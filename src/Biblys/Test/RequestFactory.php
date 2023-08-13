@@ -3,7 +3,7 @@
 namespace Biblys\Test;
 
 use Model\Publisher;
-use Model\User;
+use Model\AxysUser;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,7 +15,7 @@ class RequestFactory
      */
     public static function createAuthRequest(
         string $content = "",
-        User   $user = null,
+        AxysUser   $user = null,
         string $authMethod = "cookie"): Request
     {
         $session = ModelFactory::createUserSession($user);

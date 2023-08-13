@@ -91,7 +91,7 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals(1682278410, $userUidCookie->getExpiresTime());
         $session = SessionQuery::create()
             ->filterBySite($site)
-            ->filterByUser($user)
+            ->filterByAxysUser($user)
             ->findOneByToken($userUidCookie->getValue());
         $this->assertNotNull($session);
         $this->assertEquals(new DateTime("@1682278410"), $session->getExpiresAt());
@@ -136,7 +136,7 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals(1682278410, $userUidCookie->getExpiresTime());
         $session = SessionQuery::create()
             ->filterBySite($site)
-            ->filterByUser($user)
+            ->filterByAxysUser($user)
             ->findOneByToken($userUidCookie->getValue());
         $this->assertNotNull($session);
         $this->assertEquals(new DateTime("@1682278410"), $session->getExpiresAt());

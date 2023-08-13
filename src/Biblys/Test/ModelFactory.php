@@ -7,6 +7,8 @@ use Biblys\Service\Config;
 use DateTime;
 use Model\Article;
 use Model\ArticleCategory;
+use Model\AxysUser;
+use Model\AxysUserQuery;
 use Model\BookCollection;
 use Model\Cart;
 use Model\Country;
@@ -26,8 +28,6 @@ use Model\ShippingFee;
 use Model\Site;
 use Model\SiteQuery;
 use Model\Stock;
-use Model\User;
-use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
 
 class ModelFactory
@@ -35,9 +35,9 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createAdminUser(Site $site = null): User
+    public static function createAdminUser(Site $site = null): AxysUser
     {
-        $user = new User();
+        $user = new AxysUser();
         $user->save();
 
         $config = Config::load();
@@ -46,7 +46,7 @@ class ModelFactory
         }
 
         $right = new Right();
-        $right->setUser($user);
+        $right->setAxysUser($user);
         $right->setSite($site);
         $right->setCurrent(true);
         $right->save();
@@ -110,13 +110,13 @@ class ModelFactory
     public static function createCart(
         array $attributes = [],
         Site $site = null,
-        User $user = null
+        AxysUser $user = null
     ): Cart
     {
         $cart = new Cart();
         $cart->setUid($attributes["uid"] ?? "cart-uid");
         $cart->setSite($site ?? self::createSite());
-        $cart->setUser($user);
+        $cart->setAxysUser($user);
         $cart->save();
 
         return $cart;
@@ -276,13 +276,13 @@ class ModelFactory
         array $attributes = [],
         ?Site $site = null,
         ?Article $article = null,
-        ?User $user = null,
+        ?AxysUser $user = null,
     ): Stock
     {
         $stock = new Stock();
         $stock->setSite($site ?? self::createSite());
         $stock->setArticle($article ?? self::createArticle());
-        $stock->setUser($user);
+        $stock->setAxysUser($user);
         $stock->setSellingDate($attributes["selling_date"] ?? null);
         $stock->setReturnDate($attributes["return_date"] ?? null);
         $stock->setLostDate($attributes["lost_date"] ?? null);
@@ -294,23 +294,23 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createUser(array $attributes = []): User
+    public static function createUser(array $attributes = []): AxysUser
     {
         $attributes["email"] = $attributes["email"] ?? "user@biblys.fr";
         $attributes["username"] = $attributes["username"] ?? "User";
         $attributes["password"] = $attributes["password"] ?? "password";
 
-        $userByEmail = UserQuery::create()->findOneByEmail($attributes["email"]);
+        $userByEmail = AxysUserQuery::create()->findOneByEmail($attributes["email"]);
         if ($userByEmail) {
             return $userByEmail;
         }
 
-        $userByUsername = UserQuery::create()->findOneByUsername($attributes["username"]);
+        $userByUsername = AxysUserQuery::create()->findOneByUsername($attributes["username"]);
         if ($userByUsername) {
             return $userByUsername;
         }
 
-        $user = new User();
+        $user = new AxysUser();
         $user->setEmail($attributes["email"]);
         $user->setUsername($attributes["username"]);
         $user->setPassword(password_hash($attributes["password"], PASSWORD_DEFAULT));
@@ -326,7 +326,7 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createUserSession(User $user = null): Session
+    public static function createUserSession(AxysUser $user = null): Session
     {
         if (!$user) {
             $user = ModelFactory::createUser();
@@ -353,13 +353,13 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createPublisherUser(Publisher $publisher): User
+    public static function createPublisherUser(Publisher $publisher): AxysUser
     {
-        $user = new User();
+        $user = new AxysUser();
         $user->save();
 
         $right = new Right();
-        $right->setUser($user);
+        $right->setAxysUser($user);
         $right->setPublisherId($publisher->getId());
         $right->setCurrent(true);
         $right->save();

@@ -107,15 +107,15 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildSiteQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildSiteQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
- * @method     ChildSiteQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
- * @method     ChildSiteQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
+ * @method     ChildSiteQuery leftJoinAxysUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the AxysUser relation
+ * @method     ChildSiteQuery rightJoinAxysUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the AxysUser relation
+ * @method     ChildSiteQuery innerJoinAxysUser($relationAlias = null) Adds a INNER JOIN clause to the query using the AxysUser relation
  *
- * @method     ChildSiteQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
+ * @method     ChildSiteQuery joinWithAxysUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the AxysUser relation
  *
- * @method     ChildSiteQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
- * @method     ChildSiteQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
- * @method     ChildSiteQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
+ * @method     ChildSiteQuery leftJoinWithAxysUser() Adds a LEFT JOIN clause and with to the query using the AxysUser relation
+ * @method     ChildSiteQuery rightJoinWithAxysUser() Adds a RIGHT JOIN clause and with to the query using the AxysUser relation
+ * @method     ChildSiteQuery innerJoinWithAxysUser() Adds a INNER JOIN clause and with to the query using the AxysUser relation
  *
  * @method     ChildSiteQuery leftJoinCart($relationAlias = null) Adds a LEFT JOIN clause to the query using the Cart relation
  * @method     ChildSiteQuery rightJoinCart($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Cart relation
@@ -227,7 +227,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery rightJoinWithStock() Adds a RIGHT JOIN clause and with to the query using the Stock relation
  * @method     ChildSiteQuery innerJoinWithStock() Adds a INNER JOIN clause and with to the query using the Stock relation
  *
- * @method     \Model\UserQuery|\Model\CartQuery|\Model\CrowdfundingCampaignQuery|\Model\CrowfundingRewardQuery|\Model\OptionQuery|\Model\OrderQuery|\Model\PageQuery|\Model\PaymentQuery|\Model\ArticleCategoryQuery|\Model\RightQuery|\Model\SessionQuery|\Model\StockQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\AxysUserQuery|\Model\CartQuery|\Model\CrowdfundingCampaignQuery|\Model\CrowfundingRewardQuery|\Model\OptionQuery|\Model\OrderQuery|\Model\PageQuery|\Model\PaymentQuery|\Model\ArticleCategoryQuery|\Model\RightQuery|\Model\SessionQuery|\Model\StockQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildSite|null findOne(?ConnectionInterface $con = null) Return the first ChildSite matching the query
  * @method     ChildSite findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildSite matching the query, or a new ChildSite object populated from the query conditions when no match is found
@@ -1867,44 +1867,44 @@ abstract class SiteQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \Model\User object
+     * Filter the query by a related \Model\AxysUser object
      *
-     * @param \Model\User|ObjectCollection $user the related object to use as filter
+     * @param \Model\AxysUser|ObjectCollection $axysUser the related object to use as filter
      * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByUser($user, ?string $comparison = null)
+    public function filterByAxysUser($axysUser, ?string $comparison = null)
     {
-        if ($user instanceof \Model\User) {
+        if ($axysUser instanceof \Model\AxysUser) {
             $this
-                ->addUsingAlias(SiteTableMap::COL_SITE_ID, $user->getSiteId(), $comparison);
+                ->addUsingAlias(SiteTableMap::COL_SITE_ID, $axysUser->getSiteId(), $comparison);
 
             return $this;
-        } elseif ($user instanceof ObjectCollection) {
+        } elseif ($axysUser instanceof ObjectCollection) {
             $this
-                ->useUserQuery()
-                ->filterByPrimaryKeys($user->getPrimaryKeys())
+                ->useAxysUserQuery()
+                ->filterByPrimaryKeys($axysUser->getPrimaryKeys())
                 ->endUse();
 
             return $this;
         } else {
-            throw new PropelException('filterByUser() only accepts arguments of type \Model\User or Collection');
+            throw new PropelException('filterByAxysUser() only accepts arguments of type \Model\AxysUser or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the User relation
+     * Adds a JOIN clause to the query using the AxysUser relation
      *
      * @param string|null $relationAlias Optional alias for the relation
      * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this The current query, for fluid interface
      */
-    public function joinUser(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    public function joinAxysUser(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('User');
+        $relationMap = $tableMap->getRelation('AxysUser');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -1919,14 +1919,14 @@ abstract class SiteQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'User');
+            $this->addJoinObject($join, 'AxysUser');
         }
 
         return $this;
     }
 
     /**
-     * Use the User relation User object
+     * Use the AxysUser relation AxysUser object
      *
      * @see useQuery()
      *
@@ -1934,19 +1934,19 @@ abstract class SiteQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \Model\UserQuery A secondary query class using the current class as primary query
+     * @return \Model\AxysUserQuery A secondary query class using the current class as primary query
      */
-    public function useUserQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useAxysUserQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
-            ->joinUser($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'User', '\Model\UserQuery');
+            ->joinAxysUser($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'AxysUser', '\Model\AxysUserQuery');
     }
 
     /**
-     * Use the User relation User object
+     * Use the AxysUser relation AxysUser object
      *
-     * @param callable(\Model\UserQuery):\Model\UserQuery $callable A function working on the related query
+     * @param callable(\Model\AxysUserQuery):\Model\AxysUserQuery $callable A function working on the related query
      *
      * @param string|null $relationAlias optional alias for the relation
      *
@@ -1954,12 +1954,12 @@ abstract class SiteQuery extends ModelCriteria
      *
      * @return $this
      */
-    public function withUserQuery(
+    public function withAxysUserQuery(
         callable $callable,
         string $relationAlias = null,
         ?string $joinType = Criteria::LEFT_JOIN
     ) {
-        $relatedQuery = $this->useUserQuery(
+        $relatedQuery = $this->useAxysUserQuery(
             $relationAlias,
             $joinType
         );
@@ -1970,7 +1970,7 @@ abstract class SiteQuery extends ModelCriteria
     }
 
     /**
-     * Use the relation to User table for an EXISTS query.
+     * Use the relation to AxysUser table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
@@ -1978,34 +1978,34 @@ abstract class SiteQuery extends ModelCriteria
      * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
-     * @return \Model\UserQuery The inner query object of the EXISTS statement
+     * @return \Model\AxysUserQuery The inner query object of the EXISTS statement
      */
-    public function useUserExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    public function useAxysUserExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        /** @var $q \Model\UserQuery */
-        $q = $this->useExistsQuery('User', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\AxysUserQuery */
+        $q = $this->useExistsQuery('AxysUser', $modelAlias, $queryClass, $typeOfExists);
         return $q;
     }
 
     /**
-     * Use the relation to User table for a NOT EXISTS query.
+     * Use the relation to AxysUser table for a NOT EXISTS query.
      *
-     * @see useUserExistsQuery()
+     * @see useAxysUserExistsQuery()
      *
      * @param string|null $modelAlias sets an alias for the nested query
      * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      *
-     * @return \Model\UserQuery The inner query object of the NOT EXISTS statement
+     * @return \Model\AxysUserQuery The inner query object of the NOT EXISTS statement
      */
-    public function useUserNotExistsQuery($modelAlias = null, $queryClass = null)
+    public function useAxysUserNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        /** @var $q \Model\UserQuery */
-        $q = $this->useExistsQuery('User', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\AxysUserQuery */
+        $q = $this->useExistsQuery('AxysUser', $modelAlias, $queryClass, 'NOT EXISTS');
         return $q;
     }
 
     /**
-     * Use the relation to User table for an IN query.
+     * Use the relation to AxysUser table for an IN query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
      *
@@ -2013,29 +2013,29 @@ abstract class SiteQuery extends ModelCriteria
      * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
      * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
      *
-     * @return \Model\UserQuery The inner query object of the IN statement
+     * @return \Model\AxysUserQuery The inner query object of the IN statement
      */
-    public function useInUserQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    public function useInAxysUserQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
     {
-        /** @var $q \Model\UserQuery */
-        $q = $this->useInQuery('User', $modelAlias, $queryClass, $typeOfIn);
+        /** @var $q \Model\AxysUserQuery */
+        $q = $this->useInQuery('AxysUser', $modelAlias, $queryClass, $typeOfIn);
         return $q;
     }
 
     /**
-     * Use the relation to User table for a NOT IN query.
+     * Use the relation to AxysUser table for a NOT IN query.
      *
-     * @see useUserInQuery()
+     * @see useAxysUserInQuery()
      *
      * @param string|null $modelAlias sets an alias for the nested query
      * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
      *
-     * @return \Model\UserQuery The inner query object of the NOT IN statement
+     * @return \Model\AxysUserQuery The inner query object of the NOT IN statement
      */
-    public function useNotInUserQuery($modelAlias = null, $queryClass = null)
+    public function useNotInAxysUserQuery($modelAlias = null, $queryClass = null)
     {
-        /** @var $q \Model\UserQuery */
-        $q = $this->useInQuery('User', $modelAlias, $queryClass, 'NOT IN');
+        /** @var $q \Model\AxysUserQuery */
+        $q = $this->useInQuery('AxysUser', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 

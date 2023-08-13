@@ -6,8 +6,8 @@ use Biblys\Service\CurrentUser;
 use Biblys\Service\Log;
 use Framework\Controller;
 use Framework\Exception\AuthException;
+use Model\AxysUserQuery;
 use Model\Session;
-use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,8 +32,8 @@ class AuthController extends Controller
             throw new BadRequestHttpException("Credentials are missing");
         }
 
-        $userByEmail = UserQuery::create()->findOneByEmail($login);
-        $userByUsername = UserQuery::create()->findOneByUsername($login);
+        $userByEmail = AxysUserQuery::create()->findOneByEmail($login);
+        $userByUsername = AxysUserQuery::create()->findOneByUsername($login);
         $user = $userByEmail ?: $userByUsername;
 
         if (!$user) {

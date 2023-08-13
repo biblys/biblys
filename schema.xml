@@ -157,7 +157,7 @@
       <reference local="user_id" foreign="id"/>
     </foreign-key>
   </table>
-  <table name="axys_users" idMethod="native" phpName="User">
+  <table name="axys_users" idMethod="native" phpName="AxysUser">
     <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER"/>
     <column name="Email" phpName="Email" type="VARCHAR" size="255"/>

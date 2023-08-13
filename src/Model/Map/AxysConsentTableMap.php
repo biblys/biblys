@@ -235,7 +235,7 @@ class AxysConsentTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, null, false);
-        $this->addRelation('User', '\\Model\\User', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('AxysUser', '\\Model\\AxysUser', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':user_id',

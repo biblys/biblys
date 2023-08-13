@@ -244,7 +244,7 @@ class OptionTableMap extends TableMap
      */
     public function buildRelations(): void
     {
-        $this->addRelation('User', '\\Model\\User', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('AxysUser', '\\Model\\AxysUser', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':user_id',

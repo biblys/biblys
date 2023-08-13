@@ -8,7 +8,7 @@ use Model\Publisher;
 use Model\Right;
 use Model\ShippingFee;
 use Model\Site;
-use Model\User;
+use Model\AxysUser;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -48,19 +48,19 @@ class CreateSeedsCommand extends Command
         $output->writeln(["Inserted Axys app: librys"]);
 
         // Admin
-        $admin = new User();
+        $admin = new AxysUser();
         $admin->setEmail("admin@librys.fr");
         $admin->setUsername("admin");
         $admin->setPassword("$2y$10\$uBSKxkPvkt8UQM8B98u61e.GGOEdLHzU470Nw4X17zq05i1wIYftm");
         $admin->save();
         $right = new Right();
         $right->setSite($site);
-        $right->setUser($admin);
+        $right->setAxysUser($admin);
         $right->save();
         $output->writeln(["Inserted user: admin@librys.fr (password: password)"]);
 
         // Simple user
-        $user = new User();
+        $user = new AxysUser();
         $user->setEmail("user@librys.fr");
         $user->setUsername("user");
         $user->setPassword("$2y$10\$uBSKxkPvkt8UQM8B98u61e.GGOEdLHzU470Nw4X17zq05i1wIYftm");
@@ -68,7 +68,7 @@ class CreateSeedsCommand extends Command
         $output->writeln(["Inserted user: user@librys.fr (password: password)"]);
 
         // User with publisher right
-        $publisherUser = new User();
+        $publisherUser = new AxysUser();
         $publisherUser->setEmail("publisher@librys.fr");
         $publisherUser->setUsername("publisher");
         $publisherUser->setPassword("$2y$10\$uBSKxkPvkt8UQM8B98u61e.GGOEdLHzU470Nw4X17zq05i1wIYftm");
@@ -78,7 +78,7 @@ class CreateSeedsCommand extends Command
         $publisher->setUrl("les-editions-paronymie");
         $publisher->save();
         $right = new Right();
-        $right->setUser($publisherUser);
+        $right->setAxysUser($publisherUser);
         $right->setPublisher($publisher);
         $right->save();
         $output->writeln(["Inserted user: publisher@librys.fr (password: password)"]);

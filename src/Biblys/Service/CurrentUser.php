@@ -6,6 +6,7 @@ namespace Biblys\Service;
 
 use DateTime;
 use Exception;
+use Model\AxysUser;
 use Model\Cart;
 use Model\CartQuery;
 use Model\Option;
@@ -14,18 +15,17 @@ use Model\Publisher;
 use Model\Right;
 use Model\SessionQuery;
 use Model\Site;
-use Model\User;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class CurrentUser
 {
-    private ?User $user;
+    private ?AxysUser $user;
     private ?string $token;
     private ?CurrentSite $currentSite;
 
-    public function __construct(?User $user, ?string $token)
+    public function __construct(?AxysUser $user, ?string $token)
     {
         $this->user = $user;
         $this->token = $token;
@@ -57,7 +57,7 @@ class CurrentUser
             return new CurrentUser(null, $token);
         }
 
-        $user = $session->getUser();
+        $user = $session->getAxysUser();
         if (!$user) {
             return new CurrentUser(null, $token);
         }
@@ -106,9 +106,9 @@ class CurrentUser
     }
 
     /**
-     * @return User
+     * @return AxysUser
      */
-    public function getUser(): User
+    public function getUser(): AxysUser
     {
         if ($this->user === null) {
             throw new UnauthorizedHttpException("","Identification requise.");
@@ -151,7 +151,7 @@ class CurrentUser
         }
 
         $option = OptionQuery::create()
-            ->filterByUser($this->user)
+            ->filterByAxysUser($this->user)
             ->filterByKey($key)
             ->findOne();
 
@@ -165,13 +165,13 @@ class CurrentUser
     public function setOption(string $key, string $value): void
     {
         $option = OptionQuery::create()
-            ->filterByUser($this->user)
+            ->filterByAxysUser($this->user)
             ->filterByKey($key)
             ->findOne();
 
         if (!$option) {
             $option = new Option();
-            $option->setUser($this->user);
+            $option->setAxysUser($this->user);
             $option->setKey($key);
         }
 
@@ -196,7 +196,7 @@ class CurrentUser
 
         return CartQuery::create()
             ->filterBySite($this->getCurrentSite()->getSite())
-            ->filterByUser($this->user)
+            ->filterByAxysUser($this->user)
             ->findOne();
     }
 

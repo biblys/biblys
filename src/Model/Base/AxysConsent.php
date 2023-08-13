@@ -8,8 +8,8 @@ use \PDO;
 use Model\AxysApp as ChildAxysApp;
 use Model\AxysAppQuery as ChildAxysAppQuery;
 use Model\AxysConsentQuery as ChildAxysConsentQuery;
-use Model\User as ChildUser;
-use Model\UserQuery as ChildUserQuery;
+use Model\AxysUser as ChildAxysUser;
+use Model\AxysUserQuery as ChildAxysUserQuery;
 use Model\Map\AxysConsentTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -115,9 +115,9 @@ abstract class AxysConsent implements ActiveRecordInterface
     protected $aAxysApp;
 
     /**
-     * @var        ChildUser
+     * @var        ChildAxysUser
      */
-    protected $aUser;
+    protected $aAxysUser;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -498,8 +498,8 @@ abstract class AxysConsent implements ActiveRecordInterface
             $this->modifiedColumns[AxysConsentTableMap::COL_USER_ID] = true;
         }
 
-        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
-            $this->aUser = null;
+        if ($this->aAxysUser !== null && $this->aAxysUser->getId() !== $v) {
+            $this->aAxysUser = null;
         }
 
         return $this;
@@ -658,8 +658,8 @@ abstract class AxysConsent implements ActiveRecordInterface
         if ($this->aAxysApp !== null && $this->app_id !== $this->aAxysApp->getId()) {
             $this->aAxysApp = null;
         }
-        if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
-            $this->aUser = null;
+        if ($this->aAxysUser !== null && $this->user_id !== $this->aAxysUser->getId()) {
+            $this->aAxysUser = null;
         }
     }
 
@@ -701,7 +701,7 @@ abstract class AxysConsent implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aAxysApp = null;
-            $this->aUser = null;
+            $this->aAxysUser = null;
         } // if (deep)
     }
 
@@ -830,11 +830,11 @@ abstract class AxysConsent implements ActiveRecordInterface
                 $this->setAxysApp($this->aAxysApp);
             }
 
-            if ($this->aUser !== null) {
-                if ($this->aUser->isModified() || $this->aUser->isNew()) {
-                    $affectedRows += $this->aUser->save($con);
+            if ($this->aAxysUser !== null) {
+                if ($this->aAxysUser->isModified() || $this->aAxysUser->isNew()) {
+                    $affectedRows += $this->aAxysUser->save($con);
                 }
-                $this->setUser($this->aUser);
+                $this->setAxysUser($this->aAxysUser);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -1071,20 +1071,20 @@ abstract class AxysConsent implements ActiveRecordInterface
 
                 $result[$key] = $this->aAxysApp->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->aUser) {
+            if (null !== $this->aAxysUser) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'user';
+                        $key = 'axysUser';
                         break;
                     case TableMap::TYPE_FIELDNAME:
                         $key = 'axys_users';
                         break;
                     default:
-                        $key = 'User';
+                        $key = 'AxysUser';
                 }
 
-                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aAxysUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1418,13 +1418,13 @@ abstract class AxysConsent implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildUser object.
+     * Declares an association between this object and a ChildAxysUser object.
      *
-     * @param ChildUser $v
+     * @param ChildAxysUser $v
      * @return $this The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function setUser(ChildUser $v = null)
+    public function setAxysUser(ChildAxysUser $v = null)
     {
         if ($v === null) {
             $this->setUserId(NULL);
@@ -1432,10 +1432,10 @@ abstract class AxysConsent implements ActiveRecordInterface
             $this->setUserId($v->getId());
         }
 
-        $this->aUser = $v;
+        $this->aAxysUser = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildUser object, it will not be re-added.
+        // If this object has already been added to the ChildAxysUser object, it will not be re-added.
         if ($v !== null) {
             $v->addAxysConsent($this);
         }
@@ -1446,26 +1446,26 @@ abstract class AxysConsent implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildUser object
+     * Get the associated ChildAxysUser object
      *
      * @param ConnectionInterface $con Optional Connection object.
-     * @return ChildUser The associated ChildUser object.
+     * @return ChildAxysUser The associated ChildAxysUser object.
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function getUser(?ConnectionInterface $con = null)
+    public function getAxysUser(?ConnectionInterface $con = null)
     {
-        if ($this->aUser === null && ($this->user_id != 0)) {
-            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
+        if ($this->aAxysUser === null && ($this->user_id != 0)) {
+            $this->aAxysUser = ChildAxysUserQuery::create()->findPk($this->user_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aUser->addAxysConsents($this);
+                $this->aAxysUser->addAxysConsents($this);
              */
         }
 
-        return $this->aUser;
+        return $this->aAxysUser;
     }
 
     /**
@@ -1480,8 +1480,8 @@ abstract class AxysConsent implements ActiveRecordInterface
         if (null !== $this->aAxysApp) {
             $this->aAxysApp->removeAxysConsent($this);
         }
-        if (null !== $this->aUser) {
-            $this->aUser->removeAxysConsent($this);
+        if (null !== $this->aAxysUser) {
+            $this->aAxysUser->removeAxysConsent($this);
         }
         $this->id = null;
         $this->app_id = null;
@@ -1513,7 +1513,7 @@ abstract class AxysConsent implements ActiveRecordInterface
         } // if ($deep)
 
         $this->aAxysApp = null;
-        $this->aUser = null;
+        $this->aAxysUser = null;
         return $this;
     }
 

@@ -9,7 +9,7 @@ use Exception;
 use Model\Option;
 use Model\Right;
 use Model\SiteQuery;
-use Model\User;
+use Model\AxysUser;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -385,7 +385,7 @@ class CurrentUserTest extends TestCase
         // given
         $currentRight = $this->createMock(Right::class);
         $currentRight->method("getId")->willReturn("1111");
-        $user = $this->createMock(User::class);
+        $user = $this->createMock(AxysUser::class);
         $user->expects($this->once())
             ->method("getCurrentRight")
             ->willReturn($currentRight);
@@ -406,7 +406,7 @@ class CurrentUserTest extends TestCase
         // given
         $user = ModelFactory::createUser();
         $option = new Option();
-        $option->setUser($user);
+        $option->setAxysUser($user);
         $option->setKey("days_since_last_login");
         $option->setValue("31");
         $option->save();

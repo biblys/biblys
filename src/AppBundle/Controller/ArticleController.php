@@ -278,7 +278,7 @@ class ArticleController extends Controller
         $currentUser = $currentUserService->getUser();
         $currentUserPurchasesForArticle = StockQuery::create()
             ->filterBySite($currentSiteService->getSite())
-            ->filterByUser($currentUser)
+            ->filterByAxysUser($currentUser)
             ->filterByArticleId($article->get("id"))
             ->count();
         if ($currentUserPurchasesForArticle > 0) {

@@ -4,9 +4,9 @@ namespace Model\Base;
 
 use \Exception;
 use \PDO;
-use Model\User as ChildUser;
-use Model\UserQuery as ChildUserQuery;
-use Model\Map\UserTableMap;
+use Model\AxysUser as ChildAxysUser;
+use Model\AxysUserQuery as ChildAxysUserQuery;
+use Model\Map\AxysUserTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -19,375 +19,375 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the `axys_users` table.
  *
- * @method     ChildUserQuery orderById($order = Criteria::ASC) Order by the id column
- * @method     ChildUserQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
- * @method     ChildUserQuery orderByEmail($order = Criteria::ASC) Order by the Email column
- * @method     ChildUserQuery orderByPassword($order = Criteria::ASC) Order by the user_password column
- * @method     ChildUserQuery orderByKey($order = Criteria::ASC) Order by the user_key column
- * @method     ChildUserQuery orderByEmailKey($order = Criteria::ASC) Order by the email_key column
- * @method     ChildUserQuery orderByFacebookUid($order = Criteria::ASC) Order by the facebook_uid column
- * @method     ChildUserQuery orderByUsername($order = Criteria::ASC) Order by the user_screen_name column
- * @method     ChildUserQuery orderBySlug($order = Criteria::ASC) Order by the user_slug column
- * @method     ChildUserQuery orderByWishlistShip($order = Criteria::ASC) Order by the user_wishlist_ship column
- * @method     ChildUserQuery orderByTop($order = Criteria::ASC) Order by the user_top column
- * @method     ChildUserQuery orderByBiblio($order = Criteria::ASC) Order by the user_biblio column
- * @method     ChildUserQuery orderByAdresseIp($order = Criteria::ASC) Order by the adresse_ip column
- * @method     ChildUserQuery orderByRecaptchaScore($order = Criteria::ASC) Order by the recaptcha_score column
- * @method     ChildUserQuery orderByDateinscription($order = Criteria::ASC) Order by the DateInscription column
- * @method     ChildUserQuery orderByDateconnexion($order = Criteria::ASC) Order by the DateConnexion column
- * @method     ChildUserQuery orderByPublisherId($order = Criteria::ASC) Order by the publisher_id column
- * @method     ChildUserQuery orderByBookshopId($order = Criteria::ASC) Order by the bookshop_id column
- * @method     ChildUserQuery orderByLibraryId($order = Criteria::ASC) Order by the library_id column
- * @method     ChildUserQuery orderByCivilite($order = Criteria::ASC) Order by the user_civilite column
- * @method     ChildUserQuery orderByNom($order = Criteria::ASC) Order by the user_nom column
- * @method     ChildUserQuery orderByPrenom($order = Criteria::ASC) Order by the user_prenom column
- * @method     ChildUserQuery orderByAdresse1($order = Criteria::ASC) Order by the user_adresse1 column
- * @method     ChildUserQuery orderByAdresse2($order = Criteria::ASC) Order by the user_adresse2 column
- * @method     ChildUserQuery orderByCodepostal($order = Criteria::ASC) Order by the user_codepostal column
- * @method     ChildUserQuery orderByVille($order = Criteria::ASC) Order by the user_ville column
- * @method     ChildUserQuery orderByPays($order = Criteria::ASC) Order by the user_pays column
- * @method     ChildUserQuery orderByTelephone($order = Criteria::ASC) Order by the user_telephone column
- * @method     ChildUserQuery orderByPrefArticlesShow($order = Criteria::ASC) Order by the user_pref_articles_show column
- * @method     ChildUserQuery orderByFbId($order = Criteria::ASC) Order by the user_fb_id column
- * @method     ChildUserQuery orderByFbToken($order = Criteria::ASC) Order by the user_fb_token column
- * @method     ChildUserQuery orderByCountryId($order = Criteria::ASC) Order by the country_id column
- * @method     ChildUserQuery orderByPasswordResetToken($order = Criteria::ASC) Order by the user_password_reset_token column
- * @method     ChildUserQuery orderByPasswordResetTokenCreated($order = Criteria::ASC) Order by the user_password_reset_token_created column
- * @method     ChildUserQuery orderByUpdate($order = Criteria::ASC) Order by the user_update column
- * @method     ChildUserQuery orderByCreatedAt($order = Criteria::ASC) Order by the user_created column
- * @method     ChildUserQuery orderByUpdatedAt($order = Criteria::ASC) Order by the user_updated column
+ * @method     ChildAxysUserQuery orderById($order = Criteria::ASC) Order by the id column
+ * @method     ChildAxysUserQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
+ * @method     ChildAxysUserQuery orderByEmail($order = Criteria::ASC) Order by the Email column
+ * @method     ChildAxysUserQuery orderByPassword($order = Criteria::ASC) Order by the user_password column
+ * @method     ChildAxysUserQuery orderByKey($order = Criteria::ASC) Order by the user_key column
+ * @method     ChildAxysUserQuery orderByEmailKey($order = Criteria::ASC) Order by the email_key column
+ * @method     ChildAxysUserQuery orderByFacebookUid($order = Criteria::ASC) Order by the facebook_uid column
+ * @method     ChildAxysUserQuery orderByUsername($order = Criteria::ASC) Order by the user_screen_name column
+ * @method     ChildAxysUserQuery orderBySlug($order = Criteria::ASC) Order by the user_slug column
+ * @method     ChildAxysUserQuery orderByWishlistShip($order = Criteria::ASC) Order by the user_wishlist_ship column
+ * @method     ChildAxysUserQuery orderByTop($order = Criteria::ASC) Order by the user_top column
+ * @method     ChildAxysUserQuery orderByBiblio($order = Criteria::ASC) Order by the user_biblio column
+ * @method     ChildAxysUserQuery orderByAdresseIp($order = Criteria::ASC) Order by the adresse_ip column
+ * @method     ChildAxysUserQuery orderByRecaptchaScore($order = Criteria::ASC) Order by the recaptcha_score column
+ * @method     ChildAxysUserQuery orderByDateinscription($order = Criteria::ASC) Order by the DateInscription column
+ * @method     ChildAxysUserQuery orderByDateconnexion($order = Criteria::ASC) Order by the DateConnexion column
+ * @method     ChildAxysUserQuery orderByPublisherId($order = Criteria::ASC) Order by the publisher_id column
+ * @method     ChildAxysUserQuery orderByBookshopId($order = Criteria::ASC) Order by the bookshop_id column
+ * @method     ChildAxysUserQuery orderByLibraryId($order = Criteria::ASC) Order by the library_id column
+ * @method     ChildAxysUserQuery orderByCivilite($order = Criteria::ASC) Order by the user_civilite column
+ * @method     ChildAxysUserQuery orderByNom($order = Criteria::ASC) Order by the user_nom column
+ * @method     ChildAxysUserQuery orderByPrenom($order = Criteria::ASC) Order by the user_prenom column
+ * @method     ChildAxysUserQuery orderByAdresse1($order = Criteria::ASC) Order by the user_adresse1 column
+ * @method     ChildAxysUserQuery orderByAdresse2($order = Criteria::ASC) Order by the user_adresse2 column
+ * @method     ChildAxysUserQuery orderByCodepostal($order = Criteria::ASC) Order by the user_codepostal column
+ * @method     ChildAxysUserQuery orderByVille($order = Criteria::ASC) Order by the user_ville column
+ * @method     ChildAxysUserQuery orderByPays($order = Criteria::ASC) Order by the user_pays column
+ * @method     ChildAxysUserQuery orderByTelephone($order = Criteria::ASC) Order by the user_telephone column
+ * @method     ChildAxysUserQuery orderByPrefArticlesShow($order = Criteria::ASC) Order by the user_pref_articles_show column
+ * @method     ChildAxysUserQuery orderByFbId($order = Criteria::ASC) Order by the user_fb_id column
+ * @method     ChildAxysUserQuery orderByFbToken($order = Criteria::ASC) Order by the user_fb_token column
+ * @method     ChildAxysUserQuery orderByCountryId($order = Criteria::ASC) Order by the country_id column
+ * @method     ChildAxysUserQuery orderByPasswordResetToken($order = Criteria::ASC) Order by the user_password_reset_token column
+ * @method     ChildAxysUserQuery orderByPasswordResetTokenCreated($order = Criteria::ASC) Order by the user_password_reset_token_created column
+ * @method     ChildAxysUserQuery orderByUpdate($order = Criteria::ASC) Order by the user_update column
+ * @method     ChildAxysUserQuery orderByCreatedAt($order = Criteria::ASC) Order by the user_created column
+ * @method     ChildAxysUserQuery orderByUpdatedAt($order = Criteria::ASC) Order by the user_updated column
  *
- * @method     ChildUserQuery groupById() Group by the id column
- * @method     ChildUserQuery groupBySiteId() Group by the site_id column
- * @method     ChildUserQuery groupByEmail() Group by the Email column
- * @method     ChildUserQuery groupByPassword() Group by the user_password column
- * @method     ChildUserQuery groupByKey() Group by the user_key column
- * @method     ChildUserQuery groupByEmailKey() Group by the email_key column
- * @method     ChildUserQuery groupByFacebookUid() Group by the facebook_uid column
- * @method     ChildUserQuery groupByUsername() Group by the user_screen_name column
- * @method     ChildUserQuery groupBySlug() Group by the user_slug column
- * @method     ChildUserQuery groupByWishlistShip() Group by the user_wishlist_ship column
- * @method     ChildUserQuery groupByTop() Group by the user_top column
- * @method     ChildUserQuery groupByBiblio() Group by the user_biblio column
- * @method     ChildUserQuery groupByAdresseIp() Group by the adresse_ip column
- * @method     ChildUserQuery groupByRecaptchaScore() Group by the recaptcha_score column
- * @method     ChildUserQuery groupByDateinscription() Group by the DateInscription column
- * @method     ChildUserQuery groupByDateconnexion() Group by the DateConnexion column
- * @method     ChildUserQuery groupByPublisherId() Group by the publisher_id column
- * @method     ChildUserQuery groupByBookshopId() Group by the bookshop_id column
- * @method     ChildUserQuery groupByLibraryId() Group by the library_id column
- * @method     ChildUserQuery groupByCivilite() Group by the user_civilite column
- * @method     ChildUserQuery groupByNom() Group by the user_nom column
- * @method     ChildUserQuery groupByPrenom() Group by the user_prenom column
- * @method     ChildUserQuery groupByAdresse1() Group by the user_adresse1 column
- * @method     ChildUserQuery groupByAdresse2() Group by the user_adresse2 column
- * @method     ChildUserQuery groupByCodepostal() Group by the user_codepostal column
- * @method     ChildUserQuery groupByVille() Group by the user_ville column
- * @method     ChildUserQuery groupByPays() Group by the user_pays column
- * @method     ChildUserQuery groupByTelephone() Group by the user_telephone column
- * @method     ChildUserQuery groupByPrefArticlesShow() Group by the user_pref_articles_show column
- * @method     ChildUserQuery groupByFbId() Group by the user_fb_id column
- * @method     ChildUserQuery groupByFbToken() Group by the user_fb_token column
- * @method     ChildUserQuery groupByCountryId() Group by the country_id column
- * @method     ChildUserQuery groupByPasswordResetToken() Group by the user_password_reset_token column
- * @method     ChildUserQuery groupByPasswordResetTokenCreated() Group by the user_password_reset_token_created column
- * @method     ChildUserQuery groupByUpdate() Group by the user_update column
- * @method     ChildUserQuery groupByCreatedAt() Group by the user_created column
- * @method     ChildUserQuery groupByUpdatedAt() Group by the user_updated column
+ * @method     ChildAxysUserQuery groupById() Group by the id column
+ * @method     ChildAxysUserQuery groupBySiteId() Group by the site_id column
+ * @method     ChildAxysUserQuery groupByEmail() Group by the Email column
+ * @method     ChildAxysUserQuery groupByPassword() Group by the user_password column
+ * @method     ChildAxysUserQuery groupByKey() Group by the user_key column
+ * @method     ChildAxysUserQuery groupByEmailKey() Group by the email_key column
+ * @method     ChildAxysUserQuery groupByFacebookUid() Group by the facebook_uid column
+ * @method     ChildAxysUserQuery groupByUsername() Group by the user_screen_name column
+ * @method     ChildAxysUserQuery groupBySlug() Group by the user_slug column
+ * @method     ChildAxysUserQuery groupByWishlistShip() Group by the user_wishlist_ship column
+ * @method     ChildAxysUserQuery groupByTop() Group by the user_top column
+ * @method     ChildAxysUserQuery groupByBiblio() Group by the user_biblio column
+ * @method     ChildAxysUserQuery groupByAdresseIp() Group by the adresse_ip column
+ * @method     ChildAxysUserQuery groupByRecaptchaScore() Group by the recaptcha_score column
+ * @method     ChildAxysUserQuery groupByDateinscription() Group by the DateInscription column
+ * @method     ChildAxysUserQuery groupByDateconnexion() Group by the DateConnexion column
+ * @method     ChildAxysUserQuery groupByPublisherId() Group by the publisher_id column
+ * @method     ChildAxysUserQuery groupByBookshopId() Group by the bookshop_id column
+ * @method     ChildAxysUserQuery groupByLibraryId() Group by the library_id column
+ * @method     ChildAxysUserQuery groupByCivilite() Group by the user_civilite column
+ * @method     ChildAxysUserQuery groupByNom() Group by the user_nom column
+ * @method     ChildAxysUserQuery groupByPrenom() Group by the user_prenom column
+ * @method     ChildAxysUserQuery groupByAdresse1() Group by the user_adresse1 column
+ * @method     ChildAxysUserQuery groupByAdresse2() Group by the user_adresse2 column
+ * @method     ChildAxysUserQuery groupByCodepostal() Group by the user_codepostal column
+ * @method     ChildAxysUserQuery groupByVille() Group by the user_ville column
+ * @method     ChildAxysUserQuery groupByPays() Group by the user_pays column
+ * @method     ChildAxysUserQuery groupByTelephone() Group by the user_telephone column
+ * @method     ChildAxysUserQuery groupByPrefArticlesShow() Group by the user_pref_articles_show column
+ * @method     ChildAxysUserQuery groupByFbId() Group by the user_fb_id column
+ * @method     ChildAxysUserQuery groupByFbToken() Group by the user_fb_token column
+ * @method     ChildAxysUserQuery groupByCountryId() Group by the country_id column
+ * @method     ChildAxysUserQuery groupByPasswordResetToken() Group by the user_password_reset_token column
+ * @method     ChildAxysUserQuery groupByPasswordResetTokenCreated() Group by the user_password_reset_token_created column
+ * @method     ChildAxysUserQuery groupByUpdate() Group by the user_update column
+ * @method     ChildAxysUserQuery groupByCreatedAt() Group by the user_created column
+ * @method     ChildAxysUserQuery groupByUpdatedAt() Group by the user_updated column
  *
- * @method     ChildUserQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildUserQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildUserQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method     ChildAxysUserQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildAxysUserQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildAxysUserQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildUserQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildUserQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildUserQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method     ChildAxysUserQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method     ChildAxysUserQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method     ChildAxysUserQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildUserQuery leftJoinSite($relationAlias = null) Adds a LEFT JOIN clause to the query using the Site relation
- * @method     ChildUserQuery rightJoinSite($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Site relation
- * @method     ChildUserQuery innerJoinSite($relationAlias = null) Adds a INNER JOIN clause to the query using the Site relation
+ * @method     ChildAxysUserQuery leftJoinSite($relationAlias = null) Adds a LEFT JOIN clause to the query using the Site relation
+ * @method     ChildAxysUserQuery rightJoinSite($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Site relation
+ * @method     ChildAxysUserQuery innerJoinSite($relationAlias = null) Adds a INNER JOIN clause to the query using the Site relation
  *
- * @method     ChildUserQuery joinWithSite($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Site relation
+ * @method     ChildAxysUserQuery joinWithSite($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Site relation
  *
- * @method     ChildUserQuery leftJoinWithSite() Adds a LEFT JOIN clause and with to the query using the Site relation
- * @method     ChildUserQuery rightJoinWithSite() Adds a RIGHT JOIN clause and with to the query using the Site relation
- * @method     ChildUserQuery innerJoinWithSite() Adds a INNER JOIN clause and with to the query using the Site relation
+ * @method     ChildAxysUserQuery leftJoinWithSite() Adds a LEFT JOIN clause and with to the query using the Site relation
+ * @method     ChildAxysUserQuery rightJoinWithSite() Adds a RIGHT JOIN clause and with to the query using the Site relation
+ * @method     ChildAxysUserQuery innerJoinWithSite() Adds a INNER JOIN clause and with to the query using the Site relation
  *
- * @method     ChildUserQuery leftJoinAxysConsent($relationAlias = null) Adds a LEFT JOIN clause to the query using the AxysConsent relation
- * @method     ChildUserQuery rightJoinAxysConsent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the AxysConsent relation
- * @method     ChildUserQuery innerJoinAxysConsent($relationAlias = null) Adds a INNER JOIN clause to the query using the AxysConsent relation
+ * @method     ChildAxysUserQuery leftJoinAxysConsent($relationAlias = null) Adds a LEFT JOIN clause to the query using the AxysConsent relation
+ * @method     ChildAxysUserQuery rightJoinAxysConsent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the AxysConsent relation
+ * @method     ChildAxysUserQuery innerJoinAxysConsent($relationAlias = null) Adds a INNER JOIN clause to the query using the AxysConsent relation
  *
- * @method     ChildUserQuery joinWithAxysConsent($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the AxysConsent relation
+ * @method     ChildAxysUserQuery joinWithAxysConsent($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the AxysConsent relation
  *
- * @method     ChildUserQuery leftJoinWithAxysConsent() Adds a LEFT JOIN clause and with to the query using the AxysConsent relation
- * @method     ChildUserQuery rightJoinWithAxysConsent() Adds a RIGHT JOIN clause and with to the query using the AxysConsent relation
- * @method     ChildUserQuery innerJoinWithAxysConsent() Adds a INNER JOIN clause and with to the query using the AxysConsent relation
+ * @method     ChildAxysUserQuery leftJoinWithAxysConsent() Adds a LEFT JOIN clause and with to the query using the AxysConsent relation
+ * @method     ChildAxysUserQuery rightJoinWithAxysConsent() Adds a RIGHT JOIN clause and with to the query using the AxysConsent relation
+ * @method     ChildAxysUserQuery innerJoinWithAxysConsent() Adds a INNER JOIN clause and with to the query using the AxysConsent relation
  *
- * @method     ChildUserQuery leftJoinCart($relationAlias = null) Adds a LEFT JOIN clause to the query using the Cart relation
- * @method     ChildUserQuery rightJoinCart($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Cart relation
- * @method     ChildUserQuery innerJoinCart($relationAlias = null) Adds a INNER JOIN clause to the query using the Cart relation
+ * @method     ChildAxysUserQuery leftJoinCart($relationAlias = null) Adds a LEFT JOIN clause to the query using the Cart relation
+ * @method     ChildAxysUserQuery rightJoinCart($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Cart relation
+ * @method     ChildAxysUserQuery innerJoinCart($relationAlias = null) Adds a INNER JOIN clause to the query using the Cart relation
  *
- * @method     ChildUserQuery joinWithCart($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Cart relation
+ * @method     ChildAxysUserQuery joinWithCart($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Cart relation
  *
- * @method     ChildUserQuery leftJoinWithCart() Adds a LEFT JOIN clause and with to the query using the Cart relation
- * @method     ChildUserQuery rightJoinWithCart() Adds a RIGHT JOIN clause and with to the query using the Cart relation
- * @method     ChildUserQuery innerJoinWithCart() Adds a INNER JOIN clause and with to the query using the Cart relation
+ * @method     ChildAxysUserQuery leftJoinWithCart() Adds a LEFT JOIN clause and with to the query using the Cart relation
+ * @method     ChildAxysUserQuery rightJoinWithCart() Adds a RIGHT JOIN clause and with to the query using the Cart relation
+ * @method     ChildAxysUserQuery innerJoinWithCart() Adds a INNER JOIN clause and with to the query using the Cart relation
  *
- * @method     ChildUserQuery leftJoinOption($relationAlias = null) Adds a LEFT JOIN clause to the query using the Option relation
- * @method     ChildUserQuery rightJoinOption($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Option relation
- * @method     ChildUserQuery innerJoinOption($relationAlias = null) Adds a INNER JOIN clause to the query using the Option relation
+ * @method     ChildAxysUserQuery leftJoinOption($relationAlias = null) Adds a LEFT JOIN clause to the query using the Option relation
+ * @method     ChildAxysUserQuery rightJoinOption($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Option relation
+ * @method     ChildAxysUserQuery innerJoinOption($relationAlias = null) Adds a INNER JOIN clause to the query using the Option relation
  *
- * @method     ChildUserQuery joinWithOption($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Option relation
+ * @method     ChildAxysUserQuery joinWithOption($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Option relation
  *
- * @method     ChildUserQuery leftJoinWithOption() Adds a LEFT JOIN clause and with to the query using the Option relation
- * @method     ChildUserQuery rightJoinWithOption() Adds a RIGHT JOIN clause and with to the query using the Option relation
- * @method     ChildUserQuery innerJoinWithOption() Adds a INNER JOIN clause and with to the query using the Option relation
+ * @method     ChildAxysUserQuery leftJoinWithOption() Adds a LEFT JOIN clause and with to the query using the Option relation
+ * @method     ChildAxysUserQuery rightJoinWithOption() Adds a RIGHT JOIN clause and with to the query using the Option relation
+ * @method     ChildAxysUserQuery innerJoinWithOption() Adds a INNER JOIN clause and with to the query using the Option relation
  *
- * @method     ChildUserQuery leftJoinRight($relationAlias = null) Adds a LEFT JOIN clause to the query using the Right relation
- * @method     ChildUserQuery rightJoinRight($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Right relation
- * @method     ChildUserQuery innerJoinRight($relationAlias = null) Adds a INNER JOIN clause to the query using the Right relation
+ * @method     ChildAxysUserQuery leftJoinRight($relationAlias = null) Adds a LEFT JOIN clause to the query using the Right relation
+ * @method     ChildAxysUserQuery rightJoinRight($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Right relation
+ * @method     ChildAxysUserQuery innerJoinRight($relationAlias = null) Adds a INNER JOIN clause to the query using the Right relation
  *
- * @method     ChildUserQuery joinWithRight($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Right relation
+ * @method     ChildAxysUserQuery joinWithRight($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Right relation
  *
- * @method     ChildUserQuery leftJoinWithRight() Adds a LEFT JOIN clause and with to the query using the Right relation
- * @method     ChildUserQuery rightJoinWithRight() Adds a RIGHT JOIN clause and with to the query using the Right relation
- * @method     ChildUserQuery innerJoinWithRight() Adds a INNER JOIN clause and with to the query using the Right relation
+ * @method     ChildAxysUserQuery leftJoinWithRight() Adds a LEFT JOIN clause and with to the query using the Right relation
+ * @method     ChildAxysUserQuery rightJoinWithRight() Adds a RIGHT JOIN clause and with to the query using the Right relation
+ * @method     ChildAxysUserQuery innerJoinWithRight() Adds a INNER JOIN clause and with to the query using the Right relation
  *
- * @method     ChildUserQuery leftJoinSession($relationAlias = null) Adds a LEFT JOIN clause to the query using the Session relation
- * @method     ChildUserQuery rightJoinSession($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Session relation
- * @method     ChildUserQuery innerJoinSession($relationAlias = null) Adds a INNER JOIN clause to the query using the Session relation
+ * @method     ChildAxysUserQuery leftJoinSession($relationAlias = null) Adds a LEFT JOIN clause to the query using the Session relation
+ * @method     ChildAxysUserQuery rightJoinSession($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Session relation
+ * @method     ChildAxysUserQuery innerJoinSession($relationAlias = null) Adds a INNER JOIN clause to the query using the Session relation
  *
- * @method     ChildUserQuery joinWithSession($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Session relation
+ * @method     ChildAxysUserQuery joinWithSession($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Session relation
  *
- * @method     ChildUserQuery leftJoinWithSession() Adds a LEFT JOIN clause and with to the query using the Session relation
- * @method     ChildUserQuery rightJoinWithSession() Adds a RIGHT JOIN clause and with to the query using the Session relation
- * @method     ChildUserQuery innerJoinWithSession() Adds a INNER JOIN clause and with to the query using the Session relation
+ * @method     ChildAxysUserQuery leftJoinWithSession() Adds a LEFT JOIN clause and with to the query using the Session relation
+ * @method     ChildAxysUserQuery rightJoinWithSession() Adds a RIGHT JOIN clause and with to the query using the Session relation
+ * @method     ChildAxysUserQuery innerJoinWithSession() Adds a INNER JOIN clause and with to the query using the Session relation
  *
- * @method     ChildUserQuery leftJoinStock($relationAlias = null) Adds a LEFT JOIN clause to the query using the Stock relation
- * @method     ChildUserQuery rightJoinStock($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Stock relation
- * @method     ChildUserQuery innerJoinStock($relationAlias = null) Adds a INNER JOIN clause to the query using the Stock relation
+ * @method     ChildAxysUserQuery leftJoinStock($relationAlias = null) Adds a LEFT JOIN clause to the query using the Stock relation
+ * @method     ChildAxysUserQuery rightJoinStock($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Stock relation
+ * @method     ChildAxysUserQuery innerJoinStock($relationAlias = null) Adds a INNER JOIN clause to the query using the Stock relation
  *
- * @method     ChildUserQuery joinWithStock($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Stock relation
+ * @method     ChildAxysUserQuery joinWithStock($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Stock relation
  *
- * @method     ChildUserQuery leftJoinWithStock() Adds a LEFT JOIN clause and with to the query using the Stock relation
- * @method     ChildUserQuery rightJoinWithStock() Adds a RIGHT JOIN clause and with to the query using the Stock relation
- * @method     ChildUserQuery innerJoinWithStock() Adds a INNER JOIN clause and with to the query using the Stock relation
+ * @method     ChildAxysUserQuery leftJoinWithStock() Adds a LEFT JOIN clause and with to the query using the Stock relation
+ * @method     ChildAxysUserQuery rightJoinWithStock() Adds a RIGHT JOIN clause and with to the query using the Stock relation
+ * @method     ChildAxysUserQuery innerJoinWithStock() Adds a INNER JOIN clause and with to the query using the Stock relation
  *
- * @method     ChildUserQuery leftJoinWish($relationAlias = null) Adds a LEFT JOIN clause to the query using the Wish relation
- * @method     ChildUserQuery rightJoinWish($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Wish relation
- * @method     ChildUserQuery innerJoinWish($relationAlias = null) Adds a INNER JOIN clause to the query using the Wish relation
+ * @method     ChildAxysUserQuery leftJoinWish($relationAlias = null) Adds a LEFT JOIN clause to the query using the Wish relation
+ * @method     ChildAxysUserQuery rightJoinWish($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Wish relation
+ * @method     ChildAxysUserQuery innerJoinWish($relationAlias = null) Adds a INNER JOIN clause to the query using the Wish relation
  *
- * @method     ChildUserQuery joinWithWish($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Wish relation
+ * @method     ChildAxysUserQuery joinWithWish($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Wish relation
  *
- * @method     ChildUserQuery leftJoinWithWish() Adds a LEFT JOIN clause and with to the query using the Wish relation
- * @method     ChildUserQuery rightJoinWithWish() Adds a RIGHT JOIN clause and with to the query using the Wish relation
- * @method     ChildUserQuery innerJoinWithWish() Adds a INNER JOIN clause and with to the query using the Wish relation
+ * @method     ChildAxysUserQuery leftJoinWithWish() Adds a LEFT JOIN clause and with to the query using the Wish relation
+ * @method     ChildAxysUserQuery rightJoinWithWish() Adds a RIGHT JOIN clause and with to the query using the Wish relation
+ * @method     ChildAxysUserQuery innerJoinWithWish() Adds a INNER JOIN clause and with to the query using the Wish relation
  *
- * @method     ChildUserQuery leftJoinWishlist($relationAlias = null) Adds a LEFT JOIN clause to the query using the Wishlist relation
- * @method     ChildUserQuery rightJoinWishlist($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Wishlist relation
- * @method     ChildUserQuery innerJoinWishlist($relationAlias = null) Adds a INNER JOIN clause to the query using the Wishlist relation
+ * @method     ChildAxysUserQuery leftJoinWishlist($relationAlias = null) Adds a LEFT JOIN clause to the query using the Wishlist relation
+ * @method     ChildAxysUserQuery rightJoinWishlist($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Wishlist relation
+ * @method     ChildAxysUserQuery innerJoinWishlist($relationAlias = null) Adds a INNER JOIN clause to the query using the Wishlist relation
  *
- * @method     ChildUserQuery joinWithWishlist($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Wishlist relation
+ * @method     ChildAxysUserQuery joinWithWishlist($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Wishlist relation
  *
- * @method     ChildUserQuery leftJoinWithWishlist() Adds a LEFT JOIN clause and with to the query using the Wishlist relation
- * @method     ChildUserQuery rightJoinWithWishlist() Adds a RIGHT JOIN clause and with to the query using the Wishlist relation
- * @method     ChildUserQuery innerJoinWithWishlist() Adds a INNER JOIN clause and with to the query using the Wishlist relation
+ * @method     ChildAxysUserQuery leftJoinWithWishlist() Adds a LEFT JOIN clause and with to the query using the Wishlist relation
+ * @method     ChildAxysUserQuery rightJoinWithWishlist() Adds a RIGHT JOIN clause and with to the query using the Wishlist relation
+ * @method     ChildAxysUserQuery innerJoinWithWishlist() Adds a INNER JOIN clause and with to the query using the Wishlist relation
  *
  * @method     \Model\SiteQuery|\Model\AxysConsentQuery|\Model\CartQuery|\Model\OptionQuery|\Model\RightQuery|\Model\SessionQuery|\Model\StockQuery|\Model\WishQuery|\Model\WishlistQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildUser|null findOne(?ConnectionInterface $con = null) Return the first ChildUser matching the query
- * @method     ChildUser findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildUser matching the query, or a new ChildUser object populated from the query conditions when no match is found
+ * @method     ChildAxysUser|null findOne(?ConnectionInterface $con = null) Return the first ChildAxysUser matching the query
+ * @method     ChildAxysUser findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildAxysUser matching the query, or a new ChildAxysUser object populated from the query conditions when no match is found
  *
- * @method     ChildUser|null findOneById(int $id) Return the first ChildUser filtered by the id column
- * @method     ChildUser|null findOneBySiteId(int $site_id) Return the first ChildUser filtered by the site_id column
- * @method     ChildUser|null findOneByEmail(string $Email) Return the first ChildUser filtered by the Email column
- * @method     ChildUser|null findOneByPassword(string $user_password) Return the first ChildUser filtered by the user_password column
- * @method     ChildUser|null findOneByKey(string $user_key) Return the first ChildUser filtered by the user_key column
- * @method     ChildUser|null findOneByEmailKey(string $email_key) Return the first ChildUser filtered by the email_key column
- * @method     ChildUser|null findOneByFacebookUid(int $facebook_uid) Return the first ChildUser filtered by the facebook_uid column
- * @method     ChildUser|null findOneByUsername(string $user_screen_name) Return the first ChildUser filtered by the user_screen_name column
- * @method     ChildUser|null findOneBySlug(string $user_slug) Return the first ChildUser filtered by the user_slug column
- * @method     ChildUser|null findOneByWishlistShip(boolean $user_wishlist_ship) Return the first ChildUser filtered by the user_wishlist_ship column
- * @method     ChildUser|null findOneByTop(boolean $user_top) Return the first ChildUser filtered by the user_top column
- * @method     ChildUser|null findOneByBiblio(boolean $user_biblio) Return the first ChildUser filtered by the user_biblio column
- * @method     ChildUser|null findOneByAdresseIp(string $adresse_ip) Return the first ChildUser filtered by the adresse_ip column
- * @method     ChildUser|null findOneByRecaptchaScore(double $recaptcha_score) Return the first ChildUser filtered by the recaptcha_score column
- * @method     ChildUser|null findOneByDateinscription(string $DateInscription) Return the first ChildUser filtered by the DateInscription column
- * @method     ChildUser|null findOneByDateconnexion(string $DateConnexion) Return the first ChildUser filtered by the DateConnexion column
- * @method     ChildUser|null findOneByPublisherId(int $publisher_id) Return the first ChildUser filtered by the publisher_id column
- * @method     ChildUser|null findOneByBookshopId(int $bookshop_id) Return the first ChildUser filtered by the bookshop_id column
- * @method     ChildUser|null findOneByLibraryId(int $library_id) Return the first ChildUser filtered by the library_id column
- * @method     ChildUser|null findOneByCivilite(string $user_civilite) Return the first ChildUser filtered by the user_civilite column
- * @method     ChildUser|null findOneByNom(string $user_nom) Return the first ChildUser filtered by the user_nom column
- * @method     ChildUser|null findOneByPrenom(string $user_prenom) Return the first ChildUser filtered by the user_prenom column
- * @method     ChildUser|null findOneByAdresse1(string $user_adresse1) Return the first ChildUser filtered by the user_adresse1 column
- * @method     ChildUser|null findOneByAdresse2(string $user_adresse2) Return the first ChildUser filtered by the user_adresse2 column
- * @method     ChildUser|null findOneByCodepostal(string $user_codepostal) Return the first ChildUser filtered by the user_codepostal column
- * @method     ChildUser|null findOneByVille(string $user_ville) Return the first ChildUser filtered by the user_ville column
- * @method     ChildUser|null findOneByPays(string $user_pays) Return the first ChildUser filtered by the user_pays column
- * @method     ChildUser|null findOneByTelephone(string $user_telephone) Return the first ChildUser filtered by the user_telephone column
- * @method     ChildUser|null findOneByPrefArticlesShow(string $user_pref_articles_show) Return the first ChildUser filtered by the user_pref_articles_show column
- * @method     ChildUser|null findOneByFbId(string $user_fb_id) Return the first ChildUser filtered by the user_fb_id column
- * @method     ChildUser|null findOneByFbToken(string $user_fb_token) Return the first ChildUser filtered by the user_fb_token column
- * @method     ChildUser|null findOneByCountryId(int $country_id) Return the first ChildUser filtered by the country_id column
- * @method     ChildUser|null findOneByPasswordResetToken(string $user_password_reset_token) Return the first ChildUser filtered by the user_password_reset_token column
- * @method     ChildUser|null findOneByPasswordResetTokenCreated(string $user_password_reset_token_created) Return the first ChildUser filtered by the user_password_reset_token_created column
- * @method     ChildUser|null findOneByUpdate(string $user_update) Return the first ChildUser filtered by the user_update column
- * @method     ChildUser|null findOneByCreatedAt(string $user_created) Return the first ChildUser filtered by the user_created column
- * @method     ChildUser|null findOneByUpdatedAt(string $user_updated) Return the first ChildUser filtered by the user_updated column
+ * @method     ChildAxysUser|null findOneById(int $id) Return the first ChildAxysUser filtered by the id column
+ * @method     ChildAxysUser|null findOneBySiteId(int $site_id) Return the first ChildAxysUser filtered by the site_id column
+ * @method     ChildAxysUser|null findOneByEmail(string $Email) Return the first ChildAxysUser filtered by the Email column
+ * @method     ChildAxysUser|null findOneByPassword(string $user_password) Return the first ChildAxysUser filtered by the user_password column
+ * @method     ChildAxysUser|null findOneByKey(string $user_key) Return the first ChildAxysUser filtered by the user_key column
+ * @method     ChildAxysUser|null findOneByEmailKey(string $email_key) Return the first ChildAxysUser filtered by the email_key column
+ * @method     ChildAxysUser|null findOneByFacebookUid(int $facebook_uid) Return the first ChildAxysUser filtered by the facebook_uid column
+ * @method     ChildAxysUser|null findOneByUsername(string $user_screen_name) Return the first ChildAxysUser filtered by the user_screen_name column
+ * @method     ChildAxysUser|null findOneBySlug(string $user_slug) Return the first ChildAxysUser filtered by the user_slug column
+ * @method     ChildAxysUser|null findOneByWishlistShip(boolean $user_wishlist_ship) Return the first ChildAxysUser filtered by the user_wishlist_ship column
+ * @method     ChildAxysUser|null findOneByTop(boolean $user_top) Return the first ChildAxysUser filtered by the user_top column
+ * @method     ChildAxysUser|null findOneByBiblio(boolean $user_biblio) Return the first ChildAxysUser filtered by the user_biblio column
+ * @method     ChildAxysUser|null findOneByAdresseIp(string $adresse_ip) Return the first ChildAxysUser filtered by the adresse_ip column
+ * @method     ChildAxysUser|null findOneByRecaptchaScore(double $recaptcha_score) Return the first ChildAxysUser filtered by the recaptcha_score column
+ * @method     ChildAxysUser|null findOneByDateinscription(string $DateInscription) Return the first ChildAxysUser filtered by the DateInscription column
+ * @method     ChildAxysUser|null findOneByDateconnexion(string $DateConnexion) Return the first ChildAxysUser filtered by the DateConnexion column
+ * @method     ChildAxysUser|null findOneByPublisherId(int $publisher_id) Return the first ChildAxysUser filtered by the publisher_id column
+ * @method     ChildAxysUser|null findOneByBookshopId(int $bookshop_id) Return the first ChildAxysUser filtered by the bookshop_id column
+ * @method     ChildAxysUser|null findOneByLibraryId(int $library_id) Return the first ChildAxysUser filtered by the library_id column
+ * @method     ChildAxysUser|null findOneByCivilite(string $user_civilite) Return the first ChildAxysUser filtered by the user_civilite column
+ * @method     ChildAxysUser|null findOneByNom(string $user_nom) Return the first ChildAxysUser filtered by the user_nom column
+ * @method     ChildAxysUser|null findOneByPrenom(string $user_prenom) Return the first ChildAxysUser filtered by the user_prenom column
+ * @method     ChildAxysUser|null findOneByAdresse1(string $user_adresse1) Return the first ChildAxysUser filtered by the user_adresse1 column
+ * @method     ChildAxysUser|null findOneByAdresse2(string $user_adresse2) Return the first ChildAxysUser filtered by the user_adresse2 column
+ * @method     ChildAxysUser|null findOneByCodepostal(string $user_codepostal) Return the first ChildAxysUser filtered by the user_codepostal column
+ * @method     ChildAxysUser|null findOneByVille(string $user_ville) Return the first ChildAxysUser filtered by the user_ville column
+ * @method     ChildAxysUser|null findOneByPays(string $user_pays) Return the first ChildAxysUser filtered by the user_pays column
+ * @method     ChildAxysUser|null findOneByTelephone(string $user_telephone) Return the first ChildAxysUser filtered by the user_telephone column
+ * @method     ChildAxysUser|null findOneByPrefArticlesShow(string $user_pref_articles_show) Return the first ChildAxysUser filtered by the user_pref_articles_show column
+ * @method     ChildAxysUser|null findOneByFbId(string $user_fb_id) Return the first ChildAxysUser filtered by the user_fb_id column
+ * @method     ChildAxysUser|null findOneByFbToken(string $user_fb_token) Return the first ChildAxysUser filtered by the user_fb_token column
+ * @method     ChildAxysUser|null findOneByCountryId(int $country_id) Return the first ChildAxysUser filtered by the country_id column
+ * @method     ChildAxysUser|null findOneByPasswordResetToken(string $user_password_reset_token) Return the first ChildAxysUser filtered by the user_password_reset_token column
+ * @method     ChildAxysUser|null findOneByPasswordResetTokenCreated(string $user_password_reset_token_created) Return the first ChildAxysUser filtered by the user_password_reset_token_created column
+ * @method     ChildAxysUser|null findOneByUpdate(string $user_update) Return the first ChildAxysUser filtered by the user_update column
+ * @method     ChildAxysUser|null findOneByCreatedAt(string $user_created) Return the first ChildAxysUser filtered by the user_created column
+ * @method     ChildAxysUser|null findOneByUpdatedAt(string $user_updated) Return the first ChildAxysUser filtered by the user_updated column
  *
- * @method     ChildUser requirePk($key, ?ConnectionInterface $con = null) Return the ChildUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOne(?ConnectionInterface $con = null) Return the first ChildUser matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requirePk($key, ?ConnectionInterface $con = null) Return the ChildAxysUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOne(?ConnectionInterface $con = null) Return the first ChildAxysUser matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildUser requireOneById(int $id) Return the first ChildUser filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneBySiteId(int $site_id) Return the first ChildUser filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByEmail(string $Email) Return the first ChildUser filtered by the Email column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByPassword(string $user_password) Return the first ChildUser filtered by the user_password column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByKey(string $user_key) Return the first ChildUser filtered by the user_key column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByEmailKey(string $email_key) Return the first ChildUser filtered by the email_key column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByFacebookUid(int $facebook_uid) Return the first ChildUser filtered by the facebook_uid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByUsername(string $user_screen_name) Return the first ChildUser filtered by the user_screen_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneBySlug(string $user_slug) Return the first ChildUser filtered by the user_slug column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByWishlistShip(boolean $user_wishlist_ship) Return the first ChildUser filtered by the user_wishlist_ship column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByTop(boolean $user_top) Return the first ChildUser filtered by the user_top column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByBiblio(boolean $user_biblio) Return the first ChildUser filtered by the user_biblio column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByAdresseIp(string $adresse_ip) Return the first ChildUser filtered by the adresse_ip column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByRecaptchaScore(double $recaptcha_score) Return the first ChildUser filtered by the recaptcha_score column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByDateinscription(string $DateInscription) Return the first ChildUser filtered by the DateInscription column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByDateconnexion(string $DateConnexion) Return the first ChildUser filtered by the DateConnexion column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByPublisherId(int $publisher_id) Return the first ChildUser filtered by the publisher_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByBookshopId(int $bookshop_id) Return the first ChildUser filtered by the bookshop_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByLibraryId(int $library_id) Return the first ChildUser filtered by the library_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByCivilite(string $user_civilite) Return the first ChildUser filtered by the user_civilite column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByNom(string $user_nom) Return the first ChildUser filtered by the user_nom column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByPrenom(string $user_prenom) Return the first ChildUser filtered by the user_prenom column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByAdresse1(string $user_adresse1) Return the first ChildUser filtered by the user_adresse1 column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByAdresse2(string $user_adresse2) Return the first ChildUser filtered by the user_adresse2 column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByCodepostal(string $user_codepostal) Return the first ChildUser filtered by the user_codepostal column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByVille(string $user_ville) Return the first ChildUser filtered by the user_ville column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByPays(string $user_pays) Return the first ChildUser filtered by the user_pays column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByTelephone(string $user_telephone) Return the first ChildUser filtered by the user_telephone column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByPrefArticlesShow(string $user_pref_articles_show) Return the first ChildUser filtered by the user_pref_articles_show column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByFbId(string $user_fb_id) Return the first ChildUser filtered by the user_fb_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByFbToken(string $user_fb_token) Return the first ChildUser filtered by the user_fb_token column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByCountryId(int $country_id) Return the first ChildUser filtered by the country_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByPasswordResetToken(string $user_password_reset_token) Return the first ChildUser filtered by the user_password_reset_token column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByPasswordResetTokenCreated(string $user_password_reset_token_created) Return the first ChildUser filtered by the user_password_reset_token_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByUpdate(string $user_update) Return the first ChildUser filtered by the user_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByCreatedAt(string $user_created) Return the first ChildUser filtered by the user_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByUpdatedAt(string $user_updated) Return the first ChildUser filtered by the user_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneById(int $id) Return the first ChildAxysUser filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneBySiteId(int $site_id) Return the first ChildAxysUser filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByEmail(string $Email) Return the first ChildAxysUser filtered by the Email column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByPassword(string $user_password) Return the first ChildAxysUser filtered by the user_password column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByKey(string $user_key) Return the first ChildAxysUser filtered by the user_key column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByEmailKey(string $email_key) Return the first ChildAxysUser filtered by the email_key column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByFacebookUid(int $facebook_uid) Return the first ChildAxysUser filtered by the facebook_uid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByUsername(string $user_screen_name) Return the first ChildAxysUser filtered by the user_screen_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneBySlug(string $user_slug) Return the first ChildAxysUser filtered by the user_slug column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByWishlistShip(boolean $user_wishlist_ship) Return the first ChildAxysUser filtered by the user_wishlist_ship column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByTop(boolean $user_top) Return the first ChildAxysUser filtered by the user_top column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByBiblio(boolean $user_biblio) Return the first ChildAxysUser filtered by the user_biblio column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByAdresseIp(string $adresse_ip) Return the first ChildAxysUser filtered by the adresse_ip column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByRecaptchaScore(double $recaptcha_score) Return the first ChildAxysUser filtered by the recaptcha_score column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByDateinscription(string $DateInscription) Return the first ChildAxysUser filtered by the DateInscription column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByDateconnexion(string $DateConnexion) Return the first ChildAxysUser filtered by the DateConnexion column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByPublisherId(int $publisher_id) Return the first ChildAxysUser filtered by the publisher_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByBookshopId(int $bookshop_id) Return the first ChildAxysUser filtered by the bookshop_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByLibraryId(int $library_id) Return the first ChildAxysUser filtered by the library_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByCivilite(string $user_civilite) Return the first ChildAxysUser filtered by the user_civilite column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByNom(string $user_nom) Return the first ChildAxysUser filtered by the user_nom column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByPrenom(string $user_prenom) Return the first ChildAxysUser filtered by the user_prenom column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByAdresse1(string $user_adresse1) Return the first ChildAxysUser filtered by the user_adresse1 column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByAdresse2(string $user_adresse2) Return the first ChildAxysUser filtered by the user_adresse2 column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByCodepostal(string $user_codepostal) Return the first ChildAxysUser filtered by the user_codepostal column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByVille(string $user_ville) Return the first ChildAxysUser filtered by the user_ville column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByPays(string $user_pays) Return the first ChildAxysUser filtered by the user_pays column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByTelephone(string $user_telephone) Return the first ChildAxysUser filtered by the user_telephone column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByPrefArticlesShow(string $user_pref_articles_show) Return the first ChildAxysUser filtered by the user_pref_articles_show column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByFbId(string $user_fb_id) Return the first ChildAxysUser filtered by the user_fb_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByFbToken(string $user_fb_token) Return the first ChildAxysUser filtered by the user_fb_token column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByCountryId(int $country_id) Return the first ChildAxysUser filtered by the country_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByPasswordResetToken(string $user_password_reset_token) Return the first ChildAxysUser filtered by the user_password_reset_token column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByPasswordResetTokenCreated(string $user_password_reset_token_created) Return the first ChildAxysUser filtered by the user_password_reset_token_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByUpdate(string $user_update) Return the first ChildAxysUser filtered by the user_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByCreatedAt(string $user_created) Return the first ChildAxysUser filtered by the user_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysUser requireOneByUpdatedAt(string $user_updated) Return the first ChildAxysUser filtered by the user_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildUser[]|Collection find(?ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
- * @psalm-method Collection&\Traversable<ChildUser> find(?ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
+ * @method     ChildAxysUser[]|Collection find(?ConnectionInterface $con = null) Return ChildAxysUser objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildAxysUser> find(?ConnectionInterface $con = null) Return ChildAxysUser objects based on current ModelCriteria
  *
- * @method     ChildUser[]|Collection findById(int|array<int> $id) Return ChildUser objects filtered by the id column
- * @psalm-method Collection&\Traversable<ChildUser> findById(int|array<int> $id) Return ChildUser objects filtered by the id column
- * @method     ChildUser[]|Collection findBySiteId(int|array<int> $site_id) Return ChildUser objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildUser> findBySiteId(int|array<int> $site_id) Return ChildUser objects filtered by the site_id column
- * @method     ChildUser[]|Collection findByEmail(string|array<string> $Email) Return ChildUser objects filtered by the Email column
- * @psalm-method Collection&\Traversable<ChildUser> findByEmail(string|array<string> $Email) Return ChildUser objects filtered by the Email column
- * @method     ChildUser[]|Collection findByPassword(string|array<string> $user_password) Return ChildUser objects filtered by the user_password column
- * @psalm-method Collection&\Traversable<ChildUser> findByPassword(string|array<string> $user_password) Return ChildUser objects filtered by the user_password column
- * @method     ChildUser[]|Collection findByKey(string|array<string> $user_key) Return ChildUser objects filtered by the user_key column
- * @psalm-method Collection&\Traversable<ChildUser> findByKey(string|array<string> $user_key) Return ChildUser objects filtered by the user_key column
- * @method     ChildUser[]|Collection findByEmailKey(string|array<string> $email_key) Return ChildUser objects filtered by the email_key column
- * @psalm-method Collection&\Traversable<ChildUser> findByEmailKey(string|array<string> $email_key) Return ChildUser objects filtered by the email_key column
- * @method     ChildUser[]|Collection findByFacebookUid(int|array<int> $facebook_uid) Return ChildUser objects filtered by the facebook_uid column
- * @psalm-method Collection&\Traversable<ChildUser> findByFacebookUid(int|array<int> $facebook_uid) Return ChildUser objects filtered by the facebook_uid column
- * @method     ChildUser[]|Collection findByUsername(string|array<string> $user_screen_name) Return ChildUser objects filtered by the user_screen_name column
- * @psalm-method Collection&\Traversable<ChildUser> findByUsername(string|array<string> $user_screen_name) Return ChildUser objects filtered by the user_screen_name column
- * @method     ChildUser[]|Collection findBySlug(string|array<string> $user_slug) Return ChildUser objects filtered by the user_slug column
- * @psalm-method Collection&\Traversable<ChildUser> findBySlug(string|array<string> $user_slug) Return ChildUser objects filtered by the user_slug column
- * @method     ChildUser[]|Collection findByWishlistShip(boolean|array<boolean> $user_wishlist_ship) Return ChildUser objects filtered by the user_wishlist_ship column
- * @psalm-method Collection&\Traversable<ChildUser> findByWishlistShip(boolean|array<boolean> $user_wishlist_ship) Return ChildUser objects filtered by the user_wishlist_ship column
- * @method     ChildUser[]|Collection findByTop(boolean|array<boolean> $user_top) Return ChildUser objects filtered by the user_top column
- * @psalm-method Collection&\Traversable<ChildUser> findByTop(boolean|array<boolean> $user_top) Return ChildUser objects filtered by the user_top column
- * @method     ChildUser[]|Collection findByBiblio(boolean|array<boolean> $user_biblio) Return ChildUser objects filtered by the user_biblio column
- * @psalm-method Collection&\Traversable<ChildUser> findByBiblio(boolean|array<boolean> $user_biblio) Return ChildUser objects filtered by the user_biblio column
- * @method     ChildUser[]|Collection findByAdresseIp(string|array<string> $adresse_ip) Return ChildUser objects filtered by the adresse_ip column
- * @psalm-method Collection&\Traversable<ChildUser> findByAdresseIp(string|array<string> $adresse_ip) Return ChildUser objects filtered by the adresse_ip column
- * @method     ChildUser[]|Collection findByRecaptchaScore(double|array<double> $recaptcha_score) Return ChildUser objects filtered by the recaptcha_score column
- * @psalm-method Collection&\Traversable<ChildUser> findByRecaptchaScore(double|array<double> $recaptcha_score) Return ChildUser objects filtered by the recaptcha_score column
- * @method     ChildUser[]|Collection findByDateinscription(string|array<string> $DateInscription) Return ChildUser objects filtered by the DateInscription column
- * @psalm-method Collection&\Traversable<ChildUser> findByDateinscription(string|array<string> $DateInscription) Return ChildUser objects filtered by the DateInscription column
- * @method     ChildUser[]|Collection findByDateconnexion(string|array<string> $DateConnexion) Return ChildUser objects filtered by the DateConnexion column
- * @psalm-method Collection&\Traversable<ChildUser> findByDateconnexion(string|array<string> $DateConnexion) Return ChildUser objects filtered by the DateConnexion column
- * @method     ChildUser[]|Collection findByPublisherId(int|array<int> $publisher_id) Return ChildUser objects filtered by the publisher_id column
- * @psalm-method Collection&\Traversable<ChildUser> findByPublisherId(int|array<int> $publisher_id) Return ChildUser objects filtered by the publisher_id column
- * @method     ChildUser[]|Collection findByBookshopId(int|array<int> $bookshop_id) Return ChildUser objects filtered by the bookshop_id column
- * @psalm-method Collection&\Traversable<ChildUser> findByBookshopId(int|array<int> $bookshop_id) Return ChildUser objects filtered by the bookshop_id column
- * @method     ChildUser[]|Collection findByLibraryId(int|array<int> $library_id) Return ChildUser objects filtered by the library_id column
- * @psalm-method Collection&\Traversable<ChildUser> findByLibraryId(int|array<int> $library_id) Return ChildUser objects filtered by the library_id column
- * @method     ChildUser[]|Collection findByCivilite(string|array<string> $user_civilite) Return ChildUser objects filtered by the user_civilite column
- * @psalm-method Collection&\Traversable<ChildUser> findByCivilite(string|array<string> $user_civilite) Return ChildUser objects filtered by the user_civilite column
- * @method     ChildUser[]|Collection findByNom(string|array<string> $user_nom) Return ChildUser objects filtered by the user_nom column
- * @psalm-method Collection&\Traversable<ChildUser> findByNom(string|array<string> $user_nom) Return ChildUser objects filtered by the user_nom column
- * @method     ChildUser[]|Collection findByPrenom(string|array<string> $user_prenom) Return ChildUser objects filtered by the user_prenom column
- * @psalm-method Collection&\Traversable<ChildUser> findByPrenom(string|array<string> $user_prenom) Return ChildUser objects filtered by the user_prenom column
- * @method     ChildUser[]|Collection findByAdresse1(string|array<string> $user_adresse1) Return ChildUser objects filtered by the user_adresse1 column
- * @psalm-method Collection&\Traversable<ChildUser> findByAdresse1(string|array<string> $user_adresse1) Return ChildUser objects filtered by the user_adresse1 column
- * @method     ChildUser[]|Collection findByAdresse2(string|array<string> $user_adresse2) Return ChildUser objects filtered by the user_adresse2 column
- * @psalm-method Collection&\Traversable<ChildUser> findByAdresse2(string|array<string> $user_adresse2) Return ChildUser objects filtered by the user_adresse2 column
- * @method     ChildUser[]|Collection findByCodepostal(string|array<string> $user_codepostal) Return ChildUser objects filtered by the user_codepostal column
- * @psalm-method Collection&\Traversable<ChildUser> findByCodepostal(string|array<string> $user_codepostal) Return ChildUser objects filtered by the user_codepostal column
- * @method     ChildUser[]|Collection findByVille(string|array<string> $user_ville) Return ChildUser objects filtered by the user_ville column
- * @psalm-method Collection&\Traversable<ChildUser> findByVille(string|array<string> $user_ville) Return ChildUser objects filtered by the user_ville column
- * @method     ChildUser[]|Collection findByPays(string|array<string> $user_pays) Return ChildUser objects filtered by the user_pays column
- * @psalm-method Collection&\Traversable<ChildUser> findByPays(string|array<string> $user_pays) Return ChildUser objects filtered by the user_pays column
- * @method     ChildUser[]|Collection findByTelephone(string|array<string> $user_telephone) Return ChildUser objects filtered by the user_telephone column
- * @psalm-method Collection&\Traversable<ChildUser> findByTelephone(string|array<string> $user_telephone) Return ChildUser objects filtered by the user_telephone column
- * @method     ChildUser[]|Collection findByPrefArticlesShow(string|array<string> $user_pref_articles_show) Return ChildUser objects filtered by the user_pref_articles_show column
- * @psalm-method Collection&\Traversable<ChildUser> findByPrefArticlesShow(string|array<string> $user_pref_articles_show) Return ChildUser objects filtered by the user_pref_articles_show column
- * @method     ChildUser[]|Collection findByFbId(string|array<string> $user_fb_id) Return ChildUser objects filtered by the user_fb_id column
- * @psalm-method Collection&\Traversable<ChildUser> findByFbId(string|array<string> $user_fb_id) Return ChildUser objects filtered by the user_fb_id column
- * @method     ChildUser[]|Collection findByFbToken(string|array<string> $user_fb_token) Return ChildUser objects filtered by the user_fb_token column
- * @psalm-method Collection&\Traversable<ChildUser> findByFbToken(string|array<string> $user_fb_token) Return ChildUser objects filtered by the user_fb_token column
- * @method     ChildUser[]|Collection findByCountryId(int|array<int> $country_id) Return ChildUser objects filtered by the country_id column
- * @psalm-method Collection&\Traversable<ChildUser> findByCountryId(int|array<int> $country_id) Return ChildUser objects filtered by the country_id column
- * @method     ChildUser[]|Collection findByPasswordResetToken(string|array<string> $user_password_reset_token) Return ChildUser objects filtered by the user_password_reset_token column
- * @psalm-method Collection&\Traversable<ChildUser> findByPasswordResetToken(string|array<string> $user_password_reset_token) Return ChildUser objects filtered by the user_password_reset_token column
- * @method     ChildUser[]|Collection findByPasswordResetTokenCreated(string|array<string> $user_password_reset_token_created) Return ChildUser objects filtered by the user_password_reset_token_created column
- * @psalm-method Collection&\Traversable<ChildUser> findByPasswordResetTokenCreated(string|array<string> $user_password_reset_token_created) Return ChildUser objects filtered by the user_password_reset_token_created column
- * @method     ChildUser[]|Collection findByUpdate(string|array<string> $user_update) Return ChildUser objects filtered by the user_update column
- * @psalm-method Collection&\Traversable<ChildUser> findByUpdate(string|array<string> $user_update) Return ChildUser objects filtered by the user_update column
- * @method     ChildUser[]|Collection findByCreatedAt(string|array<string> $user_created) Return ChildUser objects filtered by the user_created column
- * @psalm-method Collection&\Traversable<ChildUser> findByCreatedAt(string|array<string> $user_created) Return ChildUser objects filtered by the user_created column
- * @method     ChildUser[]|Collection findByUpdatedAt(string|array<string> $user_updated) Return ChildUser objects filtered by the user_updated column
- * @psalm-method Collection&\Traversable<ChildUser> findByUpdatedAt(string|array<string> $user_updated) Return ChildUser objects filtered by the user_updated column
+ * @method     ChildAxysUser[]|Collection findById(int|array<int> $id) Return ChildAxysUser objects filtered by the id column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findById(int|array<int> $id) Return ChildAxysUser objects filtered by the id column
+ * @method     ChildAxysUser[]|Collection findBySiteId(int|array<int> $site_id) Return ChildAxysUser objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findBySiteId(int|array<int> $site_id) Return ChildAxysUser objects filtered by the site_id column
+ * @method     ChildAxysUser[]|Collection findByEmail(string|array<string> $Email) Return ChildAxysUser objects filtered by the Email column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByEmail(string|array<string> $Email) Return ChildAxysUser objects filtered by the Email column
+ * @method     ChildAxysUser[]|Collection findByPassword(string|array<string> $user_password) Return ChildAxysUser objects filtered by the user_password column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByPassword(string|array<string> $user_password) Return ChildAxysUser objects filtered by the user_password column
+ * @method     ChildAxysUser[]|Collection findByKey(string|array<string> $user_key) Return ChildAxysUser objects filtered by the user_key column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByKey(string|array<string> $user_key) Return ChildAxysUser objects filtered by the user_key column
+ * @method     ChildAxysUser[]|Collection findByEmailKey(string|array<string> $email_key) Return ChildAxysUser objects filtered by the email_key column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByEmailKey(string|array<string> $email_key) Return ChildAxysUser objects filtered by the email_key column
+ * @method     ChildAxysUser[]|Collection findByFacebookUid(int|array<int> $facebook_uid) Return ChildAxysUser objects filtered by the facebook_uid column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByFacebookUid(int|array<int> $facebook_uid) Return ChildAxysUser objects filtered by the facebook_uid column
+ * @method     ChildAxysUser[]|Collection findByUsername(string|array<string> $user_screen_name) Return ChildAxysUser objects filtered by the user_screen_name column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByUsername(string|array<string> $user_screen_name) Return ChildAxysUser objects filtered by the user_screen_name column
+ * @method     ChildAxysUser[]|Collection findBySlug(string|array<string> $user_slug) Return ChildAxysUser objects filtered by the user_slug column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findBySlug(string|array<string> $user_slug) Return ChildAxysUser objects filtered by the user_slug column
+ * @method     ChildAxysUser[]|Collection findByWishlistShip(boolean|array<boolean> $user_wishlist_ship) Return ChildAxysUser objects filtered by the user_wishlist_ship column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByWishlistShip(boolean|array<boolean> $user_wishlist_ship) Return ChildAxysUser objects filtered by the user_wishlist_ship column
+ * @method     ChildAxysUser[]|Collection findByTop(boolean|array<boolean> $user_top) Return ChildAxysUser objects filtered by the user_top column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByTop(boolean|array<boolean> $user_top) Return ChildAxysUser objects filtered by the user_top column
+ * @method     ChildAxysUser[]|Collection findByBiblio(boolean|array<boolean> $user_biblio) Return ChildAxysUser objects filtered by the user_biblio column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByBiblio(boolean|array<boolean> $user_biblio) Return ChildAxysUser objects filtered by the user_biblio column
+ * @method     ChildAxysUser[]|Collection findByAdresseIp(string|array<string> $adresse_ip) Return ChildAxysUser objects filtered by the adresse_ip column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByAdresseIp(string|array<string> $adresse_ip) Return ChildAxysUser objects filtered by the adresse_ip column
+ * @method     ChildAxysUser[]|Collection findByRecaptchaScore(double|array<double> $recaptcha_score) Return ChildAxysUser objects filtered by the recaptcha_score column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByRecaptchaScore(double|array<double> $recaptcha_score) Return ChildAxysUser objects filtered by the recaptcha_score column
+ * @method     ChildAxysUser[]|Collection findByDateinscription(string|array<string> $DateInscription) Return ChildAxysUser objects filtered by the DateInscription column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByDateinscription(string|array<string> $DateInscription) Return ChildAxysUser objects filtered by the DateInscription column
+ * @method     ChildAxysUser[]|Collection findByDateconnexion(string|array<string> $DateConnexion) Return ChildAxysUser objects filtered by the DateConnexion column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByDateconnexion(string|array<string> $DateConnexion) Return ChildAxysUser objects filtered by the DateConnexion column
+ * @method     ChildAxysUser[]|Collection findByPublisherId(int|array<int> $publisher_id) Return ChildAxysUser objects filtered by the publisher_id column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByPublisherId(int|array<int> $publisher_id) Return ChildAxysUser objects filtered by the publisher_id column
+ * @method     ChildAxysUser[]|Collection findByBookshopId(int|array<int> $bookshop_id) Return ChildAxysUser objects filtered by the bookshop_id column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByBookshopId(int|array<int> $bookshop_id) Return ChildAxysUser objects filtered by the bookshop_id column
+ * @method     ChildAxysUser[]|Collection findByLibraryId(int|array<int> $library_id) Return ChildAxysUser objects filtered by the library_id column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByLibraryId(int|array<int> $library_id) Return ChildAxysUser objects filtered by the library_id column
+ * @method     ChildAxysUser[]|Collection findByCivilite(string|array<string> $user_civilite) Return ChildAxysUser objects filtered by the user_civilite column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByCivilite(string|array<string> $user_civilite) Return ChildAxysUser objects filtered by the user_civilite column
+ * @method     ChildAxysUser[]|Collection findByNom(string|array<string> $user_nom) Return ChildAxysUser objects filtered by the user_nom column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByNom(string|array<string> $user_nom) Return ChildAxysUser objects filtered by the user_nom column
+ * @method     ChildAxysUser[]|Collection findByPrenom(string|array<string> $user_prenom) Return ChildAxysUser objects filtered by the user_prenom column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByPrenom(string|array<string> $user_prenom) Return ChildAxysUser objects filtered by the user_prenom column
+ * @method     ChildAxysUser[]|Collection findByAdresse1(string|array<string> $user_adresse1) Return ChildAxysUser objects filtered by the user_adresse1 column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByAdresse1(string|array<string> $user_adresse1) Return ChildAxysUser objects filtered by the user_adresse1 column
+ * @method     ChildAxysUser[]|Collection findByAdresse2(string|array<string> $user_adresse2) Return ChildAxysUser objects filtered by the user_adresse2 column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByAdresse2(string|array<string> $user_adresse2) Return ChildAxysUser objects filtered by the user_adresse2 column
+ * @method     ChildAxysUser[]|Collection findByCodepostal(string|array<string> $user_codepostal) Return ChildAxysUser objects filtered by the user_codepostal column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByCodepostal(string|array<string> $user_codepostal) Return ChildAxysUser objects filtered by the user_codepostal column
+ * @method     ChildAxysUser[]|Collection findByVille(string|array<string> $user_ville) Return ChildAxysUser objects filtered by the user_ville column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByVille(string|array<string> $user_ville) Return ChildAxysUser objects filtered by the user_ville column
+ * @method     ChildAxysUser[]|Collection findByPays(string|array<string> $user_pays) Return ChildAxysUser objects filtered by the user_pays column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByPays(string|array<string> $user_pays) Return ChildAxysUser objects filtered by the user_pays column
+ * @method     ChildAxysUser[]|Collection findByTelephone(string|array<string> $user_telephone) Return ChildAxysUser objects filtered by the user_telephone column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByTelephone(string|array<string> $user_telephone) Return ChildAxysUser objects filtered by the user_telephone column
+ * @method     ChildAxysUser[]|Collection findByPrefArticlesShow(string|array<string> $user_pref_articles_show) Return ChildAxysUser objects filtered by the user_pref_articles_show column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByPrefArticlesShow(string|array<string> $user_pref_articles_show) Return ChildAxysUser objects filtered by the user_pref_articles_show column
+ * @method     ChildAxysUser[]|Collection findByFbId(string|array<string> $user_fb_id) Return ChildAxysUser objects filtered by the user_fb_id column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByFbId(string|array<string> $user_fb_id) Return ChildAxysUser objects filtered by the user_fb_id column
+ * @method     ChildAxysUser[]|Collection findByFbToken(string|array<string> $user_fb_token) Return ChildAxysUser objects filtered by the user_fb_token column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByFbToken(string|array<string> $user_fb_token) Return ChildAxysUser objects filtered by the user_fb_token column
+ * @method     ChildAxysUser[]|Collection findByCountryId(int|array<int> $country_id) Return ChildAxysUser objects filtered by the country_id column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByCountryId(int|array<int> $country_id) Return ChildAxysUser objects filtered by the country_id column
+ * @method     ChildAxysUser[]|Collection findByPasswordResetToken(string|array<string> $user_password_reset_token) Return ChildAxysUser objects filtered by the user_password_reset_token column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByPasswordResetToken(string|array<string> $user_password_reset_token) Return ChildAxysUser objects filtered by the user_password_reset_token column
+ * @method     ChildAxysUser[]|Collection findByPasswordResetTokenCreated(string|array<string> $user_password_reset_token_created) Return ChildAxysUser objects filtered by the user_password_reset_token_created column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByPasswordResetTokenCreated(string|array<string> $user_password_reset_token_created) Return ChildAxysUser objects filtered by the user_password_reset_token_created column
+ * @method     ChildAxysUser[]|Collection findByUpdate(string|array<string> $user_update) Return ChildAxysUser objects filtered by the user_update column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByUpdate(string|array<string> $user_update) Return ChildAxysUser objects filtered by the user_update column
+ * @method     ChildAxysUser[]|Collection findByCreatedAt(string|array<string> $user_created) Return ChildAxysUser objects filtered by the user_created column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByCreatedAt(string|array<string> $user_created) Return ChildAxysUser objects filtered by the user_created column
+ * @method     ChildAxysUser[]|Collection findByUpdatedAt(string|array<string> $user_updated) Return ChildAxysUser objects filtered by the user_updated column
+ * @psalm-method Collection&\Traversable<ChildAxysUser> findByUpdatedAt(string|array<string> $user_updated) Return ChildAxysUser objects filtered by the user_updated column
  *
- * @method     ChildUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildUser> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildAxysUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildAxysUser> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
-abstract class UserQuery extends ModelCriteria
+abstract class AxysUserQuery extends ModelCriteria
 {
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \Model\Base\UserQuery object.
+     * Initializes internal state of \Model\Base\AxysUserQuery object.
      *
      * @param string $dbName The database name
      * @param string $modelName The phpName of a model, e.g. 'Book'
      * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'default', $modelName = '\\Model\\User', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\Model\\AxysUser', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new ChildUserQuery object.
+     * Returns a new ChildAxysUserQuery object.
      *
      * @param string $modelAlias The alias of a model in the query
      * @param Criteria $criteria Optional Criteria to build the query from
      *
-     * @return ChildUserQuery
+     * @return ChildAxysUserQuery
      */
     public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
-        if ($criteria instanceof ChildUserQuery) {
+        if ($criteria instanceof ChildAxysUserQuery) {
             return $criteria;
         }
-        $query = new ChildUserQuery();
+        $query = new ChildAxysUserQuery();
         if (null !== $modelAlias) {
             $query->setModelAlias($modelAlias);
         }
@@ -410,7 +410,7 @@ abstract class UserQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
-     * @return ChildUser|array|mixed the result, formatted by the current formatter
+     * @return ChildAxysUser|array|mixed the result, formatted by the current formatter
      */
     public function findPk($key, ?ConnectionInterface $con = null)
     {
@@ -419,7 +419,7 @@ abstract class UserQuery extends ModelCriteria
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(UserTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(AxysUserTableMap::DATABASE_NAME);
         }
 
         $this->basePreSelect($con);
@@ -432,7 +432,7 @@ abstract class UserQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = UserTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
+        if ((null !== ($obj = AxysUserTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -449,7 +449,7 @@ abstract class UserQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildUser A model object, or null if the key is not found
+     * @return ChildAxysUser A model object, or null if the key is not found
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
@@ -464,10 +464,10 @@ abstract class UserQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildUser $obj */
-            $obj = new ChildUser();
+            /** @var ChildAxysUser $obj */
+            $obj = new ChildAxysUser();
             $obj->hydrate($row);
-            UserTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
+            AxysUserTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -480,7 +480,7 @@ abstract class UserQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con A connection object
      *
-     * @return ChildUser|array|mixed the result, formatted by the current formatter
+     * @return ChildAxysUser|array|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, ConnectionInterface $con)
     {
@@ -527,7 +527,7 @@ abstract class UserQuery extends ModelCriteria
     public function filterByPrimaryKey($key)
     {
 
-        $this->addUsingAlias(UserTableMap::COL_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(AxysUserTableMap::COL_ID, $key, Criteria::EQUAL);
 
         return $this;
     }
@@ -542,7 +542,7 @@ abstract class UserQuery extends ModelCriteria
     public function filterByPrimaryKeys($keys)
     {
 
-        $this->addUsingAlias(UserTableMap::COL_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(AxysUserTableMap::COL_ID, $keys, Criteria::IN);
 
         return $this;
     }
@@ -570,11 +570,11 @@ abstract class UserQuery extends ModelCriteria
         if (is_array($id)) {
             $useMinMax = false;
             if (isset($id['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($id['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -585,7 +585,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_ID, $id, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_ID, $id, $comparison);
 
         return $this;
     }
@@ -615,11 +615,11 @@ abstract class UserQuery extends ModelCriteria
         if (is_array($siteId)) {
             $useMinMax = false;
             if (isset($siteId['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_SITE_ID, $siteId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_SITE_ID, $siteId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($siteId['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_SITE_ID, $siteId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_SITE_ID, $siteId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -630,7 +630,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_SITE_ID, $siteId, $comparison);
 
         return $this;
     }
@@ -658,7 +658,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_EMAIL, $email, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_EMAIL, $email, $comparison);
 
         return $this;
     }
@@ -686,7 +686,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_PASSWORD, $password, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_PASSWORD, $password, $comparison);
 
         return $this;
     }
@@ -714,7 +714,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_KEY, $key, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_KEY, $key, $comparison);
 
         return $this;
     }
@@ -742,7 +742,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_EMAIL_KEY, $emailKey, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_EMAIL_KEY, $emailKey, $comparison);
 
         return $this;
     }
@@ -770,11 +770,11 @@ abstract class UserQuery extends ModelCriteria
         if (is_array($facebookUid)) {
             $useMinMax = false;
             if (isset($facebookUid['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_FACEBOOK_UID, $facebookUid['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_FACEBOOK_UID, $facebookUid['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($facebookUid['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_FACEBOOK_UID, $facebookUid['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_FACEBOOK_UID, $facebookUid['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -785,7 +785,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_FACEBOOK_UID, $facebookUid, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_FACEBOOK_UID, $facebookUid, $comparison);
 
         return $this;
     }
@@ -813,7 +813,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_SCREEN_NAME, $username, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_SCREEN_NAME, $username, $comparison);
 
         return $this;
     }
@@ -841,7 +841,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_SLUG, $slug, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_SLUG, $slug, $comparison);
 
         return $this;
     }
@@ -870,7 +870,7 @@ abstract class UserQuery extends ModelCriteria
             $wishlistShip = in_array(strtolower($wishlistShip), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_WISHLIST_SHIP, $wishlistShip, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_WISHLIST_SHIP, $wishlistShip, $comparison);
 
         return $this;
     }
@@ -899,7 +899,7 @@ abstract class UserQuery extends ModelCriteria
             $top = in_array(strtolower($top), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_TOP, $top, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_TOP, $top, $comparison);
 
         return $this;
     }
@@ -928,7 +928,7 @@ abstract class UserQuery extends ModelCriteria
             $biblio = in_array(strtolower($biblio), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_BIBLIO, $biblio, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_BIBLIO, $biblio, $comparison);
 
         return $this;
     }
@@ -956,7 +956,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_ADRESSE_IP, $adresseIp, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_ADRESSE_IP, $adresseIp, $comparison);
 
         return $this;
     }
@@ -984,11 +984,11 @@ abstract class UserQuery extends ModelCriteria
         if (is_array($recaptchaScore)) {
             $useMinMax = false;
             if (isset($recaptchaScore['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_RECAPTCHA_SCORE, $recaptchaScore['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_RECAPTCHA_SCORE, $recaptchaScore['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($recaptchaScore['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_RECAPTCHA_SCORE, $recaptchaScore['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_RECAPTCHA_SCORE, $recaptchaScore['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -999,7 +999,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_RECAPTCHA_SCORE, $recaptchaScore, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_RECAPTCHA_SCORE, $recaptchaScore, $comparison);
 
         return $this;
     }
@@ -1029,11 +1029,11 @@ abstract class UserQuery extends ModelCriteria
         if (is_array($dateinscription)) {
             $useMinMax = false;
             if (isset($dateinscription['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_DATEINSCRIPTION, $dateinscription['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_DATEINSCRIPTION, $dateinscription['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($dateinscription['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_DATEINSCRIPTION, $dateinscription['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_DATEINSCRIPTION, $dateinscription['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -1044,7 +1044,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_DATEINSCRIPTION, $dateinscription, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_DATEINSCRIPTION, $dateinscription, $comparison);
 
         return $this;
     }
@@ -1074,11 +1074,11 @@ abstract class UserQuery extends ModelCriteria
         if (is_array($dateconnexion)) {
             $useMinMax = false;
             if (isset($dateconnexion['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_DATECONNEXION, $dateconnexion['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_DATECONNEXION, $dateconnexion['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($dateconnexion['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_DATECONNEXION, $dateconnexion['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_DATECONNEXION, $dateconnexion['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -1089,7 +1089,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_DATECONNEXION, $dateconnexion, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_DATECONNEXION, $dateconnexion, $comparison);
 
         return $this;
     }
@@ -1117,11 +1117,11 @@ abstract class UserQuery extends ModelCriteria
         if (is_array($publisherId)) {
             $useMinMax = false;
             if (isset($publisherId['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_PUBLISHER_ID, $publisherId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_PUBLISHER_ID, $publisherId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($publisherId['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_PUBLISHER_ID, $publisherId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_PUBLISHER_ID, $publisherId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -1132,7 +1132,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
 
         return $this;
     }
@@ -1160,11 +1160,11 @@ abstract class UserQuery extends ModelCriteria
         if (is_array($bookshopId)) {
             $useMinMax = false;
             if (isset($bookshopId['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_BOOKSHOP_ID, $bookshopId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_BOOKSHOP_ID, $bookshopId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($bookshopId['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_BOOKSHOP_ID, $bookshopId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_BOOKSHOP_ID, $bookshopId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -1175,7 +1175,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_BOOKSHOP_ID, $bookshopId, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_BOOKSHOP_ID, $bookshopId, $comparison);
 
         return $this;
     }
@@ -1203,11 +1203,11 @@ abstract class UserQuery extends ModelCriteria
         if (is_array($libraryId)) {
             $useMinMax = false;
             if (isset($libraryId['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_LIBRARY_ID, $libraryId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_LIBRARY_ID, $libraryId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($libraryId['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_LIBRARY_ID, $libraryId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_LIBRARY_ID, $libraryId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -1218,7 +1218,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_LIBRARY_ID, $libraryId, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_LIBRARY_ID, $libraryId, $comparison);
 
         return $this;
     }
@@ -1246,7 +1246,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_CIVILITE, $civilite, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_CIVILITE, $civilite, $comparison);
 
         return $this;
     }
@@ -1274,7 +1274,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_NOM, $nom, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_NOM, $nom, $comparison);
 
         return $this;
     }
@@ -1302,7 +1302,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_PRENOM, $prenom, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_PRENOM, $prenom, $comparison);
 
         return $this;
     }
@@ -1330,7 +1330,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_ADRESSE1, $adresse1, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_ADRESSE1, $adresse1, $comparison);
 
         return $this;
     }
@@ -1358,7 +1358,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_ADRESSE2, $adresse2, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_ADRESSE2, $adresse2, $comparison);
 
         return $this;
     }
@@ -1386,7 +1386,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_CODEPOSTAL, $codepostal, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_CODEPOSTAL, $codepostal, $comparison);
 
         return $this;
     }
@@ -1414,7 +1414,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_VILLE, $ville, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_VILLE, $ville, $comparison);
 
         return $this;
     }
@@ -1442,7 +1442,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_PAYS, $pays, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_PAYS, $pays, $comparison);
 
         return $this;
     }
@@ -1470,7 +1470,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_TELEPHONE, $telephone, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_TELEPHONE, $telephone, $comparison);
 
         return $this;
     }
@@ -1498,7 +1498,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_PREF_ARTICLES_SHOW, $prefArticlesShow, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_PREF_ARTICLES_SHOW, $prefArticlesShow, $comparison);
 
         return $this;
     }
@@ -1526,11 +1526,11 @@ abstract class UserQuery extends ModelCriteria
         if (is_array($fbId)) {
             $useMinMax = false;
             if (isset($fbId['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_USER_FB_ID, $fbId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_USER_FB_ID, $fbId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($fbId['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_USER_FB_ID, $fbId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_USER_FB_ID, $fbId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -1541,7 +1541,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_FB_ID, $fbId, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_FB_ID, $fbId, $comparison);
 
         return $this;
     }
@@ -1569,7 +1569,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_FB_TOKEN, $fbToken, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_FB_TOKEN, $fbToken, $comparison);
 
         return $this;
     }
@@ -1597,11 +1597,11 @@ abstract class UserQuery extends ModelCriteria
         if (is_array($countryId)) {
             $useMinMax = false;
             if (isset($countryId['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_COUNTRY_ID, $countryId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_COUNTRY_ID, $countryId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($countryId['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_COUNTRY_ID, $countryId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_COUNTRY_ID, $countryId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -1612,7 +1612,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_COUNTRY_ID, $countryId, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_COUNTRY_ID, $countryId, $comparison);
 
         return $this;
     }
@@ -1640,7 +1640,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_PASSWORD_RESET_TOKEN, $passwordResetToken, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN, $passwordResetToken, $comparison);
 
         return $this;
     }
@@ -1670,11 +1670,11 @@ abstract class UserQuery extends ModelCriteria
         if (is_array($passwordResetTokenCreated)) {
             $useMinMax = false;
             if (isset($passwordResetTokenCreated['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED, $passwordResetTokenCreated['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED, $passwordResetTokenCreated['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($passwordResetTokenCreated['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED, $passwordResetTokenCreated['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED, $passwordResetTokenCreated['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -1685,7 +1685,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED, $passwordResetTokenCreated, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED, $passwordResetTokenCreated, $comparison);
 
         return $this;
     }
@@ -1715,11 +1715,11 @@ abstract class UserQuery extends ModelCriteria
         if (is_array($update)) {
             $useMinMax = false;
             if (isset($update['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_USER_UPDATE, $update['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_USER_UPDATE, $update['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($update['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_USER_UPDATE, $update['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_USER_UPDATE, $update['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -1730,7 +1730,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_UPDATE, $update, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_UPDATE, $update, $comparison);
 
         return $this;
     }
@@ -1760,11 +1760,11 @@ abstract class UserQuery extends ModelCriteria
         if (is_array($createdAt)) {
             $useMinMax = false;
             if (isset($createdAt['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_USER_CREATED, $createdAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_USER_CREATED, $createdAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($createdAt['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_USER_CREATED, $createdAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_USER_CREATED, $createdAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -1775,7 +1775,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_CREATED, $createdAt, $comparison);
 
         return $this;
     }
@@ -1805,11 +1805,11 @@ abstract class UserQuery extends ModelCriteria
         if (is_array($updatedAt)) {
             $useMinMax = false;
             if (isset($updatedAt['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_USER_UPDATED, $updatedAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_USER_UPDATED, $updatedAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($updatedAt['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_USER_UPDATED, $updatedAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysUserTableMap::COL_USER_UPDATED, $updatedAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -1820,7 +1820,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(UserTableMap::COL_USER_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_UPDATED, $updatedAt, $comparison);
 
         return $this;
     }
@@ -1839,14 +1839,14 @@ abstract class UserQuery extends ModelCriteria
     {
         if ($site instanceof \Model\Site) {
             return $this
-                ->addUsingAlias(UserTableMap::COL_SITE_ID, $site->getId(), $comparison);
+                ->addUsingAlias(AxysUserTableMap::COL_SITE_ID, $site->getId(), $comparison);
         } elseif ($site instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             $this
-                ->addUsingAlias(UserTableMap::COL_SITE_ID, $site->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(AxysUserTableMap::COL_SITE_ID, $site->toKeyValue('PrimaryKey', 'Id'), $comparison);
 
             return $this;
         } else {
@@ -2012,7 +2012,7 @@ abstract class UserQuery extends ModelCriteria
     {
         if ($axysConsent instanceof \Model\AxysConsent) {
             $this
-                ->addUsingAlias(UserTableMap::COL_ID, $axysConsent->getUserId(), $comparison);
+                ->addUsingAlias(AxysUserTableMap::COL_ID, $axysConsent->getUserId(), $comparison);
 
             return $this;
         } elseif ($axysConsent instanceof ObjectCollection) {
@@ -2185,7 +2185,7 @@ abstract class UserQuery extends ModelCriteria
     {
         if ($cart instanceof \Model\Cart) {
             $this
-                ->addUsingAlias(UserTableMap::COL_ID, $cart->getUserId(), $comparison);
+                ->addUsingAlias(AxysUserTableMap::COL_ID, $cart->getUserId(), $comparison);
 
             return $this;
         } elseif ($cart instanceof ObjectCollection) {
@@ -2358,7 +2358,7 @@ abstract class UserQuery extends ModelCriteria
     {
         if ($option instanceof \Model\Option) {
             $this
-                ->addUsingAlias(UserTableMap::COL_ID, $option->getUserId(), $comparison);
+                ->addUsingAlias(AxysUserTableMap::COL_ID, $option->getUserId(), $comparison);
 
             return $this;
         } elseif ($option instanceof ObjectCollection) {
@@ -2531,7 +2531,7 @@ abstract class UserQuery extends ModelCriteria
     {
         if ($right instanceof \Model\Right) {
             $this
-                ->addUsingAlias(UserTableMap::COL_ID, $right->getUserId(), $comparison);
+                ->addUsingAlias(AxysUserTableMap::COL_ID, $right->getUserId(), $comparison);
 
             return $this;
         } elseif ($right instanceof ObjectCollection) {
@@ -2704,7 +2704,7 @@ abstract class UserQuery extends ModelCriteria
     {
         if ($session instanceof \Model\Session) {
             $this
-                ->addUsingAlias(UserTableMap::COL_ID, $session->getUserId(), $comparison);
+                ->addUsingAlias(AxysUserTableMap::COL_ID, $session->getUserId(), $comparison);
 
             return $this;
         } elseif ($session instanceof ObjectCollection) {
@@ -2877,7 +2877,7 @@ abstract class UserQuery extends ModelCriteria
     {
         if ($stock instanceof \Model\Stock) {
             $this
-                ->addUsingAlias(UserTableMap::COL_ID, $stock->getUserId(), $comparison);
+                ->addUsingAlias(AxysUserTableMap::COL_ID, $stock->getUserId(), $comparison);
 
             return $this;
         } elseif ($stock instanceof ObjectCollection) {
@@ -3050,7 +3050,7 @@ abstract class UserQuery extends ModelCriteria
     {
         if ($wish instanceof \Model\Wish) {
             $this
-                ->addUsingAlias(UserTableMap::COL_ID, $wish->getUserId(), $comparison);
+                ->addUsingAlias(AxysUserTableMap::COL_ID, $wish->getUserId(), $comparison);
 
             return $this;
         } elseif ($wish instanceof ObjectCollection) {
@@ -3223,7 +3223,7 @@ abstract class UserQuery extends ModelCriteria
     {
         if ($wishlist instanceof \Model\Wishlist) {
             $this
-                ->addUsingAlias(UserTableMap::COL_ID, $wishlist->getUserId(), $comparison);
+                ->addUsingAlias(AxysUserTableMap::COL_ID, $wishlist->getUserId(), $comparison);
 
             return $this;
         } elseif ($wishlist instanceof ObjectCollection) {
@@ -3387,14 +3387,14 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param ChildUser $user Object to remove from the list of results
+     * @param ChildAxysUser $axysUser Object to remove from the list of results
      *
      * @return $this The current query, for fluid interface
      */
-    public function prune($user = null)
+    public function prune($axysUser = null)
     {
-        if ($user) {
-            $this->addUsingAlias(UserTableMap::COL_ID, $user->getId(), Criteria::NOT_EQUAL);
+        if ($axysUser) {
+            $this->addUsingAlias(AxysUserTableMap::COL_ID, $axysUser->getId(), Criteria::NOT_EQUAL);
         }
 
         return $this;
@@ -3409,7 +3409,7 @@ abstract class UserQuery extends ModelCriteria
     public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(UserTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AxysUserTableMap::DATABASE_NAME);
         }
 
         // use transaction because $criteria could contain info
@@ -3420,8 +3420,8 @@ abstract class UserQuery extends ModelCriteria
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            UserTableMap::clearInstancePool();
-            UserTableMap::clearRelatedInstancePool();
+            AxysUserTableMap::clearInstancePool();
+            AxysUserTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -3439,23 +3439,23 @@ abstract class UserQuery extends ModelCriteria
     public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(UserTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AxysUserTableMap::DATABASE_NAME);
         }
 
         $criteria = $this;
 
         // Set the correct dbName
-        $criteria->setDbName(UserTableMap::DATABASE_NAME);
+        $criteria->setDbName(AxysUserTableMap::DATABASE_NAME);
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
 
-            UserTableMap::removeInstanceFromPool($criteria);
+            AxysUserTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
-            UserTableMap::clearRelatedInstancePool();
+            AxysUserTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -3472,7 +3472,7 @@ abstract class UserQuery extends ModelCriteria
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        $this->addUsingAlias(UserTableMap::COL_USER_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
 
         return $this;
     }
@@ -3484,7 +3484,7 @@ abstract class UserQuery extends ModelCriteria
      */
     public function lastUpdatedFirst()
     {
-        $this->addDescendingOrderByColumn(UserTableMap::COL_USER_UPDATED);
+        $this->addDescendingOrderByColumn(AxysUserTableMap::COL_USER_UPDATED);
 
         return $this;
     }
@@ -3496,7 +3496,7 @@ abstract class UserQuery extends ModelCriteria
      */
     public function firstUpdatedFirst()
     {
-        $this->addAscendingOrderByColumn(UserTableMap::COL_USER_UPDATED);
+        $this->addAscendingOrderByColumn(AxysUserTableMap::COL_USER_UPDATED);
 
         return $this;
     }
@@ -3508,7 +3508,7 @@ abstract class UserQuery extends ModelCriteria
      */
     public function lastCreatedFirst()
     {
-        $this->addDescendingOrderByColumn(UserTableMap::COL_USER_CREATED);
+        $this->addDescendingOrderByColumn(AxysUserTableMap::COL_USER_CREATED);
 
         return $this;
     }
@@ -3522,7 +3522,7 @@ abstract class UserQuery extends ModelCriteria
      */
     public function recentlyCreated($nbDays = 7)
     {
-        $this->addUsingAlias(UserTableMap::COL_USER_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(AxysUserTableMap::COL_USER_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
 
         return $this;
     }
@@ -3534,7 +3534,7 @@ abstract class UserQuery extends ModelCriteria
      */
     public function firstCreatedFirst()
     {
-        $this->addAscendingOrderByColumn(UserTableMap::COL_USER_CREATED);
+        $this->addAscendingOrderByColumn(AxysUserTableMap::COL_USER_CREATED);
 
         return $this;
     }

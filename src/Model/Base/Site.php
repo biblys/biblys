@@ -7,6 +7,8 @@ use \Exception;
 use \PDO;
 use Model\ArticleCategory as ChildArticleCategory;
 use Model\ArticleCategoryQuery as ChildArticleCategoryQuery;
+use Model\AxysUser as ChildAxysUser;
+use Model\AxysUserQuery as ChildAxysUserQuery;
 use Model\Cart as ChildCart;
 use Model\CartQuery as ChildCartQuery;
 use Model\CrowdfundingCampaign as ChildCrowdfundingCampaign;
@@ -29,9 +31,8 @@ use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
 use Model\Stock as ChildStock;
 use Model\StockQuery as ChildStockQuery;
-use Model\User as ChildUser;
-use Model\UserQuery as ChildUserQuery;
 use Model\Map\ArticleCategoryTableMap;
+use Model\Map\AxysUserTableMap;
 use Model\Map\CartTableMap;
 use Model\Map\CrowdfundingCampaignTableMap;
 use Model\Map\CrowfundingRewardTableMap;
@@ -43,7 +44,6 @@ use Model\Map\RightTableMap;
 use Model\Map\SessionTableMap;
 use Model\Map\SiteTableMap;
 use Model\Map\StockTableMap;
-use Model\Map\UserTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -388,11 +388,11 @@ abstract class Site implements ActiveRecordInterface
     protected $site_updated;
 
     /**
-     * @var        ObjectCollection|ChildUser[] Collection to store aggregation of ChildUser objects.
-     * @phpstan-var ObjectCollection&\Traversable<ChildUser> Collection to store aggregation of ChildUser objects.
+     * @var        ObjectCollection|ChildAxysUser[] Collection to store aggregation of ChildAxysUser objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildAxysUser> Collection to store aggregation of ChildAxysUser objects.
      */
-    protected $collUsers;
-    protected $collUsersPartial;
+    protected $collAxysUsers;
+    protected $collAxysUsersPartial;
 
     /**
      * @var        ObjectCollection|ChildCart[] Collection to store aggregation of ChildCart objects.
@@ -481,10 +481,10 @@ abstract class Site implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildUser[]
-     * @phpstan-var ObjectCollection&\Traversable<ChildUser>
+     * @var ObjectCollection|ChildAxysUser[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildAxysUser>
      */
-    protected $usersScheduledForDeletion = null;
+    protected $axysUsersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -2555,7 +2555,7 @@ abstract class Site implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->collUsers = null;
+            $this->collAxysUsers = null;
 
             $this->collCarts = null;
 
@@ -2706,18 +2706,18 @@ abstract class Site implements ActiveRecordInterface
                 $this->resetModified();
             }
 
-            if ($this->usersScheduledForDeletion !== null) {
-                if (!$this->usersScheduledForDeletion->isEmpty()) {
-                    foreach ($this->usersScheduledForDeletion as $user) {
+            if ($this->axysUsersScheduledForDeletion !== null) {
+                if (!$this->axysUsersScheduledForDeletion->isEmpty()) {
+                    foreach ($this->axysUsersScheduledForDeletion as $axysUser) {
                         // need to save related object because we set the relation to null
-                        $user->save($con);
+                        $axysUser->save($con);
                     }
-                    $this->usersScheduledForDeletion = null;
+                    $this->axysUsersScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collUsers !== null) {
-                foreach ($this->collUsers as $referrerFK) {
+            if ($this->collAxysUsers !== null) {
+                foreach ($this->collAxysUsers as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -3497,20 +3497,20 @@ abstract class Site implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->collUsers) {
+            if (null !== $this->collAxysUsers) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'users';
+                        $key = 'axysUsers';
                         break;
                     case TableMap::TYPE_FIELDNAME:
                         $key = 'axys_userss';
                         break;
                     default:
-                        $key = 'Users';
+                        $key = 'AxysUsers';
                 }
 
-                $result[$key] = $this->collUsers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collAxysUsers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collCarts) {
 
@@ -4265,9 +4265,9 @@ abstract class Site implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
-            foreach ($this->getUsers() as $relObj) {
+            foreach ($this->getAxysUsers() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addUser($relObj->copy($deepCopy));
+                    $copyObj->addAxysUser($relObj->copy($deepCopy));
                 }
             }
 
@@ -4378,8 +4378,8 @@ abstract class Site implements ActiveRecordInterface
      */
     public function initRelation($relationName): void
     {
-        if ('User' === $relationName) {
-            $this->initUsers();
+        if ('AxysUser' === $relationName) {
+            $this->initAxysUsers();
             return;
         }
         if ('Cart' === $relationName) {
@@ -4429,35 +4429,35 @@ abstract class Site implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collUsers collection
+     * Clears out the collAxysUsers collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return $this
-     * @see addUsers()
+     * @see addAxysUsers()
      */
-    public function clearUsers()
+    public function clearAxysUsers()
     {
-        $this->collUsers = null; // important to set this to NULL since that means it is uninitialized
+        $this->collAxysUsers = null; // important to set this to NULL since that means it is uninitialized
 
         return $this;
     }
 
     /**
-     * Reset is the collUsers collection loaded partially.
+     * Reset is the collAxysUsers collection loaded partially.
      *
      * @return void
      */
-    public function resetPartialUsers($v = true): void
+    public function resetPartialAxysUsers($v = true): void
     {
-        $this->collUsersPartial = $v;
+        $this->collAxysUsersPartial = $v;
     }
 
     /**
-     * Initializes the collUsers collection.
+     * Initializes the collAxysUsers collection.
      *
-     * By default this just sets the collUsers collection to an empty array (like clearcollUsers());
+     * By default this just sets the collAxysUsers collection to an empty array (like clearcollAxysUsers());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -4466,20 +4466,20 @@ abstract class Site implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initUsers(bool $overrideExisting = true): void
+    public function initAxysUsers(bool $overrideExisting = true): void
     {
-        if (null !== $this->collUsers && !$overrideExisting) {
+        if (null !== $this->collAxysUsers && !$overrideExisting) {
             return;
         }
 
-        $collectionClassName = UserTableMap::getTableMap()->getCollectionClassName();
+        $collectionClassName = AxysUserTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collUsers = new $collectionClassName;
-        $this->collUsers->setModel('\Model\User');
+        $this->collAxysUsers = new $collectionClassName;
+        $this->collAxysUsers->setModel('\Model\AxysUser');
     }
 
     /**
-     * Gets an array of ChildUser objects which contain a foreign key that references this object.
+     * Gets an array of ChildAxysUser objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -4489,118 +4489,118 @@ abstract class Site implements ActiveRecordInterface
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildUser[] List of ChildUser objects
-     * @phpstan-return ObjectCollection&\Traversable<ChildUser> List of ChildUser objects
+     * @return ObjectCollection|ChildAxysUser[] List of ChildAxysUser objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildAxysUser> List of ChildAxysUser objects
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function getUsers(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    public function getAxysUsers(?Criteria $criteria = null, ?ConnectionInterface $con = null)
     {
-        $partial = $this->collUsersPartial && !$this->isNew();
-        if (null === $this->collUsers || null !== $criteria || $partial) {
+        $partial = $this->collAxysUsersPartial && !$this->isNew();
+        if (null === $this->collAxysUsers || null !== $criteria || $partial) {
             if ($this->isNew()) {
                 // return empty collection
-                if (null === $this->collUsers) {
-                    $this->initUsers();
+                if (null === $this->collAxysUsers) {
+                    $this->initAxysUsers();
                 } else {
-                    $collectionClassName = UserTableMap::getTableMap()->getCollectionClassName();
+                    $collectionClassName = AxysUserTableMap::getTableMap()->getCollectionClassName();
 
-                    $collUsers = new $collectionClassName;
-                    $collUsers->setModel('\Model\User');
+                    $collAxysUsers = new $collectionClassName;
+                    $collAxysUsers->setModel('\Model\AxysUser');
 
-                    return $collUsers;
+                    return $collAxysUsers;
                 }
             } else {
-                $collUsers = ChildUserQuery::create(null, $criteria)
+                $collAxysUsers = ChildAxysUserQuery::create(null, $criteria)
                     ->filterBySite($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collUsersPartial && count($collUsers)) {
-                        $this->initUsers(false);
+                    if (false !== $this->collAxysUsersPartial && count($collAxysUsers)) {
+                        $this->initAxysUsers(false);
 
-                        foreach ($collUsers as $obj) {
-                            if (false == $this->collUsers->contains($obj)) {
-                                $this->collUsers->append($obj);
+                        foreach ($collAxysUsers as $obj) {
+                            if (false == $this->collAxysUsers->contains($obj)) {
+                                $this->collAxysUsers->append($obj);
                             }
                         }
 
-                        $this->collUsersPartial = true;
+                        $this->collAxysUsersPartial = true;
                     }
 
-                    return $collUsers;
+                    return $collAxysUsers;
                 }
 
-                if ($partial && $this->collUsers) {
-                    foreach ($this->collUsers as $obj) {
+                if ($partial && $this->collAxysUsers) {
+                    foreach ($this->collAxysUsers as $obj) {
                         if ($obj->isNew()) {
-                            $collUsers[] = $obj;
+                            $collAxysUsers[] = $obj;
                         }
                     }
                 }
 
-                $this->collUsers = $collUsers;
-                $this->collUsersPartial = false;
+                $this->collAxysUsers = $collAxysUsers;
+                $this->collAxysUsersPartial = false;
             }
         }
 
-        return $this->collUsers;
+        return $this->collAxysUsers;
     }
 
     /**
-     * Sets a collection of ChildUser objects related by a one-to-many relationship
+     * Sets a collection of ChildAxysUser objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param Collection $users A Propel collection.
+     * @param Collection $axysUsers A Propel collection.
      * @param ConnectionInterface $con Optional connection object
      * @return $this The current object (for fluent API support)
      */
-    public function setUsers(Collection $users, ?ConnectionInterface $con = null)
+    public function setAxysUsers(Collection $axysUsers, ?ConnectionInterface $con = null)
     {
-        /** @var ChildUser[] $usersToDelete */
-        $usersToDelete = $this->getUsers(new Criteria(), $con)->diff($users);
+        /** @var ChildAxysUser[] $axysUsersToDelete */
+        $axysUsersToDelete = $this->getAxysUsers(new Criteria(), $con)->diff($axysUsers);
 
 
-        $this->usersScheduledForDeletion = $usersToDelete;
+        $this->axysUsersScheduledForDeletion = $axysUsersToDelete;
 
-        foreach ($usersToDelete as $userRemoved) {
-            $userRemoved->setSite(null);
+        foreach ($axysUsersToDelete as $axysUserRemoved) {
+            $axysUserRemoved->setSite(null);
         }
 
-        $this->collUsers = null;
-        foreach ($users as $user) {
-            $this->addUser($user);
+        $this->collAxysUsers = null;
+        foreach ($axysUsers as $axysUser) {
+            $this->addAxysUser($axysUser);
         }
 
-        $this->collUsers = $users;
-        $this->collUsersPartial = false;
+        $this->collAxysUsers = $axysUsers;
+        $this->collAxysUsersPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related User objects.
+     * Returns the number of related AxysUser objects.
      *
      * @param Criteria $criteria
      * @param bool $distinct
      * @param ConnectionInterface $con
-     * @return int Count of related User objects.
+     * @return int Count of related AxysUser objects.
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function countUsers(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    public function countAxysUsers(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
     {
-        $partial = $this->collUsersPartial && !$this->isNew();
-        if (null === $this->collUsers || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collUsers) {
+        $partial = $this->collAxysUsersPartial && !$this->isNew();
+        if (null === $this->collAxysUsers || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAxysUsers) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getUsers());
+                return count($this->getAxysUsers());
             }
 
-            $query = ChildUserQuery::create(null, $criteria);
+            $query = ChildAxysUserQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -4610,28 +4610,28 @@ abstract class Site implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collUsers);
+        return count($this->collAxysUsers);
     }
 
     /**
-     * Method called to associate a ChildUser object to this object
-     * through the ChildUser foreign key attribute.
+     * Method called to associate a ChildAxysUser object to this object
+     * through the ChildAxysUser foreign key attribute.
      *
-     * @param ChildUser $l ChildUser
+     * @param ChildAxysUser $l ChildAxysUser
      * @return $this The current object (for fluent API support)
      */
-    public function addUser(ChildUser $l)
+    public function addAxysUser(ChildAxysUser $l)
     {
-        if ($this->collUsers === null) {
-            $this->initUsers();
-            $this->collUsersPartial = true;
+        if ($this->collAxysUsers === null) {
+            $this->initAxysUsers();
+            $this->collAxysUsersPartial = true;
         }
 
-        if (!$this->collUsers->contains($l)) {
-            $this->doAddUser($l);
+        if (!$this->collAxysUsers->contains($l)) {
+            $this->doAddAxysUser($l);
 
-            if ($this->usersScheduledForDeletion and $this->usersScheduledForDeletion->contains($l)) {
-                $this->usersScheduledForDeletion->remove($this->usersScheduledForDeletion->search($l));
+            if ($this->axysUsersScheduledForDeletion and $this->axysUsersScheduledForDeletion->contains($l)) {
+                $this->axysUsersScheduledForDeletion->remove($this->axysUsersScheduledForDeletion->search($l));
             }
         }
 
@@ -4639,29 +4639,29 @@ abstract class Site implements ActiveRecordInterface
     }
 
     /**
-     * @param ChildUser $user The ChildUser object to add.
+     * @param ChildAxysUser $axysUser The ChildAxysUser object to add.
      */
-    protected function doAddUser(ChildUser $user): void
+    protected function doAddAxysUser(ChildAxysUser $axysUser): void
     {
-        $this->collUsers[]= $user;
-        $user->setSite($this);
+        $this->collAxysUsers[]= $axysUser;
+        $axysUser->setSite($this);
     }
 
     /**
-     * @param ChildUser $user The ChildUser object to remove.
+     * @param ChildAxysUser $axysUser The ChildAxysUser object to remove.
      * @return $this The current object (for fluent API support)
      */
-    public function removeUser(ChildUser $user)
+    public function removeAxysUser(ChildAxysUser $axysUser)
     {
-        if ($this->getUsers()->contains($user)) {
-            $pos = $this->collUsers->search($user);
-            $this->collUsers->remove($pos);
-            if (null === $this->usersScheduledForDeletion) {
-                $this->usersScheduledForDeletion = clone $this->collUsers;
-                $this->usersScheduledForDeletion->clear();
+        if ($this->getAxysUsers()->contains($axysUser)) {
+            $pos = $this->collAxysUsers->search($axysUser);
+            $this->collAxysUsers->remove($pos);
+            if (null === $this->axysUsersScheduledForDeletion) {
+                $this->axysUsersScheduledForDeletion = clone $this->collAxysUsers;
+                $this->axysUsersScheduledForDeletion->clear();
             }
-            $this->usersScheduledForDeletion[]= $user;
-            $user->setSite(null);
+            $this->axysUsersScheduledForDeletion[]= $axysUser;
+            $axysUser->setSite(null);
         }
 
         return $this;
@@ -4924,10 +4924,10 @@ abstract class Site implements ActiveRecordInterface
      * @return ObjectCollection|ChildCart[] List of ChildCart objects
      * @phpstan-return ObjectCollection&\Traversable<ChildCart}> List of ChildCart objects
      */
-    public function getCartsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getCartsJoinAxysUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildCartQuery::create(null, $criteria);
-        $query->joinWith('User', $joinBehavior);
+        $query->joinWith('AxysUser', $joinBehavior);
 
         return $this->getCarts($query, $con);
     }
@@ -5693,10 +5693,10 @@ abstract class Site implements ActiveRecordInterface
      * @return ObjectCollection|ChildOption[] List of ChildOption objects
      * @phpstan-return ObjectCollection&\Traversable<ChildOption}> List of ChildOption objects
      */
-    public function getOptionsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getOptionsJoinAxysUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildOptionQuery::create(null, $criteria);
-        $query->joinWith('User', $joinBehavior);
+        $query->joinWith('AxysUser', $joinBehavior);
 
         return $this->getOptions($query, $con);
     }
@@ -6940,10 +6940,10 @@ abstract class Site implements ActiveRecordInterface
      * @return ObjectCollection|ChildRight[] List of ChildRight objects
      * @phpstan-return ObjectCollection&\Traversable<ChildRight}> List of ChildRight objects
      */
-    public function getRightsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getRightsJoinAxysUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildRightQuery::create(null, $criteria);
-        $query->joinWith('User', $joinBehavior);
+        $query->joinWith('AxysUser', $joinBehavior);
 
         return $this->getRights($query, $con);
     }
@@ -7231,10 +7231,10 @@ abstract class Site implements ActiveRecordInterface
      * @return ObjectCollection|ChildSession[] List of ChildSession objects
      * @phpstan-return ObjectCollection&\Traversable<ChildSession}> List of ChildSession objects
      */
-    public function getSessionsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getSessionsJoinAxysUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildSessionQuery::create(null, $criteria);
-        $query->joinWith('User', $joinBehavior);
+        $query->joinWith('AxysUser', $joinBehavior);
 
         return $this->getSessions($query, $con);
     }
@@ -7522,10 +7522,10 @@ abstract class Site implements ActiveRecordInterface
      * @return ObjectCollection|ChildStock[] List of ChildStock objects
      * @phpstan-return ObjectCollection&\Traversable<ChildStock}> List of ChildStock objects
      */
-    public function getStocksJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getStocksJoinAxysUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildStockQuery::create(null, $criteria);
-        $query->joinWith('User', $joinBehavior);
+        $query->joinWith('AxysUser', $joinBehavior);
 
         return $this->getStocks($query, $con);
     }
@@ -7600,8 +7600,8 @@ abstract class Site implements ActiveRecordInterface
     public function clearAllReferences(bool $deep = false)
     {
         if ($deep) {
-            if ($this->collUsers) {
-                foreach ($this->collUsers as $o) {
+            if ($this->collAxysUsers) {
+                foreach ($this->collAxysUsers as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -7662,7 +7662,7 @@ abstract class Site implements ActiveRecordInterface
             }
         } // if ($deep)
 
-        $this->collUsers = null;
+        $this->collAxysUsers = null;
         $this->collCarts = null;
         $this->collCrowdfundingCampaigns = null;
         $this->collCrowfundingRewards = null;

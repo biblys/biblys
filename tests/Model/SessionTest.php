@@ -25,7 +25,7 @@ class SessionTest extends TestCase
 
         // then
         $this->assertNotNull($session->getToken(), "it creates a token");
-        $this->assertEquals($user, $session->getUser(), "it associates given user");
+        $this->assertEquals($user, $session->getAxysUser(), "it associates given user");
         $this->assertTrue($session->getExpiresAt() > new DateTime(), "it sets an expire date in the future");
     }
 
@@ -45,7 +45,7 @@ class SessionTest extends TestCase
 
         // then
         $this->assertNotNull($session->getToken(), "it creates a token");
-        $this->assertEquals($user, $session->getUser(), "it associates given user");
+        $this->assertEquals($user, $session->getAxysUser(), "it associates given user");
         $this->assertEquals($site, $session->getSite(), "it associates current site");
         $this->assertEquals($expiresAt, $session->getExpiresAt(), "it sets an expire date in the future");
     }

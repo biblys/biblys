@@ -3,7 +3,7 @@
 namespace Biblys\Service\Validator;
 
 use Exception;
-use Model\User;
+use Model\AxysUser;
 use PHPUnit\Framework\TestCase;
 
 class ValidatorTest extends TestCase
@@ -21,7 +21,7 @@ class ValidatorTest extends TestCase
         );
 
         // given
-        $user = new User();
+        $user = new AxysUser();
         $user->setEmail("invalid-email-example.net");
 
         // when

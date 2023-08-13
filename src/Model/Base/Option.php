@@ -5,11 +5,11 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\AxysUser as ChildAxysUser;
+use Model\AxysUserQuery as ChildAxysUserQuery;
 use Model\OptionQuery as ChildOptionQuery;
 use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
-use Model\User as ChildUser;
-use Model\UserQuery as ChildUserQuery;
 use Model\Map\OptionTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -117,9 +117,9 @@ abstract class Option implements ActiveRecordInterface
     protected $option_updated;
 
     /**
-     * @var        ChildUser
+     * @var        ChildAxysUser
      */
-    protected $aUser;
+    protected $aAxysUser;
 
     /**
      * @var        ChildSite
@@ -515,8 +515,8 @@ abstract class Option implements ActiveRecordInterface
             $this->modifiedColumns[OptionTableMap::COL_USER_ID] = true;
         }
 
-        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
-            $this->aUser = null;
+        if ($this->aAxysUser !== null && $this->aAxysUser->getId() !== $v) {
+            $this->aAxysUser = null;
         }
 
         return $this;
@@ -698,8 +698,8 @@ abstract class Option implements ActiveRecordInterface
         if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
             $this->aSite = null;
         }
-        if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
-            $this->aUser = null;
+        if ($this->aAxysUser !== null && $this->user_id !== $this->aAxysUser->getId()) {
+            $this->aAxysUser = null;
         }
     }
 
@@ -740,7 +740,7 @@ abstract class Option implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aUser = null;
+            $this->aAxysUser = null;
             $this->aSite = null;
         } // if (deep)
     }
@@ -863,11 +863,11 @@ abstract class Option implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aUser !== null) {
-                if ($this->aUser->isModified() || $this->aUser->isNew()) {
-                    $affectedRows += $this->aUser->save($con);
+            if ($this->aAxysUser !== null) {
+                if ($this->aAxysUser->isModified() || $this->aAxysUser->isNew()) {
+                    $affectedRows += $this->aAxysUser->save($con);
                 }
-                $this->setUser($this->aUser);
+                $this->setAxysUser($this->aAxysUser);
             }
 
             if ($this->aSite !== null) {
@@ -1107,20 +1107,20 @@ abstract class Option implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aUser) {
+            if (null !== $this->aAxysUser) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'user';
+                        $key = 'axysUser';
                         break;
                     case TableMap::TYPE_FIELDNAME:
                         $key = 'axys_users';
                         break;
                     default:
-                        $key = 'User';
+                        $key = 'AxysUser';
                 }
 
-                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aAxysUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aSite) {
 
@@ -1428,13 +1428,13 @@ abstract class Option implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildUser object.
+     * Declares an association between this object and a ChildAxysUser object.
      *
-     * @param ChildUser|null $v
+     * @param ChildAxysUser|null $v
      * @return $this The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function setUser(ChildUser $v = null)
+    public function setAxysUser(ChildAxysUser $v = null)
     {
         if ($v === null) {
             $this->setUserId(NULL);
@@ -1442,10 +1442,10 @@ abstract class Option implements ActiveRecordInterface
             $this->setUserId($v->getId());
         }
 
-        $this->aUser = $v;
+        $this->aAxysUser = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildUser object, it will not be re-added.
+        // If this object has already been added to the ChildAxysUser object, it will not be re-added.
         if ($v !== null) {
             $v->addOption($this);
         }
@@ -1456,26 +1456,26 @@ abstract class Option implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildUser object
+     * Get the associated ChildAxysUser object
      *
      * @param ConnectionInterface $con Optional Connection object.
-     * @return ChildUser|null The associated ChildUser object.
+     * @return ChildAxysUser|null The associated ChildAxysUser object.
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function getUser(?ConnectionInterface $con = null)
+    public function getAxysUser(?ConnectionInterface $con = null)
     {
-        if ($this->aUser === null && ($this->user_id != 0)) {
-            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
+        if ($this->aAxysUser === null && ($this->user_id != 0)) {
+            $this->aAxysUser = ChildAxysUserQuery::create()->findPk($this->user_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aUser->addOptions($this);
+                $this->aAxysUser->addOptions($this);
              */
         }
 
-        return $this->aUser;
+        return $this->aAxysUser;
     }
 
     /**
@@ -1538,8 +1538,8 @@ abstract class Option implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aUser) {
-            $this->aUser->removeOption($this);
+        if (null !== $this->aAxysUser) {
+            $this->aAxysUser->removeOption($this);
         }
         if (null !== $this->aSite) {
             $this->aSite->removeOption($this);
@@ -1574,7 +1574,7 @@ abstract class Option implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aUser = null;
+        $this->aAxysUser = null;
         $this->aSite = null;
         return $this;
     }
