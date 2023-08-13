@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 $pm = new PublisherManager();
 $cm = new CollectionManager();
 $am = new ArticleManager();
-$um = new UserManager();
+$um = new AxysUserManager();
 $sm = new SupplierManager();
 $lm = new LinkManager();
 

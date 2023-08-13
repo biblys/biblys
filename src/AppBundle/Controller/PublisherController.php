@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-use UserManager;
+use AxysUserManager;
 
 class PublisherController extends Controller
 {
@@ -352,7 +352,7 @@ class PublisherController extends Controller
             throw new NotFoundException("Publisher $id not found.");
         }
 
-        $um = new UserManager();
+        $um = new AxysUserManager();
         $userEmail = $request->request->get('user_email');
         $user = $um->get(['Email' => $userEmail]);
         if (!$user) {
@@ -397,7 +397,7 @@ class PublisherController extends Controller
             throw new NotFoundException("Publisher $publisherId not found.");
         }
 
-        $um = new UserManager();
+        $um = new AxysUserManager();
         $user = $um->getById($userId);
         if (!$user) {
             throw new NotFoundException("User $userId not found.");

@@ -6,7 +6,7 @@ global $_SITE;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
-$um = new UserManager();
+$um = new AxysUserManager();
 $wlm = new WishlistManager();
 
 $user = $um->get(array('user_slug' => $request->query->get('slug')));

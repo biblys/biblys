@@ -21,7 +21,7 @@ $com = new CollectionManager();
 $om = new OrderManager();
 $shm = new ShippingManager();
 $sm = new StockManager();
-$um = new UserManager();
+$um = new AxysUserManager();
 
 $content = null;
 

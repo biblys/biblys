@@ -4,11 +4,11 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Symfony\Component\HttpFoundation\Request;
 
-class Visitor extends User
+class Visitor extends AxysUser
 {
     private bool $logged = false;
     private mixed $visitor_uid;
-    private ?User $user = null;
+    private ?AxysUser $user = null;
 
     private ?bool $isAdmin = null;
 
@@ -203,8 +203,8 @@ class Visitor extends User
             return;
         }
 
-        $um = new UserManager();
-        /** @var User|false $user */
+        $um = new AxysUserManager();
+        /** @var AxysUser|false $user */
         $user = $um->getById($session->get('user_id'));
         if (!$user) {
             return;

@@ -16,7 +16,7 @@ $sm = new StockManager();
 $am = new ArticleManager();
 $alm = new AlertManager();
 $om = new OrderManager();
-$um = new UserManager();
+$um = new AxysUserManager();
 $rm = new RayonManager();
 
 $content = null;
@@ -960,7 +960,7 @@ function _sendAlertsForArticle(
 ): array
 {
     $am = new AlertManager();
-    $um = new UserManager();
+    $um = new AxysUserManager();
 
     $alerts = $am->getAll(["article_id" => $article->get("id")]);
 

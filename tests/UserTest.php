@@ -13,13 +13,13 @@ class UserTest extends PHPUnit\Framework\TestCase
 {
     public function testCreate()
     {
-        $um = new UserManager();
+        $um = new AxysUserManager();
 
         $email = 'user'.rand(0,999).'@biblys.fr';
 
         $user = $um->create(array('user_email' => $email));
 
-        $this->assertInstanceOf('User', $user);
+        $this->assertInstanceOf(AxysUser::class, $user);
 
         return $user;
     }
@@ -27,13 +27,13 @@ class UserTest extends PHPUnit\Framework\TestCase
     /**
      * @depends testCreate
      */
-    public function testGet(User $user)
+    public function testGet(AxysUser $user)
     {
-        $um = new UserManager();
+        $um = new AxysUserManager();
 
         $get_user = $um->get(array('user_email' => $user->get('email')));
 
-        $this->assertInstanceOf('User', $get_user);
+        $this->assertInstanceOf(AxysUser::class, $get_user);
         $this->assertEquals($user->get('id'), $get_user->get('id'));
 
         return $user;
@@ -43,7 +43,7 @@ class UserTest extends PHPUnit\Framework\TestCase
     * Test get and create customer
     * @depends testGet
     */
-    public function testGetCustomerAndCreate(User $user)
+    public function testGetCustomerAndCreate(AxysUser $user)
     {
         $customer = $user->getCustomer(true);
 
@@ -57,7 +57,7 @@ class UserTest extends PHPUnit\Framework\TestCase
     * @depends testGet
     * @depends testGetCustomerAndCreate
     */
-    public function testGetCustomer(User $user, Customer $customer)
+    public function testGetCustomer(AxysUser $user, Customer $customer)
     {
         $customer2 = $user->getCustomer();
 
@@ -69,7 +69,7 @@ class UserTest extends PHPUnit\Framework\TestCase
     * Test get and create wishlist
     * @depends testGet
     */
-    public function testGetWishlistOrCreate(User $user)
+    public function testGetWishlistOrCreate(AxysUser $user)
     {
         $wishlist = $user->getWishlist(true);
 
@@ -86,7 +86,7 @@ class UserTest extends PHPUnit\Framework\TestCase
     * @depends testGet
     * @depends testGetWishlistOrCreate
     */
-    public function testGetWishlist(User $user, Wishlist $wishlist)
+    public function testGetWishlist(AxysUser $user, Wishlist $wishlist)
     {
         $wishlist2 = $user->getWishlist();
 
@@ -99,7 +99,7 @@ class UserTest extends PHPUnit\Framework\TestCase
      * Test if user has purchased a book
      * @depends testCreate
      */
-    public function testHasPurchased(User $user)
+    public function testHasPurchased(AxysUser $user)
     {
         $am = new ArticleManager();
         $article = EntityFactory::createArticle();
@@ -122,7 +122,7 @@ class UserTest extends PHPUnit\Framework\TestCase
         // given
         $publisher = EntityFactory::createPublisher();
         $_SITE->set("publisher_id", $publisher->get("id"));
-        $um = new UserManager();
+        $um = new AxysUserManager();
         $user = $um->create(["user_email" => "customer@biblys.fr"]);
         $am = new ArticleManager();
         $article = $am->create([

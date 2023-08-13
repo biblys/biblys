@@ -19,7 +19,7 @@
             /* JOINS */
 
             // Author (OneToMany)
-            $um = new UserManager();
+            $um = new AxysUserManager();
             if (isset($data['user_id'])) $data['author'] = $um->get(array('user_id' => $data['user_id']));
 
             // Category (OneToMany)
@@ -151,10 +151,10 @@
 
         /**
          * Test if user can delete post
-         * @param User $user
+         * @param AxysUser $user
          * @return bool true if user is admin or post's author
          */
-        public function canBeDeletedBy(User $user): bool
+        public function canBeDeletedBy(AxysUser $user): bool
         {
             if ($user->isAdmin()) {
                 return true;

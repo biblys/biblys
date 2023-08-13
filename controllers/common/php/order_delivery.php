@@ -31,7 +31,7 @@ $cm = new CustomerManager();
 $com = new CountryManager();
 $om = new OrderManager();
 $sm = new StockManager();
-$um = new UserManager();
+$um = new AxysUserManager();
 $shm = new ShippingManager();
 
 $content = "";

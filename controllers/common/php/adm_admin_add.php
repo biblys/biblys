@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /** @var Request $request */
 
-$um = new UserManager();
+$um = new AxysUserManager();
 
 if ($request->getMethod() === "POST") {
 

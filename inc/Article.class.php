@@ -700,11 +700,11 @@ class Article extends Entity
     /**
      * @throws Exception
      */
-    public function getDeletionUser(): ?User
+    public function getDeletionUser(): ?AxysUser
     {
         $deletion_user_id = $this->get('article_deletion_by');
         if ($deletion_user_id) {
-            $um = new UserManager();
+            $um = new AxysUserManager();
             $user = $um->getById($deletion_user_id);
             if ($user) {
                 return $user;

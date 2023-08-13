@@ -233,7 +233,7 @@ class PostTest extends PHPUnit\Framework\TestCase
     public function testCanBeDeletedBy()
     {
         $pm = new PostManager();
-        $um = new UserManager();
+        $um = new AxysUserManager();
 
         $user = $um->create([
             "id" => 927,

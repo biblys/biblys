@@ -9,7 +9,7 @@ class InvalidCredentialsException extends Exception
 {
 }
 
-class User extends Entity
+class AxysUser extends Entity
 {
     protected $prefix = 'user';
     protected $cart = null;
@@ -357,10 +357,10 @@ class User extends Entity
     }
 }
 
-class UserManager extends EntityManager
+class AxysUserManager extends EntityManager
 {
     protected $prefix = 'user';
-    protected $object = 'User';
+    protected $object = 'AxysUser';
     protected $select = '*,
                     `id` AS `user_id`,
                     `Email` AS `user_email`,
@@ -393,7 +393,6 @@ class UserManager extends EntityManager
         return parent::getQuery($query, $params, $options);
     }
 
-    // Create a new User
     public function create(array $defaults = [], $text = null)
     {
         // Check if there is already a user with that e-mail address
@@ -448,12 +447,12 @@ class UserManager extends EntityManager
     /**
      * Send a mail to the user.
      *
-     * @param User   $user    The mail's recipient
+     * @param AxysUser   $user    The mail's recipient
      * @param string $subject The mail's subject
      * @param string $message The mail's body
      * @param array  $headers The mail's header
      */
-    public function mail(User $user, $subject, $message, $headers = null)
+    public function mail(AxysUser $user, $subject, $message, $headers = null)
     {
         $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -479,7 +478,7 @@ class UserManager extends EntityManager
      * @param bool   $predownload Can the user download the files before article publication date?
      * @param array  $options     Additionnal options
      */
-    public function addToLibrary(User $user, array $articles = [], array $stocks = [], $predownload = false, $options = [])
+    public function addToLibrary(AxysUser $user, array $articles = [], array $stocks = [], $predownload = false, $options = [])
     {
         global $_SITE;
 

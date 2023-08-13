@@ -7,7 +7,7 @@ if (LegacyCodeHelper::getGlobalVisitor()->isLibrary()) $_GET['id'] = LegacyCodeH
 	else trigger_error('Vous n\'avez pas le droit d\'accéder à cette page.', E_USER_ERROR);
 	
 	$_L = new LibraryManager();
-	$um = new UserManager();
+	$um = new AxysUserManager();
 	
 	// Edit an existing library
 	if (isset($_GET['id']))

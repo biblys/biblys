@@ -23,7 +23,7 @@ class Cart extends Entity
 
         // Seller (OneToMany)
         if (isset($data['cart_seller_id'])) {
-            $um = new UserManager();
+            $um = new AxysUserManager();
             $seller = $um->getById($data['cart_seller_id']);
             if ($seller) {
                 $this->seller = $seller;
@@ -209,7 +209,7 @@ class Cart extends Entity
             return $this->get('cart_ip');
         }
 
-        $um = new UserManager();
+        $um = new AxysUserManager();
         $user = $um->getById($user_id);
         if (!$user) {
             return $this->get('cart_ip');
@@ -231,9 +231,9 @@ class Cart extends Entity
     }
 
     /**
-     * @return User|null
+     * @return AxysUser|null
      */
-    public function getSeller(): User
+    public function getSeller(): AxysUser
     {
         return $this->seller;
     }
