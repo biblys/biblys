@@ -84,7 +84,7 @@ $orders = EntityManager::prepareAndExecute(
         `customer_first_name`, `customer_last_name`
     FROM `orders` AS `o`
     JOIN `stock` AS `s` USING(`order_id`)
-    LEFT JOIN `users` AS `u` ON `o`.`user_id` = `u`.`id`
+    LEFT JOIN `axys_users` AS `u` ON `o`.`user_id` = `u`.`id`
     LEFT JOIN `customers` AS `c` ON `o`.`customer_id` = `c`.`customer_id`
     WHERE `o`.`site_id` = :site_id'.$_QUERY.'
     GROUP BY `order_id`

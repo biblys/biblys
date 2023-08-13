@@ -1133,7 +1133,7 @@ abstract class Session implements ActiveRecordInterface
                         $key = 'user';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'users';
+                        $key = 'axys_users';
                         break;
                     default:
                         $key = 'User';

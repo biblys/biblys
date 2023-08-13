@@ -59,7 +59,7 @@ use Symfony\Component\Validator\Validator\RecursiveValidator;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Base class that represents a row from the 'users' table.
+ * Base class that represents a row from the 'axys_users' table.
  *
  *
  *
@@ -2661,7 +2661,7 @@ abstract class User implements ActiveRecordInterface
         }
 
         $sql = sprintf(
-            'INSERT INTO users (%s) VALUES (%s)',
+            'INSERT INTO axys_users (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );

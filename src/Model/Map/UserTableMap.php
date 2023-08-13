@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'users' table.
+ * This class defines the structure of the 'axys_users' table.
  *
  *
  *
@@ -43,7 +43,7 @@ class UserTableMap extends TableMap
     /**
      * The table name for this class
      */
-    public const TABLE_NAME = 'users';
+    public const TABLE_NAME = 'axys_users';
 
     /**
      * The PHP name of this class (PascalCase)
@@ -78,187 +78,187 @@ class UserTableMap extends TableMap
     /**
      * the column name for the id field
      */
-    public const COL_ID = 'users.id';
+    public const COL_ID = 'axys_users.id';
 
     /**
      * the column name for the site_id field
      */
-    public const COL_SITE_ID = 'users.site_id';
+    public const COL_SITE_ID = 'axys_users.site_id';
 
     /**
      * the column name for the Email field
      */
-    public const COL_EMAIL = 'users.Email';
+    public const COL_EMAIL = 'axys_users.Email';
 
     /**
      * the column name for the user_password field
      */
-    public const COL_USER_PASSWORD = 'users.user_password';
+    public const COL_USER_PASSWORD = 'axys_users.user_password';
 
     /**
      * the column name for the user_key field
      */
-    public const COL_USER_KEY = 'users.user_key';
+    public const COL_USER_KEY = 'axys_users.user_key';
 
     /**
      * the column name for the email_key field
      */
-    public const COL_EMAIL_KEY = 'users.email_key';
+    public const COL_EMAIL_KEY = 'axys_users.email_key';
 
     /**
      * the column name for the facebook_uid field
      */
-    public const COL_FACEBOOK_UID = 'users.facebook_uid';
+    public const COL_FACEBOOK_UID = 'axys_users.facebook_uid';
 
     /**
      * the column name for the user_screen_name field
      */
-    public const COL_USER_SCREEN_NAME = 'users.user_screen_name';
+    public const COL_USER_SCREEN_NAME = 'axys_users.user_screen_name';
 
     /**
      * the column name for the user_slug field
      */
-    public const COL_USER_SLUG = 'users.user_slug';
+    public const COL_USER_SLUG = 'axys_users.user_slug';
 
     /**
      * the column name for the user_wishlist_ship field
      */
-    public const COL_USER_WISHLIST_SHIP = 'users.user_wishlist_ship';
+    public const COL_USER_WISHLIST_SHIP = 'axys_users.user_wishlist_ship';
 
     /**
      * the column name for the user_top field
      */
-    public const COL_USER_TOP = 'users.user_top';
+    public const COL_USER_TOP = 'axys_users.user_top';
 
     /**
      * the column name for the user_biblio field
      */
-    public const COL_USER_BIBLIO = 'users.user_biblio';
+    public const COL_USER_BIBLIO = 'axys_users.user_biblio';
 
     /**
      * the column name for the adresse_ip field
      */
-    public const COL_ADRESSE_IP = 'users.adresse_ip';
+    public const COL_ADRESSE_IP = 'axys_users.adresse_ip';
 
     /**
      * the column name for the recaptcha_score field
      */
-    public const COL_RECAPTCHA_SCORE = 'users.recaptcha_score';
+    public const COL_RECAPTCHA_SCORE = 'axys_users.recaptcha_score';
 
     /**
      * the column name for the DateInscription field
      */
-    public const COL_DATEINSCRIPTION = 'users.DateInscription';
+    public const COL_DATEINSCRIPTION = 'axys_users.DateInscription';
 
     /**
      * the column name for the DateConnexion field
      */
-    public const COL_DATECONNEXION = 'users.DateConnexion';
+    public const COL_DATECONNEXION = 'axys_users.DateConnexion';
 
     /**
      * the column name for the publisher_id field
      */
-    public const COL_PUBLISHER_ID = 'users.publisher_id';
+    public const COL_PUBLISHER_ID = 'axys_users.publisher_id';
 
     /**
      * the column name for the bookshop_id field
      */
-    public const COL_BOOKSHOP_ID = 'users.bookshop_id';
+    public const COL_BOOKSHOP_ID = 'axys_users.bookshop_id';
 
     /**
      * the column name for the library_id field
      */
-    public const COL_LIBRARY_ID = 'users.library_id';
+    public const COL_LIBRARY_ID = 'axys_users.library_id';
 
     /**
      * the column name for the user_civilite field
      */
-    public const COL_USER_CIVILITE = 'users.user_civilite';
+    public const COL_USER_CIVILITE = 'axys_users.user_civilite';
 
     /**
      * the column name for the user_nom field
      */
-    public const COL_USER_NOM = 'users.user_nom';
+    public const COL_USER_NOM = 'axys_users.user_nom';
 
     /**
      * the column name for the user_prenom field
      */
-    public const COL_USER_PRENOM = 'users.user_prenom';
+    public const COL_USER_PRENOM = 'axys_users.user_prenom';
 
     /**
      * the column name for the user_adresse1 field
      */
-    public const COL_USER_ADRESSE1 = 'users.user_adresse1';
+    public const COL_USER_ADRESSE1 = 'axys_users.user_adresse1';
 
     /**
      * the column name for the user_adresse2 field
      */
-    public const COL_USER_ADRESSE2 = 'users.user_adresse2';
+    public const COL_USER_ADRESSE2 = 'axys_users.user_adresse2';
 
     /**
      * the column name for the user_codepostal field
      */
-    public const COL_USER_CODEPOSTAL = 'users.user_codepostal';
+    public const COL_USER_CODEPOSTAL = 'axys_users.user_codepostal';
 
     /**
      * the column name for the user_ville field
      */
-    public const COL_USER_VILLE = 'users.user_ville';
+    public const COL_USER_VILLE = 'axys_users.user_ville';
 
     /**
      * the column name for the user_pays field
      */
-    public const COL_USER_PAYS = 'users.user_pays';
+    public const COL_USER_PAYS = 'axys_users.user_pays';
 
     /**
      * the column name for the user_telephone field
      */
-    public const COL_USER_TELEPHONE = 'users.user_telephone';
+    public const COL_USER_TELEPHONE = 'axys_users.user_telephone';
 
     /**
      * the column name for the user_pref_articles_show field
      */
-    public const COL_USER_PREF_ARTICLES_SHOW = 'users.user_pref_articles_show';
+    public const COL_USER_PREF_ARTICLES_SHOW = 'axys_users.user_pref_articles_show';
 
     /**
      * the column name for the user_fb_id field
      */
-    public const COL_USER_FB_ID = 'users.user_fb_id';
+    public const COL_USER_FB_ID = 'axys_users.user_fb_id';
 
     /**
      * the column name for the user_fb_token field
      */
-    public const COL_USER_FB_TOKEN = 'users.user_fb_token';
+    public const COL_USER_FB_TOKEN = 'axys_users.user_fb_token';
 
     /**
      * the column name for the country_id field
      */
-    public const COL_COUNTRY_ID = 'users.country_id';
+    public const COL_COUNTRY_ID = 'axys_users.country_id';
 
     /**
      * the column name for the user_password_reset_token field
      */
-    public const COL_USER_PASSWORD_RESET_TOKEN = 'users.user_password_reset_token';
+    public const COL_USER_PASSWORD_RESET_TOKEN = 'axys_users.user_password_reset_token';
 
     /**
      * the column name for the user_password_reset_token_created field
      */
-    public const COL_USER_PASSWORD_RESET_TOKEN_CREATED = 'users.user_password_reset_token_created';
+    public const COL_USER_PASSWORD_RESET_TOKEN_CREATED = 'axys_users.user_password_reset_token_created';
 
     /**
      * the column name for the user_update field
      */
-    public const COL_USER_UPDATE = 'users.user_update';
+    public const COL_USER_UPDATE = 'axys_users.user_update';
 
     /**
      * the column name for the user_created field
      */
-    public const COL_USER_CREATED = 'users.user_created';
+    public const COL_USER_CREATED = 'axys_users.user_created';
 
     /**
      * the column name for the user_updated field
      */
-    public const COL_USER_UPDATED = 'users.user_updated';
+    public const COL_USER_UPDATED = 'axys_users.user_updated';
 
     /**
      * The default string format for model objects of the related table
@@ -309,7 +309,7 @@ class UserTableMap extends TableMap
         'user.id' => 'ID',
         'UserTableMap::COL_ID' => 'ID',
         'COL_ID' => 'ID',
-        'users.id' => 'ID',
+        'axys_users.id' => 'ID',
         'SiteId' => 'SITE_ID',
         'User.SiteId' => 'SITE_ID',
         'siteId' => 'SITE_ID',
@@ -317,14 +317,14 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_SITE_ID' => 'SITE_ID',
         'COL_SITE_ID' => 'SITE_ID',
         'site_id' => 'SITE_ID',
-        'users.site_id' => 'SITE_ID',
+        'axys_users.site_id' => 'SITE_ID',
         'Email' => 'EMAIL',
         'User.Email' => 'EMAIL',
         'email' => 'EMAIL',
         'user.email' => 'EMAIL',
         'UserTableMap::COL_EMAIL' => 'EMAIL',
         'COL_EMAIL' => 'EMAIL',
-        'users.Email' => 'EMAIL',
+        'axys_users.Email' => 'EMAIL',
         'Password' => 'USER_PASSWORD',
         'User.Password' => 'USER_PASSWORD',
         'password' => 'USER_PASSWORD',
@@ -332,7 +332,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_PASSWORD' => 'USER_PASSWORD',
         'COL_USER_PASSWORD' => 'USER_PASSWORD',
         'user_password' => 'USER_PASSWORD',
-        'users.user_password' => 'USER_PASSWORD',
+        'axys_users.user_password' => 'USER_PASSWORD',
         'Key' => 'USER_KEY',
         'User.Key' => 'USER_KEY',
         'key' => 'USER_KEY',
@@ -340,7 +340,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_KEY' => 'USER_KEY',
         'COL_USER_KEY' => 'USER_KEY',
         'user_key' => 'USER_KEY',
-        'users.user_key' => 'USER_KEY',
+        'axys_users.user_key' => 'USER_KEY',
         'EmailKey' => 'EMAIL_KEY',
         'User.EmailKey' => 'EMAIL_KEY',
         'emailKey' => 'EMAIL_KEY',
@@ -348,7 +348,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_EMAIL_KEY' => 'EMAIL_KEY',
         'COL_EMAIL_KEY' => 'EMAIL_KEY',
         'email_key' => 'EMAIL_KEY',
-        'users.email_key' => 'EMAIL_KEY',
+        'axys_users.email_key' => 'EMAIL_KEY',
         'FacebookUid' => 'FACEBOOK_UID',
         'User.FacebookUid' => 'FACEBOOK_UID',
         'facebookUid' => 'FACEBOOK_UID',
@@ -356,7 +356,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_FACEBOOK_UID' => 'FACEBOOK_UID',
         'COL_FACEBOOK_UID' => 'FACEBOOK_UID',
         'facebook_uid' => 'FACEBOOK_UID',
-        'users.facebook_uid' => 'FACEBOOK_UID',
+        'axys_users.facebook_uid' => 'FACEBOOK_UID',
         'Username' => 'USER_SCREEN_NAME',
         'User.Username' => 'USER_SCREEN_NAME',
         'username' => 'USER_SCREEN_NAME',
@@ -364,7 +364,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_SCREEN_NAME' => 'USER_SCREEN_NAME',
         'COL_USER_SCREEN_NAME' => 'USER_SCREEN_NAME',
         'user_screen_name' => 'USER_SCREEN_NAME',
-        'users.user_screen_name' => 'USER_SCREEN_NAME',
+        'axys_users.user_screen_name' => 'USER_SCREEN_NAME',
         'Slug' => 'USER_SLUG',
         'User.Slug' => 'USER_SLUG',
         'slug' => 'USER_SLUG',
@@ -372,7 +372,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_SLUG' => 'USER_SLUG',
         'COL_USER_SLUG' => 'USER_SLUG',
         'user_slug' => 'USER_SLUG',
-        'users.user_slug' => 'USER_SLUG',
+        'axys_users.user_slug' => 'USER_SLUG',
         'WishlistShip' => 'USER_WISHLIST_SHIP',
         'User.WishlistShip' => 'USER_WISHLIST_SHIP',
         'wishlistShip' => 'USER_WISHLIST_SHIP',
@@ -380,7 +380,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_WISHLIST_SHIP' => 'USER_WISHLIST_SHIP',
         'COL_USER_WISHLIST_SHIP' => 'USER_WISHLIST_SHIP',
         'user_wishlist_ship' => 'USER_WISHLIST_SHIP',
-        'users.user_wishlist_ship' => 'USER_WISHLIST_SHIP',
+        'axys_users.user_wishlist_ship' => 'USER_WISHLIST_SHIP',
         'Top' => 'USER_TOP',
         'User.Top' => 'USER_TOP',
         'top' => 'USER_TOP',
@@ -388,7 +388,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_TOP' => 'USER_TOP',
         'COL_USER_TOP' => 'USER_TOP',
         'user_top' => 'USER_TOP',
-        'users.user_top' => 'USER_TOP',
+        'axys_users.user_top' => 'USER_TOP',
         'Biblio' => 'USER_BIBLIO',
         'User.Biblio' => 'USER_BIBLIO',
         'biblio' => 'USER_BIBLIO',
@@ -396,7 +396,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_BIBLIO' => 'USER_BIBLIO',
         'COL_USER_BIBLIO' => 'USER_BIBLIO',
         'user_biblio' => 'USER_BIBLIO',
-        'users.user_biblio' => 'USER_BIBLIO',
+        'axys_users.user_biblio' => 'USER_BIBLIO',
         'AdresseIp' => 'ADRESSE_IP',
         'User.AdresseIp' => 'ADRESSE_IP',
         'adresseIp' => 'ADRESSE_IP',
@@ -404,7 +404,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_ADRESSE_IP' => 'ADRESSE_IP',
         'COL_ADRESSE_IP' => 'ADRESSE_IP',
         'adresse_ip' => 'ADRESSE_IP',
-        'users.adresse_ip' => 'ADRESSE_IP',
+        'axys_users.adresse_ip' => 'ADRESSE_IP',
         'RecaptchaScore' => 'RECAPTCHA_SCORE',
         'User.RecaptchaScore' => 'RECAPTCHA_SCORE',
         'recaptchaScore' => 'RECAPTCHA_SCORE',
@@ -412,7 +412,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_RECAPTCHA_SCORE' => 'RECAPTCHA_SCORE',
         'COL_RECAPTCHA_SCORE' => 'RECAPTCHA_SCORE',
         'recaptcha_score' => 'RECAPTCHA_SCORE',
-        'users.recaptcha_score' => 'RECAPTCHA_SCORE',
+        'axys_users.recaptcha_score' => 'RECAPTCHA_SCORE',
         'Dateinscription' => 'DATEINSCRIPTION',
         'User.Dateinscription' => 'DATEINSCRIPTION',
         'dateinscription' => 'DATEINSCRIPTION',
@@ -420,7 +420,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_DATEINSCRIPTION' => 'DATEINSCRIPTION',
         'COL_DATEINSCRIPTION' => 'DATEINSCRIPTION',
         'DateInscription' => 'DATEINSCRIPTION',
-        'users.DateInscription' => 'DATEINSCRIPTION',
+        'axys_users.DateInscription' => 'DATEINSCRIPTION',
         'Dateconnexion' => 'DATECONNEXION',
         'User.Dateconnexion' => 'DATECONNEXION',
         'dateconnexion' => 'DATECONNEXION',
@@ -428,7 +428,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_DATECONNEXION' => 'DATECONNEXION',
         'COL_DATECONNEXION' => 'DATECONNEXION',
         'DateConnexion' => 'DATECONNEXION',
-        'users.DateConnexion' => 'DATECONNEXION',
+        'axys_users.DateConnexion' => 'DATECONNEXION',
         'PublisherId' => 'PUBLISHER_ID',
         'User.PublisherId' => 'PUBLISHER_ID',
         'publisherId' => 'PUBLISHER_ID',
@@ -436,7 +436,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_PUBLISHER_ID' => 'PUBLISHER_ID',
         'COL_PUBLISHER_ID' => 'PUBLISHER_ID',
         'publisher_id' => 'PUBLISHER_ID',
-        'users.publisher_id' => 'PUBLISHER_ID',
+        'axys_users.publisher_id' => 'PUBLISHER_ID',
         'BookshopId' => 'BOOKSHOP_ID',
         'User.BookshopId' => 'BOOKSHOP_ID',
         'bookshopId' => 'BOOKSHOP_ID',
@@ -444,7 +444,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_BOOKSHOP_ID' => 'BOOKSHOP_ID',
         'COL_BOOKSHOP_ID' => 'BOOKSHOP_ID',
         'bookshop_id' => 'BOOKSHOP_ID',
-        'users.bookshop_id' => 'BOOKSHOP_ID',
+        'axys_users.bookshop_id' => 'BOOKSHOP_ID',
         'LibraryId' => 'LIBRARY_ID',
         'User.LibraryId' => 'LIBRARY_ID',
         'libraryId' => 'LIBRARY_ID',
@@ -452,7 +452,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_LIBRARY_ID' => 'LIBRARY_ID',
         'COL_LIBRARY_ID' => 'LIBRARY_ID',
         'library_id' => 'LIBRARY_ID',
-        'users.library_id' => 'LIBRARY_ID',
+        'axys_users.library_id' => 'LIBRARY_ID',
         'Civilite' => 'USER_CIVILITE',
         'User.Civilite' => 'USER_CIVILITE',
         'civilite' => 'USER_CIVILITE',
@@ -460,7 +460,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_CIVILITE' => 'USER_CIVILITE',
         'COL_USER_CIVILITE' => 'USER_CIVILITE',
         'user_civilite' => 'USER_CIVILITE',
-        'users.user_civilite' => 'USER_CIVILITE',
+        'axys_users.user_civilite' => 'USER_CIVILITE',
         'Nom' => 'USER_NOM',
         'User.Nom' => 'USER_NOM',
         'nom' => 'USER_NOM',
@@ -468,7 +468,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_NOM' => 'USER_NOM',
         'COL_USER_NOM' => 'USER_NOM',
         'user_nom' => 'USER_NOM',
-        'users.user_nom' => 'USER_NOM',
+        'axys_users.user_nom' => 'USER_NOM',
         'Prenom' => 'USER_PRENOM',
         'User.Prenom' => 'USER_PRENOM',
         'prenom' => 'USER_PRENOM',
@@ -476,7 +476,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_PRENOM' => 'USER_PRENOM',
         'COL_USER_PRENOM' => 'USER_PRENOM',
         'user_prenom' => 'USER_PRENOM',
-        'users.user_prenom' => 'USER_PRENOM',
+        'axys_users.user_prenom' => 'USER_PRENOM',
         'Adresse1' => 'USER_ADRESSE1',
         'User.Adresse1' => 'USER_ADRESSE1',
         'adresse1' => 'USER_ADRESSE1',
@@ -484,7 +484,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_ADRESSE1' => 'USER_ADRESSE1',
         'COL_USER_ADRESSE1' => 'USER_ADRESSE1',
         'user_adresse1' => 'USER_ADRESSE1',
-        'users.user_adresse1' => 'USER_ADRESSE1',
+        'axys_users.user_adresse1' => 'USER_ADRESSE1',
         'Adresse2' => 'USER_ADRESSE2',
         'User.Adresse2' => 'USER_ADRESSE2',
         'adresse2' => 'USER_ADRESSE2',
@@ -492,7 +492,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_ADRESSE2' => 'USER_ADRESSE2',
         'COL_USER_ADRESSE2' => 'USER_ADRESSE2',
         'user_adresse2' => 'USER_ADRESSE2',
-        'users.user_adresse2' => 'USER_ADRESSE2',
+        'axys_users.user_adresse2' => 'USER_ADRESSE2',
         'Codepostal' => 'USER_CODEPOSTAL',
         'User.Codepostal' => 'USER_CODEPOSTAL',
         'codepostal' => 'USER_CODEPOSTAL',
@@ -500,7 +500,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_CODEPOSTAL' => 'USER_CODEPOSTAL',
         'COL_USER_CODEPOSTAL' => 'USER_CODEPOSTAL',
         'user_codepostal' => 'USER_CODEPOSTAL',
-        'users.user_codepostal' => 'USER_CODEPOSTAL',
+        'axys_users.user_codepostal' => 'USER_CODEPOSTAL',
         'Ville' => 'USER_VILLE',
         'User.Ville' => 'USER_VILLE',
         'ville' => 'USER_VILLE',
@@ -508,7 +508,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_VILLE' => 'USER_VILLE',
         'COL_USER_VILLE' => 'USER_VILLE',
         'user_ville' => 'USER_VILLE',
-        'users.user_ville' => 'USER_VILLE',
+        'axys_users.user_ville' => 'USER_VILLE',
         'Pays' => 'USER_PAYS',
         'User.Pays' => 'USER_PAYS',
         'pays' => 'USER_PAYS',
@@ -516,7 +516,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_PAYS' => 'USER_PAYS',
         'COL_USER_PAYS' => 'USER_PAYS',
         'user_pays' => 'USER_PAYS',
-        'users.user_pays' => 'USER_PAYS',
+        'axys_users.user_pays' => 'USER_PAYS',
         'Telephone' => 'USER_TELEPHONE',
         'User.Telephone' => 'USER_TELEPHONE',
         'telephone' => 'USER_TELEPHONE',
@@ -524,7 +524,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_TELEPHONE' => 'USER_TELEPHONE',
         'COL_USER_TELEPHONE' => 'USER_TELEPHONE',
         'user_telephone' => 'USER_TELEPHONE',
-        'users.user_telephone' => 'USER_TELEPHONE',
+        'axys_users.user_telephone' => 'USER_TELEPHONE',
         'PrefArticlesShow' => 'USER_PREF_ARTICLES_SHOW',
         'User.PrefArticlesShow' => 'USER_PREF_ARTICLES_SHOW',
         'prefArticlesShow' => 'USER_PREF_ARTICLES_SHOW',
@@ -532,7 +532,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_PREF_ARTICLES_SHOW' => 'USER_PREF_ARTICLES_SHOW',
         'COL_USER_PREF_ARTICLES_SHOW' => 'USER_PREF_ARTICLES_SHOW',
         'user_pref_articles_show' => 'USER_PREF_ARTICLES_SHOW',
-        'users.user_pref_articles_show' => 'USER_PREF_ARTICLES_SHOW',
+        'axys_users.user_pref_articles_show' => 'USER_PREF_ARTICLES_SHOW',
         'FbId' => 'USER_FB_ID',
         'User.FbId' => 'USER_FB_ID',
         'fbId' => 'USER_FB_ID',
@@ -540,7 +540,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_FB_ID' => 'USER_FB_ID',
         'COL_USER_FB_ID' => 'USER_FB_ID',
         'user_fb_id' => 'USER_FB_ID',
-        'users.user_fb_id' => 'USER_FB_ID',
+        'axys_users.user_fb_id' => 'USER_FB_ID',
         'FbToken' => 'USER_FB_TOKEN',
         'User.FbToken' => 'USER_FB_TOKEN',
         'fbToken' => 'USER_FB_TOKEN',
@@ -548,7 +548,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_FB_TOKEN' => 'USER_FB_TOKEN',
         'COL_USER_FB_TOKEN' => 'USER_FB_TOKEN',
         'user_fb_token' => 'USER_FB_TOKEN',
-        'users.user_fb_token' => 'USER_FB_TOKEN',
+        'axys_users.user_fb_token' => 'USER_FB_TOKEN',
         'CountryId' => 'COUNTRY_ID',
         'User.CountryId' => 'COUNTRY_ID',
         'countryId' => 'COUNTRY_ID',
@@ -556,7 +556,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_COUNTRY_ID' => 'COUNTRY_ID',
         'COL_COUNTRY_ID' => 'COUNTRY_ID',
         'country_id' => 'COUNTRY_ID',
-        'users.country_id' => 'COUNTRY_ID',
+        'axys_users.country_id' => 'COUNTRY_ID',
         'PasswordResetToken' => 'USER_PASSWORD_RESET_TOKEN',
         'User.PasswordResetToken' => 'USER_PASSWORD_RESET_TOKEN',
         'passwordResetToken' => 'USER_PASSWORD_RESET_TOKEN',
@@ -564,7 +564,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_PASSWORD_RESET_TOKEN' => 'USER_PASSWORD_RESET_TOKEN',
         'COL_USER_PASSWORD_RESET_TOKEN' => 'USER_PASSWORD_RESET_TOKEN',
         'user_password_reset_token' => 'USER_PASSWORD_RESET_TOKEN',
-        'users.user_password_reset_token' => 'USER_PASSWORD_RESET_TOKEN',
+        'axys_users.user_password_reset_token' => 'USER_PASSWORD_RESET_TOKEN',
         'PasswordResetTokenCreated' => 'USER_PASSWORD_RESET_TOKEN_CREATED',
         'User.PasswordResetTokenCreated' => 'USER_PASSWORD_RESET_TOKEN_CREATED',
         'passwordResetTokenCreated' => 'USER_PASSWORD_RESET_TOKEN_CREATED',
@@ -572,7 +572,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED' => 'USER_PASSWORD_RESET_TOKEN_CREATED',
         'COL_USER_PASSWORD_RESET_TOKEN_CREATED' => 'USER_PASSWORD_RESET_TOKEN_CREATED',
         'user_password_reset_token_created' => 'USER_PASSWORD_RESET_TOKEN_CREATED',
-        'users.user_password_reset_token_created' => 'USER_PASSWORD_RESET_TOKEN_CREATED',
+        'axys_users.user_password_reset_token_created' => 'USER_PASSWORD_RESET_TOKEN_CREATED',
         'Update' => 'USER_UPDATE',
         'User.Update' => 'USER_UPDATE',
         'update' => 'USER_UPDATE',
@@ -580,7 +580,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_UPDATE' => 'USER_UPDATE',
         'COL_USER_UPDATE' => 'USER_UPDATE',
         'user_update' => 'USER_UPDATE',
-        'users.user_update' => 'USER_UPDATE',
+        'axys_users.user_update' => 'USER_UPDATE',
         'CreatedAt' => 'USER_CREATED',
         'User.CreatedAt' => 'USER_CREATED',
         'createdAt' => 'USER_CREATED',
@@ -588,7 +588,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_CREATED' => 'USER_CREATED',
         'COL_USER_CREATED' => 'USER_CREATED',
         'user_created' => 'USER_CREATED',
-        'users.user_created' => 'USER_CREATED',
+        'axys_users.user_created' => 'USER_CREATED',
         'UpdatedAt' => 'USER_UPDATED',
         'User.UpdatedAt' => 'USER_UPDATED',
         'updatedAt' => 'USER_UPDATED',
@@ -596,7 +596,7 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_USER_UPDATED' => 'USER_UPDATED',
         'COL_USER_UPDATED' => 'USER_UPDATED',
         'user_updated' => 'USER_UPDATED',
-        'users.user_updated' => 'USER_UPDATED',
+        'axys_users.user_updated' => 'USER_UPDATED',
     ];
 
     /**
@@ -609,7 +609,7 @@ class UserTableMap extends TableMap
     public function initialize(): void
     {
         // attributes
-        $this->setName('users');
+        $this->setName('axys_users');
         $this->setPhpName('User');
         $this->setIdentifierQuoting(false);
         $this->setClassName('\\Model\\User');
@@ -1108,7 +1108,7 @@ class UserTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the users table.
+     * Deletes all rows from the axys_users table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).

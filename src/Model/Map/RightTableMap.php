@@ -269,7 +269,7 @@ class RightTableMap extends TableMap
         // columns
         $this->addPrimaryKey('right_id', 'Id', 'INTEGER', true, 10, null);
         $this->addColumn('right_uid', 'Uid', 'VARCHAR', false, 32, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'axys_users', 'id', false, 10, null);
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
         $this->addForeignKey('publisher_id', 'PublisherId', 'INTEGER', 'publishers', 'publisher_id', false, 10, null);
         $this->addColumn('bookshop_id', 'BookshopId', 'INTEGER', false, 10, null);

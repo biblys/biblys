@@ -206,7 +206,7 @@ $content .= '<h3>Toutes les ventes</h3>';
 $achats = $_SQL->prepare("SELECT `article_title`, `Email`,`stock_selling_price`,`stock_selling_date`, `stock_id`
     FROM `articles`
     JOIN `stock` USING(`article_id`)
-    JOIN `users` ON `users`.`id` = `stock`.`user_id`
+    JOIN `axys_users` ON `axys_users`.`id` = `stock`.`user_id`
     WHERE `stock`.`site_id` = :site_id AND (`type_id` = '2' OR `type_id` = 11) " .$req.$reqPeople."
     GROUP BY `stock_id`
 ORDER BY `stock_selling_date` DESC");

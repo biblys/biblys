@@ -380,7 +380,7 @@ class UserManager extends EntityManager
     {
         parent::__construct();
 
-        $this->table = "users";
+        $this->table = "axys_users";
     }
 
     public function getQuery($query, $params, $options = [], $withJoins = true)
