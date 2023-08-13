@@ -22,7 +22,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery orderById($order = Criteria::ASC) Order by the order_id column
  * @method     ChildOrderQuery orderBySlug($order = Criteria::ASC) Order by the order_url column
  * @method     ChildOrderQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
- * @method     ChildOrderQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
+ * @method     ChildOrderQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
  * @method     ChildOrderQuery orderByCustomerId($order = Criteria::ASC) Order by the customer_id column
  * @method     ChildOrderQuery orderBySellerId($order = Criteria::ASC) Order by the seller_id column
  * @method     ChildOrderQuery orderByType($order = Criteria::ASC) Order by the order_type column
@@ -70,7 +70,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery groupById() Group by the order_id column
  * @method     ChildOrderQuery groupBySlug() Group by the order_url column
  * @method     ChildOrderQuery groupBySiteId() Group by the site_id column
- * @method     ChildOrderQuery groupByUserId() Group by the user_id column
+ * @method     ChildOrderQuery groupByAxysUserId() Group by the axys_user_id column
  * @method     ChildOrderQuery groupByCustomerId() Group by the customer_id column
  * @method     ChildOrderQuery groupBySellerId() Group by the seller_id column
  * @method     ChildOrderQuery groupByType() Group by the order_type column
@@ -151,7 +151,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder|null findOneById(int $order_id) Return the first ChildOrder filtered by the order_id column
  * @method     ChildOrder|null findOneBySlug(string $order_url) Return the first ChildOrder filtered by the order_url column
  * @method     ChildOrder|null findOneBySiteId(int $site_id) Return the first ChildOrder filtered by the site_id column
- * @method     ChildOrder|null findOneByUserId(int $user_id) Return the first ChildOrder filtered by the user_id column
+ * @method     ChildOrder|null findOneByAxysUserId(int $axys_user_id) Return the first ChildOrder filtered by the axys_user_id column
  * @method     ChildOrder|null findOneByCustomerId(int $customer_id) Return the first ChildOrder filtered by the customer_id column
  * @method     ChildOrder|null findOneBySellerId(int $seller_id) Return the first ChildOrder filtered by the seller_id column
  * @method     ChildOrder|null findOneByType(string $order_type) Return the first ChildOrder filtered by the order_type column
@@ -202,7 +202,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder requireOneById(int $order_id) Return the first ChildOrder filtered by the order_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneBySlug(string $order_url) Return the first ChildOrder filtered by the order_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneBySiteId(int $site_id) Return the first ChildOrder filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByUserId(int $user_id) Return the first ChildOrder filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildOrder requireOneByAxysUserId(int $axys_user_id) Return the first ChildOrder filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByCustomerId(int $customer_id) Return the first ChildOrder filtered by the customer_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneBySellerId(int $seller_id) Return the first ChildOrder filtered by the seller_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByType(string $order_type) Return the first ChildOrder filtered by the order_type column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -256,8 +256,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildOrder> findBySlug(string|array<string> $order_url) Return ChildOrder objects filtered by the order_url column
  * @method     ChildOrder[]|Collection findBySiteId(int|array<int> $site_id) Return ChildOrder objects filtered by the site_id column
  * @psalm-method Collection&\Traversable<ChildOrder> findBySiteId(int|array<int> $site_id) Return ChildOrder objects filtered by the site_id column
- * @method     ChildOrder[]|Collection findByUserId(int|array<int> $user_id) Return ChildOrder objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildOrder> findByUserId(int|array<int> $user_id) Return ChildOrder objects filtered by the user_id column
+ * @method     ChildOrder[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildOrder objects filtered by the axys_user_id column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByAxysUserId(int|array<int> $axys_user_id) Return ChildOrder objects filtered by the axys_user_id column
  * @method     ChildOrder[]|Collection findByCustomerId(int|array<int> $customer_id) Return ChildOrder objects filtered by the customer_id column
  * @psalm-method Collection&\Traversable<ChildOrder> findByCustomerId(int|array<int> $customer_id) Return ChildOrder objects filtered by the customer_id column
  * @method     ChildOrder[]|Collection findBySellerId(int|array<int> $seller_id) Return ChildOrder objects filtered by the seller_id column
@@ -443,7 +443,7 @@ abstract class OrderQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT order_id, order_url, site_id, user_id, customer_id, seller_id, order_type, order_as_a_gift, order_gift_recipient, order_amount, order_discount, order_amount_tobepaid, shipping_id, country_id, order_shipping, order_shipping_mode, order_track_number, order_payment_mode, order_payment_cash, order_payment_cheque, order_payment_transfer, order_payment_card, order_payment_paypal, order_payment_payplug, order_payment_left, order_title, order_firstname, order_lastname, order_address1, order_address2, order_postalcode, order_city, order_country, order_email, order_phone, order_comment, order_utmz, order_referer, order_insert, order_payment_date, order_shipping_date, order_followup_date, order_confirmation_date, order_cancel_date, order_update, order_created, order_updated FROM orders WHERE order_id = :p0';
+        $sql = 'SELECT order_id, order_url, site_id, axys_user_id, customer_id, seller_id, order_type, order_as_a_gift, order_gift_recipient, order_amount, order_discount, order_amount_tobepaid, shipping_id, country_id, order_shipping, order_shipping_mode, order_track_number, order_payment_mode, order_payment_cash, order_payment_cheque, order_payment_transfer, order_payment_card, order_payment_paypal, order_payment_payplug, order_payment_left, order_title, order_firstname, order_lastname, order_address1, order_address2, order_postalcode, order_city, order_country, order_email, order_phone, order_comment, order_utmz, order_referer, order_insert, order_payment_date, order_shipping_date, order_followup_date, order_confirmation_date, order_cancel_date, order_update, order_created, order_updated FROM orders WHERE order_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -654,16 +654,16 @@ abstract class OrderQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the user_id column
+     * Filter the query on the axys_user_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByUserId(1234); // WHERE user_id = 1234
-     * $query->filterByUserId(array(12, 34)); // WHERE user_id IN (12, 34)
-     * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
+     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
+     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
+     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
      * </code>
      *
-     * @param mixed $userId The value to use as filter.
+     * @param mixed $axysUserId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -671,16 +671,16 @@ abstract class OrderQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, ?string $comparison = null)
+    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
     {
-        if (is_array($userId)) {
+        if (is_array($axysUserId)) {
             $useMinMax = false;
-            if (isset($userId['min'])) {
-                $this->addUsingAlias(OrderTableMap::COL_USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysUserId['min'])) {
+                $this->addUsingAlias(OrderTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($userId['max'])) {
-                $this->addUsingAlias(OrderTableMap::COL_USER_ID, $userId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysUserId['max'])) {
+                $this->addUsingAlias(OrderTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -691,7 +691,7 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(OrderTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
 
         return $this;
     }

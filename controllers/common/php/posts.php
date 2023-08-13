@@ -43,7 +43,7 @@ if (isset($_GET["author"]))
 {
     if ($u = $um->get(array('user_slug' => $_GET['author'])))
     {
-        $aut_req = " AND `posts`.`user_id` = '".$u->get('id')."'";
+        $aut_req = " AND `posts`.`axys_user_id` = '".$u->get('id')."'";
         if (isset(\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle())) \Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle() .= ' de '.$u->get('screen_name');
     }
 }
@@ -60,7 +60,7 @@ $posts_query = "SELECT `post_id`, `post_title`, `post_url`, `post_content`, `pos
                 `user_screen_name`, `user_slug`
     FROM `posts`
     LEFT JOIN `categories` USING(`category_id`)
-    LEFT JOIN `axys_users` ON `posts`.`user_id` = `axys_users`.`id`
+    LEFT JOIN `axys_users` ON `posts`.`axys_user_id` = `axys_users`.`id`
     LEFT JOIN `links` USING(`post_id`)
 WHERE `posts`.`site_id` = '" . LegacyCodeHelper::getLegacyCurrentSite()["site_id"]."' AND `post_date` <= NOW() AND `post_status` = '1' ".$aut_req." ".$cat_req.""
         . "GROUP BY `post_id`";

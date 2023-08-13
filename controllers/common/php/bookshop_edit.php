@@ -68,7 +68,7 @@ if (LegacyCodeHelper::getGlobalVisitor()->isBookshop()) $_GET['id'] = LegacyCode
         $managers = array();
         foreach ($rights as $r)
         {
-            if ($u = $um->get(array('user_id' => $r->get('user_id'))))
+            if ($u = $um->get(array('user_id' => $r->get('axys_user_id'))))
             {
                 $managers[] .= $u->getUserName();
             }

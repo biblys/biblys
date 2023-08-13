@@ -21,7 +21,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildWishQuery orderById($order = Criteria::ASC) Order by the wish_id column
  * @method     ChildWishQuery orderByWishlistId($order = Criteria::ASC) Order by the wishlist_id column
- * @method     ChildWishQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
+ * @method     ChildWishQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
  * @method     ChildWishQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
  * @method     ChildWishQuery orderByArticleId($order = Criteria::ASC) Order by the article_id column
  * @method     ChildWishQuery orderByCreatedAt($order = Criteria::ASC) Order by the wish_created column
@@ -30,7 +30,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildWishQuery groupById() Group by the wish_id column
  * @method     ChildWishQuery groupByWishlistId() Group by the wishlist_id column
- * @method     ChildWishQuery groupByUserId() Group by the user_id column
+ * @method     ChildWishQuery groupByAxysUserId() Group by the axys_user_id column
  * @method     ChildWishQuery groupBySiteId() Group by the site_id column
  * @method     ChildWishQuery groupByArticleId() Group by the article_id column
  * @method     ChildWishQuery groupByCreatedAt() Group by the wish_created column
@@ -62,7 +62,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildWish|null findOneById(int $wish_id) Return the first ChildWish filtered by the wish_id column
  * @method     ChildWish|null findOneByWishlistId(int $wishlist_id) Return the first ChildWish filtered by the wishlist_id column
- * @method     ChildWish|null findOneByUserId(int $user_id) Return the first ChildWish filtered by the user_id column
+ * @method     ChildWish|null findOneByAxysUserId(int $axys_user_id) Return the first ChildWish filtered by the axys_user_id column
  * @method     ChildWish|null findOneBySiteId(int $site_id) Return the first ChildWish filtered by the site_id column
  * @method     ChildWish|null findOneByArticleId(int $article_id) Return the first ChildWish filtered by the article_id column
  * @method     ChildWish|null findOneByCreatedAt(string $wish_created) Return the first ChildWish filtered by the wish_created column
@@ -74,7 +74,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildWish requireOneById(int $wish_id) Return the first ChildWish filtered by the wish_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildWish requireOneByWishlistId(int $wishlist_id) Return the first ChildWish filtered by the wishlist_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildWish requireOneByUserId(int $user_id) Return the first ChildWish filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildWish requireOneByAxysUserId(int $axys_user_id) Return the first ChildWish filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildWish requireOneBySiteId(int $site_id) Return the first ChildWish filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildWish requireOneByArticleId(int $article_id) Return the first ChildWish filtered by the article_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildWish requireOneByCreatedAt(string $wish_created) Return the first ChildWish filtered by the wish_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -88,8 +88,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildWish> findById(int|array<int> $wish_id) Return ChildWish objects filtered by the wish_id column
  * @method     ChildWish[]|Collection findByWishlistId(int|array<int> $wishlist_id) Return ChildWish objects filtered by the wishlist_id column
  * @psalm-method Collection&\Traversable<ChildWish> findByWishlistId(int|array<int> $wishlist_id) Return ChildWish objects filtered by the wishlist_id column
- * @method     ChildWish[]|Collection findByUserId(int|array<int> $user_id) Return ChildWish objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildWish> findByUserId(int|array<int> $user_id) Return ChildWish objects filtered by the user_id column
+ * @method     ChildWish[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildWish objects filtered by the axys_user_id column
+ * @psalm-method Collection&\Traversable<ChildWish> findByAxysUserId(int|array<int> $axys_user_id) Return ChildWish objects filtered by the axys_user_id column
  * @method     ChildWish[]|Collection findBySiteId(int|array<int> $site_id) Return ChildWish objects filtered by the site_id column
  * @psalm-method Collection&\Traversable<ChildWish> findBySiteId(int|array<int> $site_id) Return ChildWish objects filtered by the site_id column
  * @method     ChildWish[]|Collection findByArticleId(int|array<int> $article_id) Return ChildWish objects filtered by the article_id column
@@ -199,7 +199,7 @@ abstract class WishQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT wish_id, wishlist_id, user_id, site_id, article_id, wish_created, wish_updated, wish_bought FROM wishes WHERE wish_id = :p0';
+        $sql = 'SELECT wish_id, wishlist_id, axys_user_id, site_id, article_id, wish_created, wish_updated, wish_bought FROM wishes WHERE wish_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -380,18 +380,18 @@ abstract class WishQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the user_id column
+     * Filter the query on the axys_user_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByUserId(1234); // WHERE user_id = 1234
-     * $query->filterByUserId(array(12, 34)); // WHERE user_id IN (12, 34)
-     * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
+     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
+     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
+     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
      * </code>
      *
      * @see       filterByAxysUser()
      *
-     * @param mixed $userId The value to use as filter.
+     * @param mixed $axysUserId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -399,16 +399,16 @@ abstract class WishQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, ?string $comparison = null)
+    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
     {
-        if (is_array($userId)) {
+        if (is_array($axysUserId)) {
             $useMinMax = false;
-            if (isset($userId['min'])) {
-                $this->addUsingAlias(WishTableMap::COL_USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysUserId['min'])) {
+                $this->addUsingAlias(WishTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($userId['max'])) {
-                $this->addUsingAlias(WishTableMap::COL_USER_ID, $userId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysUserId['max'])) {
+                $this->addUsingAlias(WishTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -419,7 +419,7 @@ abstract class WishQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(WishTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(WishTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
 
         return $this;
     }
@@ -659,14 +659,14 @@ abstract class WishQuery extends ModelCriteria
     {
         if ($axysUser instanceof \Model\AxysUser) {
             return $this
-                ->addUsingAlias(WishTableMap::COL_USER_ID, $axysUser->getId(), $comparison);
+                ->addUsingAlias(WishTableMap::COL_AXYS_USER_ID, $axysUser->getId(), $comparison);
         } elseif ($axysUser instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             $this
-                ->addUsingAlias(WishTableMap::COL_USER_ID, $axysUser->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(WishTableMap::COL_AXYS_USER_ID, $axysUser->toKeyValue('PrimaryKey', 'Id'), $comparison);
 
             return $this;
         } else {

@@ -67,7 +67,7 @@ $ventes = EntityManager::prepareAndExecute("
     FROM `articles`
     JOIN `stock` USING(`article_id`)
     WHERE
-        `site_id` = :site_id AND (`type_id` = 2 OR `type_id` = 11) AND `stock`.`user_id` IS NOT NULL
+        `site_id` = :site_id AND (`type_id` = 2 OR `type_id` = 11) AND `stock`.`axys_user_id` IS NOT NULL
         " . $req . $reqPeople . "
     GROUP BY `article_id`
     ORDER BY `article_authors_alphabetic` ", array_merge($reqParams, $reqPeopleParams));
@@ -84,7 +84,7 @@ while ($l = $ventes->fetch(PDO::FETCH_ASSOC)) {
 
     $subReqParams['article_id'] = $l['article_id'];
 
-    $numVentes = $_SQL->prepare("SELECT COUNT(`stock_id`) AS `ventes`, SUM(`stock_selling_price`) AS `ca`, SUM(`stock_selling_price_ht`) AS `ca_ht` FROM `stock` WHERE `article_id` = :article_id AND `stock_selling_price` != '0' AND `stock_selling_date` AND `site_id` = :site_id " . $req . " AND `stock`.`user_id` IS NOT NULL");
+    $numVentes = $_SQL->prepare("SELECT COUNT(`stock_id`) AS `ventes`, SUM(`stock_selling_price`) AS `ca`, SUM(`stock_selling_price_ht`) AS `ca_ht` FROM `stock` WHERE `article_id` = :article_id AND `stock_selling_price` != '0' AND `stock_selling_date` AND `site_id` = :site_id " . $req . " AND `stock`.`axys_user_id` IS NOT NULL");
     $numVentes->execute($subReqParams);
     $v = $numVentes->fetch(PDO::FETCH_ASSOC);
 
@@ -206,7 +206,7 @@ $content .= '<h3>Toutes les ventes</h3>';
 $achats = $_SQL->prepare("SELECT `article_title`, `Email`,`stock_selling_price`,`stock_selling_date`, `stock_id`
     FROM `articles`
     JOIN `stock` USING(`article_id`)
-    JOIN `axys_users` ON `axys_users`.`id` = `stock`.`user_id`
+    JOIN `axys_users` ON `axys_users`.`id` = `stock`.`axys_user_id`
     WHERE `stock`.`site_id` = :site_id AND (`type_id` = '2' OR `type_id` = 11) " .$req.$reqPeople."
     GROUP BY `stock_id`
 ORDER BY `stock_selling_date` DESC");

@@ -71,11 +71,11 @@ abstract class Alert implements ActiveRecordInterface
     protected $alert_id;
 
     /**
-     * The value for the user_id field.
+     * The value for the axys_user_id field.
      *
      * @var        int|null
      */
-    protected $user_id;
+    protected $axys_user_id;
 
     /**
      * The value for the article_id field.
@@ -378,13 +378,13 @@ abstract class Alert implements ActiveRecordInterface
     }
 
     /**
-     * Get the [user_id] column value.
+     * Get the [axys_user_id] column value.
      *
      * @return int|null
      */
-    public function getUserId()
+    public function getAxysUserId()
     {
-        return $this->user_id;
+        return $this->axys_user_id;
     }
 
     /**
@@ -536,20 +536,20 @@ abstract class Alert implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [user_id] column.
+     * Set the value of [axys_user_id] column.
      *
      * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setUserId($v)
+    public function setAxysUserId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->user_id !== $v) {
-            $this->user_id = $v;
-            $this->modifiedColumns[AlertTableMap::COL_USER_ID] = true;
+        if ($this->axys_user_id !== $v) {
+            $this->axys_user_id = $v;
+            $this->modifiedColumns[AlertTableMap::COL_AXYS_USER_ID] = true;
         }
 
         return $this;
@@ -754,8 +754,8 @@ abstract class Alert implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : AlertTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->alert_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : AlertTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : AlertTableMap::translateFieldName('AxysUserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->axys_user_id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : AlertTableMap::translateFieldName('ArticleId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->article_id = (null !== $col) ? (int) $col : null;
@@ -1018,8 +1018,8 @@ abstract class Alert implements ActiveRecordInterface
         if ($this->isColumnModified(AlertTableMap::COL_ALERT_ID)) {
             $modifiedColumns[':p' . $index++]  = 'alert_id';
         }
-        if ($this->isColumnModified(AlertTableMap::COL_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'user_id';
+        if ($this->isColumnModified(AlertTableMap::COL_AXYS_USER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_user_id';
         }
         if ($this->isColumnModified(AlertTableMap::COL_ARTICLE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'article_id';
@@ -1060,8 +1060,8 @@ abstract class Alert implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->alert_id, PDO::PARAM_INT);
 
                         break;
-                    case 'user_id':
-                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+                    case 'axys_user_id':
+                        $stmt->bindValue($identifier, $this->axys_user_id, PDO::PARAM_INT);
 
                         break;
                     case 'article_id':
@@ -1162,7 +1162,7 @@ abstract class Alert implements ActiveRecordInterface
                 return $this->getId();
 
             case 1:
-                return $this->getUserId();
+                return $this->getAxysUserId();
 
             case 2:
                 return $this->getArticleId();
@@ -1216,7 +1216,7 @@ abstract class Alert implements ActiveRecordInterface
         $keys = AlertTableMap::getFieldNames($keyType);
         $result = [
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getUserId(),
+            $keys[1] => $this->getAxysUserId(),
             $keys[2] => $this->getArticleId(),
             $keys[3] => $this->getMaxPrice(),
             $keys[4] => $this->getPubYear(),
@@ -1286,7 +1286,7 @@ abstract class Alert implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setUserId($value);
+                $this->setAxysUserId($value);
                 break;
             case 2:
                 $this->setArticleId($value);
@@ -1342,7 +1342,7 @@ abstract class Alert implements ActiveRecordInterface
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setUserId($arr[$keys[1]]);
+            $this->setAxysUserId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
             $this->setArticleId($arr[$keys[2]]);
@@ -1414,8 +1414,8 @@ abstract class Alert implements ActiveRecordInterface
         if ($this->isColumnModified(AlertTableMap::COL_ALERT_ID)) {
             $criteria->add(AlertTableMap::COL_ALERT_ID, $this->alert_id);
         }
-        if ($this->isColumnModified(AlertTableMap::COL_USER_ID)) {
-            $criteria->add(AlertTableMap::COL_USER_ID, $this->user_id);
+        if ($this->isColumnModified(AlertTableMap::COL_AXYS_USER_ID)) {
+            $criteria->add(AlertTableMap::COL_AXYS_USER_ID, $this->axys_user_id);
         }
         if ($this->isColumnModified(AlertTableMap::COL_ARTICLE_ID)) {
             $criteria->add(AlertTableMap::COL_ARTICLE_ID, $this->article_id);
@@ -1529,7 +1529,7 @@ abstract class Alert implements ActiveRecordInterface
      */
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
-        $copyObj->setUserId($this->getUserId());
+        $copyObj->setAxysUserId($this->getAxysUserId());
         $copyObj->setArticleId($this->getArticleId());
         $copyObj->setMaxPrice($this->getMaxPrice());
         $copyObj->setPubYear($this->getPubYear());
@@ -1576,7 +1576,7 @@ abstract class Alert implements ActiveRecordInterface
     public function clear()
     {
         $this->alert_id = null;
-        $this->user_id = null;
+        $this->axys_user_id = null;
         $this->article_id = null;
         $this->alert_max_price = null;
         $this->alert_pub_year = null;

@@ -86,9 +86,9 @@ class FileTableMap extends TableMap
     public const COL_ARTICLE_ID = 'files.article_id';
 
     /**
-     * the column name for the user_id field
+     * the column name for the axys_user_id field
      */
-    public const COL_USER_ID = 'files.user_id';
+    public const COL_AXYS_USER_ID = 'files.axys_user_id';
 
     /**
      * the column name for the file_title field
@@ -159,10 +159,10 @@ class FileTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'ArticleId', 'UserId', 'Title', 'Type', 'Access', 'Version', 'Hash', 'Size', 'Ean', 'Inserted', 'Uploaded', 'UpdatedAt', 'CreatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'articleId', 'userId', 'title', 'type', 'access', 'version', 'hash', 'size', 'ean', 'inserted', 'uploaded', 'updatedAt', 'createdAt', ],
-        self::TYPE_COLNAME       => [FileTableMap::COL_FILE_ID, FileTableMap::COL_ARTICLE_ID, FileTableMap::COL_USER_ID, FileTableMap::COL_FILE_TITLE, FileTableMap::COL_FILE_TYPE, FileTableMap::COL_FILE_ACCESS, FileTableMap::COL_FILE_VERSION, FileTableMap::COL_FILE_HASH, FileTableMap::COL_FILE_SIZE, FileTableMap::COL_FILE_EAN, FileTableMap::COL_FILE_INSERTED, FileTableMap::COL_FILE_UPLOADED, FileTableMap::COL_FILE_UPDATED, FileTableMap::COL_FILE_CREATED, ],
-        self::TYPE_FIELDNAME     => ['file_id', 'article_id', 'user_id', 'file_title', 'file_type', 'file_access', 'file_version', 'file_hash', 'file_size', 'file_ean', 'file_inserted', 'file_uploaded', 'file_updated', 'file_created', ],
+        self::TYPE_PHPNAME       => ['Id', 'ArticleId', 'AxysUserId', 'Title', 'Type', 'Access', 'Version', 'Hash', 'Size', 'Ean', 'Inserted', 'Uploaded', 'UpdatedAt', 'CreatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'articleId', 'axysUserId', 'title', 'type', 'access', 'version', 'hash', 'size', 'ean', 'inserted', 'uploaded', 'updatedAt', 'createdAt', ],
+        self::TYPE_COLNAME       => [FileTableMap::COL_FILE_ID, FileTableMap::COL_ARTICLE_ID, FileTableMap::COL_AXYS_USER_ID, FileTableMap::COL_FILE_TITLE, FileTableMap::COL_FILE_TYPE, FileTableMap::COL_FILE_ACCESS, FileTableMap::COL_FILE_VERSION, FileTableMap::COL_FILE_HASH, FileTableMap::COL_FILE_SIZE, FileTableMap::COL_FILE_EAN, FileTableMap::COL_FILE_INSERTED, FileTableMap::COL_FILE_UPLOADED, FileTableMap::COL_FILE_UPDATED, FileTableMap::COL_FILE_CREATED, ],
+        self::TYPE_FIELDNAME     => ['file_id', 'article_id', 'axys_user_id', 'file_title', 'file_type', 'file_access', 'file_version', 'file_hash', 'file_size', 'file_ean', 'file_inserted', 'file_uploaded', 'file_updated', 'file_created', ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
     ];
 
@@ -175,10 +175,10 @@ class FileTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'ArticleId' => 1, 'UserId' => 2, 'Title' => 3, 'Type' => 4, 'Access' => 5, 'Version' => 6, 'Hash' => 7, 'Size' => 8, 'Ean' => 9, 'Inserted' => 10, 'Uploaded' => 11, 'UpdatedAt' => 12, 'CreatedAt' => 13, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'articleId' => 1, 'userId' => 2, 'title' => 3, 'type' => 4, 'access' => 5, 'version' => 6, 'hash' => 7, 'size' => 8, 'ean' => 9, 'inserted' => 10, 'uploaded' => 11, 'updatedAt' => 12, 'createdAt' => 13, ],
-        self::TYPE_COLNAME       => [FileTableMap::COL_FILE_ID => 0, FileTableMap::COL_ARTICLE_ID => 1, FileTableMap::COL_USER_ID => 2, FileTableMap::COL_FILE_TITLE => 3, FileTableMap::COL_FILE_TYPE => 4, FileTableMap::COL_FILE_ACCESS => 5, FileTableMap::COL_FILE_VERSION => 6, FileTableMap::COL_FILE_HASH => 7, FileTableMap::COL_FILE_SIZE => 8, FileTableMap::COL_FILE_EAN => 9, FileTableMap::COL_FILE_INSERTED => 10, FileTableMap::COL_FILE_UPLOADED => 11, FileTableMap::COL_FILE_UPDATED => 12, FileTableMap::COL_FILE_CREATED => 13, ],
-        self::TYPE_FIELDNAME     => ['file_id' => 0, 'article_id' => 1, 'user_id' => 2, 'file_title' => 3, 'file_type' => 4, 'file_access' => 5, 'file_version' => 6, 'file_hash' => 7, 'file_size' => 8, 'file_ean' => 9, 'file_inserted' => 10, 'file_uploaded' => 11, 'file_updated' => 12, 'file_created' => 13, ],
+        self::TYPE_PHPNAME       => ['Id' => 0, 'ArticleId' => 1, 'AxysUserId' => 2, 'Title' => 3, 'Type' => 4, 'Access' => 5, 'Version' => 6, 'Hash' => 7, 'Size' => 8, 'Ean' => 9, 'Inserted' => 10, 'Uploaded' => 11, 'UpdatedAt' => 12, 'CreatedAt' => 13, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'articleId' => 1, 'axysUserId' => 2, 'title' => 3, 'type' => 4, 'access' => 5, 'version' => 6, 'hash' => 7, 'size' => 8, 'ean' => 9, 'inserted' => 10, 'uploaded' => 11, 'updatedAt' => 12, 'createdAt' => 13, ],
+        self::TYPE_COLNAME       => [FileTableMap::COL_FILE_ID => 0, FileTableMap::COL_ARTICLE_ID => 1, FileTableMap::COL_AXYS_USER_ID => 2, FileTableMap::COL_FILE_TITLE => 3, FileTableMap::COL_FILE_TYPE => 4, FileTableMap::COL_FILE_ACCESS => 5, FileTableMap::COL_FILE_VERSION => 6, FileTableMap::COL_FILE_HASH => 7, FileTableMap::COL_FILE_SIZE => 8, FileTableMap::COL_FILE_EAN => 9, FileTableMap::COL_FILE_INSERTED => 10, FileTableMap::COL_FILE_UPLOADED => 11, FileTableMap::COL_FILE_UPDATED => 12, FileTableMap::COL_FILE_CREATED => 13, ],
+        self::TYPE_FIELDNAME     => ['file_id' => 0, 'article_id' => 1, 'axys_user_id' => 2, 'file_title' => 3, 'file_type' => 4, 'file_access' => 5, 'file_version' => 6, 'file_hash' => 7, 'file_size' => 8, 'file_ean' => 9, 'file_inserted' => 10, 'file_uploaded' => 11, 'file_updated' => 12, 'file_created' => 13, ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
     ];
 
@@ -204,14 +204,14 @@ class FileTableMap extends TableMap
         'COL_ARTICLE_ID' => 'ARTICLE_ID',
         'article_id' => 'ARTICLE_ID',
         'files.article_id' => 'ARTICLE_ID',
-        'UserId' => 'USER_ID',
-        'File.UserId' => 'USER_ID',
-        'userId' => 'USER_ID',
-        'file.userId' => 'USER_ID',
-        'FileTableMap::COL_USER_ID' => 'USER_ID',
-        'COL_USER_ID' => 'USER_ID',
-        'user_id' => 'USER_ID',
-        'files.user_id' => 'USER_ID',
+        'AxysUserId' => 'AXYS_USER_ID',
+        'File.AxysUserId' => 'AXYS_USER_ID',
+        'axysUserId' => 'AXYS_USER_ID',
+        'file.axysUserId' => 'AXYS_USER_ID',
+        'FileTableMap::COL_AXYS_USER_ID' => 'AXYS_USER_ID',
+        'COL_AXYS_USER_ID' => 'AXYS_USER_ID',
+        'axys_user_id' => 'AXYS_USER_ID',
+        'files.axys_user_id' => 'AXYS_USER_ID',
         'Title' => 'FILE_TITLE',
         'File.Title' => 'FILE_TITLE',
         'title' => 'FILE_TITLE',
@@ -321,7 +321,7 @@ class FileTableMap extends TableMap
         // columns
         $this->addPrimaryKey('file_id', 'Id', 'INTEGER', true, 10, null);
         $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, 10, null);
-        $this->addColumn('user_id', 'UserId', 'INTEGER', false, 10, null);
+        $this->addColumn('axys_user_id', 'AxysUserId', 'INTEGER', false, 10, null);
         $this->addColumn('file_title', 'Title', 'VARCHAR', false, 32, null);
         $this->addColumn('file_type', 'Type', 'VARCHAR', false, 32, null);
         $this->addColumn('file_access', 'Access', 'BOOLEAN', false, 1, true);
@@ -501,7 +501,7 @@ class FileTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(FileTableMap::COL_FILE_ID);
             $criteria->addSelectColumn(FileTableMap::COL_ARTICLE_ID);
-            $criteria->addSelectColumn(FileTableMap::COL_USER_ID);
+            $criteria->addSelectColumn(FileTableMap::COL_AXYS_USER_ID);
             $criteria->addSelectColumn(FileTableMap::COL_FILE_TITLE);
             $criteria->addSelectColumn(FileTableMap::COL_FILE_TYPE);
             $criteria->addSelectColumn(FileTableMap::COL_FILE_ACCESS);
@@ -516,7 +516,7 @@ class FileTableMap extends TableMap
         } else {
             $criteria->addSelectColumn($alias . '.file_id');
             $criteria->addSelectColumn($alias . '.article_id');
-            $criteria->addSelectColumn($alias . '.user_id');
+            $criteria->addSelectColumn($alias . '.axys_user_id');
             $criteria->addSelectColumn($alias . '.file_title');
             $criteria->addSelectColumn($alias . '.file_type');
             $criteria->addSelectColumn($alias . '.file_access');
@@ -548,7 +548,7 @@ class FileTableMap extends TableMap
         if (null === $alias) {
             $criteria->removeSelectColumn(FileTableMap::COL_FILE_ID);
             $criteria->removeSelectColumn(FileTableMap::COL_ARTICLE_ID);
-            $criteria->removeSelectColumn(FileTableMap::COL_USER_ID);
+            $criteria->removeSelectColumn(FileTableMap::COL_AXYS_USER_ID);
             $criteria->removeSelectColumn(FileTableMap::COL_FILE_TITLE);
             $criteria->removeSelectColumn(FileTableMap::COL_FILE_TYPE);
             $criteria->removeSelectColumn(FileTableMap::COL_FILE_ACCESS);
@@ -563,7 +563,7 @@ class FileTableMap extends TableMap
         } else {
             $criteria->removeSelectColumn($alias . '.file_id');
             $criteria->removeSelectColumn($alias . '.article_id');
-            $criteria->removeSelectColumn($alias . '.user_id');
+            $criteria->removeSelectColumn($alias . '.axys_user_id');
             $criteria->removeSelectColumn($alias . '.file_title');
             $criteria->removeSelectColumn($alias . '.file_type');
             $criteria->removeSelectColumn($alias . '.file_access');

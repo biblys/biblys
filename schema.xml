@@ -2,7 +2,7 @@
 <database name="default" defaultIdMethod="native" namespace="Model" defaultPhpNamingMethod="underscore">
   <table name="alerts" idMethod="native" phpName="Alert">
     <column name="alert_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="alert_max_price" phpName="MaxPrice" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="alert_pub_year" phpName="PubYear" type="INTEGER" size="4" sqlType="int(4) unsigned"/>
@@ -279,7 +279,7 @@
     <column name="cart_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="cart_uid" phpName="Uid" type="VARCHAR" size="32"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
-    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="cart_seller_id" phpName="SellerId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="customer_id" phpName="CustomerId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="cart_title" phpName="Title" type="VARCHAR" size="128"/>
@@ -305,7 +305,7 @@
       <reference local="site_id" foreign="site_id"/>
     </foreign-key>
     <foreign-key foreignTable="axys_users" skipSql="true">
-      <reference local="user_id" foreign="id"/>
+      <reference local="axys_user_id" foreign="id"/>
     </foreign-key>
   </table>
   <table name="categories" idMethod="native" phpName="Category">
@@ -437,7 +437,7 @@
   <table name="coupons" idMethod="native" phpName="Coupon">
     <column name="coupon_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
-    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="coupon_code" phpName="Code" type="VARCHAR" size="6"/>
     <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="stock_id" phpName="StockId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
@@ -480,7 +480,7 @@
   <table name="customers" idMethod="native" phpName="Customer">
     <column name="customer_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
-    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="customer_type" phpName="Type" type="VARCHAR" size="16" defaultValue="Particulier"/>
     <column name="customer_first_name" phpName="FirstName" type="VARCHAR" size="64"/>
     <column name="customer_last_name" phpName="LastName" type="VARCHAR" size="64"/>
@@ -498,7 +498,7 @@
     </behavior>
     <unique name="site_id">
       <unique-column name="site_id"/>
-      <unique-column name="user_id"/>
+      <unique-column name="axys_user_id"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -531,7 +531,7 @@
     <column name="file_id" phpName="FileId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="book_id" phpName="BookId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
-    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="download_filetype" phpName="Filetype" type="LONGVARCHAR"/>
     <column name="download_version" phpName="Version" type="VARCHAR" size="8"/>
     <column name="download_ip" phpName="Ip" type="LONGVARCHAR"/>
@@ -582,7 +582,7 @@
   <table name="files" idMethod="native" phpName="File">
     <column name="file_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
-    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="file_title" phpName="Title" type="VARCHAR" size="32"/>
     <column name="file_type" phpName="Type" type="VARCHAR" size="32"/>
     <column name="file_access" phpName="Access" type="BOOLEAN" size="1" defaultValue="true"/>
@@ -751,7 +751,7 @@
   <table name="links" idMethod="native" phpName="Link" isCrossRef="true">
     <column name="link_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
-    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="stock_id" phpName="StockId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="list_id" phpName="ListId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
@@ -769,7 +769,7 @@
     <column name="bundle_id" phpName="BundleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="link_hide" phpName="Hide" type="BOOLEAN" size="1"/>
     <column name="link_do_not_reorder" phpName="DoNotReorder" type="BOOLEAN" size="1"/>
-    <column name="link_sponsor_user_id" phpName="SponsorUserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="link_sponsor_axys_user_id" phpName="SponsorAxysUserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="link_date" phpName="Date" type="TIMESTAMP"/>
     <column name="link_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="link_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
@@ -782,8 +782,8 @@
     </index>
     <unique name="sponsorship">
       <unique-column name="site_id"/>
-      <unique-column name="user_id"/>
-      <unique-column name="link_sponsor_user_id"/>
+      <unique-column name="axys_user_id"/>
+      <unique-column name="link_sponsor_axys_user_id"/>
     </unique>
     <unique name="suppliers">
       <unique-column name="site_id"/>
@@ -792,7 +792,7 @@
     </unique>
     <unique name="myEvents">
       <unique-column name="site_id"/>
-      <unique-column name="user_id"/>
+      <unique-column name="axys_user_id"/>
       <unique-column name="event_id"/>
     </unique>
     <unique name="rayons">
@@ -824,7 +824,7 @@
   </table>
   <table name="lists" idMethod="native" phpName="StockItemList">
     <column name="list_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="list_title" phpName="Title" type="VARCHAR" size="256"/>
     <column name="list_url" phpName="Url" type="VARCHAR" size="256"/>
@@ -864,7 +864,7 @@
   <table name="options" idMethod="native" phpName="Option">
     <column name="option_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int(11) unsigned"/>
-    <column name="user_id" phpName="UserId" type="INTEGER"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER"/>
     <column name="option_key" phpName="Key" type="VARCHAR" size="32"/>
     <column name="option_value" phpName="Value" type="VARCHAR" size="2048"/>
     <column name="option_created" phpName="CreatedAt" type="TIMESTAMP"/>
@@ -874,7 +874,7 @@
       <parameter name="update_column" value="option_updated" />
     </behavior>
     <foreign-key foreignTable="axys_users" skipSql="true">
-      <reference local="user_id" foreign="id"/>
+      <reference local="axys_user_id" foreign="id"/>
     </foreign-key>
     <foreign-key foreignTable="sites" skipSql="true">
       <reference local="site_id" foreign="site_id"/>
@@ -887,7 +887,7 @@
     <column name="order_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="order_url" phpName="Slug" type="VARCHAR" size="16"/>
     <column name="site_id" phpName="SiteId" type="INTEGER"/>
-    <column name="user_id" phpName="UserId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER" sqlType="int(11) unsigned"/>
     <column name="customer_id" phpName="CustomerId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="seller_id" phpName="SellerId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="order_type" phpName="Type" type="VARCHAR" size="8" defaultValue=""/>
@@ -1032,13 +1032,13 @@
   </table>
   <table name="permissions" idMethod="native" phpName="Permission">
     <column name="permission_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="user_id" phpName="UserId" type="INTEGER"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER"/>
     <column name="site_id" phpName="SiteId" type="INTEGER"/>
     <column name="permission_rank" phpName="Rank" type="VARCHAR" size="8"/>
     <column name="permission_last" phpName="Last" type="TIMESTAMP"/>
     <column name="permission_date" phpName="Date" type="TIMESTAMP"/>
-    <unique name="user_id">
-      <unique-column name="user_id"/>
+    <unique name="axys_user_id">
+      <unique-column name="axys_user_id"/>
       <unique-column name="site_id"/>
     </unique>
     <vendor type="mysql">
@@ -1047,7 +1047,7 @@
   </table>
   <table name="posts" idMethod="native" phpName="Post">
     <column name="post_id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="user_id" phpName="UserId" type="INTEGER"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int(11) unsigned"/>
     <column name="publisher_id" phpName="PublisherId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="category_id" phpName="CategoryId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
@@ -1199,7 +1199,7 @@
   <table name="rights" idMethod="native" phpName="Right">
     <column name="right_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="right_uid" phpName="Uid" type="VARCHAR" size="32"/>
-    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="publisher_id" phpName="PublisherId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="bookshop_id" phpName="BookshopId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
@@ -1212,7 +1212,7 @@
       <parameter name="update_column" value="right_updated" />
     </behavior>
     <foreign-key foreignTable="axys_users" skipSql="true">
-      <reference local="user_id" foreign="id"/>
+      <reference local="axys_user_id" foreign="id"/>
     </foreign-key>
     <foreign-key foreignTable="sites" skipSql="true">
       <reference local="site_id" foreign="site_id"/>
@@ -1231,7 +1231,7 @@
     <column name="event_id" phpName="EventId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="people_id" phpName="PeopleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="job_id" phpName="JobId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
-    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="role_hide" phpName="Hide" type="BOOLEAN" size="1" sqlType="tinyint(1) unsigned"/>
     <column name="role_presence" phpName="Presence" type="VARCHAR" size="256"/>
     <column name="role_date" phpName="Date" type="TIMESTAMP"/>
@@ -1276,7 +1276,7 @@
   <table name="session" idMethod="native" phpName="Session">
     <column name="session_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER"/>
-    <column name="user_id" phpName="UserId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER" sqlType="int(11) unsigned"/>
     <column name="session_token" phpName="Token" type="VARCHAR" size="32"/>
     <column name="session_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="session_expires" phpName="ExpiresAt" type="TIMESTAMP"/>
@@ -1286,7 +1286,7 @@
       <parameter name="update_column" value="session_updated" />
     </behavior>
     <foreign-key foreignTable="axys_users" skipSql="true">
-      <reference local="user_id" foreign="id"/>
+      <reference local="axys_user_id" foreign="id"/>
     </foreign-key>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -1401,7 +1401,7 @@
     <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="campaign_id" phpName="CampaignId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="reward_id" phpName="RewardId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
-    <column name="user_id" phpName="UserId" type="INTEGER" size="10"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER" size="10"/>
     <column name="customer_id" phpName="CustomerId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="wish_id" phpName="WishId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="cart_id" phpName="CartId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
@@ -1475,13 +1475,13 @@
       <reference local="article_id" foreign="article_id"/>
     </foreign-key>
     <foreign-key foreignTable="axys_users" skipSql="true">
-      <reference local="user_id" foreign="id" />
+      <reference local="axys_user_id" foreign="id" />
     </foreign-key>
   </table>
   <table name="subscriptions" idMethod="native" phpName="Subscription">
     <column name="subscription_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
-    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="publisher_id" phpName="PublisherId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="bookshop_id" phpName="BookshopId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="library_id" phpName="LibraryId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
@@ -1548,7 +1548,7 @@
   </table>
   <table name="votes" idMethod="native" phpName="Vote">
     <column name="vote_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="vote_F" phpName="F" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="vote_E" phpName="E" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="vote_date" phpName="Date" type="TIMESTAMP"/>
@@ -1559,7 +1559,7 @@
   <table name="wishes" idMethod="native" phpName="Wish">
     <column name="wish_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="wishlist_id" phpName="WishlistId" type="INTEGER"/>
-    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="wish_created" phpName="CreatedAt" type="TIMESTAMP"/>
@@ -1569,12 +1569,12 @@
       <parameter name="create_column" value="wish_created" />
       <parameter name="update_column" value="wish_updated" />
     </behavior>
-    <unique name="user_id">
-      <unique-column name="user_id"/>
+    <unique name="axys_user_id">
+      <unique-column name="axys_user_id"/>
       <unique-column name="article_id"/>
     </unique>
     <foreign-key foreignTable="axys_users" skipSql="true">
-      <reference local="user_id" foreign="id"/>
+      <reference local="axys_user_id" foreign="id"/>
     </foreign-key>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -1582,7 +1582,7 @@
   </table>
   <table name="wishlist" idMethod="native" phpName="Wishlist">
     <column name="wishlist_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="user_id" phpName="UserId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="axys_user_id" phpName="AxysUserId" type="INTEGER" sqlType="int(11) unsigned"/>
     <column name="wishlist_name" phpName="Name" type="VARCHAR" size="128"/>
     <column name="wishlist_current" phpName="Current" type="BOOLEAN" size="1"/>
     <column name="wishlist_public" phpName="Public" type="BOOLEAN" size="1"/>
@@ -1596,7 +1596,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
     <foreign-key foreignTable="axys_users" skipSql="true">
-      <reference local="user_id" foreign="id"/>
+      <reference local="axys_user_id" foreign="id"/>
     </foreign-key>
   </table>
 </database>

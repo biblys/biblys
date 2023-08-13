@@ -502,7 +502,7 @@ $rm = new RightManager();
 $rights = $rm->getAll(array('publisher_id' => $p['publisher_id']));
 $managers = array();
 foreach ($rights as $r) {
-    if ($u = $um->get(array('user_id' => $r->get('user_id')))) {
+    if ($u = $um->get(array('user_id' => $r->get('axys_user_id')))) {
         $managers[] .= $u->getUserName();
     }
 }

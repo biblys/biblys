@@ -92,11 +92,11 @@ abstract class Order implements ActiveRecordInterface
     protected $site_id;
 
     /**
-     * The value for the user_id field.
+     * The value for the axys_user_id field.
      *
      * @var        int|null
      */
-    protected $user_id;
+    protected $axys_user_id;
 
     /**
      * The value for the customer_id field.
@@ -717,13 +717,13 @@ abstract class Order implements ActiveRecordInterface
     }
 
     /**
-     * Get the [user_id] column value.
+     * Get the [axys_user_id] column value.
      *
      * @return int|null
      */
-    public function getUserId()
+    public function getAxysUserId()
     {
-        return $this->user_id;
+        return $this->axys_user_id;
     }
 
     /**
@@ -1329,20 +1329,20 @@ abstract class Order implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [user_id] column.
+     * Set the value of [axys_user_id] column.
      *
      * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setUserId($v)
+    public function setAxysUserId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->user_id !== $v) {
-            $this->user_id = $v;
-            $this->modifiedColumns[OrderTableMap::COL_USER_ID] = true;
+        if ($this->axys_user_id !== $v) {
+            $this->axys_user_id = $v;
+            $this->modifiedColumns[OrderTableMap::COL_AXYS_USER_ID] = true;
         }
 
         return $this;
@@ -2297,8 +2297,8 @@ abstract class Order implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : OrderTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : OrderTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : OrderTableMap::translateFieldName('AxysUserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->axys_user_id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : OrderTableMap::translateFieldName('CustomerId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->customer_id = (null !== $col) ? (int) $col : null;
@@ -2723,8 +2723,8 @@ abstract class Order implements ActiveRecordInterface
         if ($this->isColumnModified(OrderTableMap::COL_SITE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'site_id';
         }
-        if ($this->isColumnModified(OrderTableMap::COL_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'user_id';
+        if ($this->isColumnModified(OrderTableMap::COL_AXYS_USER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_user_id';
         }
         if ($this->isColumnModified(OrderTableMap::COL_CUSTOMER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'customer_id';
@@ -2878,8 +2878,8 @@ abstract class Order implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
 
                         break;
-                    case 'user_id':
-                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+                    case 'axys_user_id':
+                        $stmt->bindValue($identifier, $this->axys_user_id, PDO::PARAM_INT);
 
                         break;
                     case 'customer_id':
@@ -3126,7 +3126,7 @@ abstract class Order implements ActiveRecordInterface
                 return $this->getSiteId();
 
             case 3:
-                return $this->getUserId();
+                return $this->getAxysUserId();
 
             case 4:
                 return $this->getCustomerId();
@@ -3288,7 +3288,7 @@ abstract class Order implements ActiveRecordInterface
             $keys[0] => $this->getId(),
             $keys[1] => $this->getSlug(),
             $keys[2] => $this->getSiteId(),
-            $keys[3] => $this->getUserId(),
+            $keys[3] => $this->getAxysUserId(),
             $keys[4] => $this->getCustomerId(),
             $keys[5] => $this->getSellerId(),
             $keys[6] => $this->getType(),
@@ -3451,7 +3451,7 @@ abstract class Order implements ActiveRecordInterface
                 $this->setSiteId($value);
                 break;
             case 3:
-                $this->setUserId($value);
+                $this->setAxysUserId($value);
                 break;
             case 4:
                 $this->setCustomerId($value);
@@ -3618,7 +3618,7 @@ abstract class Order implements ActiveRecordInterface
             $this->setSiteId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setUserId($arr[$keys[3]]);
+            $this->setAxysUserId($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
             $this->setCustomerId($arr[$keys[4]]);
@@ -3801,8 +3801,8 @@ abstract class Order implements ActiveRecordInterface
         if ($this->isColumnModified(OrderTableMap::COL_SITE_ID)) {
             $criteria->add(OrderTableMap::COL_SITE_ID, $this->site_id);
         }
-        if ($this->isColumnModified(OrderTableMap::COL_USER_ID)) {
-            $criteria->add(OrderTableMap::COL_USER_ID, $this->user_id);
+        if ($this->isColumnModified(OrderTableMap::COL_AXYS_USER_ID)) {
+            $criteria->add(OrderTableMap::COL_AXYS_USER_ID, $this->axys_user_id);
         }
         if ($this->isColumnModified(OrderTableMap::COL_CUSTOMER_ID)) {
             $criteria->add(OrderTableMap::COL_CUSTOMER_ID, $this->customer_id);
@@ -4023,7 +4023,7 @@ abstract class Order implements ActiveRecordInterface
     {
         $copyObj->setSlug($this->getSlug());
         $copyObj->setSiteId($this->getSiteId());
-        $copyObj->setUserId($this->getUserId());
+        $copyObj->setAxysUserId($this->getAxysUserId());
         $copyObj->setCustomerId($this->getCustomerId());
         $copyObj->setSellerId($this->getSellerId());
         $copyObj->setType($this->getType());
@@ -4457,7 +4457,7 @@ abstract class Order implements ActiveRecordInterface
         $this->order_id = null;
         $this->order_url = null;
         $this->site_id = null;
-        $this->user_id = null;
+        $this->axys_user_id = null;
         $this->customer_id = null;
         $this->seller_id = null;
         $this->order_type = null;

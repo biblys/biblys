@@ -71,11 +71,11 @@ abstract class Post implements ActiveRecordInterface
     protected $post_id;
 
     /**
-     * The value for the user_id field.
+     * The value for the axys_user_id field.
      *
      * @var        int|null
      */
-    protected $user_id;
+    protected $axys_user_id;
 
     /**
      * The value for the site_id field.
@@ -483,13 +483,13 @@ abstract class Post implements ActiveRecordInterface
     }
 
     /**
-     * Get the [user_id] column value.
+     * Get the [axys_user_id] column value.
      *
      * @return int|null
      */
-    public function getUserId()
+    public function getAxysUserId()
     {
-        return $this->user_id;
+        return $this->axys_user_id;
     }
 
     /**
@@ -815,20 +815,20 @@ abstract class Post implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [user_id] column.
+     * Set the value of [axys_user_id] column.
      *
      * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setUserId($v)
+    public function setAxysUserId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->user_id !== $v) {
-            $this->user_id = $v;
-            $this->modifiedColumns[PostTableMap::COL_USER_ID] = true;
+        if ($this->axys_user_id !== $v) {
+            $this->axys_user_id = $v;
+            $this->modifiedColumns[PostTableMap::COL_AXYS_USER_ID] = true;
         }
 
         return $this;
@@ -1313,8 +1313,8 @@ abstract class Post implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : PostTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->post_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : PostTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : PostTableMap::translateFieldName('AxysUserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->axys_user_id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : PostTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_id = (null !== $col) ? (int) $col : null;
@@ -1622,8 +1622,8 @@ abstract class Post implements ActiveRecordInterface
         if ($this->isColumnModified(PostTableMap::COL_POST_ID)) {
             $modifiedColumns[':p' . $index++]  = 'post_id';
         }
-        if ($this->isColumnModified(PostTableMap::COL_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'user_id';
+        if ($this->isColumnModified(PostTableMap::COL_AXYS_USER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_user_id';
         }
         if ($this->isColumnModified(PostTableMap::COL_SITE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'site_id';
@@ -1703,8 +1703,8 @@ abstract class Post implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->post_id, PDO::PARAM_INT);
 
                         break;
-                    case 'user_id':
-                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+                    case 'axys_user_id':
+                        $stmt->bindValue($identifier, $this->axys_user_id, PDO::PARAM_INT);
 
                         break;
                     case 'site_id':
@@ -1857,7 +1857,7 @@ abstract class Post implements ActiveRecordInterface
                 return $this->getId();
 
             case 1:
-                return $this->getUserId();
+                return $this->getAxysUserId();
 
             case 2:
                 return $this->getSiteId();
@@ -1950,7 +1950,7 @@ abstract class Post implements ActiveRecordInterface
         $keys = PostTableMap::getFieldNames($keyType);
         $result = [
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getUserId(),
+            $keys[1] => $this->getAxysUserId(),
             $keys[2] => $this->getSiteId(),
             $keys[3] => $this->getPublisherId(),
             $keys[4] => $this->getCategoryId(),
@@ -2041,7 +2041,7 @@ abstract class Post implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setUserId($value);
+                $this->setAxysUserId($value);
                 break;
             case 2:
                 $this->setSiteId($value);
@@ -2136,7 +2136,7 @@ abstract class Post implements ActiveRecordInterface
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setUserId($arr[$keys[1]]);
+            $this->setAxysUserId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
             $this->setSiteId($arr[$keys[2]]);
@@ -2247,8 +2247,8 @@ abstract class Post implements ActiveRecordInterface
         if ($this->isColumnModified(PostTableMap::COL_POST_ID)) {
             $criteria->add(PostTableMap::COL_POST_ID, $this->post_id);
         }
-        if ($this->isColumnModified(PostTableMap::COL_USER_ID)) {
-            $criteria->add(PostTableMap::COL_USER_ID, $this->user_id);
+        if ($this->isColumnModified(PostTableMap::COL_AXYS_USER_ID)) {
+            $criteria->add(PostTableMap::COL_AXYS_USER_ID, $this->axys_user_id);
         }
         if ($this->isColumnModified(PostTableMap::COL_SITE_ID)) {
             $criteria->add(PostTableMap::COL_SITE_ID, $this->site_id);
@@ -2401,7 +2401,7 @@ abstract class Post implements ActiveRecordInterface
      */
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
-        $copyObj->setUserId($this->getUserId());
+        $copyObj->setAxysUserId($this->getAxysUserId());
         $copyObj->setSiteId($this->getSiteId());
         $copyObj->setPublisherId($this->getPublisherId());
         $copyObj->setCategoryId($this->getCategoryId());
@@ -2461,7 +2461,7 @@ abstract class Post implements ActiveRecordInterface
     public function clear()
     {
         $this->post_id = null;
-        $this->user_id = null;
+        $this->axys_user_id = null;
         $this->site_id = null;
         $this->publisher_id = null;
         $this->category_id = null;

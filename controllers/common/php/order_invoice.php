@@ -26,13 +26,13 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
 
         // Check access right
         
-        if ($customer->get('user_id') != LegacyCodeHelper::getGlobalVisitor()->get('id') && !LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
+        if ($customer->get('axys_user_id') != LegacyCodeHelper::getGlobalVisitor()->get('id') && !LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
             throw new AccessDeniedHttpException();
         }
 
         // Calculate customer reference
         /** @var PDO $_SQL */
-                $stock = $_SQL->query("SELECT COUNT(`order_id`) AS `orders`, SUM(`order_amount`) AS `revenue` FROM `orders` WHERE `customer_id` = '".$customer->get('id')."' AND `site_id` = ". LegacyCodeHelper::getLegacyCurrentSite()["site_id"]." AND `order_payment_date` IS NOT NULL AND `order_cancel_date` IS NULL GROUP BY `user_id`");
+                $stock = $_SQL->query("SELECT COUNT(`order_id`) AS `orders`, SUM(`order_amount`) AS `revenue` FROM `orders` WHERE `customer_id` = '".$customer->get('id')."' AND `site_id` = ". LegacyCodeHelper::getLegacyCurrentSite()["site_id"]." AND `order_payment_date` IS NOT NULL AND `order_cancel_date` IS NULL GROUP BY `axys_user_id`");
         if ($s = $stock->fetch(PDO::FETCH_ASSOC)) {
             $customer_ref = '<p>Ref. client '.$customer->get('id').'-'.$s["orders"].'-'.round($s["revenue"]/100).'</p>';
         }

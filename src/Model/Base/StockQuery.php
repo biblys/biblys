@@ -24,7 +24,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockQuery orderByArticleId($order = Criteria::ASC) Order by the article_id column
  * @method     ChildStockQuery orderByCampaignId($order = Criteria::ASC) Order by the campaign_id column
  * @method     ChildStockQuery orderByRewardId($order = Criteria::ASC) Order by the reward_id column
- * @method     ChildStockQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
+ * @method     ChildStockQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
  * @method     ChildStockQuery orderByCustomerId($order = Criteria::ASC) Order by the customer_id column
  * @method     ChildStockQuery orderByWishId($order = Criteria::ASC) Order by the wish_id column
  * @method     ChildStockQuery orderByCartId($order = Criteria::ASC) Order by the cart_id column
@@ -66,7 +66,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockQuery groupByArticleId() Group by the article_id column
  * @method     ChildStockQuery groupByCampaignId() Group by the campaign_id column
  * @method     ChildStockQuery groupByRewardId() Group by the reward_id column
- * @method     ChildStockQuery groupByUserId() Group by the user_id column
+ * @method     ChildStockQuery groupByAxysUserId() Group by the axys_user_id column
  * @method     ChildStockQuery groupByCustomerId() Group by the customer_id column
  * @method     ChildStockQuery groupByWishId() Group by the wish_id column
  * @method     ChildStockQuery groupByCartId() Group by the cart_id column
@@ -151,7 +151,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStock|null findOneByArticleId(int $article_id) Return the first ChildStock filtered by the article_id column
  * @method     ChildStock|null findOneByCampaignId(int $campaign_id) Return the first ChildStock filtered by the campaign_id column
  * @method     ChildStock|null findOneByRewardId(int $reward_id) Return the first ChildStock filtered by the reward_id column
- * @method     ChildStock|null findOneByUserId(int $user_id) Return the first ChildStock filtered by the user_id column
+ * @method     ChildStock|null findOneByAxysUserId(int $axys_user_id) Return the first ChildStock filtered by the axys_user_id column
  * @method     ChildStock|null findOneByCustomerId(int $customer_id) Return the first ChildStock filtered by the customer_id column
  * @method     ChildStock|null findOneByWishId(int $wish_id) Return the first ChildStock filtered by the wish_id column
  * @method     ChildStock|null findOneByCartId(int $cart_id) Return the first ChildStock filtered by the cart_id column
@@ -196,7 +196,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStock requireOneByArticleId(int $article_id) Return the first ChildStock filtered by the article_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStock requireOneByCampaignId(int $campaign_id) Return the first ChildStock filtered by the campaign_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStock requireOneByRewardId(int $reward_id) Return the first ChildStock filtered by the reward_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildStock requireOneByUserId(int $user_id) Return the first ChildStock filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildStock requireOneByAxysUserId(int $axys_user_id) Return the first ChildStock filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStock requireOneByCustomerId(int $customer_id) Return the first ChildStock filtered by the customer_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStock requireOneByWishId(int $wish_id) Return the first ChildStock filtered by the wish_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStock requireOneByCartId(int $cart_id) Return the first ChildStock filtered by the cart_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -246,8 +246,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildStock> findByCampaignId(int|array<int> $campaign_id) Return ChildStock objects filtered by the campaign_id column
  * @method     ChildStock[]|Collection findByRewardId(int|array<int> $reward_id) Return ChildStock objects filtered by the reward_id column
  * @psalm-method Collection&\Traversable<ChildStock> findByRewardId(int|array<int> $reward_id) Return ChildStock objects filtered by the reward_id column
- * @method     ChildStock[]|Collection findByUserId(int|array<int> $user_id) Return ChildStock objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildStock> findByUserId(int|array<int> $user_id) Return ChildStock objects filtered by the user_id column
+ * @method     ChildStock[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildStock objects filtered by the axys_user_id column
+ * @psalm-method Collection&\Traversable<ChildStock> findByAxysUserId(int|array<int> $axys_user_id) Return ChildStock objects filtered by the axys_user_id column
  * @method     ChildStock[]|Collection findByCustomerId(int|array<int> $customer_id) Return ChildStock objects filtered by the customer_id column
  * @psalm-method Collection&\Traversable<ChildStock> findByCustomerId(int|array<int> $customer_id) Return ChildStock objects filtered by the customer_id column
  * @method     ChildStock[]|Collection findByWishId(int|array<int> $wish_id) Return ChildStock objects filtered by the wish_id column
@@ -417,7 +417,7 @@ abstract class StockQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT stock_id, site_id, article_id, campaign_id, reward_id, user_id, customer_id, wish_id, cart_id, order_id, coupon_id, stock_shop, stock_invoice, stock_depot, stock_stockage, stock_condition, stock_condition_details, stock_purchase_price, stock_selling_price, stock_selling_price2, stock_selling_price_saved, stock_selling_price_ht, stock_selling_price_tva, stock_tva_rate, stock_weight, stock_pub_year, stock_allow_predownload, stock_photo_version, stock_purchase_date, stock_onsale_date, stock_cart_date, stock_selling_date, stock_return_date, stock_lost_date, stock_media_ok, stock_file_updated, stock_insert, stock_update, stock_dl, stock_created, stock_updated FROM stock WHERE stock_id = :p0';
+        $sql = 'SELECT stock_id, site_id, article_id, campaign_id, reward_id, axys_user_id, customer_id, wish_id, cart_id, order_id, coupon_id, stock_shop, stock_invoice, stock_depot, stock_stockage, stock_condition, stock_condition_details, stock_purchase_price, stock_selling_price, stock_selling_price2, stock_selling_price_saved, stock_selling_price_ht, stock_selling_price_tva, stock_tva_rate, stock_weight, stock_pub_year, stock_allow_predownload, stock_photo_version, stock_purchase_date, stock_onsale_date, stock_cart_date, stock_selling_date, stock_return_date, stock_lost_date, stock_media_ok, stock_file_updated, stock_insert, stock_update, stock_dl, stock_created, stock_updated FROM stock WHERE stock_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -731,18 +731,18 @@ abstract class StockQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the user_id column
+     * Filter the query on the axys_user_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByUserId(1234); // WHERE user_id = 1234
-     * $query->filterByUserId(array(12, 34)); // WHERE user_id IN (12, 34)
-     * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
+     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
+     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
+     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
      * </code>
      *
      * @see       filterByAxysUser()
      *
-     * @param mixed $userId The value to use as filter.
+     * @param mixed $axysUserId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -750,16 +750,16 @@ abstract class StockQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, ?string $comparison = null)
+    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
     {
-        if (is_array($userId)) {
+        if (is_array($axysUserId)) {
             $useMinMax = false;
-            if (isset($userId['min'])) {
-                $this->addUsingAlias(StockTableMap::COL_USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysUserId['min'])) {
+                $this->addUsingAlias(StockTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($userId['max'])) {
-                $this->addUsingAlias(StockTableMap::COL_USER_ID, $userId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysUserId['max'])) {
+                $this->addUsingAlias(StockTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -770,7 +770,7 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(StockTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
 
         return $this;
     }
@@ -2534,14 +2534,14 @@ abstract class StockQuery extends ModelCriteria
     {
         if ($axysUser instanceof \Model\AxysUser) {
             return $this
-                ->addUsingAlias(StockTableMap::COL_USER_ID, $axysUser->getId(), $comparison);
+                ->addUsingAlias(StockTableMap::COL_AXYS_USER_ID, $axysUser->getId(), $comparison);
         } elseif ($axysUser instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             $this
-                ->addUsingAlias(StockTableMap::COL_USER_ID, $axysUser->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(StockTableMap::COL_AXYS_USER_ID, $axysUser->toKeyValue('PrimaryKey', 'Id'), $comparison);
 
             return $this;
         } else {

@@ -80,11 +80,11 @@ abstract class Wish implements ActiveRecordInterface
     protected $wishlist_id;
 
     /**
-     * The value for the user_id field.
+     * The value for the axys_user_id field.
      *
      * @var        int|null
      */
-    protected $user_id;
+    protected $axys_user_id;
 
     /**
      * The value for the site_id field.
@@ -381,13 +381,13 @@ abstract class Wish implements ActiveRecordInterface
     }
 
     /**
-     * Get the [user_id] column value.
+     * Get the [axys_user_id] column value.
      *
      * @return int|null
      */
-    public function getUserId()
+    public function getAxysUserId()
     {
-        return $this->user_id;
+        return $this->axys_user_id;
     }
 
     /**
@@ -517,20 +517,20 @@ abstract class Wish implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [user_id] column.
+     * Set the value of [axys_user_id] column.
      *
      * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setUserId($v)
+    public function setAxysUserId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->user_id !== $v) {
-            $this->user_id = $v;
-            $this->modifiedColumns[WishTableMap::COL_USER_ID] = true;
+        if ($this->axys_user_id !== $v) {
+            $this->axys_user_id = $v;
+            $this->modifiedColumns[WishTableMap::COL_AXYS_USER_ID] = true;
         }
 
         if ($this->aAxysUser !== null && $this->aAxysUser->getId() !== $v) {
@@ -682,8 +682,8 @@ abstract class Wish implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : WishTableMap::translateFieldName('WishlistId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->wishlist_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : WishTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : WishTableMap::translateFieldName('AxysUserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->axys_user_id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : WishTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_id = (null !== $col) ? (int) $col : null;
@@ -739,7 +739,7 @@ abstract class Wish implements ActiveRecordInterface
      */
     public function ensureConsistency(): void
     {
-        if ($this->aAxysUser !== null && $this->user_id !== $this->aAxysUser->getId()) {
+        if ($this->aAxysUser !== null && $this->axys_user_id !== $this->aAxysUser->getId()) {
             $this->aAxysUser = null;
         }
     }
@@ -953,8 +953,8 @@ abstract class Wish implements ActiveRecordInterface
         if ($this->isColumnModified(WishTableMap::COL_WISHLIST_ID)) {
             $modifiedColumns[':p' . $index++]  = 'wishlist_id';
         }
-        if ($this->isColumnModified(WishTableMap::COL_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'user_id';
+        if ($this->isColumnModified(WishTableMap::COL_AXYS_USER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_user_id';
         }
         if ($this->isColumnModified(WishTableMap::COL_SITE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'site_id';
@@ -990,8 +990,8 @@ abstract class Wish implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->wishlist_id, PDO::PARAM_INT);
 
                         break;
-                    case 'user_id':
-                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+                    case 'axys_user_id':
+                        $stmt->bindValue($identifier, $this->axys_user_id, PDO::PARAM_INT);
 
                         break;
                     case 'site_id':
@@ -1083,7 +1083,7 @@ abstract class Wish implements ActiveRecordInterface
                 return $this->getWishlistId();
 
             case 2:
-                return $this->getUserId();
+                return $this->getAxysUserId();
 
             case 3:
                 return $this->getSiteId();
@@ -1130,7 +1130,7 @@ abstract class Wish implements ActiveRecordInterface
         $result = [
             $keys[0] => $this->getId(),
             $keys[1] => $this->getWishlistId(),
-            $keys[2] => $this->getUserId(),
+            $keys[2] => $this->getAxysUserId(),
             $keys[3] => $this->getSiteId(),
             $keys[4] => $this->getArticleId(),
             $keys[5] => $this->getCreatedAt(),
@@ -1213,7 +1213,7 @@ abstract class Wish implements ActiveRecordInterface
                 $this->setWishlistId($value);
                 break;
             case 2:
-                $this->setUserId($value);
+                $this->setAxysUserId($value);
                 break;
             case 3:
                 $this->setSiteId($value);
@@ -1263,7 +1263,7 @@ abstract class Wish implements ActiveRecordInterface
             $this->setWishlistId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setUserId($arr[$keys[2]]);
+            $this->setAxysUserId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
             $this->setSiteId($arr[$keys[3]]);
@@ -1329,8 +1329,8 @@ abstract class Wish implements ActiveRecordInterface
         if ($this->isColumnModified(WishTableMap::COL_WISHLIST_ID)) {
             $criteria->add(WishTableMap::COL_WISHLIST_ID, $this->wishlist_id);
         }
-        if ($this->isColumnModified(WishTableMap::COL_USER_ID)) {
-            $criteria->add(WishTableMap::COL_USER_ID, $this->user_id);
+        if ($this->isColumnModified(WishTableMap::COL_AXYS_USER_ID)) {
+            $criteria->add(WishTableMap::COL_AXYS_USER_ID, $this->axys_user_id);
         }
         if ($this->isColumnModified(WishTableMap::COL_SITE_ID)) {
             $criteria->add(WishTableMap::COL_SITE_ID, $this->site_id);
@@ -1436,7 +1436,7 @@ abstract class Wish implements ActiveRecordInterface
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
         $copyObj->setWishlistId($this->getWishlistId());
-        $copyObj->setUserId($this->getUserId());
+        $copyObj->setAxysUserId($this->getAxysUserId());
         $copyObj->setSiteId($this->getSiteId());
         $copyObj->setArticleId($this->getArticleId());
         $copyObj->setCreatedAt($this->getCreatedAt());
@@ -1480,9 +1480,9 @@ abstract class Wish implements ActiveRecordInterface
     public function setAxysUser(ChildAxysUser $v = null)
     {
         if ($v === null) {
-            $this->setUserId(NULL);
+            $this->setAxysUserId(NULL);
         } else {
-            $this->setUserId($v->getId());
+            $this->setAxysUserId($v->getId());
         }
 
         $this->aAxysUser = $v;
@@ -1507,8 +1507,8 @@ abstract class Wish implements ActiveRecordInterface
      */
     public function getAxysUser(?ConnectionInterface $con = null)
     {
-        if ($this->aAxysUser === null && ($this->user_id != 0)) {
-            $this->aAxysUser = ChildAxysUserQuery::create()->findPk($this->user_id, $con);
+        if ($this->aAxysUser === null && ($this->axys_user_id != 0)) {
+            $this->aAxysUser = ChildAxysUserQuery::create()->findPk($this->axys_user_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1535,7 +1535,7 @@ abstract class Wish implements ActiveRecordInterface
         }
         $this->wish_id = null;
         $this->wishlist_id = null;
-        $this->user_id = null;
+        $this->axys_user_id = null;
         $this->site_id = null;
         $this->article_id = null;
         $this->wish_created = null;

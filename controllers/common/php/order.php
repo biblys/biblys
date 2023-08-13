@@ -99,16 +99,16 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
     ';
 
     // Ref client
-    if (!empty($o["user_id"]) and $currentUserService->isAdmin()) {
+    if (!empty($o["axys_user_id"]) and $currentUserService->isAdmin()) {
         /** @var PDO $_SQL */
-        $stock = $_SQL->prepare("SELECT COUNT(`order_id`) AS `num`, SUM(`order_amount`) AS `CA` FROM `orders` WHERE `user_id` = :user_id AND `site_id` = :site_id AND `order_payment_date` IS NOT NULL AND `order_cancel_date` IS NULL GROUP BY `user_id`");
+        $stock = $_SQL->prepare("SELECT COUNT(`order_id`) AS `num`, SUM(`order_amount`) AS `CA` FROM `orders` WHERE `axys_user_id` = :axys_user_id AND `site_id` = :site_id AND `order_payment_date` IS NOT NULL AND `order_cancel_date` IS NULL GROUP BY `axys_user_id`");
         $stock->execute([
-            'user_id' => $o['user_id'],
+            'axys_user_id' => $o['axys_user_id'],
             'site_id' => $currentSiteService->getId(),
         ]);
         $s = $stock->fetch(PDO::FETCH_ASSOC);
         if ($s) {
-            $content .= '<p>Ref. Client : ' . $o["user_id"] . '-' . round($s["num"]) . '-' . round($s["CA"] / 100) . '</p>';
+            $content .= '<p>Ref. Client : ' . $o["axys_user_id"] . '-' . round($s["num"]) . '-' . round($s["CA"] / 100) . '</p>';
         }
     }
 
@@ -414,7 +414,7 @@ return new Response($content);
 
 function _isAnonymousOrder(Order $order): bool
 {
-    return !$order->has("user_id");
+    return !$order->has("axys_user_id");
 }
 
 function _orderBelongsToVisitor(Order $order, CurrentUser $currentUser): bool
@@ -423,5 +423,5 @@ function _orderBelongsToVisitor(Order $order, CurrentUser $currentUser): bool
         return false;
     }
 
-    return $order->get("user_id") === $currentUser->getAxysUser()->getId();
+    return $order->get("axys_user_id") === $currentUser->getAxysUser()->getId();
 }

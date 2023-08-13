@@ -2185,7 +2185,7 @@ abstract class AxysUserQuery extends ModelCriteria
     {
         if ($cart instanceof \Model\Cart) {
             $this
-                ->addUsingAlias(AxysUserTableMap::COL_ID, $cart->getUserId(), $comparison);
+                ->addUsingAlias(AxysUserTableMap::COL_ID, $cart->getAxysUserId(), $comparison);
 
             return $this;
         } elseif ($cart instanceof ObjectCollection) {
@@ -2358,7 +2358,7 @@ abstract class AxysUserQuery extends ModelCriteria
     {
         if ($option instanceof \Model\Option) {
             $this
-                ->addUsingAlias(AxysUserTableMap::COL_ID, $option->getUserId(), $comparison);
+                ->addUsingAlias(AxysUserTableMap::COL_ID, $option->getAxysUserId(), $comparison);
 
             return $this;
         } elseif ($option instanceof ObjectCollection) {
@@ -2531,7 +2531,7 @@ abstract class AxysUserQuery extends ModelCriteria
     {
         if ($right instanceof \Model\Right) {
             $this
-                ->addUsingAlias(AxysUserTableMap::COL_ID, $right->getUserId(), $comparison);
+                ->addUsingAlias(AxysUserTableMap::COL_ID, $right->getAxysUserId(), $comparison);
 
             return $this;
         } elseif ($right instanceof ObjectCollection) {
@@ -2704,7 +2704,7 @@ abstract class AxysUserQuery extends ModelCriteria
     {
         if ($session instanceof \Model\Session) {
             $this
-                ->addUsingAlias(AxysUserTableMap::COL_ID, $session->getUserId(), $comparison);
+                ->addUsingAlias(AxysUserTableMap::COL_ID, $session->getAxysUserId(), $comparison);
 
             return $this;
         } elseif ($session instanceof ObjectCollection) {
@@ -2877,7 +2877,7 @@ abstract class AxysUserQuery extends ModelCriteria
     {
         if ($stock instanceof \Model\Stock) {
             $this
-                ->addUsingAlias(AxysUserTableMap::COL_ID, $stock->getUserId(), $comparison);
+                ->addUsingAlias(AxysUserTableMap::COL_ID, $stock->getAxysUserId(), $comparison);
 
             return $this;
         } elseif ($stock instanceof ObjectCollection) {
@@ -3050,7 +3050,7 @@ abstract class AxysUserQuery extends ModelCriteria
     {
         if ($wish instanceof \Model\Wish) {
             $this
-                ->addUsingAlias(AxysUserTableMap::COL_ID, $wish->getUserId(), $comparison);
+                ->addUsingAlias(AxysUserTableMap::COL_ID, $wish->getAxysUserId(), $comparison);
 
             return $this;
         } elseif ($wish instanceof ObjectCollection) {
@@ -3223,7 +3223,7 @@ abstract class AxysUserQuery extends ModelCriteria
     {
         if ($wishlist instanceof \Model\Wishlist) {
             $this
-                ->addUsingAlias(AxysUserTableMap::COL_ID, $wishlist->getUserId(), $comparison);
+                ->addUsingAlias(AxysUserTableMap::COL_ID, $wishlist->getAxysUserId(), $comparison);
 
             return $this;
         } elseif ($wishlist instanceof ObjectCollection) {

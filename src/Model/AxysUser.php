@@ -23,7 +23,7 @@ class AxysUser extends BaseAxysUser
     public function isAdminForSite(Site $site): bool
     {
         $adminRight = RightQuery::create()
-            ->filterByUserId($this->getId())
+            ->filterByAxysUserId($this->getId())
             ->filterBySiteId($site->getId())
             ->findOne();
 

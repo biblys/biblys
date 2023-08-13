@@ -21,7 +21,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildOptionQuery orderById($order = Criteria::ASC) Order by the option_id column
  * @method     ChildOptionQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
- * @method     ChildOptionQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
+ * @method     ChildOptionQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
  * @method     ChildOptionQuery orderByKey($order = Criteria::ASC) Order by the option_key column
  * @method     ChildOptionQuery orderByValue($order = Criteria::ASC) Order by the option_value column
  * @method     ChildOptionQuery orderByCreatedAt($order = Criteria::ASC) Order by the option_created column
@@ -29,7 +29,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildOptionQuery groupById() Group by the option_id column
  * @method     ChildOptionQuery groupBySiteId() Group by the site_id column
- * @method     ChildOptionQuery groupByUserId() Group by the user_id column
+ * @method     ChildOptionQuery groupByAxysUserId() Group by the axys_user_id column
  * @method     ChildOptionQuery groupByKey() Group by the option_key column
  * @method     ChildOptionQuery groupByValue() Group by the option_value column
  * @method     ChildOptionQuery groupByCreatedAt() Group by the option_created column
@@ -70,7 +70,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildOption|null findOneById(int $option_id) Return the first ChildOption filtered by the option_id column
  * @method     ChildOption|null findOneBySiteId(int $site_id) Return the first ChildOption filtered by the site_id column
- * @method     ChildOption|null findOneByUserId(int $user_id) Return the first ChildOption filtered by the user_id column
+ * @method     ChildOption|null findOneByAxysUserId(int $axys_user_id) Return the first ChildOption filtered by the axys_user_id column
  * @method     ChildOption|null findOneByKey(string $option_key) Return the first ChildOption filtered by the option_key column
  * @method     ChildOption|null findOneByValue(string $option_value) Return the first ChildOption filtered by the option_value column
  * @method     ChildOption|null findOneByCreatedAt(string $option_created) Return the first ChildOption filtered by the option_created column
@@ -81,7 +81,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildOption requireOneById(int $option_id) Return the first ChildOption filtered by the option_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOption requireOneBySiteId(int $site_id) Return the first ChildOption filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOption requireOneByUserId(int $user_id) Return the first ChildOption filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildOption requireOneByAxysUserId(int $axys_user_id) Return the first ChildOption filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOption requireOneByKey(string $option_key) Return the first ChildOption filtered by the option_key column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOption requireOneByValue(string $option_value) Return the first ChildOption filtered by the option_value column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOption requireOneByCreatedAt(string $option_created) Return the first ChildOption filtered by the option_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -94,8 +94,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildOption> findById(int|array<int> $option_id) Return ChildOption objects filtered by the option_id column
  * @method     ChildOption[]|Collection findBySiteId(int|array<int> $site_id) Return ChildOption objects filtered by the site_id column
  * @psalm-method Collection&\Traversable<ChildOption> findBySiteId(int|array<int> $site_id) Return ChildOption objects filtered by the site_id column
- * @method     ChildOption[]|Collection findByUserId(int|array<int> $user_id) Return ChildOption objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildOption> findByUserId(int|array<int> $user_id) Return ChildOption objects filtered by the user_id column
+ * @method     ChildOption[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildOption objects filtered by the axys_user_id column
+ * @psalm-method Collection&\Traversable<ChildOption> findByAxysUserId(int|array<int> $axys_user_id) Return ChildOption objects filtered by the axys_user_id column
  * @method     ChildOption[]|Collection findByKey(string|array<string> $option_key) Return ChildOption objects filtered by the option_key column
  * @psalm-method Collection&\Traversable<ChildOption> findByKey(string|array<string> $option_key) Return ChildOption objects filtered by the option_key column
  * @method     ChildOption[]|Collection findByValue(string|array<string> $option_value) Return ChildOption objects filtered by the option_value column
@@ -203,7 +203,7 @@ abstract class OptionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT option_id, site_id, user_id, option_key, option_value, option_created, option_updated FROM options WHERE option_id = :p0';
+        $sql = 'SELECT option_id, site_id, axys_user_id, option_key, option_value, option_created, option_updated FROM options WHERE option_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -386,18 +386,18 @@ abstract class OptionQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the user_id column
+     * Filter the query on the axys_user_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByUserId(1234); // WHERE user_id = 1234
-     * $query->filterByUserId(array(12, 34)); // WHERE user_id IN (12, 34)
-     * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
+     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
+     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
+     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
      * </code>
      *
      * @see       filterByAxysUser()
      *
-     * @param mixed $userId The value to use as filter.
+     * @param mixed $axysUserId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -405,16 +405,16 @@ abstract class OptionQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, ?string $comparison = null)
+    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
     {
-        if (is_array($userId)) {
+        if (is_array($axysUserId)) {
             $useMinMax = false;
-            if (isset($userId['min'])) {
-                $this->addUsingAlias(OptionTableMap::COL_USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysUserId['min'])) {
+                $this->addUsingAlias(OptionTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($userId['max'])) {
-                $this->addUsingAlias(OptionTableMap::COL_USER_ID, $userId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysUserId['max'])) {
+                $this->addUsingAlias(OptionTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -425,7 +425,7 @@ abstract class OptionQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(OptionTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(OptionTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
 
         return $this;
     }
@@ -590,14 +590,14 @@ abstract class OptionQuery extends ModelCriteria
     {
         if ($axysUser instanceof \Model\AxysUser) {
             return $this
-                ->addUsingAlias(OptionTableMap::COL_USER_ID, $axysUser->getId(), $comparison);
+                ->addUsingAlias(OptionTableMap::COL_AXYS_USER_ID, $axysUser->getId(), $comparison);
         } elseif ($axysUser instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             $this
-                ->addUsingAlias(OptionTableMap::COL_USER_ID, $axysUser->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(OptionTableMap::COL_AXYS_USER_ID, $axysUser->toKeyValue('PrimaryKey', 'Id'), $comparison);
 
             return $this;
         } else {

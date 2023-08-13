@@ -91,9 +91,9 @@ class CartTableMap extends TableMap
     public const COL_SITE_ID = 'carts.site_id';
 
     /**
-     * the column name for the user_id field
+     * the column name for the axys_user_id field
      */
-    public const COL_USER_ID = 'carts.user_id';
+    public const COL_AXYS_USER_ID = 'carts.axys_user_id';
 
     /**
      * the column name for the cart_seller_id field
@@ -179,10 +179,10 @@ class CartTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'Uid', 'SiteId', 'UserId', 'SellerId', 'CustomerId', 'Title', 'Type', 'Ip', 'Count', 'Amount', 'AsAGift', 'GiftRecipient', 'Date', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'uid', 'siteId', 'userId', 'sellerId', 'customerId', 'title', 'type', 'ip', 'count', 'amount', 'asAGift', 'giftRecipient', 'date', 'insert', 'update', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [CartTableMap::COL_CART_ID, CartTableMap::COL_CART_UID, CartTableMap::COL_SITE_ID, CartTableMap::COL_USER_ID, CartTableMap::COL_CART_SELLER_ID, CartTableMap::COL_CUSTOMER_ID, CartTableMap::COL_CART_TITLE, CartTableMap::COL_CART_TYPE, CartTableMap::COL_CART_IP, CartTableMap::COL_CART_COUNT, CartTableMap::COL_CART_AMOUNT, CartTableMap::COL_AS_A_GIFT, CartTableMap::COL_GIFT_RECIPIENT, CartTableMap::COL_CART_DATE, CartTableMap::COL_CART_INSERT, CartTableMap::COL_CART_UPDATE, CartTableMap::COL_CART_CREATED, CartTableMap::COL_CART_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['cart_id', 'cart_uid', 'site_id', 'user_id', 'cart_seller_id', 'customer_id', 'cart_title', 'cart_type', 'cart_ip', 'cart_count', 'cart_amount', 'cart_as_a_gift', 'cart_gift_recipient', 'cart_date', 'cart_insert', 'cart_update', 'cart_created', 'cart_updated', ],
+        self::TYPE_PHPNAME       => ['Id', 'Uid', 'SiteId', 'AxysUserId', 'SellerId', 'CustomerId', 'Title', 'Type', 'Ip', 'Count', 'Amount', 'AsAGift', 'GiftRecipient', 'Date', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'uid', 'siteId', 'axysUserId', 'sellerId', 'customerId', 'title', 'type', 'ip', 'count', 'amount', 'asAGift', 'giftRecipient', 'date', 'insert', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [CartTableMap::COL_CART_ID, CartTableMap::COL_CART_UID, CartTableMap::COL_SITE_ID, CartTableMap::COL_AXYS_USER_ID, CartTableMap::COL_CART_SELLER_ID, CartTableMap::COL_CUSTOMER_ID, CartTableMap::COL_CART_TITLE, CartTableMap::COL_CART_TYPE, CartTableMap::COL_CART_IP, CartTableMap::COL_CART_COUNT, CartTableMap::COL_CART_AMOUNT, CartTableMap::COL_AS_A_GIFT, CartTableMap::COL_GIFT_RECIPIENT, CartTableMap::COL_CART_DATE, CartTableMap::COL_CART_INSERT, CartTableMap::COL_CART_UPDATE, CartTableMap::COL_CART_CREATED, CartTableMap::COL_CART_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['cart_id', 'cart_uid', 'site_id', 'axys_user_id', 'cart_seller_id', 'customer_id', 'cart_title', 'cart_type', 'cart_ip', 'cart_count', 'cart_amount', 'cart_as_a_gift', 'cart_gift_recipient', 'cart_date', 'cart_insert', 'cart_update', 'cart_created', 'cart_updated', ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, ]
     ];
 
@@ -195,10 +195,10 @@ class CartTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'Uid' => 1, 'SiteId' => 2, 'UserId' => 3, 'SellerId' => 4, 'CustomerId' => 5, 'Title' => 6, 'Type' => 7, 'Ip' => 8, 'Count' => 9, 'Amount' => 10, 'AsAGift' => 11, 'GiftRecipient' => 12, 'Date' => 13, 'Insert' => 14, 'Update' => 15, 'CreatedAt' => 16, 'UpdatedAt' => 17, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'uid' => 1, 'siteId' => 2, 'userId' => 3, 'sellerId' => 4, 'customerId' => 5, 'title' => 6, 'type' => 7, 'ip' => 8, 'count' => 9, 'amount' => 10, 'asAGift' => 11, 'giftRecipient' => 12, 'date' => 13, 'insert' => 14, 'update' => 15, 'createdAt' => 16, 'updatedAt' => 17, ],
-        self::TYPE_COLNAME       => [CartTableMap::COL_CART_ID => 0, CartTableMap::COL_CART_UID => 1, CartTableMap::COL_SITE_ID => 2, CartTableMap::COL_USER_ID => 3, CartTableMap::COL_CART_SELLER_ID => 4, CartTableMap::COL_CUSTOMER_ID => 5, CartTableMap::COL_CART_TITLE => 6, CartTableMap::COL_CART_TYPE => 7, CartTableMap::COL_CART_IP => 8, CartTableMap::COL_CART_COUNT => 9, CartTableMap::COL_CART_AMOUNT => 10, CartTableMap::COL_AS_A_GIFT => 11, CartTableMap::COL_GIFT_RECIPIENT => 12, CartTableMap::COL_CART_DATE => 13, CartTableMap::COL_CART_INSERT => 14, CartTableMap::COL_CART_UPDATE => 15, CartTableMap::COL_CART_CREATED => 16, CartTableMap::COL_CART_UPDATED => 17, ],
-        self::TYPE_FIELDNAME     => ['cart_id' => 0, 'cart_uid' => 1, 'site_id' => 2, 'user_id' => 3, 'cart_seller_id' => 4, 'customer_id' => 5, 'cart_title' => 6, 'cart_type' => 7, 'cart_ip' => 8, 'cart_count' => 9, 'cart_amount' => 10, 'cart_as_a_gift' => 11, 'cart_gift_recipient' => 12, 'cart_date' => 13, 'cart_insert' => 14, 'cart_update' => 15, 'cart_created' => 16, 'cart_updated' => 17, ],
+        self::TYPE_PHPNAME       => ['Id' => 0, 'Uid' => 1, 'SiteId' => 2, 'AxysUserId' => 3, 'SellerId' => 4, 'CustomerId' => 5, 'Title' => 6, 'Type' => 7, 'Ip' => 8, 'Count' => 9, 'Amount' => 10, 'AsAGift' => 11, 'GiftRecipient' => 12, 'Date' => 13, 'Insert' => 14, 'Update' => 15, 'CreatedAt' => 16, 'UpdatedAt' => 17, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'uid' => 1, 'siteId' => 2, 'axysUserId' => 3, 'sellerId' => 4, 'customerId' => 5, 'title' => 6, 'type' => 7, 'ip' => 8, 'count' => 9, 'amount' => 10, 'asAGift' => 11, 'giftRecipient' => 12, 'date' => 13, 'insert' => 14, 'update' => 15, 'createdAt' => 16, 'updatedAt' => 17, ],
+        self::TYPE_COLNAME       => [CartTableMap::COL_CART_ID => 0, CartTableMap::COL_CART_UID => 1, CartTableMap::COL_SITE_ID => 2, CartTableMap::COL_AXYS_USER_ID => 3, CartTableMap::COL_CART_SELLER_ID => 4, CartTableMap::COL_CUSTOMER_ID => 5, CartTableMap::COL_CART_TITLE => 6, CartTableMap::COL_CART_TYPE => 7, CartTableMap::COL_CART_IP => 8, CartTableMap::COL_CART_COUNT => 9, CartTableMap::COL_CART_AMOUNT => 10, CartTableMap::COL_AS_A_GIFT => 11, CartTableMap::COL_GIFT_RECIPIENT => 12, CartTableMap::COL_CART_DATE => 13, CartTableMap::COL_CART_INSERT => 14, CartTableMap::COL_CART_UPDATE => 15, CartTableMap::COL_CART_CREATED => 16, CartTableMap::COL_CART_UPDATED => 17, ],
+        self::TYPE_FIELDNAME     => ['cart_id' => 0, 'cart_uid' => 1, 'site_id' => 2, 'axys_user_id' => 3, 'cart_seller_id' => 4, 'customer_id' => 5, 'cart_title' => 6, 'cart_type' => 7, 'cart_ip' => 8, 'cart_count' => 9, 'cart_amount' => 10, 'cart_as_a_gift' => 11, 'cart_gift_recipient' => 12, 'cart_date' => 13, 'cart_insert' => 14, 'cart_update' => 15, 'cart_created' => 16, 'cart_updated' => 17, ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, ]
     ];
 
@@ -232,14 +232,14 @@ class CartTableMap extends TableMap
         'COL_SITE_ID' => 'SITE_ID',
         'site_id' => 'SITE_ID',
         'carts.site_id' => 'SITE_ID',
-        'UserId' => 'USER_ID',
-        'Cart.UserId' => 'USER_ID',
-        'userId' => 'USER_ID',
-        'cart.userId' => 'USER_ID',
-        'CartTableMap::COL_USER_ID' => 'USER_ID',
-        'COL_USER_ID' => 'USER_ID',
-        'user_id' => 'USER_ID',
-        'carts.user_id' => 'USER_ID',
+        'AxysUserId' => 'AXYS_USER_ID',
+        'Cart.AxysUserId' => 'AXYS_USER_ID',
+        'axysUserId' => 'AXYS_USER_ID',
+        'cart.axysUserId' => 'AXYS_USER_ID',
+        'CartTableMap::COL_AXYS_USER_ID' => 'AXYS_USER_ID',
+        'COL_AXYS_USER_ID' => 'AXYS_USER_ID',
+        'axys_user_id' => 'AXYS_USER_ID',
+        'carts.axys_user_id' => 'AXYS_USER_ID',
         'SellerId' => 'CART_SELLER_ID',
         'Cart.SellerId' => 'CART_SELLER_ID',
         'sellerId' => 'CART_SELLER_ID',
@@ -374,7 +374,7 @@ class CartTableMap extends TableMap
         $this->addPrimaryKey('cart_id', 'Id', 'INTEGER', true, 10, null);
         $this->addColumn('cart_uid', 'Uid', 'VARCHAR', false, 32, null);
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'axys_users', 'id', false, 10, null);
+        $this->addForeignKey('axys_user_id', 'AxysUserId', 'INTEGER', 'axys_users', 'id', false, 10, null);
         $this->addColumn('cart_seller_id', 'SellerId', 'INTEGER', false, 10, null);
         $this->addColumn('customer_id', 'CustomerId', 'INTEGER', false, 10, null);
         $this->addColumn('cart_title', 'Title', 'VARCHAR', false, 128, null);
@@ -408,7 +408,7 @@ class CartTableMap extends TableMap
         $this->addRelation('AxysUser', '\\Model\\AxysUser', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':user_id',
+    0 => ':axys_user_id',
     1 => ':id',
   ),
 ), null, null, null, false);
@@ -572,7 +572,7 @@ class CartTableMap extends TableMap
             $criteria->addSelectColumn(CartTableMap::COL_CART_ID);
             $criteria->addSelectColumn(CartTableMap::COL_CART_UID);
             $criteria->addSelectColumn(CartTableMap::COL_SITE_ID);
-            $criteria->addSelectColumn(CartTableMap::COL_USER_ID);
+            $criteria->addSelectColumn(CartTableMap::COL_AXYS_USER_ID);
             $criteria->addSelectColumn(CartTableMap::COL_CART_SELLER_ID);
             $criteria->addSelectColumn(CartTableMap::COL_CUSTOMER_ID);
             $criteria->addSelectColumn(CartTableMap::COL_CART_TITLE);
@@ -591,7 +591,7 @@ class CartTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.cart_id');
             $criteria->addSelectColumn($alias . '.cart_uid');
             $criteria->addSelectColumn($alias . '.site_id');
-            $criteria->addSelectColumn($alias . '.user_id');
+            $criteria->addSelectColumn($alias . '.axys_user_id');
             $criteria->addSelectColumn($alias . '.cart_seller_id');
             $criteria->addSelectColumn($alias . '.customer_id');
             $criteria->addSelectColumn($alias . '.cart_title');
@@ -627,7 +627,7 @@ class CartTableMap extends TableMap
             $criteria->removeSelectColumn(CartTableMap::COL_CART_ID);
             $criteria->removeSelectColumn(CartTableMap::COL_CART_UID);
             $criteria->removeSelectColumn(CartTableMap::COL_SITE_ID);
-            $criteria->removeSelectColumn(CartTableMap::COL_USER_ID);
+            $criteria->removeSelectColumn(CartTableMap::COL_AXYS_USER_ID);
             $criteria->removeSelectColumn(CartTableMap::COL_CART_SELLER_ID);
             $criteria->removeSelectColumn(CartTableMap::COL_CUSTOMER_ID);
             $criteria->removeSelectColumn(CartTableMap::COL_CART_TITLE);
@@ -646,7 +646,7 @@ class CartTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.cart_id');
             $criteria->removeSelectColumn($alias . '.cart_uid');
             $criteria->removeSelectColumn($alias . '.site_id');
-            $criteria->removeSelectColumn($alias . '.user_id');
+            $criteria->removeSelectColumn($alias . '.axys_user_id');
             $criteria->removeSelectColumn($alias . '.cart_seller_id');
             $criteria->removeSelectColumn($alias . '.customer_id');
             $criteria->removeSelectColumn($alias . '.cart_title');

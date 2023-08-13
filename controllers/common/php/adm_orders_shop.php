@@ -110,7 +110,7 @@ $sql = $GLOBALS["_SQL"]->prepare(
     JOIN `articles` USING(`article_id`)
     JOIN `orders` USING(`order_id`)
     JOIN `collections` USING(`collection_id`)
-    LEFT JOIN `axys_users` ON `axys_users`.`id` = `orders`.`user_id`
+    LEFT JOIN `axys_users` ON `axys_users`.`id` = `orders`.`axys_user_id`
     LEFT JOIN `customers` ON `orders`.`customer_id` = `customers`.`customer_id`
     WHERE `orders`.`site_id` = :site_id $req
     GROUP BY `stock_id` ORDER BY `order_payment_date` ASC"

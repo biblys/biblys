@@ -18,13 +18,13 @@ use Propel\Runtime\Exception\PropelException;
  * Base class that represents a query for the `votes` table.
  *
  * @method     ChildVoteQuery orderById($order = Criteria::ASC) Order by the vote_id column
- * @method     ChildVoteQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
+ * @method     ChildVoteQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
  * @method     ChildVoteQuery orderByF($order = Criteria::ASC) Order by the vote_F column
  * @method     ChildVoteQuery orderByE($order = Criteria::ASC) Order by the vote_E column
  * @method     ChildVoteQuery orderByDate($order = Criteria::ASC) Order by the vote_date column
  *
  * @method     ChildVoteQuery groupById() Group by the vote_id column
- * @method     ChildVoteQuery groupByUserId() Group by the user_id column
+ * @method     ChildVoteQuery groupByAxysUserId() Group by the axys_user_id column
  * @method     ChildVoteQuery groupByF() Group by the vote_F column
  * @method     ChildVoteQuery groupByE() Group by the vote_E column
  * @method     ChildVoteQuery groupByDate() Group by the vote_date column
@@ -41,7 +41,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildVote findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildVote matching the query, or a new ChildVote object populated from the query conditions when no match is found
  *
  * @method     ChildVote|null findOneById(int $vote_id) Return the first ChildVote filtered by the vote_id column
- * @method     ChildVote|null findOneByUserId(int $user_id) Return the first ChildVote filtered by the user_id column
+ * @method     ChildVote|null findOneByAxysUserId(int $axys_user_id) Return the first ChildVote filtered by the axys_user_id column
  * @method     ChildVote|null findOneByF(int $vote_F) Return the first ChildVote filtered by the vote_F column
  * @method     ChildVote|null findOneByE(int $vote_E) Return the first ChildVote filtered by the vote_E column
  * @method     ChildVote|null findOneByDate(string $vote_date) Return the first ChildVote filtered by the vote_date column
@@ -50,7 +50,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildVote requireOne(?ConnectionInterface $con = null) Return the first ChildVote matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildVote requireOneById(int $vote_id) Return the first ChildVote filtered by the vote_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildVote requireOneByUserId(int $user_id) Return the first ChildVote filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildVote requireOneByAxysUserId(int $axys_user_id) Return the first ChildVote filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildVote requireOneByF(int $vote_F) Return the first ChildVote filtered by the vote_F column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildVote requireOneByE(int $vote_E) Return the first ChildVote filtered by the vote_E column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildVote requireOneByDate(string $vote_date) Return the first ChildVote filtered by the vote_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -60,8 +60,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildVote[]|Collection findById(int|array<int> $vote_id) Return ChildVote objects filtered by the vote_id column
  * @psalm-method Collection&\Traversable<ChildVote> findById(int|array<int> $vote_id) Return ChildVote objects filtered by the vote_id column
- * @method     ChildVote[]|Collection findByUserId(int|array<int> $user_id) Return ChildVote objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildVote> findByUserId(int|array<int> $user_id) Return ChildVote objects filtered by the user_id column
+ * @method     ChildVote[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildVote objects filtered by the axys_user_id column
+ * @psalm-method Collection&\Traversable<ChildVote> findByAxysUserId(int|array<int> $axys_user_id) Return ChildVote objects filtered by the axys_user_id column
  * @method     ChildVote[]|Collection findByF(int|array<int> $vote_F) Return ChildVote objects filtered by the vote_F column
  * @psalm-method Collection&\Traversable<ChildVote> findByF(int|array<int> $vote_F) Return ChildVote objects filtered by the vote_F column
  * @method     ChildVote[]|Collection findByE(int|array<int> $vote_E) Return ChildVote objects filtered by the vote_E column
@@ -167,7 +167,7 @@ abstract class VoteQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT vote_id, user_id, vote_F, vote_E, vote_date FROM votes WHERE vote_id = :p0';
+        $sql = 'SELECT vote_id, axys_user_id, vote_F, vote_E, vote_date FROM votes WHERE vote_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -305,16 +305,16 @@ abstract class VoteQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the user_id column
+     * Filter the query on the axys_user_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByUserId(1234); // WHERE user_id = 1234
-     * $query->filterByUserId(array(12, 34)); // WHERE user_id IN (12, 34)
-     * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
+     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
+     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
+     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
      * </code>
      *
-     * @param mixed $userId The value to use as filter.
+     * @param mixed $axysUserId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -322,16 +322,16 @@ abstract class VoteQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, ?string $comparison = null)
+    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
     {
-        if (is_array($userId)) {
+        if (is_array($axysUserId)) {
             $useMinMax = false;
-            if (isset($userId['min'])) {
-                $this->addUsingAlias(VoteTableMap::COL_USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysUserId['min'])) {
+                $this->addUsingAlias(VoteTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($userId['max'])) {
-                $this->addUsingAlias(VoteTableMap::COL_USER_ID, $userId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysUserId['max'])) {
+                $this->addUsingAlias(VoteTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -342,7 +342,7 @@ abstract class VoteQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(VoteTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(VoteTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
 
         return $this;
     }

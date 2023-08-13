@@ -246,7 +246,7 @@ class PostTest extends PHPUnit\Framework\TestCase
             "User should not be able to delete any post"
         );
 
-        $post->set('user_id', $user->get('id'));
+        $post->set('axys_user_id', $user->get('id'));
         $this->assertTrue(
             $post->canBeDeletedBy($user),
             "Post author should be able to delete it"

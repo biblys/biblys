@@ -33,14 +33,14 @@ if ($request->getMethod() === "POST") {
         /** @noinspection PhpUnhandledExceptionInspection */
         $alert = $am->create();
 
-        $alert->set('user_id', LegacyCodeHelper::getGlobalVisitor()->get('id'));
+        $alert->set('axys_user_id', LegacyCodeHelper::getGlobalVisitor()->get('id'));
         $alert->set('article_id', $params["article_id"]);
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $am->update($alert);
         $result['created'] = 1;
     } else {
-        $alert = $am->get(array('user_id' => LegacyCodeHelper::getGlobalVisitor()->get('id'), 'article_id' => $params["article_id"]));
+        $alert = $am->get(array('axys_user_id' => LegacyCodeHelper::getGlobalVisitor()->get('id'), 'article_id' => $params["article_id"]));
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $am->delete($alert);
@@ -86,11 +86,11 @@ $sql = $_SQL->prepare("
             AND `stock_selling_date` IS NULL 
             AND `stock_return_date` IS NULL 
             AND `stock_lost_date` IS NULL
-    WHERE `alerts`.`user_id` = :user_id
+    WHERE `alerts`.`axys_user_id` = :axys_user_id
     GROUP BY `alert_id`
     ORDER BY `alert_id`, `stock_purchase_date`
 ");
-$sql->execute(['user_id' => $currentUser->getId(), 'site_id' => $currentSite->getId()]);
+$sql->execute(['axys_user_id' => $currentUser->getId(), 'site_id' => $currentSite->getId()]);
 
 while ($a = $sql->fetch(PDO::FETCH_ASSOC)) {
     if ($a["alert_max_price"]) {

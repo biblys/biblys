@@ -84,11 +84,11 @@ abstract class Link implements ActiveRecordInterface
     protected $site_id;
 
     /**
-     * The value for the user_id field.
+     * The value for the axys_user_id field.
      *
      * @var        int|null
      */
-    protected $user_id;
+    protected $axys_user_id;
 
     /**
      * The value for the article_id field.
@@ -210,11 +210,11 @@ abstract class Link implements ActiveRecordInterface
     protected $link_do_not_reorder;
 
     /**
-     * The value for the link_sponsor_user_id field.
+     * The value for the link_sponsor_axys_user_id field.
      *
      * @var        int|null
      */
-    protected $link_sponsor_user_id;
+    protected $link_sponsor_axys_user_id;
 
     /**
      * The value for the link_date field.
@@ -507,13 +507,13 @@ abstract class Link implements ActiveRecordInterface
     }
 
     /**
-     * Get the [user_id] column value.
+     * Get the [axys_user_id] column value.
      *
      * @return int|null
      */
-    public function getUserId()
+    public function getAxysUserId()
     {
-        return $this->user_id;
+        return $this->axys_user_id;
     }
 
     /**
@@ -707,13 +707,13 @@ abstract class Link implements ActiveRecordInterface
     }
 
     /**
-     * Get the [link_sponsor_user_id] column value.
+     * Get the [link_sponsor_axys_user_id] column value.
      *
      * @return int|null
      */
-    public function getSponsorUserId()
+    public function getSponsorAxysUserId()
     {
-        return $this->link_sponsor_user_id;
+        return $this->link_sponsor_axys_user_id;
     }
 
     /**
@@ -823,20 +823,20 @@ abstract class Link implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [user_id] column.
+     * Set the value of [axys_user_id] column.
      *
      * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setUserId($v)
+    public function setAxysUserId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->user_id !== $v) {
-            $this->user_id = $v;
-            $this->modifiedColumns[LinkTableMap::COL_USER_ID] = true;
+        if ($this->axys_user_id !== $v) {
+            $this->axys_user_id = $v;
+            $this->modifiedColumns[LinkTableMap::COL_AXYS_USER_ID] = true;
         }
 
         return $this;
@@ -1211,20 +1211,20 @@ abstract class Link implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [link_sponsor_user_id] column.
+     * Set the value of [link_sponsor_axys_user_id] column.
      *
      * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setSponsorUserId($v)
+    public function setSponsorAxysUserId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->link_sponsor_user_id !== $v) {
-            $this->link_sponsor_user_id = $v;
-            $this->modifiedColumns[LinkTableMap::COL_LINK_SPONSOR_USER_ID] = true;
+        if ($this->link_sponsor_axys_user_id !== $v) {
+            $this->link_sponsor_axys_user_id = $v;
+            $this->modifiedColumns[LinkTableMap::COL_LINK_SPONSOR_AXYS_USER_ID] = true;
         }
 
         return $this;
@@ -1332,8 +1332,8 @@ abstract class Link implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : LinkTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : LinkTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : LinkTableMap::translateFieldName('AxysUserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->axys_user_id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : LinkTableMap::translateFieldName('ArticleId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->article_id = (null !== $col) ? (int) $col : null;
@@ -1386,8 +1386,8 @@ abstract class Link implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 19 + $startcol : LinkTableMap::translateFieldName('DoNotReorder', TableMap::TYPE_PHPNAME, $indexType)];
             $this->link_do_not_reorder = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 20 + $startcol : LinkTableMap::translateFieldName('SponsorUserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->link_sponsor_user_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 20 + $startcol : LinkTableMap::translateFieldName('SponsorAxysUserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->link_sponsor_axys_user_id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 21 + $startcol : LinkTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
@@ -1673,8 +1673,8 @@ abstract class Link implements ActiveRecordInterface
         if ($this->isColumnModified(LinkTableMap::COL_SITE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'site_id';
         }
-        if ($this->isColumnModified(LinkTableMap::COL_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'user_id';
+        if ($this->isColumnModified(LinkTableMap::COL_AXYS_USER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_user_id';
         }
         if ($this->isColumnModified(LinkTableMap::COL_ARTICLE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'article_id';
@@ -1727,8 +1727,8 @@ abstract class Link implements ActiveRecordInterface
         if ($this->isColumnModified(LinkTableMap::COL_LINK_DO_NOT_REORDER)) {
             $modifiedColumns[':p' . $index++]  = 'link_do_not_reorder';
         }
-        if ($this->isColumnModified(LinkTableMap::COL_LINK_SPONSOR_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'link_sponsor_user_id';
+        if ($this->isColumnModified(LinkTableMap::COL_LINK_SPONSOR_AXYS_USER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'link_sponsor_axys_user_id';
         }
         if ($this->isColumnModified(LinkTableMap::COL_LINK_DATE)) {
             $modifiedColumns[':p' . $index++]  = 'link_date';
@@ -1758,8 +1758,8 @@ abstract class Link implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
 
                         break;
-                    case 'user_id':
-                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+                    case 'axys_user_id':
+                        $stmt->bindValue($identifier, $this->axys_user_id, PDO::PARAM_INT);
 
                         break;
                     case 'article_id':
@@ -1830,8 +1830,8 @@ abstract class Link implements ActiveRecordInterface
                         $stmt->bindValue($identifier, (int) $this->link_do_not_reorder, PDO::PARAM_INT);
 
                         break;
-                    case 'link_sponsor_user_id':
-                        $stmt->bindValue($identifier, $this->link_sponsor_user_id, PDO::PARAM_INT);
+                    case 'link_sponsor_axys_user_id':
+                        $stmt->bindValue($identifier, $this->link_sponsor_axys_user_id, PDO::PARAM_INT);
 
                         break;
                     case 'link_date':
@@ -1915,7 +1915,7 @@ abstract class Link implements ActiveRecordInterface
                 return $this->getSiteId();
 
             case 2:
-                return $this->getUserId();
+                return $this->getAxysUserId();
 
             case 3:
                 return $this->getArticleId();
@@ -1969,7 +1969,7 @@ abstract class Link implements ActiveRecordInterface
                 return $this->getDoNotReorder();
 
             case 20:
-                return $this->getSponsorUserId();
+                return $this->getSponsorAxysUserId();
 
             case 21:
                 return $this->getDate();
@@ -2010,7 +2010,7 @@ abstract class Link implements ActiveRecordInterface
         $result = [
             $keys[0] => $this->getId(),
             $keys[1] => $this->getSiteId(),
-            $keys[2] => $this->getUserId(),
+            $keys[2] => $this->getAxysUserId(),
             $keys[3] => $this->getArticleId(),
             $keys[4] => $this->getStockId(),
             $keys[5] => $this->getListId(),
@@ -2028,7 +2028,7 @@ abstract class Link implements ActiveRecordInterface
             $keys[17] => $this->getBundleId(),
             $keys[18] => $this->getHide(),
             $keys[19] => $this->getDoNotReorder(),
-            $keys[20] => $this->getSponsorUserId(),
+            $keys[20] => $this->getSponsorAxysUserId(),
             $keys[21] => $this->getDate(),
             $keys[22] => $this->getCreatedAt(),
             $keys[23] => $this->getUpdatedAt(),
@@ -2139,7 +2139,7 @@ abstract class Link implements ActiveRecordInterface
                 $this->setSiteId($value);
                 break;
             case 2:
-                $this->setUserId($value);
+                $this->setAxysUserId($value);
                 break;
             case 3:
                 $this->setArticleId($value);
@@ -2193,7 +2193,7 @@ abstract class Link implements ActiveRecordInterface
                 $this->setDoNotReorder($value);
                 break;
             case 20:
-                $this->setSponsorUserId($value);
+                $this->setSponsorAxysUserId($value);
                 break;
             case 21:
                 $this->setDate($value);
@@ -2237,7 +2237,7 @@ abstract class Link implements ActiveRecordInterface
             $this->setSiteId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setUserId($arr[$keys[2]]);
+            $this->setAxysUserId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
             $this->setArticleId($arr[$keys[3]]);
@@ -2291,7 +2291,7 @@ abstract class Link implements ActiveRecordInterface
             $this->setDoNotReorder($arr[$keys[19]]);
         }
         if (array_key_exists($keys[20], $arr)) {
-            $this->setSponsorUserId($arr[$keys[20]]);
+            $this->setSponsorAxysUserId($arr[$keys[20]]);
         }
         if (array_key_exists($keys[21], $arr)) {
             $this->setDate($arr[$keys[21]]);
@@ -2351,8 +2351,8 @@ abstract class Link implements ActiveRecordInterface
         if ($this->isColumnModified(LinkTableMap::COL_SITE_ID)) {
             $criteria->add(LinkTableMap::COL_SITE_ID, $this->site_id);
         }
-        if ($this->isColumnModified(LinkTableMap::COL_USER_ID)) {
-            $criteria->add(LinkTableMap::COL_USER_ID, $this->user_id);
+        if ($this->isColumnModified(LinkTableMap::COL_AXYS_USER_ID)) {
+            $criteria->add(LinkTableMap::COL_AXYS_USER_ID, $this->axys_user_id);
         }
         if ($this->isColumnModified(LinkTableMap::COL_ARTICLE_ID)) {
             $criteria->add(LinkTableMap::COL_ARTICLE_ID, $this->article_id);
@@ -2405,8 +2405,8 @@ abstract class Link implements ActiveRecordInterface
         if ($this->isColumnModified(LinkTableMap::COL_LINK_DO_NOT_REORDER)) {
             $criteria->add(LinkTableMap::COL_LINK_DO_NOT_REORDER, $this->link_do_not_reorder);
         }
-        if ($this->isColumnModified(LinkTableMap::COL_LINK_SPONSOR_USER_ID)) {
-            $criteria->add(LinkTableMap::COL_LINK_SPONSOR_USER_ID, $this->link_sponsor_user_id);
+        if ($this->isColumnModified(LinkTableMap::COL_LINK_SPONSOR_AXYS_USER_ID)) {
+            $criteria->add(LinkTableMap::COL_LINK_SPONSOR_AXYS_USER_ID, $this->link_sponsor_axys_user_id);
         }
         if ($this->isColumnModified(LinkTableMap::COL_LINK_DATE)) {
             $criteria->add(LinkTableMap::COL_LINK_DATE, $this->link_date);
@@ -2506,7 +2506,7 @@ abstract class Link implements ActiveRecordInterface
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
         $copyObj->setSiteId($this->getSiteId());
-        $copyObj->setUserId($this->getUserId());
+        $copyObj->setAxysUserId($this->getAxysUserId());
         $copyObj->setArticleId($this->getArticleId());
         $copyObj->setStockId($this->getStockId());
         $copyObj->setListId($this->getListId());
@@ -2524,7 +2524,7 @@ abstract class Link implements ActiveRecordInterface
         $copyObj->setBundleId($this->getBundleId());
         $copyObj->setHide($this->getHide());
         $copyObj->setDoNotReorder($this->getDoNotReorder());
-        $copyObj->setSponsorUserId($this->getSponsorUserId());
+        $copyObj->setSponsorAxysUserId($this->getSponsorAxysUserId());
         $copyObj->setDate($this->getDate());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
@@ -2729,7 +2729,7 @@ abstract class Link implements ActiveRecordInterface
         }
         $this->link_id = null;
         $this->site_id = null;
-        $this->user_id = null;
+        $this->axys_user_id = null;
         $this->article_id = null;
         $this->stock_id = null;
         $this->list_id = null;
@@ -2747,7 +2747,7 @@ abstract class Link implements ActiveRecordInterface
         $this->bundle_id = null;
         $this->link_hide = null;
         $this->link_do_not_reorder = null;
-        $this->link_sponsor_user_id = null;
+        $this->link_sponsor_axys_user_id = null;
         $this->link_date = null;
         $this->link_created = null;
         $this->link_updated = null;

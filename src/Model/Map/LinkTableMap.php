@@ -86,9 +86,9 @@ class LinkTableMap extends TableMap
     public const COL_SITE_ID = 'links.site_id';
 
     /**
-     * the column name for the user_id field
+     * the column name for the axys_user_id field
      */
-    public const COL_USER_ID = 'links.user_id';
+    public const COL_AXYS_USER_ID = 'links.axys_user_id';
 
     /**
      * the column name for the article_id field
@@ -176,9 +176,9 @@ class LinkTableMap extends TableMap
     public const COL_LINK_DO_NOT_REORDER = 'links.link_do_not_reorder';
 
     /**
-     * the column name for the link_sponsor_user_id field
+     * the column name for the link_sponsor_axys_user_id field
      */
-    public const COL_LINK_SPONSOR_USER_ID = 'links.link_sponsor_user_id';
+    public const COL_LINK_SPONSOR_AXYS_USER_ID = 'links.link_sponsor_axys_user_id';
 
     /**
      * the column name for the link_date field
@@ -209,10 +209,10 @@ class LinkTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'UserId', 'ArticleId', 'StockId', 'ListId', 'BookId', 'PeopleId', 'JobId', 'RayonId', 'TagId', 'EventId', 'PostId', 'CollectionId', 'PublisherId', 'SupplierId', 'MediaId', 'BundleId', 'Hide', 'DoNotReorder', 'SponsorUserId', 'Date', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'userId', 'articleId', 'stockId', 'listId', 'bookId', 'peopleId', 'jobId', 'rayonId', 'tagId', 'eventId', 'postId', 'collectionId', 'publisherId', 'supplierId', 'mediaId', 'bundleId', 'hide', 'doNotReorder', 'sponsorUserId', 'date', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [LinkTableMap::COL_LINK_ID, LinkTableMap::COL_SITE_ID, LinkTableMap::COL_USER_ID, LinkTableMap::COL_ARTICLE_ID, LinkTableMap::COL_STOCK_ID, LinkTableMap::COL_LIST_ID, LinkTableMap::COL_BOOK_ID, LinkTableMap::COL_PEOPLE_ID, LinkTableMap::COL_JOB_ID, LinkTableMap::COL_RAYON_ID, LinkTableMap::COL_TAG_ID, LinkTableMap::COL_EVENT_ID, LinkTableMap::COL_POST_ID, LinkTableMap::COL_COLLECTION_ID, LinkTableMap::COL_PUBLISHER_ID, LinkTableMap::COL_SUPPLIER_ID, LinkTableMap::COL_MEDIA_ID, LinkTableMap::COL_BUNDLE_ID, LinkTableMap::COL_LINK_HIDE, LinkTableMap::COL_LINK_DO_NOT_REORDER, LinkTableMap::COL_LINK_SPONSOR_USER_ID, LinkTableMap::COL_LINK_DATE, LinkTableMap::COL_LINK_CREATED, LinkTableMap::COL_LINK_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['link_id', 'site_id', 'user_id', 'article_id', 'stock_id', 'list_id', 'book_id', 'people_id', 'job_id', 'rayon_id', 'tag_id', 'event_id', 'post_id', 'collection_id', 'publisher_id', 'supplier_id', 'media_id', 'bundle_id', 'link_hide', 'link_do_not_reorder', 'link_sponsor_user_id', 'link_date', 'link_created', 'link_updated', ],
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'AxysUserId', 'ArticleId', 'StockId', 'ListId', 'BookId', 'PeopleId', 'JobId', 'RayonId', 'TagId', 'EventId', 'PostId', 'CollectionId', 'PublisherId', 'SupplierId', 'MediaId', 'BundleId', 'Hide', 'DoNotReorder', 'SponsorAxysUserId', 'Date', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'axysUserId', 'articleId', 'stockId', 'listId', 'bookId', 'peopleId', 'jobId', 'rayonId', 'tagId', 'eventId', 'postId', 'collectionId', 'publisherId', 'supplierId', 'mediaId', 'bundleId', 'hide', 'doNotReorder', 'sponsorAxysUserId', 'date', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [LinkTableMap::COL_LINK_ID, LinkTableMap::COL_SITE_ID, LinkTableMap::COL_AXYS_USER_ID, LinkTableMap::COL_ARTICLE_ID, LinkTableMap::COL_STOCK_ID, LinkTableMap::COL_LIST_ID, LinkTableMap::COL_BOOK_ID, LinkTableMap::COL_PEOPLE_ID, LinkTableMap::COL_JOB_ID, LinkTableMap::COL_RAYON_ID, LinkTableMap::COL_TAG_ID, LinkTableMap::COL_EVENT_ID, LinkTableMap::COL_POST_ID, LinkTableMap::COL_COLLECTION_ID, LinkTableMap::COL_PUBLISHER_ID, LinkTableMap::COL_SUPPLIER_ID, LinkTableMap::COL_MEDIA_ID, LinkTableMap::COL_BUNDLE_ID, LinkTableMap::COL_LINK_HIDE, LinkTableMap::COL_LINK_DO_NOT_REORDER, LinkTableMap::COL_LINK_SPONSOR_AXYS_USER_ID, LinkTableMap::COL_LINK_DATE, LinkTableMap::COL_LINK_CREATED, LinkTableMap::COL_LINK_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['link_id', 'site_id', 'axys_user_id', 'article_id', 'stock_id', 'list_id', 'book_id', 'people_id', 'job_id', 'rayon_id', 'tag_id', 'event_id', 'post_id', 'collection_id', 'publisher_id', 'supplier_id', 'media_id', 'bundle_id', 'link_hide', 'link_do_not_reorder', 'link_sponsor_axys_user_id', 'link_date', 'link_created', 'link_updated', ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, ]
     ];
 
@@ -225,10 +225,10 @@ class LinkTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'UserId' => 2, 'ArticleId' => 3, 'StockId' => 4, 'ListId' => 5, 'BookId' => 6, 'PeopleId' => 7, 'JobId' => 8, 'RayonId' => 9, 'TagId' => 10, 'EventId' => 11, 'PostId' => 12, 'CollectionId' => 13, 'PublisherId' => 14, 'SupplierId' => 15, 'MediaId' => 16, 'BundleId' => 17, 'Hide' => 18, 'DoNotReorder' => 19, 'SponsorUserId' => 20, 'Date' => 21, 'CreatedAt' => 22, 'UpdatedAt' => 23, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'userId' => 2, 'articleId' => 3, 'stockId' => 4, 'listId' => 5, 'bookId' => 6, 'peopleId' => 7, 'jobId' => 8, 'rayonId' => 9, 'tagId' => 10, 'eventId' => 11, 'postId' => 12, 'collectionId' => 13, 'publisherId' => 14, 'supplierId' => 15, 'mediaId' => 16, 'bundleId' => 17, 'hide' => 18, 'doNotReorder' => 19, 'sponsorUserId' => 20, 'date' => 21, 'createdAt' => 22, 'updatedAt' => 23, ],
-        self::TYPE_COLNAME       => [LinkTableMap::COL_LINK_ID => 0, LinkTableMap::COL_SITE_ID => 1, LinkTableMap::COL_USER_ID => 2, LinkTableMap::COL_ARTICLE_ID => 3, LinkTableMap::COL_STOCK_ID => 4, LinkTableMap::COL_LIST_ID => 5, LinkTableMap::COL_BOOK_ID => 6, LinkTableMap::COL_PEOPLE_ID => 7, LinkTableMap::COL_JOB_ID => 8, LinkTableMap::COL_RAYON_ID => 9, LinkTableMap::COL_TAG_ID => 10, LinkTableMap::COL_EVENT_ID => 11, LinkTableMap::COL_POST_ID => 12, LinkTableMap::COL_COLLECTION_ID => 13, LinkTableMap::COL_PUBLISHER_ID => 14, LinkTableMap::COL_SUPPLIER_ID => 15, LinkTableMap::COL_MEDIA_ID => 16, LinkTableMap::COL_BUNDLE_ID => 17, LinkTableMap::COL_LINK_HIDE => 18, LinkTableMap::COL_LINK_DO_NOT_REORDER => 19, LinkTableMap::COL_LINK_SPONSOR_USER_ID => 20, LinkTableMap::COL_LINK_DATE => 21, LinkTableMap::COL_LINK_CREATED => 22, LinkTableMap::COL_LINK_UPDATED => 23, ],
-        self::TYPE_FIELDNAME     => ['link_id' => 0, 'site_id' => 1, 'user_id' => 2, 'article_id' => 3, 'stock_id' => 4, 'list_id' => 5, 'book_id' => 6, 'people_id' => 7, 'job_id' => 8, 'rayon_id' => 9, 'tag_id' => 10, 'event_id' => 11, 'post_id' => 12, 'collection_id' => 13, 'publisher_id' => 14, 'supplier_id' => 15, 'media_id' => 16, 'bundle_id' => 17, 'link_hide' => 18, 'link_do_not_reorder' => 19, 'link_sponsor_user_id' => 20, 'link_date' => 21, 'link_created' => 22, 'link_updated' => 23, ],
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'AxysUserId' => 2, 'ArticleId' => 3, 'StockId' => 4, 'ListId' => 5, 'BookId' => 6, 'PeopleId' => 7, 'JobId' => 8, 'RayonId' => 9, 'TagId' => 10, 'EventId' => 11, 'PostId' => 12, 'CollectionId' => 13, 'PublisherId' => 14, 'SupplierId' => 15, 'MediaId' => 16, 'BundleId' => 17, 'Hide' => 18, 'DoNotReorder' => 19, 'SponsorAxysUserId' => 20, 'Date' => 21, 'CreatedAt' => 22, 'UpdatedAt' => 23, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'axysUserId' => 2, 'articleId' => 3, 'stockId' => 4, 'listId' => 5, 'bookId' => 6, 'peopleId' => 7, 'jobId' => 8, 'rayonId' => 9, 'tagId' => 10, 'eventId' => 11, 'postId' => 12, 'collectionId' => 13, 'publisherId' => 14, 'supplierId' => 15, 'mediaId' => 16, 'bundleId' => 17, 'hide' => 18, 'doNotReorder' => 19, 'sponsorAxysUserId' => 20, 'date' => 21, 'createdAt' => 22, 'updatedAt' => 23, ],
+        self::TYPE_COLNAME       => [LinkTableMap::COL_LINK_ID => 0, LinkTableMap::COL_SITE_ID => 1, LinkTableMap::COL_AXYS_USER_ID => 2, LinkTableMap::COL_ARTICLE_ID => 3, LinkTableMap::COL_STOCK_ID => 4, LinkTableMap::COL_LIST_ID => 5, LinkTableMap::COL_BOOK_ID => 6, LinkTableMap::COL_PEOPLE_ID => 7, LinkTableMap::COL_JOB_ID => 8, LinkTableMap::COL_RAYON_ID => 9, LinkTableMap::COL_TAG_ID => 10, LinkTableMap::COL_EVENT_ID => 11, LinkTableMap::COL_POST_ID => 12, LinkTableMap::COL_COLLECTION_ID => 13, LinkTableMap::COL_PUBLISHER_ID => 14, LinkTableMap::COL_SUPPLIER_ID => 15, LinkTableMap::COL_MEDIA_ID => 16, LinkTableMap::COL_BUNDLE_ID => 17, LinkTableMap::COL_LINK_HIDE => 18, LinkTableMap::COL_LINK_DO_NOT_REORDER => 19, LinkTableMap::COL_LINK_SPONSOR_AXYS_USER_ID => 20, LinkTableMap::COL_LINK_DATE => 21, LinkTableMap::COL_LINK_CREATED => 22, LinkTableMap::COL_LINK_UPDATED => 23, ],
+        self::TYPE_FIELDNAME     => ['link_id' => 0, 'site_id' => 1, 'axys_user_id' => 2, 'article_id' => 3, 'stock_id' => 4, 'list_id' => 5, 'book_id' => 6, 'people_id' => 7, 'job_id' => 8, 'rayon_id' => 9, 'tag_id' => 10, 'event_id' => 11, 'post_id' => 12, 'collection_id' => 13, 'publisher_id' => 14, 'supplier_id' => 15, 'media_id' => 16, 'bundle_id' => 17, 'link_hide' => 18, 'link_do_not_reorder' => 19, 'link_sponsor_axys_user_id' => 20, 'link_date' => 21, 'link_created' => 22, 'link_updated' => 23, ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, ]
     ];
 
@@ -254,14 +254,14 @@ class LinkTableMap extends TableMap
         'COL_SITE_ID' => 'SITE_ID',
         'site_id' => 'SITE_ID',
         'links.site_id' => 'SITE_ID',
-        'UserId' => 'USER_ID',
-        'Link.UserId' => 'USER_ID',
-        'userId' => 'USER_ID',
-        'link.userId' => 'USER_ID',
-        'LinkTableMap::COL_USER_ID' => 'USER_ID',
-        'COL_USER_ID' => 'USER_ID',
-        'user_id' => 'USER_ID',
-        'links.user_id' => 'USER_ID',
+        'AxysUserId' => 'AXYS_USER_ID',
+        'Link.AxysUserId' => 'AXYS_USER_ID',
+        'axysUserId' => 'AXYS_USER_ID',
+        'link.axysUserId' => 'AXYS_USER_ID',
+        'LinkTableMap::COL_AXYS_USER_ID' => 'AXYS_USER_ID',
+        'COL_AXYS_USER_ID' => 'AXYS_USER_ID',
+        'axys_user_id' => 'AXYS_USER_ID',
+        'links.axys_user_id' => 'AXYS_USER_ID',
         'ArticleId' => 'ARTICLE_ID',
         'Link.ArticleId' => 'ARTICLE_ID',
         'articleId' => 'ARTICLE_ID',
@@ -398,14 +398,14 @@ class LinkTableMap extends TableMap
         'COL_LINK_DO_NOT_REORDER' => 'LINK_DO_NOT_REORDER',
         'link_do_not_reorder' => 'LINK_DO_NOT_REORDER',
         'links.link_do_not_reorder' => 'LINK_DO_NOT_REORDER',
-        'SponsorUserId' => 'LINK_SPONSOR_USER_ID',
-        'Link.SponsorUserId' => 'LINK_SPONSOR_USER_ID',
-        'sponsorUserId' => 'LINK_SPONSOR_USER_ID',
-        'link.sponsorUserId' => 'LINK_SPONSOR_USER_ID',
-        'LinkTableMap::COL_LINK_SPONSOR_USER_ID' => 'LINK_SPONSOR_USER_ID',
-        'COL_LINK_SPONSOR_USER_ID' => 'LINK_SPONSOR_USER_ID',
-        'link_sponsor_user_id' => 'LINK_SPONSOR_USER_ID',
-        'links.link_sponsor_user_id' => 'LINK_SPONSOR_USER_ID',
+        'SponsorAxysUserId' => 'LINK_SPONSOR_AXYS_USER_ID',
+        'Link.SponsorAxysUserId' => 'LINK_SPONSOR_AXYS_USER_ID',
+        'sponsorAxysUserId' => 'LINK_SPONSOR_AXYS_USER_ID',
+        'link.sponsorAxysUserId' => 'LINK_SPONSOR_AXYS_USER_ID',
+        'LinkTableMap::COL_LINK_SPONSOR_AXYS_USER_ID' => 'LINK_SPONSOR_AXYS_USER_ID',
+        'COL_LINK_SPONSOR_AXYS_USER_ID' => 'LINK_SPONSOR_AXYS_USER_ID',
+        'link_sponsor_axys_user_id' => 'LINK_SPONSOR_AXYS_USER_ID',
+        'links.link_sponsor_axys_user_id' => 'LINK_SPONSOR_AXYS_USER_ID',
         'Date' => 'LINK_DATE',
         'Link.Date' => 'LINK_DATE',
         'date' => 'LINK_DATE',
@@ -452,7 +452,7 @@ class LinkTableMap extends TableMap
         // columns
         $this->addPrimaryKey('link_id', 'Id', 'INTEGER', true, 10, null);
         $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
-        $this->addColumn('user_id', 'UserId', 'INTEGER', false, 10, null);
+        $this->addColumn('axys_user_id', 'AxysUserId', 'INTEGER', false, 10, null);
         $this->addForeignKey('article_id', 'ArticleId', 'INTEGER', 'articles', 'article_id', false, 10, null);
         $this->addColumn('stock_id', 'StockId', 'INTEGER', false, 10, null);
         $this->addColumn('list_id', 'ListId', 'INTEGER', false, 10, null);
@@ -470,7 +470,7 @@ class LinkTableMap extends TableMap
         $this->addColumn('bundle_id', 'BundleId', 'INTEGER', false, 10, null);
         $this->addColumn('link_hide', 'Hide', 'BOOLEAN', false, 1, null);
         $this->addColumn('link_do_not_reorder', 'DoNotReorder', 'BOOLEAN', false, 1, null);
-        $this->addColumn('link_sponsor_user_id', 'SponsorUserId', 'INTEGER', false, 10, null);
+        $this->addColumn('link_sponsor_axys_user_id', 'SponsorAxysUserId', 'INTEGER', false, 10, null);
         $this->addColumn('link_date', 'Date', 'TIMESTAMP', false, null, null);
         $this->addColumn('link_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('link_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
@@ -663,7 +663,7 @@ class LinkTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(LinkTableMap::COL_LINK_ID);
             $criteria->addSelectColumn(LinkTableMap::COL_SITE_ID);
-            $criteria->addSelectColumn(LinkTableMap::COL_USER_ID);
+            $criteria->addSelectColumn(LinkTableMap::COL_AXYS_USER_ID);
             $criteria->addSelectColumn(LinkTableMap::COL_ARTICLE_ID);
             $criteria->addSelectColumn(LinkTableMap::COL_STOCK_ID);
             $criteria->addSelectColumn(LinkTableMap::COL_LIST_ID);
@@ -681,14 +681,14 @@ class LinkTableMap extends TableMap
             $criteria->addSelectColumn(LinkTableMap::COL_BUNDLE_ID);
             $criteria->addSelectColumn(LinkTableMap::COL_LINK_HIDE);
             $criteria->addSelectColumn(LinkTableMap::COL_LINK_DO_NOT_REORDER);
-            $criteria->addSelectColumn(LinkTableMap::COL_LINK_SPONSOR_USER_ID);
+            $criteria->addSelectColumn(LinkTableMap::COL_LINK_SPONSOR_AXYS_USER_ID);
             $criteria->addSelectColumn(LinkTableMap::COL_LINK_DATE);
             $criteria->addSelectColumn(LinkTableMap::COL_LINK_CREATED);
             $criteria->addSelectColumn(LinkTableMap::COL_LINK_UPDATED);
         } else {
             $criteria->addSelectColumn($alias . '.link_id');
             $criteria->addSelectColumn($alias . '.site_id');
-            $criteria->addSelectColumn($alias . '.user_id');
+            $criteria->addSelectColumn($alias . '.axys_user_id');
             $criteria->addSelectColumn($alias . '.article_id');
             $criteria->addSelectColumn($alias . '.stock_id');
             $criteria->addSelectColumn($alias . '.list_id');
@@ -706,7 +706,7 @@ class LinkTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.bundle_id');
             $criteria->addSelectColumn($alias . '.link_hide');
             $criteria->addSelectColumn($alias . '.link_do_not_reorder');
-            $criteria->addSelectColumn($alias . '.link_sponsor_user_id');
+            $criteria->addSelectColumn($alias . '.link_sponsor_axys_user_id');
             $criteria->addSelectColumn($alias . '.link_date');
             $criteria->addSelectColumn($alias . '.link_created');
             $criteria->addSelectColumn($alias . '.link_updated');
@@ -730,7 +730,7 @@ class LinkTableMap extends TableMap
         if (null === $alias) {
             $criteria->removeSelectColumn(LinkTableMap::COL_LINK_ID);
             $criteria->removeSelectColumn(LinkTableMap::COL_SITE_ID);
-            $criteria->removeSelectColumn(LinkTableMap::COL_USER_ID);
+            $criteria->removeSelectColumn(LinkTableMap::COL_AXYS_USER_ID);
             $criteria->removeSelectColumn(LinkTableMap::COL_ARTICLE_ID);
             $criteria->removeSelectColumn(LinkTableMap::COL_STOCK_ID);
             $criteria->removeSelectColumn(LinkTableMap::COL_LIST_ID);
@@ -748,14 +748,14 @@ class LinkTableMap extends TableMap
             $criteria->removeSelectColumn(LinkTableMap::COL_BUNDLE_ID);
             $criteria->removeSelectColumn(LinkTableMap::COL_LINK_HIDE);
             $criteria->removeSelectColumn(LinkTableMap::COL_LINK_DO_NOT_REORDER);
-            $criteria->removeSelectColumn(LinkTableMap::COL_LINK_SPONSOR_USER_ID);
+            $criteria->removeSelectColumn(LinkTableMap::COL_LINK_SPONSOR_AXYS_USER_ID);
             $criteria->removeSelectColumn(LinkTableMap::COL_LINK_DATE);
             $criteria->removeSelectColumn(LinkTableMap::COL_LINK_CREATED);
             $criteria->removeSelectColumn(LinkTableMap::COL_LINK_UPDATED);
         } else {
             $criteria->removeSelectColumn($alias . '.link_id');
             $criteria->removeSelectColumn($alias . '.site_id');
-            $criteria->removeSelectColumn($alias . '.user_id');
+            $criteria->removeSelectColumn($alias . '.axys_user_id');
             $criteria->removeSelectColumn($alias . '.article_id');
             $criteria->removeSelectColumn($alias . '.stock_id');
             $criteria->removeSelectColumn($alias . '.list_id');
@@ -773,7 +773,7 @@ class LinkTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.bundle_id');
             $criteria->removeSelectColumn($alias . '.link_hide');
             $criteria->removeSelectColumn($alias . '.link_do_not_reorder');
-            $criteria->removeSelectColumn($alias . '.link_sponsor_user_id');
+            $criteria->removeSelectColumn($alias . '.link_sponsor_axys_user_id');
             $criteria->removeSelectColumn($alias . '.link_date');
             $criteria->removeSelectColumn($alias . '.link_created');
             $criteria->removeSelectColumn($alias . '.link_updated');

@@ -21,7 +21,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildRightQuery orderById($order = Criteria::ASC) Order by the right_id column
  * @method     ChildRightQuery orderByUid($order = Criteria::ASC) Order by the right_uid column
- * @method     ChildRightQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
+ * @method     ChildRightQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
  * @method     ChildRightQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
  * @method     ChildRightQuery orderByPublisherId($order = Criteria::ASC) Order by the publisher_id column
  * @method     ChildRightQuery orderByBookshopId($order = Criteria::ASC) Order by the bookshop_id column
@@ -32,7 +32,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildRightQuery groupById() Group by the right_id column
  * @method     ChildRightQuery groupByUid() Group by the right_uid column
- * @method     ChildRightQuery groupByUserId() Group by the user_id column
+ * @method     ChildRightQuery groupByAxysUserId() Group by the axys_user_id column
  * @method     ChildRightQuery groupBySiteId() Group by the site_id column
  * @method     ChildRightQuery groupByPublisherId() Group by the publisher_id column
  * @method     ChildRightQuery groupByBookshopId() Group by the bookshop_id column
@@ -86,7 +86,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildRight|null findOneById(int $right_id) Return the first ChildRight filtered by the right_id column
  * @method     ChildRight|null findOneByUid(string $right_uid) Return the first ChildRight filtered by the right_uid column
- * @method     ChildRight|null findOneByUserId(int $user_id) Return the first ChildRight filtered by the user_id column
+ * @method     ChildRight|null findOneByAxysUserId(int $axys_user_id) Return the first ChildRight filtered by the axys_user_id column
  * @method     ChildRight|null findOneBySiteId(int $site_id) Return the first ChildRight filtered by the site_id column
  * @method     ChildRight|null findOneByPublisherId(int $publisher_id) Return the first ChildRight filtered by the publisher_id column
  * @method     ChildRight|null findOneByBookshopId(int $bookshop_id) Return the first ChildRight filtered by the bookshop_id column
@@ -100,7 +100,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildRight requireOneById(int $right_id) Return the first ChildRight filtered by the right_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRight requireOneByUid(string $right_uid) Return the first ChildRight filtered by the right_uid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRight requireOneByUserId(int $user_id) Return the first ChildRight filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRight requireOneByAxysUserId(int $axys_user_id) Return the first ChildRight filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRight requireOneBySiteId(int $site_id) Return the first ChildRight filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRight requireOneByPublisherId(int $publisher_id) Return the first ChildRight filtered by the publisher_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRight requireOneByBookshopId(int $bookshop_id) Return the first ChildRight filtered by the bookshop_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -116,8 +116,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildRight> findById(int|array<int> $right_id) Return ChildRight objects filtered by the right_id column
  * @method     ChildRight[]|Collection findByUid(string|array<string> $right_uid) Return ChildRight objects filtered by the right_uid column
  * @psalm-method Collection&\Traversable<ChildRight> findByUid(string|array<string> $right_uid) Return ChildRight objects filtered by the right_uid column
- * @method     ChildRight[]|Collection findByUserId(int|array<int> $user_id) Return ChildRight objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildRight> findByUserId(int|array<int> $user_id) Return ChildRight objects filtered by the user_id column
+ * @method     ChildRight[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildRight objects filtered by the axys_user_id column
+ * @psalm-method Collection&\Traversable<ChildRight> findByAxysUserId(int|array<int> $axys_user_id) Return ChildRight objects filtered by the axys_user_id column
  * @method     ChildRight[]|Collection findBySiteId(int|array<int> $site_id) Return ChildRight objects filtered by the site_id column
  * @psalm-method Collection&\Traversable<ChildRight> findBySiteId(int|array<int> $site_id) Return ChildRight objects filtered by the site_id column
  * @method     ChildRight[]|Collection findByPublisherId(int|array<int> $publisher_id) Return ChildRight objects filtered by the publisher_id column
@@ -231,7 +231,7 @@ abstract class RightQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT right_id, right_uid, user_id, site_id, publisher_id, bookshop_id, library_id, right_current, right_created, right_updated FROM rights WHERE right_id = :p0';
+        $sql = 'SELECT right_id, right_uid, axys_user_id, site_id, publisher_id, bookshop_id, library_id, right_current, right_created, right_updated FROM rights WHERE right_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -397,18 +397,18 @@ abstract class RightQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the user_id column
+     * Filter the query on the axys_user_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByUserId(1234); // WHERE user_id = 1234
-     * $query->filterByUserId(array(12, 34)); // WHERE user_id IN (12, 34)
-     * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
+     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
+     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
+     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
      * </code>
      *
      * @see       filterByAxysUser()
      *
-     * @param mixed $userId The value to use as filter.
+     * @param mixed $axysUserId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -416,16 +416,16 @@ abstract class RightQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, ?string $comparison = null)
+    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
     {
-        if (is_array($userId)) {
+        if (is_array($axysUserId)) {
             $useMinMax = false;
-            if (isset($userId['min'])) {
-                $this->addUsingAlias(RightTableMap::COL_USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysUserId['min'])) {
+                $this->addUsingAlias(RightTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($userId['max'])) {
-                $this->addUsingAlias(RightTableMap::COL_USER_ID, $userId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysUserId['max'])) {
+                $this->addUsingAlias(RightTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -436,7 +436,7 @@ abstract class RightQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(RightTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(RightTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
 
         return $this;
     }
@@ -750,14 +750,14 @@ abstract class RightQuery extends ModelCriteria
     {
         if ($axysUser instanceof \Model\AxysUser) {
             return $this
-                ->addUsingAlias(RightTableMap::COL_USER_ID, $axysUser->getId(), $comparison);
+                ->addUsingAlias(RightTableMap::COL_AXYS_USER_ID, $axysUser->getId(), $comparison);
         } elseif ($axysUser instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             $this
-                ->addUsingAlias(RightTableMap::COL_USER_ID, $axysUser->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(RightTableMap::COL_AXYS_USER_ID, $axysUser->toKeyValue('PrimaryKey', 'Id'), $comparison);
 
             return $this;
         } else {

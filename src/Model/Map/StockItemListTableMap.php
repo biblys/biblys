@@ -81,9 +81,9 @@ class StockItemListTableMap extends TableMap
     public const COL_LIST_ID = 'lists.list_id';
 
     /**
-     * the column name for the user_id field
+     * the column name for the axys_user_id field
      */
-    public const COL_USER_ID = 'lists.user_id';
+    public const COL_AXYS_USER_ID = 'lists.axys_user_id';
 
     /**
      * the column name for the site_id field
@@ -124,10 +124,10 @@ class StockItemListTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'UserId', 'SiteId', 'Title', 'Url', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'userId', 'siteId', 'title', 'url', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [StockItemListTableMap::COL_LIST_ID, StockItemListTableMap::COL_USER_ID, StockItemListTableMap::COL_SITE_ID, StockItemListTableMap::COL_LIST_TITLE, StockItemListTableMap::COL_LIST_URL, StockItemListTableMap::COL_LIST_CREATED, StockItemListTableMap::COL_LIST_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['list_id', 'user_id', 'site_id', 'list_title', 'list_url', 'list_created', 'list_updated', ],
+        self::TYPE_PHPNAME       => ['Id', 'AxysUserId', 'SiteId', 'Title', 'Url', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'axysUserId', 'siteId', 'title', 'url', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [StockItemListTableMap::COL_LIST_ID, StockItemListTableMap::COL_AXYS_USER_ID, StockItemListTableMap::COL_SITE_ID, StockItemListTableMap::COL_LIST_TITLE, StockItemListTableMap::COL_LIST_URL, StockItemListTableMap::COL_LIST_CREATED, StockItemListTableMap::COL_LIST_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['list_id', 'axys_user_id', 'site_id', 'list_title', 'list_url', 'list_created', 'list_updated', ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
     ];
 
@@ -140,10 +140,10 @@ class StockItemListTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'UserId' => 1, 'SiteId' => 2, 'Title' => 3, 'Url' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'userId' => 1, 'siteId' => 2, 'title' => 3, 'url' => 4, 'createdAt' => 5, 'updatedAt' => 6, ],
-        self::TYPE_COLNAME       => [StockItemListTableMap::COL_LIST_ID => 0, StockItemListTableMap::COL_USER_ID => 1, StockItemListTableMap::COL_SITE_ID => 2, StockItemListTableMap::COL_LIST_TITLE => 3, StockItemListTableMap::COL_LIST_URL => 4, StockItemListTableMap::COL_LIST_CREATED => 5, StockItemListTableMap::COL_LIST_UPDATED => 6, ],
-        self::TYPE_FIELDNAME     => ['list_id' => 0, 'user_id' => 1, 'site_id' => 2, 'list_title' => 3, 'list_url' => 4, 'list_created' => 5, 'list_updated' => 6, ],
+        self::TYPE_PHPNAME       => ['Id' => 0, 'AxysUserId' => 1, 'SiteId' => 2, 'Title' => 3, 'Url' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'axysUserId' => 1, 'siteId' => 2, 'title' => 3, 'url' => 4, 'createdAt' => 5, 'updatedAt' => 6, ],
+        self::TYPE_COLNAME       => [StockItemListTableMap::COL_LIST_ID => 0, StockItemListTableMap::COL_AXYS_USER_ID => 1, StockItemListTableMap::COL_SITE_ID => 2, StockItemListTableMap::COL_LIST_TITLE => 3, StockItemListTableMap::COL_LIST_URL => 4, StockItemListTableMap::COL_LIST_CREATED => 5, StockItemListTableMap::COL_LIST_UPDATED => 6, ],
+        self::TYPE_FIELDNAME     => ['list_id' => 0, 'axys_user_id' => 1, 'site_id' => 2, 'list_title' => 3, 'list_url' => 4, 'list_created' => 5, 'list_updated' => 6, ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
     ];
 
@@ -161,14 +161,14 @@ class StockItemListTableMap extends TableMap
         'COL_LIST_ID' => 'LIST_ID',
         'list_id' => 'LIST_ID',
         'lists.list_id' => 'LIST_ID',
-        'UserId' => 'USER_ID',
-        'StockItemList.UserId' => 'USER_ID',
-        'userId' => 'USER_ID',
-        'stockItemList.userId' => 'USER_ID',
-        'StockItemListTableMap::COL_USER_ID' => 'USER_ID',
-        'COL_USER_ID' => 'USER_ID',
-        'user_id' => 'USER_ID',
-        'lists.user_id' => 'USER_ID',
+        'AxysUserId' => 'AXYS_USER_ID',
+        'StockItemList.AxysUserId' => 'AXYS_USER_ID',
+        'axysUserId' => 'AXYS_USER_ID',
+        'stockItemList.axysUserId' => 'AXYS_USER_ID',
+        'StockItemListTableMap::COL_AXYS_USER_ID' => 'AXYS_USER_ID',
+        'COL_AXYS_USER_ID' => 'AXYS_USER_ID',
+        'axys_user_id' => 'AXYS_USER_ID',
+        'lists.axys_user_id' => 'AXYS_USER_ID',
         'SiteId' => 'SITE_ID',
         'StockItemList.SiteId' => 'SITE_ID',
         'siteId' => 'SITE_ID',
@@ -229,7 +229,7 @@ class StockItemListTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('list_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('user_id', 'UserId', 'INTEGER', false, 10, null);
+        $this->addColumn('axys_user_id', 'AxysUserId', 'INTEGER', false, 10, null);
         $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
         $this->addColumn('list_title', 'Title', 'VARCHAR', false, 256, null);
         $this->addColumn('list_url', 'Url', 'VARCHAR', false, 256, null);
@@ -402,7 +402,7 @@ class StockItemListTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(StockItemListTableMap::COL_LIST_ID);
-            $criteria->addSelectColumn(StockItemListTableMap::COL_USER_ID);
+            $criteria->addSelectColumn(StockItemListTableMap::COL_AXYS_USER_ID);
             $criteria->addSelectColumn(StockItemListTableMap::COL_SITE_ID);
             $criteria->addSelectColumn(StockItemListTableMap::COL_LIST_TITLE);
             $criteria->addSelectColumn(StockItemListTableMap::COL_LIST_URL);
@@ -410,7 +410,7 @@ class StockItemListTableMap extends TableMap
             $criteria->addSelectColumn(StockItemListTableMap::COL_LIST_UPDATED);
         } else {
             $criteria->addSelectColumn($alias . '.list_id');
-            $criteria->addSelectColumn($alias . '.user_id');
+            $criteria->addSelectColumn($alias . '.axys_user_id');
             $criteria->addSelectColumn($alias . '.site_id');
             $criteria->addSelectColumn($alias . '.list_title');
             $criteria->addSelectColumn($alias . '.list_url');
@@ -435,7 +435,7 @@ class StockItemListTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(StockItemListTableMap::COL_LIST_ID);
-            $criteria->removeSelectColumn(StockItemListTableMap::COL_USER_ID);
+            $criteria->removeSelectColumn(StockItemListTableMap::COL_AXYS_USER_ID);
             $criteria->removeSelectColumn(StockItemListTableMap::COL_SITE_ID);
             $criteria->removeSelectColumn(StockItemListTableMap::COL_LIST_TITLE);
             $criteria->removeSelectColumn(StockItemListTableMap::COL_LIST_URL);
@@ -443,7 +443,7 @@ class StockItemListTableMap extends TableMap
             $criteria->removeSelectColumn(StockItemListTableMap::COL_LIST_UPDATED);
         } else {
             $criteria->removeSelectColumn($alias . '.list_id');
-            $criteria->removeSelectColumn($alias . '.user_id');
+            $criteria->removeSelectColumn($alias . '.axys_user_id');
             $criteria->removeSelectColumn($alias . '.site_id');
             $criteria->removeSelectColumn($alias . '.list_title');
             $criteria->removeSelectColumn($alias . '.list_url');

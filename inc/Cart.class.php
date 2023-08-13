@@ -204,7 +204,7 @@ class Cart extends Entity
      */
     public function getUserInfo()
     {
-        $user_id = $this->get('user_id');
+        $user_id = $this->get('axys_user_id');
         if (!$user_id) {
             return $this->get('cart_ip');
         }
@@ -371,7 +371,7 @@ class CartManager extends EntityManager
         else {
             if (LegacyCodeHelper::getGlobalVisitor()->isLogged()) {
                 $wm = new WishManager();
-                if ($w = $wm->get(array('article_id' => $stock->get('article_id'), 'user_id' => LegacyCodeHelper::getGlobalVisitor()->get('id')))) {
+                if ($w = $wm->get(array('article_id' => $stock->get('article_id'), 'axys_user_id' => LegacyCodeHelper::getGlobalVisitor()->get('id')))) {
                     $w->set('wish_bought', date('Y-m-d H:i:s'));
                     $wm->update($w);
                     $stock->set('wish_id', $w->get('id'));

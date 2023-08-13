@@ -12,7 +12,7 @@
             
             // User (OneToMany)
             $um = new AxysUserManager();
-            if (isset($data['user_id'])) $data['user'] = $um->get(array('user_id' => $data['user_id']));
+            if (isset($data['axys_user_id'])) $data['user'] = $um->get(array('user_id' => $data['axys_user_id']));
 
             // Publisher (OneToMany)
             $pm = new PublisherManager();

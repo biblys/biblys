@@ -105,11 +105,11 @@ abstract class Stock implements ActiveRecordInterface
     protected $reward_id;
 
     /**
-     * The value for the user_id field.
+     * The value for the axys_user_id field.
      *
      * @var        int|null
      */
-    protected $user_id;
+    protected $axys_user_id;
 
     /**
      * The value for the customer_id field.
@@ -680,13 +680,13 @@ abstract class Stock implements ActiveRecordInterface
     }
 
     /**
-     * Get the [user_id] column value.
+     * Get the [axys_user_id] column value.
      *
      * @return int|null
      */
-    public function getUserId()
+    public function getAxysUserId()
     {
-        return $this->user_id;
+        return $this->axys_user_id;
     }
 
     /**
@@ -1318,20 +1318,20 @@ abstract class Stock implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [user_id] column.
+     * Set the value of [axys_user_id] column.
      *
      * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setUserId($v)
+    public function setAxysUserId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->user_id !== $v) {
-            $this->user_id = $v;
-            $this->modifiedColumns[StockTableMap::COL_USER_ID] = true;
+        if ($this->axys_user_id !== $v) {
+            $this->axys_user_id = $v;
+            $this->modifiedColumns[StockTableMap::COL_AXYS_USER_ID] = true;
         }
 
         if ($this->aAxysUser !== null && $this->aAxysUser->getId() !== $v) {
@@ -2156,8 +2156,8 @@ abstract class Stock implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : StockTableMap::translateFieldName('RewardId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->reward_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : StockTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : StockTableMap::translateFieldName('AxysUserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->axys_user_id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : StockTableMap::translateFieldName('CustomerId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->customer_id = (null !== $col) ? (int) $col : null;
@@ -2330,7 +2330,7 @@ abstract class Stock implements ActiveRecordInterface
         if ($this->aArticle !== null && $this->article_id !== $this->aArticle->getId()) {
             $this->aArticle = null;
         }
-        if ($this->aAxysUser !== null && $this->user_id !== $this->aAxysUser->getId()) {
+        if ($this->aAxysUser !== null && $this->axys_user_id !== $this->aAxysUser->getId()) {
             $this->aAxysUser = null;
         }
     }
@@ -2569,8 +2569,8 @@ abstract class Stock implements ActiveRecordInterface
         if ($this->isColumnModified(StockTableMap::COL_REWARD_ID)) {
             $modifiedColumns[':p' . $index++]  = 'reward_id';
         }
-        if ($this->isColumnModified(StockTableMap::COL_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'user_id';
+        if ($this->isColumnModified(StockTableMap::COL_AXYS_USER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_user_id';
         }
         if ($this->isColumnModified(StockTableMap::COL_CUSTOMER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'customer_id';
@@ -2708,8 +2708,8 @@ abstract class Stock implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->reward_id, PDO::PARAM_INT);
 
                         break;
-                    case 'user_id':
-                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+                    case 'axys_user_id':
+                        $stmt->bindValue($identifier, $this->axys_user_id, PDO::PARAM_INT);
 
                         break;
                     case 'customer_id':
@@ -2930,7 +2930,7 @@ abstract class Stock implements ActiveRecordInterface
                 return $this->getRewardId();
 
             case 5:
-                return $this->getUserId();
+                return $this->getAxysUserId();
 
             case 6:
                 return $this->getCustomerId();
@@ -3070,7 +3070,7 @@ abstract class Stock implements ActiveRecordInterface
             $keys[2] => $this->getArticleId(),
             $keys[3] => $this->getCampaignId(),
             $keys[4] => $this->getRewardId(),
-            $keys[5] => $this->getUserId(),
+            $keys[5] => $this->getAxysUserId(),
             $keys[6] => $this->getCustomerId(),
             $keys[7] => $this->getWishId(),
             $keys[8] => $this->getCartId(),
@@ -3250,7 +3250,7 @@ abstract class Stock implements ActiveRecordInterface
                 $this->setRewardId($value);
                 break;
             case 5:
-                $this->setUserId($value);
+                $this->setAxysUserId($value);
                 break;
             case 6:
                 $this->setCustomerId($value);
@@ -3399,7 +3399,7 @@ abstract class Stock implements ActiveRecordInterface
             $this->setRewardId($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setUserId($arr[$keys[5]]);
+            $this->setAxysUserId($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
             $this->setCustomerId($arr[$keys[6]]);
@@ -3564,8 +3564,8 @@ abstract class Stock implements ActiveRecordInterface
         if ($this->isColumnModified(StockTableMap::COL_REWARD_ID)) {
             $criteria->add(StockTableMap::COL_REWARD_ID, $this->reward_id);
         }
-        if ($this->isColumnModified(StockTableMap::COL_USER_ID)) {
-            $criteria->add(StockTableMap::COL_USER_ID, $this->user_id);
+        if ($this->isColumnModified(StockTableMap::COL_AXYS_USER_ID)) {
+            $criteria->add(StockTableMap::COL_AXYS_USER_ID, $this->axys_user_id);
         }
         if ($this->isColumnModified(StockTableMap::COL_CUSTOMER_ID)) {
             $criteria->add(StockTableMap::COL_CUSTOMER_ID, $this->customer_id);
@@ -3764,7 +3764,7 @@ abstract class Stock implements ActiveRecordInterface
         $copyObj->setArticleId($this->getArticleId());
         $copyObj->setCampaignId($this->getCampaignId());
         $copyObj->setRewardId($this->getRewardId());
-        $copyObj->setUserId($this->getUserId());
+        $copyObj->setAxysUserId($this->getAxysUserId());
         $copyObj->setCustomerId($this->getCustomerId());
         $copyObj->setWishId($this->getWishId());
         $copyObj->setCartId($this->getCartId());
@@ -3940,9 +3940,9 @@ abstract class Stock implements ActiveRecordInterface
     public function setAxysUser(ChildAxysUser $v = null)
     {
         if ($v === null) {
-            $this->setUserId(NULL);
+            $this->setAxysUserId(NULL);
         } else {
-            $this->setUserId($v->getId());
+            $this->setAxysUserId($v->getId());
         }
 
         $this->aAxysUser = $v;
@@ -3967,8 +3967,8 @@ abstract class Stock implements ActiveRecordInterface
      */
     public function getAxysUser(?ConnectionInterface $con = null)
     {
-        if ($this->aAxysUser === null && ($this->user_id != 0)) {
-            $this->aAxysUser = ChildAxysUserQuery::create()->findPk($this->user_id, $con);
+        if ($this->aAxysUser === null && ($this->axys_user_id != 0)) {
+            $this->aAxysUser = ChildAxysUserQuery::create()->findPk($this->axys_user_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -4004,7 +4004,7 @@ abstract class Stock implements ActiveRecordInterface
         $this->article_id = null;
         $this->campaign_id = null;
         $this->reward_id = null;
-        $this->user_id = null;
+        $this->axys_user_id = null;
         $this->customer_id = null;
         $this->wish_id = null;
         $this->cart_id = null;

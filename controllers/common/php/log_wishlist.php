@@ -9,7 +9,7 @@ $wm = new WishlistManager();
         trigger_error('Liste d\'envie #'.$request->query->get('id').' inconnue.');
     }
     
-    if ($wishlist->get('user_id') != LegacyCodeHelper::getGlobalVisitor()->get('id')) {
+    if ($wishlist->get('axys_user_id') != LegacyCodeHelper::getGlobalVisitor()->get('id')) {
         trigger_error("Vous n'avez pas le droit de modifier cette liste d'envies.");
     }
     

@@ -36,8 +36,8 @@ class Order extends Entity
 
         // User (OneToMany)
         $um = new AxysUserManager();
-        if (isset($data['user_id'])) {
-            $data['user'] = $um->get(array('user_id' => $data['user_id']));
+        if (isset($data['axys_user_id'])) {
+            $data['user'] = $um->get(array('user_id' => $data['axys_user_id']));
         }
 
         // Country (OneToMany)
@@ -493,7 +493,7 @@ class Order extends Entity
             // Get alert for this user and article
             $alert = $alm->get(
                 [
-                    "user_id" => LegacyCodeHelper::getGlobalVisitor()->get("id"),
+                    "axys_user_id" => LegacyCodeHelper::getGlobalVisitor()->get("id"),
                     "article_id" => $copy->get("article_id")
                 ]
             );
@@ -722,7 +722,7 @@ class OrderManager extends EntityManager
         if ($stock->get('order_id') == $order->get('order_id')) {
             $sm = new StockManager();
             $stock->set('order_id', null);
-            $stock->set('user_id', null);
+            $stock->set('axys_user_id', null);
             $stock->set('customer_id', null);
             $stock->set('stock_selling_date', null);
             $sm->update($stock);
@@ -898,7 +898,7 @@ class OrderManager extends EntityManager
                 $ebooks[] = $stock;
             } else {
                 $books[] = $stock;
-                $stock->set('user_id', $order->get('user_id'));
+                $stock->set('axys_user_id', $order->get('axys_user_id'));
                 $sm->update($stock);
             }
 

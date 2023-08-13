@@ -86,9 +86,9 @@ class SessionTableMap extends TableMap
     public const COL_SITE_ID = 'session.site_id';
 
     /**
-     * the column name for the user_id field
+     * the column name for the axys_user_id field
      */
-    public const COL_USER_ID = 'session.user_id';
+    public const COL_AXYS_USER_ID = 'session.axys_user_id';
 
     /**
      * the column name for the session_token field
@@ -124,10 +124,10 @@ class SessionTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'UserId', 'Token', 'CreatedAt', 'ExpiresAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'userId', 'token', 'createdAt', 'expiresAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [SessionTableMap::COL_SESSION_ID, SessionTableMap::COL_SITE_ID, SessionTableMap::COL_USER_ID, SessionTableMap::COL_SESSION_TOKEN, SessionTableMap::COL_SESSION_CREATED, SessionTableMap::COL_SESSION_EXPIRES, SessionTableMap::COL_SESSION_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['session_id', 'site_id', 'user_id', 'session_token', 'session_created', 'session_expires', 'session_updated', ],
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'AxysUserId', 'Token', 'CreatedAt', 'ExpiresAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'axysUserId', 'token', 'createdAt', 'expiresAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [SessionTableMap::COL_SESSION_ID, SessionTableMap::COL_SITE_ID, SessionTableMap::COL_AXYS_USER_ID, SessionTableMap::COL_SESSION_TOKEN, SessionTableMap::COL_SESSION_CREATED, SessionTableMap::COL_SESSION_EXPIRES, SessionTableMap::COL_SESSION_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['session_id', 'site_id', 'axys_user_id', 'session_token', 'session_created', 'session_expires', 'session_updated', ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
     ];
 
@@ -140,10 +140,10 @@ class SessionTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'UserId' => 2, 'Token' => 3, 'CreatedAt' => 4, 'ExpiresAt' => 5, 'UpdatedAt' => 6, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'userId' => 2, 'token' => 3, 'createdAt' => 4, 'expiresAt' => 5, 'updatedAt' => 6, ],
-        self::TYPE_COLNAME       => [SessionTableMap::COL_SESSION_ID => 0, SessionTableMap::COL_SITE_ID => 1, SessionTableMap::COL_USER_ID => 2, SessionTableMap::COL_SESSION_TOKEN => 3, SessionTableMap::COL_SESSION_CREATED => 4, SessionTableMap::COL_SESSION_EXPIRES => 5, SessionTableMap::COL_SESSION_UPDATED => 6, ],
-        self::TYPE_FIELDNAME     => ['session_id' => 0, 'site_id' => 1, 'user_id' => 2, 'session_token' => 3, 'session_created' => 4, 'session_expires' => 5, 'session_updated' => 6, ],
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'AxysUserId' => 2, 'Token' => 3, 'CreatedAt' => 4, 'ExpiresAt' => 5, 'UpdatedAt' => 6, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'axysUserId' => 2, 'token' => 3, 'createdAt' => 4, 'expiresAt' => 5, 'updatedAt' => 6, ],
+        self::TYPE_COLNAME       => [SessionTableMap::COL_SESSION_ID => 0, SessionTableMap::COL_SITE_ID => 1, SessionTableMap::COL_AXYS_USER_ID => 2, SessionTableMap::COL_SESSION_TOKEN => 3, SessionTableMap::COL_SESSION_CREATED => 4, SessionTableMap::COL_SESSION_EXPIRES => 5, SessionTableMap::COL_SESSION_UPDATED => 6, ],
+        self::TYPE_FIELDNAME     => ['session_id' => 0, 'site_id' => 1, 'axys_user_id' => 2, 'session_token' => 3, 'session_created' => 4, 'session_expires' => 5, 'session_updated' => 6, ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
     ];
 
@@ -169,14 +169,14 @@ class SessionTableMap extends TableMap
         'COL_SITE_ID' => 'SITE_ID',
         'site_id' => 'SITE_ID',
         'session.site_id' => 'SITE_ID',
-        'UserId' => 'USER_ID',
-        'Session.UserId' => 'USER_ID',
-        'userId' => 'USER_ID',
-        'session.userId' => 'USER_ID',
-        'SessionTableMap::COL_USER_ID' => 'USER_ID',
-        'COL_USER_ID' => 'USER_ID',
-        'user_id' => 'USER_ID',
-        'session.user_id' => 'USER_ID',
+        'AxysUserId' => 'AXYS_USER_ID',
+        'Session.AxysUserId' => 'AXYS_USER_ID',
+        'axysUserId' => 'AXYS_USER_ID',
+        'session.axysUserId' => 'AXYS_USER_ID',
+        'SessionTableMap::COL_AXYS_USER_ID' => 'AXYS_USER_ID',
+        'COL_AXYS_USER_ID' => 'AXYS_USER_ID',
+        'axys_user_id' => 'AXYS_USER_ID',
+        'session.axys_user_id' => 'AXYS_USER_ID',
         'Token' => 'SESSION_TOKEN',
         'Session.Token' => 'SESSION_TOKEN',
         'token' => 'SESSION_TOKEN',
@@ -230,7 +230,7 @@ class SessionTableMap extends TableMap
         // columns
         $this->addPrimaryKey('session_id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'axys_users', 'id', false, null, null);
+        $this->addForeignKey('axys_user_id', 'AxysUserId', 'INTEGER', 'axys_users', 'id', false, null, null);
         $this->addColumn('session_token', 'Token', 'VARCHAR', false, 32, null);
         $this->addColumn('session_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('session_expires', 'ExpiresAt', 'TIMESTAMP', false, null, null);
@@ -247,7 +247,7 @@ class SessionTableMap extends TableMap
         $this->addRelation('AxysUser', '\\Model\\AxysUser', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':user_id',
+    0 => ':axys_user_id',
     1 => ':id',
   ),
 ), null, null, null, false);
@@ -417,7 +417,7 @@ class SessionTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(SessionTableMap::COL_SESSION_ID);
             $criteria->addSelectColumn(SessionTableMap::COL_SITE_ID);
-            $criteria->addSelectColumn(SessionTableMap::COL_USER_ID);
+            $criteria->addSelectColumn(SessionTableMap::COL_AXYS_USER_ID);
             $criteria->addSelectColumn(SessionTableMap::COL_SESSION_TOKEN);
             $criteria->addSelectColumn(SessionTableMap::COL_SESSION_CREATED);
             $criteria->addSelectColumn(SessionTableMap::COL_SESSION_EXPIRES);
@@ -425,7 +425,7 @@ class SessionTableMap extends TableMap
         } else {
             $criteria->addSelectColumn($alias . '.session_id');
             $criteria->addSelectColumn($alias . '.site_id');
-            $criteria->addSelectColumn($alias . '.user_id');
+            $criteria->addSelectColumn($alias . '.axys_user_id');
             $criteria->addSelectColumn($alias . '.session_token');
             $criteria->addSelectColumn($alias . '.session_created');
             $criteria->addSelectColumn($alias . '.session_expires');
@@ -450,7 +450,7 @@ class SessionTableMap extends TableMap
         if (null === $alias) {
             $criteria->removeSelectColumn(SessionTableMap::COL_SESSION_ID);
             $criteria->removeSelectColumn(SessionTableMap::COL_SITE_ID);
-            $criteria->removeSelectColumn(SessionTableMap::COL_USER_ID);
+            $criteria->removeSelectColumn(SessionTableMap::COL_AXYS_USER_ID);
             $criteria->removeSelectColumn(SessionTableMap::COL_SESSION_TOKEN);
             $criteria->removeSelectColumn(SessionTableMap::COL_SESSION_CREATED);
             $criteria->removeSelectColumn(SessionTableMap::COL_SESSION_EXPIRES);
@@ -458,7 +458,7 @@ class SessionTableMap extends TableMap
         } else {
             $criteria->removeSelectColumn($alias . '.session_id');
             $criteria->removeSelectColumn($alias . '.site_id');
-            $criteria->removeSelectColumn($alias . '.user_id');
+            $criteria->removeSelectColumn($alias . '.axys_user_id');
             $criteria->removeSelectColumn($alias . '.session_token');
             $criteria->removeSelectColumn($alias . '.session_created');
             $criteria->removeSelectColumn($alias . '.session_expires');

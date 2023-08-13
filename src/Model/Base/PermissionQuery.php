@@ -18,14 +18,14 @@ use Propel\Runtime\Exception\PropelException;
  * Base class that represents a query for the `permissions` table.
  *
  * @method     ChildPermissionQuery orderById($order = Criteria::ASC) Order by the permission_id column
- * @method     ChildPermissionQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
+ * @method     ChildPermissionQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
  * @method     ChildPermissionQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
  * @method     ChildPermissionQuery orderByRank($order = Criteria::ASC) Order by the permission_rank column
  * @method     ChildPermissionQuery orderByLast($order = Criteria::ASC) Order by the permission_last column
  * @method     ChildPermissionQuery orderByDate($order = Criteria::ASC) Order by the permission_date column
  *
  * @method     ChildPermissionQuery groupById() Group by the permission_id column
- * @method     ChildPermissionQuery groupByUserId() Group by the user_id column
+ * @method     ChildPermissionQuery groupByAxysUserId() Group by the axys_user_id column
  * @method     ChildPermissionQuery groupBySiteId() Group by the site_id column
  * @method     ChildPermissionQuery groupByRank() Group by the permission_rank column
  * @method     ChildPermissionQuery groupByLast() Group by the permission_last column
@@ -43,7 +43,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPermission findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildPermission matching the query, or a new ChildPermission object populated from the query conditions when no match is found
  *
  * @method     ChildPermission|null findOneById(int $permission_id) Return the first ChildPermission filtered by the permission_id column
- * @method     ChildPermission|null findOneByUserId(int $user_id) Return the first ChildPermission filtered by the user_id column
+ * @method     ChildPermission|null findOneByAxysUserId(int $axys_user_id) Return the first ChildPermission filtered by the axys_user_id column
  * @method     ChildPermission|null findOneBySiteId(int $site_id) Return the first ChildPermission filtered by the site_id column
  * @method     ChildPermission|null findOneByRank(string $permission_rank) Return the first ChildPermission filtered by the permission_rank column
  * @method     ChildPermission|null findOneByLast(string $permission_last) Return the first ChildPermission filtered by the permission_last column
@@ -53,7 +53,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPermission requireOne(?ConnectionInterface $con = null) Return the first ChildPermission matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPermission requireOneById(int $permission_id) Return the first ChildPermission filtered by the permission_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPermission requireOneByUserId(int $user_id) Return the first ChildPermission filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPermission requireOneByAxysUserId(int $axys_user_id) Return the first ChildPermission filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPermission requireOneBySiteId(int $site_id) Return the first ChildPermission filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPermission requireOneByRank(string $permission_rank) Return the first ChildPermission filtered by the permission_rank column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPermission requireOneByLast(string $permission_last) Return the first ChildPermission filtered by the permission_last column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -64,8 +64,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildPermission[]|Collection findById(int|array<int> $permission_id) Return ChildPermission objects filtered by the permission_id column
  * @psalm-method Collection&\Traversable<ChildPermission> findById(int|array<int> $permission_id) Return ChildPermission objects filtered by the permission_id column
- * @method     ChildPermission[]|Collection findByUserId(int|array<int> $user_id) Return ChildPermission objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildPermission> findByUserId(int|array<int> $user_id) Return ChildPermission objects filtered by the user_id column
+ * @method     ChildPermission[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildPermission objects filtered by the axys_user_id column
+ * @psalm-method Collection&\Traversable<ChildPermission> findByAxysUserId(int|array<int> $axys_user_id) Return ChildPermission objects filtered by the axys_user_id column
  * @method     ChildPermission[]|Collection findBySiteId(int|array<int> $site_id) Return ChildPermission objects filtered by the site_id column
  * @psalm-method Collection&\Traversable<ChildPermission> findBySiteId(int|array<int> $site_id) Return ChildPermission objects filtered by the site_id column
  * @method     ChildPermission[]|Collection findByRank(string|array<string> $permission_rank) Return ChildPermission objects filtered by the permission_rank column
@@ -173,7 +173,7 @@ abstract class PermissionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT permission_id, user_id, site_id, permission_rank, permission_last, permission_date FROM permissions WHERE permission_id = :p0';
+        $sql = 'SELECT permission_id, axys_user_id, site_id, permission_rank, permission_last, permission_date FROM permissions WHERE permission_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -311,16 +311,16 @@ abstract class PermissionQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the user_id column
+     * Filter the query on the axys_user_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByUserId(1234); // WHERE user_id = 1234
-     * $query->filterByUserId(array(12, 34)); // WHERE user_id IN (12, 34)
-     * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
+     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
+     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
+     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
      * </code>
      *
-     * @param mixed $userId The value to use as filter.
+     * @param mixed $axysUserId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -328,16 +328,16 @@ abstract class PermissionQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, ?string $comparison = null)
+    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
     {
-        if (is_array($userId)) {
+        if (is_array($axysUserId)) {
             $useMinMax = false;
-            if (isset($userId['min'])) {
-                $this->addUsingAlias(PermissionTableMap::COL_USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysUserId['min'])) {
+                $this->addUsingAlias(PermissionTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($userId['max'])) {
-                $this->addUsingAlias(PermissionTableMap::COL_USER_ID, $userId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysUserId['max'])) {
+                $this->addUsingAlias(PermissionTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -348,7 +348,7 @@ abstract class PermissionQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(PermissionTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(PermissionTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
 
         return $this;
     }

@@ -27,7 +27,7 @@ class File extends Entity
 
         // Article must be in user's library
         $sm = new StockManager();
-        $right = $sm->get(['article_id' => $this->get('article_id'), 'user_id' => $user->get('id')]);
+        $right = $sm->get(['article_id' => $this->get('article_id'), 'axys_user_id' => $user->get('id')]);
         if (!$right) {
             throw new Exception("Le fichier est en accès restreint et l'article lié n'est pas dans votre bibliothèque.");
         }
@@ -66,7 +66,7 @@ class File extends Entity
         $download->set('download_ip', $request->getClientIp());
 
         if ($user->isLogged()) {
-            $download->set('user_id', $user->get('id'));
+            $download->set('axys_user_id', $user->get('id'));
         }
 
         $dm->update($download);
@@ -310,7 +310,7 @@ class FileManager extends EntityManager
 
         // Update file data
         $file->set('article_id', $article);
-        $file->set('user_id', $user);
+        $file->set('axys_user_id', $user);
         $file->set('file_title', $title);
         $file->set('file_type', $type);
         $file->set('file_hash', md5_file($path));

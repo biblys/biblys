@@ -21,7 +21,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDownloadQuery orderByFileId($order = Criteria::ASC) Order by the file_id column
  * @method     ChildDownloadQuery orderByArticleId($order = Criteria::ASC) Order by the article_id column
  * @method     ChildDownloadQuery orderByBookId($order = Criteria::ASC) Order by the book_id column
- * @method     ChildDownloadQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
+ * @method     ChildDownloadQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
  * @method     ChildDownloadQuery orderByFiletype($order = Criteria::ASC) Order by the download_filetype column
  * @method     ChildDownloadQuery orderByVersion($order = Criteria::ASC) Order by the download_version column
  * @method     ChildDownloadQuery orderByIp($order = Criteria::ASC) Order by the download_ip column
@@ -33,7 +33,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDownloadQuery groupByFileId() Group by the file_id column
  * @method     ChildDownloadQuery groupByArticleId() Group by the article_id column
  * @method     ChildDownloadQuery groupByBookId() Group by the book_id column
- * @method     ChildDownloadQuery groupByUserId() Group by the user_id column
+ * @method     ChildDownloadQuery groupByAxysUserId() Group by the axys_user_id column
  * @method     ChildDownloadQuery groupByFiletype() Group by the download_filetype column
  * @method     ChildDownloadQuery groupByVersion() Group by the download_version column
  * @method     ChildDownloadQuery groupByIp() Group by the download_ip column
@@ -56,7 +56,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDownload|null findOneByFileId(int $file_id) Return the first ChildDownload filtered by the file_id column
  * @method     ChildDownload|null findOneByArticleId(int $article_id) Return the first ChildDownload filtered by the article_id column
  * @method     ChildDownload|null findOneByBookId(int $book_id) Return the first ChildDownload filtered by the book_id column
- * @method     ChildDownload|null findOneByUserId(int $user_id) Return the first ChildDownload filtered by the user_id column
+ * @method     ChildDownload|null findOneByAxysUserId(int $axys_user_id) Return the first ChildDownload filtered by the axys_user_id column
  * @method     ChildDownload|null findOneByFiletype(string $download_filetype) Return the first ChildDownload filtered by the download_filetype column
  * @method     ChildDownload|null findOneByVersion(string $download_version) Return the first ChildDownload filtered by the download_version column
  * @method     ChildDownload|null findOneByIp(string $download_ip) Return the first ChildDownload filtered by the download_ip column
@@ -71,7 +71,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDownload requireOneByFileId(int $file_id) Return the first ChildDownload filtered by the file_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildDownload requireOneByArticleId(int $article_id) Return the first ChildDownload filtered by the article_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildDownload requireOneByBookId(int $book_id) Return the first ChildDownload filtered by the book_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildDownload requireOneByUserId(int $user_id) Return the first ChildDownload filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildDownload requireOneByAxysUserId(int $axys_user_id) Return the first ChildDownload filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildDownload requireOneByFiletype(string $download_filetype) Return the first ChildDownload filtered by the download_filetype column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildDownload requireOneByVersion(string $download_version) Return the first ChildDownload filtered by the download_version column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildDownload requireOneByIp(string $download_ip) Return the first ChildDownload filtered by the download_ip column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -90,8 +90,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildDownload> findByArticleId(int|array<int> $article_id) Return ChildDownload objects filtered by the article_id column
  * @method     ChildDownload[]|Collection findByBookId(int|array<int> $book_id) Return ChildDownload objects filtered by the book_id column
  * @psalm-method Collection&\Traversable<ChildDownload> findByBookId(int|array<int> $book_id) Return ChildDownload objects filtered by the book_id column
- * @method     ChildDownload[]|Collection findByUserId(int|array<int> $user_id) Return ChildDownload objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildDownload> findByUserId(int|array<int> $user_id) Return ChildDownload objects filtered by the user_id column
+ * @method     ChildDownload[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildDownload objects filtered by the axys_user_id column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByAxysUserId(int|array<int> $axys_user_id) Return ChildDownload objects filtered by the axys_user_id column
  * @method     ChildDownload[]|Collection findByFiletype(string|array<string> $download_filetype) Return ChildDownload objects filtered by the download_filetype column
  * @psalm-method Collection&\Traversable<ChildDownload> findByFiletype(string|array<string> $download_filetype) Return ChildDownload objects filtered by the download_filetype column
  * @method     ChildDownload[]|Collection findByVersion(string|array<string> $download_version) Return ChildDownload objects filtered by the download_version column
@@ -203,7 +203,7 @@ abstract class DownloadQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT download_id, file_id, article_id, book_id, user_id, download_filetype, download_version, download_ip, download_date, download_created, download_updated FROM downloads WHERE download_id = :p0';
+        $sql = 'SELECT download_id, file_id, article_id, book_id, axys_user_id, download_filetype, download_version, download_ip, download_date, download_created, download_updated FROM downloads WHERE download_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -470,16 +470,16 @@ abstract class DownloadQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the user_id column
+     * Filter the query on the axys_user_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByUserId(1234); // WHERE user_id = 1234
-     * $query->filterByUserId(array(12, 34)); // WHERE user_id IN (12, 34)
-     * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
+     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
+     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
+     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
      * </code>
      *
-     * @param mixed $userId The value to use as filter.
+     * @param mixed $axysUserId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -487,16 +487,16 @@ abstract class DownloadQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, ?string $comparison = null)
+    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
     {
-        if (is_array($userId)) {
+        if (is_array($axysUserId)) {
             $useMinMax = false;
-            if (isset($userId['min'])) {
-                $this->addUsingAlias(DownloadTableMap::COL_USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysUserId['min'])) {
+                $this->addUsingAlias(DownloadTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($userId['max'])) {
-                $this->addUsingAlias(DownloadTableMap::COL_USER_ID, $userId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysUserId['max'])) {
+                $this->addUsingAlias(DownloadTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -507,7 +507,7 @@ abstract class DownloadQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(DownloadTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(DownloadTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
 
         return $this;
     }

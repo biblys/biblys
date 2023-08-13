@@ -20,7 +20,7 @@
 
             // Author (OneToMany)
             $um = new AxysUserManager();
-            if (isset($data['user_id'])) $data['author'] = $um->get(array('user_id' => $data['user_id']));
+            if (isset($data['axys_user_id'])) $data['author'] = $um->get(array('user_id' => $data['axys_user_id']));
 
             // Category (OneToMany)
             $cm = new CategoryManager();
@@ -160,7 +160,7 @@
                 return true;
             }
 
-            if ($user->get('id') === $this->get('user_id')) {
+            if ($user->get('id') === $this->get('axys_user_id')) {
                 return true;
             }
 

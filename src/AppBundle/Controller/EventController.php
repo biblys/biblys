@@ -56,14 +56,14 @@ class EventController extends Controller
 
         // Offline event
         if ($event && $event->get('status') == 0
-            && $event->get('user_id') !== \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->get('id')
+            && $event->get('axys_user_id') !== \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->get('id')
             && !\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
             $event = false;
         }
 
         // Future event
         if ($event && $event->get('date') > date("Y-m-d H:i:s")
-            && $event->get('user_id') !== \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->get('id')
+            && $event->get('axys_user_id') !== \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->get('id')
             && !\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
             $event = false;
         }

@@ -44,7 +44,7 @@ class FileController extends Controller
             // Find related copy
             $copy = $sm->get([
                 'article_id' => $file->get('article_id'),
-                'user_id' => \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->get('id'),
+                'axys_user_id' => \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->get('id'),
             ]);
             if (!$copy) {
                 throw new \Exception('Related copy not found');

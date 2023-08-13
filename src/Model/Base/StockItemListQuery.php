@@ -18,7 +18,7 @@ use Propel\Runtime\Exception\PropelException;
  * Base class that represents a query for the `lists` table.
  *
  * @method     ChildStockItemListQuery orderById($order = Criteria::ASC) Order by the list_id column
- * @method     ChildStockItemListQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
+ * @method     ChildStockItemListQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
  * @method     ChildStockItemListQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
  * @method     ChildStockItemListQuery orderByTitle($order = Criteria::ASC) Order by the list_title column
  * @method     ChildStockItemListQuery orderByUrl($order = Criteria::ASC) Order by the list_url column
@@ -26,7 +26,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockItemListQuery orderByUpdatedAt($order = Criteria::ASC) Order by the list_updated column
  *
  * @method     ChildStockItemListQuery groupById() Group by the list_id column
- * @method     ChildStockItemListQuery groupByUserId() Group by the user_id column
+ * @method     ChildStockItemListQuery groupByAxysUserId() Group by the axys_user_id column
  * @method     ChildStockItemListQuery groupBySiteId() Group by the site_id column
  * @method     ChildStockItemListQuery groupByTitle() Group by the list_title column
  * @method     ChildStockItemListQuery groupByUrl() Group by the list_url column
@@ -45,7 +45,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockItemList findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildStockItemList matching the query, or a new ChildStockItemList object populated from the query conditions when no match is found
  *
  * @method     ChildStockItemList|null findOneById(int $list_id) Return the first ChildStockItemList filtered by the list_id column
- * @method     ChildStockItemList|null findOneByUserId(int $user_id) Return the first ChildStockItemList filtered by the user_id column
+ * @method     ChildStockItemList|null findOneByAxysUserId(int $axys_user_id) Return the first ChildStockItemList filtered by the axys_user_id column
  * @method     ChildStockItemList|null findOneBySiteId(int $site_id) Return the first ChildStockItemList filtered by the site_id column
  * @method     ChildStockItemList|null findOneByTitle(string $list_title) Return the first ChildStockItemList filtered by the list_title column
  * @method     ChildStockItemList|null findOneByUrl(string $list_url) Return the first ChildStockItemList filtered by the list_url column
@@ -56,7 +56,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockItemList requireOne(?ConnectionInterface $con = null) Return the first ChildStockItemList matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildStockItemList requireOneById(int $list_id) Return the first ChildStockItemList filtered by the list_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildStockItemList requireOneByUserId(int $user_id) Return the first ChildStockItemList filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildStockItemList requireOneByAxysUserId(int $axys_user_id) Return the first ChildStockItemList filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStockItemList requireOneBySiteId(int $site_id) Return the first ChildStockItemList filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStockItemList requireOneByTitle(string $list_title) Return the first ChildStockItemList filtered by the list_title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStockItemList requireOneByUrl(string $list_url) Return the first ChildStockItemList filtered by the list_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -68,8 +68,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildStockItemList[]|Collection findById(int|array<int> $list_id) Return ChildStockItemList objects filtered by the list_id column
  * @psalm-method Collection&\Traversable<ChildStockItemList> findById(int|array<int> $list_id) Return ChildStockItemList objects filtered by the list_id column
- * @method     ChildStockItemList[]|Collection findByUserId(int|array<int> $user_id) Return ChildStockItemList objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildStockItemList> findByUserId(int|array<int> $user_id) Return ChildStockItemList objects filtered by the user_id column
+ * @method     ChildStockItemList[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildStockItemList objects filtered by the axys_user_id column
+ * @psalm-method Collection&\Traversable<ChildStockItemList> findByAxysUserId(int|array<int> $axys_user_id) Return ChildStockItemList objects filtered by the axys_user_id column
  * @method     ChildStockItemList[]|Collection findBySiteId(int|array<int> $site_id) Return ChildStockItemList objects filtered by the site_id column
  * @psalm-method Collection&\Traversable<ChildStockItemList> findBySiteId(int|array<int> $site_id) Return ChildStockItemList objects filtered by the site_id column
  * @method     ChildStockItemList[]|Collection findByTitle(string|array<string> $list_title) Return ChildStockItemList objects filtered by the list_title column
@@ -179,7 +179,7 @@ abstract class StockItemListQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT list_id, user_id, site_id, list_title, list_url, list_created, list_updated FROM lists WHERE list_id = :p0';
+        $sql = 'SELECT list_id, axys_user_id, site_id, list_title, list_url, list_created, list_updated FROM lists WHERE list_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -317,16 +317,16 @@ abstract class StockItemListQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the user_id column
+     * Filter the query on the axys_user_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByUserId(1234); // WHERE user_id = 1234
-     * $query->filterByUserId(array(12, 34)); // WHERE user_id IN (12, 34)
-     * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
+     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
+     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
+     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
      * </code>
      *
-     * @param mixed $userId The value to use as filter.
+     * @param mixed $axysUserId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -334,16 +334,16 @@ abstract class StockItemListQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, ?string $comparison = null)
+    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
     {
-        if (is_array($userId)) {
+        if (is_array($axysUserId)) {
             $useMinMax = false;
-            if (isset($userId['min'])) {
-                $this->addUsingAlias(StockItemListTableMap::COL_USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysUserId['min'])) {
+                $this->addUsingAlias(StockItemListTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($userId['max'])) {
-                $this->addUsingAlias(StockItemListTableMap::COL_USER_ID, $userId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysUserId['max'])) {
+                $this->addUsingAlias(StockItemListTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -354,7 +354,7 @@ abstract class StockItemListQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(StockItemListTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(StockItemListTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
 
         return $this;
     }

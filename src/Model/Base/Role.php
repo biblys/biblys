@@ -110,11 +110,11 @@ abstract class Role implements ActiveRecordInterface
     protected $job_id;
 
     /**
-     * The value for the user_id field.
+     * The value for the axys_user_id field.
      *
      * @var        int|null
      */
-    protected $user_id;
+    protected $axys_user_id;
 
     /**
      * The value for the role_hide field.
@@ -456,13 +456,13 @@ abstract class Role implements ActiveRecordInterface
     }
 
     /**
-     * Get the [user_id] column value.
+     * Get the [axys_user_id] column value.
      *
      * @return int|null
      */
-    public function getUserId()
+    public function getAxysUserId()
     {
-        return $this->user_id;
+        return $this->axys_user_id;
     }
 
     /**
@@ -690,20 +690,20 @@ abstract class Role implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [user_id] column.
+     * Set the value of [axys_user_id] column.
      *
      * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setUserId($v)
+    public function setAxysUserId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->user_id !== $v) {
-            $this->user_id = $v;
-            $this->modifiedColumns[RoleTableMap::COL_USER_ID] = true;
+        if ($this->axys_user_id !== $v) {
+            $this->axys_user_id = $v;
+            $this->modifiedColumns[RoleTableMap::COL_AXYS_USER_ID] = true;
         }
 
         return $this;
@@ -871,8 +871,8 @@ abstract class Role implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : RoleTableMap::translateFieldName('JobId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->job_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : RoleTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : RoleTableMap::translateFieldName('AxysUserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->axys_user_id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : RoleTableMap::translateFieldName('Hide', TableMap::TYPE_PHPNAME, $indexType)];
             $this->role_hide = (null !== $col) ? (boolean) $col : null;
@@ -1165,8 +1165,8 @@ abstract class Role implements ActiveRecordInterface
         if ($this->isColumnModified(RoleTableMap::COL_JOB_ID)) {
             $modifiedColumns[':p' . $index++]  = 'job_id';
         }
-        if ($this->isColumnModified(RoleTableMap::COL_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'user_id';
+        if ($this->isColumnModified(RoleTableMap::COL_AXYS_USER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_user_id';
         }
         if ($this->isColumnModified(RoleTableMap::COL_ROLE_HIDE)) {
             $modifiedColumns[':p' . $index++]  = 'role_hide';
@@ -1218,8 +1218,8 @@ abstract class Role implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->job_id, PDO::PARAM_INT);
 
                         break;
-                    case 'user_id':
-                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+                    case 'axys_user_id':
+                        $stmt->bindValue($identifier, $this->axys_user_id, PDO::PARAM_INT);
 
                         break;
                     case 'role_hide':
@@ -1323,7 +1323,7 @@ abstract class Role implements ActiveRecordInterface
                 return $this->getJobId();
 
             case 6:
-                return $this->getUserId();
+                return $this->getAxysUserId();
 
             case 7:
                 return $this->getHide();
@@ -1374,7 +1374,7 @@ abstract class Role implements ActiveRecordInterface
             $keys[3] => $this->getEventId(),
             $keys[4] => $this->getPeopleId(),
             $keys[5] => $this->getJobId(),
-            $keys[6] => $this->getUserId(),
+            $keys[6] => $this->getAxysUserId(),
             $keys[7] => $this->getHide(),
             $keys[8] => $this->getPresence(),
             $keys[9] => $this->getDate(),
@@ -1484,7 +1484,7 @@ abstract class Role implements ActiveRecordInterface
                 $this->setJobId($value);
                 break;
             case 6:
-                $this->setUserId($value);
+                $this->setAxysUserId($value);
                 break;
             case 7:
                 $this->setHide($value);
@@ -1546,7 +1546,7 @@ abstract class Role implements ActiveRecordInterface
             $this->setJobId($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setUserId($arr[$keys[6]]);
+            $this->setAxysUserId($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
             $this->setHide($arr[$keys[7]]);
@@ -1624,8 +1624,8 @@ abstract class Role implements ActiveRecordInterface
         if ($this->isColumnModified(RoleTableMap::COL_JOB_ID)) {
             $criteria->add(RoleTableMap::COL_JOB_ID, $this->job_id);
         }
-        if ($this->isColumnModified(RoleTableMap::COL_USER_ID)) {
-            $criteria->add(RoleTableMap::COL_USER_ID, $this->user_id);
+        if ($this->isColumnModified(RoleTableMap::COL_AXYS_USER_ID)) {
+            $criteria->add(RoleTableMap::COL_AXYS_USER_ID, $this->axys_user_id);
         }
         if ($this->isColumnModified(RoleTableMap::COL_ROLE_HIDE)) {
             $criteria->add(RoleTableMap::COL_ROLE_HIDE, $this->role_hide);
@@ -1735,7 +1735,7 @@ abstract class Role implements ActiveRecordInterface
         $copyObj->setEventId($this->getEventId());
         $copyObj->setPeopleId($this->getPeopleId());
         $copyObj->setJobId($this->getJobId());
-        $copyObj->setUserId($this->getUserId());
+        $copyObj->setAxysUserId($this->getAxysUserId());
         $copyObj->setHide($this->getHide());
         $copyObj->setPresence($this->getPresence());
         $copyObj->setDate($this->getDate());
@@ -1892,7 +1892,7 @@ abstract class Role implements ActiveRecordInterface
         $this->event_id = null;
         $this->people_id = null;
         $this->job_id = null;
-        $this->user_id = null;
+        $this->axys_user_id = null;
         $this->role_hide = null;
         $this->role_presence = null;
         $this->role_date = null;
