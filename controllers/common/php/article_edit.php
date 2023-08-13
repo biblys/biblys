@@ -276,7 +276,7 @@ $articles = EntityManager::prepareAndExecute(
     ORDER BY `article_editing_user` LIMIT 1',
     [
         'article_id' => $request->query->get('id'),
-        'user_id' => $currentUser->getUser()->getId(),
+        'user_id' => $currentUser->getAxysUser()->getId(),
     ]
 );
 if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
@@ -374,7 +374,7 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
     // Creer un nouvel article
     $articleInsert = EntityManager::prepareAndExecute(
         'INSERT INTO `articles`(`article_editing_user`, `article_created`) VALUES(:user_id, NOW())',
-        ['user_id' => $currentUser->getUser()->getId()]
+        ['user_id' => $currentUser->getAxysUser()->getId()]
     );
 
     $import = $request->query->get('import');

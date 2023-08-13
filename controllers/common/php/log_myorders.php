@@ -13,7 +13,7 @@ $currentUserService = CurrentUser::buildFromRequest($request);
 
 $orders = $om->getAll([
     'order_type' => 'web',
-    'user_id' => $currentUserService->getUser()->getId(),
+    'user_id' => $currentUserService->getAxysUser()->getId(),
 ], [
     'order' => 'order_insert',
     'sort' => 'desc'

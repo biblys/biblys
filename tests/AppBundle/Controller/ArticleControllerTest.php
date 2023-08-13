@@ -570,7 +570,7 @@ class ArticleControllerTest extends TestCase
             ->with("newsletter")
             ->willReturn("1");
         $currentUserService = $this->createMock(CurrentUser::class);
-        $currentUserService->expects($this->once())->method("getUser")->willReturn($user);
+        $currentUserService->expects($this->once())->method("getAxysUser")->willReturn($user);
         $mailingList = $this->createMock(MailingListInterface::class);
         $mailingList
             ->expects($this->once())
@@ -617,7 +617,7 @@ class ArticleControllerTest extends TestCase
         $currentSiteService = $this->createMock(CurrentSite::class);
         $currentSiteService->expects($this->once())->method("getSite")->willReturn($site);
         $currentUserService = $this->createMock(CurrentUser::class);
-        $currentUserService->expects($this->once())->method("getUser")->willReturn($user);
+        $currentUserService->expects($this->once())->method("getAxysUser")->willReturn($user);
         $mailingList = $this->createMock(MailingListInterface::class);
         $mailingListService = $this->createMock(MailingListService::class);
         $mailingListService->method("getMailingList")->willReturn($mailingList);

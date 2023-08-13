@@ -108,7 +108,7 @@ class CurrentUser
     /**
      * @return AxysUser
      */
-    public function getUser(): AxysUser
+    public function getAxysUser(): AxysUser
     {
         if ($this->user === null) {
             throw new UnauthorizedHttpException("","Identification requise.");

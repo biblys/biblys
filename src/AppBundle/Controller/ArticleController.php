@@ -275,7 +275,7 @@ class ArticleController extends Controller
             throw new NotFoundException($article->get('title')." n'est pas disponible.");
         }
 
-        $currentUser = $currentUserService->getUser();
+        $currentUser = $currentUserService->getAxysUser();
         $currentUserPurchasesForArticle = StockQuery::create()
             ->filterBySite($currentSiteService->getSite())
             ->filterByAxysUser($currentUser)
