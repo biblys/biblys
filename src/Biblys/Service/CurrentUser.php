@@ -21,13 +21,13 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class CurrentUser
 {
-    private ?AxysAccount $user;
+    private ?AxysAccount $axysAccount;
     private ?string $token;
     private ?CurrentSite $currentSite;
 
-    public function __construct(?AxysAccount $user, ?string $token)
+    public function __construct(?AxysAccount $axysAccount, ?string $token)
     {
-        $this->user = $user;
+        $this->axysAccount = $axysAccount;
         $this->token = $token;
     }
 
@@ -57,12 +57,12 @@ class CurrentUser
             return new CurrentUser(null, $token);
         }
 
-        $user = $session->getAxysAccount();
-        if (!$user) {
+        $axysAccount = $session->getAxysAccount();
+        if (!$axysAccount) {
             return new CurrentUser(null, $token);
         }
 
-        return new CurrentUser($user, $token);
+        return new CurrentUser($axysAccount, $token);
     }
 
     /**
@@ -80,7 +80,7 @@ class CurrentUser
 
     public function isAuthentified(): bool
     {
-        if ($this->user) {
+        if ($this->axysAccount) {
             return true;
         }
 
@@ -98,8 +98,8 @@ class CurrentUser
 
     public function isAdminForSite(Site $site): bool
     {
-        if ($this->user) {
-            return $this->user->isAdminForSite($site);
+        if ($this->axysAccount) {
+            return $this->axysAccount->isAdminForSite($site);
         }
 
         return false;
@@ -108,13 +108,13 @@ class CurrentUser
     /**
      * @return AxysAccount
      */
-    public function getAxysUser(): AxysAccount
+    public function getAxysAccount(): AxysAccount
     {
-        if ($this->user === null) {
+        if ($this->axysAccount === null) {
             throw new UnauthorizedHttpException("","Identification requise.");
         }
 
-        return $this->user;
+        return $this->axysAccount;
     }
 
     /**
@@ -122,8 +122,8 @@ class CurrentUser
      */
     public function hasRightForPublisher(Publisher $publisher): bool
     {
-        if ($this->user) {
-            return $this->user->hasRightForPublisher($publisher);
+        if ($this->axysAccount) {
+            return $this->axysAccount->hasRightForPublisher($publisher);
         }
 
         return false;
@@ -134,8 +134,8 @@ class CurrentUser
      */
     public function hasPublisherRight(): bool
     {
-        if ($this->user) {
-            return $this->user->hasPublisherRight();
+        if ($this->axysAccount) {
+            return $this->axysAccount->hasPublisherRight();
         }
 
         return false;
@@ -146,12 +146,12 @@ class CurrentUser
      */
     public function getOption(string $key): ?string
     {
-        if (!$this->user) {
+        if (!$this->axysAccount) {
             return null;
         }
 
         $option = OptionQuery::create()
-            ->filterByAxysAccount($this->user)
+            ->filterByAxysAccount($this->axysAccount)
             ->filterByKey($key)
             ->findOne();
 
@@ -165,13 +165,13 @@ class CurrentUser
     public function setOption(string $key, string $value): void
     {
         $option = OptionQuery::create()
-            ->filterByAxysAccount($this->user)
+            ->filterByAxysAccount($this->axysAccount)
             ->filterByKey($key)
             ->findOne();
 
         if (!$option) {
             $option = new Option();
-            $option->setAxysAccount($this->user);
+            $option->setAxysAccount($this->axysAccount);
             $option->setKey($key);
         }
 
@@ -196,7 +196,7 @@ class CurrentUser
 
         return CartQuery::create()
             ->filterBySite($this->getCurrentSite()->getSite())
-            ->filterByAxysAccount($this->user)
+            ->filterByAxysAccount($this->axysAccount)
             ->findOne();
     }
 
@@ -224,7 +224,7 @@ class CurrentUser
      */
     public function getCurrentRight(): ?Right
     {
-        return $this->user?->getCurrentRight();
+        return $this->axysAccount?->getCurrentRight();
 
     }
 }

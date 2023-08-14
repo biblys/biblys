@@ -423,5 +423,5 @@ function _orderBelongsToVisitor(Order $order, CurrentUser $currentUser): bool
         return false;
     }
 
-    return $order->get("axys_user_id") === $currentUser->getAxysUser()->getId();
+    return $order->get("axys_user_id") === $currentUser->getAxysAccount()->getId();
 }

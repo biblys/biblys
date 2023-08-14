@@ -229,7 +229,7 @@ if (isset($Articles) && $Articles > 0) {
         $order = $om->get(
             [
                 'order_type' => 'web',
-                'axys_user_id' => $currentUserService->getAxysUser()->getId(),
+                'axys_user_id' => $currentUserService->getAxysAccount()->getId(),
                 'order_payment_date' => 'NULL',
                 'order_shipping_date' => 'NULL',
                 'order_cancel_date' => 'NULL'

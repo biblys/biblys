@@ -61,7 +61,7 @@ class AuthController extends Controller
      */
     public function meAction(CurrentUser $currentUserService): JsonResponse
     {
-        $user = $currentUserService->getAxysUser();
+        $user = $currentUserService->getAxysAccount();
 
         return new JsonResponse(['user' => [
             'id' => $user->getId(),
