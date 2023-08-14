@@ -9,7 +9,7 @@ class InvalidCredentialsException extends Exception
 {
 }
 
-class AxysUser extends Entity
+class AxysAccount extends Entity
 {
     protected $prefix = 'user';
     protected $cart = null;
@@ -357,10 +357,10 @@ class AxysUser extends Entity
     }
 }
 
-class AxysUserManager extends EntityManager
+class AxysAccountManager extends EntityManager
 {
     protected $prefix = 'user';
-    protected $object = 'AxysUser';
+    protected $object = 'AxysAccount';
     protected $select = '*,
                     `id` AS `user_id`,
                     `Email` AS `user_email`,
@@ -440,12 +440,12 @@ class AxysUserManager extends EntityManager
     /**
      * Send a mail to the user.
      *
-     * @param AxysUser   $user    The mail's recipient
+     * @param AxysAccount   $user    The mail's recipient
      * @param string $subject The mail's subject
      * @param string $message The mail's body
      * @param array  $headers The mail's header
      */
-    public function mail(AxysUser $user, $subject, $message, $headers = null)
+    public function mail(AxysAccount $user, $subject, $message, $headers = null)
     {
         $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -471,7 +471,7 @@ class AxysUserManager extends EntityManager
      * @param bool   $predownload Can the user download the files before article publication date?
      * @param array  $options     Additionnal options
      */
-    public function addToLibrary(AxysUser $user, array $articles = [], array $stocks = [], $predownload = false, $options = [])
+    public function addToLibrary(AxysAccount $user, array $articles = [], array $stocks = [], $predownload = false, $options = [])
     {
         global $_SITE;
 

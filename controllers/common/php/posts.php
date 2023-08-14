@@ -2,7 +2,7 @@
 
 use Biblys\Legacy\LegacyCodeHelper;
 
-$um = new AxysUserManager();
+$um = new AxysAccountManager();
 
 \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Le Blog');
 

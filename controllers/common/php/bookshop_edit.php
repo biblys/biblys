@@ -7,7 +7,7 @@ if (LegacyCodeHelper::getGlobalVisitor()->isBookshop()) $_GET['id'] = LegacyCode
     else trigger_error('Vous n\'avez pas le droit d\'accéder à cette page.', E_USER_ERROR);
 	
 	$_B = new BookshopManager();
-	$um = new AxysUserManager();
+	$um = new AxysAccountManager();
 	
 	// Edit an existing bookshop
 	if (isset($_GET['id']))

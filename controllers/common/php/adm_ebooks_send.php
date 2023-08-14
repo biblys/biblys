@@ -5,7 +5,7 @@ global $request;
 use Symfony\Component\HttpFoundation\Response;
 
 $am = new ArticleManager();
-$um = new AxysUserManager();
+$um = new AxysAccountManager();
 
 $request->attributes->set("page_title", "Envoyer des livres numériques");
 

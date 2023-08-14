@@ -11,7 +11,7 @@ class File extends Entity
      *
      * @return bool
      */
-    public function canBeDownloadedBy(AxysUser $user)
+    public function canBeDownloadedBy(AxysAccount $user)
     {
         // Public file
         if ($this->get('access') == 0) {
@@ -51,7 +51,7 @@ class File extends Entity
     /**
      * Increment download count.
      */
-    public function addDownloadBy(AxysUser $user)
+    public function addDownloadBy(AxysAccount $user)
     {
         global $request;
 

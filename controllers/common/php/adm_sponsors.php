@@ -63,7 +63,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 			$user_ids[] = $s['user_id'];
 			$user_ids[] = $s['link_sponsor_user_id'];
 		}
-		$um = new AxysUserManager();
+		$um = new AxysAccountsManager();
 		$users = $um->getByIds($user_ids);
 		reset($sponsors);
 		

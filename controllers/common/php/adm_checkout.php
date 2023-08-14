@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 $cm = new CartManager();
-$um = new AxysUserManager();
+$um = new AxysAccountManager();
 
 /* SELECTION DU PANIER COURANT */
 

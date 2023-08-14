@@ -37,7 +37,7 @@ use TagManager;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-use AxysUserManager;
+use AxysAccountManager;
 
 class ArticleController extends Controller
 {
@@ -312,7 +312,7 @@ class ArticleController extends Controller
             }
 
             // Add book to library
-            $um = new AxysUserManager();
+            $um = new AxysAccountManager();
             $current_user = $um->getById($currentUser->getId());
             $um->addToLibrary($current_user, [$article], [], false, ['send_email' => false]);
 

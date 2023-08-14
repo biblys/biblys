@@ -35,7 +35,7 @@ class Order extends Entity
         }
 
         // User (OneToMany)
-        $um = new AxysUserManager();
+        $um = new AxysAccountsManager();
         if (isset($data['axys_user_id'])) {
             $data['user'] = $um->get(array('user_id' => $data['axys_user_id']));
         }
@@ -911,7 +911,7 @@ class OrderManager extends EntityManager
         // Books & e-books
         $user = $order->get('user');
         if ($order->has('user') && !empty($ebooks)) {
-            $um = new AxysUserManager();
+            $um = new AxysAccountManager();
             $um->addToLibrary($user, array(), $ebooks);
         }
 
