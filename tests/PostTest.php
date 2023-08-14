@@ -238,7 +238,7 @@ class PostTest extends PHPUnit\Framework\TestCase
         /** @var AxysAccount $axysAccount */
         $axysAccount = $um->create([
             "id" => 927,
-            'user_email' => 'author@biblys.fr'
+            'axys_account_email' => 'author@biblys.fr'
         ]);
         $post = $pm->create();
 

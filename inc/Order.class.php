@@ -37,7 +37,7 @@ class Order extends Entity
         // User (OneToMany)
         $um = new AxysAccountManager();
         if (isset($data['axys_account_id'])) {
-            $data['user'] = $um->get(array('user_id' => $data['axys_account_id']));
+            $data['user'] = $um->get(array('axys_account_id' => $data['axys_account_id']));
         }
 
         // Country (OneToMany)

@@ -230,7 +230,7 @@ class SessionTableMap extends TableMap
         // columns
         $this->addPrimaryKey('session_id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
-        $this->addForeignKey('axys_account_id', 'AxysAccountId', 'INTEGER', 'axys_accounts', 'id', false, null, null);
+        $this->addForeignKey('axys_account_id', 'AxysAccountId', 'INTEGER', 'axys_accounts', 'axys_account_id', false, null, null);
         $this->addColumn('session_token', 'Token', 'VARCHAR', false, 32, null);
         $this->addColumn('session_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('session_expires', 'ExpiresAt', 'TIMESTAMP', false, null, null);
@@ -248,7 +248,7 @@ class SessionTableMap extends TableMap
   0 =>
   array (
     0 => ':axys_account_id',
-    1 => ':id',
+    1 => ':axys_account_id',
   ),
 ), null, null, null, false);
         $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (

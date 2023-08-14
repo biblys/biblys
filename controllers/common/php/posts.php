@@ -41,7 +41,7 @@ if (isset($_GET["category"]))
 $aut_req = null;
 if (isset($_GET["author"]))
 {
-    if ($u = $um->get(array('user_slug' => $_GET['author'])))
+    if ($u = $um->get(array('axys_account_slug' => $_GET['author'])))
     {
         $aut_req = " AND `posts`.`axys_account_id` = '".$u->get('id')."'";
         if (isset(\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle())) \Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle() .= ' de '.$u->get('screen_name');
@@ -57,7 +57,7 @@ $_ECHO .= '<h1>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>';
 // Requête
 $posts_query = "SELECT `post_id`, `post_title`, `post_url`, `post_content`, `post_date`, `post_illustration_legend`,
                 `category_name`, `category_url`,
-                `user_screen_name`, `user_slug`
+                `axys_account_screen_name`, `axys_account_slug`
     FROM `posts`
     LEFT JOIN `categories` USING(`category_id`)
     LEFT JOIN `axys_accounts` ON `posts`.`axys_account_id` = `axys_accounts`.`id`
@@ -112,7 +112,7 @@ while ($p = $posts->fetch())
     } else {
 
         if(!empty($p["category_name"])) $p["dans"] = 'dans la rubrique <a href="/blog/'.$p["category_url"].'/">'.$p["category_name"].'</a>.'; else $p['dans'] = null;
-        if(!empty($p["user_screen_name"])) $p["par"] = '<span class="post-infos-par">par '.$p["user_screen_name"].'</span>'; else $p['par'] = null;
+        if(!empty($p["axys_account_screen_name"])) $p["par"] = '<span class="post-infos-par">par '.$p["axys_account_screen_name"].'</span>'; else $p['par'] = null;
         if(media_exists("post",$p["post_id"])) $p["illustration"] = '<img src="'.media_url("post",$p["post_id"]).'" alt="'.$p["post_illustration_legend"].'">';
         else $p['illustration'] = null;
 

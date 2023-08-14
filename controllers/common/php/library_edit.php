@@ -67,7 +67,7 @@ if (LegacyCodeHelper::getGlobalVisitor()->isLibrary()) $_GET['id'] = LegacyCodeH
         $managers = array();
         foreach ($rights as $r)
         {
-            if ($user = $um->getById($r->get('user_id')))
+            if ($user = $um->getById($r->get('axys_account_id')))
             {
                 $managers[] .= $user->getUserName();
             }

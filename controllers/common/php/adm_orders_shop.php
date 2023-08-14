@@ -103,8 +103,8 @@ $sql = $GLOBALS["_SQL"]->prepare(
         `stock_tva_rate`, `order_id`, `order_type`, `order_url`, `order_amount`, `order_firstname`,
         `order_lastname`, `order_payment_date`,`order_payment_cash`, `order_payment_cheque`,
         `order_payment_card`, `order_payment_paypal`,  `order_payment_left`, `order_shipping`,
-        `axys_accounts`.`id` AS `user_id`, `axys_accounts`.`Email` AS `user_email`,
-        `user_nom` AS `user_last_name`, `user_prenom` AS `user_first_name`,
+        `axys_account_id`, `axys_account_email`,
+        `axys_account_last_name`, `axys_account_first_name`,
         `customers`.`customer_id`, `customer_first_name`, `customer_last_name`
     FROM `stock`
     JOIN `articles` USING(`article_id`)
@@ -251,7 +251,7 @@ while ($l = $sql->fetch(PDO::FETCH_ASSOC)) {
                 <td colspan="3">
                     <strong>'.$l["type"].' n&deg; <a href="/order/'.$l["order_url"].'">'.$l["order_id"].'</a></strong><br />';
         if (!empty($l["customer_id"])) $content .= '<p>Client&nbsp;: <a href="/pages/adm_customer?id='.$l["customer_id"].'">'.trim($l['customer_first_name'].' '.$l['customer_last_name']).'</a></p>';
-        elseif (!empty($l["user_id"])) $content .= '<p><a href="/pages/adm_orders_shop?u='.$l["user_id"].'">'.user_name($l).'</a></p>';
+        elseif (!empty($l['axys_account_id'])) $content .= '<p><a href="/pages/adm_orders_shop?u='.$l['axys_account_id'].'">'.user_name($l).'</a></p>';
         $content .= '
                     '._date($l["order_payment_date"], 'L j F Y - H:i').'<br />
                     <a href="/pages/adm_order?order_id='.$l["order_id"].'">modifier</a> | <a href="/pages/adm_order?order_id='.$l["order_id"].'&delete=1" data-confirm="Voulez-vous vraiment ANNULER cet achat et remettre les livres en vente ?">annuler</a>

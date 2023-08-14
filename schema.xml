@@ -154,42 +154,42 @@
       <reference local="app_id" foreign="id"/>
     </foreign-key>
     <foreign-key foreignTable="axys_accounts" skipSql="true">
-      <reference local="user_id" foreign="id"/>
+      <reference local="user_id" foreign="axys_account_id"/>
     </foreign-key>
   </table>
   <table name="axys_accounts" idMethod="native" phpName="AxysAccount">
-    <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="Email" phpName="Email" type="VARCHAR" size="255"/>
-    <column name="user_password" phpName="Password" type="VARCHAR" size="255"/>
-    <column name="user_key" phpName="Key" type="LONGVARCHAR"/>
-    <column name="email_key" phpName="EmailKey" type="VARCHAR" size="32"/>
-    <column name="user_screen_name" phpName="Username" type="VARCHAR" size="128"/>
-    <column name="user_slug" phpName="Slug" type="VARCHAR" size="32"/>
-    <column name="DateInscription" phpName="Dateinscription" type="TIMESTAMP"/>
-    <column name="DateConnexion" phpName="Dateconnexion" type="TIMESTAMP"/>
-    <column name="user_nom" phpName="Nom" type="LONGVARCHAR"/>
-    <column name="user_prenom" phpName="Prenom" type="LONGVARCHAR"/>
-    <column name="user_update" phpName="Update" type="TIMESTAMP"/>
-    <column name="user_created" phpName="CreatedAt" type="TIMESTAMP"/>
-    <column name="user_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="axys_account_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="axys_account_email" phpName="Email" type="VARCHAR" size="255"/>
+    <column name="axys_account_password" phpName="Password" type="VARCHAR" size="255"/>
+    <column name="axys_account_key" phpName="Key" type="LONGVARCHAR"/>
+    <column name="axys_account_email_key" phpName="EmailKey" type="VARCHAR" size="32"/>
+    <column name="axys_account_screen_name" phpName="Username" type="VARCHAR" size="128"/>
+    <column name="axys_account_slug" phpName="Slug" type="VARCHAR" size="32"/>
+    <column name="axys_account_signup_date" phpName="SignupDate" type="TIMESTAMP"/>
+    <column name="axys_account_login_date" phpName="LoginDate" type="TIMESTAMP"/>
+    <column name="axys_account_first_name" phpName="FirstName" type="LONGVARCHAR"/>
+    <column name="axys_account_last_name" phpName="LastName" type="LONGVARCHAR"/>
+    <column name="axys_account_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="axys_account_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="axys_account_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
-      <parameter name="create_column" value="user_created" />
-      <parameter name="update_column" value="user_updated" />
+      <parameter name="create_column" value="axys_account_created" />
+      <parameter name="update_column" value="axys_account_updated" />
     </behavior>
     <index name="Email">
       <index-column name="Email"/>
     </index>
-    <unique name="user_screen_name">
-      <unique-column name="user_screen_name"/>
+    <unique name="axys_account_screen_name">
+      <unique-column name="axys_account_screen_name"/>
     </unique>
-    <unique name="user_slug">
-      <unique-column name="user_slug"/>
+    <unique name="axys_account_slug">
+      <unique-column name="axys_account_slug"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
     <behavior name="validate">
-      <parameter name="rule1" value="{column: email, validator: Email}" />
+      <parameter name="rule1" value="{column: axys_account_email, validator: Email}" />
     </behavior>
   </table>
   <table name="awards" idMethod="native" phpName="Award">
@@ -276,7 +276,7 @@
       <reference local="site_id" foreign="site_id"/>
     </foreign-key>
     <foreign-key foreignTable="axys_accounts" skipSql="true">
-      <reference local="axys_account_id" foreign="id"/>
+      <reference local="axys_account_id" foreign="axys_account_id"/>
     </foreign-key>
   </table>
   <table name="categories" idMethod="native" phpName="Category">
@@ -845,7 +845,7 @@
       <parameter name="update_column" value="option_updated" />
     </behavior>
     <foreign-key foreignTable="axys_accounts" skipSql="true">
-      <reference local="axys_account_id" foreign="id"/>
+      <reference local="axys_account_id" foreign="axys_account_id"/>
     </foreign-key>
     <foreign-key foreignTable="sites" skipSql="true">
       <reference local="site_id" foreign="site_id"/>
@@ -1183,7 +1183,7 @@
       <parameter name="update_column" value="right_updated" />
     </behavior>
     <foreign-key foreignTable="axys_accounts" skipSql="true">
-      <reference local="axys_account_id" foreign="id"/>
+      <reference local="axys_account_id" foreign="axys_account_id"/>
     </foreign-key>
     <foreign-key foreignTable="sites" skipSql="true">
       <reference local="site_id" foreign="site_id"/>
@@ -1257,7 +1257,7 @@
       <parameter name="update_column" value="session_updated" />
     </behavior>
     <foreign-key foreignTable="axys_accounts" skipSql="true">
-      <reference local="axys_account_id" foreign="id"/>
+      <reference local="axys_account_id" foreign="axys_account_id"/>
     </foreign-key>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -1446,7 +1446,7 @@
       <reference local="article_id" foreign="article_id"/>
     </foreign-key>
     <foreign-key foreignTable="axys_accounts" skipSql="true">
-      <reference local="axys_account_id" foreign="id" />
+      <reference local="axys_account_id" foreign="axys_account_id" />
     </foreign-key>
   </table>
   <table name="subscriptions" idMethod="native" phpName="Subscription">
@@ -1545,7 +1545,7 @@
       <unique-column name="article_id"/>
     </unique>
     <foreign-key foreignTable="axys_accounts" skipSql="true">
-      <reference local="axys_account_id" foreign="id"/>
+      <reference local="axys_account_id" foreign="axys_account_id"/>
     </foreign-key>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -1567,7 +1567,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
     <foreign-key foreignTable="axys_accounts" skipSql="true">
-      <reference local="axys_account_id" foreign="id"/>
+      <reference local="axys_account_id" foreign="axys_account_id"/>
     </foreign-key>
   </table>
 </database>

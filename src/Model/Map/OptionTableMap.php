@@ -230,7 +230,7 @@ class OptionTableMap extends TableMap
         // columns
         $this->addPrimaryKey('option_id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
-        $this->addForeignKey('axys_account_id', 'AxysAccountId', 'INTEGER', 'axys_accounts', 'id', false, null, null);
+        $this->addForeignKey('axys_account_id', 'AxysAccountId', 'INTEGER', 'axys_accounts', 'axys_account_id', false, null, null);
         $this->addColumn('option_key', 'Key', 'VARCHAR', false, 32, null);
         $this->addColumn('option_value', 'Value', 'VARCHAR', false, 2048, null);
         $this->addColumn('option_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
@@ -248,7 +248,7 @@ class OptionTableMap extends TableMap
   0 =>
   array (
     0 => ':axys_account_id',
-    1 => ':id',
+    1 => ':axys_account_id',
   ),
 ), null, null, null, false);
         $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (

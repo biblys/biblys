@@ -10,7 +10,7 @@ if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) $mode = 'admin';
 elseif (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $mode = 'publisher';
 elseif (LegacyCodeHelper::getGlobalVisitor()->isBookshop()) $mode = 'bookshop';
 elseif (LegacyCodeHelper::getGlobalVisitor()->isLibrary()) $mode = 'library';
-else trigger_error('Accès non autorisé pour '. LegacyCodeHelper::getGlobalVisitor()->get('user_email'));
+else trigger_error('Accès non autorisé pour '. LegacyCodeHelper::getGlobalVisitor()->get('axys_account_email'));
 
 /** @var Request $request */
 $request->attributes->set("page_title", "Gestion des évènements");

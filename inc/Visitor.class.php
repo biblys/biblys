@@ -107,7 +107,6 @@ class Visitor extends AxysAccount
 
             // If visitor has a cart
             if ($cart = $cm->get(array('cart_uid' => $this->visitor_uid))) {
-                // If user is logged, add user_id
                 if ($this->isLogged() && !$cart->has('axys_account_id')) {
                     $cart->set('axys_account_id', $this->get('id'));
                 }

@@ -113,7 +113,7 @@ $p["post_time"] = date("H:i");
 
 // Auteur
 if ($currentUser->isAdmin()) {
-    if(!empty(LegacyCodeHelper::getGlobalVisitor()["user_screen_name"])) $author = LegacyCodeHelper::getGlobalVisitor()["user_screen_name"];
+    if(!empty(LegacyCodeHelper::getGlobalVisitor()["axys_account_screen_name"])) $author = LegacyCodeHelper::getGlobalVisitor()["axys_account_screen_name"];
     else $author = $_SITE->get("id");
 }
 elseif ($currentUser->hasPublisherRight()) {
@@ -142,7 +142,7 @@ if ($post) {
             <p><a href="/pages/'.$rank.'posts">billets</a></p>
         </div>
     ';
-    $author = $p["user_screen_name"];
+    $author = $p["axys_account_screen_name"];
     $date = explode(" ", $p["post_date"]);
     $p["post_date"] = $date[0];
     $p["post_time"] = substr($date[1],0,5);

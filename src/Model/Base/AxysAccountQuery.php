@@ -19,35 +19,35 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the `axys_accounts` table.
  *
- * @method     ChildAxysAccountQuery orderById($order = Criteria::ASC) Order by the id column
- * @method     ChildAxysAccountQuery orderByEmail($order = Criteria::ASC) Order by the Email column
- * @method     ChildAxysAccountQuery orderByPassword($order = Criteria::ASC) Order by the user_password column
- * @method     ChildAxysAccountQuery orderByKey($order = Criteria::ASC) Order by the user_key column
- * @method     ChildAxysAccountQuery orderByEmailKey($order = Criteria::ASC) Order by the email_key column
- * @method     ChildAxysAccountQuery orderByUsername($order = Criteria::ASC) Order by the user_screen_name column
- * @method     ChildAxysAccountQuery orderBySlug($order = Criteria::ASC) Order by the user_slug column
- * @method     ChildAxysAccountQuery orderByDateinscription($order = Criteria::ASC) Order by the DateInscription column
- * @method     ChildAxysAccountQuery orderByDateconnexion($order = Criteria::ASC) Order by the DateConnexion column
- * @method     ChildAxysAccountQuery orderByNom($order = Criteria::ASC) Order by the user_nom column
- * @method     ChildAxysAccountQuery orderByPrenom($order = Criteria::ASC) Order by the user_prenom column
- * @method     ChildAxysAccountQuery orderByUpdate($order = Criteria::ASC) Order by the user_update column
- * @method     ChildAxysAccountQuery orderByCreatedAt($order = Criteria::ASC) Order by the user_created column
- * @method     ChildAxysAccountQuery orderByUpdatedAt($order = Criteria::ASC) Order by the user_updated column
+ * @method     ChildAxysAccountQuery orderById($order = Criteria::ASC) Order by the axys_account_id column
+ * @method     ChildAxysAccountQuery orderByEmail($order = Criteria::ASC) Order by the axys_account_email column
+ * @method     ChildAxysAccountQuery orderByPassword($order = Criteria::ASC) Order by the axys_account_password column
+ * @method     ChildAxysAccountQuery orderByKey($order = Criteria::ASC) Order by the axys_account_key column
+ * @method     ChildAxysAccountQuery orderByEmailKey($order = Criteria::ASC) Order by the axys_account_email_key column
+ * @method     ChildAxysAccountQuery orderByUsername($order = Criteria::ASC) Order by the axys_account_screen_name column
+ * @method     ChildAxysAccountQuery orderBySlug($order = Criteria::ASC) Order by the axys_account_slug column
+ * @method     ChildAxysAccountQuery orderBySignupDate($order = Criteria::ASC) Order by the axys_account_signup_date column
+ * @method     ChildAxysAccountQuery orderByLoginDate($order = Criteria::ASC) Order by the axys_account_login_date column
+ * @method     ChildAxysAccountQuery orderByFirstName($order = Criteria::ASC) Order by the axys_account_first_name column
+ * @method     ChildAxysAccountQuery orderByLastName($order = Criteria::ASC) Order by the axys_account_last_name column
+ * @method     ChildAxysAccountQuery orderByUpdate($order = Criteria::ASC) Order by the axys_account_update column
+ * @method     ChildAxysAccountQuery orderByCreatedAt($order = Criteria::ASC) Order by the axys_account_created column
+ * @method     ChildAxysAccountQuery orderByUpdatedAt($order = Criteria::ASC) Order by the axys_account_updated column
  *
- * @method     ChildAxysAccountQuery groupById() Group by the id column
- * @method     ChildAxysAccountQuery groupByEmail() Group by the Email column
- * @method     ChildAxysAccountQuery groupByPassword() Group by the user_password column
- * @method     ChildAxysAccountQuery groupByKey() Group by the user_key column
- * @method     ChildAxysAccountQuery groupByEmailKey() Group by the email_key column
- * @method     ChildAxysAccountQuery groupByUsername() Group by the user_screen_name column
- * @method     ChildAxysAccountQuery groupBySlug() Group by the user_slug column
- * @method     ChildAxysAccountQuery groupByDateinscription() Group by the DateInscription column
- * @method     ChildAxysAccountQuery groupByDateconnexion() Group by the DateConnexion column
- * @method     ChildAxysAccountQuery groupByNom() Group by the user_nom column
- * @method     ChildAxysAccountQuery groupByPrenom() Group by the user_prenom column
- * @method     ChildAxysAccountQuery groupByUpdate() Group by the user_update column
- * @method     ChildAxysAccountQuery groupByCreatedAt() Group by the user_created column
- * @method     ChildAxysAccountQuery groupByUpdatedAt() Group by the user_updated column
+ * @method     ChildAxysAccountQuery groupById() Group by the axys_account_id column
+ * @method     ChildAxysAccountQuery groupByEmail() Group by the axys_account_email column
+ * @method     ChildAxysAccountQuery groupByPassword() Group by the axys_account_password column
+ * @method     ChildAxysAccountQuery groupByKey() Group by the axys_account_key column
+ * @method     ChildAxysAccountQuery groupByEmailKey() Group by the axys_account_email_key column
+ * @method     ChildAxysAccountQuery groupByUsername() Group by the axys_account_screen_name column
+ * @method     ChildAxysAccountQuery groupBySlug() Group by the axys_account_slug column
+ * @method     ChildAxysAccountQuery groupBySignupDate() Group by the axys_account_signup_date column
+ * @method     ChildAxysAccountQuery groupByLoginDate() Group by the axys_account_login_date column
+ * @method     ChildAxysAccountQuery groupByFirstName() Group by the axys_account_first_name column
+ * @method     ChildAxysAccountQuery groupByLastName() Group by the axys_account_last_name column
+ * @method     ChildAxysAccountQuery groupByUpdate() Group by the axys_account_update column
+ * @method     ChildAxysAccountQuery groupByCreatedAt() Group by the axys_account_created column
+ * @method     ChildAxysAccountQuery groupByUpdatedAt() Group by the axys_account_updated column
  *
  * @method     ChildAxysAccountQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildAxysAccountQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -142,70 +142,70 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAxysAccount|null findOne(?ConnectionInterface $con = null) Return the first ChildAxysAccount matching the query
  * @method     ChildAxysAccount findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildAxysAccount matching the query, or a new ChildAxysAccount object populated from the query conditions when no match is found
  *
- * @method     ChildAxysAccount|null findOneById(int $id) Return the first ChildAxysAccount filtered by the id column
- * @method     ChildAxysAccount|null findOneByEmail(string $Email) Return the first ChildAxysAccount filtered by the Email column
- * @method     ChildAxysAccount|null findOneByPassword(string $user_password) Return the first ChildAxysAccount filtered by the user_password column
- * @method     ChildAxysAccount|null findOneByKey(string $user_key) Return the first ChildAxysAccount filtered by the user_key column
- * @method     ChildAxysAccount|null findOneByEmailKey(string $email_key) Return the first ChildAxysAccount filtered by the email_key column
- * @method     ChildAxysAccount|null findOneByUsername(string $user_screen_name) Return the first ChildAxysAccount filtered by the user_screen_name column
- * @method     ChildAxysAccount|null findOneBySlug(string $user_slug) Return the first ChildAxysAccount filtered by the user_slug column
- * @method     ChildAxysAccount|null findOneByDateinscription(string $DateInscription) Return the first ChildAxysAccount filtered by the DateInscription column
- * @method     ChildAxysAccount|null findOneByDateconnexion(string $DateConnexion) Return the first ChildAxysAccount filtered by the DateConnexion column
- * @method     ChildAxysAccount|null findOneByNom(string $user_nom) Return the first ChildAxysAccount filtered by the user_nom column
- * @method     ChildAxysAccount|null findOneByPrenom(string $user_prenom) Return the first ChildAxysAccount filtered by the user_prenom column
- * @method     ChildAxysAccount|null findOneByUpdate(string $user_update) Return the first ChildAxysAccount filtered by the user_update column
- * @method     ChildAxysAccount|null findOneByCreatedAt(string $user_created) Return the first ChildAxysAccount filtered by the user_created column
- * @method     ChildAxysAccount|null findOneByUpdatedAt(string $user_updated) Return the first ChildAxysAccount filtered by the user_updated column
+ * @method     ChildAxysAccount|null findOneById(int $axys_account_id) Return the first ChildAxysAccount filtered by the axys_account_id column
+ * @method     ChildAxysAccount|null findOneByEmail(string $axys_account_email) Return the first ChildAxysAccount filtered by the axys_account_email column
+ * @method     ChildAxysAccount|null findOneByPassword(string $axys_account_password) Return the first ChildAxysAccount filtered by the axys_account_password column
+ * @method     ChildAxysAccount|null findOneByKey(string $axys_account_key) Return the first ChildAxysAccount filtered by the axys_account_key column
+ * @method     ChildAxysAccount|null findOneByEmailKey(string $axys_account_email_key) Return the first ChildAxysAccount filtered by the axys_account_email_key column
+ * @method     ChildAxysAccount|null findOneByUsername(string $axys_account_screen_name) Return the first ChildAxysAccount filtered by the axys_account_screen_name column
+ * @method     ChildAxysAccount|null findOneBySlug(string $axys_account_slug) Return the first ChildAxysAccount filtered by the axys_account_slug column
+ * @method     ChildAxysAccount|null findOneBySignupDate(string $axys_account_signup_date) Return the first ChildAxysAccount filtered by the axys_account_signup_date column
+ * @method     ChildAxysAccount|null findOneByLoginDate(string $axys_account_login_date) Return the first ChildAxysAccount filtered by the axys_account_login_date column
+ * @method     ChildAxysAccount|null findOneByFirstName(string $axys_account_first_name) Return the first ChildAxysAccount filtered by the axys_account_first_name column
+ * @method     ChildAxysAccount|null findOneByLastName(string $axys_account_last_name) Return the first ChildAxysAccount filtered by the axys_account_last_name column
+ * @method     ChildAxysAccount|null findOneByUpdate(string $axys_account_update) Return the first ChildAxysAccount filtered by the axys_account_update column
+ * @method     ChildAxysAccount|null findOneByCreatedAt(string $axys_account_created) Return the first ChildAxysAccount filtered by the axys_account_created column
+ * @method     ChildAxysAccount|null findOneByUpdatedAt(string $axys_account_updated) Return the first ChildAxysAccount filtered by the axys_account_updated column
  *
  * @method     ChildAxysAccount requirePk($key, ?ConnectionInterface $con = null) Return the ChildAxysAccount by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysAccount requireOne(?ConnectionInterface $con = null) Return the first ChildAxysAccount matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildAxysAccount requireOneById(int $id) Return the first ChildAxysAccount filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysAccount requireOneByEmail(string $Email) Return the first ChildAxysAccount filtered by the Email column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysAccount requireOneByPassword(string $user_password) Return the first ChildAxysAccount filtered by the user_password column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysAccount requireOneByKey(string $user_key) Return the first ChildAxysAccount filtered by the user_key column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysAccount requireOneByEmailKey(string $email_key) Return the first ChildAxysAccount filtered by the email_key column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysAccount requireOneByUsername(string $user_screen_name) Return the first ChildAxysAccount filtered by the user_screen_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysAccount requireOneBySlug(string $user_slug) Return the first ChildAxysAccount filtered by the user_slug column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysAccount requireOneByDateinscription(string $DateInscription) Return the first ChildAxysAccount filtered by the DateInscription column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysAccount requireOneByDateconnexion(string $DateConnexion) Return the first ChildAxysAccount filtered by the DateConnexion column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysAccount requireOneByNom(string $user_nom) Return the first ChildAxysAccount filtered by the user_nom column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysAccount requireOneByPrenom(string $user_prenom) Return the first ChildAxysAccount filtered by the user_prenom column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysAccount requireOneByUpdate(string $user_update) Return the first ChildAxysAccount filtered by the user_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysAccount requireOneByCreatedAt(string $user_created) Return the first ChildAxysAccount filtered by the user_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysAccount requireOneByUpdatedAt(string $user_updated) Return the first ChildAxysAccount filtered by the user_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysAccount requireOneById(int $axys_account_id) Return the first ChildAxysAccount filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysAccount requireOneByEmail(string $axys_account_email) Return the first ChildAxysAccount filtered by the axys_account_email column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysAccount requireOneByPassword(string $axys_account_password) Return the first ChildAxysAccount filtered by the axys_account_password column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysAccount requireOneByKey(string $axys_account_key) Return the first ChildAxysAccount filtered by the axys_account_key column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysAccount requireOneByEmailKey(string $axys_account_email_key) Return the first ChildAxysAccount filtered by the axys_account_email_key column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysAccount requireOneByUsername(string $axys_account_screen_name) Return the first ChildAxysAccount filtered by the axys_account_screen_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysAccount requireOneBySlug(string $axys_account_slug) Return the first ChildAxysAccount filtered by the axys_account_slug column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysAccount requireOneBySignupDate(string $axys_account_signup_date) Return the first ChildAxysAccount filtered by the axys_account_signup_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysAccount requireOneByLoginDate(string $axys_account_login_date) Return the first ChildAxysAccount filtered by the axys_account_login_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysAccount requireOneByFirstName(string $axys_account_first_name) Return the first ChildAxysAccount filtered by the axys_account_first_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysAccount requireOneByLastName(string $axys_account_last_name) Return the first ChildAxysAccount filtered by the axys_account_last_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysAccount requireOneByUpdate(string $axys_account_update) Return the first ChildAxysAccount filtered by the axys_account_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysAccount requireOneByCreatedAt(string $axys_account_created) Return the first ChildAxysAccount filtered by the axys_account_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysAccount requireOneByUpdatedAt(string $axys_account_updated) Return the first ChildAxysAccount filtered by the axys_account_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildAxysAccount[]|Collection find(?ConnectionInterface $con = null) Return ChildAxysAccount objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildAxysAccount> find(?ConnectionInterface $con = null) Return ChildAxysAccount objects based on current ModelCriteria
  *
- * @method     ChildAxysAccount[]|Collection findById(int|array<int> $id) Return ChildAxysAccount objects filtered by the id column
- * @psalm-method Collection&\Traversable<ChildAxysAccount> findById(int|array<int> $id) Return ChildAxysAccount objects filtered by the id column
- * @method     ChildAxysAccount[]|Collection findByEmail(string|array<string> $Email) Return ChildAxysAccount objects filtered by the Email column
- * @psalm-method Collection&\Traversable<ChildAxysAccount> findByEmail(string|array<string> $Email) Return ChildAxysAccount objects filtered by the Email column
- * @method     ChildAxysAccount[]|Collection findByPassword(string|array<string> $user_password) Return ChildAxysAccount objects filtered by the user_password column
- * @psalm-method Collection&\Traversable<ChildAxysAccount> findByPassword(string|array<string> $user_password) Return ChildAxysAccount objects filtered by the user_password column
- * @method     ChildAxysAccount[]|Collection findByKey(string|array<string> $user_key) Return ChildAxysAccount objects filtered by the user_key column
- * @psalm-method Collection&\Traversable<ChildAxysAccount> findByKey(string|array<string> $user_key) Return ChildAxysAccount objects filtered by the user_key column
- * @method     ChildAxysAccount[]|Collection findByEmailKey(string|array<string> $email_key) Return ChildAxysAccount objects filtered by the email_key column
- * @psalm-method Collection&\Traversable<ChildAxysAccount> findByEmailKey(string|array<string> $email_key) Return ChildAxysAccount objects filtered by the email_key column
- * @method     ChildAxysAccount[]|Collection findByUsername(string|array<string> $user_screen_name) Return ChildAxysAccount objects filtered by the user_screen_name column
- * @psalm-method Collection&\Traversable<ChildAxysAccount> findByUsername(string|array<string> $user_screen_name) Return ChildAxysAccount objects filtered by the user_screen_name column
- * @method     ChildAxysAccount[]|Collection findBySlug(string|array<string> $user_slug) Return ChildAxysAccount objects filtered by the user_slug column
- * @psalm-method Collection&\Traversable<ChildAxysAccount> findBySlug(string|array<string> $user_slug) Return ChildAxysAccount objects filtered by the user_slug column
- * @method     ChildAxysAccount[]|Collection findByDateinscription(string|array<string> $DateInscription) Return ChildAxysAccount objects filtered by the DateInscription column
- * @psalm-method Collection&\Traversable<ChildAxysAccount> findByDateinscription(string|array<string> $DateInscription) Return ChildAxysAccount objects filtered by the DateInscription column
- * @method     ChildAxysAccount[]|Collection findByDateconnexion(string|array<string> $DateConnexion) Return ChildAxysAccount objects filtered by the DateConnexion column
- * @psalm-method Collection&\Traversable<ChildAxysAccount> findByDateconnexion(string|array<string> $DateConnexion) Return ChildAxysAccount objects filtered by the DateConnexion column
- * @method     ChildAxysAccount[]|Collection findByNom(string|array<string> $user_nom) Return ChildAxysAccount objects filtered by the user_nom column
- * @psalm-method Collection&\Traversable<ChildAxysAccount> findByNom(string|array<string> $user_nom) Return ChildAxysAccount objects filtered by the user_nom column
- * @method     ChildAxysAccount[]|Collection findByPrenom(string|array<string> $user_prenom) Return ChildAxysAccount objects filtered by the user_prenom column
- * @psalm-method Collection&\Traversable<ChildAxysAccount> findByPrenom(string|array<string> $user_prenom) Return ChildAxysAccount objects filtered by the user_prenom column
- * @method     ChildAxysAccount[]|Collection findByUpdate(string|array<string> $user_update) Return ChildAxysAccount objects filtered by the user_update column
- * @psalm-method Collection&\Traversable<ChildAxysAccount> findByUpdate(string|array<string> $user_update) Return ChildAxysAccount objects filtered by the user_update column
- * @method     ChildAxysAccount[]|Collection findByCreatedAt(string|array<string> $user_created) Return ChildAxysAccount objects filtered by the user_created column
- * @psalm-method Collection&\Traversable<ChildAxysAccount> findByCreatedAt(string|array<string> $user_created) Return ChildAxysAccount objects filtered by the user_created column
- * @method     ChildAxysAccount[]|Collection findByUpdatedAt(string|array<string> $user_updated) Return ChildAxysAccount objects filtered by the user_updated column
- * @psalm-method Collection&\Traversable<ChildAxysAccount> findByUpdatedAt(string|array<string> $user_updated) Return ChildAxysAccount objects filtered by the user_updated column
+ * @method     ChildAxysAccount[]|Collection findById(int|array<int> $axys_account_id) Return ChildAxysAccount objects filtered by the axys_account_id column
+ * @psalm-method Collection&\Traversable<ChildAxysAccount> findById(int|array<int> $axys_account_id) Return ChildAxysAccount objects filtered by the axys_account_id column
+ * @method     ChildAxysAccount[]|Collection findByEmail(string|array<string> $axys_account_email) Return ChildAxysAccount objects filtered by the axys_account_email column
+ * @psalm-method Collection&\Traversable<ChildAxysAccount> findByEmail(string|array<string> $axys_account_email) Return ChildAxysAccount objects filtered by the axys_account_email column
+ * @method     ChildAxysAccount[]|Collection findByPassword(string|array<string> $axys_account_password) Return ChildAxysAccount objects filtered by the axys_account_password column
+ * @psalm-method Collection&\Traversable<ChildAxysAccount> findByPassword(string|array<string> $axys_account_password) Return ChildAxysAccount objects filtered by the axys_account_password column
+ * @method     ChildAxysAccount[]|Collection findByKey(string|array<string> $axys_account_key) Return ChildAxysAccount objects filtered by the axys_account_key column
+ * @psalm-method Collection&\Traversable<ChildAxysAccount> findByKey(string|array<string> $axys_account_key) Return ChildAxysAccount objects filtered by the axys_account_key column
+ * @method     ChildAxysAccount[]|Collection findByEmailKey(string|array<string> $axys_account_email_key) Return ChildAxysAccount objects filtered by the axys_account_email_key column
+ * @psalm-method Collection&\Traversable<ChildAxysAccount> findByEmailKey(string|array<string> $axys_account_email_key) Return ChildAxysAccount objects filtered by the axys_account_email_key column
+ * @method     ChildAxysAccount[]|Collection findByUsername(string|array<string> $axys_account_screen_name) Return ChildAxysAccount objects filtered by the axys_account_screen_name column
+ * @psalm-method Collection&\Traversable<ChildAxysAccount> findByUsername(string|array<string> $axys_account_screen_name) Return ChildAxysAccount objects filtered by the axys_account_screen_name column
+ * @method     ChildAxysAccount[]|Collection findBySlug(string|array<string> $axys_account_slug) Return ChildAxysAccount objects filtered by the axys_account_slug column
+ * @psalm-method Collection&\Traversable<ChildAxysAccount> findBySlug(string|array<string> $axys_account_slug) Return ChildAxysAccount objects filtered by the axys_account_slug column
+ * @method     ChildAxysAccount[]|Collection findBySignupDate(string|array<string> $axys_account_signup_date) Return ChildAxysAccount objects filtered by the axys_account_signup_date column
+ * @psalm-method Collection&\Traversable<ChildAxysAccount> findBySignupDate(string|array<string> $axys_account_signup_date) Return ChildAxysAccount objects filtered by the axys_account_signup_date column
+ * @method     ChildAxysAccount[]|Collection findByLoginDate(string|array<string> $axys_account_login_date) Return ChildAxysAccount objects filtered by the axys_account_login_date column
+ * @psalm-method Collection&\Traversable<ChildAxysAccount> findByLoginDate(string|array<string> $axys_account_login_date) Return ChildAxysAccount objects filtered by the axys_account_login_date column
+ * @method     ChildAxysAccount[]|Collection findByFirstName(string|array<string> $axys_account_first_name) Return ChildAxysAccount objects filtered by the axys_account_first_name column
+ * @psalm-method Collection&\Traversable<ChildAxysAccount> findByFirstName(string|array<string> $axys_account_first_name) Return ChildAxysAccount objects filtered by the axys_account_first_name column
+ * @method     ChildAxysAccount[]|Collection findByLastName(string|array<string> $axys_account_last_name) Return ChildAxysAccount objects filtered by the axys_account_last_name column
+ * @psalm-method Collection&\Traversable<ChildAxysAccount> findByLastName(string|array<string> $axys_account_last_name) Return ChildAxysAccount objects filtered by the axys_account_last_name column
+ * @method     ChildAxysAccount[]|Collection findByUpdate(string|array<string> $axys_account_update) Return ChildAxysAccount objects filtered by the axys_account_update column
+ * @psalm-method Collection&\Traversable<ChildAxysAccount> findByUpdate(string|array<string> $axys_account_update) Return ChildAxysAccount objects filtered by the axys_account_update column
+ * @method     ChildAxysAccount[]|Collection findByCreatedAt(string|array<string> $axys_account_created) Return ChildAxysAccount objects filtered by the axys_account_created column
+ * @psalm-method Collection&\Traversable<ChildAxysAccount> findByCreatedAt(string|array<string> $axys_account_created) Return ChildAxysAccount objects filtered by the axys_account_created column
+ * @method     ChildAxysAccount[]|Collection findByUpdatedAt(string|array<string> $axys_account_updated) Return ChildAxysAccount objects filtered by the axys_account_updated column
+ * @psalm-method Collection&\Traversable<ChildAxysAccount> findByUpdatedAt(string|array<string> $axys_account_updated) Return ChildAxysAccount objects filtered by the axys_account_updated column
  *
  * @method     ChildAxysAccount[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildAxysAccount> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -305,7 +305,7 @@ abstract class AxysAccountQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, Email, user_password, user_key, email_key, user_screen_name, user_slug, DateInscription, DateConnexion, user_nom, user_prenom, user_update, user_created, user_updated FROM axys_accounts WHERE id = :p0';
+        $sql = 'SELECT axys_account_id, axys_account_email, axys_account_password, axys_account_key, axys_account_email_key, axys_account_screen_name, axys_account_slug, axys_account_signup_date, axys_account_login_date, axys_account_first_name, axys_account_last_name, axys_account_update, axys_account_created, axys_account_updated FROM axys_accounts WHERE axys_account_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -379,7 +379,7 @@ abstract class AxysAccountQuery extends ModelCriteria
     public function filterByPrimaryKey($key)
     {
 
-        $this->addUsingAlias(AxysAccountTableMap::COL_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, $key, Criteria::EQUAL);
 
         return $this;
     }
@@ -394,19 +394,19 @@ abstract class AxysAccountQuery extends ModelCriteria
     public function filterByPrimaryKeys($keys)
     {
 
-        $this->addUsingAlias(AxysAccountTableMap::COL_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, $keys, Criteria::IN);
 
         return $this;
     }
 
     /**
-     * Filter the query on the id column
+     * Filter the query on the axys_account_id column
      *
      * Example usage:
      * <code>
-     * $query->filterById(1234); // WHERE id = 1234
-     * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
-     * $query->filterById(array('min' => 12)); // WHERE id > 12
+     * $query->filterById(1234); // WHERE axys_account_id = 1234
+     * $query->filterById(array(12, 34)); // WHERE axys_account_id IN (12, 34)
+     * $query->filterById(array('min' => 12)); // WHERE axys_account_id > 12
      * </code>
      *
      * @param mixed $id The value to use as filter.
@@ -422,11 +422,11 @@ abstract class AxysAccountQuery extends ModelCriteria
         if (is_array($id)) {
             $useMinMax = false;
             if (isset($id['min'])) {
-                $this->addUsingAlias(AxysAccountTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, $id['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($id['max'])) {
-                $this->addUsingAlias(AxysAccountTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, $id['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -437,19 +437,19 @@ abstract class AxysAccountQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(AxysAccountTableMap::COL_ID, $id, $comparison);
+        $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, $id, $comparison);
 
         return $this;
     }
 
     /**
-     * Filter the query on the Email column
+     * Filter the query on the axys_account_email column
      *
      * Example usage:
      * <code>
-     * $query->filterByEmail('fooValue');   // WHERE Email = 'fooValue'
-     * $query->filterByEmail('%fooValue%', Criteria::LIKE); // WHERE Email LIKE '%fooValue%'
-     * $query->filterByEmail(['foo', 'bar']); // WHERE Email IN ('foo', 'bar')
+     * $query->filterByEmail('fooValue');   // WHERE axys_account_email = 'fooValue'
+     * $query->filterByEmail('%fooValue%', Criteria::LIKE); // WHERE axys_account_email LIKE '%fooValue%'
+     * $query->filterByEmail(['foo', 'bar']); // WHERE axys_account_email IN ('foo', 'bar')
      * </code>
      *
      * @param string|string[] $email The value to use as filter.
@@ -465,19 +465,19 @@ abstract class AxysAccountQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(AxysAccountTableMap::COL_EMAIL, $email, $comparison);
+        $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_EMAIL, $email, $comparison);
 
         return $this;
     }
 
     /**
-     * Filter the query on the user_password column
+     * Filter the query on the axys_account_password column
      *
      * Example usage:
      * <code>
-     * $query->filterByPassword('fooValue');   // WHERE user_password = 'fooValue'
-     * $query->filterByPassword('%fooValue%', Criteria::LIKE); // WHERE user_password LIKE '%fooValue%'
-     * $query->filterByPassword(['foo', 'bar']); // WHERE user_password IN ('foo', 'bar')
+     * $query->filterByPassword('fooValue');   // WHERE axys_account_password = 'fooValue'
+     * $query->filterByPassword('%fooValue%', Criteria::LIKE); // WHERE axys_account_password LIKE '%fooValue%'
+     * $query->filterByPassword(['foo', 'bar']); // WHERE axys_account_password IN ('foo', 'bar')
      * </code>
      *
      * @param string|string[] $password The value to use as filter.
@@ -493,19 +493,19 @@ abstract class AxysAccountQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(AxysAccountTableMap::COL_USER_PASSWORD, $password, $comparison);
+        $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_PASSWORD, $password, $comparison);
 
         return $this;
     }
 
     /**
-     * Filter the query on the user_key column
+     * Filter the query on the axys_account_key column
      *
      * Example usage:
      * <code>
-     * $query->filterByKey('fooValue');   // WHERE user_key = 'fooValue'
-     * $query->filterByKey('%fooValue%', Criteria::LIKE); // WHERE user_key LIKE '%fooValue%'
-     * $query->filterByKey(['foo', 'bar']); // WHERE user_key IN ('foo', 'bar')
+     * $query->filterByKey('fooValue');   // WHERE axys_account_key = 'fooValue'
+     * $query->filterByKey('%fooValue%', Criteria::LIKE); // WHERE axys_account_key LIKE '%fooValue%'
+     * $query->filterByKey(['foo', 'bar']); // WHERE axys_account_key IN ('foo', 'bar')
      * </code>
      *
      * @param string|string[] $key The value to use as filter.
@@ -521,19 +521,19 @@ abstract class AxysAccountQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(AxysAccountTableMap::COL_USER_KEY, $key, $comparison);
+        $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_KEY, $key, $comparison);
 
         return $this;
     }
 
     /**
-     * Filter the query on the email_key column
+     * Filter the query on the axys_account_email_key column
      *
      * Example usage:
      * <code>
-     * $query->filterByEmailKey('fooValue');   // WHERE email_key = 'fooValue'
-     * $query->filterByEmailKey('%fooValue%', Criteria::LIKE); // WHERE email_key LIKE '%fooValue%'
-     * $query->filterByEmailKey(['foo', 'bar']); // WHERE email_key IN ('foo', 'bar')
+     * $query->filterByEmailKey('fooValue');   // WHERE axys_account_email_key = 'fooValue'
+     * $query->filterByEmailKey('%fooValue%', Criteria::LIKE); // WHERE axys_account_email_key LIKE '%fooValue%'
+     * $query->filterByEmailKey(['foo', 'bar']); // WHERE axys_account_email_key IN ('foo', 'bar')
      * </code>
      *
      * @param string|string[] $emailKey The value to use as filter.
@@ -549,19 +549,19 @@ abstract class AxysAccountQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(AxysAccountTableMap::COL_EMAIL_KEY, $emailKey, $comparison);
+        $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_EMAIL_KEY, $emailKey, $comparison);
 
         return $this;
     }
 
     /**
-     * Filter the query on the user_screen_name column
+     * Filter the query on the axys_account_screen_name column
      *
      * Example usage:
      * <code>
-     * $query->filterByUsername('fooValue');   // WHERE user_screen_name = 'fooValue'
-     * $query->filterByUsername('%fooValue%', Criteria::LIKE); // WHERE user_screen_name LIKE '%fooValue%'
-     * $query->filterByUsername(['foo', 'bar']); // WHERE user_screen_name IN ('foo', 'bar')
+     * $query->filterByUsername('fooValue');   // WHERE axys_account_screen_name = 'fooValue'
+     * $query->filterByUsername('%fooValue%', Criteria::LIKE); // WHERE axys_account_screen_name LIKE '%fooValue%'
+     * $query->filterByUsername(['foo', 'bar']); // WHERE axys_account_screen_name IN ('foo', 'bar')
      * </code>
      *
      * @param string|string[] $username The value to use as filter.
@@ -577,19 +577,19 @@ abstract class AxysAccountQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(AxysAccountTableMap::COL_USER_SCREEN_NAME, $username, $comparison);
+        $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_SCREEN_NAME, $username, $comparison);
 
         return $this;
     }
 
     /**
-     * Filter the query on the user_slug column
+     * Filter the query on the axys_account_slug column
      *
      * Example usage:
      * <code>
-     * $query->filterBySlug('fooValue');   // WHERE user_slug = 'fooValue'
-     * $query->filterBySlug('%fooValue%', Criteria::LIKE); // WHERE user_slug LIKE '%fooValue%'
-     * $query->filterBySlug(['foo', 'bar']); // WHERE user_slug IN ('foo', 'bar')
+     * $query->filterBySlug('fooValue');   // WHERE axys_account_slug = 'fooValue'
+     * $query->filterBySlug('%fooValue%', Criteria::LIKE); // WHERE axys_account_slug LIKE '%fooValue%'
+     * $query->filterBySlug(['foo', 'bar']); // WHERE axys_account_slug IN ('foo', 'bar')
      * </code>
      *
      * @param string|string[] $slug The value to use as filter.
@@ -605,22 +605,22 @@ abstract class AxysAccountQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(AxysAccountTableMap::COL_USER_SLUG, $slug, $comparison);
+        $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_SLUG, $slug, $comparison);
 
         return $this;
     }
 
     /**
-     * Filter the query on the DateInscription column
+     * Filter the query on the axys_account_signup_date column
      *
      * Example usage:
      * <code>
-     * $query->filterByDateinscription('2011-03-14'); // WHERE DateInscription = '2011-03-14'
-     * $query->filterByDateinscription('now'); // WHERE DateInscription = '2011-03-14'
-     * $query->filterByDateinscription(array('max' => 'yesterday')); // WHERE DateInscription > '2011-03-13'
+     * $query->filterBySignupDate('2011-03-14'); // WHERE axys_account_signup_date = '2011-03-14'
+     * $query->filterBySignupDate('now'); // WHERE axys_account_signup_date = '2011-03-14'
+     * $query->filterBySignupDate(array('max' => 'yesterday')); // WHERE axys_account_signup_date > '2011-03-13'
      * </code>
      *
-     * @param mixed $dateinscription The value to use as filter.
+     * @param mixed $signupDate The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
@@ -630,16 +630,16 @@ abstract class AxysAccountQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByDateinscription($dateinscription = null, ?string $comparison = null)
+    public function filterBySignupDate($signupDate = null, ?string $comparison = null)
     {
-        if (is_array($dateinscription)) {
+        if (is_array($signupDate)) {
             $useMinMax = false;
-            if (isset($dateinscription['min'])) {
-                $this->addUsingAlias(AxysAccountTableMap::COL_DATEINSCRIPTION, $dateinscription['min'], Criteria::GREATER_EQUAL);
+            if (isset($signupDate['min'])) {
+                $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_SIGNUP_DATE, $signupDate['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($dateinscription['max'])) {
-                $this->addUsingAlias(AxysAccountTableMap::COL_DATEINSCRIPTION, $dateinscription['max'], Criteria::LESS_EQUAL);
+            if (isset($signupDate['max'])) {
+                $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_SIGNUP_DATE, $signupDate['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -650,22 +650,22 @@ abstract class AxysAccountQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(AxysAccountTableMap::COL_DATEINSCRIPTION, $dateinscription, $comparison);
+        $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_SIGNUP_DATE, $signupDate, $comparison);
 
         return $this;
     }
 
     /**
-     * Filter the query on the DateConnexion column
+     * Filter the query on the axys_account_login_date column
      *
      * Example usage:
      * <code>
-     * $query->filterByDateconnexion('2011-03-14'); // WHERE DateConnexion = '2011-03-14'
-     * $query->filterByDateconnexion('now'); // WHERE DateConnexion = '2011-03-14'
-     * $query->filterByDateconnexion(array('max' => 'yesterday')); // WHERE DateConnexion > '2011-03-13'
+     * $query->filterByLoginDate('2011-03-14'); // WHERE axys_account_login_date = '2011-03-14'
+     * $query->filterByLoginDate('now'); // WHERE axys_account_login_date = '2011-03-14'
+     * $query->filterByLoginDate(array('max' => 'yesterday')); // WHERE axys_account_login_date > '2011-03-13'
      * </code>
      *
-     * @param mixed $dateconnexion The value to use as filter.
+     * @param mixed $loginDate The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
@@ -675,16 +675,16 @@ abstract class AxysAccountQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByDateconnexion($dateconnexion = null, ?string $comparison = null)
+    public function filterByLoginDate($loginDate = null, ?string $comparison = null)
     {
-        if (is_array($dateconnexion)) {
+        if (is_array($loginDate)) {
             $useMinMax = false;
-            if (isset($dateconnexion['min'])) {
-                $this->addUsingAlias(AxysAccountTableMap::COL_DATECONNEXION, $dateconnexion['min'], Criteria::GREATER_EQUAL);
+            if (isset($loginDate['min'])) {
+                $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_LOGIN_DATE, $loginDate['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($dateconnexion['max'])) {
-                $this->addUsingAlias(AxysAccountTableMap::COL_DATECONNEXION, $dateconnexion['max'], Criteria::LESS_EQUAL);
+            if (isset($loginDate['max'])) {
+                $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_LOGIN_DATE, $loginDate['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -695,75 +695,75 @@ abstract class AxysAccountQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(AxysAccountTableMap::COL_DATECONNEXION, $dateconnexion, $comparison);
+        $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_LOGIN_DATE, $loginDate, $comparison);
 
         return $this;
     }
 
     /**
-     * Filter the query on the user_nom column
+     * Filter the query on the axys_account_first_name column
      *
      * Example usage:
      * <code>
-     * $query->filterByNom('fooValue');   // WHERE user_nom = 'fooValue'
-     * $query->filterByNom('%fooValue%', Criteria::LIKE); // WHERE user_nom LIKE '%fooValue%'
-     * $query->filterByNom(['foo', 'bar']); // WHERE user_nom IN ('foo', 'bar')
+     * $query->filterByFirstName('fooValue');   // WHERE axys_account_first_name = 'fooValue'
+     * $query->filterByFirstName('%fooValue%', Criteria::LIKE); // WHERE axys_account_first_name LIKE '%fooValue%'
+     * $query->filterByFirstName(['foo', 'bar']); // WHERE axys_account_first_name IN ('foo', 'bar')
      * </code>
      *
-     * @param string|string[] $nom The value to use as filter.
+     * @param string|string[] $firstName The value to use as filter.
      * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByNom($nom = null, ?string $comparison = null)
+    public function filterByFirstName($firstName = null, ?string $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($nom)) {
+            if (is_array($firstName)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        $this->addUsingAlias(AxysAccountTableMap::COL_USER_NOM, $nom, $comparison);
+        $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_FIRST_NAME, $firstName, $comparison);
 
         return $this;
     }
 
     /**
-     * Filter the query on the user_prenom column
+     * Filter the query on the axys_account_last_name column
      *
      * Example usage:
      * <code>
-     * $query->filterByPrenom('fooValue');   // WHERE user_prenom = 'fooValue'
-     * $query->filterByPrenom('%fooValue%', Criteria::LIKE); // WHERE user_prenom LIKE '%fooValue%'
-     * $query->filterByPrenom(['foo', 'bar']); // WHERE user_prenom IN ('foo', 'bar')
+     * $query->filterByLastName('fooValue');   // WHERE axys_account_last_name = 'fooValue'
+     * $query->filterByLastName('%fooValue%', Criteria::LIKE); // WHERE axys_account_last_name LIKE '%fooValue%'
+     * $query->filterByLastName(['foo', 'bar']); // WHERE axys_account_last_name IN ('foo', 'bar')
      * </code>
      *
-     * @param string|string[] $prenom The value to use as filter.
+     * @param string|string[] $lastName The value to use as filter.
      * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByPrenom($prenom = null, ?string $comparison = null)
+    public function filterByLastName($lastName = null, ?string $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($prenom)) {
+            if (is_array($lastName)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        $this->addUsingAlias(AxysAccountTableMap::COL_USER_PRENOM, $prenom, $comparison);
+        $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_LAST_NAME, $lastName, $comparison);
 
         return $this;
     }
 
     /**
-     * Filter the query on the user_update column
+     * Filter the query on the axys_account_update column
      *
      * Example usage:
      * <code>
-     * $query->filterByUpdate('2011-03-14'); // WHERE user_update = '2011-03-14'
-     * $query->filterByUpdate('now'); // WHERE user_update = '2011-03-14'
-     * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE user_update > '2011-03-13'
+     * $query->filterByUpdate('2011-03-14'); // WHERE axys_account_update = '2011-03-14'
+     * $query->filterByUpdate('now'); // WHERE axys_account_update = '2011-03-14'
+     * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE axys_account_update > '2011-03-13'
      * </code>
      *
      * @param mixed $update The value to use as filter.
@@ -781,11 +781,11 @@ abstract class AxysAccountQuery extends ModelCriteria
         if (is_array($update)) {
             $useMinMax = false;
             if (isset($update['min'])) {
-                $this->addUsingAlias(AxysAccountTableMap::COL_USER_UPDATE, $update['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATE, $update['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($update['max'])) {
-                $this->addUsingAlias(AxysAccountTableMap::COL_USER_UPDATE, $update['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATE, $update['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -796,19 +796,19 @@ abstract class AxysAccountQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(AxysAccountTableMap::COL_USER_UPDATE, $update, $comparison);
+        $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATE, $update, $comparison);
 
         return $this;
     }
 
     /**
-     * Filter the query on the user_created column
+     * Filter the query on the axys_account_created column
      *
      * Example usage:
      * <code>
-     * $query->filterByCreatedAt('2011-03-14'); // WHERE user_created = '2011-03-14'
-     * $query->filterByCreatedAt('now'); // WHERE user_created = '2011-03-14'
-     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE user_created > '2011-03-13'
+     * $query->filterByCreatedAt('2011-03-14'); // WHERE axys_account_created = '2011-03-14'
+     * $query->filterByCreatedAt('now'); // WHERE axys_account_created = '2011-03-14'
+     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE axys_account_created > '2011-03-13'
      * </code>
      *
      * @param mixed $createdAt The value to use as filter.
@@ -826,11 +826,11 @@ abstract class AxysAccountQuery extends ModelCriteria
         if (is_array($createdAt)) {
             $useMinMax = false;
             if (isset($createdAt['min'])) {
-                $this->addUsingAlias(AxysAccountTableMap::COL_USER_CREATED, $createdAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED, $createdAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($createdAt['max'])) {
-                $this->addUsingAlias(AxysAccountTableMap::COL_USER_CREATED, $createdAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED, $createdAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -841,19 +841,19 @@ abstract class AxysAccountQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(AxysAccountTableMap::COL_USER_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED, $createdAt, $comparison);
 
         return $this;
     }
 
     /**
-     * Filter the query on the user_updated column
+     * Filter the query on the axys_account_updated column
      *
      * Example usage:
      * <code>
-     * $query->filterByUpdatedAt('2011-03-14'); // WHERE user_updated = '2011-03-14'
-     * $query->filterByUpdatedAt('now'); // WHERE user_updated = '2011-03-14'
-     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE user_updated > '2011-03-13'
+     * $query->filterByUpdatedAt('2011-03-14'); // WHERE axys_account_updated = '2011-03-14'
+     * $query->filterByUpdatedAt('now'); // WHERE axys_account_updated = '2011-03-14'
+     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE axys_account_updated > '2011-03-13'
      * </code>
      *
      * @param mixed $updatedAt The value to use as filter.
@@ -871,11 +871,11 @@ abstract class AxysAccountQuery extends ModelCriteria
         if (is_array($updatedAt)) {
             $useMinMax = false;
             if (isset($updatedAt['min'])) {
-                $this->addUsingAlias(AxysAccountTableMap::COL_USER_UPDATED, $updatedAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED, $updatedAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($updatedAt['max'])) {
-                $this->addUsingAlias(AxysAccountTableMap::COL_USER_UPDATED, $updatedAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED, $updatedAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -886,7 +886,7 @@ abstract class AxysAccountQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(AxysAccountTableMap::COL_USER_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED, $updatedAt, $comparison);
 
         return $this;
     }
@@ -903,7 +903,7 @@ abstract class AxysAccountQuery extends ModelCriteria
     {
         if ($axysConsent instanceof \Model\AxysConsent) {
             $this
-                ->addUsingAlias(AxysAccountTableMap::COL_ID, $axysConsent->getUserId(), $comparison);
+                ->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, $axysConsent->getUserId(), $comparison);
 
             return $this;
         } elseif ($axysConsent instanceof ObjectCollection) {
@@ -1076,7 +1076,7 @@ abstract class AxysAccountQuery extends ModelCriteria
     {
         if ($cart instanceof \Model\Cart) {
             $this
-                ->addUsingAlias(AxysAccountTableMap::COL_ID, $cart->getAxysAccountId(), $comparison);
+                ->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, $cart->getAxysAccountId(), $comparison);
 
             return $this;
         } elseif ($cart instanceof ObjectCollection) {
@@ -1249,7 +1249,7 @@ abstract class AxysAccountQuery extends ModelCriteria
     {
         if ($option instanceof \Model\Option) {
             $this
-                ->addUsingAlias(AxysAccountTableMap::COL_ID, $option->getAxysAccountId(), $comparison);
+                ->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, $option->getAxysAccountId(), $comparison);
 
             return $this;
         } elseif ($option instanceof ObjectCollection) {
@@ -1422,7 +1422,7 @@ abstract class AxysAccountQuery extends ModelCriteria
     {
         if ($right instanceof \Model\Right) {
             $this
-                ->addUsingAlias(AxysAccountTableMap::COL_ID, $right->getAxysAccountId(), $comparison);
+                ->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, $right->getAxysAccountId(), $comparison);
 
             return $this;
         } elseif ($right instanceof ObjectCollection) {
@@ -1595,7 +1595,7 @@ abstract class AxysAccountQuery extends ModelCriteria
     {
         if ($session instanceof \Model\Session) {
             $this
-                ->addUsingAlias(AxysAccountTableMap::COL_ID, $session->getAxysAccountId(), $comparison);
+                ->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, $session->getAxysAccountId(), $comparison);
 
             return $this;
         } elseif ($session instanceof ObjectCollection) {
@@ -1768,7 +1768,7 @@ abstract class AxysAccountQuery extends ModelCriteria
     {
         if ($stock instanceof \Model\Stock) {
             $this
-                ->addUsingAlias(AxysAccountTableMap::COL_ID, $stock->getAxysAccountId(), $comparison);
+                ->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, $stock->getAxysAccountId(), $comparison);
 
             return $this;
         } elseif ($stock instanceof ObjectCollection) {
@@ -1941,7 +1941,7 @@ abstract class AxysAccountQuery extends ModelCriteria
     {
         if ($wish instanceof \Model\Wish) {
             $this
-                ->addUsingAlias(AxysAccountTableMap::COL_ID, $wish->getAxysAccountId(), $comparison);
+                ->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, $wish->getAxysAccountId(), $comparison);
 
             return $this;
         } elseif ($wish instanceof ObjectCollection) {
@@ -2114,7 +2114,7 @@ abstract class AxysAccountQuery extends ModelCriteria
     {
         if ($wishlist instanceof \Model\Wishlist) {
             $this
-                ->addUsingAlias(AxysAccountTableMap::COL_ID, $wishlist->getAxysAccountId(), $comparison);
+                ->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, $wishlist->getAxysAccountId(), $comparison);
 
             return $this;
         } elseif ($wishlist instanceof ObjectCollection) {
@@ -2285,7 +2285,7 @@ abstract class AxysAccountQuery extends ModelCriteria
     public function prune($axysAccount = null)
     {
         if ($axysAccount) {
-            $this->addUsingAlias(AxysAccountTableMap::COL_ID, $axysAccount->getId(), Criteria::NOT_EQUAL);
+            $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, $axysAccount->getId(), Criteria::NOT_EQUAL);
         }
 
         return $this;
@@ -2363,7 +2363,7 @@ abstract class AxysAccountQuery extends ModelCriteria
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        $this->addUsingAlias(AxysAccountTableMap::COL_USER_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
 
         return $this;
     }
@@ -2375,7 +2375,7 @@ abstract class AxysAccountQuery extends ModelCriteria
      */
     public function lastUpdatedFirst()
     {
-        $this->addDescendingOrderByColumn(AxysAccountTableMap::COL_USER_UPDATED);
+        $this->addDescendingOrderByColumn(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED);
 
         return $this;
     }
@@ -2387,7 +2387,7 @@ abstract class AxysAccountQuery extends ModelCriteria
      */
     public function firstUpdatedFirst()
     {
-        $this->addAscendingOrderByColumn(AxysAccountTableMap::COL_USER_UPDATED);
+        $this->addAscendingOrderByColumn(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED);
 
         return $this;
     }
@@ -2399,7 +2399,7 @@ abstract class AxysAccountQuery extends ModelCriteria
      */
     public function lastCreatedFirst()
     {
-        $this->addDescendingOrderByColumn(AxysAccountTableMap::COL_USER_CREATED);
+        $this->addDescendingOrderByColumn(AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED);
 
         return $this;
     }
@@ -2413,7 +2413,7 @@ abstract class AxysAccountQuery extends ModelCriteria
      */
     public function recentlyCreated($nbDays = 7)
     {
-        $this->addUsingAlias(AxysAccountTableMap::COL_USER_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
 
         return $this;
     }
@@ -2425,7 +2425,7 @@ abstract class AxysAccountQuery extends ModelCriteria
      */
     public function firstCreatedFirst()
     {
-        $this->addAscendingOrderByColumn(AxysAccountTableMap::COL_USER_CREATED);
+        $this->addAscendingOrderByColumn(AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED);
 
         return $this;
     }

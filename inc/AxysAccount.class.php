@@ -11,7 +11,7 @@ class InvalidCredentialsException extends Exception
 
 class AxysAccount extends Entity
 {
-    protected $prefix = 'user';
+    protected $prefix = 'axys_account';
     protected $cart = null;
     protected $alerts = null;
     protected $wishes = null;
@@ -57,11 +57,6 @@ class AxysAccount extends Entity
         return $this;
     }
 
-    /**
-     * Get the customer corresponding to this user or create one.
-     *
-     * @param bool $create Create customer if there isn't one
-     */
     public function getCustomer($create = false)
     {
         $cm = new CustomerManager();
@@ -83,11 +78,6 @@ class AxysAccount extends Entity
         }
     }
 
-    /**
-     * Get user's username.
-     *
-     * @return string
-     */
     public function getUserName()
     {
         if ($this->has('screen_name')) {
@@ -109,11 +99,6 @@ class AxysAccount extends Entity
         return 'Inconnu';
     }
 
-    /**
-     * Get user cart.
-     *
-     * @return Cart
-     */
     public function getCart()
     {
         if (isset($this->cart)) {
@@ -172,11 +157,6 @@ class AxysAccount extends Entity
 
     /* ALERTS */
 
-    /**
-     * Get all user alerts.
-     *
-     * @return array user alerts
-     */
     public function getAlerts()
     {
         if (!is_array($this->alerts)) {
@@ -187,13 +167,6 @@ class AxysAccount extends Entity
         return $this->alerts;
     }
 
-    /**
-     * Check if user has alert.
-     *
-     * @param int $article_id
-     *
-     * @return bool
-     */
     public function hasAlert($article_id)
     {
         $alerts = $this->getAlerts();
@@ -208,7 +181,6 @@ class AxysAccount extends Entity
 
     /* WISHES */
 
-    // Get all user wishes
     public function getWishes()
     {
         if (is_array($this->wishes)) {
@@ -235,7 +207,6 @@ class AxysAccount extends Entity
 
     /* PURCHASES */
 
-    // Get all user purchases
     public function getPurchases()
     {
         if (is_array($this->purchases)) {
@@ -262,21 +233,11 @@ class AxysAccount extends Entity
 
     /* RIGHTS */
 
-    /**
-     * Is the user root ?
-     *
-     * @return bool
-     */
     public function isRoot()
     {
-        return $this->get('user_id') == 1;
+        return $this->get('axys_account_id') == 1;
     }
 
-    /**
-     * Is the user an admin ?
-     *
-     * @return bool
-     */
     public function isAdmin()
     {
         
@@ -338,11 +299,6 @@ class AxysAccount extends Entity
         }
     }
 
-    /**
-     * Get the user's current wishlist (or create one).
-     *
-     * @param bool $create Create wishlist if there isn't one
-     */
     public function getWishlist($create = false)
     {
         $wm = new WishlistManager();
@@ -359,15 +315,8 @@ class AxysAccount extends Entity
 
 class AxysAccountManager extends EntityManager
 {
-    protected $prefix = 'user';
+    protected $prefix = 'axys_account';
     protected $object = 'AxysAccount';
-    protected $select = '*,
-                    `id` AS `user_id`,
-                    `Email` AS `user_email`,
-                    `user_key` AS `user_uid`,
-                    `user_prenom` AS `user_first_name`,
-                    `user_nom` AS `user_last_name`
-                    ';
 
     public function __construct()
     {
@@ -376,45 +325,31 @@ class AxysAccountManager extends EntityManager
         $this->table = "axys_accounts";
     }
 
-    public function getQuery($query, $params, $options = [], $withJoins = true)
-    {
-        // Old db scheme
-        $query = str_replace('`user_id`', '`id`', $query);
-        $query = str_replace('`user_email`', '`Email`', $query);
-        $query = str_replace('`user_uid`', '`user_key`', $query);
-
-        return parent::getQuery($query, $params, $options);
-    }
-
     public function create(array $defaults = [], $text = null)
     {
-        // Check if there is already a user with that e-mail address
-        if ($this->get(['user_email' => $defaults['user_email']])) {
+        if ($this->get(['axys_account_email' => $defaults['axys_account_email']])) {
             throw new Exception('Cette adresse e-mail est déjà utilisée !');
         }
 
         // Generate a new password if necessary
-        if (isset($defaults['user_new_password'])) {
-            $user_password = $defaults['user_new_password'];
+        if (isset($defaults['axys_account_new_password'])) {
+            $axys_account_password = $defaults['axys_account_new_password'];
         } else {
-            $user_password = null;
+            $axys_account_password = null;
             for ($i = 0; $i < 8; ++$i) {
-                $user_password .= substr('ABCDEFGHJKMNPQRSTUVWXYZabcdefghijkmnopqrstuvxyz23456789', rand(0, 31), 1);
+                $axys_account_password .= substr('ABCDEFGHJKMNPQRSTUVWXYZabcdefghijkmnopqrstuvxyz23456789', rand(0, 31), 1);
             }
         }
-        unset($defaults['user_new_password']);
+        unset($defaults['axys_account_new_password']);
 
         // Crypt the password
-        $defaults['user_password'] = password_hash($user_password, PASSWORD_DEFAULT);
-
-        // Override defaults because of old db scheme
-        $defaults['Email'] = $defaults['user_email'];
-        unset($defaults['user_email']);
+        $defaults['axys_account_password'] = password_hash($axys_account_password, PASSWORD_DEFAULT);
 
         // Creating the entity
-        $user = parent::create($defaults);
-        $user->set('user_just_created', true);
-        $user->set('user_new_password', $user_password);
+        /** @var AxysAccount $axysAccount */
+        $axysAccount = parent::create($defaults);
+        $axysAccount->set('axys_account_just_created', true);
+        $axysAccount->set('axys_account_new_password', $axys_account_password);
 
         // Send mail
         if (empty($text)) {
@@ -423,32 +358,23 @@ class AxysAccountManager extends EntityManager
         $message = $text . '
 <p>
     Voici vos informations de connexion :<br />
-    Adresse e-mail : ' . $user->get('user_email') . '<br />
-    Mot de passe : ' . $user_password . '
+    Adresse e-mail : ' . $axysAccount->get('axys_account_email') . '<br />
+    Mot de passe : ' . $axys_account_password . '
 </p>
 
-<p>Grâce à votre compte, vous pourrez désormais vous identifier en un clic sur tous les sites du réseau Axys sans avoir à créer à chaque fois un nouveau compte. Retrouvez la liste sites du réseau sur <a href="https://axys.me"Z>axys.me</a>.</a></p>
+<p>Grâce à votre compte, vous pourrez désormais vous identifier en un clic sur tous les sites du réseau Axys sans avoir à créer à chaque fois un nouveau compte. Retrouvez la liste sites du réseau sur <a href="https://axys.me">axys.me</a>.</a></p>
 
 <p>A très bientôt sur les sites du réseau Axys !</p>
 ';
-        $this->mail($user, $this->site['site_tag'] . ' | Votre compte Axys', $message);
+        $this->mail($axysAccount, $this->site['site_tag'] . ' | Votre compte Axys', $message);
 
-        // Return user
-        return $user;
+        return $axysAccount;
     }
 
-    /**
-     * Send a mail to the user.
-     *
-     * @param AxysAccount   $user    The mail's recipient
-     * @param string $subject The mail's subject
-     * @param string $message The mail's body
-     * @param array  $headers The mail's header
-     */
-    public function mail(AxysAccount $user, $subject, $message, $headers = null)
+    public function mail(AxysAccount $axysAccount, $subject, $message, $headers = null)
     {
         $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="fr" xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>' . $subject . '</title>
@@ -459,19 +385,10 @@ class AxysAccountManager extends EntityManager
 </html>
             ';
         $mailer = new Biblys\Service\Mailer();
-        $mailer->send($user->get('email'), $subject, $message);
+        $mailer->send($axysAccount->get('email'), $subject, $message);
     }
 
-    /**
-     * Add ebooks to user's library.
-     *
-     * @param object $user        The user
-     * @param array  $articles    An array of Article objects to add
-     * @param array  $stock       An array of Stock objects to add (if they already exists)
-     * @param bool   $predownload Can the user download the files before article publication date?
-     * @param array  $options     Additionnal options
-     */
-    public function addToLibrary(AxysAccount $user, array $articles = [], array $stocks = [], $predownload = false, $options = [])
+    public function addToLibrary(AxysAccount $axysAccount, array $articles = [], array $stocks = [], $predownload = false, $options = [])
     {
         global $_SITE;
 
@@ -497,7 +414,7 @@ class AxysAccountManager extends EntityManager
                 // Check if article is a downloadable
                 if ($article->get('type_id') == 2 || $article->get('type_id') == 11) {
                     // Check if article is already in library
-                    if ($sm->getAll(['article_id' => $article->get('id'), 'axys_account_id' => $user->get('id')])) {
+                    if ($sm->getAll(['article_id' => $article->get('id'), 'axys_account_id' => $axysAccount->get('id')])) {
                         $errors[] = 'Article ' . $article->get('title') . ' is already in user\'s library.';
                     } else {
                         // Create a new free copy
@@ -531,7 +448,7 @@ class AxysAccountManager extends EntityManager
 
                     // Else add it
                     else {
-                        $stock->set('axys_account_id', $user->get('id'))
+                        $stock->set('axys_account_id', $axysAccount->get('id'))
                             ->set('stock_selling_date', date('Y-m-d H:i:s'));
                         if ($predownload) {
                             $stock->set('stock_allow_predownload', 1);
@@ -548,13 +465,13 @@ class AxysAccountManager extends EntityManager
 
         // Send mail
         if (!empty($added) && $options['send_email']) {
-            $newuser = null;
-            if ($user->get('user_just_created')) {
-                $newuser = '
+            $newAxysAccount = null;
+            if ($axysAccount->get('axys_account_just_created')) {
+                $newAxysAccount = '
                         <p>
                             Connectez-vous en utilisant vos identifiants Axys :<br />
-                            Adresse e-mail : ' . $user->get('user_email') . '<br />
-                            Mot de passe : ' . $user->get('user_new_password') . '
+                            Adresse e-mail : ' . $axysAccount->get('axys_account_email') . '<br />
+                            Mot de passe : ' . $axysAccount->get('axys_account_new_password') . '
                         </p>
 
                     ';
@@ -570,11 +487,11 @@ class AxysAccountManager extends EntityManager
                     <p>Vous pouvez les télécharger à volonté depuis notre site, dans tous les formats disponibles. Vous pourrez également profiter gratuitement des mises à jour de ces fichiers si de nouvelles versions sont proposées.</p>
                     <p>Vous trouverez également dans votre bibliothèque numérique de l\'aide pour télécharger et lire ces fichiers. En cas de difficulté, n\'hésitez pas à nous solliciter en répondant à ce message.</p>
                     <p><a href="http://' . $this->site['site_domain'] . '/pages/log_myebooks"><strong>Accéder à votre bibliothèque numérique</strong></a></p>
-                    ' . $newuser . '
+                    ' . $newAxysAccount . '
                     <p>NB : Ces fichiers vous sont volontairement proposés sans dispositif de gestion des droits numériques (DRM ou GDN). Nous vous invitons à les transmettre à vos proches si vous souhaitez les leur faire découvrir, comme vous le feriez avec un livre papier, mais nous vous prions de ne pas les diffuser plus largement, par respect pour l\'auteur et l\'éditeur.</p>
                 ';
             $mailer = new Mailer();
-            $mailer->send($user->get('Email'), $subject, $message);
+            $mailer->send($axysAccount->get("axys_account_email"), $subject, $message);
         }
     }
 }

@@ -11,16 +11,16 @@ $um = new AxysAccountManager();
 
 if ($request->getMethod() === "POST") {
 
-    $user_email = $request->request->get("user_email", false);
+    $axysAccountEmail = $request->request->get("axys_account_email", false);
 
-    if (!$user_email) {
+    if (!$axysAccountEmail) {
         trigger_error("Le champ Adresse e-mail est obligatoire.");
     }
 
     // Create a user if it doesn't exist
-    $user = $um->get(['user_email' => $user_email]);
+    $user = $um->get(['axys_account_email' => $axysAccountEmail]);
     if (!$user)  {
-        $user = $um->create(array("user_email" => $user_email));
+        $user = $um->create(array("axys_account_email" => $axysAccountEmail));
         $params['created'] = 1;
     }
 
@@ -30,12 +30,12 @@ if ($request->getMethod() === "POST") {
     }
 
     // E-mail de bienvenue
-    if ($user->get('user_just_created')) // Si nouvel utilisateur, on ajoute les identifiants
+    if ($user->get('axys_account_just_created')) // Si nouvel utilisateur, on ajoute les identifiants
     {
         $credentials = '
             <p>
                 Vos identifiants de connexion Axys :<br />
-                Adresse e-mail : '.$user->get("user_email").'<br />
+                Adresse e-mail : '.$user->get("axys_account_email").'<br />
                 Le mot de passe vous a été envoyé par courriel. Nous vous invitons à le changer dès votre première connexion.
             </p>
         ';
@@ -44,7 +44,7 @@ if ($request->getMethod() === "POST") {
     {
         $credentials = '
             <p>
-                Vos identifiants de connexion sont votre adresse e-mail ('.$user->get("user_email").') et le mot de passe que vous avez défini au moment de la création de votre compte Axys (vous pourrez demander à en recevoir un nouveau si besoin).
+                Vos identifiants de connexion sont votre adresse e-mail ('.$user->get("axys_account_email").') et le mot de passe que vous avez défini au moment de la création de votre compte Axys (vous pourrez demander à en recevoir un nouveau si besoin).
             </p>
         ';
     }
@@ -59,7 +59,7 @@ if ($request->getMethod() === "POST") {
     $um->mail($user,$subject,$message,$headers);
 
     $params["added"] = 1;
-    $params["email"] = $user->get("user_email");
+    $params["email"] = $user->get("axys_account_email");
     $queryParams = http_build_query($params);
 
     return new RedirectResponse("/pages/adm_admins?$queryParams");
@@ -78,8 +78,8 @@ $content = '
     <form method="post" class="check">
         <fieldset>
             <p>
-                <label for="user_email">Adresse e-mail :</label>
-                <input type="email" name="user_email" id="user_email" value="'.($user_email ?? null).'" class="long" required>&nbsp;
+                <label for="axys_account_email">Adresse e-mail :</label>
+                <input type="email" name="axys_account_email" id="axys_account_email" value="'.($axysAccountEmail ?? null).'" class="long" required>&nbsp;
                 <span class="fa fa-info-circle" title="Si cette adresse ne correspond pas à un compte Axys, un nouveau compte sera créé automatiquement avec un mot de passe aléatoire envoyé par e-mail."></span>
             </p>
             <br>

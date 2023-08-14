@@ -46,7 +46,7 @@ $config = Config::load();
 $posts = EntityManager::prepareAndExecute(
     "SELECT
         `post_id`, `post_title`, `post_content`, `post_url`, `post_status`, `post_date`, `Email`,
-        `user_screen_name`, `category_name`, `publishers`.`publisher_id`, `publisher_name`
+        `axys_account_screen_name`, `category_name`, `publishers`.`publisher_id`, `publisher_name`
     FROM `posts`
     JOIN `axys_accounts` ON `axys_accounts`.`id` = `axys_account_id`
     LEFT JOIN `categories` USING(`category_id`)
@@ -63,7 +63,7 @@ $table = NULL;
 while($p = $posts->fetch(PDO::FETCH_ASSOC)) {
     if($p["post_status"] == 1) $p["status"] = '<img src="/common/img/square_green.png" alt="En ligne" />';
     else $p["status"] = '<img src="/common/img/square_red.png" alt="Hors ligne" />';
-    if(!empty($p["user_screen_name"])) $p["user"] = $p["user_screen_name"];
+    if(!empty($p["axys_account_screen_name"])) $p["user"] = $p["axys_account_screen_name"];
     else $p["user"] = $p["Email"];
     if(empty($p["post_title"])) $p["post_title"] = truncate(strip_tags($p["post_content"]),50);
     if(!empty($p["publisher_id"])) $p["user"] = $p["publisher_name"];

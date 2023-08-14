@@ -5,7 +5,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 
 if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) $mode = 'admin';
 	elseif (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $mode = 'publisher';
-	else trigger_error('Accès non autorisé pour '. LegacyCodeHelper::getGlobalVisitor()->get('user_email'));
+	else trigger_error('Accès non autorisé pour '. LegacyCodeHelper::getGlobalVisitor()->get('axys_account_email'));
     
     \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Gestion des dédicaces');
     

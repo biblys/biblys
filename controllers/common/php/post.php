@@ -38,7 +38,7 @@ if ($post->get('status') == 0) {
 
 $query = "SELECT `post_id`, `post_title`, `post_url`, `post_content`, `post_date`, `post_update`,
         `category_name`, `category_url`,
-        `user_screen_name`, `user_slug`
+        `axys_account_screen_name`, `axys_account_slug`
     FROM `posts`
     LEFT JOIN `categories` USING(`category_id`)
     LEFT JOIN `axys_accounts` ON `axys_account_id` = `axys_accounts`.`id`
@@ -63,7 +63,7 @@ if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
 \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle($p["post_title"]);
 
 if(!empty($p["category_name"])) $dans = 'dans la rubrique <a href="/blog/'.$p["category_url"].'/">'.$p["category_name"].'</a>.'; else $dans = null;
-if(!empty($p["user_screen_name"])) $par = "par ".$p["user_screen_name"]; else $par = null;
+if(!empty($p["axys_account_screen_name"])) $par = "par ".$p["axys_account_screen_name"]; else $par = null;
 if(media_exists("post",$p["post_id"]))
 {
     $_og_image = media_url("post",$p["post_id"]);
@@ -126,7 +126,7 @@ else
         <article id="p'.$p["post_id"].'" class="post">
             <header class="post-header">
                 <h1><a href="/blog/'.$p["post_url"].'">'.$p["post_title"].'</a></h1>
-                <p class="post-infos">Publié <span class="post-infos-par">par '.$p["user_screen_name"].'</span> le&nbsp;<time datetime="'._date($p["post_date"],'Y-m-dTH:i:sZ').'">'._date($p["post_date"],'j f Y').'</time> '.$dans.'</p>
+                <p class="post-infos">Publié <span class="post-infos-par">par '.$p["axys_account_screen_name"].'</span> le&nbsp;<time datetime="'._date($p["post_date"],'Y-m-dTH:i:sZ').'">'._date($p["post_date"],'j f Y').'</time> '.$dans.'</p>
             </header>
             <section class="post-content">
                 '.$p["illustration"].'

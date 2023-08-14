@@ -204,13 +204,13 @@ class Cart extends Entity
      */
     public function getUserInfo()
     {
-        $user_id = $this->get('axys_account_id');
-        if (!$user_id) {
+        $axys_account_id = $this->get('axys_account_id');
+        if (!$axys_account_id) {
             return $this->get('cart_ip');
         }
 
-        $um = new AxysAccountsManager();
-        $user = $um->getById($user_id);
+        $um = new AxysAccountManager();
+        $user = $um->getById($axys_account_id);
         if (!$user) {
             return $this->get('cart_ip');
         }

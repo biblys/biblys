@@ -269,7 +269,7 @@ class RightTableMap extends TableMap
         // columns
         $this->addPrimaryKey('right_id', 'Id', 'INTEGER', true, 10, null);
         $this->addColumn('right_uid', 'Uid', 'VARCHAR', false, 32, null);
-        $this->addForeignKey('axys_account_id', 'AxysAccountId', 'INTEGER', 'axys_accounts', 'id', false, 10, null);
+        $this->addForeignKey('axys_account_id', 'AxysAccountId', 'INTEGER', 'axys_accounts', 'axys_account_id', false, 10, null);
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
         $this->addForeignKey('publisher_id', 'PublisherId', 'INTEGER', 'publishers', 'publisher_id', false, 10, null);
         $this->addColumn('bookshop_id', 'BookshopId', 'INTEGER', false, 10, null);
@@ -290,7 +290,7 @@ class RightTableMap extends TableMap
   0 =>
   array (
     0 => ':axys_account_id',
-    1 => ':id',
+    1 => ':axys_account_id',
   ),
 ), null, null, null, false);
         $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (

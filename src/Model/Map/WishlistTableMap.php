@@ -229,7 +229,7 @@ class WishlistTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('wishlist_id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('axys_account_id', 'AxysAccountId', 'INTEGER', 'axys_accounts', 'id', false, null, null);
+        $this->addForeignKey('axys_account_id', 'AxysAccountId', 'INTEGER', 'axys_accounts', 'axys_account_id', false, null, null);
         $this->addColumn('wishlist_name', 'Name', 'VARCHAR', false, 128, null);
         $this->addColumn('wishlist_current', 'Current', 'BOOLEAN', false, 1, null);
         $this->addColumn('wishlist_public', 'Public', 'BOOLEAN', false, 1, null);
@@ -248,7 +248,7 @@ class WishlistTableMap extends TableMap
   0 =>
   array (
     0 => ':axys_account_id',
-    1 => ':id',
+    1 => ':axys_account_id',
   ),
 ), null, null, null, false);
     }

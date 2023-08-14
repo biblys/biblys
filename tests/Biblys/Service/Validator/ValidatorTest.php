@@ -17,7 +17,7 @@ class ValidatorTest extends TestCase
         // then
         $this->expectException("Biblys\Service\Validator\ValidatorException");
         $this->expectExceptionMessage(
-            "La validation de la propriété “email” a échoué pour la valeur « invalid-email-example.net » : This value is not a valid email address."
+            "La validation de la propriété “axys_account_email” a échoué pour la valeur « invalid-email-example.net » : This value is not a valid email address."
         );
 
         // given

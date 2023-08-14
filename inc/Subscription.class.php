@@ -11,8 +11,8 @@
             /* JOINS */
             
             // User (OneToMany)
-            $um = new AxysAccountsManager();
-            if (isset($data['axys_account_id'])) $data['user'] = $um->get(array('user_id' => $data['axys_account_id']));
+            $um = new AxysAccountManager();
+            if (isset($data['axys_account_id'])) $data['user'] = $um->get(array('axys_account_id' => $data['axys_account_id']));
 
             // Publisher (OneToMany)
             $pm = new PublisherManager();

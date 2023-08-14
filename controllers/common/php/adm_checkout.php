@@ -41,7 +41,7 @@ else
 {
     $cart = $cm->create();
     $cart->set('cart_type', 'shop');
-    $cart->set('cart_seller_id', LegacyCodeHelper::getGlobalVisitor()['user_id']);
+    $cart->set('cart_seller_id', LegacyCodeHelper::getGlobalVisitor()['axys_account_id']);
     $cart = $cm->update($cart);
     return new RedirectResponse(sprintf("/pages/adm_checkout?cart_id=%s", $cart->get('id')));
 }
@@ -230,11 +230,11 @@ if ($cart->has('customer_id'))
 $seller_field = null;
 if ($cart->has('seller_id'))
 {
-    if ($seller = $um->get(array('user_id' => $cart->get('seller_id'))))
+    if ($seller = $um->get(array('axys_account_id' => $cart->get('seller_id'))))
     {
         $seller_field = '
             <input type="text" name="seller" id="seller" value="'.$seller->getUserName().'" class="long" required readonly>
-            <input type="hidden" name="seller_id" id="seller_id" value="'.$seller->get('user_id').'" required>
+            <input type="hidden" name="seller_id" id="seller_id" value="'.$seller->get('axys_account_id').'" required>
         ';
     }
 } else trigger_error('No seller id.');

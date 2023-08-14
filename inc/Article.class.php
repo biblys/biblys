@@ -702,10 +702,10 @@ class Article extends Entity
      */
     public function getDeletionUser(): ?AxysAccount
     {
-        $deletion_user_id = $this->get('article_deletion_by');
-        if ($deletion_user_id) {
-            $um = new AxysAccountsManager();
-            $user = $um->getById($deletion_user_id);
+        $deletion_axys_account_id = $this->get('article_deletion_by');
+        if ($deletion_axys_account_id) {
+            $um = new AxysAccountManager();
+            $user = $um->getById($deletion_axys_account_id);
             if ($user) {
                 return $user;
             }

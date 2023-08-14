@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 $um = new AxysAccountManager();
 $wlm = new WishlistManager();
 
-$user = $um->get(array('user_slug' => $request->query->get('slug')));
+$user = $um->get(array('axys_account_slug' => $request->query->get('slug')));
 if (!$user) {
     throw new ResourceNotFoundException('Utilisateur '.$request->query->get('slug').' inconnu');
 }

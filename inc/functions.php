@@ -537,20 +537,20 @@ function alphabetize($text): array|string|null
 // Afficher nom d'utilisateur
 function user_name($x)
 {
-    if (!empty($x['user_screen_name'])) {
-        $name = $x['user_screen_name'];
-    } elseif (!empty($x['user_last_name'])) {
-        $name = trim($x['user_first_name'] . ' ' . $x['user_last_name']);
+    if (!empty($x['axys_account_screen_name'])) {
+        $name = $x['axys_account_screen_name'];
+    } elseif (!empty($x['axys_account_last_name'])) {
+        $name = trim($x['axys_account_first_name'] . ' ' . $x['axys_account_last_name']);
     } elseif (!empty($x['order_last_name'])) {
         $name = trim($x['order_first_name'] . ' ' . $x['order_last_name']);
     } elseif (!empty($x['customer_last_name'])) {
         $name = trim($x['customer_first_name'] . ' ' . $x['customer_last_name']);
-    } elseif (!empty($x['user_email'])) {
-        $name = $x['user_email'];
+    } elseif (!empty($x['axys_account_email'])) {
+        $name = $x['axys_account_email'];
     } elseif (!empty($x['customer_email'])) {
         $name = $x['customer_email'];
-    } elseif (!empty($x['user_id'])) {
-        $name = $x['user_id'];
+    } elseif (!empty($x['axys_account_id'])) {
+        $name = $x['axys_account_id'];
     } elseif (!empty($x['customer_id'])) {
         $name = 'Client n° ' . $x['customer_id'];
     } else {

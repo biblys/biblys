@@ -17,7 +17,7 @@ class AxysAccountTest extends PHPUnit\Framework\TestCase
 
         $email = 'user'.rand(0,999).'@biblys.fr';
 
-        $user = $um->create(array('user_email' => $email));
+        $user = $um->create(array('axys_account_email' => $email));
 
         $this->assertInstanceOf(AxysAccount::class, $user);
 
@@ -31,7 +31,7 @@ class AxysAccountTest extends PHPUnit\Framework\TestCase
     {
         $um = new AxysAccountManager();
 
-        $get_user = $um->get(array('user_email' => $user->get('email')));
+        $get_user = $um->get(array('axys_account_email' => $user->get('email')));
 
         $this->assertInstanceOf(AxysAccount::class, $get_user);
         $this->assertEquals($user->get('id'), $get_user->get('id'));
@@ -122,8 +122,8 @@ class AxysAccountTest extends PHPUnit\Framework\TestCase
         // given
         $publisher = EntityFactory::createPublisher();
         $_SITE->set("publisher_id", $publisher->get("id"));
-        $um = new AxysAccountsManager();
-        $user = $um->create(["user_email" => "customer@biblys.fr"]);
+        $um = new AxysAccountManager();
+        $user = $um->create(["axys_account_email" => "customer@biblys.fr"]);
         $am = new ArticleManager();
         $article = $am->create([
             "type_id" => 2,

@@ -100,102 +100,102 @@ abstract class AxysAccount implements ActiveRecordInterface
     protected $virtualColumns = [];
 
     /**
-     * The value for the id field.
+     * The value for the axys_account_id field.
      *
      * @var        int
      */
-    protected $id;
+    protected $axys_account_id;
 
     /**
-     * The value for the email field.
+     * The value for the axys_account_email field.
      *
      * @var        string|null
      */
-    protected $email;
+    protected $axys_account_email;
 
     /**
-     * The value for the user_password field.
+     * The value for the axys_account_password field.
      *
      * @var        string|null
      */
-    protected $user_password;
+    protected $axys_account_password;
 
     /**
-     * The value for the user_key field.
+     * The value for the axys_account_key field.
      *
      * @var        string|null
      */
-    protected $user_key;
+    protected $axys_account_key;
 
     /**
-     * The value for the email_key field.
+     * The value for the axys_account_email_key field.
      *
      * @var        string|null
      */
-    protected $email_key;
+    protected $axys_account_email_key;
 
     /**
-     * The value for the user_screen_name field.
+     * The value for the axys_account_screen_name field.
      *
      * @var        string|null
      */
-    protected $user_screen_name;
+    protected $axys_account_screen_name;
 
     /**
-     * The value for the user_slug field.
+     * The value for the axys_account_slug field.
      *
      * @var        string|null
      */
-    protected $user_slug;
+    protected $axys_account_slug;
 
     /**
-     * The value for the dateinscription field.
+     * The value for the axys_account_signup_date field.
      *
      * @var        DateTime|null
      */
-    protected $dateinscription;
+    protected $axys_account_signup_date;
 
     /**
-     * The value for the dateconnexion field.
+     * The value for the axys_account_login_date field.
      *
      * @var        DateTime|null
      */
-    protected $dateconnexion;
+    protected $axys_account_login_date;
 
     /**
-     * The value for the user_nom field.
+     * The value for the axys_account_first_name field.
      *
      * @var        string|null
      */
-    protected $user_nom;
+    protected $axys_account_first_name;
 
     /**
-     * The value for the user_prenom field.
+     * The value for the axys_account_last_name field.
      *
      * @var        string|null
      */
-    protected $user_prenom;
+    protected $axys_account_last_name;
 
     /**
-     * The value for the user_update field.
+     * The value for the axys_account_update field.
      *
      * @var        DateTime|null
      */
-    protected $user_update;
+    protected $axys_account_update;
 
     /**
-     * The value for the user_created field.
+     * The value for the axys_account_created field.
      *
      * @var        DateTime|null
      */
-    protected $user_created;
+    protected $axys_account_created;
 
     /**
-     * The value for the user_updated field.
+     * The value for the axys_account_updated field.
      *
      * @var        DateTime|null
      */
-    protected $user_updated;
+    protected $axys_account_updated;
 
     /**
      * @var        ObjectCollection|ChildAxysConsent[] Collection to store aggregation of ChildAxysConsent objects.
@@ -561,77 +561,77 @@ abstract class AxysAccount implements ActiveRecordInterface
     }
 
     /**
-     * Get the [id] column value.
+     * Get the [axys_account_id] column value.
      *
      * @return int
      */
     public function getId()
     {
-        return $this->id;
+        return $this->axys_account_id;
     }
 
     /**
-     * Get the [email] column value.
+     * Get the [axys_account_email] column value.
      *
      * @return string|null
      */
     public function getEmail()
     {
-        return $this->email;
+        return $this->axys_account_email;
     }
 
     /**
-     * Get the [user_password] column value.
+     * Get the [axys_account_password] column value.
      *
      * @return string|null
      */
     public function getPassword()
     {
-        return $this->user_password;
+        return $this->axys_account_password;
     }
 
     /**
-     * Get the [user_key] column value.
+     * Get the [axys_account_key] column value.
      *
      * @return string|null
      */
     public function getKey()
     {
-        return $this->user_key;
+        return $this->axys_account_key;
     }
 
     /**
-     * Get the [email_key] column value.
+     * Get the [axys_account_email_key] column value.
      *
      * @return string|null
      */
     public function getEmailKey()
     {
-        return $this->email_key;
+        return $this->axys_account_email_key;
     }
 
     /**
-     * Get the [user_screen_name] column value.
+     * Get the [axys_account_screen_name] column value.
      *
      * @return string|null
      */
     public function getUsername()
     {
-        return $this->user_screen_name;
+        return $this->axys_account_screen_name;
     }
 
     /**
-     * Get the [user_slug] column value.
+     * Get the [axys_account_slug] column value.
      *
      * @return string|null
      */
     public function getSlug()
     {
-        return $this->user_slug;
+        return $this->axys_account_slug;
     }
 
     /**
-     * Get the [optionally formatted] temporal [dateinscription] column value.
+     * Get the [optionally formatted] temporal [axys_account_signup_date] column value.
      *
      *
      * @param string|null $format The date/time format string (either date()-style or strftime()-style).
@@ -643,17 +643,17 @@ abstract class AxysAccount implements ActiveRecordInterface
      *
      * @psalm-return ($format is null ? DateTime|null : string|null)
      */
-    public function getDateinscription($format = null)
+    public function getSignupDate($format = null)
     {
         if ($format === null) {
-            return $this->dateinscription;
+            return $this->axys_account_signup_date;
         } else {
-            return $this->dateinscription instanceof \DateTimeInterface ? $this->dateinscription->format($format) : null;
+            return $this->axys_account_signup_date instanceof \DateTimeInterface ? $this->axys_account_signup_date->format($format) : null;
         }
     }
 
     /**
-     * Get the [optionally formatted] temporal [dateconnexion] column value.
+     * Get the [optionally formatted] temporal [axys_account_login_date] column value.
      *
      *
      * @param string|null $format The date/time format string (either date()-style or strftime()-style).
@@ -665,37 +665,37 @@ abstract class AxysAccount implements ActiveRecordInterface
      *
      * @psalm-return ($format is null ? DateTime|null : string|null)
      */
-    public function getDateconnexion($format = null)
+    public function getLoginDate($format = null)
     {
         if ($format === null) {
-            return $this->dateconnexion;
+            return $this->axys_account_login_date;
         } else {
-            return $this->dateconnexion instanceof \DateTimeInterface ? $this->dateconnexion->format($format) : null;
+            return $this->axys_account_login_date instanceof \DateTimeInterface ? $this->axys_account_login_date->format($format) : null;
         }
     }
 
     /**
-     * Get the [user_nom] column value.
+     * Get the [axys_account_first_name] column value.
      *
      * @return string|null
      */
-    public function getNom()
+    public function getFirstName()
     {
-        return $this->user_nom;
+        return $this->axys_account_first_name;
     }
 
     /**
-     * Get the [user_prenom] column value.
+     * Get the [axys_account_last_name] column value.
      *
      * @return string|null
      */
-    public function getPrenom()
+    public function getLastName()
     {
-        return $this->user_prenom;
+        return $this->axys_account_last_name;
     }
 
     /**
-     * Get the [optionally formatted] temporal [user_update] column value.
+     * Get the [optionally formatted] temporal [axys_account_update] column value.
      *
      *
      * @param string|null $format The date/time format string (either date()-style or strftime()-style).
@@ -710,14 +710,14 @@ abstract class AxysAccount implements ActiveRecordInterface
     public function getUpdate($format = null)
     {
         if ($format === null) {
-            return $this->user_update;
+            return $this->axys_account_update;
         } else {
-            return $this->user_update instanceof \DateTimeInterface ? $this->user_update->format($format) : null;
+            return $this->axys_account_update instanceof \DateTimeInterface ? $this->axys_account_update->format($format) : null;
         }
     }
 
     /**
-     * Get the [optionally formatted] temporal [user_created] column value.
+     * Get the [optionally formatted] temporal [axys_account_created] column value.
      *
      *
      * @param string|null $format The date/time format string (either date()-style or strftime()-style).
@@ -732,14 +732,14 @@ abstract class AxysAccount implements ActiveRecordInterface
     public function getCreatedAt($format = null)
     {
         if ($format === null) {
-            return $this->user_created;
+            return $this->axys_account_created;
         } else {
-            return $this->user_created instanceof \DateTimeInterface ? $this->user_created->format($format) : null;
+            return $this->axys_account_created instanceof \DateTimeInterface ? $this->axys_account_created->format($format) : null;
         }
     }
 
     /**
-     * Get the [optionally formatted] temporal [user_updated] column value.
+     * Get the [optionally formatted] temporal [axys_account_updated] column value.
      *
      *
      * @param string|null $format The date/time format string (either date()-style or strftime()-style).
@@ -754,14 +754,14 @@ abstract class AxysAccount implements ActiveRecordInterface
     public function getUpdatedAt($format = null)
     {
         if ($format === null) {
-            return $this->user_updated;
+            return $this->axys_account_updated;
         } else {
-            return $this->user_updated instanceof \DateTimeInterface ? $this->user_updated->format($format) : null;
+            return $this->axys_account_updated instanceof \DateTimeInterface ? $this->axys_account_updated->format($format) : null;
         }
     }
 
     /**
-     * Set the value of [id] column.
+     * Set the value of [axys_account_id] column.
      *
      * @param int $v New value
      * @return $this The current object (for fluent API support)
@@ -772,16 +772,16 @@ abstract class AxysAccount implements ActiveRecordInterface
             $v = (int) $v;
         }
 
-        if ($this->id !== $v) {
-            $this->id = $v;
-            $this->modifiedColumns[AxysAccountTableMap::COL_ID] = true;
+        if ($this->axys_account_id !== $v) {
+            $this->axys_account_id = $v;
+            $this->modifiedColumns[AxysAccountTableMap::COL_AXYS_ACCOUNT_ID] = true;
         }
 
         return $this;
     }
 
     /**
-     * Set the value of [email] column.
+     * Set the value of [axys_account_email] column.
      *
      * @param string|null $v New value
      * @return $this The current object (for fluent API support)
@@ -792,16 +792,16 @@ abstract class AxysAccount implements ActiveRecordInterface
             $v = (string) $v;
         }
 
-        if ($this->email !== $v) {
-            $this->email = $v;
-            $this->modifiedColumns[AxysAccountTableMap::COL_EMAIL] = true;
+        if ($this->axys_account_email !== $v) {
+            $this->axys_account_email = $v;
+            $this->modifiedColumns[AxysAccountTableMap::COL_AXYS_ACCOUNT_EMAIL] = true;
         }
 
         return $this;
     }
 
     /**
-     * Set the value of [user_password] column.
+     * Set the value of [axys_account_password] column.
      *
      * @param string|null $v New value
      * @return $this The current object (for fluent API support)
@@ -812,16 +812,16 @@ abstract class AxysAccount implements ActiveRecordInterface
             $v = (string) $v;
         }
 
-        if ($this->user_password !== $v) {
-            $this->user_password = $v;
-            $this->modifiedColumns[AxysAccountTableMap::COL_USER_PASSWORD] = true;
+        if ($this->axys_account_password !== $v) {
+            $this->axys_account_password = $v;
+            $this->modifiedColumns[AxysAccountTableMap::COL_AXYS_ACCOUNT_PASSWORD] = true;
         }
 
         return $this;
     }
 
     /**
-     * Set the value of [user_key] column.
+     * Set the value of [axys_account_key] column.
      *
      * @param string|null $v New value
      * @return $this The current object (for fluent API support)
@@ -832,16 +832,16 @@ abstract class AxysAccount implements ActiveRecordInterface
             $v = (string) $v;
         }
 
-        if ($this->user_key !== $v) {
-            $this->user_key = $v;
-            $this->modifiedColumns[AxysAccountTableMap::COL_USER_KEY] = true;
+        if ($this->axys_account_key !== $v) {
+            $this->axys_account_key = $v;
+            $this->modifiedColumns[AxysAccountTableMap::COL_AXYS_ACCOUNT_KEY] = true;
         }
 
         return $this;
     }
 
     /**
-     * Set the value of [email_key] column.
+     * Set the value of [axys_account_email_key] column.
      *
      * @param string|null $v New value
      * @return $this The current object (for fluent API support)
@@ -852,16 +852,16 @@ abstract class AxysAccount implements ActiveRecordInterface
             $v = (string) $v;
         }
 
-        if ($this->email_key !== $v) {
-            $this->email_key = $v;
-            $this->modifiedColumns[AxysAccountTableMap::COL_EMAIL_KEY] = true;
+        if ($this->axys_account_email_key !== $v) {
+            $this->axys_account_email_key = $v;
+            $this->modifiedColumns[AxysAccountTableMap::COL_AXYS_ACCOUNT_EMAIL_KEY] = true;
         }
 
         return $this;
     }
 
     /**
-     * Set the value of [user_screen_name] column.
+     * Set the value of [axys_account_screen_name] column.
      *
      * @param string|null $v New value
      * @return $this The current object (for fluent API support)
@@ -872,16 +872,16 @@ abstract class AxysAccount implements ActiveRecordInterface
             $v = (string) $v;
         }
 
-        if ($this->user_screen_name !== $v) {
-            $this->user_screen_name = $v;
-            $this->modifiedColumns[AxysAccountTableMap::COL_USER_SCREEN_NAME] = true;
+        if ($this->axys_account_screen_name !== $v) {
+            $this->axys_account_screen_name = $v;
+            $this->modifiedColumns[AxysAccountTableMap::COL_AXYS_ACCOUNT_SCREEN_NAME] = true;
         }
 
         return $this;
     }
 
     /**
-     * Set the value of [user_slug] column.
+     * Set the value of [axys_account_slug] column.
      *
      * @param string|null $v New value
      * @return $this The current object (for fluent API support)
@@ -892,28 +892,28 @@ abstract class AxysAccount implements ActiveRecordInterface
             $v = (string) $v;
         }
 
-        if ($this->user_slug !== $v) {
-            $this->user_slug = $v;
-            $this->modifiedColumns[AxysAccountTableMap::COL_USER_SLUG] = true;
+        if ($this->axys_account_slug !== $v) {
+            $this->axys_account_slug = $v;
+            $this->modifiedColumns[AxysAccountTableMap::COL_AXYS_ACCOUNT_SLUG] = true;
         }
 
         return $this;
     }
 
     /**
-     * Sets the value of [dateinscription] column to a normalized version of the date/time value specified.
+     * Sets the value of [axys_account_signup_date] column to a normalized version of the date/time value specified.
      *
      * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this The current object (for fluent API support)
      */
-    public function setDateinscription($v)
+    public function setSignupDate($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->dateinscription !== null || $dt !== null) {
-            if ($this->dateinscription === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->dateinscription->format("Y-m-d H:i:s.u")) {
-                $this->dateinscription = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[AxysAccountTableMap::COL_DATEINSCRIPTION] = true;
+        if ($this->axys_account_signup_date !== null || $dt !== null) {
+            if ($this->axys_account_signup_date === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->axys_account_signup_date->format("Y-m-d H:i:s.u")) {
+                $this->axys_account_signup_date = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[AxysAccountTableMap::COL_AXYS_ACCOUNT_SIGNUP_DATE] = true;
             }
         } // if either are not null
 
@@ -921,19 +921,19 @@ abstract class AxysAccount implements ActiveRecordInterface
     }
 
     /**
-     * Sets the value of [dateconnexion] column to a normalized version of the date/time value specified.
+     * Sets the value of [axys_account_login_date] column to a normalized version of the date/time value specified.
      *
      * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this The current object (for fluent API support)
      */
-    public function setDateconnexion($v)
+    public function setLoginDate($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->dateconnexion !== null || $dt !== null) {
-            if ($this->dateconnexion === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->dateconnexion->format("Y-m-d H:i:s.u")) {
-                $this->dateconnexion = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[AxysAccountTableMap::COL_DATECONNEXION] = true;
+        if ($this->axys_account_login_date !== null || $dt !== null) {
+            if ($this->axys_account_login_date === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->axys_account_login_date->format("Y-m-d H:i:s.u")) {
+                $this->axys_account_login_date = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[AxysAccountTableMap::COL_AXYS_ACCOUNT_LOGIN_DATE] = true;
             }
         } // if either are not null
 
@@ -941,47 +941,47 @@ abstract class AxysAccount implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [user_nom] column.
+     * Set the value of [axys_account_first_name] column.
      *
      * @param string|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setNom($v)
+    public function setFirstName($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->user_nom !== $v) {
-            $this->user_nom = $v;
-            $this->modifiedColumns[AxysAccountTableMap::COL_USER_NOM] = true;
+        if ($this->axys_account_first_name !== $v) {
+            $this->axys_account_first_name = $v;
+            $this->modifiedColumns[AxysAccountTableMap::COL_AXYS_ACCOUNT_FIRST_NAME] = true;
         }
 
         return $this;
     }
 
     /**
-     * Set the value of [user_prenom] column.
+     * Set the value of [axys_account_last_name] column.
      *
      * @param string|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setPrenom($v)
+    public function setLastName($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->user_prenom !== $v) {
-            $this->user_prenom = $v;
-            $this->modifiedColumns[AxysAccountTableMap::COL_USER_PRENOM] = true;
+        if ($this->axys_account_last_name !== $v) {
+            $this->axys_account_last_name = $v;
+            $this->modifiedColumns[AxysAccountTableMap::COL_AXYS_ACCOUNT_LAST_NAME] = true;
         }
 
         return $this;
     }
 
     /**
-     * Sets the value of [user_update] column to a normalized version of the date/time value specified.
+     * Sets the value of [axys_account_update] column to a normalized version of the date/time value specified.
      *
      * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
@@ -990,10 +990,10 @@ abstract class AxysAccount implements ActiveRecordInterface
     public function setUpdate($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->user_update !== null || $dt !== null) {
-            if ($this->user_update === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->user_update->format("Y-m-d H:i:s.u")) {
-                $this->user_update = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[AxysAccountTableMap::COL_USER_UPDATE] = true;
+        if ($this->axys_account_update !== null || $dt !== null) {
+            if ($this->axys_account_update === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->axys_account_update->format("Y-m-d H:i:s.u")) {
+                $this->axys_account_update = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATE] = true;
             }
         } // if either are not null
 
@@ -1001,7 +1001,7 @@ abstract class AxysAccount implements ActiveRecordInterface
     }
 
     /**
-     * Sets the value of [user_created] column to a normalized version of the date/time value specified.
+     * Sets the value of [axys_account_created] column to a normalized version of the date/time value specified.
      *
      * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
@@ -1010,10 +1010,10 @@ abstract class AxysAccount implements ActiveRecordInterface
     public function setCreatedAt($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->user_created !== null || $dt !== null) {
-            if ($this->user_created === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->user_created->format("Y-m-d H:i:s.u")) {
-                $this->user_created = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[AxysAccountTableMap::COL_USER_CREATED] = true;
+        if ($this->axys_account_created !== null || $dt !== null) {
+            if ($this->axys_account_created === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->axys_account_created->format("Y-m-d H:i:s.u")) {
+                $this->axys_account_created = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED] = true;
             }
         } // if either are not null
 
@@ -1021,7 +1021,7 @@ abstract class AxysAccount implements ActiveRecordInterface
     }
 
     /**
-     * Sets the value of [user_updated] column to a normalized version of the date/time value specified.
+     * Sets the value of [axys_account_updated] column to a normalized version of the date/time value specified.
      *
      * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
@@ -1030,10 +1030,10 @@ abstract class AxysAccount implements ActiveRecordInterface
     public function setUpdatedAt($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->user_updated !== null || $dt !== null) {
-            if ($this->user_updated === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->user_updated->format("Y-m-d H:i:s.u")) {
-                $this->user_updated = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[AxysAccountTableMap::COL_USER_UPDATED] = true;
+        if ($this->axys_account_updated !== null || $dt !== null) {
+            if ($this->axys_account_updated === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->axys_account_updated->format("Y-m-d H:i:s.u")) {
+                $this->axys_account_updated = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED] = true;
             }
         } // if either are not null
 
@@ -1077,61 +1077,61 @@ abstract class AxysAccount implements ActiveRecordInterface
         try {
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : AxysAccountTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->id = (null !== $col) ? (int) $col : null;
+            $this->axys_account_id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : AxysAccountTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->email = (null !== $col) ? (string) $col : null;
+            $this->axys_account_email = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : AxysAccountTableMap::translateFieldName('Password', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_password = (null !== $col) ? (string) $col : null;
+            $this->axys_account_password = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : AxysAccountTableMap::translateFieldName('Key', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_key = (null !== $col) ? (string) $col : null;
+            $this->axys_account_key = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : AxysAccountTableMap::translateFieldName('EmailKey', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->email_key = (null !== $col) ? (string) $col : null;
+            $this->axys_account_email_key = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : AxysAccountTableMap::translateFieldName('Username', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_screen_name = (null !== $col) ? (string) $col : null;
+            $this->axys_account_screen_name = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : AxysAccountTableMap::translateFieldName('Slug', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_slug = (null !== $col) ? (string) $col : null;
+            $this->axys_account_slug = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : AxysAccountTableMap::translateFieldName('Dateinscription', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : AxysAccountTableMap::translateFieldName('SignupDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->dateinscription = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->axys_account_signup_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : AxysAccountTableMap::translateFieldName('Dateconnexion', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : AxysAccountTableMap::translateFieldName('LoginDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->dateconnexion = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->axys_account_login_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : AxysAccountTableMap::translateFieldName('Nom', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_nom = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : AxysAccountTableMap::translateFieldName('FirstName', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->axys_account_first_name = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : AxysAccountTableMap::translateFieldName('Prenom', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_prenom = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : AxysAccountTableMap::translateFieldName('LastName', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->axys_account_last_name = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : AxysAccountTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->user_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->axys_account_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : AxysAccountTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->user_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->axys_account_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : AxysAccountTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->user_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->axys_account_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
             $this->resetModified();
             $this->setNew(false);
@@ -1287,16 +1287,16 @@ abstract class AxysAccount implements ActiveRecordInterface
                 // timestampable behavior
                 $time = time();
                 $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
-                if (!$this->isColumnModified(AxysAccountTableMap::COL_USER_CREATED)) {
+                if (!$this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED)) {
                     $this->setCreatedAt($highPrecision);
                 }
-                if (!$this->isColumnModified(AxysAccountTableMap::COL_USER_UPDATED)) {
+                if (!$this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED)) {
                     $this->setUpdatedAt($highPrecision);
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(AxysAccountTableMap::COL_USER_UPDATED)) {
+                if ($this->isModified() && !$this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED)) {
                     $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
                 }
             }
@@ -1508,53 +1508,53 @@ abstract class AxysAccount implements ActiveRecordInterface
         $modifiedColumns = [];
         $index = 0;
 
-        $this->modifiedColumns[AxysAccountTableMap::COL_ID] = true;
-        if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . AxysAccountTableMap::COL_ID . ')');
+        $this->modifiedColumns[AxysAccountTableMap::COL_AXYS_ACCOUNT_ID] = true;
+        if (null !== $this->axys_account_id) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . AxysAccountTableMap::COL_AXYS_ACCOUNT_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(AxysAccountTableMap::COL_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'id';
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_id';
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_EMAIL)) {
-            $modifiedColumns[':p' . $index++]  = 'Email';
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_EMAIL)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_email';
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_PASSWORD)) {
-            $modifiedColumns[':p' . $index++]  = 'user_password';
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_PASSWORD)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_password';
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_KEY)) {
-            $modifiedColumns[':p' . $index++]  = 'user_key';
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_KEY)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_key';
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_EMAIL_KEY)) {
-            $modifiedColumns[':p' . $index++]  = 'email_key';
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_EMAIL_KEY)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_email_key';
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_SCREEN_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'user_screen_name';
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_SCREEN_NAME)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_screen_name';
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_SLUG)) {
-            $modifiedColumns[':p' . $index++]  = 'user_slug';
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_SLUG)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_slug';
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_DATEINSCRIPTION)) {
-            $modifiedColumns[':p' . $index++]  = 'DateInscription';
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_SIGNUP_DATE)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_signup_date';
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_DATECONNEXION)) {
-            $modifiedColumns[':p' . $index++]  = 'DateConnexion';
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_LOGIN_DATE)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_login_date';
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_NOM)) {
-            $modifiedColumns[':p' . $index++]  = 'user_nom';
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_FIRST_NAME)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_first_name';
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_PRENOM)) {
-            $modifiedColumns[':p' . $index++]  = 'user_prenom';
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_LAST_NAME)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_last_name';
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_UPDATE)) {
-            $modifiedColumns[':p' . $index++]  = 'user_update';
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATE)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_update';
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_CREATED)) {
-            $modifiedColumns[':p' . $index++]  = 'user_created';
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_created';
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_UPDATED)) {
-            $modifiedColumns[':p' . $index++]  = 'user_updated';
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_updated';
         }
 
         $sql = sprintf(
@@ -1567,60 +1567,60 @@ abstract class AxysAccount implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':
-                        $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+                    case 'axys_account_id':
+                        $stmt->bindValue($identifier, $this->axys_account_id, PDO::PARAM_INT);
 
                         break;
-                    case 'Email':
-                        $stmt->bindValue($identifier, $this->email, PDO::PARAM_STR);
+                    case 'axys_account_email':
+                        $stmt->bindValue($identifier, $this->axys_account_email, PDO::PARAM_STR);
 
                         break;
-                    case 'user_password':
-                        $stmt->bindValue($identifier, $this->user_password, PDO::PARAM_STR);
+                    case 'axys_account_password':
+                        $stmt->bindValue($identifier, $this->axys_account_password, PDO::PARAM_STR);
 
                         break;
-                    case 'user_key':
-                        $stmt->bindValue($identifier, $this->user_key, PDO::PARAM_STR);
+                    case 'axys_account_key':
+                        $stmt->bindValue($identifier, $this->axys_account_key, PDO::PARAM_STR);
 
                         break;
-                    case 'email_key':
-                        $stmt->bindValue($identifier, $this->email_key, PDO::PARAM_STR);
+                    case 'axys_account_email_key':
+                        $stmt->bindValue($identifier, $this->axys_account_email_key, PDO::PARAM_STR);
 
                         break;
-                    case 'user_screen_name':
-                        $stmt->bindValue($identifier, $this->user_screen_name, PDO::PARAM_STR);
+                    case 'axys_account_screen_name':
+                        $stmt->bindValue($identifier, $this->axys_account_screen_name, PDO::PARAM_STR);
 
                         break;
-                    case 'user_slug':
-                        $stmt->bindValue($identifier, $this->user_slug, PDO::PARAM_STR);
+                    case 'axys_account_slug':
+                        $stmt->bindValue($identifier, $this->axys_account_slug, PDO::PARAM_STR);
 
                         break;
-                    case 'DateInscription':
-                        $stmt->bindValue($identifier, $this->dateinscription ? $this->dateinscription->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                    case 'axys_account_signup_date':
+                        $stmt->bindValue($identifier, $this->axys_account_signup_date ? $this->axys_account_signup_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
 
                         break;
-                    case 'DateConnexion':
-                        $stmt->bindValue($identifier, $this->dateconnexion ? $this->dateconnexion->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                    case 'axys_account_login_date':
+                        $stmt->bindValue($identifier, $this->axys_account_login_date ? $this->axys_account_login_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
 
                         break;
-                    case 'user_nom':
-                        $stmt->bindValue($identifier, $this->user_nom, PDO::PARAM_STR);
+                    case 'axys_account_first_name':
+                        $stmt->bindValue($identifier, $this->axys_account_first_name, PDO::PARAM_STR);
 
                         break;
-                    case 'user_prenom':
-                        $stmt->bindValue($identifier, $this->user_prenom, PDO::PARAM_STR);
+                    case 'axys_account_last_name':
+                        $stmt->bindValue($identifier, $this->axys_account_last_name, PDO::PARAM_STR);
 
                         break;
-                    case 'user_update':
-                        $stmt->bindValue($identifier, $this->user_update ? $this->user_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                    case 'axys_account_update':
+                        $stmt->bindValue($identifier, $this->axys_account_update ? $this->axys_account_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
 
                         break;
-                    case 'user_created':
-                        $stmt->bindValue($identifier, $this->user_created ? $this->user_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                    case 'axys_account_created':
+                        $stmt->bindValue($identifier, $this->axys_account_created ? $this->axys_account_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
 
                         break;
-                    case 'user_updated':
-                        $stmt->bindValue($identifier, $this->user_updated ? $this->user_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                    case 'axys_account_updated':
+                        $stmt->bindValue($identifier, $this->axys_account_updated ? $this->axys_account_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
 
                         break;
                 }
@@ -1707,16 +1707,16 @@ abstract class AxysAccount implements ActiveRecordInterface
                 return $this->getSlug();
 
             case 7:
-                return $this->getDateinscription();
+                return $this->getSignupDate();
 
             case 8:
-                return $this->getDateconnexion();
+                return $this->getLoginDate();
 
             case 9:
-                return $this->getNom();
+                return $this->getFirstName();
 
             case 10:
-                return $this->getPrenom();
+                return $this->getLastName();
 
             case 11:
                 return $this->getUpdate();
@@ -1762,10 +1762,10 @@ abstract class AxysAccount implements ActiveRecordInterface
             $keys[4] => $this->getEmailKey(),
             $keys[5] => $this->getUsername(),
             $keys[6] => $this->getSlug(),
-            $keys[7] => $this->getDateinscription(),
-            $keys[8] => $this->getDateconnexion(),
-            $keys[9] => $this->getNom(),
-            $keys[10] => $this->getPrenom(),
+            $keys[7] => $this->getSignupDate(),
+            $keys[8] => $this->getLoginDate(),
+            $keys[9] => $this->getFirstName(),
+            $keys[10] => $this->getLastName(),
             $keys[11] => $this->getUpdate(),
             $keys[12] => $this->getCreatedAt(),
             $keys[13] => $this->getUpdatedAt(),
@@ -1974,16 +1974,16 @@ abstract class AxysAccount implements ActiveRecordInterface
                 $this->setSlug($value);
                 break;
             case 7:
-                $this->setDateinscription($value);
+                $this->setSignupDate($value);
                 break;
             case 8:
-                $this->setDateconnexion($value);
+                $this->setLoginDate($value);
                 break;
             case 9:
-                $this->setNom($value);
+                $this->setFirstName($value);
                 break;
             case 10:
-                $this->setPrenom($value);
+                $this->setLastName($value);
                 break;
             case 11:
                 $this->setUpdate($value);
@@ -2042,16 +2042,16 @@ abstract class AxysAccount implements ActiveRecordInterface
             $this->setSlug($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setDateinscription($arr[$keys[7]]);
+            $this->setSignupDate($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setDateconnexion($arr[$keys[8]]);
+            $this->setLoginDate($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setNom($arr[$keys[9]]);
+            $this->setFirstName($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setPrenom($arr[$keys[10]]);
+            $this->setLastName($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
             $this->setUpdate($arr[$keys[11]]);
@@ -2105,47 +2105,47 @@ abstract class AxysAccount implements ActiveRecordInterface
     {
         $criteria = new Criteria(AxysAccountTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(AxysAccountTableMap::COL_ID)) {
-            $criteria->add(AxysAccountTableMap::COL_ID, $this->id);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID)) {
+            $criteria->add(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, $this->axys_account_id);
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_EMAIL)) {
-            $criteria->add(AxysAccountTableMap::COL_EMAIL, $this->email);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_EMAIL)) {
+            $criteria->add(AxysAccountTableMap::COL_AXYS_ACCOUNT_EMAIL, $this->axys_account_email);
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_PASSWORD)) {
-            $criteria->add(AxysAccountTableMap::COL_USER_PASSWORD, $this->user_password);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_PASSWORD)) {
+            $criteria->add(AxysAccountTableMap::COL_AXYS_ACCOUNT_PASSWORD, $this->axys_account_password);
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_KEY)) {
-            $criteria->add(AxysAccountTableMap::COL_USER_KEY, $this->user_key);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_KEY)) {
+            $criteria->add(AxysAccountTableMap::COL_AXYS_ACCOUNT_KEY, $this->axys_account_key);
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_EMAIL_KEY)) {
-            $criteria->add(AxysAccountTableMap::COL_EMAIL_KEY, $this->email_key);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_EMAIL_KEY)) {
+            $criteria->add(AxysAccountTableMap::COL_AXYS_ACCOUNT_EMAIL_KEY, $this->axys_account_email_key);
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_SCREEN_NAME)) {
-            $criteria->add(AxysAccountTableMap::COL_USER_SCREEN_NAME, $this->user_screen_name);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_SCREEN_NAME)) {
+            $criteria->add(AxysAccountTableMap::COL_AXYS_ACCOUNT_SCREEN_NAME, $this->axys_account_screen_name);
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_SLUG)) {
-            $criteria->add(AxysAccountTableMap::COL_USER_SLUG, $this->user_slug);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_SLUG)) {
+            $criteria->add(AxysAccountTableMap::COL_AXYS_ACCOUNT_SLUG, $this->axys_account_slug);
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_DATEINSCRIPTION)) {
-            $criteria->add(AxysAccountTableMap::COL_DATEINSCRIPTION, $this->dateinscription);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_SIGNUP_DATE)) {
+            $criteria->add(AxysAccountTableMap::COL_AXYS_ACCOUNT_SIGNUP_DATE, $this->axys_account_signup_date);
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_DATECONNEXION)) {
-            $criteria->add(AxysAccountTableMap::COL_DATECONNEXION, $this->dateconnexion);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_LOGIN_DATE)) {
+            $criteria->add(AxysAccountTableMap::COL_AXYS_ACCOUNT_LOGIN_DATE, $this->axys_account_login_date);
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_NOM)) {
-            $criteria->add(AxysAccountTableMap::COL_USER_NOM, $this->user_nom);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_FIRST_NAME)) {
+            $criteria->add(AxysAccountTableMap::COL_AXYS_ACCOUNT_FIRST_NAME, $this->axys_account_first_name);
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_PRENOM)) {
-            $criteria->add(AxysAccountTableMap::COL_USER_PRENOM, $this->user_prenom);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_LAST_NAME)) {
+            $criteria->add(AxysAccountTableMap::COL_AXYS_ACCOUNT_LAST_NAME, $this->axys_account_last_name);
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_UPDATE)) {
-            $criteria->add(AxysAccountTableMap::COL_USER_UPDATE, $this->user_update);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATE)) {
+            $criteria->add(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATE, $this->axys_account_update);
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_CREATED)) {
-            $criteria->add(AxysAccountTableMap::COL_USER_CREATED, $this->user_created);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED)) {
+            $criteria->add(AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED, $this->axys_account_created);
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_UPDATED)) {
-            $criteria->add(AxysAccountTableMap::COL_USER_UPDATED, $this->user_updated);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED)) {
+            $criteria->add(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED, $this->axys_account_updated);
         }
 
         return $criteria;
@@ -2164,7 +2164,7 @@ abstract class AxysAccount implements ActiveRecordInterface
     public function buildPkeyCriteria(): Criteria
     {
         $criteria = ChildAxysAccountQuery::create();
-        $criteria->add(AxysAccountTableMap::COL_ID, $this->id);
+        $criteria->add(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, $this->axys_account_id);
 
         return $criteria;
     }
@@ -2201,7 +2201,7 @@ abstract class AxysAccount implements ActiveRecordInterface
     }
 
     /**
-     * Generic method to set the primary key (id column).
+     * Generic method to set the primary key (axys_account_id column).
      *
      * @param int|null $key Primary key.
      * @return void
@@ -2241,10 +2241,10 @@ abstract class AxysAccount implements ActiveRecordInterface
         $copyObj->setEmailKey($this->getEmailKey());
         $copyObj->setUsername($this->getUsername());
         $copyObj->setSlug($this->getSlug());
-        $copyObj->setDateinscription($this->getDateinscription());
-        $copyObj->setDateconnexion($this->getDateconnexion());
-        $copyObj->setNom($this->getNom());
-        $copyObj->setPrenom($this->getPrenom());
+        $copyObj->setSignupDate($this->getSignupDate());
+        $copyObj->setLoginDate($this->getLoginDate());
+        $copyObj->setFirstName($this->getFirstName());
+        $copyObj->setLastName($this->getLastName());
         $copyObj->setUpdate($this->getUpdate());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
@@ -4506,20 +4506,20 @@ abstract class AxysAccount implements ActiveRecordInterface
      */
     public function clear()
     {
-        $this->id = null;
-        $this->email = null;
-        $this->user_password = null;
-        $this->user_key = null;
-        $this->email_key = null;
-        $this->user_screen_name = null;
-        $this->user_slug = null;
-        $this->dateinscription = null;
-        $this->dateconnexion = null;
-        $this->user_nom = null;
-        $this->user_prenom = null;
-        $this->user_update = null;
-        $this->user_created = null;
-        $this->user_updated = null;
+        $this->axys_account_id = null;
+        $this->axys_account_email = null;
+        $this->axys_account_password = null;
+        $this->axys_account_key = null;
+        $this->axys_account_email_key = null;
+        $this->axys_account_screen_name = null;
+        $this->axys_account_slug = null;
+        $this->axys_account_signup_date = null;
+        $this->axys_account_login_date = null;
+        $this->axys_account_first_name = null;
+        $this->axys_account_last_name = null;
+        $this->axys_account_update = null;
+        $this->axys_account_created = null;
+        $this->axys_account_updated = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -4613,7 +4613,7 @@ abstract class AxysAccount implements ActiveRecordInterface
      */
     public function keepUpdateDateUnchanged()
     {
-        $this->modifiedColumns[AxysAccountTableMap::COL_USER_UPDATED] = true;
+        $this->modifiedColumns[AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED] = true;
 
         return $this;
     }
@@ -4628,7 +4628,7 @@ abstract class AxysAccount implements ActiveRecordInterface
      */
     static public function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        $metadata->addPropertyConstraint('email', new Email());
+        $metadata->addPropertyConstraint('axys_account_email', new Email());
     }
 
     /**

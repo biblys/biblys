@@ -49,11 +49,11 @@ if ($request->getMethod() == "POST") {
             }
 
             // Check if there is already a user with this address
-            $user = $um->get(array('user_email' => $email));
+            $user = $um->get(array('axys_account_email' => $email));
 
             // Else, create a new one
             if (!$user && $create_user) {
-                $user = $um->create(array('user_email' => $email));
+                $user = $um->create(array('axys_account_email' => $email));
                 $result .= '<p class="success">Compte Axys créé pour '.$email.'.</p>';
             }
 

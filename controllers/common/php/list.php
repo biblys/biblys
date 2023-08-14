@@ -25,7 +25,7 @@ $newList = $request->request->get('new_list');
 if ($newList) {
     /** @var Liste $list */
     $list = $lm->create([
-        'axys_account_id' => LegacyCodeHelper::getGlobalVisitor()->get('user_id'),
+        'axys_account_id' => LegacyCodeHelper::getGlobalVisitor()->get('axys_account_id'),
     ]);
 
     $listUrl = $request->request->get('list_url', false);
