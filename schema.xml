@@ -159,7 +159,6 @@
   </table>
   <table name="axys_accounts" idMethod="native" phpName="AxysAccount">
     <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="site_id" phpName="SiteId" type="INTEGER"/>
     <column name="Email" phpName="Email" type="VARCHAR" size="255"/>
     <column name="user_password" phpName="Password" type="VARCHAR" size="255"/>
     <column name="user_key" phpName="Key" type="LONGVARCHAR"/>
@@ -177,9 +176,6 @@
       <parameter name="create_column" value="user_created" />
       <parameter name="update_column" value="user_updated" />
     </behavior>
-    <index name="publisher_id">
-      <index-column name="publisher_id"/>
-    </index>
     <index name="Email">
       <index-column name="Email"/>
     </index>
@@ -195,9 +191,6 @@
     <behavior name="validate">
       <parameter name="rule1" value="{column: email, validator: Email}" />
     </behavior>
-    <foreign-key foreignTable="sites" skipSql="true">
-      <reference local="site_id" foreign="site_id"/>
-    </foreign-key>
   </table>
   <table name="awards" idMethod="native" phpName="Award">
     <column name="award_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>

@@ -17,8 +17,6 @@ use Model\Right as ChildRight;
 use Model\RightQuery as ChildRightQuery;
 use Model\Session as ChildSession;
 use Model\SessionQuery as ChildSessionQuery;
-use Model\Site as ChildSite;
-use Model\SiteQuery as ChildSiteQuery;
 use Model\Stock as ChildStock;
 use Model\StockQuery as ChildStockQuery;
 use Model\Wish as ChildWish;
@@ -107,13 +105,6 @@ abstract class AxysAccount implements ActiveRecordInterface
      * @var        int
      */
     protected $id;
-
-    /**
-     * The value for the site_id field.
-     *
-     * @var        int|null
-     */
-    protected $site_id;
 
     /**
      * The value for the email field.
@@ -205,11 +196,6 @@ abstract class AxysAccount implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $user_updated;
-
-    /**
-     * @var        ChildSite
-     */
-    protected $aSite;
 
     /**
      * @var        ObjectCollection|ChildAxysConsent[] Collection to store aggregation of ChildAxysConsent objects.
@@ -585,16 +571,6 @@ abstract class AxysAccount implements ActiveRecordInterface
     }
 
     /**
-     * Get the [site_id] column value.
-     *
-     * @return int|null
-     */
-    public function getSiteId()
-    {
-        return $this->site_id;
-    }
-
-    /**
      * Get the [email] column value.
      *
      * @return string|null
@@ -799,30 +775,6 @@ abstract class AxysAccount implements ActiveRecordInterface
         if ($this->id !== $v) {
             $this->id = $v;
             $this->modifiedColumns[AxysAccountTableMap::COL_ID] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [site_id] column.
-     *
-     * @param int|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setSiteId($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->site_id !== $v) {
-            $this->site_id = $v;
-            $this->modifiedColumns[AxysAccountTableMap::COL_SITE_ID] = true;
-        }
-
-        if ($this->aSite !== null && $this->aSite->getId() !== $v) {
-            $this->aSite = null;
         }
 
         return $this;
@@ -1127,58 +1079,55 @@ abstract class AxysAccount implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : AxysAccountTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : AxysAccountTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->site_id = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : AxysAccountTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : AxysAccountTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
             $this->email = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : AxysAccountTableMap::translateFieldName('Password', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : AxysAccountTableMap::translateFieldName('Password', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_password = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : AxysAccountTableMap::translateFieldName('Key', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : AxysAccountTableMap::translateFieldName('Key', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_key = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : AxysAccountTableMap::translateFieldName('EmailKey', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : AxysAccountTableMap::translateFieldName('EmailKey', TableMap::TYPE_PHPNAME, $indexType)];
             $this->email_key = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : AxysAccountTableMap::translateFieldName('Username', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : AxysAccountTableMap::translateFieldName('Username', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_screen_name = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : AxysAccountTableMap::translateFieldName('Slug', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : AxysAccountTableMap::translateFieldName('Slug', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_slug = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : AxysAccountTableMap::translateFieldName('Dateinscription', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : AxysAccountTableMap::translateFieldName('Dateinscription', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->dateinscription = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : AxysAccountTableMap::translateFieldName('Dateconnexion', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : AxysAccountTableMap::translateFieldName('Dateconnexion', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->dateconnexion = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : AxysAccountTableMap::translateFieldName('Nom', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : AxysAccountTableMap::translateFieldName('Nom', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_nom = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : AxysAccountTableMap::translateFieldName('Prenom', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : AxysAccountTableMap::translateFieldName('Prenom', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_prenom = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : AxysAccountTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : AxysAccountTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->user_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : AxysAccountTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : AxysAccountTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->user_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : AxysAccountTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : AxysAccountTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -1191,7 +1140,7 @@ abstract class AxysAccount implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 15; // 15 = AxysAccountTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 14; // 14 = AxysAccountTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\AxysAccount'), 0, $e);
@@ -1214,9 +1163,6 @@ abstract class AxysAccount implements ActiveRecordInterface
      */
     public function ensureConsistency(): void
     {
-        if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
-            $this->aSite = null;
-        }
     }
 
     /**
@@ -1256,7 +1202,6 @@ abstract class AxysAccount implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aSite = null;
             $this->collAxysConsents = null;
 
             $this->collCarts = null;
@@ -1388,18 +1333,6 @@ abstract class AxysAccount implements ActiveRecordInterface
         $affectedRows = 0; // initialize var to track total num of affected rows
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
-
-            // We call the save method on the following object(s) if they
-            // were passed to this object by their corresponding set
-            // method.  This object relates to these object(s) by a
-            // foreign key reference.
-
-            if ($this->aSite !== null) {
-                if ($this->aSite->isModified() || $this->aSite->isNew()) {
-                    $affectedRows += $this->aSite->save($con);
-                }
-                $this->setSite($this->aSite);
-            }
 
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
@@ -1584,9 +1517,6 @@ abstract class AxysAccount implements ActiveRecordInterface
         if ($this->isColumnModified(AxysAccountTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_SITE_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'site_id';
-        }
         if ($this->isColumnModified(AxysAccountTableMap::COL_EMAIL)) {
             $modifiedColumns[':p' . $index++]  = 'Email';
         }
@@ -1639,10 +1569,6 @@ abstract class AxysAccount implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'id':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
-
-                        break;
-                    case 'site_id':
-                        $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
 
                         break;
                     case 'Email':
@@ -1763,45 +1689,42 @@ abstract class AxysAccount implements ActiveRecordInterface
                 return $this->getId();
 
             case 1:
-                return $this->getSiteId();
-
-            case 2:
                 return $this->getEmail();
 
-            case 3:
+            case 2:
                 return $this->getPassword();
 
-            case 4:
+            case 3:
                 return $this->getKey();
 
-            case 5:
+            case 4:
                 return $this->getEmailKey();
 
-            case 6:
+            case 5:
                 return $this->getUsername();
 
-            case 7:
+            case 6:
                 return $this->getSlug();
 
-            case 8:
+            case 7:
                 return $this->getDateinscription();
 
-            case 9:
+            case 8:
                 return $this->getDateconnexion();
 
-            case 10:
+            case 9:
                 return $this->getNom();
 
-            case 11:
+            case 10:
                 return $this->getPrenom();
 
-            case 12:
+            case 11:
                 return $this->getUpdate();
 
-            case 13:
+            case 12:
                 return $this->getCreatedAt();
 
-            case 14:
+            case 13:
                 return $this->getUpdatedAt();
 
             default:
@@ -1833,27 +1756,30 @@ abstract class AxysAccount implements ActiveRecordInterface
         $keys = AxysAccountTableMap::getFieldNames($keyType);
         $result = [
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getSiteId(),
-            $keys[2] => $this->getEmail(),
-            $keys[3] => $this->getPassword(),
-            $keys[4] => $this->getKey(),
-            $keys[5] => $this->getEmailKey(),
-            $keys[6] => $this->getUsername(),
-            $keys[7] => $this->getSlug(),
-            $keys[8] => $this->getDateinscription(),
-            $keys[9] => $this->getDateconnexion(),
-            $keys[10] => $this->getNom(),
-            $keys[11] => $this->getPrenom(),
-            $keys[12] => $this->getUpdate(),
-            $keys[13] => $this->getCreatedAt(),
-            $keys[14] => $this->getUpdatedAt(),
+            $keys[1] => $this->getEmail(),
+            $keys[2] => $this->getPassword(),
+            $keys[3] => $this->getKey(),
+            $keys[4] => $this->getEmailKey(),
+            $keys[5] => $this->getUsername(),
+            $keys[6] => $this->getSlug(),
+            $keys[7] => $this->getDateinscription(),
+            $keys[8] => $this->getDateconnexion(),
+            $keys[9] => $this->getNom(),
+            $keys[10] => $this->getPrenom(),
+            $keys[11] => $this->getUpdate(),
+            $keys[12] => $this->getCreatedAt(),
+            $keys[13] => $this->getUpdatedAt(),
         ];
+        if ($result[$keys[7]] instanceof \DateTimeInterface) {
+            $result[$keys[7]] = $result[$keys[7]]->format('Y-m-d H:i:s.u');
+        }
+
         if ($result[$keys[8]] instanceof \DateTimeInterface) {
             $result[$keys[8]] = $result[$keys[8]]->format('Y-m-d H:i:s.u');
         }
 
-        if ($result[$keys[9]] instanceof \DateTimeInterface) {
-            $result[$keys[9]] = $result[$keys[9]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[11]] instanceof \DateTimeInterface) {
+            $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
         }
 
         if ($result[$keys[12]] instanceof \DateTimeInterface) {
@@ -1864,31 +1790,12 @@ abstract class AxysAccount implements ActiveRecordInterface
             $result[$keys[13]] = $result[$keys[13]]->format('Y-m-d H:i:s.u');
         }
 
-        if ($result[$keys[14]] instanceof \DateTimeInterface) {
-            $result[$keys[14]] = $result[$keys[14]]->format('Y-m-d H:i:s.u');
-        }
-
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aSite) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'site';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'sites';
-                        break;
-                    default:
-                        $key = 'Site';
-                }
-
-                $result[$key] = $this->aSite->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
             if (null !== $this->collAxysConsents) {
 
                 switch ($keyType) {
@@ -2049,45 +1956,42 @@ abstract class AxysAccount implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setSiteId($value);
-                break;
-            case 2:
                 $this->setEmail($value);
                 break;
-            case 3:
+            case 2:
                 $this->setPassword($value);
                 break;
-            case 4:
+            case 3:
                 $this->setKey($value);
                 break;
-            case 5:
+            case 4:
                 $this->setEmailKey($value);
                 break;
-            case 6:
+            case 5:
                 $this->setUsername($value);
                 break;
-            case 7:
+            case 6:
                 $this->setSlug($value);
                 break;
-            case 8:
+            case 7:
                 $this->setDateinscription($value);
                 break;
-            case 9:
+            case 8:
                 $this->setDateconnexion($value);
                 break;
-            case 10:
+            case 9:
                 $this->setNom($value);
                 break;
-            case 11:
+            case 10:
                 $this->setPrenom($value);
                 break;
-            case 12:
+            case 11:
                 $this->setUpdate($value);
                 break;
-            case 13:
+            case 12:
                 $this->setCreatedAt($value);
                 break;
-            case 14:
+            case 13:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -2120,46 +2024,43 @@ abstract class AxysAccount implements ActiveRecordInterface
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setSiteId($arr[$keys[1]]);
+            $this->setEmail($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setEmail($arr[$keys[2]]);
+            $this->setPassword($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setPassword($arr[$keys[3]]);
+            $this->setKey($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setKey($arr[$keys[4]]);
+            $this->setEmailKey($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setEmailKey($arr[$keys[5]]);
+            $this->setUsername($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setUsername($arr[$keys[6]]);
+            $this->setSlug($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setSlug($arr[$keys[7]]);
+            $this->setDateinscription($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setDateinscription($arr[$keys[8]]);
+            $this->setDateconnexion($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setDateconnexion($arr[$keys[9]]);
+            $this->setNom($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setNom($arr[$keys[10]]);
+            $this->setPrenom($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setPrenom($arr[$keys[11]]);
+            $this->setUpdate($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setUpdate($arr[$keys[12]]);
+            $this->setCreatedAt($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
-            $this->setCreatedAt($arr[$keys[13]]);
-        }
-        if (array_key_exists($keys[14], $arr)) {
-            $this->setUpdatedAt($arr[$keys[14]]);
+            $this->setUpdatedAt($arr[$keys[13]]);
         }
 
         return $this;
@@ -2206,9 +2107,6 @@ abstract class AxysAccount implements ActiveRecordInterface
 
         if ($this->isColumnModified(AxysAccountTableMap::COL_ID)) {
             $criteria->add(AxysAccountTableMap::COL_ID, $this->id);
-        }
-        if ($this->isColumnModified(AxysAccountTableMap::COL_SITE_ID)) {
-            $criteria->add(AxysAccountTableMap::COL_SITE_ID, $this->site_id);
         }
         if ($this->isColumnModified(AxysAccountTableMap::COL_EMAIL)) {
             $criteria->add(AxysAccountTableMap::COL_EMAIL, $this->email);
@@ -2337,7 +2235,6 @@ abstract class AxysAccount implements ActiveRecordInterface
      */
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
-        $copyObj->setSiteId($this->getSiteId());
         $copyObj->setEmail($this->getEmail());
         $copyObj->setPassword($this->getPassword());
         $copyObj->setKey($this->getKey());
@@ -2433,57 +2330,6 @@ abstract class AxysAccount implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
-    }
-
-    /**
-     * Declares an association between this object and a ChildSite object.
-     *
-     * @param ChildSite|null $v
-     * @return $this The current object (for fluent API support)
-     * @throws \Propel\Runtime\Exception\PropelException
-     */
-    public function setSite(ChildSite $v = null)
-    {
-        if ($v === null) {
-            $this->setSiteId(NULL);
-        } else {
-            $this->setSiteId($v->getId());
-        }
-
-        $this->aSite = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildSite object, it will not be re-added.
-        if ($v !== null) {
-            $v->addAxysAccount($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildSite object
-     *
-     * @param ConnectionInterface $con Optional Connection object.
-     * @return ChildSite|null The associated ChildSite object.
-     * @throws \Propel\Runtime\Exception\PropelException
-     */
-    public function getSite(?ConnectionInterface $con = null)
-    {
-        if ($this->aSite === null && ($this->site_id != 0)) {
-            $this->aSite = ChildSiteQuery::create()->findPk($this->site_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aSite->addAxysAccounts($this);
-             */
-        }
-
-        return $this->aSite;
     }
 
 
@@ -4660,11 +4506,7 @@ abstract class AxysAccount implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aSite) {
-            $this->aSite->removeAxysAccount($this);
-        }
         $this->id = null;
-        $this->site_id = null;
         $this->email = null;
         $this->user_password = null;
         $this->user_key = null;
@@ -4749,7 +4591,6 @@ abstract class AxysAccount implements ActiveRecordInterface
         $this->collStocks = null;
         $this->collWishes = null;
         $this->collWishlists = null;
-        $this->aSite = null;
         return $this;
     }
 
@@ -4813,17 +4654,6 @@ abstract class AxysAccount implements ActiveRecordInterface
             $this->alreadyInValidation = true;
             $retval = null;
 
-            // We call the validate method on the following object(s) if they
-            // were passed to this object by their corresponding set
-            // method.  This object relates to these object(s) by a
-            // foreign key reference.
-
-            // If validate() method exists, the validate-behavior is configured for related object
-            if (is_object($this->aSite) and method_exists($this->aSite, 'validate')) {
-                if (!$this->aSite->validate($validator)) {
-                    $failureMap->addAll($this->aSite->getValidationFailures());
-                }
-            }
 
             $retval = $validator->validate($this);
             if (count($retval) > 0) {

@@ -7,8 +7,6 @@ use \Exception;
 use \PDO;
 use Model\ArticleCategory as ChildArticleCategory;
 use Model\ArticleCategoryQuery as ChildArticleCategoryQuery;
-use Model\AxysAccount as ChildAxysAccount;
-use Model\AxysAccountQuery as ChildAxysAccountQuery;
 use Model\Cart as ChildCart;
 use Model\CartQuery as ChildCartQuery;
 use Model\CrowdfundingCampaign as ChildCrowdfundingCampaign;
@@ -32,7 +30,6 @@ use Model\SiteQuery as ChildSiteQuery;
 use Model\Stock as ChildStock;
 use Model\StockQuery as ChildStockQuery;
 use Model\Map\ArticleCategoryTableMap;
-use Model\Map\AxysAccountTableMap;
 use Model\Map\CartTableMap;
 use Model\Map\CrowdfundingCampaignTableMap;
 use Model\Map\CrowfundingRewardTableMap;
@@ -388,13 +385,6 @@ abstract class Site implements ActiveRecordInterface
     protected $site_updated;
 
     /**
-     * @var        ObjectCollection|ChildAxysAccount[] Collection to store aggregation of ChildAxysAccount objects.
-     * @phpstan-var ObjectCollection&\Traversable<ChildAxysAccount> Collection to store aggregation of ChildAxysAccount objects.
-     */
-    protected $collAxysAccounts;
-    protected $collAxysAccountsPartial;
-
-    /**
      * @var        ObjectCollection|ChildCart[] Collection to store aggregation of ChildCart objects.
      * @phpstan-var ObjectCollection&\Traversable<ChildCart> Collection to store aggregation of ChildCart objects.
      */
@@ -478,13 +468,6 @@ abstract class Site implements ActiveRecordInterface
      * @var bool
      */
     protected $alreadyInSave = false;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildAxysAccount[]
-     * @phpstan-var ObjectCollection&\Traversable<ChildAxysAccount>
-     */
-    protected $axysAccountsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -2555,8 +2538,6 @@ abstract class Site implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->collAxysAccounts = null;
-
             $this->collCarts = null;
 
             $this->collCrowdfundingCampaigns = null;
@@ -2704,24 +2685,6 @@ abstract class Site implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
-            }
-
-            if ($this->axysAccountsScheduledForDeletion !== null) {
-                if (!$this->axysAccountsScheduledForDeletion->isEmpty()) {
-                    foreach ($this->axysAccountsScheduledForDeletion as $axysAccount) {
-                        // need to save related object because we set the relation to null
-                        $axysAccount->save($con);
-                    }
-                    $this->axysAccountsScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collAxysAccounts !== null) {
-                foreach ($this->collAxysAccounts as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
             }
 
             if ($this->cartsScheduledForDeletion !== null) {
@@ -3497,21 +3460,6 @@ abstract class Site implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->collAxysAccounts) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'axysAccounts';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'axys_accountss';
-                        break;
-                    default:
-                        $key = 'AxysAccounts';
-                }
-
-                $result[$key] = $this->collAxysAccounts->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
             if (null !== $this->collCarts) {
 
                 switch ($keyType) {
@@ -4265,12 +4213,6 @@ abstract class Site implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
-            foreach ($this->getAxysAccounts() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addAxysAccount($relObj->copy($deepCopy));
-                }
-            }
-
             foreach ($this->getCarts() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addCart($relObj->copy($deepCopy));
@@ -4378,10 +4320,6 @@ abstract class Site implements ActiveRecordInterface
      */
     public function initRelation($relationName): void
     {
-        if ('AxysAccount' === $relationName) {
-            $this->initAxysAccounts();
-            return;
-        }
         if ('Cart' === $relationName) {
             $this->initCarts();
             return;
@@ -4426,245 +4364,6 @@ abstract class Site implements ActiveRecordInterface
             $this->initStocks();
             return;
         }
-    }
-
-    /**
-     * Clears out the collAxysAccounts collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return $this
-     * @see addAxysAccounts()
-     */
-    public function clearAxysAccounts()
-    {
-        $this->collAxysAccounts = null; // important to set this to NULL since that means it is uninitialized
-
-        return $this;
-    }
-
-    /**
-     * Reset is the collAxysAccounts collection loaded partially.
-     *
-     * @return void
-     */
-    public function resetPartialAxysAccounts($v = true): void
-    {
-        $this->collAxysAccountsPartial = $v;
-    }
-
-    /**
-     * Initializes the collAxysAccounts collection.
-     *
-     * By default this just sets the collAxysAccounts collection to an empty array (like clearcollAxysAccounts());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param bool $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initAxysAccounts(bool $overrideExisting = true): void
-    {
-        if (null !== $this->collAxysAccounts && !$overrideExisting) {
-            return;
-        }
-
-        $collectionClassName = AxysAccountTableMap::getTableMap()->getCollectionClassName();
-
-        $this->collAxysAccounts = new $collectionClassName;
-        $this->collAxysAccounts->setModel('\Model\AxysAccount');
-    }
-
-    /**
-     * Gets an array of ChildAxysAccount objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildSite is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildAxysAccount[] List of ChildAxysAccount objects
-     * @phpstan-return ObjectCollection&\Traversable<ChildAxysAccount> List of ChildAxysAccount objects
-     * @throws \Propel\Runtime\Exception\PropelException
-     */
-    public function getAxysAccounts(?Criteria $criteria = null, ?ConnectionInterface $con = null)
-    {
-        $partial = $this->collAxysAccountsPartial && !$this->isNew();
-        if (null === $this->collAxysAccounts || null !== $criteria || $partial) {
-            if ($this->isNew()) {
-                // return empty collection
-                if (null === $this->collAxysAccounts) {
-                    $this->initAxysAccounts();
-                } else {
-                    $collectionClassName = AxysAccountTableMap::getTableMap()->getCollectionClassName();
-
-                    $collAxysAccounts = new $collectionClassName;
-                    $collAxysAccounts->setModel('\Model\AxysAccount');
-
-                    return $collAxysAccounts;
-                }
-            } else {
-                $collAxysAccounts = ChildAxysAccountQuery::create(null, $criteria)
-                    ->filterBySite($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collAxysAccountsPartial && count($collAxysAccounts)) {
-                        $this->initAxysAccounts(false);
-
-                        foreach ($collAxysAccounts as $obj) {
-                            if (false == $this->collAxysAccounts->contains($obj)) {
-                                $this->collAxysAccounts->append($obj);
-                            }
-                        }
-
-                        $this->collAxysAccountsPartial = true;
-                    }
-
-                    return $collAxysAccounts;
-                }
-
-                if ($partial && $this->collAxysAccounts) {
-                    foreach ($this->collAxysAccounts as $obj) {
-                        if ($obj->isNew()) {
-                            $collAxysAccounts[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collAxysAccounts = $collAxysAccounts;
-                $this->collAxysAccountsPartial = false;
-            }
-        }
-
-        return $this->collAxysAccounts;
-    }
-
-    /**
-     * Sets a collection of ChildAxysAccount objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param Collection $axysAccounts A Propel collection.
-     * @param ConnectionInterface $con Optional connection object
-     * @return $this The current object (for fluent API support)
-     */
-    public function setAxysAccounts(Collection $axysAccounts, ?ConnectionInterface $con = null)
-    {
-        /** @var ChildAxysAccount[] $axysAccountsToDelete */
-        $axysAccountsToDelete = $this->getAxysAccounts(new Criteria(), $con)->diff($axysAccounts);
-
-
-        $this->axysAccountsScheduledForDeletion = $axysAccountsToDelete;
-
-        foreach ($axysAccountsToDelete as $axysAccountRemoved) {
-            $axysAccountRemoved->setSite(null);
-        }
-
-        $this->collAxysAccounts = null;
-        foreach ($axysAccounts as $axysAccount) {
-            $this->addAxysAccount($axysAccount);
-        }
-
-        $this->collAxysAccounts = $axysAccounts;
-        $this->collAxysAccountsPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related AxysAccount objects.
-     *
-     * @param Criteria $criteria
-     * @param bool $distinct
-     * @param ConnectionInterface $con
-     * @return int Count of related AxysAccount objects.
-     * @throws \Propel\Runtime\Exception\PropelException
-     */
-    public function countAxysAccounts(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
-    {
-        $partial = $this->collAxysAccountsPartial && !$this->isNew();
-        if (null === $this->collAxysAccounts || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collAxysAccounts) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getAxysAccounts());
-            }
-
-            $query = ChildAxysAccountQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterBySite($this)
-                ->count($con);
-        }
-
-        return count($this->collAxysAccounts);
-    }
-
-    /**
-     * Method called to associate a ChildAxysAccount object to this object
-     * through the ChildAxysAccount foreign key attribute.
-     *
-     * @param ChildAxysAccount $l ChildAxysAccount
-     * @return $this The current object (for fluent API support)
-     */
-    public function addAxysAccount(ChildAxysAccount $l)
-    {
-        if ($this->collAxysAccounts === null) {
-            $this->initAxysAccounts();
-            $this->collAxysAccountsPartial = true;
-        }
-
-        if (!$this->collAxysAccounts->contains($l)) {
-            $this->doAddAxysAccount($l);
-
-            if ($this->axysAccountsScheduledForDeletion and $this->axysAccountsScheduledForDeletion->contains($l)) {
-                $this->axysAccountsScheduledForDeletion->remove($this->axysAccountsScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param ChildAxysAccount $axysAccount The ChildAxysAccount object to add.
-     */
-    protected function doAddAxysAccount(ChildAxysAccount $axysAccount): void
-    {
-        $this->collAxysAccounts[]= $axysAccount;
-        $axysAccount->setSite($this);
-    }
-
-    /**
-     * @param ChildAxysAccount $axysAccount The ChildAxysAccount object to remove.
-     * @return $this The current object (for fluent API support)
-     */
-    public function removeAxysAccount(ChildAxysAccount $axysAccount)
-    {
-        if ($this->getAxysAccounts()->contains($axysAccount)) {
-            $pos = $this->collAxysAccounts->search($axysAccount);
-            $this->collAxysAccounts->remove($pos);
-            if (null === $this->axysAccountsScheduledForDeletion) {
-                $this->axysAccountsScheduledForDeletion = clone $this->collAxysAccounts;
-                $this->axysAccountsScheduledForDeletion->clear();
-            }
-            $this->axysAccountsScheduledForDeletion[]= $axysAccount;
-            $axysAccount->setSite(null);
-        }
-
-        return $this;
     }
 
     /**
@@ -7600,11 +7299,6 @@ abstract class Site implements ActiveRecordInterface
     public function clearAllReferences(bool $deep = false)
     {
         if ($deep) {
-            if ($this->collAxysAccounts) {
-                foreach ($this->collAxysAccounts as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
             if ($this->collCarts) {
                 foreach ($this->collCarts as $o) {
                     $o->clearAllReferences($deep);
@@ -7662,7 +7356,6 @@ abstract class Site implements ActiveRecordInterface
             }
         } // if ($deep)
 
-        $this->collAxysAccounts = null;
         $this->collCarts = null;
         $this->collCrowdfundingCampaigns = null;
         $this->collCrowfundingRewards = null;

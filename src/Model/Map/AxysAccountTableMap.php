@@ -63,7 +63,7 @@ class AxysAccountTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 15;
+    public const NUM_COLUMNS = 14;
 
     /**
      * The number of lazy-loaded columns
@@ -73,17 +73,12 @@ class AxysAccountTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 15;
+    public const NUM_HYDRATE_COLUMNS = 14;
 
     /**
      * the column name for the id field
      */
     public const COL_ID = 'axys_accounts.id';
-
-    /**
-     * the column name for the site_id field
-     */
-    public const COL_SITE_ID = 'axys_accounts.site_id';
 
     /**
      * the column name for the Email field
@@ -164,11 +159,11 @@ class AxysAccountTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'Email', 'Password', 'Key', 'EmailKey', 'Username', 'Slug', 'Dateinscription', 'Dateconnexion', 'Nom', 'Prenom', 'Update', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'email', 'password', 'key', 'emailKey', 'username', 'slug', 'dateinscription', 'dateconnexion', 'nom', 'prenom', 'update', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [AxysAccountTableMap::COL_ID, AxysAccountTableMap::COL_SITE_ID, AxysAccountTableMap::COL_EMAIL, AxysAccountTableMap::COL_USER_PASSWORD, AxysAccountTableMap::COL_USER_KEY, AxysAccountTableMap::COL_EMAIL_KEY, AxysAccountTableMap::COL_USER_SCREEN_NAME, AxysAccountTableMap::COL_USER_SLUG, AxysAccountTableMap::COL_DATEINSCRIPTION, AxysAccountTableMap::COL_DATECONNEXION, AxysAccountTableMap::COL_USER_NOM, AxysAccountTableMap::COL_USER_PRENOM, AxysAccountTableMap::COL_USER_UPDATE, AxysAccountTableMap::COL_USER_CREATED, AxysAccountTableMap::COL_USER_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['id', 'site_id', 'Email', 'user_password', 'user_key', 'email_key', 'user_screen_name', 'user_slug', 'DateInscription', 'DateConnexion', 'user_nom', 'user_prenom', 'user_update', 'user_created', 'user_updated', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, ]
+        self::TYPE_PHPNAME       => ['Id', 'Email', 'Password', 'Key', 'EmailKey', 'Username', 'Slug', 'Dateinscription', 'Dateconnexion', 'Nom', 'Prenom', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'email', 'password', 'key', 'emailKey', 'username', 'slug', 'dateinscription', 'dateconnexion', 'nom', 'prenom', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [AxysAccountTableMap::COL_ID, AxysAccountTableMap::COL_EMAIL, AxysAccountTableMap::COL_USER_PASSWORD, AxysAccountTableMap::COL_USER_KEY, AxysAccountTableMap::COL_EMAIL_KEY, AxysAccountTableMap::COL_USER_SCREEN_NAME, AxysAccountTableMap::COL_USER_SLUG, AxysAccountTableMap::COL_DATEINSCRIPTION, AxysAccountTableMap::COL_DATECONNEXION, AxysAccountTableMap::COL_USER_NOM, AxysAccountTableMap::COL_USER_PRENOM, AxysAccountTableMap::COL_USER_UPDATE, AxysAccountTableMap::COL_USER_CREATED, AxysAccountTableMap::COL_USER_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['id', 'Email', 'user_password', 'user_key', 'email_key', 'user_screen_name', 'user_slug', 'DateInscription', 'DateConnexion', 'user_nom', 'user_prenom', 'user_update', 'user_created', 'user_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
     ];
 
     /**
@@ -180,11 +175,11 @@ class AxysAccountTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'Email' => 2, 'Password' => 3, 'Key' => 4, 'EmailKey' => 5, 'Username' => 6, 'Slug' => 7, 'Dateinscription' => 8, 'Dateconnexion' => 9, 'Nom' => 10, 'Prenom' => 11, 'Update' => 12, 'CreatedAt' => 13, 'UpdatedAt' => 14, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'email' => 2, 'password' => 3, 'key' => 4, 'emailKey' => 5, 'username' => 6, 'slug' => 7, 'dateinscription' => 8, 'dateconnexion' => 9, 'nom' => 10, 'prenom' => 11, 'update' => 12, 'createdAt' => 13, 'updatedAt' => 14, ],
-        self::TYPE_COLNAME       => [AxysAccountTableMap::COL_ID => 0, AxysAccountTableMap::COL_SITE_ID => 1, AxysAccountTableMap::COL_EMAIL => 2, AxysAccountTableMap::COL_USER_PASSWORD => 3, AxysAccountTableMap::COL_USER_KEY => 4, AxysAccountTableMap::COL_EMAIL_KEY => 5, AxysAccountTableMap::COL_USER_SCREEN_NAME => 6, AxysAccountTableMap::COL_USER_SLUG => 7, AxysAccountTableMap::COL_DATEINSCRIPTION => 8, AxysAccountTableMap::COL_DATECONNEXION => 9, AxysAccountTableMap::COL_USER_NOM => 10, AxysAccountTableMap::COL_USER_PRENOM => 11, AxysAccountTableMap::COL_USER_UPDATE => 12, AxysAccountTableMap::COL_USER_CREATED => 13, AxysAccountTableMap::COL_USER_UPDATED => 14, ],
-        self::TYPE_FIELDNAME     => ['id' => 0, 'site_id' => 1, 'Email' => 2, 'user_password' => 3, 'user_key' => 4, 'email_key' => 5, 'user_screen_name' => 6, 'user_slug' => 7, 'DateInscription' => 8, 'DateConnexion' => 9, 'user_nom' => 10, 'user_prenom' => 11, 'user_update' => 12, 'user_created' => 13, 'user_updated' => 14, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'Email' => 1, 'Password' => 2, 'Key' => 3, 'EmailKey' => 4, 'Username' => 5, 'Slug' => 6, 'Dateinscription' => 7, 'Dateconnexion' => 8, 'Nom' => 9, 'Prenom' => 10, 'Update' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'email' => 1, 'password' => 2, 'key' => 3, 'emailKey' => 4, 'username' => 5, 'slug' => 6, 'dateinscription' => 7, 'dateconnexion' => 8, 'nom' => 9, 'prenom' => 10, 'update' => 11, 'createdAt' => 12, 'updatedAt' => 13, ],
+        self::TYPE_COLNAME       => [AxysAccountTableMap::COL_ID => 0, AxysAccountTableMap::COL_EMAIL => 1, AxysAccountTableMap::COL_USER_PASSWORD => 2, AxysAccountTableMap::COL_USER_KEY => 3, AxysAccountTableMap::COL_EMAIL_KEY => 4, AxysAccountTableMap::COL_USER_SCREEN_NAME => 5, AxysAccountTableMap::COL_USER_SLUG => 6, AxysAccountTableMap::COL_DATEINSCRIPTION => 7, AxysAccountTableMap::COL_DATECONNEXION => 8, AxysAccountTableMap::COL_USER_NOM => 9, AxysAccountTableMap::COL_USER_PRENOM => 10, AxysAccountTableMap::COL_USER_UPDATE => 11, AxysAccountTableMap::COL_USER_CREATED => 12, AxysAccountTableMap::COL_USER_UPDATED => 13, ],
+        self::TYPE_FIELDNAME     => ['id' => 0, 'Email' => 1, 'user_password' => 2, 'user_key' => 3, 'email_key' => 4, 'user_screen_name' => 5, 'user_slug' => 6, 'DateInscription' => 7, 'DateConnexion' => 8, 'user_nom' => 9, 'user_prenom' => 10, 'user_update' => 11, 'user_created' => 12, 'user_updated' => 13, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
     ];
 
     /**
@@ -200,14 +195,6 @@ class AxysAccountTableMap extends TableMap
         'AxysAccountTableMap::COL_ID' => 'ID',
         'COL_ID' => 'ID',
         'axys_accounts.id' => 'ID',
-        'SiteId' => 'SITE_ID',
-        'AxysAccount.SiteId' => 'SITE_ID',
-        'siteId' => 'SITE_ID',
-        'axysAccount.siteId' => 'SITE_ID',
-        'AxysAccountTableMap::COL_SITE_ID' => 'SITE_ID',
-        'COL_SITE_ID' => 'SITE_ID',
-        'site_id' => 'SITE_ID',
-        'axys_accounts.site_id' => 'SITE_ID',
         'Email' => 'EMAIL',
         'AxysAccount.Email' => 'EMAIL',
         'email' => 'EMAIL',
@@ -331,7 +318,6 @@ class AxysAccountTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addColumn('Email', 'Email', 'VARCHAR', false, 255, null);
         $this->addColumn('user_password', 'Password', 'VARCHAR', false, 255, null);
         $this->addColumn('user_key', 'Key', 'LONGVARCHAR', false, null, null);
@@ -354,13 +340,6 @@ class AxysAccountTableMap extends TableMap
      */
     public function buildRelations(): void
     {
-        $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':site_id',
-    1 => ':site_id',
-  ),
-), null, null, null, false);
         $this->addRelation('AxysConsent', '\\Model\\AxysConsent', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -576,7 +555,6 @@ class AxysAccountTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(AxysAccountTableMap::COL_ID);
-            $criteria->addSelectColumn(AxysAccountTableMap::COL_SITE_ID);
             $criteria->addSelectColumn(AxysAccountTableMap::COL_EMAIL);
             $criteria->addSelectColumn(AxysAccountTableMap::COL_USER_PASSWORD);
             $criteria->addSelectColumn(AxysAccountTableMap::COL_USER_KEY);
@@ -592,7 +570,6 @@ class AxysAccountTableMap extends TableMap
             $criteria->addSelectColumn(AxysAccountTableMap::COL_USER_UPDATED);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.site_id');
             $criteria->addSelectColumn($alias . '.Email');
             $criteria->addSelectColumn($alias . '.user_password');
             $criteria->addSelectColumn($alias . '.user_key');
@@ -625,7 +602,6 @@ class AxysAccountTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(AxysAccountTableMap::COL_ID);
-            $criteria->removeSelectColumn(AxysAccountTableMap::COL_SITE_ID);
             $criteria->removeSelectColumn(AxysAccountTableMap::COL_EMAIL);
             $criteria->removeSelectColumn(AxysAccountTableMap::COL_USER_PASSWORD);
             $criteria->removeSelectColumn(AxysAccountTableMap::COL_USER_KEY);
@@ -641,7 +617,6 @@ class AxysAccountTableMap extends TableMap
             $criteria->removeSelectColumn(AxysAccountTableMap::COL_USER_UPDATED);
         } else {
             $criteria->removeSelectColumn($alias . '.id');
-            $criteria->removeSelectColumn($alias . '.site_id');
             $criteria->removeSelectColumn($alias . '.Email');
             $criteria->removeSelectColumn($alias . '.user_password');
             $criteria->removeSelectColumn($alias . '.user_key');

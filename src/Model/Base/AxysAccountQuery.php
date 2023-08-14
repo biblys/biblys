@@ -20,7 +20,6 @@ use Propel\Runtime\Exception\PropelException;
  * Base class that represents a query for the `axys_accounts` table.
  *
  * @method     ChildAxysAccountQuery orderById($order = Criteria::ASC) Order by the id column
- * @method     ChildAxysAccountQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
  * @method     ChildAxysAccountQuery orderByEmail($order = Criteria::ASC) Order by the Email column
  * @method     ChildAxysAccountQuery orderByPassword($order = Criteria::ASC) Order by the user_password column
  * @method     ChildAxysAccountQuery orderByKey($order = Criteria::ASC) Order by the user_key column
@@ -36,7 +35,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAxysAccountQuery orderByUpdatedAt($order = Criteria::ASC) Order by the user_updated column
  *
  * @method     ChildAxysAccountQuery groupById() Group by the id column
- * @method     ChildAxysAccountQuery groupBySiteId() Group by the site_id column
  * @method     ChildAxysAccountQuery groupByEmail() Group by the Email column
  * @method     ChildAxysAccountQuery groupByPassword() Group by the user_password column
  * @method     ChildAxysAccountQuery groupByKey() Group by the user_key column
@@ -58,16 +56,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAxysAccountQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
  * @method     ChildAxysAccountQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildAxysAccountQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
- *
- * @method     ChildAxysAccountQuery leftJoinSite($relationAlias = null) Adds a LEFT JOIN clause to the query using the Site relation
- * @method     ChildAxysAccountQuery rightJoinSite($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Site relation
- * @method     ChildAxysAccountQuery innerJoinSite($relationAlias = null) Adds a INNER JOIN clause to the query using the Site relation
- *
- * @method     ChildAxysAccountQuery joinWithSite($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Site relation
- *
- * @method     ChildAxysAccountQuery leftJoinWithSite() Adds a LEFT JOIN clause and with to the query using the Site relation
- * @method     ChildAxysAccountQuery rightJoinWithSite() Adds a RIGHT JOIN clause and with to the query using the Site relation
- * @method     ChildAxysAccountQuery innerJoinWithSite() Adds a INNER JOIN clause and with to the query using the Site relation
  *
  * @method     ChildAxysAccountQuery leftJoinAxysConsent($relationAlias = null) Adds a LEFT JOIN clause to the query using the AxysConsent relation
  * @method     ChildAxysAccountQuery rightJoinAxysConsent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the AxysConsent relation
@@ -149,13 +137,12 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAxysAccountQuery rightJoinWithWishlist() Adds a RIGHT JOIN clause and with to the query using the Wishlist relation
  * @method     ChildAxysAccountQuery innerJoinWithWishlist() Adds a INNER JOIN clause and with to the query using the Wishlist relation
  *
- * @method     \Model\SiteQuery|\Model\AxysConsentQuery|\Model\CartQuery|\Model\OptionQuery|\Model\RightQuery|\Model\SessionQuery|\Model\StockQuery|\Model\WishQuery|\Model\WishlistQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\AxysConsentQuery|\Model\CartQuery|\Model\OptionQuery|\Model\RightQuery|\Model\SessionQuery|\Model\StockQuery|\Model\WishQuery|\Model\WishlistQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildAxysAccount|null findOne(?ConnectionInterface $con = null) Return the first ChildAxysAccount matching the query
  * @method     ChildAxysAccount findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildAxysAccount matching the query, or a new ChildAxysAccount object populated from the query conditions when no match is found
  *
  * @method     ChildAxysAccount|null findOneById(int $id) Return the first ChildAxysAccount filtered by the id column
- * @method     ChildAxysAccount|null findOneBySiteId(int $site_id) Return the first ChildAxysAccount filtered by the site_id column
  * @method     ChildAxysAccount|null findOneByEmail(string $Email) Return the first ChildAxysAccount filtered by the Email column
  * @method     ChildAxysAccount|null findOneByPassword(string $user_password) Return the first ChildAxysAccount filtered by the user_password column
  * @method     ChildAxysAccount|null findOneByKey(string $user_key) Return the first ChildAxysAccount filtered by the user_key column
@@ -174,7 +161,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAxysAccount requireOne(?ConnectionInterface $con = null) Return the first ChildAxysAccount matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildAxysAccount requireOneById(int $id) Return the first ChildAxysAccount filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysAccount requireOneBySiteId(int $site_id) Return the first ChildAxysAccount filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysAccount requireOneByEmail(string $Email) Return the first ChildAxysAccount filtered by the Email column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysAccount requireOneByPassword(string $user_password) Return the first ChildAxysAccount filtered by the user_password column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysAccount requireOneByKey(string $user_key) Return the first ChildAxysAccount filtered by the user_key column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -194,8 +180,6 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildAxysAccount[]|Collection findById(int|array<int> $id) Return ChildAxysAccount objects filtered by the id column
  * @psalm-method Collection&\Traversable<ChildAxysAccount> findById(int|array<int> $id) Return ChildAxysAccount objects filtered by the id column
- * @method     ChildAxysAccount[]|Collection findBySiteId(int|array<int> $site_id) Return ChildAxysAccount objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildAxysAccount> findBySiteId(int|array<int> $site_id) Return ChildAxysAccount objects filtered by the site_id column
  * @method     ChildAxysAccount[]|Collection findByEmail(string|array<string> $Email) Return ChildAxysAccount objects filtered by the Email column
  * @psalm-method Collection&\Traversable<ChildAxysAccount> findByEmail(string|array<string> $Email) Return ChildAxysAccount objects filtered by the Email column
  * @method     ChildAxysAccount[]|Collection findByPassword(string|array<string> $user_password) Return ChildAxysAccount objects filtered by the user_password column
@@ -321,7 +305,7 @@ abstract class AxysAccountQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, site_id, Email, user_password, user_key, email_key, user_screen_name, user_slug, DateInscription, DateConnexion, user_nom, user_prenom, user_update, user_created, user_updated FROM axys_accounts WHERE id = :p0';
+        $sql = 'SELECT id, Email, user_password, user_key, email_key, user_screen_name, user_slug, DateInscription, DateConnexion, user_nom, user_prenom, user_update, user_created, user_updated FROM axys_accounts WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -454,51 +438,6 @@ abstract class AxysAccountQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(AxysAccountTableMap::COL_ID, $id, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the site_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterBySiteId(1234); // WHERE site_id = 1234
-     * $query->filterBySiteId(array(12, 34)); // WHERE site_id IN (12, 34)
-     * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
-     * </code>
-     *
-     * @see       filterBySite()
-     *
-     * @param mixed $siteId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterBySiteId($siteId = null, ?string $comparison = null)
-    {
-        if (is_array($siteId)) {
-            $useMinMax = false;
-            if (isset($siteId['min'])) {
-                $this->addUsingAlias(AxysAccountTableMap::COL_SITE_ID, $siteId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($siteId['max'])) {
-                $this->addUsingAlias(AxysAccountTableMap::COL_SITE_ID, $siteId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysAccountTableMap::COL_SITE_ID, $siteId, $comparison);
 
         return $this;
     }
@@ -950,181 +889,6 @@ abstract class AxysAccountQuery extends ModelCriteria
         $this->addUsingAlias(AxysAccountTableMap::COL_USER_UPDATED, $updatedAt, $comparison);
 
         return $this;
-    }
-
-    /**
-     * Filter the query by a related \Model\Site object
-     *
-     * @param \Model\Site|ObjectCollection $site The related object(s) to use as filter
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterBySite($site, ?string $comparison = null)
-    {
-        if ($site instanceof \Model\Site) {
-            return $this
-                ->addUsingAlias(AxysAccountTableMap::COL_SITE_ID, $site->getId(), $comparison);
-        } elseif ($site instanceof ObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            $this
-                ->addUsingAlias(AxysAccountTableMap::COL_SITE_ID, $site->toKeyValue('PrimaryKey', 'Id'), $comparison);
-
-            return $this;
-        } else {
-            throw new PropelException('filterBySite() only accepts arguments of type \Model\Site or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Site relation
-     *
-     * @param string|null $relationAlias Optional alias for the relation
-     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function joinSite(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Site');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Site');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Site relation Site object
-     *
-     * @see useQuery()
-     *
-     * @param string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \Model\SiteQuery A secondary query class using the current class as primary query
-     */
-    public function useSiteQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        return $this
-            ->joinSite($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Site', '\Model\SiteQuery');
-    }
-
-    /**
-     * Use the Site relation Site object
-     *
-     * @param callable(\Model\SiteQuery):\Model\SiteQuery $callable A function working on the related query
-     *
-     * @param string|null $relationAlias optional alias for the relation
-     *
-     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this
-     */
-    public function withSiteQuery(
-        callable $callable,
-        string $relationAlias = null,
-        ?string $joinType = Criteria::LEFT_JOIN
-    ) {
-        $relatedQuery = $this->useSiteQuery(
-            $relationAlias,
-            $joinType
-        );
-        $callable($relatedQuery);
-        $relatedQuery->endUse();
-
-        return $this;
-    }
-
-    /**
-     * Use the relation to Site table for an EXISTS query.
-     *
-     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
-     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
-     *
-     * @return \Model\SiteQuery The inner query object of the EXISTS statement
-     */
-    public function useSiteExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
-    {
-        /** @var $q \Model\SiteQuery */
-        $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, $typeOfExists);
-        return $q;
-    }
-
-    /**
-     * Use the relation to Site table for a NOT EXISTS query.
-     *
-     * @see useSiteExistsQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
-     *
-     * @return \Model\SiteQuery The inner query object of the NOT EXISTS statement
-     */
-    public function useSiteNotExistsQuery($modelAlias = null, $queryClass = null)
-    {
-        /** @var $q \Model\SiteQuery */
-        $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, 'NOT EXISTS');
-        return $q;
-    }
-
-    /**
-     * Use the relation to Site table for an IN query.
-     *
-     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
-     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
-     *
-     * @return \Model\SiteQuery The inner query object of the IN statement
-     */
-    public function useInSiteQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
-    {
-        /** @var $q \Model\SiteQuery */
-        $q = $this->useInQuery('Site', $modelAlias, $queryClass, $typeOfIn);
-        return $q;
-    }
-
-    /**
-     * Use the relation to Site table for a NOT IN query.
-     *
-     * @see useSiteInQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
-     *
-     * @return \Model\SiteQuery The inner query object of the NOT IN statement
-     */
-    public function useNotInSiteQuery($modelAlias = null, $queryClass = null)
-    {
-        /** @var $q \Model\SiteQuery */
-        $q = $this->useInQuery('Site', $modelAlias, $queryClass, 'NOT IN');
-        return $q;
     }
 
     /**
