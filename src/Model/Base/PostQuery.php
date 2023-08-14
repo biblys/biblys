@@ -18,7 +18,7 @@ use Propel\Runtime\Exception\PropelException;
  * Base class that represents a query for the `posts` table.
  *
  * @method     ChildPostQuery orderById($order = Criteria::ASC) Order by the post_id column
- * @method     ChildPostQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
+ * @method     ChildPostQuery orderByAxysAccountId($order = Criteria::ASC) Order by the axys_account_id column
  * @method     ChildPostQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
  * @method     ChildPostQuery orderByPublisherId($order = Criteria::ASC) Order by the publisher_id column
  * @method     ChildPostQuery orderByCategoryId($order = Criteria::ASC) Order by the category_id column
@@ -42,7 +42,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPostQuery orderByUpdatedAt($order = Criteria::ASC) Order by the post_updated column
  *
  * @method     ChildPostQuery groupById() Group by the post_id column
- * @method     ChildPostQuery groupByAxysUserId() Group by the axys_user_id column
+ * @method     ChildPostQuery groupByAxysAccountId() Group by the axys_account_id column
  * @method     ChildPostQuery groupBySiteId() Group by the site_id column
  * @method     ChildPostQuery groupByPublisherId() Group by the publisher_id column
  * @method     ChildPostQuery groupByCategoryId() Group by the category_id column
@@ -77,7 +77,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPost findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildPost matching the query, or a new ChildPost object populated from the query conditions when no match is found
  *
  * @method     ChildPost|null findOneById(int $post_id) Return the first ChildPost filtered by the post_id column
- * @method     ChildPost|null findOneByAxysUserId(int $axys_user_id) Return the first ChildPost filtered by the axys_user_id column
+ * @method     ChildPost|null findOneByAxysAccountId(int $axys_account_id) Return the first ChildPost filtered by the axys_account_id column
  * @method     ChildPost|null findOneBySiteId(int $site_id) Return the first ChildPost filtered by the site_id column
  * @method     ChildPost|null findOneByPublisherId(int $publisher_id) Return the first ChildPost filtered by the publisher_id column
  * @method     ChildPost|null findOneByCategoryId(int $category_id) Return the first ChildPost filtered by the category_id column
@@ -104,7 +104,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPost requireOne(?ConnectionInterface $con = null) Return the first ChildPost matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPost requireOneById(int $post_id) Return the first ChildPost filtered by the post_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPost requireOneByAxysUserId(int $axys_user_id) Return the first ChildPost filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPost requireOneByAxysAccountId(int $axys_account_id) Return the first ChildPost filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPost requireOneBySiteId(int $site_id) Return the first ChildPost filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPost requireOneByPublisherId(int $publisher_id) Return the first ChildPost filtered by the publisher_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPost requireOneByCategoryId(int $category_id) Return the first ChildPost filtered by the category_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -132,8 +132,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildPost[]|Collection findById(int|array<int> $post_id) Return ChildPost objects filtered by the post_id column
  * @psalm-method Collection&\Traversable<ChildPost> findById(int|array<int> $post_id) Return ChildPost objects filtered by the post_id column
- * @method     ChildPost[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildPost objects filtered by the axys_user_id column
- * @psalm-method Collection&\Traversable<ChildPost> findByAxysUserId(int|array<int> $axys_user_id) Return ChildPost objects filtered by the axys_user_id column
+ * @method     ChildPost[]|Collection findByAxysAccountId(int|array<int> $axys_account_id) Return ChildPost objects filtered by the axys_account_id column
+ * @psalm-method Collection&\Traversable<ChildPost> findByAxysAccountId(int|array<int> $axys_account_id) Return ChildPost objects filtered by the axys_account_id column
  * @method     ChildPost[]|Collection findBySiteId(int|array<int> $site_id) Return ChildPost objects filtered by the site_id column
  * @psalm-method Collection&\Traversable<ChildPost> findBySiteId(int|array<int> $site_id) Return ChildPost objects filtered by the site_id column
  * @method     ChildPost[]|Collection findByPublisherId(int|array<int> $publisher_id) Return ChildPost objects filtered by the publisher_id column
@@ -275,7 +275,7 @@ abstract class PostQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT post_id, axys_user_id, site_id, publisher_id, category_id, post_url, post_title, post_content, post_illustration_version, post_illustration_legend, post_selected, post_link, post_status, post_keywords, post_links, post_keywords_generated, post_fb_id, post_date, post_hits, post_insert, post_update, post_created, post_updated FROM posts WHERE post_id = :p0';
+        $sql = 'SELECT post_id, axys_account_id, site_id, publisher_id, category_id, post_url, post_title, post_content, post_illustration_version, post_illustration_legend, post_selected, post_link, post_status, post_keywords, post_links, post_keywords_generated, post_fb_id, post_date, post_hits, post_insert, post_update, post_created, post_updated FROM posts WHERE post_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -413,16 +413,16 @@ abstract class PostQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the axys_user_id column
+     * Filter the query on the axys_account_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
-     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
-     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
+     * $query->filterByAxysAccountId(1234); // WHERE axys_account_id = 1234
+     * $query->filterByAxysAccountId(array(12, 34)); // WHERE axys_account_id IN (12, 34)
+     * $query->filterByAxysAccountId(array('min' => 12)); // WHERE axys_account_id > 12
      * </code>
      *
-     * @param mixed $axysUserId The value to use as filter.
+     * @param mixed $axysAccountId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -430,16 +430,16 @@ abstract class PostQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
+    public function filterByAxysAccountId($axysAccountId = null, ?string $comparison = null)
     {
-        if (is_array($axysUserId)) {
+        if (is_array($axysAccountId)) {
             $useMinMax = false;
-            if (isset($axysUserId['min'])) {
-                $this->addUsingAlias(PostTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysAccountId['min'])) {
+                $this->addUsingAlias(PostTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($axysUserId['max'])) {
-                $this->addUsingAlias(PostTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysAccountId['max'])) {
+                $this->addUsingAlias(PostTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -450,7 +450,7 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(PostTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId, $comparison);
 
         return $this;
     }

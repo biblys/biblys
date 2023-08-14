@@ -78,11 +78,11 @@ abstract class Customer implements ActiveRecordInterface
     protected $site_id;
 
     /**
-     * The value for the axys_user_id field.
+     * The value for the axys_account_id field.
      *
      * @var        int|null
      */
-    protected $axys_user_id;
+    protected $axys_account_id;
 
     /**
      * The value for the customer_type field.
@@ -430,13 +430,13 @@ abstract class Customer implements ActiveRecordInterface
     }
 
     /**
-     * Get the [axys_user_id] column value.
+     * Get the [axys_account_id] column value.
      *
      * @return int|null
      */
-    public function getAxysUserId()
+    public function getAxysAccountId()
     {
-        return $this->axys_user_id;
+        return $this->axys_account_id;
     }
 
     /**
@@ -650,20 +650,20 @@ abstract class Customer implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [axys_user_id] column.
+     * Set the value of [axys_account_id] column.
      *
      * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setAxysUserId($v)
+    public function setAxysAccountId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->axys_user_id !== $v) {
-            $this->axys_user_id = $v;
-            $this->modifiedColumns[CustomerTableMap::COL_AXYS_USER_ID] = true;
+        if ($this->axys_account_id !== $v) {
+            $this->axys_account_id = $v;
+            $this->modifiedColumns[CustomerTableMap::COL_AXYS_ACCOUNT_ID] = true;
         }
 
         return $this;
@@ -935,8 +935,8 @@ abstract class Customer implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : CustomerTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : CustomerTableMap::translateFieldName('AxysUserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->axys_user_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : CustomerTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->axys_account_id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : CustomerTableMap::translateFieldName('Type', TableMap::TYPE_PHPNAME, $indexType)];
             $this->customer_type = (null !== $col) ? (string) $col : null;
@@ -1214,8 +1214,8 @@ abstract class Customer implements ActiveRecordInterface
         if ($this->isColumnModified(CustomerTableMap::COL_SITE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'site_id';
         }
-        if ($this->isColumnModified(CustomerTableMap::COL_AXYS_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'axys_user_id';
+        if ($this->isColumnModified(CustomerTableMap::COL_AXYS_ACCOUNT_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_id';
         }
         if ($this->isColumnModified(CustomerTableMap::COL_CUSTOMER_TYPE)) {
             $modifiedColumns[':p' . $index++]  = 'customer_type';
@@ -1269,8 +1269,8 @@ abstract class Customer implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
 
                         break;
-                    case 'axys_user_id':
-                        $stmt->bindValue($identifier, $this->axys_user_id, PDO::PARAM_INT);
+                    case 'axys_account_id':
+                        $stmt->bindValue($identifier, $this->axys_account_id, PDO::PARAM_INT);
 
                         break;
                     case 'customer_type':
@@ -1386,7 +1386,7 @@ abstract class Customer implements ActiveRecordInterface
                 return $this->getSiteId();
 
             case 2:
-                return $this->getAxysUserId();
+                return $this->getAxysAccountId();
 
             case 3:
                 return $this->getType();
@@ -1450,7 +1450,7 @@ abstract class Customer implements ActiveRecordInterface
         $result = [
             $keys[0] => $this->getId(),
             $keys[1] => $this->getSiteId(),
-            $keys[2] => $this->getAxysUserId(),
+            $keys[2] => $this->getAxysAccountId(),
             $keys[3] => $this->getType(),
             $keys[4] => $this->getFirstName(),
             $keys[5] => $this->getLastName(),
@@ -1530,7 +1530,7 @@ abstract class Customer implements ActiveRecordInterface
                 $this->setSiteId($value);
                 break;
             case 2:
-                $this->setAxysUserId($value);
+                $this->setAxysAccountId($value);
                 break;
             case 3:
                 $this->setType($value);
@@ -1598,7 +1598,7 @@ abstract class Customer implements ActiveRecordInterface
             $this->setSiteId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setAxysUserId($arr[$keys[2]]);
+            $this->setAxysAccountId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
             $this->setType($arr[$keys[3]]);
@@ -1682,8 +1682,8 @@ abstract class Customer implements ActiveRecordInterface
         if ($this->isColumnModified(CustomerTableMap::COL_SITE_ID)) {
             $criteria->add(CustomerTableMap::COL_SITE_ID, $this->site_id);
         }
-        if ($this->isColumnModified(CustomerTableMap::COL_AXYS_USER_ID)) {
-            $criteria->add(CustomerTableMap::COL_AXYS_USER_ID, $this->axys_user_id);
+        if ($this->isColumnModified(CustomerTableMap::COL_AXYS_ACCOUNT_ID)) {
+            $criteria->add(CustomerTableMap::COL_AXYS_ACCOUNT_ID, $this->axys_account_id);
         }
         if ($this->isColumnModified(CustomerTableMap::COL_CUSTOMER_TYPE)) {
             $criteria->add(CustomerTableMap::COL_CUSTOMER_TYPE, $this->customer_type);
@@ -1807,7 +1807,7 @@ abstract class Customer implements ActiveRecordInterface
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
         $copyObj->setSiteId($this->getSiteId());
-        $copyObj->setAxysUserId($this->getAxysUserId());
+        $copyObj->setAxysAccountId($this->getAxysAccountId());
         $copyObj->setType($this->getType());
         $copyObj->setFirstName($this->getFirstName());
         $copyObj->setLastName($this->getLastName());
@@ -1858,7 +1858,7 @@ abstract class Customer implements ActiveRecordInterface
     {
         $this->customer_id = null;
         $this->site_id = null;
-        $this->axys_user_id = null;
+        $this->axys_account_id = null;
         $this->customer_type = null;
         $this->customer_first_name = null;
         $this->customer_last_name = null;

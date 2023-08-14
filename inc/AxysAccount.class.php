@@ -25,7 +25,7 @@ class AxysAccount extends Entity
 
         $om = new OptionManager();
 
-        $option = $om->get(['site_id' => $_SITE->get('id'), 'option_key' => $key, 'axys_user_id' => $this->get('id')]);
+        $option = $om->get(['site_id' => $_SITE->get('id'), 'option_key' => $key, 'axys_account_id' => $this->get('id')]);
 
         if ($option) {
             return $option->get('value');
@@ -40,19 +40,19 @@ class AxysAccount extends Entity
 
         $om = new OptionManager();
 
-        $option = $om->get(['site_id' => $_SITE->get('id'), 'option_key' => $key, 'axys_user_id' => $this->get('id')]);
+        $option = $om->get(['site_id' => $_SITE->get('id'), 'option_key' => $key, 'axys_account_id' => $this->get('id')]);
 
         // If option already exists, update it
         if ($option) {
             $option->set('option_value', $value);
-            $option->set('axys_user_id', $this->get('id'));
+            $option->set('axys_account_id', $this->get('id'));
             $om->update($option);
 
             return $this;
         }
 
         // Else, create a new one
-        $option = $om->create(['site_id' => $_SITE->get('id'), 'axys_user_id' => $this->get('id'), 'option_key' => $key, 'option_value' => $value]);
+        $option = $om->create(['site_id' => $_SITE->get('id'), 'axys_account_id' => $this->get('id'), 'option_key' => $key, 'option_value' => $value]);
 
         return $this;
     }
@@ -67,11 +67,11 @@ class AxysAccount extends Entity
         $cm = new CustomerManager();
 
         // Get customer if if already exists
-        if ($customer = $cm->get(['axys_user_id' => $this->get('id')])) {
+        if ($customer = $cm->get(['axys_account_id' => $this->get('id')])) {
             return $customer;
         } elseif ($create) {
             $customer = $cm->create();
-            $customer->set('axys_user_id', $this->get('id'))
+            $customer->set('axys_account_id', $this->get('id'))
                 ->set('customer_first_name', $this->get('first_name'))
                 ->set('customer_last_name', $this->get('last_name'))
                 ->set('customer_email', $this->get('email'));
@@ -121,7 +121,7 @@ class AxysAccount extends Entity
         }
 
         $cm = new CartManager();
-        if ($cart = $cm->get(['carts`.`user_id' => $this->get('id')])) {
+        if ($cart = $cm->get(['carts`.`axys_account_id' => $this->get('id')])) {
             return $cart;
         }
 
@@ -181,7 +181,7 @@ class AxysAccount extends Entity
     {
         if (!is_array($this->alerts)) {
             $am = new AlertManager();
-            $this->alerts = $am->getAll(['axys_user_id' => $this->get('id')]);
+            $this->alerts = $am->getAll(['axys_account_id' => $this->get('id')]);
         }
 
         return $this->alerts;
@@ -216,7 +216,7 @@ class AxysAccount extends Entity
         } else {
             $wm = new WishManager();
 
-            return $wm->getAll(['axys_user_id' => $this->get('id')]);
+            return $wm->getAll(['axys_account_id' => $this->get('id')]);
         }
     }
 
@@ -243,7 +243,7 @@ class AxysAccount extends Entity
         } else {
             $sm = new StockManager();
 
-            return $sm->getAll(['axys_user_id' => $this->get('id')], [], false);
+            return $sm->getAll(['axys_account_id' => $this->get('id')], [], false);
         }
     }
 
@@ -293,7 +293,7 @@ class AxysAccount extends Entity
         $currentSiteService = CurrentSite::buildFromConfig($config);
 
         $rm = new RightManager();
-        $rights = $rm->getAll(['axys_user_id' => $this->get('id')], [], false);
+        $rights = $rm->getAll(['axys_account_id' => $this->get('id')], [], false);
 
         // Keep only admin rights for current site
         foreach ($rights as $key => $right) {
@@ -321,7 +321,7 @@ class AxysAccount extends Entity
     {
         $rm = new RightManager();
         $right = $rm->create();
-        $right->set('axys_user_id', $this->get('id'))->set($type . '_id', $id);
+        $right->set('axys_account_id', $this->get('id'))->set($type . '_id', $id);
         $rm->update($right);
     }
 
@@ -329,7 +329,7 @@ class AxysAccount extends Entity
     {
         $rm = new RightManager();
         $right = $rm->get([
-            'axys_user_id' => $this->get('id'),
+            'axys_account_id' => $this->get('id'),
             $type . '_id' => $id,
         ]);
 
@@ -347,10 +347,10 @@ class AxysAccount extends Entity
     {
         $wm = new WishlistManager();
 
-        $wishlist = $wm->get(['axys_user_id' => $this->get('id'), 'wishlist_current' => 1]);
+        $wishlist = $wm->get(['axys_account_id' => $this->get('id'), 'wishlist_current' => 1]);
 
         if (!$wishlist && $create) {
-            $wishlist = $wm->create(['axys_user_id' => $this->get('id')]);
+            $wishlist = $wm->create(['axys_account_id' => $this->get('id')]);
         }
 
         return $wishlist;
@@ -497,7 +497,7 @@ class AxysAccountManager extends EntityManager
                 // Check if article is a downloadable
                 if ($article->get('type_id') == 2 || $article->get('type_id') == 11) {
                     // Check if article is already in library
-                    if ($sm->getAll(['article_id' => $article->get('id'), 'axys_user_id' => $user->get('id')])) {
+                    if ($sm->getAll(['article_id' => $article->get('id'), 'axys_account_id' => $user->get('id')])) {
                         $errors[] = 'Article ' . $article->get('title') . ' is already in user\'s library.';
                     } else {
                         // Create a new free copy
@@ -525,13 +525,13 @@ class AxysAccountManager extends EntityManager
                 // Check if article is a downloadable
                 if ($article->get('type_id') == 2 || $article->get('type_id') == 11) {
                     // Check if copy is already in library
-                    if ($stock->has('axys_user_id')) {
+                    if ($stock->has('axys_account_id')) {
                         $errors[] = 'Stock #' . $stock->get('id') . ' is already in user\'s library.';
                     }
 
                     // Else add it
                     else {
-                        $stock->set('axys_user_id', $user->get('id'))
+                        $stock->set('axys_account_id', $user->get('id'))
                             ->set('stock_selling_date', date('Y-m-d H:i:s'));
                         if ($predownload) {
                             $stock->set('stock_allow_predownload', 1);

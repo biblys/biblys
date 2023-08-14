@@ -71,11 +71,11 @@ abstract class StockItemList implements ActiveRecordInterface
     protected $list_id;
 
     /**
-     * The value for the axys_user_id field.
+     * The value for the axys_account_id field.
      *
      * @var        int|null
      */
-    protected $axys_user_id;
+    protected $axys_account_id;
 
     /**
      * The value for the site_id field.
@@ -357,13 +357,13 @@ abstract class StockItemList implements ActiveRecordInterface
     }
 
     /**
-     * Get the [axys_user_id] column value.
+     * Get the [axys_account_id] column value.
      *
      * @return int|null
      */
-    public function getAxysUserId()
+    public function getAxysAccountId()
     {
-        return $this->axys_user_id;
+        return $this->axys_account_id;
     }
 
     /**
@@ -461,20 +461,20 @@ abstract class StockItemList implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [axys_user_id] column.
+     * Set the value of [axys_account_id] column.
      *
      * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setAxysUserId($v)
+    public function setAxysAccountId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->axys_user_id !== $v) {
-            $this->axys_user_id = $v;
-            $this->modifiedColumns[StockItemListTableMap::COL_AXYS_USER_ID] = true;
+        if ($this->axys_account_id !== $v) {
+            $this->axys_account_id = $v;
+            $this->modifiedColumns[StockItemListTableMap::COL_AXYS_ACCOUNT_ID] = true;
         }
 
         return $this;
@@ -619,8 +619,8 @@ abstract class StockItemList implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : StockItemListTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->list_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : StockItemListTableMap::translateFieldName('AxysUserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->axys_user_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : StockItemListTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->axys_account_id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : StockItemListTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_id = (null !== $col) ? (int) $col : null;
@@ -868,8 +868,8 @@ abstract class StockItemList implements ActiveRecordInterface
         if ($this->isColumnModified(StockItemListTableMap::COL_LIST_ID)) {
             $modifiedColumns[':p' . $index++]  = 'list_id';
         }
-        if ($this->isColumnModified(StockItemListTableMap::COL_AXYS_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'axys_user_id';
+        if ($this->isColumnModified(StockItemListTableMap::COL_AXYS_ACCOUNT_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_id';
         }
         if ($this->isColumnModified(StockItemListTableMap::COL_SITE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'site_id';
@@ -901,8 +901,8 @@ abstract class StockItemList implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->list_id, PDO::PARAM_INT);
 
                         break;
-                    case 'axys_user_id':
-                        $stmt->bindValue($identifier, $this->axys_user_id, PDO::PARAM_INT);
+                    case 'axys_account_id':
+                        $stmt->bindValue($identifier, $this->axys_account_id, PDO::PARAM_INT);
 
                         break;
                     case 'site_id':
@@ -991,7 +991,7 @@ abstract class StockItemList implements ActiveRecordInterface
                 return $this->getId();
 
             case 1:
-                return $this->getAxysUserId();
+                return $this->getAxysAccountId();
 
             case 2:
                 return $this->getSiteId();
@@ -1036,7 +1036,7 @@ abstract class StockItemList implements ActiveRecordInterface
         $keys = StockItemListTableMap::getFieldNames($keyType);
         $result = [
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getAxysUserId(),
+            $keys[1] => $this->getAxysAccountId(),
             $keys[2] => $this->getSiteId(),
             $keys[3] => $this->getTitle(),
             $keys[4] => $this->getUrl(),
@@ -1095,7 +1095,7 @@ abstract class StockItemList implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setAxysUserId($value);
+                $this->setAxysAccountId($value);
                 break;
             case 2:
                 $this->setSiteId($value);
@@ -1142,7 +1142,7 @@ abstract class StockItemList implements ActiveRecordInterface
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setAxysUserId($arr[$keys[1]]);
+            $this->setAxysAccountId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
             $this->setSiteId($arr[$keys[2]]);
@@ -1205,8 +1205,8 @@ abstract class StockItemList implements ActiveRecordInterface
         if ($this->isColumnModified(StockItemListTableMap::COL_LIST_ID)) {
             $criteria->add(StockItemListTableMap::COL_LIST_ID, $this->list_id);
         }
-        if ($this->isColumnModified(StockItemListTableMap::COL_AXYS_USER_ID)) {
-            $criteria->add(StockItemListTableMap::COL_AXYS_USER_ID, $this->axys_user_id);
+        if ($this->isColumnModified(StockItemListTableMap::COL_AXYS_ACCOUNT_ID)) {
+            $criteria->add(StockItemListTableMap::COL_AXYS_ACCOUNT_ID, $this->axys_account_id);
         }
         if ($this->isColumnModified(StockItemListTableMap::COL_SITE_ID)) {
             $criteria->add(StockItemListTableMap::COL_SITE_ID, $this->site_id);
@@ -1311,7 +1311,7 @@ abstract class StockItemList implements ActiveRecordInterface
      */
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
-        $copyObj->setAxysUserId($this->getAxysUserId());
+        $copyObj->setAxysAccountId($this->getAxysAccountId());
         $copyObj->setSiteId($this->getSiteId());
         $copyObj->setTitle($this->getTitle());
         $copyObj->setUrl($this->getUrl());
@@ -1355,7 +1355,7 @@ abstract class StockItemList implements ActiveRecordInterface
     public function clear()
     {
         $this->list_id = null;
-        $this->axys_user_id = null;
+        $this->axys_account_id = null;
         $this->site_id = null;
         $this->list_title = null;
         $this->list_url = null;

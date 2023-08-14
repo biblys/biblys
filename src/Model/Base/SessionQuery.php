@@ -21,7 +21,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildSessionQuery orderById($order = Criteria::ASC) Order by the session_id column
  * @method     ChildSessionQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
- * @method     ChildSessionQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
+ * @method     ChildSessionQuery orderByAxysAccountId($order = Criteria::ASC) Order by the axys_account_id column
  * @method     ChildSessionQuery orderByToken($order = Criteria::ASC) Order by the session_token column
  * @method     ChildSessionQuery orderByCreatedAt($order = Criteria::ASC) Order by the session_created column
  * @method     ChildSessionQuery orderByExpiresAt($order = Criteria::ASC) Order by the session_expires column
@@ -29,7 +29,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildSessionQuery groupById() Group by the session_id column
  * @method     ChildSessionQuery groupBySiteId() Group by the site_id column
- * @method     ChildSessionQuery groupByAxysUserId() Group by the axys_user_id column
+ * @method     ChildSessionQuery groupByAxysAccountId() Group by the axys_account_id column
  * @method     ChildSessionQuery groupByToken() Group by the session_token column
  * @method     ChildSessionQuery groupByCreatedAt() Group by the session_created column
  * @method     ChildSessionQuery groupByExpiresAt() Group by the session_expires column
@@ -70,7 +70,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildSession|null findOneById(int $session_id) Return the first ChildSession filtered by the session_id column
  * @method     ChildSession|null findOneBySiteId(int $site_id) Return the first ChildSession filtered by the site_id column
- * @method     ChildSession|null findOneByAxysUserId(int $axys_user_id) Return the first ChildSession filtered by the axys_user_id column
+ * @method     ChildSession|null findOneByAxysAccountId(int $axys_account_id) Return the first ChildSession filtered by the axys_account_id column
  * @method     ChildSession|null findOneByToken(string $session_token) Return the first ChildSession filtered by the session_token column
  * @method     ChildSession|null findOneByCreatedAt(string $session_created) Return the first ChildSession filtered by the session_created column
  * @method     ChildSession|null findOneByExpiresAt(string $session_expires) Return the first ChildSession filtered by the session_expires column
@@ -81,7 +81,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildSession requireOneById(int $session_id) Return the first ChildSession filtered by the session_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSession requireOneBySiteId(int $site_id) Return the first ChildSession filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildSession requireOneByAxysUserId(int $axys_user_id) Return the first ChildSession filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildSession requireOneByAxysAccountId(int $axys_account_id) Return the first ChildSession filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSession requireOneByToken(string $session_token) Return the first ChildSession filtered by the session_token column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSession requireOneByCreatedAt(string $session_created) Return the first ChildSession filtered by the session_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSession requireOneByExpiresAt(string $session_expires) Return the first ChildSession filtered by the session_expires column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -94,8 +94,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildSession> findById(int|array<int> $session_id) Return ChildSession objects filtered by the session_id column
  * @method     ChildSession[]|Collection findBySiteId(int|array<int> $site_id) Return ChildSession objects filtered by the site_id column
  * @psalm-method Collection&\Traversable<ChildSession> findBySiteId(int|array<int> $site_id) Return ChildSession objects filtered by the site_id column
- * @method     ChildSession[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildSession objects filtered by the axys_user_id column
- * @psalm-method Collection&\Traversable<ChildSession> findByAxysUserId(int|array<int> $axys_user_id) Return ChildSession objects filtered by the axys_user_id column
+ * @method     ChildSession[]|Collection findByAxysAccountId(int|array<int> $axys_account_id) Return ChildSession objects filtered by the axys_account_id column
+ * @psalm-method Collection&\Traversable<ChildSession> findByAxysAccountId(int|array<int> $axys_account_id) Return ChildSession objects filtered by the axys_account_id column
  * @method     ChildSession[]|Collection findByToken(string|array<string> $session_token) Return ChildSession objects filtered by the session_token column
  * @psalm-method Collection&\Traversable<ChildSession> findByToken(string|array<string> $session_token) Return ChildSession objects filtered by the session_token column
  * @method     ChildSession[]|Collection findByCreatedAt(string|array<string> $session_created) Return ChildSession objects filtered by the session_created column
@@ -203,7 +203,7 @@ abstract class SessionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT session_id, site_id, axys_user_id, session_token, session_created, session_expires, session_updated FROM session WHERE session_id = :p0';
+        $sql = 'SELECT session_id, site_id, axys_account_id, session_token, session_created, session_expires, session_updated FROM session WHERE session_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -386,18 +386,18 @@ abstract class SessionQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the axys_user_id column
+     * Filter the query on the axys_account_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
-     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
-     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
+     * $query->filterByAxysAccountId(1234); // WHERE axys_account_id = 1234
+     * $query->filterByAxysAccountId(array(12, 34)); // WHERE axys_account_id IN (12, 34)
+     * $query->filterByAxysAccountId(array('min' => 12)); // WHERE axys_account_id > 12
      * </code>
      *
      * @see       filterByAxysAccount()
      *
-     * @param mixed $axysUserId The value to use as filter.
+     * @param mixed $axysAccountId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -405,16 +405,16 @@ abstract class SessionQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
+    public function filterByAxysAccountId($axysAccountId = null, ?string $comparison = null)
     {
-        if (is_array($axysUserId)) {
+        if (is_array($axysAccountId)) {
             $useMinMax = false;
-            if (isset($axysUserId['min'])) {
-                $this->addUsingAlias(SessionTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysAccountId['min'])) {
+                $this->addUsingAlias(SessionTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($axysUserId['max'])) {
-                $this->addUsingAlias(SessionTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysAccountId['max'])) {
+                $this->addUsingAlias(SessionTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -425,7 +425,7 @@ abstract class SessionQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(SessionTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
+        $this->addUsingAlias(SessionTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId, $comparison);
 
         return $this;
     }
@@ -607,14 +607,14 @@ abstract class SessionQuery extends ModelCriteria
     {
         if ($axysAccount instanceof \Model\AxysAccount) {
             return $this
-                ->addUsingAlias(SessionTableMap::COL_AXYS_USER_ID, $axysAccount->getId(), $comparison);
+                ->addUsingAlias(SessionTableMap::COL_AXYS_ACCOUNT_ID, $axysAccount->getId(), $comparison);
         } elseif ($axysAccount instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             $this
-                ->addUsingAlias(SessionTableMap::COL_AXYS_USER_ID, $axysAccount->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(SessionTableMap::COL_AXYS_ACCOUNT_ID, $axysAccount->toKeyValue('PrimaryKey', 'Id'), $comparison);
 
             return $this;
         } else {

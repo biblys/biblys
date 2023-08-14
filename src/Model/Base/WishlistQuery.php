@@ -20,7 +20,7 @@ use Propel\Runtime\Exception\PropelException;
  * Base class that represents a query for the `wishlist` table.
  *
  * @method     ChildWishlistQuery orderById($order = Criteria::ASC) Order by the wishlist_id column
- * @method     ChildWishlistQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
+ * @method     ChildWishlistQuery orderByAxysAccountId($order = Criteria::ASC) Order by the axys_account_id column
  * @method     ChildWishlistQuery orderByName($order = Criteria::ASC) Order by the wishlist_name column
  * @method     ChildWishlistQuery orderByCurrent($order = Criteria::ASC) Order by the wishlist_current column
  * @method     ChildWishlistQuery orderByPublic($order = Criteria::ASC) Order by the wishlist_public column
@@ -28,7 +28,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildWishlistQuery orderByUpdatedAt($order = Criteria::ASC) Order by the wishlist_updated column
  *
  * @method     ChildWishlistQuery groupById() Group by the wishlist_id column
- * @method     ChildWishlistQuery groupByAxysUserId() Group by the axys_user_id column
+ * @method     ChildWishlistQuery groupByAxysAccountId() Group by the axys_account_id column
  * @method     ChildWishlistQuery groupByName() Group by the wishlist_name column
  * @method     ChildWishlistQuery groupByCurrent() Group by the wishlist_current column
  * @method     ChildWishlistQuery groupByPublic() Group by the wishlist_public column
@@ -59,7 +59,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildWishlist findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildWishlist matching the query, or a new ChildWishlist object populated from the query conditions when no match is found
  *
  * @method     ChildWishlist|null findOneById(int $wishlist_id) Return the first ChildWishlist filtered by the wishlist_id column
- * @method     ChildWishlist|null findOneByAxysUserId(int $axys_user_id) Return the first ChildWishlist filtered by the axys_user_id column
+ * @method     ChildWishlist|null findOneByAxysAccountId(int $axys_account_id) Return the first ChildWishlist filtered by the axys_account_id column
  * @method     ChildWishlist|null findOneByName(string $wishlist_name) Return the first ChildWishlist filtered by the wishlist_name column
  * @method     ChildWishlist|null findOneByCurrent(boolean $wishlist_current) Return the first ChildWishlist filtered by the wishlist_current column
  * @method     ChildWishlist|null findOneByPublic(boolean $wishlist_public) Return the first ChildWishlist filtered by the wishlist_public column
@@ -70,7 +70,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildWishlist requireOne(?ConnectionInterface $con = null) Return the first ChildWishlist matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildWishlist requireOneById(int $wishlist_id) Return the first ChildWishlist filtered by the wishlist_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildWishlist requireOneByAxysUserId(int $axys_user_id) Return the first ChildWishlist filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildWishlist requireOneByAxysAccountId(int $axys_account_id) Return the first ChildWishlist filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildWishlist requireOneByName(string $wishlist_name) Return the first ChildWishlist filtered by the wishlist_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildWishlist requireOneByCurrent(boolean $wishlist_current) Return the first ChildWishlist filtered by the wishlist_current column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildWishlist requireOneByPublic(boolean $wishlist_public) Return the first ChildWishlist filtered by the wishlist_public column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -82,8 +82,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildWishlist[]|Collection findById(int|array<int> $wishlist_id) Return ChildWishlist objects filtered by the wishlist_id column
  * @psalm-method Collection&\Traversable<ChildWishlist> findById(int|array<int> $wishlist_id) Return ChildWishlist objects filtered by the wishlist_id column
- * @method     ChildWishlist[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildWishlist objects filtered by the axys_user_id column
- * @psalm-method Collection&\Traversable<ChildWishlist> findByAxysUserId(int|array<int> $axys_user_id) Return ChildWishlist objects filtered by the axys_user_id column
+ * @method     ChildWishlist[]|Collection findByAxysAccountId(int|array<int> $axys_account_id) Return ChildWishlist objects filtered by the axys_account_id column
+ * @psalm-method Collection&\Traversable<ChildWishlist> findByAxysAccountId(int|array<int> $axys_account_id) Return ChildWishlist objects filtered by the axys_account_id column
  * @method     ChildWishlist[]|Collection findByName(string|array<string> $wishlist_name) Return ChildWishlist objects filtered by the wishlist_name column
  * @psalm-method Collection&\Traversable<ChildWishlist> findByName(string|array<string> $wishlist_name) Return ChildWishlist objects filtered by the wishlist_name column
  * @method     ChildWishlist[]|Collection findByCurrent(boolean|array<boolean> $wishlist_current) Return ChildWishlist objects filtered by the wishlist_current column
@@ -193,7 +193,7 @@ abstract class WishlistQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT wishlist_id, axys_user_id, wishlist_name, wishlist_current, wishlist_public, wishlist_created, wishlist_updated FROM wishlist WHERE wishlist_id = :p0';
+        $sql = 'SELECT wishlist_id, axys_account_id, wishlist_name, wishlist_current, wishlist_public, wishlist_created, wishlist_updated FROM wishlist WHERE wishlist_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -331,18 +331,18 @@ abstract class WishlistQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the axys_user_id column
+     * Filter the query on the axys_account_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
-     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
-     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
+     * $query->filterByAxysAccountId(1234); // WHERE axys_account_id = 1234
+     * $query->filterByAxysAccountId(array(12, 34)); // WHERE axys_account_id IN (12, 34)
+     * $query->filterByAxysAccountId(array('min' => 12)); // WHERE axys_account_id > 12
      * </code>
      *
      * @see       filterByAxysAccount()
      *
-     * @param mixed $axysUserId The value to use as filter.
+     * @param mixed $axysAccountId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -350,16 +350,16 @@ abstract class WishlistQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
+    public function filterByAxysAccountId($axysAccountId = null, ?string $comparison = null)
     {
-        if (is_array($axysUserId)) {
+        if (is_array($axysAccountId)) {
             $useMinMax = false;
-            if (isset($axysUserId['min'])) {
-                $this->addUsingAlias(WishlistTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysAccountId['min'])) {
+                $this->addUsingAlias(WishlistTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($axysUserId['max'])) {
-                $this->addUsingAlias(WishlistTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysAccountId['max'])) {
+                $this->addUsingAlias(WishlistTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -370,7 +370,7 @@ abstract class WishlistQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(WishlistTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
+        $this->addUsingAlias(WishlistTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId, $comparison);
 
         return $this;
     }
@@ -565,14 +565,14 @@ abstract class WishlistQuery extends ModelCriteria
     {
         if ($axysAccount instanceof \Model\AxysAccount) {
             return $this
-                ->addUsingAlias(WishlistTableMap::COL_AXYS_USER_ID, $axysAccount->getId(), $comparison);
+                ->addUsingAlias(WishlistTableMap::COL_AXYS_ACCOUNT_ID, $axysAccount->getId(), $comparison);
         } elseif ($axysAccount instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             $this
-                ->addUsingAlias(WishlistTableMap::COL_AXYS_USER_ID, $axysAccount->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(WishlistTableMap::COL_AXYS_ACCOUNT_ID, $axysAccount->toKeyValue('PrimaryKey', 'Id'), $comparison);
 
             return $this;
         } else {

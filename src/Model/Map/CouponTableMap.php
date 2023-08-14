@@ -86,9 +86,9 @@ class CouponTableMap extends TableMap
     public const COL_SITE_ID = 'coupons.site_id';
 
     /**
-     * the column name for the axys_user_id field
+     * the column name for the axys_account_id field
      */
-    public const COL_AXYS_USER_ID = 'coupons.axys_user_id';
+    public const COL_AXYS_ACCOUNT_ID = 'coupons.axys_account_id';
 
     /**
      * the column name for the coupon_code field
@@ -149,10 +149,10 @@ class CouponTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'AxysUserId', 'Code', 'ArticleId', 'StockId', 'Amount', 'Note', 'Used', 'Creator', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'axysUserId', 'code', 'articleId', 'stockId', 'amount', 'note', 'used', 'creator', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [CouponTableMap::COL_COUPON_ID, CouponTableMap::COL_SITE_ID, CouponTableMap::COL_AXYS_USER_ID, CouponTableMap::COL_COUPON_CODE, CouponTableMap::COL_ARTICLE_ID, CouponTableMap::COL_STOCK_ID, CouponTableMap::COL_COUPON_AMOUNT, CouponTableMap::COL_COUPON_NOTE, CouponTableMap::COL_COUPON_USED, CouponTableMap::COL_COUPON_CREATOR, CouponTableMap::COL_COUPON_INSERT, CouponTableMap::COL_COUPON_UPDATE, ],
-        self::TYPE_FIELDNAME     => ['coupon_id', 'site_id', 'axys_user_id', 'coupon_code', 'article_id', 'stock_id', 'coupon_amount', 'coupon_note', 'coupon_used', 'coupon_creator', 'coupon_insert', 'coupon_update', ],
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'AxysAccountId', 'Code', 'ArticleId', 'StockId', 'Amount', 'Note', 'Used', 'Creator', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'axysAccountId', 'code', 'articleId', 'stockId', 'amount', 'note', 'used', 'creator', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [CouponTableMap::COL_COUPON_ID, CouponTableMap::COL_SITE_ID, CouponTableMap::COL_AXYS_ACCOUNT_ID, CouponTableMap::COL_COUPON_CODE, CouponTableMap::COL_ARTICLE_ID, CouponTableMap::COL_STOCK_ID, CouponTableMap::COL_COUPON_AMOUNT, CouponTableMap::COL_COUPON_NOTE, CouponTableMap::COL_COUPON_USED, CouponTableMap::COL_COUPON_CREATOR, CouponTableMap::COL_COUPON_INSERT, CouponTableMap::COL_COUPON_UPDATE, ],
+        self::TYPE_FIELDNAME     => ['coupon_id', 'site_id', 'axys_account_id', 'coupon_code', 'article_id', 'stock_id', 'coupon_amount', 'coupon_note', 'coupon_used', 'coupon_creator', 'coupon_insert', 'coupon_update', ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ]
     ];
 
@@ -165,10 +165,10 @@ class CouponTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'AxysUserId' => 2, 'Code' => 3, 'ArticleId' => 4, 'StockId' => 5, 'Amount' => 6, 'Note' => 7, 'Used' => 8, 'Creator' => 9, 'CreatedAt' => 10, 'UpdatedAt' => 11, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'axysUserId' => 2, 'code' => 3, 'articleId' => 4, 'stockId' => 5, 'amount' => 6, 'note' => 7, 'used' => 8, 'creator' => 9, 'createdAt' => 10, 'updatedAt' => 11, ],
-        self::TYPE_COLNAME       => [CouponTableMap::COL_COUPON_ID => 0, CouponTableMap::COL_SITE_ID => 1, CouponTableMap::COL_AXYS_USER_ID => 2, CouponTableMap::COL_COUPON_CODE => 3, CouponTableMap::COL_ARTICLE_ID => 4, CouponTableMap::COL_STOCK_ID => 5, CouponTableMap::COL_COUPON_AMOUNT => 6, CouponTableMap::COL_COUPON_NOTE => 7, CouponTableMap::COL_COUPON_USED => 8, CouponTableMap::COL_COUPON_CREATOR => 9, CouponTableMap::COL_COUPON_INSERT => 10, CouponTableMap::COL_COUPON_UPDATE => 11, ],
-        self::TYPE_FIELDNAME     => ['coupon_id' => 0, 'site_id' => 1, 'axys_user_id' => 2, 'coupon_code' => 3, 'article_id' => 4, 'stock_id' => 5, 'coupon_amount' => 6, 'coupon_note' => 7, 'coupon_used' => 8, 'coupon_creator' => 9, 'coupon_insert' => 10, 'coupon_update' => 11, ],
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'AxysAccountId' => 2, 'Code' => 3, 'ArticleId' => 4, 'StockId' => 5, 'Amount' => 6, 'Note' => 7, 'Used' => 8, 'Creator' => 9, 'CreatedAt' => 10, 'UpdatedAt' => 11, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'axysAccountId' => 2, 'code' => 3, 'articleId' => 4, 'stockId' => 5, 'amount' => 6, 'note' => 7, 'used' => 8, 'creator' => 9, 'createdAt' => 10, 'updatedAt' => 11, ],
+        self::TYPE_COLNAME       => [CouponTableMap::COL_COUPON_ID => 0, CouponTableMap::COL_SITE_ID => 1, CouponTableMap::COL_AXYS_ACCOUNT_ID => 2, CouponTableMap::COL_COUPON_CODE => 3, CouponTableMap::COL_ARTICLE_ID => 4, CouponTableMap::COL_STOCK_ID => 5, CouponTableMap::COL_COUPON_AMOUNT => 6, CouponTableMap::COL_COUPON_NOTE => 7, CouponTableMap::COL_COUPON_USED => 8, CouponTableMap::COL_COUPON_CREATOR => 9, CouponTableMap::COL_COUPON_INSERT => 10, CouponTableMap::COL_COUPON_UPDATE => 11, ],
+        self::TYPE_FIELDNAME     => ['coupon_id' => 0, 'site_id' => 1, 'axys_account_id' => 2, 'coupon_code' => 3, 'article_id' => 4, 'stock_id' => 5, 'coupon_amount' => 6, 'coupon_note' => 7, 'coupon_used' => 8, 'coupon_creator' => 9, 'coupon_insert' => 10, 'coupon_update' => 11, ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ]
     ];
 
@@ -194,14 +194,14 @@ class CouponTableMap extends TableMap
         'COL_SITE_ID' => 'SITE_ID',
         'site_id' => 'SITE_ID',
         'coupons.site_id' => 'SITE_ID',
-        'AxysUserId' => 'AXYS_USER_ID',
-        'Coupon.AxysUserId' => 'AXYS_USER_ID',
-        'axysUserId' => 'AXYS_USER_ID',
-        'coupon.axysUserId' => 'AXYS_USER_ID',
-        'CouponTableMap::COL_AXYS_USER_ID' => 'AXYS_USER_ID',
-        'COL_AXYS_USER_ID' => 'AXYS_USER_ID',
-        'axys_user_id' => 'AXYS_USER_ID',
-        'coupons.axys_user_id' => 'AXYS_USER_ID',
+        'AxysAccountId' => 'AXYS_ACCOUNT_ID',
+        'Coupon.AxysAccountId' => 'AXYS_ACCOUNT_ID',
+        'axysAccountId' => 'AXYS_ACCOUNT_ID',
+        'coupon.axysAccountId' => 'AXYS_ACCOUNT_ID',
+        'CouponTableMap::COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
+        'COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
+        'axys_account_id' => 'AXYS_ACCOUNT_ID',
+        'coupons.axys_account_id' => 'AXYS_ACCOUNT_ID',
         'Code' => 'COUPON_CODE',
         'Coupon.Code' => 'COUPON_CODE',
         'code' => 'COUPON_CODE',
@@ -295,7 +295,7 @@ class CouponTableMap extends TableMap
         // columns
         $this->addPrimaryKey('coupon_id', 'Id', 'INTEGER', true, 10, null);
         $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
-        $this->addColumn('axys_user_id', 'AxysUserId', 'INTEGER', false, 10, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
         $this->addColumn('coupon_code', 'Code', 'VARCHAR', false, 6, null);
         $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, 10, null);
         $this->addColumn('stock_id', 'StockId', 'INTEGER', false, 10, null);
@@ -473,7 +473,7 @@ class CouponTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(CouponTableMap::COL_COUPON_ID);
             $criteria->addSelectColumn(CouponTableMap::COL_SITE_ID);
-            $criteria->addSelectColumn(CouponTableMap::COL_AXYS_USER_ID);
+            $criteria->addSelectColumn(CouponTableMap::COL_AXYS_ACCOUNT_ID);
             $criteria->addSelectColumn(CouponTableMap::COL_COUPON_CODE);
             $criteria->addSelectColumn(CouponTableMap::COL_ARTICLE_ID);
             $criteria->addSelectColumn(CouponTableMap::COL_STOCK_ID);
@@ -486,7 +486,7 @@ class CouponTableMap extends TableMap
         } else {
             $criteria->addSelectColumn($alias . '.coupon_id');
             $criteria->addSelectColumn($alias . '.site_id');
-            $criteria->addSelectColumn($alias . '.axys_user_id');
+            $criteria->addSelectColumn($alias . '.axys_account_id');
             $criteria->addSelectColumn($alias . '.coupon_code');
             $criteria->addSelectColumn($alias . '.article_id');
             $criteria->addSelectColumn($alias . '.stock_id');
@@ -516,7 +516,7 @@ class CouponTableMap extends TableMap
         if (null === $alias) {
             $criteria->removeSelectColumn(CouponTableMap::COL_COUPON_ID);
             $criteria->removeSelectColumn(CouponTableMap::COL_SITE_ID);
-            $criteria->removeSelectColumn(CouponTableMap::COL_AXYS_USER_ID);
+            $criteria->removeSelectColumn(CouponTableMap::COL_AXYS_ACCOUNT_ID);
             $criteria->removeSelectColumn(CouponTableMap::COL_COUPON_CODE);
             $criteria->removeSelectColumn(CouponTableMap::COL_ARTICLE_ID);
             $criteria->removeSelectColumn(CouponTableMap::COL_STOCK_ID);
@@ -529,7 +529,7 @@ class CouponTableMap extends TableMap
         } else {
             $criteria->removeSelectColumn($alias . '.coupon_id');
             $criteria->removeSelectColumn($alias . '.site_id');
-            $criteria->removeSelectColumn($alias . '.axys_user_id');
+            $criteria->removeSelectColumn($alias . '.axys_account_id');
             $criteria->removeSelectColumn($alias . '.coupon_code');
             $criteria->removeSelectColumn($alias . '.article_id');
             $criteria->removeSelectColumn($alias . '.stock_id');

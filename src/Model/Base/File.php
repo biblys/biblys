@@ -78,11 +78,11 @@ abstract class File implements ActiveRecordInterface
     protected $article_id;
 
     /**
-     * The value for the axys_user_id field.
+     * The value for the axys_account_id field.
      *
      * @var        int|null
      */
-    protected $axys_user_id;
+    protected $axys_account_id;
 
     /**
      * The value for the file_title field.
@@ -434,13 +434,13 @@ abstract class File implements ActiveRecordInterface
     }
 
     /**
-     * Get the [axys_user_id] column value.
+     * Get the [axys_account_id] column value.
      *
      * @return int|null
      */
-    public function getAxysUserId()
+    public function getAxysAccountId()
     {
-        return $this->axys_user_id;
+        return $this->axys_account_id;
     }
 
     /**
@@ -652,20 +652,20 @@ abstract class File implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [axys_user_id] column.
+     * Set the value of [axys_account_id] column.
      *
      * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setAxysUserId($v)
+    public function setAxysAccountId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->axys_user_id !== $v) {
-            $this->axys_user_id = $v;
-            $this->modifiedColumns[FileTableMap::COL_AXYS_USER_ID] = true;
+        if ($this->axys_account_id !== $v) {
+            $this->axys_account_id = $v;
+            $this->modifiedColumns[FileTableMap::COL_AXYS_ACCOUNT_ID] = true;
         }
 
         return $this;
@@ -953,8 +953,8 @@ abstract class File implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : FileTableMap::translateFieldName('ArticleId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->article_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : FileTableMap::translateFieldName('AxysUserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->axys_user_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : FileTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->axys_account_id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : FileTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
             $this->file_title = (null !== $col) ? (string) $col : null;
@@ -1229,8 +1229,8 @@ abstract class File implements ActiveRecordInterface
         if ($this->isColumnModified(FileTableMap::COL_ARTICLE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'article_id';
         }
-        if ($this->isColumnModified(FileTableMap::COL_AXYS_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'axys_user_id';
+        if ($this->isColumnModified(FileTableMap::COL_AXYS_ACCOUNT_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_id';
         }
         if ($this->isColumnModified(FileTableMap::COL_FILE_TITLE)) {
             $modifiedColumns[':p' . $index++]  = 'file_title';
@@ -1284,8 +1284,8 @@ abstract class File implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->article_id, PDO::PARAM_INT);
 
                         break;
-                    case 'axys_user_id':
-                        $stmt->bindValue($identifier, $this->axys_user_id, PDO::PARAM_INT);
+                    case 'axys_account_id':
+                        $stmt->bindValue($identifier, $this->axys_account_id, PDO::PARAM_INT);
 
                         break;
                     case 'file_title':
@@ -1401,7 +1401,7 @@ abstract class File implements ActiveRecordInterface
                 return $this->getArticleId();
 
             case 2:
-                return $this->getAxysUserId();
+                return $this->getAxysAccountId();
 
             case 3:
                 return $this->getTitle();
@@ -1465,7 +1465,7 @@ abstract class File implements ActiveRecordInterface
         $result = [
             $keys[0] => $this->getId(),
             $keys[1] => $this->getArticleId(),
-            $keys[2] => $this->getAxysUserId(),
+            $keys[2] => $this->getAxysAccountId(),
             $keys[3] => $this->getTitle(),
             $keys[4] => $this->getType(),
             $keys[5] => $this->getAccess(),
@@ -1541,7 +1541,7 @@ abstract class File implements ActiveRecordInterface
                 $this->setArticleId($value);
                 break;
             case 2:
-                $this->setAxysUserId($value);
+                $this->setAxysAccountId($value);
                 break;
             case 3:
                 $this->setTitle($value);
@@ -1609,7 +1609,7 @@ abstract class File implements ActiveRecordInterface
             $this->setArticleId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setAxysUserId($arr[$keys[2]]);
+            $this->setAxysAccountId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
             $this->setTitle($arr[$keys[3]]);
@@ -1693,8 +1693,8 @@ abstract class File implements ActiveRecordInterface
         if ($this->isColumnModified(FileTableMap::COL_ARTICLE_ID)) {
             $criteria->add(FileTableMap::COL_ARTICLE_ID, $this->article_id);
         }
-        if ($this->isColumnModified(FileTableMap::COL_AXYS_USER_ID)) {
-            $criteria->add(FileTableMap::COL_AXYS_USER_ID, $this->axys_user_id);
+        if ($this->isColumnModified(FileTableMap::COL_AXYS_ACCOUNT_ID)) {
+            $criteria->add(FileTableMap::COL_AXYS_ACCOUNT_ID, $this->axys_account_id);
         }
         if ($this->isColumnModified(FileTableMap::COL_FILE_TITLE)) {
             $criteria->add(FileTableMap::COL_FILE_TITLE, $this->file_title);
@@ -1818,7 +1818,7 @@ abstract class File implements ActiveRecordInterface
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
         $copyObj->setArticleId($this->getArticleId());
-        $copyObj->setAxysUserId($this->getAxysUserId());
+        $copyObj->setAxysAccountId($this->getAxysAccountId());
         $copyObj->setTitle($this->getTitle());
         $copyObj->setType($this->getType());
         $copyObj->setAccess($this->getAccess());
@@ -1869,7 +1869,7 @@ abstract class File implements ActiveRecordInterface
     {
         $this->file_id = null;
         $this->article_id = null;
-        $this->axys_user_id = null;
+        $this->axys_account_id = null;
         $this->file_title = null;
         $this->file_type = null;
         $this->file_access = null;

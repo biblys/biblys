@@ -9,7 +9,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 		FROM `articles`
 		JOIN `stock` USING(`article_id`)
 		LEFT JOIN `langs` ON `article_lang_current` = `lang_id`
-		WHERE `stock`.`site_id` = :site_id AND `stock`.`axys_user_id` = :axys_user_id AND `stock_selling_date` IS NOT NULL
+		WHERE `stock`.`site_id` = :site_id AND `stock`.`axys_account_id` = :axys_account_id AND `stock_selling_date` IS NOT NULL
 		GROUP BY `stock_id`
 	ORDER BY `stock_selling_date` DESC";
 	
@@ -18,7 +18,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 	
 	$stock = $_SQL->prepare($req);
 	$stock->bindValue('site_id', LegacyCodeHelper::getLegacyCurrentSite()['site_id'],PDO::PARAM_INT);
-	$stock->bindValue('axys_user_id', LegacyCodeHelper::getGlobalVisitor()['user_id'],PDO::PARAM_INT);
+	$stock->bindValue('axys_account_id', LegacyCodeHelper::getGlobalVisitor()['user_id'],PDO::PARAM_INT);
 	$stock->execute() or error($stock->errorInfo());
 	while ($s = $stock->fetch(PDO::FETCH_ASSOC))
 	{

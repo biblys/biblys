@@ -86,9 +86,9 @@ class OptionTableMap extends TableMap
     public const COL_SITE_ID = 'options.site_id';
 
     /**
-     * the column name for the axys_user_id field
+     * the column name for the axys_account_id field
      */
-    public const COL_AXYS_USER_ID = 'options.axys_user_id';
+    public const COL_AXYS_ACCOUNT_ID = 'options.axys_account_id';
 
     /**
      * the column name for the option_key field
@@ -124,10 +124,10 @@ class OptionTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'AxysUserId', 'Key', 'Value', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'axysUserId', 'key', 'value', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [OptionTableMap::COL_OPTION_ID, OptionTableMap::COL_SITE_ID, OptionTableMap::COL_AXYS_USER_ID, OptionTableMap::COL_OPTION_KEY, OptionTableMap::COL_OPTION_VALUE, OptionTableMap::COL_OPTION_CREATED, OptionTableMap::COL_OPTION_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['option_id', 'site_id', 'axys_user_id', 'option_key', 'option_value', 'option_created', 'option_updated', ],
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'AxysAccountId', 'Key', 'Value', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'axysAccountId', 'key', 'value', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [OptionTableMap::COL_OPTION_ID, OptionTableMap::COL_SITE_ID, OptionTableMap::COL_AXYS_ACCOUNT_ID, OptionTableMap::COL_OPTION_KEY, OptionTableMap::COL_OPTION_VALUE, OptionTableMap::COL_OPTION_CREATED, OptionTableMap::COL_OPTION_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['option_id', 'site_id', 'axys_account_id', 'option_key', 'option_value', 'option_created', 'option_updated', ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
     ];
 
@@ -140,10 +140,10 @@ class OptionTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'AxysUserId' => 2, 'Key' => 3, 'Value' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'axysUserId' => 2, 'key' => 3, 'value' => 4, 'createdAt' => 5, 'updatedAt' => 6, ],
-        self::TYPE_COLNAME       => [OptionTableMap::COL_OPTION_ID => 0, OptionTableMap::COL_SITE_ID => 1, OptionTableMap::COL_AXYS_USER_ID => 2, OptionTableMap::COL_OPTION_KEY => 3, OptionTableMap::COL_OPTION_VALUE => 4, OptionTableMap::COL_OPTION_CREATED => 5, OptionTableMap::COL_OPTION_UPDATED => 6, ],
-        self::TYPE_FIELDNAME     => ['option_id' => 0, 'site_id' => 1, 'axys_user_id' => 2, 'option_key' => 3, 'option_value' => 4, 'option_created' => 5, 'option_updated' => 6, ],
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'AxysAccountId' => 2, 'Key' => 3, 'Value' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'axysAccountId' => 2, 'key' => 3, 'value' => 4, 'createdAt' => 5, 'updatedAt' => 6, ],
+        self::TYPE_COLNAME       => [OptionTableMap::COL_OPTION_ID => 0, OptionTableMap::COL_SITE_ID => 1, OptionTableMap::COL_AXYS_ACCOUNT_ID => 2, OptionTableMap::COL_OPTION_KEY => 3, OptionTableMap::COL_OPTION_VALUE => 4, OptionTableMap::COL_OPTION_CREATED => 5, OptionTableMap::COL_OPTION_UPDATED => 6, ],
+        self::TYPE_FIELDNAME     => ['option_id' => 0, 'site_id' => 1, 'axys_account_id' => 2, 'option_key' => 3, 'option_value' => 4, 'option_created' => 5, 'option_updated' => 6, ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
     ];
 
@@ -169,14 +169,14 @@ class OptionTableMap extends TableMap
         'COL_SITE_ID' => 'SITE_ID',
         'site_id' => 'SITE_ID',
         'options.site_id' => 'SITE_ID',
-        'AxysUserId' => 'AXYS_USER_ID',
-        'Option.AxysUserId' => 'AXYS_USER_ID',
-        'axysUserId' => 'AXYS_USER_ID',
-        'option.axysUserId' => 'AXYS_USER_ID',
-        'OptionTableMap::COL_AXYS_USER_ID' => 'AXYS_USER_ID',
-        'COL_AXYS_USER_ID' => 'AXYS_USER_ID',
-        'axys_user_id' => 'AXYS_USER_ID',
-        'options.axys_user_id' => 'AXYS_USER_ID',
+        'AxysAccountId' => 'AXYS_ACCOUNT_ID',
+        'Option.AxysAccountId' => 'AXYS_ACCOUNT_ID',
+        'axysAccountId' => 'AXYS_ACCOUNT_ID',
+        'option.axysAccountId' => 'AXYS_ACCOUNT_ID',
+        'OptionTableMap::COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
+        'COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
+        'axys_account_id' => 'AXYS_ACCOUNT_ID',
+        'options.axys_account_id' => 'AXYS_ACCOUNT_ID',
         'Key' => 'OPTION_KEY',
         'Option.Key' => 'OPTION_KEY',
         'key' => 'OPTION_KEY',
@@ -230,7 +230,7 @@ class OptionTableMap extends TableMap
         // columns
         $this->addPrimaryKey('option_id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
-        $this->addForeignKey('axys_user_id', 'AxysUserId', 'INTEGER', 'axys_accounts', 'id', false, null, null);
+        $this->addForeignKey('axys_account_id', 'AxysAccountId', 'INTEGER', 'axys_accounts', 'id', false, null, null);
         $this->addColumn('option_key', 'Key', 'VARCHAR', false, 32, null);
         $this->addColumn('option_value', 'Value', 'VARCHAR', false, 2048, null);
         $this->addColumn('option_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
@@ -247,7 +247,7 @@ class OptionTableMap extends TableMap
         $this->addRelation('AxysAccount', '\\Model\\AxysAccount', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':axys_user_id',
+    0 => ':axys_account_id',
     1 => ':id',
   ),
 ), null, null, null, false);
@@ -417,7 +417,7 @@ class OptionTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(OptionTableMap::COL_OPTION_ID);
             $criteria->addSelectColumn(OptionTableMap::COL_SITE_ID);
-            $criteria->addSelectColumn(OptionTableMap::COL_AXYS_USER_ID);
+            $criteria->addSelectColumn(OptionTableMap::COL_AXYS_ACCOUNT_ID);
             $criteria->addSelectColumn(OptionTableMap::COL_OPTION_KEY);
             $criteria->addSelectColumn(OptionTableMap::COL_OPTION_VALUE);
             $criteria->addSelectColumn(OptionTableMap::COL_OPTION_CREATED);
@@ -425,7 +425,7 @@ class OptionTableMap extends TableMap
         } else {
             $criteria->addSelectColumn($alias . '.option_id');
             $criteria->addSelectColumn($alias . '.site_id');
-            $criteria->addSelectColumn($alias . '.axys_user_id');
+            $criteria->addSelectColumn($alias . '.axys_account_id');
             $criteria->addSelectColumn($alias . '.option_key');
             $criteria->addSelectColumn($alias . '.option_value');
             $criteria->addSelectColumn($alias . '.option_created');
@@ -450,7 +450,7 @@ class OptionTableMap extends TableMap
         if (null === $alias) {
             $criteria->removeSelectColumn(OptionTableMap::COL_OPTION_ID);
             $criteria->removeSelectColumn(OptionTableMap::COL_SITE_ID);
-            $criteria->removeSelectColumn(OptionTableMap::COL_AXYS_USER_ID);
+            $criteria->removeSelectColumn(OptionTableMap::COL_AXYS_ACCOUNT_ID);
             $criteria->removeSelectColumn(OptionTableMap::COL_OPTION_KEY);
             $criteria->removeSelectColumn(OptionTableMap::COL_OPTION_VALUE);
             $criteria->removeSelectColumn(OptionTableMap::COL_OPTION_CREATED);
@@ -458,7 +458,7 @@ class OptionTableMap extends TableMap
         } else {
             $criteria->removeSelectColumn($alias . '.option_id');
             $criteria->removeSelectColumn($alias . '.site_id');
-            $criteria->removeSelectColumn($alias . '.axys_user_id');
+            $criteria->removeSelectColumn($alias . '.axys_account_id');
             $criteria->removeSelectColumn($alias . '.option_key');
             $criteria->removeSelectColumn($alias . '.option_value');
             $criteria->removeSelectColumn($alias . '.option_created');

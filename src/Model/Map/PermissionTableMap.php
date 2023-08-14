@@ -81,9 +81,9 @@ class PermissionTableMap extends TableMap
     public const COL_PERMISSION_ID = 'permissions.permission_id';
 
     /**
-     * the column name for the axys_user_id field
+     * the column name for the axys_account_id field
      */
-    public const COL_AXYS_USER_ID = 'permissions.axys_user_id';
+    public const COL_AXYS_ACCOUNT_ID = 'permissions.axys_account_id';
 
     /**
      * the column name for the site_id field
@@ -119,10 +119,10 @@ class PermissionTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'AxysUserId', 'SiteId', 'Rank', 'Last', 'Date', ],
-        self::TYPE_CAMELNAME     => ['id', 'axysUserId', 'siteId', 'rank', 'last', 'date', ],
-        self::TYPE_COLNAME       => [PermissionTableMap::COL_PERMISSION_ID, PermissionTableMap::COL_AXYS_USER_ID, PermissionTableMap::COL_SITE_ID, PermissionTableMap::COL_PERMISSION_RANK, PermissionTableMap::COL_PERMISSION_LAST, PermissionTableMap::COL_PERMISSION_DATE, ],
-        self::TYPE_FIELDNAME     => ['permission_id', 'axys_user_id', 'site_id', 'permission_rank', 'permission_last', 'permission_date', ],
+        self::TYPE_PHPNAME       => ['Id', 'AxysAccountId', 'SiteId', 'Rank', 'Last', 'Date', ],
+        self::TYPE_CAMELNAME     => ['id', 'axysAccountId', 'siteId', 'rank', 'last', 'date', ],
+        self::TYPE_COLNAME       => [PermissionTableMap::COL_PERMISSION_ID, PermissionTableMap::COL_AXYS_ACCOUNT_ID, PermissionTableMap::COL_SITE_ID, PermissionTableMap::COL_PERMISSION_RANK, PermissionTableMap::COL_PERMISSION_LAST, PermissionTableMap::COL_PERMISSION_DATE, ],
+        self::TYPE_FIELDNAME     => ['permission_id', 'axys_account_id', 'site_id', 'permission_rank', 'permission_last', 'permission_date', ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, ]
     ];
 
@@ -135,10 +135,10 @@ class PermissionTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'AxysUserId' => 1, 'SiteId' => 2, 'Rank' => 3, 'Last' => 4, 'Date' => 5, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'axysUserId' => 1, 'siteId' => 2, 'rank' => 3, 'last' => 4, 'date' => 5, ],
-        self::TYPE_COLNAME       => [PermissionTableMap::COL_PERMISSION_ID => 0, PermissionTableMap::COL_AXYS_USER_ID => 1, PermissionTableMap::COL_SITE_ID => 2, PermissionTableMap::COL_PERMISSION_RANK => 3, PermissionTableMap::COL_PERMISSION_LAST => 4, PermissionTableMap::COL_PERMISSION_DATE => 5, ],
-        self::TYPE_FIELDNAME     => ['permission_id' => 0, 'axys_user_id' => 1, 'site_id' => 2, 'permission_rank' => 3, 'permission_last' => 4, 'permission_date' => 5, ],
+        self::TYPE_PHPNAME       => ['Id' => 0, 'AxysAccountId' => 1, 'SiteId' => 2, 'Rank' => 3, 'Last' => 4, 'Date' => 5, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'axysAccountId' => 1, 'siteId' => 2, 'rank' => 3, 'last' => 4, 'date' => 5, ],
+        self::TYPE_COLNAME       => [PermissionTableMap::COL_PERMISSION_ID => 0, PermissionTableMap::COL_AXYS_ACCOUNT_ID => 1, PermissionTableMap::COL_SITE_ID => 2, PermissionTableMap::COL_PERMISSION_RANK => 3, PermissionTableMap::COL_PERMISSION_LAST => 4, PermissionTableMap::COL_PERMISSION_DATE => 5, ],
+        self::TYPE_FIELDNAME     => ['permission_id' => 0, 'axys_account_id' => 1, 'site_id' => 2, 'permission_rank' => 3, 'permission_last' => 4, 'permission_date' => 5, ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, ]
     ];
 
@@ -156,14 +156,14 @@ class PermissionTableMap extends TableMap
         'COL_PERMISSION_ID' => 'PERMISSION_ID',
         'permission_id' => 'PERMISSION_ID',
         'permissions.permission_id' => 'PERMISSION_ID',
-        'AxysUserId' => 'AXYS_USER_ID',
-        'Permission.AxysUserId' => 'AXYS_USER_ID',
-        'axysUserId' => 'AXYS_USER_ID',
-        'permission.axysUserId' => 'AXYS_USER_ID',
-        'PermissionTableMap::COL_AXYS_USER_ID' => 'AXYS_USER_ID',
-        'COL_AXYS_USER_ID' => 'AXYS_USER_ID',
-        'axys_user_id' => 'AXYS_USER_ID',
-        'permissions.axys_user_id' => 'AXYS_USER_ID',
+        'AxysAccountId' => 'AXYS_ACCOUNT_ID',
+        'Permission.AxysAccountId' => 'AXYS_ACCOUNT_ID',
+        'axysAccountId' => 'AXYS_ACCOUNT_ID',
+        'permission.axysAccountId' => 'AXYS_ACCOUNT_ID',
+        'PermissionTableMap::COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
+        'COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
+        'axys_account_id' => 'AXYS_ACCOUNT_ID',
+        'permissions.axys_account_id' => 'AXYS_ACCOUNT_ID',
         'SiteId' => 'SITE_ID',
         'Permission.SiteId' => 'SITE_ID',
         'siteId' => 'SITE_ID',
@@ -216,7 +216,7 @@ class PermissionTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('permission_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('axys_user_id', 'AxysUserId', 'INTEGER', false, null, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
         $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
         $this->addColumn('permission_rank', 'Rank', 'VARCHAR', false, 8, null);
         $this->addColumn('permission_last', 'Last', 'TIMESTAMP', false, null, null);
@@ -375,14 +375,14 @@ class PermissionTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(PermissionTableMap::COL_PERMISSION_ID);
-            $criteria->addSelectColumn(PermissionTableMap::COL_AXYS_USER_ID);
+            $criteria->addSelectColumn(PermissionTableMap::COL_AXYS_ACCOUNT_ID);
             $criteria->addSelectColumn(PermissionTableMap::COL_SITE_ID);
             $criteria->addSelectColumn(PermissionTableMap::COL_PERMISSION_RANK);
             $criteria->addSelectColumn(PermissionTableMap::COL_PERMISSION_LAST);
             $criteria->addSelectColumn(PermissionTableMap::COL_PERMISSION_DATE);
         } else {
             $criteria->addSelectColumn($alias . '.permission_id');
-            $criteria->addSelectColumn($alias . '.axys_user_id');
+            $criteria->addSelectColumn($alias . '.axys_account_id');
             $criteria->addSelectColumn($alias . '.site_id');
             $criteria->addSelectColumn($alias . '.permission_rank');
             $criteria->addSelectColumn($alias . '.permission_last');
@@ -406,14 +406,14 @@ class PermissionTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(PermissionTableMap::COL_PERMISSION_ID);
-            $criteria->removeSelectColumn(PermissionTableMap::COL_AXYS_USER_ID);
+            $criteria->removeSelectColumn(PermissionTableMap::COL_AXYS_ACCOUNT_ID);
             $criteria->removeSelectColumn(PermissionTableMap::COL_SITE_ID);
             $criteria->removeSelectColumn(PermissionTableMap::COL_PERMISSION_RANK);
             $criteria->removeSelectColumn(PermissionTableMap::COL_PERMISSION_LAST);
             $criteria->removeSelectColumn(PermissionTableMap::COL_PERMISSION_DATE);
         } else {
             $criteria->removeSelectColumn($alias . '.permission_id');
-            $criteria->removeSelectColumn($alias . '.axys_user_id');
+            $criteria->removeSelectColumn($alias . '.axys_account_id');
             $criteria->removeSelectColumn($alias . '.site_id');
             $criteria->removeSelectColumn($alias . '.permission_rank');
             $criteria->removeSelectColumn($alias . '.permission_last');

@@ -74,7 +74,7 @@ class AxysAccountTest extends PHPUnit\Framework\TestCase
         $wishlist = $user->getWishlist(true);
 
         $this->assertInstanceOf('Wishlist', $wishlist);
-        $this->assertEquals($wishlist->get('axys_user_id'), $user->get('id'));
+        $this->assertEquals($wishlist->get('axys_account_id'), $user->get('id'));
         $this->assertEquals($wishlist->get('name'), "Ma liste d'envies Biblys");
         $this->assertEquals($wishlist->get('current'), 1);
 
@@ -109,7 +109,7 @@ class AxysAccountTest extends PHPUnit\Framework\TestCase
         $sm = new StockManager();
         $sm->create([
             "article_id" => $article->get('id'),
-            "axys_user_id" => $user->get('id')
+            "axys_account_id" => $user->get('id')
         ]);
 
         $this->assertTrue($user->hasPurchased($article));
@@ -137,7 +137,7 @@ class AxysAccountTest extends PHPUnit\Framework\TestCase
         // then
         $copy = $sm->get([
             "article_id" => $article->get("id"),
-            "axys_user_id" => $user->get("id"),
+            "axys_account_id" => $user->get("id"),
         ]);
         $this->assertInstanceOf(
             "Stock",

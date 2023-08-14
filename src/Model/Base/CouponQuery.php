@@ -19,7 +19,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildCouponQuery orderById($order = Criteria::ASC) Order by the coupon_id column
  * @method     ChildCouponQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
- * @method     ChildCouponQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
+ * @method     ChildCouponQuery orderByAxysAccountId($order = Criteria::ASC) Order by the axys_account_id column
  * @method     ChildCouponQuery orderByCode($order = Criteria::ASC) Order by the coupon_code column
  * @method     ChildCouponQuery orderByArticleId($order = Criteria::ASC) Order by the article_id column
  * @method     ChildCouponQuery orderByStockId($order = Criteria::ASC) Order by the stock_id column
@@ -32,7 +32,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildCouponQuery groupById() Group by the coupon_id column
  * @method     ChildCouponQuery groupBySiteId() Group by the site_id column
- * @method     ChildCouponQuery groupByAxysUserId() Group by the axys_user_id column
+ * @method     ChildCouponQuery groupByAxysAccountId() Group by the axys_account_id column
  * @method     ChildCouponQuery groupByCode() Group by the coupon_code column
  * @method     ChildCouponQuery groupByArticleId() Group by the article_id column
  * @method     ChildCouponQuery groupByStockId() Group by the stock_id column
@@ -56,7 +56,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildCoupon|null findOneById(int $coupon_id) Return the first ChildCoupon filtered by the coupon_id column
  * @method     ChildCoupon|null findOneBySiteId(int $site_id) Return the first ChildCoupon filtered by the site_id column
- * @method     ChildCoupon|null findOneByAxysUserId(int $axys_user_id) Return the first ChildCoupon filtered by the axys_user_id column
+ * @method     ChildCoupon|null findOneByAxysAccountId(int $axys_account_id) Return the first ChildCoupon filtered by the axys_account_id column
  * @method     ChildCoupon|null findOneByCode(string $coupon_code) Return the first ChildCoupon filtered by the coupon_code column
  * @method     ChildCoupon|null findOneByArticleId(int $article_id) Return the first ChildCoupon filtered by the article_id column
  * @method     ChildCoupon|null findOneByStockId(int $stock_id) Return the first ChildCoupon filtered by the stock_id column
@@ -72,7 +72,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildCoupon requireOneById(int $coupon_id) Return the first ChildCoupon filtered by the coupon_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCoupon requireOneBySiteId(int $site_id) Return the first ChildCoupon filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCoupon requireOneByAxysUserId(int $axys_user_id) Return the first ChildCoupon filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCoupon requireOneByAxysAccountId(int $axys_account_id) Return the first ChildCoupon filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCoupon requireOneByCode(string $coupon_code) Return the first ChildCoupon filtered by the coupon_code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCoupon requireOneByArticleId(int $article_id) Return the first ChildCoupon filtered by the article_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCoupon requireOneByStockId(int $stock_id) Return the first ChildCoupon filtered by the stock_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -90,8 +90,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildCoupon> findById(int|array<int> $coupon_id) Return ChildCoupon objects filtered by the coupon_id column
  * @method     ChildCoupon[]|Collection findBySiteId(int|array<int> $site_id) Return ChildCoupon objects filtered by the site_id column
  * @psalm-method Collection&\Traversable<ChildCoupon> findBySiteId(int|array<int> $site_id) Return ChildCoupon objects filtered by the site_id column
- * @method     ChildCoupon[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildCoupon objects filtered by the axys_user_id column
- * @psalm-method Collection&\Traversable<ChildCoupon> findByAxysUserId(int|array<int> $axys_user_id) Return ChildCoupon objects filtered by the axys_user_id column
+ * @method     ChildCoupon[]|Collection findByAxysAccountId(int|array<int> $axys_account_id) Return ChildCoupon objects filtered by the axys_account_id column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByAxysAccountId(int|array<int> $axys_account_id) Return ChildCoupon objects filtered by the axys_account_id column
  * @method     ChildCoupon[]|Collection findByCode(string|array<string> $coupon_code) Return ChildCoupon objects filtered by the coupon_code column
  * @psalm-method Collection&\Traversable<ChildCoupon> findByCode(string|array<string> $coupon_code) Return ChildCoupon objects filtered by the coupon_code column
  * @method     ChildCoupon[]|Collection findByArticleId(int|array<int> $article_id) Return ChildCoupon objects filtered by the article_id column
@@ -209,7 +209,7 @@ abstract class CouponQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT coupon_id, site_id, axys_user_id, coupon_code, article_id, stock_id, coupon_amount, coupon_note, coupon_used, coupon_creator, coupon_insert, coupon_update FROM coupons WHERE coupon_id = :p0';
+        $sql = 'SELECT coupon_id, site_id, axys_account_id, coupon_code, article_id, stock_id, coupon_amount, coupon_note, coupon_used, coupon_creator, coupon_insert, coupon_update FROM coupons WHERE coupon_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -390,16 +390,16 @@ abstract class CouponQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the axys_user_id column
+     * Filter the query on the axys_account_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
-     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
-     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
+     * $query->filterByAxysAccountId(1234); // WHERE axys_account_id = 1234
+     * $query->filterByAxysAccountId(array(12, 34)); // WHERE axys_account_id IN (12, 34)
+     * $query->filterByAxysAccountId(array('min' => 12)); // WHERE axys_account_id > 12
      * </code>
      *
-     * @param mixed $axysUserId The value to use as filter.
+     * @param mixed $axysAccountId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -407,16 +407,16 @@ abstract class CouponQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
+    public function filterByAxysAccountId($axysAccountId = null, ?string $comparison = null)
     {
-        if (is_array($axysUserId)) {
+        if (is_array($axysAccountId)) {
             $useMinMax = false;
-            if (isset($axysUserId['min'])) {
-                $this->addUsingAlias(CouponTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysAccountId['min'])) {
+                $this->addUsingAlias(CouponTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($axysUserId['max'])) {
-                $this->addUsingAlias(CouponTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysAccountId['max'])) {
+                $this->addUsingAlias(CouponTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -427,7 +427,7 @@ abstract class CouponQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(CouponTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
+        $this->addUsingAlias(CouponTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId, $comparison);
 
         return $this;
     }

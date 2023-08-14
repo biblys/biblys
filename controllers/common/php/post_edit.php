@@ -107,7 +107,7 @@ $config = Config::load();
 $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
 // Valeurs par defaut pour un nouveau billet
-$p["axys_user_id"] = $currentUser->getAxysAccount()->getId();
+$p["axys_account_id"] = $currentUser->getAxysAccount()->getId();
 $p["post_date"] = date("Y-m-d");
 $p["post_time"] = date("H:i");
 
@@ -183,7 +183,7 @@ $content .= '
             <p>
                 <label class="floating" for="post_author">Auteur :</label>
                 <input type="text" name="post_author" id="post_author" value="'.$author.'" class="long" disabled="disabled" />
-                <input type="hidden" name="axys_user_id" id="axys_user_id" value="'.$p["axys_user_id"].'" />
+                <input type="hidden" name="axys_account_id" id="axys_account_id" value="'.$p["axys_account_id"].'" />
                 <input type="hidden" name="publisher_id" id="publisher_id" value="'.($p['publisher_id'] ?? null).'">
             </p>
 ';

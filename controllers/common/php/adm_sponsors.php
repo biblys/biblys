@@ -20,7 +20,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 		}
 		else
 		{
-			$insert = $_SQL->prepare('INSERT INTO `links`(`site_id`,`axys_user_id`,`link_sponsor_user_id`,`link_date`) VALUES(:site_id,:user_id,:link_sponsor_user_id,NOW())');
+			$insert = $_SQL->prepare('INSERT INTO `links`(`site_id`,`axys_account_id`,`link_sponsor_user_id`,`link_date`) VALUES(:site_id,:user_id,:link_sponsor_user_id,NOW())');
 			$insert->bindValue('site_id', LegacyCodeHelper::getLegacyCurrentSite()['site_id'],PDO::PARAM_INT);
 			$insert->bindValue('user_id',$_POST['user_id'],PDO::PARAM_INT);
 			$insert->bindValue('link_sponsor_user_id',$_POST['link_sponsor_user_id'],PDO::PARAM_INT);
@@ -42,9 +42,9 @@ use Biblys\Legacy\LegacyCodeHelper;
 	if (isset($_GET['success'])) $message = '<p class="success">'.$_GET['success'].'</p>';
 	elseif (isset($_GET['error'])) $message = '<p class="error">'.$_GET['error'].'</p>';
 	
-	$q = $_SQL->prepare('SELECT `link_id`, `links`.`axys_user_id`, `link_sponsor_user_id`, SUM(`stock_selling_price`) AS `CA`
+	$q = $_SQL->prepare('SELECT `link_id`, `links`.`axys_account_id`, `link_sponsor_user_id`, SUM(`stock_selling_price`) AS `CA`
 		FROM `links`
-		LEFT JOIN `stock` ON `stock`.`axys_user_id` = `links`.`axys_user_id` AND `stock`.`site_id` = :site_id
+		LEFT JOIN `stock` ON `stock`.`axys_account_id` = `links`.`axys_account_id` AND `stock`.`site_id` = :site_id
 		WHERE `links`.`site_id` = :site_id AND `link_sponsor_user_id` IS NOT NULL
 		GROUP BY `link_id`
 		ORDER BY `link_sponsor_user_id`

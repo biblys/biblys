@@ -13,7 +13,7 @@ $um = new AxysAccountManager();
 
 // Si aucun panier n'est specifié, on recherche un panier magasin pour ce vendeur avec 0 livre, sinon on en créera un
 
-$where = array('cart_type' => 'shop', 'cart_seller_id' => LegacyCodeHelper::getGlobalVisitor()->get('axys_user_id'), 'cart_count' => 0);
+$where = array('cart_type' => 'shop', 'cart_seller_id' => LegacyCodeHelper::getGlobalVisitor()->get('id'), 'cart_count' => 0);
 
 // Si un panier en particulier est demandé
 if (isset($_GET['cart_id']))

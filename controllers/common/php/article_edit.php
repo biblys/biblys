@@ -272,11 +272,11 @@ if (!isset($_GET['id'])) {
 }
 $articles = EntityManager::prepareAndExecute(
     'SELECT * FROM `articles`
-    WHERE (`article_id` = :article_id OR `article_editing_user` = :axys_user_id)
+    WHERE (`article_id` = :article_id OR `article_editing_user` = :axys_account_id)
     ORDER BY `article_editing_user` LIMIT 1',
     [
         'article_id' => $request->query->get('id'),
-        'axys_user_id' => $currentUser->getAxysAccount()->getId(),
+        'axys_account_id' => $currentUser->getAxysAccount()->getId(),
     ]
 );
 if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
@@ -373,8 +373,8 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
 } else {
     // Creer un nouvel article
     $articleInsert = EntityManager::prepareAndExecute(
-        'INSERT INTO `articles`(`article_editing_user`, `article_created`) VALUES(:axys_user_id, NOW())',
-        ['axys_user_id' => $currentUser->getAxysAccount()->getId()]
+        'INSERT INTO `articles`(`article_editing_user`, `article_created`) VALUES(:axys_account_id, NOW())',
+        ['axys_account_id' => $currentUser->getAxysAccount()->getId()]
     );
 
     $import = $request->query->get('import');

@@ -22,7 +22,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCartQuery orderById($order = Criteria::ASC) Order by the cart_id column
  * @method     ChildCartQuery orderByUid($order = Criteria::ASC) Order by the cart_uid column
  * @method     ChildCartQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
- * @method     ChildCartQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
+ * @method     ChildCartQuery orderByAxysAccountId($order = Criteria::ASC) Order by the axys_account_id column
  * @method     ChildCartQuery orderBySellerId($order = Criteria::ASC) Order by the cart_seller_id column
  * @method     ChildCartQuery orderByCustomerId($order = Criteria::ASC) Order by the customer_id column
  * @method     ChildCartQuery orderByTitle($order = Criteria::ASC) Order by the cart_title column
@@ -41,7 +41,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCartQuery groupById() Group by the cart_id column
  * @method     ChildCartQuery groupByUid() Group by the cart_uid column
  * @method     ChildCartQuery groupBySiteId() Group by the site_id column
- * @method     ChildCartQuery groupByAxysUserId() Group by the axys_user_id column
+ * @method     ChildCartQuery groupByAxysAccountId() Group by the axys_account_id column
  * @method     ChildCartQuery groupBySellerId() Group by the cart_seller_id column
  * @method     ChildCartQuery groupByCustomerId() Group by the customer_id column
  * @method     ChildCartQuery groupByTitle() Group by the cart_title column
@@ -93,7 +93,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCart|null findOneById(int $cart_id) Return the first ChildCart filtered by the cart_id column
  * @method     ChildCart|null findOneByUid(string $cart_uid) Return the first ChildCart filtered by the cart_uid column
  * @method     ChildCart|null findOneBySiteId(int $site_id) Return the first ChildCart filtered by the site_id column
- * @method     ChildCart|null findOneByAxysUserId(int $axys_user_id) Return the first ChildCart filtered by the axys_user_id column
+ * @method     ChildCart|null findOneByAxysAccountId(int $axys_account_id) Return the first ChildCart filtered by the axys_account_id column
  * @method     ChildCart|null findOneBySellerId(int $cart_seller_id) Return the first ChildCart filtered by the cart_seller_id column
  * @method     ChildCart|null findOneByCustomerId(int $customer_id) Return the first ChildCart filtered by the customer_id column
  * @method     ChildCart|null findOneByTitle(string $cart_title) Return the first ChildCart filtered by the cart_title column
@@ -115,7 +115,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCart requireOneById(int $cart_id) Return the first ChildCart filtered by the cart_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCart requireOneByUid(string $cart_uid) Return the first ChildCart filtered by the cart_uid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCart requireOneBySiteId(int $site_id) Return the first ChildCart filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCart requireOneByAxysUserId(int $axys_user_id) Return the first ChildCart filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCart requireOneByAxysAccountId(int $axys_account_id) Return the first ChildCart filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCart requireOneBySellerId(int $cart_seller_id) Return the first ChildCart filtered by the cart_seller_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCart requireOneByCustomerId(int $customer_id) Return the first ChildCart filtered by the customer_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCart requireOneByTitle(string $cart_title) Return the first ChildCart filtered by the cart_title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -140,8 +140,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildCart> findByUid(string|array<string> $cart_uid) Return ChildCart objects filtered by the cart_uid column
  * @method     ChildCart[]|Collection findBySiteId(int|array<int> $site_id) Return ChildCart objects filtered by the site_id column
  * @psalm-method Collection&\Traversable<ChildCart> findBySiteId(int|array<int> $site_id) Return ChildCart objects filtered by the site_id column
- * @method     ChildCart[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildCart objects filtered by the axys_user_id column
- * @psalm-method Collection&\Traversable<ChildCart> findByAxysUserId(int|array<int> $axys_user_id) Return ChildCart objects filtered by the axys_user_id column
+ * @method     ChildCart[]|Collection findByAxysAccountId(int|array<int> $axys_account_id) Return ChildCart objects filtered by the axys_account_id column
+ * @psalm-method Collection&\Traversable<ChildCart> findByAxysAccountId(int|array<int> $axys_account_id) Return ChildCart objects filtered by the axys_account_id column
  * @method     ChildCart[]|Collection findBySellerId(int|array<int> $cart_seller_id) Return ChildCart objects filtered by the cart_seller_id column
  * @psalm-method Collection&\Traversable<ChildCart> findBySellerId(int|array<int> $cart_seller_id) Return ChildCart objects filtered by the cart_seller_id column
  * @method     ChildCart[]|Collection findByCustomerId(int|array<int> $customer_id) Return ChildCart objects filtered by the customer_id column
@@ -269,7 +269,7 @@ abstract class CartQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT cart_id, cart_uid, site_id, axys_user_id, cart_seller_id, customer_id, cart_title, cart_type, cart_ip, cart_count, cart_amount, cart_as_a_gift, cart_gift_recipient, cart_date, cart_insert, cart_update, cart_created, cart_updated FROM carts WHERE cart_id = :p0';
+        $sql = 'SELECT cart_id, cart_uid, site_id, axys_account_id, cart_seller_id, customer_id, cart_title, cart_type, cart_ip, cart_count, cart_amount, cart_as_a_gift, cart_gift_recipient, cart_date, cart_insert, cart_update, cart_created, cart_updated FROM carts WHERE cart_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -480,18 +480,18 @@ abstract class CartQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the axys_user_id column
+     * Filter the query on the axys_account_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
-     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
-     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
+     * $query->filterByAxysAccountId(1234); // WHERE axys_account_id = 1234
+     * $query->filterByAxysAccountId(array(12, 34)); // WHERE axys_account_id IN (12, 34)
+     * $query->filterByAxysAccountId(array('min' => 12)); // WHERE axys_account_id > 12
      * </code>
      *
      * @see       filterByAxysAccount()
      *
-     * @param mixed $axysUserId The value to use as filter.
+     * @param mixed $axysAccountId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -499,16 +499,16 @@ abstract class CartQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
+    public function filterByAxysAccountId($axysAccountId = null, ?string $comparison = null)
     {
-        if (is_array($axysUserId)) {
+        if (is_array($axysAccountId)) {
             $useMinMax = false;
-            if (isset($axysUserId['min'])) {
-                $this->addUsingAlias(CartTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysAccountId['min'])) {
+                $this->addUsingAlias(CartTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($axysUserId['max'])) {
-                $this->addUsingAlias(CartTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysAccountId['max'])) {
+                $this->addUsingAlias(CartTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -519,7 +519,7 @@ abstract class CartQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(CartTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
+        $this->addUsingAlias(CartTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId, $comparison);
 
         return $this;
     }
@@ -1265,14 +1265,14 @@ abstract class CartQuery extends ModelCriteria
     {
         if ($axysAccount instanceof \Model\AxysAccount) {
             return $this
-                ->addUsingAlias(CartTableMap::COL_AXYS_USER_ID, $axysAccount->getId(), $comparison);
+                ->addUsingAlias(CartTableMap::COL_AXYS_ACCOUNT_ID, $axysAccount->getId(), $comparison);
         } elseif ($axysAccount instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             $this
-                ->addUsingAlias(CartTableMap::COL_AXYS_USER_ID, $axysAccount->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(CartTableMap::COL_AXYS_ACCOUNT_ID, $axysAccount->toKeyValue('PrimaryKey', 'Id'), $comparison);
 
             return $this;
         } else {

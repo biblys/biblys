@@ -25,7 +25,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRoleQuery orderByEventId($order = Criteria::ASC) Order by the event_id column
  * @method     ChildRoleQuery orderByPeopleId($order = Criteria::ASC) Order by the people_id column
  * @method     ChildRoleQuery orderByJobId($order = Criteria::ASC) Order by the job_id column
- * @method     ChildRoleQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
+ * @method     ChildRoleQuery orderByAxysAccountId($order = Criteria::ASC) Order by the axys_account_id column
  * @method     ChildRoleQuery orderByHide($order = Criteria::ASC) Order by the role_hide column
  * @method     ChildRoleQuery orderByPresence($order = Criteria::ASC) Order by the role_presence column
  * @method     ChildRoleQuery orderByDate($order = Criteria::ASC) Order by the role_date column
@@ -38,7 +38,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRoleQuery groupByEventId() Group by the event_id column
  * @method     ChildRoleQuery groupByPeopleId() Group by the people_id column
  * @method     ChildRoleQuery groupByJobId() Group by the job_id column
- * @method     ChildRoleQuery groupByAxysUserId() Group by the axys_user_id column
+ * @method     ChildRoleQuery groupByAxysAccountId() Group by the axys_account_id column
  * @method     ChildRoleQuery groupByHide() Group by the role_hide column
  * @method     ChildRoleQuery groupByPresence() Group by the role_presence column
  * @method     ChildRoleQuery groupByDate() Group by the role_date column
@@ -84,7 +84,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRole|null findOneByEventId(int $event_id) Return the first ChildRole filtered by the event_id column
  * @method     ChildRole|null findOneByPeopleId(int $people_id) Return the first ChildRole filtered by the people_id column
  * @method     ChildRole|null findOneByJobId(int $job_id) Return the first ChildRole filtered by the job_id column
- * @method     ChildRole|null findOneByAxysUserId(int $axys_user_id) Return the first ChildRole filtered by the axys_user_id column
+ * @method     ChildRole|null findOneByAxysAccountId(int $axys_account_id) Return the first ChildRole filtered by the axys_account_id column
  * @method     ChildRole|null findOneByHide(boolean $role_hide) Return the first ChildRole filtered by the role_hide column
  * @method     ChildRole|null findOneByPresence(string $role_presence) Return the first ChildRole filtered by the role_presence column
  * @method     ChildRole|null findOneByDate(string $role_date) Return the first ChildRole filtered by the role_date column
@@ -100,7 +100,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRole requireOneByEventId(int $event_id) Return the first ChildRole filtered by the event_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRole requireOneByPeopleId(int $people_id) Return the first ChildRole filtered by the people_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRole requireOneByJobId(int $job_id) Return the first ChildRole filtered by the job_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRole requireOneByAxysUserId(int $axys_user_id) Return the first ChildRole filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRole requireOneByAxysAccountId(int $axys_account_id) Return the first ChildRole filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRole requireOneByHide(boolean $role_hide) Return the first ChildRole filtered by the role_hide column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRole requireOneByPresence(string $role_presence) Return the first ChildRole filtered by the role_presence column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRole requireOneByDate(string $role_date) Return the first ChildRole filtered by the role_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -122,8 +122,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildRole> findByPeopleId(int|array<int> $people_id) Return ChildRole objects filtered by the people_id column
  * @method     ChildRole[]|Collection findByJobId(int|array<int> $job_id) Return ChildRole objects filtered by the job_id column
  * @psalm-method Collection&\Traversable<ChildRole> findByJobId(int|array<int> $job_id) Return ChildRole objects filtered by the job_id column
- * @method     ChildRole[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildRole objects filtered by the axys_user_id column
- * @psalm-method Collection&\Traversable<ChildRole> findByAxysUserId(int|array<int> $axys_user_id) Return ChildRole objects filtered by the axys_user_id column
+ * @method     ChildRole[]|Collection findByAxysAccountId(int|array<int> $axys_account_id) Return ChildRole objects filtered by the axys_account_id column
+ * @psalm-method Collection&\Traversable<ChildRole> findByAxysAccountId(int|array<int> $axys_account_id) Return ChildRole objects filtered by the axys_account_id column
  * @method     ChildRole[]|Collection findByHide(boolean|array<boolean> $role_hide) Return ChildRole objects filtered by the role_hide column
  * @psalm-method Collection&\Traversable<ChildRole> findByHide(boolean|array<boolean> $role_hide) Return ChildRole objects filtered by the role_hide column
  * @method     ChildRole[]|Collection findByPresence(string|array<string> $role_presence) Return ChildRole objects filtered by the role_presence column
@@ -233,7 +233,7 @@ abstract class RoleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, article_id, book_id, event_id, people_id, job_id, axys_user_id, role_hide, role_presence, role_date, role_created, role_updated FROM roles WHERE id = :p0';
+        $sql = 'SELECT id, article_id, book_id, event_id, people_id, job_id, axys_account_id, role_hide, role_presence, role_date, role_created, role_updated FROM roles WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -590,16 +590,16 @@ abstract class RoleQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the axys_user_id column
+     * Filter the query on the axys_account_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
-     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
-     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
+     * $query->filterByAxysAccountId(1234); // WHERE axys_account_id = 1234
+     * $query->filterByAxysAccountId(array(12, 34)); // WHERE axys_account_id IN (12, 34)
+     * $query->filterByAxysAccountId(array('min' => 12)); // WHERE axys_account_id > 12
      * </code>
      *
-     * @param mixed $axysUserId The value to use as filter.
+     * @param mixed $axysAccountId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -607,16 +607,16 @@ abstract class RoleQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
+    public function filterByAxysAccountId($axysAccountId = null, ?string $comparison = null)
     {
-        if (is_array($axysUserId)) {
+        if (is_array($axysAccountId)) {
             $useMinMax = false;
-            if (isset($axysUserId['min'])) {
-                $this->addUsingAlias(RoleTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysAccountId['min'])) {
+                $this->addUsingAlias(RoleTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($axysUserId['max'])) {
-                $this->addUsingAlias(RoleTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysAccountId['max'])) {
+                $this->addUsingAlias(RoleTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -627,7 +627,7 @@ abstract class RoleQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(RoleTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
+        $this->addUsingAlias(RoleTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId, $comparison);
 
         return $this;
     }

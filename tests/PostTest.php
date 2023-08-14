@@ -235,20 +235,21 @@ class PostTest extends PHPUnit\Framework\TestCase
         $pm = new PostManager();
         $um = new AxysAccountManager();
 
-        $user = $um->create([
+        /** @var AxysAccount $axysAccount */
+        $axysAccount = $um->create([
             "id" => 927,
             'user_email' => 'author@biblys.fr'
         ]);
         $post = $pm->create();
 
         $this->assertFalse(
-            $post->canBeDeletedBy($user),
+            $post->canBeDeletedBy($axysAccount),
             "User should not be able to delete any post"
         );
 
-        $post->set('axys_user_id', $user->get('id'));
+        $post->set('axys_account_id', $axysAccount->get('id'));
         $this->assertTrue(
-            $post->canBeDeletedBy($user),
+            $post->canBeDeletedBy($axysAccount),
             "Post author should be able to delete it"
         );
     }

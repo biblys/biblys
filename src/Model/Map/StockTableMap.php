@@ -101,9 +101,9 @@ class StockTableMap extends TableMap
     public const COL_REWARD_ID = 'stock.reward_id';
 
     /**
-     * the column name for the axys_user_id field
+     * the column name for the axys_account_id field
      */
-    public const COL_AXYS_USER_ID = 'stock.axys_user_id';
+    public const COL_AXYS_ACCOUNT_ID = 'stock.axys_account_id';
 
     /**
      * the column name for the customer_id field
@@ -294,10 +294,10 @@ class StockTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'ArticleId', 'CampaignId', 'RewardId', 'AxysUserId', 'CustomerId', 'WishId', 'CartId', 'OrderId', 'CouponId', 'Shop', 'Invoice', 'Depot', 'Stockage', 'Condition', 'ConditionDetails', 'PurchasePrice', 'SellingPrice', 'SellingPrice2', 'SellingPriceSaved', 'SellingPriceHt', 'SellingPriceTva', 'TvaRate', 'Weight', 'PubYear', 'AllowPredownload', 'PhotoVersion', 'PurchaseDate', 'OnsaleDate', 'CartDate', 'SellingDate', 'ReturnDate', 'LostDate', 'MediaOk', 'FileUpdated', 'Insert', 'Update', 'Dl', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'articleId', 'campaignId', 'rewardId', 'axysUserId', 'customerId', 'wishId', 'cartId', 'orderId', 'couponId', 'shop', 'invoice', 'depot', 'stockage', 'condition', 'conditionDetails', 'purchasePrice', 'sellingPrice', 'sellingPrice2', 'sellingPriceSaved', 'sellingPriceHt', 'sellingPriceTva', 'tvaRate', 'weight', 'pubYear', 'allowPredownload', 'photoVersion', 'purchaseDate', 'onsaleDate', 'cartDate', 'sellingDate', 'returnDate', 'lostDate', 'mediaOk', 'fileUpdated', 'insert', 'update', 'dl', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [StockTableMap::COL_STOCK_ID, StockTableMap::COL_SITE_ID, StockTableMap::COL_ARTICLE_ID, StockTableMap::COL_CAMPAIGN_ID, StockTableMap::COL_REWARD_ID, StockTableMap::COL_AXYS_USER_ID, StockTableMap::COL_CUSTOMER_ID, StockTableMap::COL_WISH_ID, StockTableMap::COL_CART_ID, StockTableMap::COL_ORDER_ID, StockTableMap::COL_COUPON_ID, StockTableMap::COL_STOCK_SHOP, StockTableMap::COL_STOCK_INVOICE, StockTableMap::COL_STOCK_DEPOT, StockTableMap::COL_STOCK_STOCKAGE, StockTableMap::COL_STOCK_CONDITION, StockTableMap::COL_STOCK_CONDITION_DETAILS, StockTableMap::COL_STOCK_PURCHASE_PRICE, StockTableMap::COL_STOCK_SELLING_PRICE, StockTableMap::COL_STOCK_SELLING_PRICE2, StockTableMap::COL_STOCK_SELLING_PRICE_SAVED, StockTableMap::COL_STOCK_SELLING_PRICE_HT, StockTableMap::COL_STOCK_SELLING_PRICE_TVA, StockTableMap::COL_STOCK_TVA_RATE, StockTableMap::COL_STOCK_WEIGHT, StockTableMap::COL_STOCK_PUB_YEAR, StockTableMap::COL_STOCK_ALLOW_PREDOWNLOAD, StockTableMap::COL_STOCK_PHOTO_VERSION, StockTableMap::COL_STOCK_PURCHASE_DATE, StockTableMap::COL_STOCK_ONSALE_DATE, StockTableMap::COL_STOCK_CART_DATE, StockTableMap::COL_STOCK_SELLING_DATE, StockTableMap::COL_STOCK_RETURN_DATE, StockTableMap::COL_STOCK_LOST_DATE, StockTableMap::COL_STOCK_MEDIA_OK, StockTableMap::COL_STOCK_FILE_UPDATED, StockTableMap::COL_STOCK_INSERT, StockTableMap::COL_STOCK_UPDATE, StockTableMap::COL_STOCK_DL, StockTableMap::COL_STOCK_CREATED, StockTableMap::COL_STOCK_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['stock_id', 'site_id', 'article_id', 'campaign_id', 'reward_id', 'axys_user_id', 'customer_id', 'wish_id', 'cart_id', 'order_id', 'coupon_id', 'stock_shop', 'stock_invoice', 'stock_depot', 'stock_stockage', 'stock_condition', 'stock_condition_details', 'stock_purchase_price', 'stock_selling_price', 'stock_selling_price2', 'stock_selling_price_saved', 'stock_selling_price_ht', 'stock_selling_price_tva', 'stock_tva_rate', 'stock_weight', 'stock_pub_year', 'stock_allow_predownload', 'stock_photo_version', 'stock_purchase_date', 'stock_onsale_date', 'stock_cart_date', 'stock_selling_date', 'stock_return_date', 'stock_lost_date', 'stock_media_ok', 'stock_file_updated', 'stock_insert', 'stock_update', 'stock_dl', 'stock_created', 'stock_updated', ],
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'ArticleId', 'CampaignId', 'RewardId', 'AxysAccountId', 'CustomerId', 'WishId', 'CartId', 'OrderId', 'CouponId', 'Shop', 'Invoice', 'Depot', 'Stockage', 'Condition', 'ConditionDetails', 'PurchasePrice', 'SellingPrice', 'SellingPrice2', 'SellingPriceSaved', 'SellingPriceHt', 'SellingPriceTva', 'TvaRate', 'Weight', 'PubYear', 'AllowPredownload', 'PhotoVersion', 'PurchaseDate', 'OnsaleDate', 'CartDate', 'SellingDate', 'ReturnDate', 'LostDate', 'MediaOk', 'FileUpdated', 'Insert', 'Update', 'Dl', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'articleId', 'campaignId', 'rewardId', 'axysAccountId', 'customerId', 'wishId', 'cartId', 'orderId', 'couponId', 'shop', 'invoice', 'depot', 'stockage', 'condition', 'conditionDetails', 'purchasePrice', 'sellingPrice', 'sellingPrice2', 'sellingPriceSaved', 'sellingPriceHt', 'sellingPriceTva', 'tvaRate', 'weight', 'pubYear', 'allowPredownload', 'photoVersion', 'purchaseDate', 'onsaleDate', 'cartDate', 'sellingDate', 'returnDate', 'lostDate', 'mediaOk', 'fileUpdated', 'insert', 'update', 'dl', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [StockTableMap::COL_STOCK_ID, StockTableMap::COL_SITE_ID, StockTableMap::COL_ARTICLE_ID, StockTableMap::COL_CAMPAIGN_ID, StockTableMap::COL_REWARD_ID, StockTableMap::COL_AXYS_ACCOUNT_ID, StockTableMap::COL_CUSTOMER_ID, StockTableMap::COL_WISH_ID, StockTableMap::COL_CART_ID, StockTableMap::COL_ORDER_ID, StockTableMap::COL_COUPON_ID, StockTableMap::COL_STOCK_SHOP, StockTableMap::COL_STOCK_INVOICE, StockTableMap::COL_STOCK_DEPOT, StockTableMap::COL_STOCK_STOCKAGE, StockTableMap::COL_STOCK_CONDITION, StockTableMap::COL_STOCK_CONDITION_DETAILS, StockTableMap::COL_STOCK_PURCHASE_PRICE, StockTableMap::COL_STOCK_SELLING_PRICE, StockTableMap::COL_STOCK_SELLING_PRICE2, StockTableMap::COL_STOCK_SELLING_PRICE_SAVED, StockTableMap::COL_STOCK_SELLING_PRICE_HT, StockTableMap::COL_STOCK_SELLING_PRICE_TVA, StockTableMap::COL_STOCK_TVA_RATE, StockTableMap::COL_STOCK_WEIGHT, StockTableMap::COL_STOCK_PUB_YEAR, StockTableMap::COL_STOCK_ALLOW_PREDOWNLOAD, StockTableMap::COL_STOCK_PHOTO_VERSION, StockTableMap::COL_STOCK_PURCHASE_DATE, StockTableMap::COL_STOCK_ONSALE_DATE, StockTableMap::COL_STOCK_CART_DATE, StockTableMap::COL_STOCK_SELLING_DATE, StockTableMap::COL_STOCK_RETURN_DATE, StockTableMap::COL_STOCK_LOST_DATE, StockTableMap::COL_STOCK_MEDIA_OK, StockTableMap::COL_STOCK_FILE_UPDATED, StockTableMap::COL_STOCK_INSERT, StockTableMap::COL_STOCK_UPDATE, StockTableMap::COL_STOCK_DL, StockTableMap::COL_STOCK_CREATED, StockTableMap::COL_STOCK_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['stock_id', 'site_id', 'article_id', 'campaign_id', 'reward_id', 'axys_account_id', 'customer_id', 'wish_id', 'cart_id', 'order_id', 'coupon_id', 'stock_shop', 'stock_invoice', 'stock_depot', 'stock_stockage', 'stock_condition', 'stock_condition_details', 'stock_purchase_price', 'stock_selling_price', 'stock_selling_price2', 'stock_selling_price_saved', 'stock_selling_price_ht', 'stock_selling_price_tva', 'stock_tva_rate', 'stock_weight', 'stock_pub_year', 'stock_allow_predownload', 'stock_photo_version', 'stock_purchase_date', 'stock_onsale_date', 'stock_cart_date', 'stock_selling_date', 'stock_return_date', 'stock_lost_date', 'stock_media_ok', 'stock_file_updated', 'stock_insert', 'stock_update', 'stock_dl', 'stock_created', 'stock_updated', ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, ]
     ];
 
@@ -310,10 +310,10 @@ class StockTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'ArticleId' => 2, 'CampaignId' => 3, 'RewardId' => 4, 'AxysUserId' => 5, 'CustomerId' => 6, 'WishId' => 7, 'CartId' => 8, 'OrderId' => 9, 'CouponId' => 10, 'Shop' => 11, 'Invoice' => 12, 'Depot' => 13, 'Stockage' => 14, 'Condition' => 15, 'ConditionDetails' => 16, 'PurchasePrice' => 17, 'SellingPrice' => 18, 'SellingPrice2' => 19, 'SellingPriceSaved' => 20, 'SellingPriceHt' => 21, 'SellingPriceTva' => 22, 'TvaRate' => 23, 'Weight' => 24, 'PubYear' => 25, 'AllowPredownload' => 26, 'PhotoVersion' => 27, 'PurchaseDate' => 28, 'OnsaleDate' => 29, 'CartDate' => 30, 'SellingDate' => 31, 'ReturnDate' => 32, 'LostDate' => 33, 'MediaOk' => 34, 'FileUpdated' => 35, 'Insert' => 36, 'Update' => 37, 'Dl' => 38, 'CreatedAt' => 39, 'UpdatedAt' => 40, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'articleId' => 2, 'campaignId' => 3, 'rewardId' => 4, 'axysUserId' => 5, 'customerId' => 6, 'wishId' => 7, 'cartId' => 8, 'orderId' => 9, 'couponId' => 10, 'shop' => 11, 'invoice' => 12, 'depot' => 13, 'stockage' => 14, 'condition' => 15, 'conditionDetails' => 16, 'purchasePrice' => 17, 'sellingPrice' => 18, 'sellingPrice2' => 19, 'sellingPriceSaved' => 20, 'sellingPriceHt' => 21, 'sellingPriceTva' => 22, 'tvaRate' => 23, 'weight' => 24, 'pubYear' => 25, 'allowPredownload' => 26, 'photoVersion' => 27, 'purchaseDate' => 28, 'onsaleDate' => 29, 'cartDate' => 30, 'sellingDate' => 31, 'returnDate' => 32, 'lostDate' => 33, 'mediaOk' => 34, 'fileUpdated' => 35, 'insert' => 36, 'update' => 37, 'dl' => 38, 'createdAt' => 39, 'updatedAt' => 40, ],
-        self::TYPE_COLNAME       => [StockTableMap::COL_STOCK_ID => 0, StockTableMap::COL_SITE_ID => 1, StockTableMap::COL_ARTICLE_ID => 2, StockTableMap::COL_CAMPAIGN_ID => 3, StockTableMap::COL_REWARD_ID => 4, StockTableMap::COL_AXYS_USER_ID => 5, StockTableMap::COL_CUSTOMER_ID => 6, StockTableMap::COL_WISH_ID => 7, StockTableMap::COL_CART_ID => 8, StockTableMap::COL_ORDER_ID => 9, StockTableMap::COL_COUPON_ID => 10, StockTableMap::COL_STOCK_SHOP => 11, StockTableMap::COL_STOCK_INVOICE => 12, StockTableMap::COL_STOCK_DEPOT => 13, StockTableMap::COL_STOCK_STOCKAGE => 14, StockTableMap::COL_STOCK_CONDITION => 15, StockTableMap::COL_STOCK_CONDITION_DETAILS => 16, StockTableMap::COL_STOCK_PURCHASE_PRICE => 17, StockTableMap::COL_STOCK_SELLING_PRICE => 18, StockTableMap::COL_STOCK_SELLING_PRICE2 => 19, StockTableMap::COL_STOCK_SELLING_PRICE_SAVED => 20, StockTableMap::COL_STOCK_SELLING_PRICE_HT => 21, StockTableMap::COL_STOCK_SELLING_PRICE_TVA => 22, StockTableMap::COL_STOCK_TVA_RATE => 23, StockTableMap::COL_STOCK_WEIGHT => 24, StockTableMap::COL_STOCK_PUB_YEAR => 25, StockTableMap::COL_STOCK_ALLOW_PREDOWNLOAD => 26, StockTableMap::COL_STOCK_PHOTO_VERSION => 27, StockTableMap::COL_STOCK_PURCHASE_DATE => 28, StockTableMap::COL_STOCK_ONSALE_DATE => 29, StockTableMap::COL_STOCK_CART_DATE => 30, StockTableMap::COL_STOCK_SELLING_DATE => 31, StockTableMap::COL_STOCK_RETURN_DATE => 32, StockTableMap::COL_STOCK_LOST_DATE => 33, StockTableMap::COL_STOCK_MEDIA_OK => 34, StockTableMap::COL_STOCK_FILE_UPDATED => 35, StockTableMap::COL_STOCK_INSERT => 36, StockTableMap::COL_STOCK_UPDATE => 37, StockTableMap::COL_STOCK_DL => 38, StockTableMap::COL_STOCK_CREATED => 39, StockTableMap::COL_STOCK_UPDATED => 40, ],
-        self::TYPE_FIELDNAME     => ['stock_id' => 0, 'site_id' => 1, 'article_id' => 2, 'campaign_id' => 3, 'reward_id' => 4, 'axys_user_id' => 5, 'customer_id' => 6, 'wish_id' => 7, 'cart_id' => 8, 'order_id' => 9, 'coupon_id' => 10, 'stock_shop' => 11, 'stock_invoice' => 12, 'stock_depot' => 13, 'stock_stockage' => 14, 'stock_condition' => 15, 'stock_condition_details' => 16, 'stock_purchase_price' => 17, 'stock_selling_price' => 18, 'stock_selling_price2' => 19, 'stock_selling_price_saved' => 20, 'stock_selling_price_ht' => 21, 'stock_selling_price_tva' => 22, 'stock_tva_rate' => 23, 'stock_weight' => 24, 'stock_pub_year' => 25, 'stock_allow_predownload' => 26, 'stock_photo_version' => 27, 'stock_purchase_date' => 28, 'stock_onsale_date' => 29, 'stock_cart_date' => 30, 'stock_selling_date' => 31, 'stock_return_date' => 32, 'stock_lost_date' => 33, 'stock_media_ok' => 34, 'stock_file_updated' => 35, 'stock_insert' => 36, 'stock_update' => 37, 'stock_dl' => 38, 'stock_created' => 39, 'stock_updated' => 40, ],
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'ArticleId' => 2, 'CampaignId' => 3, 'RewardId' => 4, 'AxysAccountId' => 5, 'CustomerId' => 6, 'WishId' => 7, 'CartId' => 8, 'OrderId' => 9, 'CouponId' => 10, 'Shop' => 11, 'Invoice' => 12, 'Depot' => 13, 'Stockage' => 14, 'Condition' => 15, 'ConditionDetails' => 16, 'PurchasePrice' => 17, 'SellingPrice' => 18, 'SellingPrice2' => 19, 'SellingPriceSaved' => 20, 'SellingPriceHt' => 21, 'SellingPriceTva' => 22, 'TvaRate' => 23, 'Weight' => 24, 'PubYear' => 25, 'AllowPredownload' => 26, 'PhotoVersion' => 27, 'PurchaseDate' => 28, 'OnsaleDate' => 29, 'CartDate' => 30, 'SellingDate' => 31, 'ReturnDate' => 32, 'LostDate' => 33, 'MediaOk' => 34, 'FileUpdated' => 35, 'Insert' => 36, 'Update' => 37, 'Dl' => 38, 'CreatedAt' => 39, 'UpdatedAt' => 40, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'articleId' => 2, 'campaignId' => 3, 'rewardId' => 4, 'axysAccountId' => 5, 'customerId' => 6, 'wishId' => 7, 'cartId' => 8, 'orderId' => 9, 'couponId' => 10, 'shop' => 11, 'invoice' => 12, 'depot' => 13, 'stockage' => 14, 'condition' => 15, 'conditionDetails' => 16, 'purchasePrice' => 17, 'sellingPrice' => 18, 'sellingPrice2' => 19, 'sellingPriceSaved' => 20, 'sellingPriceHt' => 21, 'sellingPriceTva' => 22, 'tvaRate' => 23, 'weight' => 24, 'pubYear' => 25, 'allowPredownload' => 26, 'photoVersion' => 27, 'purchaseDate' => 28, 'onsaleDate' => 29, 'cartDate' => 30, 'sellingDate' => 31, 'returnDate' => 32, 'lostDate' => 33, 'mediaOk' => 34, 'fileUpdated' => 35, 'insert' => 36, 'update' => 37, 'dl' => 38, 'createdAt' => 39, 'updatedAt' => 40, ],
+        self::TYPE_COLNAME       => [StockTableMap::COL_STOCK_ID => 0, StockTableMap::COL_SITE_ID => 1, StockTableMap::COL_ARTICLE_ID => 2, StockTableMap::COL_CAMPAIGN_ID => 3, StockTableMap::COL_REWARD_ID => 4, StockTableMap::COL_AXYS_ACCOUNT_ID => 5, StockTableMap::COL_CUSTOMER_ID => 6, StockTableMap::COL_WISH_ID => 7, StockTableMap::COL_CART_ID => 8, StockTableMap::COL_ORDER_ID => 9, StockTableMap::COL_COUPON_ID => 10, StockTableMap::COL_STOCK_SHOP => 11, StockTableMap::COL_STOCK_INVOICE => 12, StockTableMap::COL_STOCK_DEPOT => 13, StockTableMap::COL_STOCK_STOCKAGE => 14, StockTableMap::COL_STOCK_CONDITION => 15, StockTableMap::COL_STOCK_CONDITION_DETAILS => 16, StockTableMap::COL_STOCK_PURCHASE_PRICE => 17, StockTableMap::COL_STOCK_SELLING_PRICE => 18, StockTableMap::COL_STOCK_SELLING_PRICE2 => 19, StockTableMap::COL_STOCK_SELLING_PRICE_SAVED => 20, StockTableMap::COL_STOCK_SELLING_PRICE_HT => 21, StockTableMap::COL_STOCK_SELLING_PRICE_TVA => 22, StockTableMap::COL_STOCK_TVA_RATE => 23, StockTableMap::COL_STOCK_WEIGHT => 24, StockTableMap::COL_STOCK_PUB_YEAR => 25, StockTableMap::COL_STOCK_ALLOW_PREDOWNLOAD => 26, StockTableMap::COL_STOCK_PHOTO_VERSION => 27, StockTableMap::COL_STOCK_PURCHASE_DATE => 28, StockTableMap::COL_STOCK_ONSALE_DATE => 29, StockTableMap::COL_STOCK_CART_DATE => 30, StockTableMap::COL_STOCK_SELLING_DATE => 31, StockTableMap::COL_STOCK_RETURN_DATE => 32, StockTableMap::COL_STOCK_LOST_DATE => 33, StockTableMap::COL_STOCK_MEDIA_OK => 34, StockTableMap::COL_STOCK_FILE_UPDATED => 35, StockTableMap::COL_STOCK_INSERT => 36, StockTableMap::COL_STOCK_UPDATE => 37, StockTableMap::COL_STOCK_DL => 38, StockTableMap::COL_STOCK_CREATED => 39, StockTableMap::COL_STOCK_UPDATED => 40, ],
+        self::TYPE_FIELDNAME     => ['stock_id' => 0, 'site_id' => 1, 'article_id' => 2, 'campaign_id' => 3, 'reward_id' => 4, 'axys_account_id' => 5, 'customer_id' => 6, 'wish_id' => 7, 'cart_id' => 8, 'order_id' => 9, 'coupon_id' => 10, 'stock_shop' => 11, 'stock_invoice' => 12, 'stock_depot' => 13, 'stock_stockage' => 14, 'stock_condition' => 15, 'stock_condition_details' => 16, 'stock_purchase_price' => 17, 'stock_selling_price' => 18, 'stock_selling_price2' => 19, 'stock_selling_price_saved' => 20, 'stock_selling_price_ht' => 21, 'stock_selling_price_tva' => 22, 'stock_tva_rate' => 23, 'stock_weight' => 24, 'stock_pub_year' => 25, 'stock_allow_predownload' => 26, 'stock_photo_version' => 27, 'stock_purchase_date' => 28, 'stock_onsale_date' => 29, 'stock_cart_date' => 30, 'stock_selling_date' => 31, 'stock_return_date' => 32, 'stock_lost_date' => 33, 'stock_media_ok' => 34, 'stock_file_updated' => 35, 'stock_insert' => 36, 'stock_update' => 37, 'stock_dl' => 38, 'stock_created' => 39, 'stock_updated' => 40, ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, ]
     ];
 
@@ -363,14 +363,14 @@ class StockTableMap extends TableMap
         'COL_REWARD_ID' => 'REWARD_ID',
         'reward_id' => 'REWARD_ID',
         'stock.reward_id' => 'REWARD_ID',
-        'AxysUserId' => 'AXYS_USER_ID',
-        'Stock.AxysUserId' => 'AXYS_USER_ID',
-        'axysUserId' => 'AXYS_USER_ID',
-        'stock.axysUserId' => 'AXYS_USER_ID',
-        'StockTableMap::COL_AXYS_USER_ID' => 'AXYS_USER_ID',
-        'COL_AXYS_USER_ID' => 'AXYS_USER_ID',
-        'axys_user_id' => 'AXYS_USER_ID',
-        'stock.axys_user_id' => 'AXYS_USER_ID',
+        'AxysAccountId' => 'AXYS_ACCOUNT_ID',
+        'Stock.AxysAccountId' => 'AXYS_ACCOUNT_ID',
+        'axysAccountId' => 'AXYS_ACCOUNT_ID',
+        'stock.axysAccountId' => 'AXYS_ACCOUNT_ID',
+        'StockTableMap::COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
+        'COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
+        'axys_account_id' => 'AXYS_ACCOUNT_ID',
+        'stock.axys_account_id' => 'AXYS_ACCOUNT_ID',
         'CustomerId' => 'CUSTOMER_ID',
         'Stock.CustomerId' => 'CUSTOMER_ID',
         'customerId' => 'CUSTOMER_ID',
@@ -675,7 +675,7 @@ class StockTableMap extends TableMap
         $this->addForeignKey('article_id', 'ArticleId', 'INTEGER', 'articles', 'article_id', false, 10, null);
         $this->addColumn('campaign_id', 'CampaignId', 'INTEGER', false, 10, null);
         $this->addColumn('reward_id', 'RewardId', 'INTEGER', false, 10, null);
-        $this->addForeignKey('axys_user_id', 'AxysUserId', 'INTEGER', 'axys_accounts', 'id', false, 10, null);
+        $this->addForeignKey('axys_account_id', 'AxysAccountId', 'INTEGER', 'axys_accounts', 'id', false, 10, null);
         $this->addColumn('customer_id', 'CustomerId', 'INTEGER', false, 10, null);
         $this->addColumn('wish_id', 'WishId', 'INTEGER', false, 10, null);
         $this->addColumn('cart_id', 'CartId', 'INTEGER', false, 10, null);
@@ -737,7 +737,7 @@ class StockTableMap extends TableMap
         $this->addRelation('AxysAccount', '\\Model\\AxysAccount', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':axys_user_id',
+    0 => ':axys_account_id',
     1 => ':id',
   ),
 ), null, null, null, false);
@@ -903,7 +903,7 @@ class StockTableMap extends TableMap
             $criteria->addSelectColumn(StockTableMap::COL_ARTICLE_ID);
             $criteria->addSelectColumn(StockTableMap::COL_CAMPAIGN_ID);
             $criteria->addSelectColumn(StockTableMap::COL_REWARD_ID);
-            $criteria->addSelectColumn(StockTableMap::COL_AXYS_USER_ID);
+            $criteria->addSelectColumn(StockTableMap::COL_AXYS_ACCOUNT_ID);
             $criteria->addSelectColumn(StockTableMap::COL_CUSTOMER_ID);
             $criteria->addSelectColumn(StockTableMap::COL_WISH_ID);
             $criteria->addSelectColumn(StockTableMap::COL_CART_ID);
@@ -945,7 +945,7 @@ class StockTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.article_id');
             $criteria->addSelectColumn($alias . '.campaign_id');
             $criteria->addSelectColumn($alias . '.reward_id');
-            $criteria->addSelectColumn($alias . '.axys_user_id');
+            $criteria->addSelectColumn($alias . '.axys_account_id');
             $criteria->addSelectColumn($alias . '.customer_id');
             $criteria->addSelectColumn($alias . '.wish_id');
             $criteria->addSelectColumn($alias . '.cart_id');
@@ -1004,7 +1004,7 @@ class StockTableMap extends TableMap
             $criteria->removeSelectColumn(StockTableMap::COL_ARTICLE_ID);
             $criteria->removeSelectColumn(StockTableMap::COL_CAMPAIGN_ID);
             $criteria->removeSelectColumn(StockTableMap::COL_REWARD_ID);
-            $criteria->removeSelectColumn(StockTableMap::COL_AXYS_USER_ID);
+            $criteria->removeSelectColumn(StockTableMap::COL_AXYS_ACCOUNT_ID);
             $criteria->removeSelectColumn(StockTableMap::COL_CUSTOMER_ID);
             $criteria->removeSelectColumn(StockTableMap::COL_WISH_ID);
             $criteria->removeSelectColumn(StockTableMap::COL_CART_ID);
@@ -1046,7 +1046,7 @@ class StockTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.article_id');
             $criteria->removeSelectColumn($alias . '.campaign_id');
             $criteria->removeSelectColumn($alias . '.reward_id');
-            $criteria->removeSelectColumn($alias . '.axys_user_id');
+            $criteria->removeSelectColumn($alias . '.axys_account_id');
             $criteria->removeSelectColumn($alias . '.customer_id');
             $criteria->removeSelectColumn($alias . '.wish_id');
             $criteria->removeSelectColumn($alias . '.cart_id');

@@ -103,7 +103,7 @@ class OrderDeliveryHelpers
         $om = new OrderManager();
         return $om->get([
             'order_type' => 'web',
-            'axys_user_id' => $visitor->get('id'),
+            'axys_account_id' => $visitor->get('id'),
             'order_payment_date' => 'NULL',
             'order_shipping_date' => 'NULL',
             'order_cancel_date' => 'NULL'

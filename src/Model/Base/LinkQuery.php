@@ -21,7 +21,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildLinkQuery orderById($order = Criteria::ASC) Order by the link_id column
  * @method     ChildLinkQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
- * @method     ChildLinkQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
+ * @method     ChildLinkQuery orderByAxysAccountId($order = Criteria::ASC) Order by the axys_account_id column
  * @method     ChildLinkQuery orderByArticleId($order = Criteria::ASC) Order by the article_id column
  * @method     ChildLinkQuery orderByStockId($order = Criteria::ASC) Order by the stock_id column
  * @method     ChildLinkQuery orderByListId($order = Criteria::ASC) Order by the list_id column
@@ -39,14 +39,14 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLinkQuery orderByBundleId($order = Criteria::ASC) Order by the bundle_id column
  * @method     ChildLinkQuery orderByHide($order = Criteria::ASC) Order by the link_hide column
  * @method     ChildLinkQuery orderByDoNotReorder($order = Criteria::ASC) Order by the link_do_not_reorder column
- * @method     ChildLinkQuery orderBySponsorAxysUserId($order = Criteria::ASC) Order by the link_sponsor_axys_user_id column
+ * @method     ChildLinkQuery orderBySponsorAxysAccountId($order = Criteria::ASC) Order by the link_sponsor_axys_account_id column
  * @method     ChildLinkQuery orderByDate($order = Criteria::ASC) Order by the link_date column
  * @method     ChildLinkQuery orderByCreatedAt($order = Criteria::ASC) Order by the link_created column
  * @method     ChildLinkQuery orderByUpdatedAt($order = Criteria::ASC) Order by the link_updated column
  *
  * @method     ChildLinkQuery groupById() Group by the link_id column
  * @method     ChildLinkQuery groupBySiteId() Group by the site_id column
- * @method     ChildLinkQuery groupByAxysUserId() Group by the axys_user_id column
+ * @method     ChildLinkQuery groupByAxysAccountId() Group by the axys_account_id column
  * @method     ChildLinkQuery groupByArticleId() Group by the article_id column
  * @method     ChildLinkQuery groupByStockId() Group by the stock_id column
  * @method     ChildLinkQuery groupByListId() Group by the list_id column
@@ -64,7 +64,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLinkQuery groupByBundleId() Group by the bundle_id column
  * @method     ChildLinkQuery groupByHide() Group by the link_hide column
  * @method     ChildLinkQuery groupByDoNotReorder() Group by the link_do_not_reorder column
- * @method     ChildLinkQuery groupBySponsorAxysUserId() Group by the link_sponsor_axys_user_id column
+ * @method     ChildLinkQuery groupBySponsorAxysAccountId() Group by the link_sponsor_axys_account_id column
  * @method     ChildLinkQuery groupByDate() Group by the link_date column
  * @method     ChildLinkQuery groupByCreatedAt() Group by the link_created column
  * @method     ChildLinkQuery groupByUpdatedAt() Group by the link_updated column
@@ -114,7 +114,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildLink|null findOneById(int $link_id) Return the first ChildLink filtered by the link_id column
  * @method     ChildLink|null findOneBySiteId(int $site_id) Return the first ChildLink filtered by the site_id column
- * @method     ChildLink|null findOneByAxysUserId(int $axys_user_id) Return the first ChildLink filtered by the axys_user_id column
+ * @method     ChildLink|null findOneByAxysAccountId(int $axys_account_id) Return the first ChildLink filtered by the axys_account_id column
  * @method     ChildLink|null findOneByArticleId(int $article_id) Return the first ChildLink filtered by the article_id column
  * @method     ChildLink|null findOneByStockId(int $stock_id) Return the first ChildLink filtered by the stock_id column
  * @method     ChildLink|null findOneByListId(int $list_id) Return the first ChildLink filtered by the list_id column
@@ -132,7 +132,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLink|null findOneByBundleId(int $bundle_id) Return the first ChildLink filtered by the bundle_id column
  * @method     ChildLink|null findOneByHide(boolean $link_hide) Return the first ChildLink filtered by the link_hide column
  * @method     ChildLink|null findOneByDoNotReorder(boolean $link_do_not_reorder) Return the first ChildLink filtered by the link_do_not_reorder column
- * @method     ChildLink|null findOneBySponsorAxysUserId(int $link_sponsor_axys_user_id) Return the first ChildLink filtered by the link_sponsor_axys_user_id column
+ * @method     ChildLink|null findOneBySponsorAxysAccountId(int $link_sponsor_axys_account_id) Return the first ChildLink filtered by the link_sponsor_axys_account_id column
  * @method     ChildLink|null findOneByDate(string $link_date) Return the first ChildLink filtered by the link_date column
  * @method     ChildLink|null findOneByCreatedAt(string $link_created) Return the first ChildLink filtered by the link_created column
  * @method     ChildLink|null findOneByUpdatedAt(string $link_updated) Return the first ChildLink filtered by the link_updated column
@@ -142,7 +142,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildLink requireOneById(int $link_id) Return the first ChildLink filtered by the link_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOneBySiteId(int $site_id) Return the first ChildLink filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildLink requireOneByAxysUserId(int $axys_user_id) Return the first ChildLink filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLink requireOneByAxysAccountId(int $axys_account_id) Return the first ChildLink filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOneByArticleId(int $article_id) Return the first ChildLink filtered by the article_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOneByStockId(int $stock_id) Return the first ChildLink filtered by the stock_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOneByListId(int $list_id) Return the first ChildLink filtered by the list_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -160,7 +160,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLink requireOneByBundleId(int $bundle_id) Return the first ChildLink filtered by the bundle_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOneByHide(boolean $link_hide) Return the first ChildLink filtered by the link_hide column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOneByDoNotReorder(boolean $link_do_not_reorder) Return the first ChildLink filtered by the link_do_not_reorder column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildLink requireOneBySponsorAxysUserId(int $link_sponsor_axys_user_id) Return the first ChildLink filtered by the link_sponsor_axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLink requireOneBySponsorAxysAccountId(int $link_sponsor_axys_account_id) Return the first ChildLink filtered by the link_sponsor_axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOneByDate(string $link_date) Return the first ChildLink filtered by the link_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOneByCreatedAt(string $link_created) Return the first ChildLink filtered by the link_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOneByUpdatedAt(string $link_updated) Return the first ChildLink filtered by the link_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -172,8 +172,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildLink> findById(int|array<int> $link_id) Return ChildLink objects filtered by the link_id column
  * @method     ChildLink[]|Collection findBySiteId(int|array<int> $site_id) Return ChildLink objects filtered by the site_id column
  * @psalm-method Collection&\Traversable<ChildLink> findBySiteId(int|array<int> $site_id) Return ChildLink objects filtered by the site_id column
- * @method     ChildLink[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildLink objects filtered by the axys_user_id column
- * @psalm-method Collection&\Traversable<ChildLink> findByAxysUserId(int|array<int> $axys_user_id) Return ChildLink objects filtered by the axys_user_id column
+ * @method     ChildLink[]|Collection findByAxysAccountId(int|array<int> $axys_account_id) Return ChildLink objects filtered by the axys_account_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByAxysAccountId(int|array<int> $axys_account_id) Return ChildLink objects filtered by the axys_account_id column
  * @method     ChildLink[]|Collection findByArticleId(int|array<int> $article_id) Return ChildLink objects filtered by the article_id column
  * @psalm-method Collection&\Traversable<ChildLink> findByArticleId(int|array<int> $article_id) Return ChildLink objects filtered by the article_id column
  * @method     ChildLink[]|Collection findByStockId(int|array<int> $stock_id) Return ChildLink objects filtered by the stock_id column
@@ -208,8 +208,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildLink> findByHide(boolean|array<boolean> $link_hide) Return ChildLink objects filtered by the link_hide column
  * @method     ChildLink[]|Collection findByDoNotReorder(boolean|array<boolean> $link_do_not_reorder) Return ChildLink objects filtered by the link_do_not_reorder column
  * @psalm-method Collection&\Traversable<ChildLink> findByDoNotReorder(boolean|array<boolean> $link_do_not_reorder) Return ChildLink objects filtered by the link_do_not_reorder column
- * @method     ChildLink[]|Collection findBySponsorAxysUserId(int|array<int> $link_sponsor_axys_user_id) Return ChildLink objects filtered by the link_sponsor_axys_user_id column
- * @psalm-method Collection&\Traversable<ChildLink> findBySponsorAxysUserId(int|array<int> $link_sponsor_axys_user_id) Return ChildLink objects filtered by the link_sponsor_axys_user_id column
+ * @method     ChildLink[]|Collection findBySponsorAxysAccountId(int|array<int> $link_sponsor_axys_account_id) Return ChildLink objects filtered by the link_sponsor_axys_account_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findBySponsorAxysAccountId(int|array<int> $link_sponsor_axys_account_id) Return ChildLink objects filtered by the link_sponsor_axys_account_id column
  * @method     ChildLink[]|Collection findByDate(string|array<string> $link_date) Return ChildLink objects filtered by the link_date column
  * @psalm-method Collection&\Traversable<ChildLink> findByDate(string|array<string> $link_date) Return ChildLink objects filtered by the link_date column
  * @method     ChildLink[]|Collection findByCreatedAt(string|array<string> $link_created) Return ChildLink objects filtered by the link_created column
@@ -315,7 +315,7 @@ abstract class LinkQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT link_id, site_id, axys_user_id, article_id, stock_id, list_id, book_id, people_id, job_id, rayon_id, tag_id, event_id, post_id, collection_id, publisher_id, supplier_id, media_id, bundle_id, link_hide, link_do_not_reorder, link_sponsor_axys_user_id, link_date, link_created, link_updated FROM links WHERE link_id = :p0';
+        $sql = 'SELECT link_id, site_id, axys_account_id, article_id, stock_id, list_id, book_id, people_id, job_id, rayon_id, tag_id, event_id, post_id, collection_id, publisher_id, supplier_id, media_id, bundle_id, link_hide, link_do_not_reorder, link_sponsor_axys_account_id, link_date, link_created, link_updated FROM links WHERE link_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -496,16 +496,16 @@ abstract class LinkQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the axys_user_id column
+     * Filter the query on the axys_account_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
-     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
-     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
+     * $query->filterByAxysAccountId(1234); // WHERE axys_account_id = 1234
+     * $query->filterByAxysAccountId(array(12, 34)); // WHERE axys_account_id IN (12, 34)
+     * $query->filterByAxysAccountId(array('min' => 12)); // WHERE axys_account_id > 12
      * </code>
      *
-     * @param mixed $axysUserId The value to use as filter.
+     * @param mixed $axysAccountId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -513,16 +513,16 @@ abstract class LinkQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
+    public function filterByAxysAccountId($axysAccountId = null, ?string $comparison = null)
     {
-        if (is_array($axysUserId)) {
+        if (is_array($axysAccountId)) {
             $useMinMax = false;
-            if (isset($axysUserId['min'])) {
-                $this->addUsingAlias(LinkTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysAccountId['min'])) {
+                $this->addUsingAlias(LinkTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($axysUserId['max'])) {
-                $this->addUsingAlias(LinkTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysAccountId['max'])) {
+                $this->addUsingAlias(LinkTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -533,7 +533,7 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(LinkTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId, $comparison);
 
         return $this;
     }
@@ -1248,16 +1248,16 @@ abstract class LinkQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the link_sponsor_axys_user_id column
+     * Filter the query on the link_sponsor_axys_account_id column
      *
      * Example usage:
      * <code>
-     * $query->filterBySponsorAxysUserId(1234); // WHERE link_sponsor_axys_user_id = 1234
-     * $query->filterBySponsorAxysUserId(array(12, 34)); // WHERE link_sponsor_axys_user_id IN (12, 34)
-     * $query->filterBySponsorAxysUserId(array('min' => 12)); // WHERE link_sponsor_axys_user_id > 12
+     * $query->filterBySponsorAxysAccountId(1234); // WHERE link_sponsor_axys_account_id = 1234
+     * $query->filterBySponsorAxysAccountId(array(12, 34)); // WHERE link_sponsor_axys_account_id IN (12, 34)
+     * $query->filterBySponsorAxysAccountId(array('min' => 12)); // WHERE link_sponsor_axys_account_id > 12
      * </code>
      *
-     * @param mixed $sponsorAxysUserId The value to use as filter.
+     * @param mixed $sponsorAxysAccountId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -1265,16 +1265,16 @@ abstract class LinkQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterBySponsorAxysUserId($sponsorAxysUserId = null, ?string $comparison = null)
+    public function filterBySponsorAxysAccountId($sponsorAxysAccountId = null, ?string $comparison = null)
     {
-        if (is_array($sponsorAxysUserId)) {
+        if (is_array($sponsorAxysAccountId)) {
             $useMinMax = false;
-            if (isset($sponsorAxysUserId['min'])) {
-                $this->addUsingAlias(LinkTableMap::COL_LINK_SPONSOR_AXYS_USER_ID, $sponsorAxysUserId['min'], Criteria::GREATER_EQUAL);
+            if (isset($sponsorAxysAccountId['min'])) {
+                $this->addUsingAlias(LinkTableMap::COL_LINK_SPONSOR_AXYS_ACCOUNT_ID, $sponsorAxysAccountId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($sponsorAxysUserId['max'])) {
-                $this->addUsingAlias(LinkTableMap::COL_LINK_SPONSOR_AXYS_USER_ID, $sponsorAxysUserId['max'], Criteria::LESS_EQUAL);
+            if (isset($sponsorAxysAccountId['max'])) {
+                $this->addUsingAlias(LinkTableMap::COL_LINK_SPONSOR_AXYS_ACCOUNT_ID, $sponsorAxysAccountId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -1285,7 +1285,7 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(LinkTableMap::COL_LINK_SPONSOR_AXYS_USER_ID, $sponsorAxysUserId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_LINK_SPONSOR_AXYS_ACCOUNT_ID, $sponsorAxysAccountId, $comparison);
 
         return $this;
     }

@@ -81,9 +81,9 @@ class AlertTableMap extends TableMap
     public const COL_ALERT_ID = 'alerts.alert_id';
 
     /**
-     * the column name for the axys_user_id field
+     * the column name for the axys_account_id field
      */
-    public const COL_AXYS_USER_ID = 'alerts.axys_user_id';
+    public const COL_AXYS_ACCOUNT_ID = 'alerts.axys_account_id';
 
     /**
      * the column name for the article_id field
@@ -139,10 +139,10 @@ class AlertTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'AxysUserId', 'ArticleId', 'MaxPrice', 'PubYear', 'Condition', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'axysUserId', 'articleId', 'maxPrice', 'pubYear', 'condition', 'insert', 'update', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [AlertTableMap::COL_ALERT_ID, AlertTableMap::COL_AXYS_USER_ID, AlertTableMap::COL_ARTICLE_ID, AlertTableMap::COL_ALERT_MAX_PRICE, AlertTableMap::COL_ALERT_PUB_YEAR, AlertTableMap::COL_ALERT_CONDITION, AlertTableMap::COL_ALERT_INSERT, AlertTableMap::COL_ALERT_UPDATE, AlertTableMap::COL_ALERT_CREATED, AlertTableMap::COL_ALERT_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['alert_id', 'axys_user_id', 'article_id', 'alert_max_price', 'alert_pub_year', 'alert_condition', 'alert_insert', 'alert_update', 'alert_created', 'alert_updated', ],
+        self::TYPE_PHPNAME       => ['Id', 'AxysAccountId', 'ArticleId', 'MaxPrice', 'PubYear', 'Condition', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'axysAccountId', 'articleId', 'maxPrice', 'pubYear', 'condition', 'insert', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [AlertTableMap::COL_ALERT_ID, AlertTableMap::COL_AXYS_ACCOUNT_ID, AlertTableMap::COL_ARTICLE_ID, AlertTableMap::COL_ALERT_MAX_PRICE, AlertTableMap::COL_ALERT_PUB_YEAR, AlertTableMap::COL_ALERT_CONDITION, AlertTableMap::COL_ALERT_INSERT, AlertTableMap::COL_ALERT_UPDATE, AlertTableMap::COL_ALERT_CREATED, AlertTableMap::COL_ALERT_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['alert_id', 'axys_account_id', 'article_id', 'alert_max_price', 'alert_pub_year', 'alert_condition', 'alert_insert', 'alert_update', 'alert_created', 'alert_updated', ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
     ];
 
@@ -155,10 +155,10 @@ class AlertTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'AxysUserId' => 1, 'ArticleId' => 2, 'MaxPrice' => 3, 'PubYear' => 4, 'Condition' => 5, 'Insert' => 6, 'Update' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'axysUserId' => 1, 'articleId' => 2, 'maxPrice' => 3, 'pubYear' => 4, 'condition' => 5, 'insert' => 6, 'update' => 7, 'createdAt' => 8, 'updatedAt' => 9, ],
-        self::TYPE_COLNAME       => [AlertTableMap::COL_ALERT_ID => 0, AlertTableMap::COL_AXYS_USER_ID => 1, AlertTableMap::COL_ARTICLE_ID => 2, AlertTableMap::COL_ALERT_MAX_PRICE => 3, AlertTableMap::COL_ALERT_PUB_YEAR => 4, AlertTableMap::COL_ALERT_CONDITION => 5, AlertTableMap::COL_ALERT_INSERT => 6, AlertTableMap::COL_ALERT_UPDATE => 7, AlertTableMap::COL_ALERT_CREATED => 8, AlertTableMap::COL_ALERT_UPDATED => 9, ],
-        self::TYPE_FIELDNAME     => ['alert_id' => 0, 'axys_user_id' => 1, 'article_id' => 2, 'alert_max_price' => 3, 'alert_pub_year' => 4, 'alert_condition' => 5, 'alert_insert' => 6, 'alert_update' => 7, 'alert_created' => 8, 'alert_updated' => 9, ],
+        self::TYPE_PHPNAME       => ['Id' => 0, 'AxysAccountId' => 1, 'ArticleId' => 2, 'MaxPrice' => 3, 'PubYear' => 4, 'Condition' => 5, 'Insert' => 6, 'Update' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'axysAccountId' => 1, 'articleId' => 2, 'maxPrice' => 3, 'pubYear' => 4, 'condition' => 5, 'insert' => 6, 'update' => 7, 'createdAt' => 8, 'updatedAt' => 9, ],
+        self::TYPE_COLNAME       => [AlertTableMap::COL_ALERT_ID => 0, AlertTableMap::COL_AXYS_ACCOUNT_ID => 1, AlertTableMap::COL_ARTICLE_ID => 2, AlertTableMap::COL_ALERT_MAX_PRICE => 3, AlertTableMap::COL_ALERT_PUB_YEAR => 4, AlertTableMap::COL_ALERT_CONDITION => 5, AlertTableMap::COL_ALERT_INSERT => 6, AlertTableMap::COL_ALERT_UPDATE => 7, AlertTableMap::COL_ALERT_CREATED => 8, AlertTableMap::COL_ALERT_UPDATED => 9, ],
+        self::TYPE_FIELDNAME     => ['alert_id' => 0, 'axys_account_id' => 1, 'article_id' => 2, 'alert_max_price' => 3, 'alert_pub_year' => 4, 'alert_condition' => 5, 'alert_insert' => 6, 'alert_update' => 7, 'alert_created' => 8, 'alert_updated' => 9, ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
     ];
 
@@ -176,14 +176,14 @@ class AlertTableMap extends TableMap
         'COL_ALERT_ID' => 'ALERT_ID',
         'alert_id' => 'ALERT_ID',
         'alerts.alert_id' => 'ALERT_ID',
-        'AxysUserId' => 'AXYS_USER_ID',
-        'Alert.AxysUserId' => 'AXYS_USER_ID',
-        'axysUserId' => 'AXYS_USER_ID',
-        'alert.axysUserId' => 'AXYS_USER_ID',
-        'AlertTableMap::COL_AXYS_USER_ID' => 'AXYS_USER_ID',
-        'COL_AXYS_USER_ID' => 'AXYS_USER_ID',
-        'axys_user_id' => 'AXYS_USER_ID',
-        'alerts.axys_user_id' => 'AXYS_USER_ID',
+        'AxysAccountId' => 'AXYS_ACCOUNT_ID',
+        'Alert.AxysAccountId' => 'AXYS_ACCOUNT_ID',
+        'axysAccountId' => 'AXYS_ACCOUNT_ID',
+        'alert.axysAccountId' => 'AXYS_ACCOUNT_ID',
+        'AlertTableMap::COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
+        'COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
+        'axys_account_id' => 'AXYS_ACCOUNT_ID',
+        'alerts.axys_account_id' => 'AXYS_ACCOUNT_ID',
         'ArticleId' => 'ARTICLE_ID',
         'Alert.ArticleId' => 'ARTICLE_ID',
         'articleId' => 'ARTICLE_ID',
@@ -268,7 +268,7 @@ class AlertTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('alert_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('axys_user_id', 'AxysUserId', 'INTEGER', false, 10, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
         $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, 10, null);
         $this->addColumn('alert_max_price', 'MaxPrice', 'INTEGER', false, 10, null);
         $this->addColumn('alert_pub_year', 'PubYear', 'INTEGER', false, 4, null);
@@ -444,7 +444,7 @@ class AlertTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(AlertTableMap::COL_ALERT_ID);
-            $criteria->addSelectColumn(AlertTableMap::COL_AXYS_USER_ID);
+            $criteria->addSelectColumn(AlertTableMap::COL_AXYS_ACCOUNT_ID);
             $criteria->addSelectColumn(AlertTableMap::COL_ARTICLE_ID);
             $criteria->addSelectColumn(AlertTableMap::COL_ALERT_MAX_PRICE);
             $criteria->addSelectColumn(AlertTableMap::COL_ALERT_PUB_YEAR);
@@ -455,7 +455,7 @@ class AlertTableMap extends TableMap
             $criteria->addSelectColumn(AlertTableMap::COL_ALERT_UPDATED);
         } else {
             $criteria->addSelectColumn($alias . '.alert_id');
-            $criteria->addSelectColumn($alias . '.axys_user_id');
+            $criteria->addSelectColumn($alias . '.axys_account_id');
             $criteria->addSelectColumn($alias . '.article_id');
             $criteria->addSelectColumn($alias . '.alert_max_price');
             $criteria->addSelectColumn($alias . '.alert_pub_year');
@@ -483,7 +483,7 @@ class AlertTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(AlertTableMap::COL_ALERT_ID);
-            $criteria->removeSelectColumn(AlertTableMap::COL_AXYS_USER_ID);
+            $criteria->removeSelectColumn(AlertTableMap::COL_AXYS_ACCOUNT_ID);
             $criteria->removeSelectColumn(AlertTableMap::COL_ARTICLE_ID);
             $criteria->removeSelectColumn(AlertTableMap::COL_ALERT_MAX_PRICE);
             $criteria->removeSelectColumn(AlertTableMap::COL_ALERT_PUB_YEAR);
@@ -494,7 +494,7 @@ class AlertTableMap extends TableMap
             $criteria->removeSelectColumn(AlertTableMap::COL_ALERT_UPDATED);
         } else {
             $criteria->removeSelectColumn($alias . '.alert_id');
-            $criteria->removeSelectColumn($alias . '.axys_user_id');
+            $criteria->removeSelectColumn($alias . '.axys_account_id');
             $criteria->removeSelectColumn($alias . '.article_id');
             $criteria->removeSelectColumn($alias . '.alert_max_price');
             $criteria->removeSelectColumn($alias . '.alert_pub_year');

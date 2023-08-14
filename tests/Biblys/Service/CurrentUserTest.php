@@ -132,7 +132,7 @@ class CurrentUserTest extends TestCase
 
         // given
         $session = ModelFactory::createUserSession();
-        $session->setAxysUserId(12345);
+        $session->setAxysAccountId(12345);
         $request = new Request();
         $request->headers->set("AuthToken", $session->getToken());
         $currentUser = CurrentUser::buildFromRequest($request);

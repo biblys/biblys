@@ -82,11 +82,11 @@ abstract class Option implements ActiveRecordInterface
     protected $site_id;
 
     /**
-     * The value for the axys_user_id field.
+     * The value for the axys_account_id field.
      *
      * @var        int|null
      */
-    protected $axys_user_id;
+    protected $axys_account_id;
 
     /**
      * The value for the option_key field.
@@ -381,13 +381,13 @@ abstract class Option implements ActiveRecordInterface
     }
 
     /**
-     * Get the [axys_user_id] column value.
+     * Get the [axys_account_id] column value.
      *
      * @return int|null
      */
-    public function getAxysUserId()
+    public function getAxysAccountId()
     {
-        return $this->axys_user_id;
+        return $this->axys_account_id;
     }
 
     /**
@@ -499,20 +499,20 @@ abstract class Option implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [axys_user_id] column.
+     * Set the value of [axys_account_id] column.
      *
      * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setAxysUserId($v)
+    public function setAxysAccountId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->axys_user_id !== $v) {
-            $this->axys_user_id = $v;
-            $this->modifiedColumns[OptionTableMap::COL_AXYS_USER_ID] = true;
+        if ($this->axys_account_id !== $v) {
+            $this->axys_account_id = $v;
+            $this->modifiedColumns[OptionTableMap::COL_AXYS_ACCOUNT_ID] = true;
         }
 
         if ($this->aAxysAccount !== null && $this->aAxysAccount->getId() !== $v) {
@@ -644,8 +644,8 @@ abstract class Option implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : OptionTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : OptionTableMap::translateFieldName('AxysUserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->axys_user_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : OptionTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->axys_account_id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : OptionTableMap::translateFieldName('Key', TableMap::TYPE_PHPNAME, $indexType)];
             $this->option_key = (null !== $col) ? (string) $col : null;
@@ -698,7 +698,7 @@ abstract class Option implements ActiveRecordInterface
         if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
             $this->aSite = null;
         }
-        if ($this->aAxysAccount !== null && $this->axys_user_id !== $this->aAxysAccount->getId()) {
+        if ($this->aAxysAccount !== null && $this->axys_account_id !== $this->aAxysAccount->getId()) {
             $this->aAxysAccount = null;
         }
     }
@@ -920,8 +920,8 @@ abstract class Option implements ActiveRecordInterface
         if ($this->isColumnModified(OptionTableMap::COL_SITE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'site_id';
         }
-        if ($this->isColumnModified(OptionTableMap::COL_AXYS_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'axys_user_id';
+        if ($this->isColumnModified(OptionTableMap::COL_AXYS_ACCOUNT_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_id';
         }
         if ($this->isColumnModified(OptionTableMap::COL_OPTION_KEY)) {
             $modifiedColumns[':p' . $index++]  = 'option_key';
@@ -954,8 +954,8 @@ abstract class Option implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
 
                         break;
-                    case 'axys_user_id':
-                        $stmt->bindValue($identifier, $this->axys_user_id, PDO::PARAM_INT);
+                    case 'axys_account_id':
+                        $stmt->bindValue($identifier, $this->axys_account_id, PDO::PARAM_INT);
 
                         break;
                     case 'option_key':
@@ -1043,7 +1043,7 @@ abstract class Option implements ActiveRecordInterface
                 return $this->getSiteId();
 
             case 2:
-                return $this->getAxysUserId();
+                return $this->getAxysAccountId();
 
             case 3:
                 return $this->getKey();
@@ -1087,7 +1087,7 @@ abstract class Option implements ActiveRecordInterface
         $result = [
             $keys[0] => $this->getId(),
             $keys[1] => $this->getSiteId(),
-            $keys[2] => $this->getAxysUserId(),
+            $keys[2] => $this->getAxysAccountId(),
             $keys[3] => $this->getKey(),
             $keys[4] => $this->getValue(),
             $keys[5] => $this->getCreatedAt(),
@@ -1180,7 +1180,7 @@ abstract class Option implements ActiveRecordInterface
                 $this->setSiteId($value);
                 break;
             case 2:
-                $this->setAxysUserId($value);
+                $this->setAxysAccountId($value);
                 break;
             case 3:
                 $this->setKey($value);
@@ -1227,7 +1227,7 @@ abstract class Option implements ActiveRecordInterface
             $this->setSiteId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setAxysUserId($arr[$keys[2]]);
+            $this->setAxysAccountId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
             $this->setKey($arr[$keys[3]]);
@@ -1290,8 +1290,8 @@ abstract class Option implements ActiveRecordInterface
         if ($this->isColumnModified(OptionTableMap::COL_SITE_ID)) {
             $criteria->add(OptionTableMap::COL_SITE_ID, $this->site_id);
         }
-        if ($this->isColumnModified(OptionTableMap::COL_AXYS_USER_ID)) {
-            $criteria->add(OptionTableMap::COL_AXYS_USER_ID, $this->axys_user_id);
+        if ($this->isColumnModified(OptionTableMap::COL_AXYS_ACCOUNT_ID)) {
+            $criteria->add(OptionTableMap::COL_AXYS_ACCOUNT_ID, $this->axys_account_id);
         }
         if ($this->isColumnModified(OptionTableMap::COL_OPTION_KEY)) {
             $criteria->add(OptionTableMap::COL_OPTION_KEY, $this->option_key);
@@ -1394,7 +1394,7 @@ abstract class Option implements ActiveRecordInterface
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
         $copyObj->setSiteId($this->getSiteId());
-        $copyObj->setAxysUserId($this->getAxysUserId());
+        $copyObj->setAxysAccountId($this->getAxysAccountId());
         $copyObj->setKey($this->getKey());
         $copyObj->setValue($this->getValue());
         $copyObj->setCreatedAt($this->getCreatedAt());
@@ -1437,9 +1437,9 @@ abstract class Option implements ActiveRecordInterface
     public function setAxysAccount(ChildAxysAccount $v = null)
     {
         if ($v === null) {
-            $this->setAxysUserId(NULL);
+            $this->setAxysAccountId(NULL);
         } else {
-            $this->setAxysUserId($v->getId());
+            $this->setAxysAccountId($v->getId());
         }
 
         $this->aAxysAccount = $v;
@@ -1464,8 +1464,8 @@ abstract class Option implements ActiveRecordInterface
      */
     public function getAxysAccount(?ConnectionInterface $con = null)
     {
-        if ($this->aAxysAccount === null && ($this->axys_user_id != 0)) {
-            $this->aAxysAccount = ChildAxysAccountQuery::create()->findPk($this->axys_user_id, $con);
+        if ($this->aAxysAccount === null && ($this->axys_account_id != 0)) {
+            $this->aAxysAccount = ChildAxysAccountQuery::create()->findPk($this->axys_account_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1546,7 +1546,7 @@ abstract class Option implements ActiveRecordInterface
         }
         $this->option_id = null;
         $this->site_id = null;
-        $this->axys_user_id = null;
+        $this->axys_account_id = null;
         $this->option_key = null;
         $this->option_value = null;
         $this->option_created = null;

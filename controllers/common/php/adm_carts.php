@@ -70,11 +70,11 @@ return function (Request $request, Session $session, CurrentSite $currentSite): 
     $emptied = 0;
     $carts = EntityManager::prepareAndExecute("
         SELECT
-            `cart_id`, `carts`.`site_id`, `carts`.`axys_user_id`, `cart_ip`, `cart_date`, `cart_count`,
+            `cart_id`, `carts`.`site_id`, `carts`.`axys_account_id`, `cart_ip`, `cart_date`, `cart_count`,
             `cart_amount`, `Email`, COUNT(`stock_id`) AS `num`, SUM(`stock_selling_price`) AS `total`,
             MAX(`stock_cart_date`) AS `stock_cart_date`
         FROM `carts`
-        LEFT JOIN `axys_accounts` ON `carts`.`axys_user_id` = `axys_accounts`.`id`
+        LEFT JOIN `axys_accounts` ON `carts`.`axys_account_id` = `axys_accounts`.`id`
         LEFT JOIN `stock` USING(`cart_id`)
         WHERE `carts`.`site_id` = :site_id AND `cart_type` = 'web'
         GROUP BY `cart_id`

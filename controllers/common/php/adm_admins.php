@@ -33,7 +33,7 @@ if (isset($_GET['added'])) {
 $rights = $_SQL->prepare("
     SELECT `axys_accounts`.`id` as `user_id`, `axys_accounts`.`Email` AS `user_email`, `user_screen_name`, `DateConnexion`, `right_id`
         FROM `rights`
-        JOIN `axys_accounts` ON `axys_accounts`.`id` = `rights`.`axys_user_id`
+        JOIN `axys_accounts` ON `axys_accounts`.`id` = `rights`.`axys_account_id`
     WHERE `rights`.`site_id` = :site_id
     ORDER BY `DateConnexion` DESC
 ");
@@ -44,7 +44,7 @@ while ($p = $rights->fetch(PDO::FETCH_ASSOC)) {
 
     $table .= '
         <tr>
-            <td>'.$p["axys_user_id"].'</td>
+            <td>'.$p["axys_account_id"].'</td>
             <td>'.$p["user_email"].'<br>'.$p["user_screen_name"].'</td>
             <td class="center">'._date($p["DateConnexion"],'d/m/Y Hhi').'</td>
             <td>

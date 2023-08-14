@@ -72,7 +72,7 @@ $orders = EntityManager::prepareAndExecute(
         `order_url`,
         `order_payment_date`,
         `order_type`,
-        `o`.`axys_user_id`,
+        `o`.`axys_account_id`,
         `user_screen_name`,
         `Email` as `user_email`,
         `user_nom` AS `user_last_name`,
@@ -84,7 +84,7 @@ $orders = EntityManager::prepareAndExecute(
         `customer_first_name`, `customer_last_name`
     FROM `orders` AS `o`
     JOIN `stock` AS `s` USING(`order_id`)
-    LEFT JOIN `axys_accounts` AS `u` ON `o`.`axys_user_id` = `u`.`id`
+    LEFT JOIN `axys_accounts` AS `u` ON `o`.`axys_account_id` = `u`.`id`
     LEFT JOIN `customers` AS `c` ON `o`.`customer_id` = `c`.`customer_id`
     WHERE `o`.`site_id` = :site_id'.$_QUERY.'
     GROUP BY `order_id`

@@ -13,9 +13,9 @@ class Right extends Entity
 
         if ($withJoins) {
             // User (OneToMany)
-            $um = new AxysAccountsManager();
-            if (isset($data['axys_user_id'])) {
-                $data['user'] = $um->get(['id' => $data['axys_user_id']]);
+            $um = new AxysAccountManager();
+            if (isset($data['axys_account_id'])) {
+                $data['user'] = $um->get(['id' => $data['axys_account_id']]);
             }
             
             // Publisher (OneToMany)

@@ -18,7 +18,7 @@ use Propel\Runtime\Exception\PropelException;
  * Base class that represents a query for the `alerts` table.
  *
  * @method     ChildAlertQuery orderById($order = Criteria::ASC) Order by the alert_id column
- * @method     ChildAlertQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
+ * @method     ChildAlertQuery orderByAxysAccountId($order = Criteria::ASC) Order by the axys_account_id column
  * @method     ChildAlertQuery orderByArticleId($order = Criteria::ASC) Order by the article_id column
  * @method     ChildAlertQuery orderByMaxPrice($order = Criteria::ASC) Order by the alert_max_price column
  * @method     ChildAlertQuery orderByPubYear($order = Criteria::ASC) Order by the alert_pub_year column
@@ -29,7 +29,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlertQuery orderByUpdatedAt($order = Criteria::ASC) Order by the alert_updated column
  *
  * @method     ChildAlertQuery groupById() Group by the alert_id column
- * @method     ChildAlertQuery groupByAxysUserId() Group by the axys_user_id column
+ * @method     ChildAlertQuery groupByAxysAccountId() Group by the axys_account_id column
  * @method     ChildAlertQuery groupByArticleId() Group by the article_id column
  * @method     ChildAlertQuery groupByMaxPrice() Group by the alert_max_price column
  * @method     ChildAlertQuery groupByPubYear() Group by the alert_pub_year column
@@ -51,7 +51,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlert findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildAlert matching the query, or a new ChildAlert object populated from the query conditions when no match is found
  *
  * @method     ChildAlert|null findOneById(int $alert_id) Return the first ChildAlert filtered by the alert_id column
- * @method     ChildAlert|null findOneByAxysUserId(int $axys_user_id) Return the first ChildAlert filtered by the axys_user_id column
+ * @method     ChildAlert|null findOneByAxysAccountId(int $axys_account_id) Return the first ChildAlert filtered by the axys_account_id column
  * @method     ChildAlert|null findOneByArticleId(int $article_id) Return the first ChildAlert filtered by the article_id column
  * @method     ChildAlert|null findOneByMaxPrice(int $alert_max_price) Return the first ChildAlert filtered by the alert_max_price column
  * @method     ChildAlert|null findOneByPubYear(int $alert_pub_year) Return the first ChildAlert filtered by the alert_pub_year column
@@ -65,7 +65,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlert requireOne(?ConnectionInterface $con = null) Return the first ChildAlert matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildAlert requireOneById(int $alert_id) Return the first ChildAlert filtered by the alert_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAlert requireOneByAxysUserId(int $axys_user_id) Return the first ChildAlert filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAlert requireOneByAxysAccountId(int $axys_account_id) Return the first ChildAlert filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAlert requireOneByArticleId(int $article_id) Return the first ChildAlert filtered by the article_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAlert requireOneByMaxPrice(int $alert_max_price) Return the first ChildAlert filtered by the alert_max_price column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAlert requireOneByPubYear(int $alert_pub_year) Return the first ChildAlert filtered by the alert_pub_year column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -80,8 +80,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildAlert[]|Collection findById(int|array<int> $alert_id) Return ChildAlert objects filtered by the alert_id column
  * @psalm-method Collection&\Traversable<ChildAlert> findById(int|array<int> $alert_id) Return ChildAlert objects filtered by the alert_id column
- * @method     ChildAlert[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildAlert objects filtered by the axys_user_id column
- * @psalm-method Collection&\Traversable<ChildAlert> findByAxysUserId(int|array<int> $axys_user_id) Return ChildAlert objects filtered by the axys_user_id column
+ * @method     ChildAlert[]|Collection findByAxysAccountId(int|array<int> $axys_account_id) Return ChildAlert objects filtered by the axys_account_id column
+ * @psalm-method Collection&\Traversable<ChildAlert> findByAxysAccountId(int|array<int> $axys_account_id) Return ChildAlert objects filtered by the axys_account_id column
  * @method     ChildAlert[]|Collection findByArticleId(int|array<int> $article_id) Return ChildAlert objects filtered by the article_id column
  * @psalm-method Collection&\Traversable<ChildAlert> findByArticleId(int|array<int> $article_id) Return ChildAlert objects filtered by the article_id column
  * @method     ChildAlert[]|Collection findByMaxPrice(int|array<int> $alert_max_price) Return ChildAlert objects filtered by the alert_max_price column
@@ -197,7 +197,7 @@ abstract class AlertQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT alert_id, axys_user_id, article_id, alert_max_price, alert_pub_year, alert_condition, alert_insert, alert_update, alert_created, alert_updated FROM alerts WHERE alert_id = :p0';
+        $sql = 'SELECT alert_id, axys_account_id, article_id, alert_max_price, alert_pub_year, alert_condition, alert_insert, alert_update, alert_created, alert_updated FROM alerts WHERE alert_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -335,16 +335,16 @@ abstract class AlertQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the axys_user_id column
+     * Filter the query on the axys_account_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
-     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
-     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
+     * $query->filterByAxysAccountId(1234); // WHERE axys_account_id = 1234
+     * $query->filterByAxysAccountId(array(12, 34)); // WHERE axys_account_id IN (12, 34)
+     * $query->filterByAxysAccountId(array('min' => 12)); // WHERE axys_account_id > 12
      * </code>
      *
-     * @param mixed $axysUserId The value to use as filter.
+     * @param mixed $axysAccountId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -352,16 +352,16 @@ abstract class AlertQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
+    public function filterByAxysAccountId($axysAccountId = null, ?string $comparison = null)
     {
-        if (is_array($axysUserId)) {
+        if (is_array($axysAccountId)) {
             $useMinMax = false;
-            if (isset($axysUserId['min'])) {
-                $this->addUsingAlias(AlertTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysAccountId['min'])) {
+                $this->addUsingAlias(AlertTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($axysUserId['max'])) {
-                $this->addUsingAlias(AlertTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysAccountId['max'])) {
+                $this->addUsingAlias(AlertTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -372,7 +372,7 @@ abstract class AlertQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(AlertTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
+        $this->addUsingAlias(AlertTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId, $comparison);
 
         return $this;
     }

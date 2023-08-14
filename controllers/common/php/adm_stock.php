@@ -495,7 +495,7 @@ if ($article) {
         $als = null;
         $alerts = $alm->getAll(['article_id' => $article->get('id')]);
         $alerts = array_map(function ($alert) use ($um) {
-            $user = $um->getById($alert->get('axys_user_id'));
+            $user = $um->getById($alert->get('axys_account_id'));
 
             return '
                 <tr>
@@ -1010,7 +1010,7 @@ function _sendAlertsForArticle(
             <p>À très bientôt dans les librairies Biblys !</p>
         ';
 
-        $user = $um->getById($alert->get("axys_user_id"));
+        $user = $um->getById($alert->get("axys_account_id"));
         try {
             $mailer->send($user->get("email"), $subject, $message);
             $sentAlerts++;

@@ -92,11 +92,11 @@ abstract class Download implements ActiveRecordInterface
     protected $book_id;
 
     /**
-     * The value for the axys_user_id field.
+     * The value for the axys_account_id field.
      *
      * @var        int|null
      */
-    protected $axys_user_id;
+    protected $axys_account_id;
 
     /**
      * The value for the download_filetype field.
@@ -415,13 +415,13 @@ abstract class Download implements ActiveRecordInterface
     }
 
     /**
-     * Get the [axys_user_id] column value.
+     * Get the [axys_account_id] column value.
      *
      * @return int|null
      */
-    public function getAxysUserId()
+    public function getAxysAccountId()
     {
-        return $this->axys_user_id;
+        return $this->axys_account_id;
     }
 
     /**
@@ -601,20 +601,20 @@ abstract class Download implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [axys_user_id] column.
+     * Set the value of [axys_account_id] column.
      *
      * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setAxysUserId($v)
+    public function setAxysAccountId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->axys_user_id !== $v) {
-            $this->axys_user_id = $v;
-            $this->modifiedColumns[DownloadTableMap::COL_AXYS_USER_ID] = true;
+        if ($this->axys_account_id !== $v) {
+            $this->axys_account_id = $v;
+            $this->modifiedColumns[DownloadTableMap::COL_AXYS_ACCOUNT_ID] = true;
         }
 
         return $this;
@@ -788,8 +788,8 @@ abstract class Download implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : DownloadTableMap::translateFieldName('BookId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->book_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : DownloadTableMap::translateFieldName('AxysUserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->axys_user_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : DownloadTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->axys_account_id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : DownloadTableMap::translateFieldName('Filetype', TableMap::TYPE_PHPNAME, $indexType)];
             $this->download_filetype = (null !== $col) ? (string) $col : null;
@@ -1052,8 +1052,8 @@ abstract class Download implements ActiveRecordInterface
         if ($this->isColumnModified(DownloadTableMap::COL_BOOK_ID)) {
             $modifiedColumns[':p' . $index++]  = 'book_id';
         }
-        if ($this->isColumnModified(DownloadTableMap::COL_AXYS_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'axys_user_id';
+        if ($this->isColumnModified(DownloadTableMap::COL_AXYS_ACCOUNT_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_id';
         }
         if ($this->isColumnModified(DownloadTableMap::COL_DOWNLOAD_FILETYPE)) {
             $modifiedColumns[':p' . $index++]  = 'download_filetype';
@@ -1100,8 +1100,8 @@ abstract class Download implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->book_id, PDO::PARAM_INT);
 
                         break;
-                    case 'axys_user_id':
-                        $stmt->bindValue($identifier, $this->axys_user_id, PDO::PARAM_INT);
+                    case 'axys_account_id':
+                        $stmt->bindValue($identifier, $this->axys_account_id, PDO::PARAM_INT);
 
                         break;
                     case 'download_filetype':
@@ -1203,7 +1203,7 @@ abstract class Download implements ActiveRecordInterface
                 return $this->getBookId();
 
             case 4:
-                return $this->getAxysUserId();
+                return $this->getAxysAccountId();
 
             case 5:
                 return $this->getFiletype();
@@ -1254,7 +1254,7 @@ abstract class Download implements ActiveRecordInterface
             $keys[1] => $this->getFileId(),
             $keys[2] => $this->getArticleId(),
             $keys[3] => $this->getBookId(),
-            $keys[4] => $this->getAxysUserId(),
+            $keys[4] => $this->getAxysAccountId(),
             $keys[5] => $this->getFiletype(),
             $keys[6] => $this->getVersion(),
             $keys[7] => $this->getIp(),
@@ -1327,7 +1327,7 @@ abstract class Download implements ActiveRecordInterface
                 $this->setBookId($value);
                 break;
             case 4:
-                $this->setAxysUserId($value);
+                $this->setAxysAccountId($value);
                 break;
             case 5:
                 $this->setFiletype($value);
@@ -1386,7 +1386,7 @@ abstract class Download implements ActiveRecordInterface
             $this->setBookId($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setAxysUserId($arr[$keys[4]]);
+            $this->setAxysAccountId($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
             $this->setFiletype($arr[$keys[5]]);
@@ -1461,8 +1461,8 @@ abstract class Download implements ActiveRecordInterface
         if ($this->isColumnModified(DownloadTableMap::COL_BOOK_ID)) {
             $criteria->add(DownloadTableMap::COL_BOOK_ID, $this->book_id);
         }
-        if ($this->isColumnModified(DownloadTableMap::COL_AXYS_USER_ID)) {
-            $criteria->add(DownloadTableMap::COL_AXYS_USER_ID, $this->axys_user_id);
+        if ($this->isColumnModified(DownloadTableMap::COL_AXYS_ACCOUNT_ID)) {
+            $criteria->add(DownloadTableMap::COL_AXYS_ACCOUNT_ID, $this->axys_account_id);
         }
         if ($this->isColumnModified(DownloadTableMap::COL_DOWNLOAD_FILETYPE)) {
             $criteria->add(DownloadTableMap::COL_DOWNLOAD_FILETYPE, $this->download_filetype);
@@ -1573,7 +1573,7 @@ abstract class Download implements ActiveRecordInterface
         $copyObj->setFileId($this->getFileId());
         $copyObj->setArticleId($this->getArticleId());
         $copyObj->setBookId($this->getBookId());
-        $copyObj->setAxysUserId($this->getAxysUserId());
+        $copyObj->setAxysAccountId($this->getAxysAccountId());
         $copyObj->setFiletype($this->getFiletype());
         $copyObj->setVersion($this->getVersion());
         $copyObj->setIp($this->getIp());
@@ -1621,7 +1621,7 @@ abstract class Download implements ActiveRecordInterface
         $this->file_id = null;
         $this->article_id = null;
         $this->book_id = null;
-        $this->axys_user_id = null;
+        $this->axys_account_id = null;
         $this->download_filetype = null;
         $this->download_version = null;
         $this->download_ip = null;

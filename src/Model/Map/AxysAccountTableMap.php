@@ -371,49 +371,49 @@ class AxysAccountTableMap extends TableMap
         $this->addRelation('Cart', '\\Model\\Cart', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':axys_user_id',
+    0 => ':axys_account_id',
     1 => ':id',
   ),
 ), null, null, 'Carts', false);
         $this->addRelation('Option', '\\Model\\Option', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':axys_user_id',
+    0 => ':axys_account_id',
     1 => ':id',
   ),
 ), null, null, 'Options', false);
         $this->addRelation('Right', '\\Model\\Right', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':axys_user_id',
+    0 => ':axys_account_id',
     1 => ':id',
   ),
 ), null, null, 'Rights', false);
         $this->addRelation('Session', '\\Model\\Session', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':axys_user_id',
+    0 => ':axys_account_id',
     1 => ':id',
   ),
 ), null, null, 'Sessions', false);
         $this->addRelation('Stock', '\\Model\\Stock', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':axys_user_id',
+    0 => ':axys_account_id',
     1 => ':id',
   ),
 ), null, null, 'Stocks', false);
         $this->addRelation('Wish', '\\Model\\Wish', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':axys_user_id',
+    0 => ':axys_account_id',
     1 => ':id',
   ),
 ), null, null, 'Wishes', false);
         $this->addRelation('Wishlist', '\\Model\\Wishlist', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':axys_user_id',
+    0 => ':axys_account_id',
     1 => ':id',
   ),
 ), null, null, 'Wishlists', false);

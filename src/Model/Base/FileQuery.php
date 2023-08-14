@@ -19,7 +19,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildFileQuery orderById($order = Criteria::ASC) Order by the file_id column
  * @method     ChildFileQuery orderByArticleId($order = Criteria::ASC) Order by the article_id column
- * @method     ChildFileQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
+ * @method     ChildFileQuery orderByAxysAccountId($order = Criteria::ASC) Order by the axys_account_id column
  * @method     ChildFileQuery orderByTitle($order = Criteria::ASC) Order by the file_title column
  * @method     ChildFileQuery orderByType($order = Criteria::ASC) Order by the file_type column
  * @method     ChildFileQuery orderByAccess($order = Criteria::ASC) Order by the file_access column
@@ -34,7 +34,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildFileQuery groupById() Group by the file_id column
  * @method     ChildFileQuery groupByArticleId() Group by the article_id column
- * @method     ChildFileQuery groupByAxysUserId() Group by the axys_user_id column
+ * @method     ChildFileQuery groupByAxysAccountId() Group by the axys_account_id column
  * @method     ChildFileQuery groupByTitle() Group by the file_title column
  * @method     ChildFileQuery groupByType() Group by the file_type column
  * @method     ChildFileQuery groupByAccess() Group by the file_access column
@@ -60,7 +60,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildFile|null findOneById(int $file_id) Return the first ChildFile filtered by the file_id column
  * @method     ChildFile|null findOneByArticleId(int $article_id) Return the first ChildFile filtered by the article_id column
- * @method     ChildFile|null findOneByAxysUserId(int $axys_user_id) Return the first ChildFile filtered by the axys_user_id column
+ * @method     ChildFile|null findOneByAxysAccountId(int $axys_account_id) Return the first ChildFile filtered by the axys_account_id column
  * @method     ChildFile|null findOneByTitle(string $file_title) Return the first ChildFile filtered by the file_title column
  * @method     ChildFile|null findOneByType(string $file_type) Return the first ChildFile filtered by the file_type column
  * @method     ChildFile|null findOneByAccess(boolean $file_access) Return the first ChildFile filtered by the file_access column
@@ -78,7 +78,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildFile requireOneById(int $file_id) Return the first ChildFile filtered by the file_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildFile requireOneByArticleId(int $article_id) Return the first ChildFile filtered by the article_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildFile requireOneByAxysUserId(int $axys_user_id) Return the first ChildFile filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildFile requireOneByAxysAccountId(int $axys_account_id) Return the first ChildFile filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildFile requireOneByTitle(string $file_title) Return the first ChildFile filtered by the file_title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildFile requireOneByType(string $file_type) Return the first ChildFile filtered by the file_type column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildFile requireOneByAccess(boolean $file_access) Return the first ChildFile filtered by the file_access column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -98,8 +98,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildFile> findById(int|array<int> $file_id) Return ChildFile objects filtered by the file_id column
  * @method     ChildFile[]|Collection findByArticleId(int|array<int> $article_id) Return ChildFile objects filtered by the article_id column
  * @psalm-method Collection&\Traversable<ChildFile> findByArticleId(int|array<int> $article_id) Return ChildFile objects filtered by the article_id column
- * @method     ChildFile[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildFile objects filtered by the axys_user_id column
- * @psalm-method Collection&\Traversable<ChildFile> findByAxysUserId(int|array<int> $axys_user_id) Return ChildFile objects filtered by the axys_user_id column
+ * @method     ChildFile[]|Collection findByAxysAccountId(int|array<int> $axys_account_id) Return ChildFile objects filtered by the axys_account_id column
+ * @psalm-method Collection&\Traversable<ChildFile> findByAxysAccountId(int|array<int> $axys_account_id) Return ChildFile objects filtered by the axys_account_id column
  * @method     ChildFile[]|Collection findByTitle(string|array<string> $file_title) Return ChildFile objects filtered by the file_title column
  * @psalm-method Collection&\Traversable<ChildFile> findByTitle(string|array<string> $file_title) Return ChildFile objects filtered by the file_title column
  * @method     ChildFile[]|Collection findByType(string|array<string> $file_type) Return ChildFile objects filtered by the file_type column
@@ -221,7 +221,7 @@ abstract class FileQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT file_id, article_id, axys_user_id, file_title, file_type, file_access, file_version, file_hash, file_size, file_ean, file_inserted, file_uploaded, file_updated, file_created FROM files WHERE file_id = :p0';
+        $sql = 'SELECT file_id, article_id, axys_account_id, file_title, file_type, file_access, file_version, file_hash, file_size, file_ean, file_inserted, file_uploaded, file_updated, file_created FROM files WHERE file_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -402,16 +402,16 @@ abstract class FileQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the axys_user_id column
+     * Filter the query on the axys_account_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
-     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
-     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
+     * $query->filterByAxysAccountId(1234); // WHERE axys_account_id = 1234
+     * $query->filterByAxysAccountId(array(12, 34)); // WHERE axys_account_id IN (12, 34)
+     * $query->filterByAxysAccountId(array('min' => 12)); // WHERE axys_account_id > 12
      * </code>
      *
-     * @param mixed $axysUserId The value to use as filter.
+     * @param mixed $axysAccountId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -419,16 +419,16 @@ abstract class FileQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
+    public function filterByAxysAccountId($axysAccountId = null, ?string $comparison = null)
     {
-        if (is_array($axysUserId)) {
+        if (is_array($axysAccountId)) {
             $useMinMax = false;
-            if (isset($axysUserId['min'])) {
-                $this->addUsingAlias(FileTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysAccountId['min'])) {
+                $this->addUsingAlias(FileTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($axysUserId['max'])) {
-                $this->addUsingAlias(FileTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysAccountId['max'])) {
+                $this->addUsingAlias(FileTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -439,7 +439,7 @@ abstract class FileQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(FileTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
+        $this->addUsingAlias(FileTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId, $comparison);
 
         return $this;
     }

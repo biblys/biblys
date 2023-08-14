@@ -96,7 +96,7 @@ $am = new ArticleManager();
     }
 
     $copies = $sm->getAll([
-        "axys_user_id" => LegacyCodeHelper::getGlobalVisitor()->get('id')
+        "axys_account_id" => LegacyCodeHelper::getGlobalVisitor()->get('id')
     ], [
         "order" => "stock_selling_date",
         "sort" => "desc"

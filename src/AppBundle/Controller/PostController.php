@@ -83,13 +83,13 @@ class PostController extends Controller
 
         // Offline post
         if ($post && $post->get('status') == 0 &&
-                $post->get('axys_user_id') !== \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->get('id') && !\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
+                $post->get('axys_account_id') !== \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->get('id') && !\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
             $post = false;
         }
 
         // Future post
         if ($post && $post->get('date') > date("Y-m-d H:i:s") &&
-                $post->get('axys_user_id') !== \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->get('id') && !\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
+                $post->get('axys_account_id') !== \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->get('id') && !\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
             $post = false;
         }
 

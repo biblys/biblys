@@ -108,8 +108,8 @@ class Visitor extends AxysAccount
             // If visitor has a cart
             if ($cart = $cm->get(array('cart_uid' => $this->visitor_uid))) {
                 // If user is logged, add user_id
-                if ($this->isLogged() && !$cart->has('axys_user_id')) {
-                    $cart->set('axys_user_id', $this->get('id'));
+                if ($this->isLogged() && !$cart->has('axys_account_id')) {
+                    $cart->set('axys_account_id', $this->get('id'));
                 }
                 $this->cart = $cart;
                 return $cart;
@@ -129,7 +129,7 @@ class Visitor extends AxysAccount
                     'cart_type' => 'web'
                 );
                 if ($this->isLogged()) {
-                    $defaults['axys_user_id'] = $this->get('id');
+                    $defaults['axys_account_id'] = $this->get('id');
                 }
                 /** @var Cart $cart */
                 $cart = $cm->create($defaults);
@@ -169,7 +169,7 @@ class Visitor extends AxysAccount
         }
 
         // Set current right
-        if ($right->get('axys_user_id') === $this->get('id')) {
+        if ($right->get('axys_account_id') === $this->get('id')) {
             $right->set('right_current', 1);
             $rm->update($right);
             return true;
@@ -184,7 +184,7 @@ class Visitor extends AxysAccount
     public function getCurrentRight(): Right
     {
         $rm = new RightManager();
-        if ($right = $rm->get(['axys_user_id' => $this->get('id')])) {
+        if ($right = $rm->get(['axys_account_id' => $this->get('id')])) {
             return $right;
         }
 
@@ -205,7 +205,7 @@ class Visitor extends AxysAccount
 
         $um = new AxysAccountManager();
         /** @var AxysAccount|false $user */
-        $user = $um->getById($session->get('axys_user_id'));
+        $user = $um->getById($session->get('axys_account_id'));
         if (!$user) {
             return;
         }

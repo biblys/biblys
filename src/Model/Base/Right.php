@@ -84,11 +84,11 @@ abstract class Right implements ActiveRecordInterface
     protected $right_uid;
 
     /**
-     * The value for the axys_user_id field.
+     * The value for the axys_account_id field.
      *
      * @var        int|null
      */
-    protected $axys_user_id;
+    protected $axys_account_id;
 
     /**
      * The value for the site_id field.
@@ -423,13 +423,13 @@ abstract class Right implements ActiveRecordInterface
     }
 
     /**
-     * Get the [axys_user_id] column value.
+     * Get the [axys_account_id] column value.
      *
      * @return int|null
      */
-    public function getAxysUserId()
+    public function getAxysAccountId()
     {
-        return $this->axys_user_id;
+        return $this->axys_account_id;
     }
 
     /**
@@ -577,20 +577,20 @@ abstract class Right implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [axys_user_id] column.
+     * Set the value of [axys_account_id] column.
      *
      * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setAxysUserId($v)
+    public function setAxysAccountId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->axys_user_id !== $v) {
-            $this->axys_user_id = $v;
-            $this->modifiedColumns[RightTableMap::COL_AXYS_USER_ID] = true;
+        if ($this->axys_account_id !== $v) {
+            $this->axys_account_id = $v;
+            $this->modifiedColumns[RightTableMap::COL_AXYS_ACCOUNT_ID] = true;
         }
 
         if ($this->aAxysAccount !== null && $this->aAxysAccount->getId() !== $v) {
@@ -802,8 +802,8 @@ abstract class Right implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : RightTableMap::translateFieldName('Uid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->right_uid = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RightTableMap::translateFieldName('AxysUserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->axys_user_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RightTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->axys_account_id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : RightTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_id = (null !== $col) ? (int) $col : null;
@@ -862,7 +862,7 @@ abstract class Right implements ActiveRecordInterface
      */
     public function ensureConsistency(): void
     {
-        if ($this->aAxysAccount !== null && $this->axys_user_id !== $this->aAxysAccount->getId()) {
+        if ($this->aAxysAccount !== null && $this->axys_account_id !== $this->aAxysAccount->getId()) {
             $this->aAxysAccount = null;
         }
         if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
@@ -1098,8 +1098,8 @@ abstract class Right implements ActiveRecordInterface
         if ($this->isColumnModified(RightTableMap::COL_RIGHT_UID)) {
             $modifiedColumns[':p' . $index++]  = 'right_uid';
         }
-        if ($this->isColumnModified(RightTableMap::COL_AXYS_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'axys_user_id';
+        if ($this->isColumnModified(RightTableMap::COL_AXYS_ACCOUNT_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_id';
         }
         if ($this->isColumnModified(RightTableMap::COL_SITE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'site_id';
@@ -1141,8 +1141,8 @@ abstract class Right implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->right_uid, PDO::PARAM_STR);
 
                         break;
-                    case 'axys_user_id':
-                        $stmt->bindValue($identifier, $this->axys_user_id, PDO::PARAM_INT);
+                    case 'axys_account_id':
+                        $stmt->bindValue($identifier, $this->axys_account_id, PDO::PARAM_INT);
 
                         break;
                     case 'site_id':
@@ -1242,7 +1242,7 @@ abstract class Right implements ActiveRecordInterface
                 return $this->getUid();
 
             case 2:
-                return $this->getAxysUserId();
+                return $this->getAxysAccountId();
 
             case 3:
                 return $this->getSiteId();
@@ -1295,7 +1295,7 @@ abstract class Right implements ActiveRecordInterface
         $result = [
             $keys[0] => $this->getId(),
             $keys[1] => $this->getUid(),
-            $keys[2] => $this->getAxysUserId(),
+            $keys[2] => $this->getAxysAccountId(),
             $keys[3] => $this->getSiteId(),
             $keys[4] => $this->getPublisherId(),
             $keys[5] => $this->getBookshopId(),
@@ -1406,7 +1406,7 @@ abstract class Right implements ActiveRecordInterface
                 $this->setUid($value);
                 break;
             case 2:
-                $this->setAxysUserId($value);
+                $this->setAxysAccountId($value);
                 break;
             case 3:
                 $this->setSiteId($value);
@@ -1462,7 +1462,7 @@ abstract class Right implements ActiveRecordInterface
             $this->setUid($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setAxysUserId($arr[$keys[2]]);
+            $this->setAxysAccountId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
             $this->setSiteId($arr[$keys[3]]);
@@ -1534,8 +1534,8 @@ abstract class Right implements ActiveRecordInterface
         if ($this->isColumnModified(RightTableMap::COL_RIGHT_UID)) {
             $criteria->add(RightTableMap::COL_RIGHT_UID, $this->right_uid);
         }
-        if ($this->isColumnModified(RightTableMap::COL_AXYS_USER_ID)) {
-            $criteria->add(RightTableMap::COL_AXYS_USER_ID, $this->axys_user_id);
+        if ($this->isColumnModified(RightTableMap::COL_AXYS_ACCOUNT_ID)) {
+            $criteria->add(RightTableMap::COL_AXYS_ACCOUNT_ID, $this->axys_account_id);
         }
         if ($this->isColumnModified(RightTableMap::COL_SITE_ID)) {
             $criteria->add(RightTableMap::COL_SITE_ID, $this->site_id);
@@ -1647,7 +1647,7 @@ abstract class Right implements ActiveRecordInterface
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
         $copyObj->setUid($this->getUid());
-        $copyObj->setAxysUserId($this->getAxysUserId());
+        $copyObj->setAxysAccountId($this->getAxysAccountId());
         $copyObj->setSiteId($this->getSiteId());
         $copyObj->setPublisherId($this->getPublisherId());
         $copyObj->setBookshopId($this->getBookshopId());
@@ -1693,9 +1693,9 @@ abstract class Right implements ActiveRecordInterface
     public function setAxysAccount(ChildAxysAccount $v = null)
     {
         if ($v === null) {
-            $this->setAxysUserId(NULL);
+            $this->setAxysAccountId(NULL);
         } else {
-            $this->setAxysUserId($v->getId());
+            $this->setAxysAccountId($v->getId());
         }
 
         $this->aAxysAccount = $v;
@@ -1720,8 +1720,8 @@ abstract class Right implements ActiveRecordInterface
      */
     public function getAxysAccount(?ConnectionInterface $con = null)
     {
-        if ($this->aAxysAccount === null && ($this->axys_user_id != 0)) {
-            $this->aAxysAccount = ChildAxysAccountQuery::create()->findPk($this->axys_user_id, $con);
+        if ($this->aAxysAccount === null && ($this->axys_account_id != 0)) {
+            $this->aAxysAccount = ChildAxysAccountQuery::create()->findPk($this->axys_account_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1856,7 +1856,7 @@ abstract class Right implements ActiveRecordInterface
         }
         $this->right_id = null;
         $this->right_uid = null;
-        $this->axys_user_id = null;
+        $this->axys_account_id = null;
         $this->site_id = null;
         $this->publisher_id = null;
         $this->bookshop_id = null;

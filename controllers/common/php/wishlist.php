@@ -14,7 +14,7 @@ if (!$user) {
     throw new ResourceNotFoundException('Utilisateur '.$request->query->get('slug').' inconnu');
 }
 
-$wishlist = $wlm->get(array('axys_user_id' => $user->get('id')));
+$wishlist = $wlm->get(array('axys_account_id' => $user->get('id')));
 if (!$wishlist) {
     throw new ResourceNotFoundException('Liste d\'envies introuvable.');
 }

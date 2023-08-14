@@ -41,7 +41,7 @@ $query = "SELECT `post_id`, `post_title`, `post_url`, `post_content`, `post_date
         `user_screen_name`, `user_slug`
     FROM `posts`
     LEFT JOIN `categories` USING(`category_id`)
-    LEFT JOIN `axys_accounts` ON `axys_user_id` = `axys_accounts`.`id`
+    LEFT JOIN `axys_accounts` ON `axys_account_id` = `axys_accounts`.`id`
     WHERE `post_id` = :post_id";
 
 $posts = $_SQL->prepare($query);

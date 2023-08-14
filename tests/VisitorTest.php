@@ -39,8 +39,8 @@ class VisitorTest extends TestCase
         $request = RequestFactory::createAuthRequest("", $user);
         $visitor = new Visitor($request);
         $rm = new RightManager();
-        $oldRight = $rm->create(["axys_user_id" => $user->getId(), "right_current" => 1]);
-        $newRight = $rm->create(["axys_user_id" => $user->getId()]);
+        $oldRight = $rm->create(["axys_account_id" => $user->getId(), "right_current" => 1]);
+        $newRight = $rm->create(["axys_account_id" => $user->getId()]);
 
         // when
         $visitor->setCurrentRight($newRight);

@@ -127,7 +127,7 @@ if ($request->getMethod() === "POST") {
 
         // Get customer from User
         if ($currentUser->isAuthentified()) {
-            $order->set('axys_user_id', LegacyCodeHelper::getGlobalVisitor()->get('id'));
+            $order->set('axys_account_id', LegacyCodeHelper::getGlobalVisitor()->get('id'));
             $customer = LegacyCodeHelper::getGlobalVisitor()->getCustomer('create');
         } // Else get customer from email address
         elseif ($getCustomer = $cm->get(array('customer_email' => $_POST['order_email']))) {
@@ -375,7 +375,7 @@ if (LegacyCodeHelper::getGlobalVisitor()->isLogged()) {
     $om = new OrderManager();
     $previousOrder = $om->get(
         [
-            'axys_user_id' => LegacyCodeHelper::getGlobalVisitor()->get('id'),
+            'axys_account_id' => LegacyCodeHelper::getGlobalVisitor()->get('id'),
             'order_cancel_date' => 'NULL',
         ],
         ['order' => 'order_created', 'sort' => 'desc']

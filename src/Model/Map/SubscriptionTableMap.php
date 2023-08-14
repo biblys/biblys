@@ -86,9 +86,9 @@ class SubscriptionTableMap extends TableMap
     public const COL_SITE_ID = 'subscriptions.site_id';
 
     /**
-     * the column name for the axys_user_id field
+     * the column name for the axys_account_id field
      */
-    public const COL_AXYS_USER_ID = 'subscriptions.axys_user_id';
+    public const COL_AXYS_ACCOUNT_ID = 'subscriptions.axys_account_id';
 
     /**
      * the column name for the publisher_id field
@@ -159,10 +159,10 @@ class SubscriptionTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'AxysUserId', 'PublisherId', 'BookshopId', 'LibraryId', 'Type', 'Email', 'Ends', 'Option', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'axysUserId', 'publisherId', 'bookshopId', 'libraryId', 'type', 'email', 'ends', 'option', 'insert', 'update', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [SubscriptionTableMap::COL_SUBSCRIPTION_ID, SubscriptionTableMap::COL_SITE_ID, SubscriptionTableMap::COL_AXYS_USER_ID, SubscriptionTableMap::COL_PUBLISHER_ID, SubscriptionTableMap::COL_BOOKSHOP_ID, SubscriptionTableMap::COL_LIBRARY_ID, SubscriptionTableMap::COL_SUBSCRIPTION_TYPE, SubscriptionTableMap::COL_SUBSCRIPTION_EMAIL, SubscriptionTableMap::COL_SUBSCRIPTION_ENDS, SubscriptionTableMap::COL_SUBSCRIPTION_OPTION, SubscriptionTableMap::COL_SUBSCRIPTION_INSERT, SubscriptionTableMap::COL_SUBSCRIPTION_UPDATE, SubscriptionTableMap::COL_SUBSCRIPTION_CREATED, SubscriptionTableMap::COL_SUBSCRIPTION_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['subscription_id', 'site_id', 'axys_user_id', 'publisher_id', 'bookshop_id', 'library_id', 'subscription_type', 'subscription_email', 'subscription_ends', 'subscription_option', 'subscription_insert', 'subscription_update', 'subscription_created', 'subscription_updated', ],
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'AxysAccountId', 'PublisherId', 'BookshopId', 'LibraryId', 'Type', 'Email', 'Ends', 'Option', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'axysAccountId', 'publisherId', 'bookshopId', 'libraryId', 'type', 'email', 'ends', 'option', 'insert', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [SubscriptionTableMap::COL_SUBSCRIPTION_ID, SubscriptionTableMap::COL_SITE_ID, SubscriptionTableMap::COL_AXYS_ACCOUNT_ID, SubscriptionTableMap::COL_PUBLISHER_ID, SubscriptionTableMap::COL_BOOKSHOP_ID, SubscriptionTableMap::COL_LIBRARY_ID, SubscriptionTableMap::COL_SUBSCRIPTION_TYPE, SubscriptionTableMap::COL_SUBSCRIPTION_EMAIL, SubscriptionTableMap::COL_SUBSCRIPTION_ENDS, SubscriptionTableMap::COL_SUBSCRIPTION_OPTION, SubscriptionTableMap::COL_SUBSCRIPTION_INSERT, SubscriptionTableMap::COL_SUBSCRIPTION_UPDATE, SubscriptionTableMap::COL_SUBSCRIPTION_CREATED, SubscriptionTableMap::COL_SUBSCRIPTION_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['subscription_id', 'site_id', 'axys_account_id', 'publisher_id', 'bookshop_id', 'library_id', 'subscription_type', 'subscription_email', 'subscription_ends', 'subscription_option', 'subscription_insert', 'subscription_update', 'subscription_created', 'subscription_updated', ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
     ];
 
@@ -175,10 +175,10 @@ class SubscriptionTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'AxysUserId' => 2, 'PublisherId' => 3, 'BookshopId' => 4, 'LibraryId' => 5, 'Type' => 6, 'Email' => 7, 'Ends' => 8, 'Option' => 9, 'Insert' => 10, 'Update' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'axysUserId' => 2, 'publisherId' => 3, 'bookshopId' => 4, 'libraryId' => 5, 'type' => 6, 'email' => 7, 'ends' => 8, 'option' => 9, 'insert' => 10, 'update' => 11, 'createdAt' => 12, 'updatedAt' => 13, ],
-        self::TYPE_COLNAME       => [SubscriptionTableMap::COL_SUBSCRIPTION_ID => 0, SubscriptionTableMap::COL_SITE_ID => 1, SubscriptionTableMap::COL_AXYS_USER_ID => 2, SubscriptionTableMap::COL_PUBLISHER_ID => 3, SubscriptionTableMap::COL_BOOKSHOP_ID => 4, SubscriptionTableMap::COL_LIBRARY_ID => 5, SubscriptionTableMap::COL_SUBSCRIPTION_TYPE => 6, SubscriptionTableMap::COL_SUBSCRIPTION_EMAIL => 7, SubscriptionTableMap::COL_SUBSCRIPTION_ENDS => 8, SubscriptionTableMap::COL_SUBSCRIPTION_OPTION => 9, SubscriptionTableMap::COL_SUBSCRIPTION_INSERT => 10, SubscriptionTableMap::COL_SUBSCRIPTION_UPDATE => 11, SubscriptionTableMap::COL_SUBSCRIPTION_CREATED => 12, SubscriptionTableMap::COL_SUBSCRIPTION_UPDATED => 13, ],
-        self::TYPE_FIELDNAME     => ['subscription_id' => 0, 'site_id' => 1, 'axys_user_id' => 2, 'publisher_id' => 3, 'bookshop_id' => 4, 'library_id' => 5, 'subscription_type' => 6, 'subscription_email' => 7, 'subscription_ends' => 8, 'subscription_option' => 9, 'subscription_insert' => 10, 'subscription_update' => 11, 'subscription_created' => 12, 'subscription_updated' => 13, ],
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'AxysAccountId' => 2, 'PublisherId' => 3, 'BookshopId' => 4, 'LibraryId' => 5, 'Type' => 6, 'Email' => 7, 'Ends' => 8, 'Option' => 9, 'Insert' => 10, 'Update' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'axysAccountId' => 2, 'publisherId' => 3, 'bookshopId' => 4, 'libraryId' => 5, 'type' => 6, 'email' => 7, 'ends' => 8, 'option' => 9, 'insert' => 10, 'update' => 11, 'createdAt' => 12, 'updatedAt' => 13, ],
+        self::TYPE_COLNAME       => [SubscriptionTableMap::COL_SUBSCRIPTION_ID => 0, SubscriptionTableMap::COL_SITE_ID => 1, SubscriptionTableMap::COL_AXYS_ACCOUNT_ID => 2, SubscriptionTableMap::COL_PUBLISHER_ID => 3, SubscriptionTableMap::COL_BOOKSHOP_ID => 4, SubscriptionTableMap::COL_LIBRARY_ID => 5, SubscriptionTableMap::COL_SUBSCRIPTION_TYPE => 6, SubscriptionTableMap::COL_SUBSCRIPTION_EMAIL => 7, SubscriptionTableMap::COL_SUBSCRIPTION_ENDS => 8, SubscriptionTableMap::COL_SUBSCRIPTION_OPTION => 9, SubscriptionTableMap::COL_SUBSCRIPTION_INSERT => 10, SubscriptionTableMap::COL_SUBSCRIPTION_UPDATE => 11, SubscriptionTableMap::COL_SUBSCRIPTION_CREATED => 12, SubscriptionTableMap::COL_SUBSCRIPTION_UPDATED => 13, ],
+        self::TYPE_FIELDNAME     => ['subscription_id' => 0, 'site_id' => 1, 'axys_account_id' => 2, 'publisher_id' => 3, 'bookshop_id' => 4, 'library_id' => 5, 'subscription_type' => 6, 'subscription_email' => 7, 'subscription_ends' => 8, 'subscription_option' => 9, 'subscription_insert' => 10, 'subscription_update' => 11, 'subscription_created' => 12, 'subscription_updated' => 13, ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
     ];
 
@@ -204,14 +204,14 @@ class SubscriptionTableMap extends TableMap
         'COL_SITE_ID' => 'SITE_ID',
         'site_id' => 'SITE_ID',
         'subscriptions.site_id' => 'SITE_ID',
-        'AxysUserId' => 'AXYS_USER_ID',
-        'Subscription.AxysUserId' => 'AXYS_USER_ID',
-        'axysUserId' => 'AXYS_USER_ID',
-        'subscription.axysUserId' => 'AXYS_USER_ID',
-        'SubscriptionTableMap::COL_AXYS_USER_ID' => 'AXYS_USER_ID',
-        'COL_AXYS_USER_ID' => 'AXYS_USER_ID',
-        'axys_user_id' => 'AXYS_USER_ID',
-        'subscriptions.axys_user_id' => 'AXYS_USER_ID',
+        'AxysAccountId' => 'AXYS_ACCOUNT_ID',
+        'Subscription.AxysAccountId' => 'AXYS_ACCOUNT_ID',
+        'axysAccountId' => 'AXYS_ACCOUNT_ID',
+        'subscription.axysAccountId' => 'AXYS_ACCOUNT_ID',
+        'SubscriptionTableMap::COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
+        'COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
+        'axys_account_id' => 'AXYS_ACCOUNT_ID',
+        'subscriptions.axys_account_id' => 'AXYS_ACCOUNT_ID',
         'PublisherId' => 'PUBLISHER_ID',
         'Subscription.PublisherId' => 'PUBLISHER_ID',
         'publisherId' => 'PUBLISHER_ID',
@@ -321,7 +321,7 @@ class SubscriptionTableMap extends TableMap
         // columns
         $this->addPrimaryKey('subscription_id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
-        $this->addColumn('axys_user_id', 'AxysUserId', 'INTEGER', false, 10, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
         $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, 10, null);
         $this->addColumn('bookshop_id', 'BookshopId', 'INTEGER', false, 10, null);
         $this->addColumn('library_id', 'LibraryId', 'INTEGER', false, 10, null);
@@ -501,7 +501,7 @@ class SubscriptionTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_ID);
             $criteria->addSelectColumn(SubscriptionTableMap::COL_SITE_ID);
-            $criteria->addSelectColumn(SubscriptionTableMap::COL_AXYS_USER_ID);
+            $criteria->addSelectColumn(SubscriptionTableMap::COL_AXYS_ACCOUNT_ID);
             $criteria->addSelectColumn(SubscriptionTableMap::COL_PUBLISHER_ID);
             $criteria->addSelectColumn(SubscriptionTableMap::COL_BOOKSHOP_ID);
             $criteria->addSelectColumn(SubscriptionTableMap::COL_LIBRARY_ID);
@@ -516,7 +516,7 @@ class SubscriptionTableMap extends TableMap
         } else {
             $criteria->addSelectColumn($alias . '.subscription_id');
             $criteria->addSelectColumn($alias . '.site_id');
-            $criteria->addSelectColumn($alias . '.axys_user_id');
+            $criteria->addSelectColumn($alias . '.axys_account_id');
             $criteria->addSelectColumn($alias . '.publisher_id');
             $criteria->addSelectColumn($alias . '.bookshop_id');
             $criteria->addSelectColumn($alias . '.library_id');
@@ -548,7 +548,7 @@ class SubscriptionTableMap extends TableMap
         if (null === $alias) {
             $criteria->removeSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_ID);
             $criteria->removeSelectColumn(SubscriptionTableMap::COL_SITE_ID);
-            $criteria->removeSelectColumn(SubscriptionTableMap::COL_AXYS_USER_ID);
+            $criteria->removeSelectColumn(SubscriptionTableMap::COL_AXYS_ACCOUNT_ID);
             $criteria->removeSelectColumn(SubscriptionTableMap::COL_PUBLISHER_ID);
             $criteria->removeSelectColumn(SubscriptionTableMap::COL_BOOKSHOP_ID);
             $criteria->removeSelectColumn(SubscriptionTableMap::COL_LIBRARY_ID);
@@ -563,7 +563,7 @@ class SubscriptionTableMap extends TableMap
         } else {
             $criteria->removeSelectColumn($alias . '.subscription_id');
             $criteria->removeSelectColumn($alias . '.site_id');
-            $criteria->removeSelectColumn($alias . '.axys_user_id');
+            $criteria->removeSelectColumn($alias . '.axys_account_id');
             $criteria->removeSelectColumn($alias . '.publisher_id');
             $criteria->removeSelectColumn($alias . '.bookshop_id');
             $criteria->removeSelectColumn($alias . '.library_id');

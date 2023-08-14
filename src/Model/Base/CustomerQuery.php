@@ -19,7 +19,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildCustomerQuery orderById($order = Criteria::ASC) Order by the customer_id column
  * @method     ChildCustomerQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
- * @method     ChildCustomerQuery orderByAxysUserId($order = Criteria::ASC) Order by the axys_user_id column
+ * @method     ChildCustomerQuery orderByAxysAccountId($order = Criteria::ASC) Order by the axys_account_id column
  * @method     ChildCustomerQuery orderByType($order = Criteria::ASC) Order by the customer_type column
  * @method     ChildCustomerQuery orderByFirstName($order = Criteria::ASC) Order by the customer_first_name column
  * @method     ChildCustomerQuery orderByLastName($order = Criteria::ASC) Order by the customer_last_name column
@@ -34,7 +34,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildCustomerQuery groupById() Group by the customer_id column
  * @method     ChildCustomerQuery groupBySiteId() Group by the site_id column
- * @method     ChildCustomerQuery groupByAxysUserId() Group by the axys_user_id column
+ * @method     ChildCustomerQuery groupByAxysAccountId() Group by the axys_account_id column
  * @method     ChildCustomerQuery groupByType() Group by the customer_type column
  * @method     ChildCustomerQuery groupByFirstName() Group by the customer_first_name column
  * @method     ChildCustomerQuery groupByLastName() Group by the customer_last_name column
@@ -60,7 +60,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildCustomer|null findOneById(int $customer_id) Return the first ChildCustomer filtered by the customer_id column
  * @method     ChildCustomer|null findOneBySiteId(int $site_id) Return the first ChildCustomer filtered by the site_id column
- * @method     ChildCustomer|null findOneByAxysUserId(int $axys_user_id) Return the first ChildCustomer filtered by the axys_user_id column
+ * @method     ChildCustomer|null findOneByAxysAccountId(int $axys_account_id) Return the first ChildCustomer filtered by the axys_account_id column
  * @method     ChildCustomer|null findOneByType(string $customer_type) Return the first ChildCustomer filtered by the customer_type column
  * @method     ChildCustomer|null findOneByFirstName(string $customer_first_name) Return the first ChildCustomer filtered by the customer_first_name column
  * @method     ChildCustomer|null findOneByLastName(string $customer_last_name) Return the first ChildCustomer filtered by the customer_last_name column
@@ -78,7 +78,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildCustomer requireOneById(int $customer_id) Return the first ChildCustomer filtered by the customer_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneBySiteId(int $site_id) Return the first ChildCustomer filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCustomer requireOneByAxysUserId(int $axys_user_id) Return the first ChildCustomer filtered by the axys_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCustomer requireOneByAxysAccountId(int $axys_account_id) Return the first ChildCustomer filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByType(string $customer_type) Return the first ChildCustomer filtered by the customer_type column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByFirstName(string $customer_first_name) Return the first ChildCustomer filtered by the customer_first_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByLastName(string $customer_last_name) Return the first ChildCustomer filtered by the customer_last_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -98,8 +98,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildCustomer> findById(int|array<int> $customer_id) Return ChildCustomer objects filtered by the customer_id column
  * @method     ChildCustomer[]|Collection findBySiteId(int|array<int> $site_id) Return ChildCustomer objects filtered by the site_id column
  * @psalm-method Collection&\Traversable<ChildCustomer> findBySiteId(int|array<int> $site_id) Return ChildCustomer objects filtered by the site_id column
- * @method     ChildCustomer[]|Collection findByAxysUserId(int|array<int> $axys_user_id) Return ChildCustomer objects filtered by the axys_user_id column
- * @psalm-method Collection&\Traversable<ChildCustomer> findByAxysUserId(int|array<int> $axys_user_id) Return ChildCustomer objects filtered by the axys_user_id column
+ * @method     ChildCustomer[]|Collection findByAxysAccountId(int|array<int> $axys_account_id) Return ChildCustomer objects filtered by the axys_account_id column
+ * @psalm-method Collection&\Traversable<ChildCustomer> findByAxysAccountId(int|array<int> $axys_account_id) Return ChildCustomer objects filtered by the axys_account_id column
  * @method     ChildCustomer[]|Collection findByType(string|array<string> $customer_type) Return ChildCustomer objects filtered by the customer_type column
  * @psalm-method Collection&\Traversable<ChildCustomer> findByType(string|array<string> $customer_type) Return ChildCustomer objects filtered by the customer_type column
  * @method     ChildCustomer[]|Collection findByFirstName(string|array<string> $customer_first_name) Return ChildCustomer objects filtered by the customer_first_name column
@@ -221,7 +221,7 @@ abstract class CustomerQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT customer_id, site_id, axys_user_id, customer_type, customer_first_name, customer_last_name, customer_email, customer_phone, country_id, customer_privatization, customer_insert, customer_update, customer_created, customer_updated FROM customers WHERE customer_id = :p0';
+        $sql = 'SELECT customer_id, site_id, axys_account_id, customer_type, customer_first_name, customer_last_name, customer_email, customer_phone, country_id, customer_privatization, customer_insert, customer_update, customer_created, customer_updated FROM customers WHERE customer_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -402,16 +402,16 @@ abstract class CustomerQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the axys_user_id column
+     * Filter the query on the axys_account_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByAxysUserId(1234); // WHERE axys_user_id = 1234
-     * $query->filterByAxysUserId(array(12, 34)); // WHERE axys_user_id IN (12, 34)
-     * $query->filterByAxysUserId(array('min' => 12)); // WHERE axys_user_id > 12
+     * $query->filterByAxysAccountId(1234); // WHERE axys_account_id = 1234
+     * $query->filterByAxysAccountId(array(12, 34)); // WHERE axys_account_id IN (12, 34)
+     * $query->filterByAxysAccountId(array('min' => 12)); // WHERE axys_account_id > 12
      * </code>
      *
-     * @param mixed $axysUserId The value to use as filter.
+     * @param mixed $axysAccountId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -419,16 +419,16 @@ abstract class CustomerQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByAxysUserId($axysUserId = null, ?string $comparison = null)
+    public function filterByAxysAccountId($axysAccountId = null, ?string $comparison = null)
     {
-        if (is_array($axysUserId)) {
+        if (is_array($axysAccountId)) {
             $useMinMax = false;
-            if (isset($axysUserId['min'])) {
-                $this->addUsingAlias(CustomerTableMap::COL_AXYS_USER_ID, $axysUserId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysAccountId['min'])) {
+                $this->addUsingAlias(CustomerTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($axysUserId['max'])) {
-                $this->addUsingAlias(CustomerTableMap::COL_AXYS_USER_ID, $axysUserId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysAccountId['max'])) {
+                $this->addUsingAlias(CustomerTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -439,7 +439,7 @@ abstract class CustomerQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(CustomerTableMap::COL_AXYS_USER_ID, $axysUserId, $comparison);
+        $this->addUsingAlias(CustomerTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId, $comparison);
 
         return $this;
     }

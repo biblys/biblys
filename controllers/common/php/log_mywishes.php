@@ -21,19 +21,19 @@ $content = "";
 
 // Get or create current wishlist
 $wishlist = $wlm->get([
-    "axys_user_id" => $currentUserService->getAxysAccount()->getId(),
+    "axys_account_id" => $currentUserService->getAxysAccount()->getId(),
     "wishlist_current" => 1
 ]);
 if (!$wishlist) {
 
     // Create a current wishlist for current user
     $wishlist = $wlm->create(array(
-        'axys_user_id' => $currentUserService->getAxysAccount()->getId(),
+        'axys_account_id' => $currentUserService->getAxysAccount()->getId(),
         'wishlist_current' => 1
     ));
 
     // Add wishes
-    $wishes = $wm->getAll(array('axys_user_id' => $currentUserService->getAxysAccount()->getId(), 'wishlist_id' => 'NULL'));
+    $wishes = $wm->getAll(array('axys_account_id' => $currentUserService->getAxysAccount()->getId(), 'wishlist_id' => 'NULL'));
     foreach ($wishes as $wish) {
         $wish->set('wishlist', $wishlist);
         $wm->update($wish);
@@ -63,7 +63,7 @@ if ($request->getMethod() === "POST") {
     // Else create it
     else {
         $wish = $wm->create();
-        $wish->set('axys_user_id', $currentUserService->getAxysAccount()->getId());
+        $wish->set('axys_account_id', $currentUserService->getAxysAccount()->getId());
         $wish->set('article', $article);
         $wish->set('wishlist', $wishlist);
         $wm->update($wish);
