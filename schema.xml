@@ -164,34 +164,12 @@
     <column name="user_password" phpName="Password" type="VARCHAR" size="255"/>
     <column name="user_key" phpName="Key" type="LONGVARCHAR"/>
     <column name="email_key" phpName="EmailKey" type="VARCHAR" size="32"/>
-    <column name="facebook_uid" phpName="FacebookUid" type="INTEGER"/>
     <column name="user_screen_name" phpName="Username" type="VARCHAR" size="128"/>
     <column name="user_slug" phpName="Slug" type="VARCHAR" size="32"/>
-    <column name="user_wishlist_ship" phpName="WishlistShip" type="BOOLEAN" size="1" defaultValue="false"/>
-    <column name="user_top" phpName="Top" type="BOOLEAN" size="1"/>
-    <column name="user_biblio" phpName="Biblio" type="BOOLEAN" size="1"/>
-    <column name="adresse_ip" phpName="AdresseIp" type="VARCHAR" size="255"/>
-    <column name="recaptcha_score" phpName="RecaptchaScore" type="FLOAT"/>
     <column name="DateInscription" phpName="Dateinscription" type="TIMESTAMP"/>
     <column name="DateConnexion" phpName="Dateconnexion" type="TIMESTAMP"/>
-    <column name="publisher_id" phpName="PublisherId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
-    <column name="bookshop_id" phpName="BookshopId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
-    <column name="library_id" phpName="LibraryId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
-    <column name="user_civilite" phpName="Civilite" type="LONGVARCHAR"/>
     <column name="user_nom" phpName="Nom" type="LONGVARCHAR"/>
     <column name="user_prenom" phpName="Prenom" type="LONGVARCHAR"/>
-    <column name="user_adresse1" phpName="Adresse1" type="LONGVARCHAR"/>
-    <column name="user_adresse2" phpName="Adresse2" type="LONGVARCHAR"/>
-    <column name="user_codepostal" phpName="Codepostal" type="LONGVARCHAR"/>
-    <column name="user_ville" phpName="Ville" type="LONGVARCHAR"/>
-    <column name="user_pays" phpName="Pays" type="LONGVARCHAR"/>
-    <column name="user_telephone" phpName="Telephone" type="LONGVARCHAR"/>
-    <column name="user_pref_articles_show" phpName="PrefArticlesShow" type="VARCHAR" size="8"/>
-    <column name="user_fb_id" phpName="FbId" type="BIGINT"/>
-    <column name="user_fb_token" phpName="FbToken" type="VARCHAR" size="256"/>
-    <column name="country_id" phpName="CountryId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
-    <column name="user_password_reset_token" phpName="PasswordResetToken" type="VARCHAR" size="32"/>
-    <column name="user_password_reset_token_created" phpName="PasswordResetTokenCreated" type="TIMESTAMP"/>
     <column name="user_update" phpName="Update" type="TIMESTAMP"/>
     <column name="user_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="user_updated" phpName="UpdatedAt" type="TIMESTAMP"/>

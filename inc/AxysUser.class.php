@@ -365,15 +365,8 @@ class AxysUserManager extends EntityManager
                     `id` AS `user_id`,
                     `Email` AS `user_email`,
                     `user_key` AS `user_uid`,
-                    `user_civilite` AS `user_title`,
                     `user_prenom` AS `user_first_name`,
-                    `user_nom` AS `user_last_name`,
-                    `user_adresse1` AS `user_address1`,
-                    `user_adresse2` AS `user_address2`,
-                    `user_codepostal` AS `user_postal_code`,
-                    `user_ville` AS `user_city`,
-                    `user_pays` AS `user_country`,
-                    `user_telephone` AS `user_phone`
+                    `user_nom` AS `user_last_name`
                     ';
 
     public function __construct()

@@ -144,13 +144,6 @@ abstract class AxysUser implements ActiveRecordInterface
     protected $email_key;
 
     /**
-     * The value for the facebook_uid field.
-     *
-     * @var        int|null
-     */
-    protected $facebook_uid;
-
-    /**
      * The value for the user_screen_name field.
      *
      * @var        string|null
@@ -163,42 +156,6 @@ abstract class AxysUser implements ActiveRecordInterface
      * @var        string|null
      */
     protected $user_slug;
-
-    /**
-     * The value for the user_wishlist_ship field.
-     *
-     * Note: this column has a database default value of: false
-     * @var        boolean|null
-     */
-    protected $user_wishlist_ship;
-
-    /**
-     * The value for the user_top field.
-     *
-     * @var        boolean|null
-     */
-    protected $user_top;
-
-    /**
-     * The value for the user_biblio field.
-     *
-     * @var        boolean|null
-     */
-    protected $user_biblio;
-
-    /**
-     * The value for the adresse_ip field.
-     *
-     * @var        string|null
-     */
-    protected $adresse_ip;
-
-    /**
-     * The value for the recaptcha_score field.
-     *
-     * @var        double|null
-     */
-    protected $recaptcha_score;
 
     /**
      * The value for the dateinscription field.
@@ -215,34 +172,6 @@ abstract class AxysUser implements ActiveRecordInterface
     protected $dateconnexion;
 
     /**
-     * The value for the publisher_id field.
-     *
-     * @var        int|null
-     */
-    protected $publisher_id;
-
-    /**
-     * The value for the bookshop_id field.
-     *
-     * @var        int|null
-     */
-    protected $bookshop_id;
-
-    /**
-     * The value for the library_id field.
-     *
-     * @var        int|null
-     */
-    protected $library_id;
-
-    /**
-     * The value for the user_civilite field.
-     *
-     * @var        string|null
-     */
-    protected $user_civilite;
-
-    /**
      * The value for the user_nom field.
      *
      * @var        string|null
@@ -255,90 +184,6 @@ abstract class AxysUser implements ActiveRecordInterface
      * @var        string|null
      */
     protected $user_prenom;
-
-    /**
-     * The value for the user_adresse1 field.
-     *
-     * @var        string|null
-     */
-    protected $user_adresse1;
-
-    /**
-     * The value for the user_adresse2 field.
-     *
-     * @var        string|null
-     */
-    protected $user_adresse2;
-
-    /**
-     * The value for the user_codepostal field.
-     *
-     * @var        string|null
-     */
-    protected $user_codepostal;
-
-    /**
-     * The value for the user_ville field.
-     *
-     * @var        string|null
-     */
-    protected $user_ville;
-
-    /**
-     * The value for the user_pays field.
-     *
-     * @var        string|null
-     */
-    protected $user_pays;
-
-    /**
-     * The value for the user_telephone field.
-     *
-     * @var        string|null
-     */
-    protected $user_telephone;
-
-    /**
-     * The value for the user_pref_articles_show field.
-     *
-     * @var        string|null
-     */
-    protected $user_pref_articles_show;
-
-    /**
-     * The value for the user_fb_id field.
-     *
-     * @var        string|null
-     */
-    protected $user_fb_id;
-
-    /**
-     * The value for the user_fb_token field.
-     *
-     * @var        string|null
-     */
-    protected $user_fb_token;
-
-    /**
-     * The value for the country_id field.
-     *
-     * @var        int|null
-     */
-    protected $country_id;
-
-    /**
-     * The value for the user_password_reset_token field.
-     *
-     * @var        string|null
-     */
-    protected $user_password_reset_token;
-
-    /**
-     * The value for the user_password_reset_token_created field.
-     *
-     * @var        DateTime|null
-     */
-    protected $user_password_reset_token_created;
 
     /**
      * The value for the user_update field.
@@ -504,23 +349,10 @@ abstract class AxysUser implements ActiveRecordInterface
     protected $wishlistsScheduledForDeletion = null;
 
     /**
-     * Applies default values to this object.
-     * This method should be called from the object's constructor (or
-     * equivalent initialization method).
-     * @see __construct()
-     */
-    public function applyDefaultValues(): void
-    {
-        $this->user_wishlist_ship = false;
-    }
-
-    /**
      * Initializes internal state of Model\Base\AxysUser object.
-     * @see applyDefaults()
      */
     public function __construct()
     {
-        $this->applyDefaultValues();
     }
 
     /**
@@ -803,16 +635,6 @@ abstract class AxysUser implements ActiveRecordInterface
     }
 
     /**
-     * Get the [facebook_uid] column value.
-     *
-     * @return int|null
-     */
-    public function getFacebookUid()
-    {
-        return $this->facebook_uid;
-    }
-
-    /**
      * Get the [user_screen_name] column value.
      *
      * @return string|null
@@ -830,86 +652,6 @@ abstract class AxysUser implements ActiveRecordInterface
     public function getSlug()
     {
         return $this->user_slug;
-    }
-
-    /**
-     * Get the [user_wishlist_ship] column value.
-     *
-     * @return boolean|null
-     */
-    public function getWishlistShip()
-    {
-        return $this->user_wishlist_ship;
-    }
-
-    /**
-     * Get the [user_wishlist_ship] column value.
-     *
-     * @return boolean|null
-     */
-    public function isWishlistShip()
-    {
-        return $this->getWishlistShip();
-    }
-
-    /**
-     * Get the [user_top] column value.
-     *
-     * @return boolean|null
-     */
-    public function getTop()
-    {
-        return $this->user_top;
-    }
-
-    /**
-     * Get the [user_top] column value.
-     *
-     * @return boolean|null
-     */
-    public function isTop()
-    {
-        return $this->getTop();
-    }
-
-    /**
-     * Get the [user_biblio] column value.
-     *
-     * @return boolean|null
-     */
-    public function getBiblio()
-    {
-        return $this->user_biblio;
-    }
-
-    /**
-     * Get the [user_biblio] column value.
-     *
-     * @return boolean|null
-     */
-    public function isBiblio()
-    {
-        return $this->getBiblio();
-    }
-
-    /**
-     * Get the [adresse_ip] column value.
-     *
-     * @return string|null
-     */
-    public function getAdresseIp()
-    {
-        return $this->adresse_ip;
-    }
-
-    /**
-     * Get the [recaptcha_score] column value.
-     *
-     * @return double|null
-     */
-    public function getRecaptchaScore()
-    {
-        return $this->recaptcha_score;
     }
 
     /**
@@ -957,46 +699,6 @@ abstract class AxysUser implements ActiveRecordInterface
     }
 
     /**
-     * Get the [publisher_id] column value.
-     *
-     * @return int|null
-     */
-    public function getPublisherId()
-    {
-        return $this->publisher_id;
-    }
-
-    /**
-     * Get the [bookshop_id] column value.
-     *
-     * @return int|null
-     */
-    public function getBookshopId()
-    {
-        return $this->bookshop_id;
-    }
-
-    /**
-     * Get the [library_id] column value.
-     *
-     * @return int|null
-     */
-    public function getLibraryId()
-    {
-        return $this->library_id;
-    }
-
-    /**
-     * Get the [user_civilite] column value.
-     *
-     * @return string|null
-     */
-    public function getCivilite()
-    {
-        return $this->user_civilite;
-    }
-
-    /**
      * Get the [user_nom] column value.
      *
      * @return string|null
@@ -1014,138 +716,6 @@ abstract class AxysUser implements ActiveRecordInterface
     public function getPrenom()
     {
         return $this->user_prenom;
-    }
-
-    /**
-     * Get the [user_adresse1] column value.
-     *
-     * @return string|null
-     */
-    public function getAdresse1()
-    {
-        return $this->user_adresse1;
-    }
-
-    /**
-     * Get the [user_adresse2] column value.
-     *
-     * @return string|null
-     */
-    public function getAdresse2()
-    {
-        return $this->user_adresse2;
-    }
-
-    /**
-     * Get the [user_codepostal] column value.
-     *
-     * @return string|null
-     */
-    public function getCodepostal()
-    {
-        return $this->user_codepostal;
-    }
-
-    /**
-     * Get the [user_ville] column value.
-     *
-     * @return string|null
-     */
-    public function getVille()
-    {
-        return $this->user_ville;
-    }
-
-    /**
-     * Get the [user_pays] column value.
-     *
-     * @return string|null
-     */
-    public function getPays()
-    {
-        return $this->user_pays;
-    }
-
-    /**
-     * Get the [user_telephone] column value.
-     *
-     * @return string|null
-     */
-    public function getTelephone()
-    {
-        return $this->user_telephone;
-    }
-
-    /**
-     * Get the [user_pref_articles_show] column value.
-     *
-     * @return string|null
-     */
-    public function getPrefArticlesShow()
-    {
-        return $this->user_pref_articles_show;
-    }
-
-    /**
-     * Get the [user_fb_id] column value.
-     *
-     * @return string|null
-     */
-    public function getFbId()
-    {
-        return $this->user_fb_id;
-    }
-
-    /**
-     * Get the [user_fb_token] column value.
-     *
-     * @return string|null
-     */
-    public function getFbToken()
-    {
-        return $this->user_fb_token;
-    }
-
-    /**
-     * Get the [country_id] column value.
-     *
-     * @return int|null
-     */
-    public function getCountryId()
-    {
-        return $this->country_id;
-    }
-
-    /**
-     * Get the [user_password_reset_token] column value.
-     *
-     * @return string|null
-     */
-    public function getPasswordResetToken()
-    {
-        return $this->user_password_reset_token;
-    }
-
-    /**
-     * Get the [optionally formatted] temporal [user_password_reset_token_created] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00.
-     *
-     * @throws \Propel\Runtime\Exception\PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getPasswordResetTokenCreated($format = null)
-    {
-        if ($format === null) {
-            return $this->user_password_reset_token_created;
-        } else {
-            return $this->user_password_reset_token_created instanceof \DateTimeInterface ? $this->user_password_reset_token_created->format($format) : null;
-        }
     }
 
     /**
@@ -1339,26 +909,6 @@ abstract class AxysUser implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [facebook_uid] column.
-     *
-     * @param int|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setFacebookUid($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->facebook_uid !== $v) {
-            $this->facebook_uid = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_FACEBOOK_UID] = true;
-        }
-
-        return $this;
-    }
-
-    /**
      * Set the value of [user_screen_name] column.
      *
      * @param string|null $v New value
@@ -1393,130 +943,6 @@ abstract class AxysUser implements ActiveRecordInterface
         if ($this->user_slug !== $v) {
             $this->user_slug = $v;
             $this->modifiedColumns[AxysUserTableMap::COL_USER_SLUG] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Sets the value of the [user_wishlist_ship] column.
-     * Non-boolean arguments are converted using the following rules:
-     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
-     * @param bool|integer|string|null $v The new value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setWishlistShip($v)
-    {
-        if ($v !== null) {
-            if (is_string($v)) {
-                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-            } else {
-                $v = (boolean) $v;
-            }
-        }
-
-        if ($this->user_wishlist_ship !== $v) {
-            $this->user_wishlist_ship = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_WISHLIST_SHIP] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Sets the value of the [user_top] column.
-     * Non-boolean arguments are converted using the following rules:
-     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
-     * @param bool|integer|string|null $v The new value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setTop($v)
-    {
-        if ($v !== null) {
-            if (is_string($v)) {
-                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-            } else {
-                $v = (boolean) $v;
-            }
-        }
-
-        if ($this->user_top !== $v) {
-            $this->user_top = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_TOP] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Sets the value of the [user_biblio] column.
-     * Non-boolean arguments are converted using the following rules:
-     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
-     * @param bool|integer|string|null $v The new value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setBiblio($v)
-    {
-        if ($v !== null) {
-            if (is_string($v)) {
-                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-            } else {
-                $v = (boolean) $v;
-            }
-        }
-
-        if ($this->user_biblio !== $v) {
-            $this->user_biblio = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_BIBLIO] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [adresse_ip] column.
-     *
-     * @param string|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setAdresseIp($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->adresse_ip !== $v) {
-            $this->adresse_ip = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_ADRESSE_IP] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [recaptcha_score] column.
-     *
-     * @param double|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setRecaptchaScore($v)
-    {
-        if ($v !== null) {
-            $v = (double) $v;
-        }
-
-        if ($this->recaptcha_score !== $v) {
-            $this->recaptcha_score = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_RECAPTCHA_SCORE] = true;
         }
 
         return $this;
@@ -1563,86 +989,6 @@ abstract class AxysUser implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [publisher_id] column.
-     *
-     * @param int|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setPublisherId($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->publisher_id !== $v) {
-            $this->publisher_id = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_PUBLISHER_ID] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [bookshop_id] column.
-     *
-     * @param int|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setBookshopId($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->bookshop_id !== $v) {
-            $this->bookshop_id = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_BOOKSHOP_ID] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [library_id] column.
-     *
-     * @param int|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setLibraryId($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->library_id !== $v) {
-            $this->library_id = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_LIBRARY_ID] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [user_civilite] column.
-     *
-     * @param string|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setCivilite($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->user_civilite !== $v) {
-            $this->user_civilite = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_CIVILITE] = true;
-        }
-
-        return $this;
-    }
-
-    /**
      * Set the value of [user_nom] column.
      *
      * @param string|null $v New value
@@ -1678,246 +1024,6 @@ abstract class AxysUser implements ActiveRecordInterface
             $this->user_prenom = $v;
             $this->modifiedColumns[AxysUserTableMap::COL_USER_PRENOM] = true;
         }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [user_adresse1] column.
-     *
-     * @param string|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setAdresse1($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->user_adresse1 !== $v) {
-            $this->user_adresse1 = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_ADRESSE1] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [user_adresse2] column.
-     *
-     * @param string|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setAdresse2($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->user_adresse2 !== $v) {
-            $this->user_adresse2 = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_ADRESSE2] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [user_codepostal] column.
-     *
-     * @param string|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setCodepostal($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->user_codepostal !== $v) {
-            $this->user_codepostal = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_CODEPOSTAL] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [user_ville] column.
-     *
-     * @param string|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setVille($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->user_ville !== $v) {
-            $this->user_ville = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_VILLE] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [user_pays] column.
-     *
-     * @param string|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setPays($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->user_pays !== $v) {
-            $this->user_pays = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_PAYS] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [user_telephone] column.
-     *
-     * @param string|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setTelephone($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->user_telephone !== $v) {
-            $this->user_telephone = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_TELEPHONE] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [user_pref_articles_show] column.
-     *
-     * @param string|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setPrefArticlesShow($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->user_pref_articles_show !== $v) {
-            $this->user_pref_articles_show = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_PREF_ARTICLES_SHOW] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [user_fb_id] column.
-     *
-     * @param string|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setFbId($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->user_fb_id !== $v) {
-            $this->user_fb_id = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_FB_ID] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [user_fb_token] column.
-     *
-     * @param string|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setFbToken($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->user_fb_token !== $v) {
-            $this->user_fb_token = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_FB_TOKEN] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [country_id] column.
-     *
-     * @param int|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setCountryId($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->country_id !== $v) {
-            $this->country_id = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_COUNTRY_ID] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [user_password_reset_token] column.
-     *
-     * @param string|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setPasswordResetToken($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->user_password_reset_token !== $v) {
-            $this->user_password_reset_token = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Sets the value of [user_password_reset_token_created] column to a normalized version of the date/time value specified.
-     *
-     * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this The current object (for fluent API support)
-     */
-    public function setPasswordResetTokenCreated($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->user_password_reset_token_created !== null || $dt !== null) {
-            if ($this->user_password_reset_token_created === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->user_password_reset_token_created->format("Y-m-d H:i:s.u")) {
-                $this->user_password_reset_token_created = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED] = true;
-            }
-        } // if either are not null
 
         return $this;
     }
@@ -1992,10 +1098,6 @@ abstract class AxysUser implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues(): bool
     {
-            if ($this->user_wishlist_ship !== false) {
-                return false;
-            }
-
         // otherwise, everything was equal, so return TRUE
         return true;
     }
@@ -2040,112 +1142,43 @@ abstract class AxysUser implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : AxysUserTableMap::translateFieldName('EmailKey', TableMap::TYPE_PHPNAME, $indexType)];
             $this->email_key = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : AxysUserTableMap::translateFieldName('FacebookUid', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->facebook_uid = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : AxysUserTableMap::translateFieldName('Username', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : AxysUserTableMap::translateFieldName('Username', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_screen_name = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : AxysUserTableMap::translateFieldName('Slug', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : AxysUserTableMap::translateFieldName('Slug', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_slug = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : AxysUserTableMap::translateFieldName('WishlistShip', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_wishlist_ship = (null !== $col) ? (boolean) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : AxysUserTableMap::translateFieldName('Top', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_top = (null !== $col) ? (boolean) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : AxysUserTableMap::translateFieldName('Biblio', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_biblio = (null !== $col) ? (boolean) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : AxysUserTableMap::translateFieldName('AdresseIp', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->adresse_ip = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : AxysUserTableMap::translateFieldName('RecaptchaScore', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->recaptcha_score = (null !== $col) ? (double) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : AxysUserTableMap::translateFieldName('Dateinscription', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : AxysUserTableMap::translateFieldName('Dateinscription', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->dateinscription = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : AxysUserTableMap::translateFieldName('Dateconnexion', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : AxysUserTableMap::translateFieldName('Dateconnexion', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->dateconnexion = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : AxysUserTableMap::translateFieldName('PublisherId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->publisher_id = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : AxysUserTableMap::translateFieldName('BookshopId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->bookshop_id = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 18 + $startcol : AxysUserTableMap::translateFieldName('LibraryId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->library_id = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 19 + $startcol : AxysUserTableMap::translateFieldName('Civilite', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_civilite = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 20 + $startcol : AxysUserTableMap::translateFieldName('Nom', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : AxysUserTableMap::translateFieldName('Nom', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_nom = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 21 + $startcol : AxysUserTableMap::translateFieldName('Prenom', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : AxysUserTableMap::translateFieldName('Prenom', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_prenom = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 22 + $startcol : AxysUserTableMap::translateFieldName('Adresse1', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_adresse1 = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 23 + $startcol : AxysUserTableMap::translateFieldName('Adresse2', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_adresse2 = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 24 + $startcol : AxysUserTableMap::translateFieldName('Codepostal', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_codepostal = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 25 + $startcol : AxysUserTableMap::translateFieldName('Ville', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_ville = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 26 + $startcol : AxysUserTableMap::translateFieldName('Pays', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_pays = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 27 + $startcol : AxysUserTableMap::translateFieldName('Telephone', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_telephone = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 28 + $startcol : AxysUserTableMap::translateFieldName('PrefArticlesShow', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_pref_articles_show = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 29 + $startcol : AxysUserTableMap::translateFieldName('FbId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_fb_id = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 30 + $startcol : AxysUserTableMap::translateFieldName('FbToken', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_fb_token = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 31 + $startcol : AxysUserTableMap::translateFieldName('CountryId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->country_id = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 32 + $startcol : AxysUserTableMap::translateFieldName('PasswordResetToken', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_password_reset_token = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 33 + $startcol : AxysUserTableMap::translateFieldName('PasswordResetTokenCreated', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->user_password_reset_token_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 34 + $startcol : AxysUserTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : AxysUserTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->user_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 35 + $startcol : AxysUserTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : AxysUserTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->user_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 36 + $startcol : AxysUserTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : AxysUserTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -2158,7 +1191,7 @@ abstract class AxysUser implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 37; // 37 = AxysUserTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 15; // 15 = AxysUserTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\AxysUser'), 0, $e);
@@ -2566,29 +1599,11 @@ abstract class AxysUser implements ActiveRecordInterface
         if ($this->isColumnModified(AxysUserTableMap::COL_EMAIL_KEY)) {
             $modifiedColumns[':p' . $index++]  = 'email_key';
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_FACEBOOK_UID)) {
-            $modifiedColumns[':p' . $index++]  = 'facebook_uid';
-        }
         if ($this->isColumnModified(AxysUserTableMap::COL_USER_SCREEN_NAME)) {
             $modifiedColumns[':p' . $index++]  = 'user_screen_name';
         }
         if ($this->isColumnModified(AxysUserTableMap::COL_USER_SLUG)) {
             $modifiedColumns[':p' . $index++]  = 'user_slug';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_WISHLIST_SHIP)) {
-            $modifiedColumns[':p' . $index++]  = 'user_wishlist_ship';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_TOP)) {
-            $modifiedColumns[':p' . $index++]  = 'user_top';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_BIBLIO)) {
-            $modifiedColumns[':p' . $index++]  = 'user_biblio';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_ADRESSE_IP)) {
-            $modifiedColumns[':p' . $index++]  = 'adresse_ip';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_RECAPTCHA_SCORE)) {
-            $modifiedColumns[':p' . $index++]  = 'recaptcha_score';
         }
         if ($this->isColumnModified(AxysUserTableMap::COL_DATEINSCRIPTION)) {
             $modifiedColumns[':p' . $index++]  = 'DateInscription';
@@ -2596,59 +1611,11 @@ abstract class AxysUser implements ActiveRecordInterface
         if ($this->isColumnModified(AxysUserTableMap::COL_DATECONNEXION)) {
             $modifiedColumns[':p' . $index++]  = 'DateConnexion';
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_PUBLISHER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'publisher_id';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_BOOKSHOP_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'bookshop_id';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_LIBRARY_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'library_id';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_CIVILITE)) {
-            $modifiedColumns[':p' . $index++]  = 'user_civilite';
-        }
         if ($this->isColumnModified(AxysUserTableMap::COL_USER_NOM)) {
             $modifiedColumns[':p' . $index++]  = 'user_nom';
         }
         if ($this->isColumnModified(AxysUserTableMap::COL_USER_PRENOM)) {
             $modifiedColumns[':p' . $index++]  = 'user_prenom';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_ADRESSE1)) {
-            $modifiedColumns[':p' . $index++]  = 'user_adresse1';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_ADRESSE2)) {
-            $modifiedColumns[':p' . $index++]  = 'user_adresse2';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_CODEPOSTAL)) {
-            $modifiedColumns[':p' . $index++]  = 'user_codepostal';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_VILLE)) {
-            $modifiedColumns[':p' . $index++]  = 'user_ville';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_PAYS)) {
-            $modifiedColumns[':p' . $index++]  = 'user_pays';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_TELEPHONE)) {
-            $modifiedColumns[':p' . $index++]  = 'user_telephone';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_PREF_ARTICLES_SHOW)) {
-            $modifiedColumns[':p' . $index++]  = 'user_pref_articles_show';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_FB_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'user_fb_id';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_FB_TOKEN)) {
-            $modifiedColumns[':p' . $index++]  = 'user_fb_token';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_COUNTRY_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'country_id';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN)) {
-            $modifiedColumns[':p' . $index++]  = 'user_password_reset_token';
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED)) {
-            $modifiedColumns[':p' . $index++]  = 'user_password_reset_token_created';
         }
         if ($this->isColumnModified(AxysUserTableMap::COL_USER_UPDATE)) {
             $modifiedColumns[':p' . $index++]  = 'user_update';
@@ -2694,36 +1661,12 @@ abstract class AxysUser implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->email_key, PDO::PARAM_STR);
 
                         break;
-                    case 'facebook_uid':
-                        $stmt->bindValue($identifier, $this->facebook_uid, PDO::PARAM_INT);
-
-                        break;
                     case 'user_screen_name':
                         $stmt->bindValue($identifier, $this->user_screen_name, PDO::PARAM_STR);
 
                         break;
                     case 'user_slug':
                         $stmt->bindValue($identifier, $this->user_slug, PDO::PARAM_STR);
-
-                        break;
-                    case 'user_wishlist_ship':
-                        $stmt->bindValue($identifier, (int) $this->user_wishlist_ship, PDO::PARAM_INT);
-
-                        break;
-                    case 'user_top':
-                        $stmt->bindValue($identifier, (int) $this->user_top, PDO::PARAM_INT);
-
-                        break;
-                    case 'user_biblio':
-                        $stmt->bindValue($identifier, (int) $this->user_biblio, PDO::PARAM_INT);
-
-                        break;
-                    case 'adresse_ip':
-                        $stmt->bindValue($identifier, $this->adresse_ip, PDO::PARAM_STR);
-
-                        break;
-                    case 'recaptcha_score':
-                        $stmt->bindValue($identifier, $this->recaptcha_score, PDO::PARAM_STR);
 
                         break;
                     case 'DateInscription':
@@ -2734,76 +1677,12 @@ abstract class AxysUser implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->dateconnexion ? $this->dateconnexion->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
 
                         break;
-                    case 'publisher_id':
-                        $stmt->bindValue($identifier, $this->publisher_id, PDO::PARAM_INT);
-
-                        break;
-                    case 'bookshop_id':
-                        $stmt->bindValue($identifier, $this->bookshop_id, PDO::PARAM_INT);
-
-                        break;
-                    case 'library_id':
-                        $stmt->bindValue($identifier, $this->library_id, PDO::PARAM_INT);
-
-                        break;
-                    case 'user_civilite':
-                        $stmt->bindValue($identifier, $this->user_civilite, PDO::PARAM_STR);
-
-                        break;
                     case 'user_nom':
                         $stmt->bindValue($identifier, $this->user_nom, PDO::PARAM_STR);
 
                         break;
                     case 'user_prenom':
                         $stmt->bindValue($identifier, $this->user_prenom, PDO::PARAM_STR);
-
-                        break;
-                    case 'user_adresse1':
-                        $stmt->bindValue($identifier, $this->user_adresse1, PDO::PARAM_STR);
-
-                        break;
-                    case 'user_adresse2':
-                        $stmt->bindValue($identifier, $this->user_adresse2, PDO::PARAM_STR);
-
-                        break;
-                    case 'user_codepostal':
-                        $stmt->bindValue($identifier, $this->user_codepostal, PDO::PARAM_STR);
-
-                        break;
-                    case 'user_ville':
-                        $stmt->bindValue($identifier, $this->user_ville, PDO::PARAM_STR);
-
-                        break;
-                    case 'user_pays':
-                        $stmt->bindValue($identifier, $this->user_pays, PDO::PARAM_STR);
-
-                        break;
-                    case 'user_telephone':
-                        $stmt->bindValue($identifier, $this->user_telephone, PDO::PARAM_STR);
-
-                        break;
-                    case 'user_pref_articles_show':
-                        $stmt->bindValue($identifier, $this->user_pref_articles_show, PDO::PARAM_STR);
-
-                        break;
-                    case 'user_fb_id':
-                        $stmt->bindValue($identifier, $this->user_fb_id, PDO::PARAM_INT);
-
-                        break;
-                    case 'user_fb_token':
-                        $stmt->bindValue($identifier, $this->user_fb_token, PDO::PARAM_STR);
-
-                        break;
-                    case 'country_id':
-                        $stmt->bindValue($identifier, $this->country_id, PDO::PARAM_INT);
-
-                        break;
-                    case 'user_password_reset_token':
-                        $stmt->bindValue($identifier, $this->user_password_reset_token, PDO::PARAM_STR);
-
-                        break;
-                    case 'user_password_reset_token_created':
-                        $stmt->bindValue($identifier, $this->user_password_reset_token_created ? $this->user_password_reset_token_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
 
                         break;
                     case 'user_update':
@@ -2899,96 +1778,30 @@ abstract class AxysUser implements ActiveRecordInterface
                 return $this->getEmailKey();
 
             case 6:
-                return $this->getFacebookUid();
-
-            case 7:
                 return $this->getUsername();
 
-            case 8:
+            case 7:
                 return $this->getSlug();
 
-            case 9:
-                return $this->getWishlistShip();
-
-            case 10:
-                return $this->getTop();
-
-            case 11:
-                return $this->getBiblio();
-
-            case 12:
-                return $this->getAdresseIp();
-
-            case 13:
-                return $this->getRecaptchaScore();
-
-            case 14:
+            case 8:
                 return $this->getDateinscription();
 
-            case 15:
+            case 9:
                 return $this->getDateconnexion();
 
-            case 16:
-                return $this->getPublisherId();
-
-            case 17:
-                return $this->getBookshopId();
-
-            case 18:
-                return $this->getLibraryId();
-
-            case 19:
-                return $this->getCivilite();
-
-            case 20:
+            case 10:
                 return $this->getNom();
 
-            case 21:
+            case 11:
                 return $this->getPrenom();
 
-            case 22:
-                return $this->getAdresse1();
-
-            case 23:
-                return $this->getAdresse2();
-
-            case 24:
-                return $this->getCodepostal();
-
-            case 25:
-                return $this->getVille();
-
-            case 26:
-                return $this->getPays();
-
-            case 27:
-                return $this->getTelephone();
-
-            case 28:
-                return $this->getPrefArticlesShow();
-
-            case 29:
-                return $this->getFbId();
-
-            case 30:
-                return $this->getFbToken();
-
-            case 31:
-                return $this->getCountryId();
-
-            case 32:
-                return $this->getPasswordResetToken();
-
-            case 33:
-                return $this->getPasswordResetTokenCreated();
-
-            case 34:
+            case 12:
                 return $this->getUpdate();
 
-            case 35:
+            case 13:
                 return $this->getCreatedAt();
 
-            case 36:
+            case 14:
                 return $this->getUpdatedAt();
 
             default:
@@ -3025,60 +1838,34 @@ abstract class AxysUser implements ActiveRecordInterface
             $keys[3] => $this->getPassword(),
             $keys[4] => $this->getKey(),
             $keys[5] => $this->getEmailKey(),
-            $keys[6] => $this->getFacebookUid(),
-            $keys[7] => $this->getUsername(),
-            $keys[8] => $this->getSlug(),
-            $keys[9] => $this->getWishlistShip(),
-            $keys[10] => $this->getTop(),
-            $keys[11] => $this->getBiblio(),
-            $keys[12] => $this->getAdresseIp(),
-            $keys[13] => $this->getRecaptchaScore(),
-            $keys[14] => $this->getDateinscription(),
-            $keys[15] => $this->getDateconnexion(),
-            $keys[16] => $this->getPublisherId(),
-            $keys[17] => $this->getBookshopId(),
-            $keys[18] => $this->getLibraryId(),
-            $keys[19] => $this->getCivilite(),
-            $keys[20] => $this->getNom(),
-            $keys[21] => $this->getPrenom(),
-            $keys[22] => $this->getAdresse1(),
-            $keys[23] => $this->getAdresse2(),
-            $keys[24] => $this->getCodepostal(),
-            $keys[25] => $this->getVille(),
-            $keys[26] => $this->getPays(),
-            $keys[27] => $this->getTelephone(),
-            $keys[28] => $this->getPrefArticlesShow(),
-            $keys[29] => $this->getFbId(),
-            $keys[30] => $this->getFbToken(),
-            $keys[31] => $this->getCountryId(),
-            $keys[32] => $this->getPasswordResetToken(),
-            $keys[33] => $this->getPasswordResetTokenCreated(),
-            $keys[34] => $this->getUpdate(),
-            $keys[35] => $this->getCreatedAt(),
-            $keys[36] => $this->getUpdatedAt(),
+            $keys[6] => $this->getUsername(),
+            $keys[7] => $this->getSlug(),
+            $keys[8] => $this->getDateinscription(),
+            $keys[9] => $this->getDateconnexion(),
+            $keys[10] => $this->getNom(),
+            $keys[11] => $this->getPrenom(),
+            $keys[12] => $this->getUpdate(),
+            $keys[13] => $this->getCreatedAt(),
+            $keys[14] => $this->getUpdatedAt(),
         ];
+        if ($result[$keys[8]] instanceof \DateTimeInterface) {
+            $result[$keys[8]] = $result[$keys[8]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[9]] instanceof \DateTimeInterface) {
+            $result[$keys[9]] = $result[$keys[9]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[12]] instanceof \DateTimeInterface) {
+            $result[$keys[12]] = $result[$keys[12]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[13]] instanceof \DateTimeInterface) {
+            $result[$keys[13]] = $result[$keys[13]]->format('Y-m-d H:i:s.u');
+        }
+
         if ($result[$keys[14]] instanceof \DateTimeInterface) {
             $result[$keys[14]] = $result[$keys[14]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[15]] instanceof \DateTimeInterface) {
-            $result[$keys[15]] = $result[$keys[15]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[33]] instanceof \DateTimeInterface) {
-            $result[$keys[33]] = $result[$keys[33]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[34]] instanceof \DateTimeInterface) {
-            $result[$keys[34]] = $result[$keys[34]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[35]] instanceof \DateTimeInterface) {
-            $result[$keys[35]] = $result[$keys[35]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[36]] instanceof \DateTimeInterface) {
-            $result[$keys[36]] = $result[$keys[36]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -3277,96 +2064,30 @@ abstract class AxysUser implements ActiveRecordInterface
                 $this->setEmailKey($value);
                 break;
             case 6:
-                $this->setFacebookUid($value);
-                break;
-            case 7:
                 $this->setUsername($value);
                 break;
-            case 8:
+            case 7:
                 $this->setSlug($value);
                 break;
-            case 9:
-                $this->setWishlistShip($value);
-                break;
-            case 10:
-                $this->setTop($value);
-                break;
-            case 11:
-                $this->setBiblio($value);
-                break;
-            case 12:
-                $this->setAdresseIp($value);
-                break;
-            case 13:
-                $this->setRecaptchaScore($value);
-                break;
-            case 14:
+            case 8:
                 $this->setDateinscription($value);
                 break;
-            case 15:
+            case 9:
                 $this->setDateconnexion($value);
                 break;
-            case 16:
-                $this->setPublisherId($value);
-                break;
-            case 17:
-                $this->setBookshopId($value);
-                break;
-            case 18:
-                $this->setLibraryId($value);
-                break;
-            case 19:
-                $this->setCivilite($value);
-                break;
-            case 20:
+            case 10:
                 $this->setNom($value);
                 break;
-            case 21:
+            case 11:
                 $this->setPrenom($value);
                 break;
-            case 22:
-                $this->setAdresse1($value);
-                break;
-            case 23:
-                $this->setAdresse2($value);
-                break;
-            case 24:
-                $this->setCodepostal($value);
-                break;
-            case 25:
-                $this->setVille($value);
-                break;
-            case 26:
-                $this->setPays($value);
-                break;
-            case 27:
-                $this->setTelephone($value);
-                break;
-            case 28:
-                $this->setPrefArticlesShow($value);
-                break;
-            case 29:
-                $this->setFbId($value);
-                break;
-            case 30:
-                $this->setFbToken($value);
-                break;
-            case 31:
-                $this->setCountryId($value);
-                break;
-            case 32:
-                $this->setPasswordResetToken($value);
-                break;
-            case 33:
-                $this->setPasswordResetTokenCreated($value);
-                break;
-            case 34:
+            case 12:
                 $this->setUpdate($value);
                 break;
-            case 35:
+            case 13:
                 $this->setCreatedAt($value);
                 break;
-            case 36:
+            case 14:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -3414,97 +2135,31 @@ abstract class AxysUser implements ActiveRecordInterface
             $this->setEmailKey($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setFacebookUid($arr[$keys[6]]);
+            $this->setUsername($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setUsername($arr[$keys[7]]);
+            $this->setSlug($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setSlug($arr[$keys[8]]);
+            $this->setDateinscription($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setWishlistShip($arr[$keys[9]]);
+            $this->setDateconnexion($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setTop($arr[$keys[10]]);
+            $this->setNom($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setBiblio($arr[$keys[11]]);
+            $this->setPrenom($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setAdresseIp($arr[$keys[12]]);
+            $this->setUpdate($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
-            $this->setRecaptchaScore($arr[$keys[13]]);
+            $this->setCreatedAt($arr[$keys[13]]);
         }
         if (array_key_exists($keys[14], $arr)) {
-            $this->setDateinscription($arr[$keys[14]]);
-        }
-        if (array_key_exists($keys[15], $arr)) {
-            $this->setDateconnexion($arr[$keys[15]]);
-        }
-        if (array_key_exists($keys[16], $arr)) {
-            $this->setPublisherId($arr[$keys[16]]);
-        }
-        if (array_key_exists($keys[17], $arr)) {
-            $this->setBookshopId($arr[$keys[17]]);
-        }
-        if (array_key_exists($keys[18], $arr)) {
-            $this->setLibraryId($arr[$keys[18]]);
-        }
-        if (array_key_exists($keys[19], $arr)) {
-            $this->setCivilite($arr[$keys[19]]);
-        }
-        if (array_key_exists($keys[20], $arr)) {
-            $this->setNom($arr[$keys[20]]);
-        }
-        if (array_key_exists($keys[21], $arr)) {
-            $this->setPrenom($arr[$keys[21]]);
-        }
-        if (array_key_exists($keys[22], $arr)) {
-            $this->setAdresse1($arr[$keys[22]]);
-        }
-        if (array_key_exists($keys[23], $arr)) {
-            $this->setAdresse2($arr[$keys[23]]);
-        }
-        if (array_key_exists($keys[24], $arr)) {
-            $this->setCodepostal($arr[$keys[24]]);
-        }
-        if (array_key_exists($keys[25], $arr)) {
-            $this->setVille($arr[$keys[25]]);
-        }
-        if (array_key_exists($keys[26], $arr)) {
-            $this->setPays($arr[$keys[26]]);
-        }
-        if (array_key_exists($keys[27], $arr)) {
-            $this->setTelephone($arr[$keys[27]]);
-        }
-        if (array_key_exists($keys[28], $arr)) {
-            $this->setPrefArticlesShow($arr[$keys[28]]);
-        }
-        if (array_key_exists($keys[29], $arr)) {
-            $this->setFbId($arr[$keys[29]]);
-        }
-        if (array_key_exists($keys[30], $arr)) {
-            $this->setFbToken($arr[$keys[30]]);
-        }
-        if (array_key_exists($keys[31], $arr)) {
-            $this->setCountryId($arr[$keys[31]]);
-        }
-        if (array_key_exists($keys[32], $arr)) {
-            $this->setPasswordResetToken($arr[$keys[32]]);
-        }
-        if (array_key_exists($keys[33], $arr)) {
-            $this->setPasswordResetTokenCreated($arr[$keys[33]]);
-        }
-        if (array_key_exists($keys[34], $arr)) {
-            $this->setUpdate($arr[$keys[34]]);
-        }
-        if (array_key_exists($keys[35], $arr)) {
-            $this->setCreatedAt($arr[$keys[35]]);
-        }
-        if (array_key_exists($keys[36], $arr)) {
-            $this->setUpdatedAt($arr[$keys[36]]);
+            $this->setUpdatedAt($arr[$keys[14]]);
         }
 
         return $this;
@@ -3567,29 +2222,11 @@ abstract class AxysUser implements ActiveRecordInterface
         if ($this->isColumnModified(AxysUserTableMap::COL_EMAIL_KEY)) {
             $criteria->add(AxysUserTableMap::COL_EMAIL_KEY, $this->email_key);
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_FACEBOOK_UID)) {
-            $criteria->add(AxysUserTableMap::COL_FACEBOOK_UID, $this->facebook_uid);
-        }
         if ($this->isColumnModified(AxysUserTableMap::COL_USER_SCREEN_NAME)) {
             $criteria->add(AxysUserTableMap::COL_USER_SCREEN_NAME, $this->user_screen_name);
         }
         if ($this->isColumnModified(AxysUserTableMap::COL_USER_SLUG)) {
             $criteria->add(AxysUserTableMap::COL_USER_SLUG, $this->user_slug);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_WISHLIST_SHIP)) {
-            $criteria->add(AxysUserTableMap::COL_USER_WISHLIST_SHIP, $this->user_wishlist_ship);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_TOP)) {
-            $criteria->add(AxysUserTableMap::COL_USER_TOP, $this->user_top);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_BIBLIO)) {
-            $criteria->add(AxysUserTableMap::COL_USER_BIBLIO, $this->user_biblio);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_ADRESSE_IP)) {
-            $criteria->add(AxysUserTableMap::COL_ADRESSE_IP, $this->adresse_ip);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_RECAPTCHA_SCORE)) {
-            $criteria->add(AxysUserTableMap::COL_RECAPTCHA_SCORE, $this->recaptcha_score);
         }
         if ($this->isColumnModified(AxysUserTableMap::COL_DATEINSCRIPTION)) {
             $criteria->add(AxysUserTableMap::COL_DATEINSCRIPTION, $this->dateinscription);
@@ -3597,59 +2234,11 @@ abstract class AxysUser implements ActiveRecordInterface
         if ($this->isColumnModified(AxysUserTableMap::COL_DATECONNEXION)) {
             $criteria->add(AxysUserTableMap::COL_DATECONNEXION, $this->dateconnexion);
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_PUBLISHER_ID)) {
-            $criteria->add(AxysUserTableMap::COL_PUBLISHER_ID, $this->publisher_id);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_BOOKSHOP_ID)) {
-            $criteria->add(AxysUserTableMap::COL_BOOKSHOP_ID, $this->bookshop_id);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_LIBRARY_ID)) {
-            $criteria->add(AxysUserTableMap::COL_LIBRARY_ID, $this->library_id);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_CIVILITE)) {
-            $criteria->add(AxysUserTableMap::COL_USER_CIVILITE, $this->user_civilite);
-        }
         if ($this->isColumnModified(AxysUserTableMap::COL_USER_NOM)) {
             $criteria->add(AxysUserTableMap::COL_USER_NOM, $this->user_nom);
         }
         if ($this->isColumnModified(AxysUserTableMap::COL_USER_PRENOM)) {
             $criteria->add(AxysUserTableMap::COL_USER_PRENOM, $this->user_prenom);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_ADRESSE1)) {
-            $criteria->add(AxysUserTableMap::COL_USER_ADRESSE1, $this->user_adresse1);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_ADRESSE2)) {
-            $criteria->add(AxysUserTableMap::COL_USER_ADRESSE2, $this->user_adresse2);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_CODEPOSTAL)) {
-            $criteria->add(AxysUserTableMap::COL_USER_CODEPOSTAL, $this->user_codepostal);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_VILLE)) {
-            $criteria->add(AxysUserTableMap::COL_USER_VILLE, $this->user_ville);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_PAYS)) {
-            $criteria->add(AxysUserTableMap::COL_USER_PAYS, $this->user_pays);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_TELEPHONE)) {
-            $criteria->add(AxysUserTableMap::COL_USER_TELEPHONE, $this->user_telephone);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_PREF_ARTICLES_SHOW)) {
-            $criteria->add(AxysUserTableMap::COL_USER_PREF_ARTICLES_SHOW, $this->user_pref_articles_show);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_FB_ID)) {
-            $criteria->add(AxysUserTableMap::COL_USER_FB_ID, $this->user_fb_id);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_FB_TOKEN)) {
-            $criteria->add(AxysUserTableMap::COL_USER_FB_TOKEN, $this->user_fb_token);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_COUNTRY_ID)) {
-            $criteria->add(AxysUserTableMap::COL_COUNTRY_ID, $this->country_id);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN)) {
-            $criteria->add(AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN, $this->user_password_reset_token);
-        }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED)) {
-            $criteria->add(AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED, $this->user_password_reset_token_created);
         }
         if ($this->isColumnModified(AxysUserTableMap::COL_USER_UPDATE)) {
             $criteria->add(AxysUserTableMap::COL_USER_UPDATE, $this->user_update);
@@ -3753,34 +2342,12 @@ abstract class AxysUser implements ActiveRecordInterface
         $copyObj->setPassword($this->getPassword());
         $copyObj->setKey($this->getKey());
         $copyObj->setEmailKey($this->getEmailKey());
-        $copyObj->setFacebookUid($this->getFacebookUid());
         $copyObj->setUsername($this->getUsername());
         $copyObj->setSlug($this->getSlug());
-        $copyObj->setWishlistShip($this->getWishlistShip());
-        $copyObj->setTop($this->getTop());
-        $copyObj->setBiblio($this->getBiblio());
-        $copyObj->setAdresseIp($this->getAdresseIp());
-        $copyObj->setRecaptchaScore($this->getRecaptchaScore());
         $copyObj->setDateinscription($this->getDateinscription());
         $copyObj->setDateconnexion($this->getDateconnexion());
-        $copyObj->setPublisherId($this->getPublisherId());
-        $copyObj->setBookshopId($this->getBookshopId());
-        $copyObj->setLibraryId($this->getLibraryId());
-        $copyObj->setCivilite($this->getCivilite());
         $copyObj->setNom($this->getNom());
         $copyObj->setPrenom($this->getPrenom());
-        $copyObj->setAdresse1($this->getAdresse1());
-        $copyObj->setAdresse2($this->getAdresse2());
-        $copyObj->setCodepostal($this->getCodepostal());
-        $copyObj->setVille($this->getVille());
-        $copyObj->setPays($this->getPays());
-        $copyObj->setTelephone($this->getTelephone());
-        $copyObj->setPrefArticlesShow($this->getPrefArticlesShow());
-        $copyObj->setFbId($this->getFbId());
-        $copyObj->setFbToken($this->getFbToken());
-        $copyObj->setCountryId($this->getCountryId());
-        $copyObj->setPasswordResetToken($this->getPasswordResetToken());
-        $copyObj->setPasswordResetTokenCreated($this->getPasswordResetTokenCreated());
         $copyObj->setUpdate($this->getUpdate());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
@@ -6102,40 +4669,17 @@ abstract class AxysUser implements ActiveRecordInterface
         $this->user_password = null;
         $this->user_key = null;
         $this->email_key = null;
-        $this->facebook_uid = null;
         $this->user_screen_name = null;
         $this->user_slug = null;
-        $this->user_wishlist_ship = null;
-        $this->user_top = null;
-        $this->user_biblio = null;
-        $this->adresse_ip = null;
-        $this->recaptcha_score = null;
         $this->dateinscription = null;
         $this->dateconnexion = null;
-        $this->publisher_id = null;
-        $this->bookshop_id = null;
-        $this->library_id = null;
-        $this->user_civilite = null;
         $this->user_nom = null;
         $this->user_prenom = null;
-        $this->user_adresse1 = null;
-        $this->user_adresse2 = null;
-        $this->user_codepostal = null;
-        $this->user_ville = null;
-        $this->user_pays = null;
-        $this->user_telephone = null;
-        $this->user_pref_articles_show = null;
-        $this->user_fb_id = null;
-        $this->user_fb_token = null;
-        $this->country_id = null;
-        $this->user_password_reset_token = null;
-        $this->user_password_reset_token_created = null;
         $this->user_update = null;
         $this->user_created = null;
         $this->user_updated = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
-        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

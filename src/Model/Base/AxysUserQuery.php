@@ -25,34 +25,12 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAxysUserQuery orderByPassword($order = Criteria::ASC) Order by the user_password column
  * @method     ChildAxysUserQuery orderByKey($order = Criteria::ASC) Order by the user_key column
  * @method     ChildAxysUserQuery orderByEmailKey($order = Criteria::ASC) Order by the email_key column
- * @method     ChildAxysUserQuery orderByFacebookUid($order = Criteria::ASC) Order by the facebook_uid column
  * @method     ChildAxysUserQuery orderByUsername($order = Criteria::ASC) Order by the user_screen_name column
  * @method     ChildAxysUserQuery orderBySlug($order = Criteria::ASC) Order by the user_slug column
- * @method     ChildAxysUserQuery orderByWishlistShip($order = Criteria::ASC) Order by the user_wishlist_ship column
- * @method     ChildAxysUserQuery orderByTop($order = Criteria::ASC) Order by the user_top column
- * @method     ChildAxysUserQuery orderByBiblio($order = Criteria::ASC) Order by the user_biblio column
- * @method     ChildAxysUserQuery orderByAdresseIp($order = Criteria::ASC) Order by the adresse_ip column
- * @method     ChildAxysUserQuery orderByRecaptchaScore($order = Criteria::ASC) Order by the recaptcha_score column
  * @method     ChildAxysUserQuery orderByDateinscription($order = Criteria::ASC) Order by the DateInscription column
  * @method     ChildAxysUserQuery orderByDateconnexion($order = Criteria::ASC) Order by the DateConnexion column
- * @method     ChildAxysUserQuery orderByPublisherId($order = Criteria::ASC) Order by the publisher_id column
- * @method     ChildAxysUserQuery orderByBookshopId($order = Criteria::ASC) Order by the bookshop_id column
- * @method     ChildAxysUserQuery orderByLibraryId($order = Criteria::ASC) Order by the library_id column
- * @method     ChildAxysUserQuery orderByCivilite($order = Criteria::ASC) Order by the user_civilite column
  * @method     ChildAxysUserQuery orderByNom($order = Criteria::ASC) Order by the user_nom column
  * @method     ChildAxysUserQuery orderByPrenom($order = Criteria::ASC) Order by the user_prenom column
- * @method     ChildAxysUserQuery orderByAdresse1($order = Criteria::ASC) Order by the user_adresse1 column
- * @method     ChildAxysUserQuery orderByAdresse2($order = Criteria::ASC) Order by the user_adresse2 column
- * @method     ChildAxysUserQuery orderByCodepostal($order = Criteria::ASC) Order by the user_codepostal column
- * @method     ChildAxysUserQuery orderByVille($order = Criteria::ASC) Order by the user_ville column
- * @method     ChildAxysUserQuery orderByPays($order = Criteria::ASC) Order by the user_pays column
- * @method     ChildAxysUserQuery orderByTelephone($order = Criteria::ASC) Order by the user_telephone column
- * @method     ChildAxysUserQuery orderByPrefArticlesShow($order = Criteria::ASC) Order by the user_pref_articles_show column
- * @method     ChildAxysUserQuery orderByFbId($order = Criteria::ASC) Order by the user_fb_id column
- * @method     ChildAxysUserQuery orderByFbToken($order = Criteria::ASC) Order by the user_fb_token column
- * @method     ChildAxysUserQuery orderByCountryId($order = Criteria::ASC) Order by the country_id column
- * @method     ChildAxysUserQuery orderByPasswordResetToken($order = Criteria::ASC) Order by the user_password_reset_token column
- * @method     ChildAxysUserQuery orderByPasswordResetTokenCreated($order = Criteria::ASC) Order by the user_password_reset_token_created column
  * @method     ChildAxysUserQuery orderByUpdate($order = Criteria::ASC) Order by the user_update column
  * @method     ChildAxysUserQuery orderByCreatedAt($order = Criteria::ASC) Order by the user_created column
  * @method     ChildAxysUserQuery orderByUpdatedAt($order = Criteria::ASC) Order by the user_updated column
@@ -63,34 +41,12 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAxysUserQuery groupByPassword() Group by the user_password column
  * @method     ChildAxysUserQuery groupByKey() Group by the user_key column
  * @method     ChildAxysUserQuery groupByEmailKey() Group by the email_key column
- * @method     ChildAxysUserQuery groupByFacebookUid() Group by the facebook_uid column
  * @method     ChildAxysUserQuery groupByUsername() Group by the user_screen_name column
  * @method     ChildAxysUserQuery groupBySlug() Group by the user_slug column
- * @method     ChildAxysUserQuery groupByWishlistShip() Group by the user_wishlist_ship column
- * @method     ChildAxysUserQuery groupByTop() Group by the user_top column
- * @method     ChildAxysUserQuery groupByBiblio() Group by the user_biblio column
- * @method     ChildAxysUserQuery groupByAdresseIp() Group by the adresse_ip column
- * @method     ChildAxysUserQuery groupByRecaptchaScore() Group by the recaptcha_score column
  * @method     ChildAxysUserQuery groupByDateinscription() Group by the DateInscription column
  * @method     ChildAxysUserQuery groupByDateconnexion() Group by the DateConnexion column
- * @method     ChildAxysUserQuery groupByPublisherId() Group by the publisher_id column
- * @method     ChildAxysUserQuery groupByBookshopId() Group by the bookshop_id column
- * @method     ChildAxysUserQuery groupByLibraryId() Group by the library_id column
- * @method     ChildAxysUserQuery groupByCivilite() Group by the user_civilite column
  * @method     ChildAxysUserQuery groupByNom() Group by the user_nom column
  * @method     ChildAxysUserQuery groupByPrenom() Group by the user_prenom column
- * @method     ChildAxysUserQuery groupByAdresse1() Group by the user_adresse1 column
- * @method     ChildAxysUserQuery groupByAdresse2() Group by the user_adresse2 column
- * @method     ChildAxysUserQuery groupByCodepostal() Group by the user_codepostal column
- * @method     ChildAxysUserQuery groupByVille() Group by the user_ville column
- * @method     ChildAxysUserQuery groupByPays() Group by the user_pays column
- * @method     ChildAxysUserQuery groupByTelephone() Group by the user_telephone column
- * @method     ChildAxysUserQuery groupByPrefArticlesShow() Group by the user_pref_articles_show column
- * @method     ChildAxysUserQuery groupByFbId() Group by the user_fb_id column
- * @method     ChildAxysUserQuery groupByFbToken() Group by the user_fb_token column
- * @method     ChildAxysUserQuery groupByCountryId() Group by the country_id column
- * @method     ChildAxysUserQuery groupByPasswordResetToken() Group by the user_password_reset_token column
- * @method     ChildAxysUserQuery groupByPasswordResetTokenCreated() Group by the user_password_reset_token_created column
  * @method     ChildAxysUserQuery groupByUpdate() Group by the user_update column
  * @method     ChildAxysUserQuery groupByCreatedAt() Group by the user_created column
  * @method     ChildAxysUserQuery groupByUpdatedAt() Group by the user_updated column
@@ -204,34 +160,12 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAxysUser|null findOneByPassword(string $user_password) Return the first ChildAxysUser filtered by the user_password column
  * @method     ChildAxysUser|null findOneByKey(string $user_key) Return the first ChildAxysUser filtered by the user_key column
  * @method     ChildAxysUser|null findOneByEmailKey(string $email_key) Return the first ChildAxysUser filtered by the email_key column
- * @method     ChildAxysUser|null findOneByFacebookUid(int $facebook_uid) Return the first ChildAxysUser filtered by the facebook_uid column
  * @method     ChildAxysUser|null findOneByUsername(string $user_screen_name) Return the first ChildAxysUser filtered by the user_screen_name column
  * @method     ChildAxysUser|null findOneBySlug(string $user_slug) Return the first ChildAxysUser filtered by the user_slug column
- * @method     ChildAxysUser|null findOneByWishlistShip(boolean $user_wishlist_ship) Return the first ChildAxysUser filtered by the user_wishlist_ship column
- * @method     ChildAxysUser|null findOneByTop(boolean $user_top) Return the first ChildAxysUser filtered by the user_top column
- * @method     ChildAxysUser|null findOneByBiblio(boolean $user_biblio) Return the first ChildAxysUser filtered by the user_biblio column
- * @method     ChildAxysUser|null findOneByAdresseIp(string $adresse_ip) Return the first ChildAxysUser filtered by the adresse_ip column
- * @method     ChildAxysUser|null findOneByRecaptchaScore(double $recaptcha_score) Return the first ChildAxysUser filtered by the recaptcha_score column
  * @method     ChildAxysUser|null findOneByDateinscription(string $DateInscription) Return the first ChildAxysUser filtered by the DateInscription column
  * @method     ChildAxysUser|null findOneByDateconnexion(string $DateConnexion) Return the first ChildAxysUser filtered by the DateConnexion column
- * @method     ChildAxysUser|null findOneByPublisherId(int $publisher_id) Return the first ChildAxysUser filtered by the publisher_id column
- * @method     ChildAxysUser|null findOneByBookshopId(int $bookshop_id) Return the first ChildAxysUser filtered by the bookshop_id column
- * @method     ChildAxysUser|null findOneByLibraryId(int $library_id) Return the first ChildAxysUser filtered by the library_id column
- * @method     ChildAxysUser|null findOneByCivilite(string $user_civilite) Return the first ChildAxysUser filtered by the user_civilite column
  * @method     ChildAxysUser|null findOneByNom(string $user_nom) Return the first ChildAxysUser filtered by the user_nom column
  * @method     ChildAxysUser|null findOneByPrenom(string $user_prenom) Return the first ChildAxysUser filtered by the user_prenom column
- * @method     ChildAxysUser|null findOneByAdresse1(string $user_adresse1) Return the first ChildAxysUser filtered by the user_adresse1 column
- * @method     ChildAxysUser|null findOneByAdresse2(string $user_adresse2) Return the first ChildAxysUser filtered by the user_adresse2 column
- * @method     ChildAxysUser|null findOneByCodepostal(string $user_codepostal) Return the first ChildAxysUser filtered by the user_codepostal column
- * @method     ChildAxysUser|null findOneByVille(string $user_ville) Return the first ChildAxysUser filtered by the user_ville column
- * @method     ChildAxysUser|null findOneByPays(string $user_pays) Return the first ChildAxysUser filtered by the user_pays column
- * @method     ChildAxysUser|null findOneByTelephone(string $user_telephone) Return the first ChildAxysUser filtered by the user_telephone column
- * @method     ChildAxysUser|null findOneByPrefArticlesShow(string $user_pref_articles_show) Return the first ChildAxysUser filtered by the user_pref_articles_show column
- * @method     ChildAxysUser|null findOneByFbId(string $user_fb_id) Return the first ChildAxysUser filtered by the user_fb_id column
- * @method     ChildAxysUser|null findOneByFbToken(string $user_fb_token) Return the first ChildAxysUser filtered by the user_fb_token column
- * @method     ChildAxysUser|null findOneByCountryId(int $country_id) Return the first ChildAxysUser filtered by the country_id column
- * @method     ChildAxysUser|null findOneByPasswordResetToken(string $user_password_reset_token) Return the first ChildAxysUser filtered by the user_password_reset_token column
- * @method     ChildAxysUser|null findOneByPasswordResetTokenCreated(string $user_password_reset_token_created) Return the first ChildAxysUser filtered by the user_password_reset_token_created column
  * @method     ChildAxysUser|null findOneByUpdate(string $user_update) Return the first ChildAxysUser filtered by the user_update column
  * @method     ChildAxysUser|null findOneByCreatedAt(string $user_created) Return the first ChildAxysUser filtered by the user_created column
  * @method     ChildAxysUser|null findOneByUpdatedAt(string $user_updated) Return the first ChildAxysUser filtered by the user_updated column
@@ -245,34 +179,12 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAxysUser requireOneByPassword(string $user_password) Return the first ChildAxysUser filtered by the user_password column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysUser requireOneByKey(string $user_key) Return the first ChildAxysUser filtered by the user_key column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysUser requireOneByEmailKey(string $email_key) Return the first ChildAxysUser filtered by the email_key column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByFacebookUid(int $facebook_uid) Return the first ChildAxysUser filtered by the facebook_uid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysUser requireOneByUsername(string $user_screen_name) Return the first ChildAxysUser filtered by the user_screen_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysUser requireOneBySlug(string $user_slug) Return the first ChildAxysUser filtered by the user_slug column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByWishlistShip(boolean $user_wishlist_ship) Return the first ChildAxysUser filtered by the user_wishlist_ship column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByTop(boolean $user_top) Return the first ChildAxysUser filtered by the user_top column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByBiblio(boolean $user_biblio) Return the first ChildAxysUser filtered by the user_biblio column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByAdresseIp(string $adresse_ip) Return the first ChildAxysUser filtered by the adresse_ip column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByRecaptchaScore(double $recaptcha_score) Return the first ChildAxysUser filtered by the recaptcha_score column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysUser requireOneByDateinscription(string $DateInscription) Return the first ChildAxysUser filtered by the DateInscription column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysUser requireOneByDateconnexion(string $DateConnexion) Return the first ChildAxysUser filtered by the DateConnexion column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByPublisherId(int $publisher_id) Return the first ChildAxysUser filtered by the publisher_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByBookshopId(int $bookshop_id) Return the first ChildAxysUser filtered by the bookshop_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByLibraryId(int $library_id) Return the first ChildAxysUser filtered by the library_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByCivilite(string $user_civilite) Return the first ChildAxysUser filtered by the user_civilite column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysUser requireOneByNom(string $user_nom) Return the first ChildAxysUser filtered by the user_nom column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysUser requireOneByPrenom(string $user_prenom) Return the first ChildAxysUser filtered by the user_prenom column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByAdresse1(string $user_adresse1) Return the first ChildAxysUser filtered by the user_adresse1 column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByAdresse2(string $user_adresse2) Return the first ChildAxysUser filtered by the user_adresse2 column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByCodepostal(string $user_codepostal) Return the first ChildAxysUser filtered by the user_codepostal column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByVille(string $user_ville) Return the first ChildAxysUser filtered by the user_ville column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByPays(string $user_pays) Return the first ChildAxysUser filtered by the user_pays column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByTelephone(string $user_telephone) Return the first ChildAxysUser filtered by the user_telephone column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByPrefArticlesShow(string $user_pref_articles_show) Return the first ChildAxysUser filtered by the user_pref_articles_show column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByFbId(string $user_fb_id) Return the first ChildAxysUser filtered by the user_fb_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByFbToken(string $user_fb_token) Return the first ChildAxysUser filtered by the user_fb_token column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByCountryId(int $country_id) Return the first ChildAxysUser filtered by the country_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByPasswordResetToken(string $user_password_reset_token) Return the first ChildAxysUser filtered by the user_password_reset_token column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysUser requireOneByPasswordResetTokenCreated(string $user_password_reset_token_created) Return the first ChildAxysUser filtered by the user_password_reset_token_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysUser requireOneByUpdate(string $user_update) Return the first ChildAxysUser filtered by the user_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysUser requireOneByCreatedAt(string $user_created) Return the first ChildAxysUser filtered by the user_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysUser requireOneByUpdatedAt(string $user_updated) Return the first ChildAxysUser filtered by the user_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -292,62 +204,18 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildAxysUser> findByKey(string|array<string> $user_key) Return ChildAxysUser objects filtered by the user_key column
  * @method     ChildAxysUser[]|Collection findByEmailKey(string|array<string> $email_key) Return ChildAxysUser objects filtered by the email_key column
  * @psalm-method Collection&\Traversable<ChildAxysUser> findByEmailKey(string|array<string> $email_key) Return ChildAxysUser objects filtered by the email_key column
- * @method     ChildAxysUser[]|Collection findByFacebookUid(int|array<int> $facebook_uid) Return ChildAxysUser objects filtered by the facebook_uid column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByFacebookUid(int|array<int> $facebook_uid) Return ChildAxysUser objects filtered by the facebook_uid column
  * @method     ChildAxysUser[]|Collection findByUsername(string|array<string> $user_screen_name) Return ChildAxysUser objects filtered by the user_screen_name column
  * @psalm-method Collection&\Traversable<ChildAxysUser> findByUsername(string|array<string> $user_screen_name) Return ChildAxysUser objects filtered by the user_screen_name column
  * @method     ChildAxysUser[]|Collection findBySlug(string|array<string> $user_slug) Return ChildAxysUser objects filtered by the user_slug column
  * @psalm-method Collection&\Traversable<ChildAxysUser> findBySlug(string|array<string> $user_slug) Return ChildAxysUser objects filtered by the user_slug column
- * @method     ChildAxysUser[]|Collection findByWishlistShip(boolean|array<boolean> $user_wishlist_ship) Return ChildAxysUser objects filtered by the user_wishlist_ship column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByWishlistShip(boolean|array<boolean> $user_wishlist_ship) Return ChildAxysUser objects filtered by the user_wishlist_ship column
- * @method     ChildAxysUser[]|Collection findByTop(boolean|array<boolean> $user_top) Return ChildAxysUser objects filtered by the user_top column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByTop(boolean|array<boolean> $user_top) Return ChildAxysUser objects filtered by the user_top column
- * @method     ChildAxysUser[]|Collection findByBiblio(boolean|array<boolean> $user_biblio) Return ChildAxysUser objects filtered by the user_biblio column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByBiblio(boolean|array<boolean> $user_biblio) Return ChildAxysUser objects filtered by the user_biblio column
- * @method     ChildAxysUser[]|Collection findByAdresseIp(string|array<string> $adresse_ip) Return ChildAxysUser objects filtered by the adresse_ip column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByAdresseIp(string|array<string> $adresse_ip) Return ChildAxysUser objects filtered by the adresse_ip column
- * @method     ChildAxysUser[]|Collection findByRecaptchaScore(double|array<double> $recaptcha_score) Return ChildAxysUser objects filtered by the recaptcha_score column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByRecaptchaScore(double|array<double> $recaptcha_score) Return ChildAxysUser objects filtered by the recaptcha_score column
  * @method     ChildAxysUser[]|Collection findByDateinscription(string|array<string> $DateInscription) Return ChildAxysUser objects filtered by the DateInscription column
  * @psalm-method Collection&\Traversable<ChildAxysUser> findByDateinscription(string|array<string> $DateInscription) Return ChildAxysUser objects filtered by the DateInscription column
  * @method     ChildAxysUser[]|Collection findByDateconnexion(string|array<string> $DateConnexion) Return ChildAxysUser objects filtered by the DateConnexion column
  * @psalm-method Collection&\Traversable<ChildAxysUser> findByDateconnexion(string|array<string> $DateConnexion) Return ChildAxysUser objects filtered by the DateConnexion column
- * @method     ChildAxysUser[]|Collection findByPublisherId(int|array<int> $publisher_id) Return ChildAxysUser objects filtered by the publisher_id column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByPublisherId(int|array<int> $publisher_id) Return ChildAxysUser objects filtered by the publisher_id column
- * @method     ChildAxysUser[]|Collection findByBookshopId(int|array<int> $bookshop_id) Return ChildAxysUser objects filtered by the bookshop_id column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByBookshopId(int|array<int> $bookshop_id) Return ChildAxysUser objects filtered by the bookshop_id column
- * @method     ChildAxysUser[]|Collection findByLibraryId(int|array<int> $library_id) Return ChildAxysUser objects filtered by the library_id column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByLibraryId(int|array<int> $library_id) Return ChildAxysUser objects filtered by the library_id column
- * @method     ChildAxysUser[]|Collection findByCivilite(string|array<string> $user_civilite) Return ChildAxysUser objects filtered by the user_civilite column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByCivilite(string|array<string> $user_civilite) Return ChildAxysUser objects filtered by the user_civilite column
  * @method     ChildAxysUser[]|Collection findByNom(string|array<string> $user_nom) Return ChildAxysUser objects filtered by the user_nom column
  * @psalm-method Collection&\Traversable<ChildAxysUser> findByNom(string|array<string> $user_nom) Return ChildAxysUser objects filtered by the user_nom column
  * @method     ChildAxysUser[]|Collection findByPrenom(string|array<string> $user_prenom) Return ChildAxysUser objects filtered by the user_prenom column
  * @psalm-method Collection&\Traversable<ChildAxysUser> findByPrenom(string|array<string> $user_prenom) Return ChildAxysUser objects filtered by the user_prenom column
- * @method     ChildAxysUser[]|Collection findByAdresse1(string|array<string> $user_adresse1) Return ChildAxysUser objects filtered by the user_adresse1 column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByAdresse1(string|array<string> $user_adresse1) Return ChildAxysUser objects filtered by the user_adresse1 column
- * @method     ChildAxysUser[]|Collection findByAdresse2(string|array<string> $user_adresse2) Return ChildAxysUser objects filtered by the user_adresse2 column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByAdresse2(string|array<string> $user_adresse2) Return ChildAxysUser objects filtered by the user_adresse2 column
- * @method     ChildAxysUser[]|Collection findByCodepostal(string|array<string> $user_codepostal) Return ChildAxysUser objects filtered by the user_codepostal column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByCodepostal(string|array<string> $user_codepostal) Return ChildAxysUser objects filtered by the user_codepostal column
- * @method     ChildAxysUser[]|Collection findByVille(string|array<string> $user_ville) Return ChildAxysUser objects filtered by the user_ville column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByVille(string|array<string> $user_ville) Return ChildAxysUser objects filtered by the user_ville column
- * @method     ChildAxysUser[]|Collection findByPays(string|array<string> $user_pays) Return ChildAxysUser objects filtered by the user_pays column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByPays(string|array<string> $user_pays) Return ChildAxysUser objects filtered by the user_pays column
- * @method     ChildAxysUser[]|Collection findByTelephone(string|array<string> $user_telephone) Return ChildAxysUser objects filtered by the user_telephone column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByTelephone(string|array<string> $user_telephone) Return ChildAxysUser objects filtered by the user_telephone column
- * @method     ChildAxysUser[]|Collection findByPrefArticlesShow(string|array<string> $user_pref_articles_show) Return ChildAxysUser objects filtered by the user_pref_articles_show column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByPrefArticlesShow(string|array<string> $user_pref_articles_show) Return ChildAxysUser objects filtered by the user_pref_articles_show column
- * @method     ChildAxysUser[]|Collection findByFbId(string|array<string> $user_fb_id) Return ChildAxysUser objects filtered by the user_fb_id column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByFbId(string|array<string> $user_fb_id) Return ChildAxysUser objects filtered by the user_fb_id column
- * @method     ChildAxysUser[]|Collection findByFbToken(string|array<string> $user_fb_token) Return ChildAxysUser objects filtered by the user_fb_token column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByFbToken(string|array<string> $user_fb_token) Return ChildAxysUser objects filtered by the user_fb_token column
- * @method     ChildAxysUser[]|Collection findByCountryId(int|array<int> $country_id) Return ChildAxysUser objects filtered by the country_id column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByCountryId(int|array<int> $country_id) Return ChildAxysUser objects filtered by the country_id column
- * @method     ChildAxysUser[]|Collection findByPasswordResetToken(string|array<string> $user_password_reset_token) Return ChildAxysUser objects filtered by the user_password_reset_token column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByPasswordResetToken(string|array<string> $user_password_reset_token) Return ChildAxysUser objects filtered by the user_password_reset_token column
- * @method     ChildAxysUser[]|Collection findByPasswordResetTokenCreated(string|array<string> $user_password_reset_token_created) Return ChildAxysUser objects filtered by the user_password_reset_token_created column
- * @psalm-method Collection&\Traversable<ChildAxysUser> findByPasswordResetTokenCreated(string|array<string> $user_password_reset_token_created) Return ChildAxysUser objects filtered by the user_password_reset_token_created column
  * @method     ChildAxysUser[]|Collection findByUpdate(string|array<string> $user_update) Return ChildAxysUser objects filtered by the user_update column
  * @psalm-method Collection&\Traversable<ChildAxysUser> findByUpdate(string|array<string> $user_update) Return ChildAxysUser objects filtered by the user_update column
  * @method     ChildAxysUser[]|Collection findByCreatedAt(string|array<string> $user_created) Return ChildAxysUser objects filtered by the user_created column
@@ -453,7 +321,7 @@ abstract class AxysUserQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, site_id, Email, user_password, user_key, email_key, facebook_uid, user_screen_name, user_slug, user_wishlist_ship, user_top, user_biblio, adresse_ip, recaptcha_score, DateInscription, DateConnexion, publisher_id, bookshop_id, library_id, user_civilite, user_nom, user_prenom, user_adresse1, user_adresse2, user_codepostal, user_ville, user_pays, user_telephone, user_pref_articles_show, user_fb_id, user_fb_token, country_id, user_password_reset_token, user_password_reset_token_created, user_update, user_created, user_updated FROM axys_users WHERE id = :p0';
+        $sql = 'SELECT id, site_id, Email, user_password, user_key, email_key, user_screen_name, user_slug, DateInscription, DateConnexion, user_nom, user_prenom, user_update, user_created, user_updated FROM axys_users WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -748,49 +616,6 @@ abstract class AxysUserQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the facebook_uid column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByFacebookUid(1234); // WHERE facebook_uid = 1234
-     * $query->filterByFacebookUid(array(12, 34)); // WHERE facebook_uid IN (12, 34)
-     * $query->filterByFacebookUid(array('min' => 12)); // WHERE facebook_uid > 12
-     * </code>
-     *
-     * @param mixed $facebookUid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByFacebookUid($facebookUid = null, ?string $comparison = null)
-    {
-        if (is_array($facebookUid)) {
-            $useMinMax = false;
-            if (isset($facebookUid['min'])) {
-                $this->addUsingAlias(AxysUserTableMap::COL_FACEBOOK_UID, $facebookUid['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($facebookUid['max'])) {
-                $this->addUsingAlias(AxysUserTableMap::COL_FACEBOOK_UID, $facebookUid['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_FACEBOOK_UID, $facebookUid, $comparison);
-
-        return $this;
-    }
-
-    /**
      * Filter the query on the user_screen_name column
      *
      * Example usage:
@@ -842,164 +667,6 @@ abstract class AxysUserQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(AxysUserTableMap::COL_USER_SLUG, $slug, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the user_wishlist_ship column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByWishlistShip(true); // WHERE user_wishlist_ship = true
-     * $query->filterByWishlistShip('yes'); // WHERE user_wishlist_ship = true
-     * </code>
-     *
-     * @param bool|string $wishlistShip The value to use as filter.
-     *              Non-boolean arguments are converted using the following rules:
-     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByWishlistShip($wishlistShip = null, ?string $comparison = null)
-    {
-        if (is_string($wishlistShip)) {
-            $wishlistShip = in_array(strtolower($wishlistShip), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_USER_WISHLIST_SHIP, $wishlistShip, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the user_top column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByTop(true); // WHERE user_top = true
-     * $query->filterByTop('yes'); // WHERE user_top = true
-     * </code>
-     *
-     * @param bool|string $top The value to use as filter.
-     *              Non-boolean arguments are converted using the following rules:
-     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByTop($top = null, ?string $comparison = null)
-    {
-        if (is_string($top)) {
-            $top = in_array(strtolower($top), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_USER_TOP, $top, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the user_biblio column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByBiblio(true); // WHERE user_biblio = true
-     * $query->filterByBiblio('yes'); // WHERE user_biblio = true
-     * </code>
-     *
-     * @param bool|string $biblio The value to use as filter.
-     *              Non-boolean arguments are converted using the following rules:
-     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByBiblio($biblio = null, ?string $comparison = null)
-    {
-        if (is_string($biblio)) {
-            $biblio = in_array(strtolower($biblio), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_USER_BIBLIO, $biblio, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the adresse_ip column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByAdresseIp('fooValue');   // WHERE adresse_ip = 'fooValue'
-     * $query->filterByAdresseIp('%fooValue%', Criteria::LIKE); // WHERE adresse_ip LIKE '%fooValue%'
-     * $query->filterByAdresseIp(['foo', 'bar']); // WHERE adresse_ip IN ('foo', 'bar')
-     * </code>
-     *
-     * @param string|string[] $adresseIp The value to use as filter.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByAdresseIp($adresseIp = null, ?string $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($adresseIp)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_ADRESSE_IP, $adresseIp, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the recaptcha_score column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByRecaptchaScore(1234); // WHERE recaptcha_score = 1234
-     * $query->filterByRecaptchaScore(array(12, 34)); // WHERE recaptcha_score IN (12, 34)
-     * $query->filterByRecaptchaScore(array('min' => 12)); // WHERE recaptcha_score > 12
-     * </code>
-     *
-     * @param mixed $recaptchaScore The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByRecaptchaScore($recaptchaScore = null, ?string $comparison = null)
-    {
-        if (is_array($recaptchaScore)) {
-            $useMinMax = false;
-            if (isset($recaptchaScore['min'])) {
-                $this->addUsingAlias(AxysUserTableMap::COL_RECAPTCHA_SCORE, $recaptchaScore['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($recaptchaScore['max'])) {
-                $this->addUsingAlias(AxysUserTableMap::COL_RECAPTCHA_SCORE, $recaptchaScore['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_RECAPTCHA_SCORE, $recaptchaScore, $comparison);
 
         return $this;
     }
@@ -1095,163 +762,6 @@ abstract class AxysUserQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the publisher_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByPublisherId(1234); // WHERE publisher_id = 1234
-     * $query->filterByPublisherId(array(12, 34)); // WHERE publisher_id IN (12, 34)
-     * $query->filterByPublisherId(array('min' => 12)); // WHERE publisher_id > 12
-     * </code>
-     *
-     * @param mixed $publisherId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByPublisherId($publisherId = null, ?string $comparison = null)
-    {
-        if (is_array($publisherId)) {
-            $useMinMax = false;
-            if (isset($publisherId['min'])) {
-                $this->addUsingAlias(AxysUserTableMap::COL_PUBLISHER_ID, $publisherId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($publisherId['max'])) {
-                $this->addUsingAlias(AxysUserTableMap::COL_PUBLISHER_ID, $publisherId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the bookshop_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByBookshopId(1234); // WHERE bookshop_id = 1234
-     * $query->filterByBookshopId(array(12, 34)); // WHERE bookshop_id IN (12, 34)
-     * $query->filterByBookshopId(array('min' => 12)); // WHERE bookshop_id > 12
-     * </code>
-     *
-     * @param mixed $bookshopId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByBookshopId($bookshopId = null, ?string $comparison = null)
-    {
-        if (is_array($bookshopId)) {
-            $useMinMax = false;
-            if (isset($bookshopId['min'])) {
-                $this->addUsingAlias(AxysUserTableMap::COL_BOOKSHOP_ID, $bookshopId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($bookshopId['max'])) {
-                $this->addUsingAlias(AxysUserTableMap::COL_BOOKSHOP_ID, $bookshopId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_BOOKSHOP_ID, $bookshopId, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the library_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByLibraryId(1234); // WHERE library_id = 1234
-     * $query->filterByLibraryId(array(12, 34)); // WHERE library_id IN (12, 34)
-     * $query->filterByLibraryId(array('min' => 12)); // WHERE library_id > 12
-     * </code>
-     *
-     * @param mixed $libraryId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByLibraryId($libraryId = null, ?string $comparison = null)
-    {
-        if (is_array($libraryId)) {
-            $useMinMax = false;
-            if (isset($libraryId['min'])) {
-                $this->addUsingAlias(AxysUserTableMap::COL_LIBRARY_ID, $libraryId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($libraryId['max'])) {
-                $this->addUsingAlias(AxysUserTableMap::COL_LIBRARY_ID, $libraryId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_LIBRARY_ID, $libraryId, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the user_civilite column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByCivilite('fooValue');   // WHERE user_civilite = 'fooValue'
-     * $query->filterByCivilite('%fooValue%', Criteria::LIKE); // WHERE user_civilite LIKE '%fooValue%'
-     * $query->filterByCivilite(['foo', 'bar']); // WHERE user_civilite IN ('foo', 'bar')
-     * </code>
-     *
-     * @param string|string[] $civilite The value to use as filter.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByCivilite($civilite = null, ?string $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($civilite)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_USER_CIVILITE, $civilite, $comparison);
-
-        return $this;
-    }
-
-    /**
      * Filter the query on the user_nom column
      *
      * Example usage:
@@ -1303,389 +813,6 @@ abstract class AxysUserQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(AxysUserTableMap::COL_USER_PRENOM, $prenom, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the user_adresse1 column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByAdresse1('fooValue');   // WHERE user_adresse1 = 'fooValue'
-     * $query->filterByAdresse1('%fooValue%', Criteria::LIKE); // WHERE user_adresse1 LIKE '%fooValue%'
-     * $query->filterByAdresse1(['foo', 'bar']); // WHERE user_adresse1 IN ('foo', 'bar')
-     * </code>
-     *
-     * @param string|string[] $adresse1 The value to use as filter.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByAdresse1($adresse1 = null, ?string $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($adresse1)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_USER_ADRESSE1, $adresse1, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the user_adresse2 column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByAdresse2('fooValue');   // WHERE user_adresse2 = 'fooValue'
-     * $query->filterByAdresse2('%fooValue%', Criteria::LIKE); // WHERE user_adresse2 LIKE '%fooValue%'
-     * $query->filterByAdresse2(['foo', 'bar']); // WHERE user_adresse2 IN ('foo', 'bar')
-     * </code>
-     *
-     * @param string|string[] $adresse2 The value to use as filter.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByAdresse2($adresse2 = null, ?string $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($adresse2)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_USER_ADRESSE2, $adresse2, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the user_codepostal column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByCodepostal('fooValue');   // WHERE user_codepostal = 'fooValue'
-     * $query->filterByCodepostal('%fooValue%', Criteria::LIKE); // WHERE user_codepostal LIKE '%fooValue%'
-     * $query->filterByCodepostal(['foo', 'bar']); // WHERE user_codepostal IN ('foo', 'bar')
-     * </code>
-     *
-     * @param string|string[] $codepostal The value to use as filter.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByCodepostal($codepostal = null, ?string $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($codepostal)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_USER_CODEPOSTAL, $codepostal, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the user_ville column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByVille('fooValue');   // WHERE user_ville = 'fooValue'
-     * $query->filterByVille('%fooValue%', Criteria::LIKE); // WHERE user_ville LIKE '%fooValue%'
-     * $query->filterByVille(['foo', 'bar']); // WHERE user_ville IN ('foo', 'bar')
-     * </code>
-     *
-     * @param string|string[] $ville The value to use as filter.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByVille($ville = null, ?string $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($ville)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_USER_VILLE, $ville, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the user_pays column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByPays('fooValue');   // WHERE user_pays = 'fooValue'
-     * $query->filterByPays('%fooValue%', Criteria::LIKE); // WHERE user_pays LIKE '%fooValue%'
-     * $query->filterByPays(['foo', 'bar']); // WHERE user_pays IN ('foo', 'bar')
-     * </code>
-     *
-     * @param string|string[] $pays The value to use as filter.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByPays($pays = null, ?string $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($pays)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_USER_PAYS, $pays, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the user_telephone column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByTelephone('fooValue');   // WHERE user_telephone = 'fooValue'
-     * $query->filterByTelephone('%fooValue%', Criteria::LIKE); // WHERE user_telephone LIKE '%fooValue%'
-     * $query->filterByTelephone(['foo', 'bar']); // WHERE user_telephone IN ('foo', 'bar')
-     * </code>
-     *
-     * @param string|string[] $telephone The value to use as filter.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByTelephone($telephone = null, ?string $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($telephone)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_USER_TELEPHONE, $telephone, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the user_pref_articles_show column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByPrefArticlesShow('fooValue');   // WHERE user_pref_articles_show = 'fooValue'
-     * $query->filterByPrefArticlesShow('%fooValue%', Criteria::LIKE); // WHERE user_pref_articles_show LIKE '%fooValue%'
-     * $query->filterByPrefArticlesShow(['foo', 'bar']); // WHERE user_pref_articles_show IN ('foo', 'bar')
-     * </code>
-     *
-     * @param string|string[] $prefArticlesShow The value to use as filter.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByPrefArticlesShow($prefArticlesShow = null, ?string $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($prefArticlesShow)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_USER_PREF_ARTICLES_SHOW, $prefArticlesShow, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the user_fb_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByFbId(1234); // WHERE user_fb_id = 1234
-     * $query->filterByFbId(array(12, 34)); // WHERE user_fb_id IN (12, 34)
-     * $query->filterByFbId(array('min' => 12)); // WHERE user_fb_id > 12
-     * </code>
-     *
-     * @param mixed $fbId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByFbId($fbId = null, ?string $comparison = null)
-    {
-        if (is_array($fbId)) {
-            $useMinMax = false;
-            if (isset($fbId['min'])) {
-                $this->addUsingAlias(AxysUserTableMap::COL_USER_FB_ID, $fbId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($fbId['max'])) {
-                $this->addUsingAlias(AxysUserTableMap::COL_USER_FB_ID, $fbId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_USER_FB_ID, $fbId, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the user_fb_token column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByFbToken('fooValue');   // WHERE user_fb_token = 'fooValue'
-     * $query->filterByFbToken('%fooValue%', Criteria::LIKE); // WHERE user_fb_token LIKE '%fooValue%'
-     * $query->filterByFbToken(['foo', 'bar']); // WHERE user_fb_token IN ('foo', 'bar')
-     * </code>
-     *
-     * @param string|string[] $fbToken The value to use as filter.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByFbToken($fbToken = null, ?string $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($fbToken)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_USER_FB_TOKEN, $fbToken, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the country_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByCountryId(1234); // WHERE country_id = 1234
-     * $query->filterByCountryId(array(12, 34)); // WHERE country_id IN (12, 34)
-     * $query->filterByCountryId(array('min' => 12)); // WHERE country_id > 12
-     * </code>
-     *
-     * @param mixed $countryId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByCountryId($countryId = null, ?string $comparison = null)
-    {
-        if (is_array($countryId)) {
-            $useMinMax = false;
-            if (isset($countryId['min'])) {
-                $this->addUsingAlias(AxysUserTableMap::COL_COUNTRY_ID, $countryId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($countryId['max'])) {
-                $this->addUsingAlias(AxysUserTableMap::COL_COUNTRY_ID, $countryId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_COUNTRY_ID, $countryId, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the user_password_reset_token column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByPasswordResetToken('fooValue');   // WHERE user_password_reset_token = 'fooValue'
-     * $query->filterByPasswordResetToken('%fooValue%', Criteria::LIKE); // WHERE user_password_reset_token LIKE '%fooValue%'
-     * $query->filterByPasswordResetToken(['foo', 'bar']); // WHERE user_password_reset_token IN ('foo', 'bar')
-     * </code>
-     *
-     * @param string|string[] $passwordResetToken The value to use as filter.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByPasswordResetToken($passwordResetToken = null, ?string $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($passwordResetToken)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN, $passwordResetToken, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the user_password_reset_token_created column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByPasswordResetTokenCreated('2011-03-14'); // WHERE user_password_reset_token_created = '2011-03-14'
-     * $query->filterByPasswordResetTokenCreated('now'); // WHERE user_password_reset_token_created = '2011-03-14'
-     * $query->filterByPasswordResetTokenCreated(array('max' => 'yesterday')); // WHERE user_password_reset_token_created > '2011-03-13'
-     * </code>
-     *
-     * @param mixed $passwordResetTokenCreated The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByPasswordResetTokenCreated($passwordResetTokenCreated = null, ?string $comparison = null)
-    {
-        if (is_array($passwordResetTokenCreated)) {
-            $useMinMax = false;
-            if (isset($passwordResetTokenCreated['min'])) {
-                $this->addUsingAlias(AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED, $passwordResetTokenCreated['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($passwordResetTokenCreated['max'])) {
-                $this->addUsingAlias(AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED, $passwordResetTokenCreated['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED, $passwordResetTokenCreated, $comparison);
 
         return $this;
     }

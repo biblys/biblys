@@ -63,7 +63,7 @@ class AxysUserTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 37;
+    public const NUM_COLUMNS = 15;
 
     /**
      * The number of lazy-loaded columns
@@ -73,7 +73,7 @@ class AxysUserTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 37;
+    public const NUM_HYDRATE_COLUMNS = 15;
 
     /**
      * the column name for the id field
@@ -106,11 +106,6 @@ class AxysUserTableMap extends TableMap
     public const COL_EMAIL_KEY = 'axys_users.email_key';
 
     /**
-     * the column name for the facebook_uid field
-     */
-    public const COL_FACEBOOK_UID = 'axys_users.facebook_uid';
-
-    /**
      * the column name for the user_screen_name field
      */
     public const COL_USER_SCREEN_NAME = 'axys_users.user_screen_name';
@@ -119,31 +114,6 @@ class AxysUserTableMap extends TableMap
      * the column name for the user_slug field
      */
     public const COL_USER_SLUG = 'axys_users.user_slug';
-
-    /**
-     * the column name for the user_wishlist_ship field
-     */
-    public const COL_USER_WISHLIST_SHIP = 'axys_users.user_wishlist_ship';
-
-    /**
-     * the column name for the user_top field
-     */
-    public const COL_USER_TOP = 'axys_users.user_top';
-
-    /**
-     * the column name for the user_biblio field
-     */
-    public const COL_USER_BIBLIO = 'axys_users.user_biblio';
-
-    /**
-     * the column name for the adresse_ip field
-     */
-    public const COL_ADRESSE_IP = 'axys_users.adresse_ip';
-
-    /**
-     * the column name for the recaptcha_score field
-     */
-    public const COL_RECAPTCHA_SCORE = 'axys_users.recaptcha_score';
 
     /**
      * the column name for the DateInscription field
@@ -156,26 +126,6 @@ class AxysUserTableMap extends TableMap
     public const COL_DATECONNEXION = 'axys_users.DateConnexion';
 
     /**
-     * the column name for the publisher_id field
-     */
-    public const COL_PUBLISHER_ID = 'axys_users.publisher_id';
-
-    /**
-     * the column name for the bookshop_id field
-     */
-    public const COL_BOOKSHOP_ID = 'axys_users.bookshop_id';
-
-    /**
-     * the column name for the library_id field
-     */
-    public const COL_LIBRARY_ID = 'axys_users.library_id';
-
-    /**
-     * the column name for the user_civilite field
-     */
-    public const COL_USER_CIVILITE = 'axys_users.user_civilite';
-
-    /**
      * the column name for the user_nom field
      */
     public const COL_USER_NOM = 'axys_users.user_nom';
@@ -184,66 +134,6 @@ class AxysUserTableMap extends TableMap
      * the column name for the user_prenom field
      */
     public const COL_USER_PRENOM = 'axys_users.user_prenom';
-
-    /**
-     * the column name for the user_adresse1 field
-     */
-    public const COL_USER_ADRESSE1 = 'axys_users.user_adresse1';
-
-    /**
-     * the column name for the user_adresse2 field
-     */
-    public const COL_USER_ADRESSE2 = 'axys_users.user_adresse2';
-
-    /**
-     * the column name for the user_codepostal field
-     */
-    public const COL_USER_CODEPOSTAL = 'axys_users.user_codepostal';
-
-    /**
-     * the column name for the user_ville field
-     */
-    public const COL_USER_VILLE = 'axys_users.user_ville';
-
-    /**
-     * the column name for the user_pays field
-     */
-    public const COL_USER_PAYS = 'axys_users.user_pays';
-
-    /**
-     * the column name for the user_telephone field
-     */
-    public const COL_USER_TELEPHONE = 'axys_users.user_telephone';
-
-    /**
-     * the column name for the user_pref_articles_show field
-     */
-    public const COL_USER_PREF_ARTICLES_SHOW = 'axys_users.user_pref_articles_show';
-
-    /**
-     * the column name for the user_fb_id field
-     */
-    public const COL_USER_FB_ID = 'axys_users.user_fb_id';
-
-    /**
-     * the column name for the user_fb_token field
-     */
-    public const COL_USER_FB_TOKEN = 'axys_users.user_fb_token';
-
-    /**
-     * the column name for the country_id field
-     */
-    public const COL_COUNTRY_ID = 'axys_users.country_id';
-
-    /**
-     * the column name for the user_password_reset_token field
-     */
-    public const COL_USER_PASSWORD_RESET_TOKEN = 'axys_users.user_password_reset_token';
-
-    /**
-     * the column name for the user_password_reset_token_created field
-     */
-    public const COL_USER_PASSWORD_RESET_TOKEN_CREATED = 'axys_users.user_password_reset_token_created';
 
     /**
      * the column name for the user_update field
@@ -274,11 +164,11 @@ class AxysUserTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'Email', 'Password', 'Key', 'EmailKey', 'FacebookUid', 'Username', 'Slug', 'WishlistShip', 'Top', 'Biblio', 'AdresseIp', 'RecaptchaScore', 'Dateinscription', 'Dateconnexion', 'PublisherId', 'BookshopId', 'LibraryId', 'Civilite', 'Nom', 'Prenom', 'Adresse1', 'Adresse2', 'Codepostal', 'Ville', 'Pays', 'Telephone', 'PrefArticlesShow', 'FbId', 'FbToken', 'CountryId', 'PasswordResetToken', 'PasswordResetTokenCreated', 'Update', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'email', 'password', 'key', 'emailKey', 'facebookUid', 'username', 'slug', 'wishlistShip', 'top', 'biblio', 'adresseIp', 'recaptchaScore', 'dateinscription', 'dateconnexion', 'publisherId', 'bookshopId', 'libraryId', 'civilite', 'nom', 'prenom', 'adresse1', 'adresse2', 'codepostal', 'ville', 'pays', 'telephone', 'prefArticlesShow', 'fbId', 'fbToken', 'countryId', 'passwordResetToken', 'passwordResetTokenCreated', 'update', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [AxysUserTableMap::COL_ID, AxysUserTableMap::COL_SITE_ID, AxysUserTableMap::COL_EMAIL, AxysUserTableMap::COL_USER_PASSWORD, AxysUserTableMap::COL_USER_KEY, AxysUserTableMap::COL_EMAIL_KEY, AxysUserTableMap::COL_FACEBOOK_UID, AxysUserTableMap::COL_USER_SCREEN_NAME, AxysUserTableMap::COL_USER_SLUG, AxysUserTableMap::COL_USER_WISHLIST_SHIP, AxysUserTableMap::COL_USER_TOP, AxysUserTableMap::COL_USER_BIBLIO, AxysUserTableMap::COL_ADRESSE_IP, AxysUserTableMap::COL_RECAPTCHA_SCORE, AxysUserTableMap::COL_DATEINSCRIPTION, AxysUserTableMap::COL_DATECONNEXION, AxysUserTableMap::COL_PUBLISHER_ID, AxysUserTableMap::COL_BOOKSHOP_ID, AxysUserTableMap::COL_LIBRARY_ID, AxysUserTableMap::COL_USER_CIVILITE, AxysUserTableMap::COL_USER_NOM, AxysUserTableMap::COL_USER_PRENOM, AxysUserTableMap::COL_USER_ADRESSE1, AxysUserTableMap::COL_USER_ADRESSE2, AxysUserTableMap::COL_USER_CODEPOSTAL, AxysUserTableMap::COL_USER_VILLE, AxysUserTableMap::COL_USER_PAYS, AxysUserTableMap::COL_USER_TELEPHONE, AxysUserTableMap::COL_USER_PREF_ARTICLES_SHOW, AxysUserTableMap::COL_USER_FB_ID, AxysUserTableMap::COL_USER_FB_TOKEN, AxysUserTableMap::COL_COUNTRY_ID, AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN, AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED, AxysUserTableMap::COL_USER_UPDATE, AxysUserTableMap::COL_USER_CREATED, AxysUserTableMap::COL_USER_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['id', 'site_id', 'Email', 'user_password', 'user_key', 'email_key', 'facebook_uid', 'user_screen_name', 'user_slug', 'user_wishlist_ship', 'user_top', 'user_biblio', 'adresse_ip', 'recaptcha_score', 'DateInscription', 'DateConnexion', 'publisher_id', 'bookshop_id', 'library_id', 'user_civilite', 'user_nom', 'user_prenom', 'user_adresse1', 'user_adresse2', 'user_codepostal', 'user_ville', 'user_pays', 'user_telephone', 'user_pref_articles_show', 'user_fb_id', 'user_fb_token', 'country_id', 'user_password_reset_token', 'user_password_reset_token_created', 'user_update', 'user_created', 'user_updated', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, ]
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'Email', 'Password', 'Key', 'EmailKey', 'Username', 'Slug', 'Dateinscription', 'Dateconnexion', 'Nom', 'Prenom', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'email', 'password', 'key', 'emailKey', 'username', 'slug', 'dateinscription', 'dateconnexion', 'nom', 'prenom', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [AxysUserTableMap::COL_ID, AxysUserTableMap::COL_SITE_ID, AxysUserTableMap::COL_EMAIL, AxysUserTableMap::COL_USER_PASSWORD, AxysUserTableMap::COL_USER_KEY, AxysUserTableMap::COL_EMAIL_KEY, AxysUserTableMap::COL_USER_SCREEN_NAME, AxysUserTableMap::COL_USER_SLUG, AxysUserTableMap::COL_DATEINSCRIPTION, AxysUserTableMap::COL_DATECONNEXION, AxysUserTableMap::COL_USER_NOM, AxysUserTableMap::COL_USER_PRENOM, AxysUserTableMap::COL_USER_UPDATE, AxysUserTableMap::COL_USER_CREATED, AxysUserTableMap::COL_USER_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['id', 'site_id', 'Email', 'user_password', 'user_key', 'email_key', 'user_screen_name', 'user_slug', 'DateInscription', 'DateConnexion', 'user_nom', 'user_prenom', 'user_update', 'user_created', 'user_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, ]
     ];
 
     /**
@@ -290,11 +180,11 @@ class AxysUserTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'Email' => 2, 'Password' => 3, 'Key' => 4, 'EmailKey' => 5, 'FacebookUid' => 6, 'Username' => 7, 'Slug' => 8, 'WishlistShip' => 9, 'Top' => 10, 'Biblio' => 11, 'AdresseIp' => 12, 'RecaptchaScore' => 13, 'Dateinscription' => 14, 'Dateconnexion' => 15, 'PublisherId' => 16, 'BookshopId' => 17, 'LibraryId' => 18, 'Civilite' => 19, 'Nom' => 20, 'Prenom' => 21, 'Adresse1' => 22, 'Adresse2' => 23, 'Codepostal' => 24, 'Ville' => 25, 'Pays' => 26, 'Telephone' => 27, 'PrefArticlesShow' => 28, 'FbId' => 29, 'FbToken' => 30, 'CountryId' => 31, 'PasswordResetToken' => 32, 'PasswordResetTokenCreated' => 33, 'Update' => 34, 'CreatedAt' => 35, 'UpdatedAt' => 36, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'email' => 2, 'password' => 3, 'key' => 4, 'emailKey' => 5, 'facebookUid' => 6, 'username' => 7, 'slug' => 8, 'wishlistShip' => 9, 'top' => 10, 'biblio' => 11, 'adresseIp' => 12, 'recaptchaScore' => 13, 'dateinscription' => 14, 'dateconnexion' => 15, 'publisherId' => 16, 'bookshopId' => 17, 'libraryId' => 18, 'civilite' => 19, 'nom' => 20, 'prenom' => 21, 'adresse1' => 22, 'adresse2' => 23, 'codepostal' => 24, 'ville' => 25, 'pays' => 26, 'telephone' => 27, 'prefArticlesShow' => 28, 'fbId' => 29, 'fbToken' => 30, 'countryId' => 31, 'passwordResetToken' => 32, 'passwordResetTokenCreated' => 33, 'update' => 34, 'createdAt' => 35, 'updatedAt' => 36, ],
-        self::TYPE_COLNAME       => [AxysUserTableMap::COL_ID => 0, AxysUserTableMap::COL_SITE_ID => 1, AxysUserTableMap::COL_EMAIL => 2, AxysUserTableMap::COL_USER_PASSWORD => 3, AxysUserTableMap::COL_USER_KEY => 4, AxysUserTableMap::COL_EMAIL_KEY => 5, AxysUserTableMap::COL_FACEBOOK_UID => 6, AxysUserTableMap::COL_USER_SCREEN_NAME => 7, AxysUserTableMap::COL_USER_SLUG => 8, AxysUserTableMap::COL_USER_WISHLIST_SHIP => 9, AxysUserTableMap::COL_USER_TOP => 10, AxysUserTableMap::COL_USER_BIBLIO => 11, AxysUserTableMap::COL_ADRESSE_IP => 12, AxysUserTableMap::COL_RECAPTCHA_SCORE => 13, AxysUserTableMap::COL_DATEINSCRIPTION => 14, AxysUserTableMap::COL_DATECONNEXION => 15, AxysUserTableMap::COL_PUBLISHER_ID => 16, AxysUserTableMap::COL_BOOKSHOP_ID => 17, AxysUserTableMap::COL_LIBRARY_ID => 18, AxysUserTableMap::COL_USER_CIVILITE => 19, AxysUserTableMap::COL_USER_NOM => 20, AxysUserTableMap::COL_USER_PRENOM => 21, AxysUserTableMap::COL_USER_ADRESSE1 => 22, AxysUserTableMap::COL_USER_ADRESSE2 => 23, AxysUserTableMap::COL_USER_CODEPOSTAL => 24, AxysUserTableMap::COL_USER_VILLE => 25, AxysUserTableMap::COL_USER_PAYS => 26, AxysUserTableMap::COL_USER_TELEPHONE => 27, AxysUserTableMap::COL_USER_PREF_ARTICLES_SHOW => 28, AxysUserTableMap::COL_USER_FB_ID => 29, AxysUserTableMap::COL_USER_FB_TOKEN => 30, AxysUserTableMap::COL_COUNTRY_ID => 31, AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN => 32, AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED => 33, AxysUserTableMap::COL_USER_UPDATE => 34, AxysUserTableMap::COL_USER_CREATED => 35, AxysUserTableMap::COL_USER_UPDATED => 36, ],
-        self::TYPE_FIELDNAME     => ['id' => 0, 'site_id' => 1, 'Email' => 2, 'user_password' => 3, 'user_key' => 4, 'email_key' => 5, 'facebook_uid' => 6, 'user_screen_name' => 7, 'user_slug' => 8, 'user_wishlist_ship' => 9, 'user_top' => 10, 'user_biblio' => 11, 'adresse_ip' => 12, 'recaptcha_score' => 13, 'DateInscription' => 14, 'DateConnexion' => 15, 'publisher_id' => 16, 'bookshop_id' => 17, 'library_id' => 18, 'user_civilite' => 19, 'user_nom' => 20, 'user_prenom' => 21, 'user_adresse1' => 22, 'user_adresse2' => 23, 'user_codepostal' => 24, 'user_ville' => 25, 'user_pays' => 26, 'user_telephone' => 27, 'user_pref_articles_show' => 28, 'user_fb_id' => 29, 'user_fb_token' => 30, 'country_id' => 31, 'user_password_reset_token' => 32, 'user_password_reset_token_created' => 33, 'user_update' => 34, 'user_created' => 35, 'user_updated' => 36, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'Email' => 2, 'Password' => 3, 'Key' => 4, 'EmailKey' => 5, 'Username' => 6, 'Slug' => 7, 'Dateinscription' => 8, 'Dateconnexion' => 9, 'Nom' => 10, 'Prenom' => 11, 'Update' => 12, 'CreatedAt' => 13, 'UpdatedAt' => 14, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'email' => 2, 'password' => 3, 'key' => 4, 'emailKey' => 5, 'username' => 6, 'slug' => 7, 'dateinscription' => 8, 'dateconnexion' => 9, 'nom' => 10, 'prenom' => 11, 'update' => 12, 'createdAt' => 13, 'updatedAt' => 14, ],
+        self::TYPE_COLNAME       => [AxysUserTableMap::COL_ID => 0, AxysUserTableMap::COL_SITE_ID => 1, AxysUserTableMap::COL_EMAIL => 2, AxysUserTableMap::COL_USER_PASSWORD => 3, AxysUserTableMap::COL_USER_KEY => 4, AxysUserTableMap::COL_EMAIL_KEY => 5, AxysUserTableMap::COL_USER_SCREEN_NAME => 6, AxysUserTableMap::COL_USER_SLUG => 7, AxysUserTableMap::COL_DATEINSCRIPTION => 8, AxysUserTableMap::COL_DATECONNEXION => 9, AxysUserTableMap::COL_USER_NOM => 10, AxysUserTableMap::COL_USER_PRENOM => 11, AxysUserTableMap::COL_USER_UPDATE => 12, AxysUserTableMap::COL_USER_CREATED => 13, AxysUserTableMap::COL_USER_UPDATED => 14, ],
+        self::TYPE_FIELDNAME     => ['id' => 0, 'site_id' => 1, 'Email' => 2, 'user_password' => 3, 'user_key' => 4, 'email_key' => 5, 'user_screen_name' => 6, 'user_slug' => 7, 'DateInscription' => 8, 'DateConnexion' => 9, 'user_nom' => 10, 'user_prenom' => 11, 'user_update' => 12, 'user_created' => 13, 'user_updated' => 14, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, ]
     ];
 
     /**
@@ -349,14 +239,6 @@ class AxysUserTableMap extends TableMap
         'COL_EMAIL_KEY' => 'EMAIL_KEY',
         'email_key' => 'EMAIL_KEY',
         'axys_users.email_key' => 'EMAIL_KEY',
-        'FacebookUid' => 'FACEBOOK_UID',
-        'AxysUser.FacebookUid' => 'FACEBOOK_UID',
-        'facebookUid' => 'FACEBOOK_UID',
-        'axysUser.facebookUid' => 'FACEBOOK_UID',
-        'AxysUserTableMap::COL_FACEBOOK_UID' => 'FACEBOOK_UID',
-        'COL_FACEBOOK_UID' => 'FACEBOOK_UID',
-        'facebook_uid' => 'FACEBOOK_UID',
-        'axys_users.facebook_uid' => 'FACEBOOK_UID',
         'Username' => 'USER_SCREEN_NAME',
         'AxysUser.Username' => 'USER_SCREEN_NAME',
         'username' => 'USER_SCREEN_NAME',
@@ -373,46 +255,6 @@ class AxysUserTableMap extends TableMap
         'COL_USER_SLUG' => 'USER_SLUG',
         'user_slug' => 'USER_SLUG',
         'axys_users.user_slug' => 'USER_SLUG',
-        'WishlistShip' => 'USER_WISHLIST_SHIP',
-        'AxysUser.WishlistShip' => 'USER_WISHLIST_SHIP',
-        'wishlistShip' => 'USER_WISHLIST_SHIP',
-        'axysUser.wishlistShip' => 'USER_WISHLIST_SHIP',
-        'AxysUserTableMap::COL_USER_WISHLIST_SHIP' => 'USER_WISHLIST_SHIP',
-        'COL_USER_WISHLIST_SHIP' => 'USER_WISHLIST_SHIP',
-        'user_wishlist_ship' => 'USER_WISHLIST_SHIP',
-        'axys_users.user_wishlist_ship' => 'USER_WISHLIST_SHIP',
-        'Top' => 'USER_TOP',
-        'AxysUser.Top' => 'USER_TOP',
-        'top' => 'USER_TOP',
-        'axysUser.top' => 'USER_TOP',
-        'AxysUserTableMap::COL_USER_TOP' => 'USER_TOP',
-        'COL_USER_TOP' => 'USER_TOP',
-        'user_top' => 'USER_TOP',
-        'axys_users.user_top' => 'USER_TOP',
-        'Biblio' => 'USER_BIBLIO',
-        'AxysUser.Biblio' => 'USER_BIBLIO',
-        'biblio' => 'USER_BIBLIO',
-        'axysUser.biblio' => 'USER_BIBLIO',
-        'AxysUserTableMap::COL_USER_BIBLIO' => 'USER_BIBLIO',
-        'COL_USER_BIBLIO' => 'USER_BIBLIO',
-        'user_biblio' => 'USER_BIBLIO',
-        'axys_users.user_biblio' => 'USER_BIBLIO',
-        'AdresseIp' => 'ADRESSE_IP',
-        'AxysUser.AdresseIp' => 'ADRESSE_IP',
-        'adresseIp' => 'ADRESSE_IP',
-        'axysUser.adresseIp' => 'ADRESSE_IP',
-        'AxysUserTableMap::COL_ADRESSE_IP' => 'ADRESSE_IP',
-        'COL_ADRESSE_IP' => 'ADRESSE_IP',
-        'adresse_ip' => 'ADRESSE_IP',
-        'axys_users.adresse_ip' => 'ADRESSE_IP',
-        'RecaptchaScore' => 'RECAPTCHA_SCORE',
-        'AxysUser.RecaptchaScore' => 'RECAPTCHA_SCORE',
-        'recaptchaScore' => 'RECAPTCHA_SCORE',
-        'axysUser.recaptchaScore' => 'RECAPTCHA_SCORE',
-        'AxysUserTableMap::COL_RECAPTCHA_SCORE' => 'RECAPTCHA_SCORE',
-        'COL_RECAPTCHA_SCORE' => 'RECAPTCHA_SCORE',
-        'recaptcha_score' => 'RECAPTCHA_SCORE',
-        'axys_users.recaptcha_score' => 'RECAPTCHA_SCORE',
         'Dateinscription' => 'DATEINSCRIPTION',
         'AxysUser.Dateinscription' => 'DATEINSCRIPTION',
         'dateinscription' => 'DATEINSCRIPTION',
@@ -429,38 +271,6 @@ class AxysUserTableMap extends TableMap
         'COL_DATECONNEXION' => 'DATECONNEXION',
         'DateConnexion' => 'DATECONNEXION',
         'axys_users.DateConnexion' => 'DATECONNEXION',
-        'PublisherId' => 'PUBLISHER_ID',
-        'AxysUser.PublisherId' => 'PUBLISHER_ID',
-        'publisherId' => 'PUBLISHER_ID',
-        'axysUser.publisherId' => 'PUBLISHER_ID',
-        'AxysUserTableMap::COL_PUBLISHER_ID' => 'PUBLISHER_ID',
-        'COL_PUBLISHER_ID' => 'PUBLISHER_ID',
-        'publisher_id' => 'PUBLISHER_ID',
-        'axys_users.publisher_id' => 'PUBLISHER_ID',
-        'BookshopId' => 'BOOKSHOP_ID',
-        'AxysUser.BookshopId' => 'BOOKSHOP_ID',
-        'bookshopId' => 'BOOKSHOP_ID',
-        'axysUser.bookshopId' => 'BOOKSHOP_ID',
-        'AxysUserTableMap::COL_BOOKSHOP_ID' => 'BOOKSHOP_ID',
-        'COL_BOOKSHOP_ID' => 'BOOKSHOP_ID',
-        'bookshop_id' => 'BOOKSHOP_ID',
-        'axys_users.bookshop_id' => 'BOOKSHOP_ID',
-        'LibraryId' => 'LIBRARY_ID',
-        'AxysUser.LibraryId' => 'LIBRARY_ID',
-        'libraryId' => 'LIBRARY_ID',
-        'axysUser.libraryId' => 'LIBRARY_ID',
-        'AxysUserTableMap::COL_LIBRARY_ID' => 'LIBRARY_ID',
-        'COL_LIBRARY_ID' => 'LIBRARY_ID',
-        'library_id' => 'LIBRARY_ID',
-        'axys_users.library_id' => 'LIBRARY_ID',
-        'Civilite' => 'USER_CIVILITE',
-        'AxysUser.Civilite' => 'USER_CIVILITE',
-        'civilite' => 'USER_CIVILITE',
-        'axysUser.civilite' => 'USER_CIVILITE',
-        'AxysUserTableMap::COL_USER_CIVILITE' => 'USER_CIVILITE',
-        'COL_USER_CIVILITE' => 'USER_CIVILITE',
-        'user_civilite' => 'USER_CIVILITE',
-        'axys_users.user_civilite' => 'USER_CIVILITE',
         'Nom' => 'USER_NOM',
         'AxysUser.Nom' => 'USER_NOM',
         'nom' => 'USER_NOM',
@@ -477,102 +287,6 @@ class AxysUserTableMap extends TableMap
         'COL_USER_PRENOM' => 'USER_PRENOM',
         'user_prenom' => 'USER_PRENOM',
         'axys_users.user_prenom' => 'USER_PRENOM',
-        'Adresse1' => 'USER_ADRESSE1',
-        'AxysUser.Adresse1' => 'USER_ADRESSE1',
-        'adresse1' => 'USER_ADRESSE1',
-        'axysUser.adresse1' => 'USER_ADRESSE1',
-        'AxysUserTableMap::COL_USER_ADRESSE1' => 'USER_ADRESSE1',
-        'COL_USER_ADRESSE1' => 'USER_ADRESSE1',
-        'user_adresse1' => 'USER_ADRESSE1',
-        'axys_users.user_adresse1' => 'USER_ADRESSE1',
-        'Adresse2' => 'USER_ADRESSE2',
-        'AxysUser.Adresse2' => 'USER_ADRESSE2',
-        'adresse2' => 'USER_ADRESSE2',
-        'axysUser.adresse2' => 'USER_ADRESSE2',
-        'AxysUserTableMap::COL_USER_ADRESSE2' => 'USER_ADRESSE2',
-        'COL_USER_ADRESSE2' => 'USER_ADRESSE2',
-        'user_adresse2' => 'USER_ADRESSE2',
-        'axys_users.user_adresse2' => 'USER_ADRESSE2',
-        'Codepostal' => 'USER_CODEPOSTAL',
-        'AxysUser.Codepostal' => 'USER_CODEPOSTAL',
-        'codepostal' => 'USER_CODEPOSTAL',
-        'axysUser.codepostal' => 'USER_CODEPOSTAL',
-        'AxysUserTableMap::COL_USER_CODEPOSTAL' => 'USER_CODEPOSTAL',
-        'COL_USER_CODEPOSTAL' => 'USER_CODEPOSTAL',
-        'user_codepostal' => 'USER_CODEPOSTAL',
-        'axys_users.user_codepostal' => 'USER_CODEPOSTAL',
-        'Ville' => 'USER_VILLE',
-        'AxysUser.Ville' => 'USER_VILLE',
-        'ville' => 'USER_VILLE',
-        'axysUser.ville' => 'USER_VILLE',
-        'AxysUserTableMap::COL_USER_VILLE' => 'USER_VILLE',
-        'COL_USER_VILLE' => 'USER_VILLE',
-        'user_ville' => 'USER_VILLE',
-        'axys_users.user_ville' => 'USER_VILLE',
-        'Pays' => 'USER_PAYS',
-        'AxysUser.Pays' => 'USER_PAYS',
-        'pays' => 'USER_PAYS',
-        'axysUser.pays' => 'USER_PAYS',
-        'AxysUserTableMap::COL_USER_PAYS' => 'USER_PAYS',
-        'COL_USER_PAYS' => 'USER_PAYS',
-        'user_pays' => 'USER_PAYS',
-        'axys_users.user_pays' => 'USER_PAYS',
-        'Telephone' => 'USER_TELEPHONE',
-        'AxysUser.Telephone' => 'USER_TELEPHONE',
-        'telephone' => 'USER_TELEPHONE',
-        'axysUser.telephone' => 'USER_TELEPHONE',
-        'AxysUserTableMap::COL_USER_TELEPHONE' => 'USER_TELEPHONE',
-        'COL_USER_TELEPHONE' => 'USER_TELEPHONE',
-        'user_telephone' => 'USER_TELEPHONE',
-        'axys_users.user_telephone' => 'USER_TELEPHONE',
-        'PrefArticlesShow' => 'USER_PREF_ARTICLES_SHOW',
-        'AxysUser.PrefArticlesShow' => 'USER_PREF_ARTICLES_SHOW',
-        'prefArticlesShow' => 'USER_PREF_ARTICLES_SHOW',
-        'axysUser.prefArticlesShow' => 'USER_PREF_ARTICLES_SHOW',
-        'AxysUserTableMap::COL_USER_PREF_ARTICLES_SHOW' => 'USER_PREF_ARTICLES_SHOW',
-        'COL_USER_PREF_ARTICLES_SHOW' => 'USER_PREF_ARTICLES_SHOW',
-        'user_pref_articles_show' => 'USER_PREF_ARTICLES_SHOW',
-        'axys_users.user_pref_articles_show' => 'USER_PREF_ARTICLES_SHOW',
-        'FbId' => 'USER_FB_ID',
-        'AxysUser.FbId' => 'USER_FB_ID',
-        'fbId' => 'USER_FB_ID',
-        'axysUser.fbId' => 'USER_FB_ID',
-        'AxysUserTableMap::COL_USER_FB_ID' => 'USER_FB_ID',
-        'COL_USER_FB_ID' => 'USER_FB_ID',
-        'user_fb_id' => 'USER_FB_ID',
-        'axys_users.user_fb_id' => 'USER_FB_ID',
-        'FbToken' => 'USER_FB_TOKEN',
-        'AxysUser.FbToken' => 'USER_FB_TOKEN',
-        'fbToken' => 'USER_FB_TOKEN',
-        'axysUser.fbToken' => 'USER_FB_TOKEN',
-        'AxysUserTableMap::COL_USER_FB_TOKEN' => 'USER_FB_TOKEN',
-        'COL_USER_FB_TOKEN' => 'USER_FB_TOKEN',
-        'user_fb_token' => 'USER_FB_TOKEN',
-        'axys_users.user_fb_token' => 'USER_FB_TOKEN',
-        'CountryId' => 'COUNTRY_ID',
-        'AxysUser.CountryId' => 'COUNTRY_ID',
-        'countryId' => 'COUNTRY_ID',
-        'axysUser.countryId' => 'COUNTRY_ID',
-        'AxysUserTableMap::COL_COUNTRY_ID' => 'COUNTRY_ID',
-        'COL_COUNTRY_ID' => 'COUNTRY_ID',
-        'country_id' => 'COUNTRY_ID',
-        'axys_users.country_id' => 'COUNTRY_ID',
-        'PasswordResetToken' => 'USER_PASSWORD_RESET_TOKEN',
-        'AxysUser.PasswordResetToken' => 'USER_PASSWORD_RESET_TOKEN',
-        'passwordResetToken' => 'USER_PASSWORD_RESET_TOKEN',
-        'axysUser.passwordResetToken' => 'USER_PASSWORD_RESET_TOKEN',
-        'AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN' => 'USER_PASSWORD_RESET_TOKEN',
-        'COL_USER_PASSWORD_RESET_TOKEN' => 'USER_PASSWORD_RESET_TOKEN',
-        'user_password_reset_token' => 'USER_PASSWORD_RESET_TOKEN',
-        'axys_users.user_password_reset_token' => 'USER_PASSWORD_RESET_TOKEN',
-        'PasswordResetTokenCreated' => 'USER_PASSWORD_RESET_TOKEN_CREATED',
-        'AxysUser.PasswordResetTokenCreated' => 'USER_PASSWORD_RESET_TOKEN_CREATED',
-        'passwordResetTokenCreated' => 'USER_PASSWORD_RESET_TOKEN_CREATED',
-        'axysUser.passwordResetTokenCreated' => 'USER_PASSWORD_RESET_TOKEN_CREATED',
-        'AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED' => 'USER_PASSWORD_RESET_TOKEN_CREATED',
-        'COL_USER_PASSWORD_RESET_TOKEN_CREATED' => 'USER_PASSWORD_RESET_TOKEN_CREATED',
-        'user_password_reset_token_created' => 'USER_PASSWORD_RESET_TOKEN_CREATED',
-        'axys_users.user_password_reset_token_created' => 'USER_PASSWORD_RESET_TOKEN_CREATED',
         'Update' => 'USER_UPDATE',
         'AxysUser.Update' => 'USER_UPDATE',
         'update' => 'USER_UPDATE',
@@ -622,34 +336,12 @@ class AxysUserTableMap extends TableMap
         $this->addColumn('user_password', 'Password', 'VARCHAR', false, 255, null);
         $this->addColumn('user_key', 'Key', 'LONGVARCHAR', false, null, null);
         $this->addColumn('email_key', 'EmailKey', 'VARCHAR', false, 32, null);
-        $this->addColumn('facebook_uid', 'FacebookUid', 'INTEGER', false, null, null);
         $this->addColumn('user_screen_name', 'Username', 'VARCHAR', false, 128, null);
         $this->addColumn('user_slug', 'Slug', 'VARCHAR', false, 32, null);
-        $this->addColumn('user_wishlist_ship', 'WishlistShip', 'BOOLEAN', false, 1, false);
-        $this->addColumn('user_top', 'Top', 'BOOLEAN', false, 1, null);
-        $this->addColumn('user_biblio', 'Biblio', 'BOOLEAN', false, 1, null);
-        $this->addColumn('adresse_ip', 'AdresseIp', 'VARCHAR', false, 255, null);
-        $this->addColumn('recaptcha_score', 'RecaptchaScore', 'FLOAT', false, null, null);
         $this->addColumn('DateInscription', 'Dateinscription', 'TIMESTAMP', false, null, null);
         $this->addColumn('DateConnexion', 'Dateconnexion', 'TIMESTAMP', false, null, null);
-        $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, 10, null);
-        $this->addColumn('bookshop_id', 'BookshopId', 'INTEGER', false, 10, null);
-        $this->addColumn('library_id', 'LibraryId', 'INTEGER', false, 10, null);
-        $this->addColumn('user_civilite', 'Civilite', 'LONGVARCHAR', false, null, null);
         $this->addColumn('user_nom', 'Nom', 'LONGVARCHAR', false, null, null);
         $this->addColumn('user_prenom', 'Prenom', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('user_adresse1', 'Adresse1', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('user_adresse2', 'Adresse2', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('user_codepostal', 'Codepostal', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('user_ville', 'Ville', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('user_pays', 'Pays', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('user_telephone', 'Telephone', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('user_pref_articles_show', 'PrefArticlesShow', 'VARCHAR', false, 8, null);
-        $this->addColumn('user_fb_id', 'FbId', 'BIGINT', false, null, null);
-        $this->addColumn('user_fb_token', 'FbToken', 'VARCHAR', false, 256, null);
-        $this->addColumn('country_id', 'CountryId', 'INTEGER', false, 10, null);
-        $this->addColumn('user_password_reset_token', 'PasswordResetToken', 'VARCHAR', false, 32, null);
-        $this->addColumn('user_password_reset_token_created', 'PasswordResetTokenCreated', 'TIMESTAMP', false, null, null);
         $this->addColumn('user_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('user_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('user_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
@@ -889,34 +581,12 @@ class AxysUserTableMap extends TableMap
             $criteria->addSelectColumn(AxysUserTableMap::COL_USER_PASSWORD);
             $criteria->addSelectColumn(AxysUserTableMap::COL_USER_KEY);
             $criteria->addSelectColumn(AxysUserTableMap::COL_EMAIL_KEY);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_FACEBOOK_UID);
             $criteria->addSelectColumn(AxysUserTableMap::COL_USER_SCREEN_NAME);
             $criteria->addSelectColumn(AxysUserTableMap::COL_USER_SLUG);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_WISHLIST_SHIP);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_TOP);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_BIBLIO);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_ADRESSE_IP);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_RECAPTCHA_SCORE);
             $criteria->addSelectColumn(AxysUserTableMap::COL_DATEINSCRIPTION);
             $criteria->addSelectColumn(AxysUserTableMap::COL_DATECONNEXION);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_PUBLISHER_ID);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_BOOKSHOP_ID);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_LIBRARY_ID);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_CIVILITE);
             $criteria->addSelectColumn(AxysUserTableMap::COL_USER_NOM);
             $criteria->addSelectColumn(AxysUserTableMap::COL_USER_PRENOM);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_ADRESSE1);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_ADRESSE2);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_CODEPOSTAL);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_VILLE);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_PAYS);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_TELEPHONE);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_PREF_ARTICLES_SHOW);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_FB_ID);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_FB_TOKEN);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_COUNTRY_ID);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED);
             $criteria->addSelectColumn(AxysUserTableMap::COL_USER_UPDATE);
             $criteria->addSelectColumn(AxysUserTableMap::COL_USER_CREATED);
             $criteria->addSelectColumn(AxysUserTableMap::COL_USER_UPDATED);
@@ -927,34 +597,12 @@ class AxysUserTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.user_password');
             $criteria->addSelectColumn($alias . '.user_key');
             $criteria->addSelectColumn($alias . '.email_key');
-            $criteria->addSelectColumn($alias . '.facebook_uid');
             $criteria->addSelectColumn($alias . '.user_screen_name');
             $criteria->addSelectColumn($alias . '.user_slug');
-            $criteria->addSelectColumn($alias . '.user_wishlist_ship');
-            $criteria->addSelectColumn($alias . '.user_top');
-            $criteria->addSelectColumn($alias . '.user_biblio');
-            $criteria->addSelectColumn($alias . '.adresse_ip');
-            $criteria->addSelectColumn($alias . '.recaptcha_score');
             $criteria->addSelectColumn($alias . '.DateInscription');
             $criteria->addSelectColumn($alias . '.DateConnexion');
-            $criteria->addSelectColumn($alias . '.publisher_id');
-            $criteria->addSelectColumn($alias . '.bookshop_id');
-            $criteria->addSelectColumn($alias . '.library_id');
-            $criteria->addSelectColumn($alias . '.user_civilite');
             $criteria->addSelectColumn($alias . '.user_nom');
             $criteria->addSelectColumn($alias . '.user_prenom');
-            $criteria->addSelectColumn($alias . '.user_adresse1');
-            $criteria->addSelectColumn($alias . '.user_adresse2');
-            $criteria->addSelectColumn($alias . '.user_codepostal');
-            $criteria->addSelectColumn($alias . '.user_ville');
-            $criteria->addSelectColumn($alias . '.user_pays');
-            $criteria->addSelectColumn($alias . '.user_telephone');
-            $criteria->addSelectColumn($alias . '.user_pref_articles_show');
-            $criteria->addSelectColumn($alias . '.user_fb_id');
-            $criteria->addSelectColumn($alias . '.user_fb_token');
-            $criteria->addSelectColumn($alias . '.country_id');
-            $criteria->addSelectColumn($alias . '.user_password_reset_token');
-            $criteria->addSelectColumn($alias . '.user_password_reset_token_created');
             $criteria->addSelectColumn($alias . '.user_update');
             $criteria->addSelectColumn($alias . '.user_created');
             $criteria->addSelectColumn($alias . '.user_updated');
@@ -982,34 +630,12 @@ class AxysUserTableMap extends TableMap
             $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_PASSWORD);
             $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_KEY);
             $criteria->removeSelectColumn(AxysUserTableMap::COL_EMAIL_KEY);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_FACEBOOK_UID);
             $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_SCREEN_NAME);
             $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_SLUG);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_WISHLIST_SHIP);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_TOP);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_BIBLIO);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_ADRESSE_IP);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_RECAPTCHA_SCORE);
             $criteria->removeSelectColumn(AxysUserTableMap::COL_DATEINSCRIPTION);
             $criteria->removeSelectColumn(AxysUserTableMap::COL_DATECONNEXION);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_PUBLISHER_ID);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_BOOKSHOP_ID);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_LIBRARY_ID);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_CIVILITE);
             $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_NOM);
             $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_PRENOM);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_ADRESSE1);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_ADRESSE2);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_CODEPOSTAL);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_VILLE);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_PAYS);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_TELEPHONE);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_PREF_ARTICLES_SHOW);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_FB_ID);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_FB_TOKEN);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_COUNTRY_ID);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED);
             $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_UPDATE);
             $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_CREATED);
             $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_UPDATED);
@@ -1020,34 +646,12 @@ class AxysUserTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.user_password');
             $criteria->removeSelectColumn($alias . '.user_key');
             $criteria->removeSelectColumn($alias . '.email_key');
-            $criteria->removeSelectColumn($alias . '.facebook_uid');
             $criteria->removeSelectColumn($alias . '.user_screen_name');
             $criteria->removeSelectColumn($alias . '.user_slug');
-            $criteria->removeSelectColumn($alias . '.user_wishlist_ship');
-            $criteria->removeSelectColumn($alias . '.user_top');
-            $criteria->removeSelectColumn($alias . '.user_biblio');
-            $criteria->removeSelectColumn($alias . '.adresse_ip');
-            $criteria->removeSelectColumn($alias . '.recaptcha_score');
             $criteria->removeSelectColumn($alias . '.DateInscription');
             $criteria->removeSelectColumn($alias . '.DateConnexion');
-            $criteria->removeSelectColumn($alias . '.publisher_id');
-            $criteria->removeSelectColumn($alias . '.bookshop_id');
-            $criteria->removeSelectColumn($alias . '.library_id');
-            $criteria->removeSelectColumn($alias . '.user_civilite');
             $criteria->removeSelectColumn($alias . '.user_nom');
             $criteria->removeSelectColumn($alias . '.user_prenom');
-            $criteria->removeSelectColumn($alias . '.user_adresse1');
-            $criteria->removeSelectColumn($alias . '.user_adresse2');
-            $criteria->removeSelectColumn($alias . '.user_codepostal');
-            $criteria->removeSelectColumn($alias . '.user_ville');
-            $criteria->removeSelectColumn($alias . '.user_pays');
-            $criteria->removeSelectColumn($alias . '.user_telephone');
-            $criteria->removeSelectColumn($alias . '.user_pref_articles_show');
-            $criteria->removeSelectColumn($alias . '.user_fb_id');
-            $criteria->removeSelectColumn($alias . '.user_fb_token');
-            $criteria->removeSelectColumn($alias . '.country_id');
-            $criteria->removeSelectColumn($alias . '.user_password_reset_token');
-            $criteria->removeSelectColumn($alias . '.user_password_reset_token_created');
             $criteria->removeSelectColumn($alias . '.user_update');
             $criteria->removeSelectColumn($alias . '.user_created');
             $criteria->removeSelectColumn($alias . '.user_updated');
