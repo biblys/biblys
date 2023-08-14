@@ -1078,7 +1078,7 @@ abstract class AxysConsent implements ActiveRecordInterface
                         $key = 'axysUser';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'axys_users';
+                        $key = 'axys_accounts';
                         break;
                     default:
                         $key = 'AxysUser';

@@ -675,7 +675,7 @@ class StockTableMap extends TableMap
         $this->addForeignKey('article_id', 'ArticleId', 'INTEGER', 'articles', 'article_id', false, 10, null);
         $this->addColumn('campaign_id', 'CampaignId', 'INTEGER', false, 10, null);
         $this->addColumn('reward_id', 'RewardId', 'INTEGER', false, 10, null);
-        $this->addForeignKey('axys_user_id', 'AxysUserId', 'INTEGER', 'axys_users', 'id', false, 10, null);
+        $this->addForeignKey('axys_user_id', 'AxysUserId', 'INTEGER', 'axys_accounts', 'id', false, 10, null);
         $this->addColumn('customer_id', 'CustomerId', 'INTEGER', false, 10, null);
         $this->addColumn('wish_id', 'WishId', 'INTEGER', false, 10, null);
         $this->addColumn('cart_id', 'CartId', 'INTEGER', false, 10, null);

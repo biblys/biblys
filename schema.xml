@@ -153,11 +153,11 @@
     <foreign-key foreignTable="axys_apps" skipSql="true">
       <reference local="app_id" foreign="id"/>
     </foreign-key>
-    <foreign-key foreignTable="axys_users" skipSql="true">
+    <foreign-key foreignTable="axys_accounts" skipSql="true">
       <reference local="user_id" foreign="id"/>
     </foreign-key>
   </table>
-  <table name="axys_users" idMethod="native" phpName="AxysUser">
+  <table name="axys_accounts" idMethod="native" phpName="AxysUser">
     <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER"/>
     <column name="Email" phpName="Email" type="VARCHAR" size="255"/>
@@ -282,7 +282,7 @@
     <foreign-key foreignTable="sites" skipSql="true">
       <reference local="site_id" foreign="site_id"/>
     </foreign-key>
-    <foreign-key foreignTable="axys_users" skipSql="true">
+    <foreign-key foreignTable="axys_accounts" skipSql="true">
       <reference local="axys_user_id" foreign="id"/>
     </foreign-key>
   </table>
@@ -851,7 +851,7 @@
       <parameter name="create_column" value="option_created" />
       <parameter name="update_column" value="option_updated" />
     </behavior>
-    <foreign-key foreignTable="axys_users" skipSql="true">
+    <foreign-key foreignTable="axys_accounts" skipSql="true">
       <reference local="axys_user_id" foreign="id"/>
     </foreign-key>
     <foreign-key foreignTable="sites" skipSql="true">
@@ -1189,7 +1189,7 @@
       <parameter name="create_column" value="right_created" />
       <parameter name="update_column" value="right_updated" />
     </behavior>
-    <foreign-key foreignTable="axys_users" skipSql="true">
+    <foreign-key foreignTable="axys_accounts" skipSql="true">
       <reference local="axys_user_id" foreign="id"/>
     </foreign-key>
     <foreign-key foreignTable="sites" skipSql="true">
@@ -1263,7 +1263,7 @@
       <parameter name="create_column" value="session_created" />
       <parameter name="update_column" value="session_updated" />
     </behavior>
-    <foreign-key foreignTable="axys_users" skipSql="true">
+    <foreign-key foreignTable="axys_accounts" skipSql="true">
       <reference local="axys_user_id" foreign="id"/>
     </foreign-key>
     <vendor type="mysql">
@@ -1452,7 +1452,7 @@
     <foreign-key foreignTable="articles" skipSql="true">
       <reference local="article_id" foreign="article_id"/>
     </foreign-key>
-    <foreign-key foreignTable="axys_users" skipSql="true">
+    <foreign-key foreignTable="axys_accounts" skipSql="true">
       <reference local="axys_user_id" foreign="id" />
     </foreign-key>
   </table>
@@ -1551,7 +1551,7 @@
       <unique-column name="axys_user_id"/>
       <unique-column name="article_id"/>
     </unique>
-    <foreign-key foreignTable="axys_users" skipSql="true">
+    <foreign-key foreignTable="axys_accounts" skipSql="true">
       <reference local="axys_user_id" foreign="id"/>
     </foreign-key>
     <vendor type="mysql">
@@ -1573,7 +1573,7 @@
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
-    <foreign-key foreignTable="axys_users" skipSql="true">
+    <foreign-key foreignTable="axys_accounts" skipSql="true">
       <reference local="axys_user_id" foreign="id"/>
     </foreign-key>
   </table>

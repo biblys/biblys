@@ -31,9 +31,9 @@ if (isset($_GET['added'])) {
 }
 
 $rights = $_SQL->prepare("
-    SELECT `axys_users`.`id` as `user_id`, `axys_users`.`Email` AS `user_email`, `user_screen_name`, `DateConnexion`, `right_id`
+    SELECT `axys_accounts`.`id` as `user_id`, `axys_accounts`.`Email` AS `user_email`, `user_screen_name`, `DateConnexion`, `right_id`
         FROM `rights`
-        JOIN `axys_users` ON `axys_users`.`id` = `rights`.`axys_user_id`
+        JOIN `axys_accounts` ON `axys_accounts`.`id` = `rights`.`axys_user_id`
     WHERE `rights`.`site_id` = :site_id
     ORDER BY `DateConnexion` DESC
 ");

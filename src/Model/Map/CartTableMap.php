@@ -374,7 +374,7 @@ class CartTableMap extends TableMap
         $this->addPrimaryKey('cart_id', 'Id', 'INTEGER', true, 10, null);
         $this->addColumn('cart_uid', 'Uid', 'VARCHAR', false, 32, null);
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
-        $this->addForeignKey('axys_user_id', 'AxysUserId', 'INTEGER', 'axys_users', 'id', false, 10, null);
+        $this->addForeignKey('axys_user_id', 'AxysUserId', 'INTEGER', 'axys_accounts', 'id', false, 10, null);
         $this->addColumn('cart_seller_id', 'SellerId', 'INTEGER', false, 10, null);
         $this->addColumn('customer_id', 'CustomerId', 'INTEGER', false, 10, null);
         $this->addColumn('cart_title', 'Title', 'VARCHAR', false, 128, null);

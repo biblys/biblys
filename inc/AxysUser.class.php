@@ -373,7 +373,7 @@ class AxysUserManager extends EntityManager
     {
         parent::__construct();
 
-        $this->table = "axys_users";
+        $this->table = "axys_accounts";
     }
 
     public function getQuery($query, $params, $options = [], $withJoins = true)

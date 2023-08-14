@@ -103,14 +103,14 @@ $sql = $GLOBALS["_SQL"]->prepare(
         `stock_tva_rate`, `order_id`, `order_type`, `order_url`, `order_amount`, `order_firstname`,
         `order_lastname`, `order_payment_date`,`order_payment_cash`, `order_payment_cheque`,
         `order_payment_card`, `order_payment_paypal`,  `order_payment_left`, `order_shipping`,
-        `axys_users`.`id` AS `user_id`, `axys_users`.`Email` AS `user_email`,
+        `axys_accounts`.`id` AS `user_id`, `axys_accounts`.`Email` AS `user_email`,
         `user_nom` AS `user_last_name`, `user_prenom` AS `user_first_name`,
         `customers`.`customer_id`, `customer_first_name`, `customer_last_name`
     FROM `stock`
     JOIN `articles` USING(`article_id`)
     JOIN `orders` USING(`order_id`)
     JOIN `collections` USING(`collection_id`)
-    LEFT JOIN `axys_users` ON `axys_users`.`id` = `orders`.`axys_user_id`
+    LEFT JOIN `axys_accounts` ON `axys_accounts`.`id` = `orders`.`axys_user_id`
     LEFT JOIN `customers` ON `orders`.`customer_id` = `customers`.`customer_id`
     WHERE `orders`.`site_id` = :site_id $req
     GROUP BY `stock_id` ORDER BY `order_payment_date` ASC"

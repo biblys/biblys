@@ -3504,7 +3504,7 @@ abstract class Site implements ActiveRecordInterface
                         $key = 'axysUsers';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'axys_userss';
+                        $key = 'axys_accountss';
                         break;
                     default:
                         $key = 'AxysUsers';

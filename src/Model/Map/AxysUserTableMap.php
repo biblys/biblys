@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'axys_users' table.
+ * This class defines the structure of the 'axys_accounts' table.
  *
  *
  *
@@ -43,7 +43,7 @@ class AxysUserTableMap extends TableMap
     /**
      * The table name for this class
      */
-    public const TABLE_NAME = 'axys_users';
+    public const TABLE_NAME = 'axys_accounts';
 
     /**
      * The PHP name of this class (PascalCase)
@@ -78,77 +78,77 @@ class AxysUserTableMap extends TableMap
     /**
      * the column name for the id field
      */
-    public const COL_ID = 'axys_users.id';
+    public const COL_ID = 'axys_accounts.id';
 
     /**
      * the column name for the site_id field
      */
-    public const COL_SITE_ID = 'axys_users.site_id';
+    public const COL_SITE_ID = 'axys_accounts.site_id';
 
     /**
      * the column name for the Email field
      */
-    public const COL_EMAIL = 'axys_users.Email';
+    public const COL_EMAIL = 'axys_accounts.Email';
 
     /**
      * the column name for the user_password field
      */
-    public const COL_USER_PASSWORD = 'axys_users.user_password';
+    public const COL_USER_PASSWORD = 'axys_accounts.user_password';
 
     /**
      * the column name for the user_key field
      */
-    public const COL_USER_KEY = 'axys_users.user_key';
+    public const COL_USER_KEY = 'axys_accounts.user_key';
 
     /**
      * the column name for the email_key field
      */
-    public const COL_EMAIL_KEY = 'axys_users.email_key';
+    public const COL_EMAIL_KEY = 'axys_accounts.email_key';
 
     /**
      * the column name for the user_screen_name field
      */
-    public const COL_USER_SCREEN_NAME = 'axys_users.user_screen_name';
+    public const COL_USER_SCREEN_NAME = 'axys_accounts.user_screen_name';
 
     /**
      * the column name for the user_slug field
      */
-    public const COL_USER_SLUG = 'axys_users.user_slug';
+    public const COL_USER_SLUG = 'axys_accounts.user_slug';
 
     /**
      * the column name for the DateInscription field
      */
-    public const COL_DATEINSCRIPTION = 'axys_users.DateInscription';
+    public const COL_DATEINSCRIPTION = 'axys_accounts.DateInscription';
 
     /**
      * the column name for the DateConnexion field
      */
-    public const COL_DATECONNEXION = 'axys_users.DateConnexion';
+    public const COL_DATECONNEXION = 'axys_accounts.DateConnexion';
 
     /**
      * the column name for the user_nom field
      */
-    public const COL_USER_NOM = 'axys_users.user_nom';
+    public const COL_USER_NOM = 'axys_accounts.user_nom';
 
     /**
      * the column name for the user_prenom field
      */
-    public const COL_USER_PRENOM = 'axys_users.user_prenom';
+    public const COL_USER_PRENOM = 'axys_accounts.user_prenom';
 
     /**
      * the column name for the user_update field
      */
-    public const COL_USER_UPDATE = 'axys_users.user_update';
+    public const COL_USER_UPDATE = 'axys_accounts.user_update';
 
     /**
      * the column name for the user_created field
      */
-    public const COL_USER_CREATED = 'axys_users.user_created';
+    public const COL_USER_CREATED = 'axys_accounts.user_created';
 
     /**
      * the column name for the user_updated field
      */
-    public const COL_USER_UPDATED = 'axys_users.user_updated';
+    public const COL_USER_UPDATED = 'axys_accounts.user_updated';
 
     /**
      * The default string format for model objects of the related table
@@ -199,7 +199,7 @@ class AxysUserTableMap extends TableMap
         'axysUser.id' => 'ID',
         'AxysUserTableMap::COL_ID' => 'ID',
         'COL_ID' => 'ID',
-        'axys_users.id' => 'ID',
+        'axys_accounts.id' => 'ID',
         'SiteId' => 'SITE_ID',
         'AxysUser.SiteId' => 'SITE_ID',
         'siteId' => 'SITE_ID',
@@ -207,14 +207,14 @@ class AxysUserTableMap extends TableMap
         'AxysUserTableMap::COL_SITE_ID' => 'SITE_ID',
         'COL_SITE_ID' => 'SITE_ID',
         'site_id' => 'SITE_ID',
-        'axys_users.site_id' => 'SITE_ID',
+        'axys_accounts.site_id' => 'SITE_ID',
         'Email' => 'EMAIL',
         'AxysUser.Email' => 'EMAIL',
         'email' => 'EMAIL',
         'axysUser.email' => 'EMAIL',
         'AxysUserTableMap::COL_EMAIL' => 'EMAIL',
         'COL_EMAIL' => 'EMAIL',
-        'axys_users.Email' => 'EMAIL',
+        'axys_accounts.Email' => 'EMAIL',
         'Password' => 'USER_PASSWORD',
         'AxysUser.Password' => 'USER_PASSWORD',
         'password' => 'USER_PASSWORD',
@@ -222,7 +222,7 @@ class AxysUserTableMap extends TableMap
         'AxysUserTableMap::COL_USER_PASSWORD' => 'USER_PASSWORD',
         'COL_USER_PASSWORD' => 'USER_PASSWORD',
         'user_password' => 'USER_PASSWORD',
-        'axys_users.user_password' => 'USER_PASSWORD',
+        'axys_accounts.user_password' => 'USER_PASSWORD',
         'Key' => 'USER_KEY',
         'AxysUser.Key' => 'USER_KEY',
         'key' => 'USER_KEY',
@@ -230,7 +230,7 @@ class AxysUserTableMap extends TableMap
         'AxysUserTableMap::COL_USER_KEY' => 'USER_KEY',
         'COL_USER_KEY' => 'USER_KEY',
         'user_key' => 'USER_KEY',
-        'axys_users.user_key' => 'USER_KEY',
+        'axys_accounts.user_key' => 'USER_KEY',
         'EmailKey' => 'EMAIL_KEY',
         'AxysUser.EmailKey' => 'EMAIL_KEY',
         'emailKey' => 'EMAIL_KEY',
@@ -238,7 +238,7 @@ class AxysUserTableMap extends TableMap
         'AxysUserTableMap::COL_EMAIL_KEY' => 'EMAIL_KEY',
         'COL_EMAIL_KEY' => 'EMAIL_KEY',
         'email_key' => 'EMAIL_KEY',
-        'axys_users.email_key' => 'EMAIL_KEY',
+        'axys_accounts.email_key' => 'EMAIL_KEY',
         'Username' => 'USER_SCREEN_NAME',
         'AxysUser.Username' => 'USER_SCREEN_NAME',
         'username' => 'USER_SCREEN_NAME',
@@ -246,7 +246,7 @@ class AxysUserTableMap extends TableMap
         'AxysUserTableMap::COL_USER_SCREEN_NAME' => 'USER_SCREEN_NAME',
         'COL_USER_SCREEN_NAME' => 'USER_SCREEN_NAME',
         'user_screen_name' => 'USER_SCREEN_NAME',
-        'axys_users.user_screen_name' => 'USER_SCREEN_NAME',
+        'axys_accounts.user_screen_name' => 'USER_SCREEN_NAME',
         'Slug' => 'USER_SLUG',
         'AxysUser.Slug' => 'USER_SLUG',
         'slug' => 'USER_SLUG',
@@ -254,7 +254,7 @@ class AxysUserTableMap extends TableMap
         'AxysUserTableMap::COL_USER_SLUG' => 'USER_SLUG',
         'COL_USER_SLUG' => 'USER_SLUG',
         'user_slug' => 'USER_SLUG',
-        'axys_users.user_slug' => 'USER_SLUG',
+        'axys_accounts.user_slug' => 'USER_SLUG',
         'Dateinscription' => 'DATEINSCRIPTION',
         'AxysUser.Dateinscription' => 'DATEINSCRIPTION',
         'dateinscription' => 'DATEINSCRIPTION',
@@ -262,7 +262,7 @@ class AxysUserTableMap extends TableMap
         'AxysUserTableMap::COL_DATEINSCRIPTION' => 'DATEINSCRIPTION',
         'COL_DATEINSCRIPTION' => 'DATEINSCRIPTION',
         'DateInscription' => 'DATEINSCRIPTION',
-        'axys_users.DateInscription' => 'DATEINSCRIPTION',
+        'axys_accounts.DateInscription' => 'DATEINSCRIPTION',
         'Dateconnexion' => 'DATECONNEXION',
         'AxysUser.Dateconnexion' => 'DATECONNEXION',
         'dateconnexion' => 'DATECONNEXION',
@@ -270,7 +270,7 @@ class AxysUserTableMap extends TableMap
         'AxysUserTableMap::COL_DATECONNEXION' => 'DATECONNEXION',
         'COL_DATECONNEXION' => 'DATECONNEXION',
         'DateConnexion' => 'DATECONNEXION',
-        'axys_users.DateConnexion' => 'DATECONNEXION',
+        'axys_accounts.DateConnexion' => 'DATECONNEXION',
         'Nom' => 'USER_NOM',
         'AxysUser.Nom' => 'USER_NOM',
         'nom' => 'USER_NOM',
@@ -278,7 +278,7 @@ class AxysUserTableMap extends TableMap
         'AxysUserTableMap::COL_USER_NOM' => 'USER_NOM',
         'COL_USER_NOM' => 'USER_NOM',
         'user_nom' => 'USER_NOM',
-        'axys_users.user_nom' => 'USER_NOM',
+        'axys_accounts.user_nom' => 'USER_NOM',
         'Prenom' => 'USER_PRENOM',
         'AxysUser.Prenom' => 'USER_PRENOM',
         'prenom' => 'USER_PRENOM',
@@ -286,7 +286,7 @@ class AxysUserTableMap extends TableMap
         'AxysUserTableMap::COL_USER_PRENOM' => 'USER_PRENOM',
         'COL_USER_PRENOM' => 'USER_PRENOM',
         'user_prenom' => 'USER_PRENOM',
-        'axys_users.user_prenom' => 'USER_PRENOM',
+        'axys_accounts.user_prenom' => 'USER_PRENOM',
         'Update' => 'USER_UPDATE',
         'AxysUser.Update' => 'USER_UPDATE',
         'update' => 'USER_UPDATE',
@@ -294,7 +294,7 @@ class AxysUserTableMap extends TableMap
         'AxysUserTableMap::COL_USER_UPDATE' => 'USER_UPDATE',
         'COL_USER_UPDATE' => 'USER_UPDATE',
         'user_update' => 'USER_UPDATE',
-        'axys_users.user_update' => 'USER_UPDATE',
+        'axys_accounts.user_update' => 'USER_UPDATE',
         'CreatedAt' => 'USER_CREATED',
         'AxysUser.CreatedAt' => 'USER_CREATED',
         'createdAt' => 'USER_CREATED',
@@ -302,7 +302,7 @@ class AxysUserTableMap extends TableMap
         'AxysUserTableMap::COL_USER_CREATED' => 'USER_CREATED',
         'COL_USER_CREATED' => 'USER_CREATED',
         'user_created' => 'USER_CREATED',
-        'axys_users.user_created' => 'USER_CREATED',
+        'axys_accounts.user_created' => 'USER_CREATED',
         'UpdatedAt' => 'USER_UPDATED',
         'AxysUser.UpdatedAt' => 'USER_UPDATED',
         'updatedAt' => 'USER_UPDATED',
@@ -310,7 +310,7 @@ class AxysUserTableMap extends TableMap
         'AxysUserTableMap::COL_USER_UPDATED' => 'USER_UPDATED',
         'COL_USER_UPDATED' => 'USER_UPDATED',
         'user_updated' => 'USER_UPDATED',
-        'axys_users.user_updated' => 'USER_UPDATED',
+        'axys_accounts.user_updated' => 'USER_UPDATED',
     ];
 
     /**
@@ -323,7 +323,7 @@ class AxysUserTableMap extends TableMap
     public function initialize(): void
     {
         // attributes
-        $this->setName('axys_users');
+        $this->setName('axys_accounts');
         $this->setPhpName('AxysUser');
         $this->setIdentifierQuoting(false);
         $this->setClassName('\\Model\\AxysUser');
@@ -712,7 +712,7 @@ class AxysUserTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the axys_users table.
+     * Deletes all rows from the axys_accounts table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).

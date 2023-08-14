@@ -17,7 +17,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the `axys_users` table.
+ * Base class that represents a query for the `axys_accounts` table.
  *
  * @method     ChildAxysUserQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildAxysUserQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
@@ -321,7 +321,7 @@ abstract class AxysUserQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, site_id, Email, user_password, user_key, email_key, user_screen_name, user_slug, DateInscription, DateConnexion, user_nom, user_prenom, user_update, user_created, user_updated FROM axys_users WHERE id = :p0';
+        $sql = 'SELECT id, site_id, Email, user_password, user_key, email_key, user_screen_name, user_slug, DateInscription, DateConnexion, user_nom, user_prenom, user_update, user_created, user_updated FROM axys_accounts WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -2528,7 +2528,7 @@ abstract class AxysUserQuery extends ModelCriteria
     }
 
     /**
-     * Deletes all rows from the axys_users table.
+     * Deletes all rows from the axys_accounts table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).

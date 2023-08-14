@@ -48,7 +48,7 @@ $posts = EntityManager::prepareAndExecute(
         `post_id`, `post_title`, `post_content`, `post_url`, `post_status`, `post_date`, `Email`,
         `user_screen_name`, `category_name`, `publishers`.`publisher_id`, `publisher_name`
     FROM `posts`
-    JOIN `axys_users` ON `axys_users`.`id` = `axys_user_id`
+    JOIN `axys_accounts` ON `axys_accounts`.`id` = `axys_user_id`
     LEFT JOIN `categories` USING(`category_id`)
     LEFT JOIN `publishers` ON `posts`.`publisher_id` = `publishers`.`publisher_id`
     WHERE `posts`.`site_id` = :site_id $req
