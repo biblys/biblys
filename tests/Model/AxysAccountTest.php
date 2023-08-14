@@ -8,7 +8,7 @@ use Propel\Runtime\Exception\PropelException;
 
 require_once __DIR__."/../setUp.php";
 
-class AxysUserTest extends TestCase
+class AxysAccountTest extends TestCase
 {
     /**
      * @throws PropelException
@@ -152,10 +152,10 @@ class AxysUserTest extends TestCase
         // given
         $user = ModelFactory::createUser();
         $currentRight = new Right();
-        $currentRight->setCurrent(true)->setAxysUser($user);
+        $currentRight->setCurrent(true)->setAxysAccount($user);
         $currentRight->save();
         $otherRight = new Right();
-        $otherRight->setCurrent(false)->setAxysUser($user);
+        $otherRight->setCurrent(false)->setAxysAccount($user);
         $otherRight->save();
 
         // when
@@ -171,7 +171,7 @@ class AxysUserTest extends TestCase
     public function testValidatingValidUser()
     {
         // given
-        $user = new AxysUser();
+        $user = new AxysAccount();
         $user->setEmail("valid-email@example.net");
 
         // when
@@ -198,7 +198,7 @@ class AxysUserTest extends TestCase
         );
 
         // given
-        $user = new AxysUser();
+        $user = new AxysAccount();
         $user->setEmail("invalid-email-example.net");
 
         // when

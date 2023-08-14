@@ -7,8 +7,8 @@ use \Exception;
 use \PDO;
 use Model\Article as ChildArticle;
 use Model\ArticleQuery as ChildArticleQuery;
-use Model\AxysUser as ChildAxysUser;
-use Model\AxysUserQuery as ChildAxysUserQuery;
+use Model\AxysAccount as ChildAxysAccount;
+use Model\AxysAccountQuery as ChildAxysAccountQuery;
 use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
 use Model\StockQuery as ChildStockQuery;
@@ -373,9 +373,9 @@ abstract class Stock implements ActiveRecordInterface
     protected $aArticle;
 
     /**
-     * @var        ChildAxysUser
+     * @var        ChildAxysAccount
      */
-    protected $aAxysUser;
+    protected $aAxysAccount;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -1334,8 +1334,8 @@ abstract class Stock implements ActiveRecordInterface
             $this->modifiedColumns[StockTableMap::COL_AXYS_USER_ID] = true;
         }
 
-        if ($this->aAxysUser !== null && $this->aAxysUser->getId() !== $v) {
-            $this->aAxysUser = null;
+        if ($this->aAxysAccount !== null && $this->aAxysAccount->getId() !== $v) {
+            $this->aAxysAccount = null;
         }
 
         return $this;
@@ -2330,8 +2330,8 @@ abstract class Stock implements ActiveRecordInterface
         if ($this->aArticle !== null && $this->article_id !== $this->aArticle->getId()) {
             $this->aArticle = null;
         }
-        if ($this->aAxysUser !== null && $this->axys_user_id !== $this->aAxysUser->getId()) {
-            $this->aAxysUser = null;
+        if ($this->aAxysAccount !== null && $this->axys_user_id !== $this->aAxysAccount->getId()) {
+            $this->aAxysAccount = null;
         }
     }
 
@@ -2374,7 +2374,7 @@ abstract class Stock implements ActiveRecordInterface
 
             $this->aSite = null;
             $this->aArticle = null;
-            $this->aAxysUser = null;
+            $this->aAxysAccount = null;
         } // if (deep)
     }
 
@@ -2510,11 +2510,11 @@ abstract class Stock implements ActiveRecordInterface
                 $this->setArticle($this->aArticle);
             }
 
-            if ($this->aAxysUser !== null) {
-                if ($this->aAxysUser->isModified() || $this->aAxysUser->isNew()) {
-                    $affectedRows += $this->aAxysUser->save($con);
+            if ($this->aAxysAccount !== null) {
+                if ($this->aAxysAccount->isModified() || $this->aAxysAccount->isNew()) {
+                    $affectedRows += $this->aAxysAccount->save($con);
                 }
-                $this->setAxysUser($this->aAxysUser);
+                $this->setAxysAccount($this->aAxysAccount);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -3183,20 +3183,20 @@ abstract class Stock implements ActiveRecordInterface
 
                 $result[$key] = $this->aArticle->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->aAxysUser) {
+            if (null !== $this->aAxysAccount) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'axysUser';
+                        $key = 'axysAccount';
                         break;
                     case TableMap::TYPE_FIELDNAME:
                         $key = 'axys_accounts';
                         break;
                     default:
-                        $key = 'AxysUser';
+                        $key = 'AxysAccount';
                 }
 
-                $result[$key] = $this->aAxysUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aAxysAccount->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -3931,13 +3931,13 @@ abstract class Stock implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildAxysUser object.
+     * Declares an association between this object and a ChildAxysAccount object.
      *
-     * @param ChildAxysUser|null $v
+     * @param ChildAxysAccount|null $v
      * @return $this The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function setAxysUser(ChildAxysUser $v = null)
+    public function setAxysAccount(ChildAxysAccount $v = null)
     {
         if ($v === null) {
             $this->setAxysUserId(NULL);
@@ -3945,10 +3945,10 @@ abstract class Stock implements ActiveRecordInterface
             $this->setAxysUserId($v->getId());
         }
 
-        $this->aAxysUser = $v;
+        $this->aAxysAccount = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildAxysUser object, it will not be re-added.
+        // If this object has already been added to the ChildAxysAccount object, it will not be re-added.
         if ($v !== null) {
             $v->addStock($this);
         }
@@ -3959,26 +3959,26 @@ abstract class Stock implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildAxysUser object
+     * Get the associated ChildAxysAccount object
      *
      * @param ConnectionInterface $con Optional Connection object.
-     * @return ChildAxysUser|null The associated ChildAxysUser object.
+     * @return ChildAxysAccount|null The associated ChildAxysAccount object.
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function getAxysUser(?ConnectionInterface $con = null)
+    public function getAxysAccount(?ConnectionInterface $con = null)
     {
-        if ($this->aAxysUser === null && ($this->axys_user_id != 0)) {
-            $this->aAxysUser = ChildAxysUserQuery::create()->findPk($this->axys_user_id, $con);
+        if ($this->aAxysAccount === null && ($this->axys_user_id != 0)) {
+            $this->aAxysAccount = ChildAxysAccountQuery::create()->findPk($this->axys_user_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aAxysUser->addStocks($this);
+                $this->aAxysAccount->addStocks($this);
              */
         }
 
-        return $this->aAxysUser;
+        return $this->aAxysAccount;
     }
 
     /**
@@ -3996,8 +3996,8 @@ abstract class Stock implements ActiveRecordInterface
         if (null !== $this->aArticle) {
             $this->aArticle->removeStock($this);
         }
-        if (null !== $this->aAxysUser) {
-            $this->aAxysUser->removeStock($this);
+        if (null !== $this->aAxysAccount) {
+            $this->aAxysAccount->removeStock($this);
         }
         $this->stock_id = null;
         $this->site_id = null;
@@ -4066,7 +4066,7 @@ abstract class Stock implements ActiveRecordInterface
 
         $this->aSite = null;
         $this->aArticle = null;
-        $this->aAxysUser = null;
+        $this->aAxysAccount = null;
         return $this;
     }
 

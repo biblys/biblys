@@ -692,13 +692,13 @@ class SiteTableMap extends TableMap
      */
     public function buildRelations(): void
     {
-        $this->addRelation('AxysUser', '\\Model\\AxysUser', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('AxysAccount', '\\Model\\AxysAccount', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':site_id',
     1 => ':site_id',
   ),
-), null, null, 'AxysUsers', false);
+), null, null, 'AxysAccounts', false);
         $this->addRelation('Cart', '\\Model\\Cart', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

@@ -5,8 +5,8 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
-use Model\AxysUser as ChildAxysUser;
-use Model\AxysUserQuery as ChildAxysUserQuery;
+use Model\AxysAccount as ChildAxysAccount;
+use Model\AxysAccountQuery as ChildAxysAccountQuery;
 use Model\CartQuery as ChildCartQuery;
 use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
@@ -203,9 +203,9 @@ abstract class Cart implements ActiveRecordInterface
     protected $aSite;
 
     /**
-     * @var        ChildAxysUser
+     * @var        ChildAxysAccount
      */
-    protected $aAxysUser;
+    protected $aAxysAccount;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -777,8 +777,8 @@ abstract class Cart implements ActiveRecordInterface
             $this->modifiedColumns[CartTableMap::COL_AXYS_USER_ID] = true;
         }
 
-        if ($this->aAxysUser !== null && $this->aAxysUser->getId() !== $v) {
-            $this->aAxysUser = null;
+        if ($this->aAxysAccount !== null && $this->aAxysAccount->getId() !== $v) {
+            $this->aAxysAccount = null;
         }
 
         return $this;
@@ -1214,8 +1214,8 @@ abstract class Cart implements ActiveRecordInterface
         if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
             $this->aSite = null;
         }
-        if ($this->aAxysUser !== null && $this->axys_user_id !== $this->aAxysUser->getId()) {
-            $this->aAxysUser = null;
+        if ($this->aAxysAccount !== null && $this->axys_user_id !== $this->aAxysAccount->getId()) {
+            $this->aAxysAccount = null;
         }
     }
 
@@ -1257,7 +1257,7 @@ abstract class Cart implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aSite = null;
-            $this->aAxysUser = null;
+            $this->aAxysAccount = null;
         } // if (deep)
     }
 
@@ -1386,11 +1386,11 @@ abstract class Cart implements ActiveRecordInterface
                 $this->setSite($this->aSite);
             }
 
-            if ($this->aAxysUser !== null) {
-                if ($this->aAxysUser->isModified() || $this->aAxysUser->isNew()) {
-                    $affectedRows += $this->aAxysUser->save($con);
+            if ($this->aAxysAccount !== null) {
+                if ($this->aAxysAccount->isModified() || $this->aAxysAccount->isNew()) {
+                    $affectedRows += $this->aAxysAccount->save($con);
                 }
-                $this->setAxysUser($this->aAxysUser);
+                $this->setAxysAccount($this->aAxysAccount);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -1771,20 +1771,20 @@ abstract class Cart implements ActiveRecordInterface
 
                 $result[$key] = $this->aSite->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->aAxysUser) {
+            if (null !== $this->aAxysAccount) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'axysUser';
+                        $key = 'axysAccount';
                         break;
                     case TableMap::TYPE_FIELDNAME:
                         $key = 'axys_accounts';
                         break;
                     default:
-                        $key = 'AxysUser';
+                        $key = 'AxysAccount';
                 }
 
-                $result[$key] = $this->aAxysUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aAxysAccount->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -2238,13 +2238,13 @@ abstract class Cart implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildAxysUser object.
+     * Declares an association between this object and a ChildAxysAccount object.
      *
-     * @param ChildAxysUser|null $v
+     * @param ChildAxysAccount|null $v
      * @return $this The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function setAxysUser(ChildAxysUser $v = null)
+    public function setAxysAccount(ChildAxysAccount $v = null)
     {
         if ($v === null) {
             $this->setAxysUserId(NULL);
@@ -2252,10 +2252,10 @@ abstract class Cart implements ActiveRecordInterface
             $this->setAxysUserId($v->getId());
         }
 
-        $this->aAxysUser = $v;
+        $this->aAxysAccount = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildAxysUser object, it will not be re-added.
+        // If this object has already been added to the ChildAxysAccount object, it will not be re-added.
         if ($v !== null) {
             $v->addCart($this);
         }
@@ -2266,26 +2266,26 @@ abstract class Cart implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildAxysUser object
+     * Get the associated ChildAxysAccount object
      *
      * @param ConnectionInterface $con Optional Connection object.
-     * @return ChildAxysUser|null The associated ChildAxysUser object.
+     * @return ChildAxysAccount|null The associated ChildAxysAccount object.
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function getAxysUser(?ConnectionInterface $con = null)
+    public function getAxysAccount(?ConnectionInterface $con = null)
     {
-        if ($this->aAxysUser === null && ($this->axys_user_id != 0)) {
-            $this->aAxysUser = ChildAxysUserQuery::create()->findPk($this->axys_user_id, $con);
+        if ($this->aAxysAccount === null && ($this->axys_user_id != 0)) {
+            $this->aAxysAccount = ChildAxysAccountQuery::create()->findPk($this->axys_user_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aAxysUser->addCarts($this);
+                $this->aAxysAccount->addCarts($this);
              */
         }
 
-        return $this->aAxysUser;
+        return $this->aAxysAccount;
     }
 
     /**
@@ -2300,8 +2300,8 @@ abstract class Cart implements ActiveRecordInterface
         if (null !== $this->aSite) {
             $this->aSite->removeCart($this);
         }
-        if (null !== $this->aAxysUser) {
-            $this->aAxysUser->removeCart($this);
+        if (null !== $this->aAxysAccount) {
+            $this->aAxysAccount->removeCart($this);
         }
         $this->cart_id = null;
         $this->cart_uid = null;
@@ -2346,7 +2346,7 @@ abstract class Cart implements ActiveRecordInterface
         } // if ($deep)
 
         $this->aSite = null;
-        $this->aAxysUser = null;
+        $this->aAxysAccount = null;
         return $this;
     }
 

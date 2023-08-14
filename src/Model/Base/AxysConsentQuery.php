@@ -51,17 +51,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAxysConsentQuery rightJoinWithAxysApp() Adds a RIGHT JOIN clause and with to the query using the AxysApp relation
  * @method     ChildAxysConsentQuery innerJoinWithAxysApp() Adds a INNER JOIN clause and with to the query using the AxysApp relation
  *
- * @method     ChildAxysConsentQuery leftJoinAxysUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the AxysUser relation
- * @method     ChildAxysConsentQuery rightJoinAxysUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the AxysUser relation
- * @method     ChildAxysConsentQuery innerJoinAxysUser($relationAlias = null) Adds a INNER JOIN clause to the query using the AxysUser relation
+ * @method     ChildAxysConsentQuery leftJoinAxysAccount($relationAlias = null) Adds a LEFT JOIN clause to the query using the AxysAccount relation
+ * @method     ChildAxysConsentQuery rightJoinAxysAccount($relationAlias = null) Adds a RIGHT JOIN clause to the query using the AxysAccount relation
+ * @method     ChildAxysConsentQuery innerJoinAxysAccount($relationAlias = null) Adds a INNER JOIN clause to the query using the AxysAccount relation
  *
- * @method     ChildAxysConsentQuery joinWithAxysUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the AxysUser relation
+ * @method     ChildAxysConsentQuery joinWithAxysAccount($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the AxysAccount relation
  *
- * @method     ChildAxysConsentQuery leftJoinWithAxysUser() Adds a LEFT JOIN clause and with to the query using the AxysUser relation
- * @method     ChildAxysConsentQuery rightJoinWithAxysUser() Adds a RIGHT JOIN clause and with to the query using the AxysUser relation
- * @method     ChildAxysConsentQuery innerJoinWithAxysUser() Adds a INNER JOIN clause and with to the query using the AxysUser relation
+ * @method     ChildAxysConsentQuery leftJoinWithAxysAccount() Adds a LEFT JOIN clause and with to the query using the AxysAccount relation
+ * @method     ChildAxysConsentQuery rightJoinWithAxysAccount() Adds a RIGHT JOIN clause and with to the query using the AxysAccount relation
+ * @method     ChildAxysConsentQuery innerJoinWithAxysAccount() Adds a INNER JOIN clause and with to the query using the AxysAccount relation
  *
- * @method     \Model\AxysAppQuery|\Model\AxysUserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\AxysAppQuery|\Model\AxysAccountQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildAxysConsent|null findOne(?ConnectionInterface $con = null) Return the first ChildAxysConsent matching the query
  * @method     ChildAxysConsent findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildAxysConsent matching the query, or a new ChildAxysConsent object populated from the query conditions when no match is found
@@ -389,7 +389,7 @@ abstract class AxysConsentQuery extends ModelCriteria
      * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
      * </code>
      *
-     * @see       filterByAxysUser()
+     * @see       filterByAxysAccount()
      *
      * @param mixed $userId The value to use as filter.
      *              Use scalar values for equality.
@@ -718,46 +718,46 @@ abstract class AxysConsentQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \Model\AxysUser object
+     * Filter the query by a related \Model\AxysAccount object
      *
-     * @param \Model\AxysUser|ObjectCollection $axysUser The related object(s) to use as filter
+     * @param \Model\AxysAccount|ObjectCollection $axysAccount The related object(s) to use as filter
      * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByAxysUser($axysUser, ?string $comparison = null)
+    public function filterByAxysAccount($axysAccount, ?string $comparison = null)
     {
-        if ($axysUser instanceof \Model\AxysUser) {
+        if ($axysAccount instanceof \Model\AxysAccount) {
             return $this
-                ->addUsingAlias(AxysConsentTableMap::COL_USER_ID, $axysUser->getId(), $comparison);
-        } elseif ($axysUser instanceof ObjectCollection) {
+                ->addUsingAlias(AxysConsentTableMap::COL_USER_ID, $axysAccount->getId(), $comparison);
+        } elseif ($axysAccount instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             $this
-                ->addUsingAlias(AxysConsentTableMap::COL_USER_ID, $axysUser->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(AxysConsentTableMap::COL_USER_ID, $axysAccount->toKeyValue('PrimaryKey', 'Id'), $comparison);
 
             return $this;
         } else {
-            throw new PropelException('filterByAxysUser() only accepts arguments of type \Model\AxysUser or Collection');
+            throw new PropelException('filterByAxysAccount() only accepts arguments of type \Model\AxysAccount or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the AxysUser relation
+     * Adds a JOIN clause to the query using the AxysAccount relation
      *
      * @param string|null $relationAlias Optional alias for the relation
      * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this The current query, for fluid interface
      */
-    public function joinAxysUser(?string $relationAlias = null, ?string $joinType = Criteria::INNER_JOIN)
+    public function joinAxysAccount(?string $relationAlias = null, ?string $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('AxysUser');
+        $relationMap = $tableMap->getRelation('AxysAccount');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -772,14 +772,14 @@ abstract class AxysConsentQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'AxysUser');
+            $this->addJoinObject($join, 'AxysAccount');
         }
 
         return $this;
     }
 
     /**
-     * Use the AxysUser relation AxysUser object
+     * Use the AxysAccount relation AxysAccount object
      *
      * @see useQuery()
      *
@@ -787,19 +787,19 @@ abstract class AxysConsentQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \Model\AxysUserQuery A secondary query class using the current class as primary query
+     * @return \Model\AxysAccountQuery A secondary query class using the current class as primary query
      */
-    public function useAxysUserQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useAxysAccountQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinAxysUser($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'AxysUser', '\Model\AxysUserQuery');
+            ->joinAxysAccount($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'AxysAccount', '\Model\AxysAccountQuery');
     }
 
     /**
-     * Use the AxysUser relation AxysUser object
+     * Use the AxysAccount relation AxysAccount object
      *
-     * @param callable(\Model\AxysUserQuery):\Model\AxysUserQuery $callable A function working on the related query
+     * @param callable(\Model\AxysAccountQuery):\Model\AxysAccountQuery $callable A function working on the related query
      *
      * @param string|null $relationAlias optional alias for the relation
      *
@@ -807,12 +807,12 @@ abstract class AxysConsentQuery extends ModelCriteria
      *
      * @return $this
      */
-    public function withAxysUserQuery(
+    public function withAxysAccountQuery(
         callable $callable,
         string $relationAlias = null,
         ?string $joinType = Criteria::INNER_JOIN
     ) {
-        $relatedQuery = $this->useAxysUserQuery(
+        $relatedQuery = $this->useAxysAccountQuery(
             $relationAlias,
             $joinType
         );
@@ -823,7 +823,7 @@ abstract class AxysConsentQuery extends ModelCriteria
     }
 
     /**
-     * Use the relation to AxysUser table for an EXISTS query.
+     * Use the relation to AxysAccount table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
@@ -831,34 +831,34 @@ abstract class AxysConsentQuery extends ModelCriteria
      * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
-     * @return \Model\AxysUserQuery The inner query object of the EXISTS statement
+     * @return \Model\AxysAccountQuery The inner query object of the EXISTS statement
      */
-    public function useAxysUserExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    public function useAxysAccountExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        /** @var $q \Model\AxysUserQuery */
-        $q = $this->useExistsQuery('AxysUser', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\AxysAccountQuery */
+        $q = $this->useExistsQuery('AxysAccount', $modelAlias, $queryClass, $typeOfExists);
         return $q;
     }
 
     /**
-     * Use the relation to AxysUser table for a NOT EXISTS query.
+     * Use the relation to AxysAccount table for a NOT EXISTS query.
      *
-     * @see useAxysUserExistsQuery()
+     * @see useAxysAccountExistsQuery()
      *
      * @param string|null $modelAlias sets an alias for the nested query
      * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      *
-     * @return \Model\AxysUserQuery The inner query object of the NOT EXISTS statement
+     * @return \Model\AxysAccountQuery The inner query object of the NOT EXISTS statement
      */
-    public function useAxysUserNotExistsQuery($modelAlias = null, $queryClass = null)
+    public function useAxysAccountNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        /** @var $q \Model\AxysUserQuery */
-        $q = $this->useExistsQuery('AxysUser', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\AxysAccountQuery */
+        $q = $this->useExistsQuery('AxysAccount', $modelAlias, $queryClass, 'NOT EXISTS');
         return $q;
     }
 
     /**
-     * Use the relation to AxysUser table for an IN query.
+     * Use the relation to AxysAccount table for an IN query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
      *
@@ -866,29 +866,29 @@ abstract class AxysConsentQuery extends ModelCriteria
      * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
      * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
      *
-     * @return \Model\AxysUserQuery The inner query object of the IN statement
+     * @return \Model\AxysAccountQuery The inner query object of the IN statement
      */
-    public function useInAxysUserQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    public function useInAxysAccountQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
     {
-        /** @var $q \Model\AxysUserQuery */
-        $q = $this->useInQuery('AxysUser', $modelAlias, $queryClass, $typeOfIn);
+        /** @var $q \Model\AxysAccountQuery */
+        $q = $this->useInQuery('AxysAccount', $modelAlias, $queryClass, $typeOfIn);
         return $q;
     }
 
     /**
-     * Use the relation to AxysUser table for a NOT IN query.
+     * Use the relation to AxysAccount table for a NOT IN query.
      *
-     * @see useAxysUserInQuery()
+     * @see useAxysAccountInQuery()
      *
      * @param string|null $modelAlias sets an alias for the nested query
      * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
      *
-     * @return \Model\AxysUserQuery The inner query object of the NOT IN statement
+     * @return \Model\AxysAccountQuery The inner query object of the NOT IN statement
      */
-    public function useNotInAxysUserQuery($modelAlias = null, $queryClass = null)
+    public function useNotInAxysAccountQuery($modelAlias = null, $queryClass = null)
     {
-        /** @var $q \Model\AxysUserQuery */
-        $q = $this->useInQuery('AxysUser', $modelAlias, $queryClass, 'NOT IN');
+        /** @var $q \Model\AxysAccountQuery */
+        $q = $this->useInQuery('AxysAccount', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 

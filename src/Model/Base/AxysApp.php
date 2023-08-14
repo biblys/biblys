@@ -1689,10 +1689,10 @@ abstract class AxysApp implements ActiveRecordInterface
      * @return ObjectCollection|ChildAxysConsent[] List of ChildAxysConsent objects
      * @phpstan-return ObjectCollection&\Traversable<ChildAxysConsent}> List of ChildAxysConsent objects
      */
-    public function getAxysConsentsJoinAxysUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getAxysConsentsJoinAxysAccount(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildAxysConsentQuery::create(null, $criteria);
-        $query->joinWith('AxysUser', $joinBehavior);
+        $query->joinWith('AxysAccount', $joinBehavior);
 
         return $this->getAxysConsents($query, $con);
     }

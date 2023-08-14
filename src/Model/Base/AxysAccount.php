@@ -5,10 +5,10 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\AxysAccount as ChildAxysAccount;
+use Model\AxysAccountQuery as ChildAxysAccountQuery;
 use Model\AxysConsent as ChildAxysConsent;
 use Model\AxysConsentQuery as ChildAxysConsentQuery;
-use Model\AxysUser as ChildAxysUser;
-use Model\AxysUserQuery as ChildAxysUserQuery;
 use Model\Cart as ChildCart;
 use Model\CartQuery as ChildCartQuery;
 use Model\Option as ChildOption;
@@ -25,8 +25,8 @@ use Model\Wish as ChildWish;
 use Model\WishQuery as ChildWishQuery;
 use Model\Wishlist as ChildWishlist;
 use Model\WishlistQuery as ChildWishlistQuery;
+use Model\Map\AxysAccountTableMap;
 use Model\Map\AxysConsentTableMap;
-use Model\Map\AxysUserTableMap;
 use Model\Map\CartTableMap;
 use Model\Map\OptionTableMap;
 use Model\Map\RightTableMap;
@@ -65,14 +65,14 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  *
  * @package    propel.generator.Model.Base
  */
-abstract class AxysUser implements ActiveRecordInterface
+abstract class AxysAccount implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      *
      * @var string
      */
-    public const TABLE_MAP = '\\Model\\Map\\AxysUserTableMap';
+    public const TABLE_MAP = '\\Model\\Map\\AxysAccountTableMap';
 
 
     /**
@@ -349,7 +349,7 @@ abstract class AxysUser implements ActiveRecordInterface
     protected $wishlistsScheduledForDeletion = null;
 
     /**
-     * Initializes internal state of Model\Base\AxysUser object.
+     * Initializes internal state of Model\Base\AxysAccount object.
      */
     public function __construct()
     {
@@ -442,9 +442,9 @@ abstract class AxysUser implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>AxysUser</code> instance.  If
-     * <code>obj</code> is an instance of <code>AxysUser</code>, delegates to
-     * <code>equals(AxysUser)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>AxysAccount</code> instance.  If
+     * <code>obj</code> is an instance of <code>AxysAccount</code>, delegates to
+     * <code>equals(AxysAccount)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param mixed $obj The object to compare to.
      * @return bool Whether equal to the object specified.
@@ -798,7 +798,7 @@ abstract class AxysUser implements ActiveRecordInterface
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_ID] = true;
+            $this->modifiedColumns[AxysAccountTableMap::COL_ID] = true;
         }
 
         return $this;
@@ -818,7 +818,7 @@ abstract class AxysUser implements ActiveRecordInterface
 
         if ($this->site_id !== $v) {
             $this->site_id = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_SITE_ID] = true;
+            $this->modifiedColumns[AxysAccountTableMap::COL_SITE_ID] = true;
         }
 
         if ($this->aSite !== null && $this->aSite->getId() !== $v) {
@@ -842,7 +842,7 @@ abstract class AxysUser implements ActiveRecordInterface
 
         if ($this->email !== $v) {
             $this->email = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_EMAIL] = true;
+            $this->modifiedColumns[AxysAccountTableMap::COL_EMAIL] = true;
         }
 
         return $this;
@@ -862,7 +862,7 @@ abstract class AxysUser implements ActiveRecordInterface
 
         if ($this->user_password !== $v) {
             $this->user_password = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_PASSWORD] = true;
+            $this->modifiedColumns[AxysAccountTableMap::COL_USER_PASSWORD] = true;
         }
 
         return $this;
@@ -882,7 +882,7 @@ abstract class AxysUser implements ActiveRecordInterface
 
         if ($this->user_key !== $v) {
             $this->user_key = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_KEY] = true;
+            $this->modifiedColumns[AxysAccountTableMap::COL_USER_KEY] = true;
         }
 
         return $this;
@@ -902,7 +902,7 @@ abstract class AxysUser implements ActiveRecordInterface
 
         if ($this->email_key !== $v) {
             $this->email_key = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_EMAIL_KEY] = true;
+            $this->modifiedColumns[AxysAccountTableMap::COL_EMAIL_KEY] = true;
         }
 
         return $this;
@@ -922,7 +922,7 @@ abstract class AxysUser implements ActiveRecordInterface
 
         if ($this->user_screen_name !== $v) {
             $this->user_screen_name = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_SCREEN_NAME] = true;
+            $this->modifiedColumns[AxysAccountTableMap::COL_USER_SCREEN_NAME] = true;
         }
 
         return $this;
@@ -942,7 +942,7 @@ abstract class AxysUser implements ActiveRecordInterface
 
         if ($this->user_slug !== $v) {
             $this->user_slug = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_SLUG] = true;
+            $this->modifiedColumns[AxysAccountTableMap::COL_USER_SLUG] = true;
         }
 
         return $this;
@@ -961,7 +961,7 @@ abstract class AxysUser implements ActiveRecordInterface
         if ($this->dateinscription !== null || $dt !== null) {
             if ($this->dateinscription === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->dateinscription->format("Y-m-d H:i:s.u")) {
                 $this->dateinscription = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[AxysUserTableMap::COL_DATEINSCRIPTION] = true;
+                $this->modifiedColumns[AxysAccountTableMap::COL_DATEINSCRIPTION] = true;
             }
         } // if either are not null
 
@@ -981,7 +981,7 @@ abstract class AxysUser implements ActiveRecordInterface
         if ($this->dateconnexion !== null || $dt !== null) {
             if ($this->dateconnexion === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->dateconnexion->format("Y-m-d H:i:s.u")) {
                 $this->dateconnexion = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[AxysUserTableMap::COL_DATECONNEXION] = true;
+                $this->modifiedColumns[AxysAccountTableMap::COL_DATECONNEXION] = true;
             }
         } // if either are not null
 
@@ -1002,7 +1002,7 @@ abstract class AxysUser implements ActiveRecordInterface
 
         if ($this->user_nom !== $v) {
             $this->user_nom = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_NOM] = true;
+            $this->modifiedColumns[AxysAccountTableMap::COL_USER_NOM] = true;
         }
 
         return $this;
@@ -1022,7 +1022,7 @@ abstract class AxysUser implements ActiveRecordInterface
 
         if ($this->user_prenom !== $v) {
             $this->user_prenom = $v;
-            $this->modifiedColumns[AxysUserTableMap::COL_USER_PRENOM] = true;
+            $this->modifiedColumns[AxysAccountTableMap::COL_USER_PRENOM] = true;
         }
 
         return $this;
@@ -1041,7 +1041,7 @@ abstract class AxysUser implements ActiveRecordInterface
         if ($this->user_update !== null || $dt !== null) {
             if ($this->user_update === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->user_update->format("Y-m-d H:i:s.u")) {
                 $this->user_update = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[AxysUserTableMap::COL_USER_UPDATE] = true;
+                $this->modifiedColumns[AxysAccountTableMap::COL_USER_UPDATE] = true;
             }
         } // if either are not null
 
@@ -1061,7 +1061,7 @@ abstract class AxysUser implements ActiveRecordInterface
         if ($this->user_created !== null || $dt !== null) {
             if ($this->user_created === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->user_created->format("Y-m-d H:i:s.u")) {
                 $this->user_created = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[AxysUserTableMap::COL_USER_CREATED] = true;
+                $this->modifiedColumns[AxysAccountTableMap::COL_USER_CREATED] = true;
             }
         } // if either are not null
 
@@ -1081,7 +1081,7 @@ abstract class AxysUser implements ActiveRecordInterface
         if ($this->user_updated !== null || $dt !== null) {
             if ($this->user_updated === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->user_updated->format("Y-m-d H:i:s.u")) {
                 $this->user_updated = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[AxysUserTableMap::COL_USER_UPDATED] = true;
+                $this->modifiedColumns[AxysAccountTableMap::COL_USER_UPDATED] = true;
             }
         } // if either are not null
 
@@ -1124,61 +1124,61 @@ abstract class AxysUser implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : AxysUserTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : AxysAccountTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : AxysUserTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : AxysAccountTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : AxysUserTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : AxysAccountTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
             $this->email = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : AxysUserTableMap::translateFieldName('Password', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : AxysAccountTableMap::translateFieldName('Password', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_password = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : AxysUserTableMap::translateFieldName('Key', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : AxysAccountTableMap::translateFieldName('Key', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_key = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : AxysUserTableMap::translateFieldName('EmailKey', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : AxysAccountTableMap::translateFieldName('EmailKey', TableMap::TYPE_PHPNAME, $indexType)];
             $this->email_key = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : AxysUserTableMap::translateFieldName('Username', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : AxysAccountTableMap::translateFieldName('Username', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_screen_name = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : AxysUserTableMap::translateFieldName('Slug', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : AxysAccountTableMap::translateFieldName('Slug', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_slug = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : AxysUserTableMap::translateFieldName('Dateinscription', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : AxysAccountTableMap::translateFieldName('Dateinscription', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->dateinscription = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : AxysUserTableMap::translateFieldName('Dateconnexion', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : AxysAccountTableMap::translateFieldName('Dateconnexion', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->dateconnexion = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : AxysUserTableMap::translateFieldName('Nom', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : AxysAccountTableMap::translateFieldName('Nom', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_nom = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : AxysUserTableMap::translateFieldName('Prenom', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : AxysAccountTableMap::translateFieldName('Prenom', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_prenom = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : AxysUserTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : AxysAccountTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->user_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : AxysUserTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : AxysAccountTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->user_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : AxysUserTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : AxysAccountTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -1191,10 +1191,10 @@ abstract class AxysUser implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 15; // 15 = AxysUserTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 15; // 15 = AxysAccountTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\Model\\AxysUser'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\Model\\AxysAccount'), 0, $e);
         }
     }
 
@@ -1240,13 +1240,13 @@ abstract class AxysUser implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(AxysUserTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(AxysAccountTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildAxysUserQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildAxysAccountQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -1282,8 +1282,8 @@ abstract class AxysUser implements ActiveRecordInterface
      * @param ConnectionInterface $con
      * @return void
      * @throws \Propel\Runtime\Exception\PropelException
-     * @see AxysUser::setDeleted()
-     * @see AxysUser::isDeleted()
+     * @see AxysAccount::setDeleted()
+     * @see AxysAccount::isDeleted()
      */
     public function delete(?ConnectionInterface $con = null): void
     {
@@ -1292,11 +1292,11 @@ abstract class AxysUser implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(AxysUserTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AxysAccountTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildAxysUserQuery::create()
+            $deleteQuery = ChildAxysAccountQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -1331,7 +1331,7 @@ abstract class AxysUser implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(AxysUserTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AxysAccountTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -1342,16 +1342,16 @@ abstract class AxysUser implements ActiveRecordInterface
                 // timestampable behavior
                 $time = time();
                 $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
-                if (!$this->isColumnModified(AxysUserTableMap::COL_USER_CREATED)) {
+                if (!$this->isColumnModified(AxysAccountTableMap::COL_USER_CREATED)) {
                     $this->setCreatedAt($highPrecision);
                 }
-                if (!$this->isColumnModified(AxysUserTableMap::COL_USER_UPDATED)) {
+                if (!$this->isColumnModified(AxysAccountTableMap::COL_USER_UPDATED)) {
                     $this->setUpdatedAt($highPrecision);
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(AxysUserTableMap::COL_USER_UPDATED)) {
+                if ($this->isModified() && !$this->isColumnModified(AxysAccountTableMap::COL_USER_UPDATED)) {
                     $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
                 }
             }
@@ -1363,7 +1363,7 @@ abstract class AxysUser implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                AxysUserTableMap::addInstanceToPool($this);
+                AxysAccountTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -1575,55 +1575,55 @@ abstract class AxysUser implements ActiveRecordInterface
         $modifiedColumns = [];
         $index = 0;
 
-        $this->modifiedColumns[AxysUserTableMap::COL_ID] = true;
+        $this->modifiedColumns[AxysAccountTableMap::COL_ID] = true;
         if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . AxysUserTableMap::COL_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . AxysAccountTableMap::COL_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(AxysUserTableMap::COL_ID)) {
+        if ($this->isColumnModified(AxysAccountTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_SITE_ID)) {
+        if ($this->isColumnModified(AxysAccountTableMap::COL_SITE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'site_id';
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_EMAIL)) {
+        if ($this->isColumnModified(AxysAccountTableMap::COL_EMAIL)) {
             $modifiedColumns[':p' . $index++]  = 'Email';
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_PASSWORD)) {
+        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_PASSWORD)) {
             $modifiedColumns[':p' . $index++]  = 'user_password';
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_KEY)) {
+        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_KEY)) {
             $modifiedColumns[':p' . $index++]  = 'user_key';
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_EMAIL_KEY)) {
+        if ($this->isColumnModified(AxysAccountTableMap::COL_EMAIL_KEY)) {
             $modifiedColumns[':p' . $index++]  = 'email_key';
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_SCREEN_NAME)) {
+        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_SCREEN_NAME)) {
             $modifiedColumns[':p' . $index++]  = 'user_screen_name';
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_SLUG)) {
+        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_SLUG)) {
             $modifiedColumns[':p' . $index++]  = 'user_slug';
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_DATEINSCRIPTION)) {
+        if ($this->isColumnModified(AxysAccountTableMap::COL_DATEINSCRIPTION)) {
             $modifiedColumns[':p' . $index++]  = 'DateInscription';
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_DATECONNEXION)) {
+        if ($this->isColumnModified(AxysAccountTableMap::COL_DATECONNEXION)) {
             $modifiedColumns[':p' . $index++]  = 'DateConnexion';
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_NOM)) {
+        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_NOM)) {
             $modifiedColumns[':p' . $index++]  = 'user_nom';
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_PRENOM)) {
+        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_PRENOM)) {
             $modifiedColumns[':p' . $index++]  = 'user_prenom';
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_UPDATE)) {
+        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_UPDATE)) {
             $modifiedColumns[':p' . $index++]  = 'user_update';
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_CREATED)) {
+        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_CREATED)) {
             $modifiedColumns[':p' . $index++]  = 'user_created';
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_UPDATED)) {
+        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'user_updated';
         }
 
@@ -1743,7 +1743,7 @@ abstract class AxysUser implements ActiveRecordInterface
      */
     public function getByName(string $name, string $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = AxysUserTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = AxysAccountTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1826,11 +1826,11 @@ abstract class AxysUser implements ActiveRecordInterface
      */
     public function toArray(string $keyType = TableMap::TYPE_PHPNAME, bool $includeLazyLoadColumns = true, array $alreadyDumpedObjects = [], bool $includeForeignObjects = false): array
     {
-        if (isset($alreadyDumpedObjects['AxysUser'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['AxysAccount'][$this->hashCode()])) {
             return ['*RECURSION*'];
         }
-        $alreadyDumpedObjects['AxysUser'][$this->hashCode()] = true;
-        $keys = AxysUserTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['AxysAccount'][$this->hashCode()] = true;
+        $keys = AxysAccountTableMap::getFieldNames($keyType);
         $result = [
             $keys[0] => $this->getId(),
             $keys[1] => $this->getSiteId(),
@@ -2027,7 +2027,7 @@ abstract class AxysUser implements ActiveRecordInterface
      */
     public function setByName(string $name, $value, string $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = AxysUserTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = AxysAccountTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
 
@@ -2114,7 +2114,7 @@ abstract class AxysUser implements ActiveRecordInterface
      */
     public function fromArray(array $arr, string $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = AxysUserTableMap::getFieldNames($keyType);
+        $keys = AxysAccountTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
@@ -2202,52 +2202,52 @@ abstract class AxysUser implements ActiveRecordInterface
      */
     public function buildCriteria(): Criteria
     {
-        $criteria = new Criteria(AxysUserTableMap::DATABASE_NAME);
+        $criteria = new Criteria(AxysAccountTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(AxysUserTableMap::COL_ID)) {
-            $criteria->add(AxysUserTableMap::COL_ID, $this->id);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_ID)) {
+            $criteria->add(AxysAccountTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_SITE_ID)) {
-            $criteria->add(AxysUserTableMap::COL_SITE_ID, $this->site_id);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_SITE_ID)) {
+            $criteria->add(AxysAccountTableMap::COL_SITE_ID, $this->site_id);
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_EMAIL)) {
-            $criteria->add(AxysUserTableMap::COL_EMAIL, $this->email);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_EMAIL)) {
+            $criteria->add(AxysAccountTableMap::COL_EMAIL, $this->email);
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_PASSWORD)) {
-            $criteria->add(AxysUserTableMap::COL_USER_PASSWORD, $this->user_password);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_PASSWORD)) {
+            $criteria->add(AxysAccountTableMap::COL_USER_PASSWORD, $this->user_password);
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_KEY)) {
-            $criteria->add(AxysUserTableMap::COL_USER_KEY, $this->user_key);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_KEY)) {
+            $criteria->add(AxysAccountTableMap::COL_USER_KEY, $this->user_key);
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_EMAIL_KEY)) {
-            $criteria->add(AxysUserTableMap::COL_EMAIL_KEY, $this->email_key);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_EMAIL_KEY)) {
+            $criteria->add(AxysAccountTableMap::COL_EMAIL_KEY, $this->email_key);
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_SCREEN_NAME)) {
-            $criteria->add(AxysUserTableMap::COL_USER_SCREEN_NAME, $this->user_screen_name);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_SCREEN_NAME)) {
+            $criteria->add(AxysAccountTableMap::COL_USER_SCREEN_NAME, $this->user_screen_name);
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_SLUG)) {
-            $criteria->add(AxysUserTableMap::COL_USER_SLUG, $this->user_slug);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_SLUG)) {
+            $criteria->add(AxysAccountTableMap::COL_USER_SLUG, $this->user_slug);
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_DATEINSCRIPTION)) {
-            $criteria->add(AxysUserTableMap::COL_DATEINSCRIPTION, $this->dateinscription);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_DATEINSCRIPTION)) {
+            $criteria->add(AxysAccountTableMap::COL_DATEINSCRIPTION, $this->dateinscription);
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_DATECONNEXION)) {
-            $criteria->add(AxysUserTableMap::COL_DATECONNEXION, $this->dateconnexion);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_DATECONNEXION)) {
+            $criteria->add(AxysAccountTableMap::COL_DATECONNEXION, $this->dateconnexion);
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_NOM)) {
-            $criteria->add(AxysUserTableMap::COL_USER_NOM, $this->user_nom);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_NOM)) {
+            $criteria->add(AxysAccountTableMap::COL_USER_NOM, $this->user_nom);
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_PRENOM)) {
-            $criteria->add(AxysUserTableMap::COL_USER_PRENOM, $this->user_prenom);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_PRENOM)) {
+            $criteria->add(AxysAccountTableMap::COL_USER_PRENOM, $this->user_prenom);
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_UPDATE)) {
-            $criteria->add(AxysUserTableMap::COL_USER_UPDATE, $this->user_update);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_UPDATE)) {
+            $criteria->add(AxysAccountTableMap::COL_USER_UPDATE, $this->user_update);
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_CREATED)) {
-            $criteria->add(AxysUserTableMap::COL_USER_CREATED, $this->user_created);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_CREATED)) {
+            $criteria->add(AxysAccountTableMap::COL_USER_CREATED, $this->user_created);
         }
-        if ($this->isColumnModified(AxysUserTableMap::COL_USER_UPDATED)) {
-            $criteria->add(AxysUserTableMap::COL_USER_UPDATED, $this->user_updated);
+        if ($this->isColumnModified(AxysAccountTableMap::COL_USER_UPDATED)) {
+            $criteria->add(AxysAccountTableMap::COL_USER_UPDATED, $this->user_updated);
         }
 
         return $criteria;
@@ -2265,8 +2265,8 @@ abstract class AxysUser implements ActiveRecordInterface
      */
     public function buildPkeyCriteria(): Criteria
     {
-        $criteria = ChildAxysUserQuery::create();
-        $criteria->add(AxysUserTableMap::COL_ID, $this->id);
+        $criteria = ChildAxysAccountQuery::create();
+        $criteria->add(AxysAccountTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -2329,7 +2329,7 @@ abstract class AxysUser implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of \Model\AxysUser (or compatible) type.
+     * @param object $copyObj An object of \Model\AxysAccount (or compatible) type.
      * @param bool $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param bool $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws \Propel\Runtime\Exception\PropelException
@@ -2422,7 +2422,7 @@ abstract class AxysUser implements ActiveRecordInterface
      * objects.
      *
      * @param bool $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \Model\AxysUser Clone of current object.
+     * @return \Model\AxysAccount Clone of current object.
      * @throws \Propel\Runtime\Exception\PropelException
      */
     public function copy(bool $deepCopy = false)
@@ -2455,7 +2455,7 @@ abstract class AxysUser implements ActiveRecordInterface
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the ChildSite object, it will not be re-added.
         if ($v !== null) {
-            $v->addAxysUser($this);
+            $v->addAxysAccount($this);
         }
 
 
@@ -2479,7 +2479,7 @@ abstract class AxysUser implements ActiveRecordInterface
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aSite->addAxysUsers($this);
+                $this->aSite->addAxysAccounts($this);
              */
         }
 
@@ -2587,7 +2587,7 @@ abstract class AxysUser implements ActiveRecordInterface
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildAxysUser is new, it will return
+     * If this ChildAxysAccount is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
@@ -2614,7 +2614,7 @@ abstract class AxysUser implements ActiveRecordInterface
                 }
             } else {
                 $collAxysConsents = ChildAxysConsentQuery::create(null, $criteria)
-                    ->filterByAxysUser($this)
+                    ->filterByAxysAccount($this)
                     ->find($con);
 
                 if (null !== $criteria) {
@@ -2668,7 +2668,7 @@ abstract class AxysUser implements ActiveRecordInterface
         $this->axysConsentsScheduledForDeletion = $axysConsentsToDelete;
 
         foreach ($axysConsentsToDelete as $axysConsentRemoved) {
-            $axysConsentRemoved->setAxysUser(null);
+            $axysConsentRemoved->setAxysAccount(null);
         }
 
         $this->collAxysConsents = null;
@@ -2709,7 +2709,7 @@ abstract class AxysUser implements ActiveRecordInterface
             }
 
             return $query
-                ->filterByAxysUser($this)
+                ->filterByAxysAccount($this)
                 ->count($con);
         }
 
@@ -2747,7 +2747,7 @@ abstract class AxysUser implements ActiveRecordInterface
     protected function doAddAxysConsent(ChildAxysConsent $axysConsent): void
     {
         $this->collAxysConsents[]= $axysConsent;
-        $axysConsent->setAxysUser($this);
+        $axysConsent->setAxysAccount($this);
     }
 
     /**
@@ -2764,7 +2764,7 @@ abstract class AxysUser implements ActiveRecordInterface
                 $this->axysConsentsScheduledForDeletion->clear();
             }
             $this->axysConsentsScheduledForDeletion[]= clone $axysConsent;
-            $axysConsent->setAxysUser(null);
+            $axysConsent->setAxysAccount(null);
         }
 
         return $this;
@@ -2774,13 +2774,13 @@ abstract class AxysUser implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this AxysUser is new, it will return
-     * an empty collection; or if this AxysUser has previously
+     * Otherwise if this AxysAccount is new, it will return
+     * an empty collection; or if this AxysAccount has previously
      * been saved, it will retrieve related AxysConsents from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in AxysUser.
+     * actually need in AxysAccount.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param ConnectionInterface $con optional connection object
@@ -2852,7 +2852,7 @@ abstract class AxysUser implements ActiveRecordInterface
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildAxysUser is new, it will return
+     * If this ChildAxysAccount is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
@@ -2879,7 +2879,7 @@ abstract class AxysUser implements ActiveRecordInterface
                 }
             } else {
                 $collCarts = ChildCartQuery::create(null, $criteria)
-                    ->filterByAxysUser($this)
+                    ->filterByAxysAccount($this)
                     ->find($con);
 
                 if (null !== $criteria) {
@@ -2933,7 +2933,7 @@ abstract class AxysUser implements ActiveRecordInterface
         $this->cartsScheduledForDeletion = $cartsToDelete;
 
         foreach ($cartsToDelete as $cartRemoved) {
-            $cartRemoved->setAxysUser(null);
+            $cartRemoved->setAxysAccount(null);
         }
 
         $this->collCarts = null;
@@ -2974,7 +2974,7 @@ abstract class AxysUser implements ActiveRecordInterface
             }
 
             return $query
-                ->filterByAxysUser($this)
+                ->filterByAxysAccount($this)
                 ->count($con);
         }
 
@@ -3012,7 +3012,7 @@ abstract class AxysUser implements ActiveRecordInterface
     protected function doAddCart(ChildCart $cart): void
     {
         $this->collCarts[]= $cart;
-        $cart->setAxysUser($this);
+        $cart->setAxysAccount($this);
     }
 
     /**
@@ -3029,7 +3029,7 @@ abstract class AxysUser implements ActiveRecordInterface
                 $this->cartsScheduledForDeletion->clear();
             }
             $this->cartsScheduledForDeletion[]= $cart;
-            $cart->setAxysUser(null);
+            $cart->setAxysAccount(null);
         }
 
         return $this;
@@ -3039,13 +3039,13 @@ abstract class AxysUser implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this AxysUser is new, it will return
-     * an empty collection; or if this AxysUser has previously
+     * Otherwise if this AxysAccount is new, it will return
+     * an empty collection; or if this AxysAccount has previously
      * been saved, it will retrieve related Carts from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in AxysUser.
+     * actually need in AxysAccount.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param ConnectionInterface $con optional connection object
@@ -3117,7 +3117,7 @@ abstract class AxysUser implements ActiveRecordInterface
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildAxysUser is new, it will return
+     * If this ChildAxysAccount is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
@@ -3144,7 +3144,7 @@ abstract class AxysUser implements ActiveRecordInterface
                 }
             } else {
                 $collOptions = ChildOptionQuery::create(null, $criteria)
-                    ->filterByAxysUser($this)
+                    ->filterByAxysAccount($this)
                     ->find($con);
 
                 if (null !== $criteria) {
@@ -3198,7 +3198,7 @@ abstract class AxysUser implements ActiveRecordInterface
         $this->optionsScheduledForDeletion = $optionsToDelete;
 
         foreach ($optionsToDelete as $optionRemoved) {
-            $optionRemoved->setAxysUser(null);
+            $optionRemoved->setAxysAccount(null);
         }
 
         $this->collOptions = null;
@@ -3239,7 +3239,7 @@ abstract class AxysUser implements ActiveRecordInterface
             }
 
             return $query
-                ->filterByAxysUser($this)
+                ->filterByAxysAccount($this)
                 ->count($con);
         }
 
@@ -3277,7 +3277,7 @@ abstract class AxysUser implements ActiveRecordInterface
     protected function doAddOption(ChildOption $option): void
     {
         $this->collOptions[]= $option;
-        $option->setAxysUser($this);
+        $option->setAxysAccount($this);
     }
 
     /**
@@ -3294,7 +3294,7 @@ abstract class AxysUser implements ActiveRecordInterface
                 $this->optionsScheduledForDeletion->clear();
             }
             $this->optionsScheduledForDeletion[]= $option;
-            $option->setAxysUser(null);
+            $option->setAxysAccount(null);
         }
 
         return $this;
@@ -3304,13 +3304,13 @@ abstract class AxysUser implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this AxysUser is new, it will return
-     * an empty collection; or if this AxysUser has previously
+     * Otherwise if this AxysAccount is new, it will return
+     * an empty collection; or if this AxysAccount has previously
      * been saved, it will retrieve related Options from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in AxysUser.
+     * actually need in AxysAccount.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param ConnectionInterface $con optional connection object
@@ -3382,7 +3382,7 @@ abstract class AxysUser implements ActiveRecordInterface
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildAxysUser is new, it will return
+     * If this ChildAxysAccount is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
@@ -3409,7 +3409,7 @@ abstract class AxysUser implements ActiveRecordInterface
                 }
             } else {
                 $collRights = ChildRightQuery::create(null, $criteria)
-                    ->filterByAxysUser($this)
+                    ->filterByAxysAccount($this)
                     ->find($con);
 
                 if (null !== $criteria) {
@@ -3463,7 +3463,7 @@ abstract class AxysUser implements ActiveRecordInterface
         $this->rightsScheduledForDeletion = $rightsToDelete;
 
         foreach ($rightsToDelete as $rightRemoved) {
-            $rightRemoved->setAxysUser(null);
+            $rightRemoved->setAxysAccount(null);
         }
 
         $this->collRights = null;
@@ -3504,7 +3504,7 @@ abstract class AxysUser implements ActiveRecordInterface
             }
 
             return $query
-                ->filterByAxysUser($this)
+                ->filterByAxysAccount($this)
                 ->count($con);
         }
 
@@ -3542,7 +3542,7 @@ abstract class AxysUser implements ActiveRecordInterface
     protected function doAddRight(ChildRight $right): void
     {
         $this->collRights[]= $right;
-        $right->setAxysUser($this);
+        $right->setAxysAccount($this);
     }
 
     /**
@@ -3559,7 +3559,7 @@ abstract class AxysUser implements ActiveRecordInterface
                 $this->rightsScheduledForDeletion->clear();
             }
             $this->rightsScheduledForDeletion[]= $right;
-            $right->setAxysUser(null);
+            $right->setAxysAccount(null);
         }
 
         return $this;
@@ -3569,13 +3569,13 @@ abstract class AxysUser implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this AxysUser is new, it will return
-     * an empty collection; or if this AxysUser has previously
+     * Otherwise if this AxysAccount is new, it will return
+     * an empty collection; or if this AxysAccount has previously
      * been saved, it will retrieve related Rights from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in AxysUser.
+     * actually need in AxysAccount.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param ConnectionInterface $con optional connection object
@@ -3595,13 +3595,13 @@ abstract class AxysUser implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this AxysUser is new, it will return
-     * an empty collection; or if this AxysUser has previously
+     * Otherwise if this AxysAccount is new, it will return
+     * an empty collection; or if this AxysAccount has previously
      * been saved, it will retrieve related Rights from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in AxysUser.
+     * actually need in AxysAccount.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param ConnectionInterface $con optional connection object
@@ -3673,7 +3673,7 @@ abstract class AxysUser implements ActiveRecordInterface
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildAxysUser is new, it will return
+     * If this ChildAxysAccount is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
@@ -3700,7 +3700,7 @@ abstract class AxysUser implements ActiveRecordInterface
                 }
             } else {
                 $collSessions = ChildSessionQuery::create(null, $criteria)
-                    ->filterByAxysUser($this)
+                    ->filterByAxysAccount($this)
                     ->find($con);
 
                 if (null !== $criteria) {
@@ -3754,7 +3754,7 @@ abstract class AxysUser implements ActiveRecordInterface
         $this->sessionsScheduledForDeletion = $sessionsToDelete;
 
         foreach ($sessionsToDelete as $sessionRemoved) {
-            $sessionRemoved->setAxysUser(null);
+            $sessionRemoved->setAxysAccount(null);
         }
 
         $this->collSessions = null;
@@ -3795,7 +3795,7 @@ abstract class AxysUser implements ActiveRecordInterface
             }
 
             return $query
-                ->filterByAxysUser($this)
+                ->filterByAxysAccount($this)
                 ->count($con);
         }
 
@@ -3833,7 +3833,7 @@ abstract class AxysUser implements ActiveRecordInterface
     protected function doAddSession(ChildSession $session): void
     {
         $this->collSessions[]= $session;
-        $session->setAxysUser($this);
+        $session->setAxysAccount($this);
     }
 
     /**
@@ -3850,7 +3850,7 @@ abstract class AxysUser implements ActiveRecordInterface
                 $this->sessionsScheduledForDeletion->clear();
             }
             $this->sessionsScheduledForDeletion[]= $session;
-            $session->setAxysUser(null);
+            $session->setAxysAccount(null);
         }
 
         return $this;
@@ -3860,13 +3860,13 @@ abstract class AxysUser implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this AxysUser is new, it will return
-     * an empty collection; or if this AxysUser has previously
+     * Otherwise if this AxysAccount is new, it will return
+     * an empty collection; or if this AxysAccount has previously
      * been saved, it will retrieve related Sessions from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in AxysUser.
+     * actually need in AxysAccount.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param ConnectionInterface $con optional connection object
@@ -3938,7 +3938,7 @@ abstract class AxysUser implements ActiveRecordInterface
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildAxysUser is new, it will return
+     * If this ChildAxysAccount is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
@@ -3965,7 +3965,7 @@ abstract class AxysUser implements ActiveRecordInterface
                 }
             } else {
                 $collStocks = ChildStockQuery::create(null, $criteria)
-                    ->filterByAxysUser($this)
+                    ->filterByAxysAccount($this)
                     ->find($con);
 
                 if (null !== $criteria) {
@@ -4019,7 +4019,7 @@ abstract class AxysUser implements ActiveRecordInterface
         $this->stocksScheduledForDeletion = $stocksToDelete;
 
         foreach ($stocksToDelete as $stockRemoved) {
-            $stockRemoved->setAxysUser(null);
+            $stockRemoved->setAxysAccount(null);
         }
 
         $this->collStocks = null;
@@ -4060,7 +4060,7 @@ abstract class AxysUser implements ActiveRecordInterface
             }
 
             return $query
-                ->filterByAxysUser($this)
+                ->filterByAxysAccount($this)
                 ->count($con);
         }
 
@@ -4098,7 +4098,7 @@ abstract class AxysUser implements ActiveRecordInterface
     protected function doAddStock(ChildStock $stock): void
     {
         $this->collStocks[]= $stock;
-        $stock->setAxysUser($this);
+        $stock->setAxysAccount($this);
     }
 
     /**
@@ -4115,7 +4115,7 @@ abstract class AxysUser implements ActiveRecordInterface
                 $this->stocksScheduledForDeletion->clear();
             }
             $this->stocksScheduledForDeletion[]= $stock;
-            $stock->setAxysUser(null);
+            $stock->setAxysAccount(null);
         }
 
         return $this;
@@ -4125,13 +4125,13 @@ abstract class AxysUser implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this AxysUser is new, it will return
-     * an empty collection; or if this AxysUser has previously
+     * Otherwise if this AxysAccount is new, it will return
+     * an empty collection; or if this AxysAccount has previously
      * been saved, it will retrieve related Stocks from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in AxysUser.
+     * actually need in AxysAccount.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param ConnectionInterface $con optional connection object
@@ -4151,13 +4151,13 @@ abstract class AxysUser implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this AxysUser is new, it will return
-     * an empty collection; or if this AxysUser has previously
+     * Otherwise if this AxysAccount is new, it will return
+     * an empty collection; or if this AxysAccount has previously
      * been saved, it will retrieve related Stocks from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in AxysUser.
+     * actually need in AxysAccount.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param ConnectionInterface $con optional connection object
@@ -4229,7 +4229,7 @@ abstract class AxysUser implements ActiveRecordInterface
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildAxysUser is new, it will return
+     * If this ChildAxysAccount is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
@@ -4256,7 +4256,7 @@ abstract class AxysUser implements ActiveRecordInterface
                 }
             } else {
                 $collWishes = ChildWishQuery::create(null, $criteria)
-                    ->filterByAxysUser($this)
+                    ->filterByAxysAccount($this)
                     ->find($con);
 
                 if (null !== $criteria) {
@@ -4310,7 +4310,7 @@ abstract class AxysUser implements ActiveRecordInterface
         $this->wishesScheduledForDeletion = $wishesToDelete;
 
         foreach ($wishesToDelete as $wishRemoved) {
-            $wishRemoved->setAxysUser(null);
+            $wishRemoved->setAxysAccount(null);
         }
 
         $this->collWishes = null;
@@ -4351,7 +4351,7 @@ abstract class AxysUser implements ActiveRecordInterface
             }
 
             return $query
-                ->filterByAxysUser($this)
+                ->filterByAxysAccount($this)
                 ->count($con);
         }
 
@@ -4389,7 +4389,7 @@ abstract class AxysUser implements ActiveRecordInterface
     protected function doAddWish(ChildWish $wish): void
     {
         $this->collWishes[]= $wish;
-        $wish->setAxysUser($this);
+        $wish->setAxysAccount($this);
     }
 
     /**
@@ -4406,7 +4406,7 @@ abstract class AxysUser implements ActiveRecordInterface
                 $this->wishesScheduledForDeletion->clear();
             }
             $this->wishesScheduledForDeletion[]= $wish;
-            $wish->setAxysUser(null);
+            $wish->setAxysAccount(null);
         }
 
         return $this;
@@ -4468,7 +4468,7 @@ abstract class AxysUser implements ActiveRecordInterface
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildAxysUser is new, it will return
+     * If this ChildAxysAccount is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
@@ -4495,7 +4495,7 @@ abstract class AxysUser implements ActiveRecordInterface
                 }
             } else {
                 $collWishlists = ChildWishlistQuery::create(null, $criteria)
-                    ->filterByAxysUser($this)
+                    ->filterByAxysAccount($this)
                     ->find($con);
 
                 if (null !== $criteria) {
@@ -4549,7 +4549,7 @@ abstract class AxysUser implements ActiveRecordInterface
         $this->wishlistsScheduledForDeletion = $wishlistsToDelete;
 
         foreach ($wishlistsToDelete as $wishlistRemoved) {
-            $wishlistRemoved->setAxysUser(null);
+            $wishlistRemoved->setAxysAccount(null);
         }
 
         $this->collWishlists = null;
@@ -4590,7 +4590,7 @@ abstract class AxysUser implements ActiveRecordInterface
             }
 
             return $query
-                ->filterByAxysUser($this)
+                ->filterByAxysAccount($this)
                 ->count($con);
         }
 
@@ -4628,7 +4628,7 @@ abstract class AxysUser implements ActiveRecordInterface
     protected function doAddWishlist(ChildWishlist $wishlist): void
     {
         $this->collWishlists[]= $wishlist;
-        $wishlist->setAxysUser($this);
+        $wishlist->setAxysAccount($this);
     }
 
     /**
@@ -4645,7 +4645,7 @@ abstract class AxysUser implements ActiveRecordInterface
                 $this->wishlistsScheduledForDeletion->clear();
             }
             $this->wishlistsScheduledForDeletion[]= $wishlist;
-            $wishlist->setAxysUser(null);
+            $wishlist->setAxysAccount(null);
         }
 
         return $this;
@@ -4661,7 +4661,7 @@ abstract class AxysUser implements ActiveRecordInterface
     public function clear()
     {
         if (null !== $this->aSite) {
-            $this->aSite->removeAxysUser($this);
+            $this->aSite->removeAxysAccount($this);
         }
         $this->id = null;
         $this->site_id = null;
@@ -4760,7 +4760,7 @@ abstract class AxysUser implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(AxysUserTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(AxysAccountTableMap::DEFAULT_STRING_FORMAT);
     }
 
     // timestampable behavior
@@ -4772,7 +4772,7 @@ abstract class AxysUser implements ActiveRecordInterface
      */
     public function keepUpdateDateUnchanged()
     {
-        $this->modifiedColumns[AxysUserTableMap::COL_USER_UPDATED] = true;
+        $this->modifiedColumns[AxysAccountTableMap::COL_USER_UPDATED] = true;
 
         return $this;
     }

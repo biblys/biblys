@@ -4,7 +4,7 @@ namespace Model;
 
 use Biblys\Service\Validator\Validator;
 use Exception;
-use Model\Base\AxysUser as BaseAxysUser;
+use Model\Base\AxysAccount as BaseAxysAccount;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -18,7 +18,7 @@ use Propel\Runtime\Exception\PropelException;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class AxysUser extends BaseAxysUser
+class AxysAccount extends BaseAxysAccount
 {
     public function isAdminForSite(Site $site): bool
     {
@@ -40,7 +40,7 @@ class AxysUser extends BaseAxysUser
     public function hasRightForPublisher(Publisher $publisher): bool
     {
         $publisherRight = RightQuery::create()
-            ->filterByAxysUser($this)
+            ->filterByAxysAccount($this)
             ->filterByPublisherId($publisher->getId())
             ->findOne();
 
@@ -57,7 +57,7 @@ class AxysUser extends BaseAxysUser
     public function hasPublisherRight(): bool
     {
         $publisherRight = RightQuery::create()
-            ->filterByAxysUser($this)
+            ->filterByAxysAccount($this)
             ->filterByPublisherId(null, Criteria::NOT_EQUAL)
             ->findOne();
 
@@ -74,7 +74,7 @@ class AxysUser extends BaseAxysUser
     public function getCurrentRight(): Right
     {
         return RightQuery::create()
-            ->filterByAxysUser($this)
+            ->filterByAxysAccount($this)
             ->findOne();
     }
 

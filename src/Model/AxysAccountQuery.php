@@ -2,7 +2,7 @@
 
 namespace Model;
 
-use Model\Base\AxysUserQuery as BaseAxysUserQuery;
+use Model\Base\AxysAccountQuery as BaseAxysAccountQuery;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'users' table.
@@ -13,7 +13,7 @@ use Model\Base\AxysUserQuery as BaseAxysUserQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class AxysUserQuery extends BaseAxysUserQuery
+class AxysAccountQuery extends BaseAxysAccountQuery
 {
 
 }

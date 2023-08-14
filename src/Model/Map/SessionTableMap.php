@@ -244,7 +244,7 @@ class SessionTableMap extends TableMap
      */
     public function buildRelations(): void
     {
-        $this->addRelation('AxysUser', '\\Model\\AxysUser', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('AxysAccount', '\\Model\\AxysAccount', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':axys_user_id',

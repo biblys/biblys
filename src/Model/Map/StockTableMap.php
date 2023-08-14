@@ -734,7 +734,7 @@ class StockTableMap extends TableMap
     1 => ':article_id',
   ),
 ), null, null, null, false);
-        $this->addRelation('AxysUser', '\\Model\\AxysUser', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('AxysAccount', '\\Model\\AxysAccount', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':axys_user_id',

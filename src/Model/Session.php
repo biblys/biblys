@@ -21,14 +21,14 @@ use RandomLib\Generator;
 class Session extends BaseSession
 {
     /**
-     * @param AxysUser $user
+     * @param AxysAccount $user
      * @return Session
      * @throws PropelException
      */
-    public static function buildForUser(AxysUser $user): Session
+    public static function buildForUser(AxysAccount $user): Session
     {
         $session = new Session();
-        $session->setAxysUser($user);
+        $session->setAxysAccount($user);
         $session->setToken(Session::generateToken());
         $session->setExpiresAt(new DateTime('tomorrow'));
         return $session;
@@ -38,13 +38,13 @@ class Session extends BaseSession
      * @throws PropelException
      */
     public static function buildForUserAndCurrentSite(
-        AxysUser $user,
+        AxysAccount $user,
         CurrentSite $currentSite,
-        DateTime $expiresAt
+        DateTime    $expiresAt
     ): Session
     {
         $session = new Session();
-        $session->setAxysUser($user);
+        $session->setAxysAccount($user);
         $session->setSite($currentSite->getSite());
         $session->setToken(Session::generateToken());
         $session->setExpiresAt($expiresAt);

@@ -2,8 +2,8 @@
 
 namespace Model\Map;
 
-use Model\AxysUser;
-use Model\AxysUserQuery;
+use Model\AxysAccount;
+use Model\AxysAccountQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -25,7 +25,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
  */
-class AxysUserTableMap extends TableMap
+class AxysAccountTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -33,7 +33,7 @@ class AxysUserTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    public const CLASS_NAME = 'Model.Map.AxysUserTableMap';
+    public const CLASS_NAME = 'Model.Map.AxysAccountTableMap';
 
     /**
      * The default database name for this class
@@ -48,17 +48,17 @@ class AxysUserTableMap extends TableMap
     /**
      * The PHP name of this class (PascalCase)
      */
-    public const TABLE_PHP_NAME = 'AxysUser';
+    public const TABLE_PHP_NAME = 'AxysAccount';
 
     /**
      * The related Propel class for this table
      */
-    public const OM_CLASS = '\\Model\\AxysUser';
+    public const OM_CLASS = '\\Model\\AxysAccount';
 
     /**
      * A class that can be returned by this tableMap
      */
-    public const CLASS_DEFAULT = 'Model.AxysUser';
+    public const CLASS_DEFAULT = 'Model.AxysAccount';
 
     /**
      * The total number of columns
@@ -166,7 +166,7 @@ class AxysUserTableMap extends TableMap
     protected static $fieldNames = [
         self::TYPE_PHPNAME       => ['Id', 'SiteId', 'Email', 'Password', 'Key', 'EmailKey', 'Username', 'Slug', 'Dateinscription', 'Dateconnexion', 'Nom', 'Prenom', 'Update', 'CreatedAt', 'UpdatedAt', ],
         self::TYPE_CAMELNAME     => ['id', 'siteId', 'email', 'password', 'key', 'emailKey', 'username', 'slug', 'dateinscription', 'dateconnexion', 'nom', 'prenom', 'update', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [AxysUserTableMap::COL_ID, AxysUserTableMap::COL_SITE_ID, AxysUserTableMap::COL_EMAIL, AxysUserTableMap::COL_USER_PASSWORD, AxysUserTableMap::COL_USER_KEY, AxysUserTableMap::COL_EMAIL_KEY, AxysUserTableMap::COL_USER_SCREEN_NAME, AxysUserTableMap::COL_USER_SLUG, AxysUserTableMap::COL_DATEINSCRIPTION, AxysUserTableMap::COL_DATECONNEXION, AxysUserTableMap::COL_USER_NOM, AxysUserTableMap::COL_USER_PRENOM, AxysUserTableMap::COL_USER_UPDATE, AxysUserTableMap::COL_USER_CREATED, AxysUserTableMap::COL_USER_UPDATED, ],
+        self::TYPE_COLNAME       => [AxysAccountTableMap::COL_ID, AxysAccountTableMap::COL_SITE_ID, AxysAccountTableMap::COL_EMAIL, AxysAccountTableMap::COL_USER_PASSWORD, AxysAccountTableMap::COL_USER_KEY, AxysAccountTableMap::COL_EMAIL_KEY, AxysAccountTableMap::COL_USER_SCREEN_NAME, AxysAccountTableMap::COL_USER_SLUG, AxysAccountTableMap::COL_DATEINSCRIPTION, AxysAccountTableMap::COL_DATECONNEXION, AxysAccountTableMap::COL_USER_NOM, AxysAccountTableMap::COL_USER_PRENOM, AxysAccountTableMap::COL_USER_UPDATE, AxysAccountTableMap::COL_USER_CREATED, AxysAccountTableMap::COL_USER_UPDATED, ],
         self::TYPE_FIELDNAME     => ['id', 'site_id', 'Email', 'user_password', 'user_key', 'email_key', 'user_screen_name', 'user_slug', 'DateInscription', 'DateConnexion', 'user_nom', 'user_prenom', 'user_update', 'user_created', 'user_updated', ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, ]
     ];
@@ -182,7 +182,7 @@ class AxysUserTableMap extends TableMap
     protected static $fieldKeys = [
         self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'Email' => 2, 'Password' => 3, 'Key' => 4, 'EmailKey' => 5, 'Username' => 6, 'Slug' => 7, 'Dateinscription' => 8, 'Dateconnexion' => 9, 'Nom' => 10, 'Prenom' => 11, 'Update' => 12, 'CreatedAt' => 13, 'UpdatedAt' => 14, ],
         self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'email' => 2, 'password' => 3, 'key' => 4, 'emailKey' => 5, 'username' => 6, 'slug' => 7, 'dateinscription' => 8, 'dateconnexion' => 9, 'nom' => 10, 'prenom' => 11, 'update' => 12, 'createdAt' => 13, 'updatedAt' => 14, ],
-        self::TYPE_COLNAME       => [AxysUserTableMap::COL_ID => 0, AxysUserTableMap::COL_SITE_ID => 1, AxysUserTableMap::COL_EMAIL => 2, AxysUserTableMap::COL_USER_PASSWORD => 3, AxysUserTableMap::COL_USER_KEY => 4, AxysUserTableMap::COL_EMAIL_KEY => 5, AxysUserTableMap::COL_USER_SCREEN_NAME => 6, AxysUserTableMap::COL_USER_SLUG => 7, AxysUserTableMap::COL_DATEINSCRIPTION => 8, AxysUserTableMap::COL_DATECONNEXION => 9, AxysUserTableMap::COL_USER_NOM => 10, AxysUserTableMap::COL_USER_PRENOM => 11, AxysUserTableMap::COL_USER_UPDATE => 12, AxysUserTableMap::COL_USER_CREATED => 13, AxysUserTableMap::COL_USER_UPDATED => 14, ],
+        self::TYPE_COLNAME       => [AxysAccountTableMap::COL_ID => 0, AxysAccountTableMap::COL_SITE_ID => 1, AxysAccountTableMap::COL_EMAIL => 2, AxysAccountTableMap::COL_USER_PASSWORD => 3, AxysAccountTableMap::COL_USER_KEY => 4, AxysAccountTableMap::COL_EMAIL_KEY => 5, AxysAccountTableMap::COL_USER_SCREEN_NAME => 6, AxysAccountTableMap::COL_USER_SLUG => 7, AxysAccountTableMap::COL_DATEINSCRIPTION => 8, AxysAccountTableMap::COL_DATECONNEXION => 9, AxysAccountTableMap::COL_USER_NOM => 10, AxysAccountTableMap::COL_USER_PRENOM => 11, AxysAccountTableMap::COL_USER_UPDATE => 12, AxysAccountTableMap::COL_USER_CREATED => 13, AxysAccountTableMap::COL_USER_UPDATED => 14, ],
         self::TYPE_FIELDNAME     => ['id' => 0, 'site_id' => 1, 'Email' => 2, 'user_password' => 3, 'user_key' => 4, 'email_key' => 5, 'user_screen_name' => 6, 'user_slug' => 7, 'DateInscription' => 8, 'DateConnexion' => 9, 'user_nom' => 10, 'user_prenom' => 11, 'user_update' => 12, 'user_created' => 13, 'user_updated' => 14, ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, ]
     ];
@@ -194,120 +194,120 @@ class AxysUserTableMap extends TableMap
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'ID',
-        'AxysUser.Id' => 'ID',
+        'AxysAccount.Id' => 'ID',
         'id' => 'ID',
-        'axysUser.id' => 'ID',
-        'AxysUserTableMap::COL_ID' => 'ID',
+        'axysAccount.id' => 'ID',
+        'AxysAccountTableMap::COL_ID' => 'ID',
         'COL_ID' => 'ID',
         'axys_accounts.id' => 'ID',
         'SiteId' => 'SITE_ID',
-        'AxysUser.SiteId' => 'SITE_ID',
+        'AxysAccount.SiteId' => 'SITE_ID',
         'siteId' => 'SITE_ID',
-        'axysUser.siteId' => 'SITE_ID',
-        'AxysUserTableMap::COL_SITE_ID' => 'SITE_ID',
+        'axysAccount.siteId' => 'SITE_ID',
+        'AxysAccountTableMap::COL_SITE_ID' => 'SITE_ID',
         'COL_SITE_ID' => 'SITE_ID',
         'site_id' => 'SITE_ID',
         'axys_accounts.site_id' => 'SITE_ID',
         'Email' => 'EMAIL',
-        'AxysUser.Email' => 'EMAIL',
+        'AxysAccount.Email' => 'EMAIL',
         'email' => 'EMAIL',
-        'axysUser.email' => 'EMAIL',
-        'AxysUserTableMap::COL_EMAIL' => 'EMAIL',
+        'axysAccount.email' => 'EMAIL',
+        'AxysAccountTableMap::COL_EMAIL' => 'EMAIL',
         'COL_EMAIL' => 'EMAIL',
         'axys_accounts.Email' => 'EMAIL',
         'Password' => 'USER_PASSWORD',
-        'AxysUser.Password' => 'USER_PASSWORD',
+        'AxysAccount.Password' => 'USER_PASSWORD',
         'password' => 'USER_PASSWORD',
-        'axysUser.password' => 'USER_PASSWORD',
-        'AxysUserTableMap::COL_USER_PASSWORD' => 'USER_PASSWORD',
+        'axysAccount.password' => 'USER_PASSWORD',
+        'AxysAccountTableMap::COL_USER_PASSWORD' => 'USER_PASSWORD',
         'COL_USER_PASSWORD' => 'USER_PASSWORD',
         'user_password' => 'USER_PASSWORD',
         'axys_accounts.user_password' => 'USER_PASSWORD',
         'Key' => 'USER_KEY',
-        'AxysUser.Key' => 'USER_KEY',
+        'AxysAccount.Key' => 'USER_KEY',
         'key' => 'USER_KEY',
-        'axysUser.key' => 'USER_KEY',
-        'AxysUserTableMap::COL_USER_KEY' => 'USER_KEY',
+        'axysAccount.key' => 'USER_KEY',
+        'AxysAccountTableMap::COL_USER_KEY' => 'USER_KEY',
         'COL_USER_KEY' => 'USER_KEY',
         'user_key' => 'USER_KEY',
         'axys_accounts.user_key' => 'USER_KEY',
         'EmailKey' => 'EMAIL_KEY',
-        'AxysUser.EmailKey' => 'EMAIL_KEY',
+        'AxysAccount.EmailKey' => 'EMAIL_KEY',
         'emailKey' => 'EMAIL_KEY',
-        'axysUser.emailKey' => 'EMAIL_KEY',
-        'AxysUserTableMap::COL_EMAIL_KEY' => 'EMAIL_KEY',
+        'axysAccount.emailKey' => 'EMAIL_KEY',
+        'AxysAccountTableMap::COL_EMAIL_KEY' => 'EMAIL_KEY',
         'COL_EMAIL_KEY' => 'EMAIL_KEY',
         'email_key' => 'EMAIL_KEY',
         'axys_accounts.email_key' => 'EMAIL_KEY',
         'Username' => 'USER_SCREEN_NAME',
-        'AxysUser.Username' => 'USER_SCREEN_NAME',
+        'AxysAccount.Username' => 'USER_SCREEN_NAME',
         'username' => 'USER_SCREEN_NAME',
-        'axysUser.username' => 'USER_SCREEN_NAME',
-        'AxysUserTableMap::COL_USER_SCREEN_NAME' => 'USER_SCREEN_NAME',
+        'axysAccount.username' => 'USER_SCREEN_NAME',
+        'AxysAccountTableMap::COL_USER_SCREEN_NAME' => 'USER_SCREEN_NAME',
         'COL_USER_SCREEN_NAME' => 'USER_SCREEN_NAME',
         'user_screen_name' => 'USER_SCREEN_NAME',
         'axys_accounts.user_screen_name' => 'USER_SCREEN_NAME',
         'Slug' => 'USER_SLUG',
-        'AxysUser.Slug' => 'USER_SLUG',
+        'AxysAccount.Slug' => 'USER_SLUG',
         'slug' => 'USER_SLUG',
-        'axysUser.slug' => 'USER_SLUG',
-        'AxysUserTableMap::COL_USER_SLUG' => 'USER_SLUG',
+        'axysAccount.slug' => 'USER_SLUG',
+        'AxysAccountTableMap::COL_USER_SLUG' => 'USER_SLUG',
         'COL_USER_SLUG' => 'USER_SLUG',
         'user_slug' => 'USER_SLUG',
         'axys_accounts.user_slug' => 'USER_SLUG',
         'Dateinscription' => 'DATEINSCRIPTION',
-        'AxysUser.Dateinscription' => 'DATEINSCRIPTION',
+        'AxysAccount.Dateinscription' => 'DATEINSCRIPTION',
         'dateinscription' => 'DATEINSCRIPTION',
-        'axysUser.dateinscription' => 'DATEINSCRIPTION',
-        'AxysUserTableMap::COL_DATEINSCRIPTION' => 'DATEINSCRIPTION',
+        'axysAccount.dateinscription' => 'DATEINSCRIPTION',
+        'AxysAccountTableMap::COL_DATEINSCRIPTION' => 'DATEINSCRIPTION',
         'COL_DATEINSCRIPTION' => 'DATEINSCRIPTION',
         'DateInscription' => 'DATEINSCRIPTION',
         'axys_accounts.DateInscription' => 'DATEINSCRIPTION',
         'Dateconnexion' => 'DATECONNEXION',
-        'AxysUser.Dateconnexion' => 'DATECONNEXION',
+        'AxysAccount.Dateconnexion' => 'DATECONNEXION',
         'dateconnexion' => 'DATECONNEXION',
-        'axysUser.dateconnexion' => 'DATECONNEXION',
-        'AxysUserTableMap::COL_DATECONNEXION' => 'DATECONNEXION',
+        'axysAccount.dateconnexion' => 'DATECONNEXION',
+        'AxysAccountTableMap::COL_DATECONNEXION' => 'DATECONNEXION',
         'COL_DATECONNEXION' => 'DATECONNEXION',
         'DateConnexion' => 'DATECONNEXION',
         'axys_accounts.DateConnexion' => 'DATECONNEXION',
         'Nom' => 'USER_NOM',
-        'AxysUser.Nom' => 'USER_NOM',
+        'AxysAccount.Nom' => 'USER_NOM',
         'nom' => 'USER_NOM',
-        'axysUser.nom' => 'USER_NOM',
-        'AxysUserTableMap::COL_USER_NOM' => 'USER_NOM',
+        'axysAccount.nom' => 'USER_NOM',
+        'AxysAccountTableMap::COL_USER_NOM' => 'USER_NOM',
         'COL_USER_NOM' => 'USER_NOM',
         'user_nom' => 'USER_NOM',
         'axys_accounts.user_nom' => 'USER_NOM',
         'Prenom' => 'USER_PRENOM',
-        'AxysUser.Prenom' => 'USER_PRENOM',
+        'AxysAccount.Prenom' => 'USER_PRENOM',
         'prenom' => 'USER_PRENOM',
-        'axysUser.prenom' => 'USER_PRENOM',
-        'AxysUserTableMap::COL_USER_PRENOM' => 'USER_PRENOM',
+        'axysAccount.prenom' => 'USER_PRENOM',
+        'AxysAccountTableMap::COL_USER_PRENOM' => 'USER_PRENOM',
         'COL_USER_PRENOM' => 'USER_PRENOM',
         'user_prenom' => 'USER_PRENOM',
         'axys_accounts.user_prenom' => 'USER_PRENOM',
         'Update' => 'USER_UPDATE',
-        'AxysUser.Update' => 'USER_UPDATE',
+        'AxysAccount.Update' => 'USER_UPDATE',
         'update' => 'USER_UPDATE',
-        'axysUser.update' => 'USER_UPDATE',
-        'AxysUserTableMap::COL_USER_UPDATE' => 'USER_UPDATE',
+        'axysAccount.update' => 'USER_UPDATE',
+        'AxysAccountTableMap::COL_USER_UPDATE' => 'USER_UPDATE',
         'COL_USER_UPDATE' => 'USER_UPDATE',
         'user_update' => 'USER_UPDATE',
         'axys_accounts.user_update' => 'USER_UPDATE',
         'CreatedAt' => 'USER_CREATED',
-        'AxysUser.CreatedAt' => 'USER_CREATED',
+        'AxysAccount.CreatedAt' => 'USER_CREATED',
         'createdAt' => 'USER_CREATED',
-        'axysUser.createdAt' => 'USER_CREATED',
-        'AxysUserTableMap::COL_USER_CREATED' => 'USER_CREATED',
+        'axysAccount.createdAt' => 'USER_CREATED',
+        'AxysAccountTableMap::COL_USER_CREATED' => 'USER_CREATED',
         'COL_USER_CREATED' => 'USER_CREATED',
         'user_created' => 'USER_CREATED',
         'axys_accounts.user_created' => 'USER_CREATED',
         'UpdatedAt' => 'USER_UPDATED',
-        'AxysUser.UpdatedAt' => 'USER_UPDATED',
+        'AxysAccount.UpdatedAt' => 'USER_UPDATED',
         'updatedAt' => 'USER_UPDATED',
-        'axysUser.updatedAt' => 'USER_UPDATED',
-        'AxysUserTableMap::COL_USER_UPDATED' => 'USER_UPDATED',
+        'axysAccount.updatedAt' => 'USER_UPDATED',
+        'AxysAccountTableMap::COL_USER_UPDATED' => 'USER_UPDATED',
         'COL_USER_UPDATED' => 'USER_UPDATED',
         'user_updated' => 'USER_UPDATED',
         'axys_accounts.user_updated' => 'USER_UPDATED',
@@ -324,9 +324,9 @@ class AxysUserTableMap extends TableMap
     {
         // attributes
         $this->setName('axys_accounts');
-        $this->setPhpName('AxysUser');
+        $this->setPhpName('AxysAccount');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\Model\\AxysUser');
+        $this->setClassName('\\Model\\AxysAccount');
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
@@ -490,7 +490,7 @@ class AxysUserTableMap extends TableMap
      */
     public static function getOMClass(bool $withPrefix = true): string
     {
-        return $withPrefix ? AxysUserTableMap::CLASS_DEFAULT : AxysUserTableMap::OM_CLASS;
+        return $withPrefix ? AxysAccountTableMap::CLASS_DEFAULT : AxysAccountTableMap::OM_CLASS;
     }
 
     /**
@@ -504,22 +504,22 @@ class AxysUserTableMap extends TableMap
      *
      * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array (AxysUser object, last column rank)
+     * @return array (AxysAccount object, last column rank)
      */
     public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
-        $key = AxysUserTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = AxysUserTableMap::getInstanceFromPool($key))) {
+        $key = AxysAccountTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = AxysAccountTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + AxysUserTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + AxysAccountTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = AxysUserTableMap::OM_CLASS;
-            /** @var AxysUser $obj */
+            $cls = AxysAccountTableMap::OM_CLASS;
+            /** @var AxysAccount $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            AxysUserTableMap::addInstanceToPool($obj, $key);
+            AxysAccountTableMap::addInstanceToPool($obj, $key);
         }
 
         return [$obj, $col];
@@ -542,18 +542,18 @@ class AxysUserTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = AxysUserTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = AxysUserTableMap::getInstanceFromPool($key))) {
+            $key = AxysAccountTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = AxysAccountTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var AxysUser $obj */
+                /** @var AxysAccount $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                AxysUserTableMap::addInstanceToPool($obj, $key);
+                AxysAccountTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -575,21 +575,21 @@ class AxysUserTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(AxysUserTableMap::COL_ID);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_SITE_ID);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_EMAIL);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_PASSWORD);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_KEY);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_EMAIL_KEY);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_SCREEN_NAME);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_SLUG);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_DATEINSCRIPTION);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_DATECONNEXION);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_NOM);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_PRENOM);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_UPDATE);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_CREATED);
-            $criteria->addSelectColumn(AxysUserTableMap::COL_USER_UPDATED);
+            $criteria->addSelectColumn(AxysAccountTableMap::COL_ID);
+            $criteria->addSelectColumn(AxysAccountTableMap::COL_SITE_ID);
+            $criteria->addSelectColumn(AxysAccountTableMap::COL_EMAIL);
+            $criteria->addSelectColumn(AxysAccountTableMap::COL_USER_PASSWORD);
+            $criteria->addSelectColumn(AxysAccountTableMap::COL_USER_KEY);
+            $criteria->addSelectColumn(AxysAccountTableMap::COL_EMAIL_KEY);
+            $criteria->addSelectColumn(AxysAccountTableMap::COL_USER_SCREEN_NAME);
+            $criteria->addSelectColumn(AxysAccountTableMap::COL_USER_SLUG);
+            $criteria->addSelectColumn(AxysAccountTableMap::COL_DATEINSCRIPTION);
+            $criteria->addSelectColumn(AxysAccountTableMap::COL_DATECONNEXION);
+            $criteria->addSelectColumn(AxysAccountTableMap::COL_USER_NOM);
+            $criteria->addSelectColumn(AxysAccountTableMap::COL_USER_PRENOM);
+            $criteria->addSelectColumn(AxysAccountTableMap::COL_USER_UPDATE);
+            $criteria->addSelectColumn(AxysAccountTableMap::COL_USER_CREATED);
+            $criteria->addSelectColumn(AxysAccountTableMap::COL_USER_UPDATED);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -624,21 +624,21 @@ class AxysUserTableMap extends TableMap
     public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_ID);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_SITE_ID);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_EMAIL);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_PASSWORD);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_KEY);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_EMAIL_KEY);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_SCREEN_NAME);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_SLUG);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_DATEINSCRIPTION);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_DATECONNEXION);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_NOM);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_PRENOM);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_UPDATE);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_CREATED);
-            $criteria->removeSelectColumn(AxysUserTableMap::COL_USER_UPDATED);
+            $criteria->removeSelectColumn(AxysAccountTableMap::COL_ID);
+            $criteria->removeSelectColumn(AxysAccountTableMap::COL_SITE_ID);
+            $criteria->removeSelectColumn(AxysAccountTableMap::COL_EMAIL);
+            $criteria->removeSelectColumn(AxysAccountTableMap::COL_USER_PASSWORD);
+            $criteria->removeSelectColumn(AxysAccountTableMap::COL_USER_KEY);
+            $criteria->removeSelectColumn(AxysAccountTableMap::COL_EMAIL_KEY);
+            $criteria->removeSelectColumn(AxysAccountTableMap::COL_USER_SCREEN_NAME);
+            $criteria->removeSelectColumn(AxysAccountTableMap::COL_USER_SLUG);
+            $criteria->removeSelectColumn(AxysAccountTableMap::COL_DATEINSCRIPTION);
+            $criteria->removeSelectColumn(AxysAccountTableMap::COL_DATECONNEXION);
+            $criteria->removeSelectColumn(AxysAccountTableMap::COL_USER_NOM);
+            $criteria->removeSelectColumn(AxysAccountTableMap::COL_USER_PRENOM);
+            $criteria->removeSelectColumn(AxysAccountTableMap::COL_USER_UPDATE);
+            $criteria->removeSelectColumn(AxysAccountTableMap::COL_USER_CREATED);
+            $criteria->removeSelectColumn(AxysAccountTableMap::COL_USER_UPDATED);
         } else {
             $criteria->removeSelectColumn($alias . '.id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -667,13 +667,13 @@ class AxysUserTableMap extends TableMap
      */
     public static function getTableMap(): TableMap
     {
-        return Propel::getServiceContainer()->getDatabaseMap(AxysUserTableMap::DATABASE_NAME)->getTable(AxysUserTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(AxysAccountTableMap::DATABASE_NAME)->getTable(AxysAccountTableMap::TABLE_NAME);
     }
 
     /**
-     * Performs a DELETE on the database, given a AxysUser or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a AxysAccount or Criteria object OR a primary key value.
      *
-     * @param mixed $values Criteria or AxysUser object or primary key or array of primary keys
+     * @param mixed $values Criteria or AxysAccount object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -684,27 +684,27 @@ class AxysUserTableMap extends TableMap
      public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(AxysUserTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AxysAccountTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \Model\AxysUser) { // it's a model object
+        } elseif ($values instanceof \Model\AxysAccount) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(AxysUserTableMap::DATABASE_NAME);
-            $criteria->add(AxysUserTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(AxysAccountTableMap::DATABASE_NAME);
+            $criteria->add(AxysAccountTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = AxysUserQuery::create()->mergeWith($criteria);
+        $query = AxysAccountQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            AxysUserTableMap::clearInstancePool();
+            AxysAccountTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                AxysUserTableMap::removeInstanceFromPool($singleval);
+                AxysAccountTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -719,13 +719,13 @@ class AxysUserTableMap extends TableMap
      */
     public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
-        return AxysUserQuery::create()->doDeleteAll($con);
+        return AxysAccountQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a AxysUser or Criteria object.
+     * Performs an INSERT on the database, given a AxysAccount or Criteria object.
      *
-     * @param mixed $criteria Criteria or AxysUser object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or AxysAccount object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed The new primary key.
      * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
@@ -734,22 +734,22 @@ class AxysUserTableMap extends TableMap
     public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(AxysUserTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AxysAccountTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from AxysUser object
+            $criteria = $criteria->buildCriteria(); // build Criteria from AxysAccount object
         }
 
-        if ($criteria->containsKey(AxysUserTableMap::COL_ID) && $criteria->keyContainsValue(AxysUserTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.AxysUserTableMap::COL_ID.')');
+        if ($criteria->containsKey(AxysAccountTableMap::COL_ID) && $criteria->keyContainsValue(AxysAccountTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.AxysAccountTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = AxysUserQuery::create()->mergeWith($criteria);
+        $query = AxysAccountQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)

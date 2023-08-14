@@ -7105,10 +7105,10 @@ abstract class Article implements ActiveRecordInterface
      * @return ObjectCollection|ChildStock[] List of ChildStock objects
      * @phpstan-return ObjectCollection&\Traversable<ChildStock}> List of ChildStock objects
      */
-    public function getStocksJoinAxysUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getStocksJoinAxysAccount(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildStockQuery::create(null, $criteria);
-        $query->joinWith('AxysUser', $joinBehavior);
+        $query->joinWith('AxysAccount', $joinBehavior);
 
         return $this->getStocks($query, $con);
     }

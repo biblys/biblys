@@ -5,8 +5,8 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
-use Model\AxysUser as ChildAxysUser;
-use Model\AxysUserQuery as ChildAxysUserQuery;
+use Model\AxysAccount as ChildAxysAccount;
+use Model\AxysAccountQuery as ChildAxysAccountQuery;
 use Model\WishlistQuery as ChildWishlistQuery;
 use Model\Map\WishlistTableMap;
 use Propel\Runtime\Propel;
@@ -115,9 +115,9 @@ abstract class Wishlist implements ActiveRecordInterface
     protected $wishlist_updated;
 
     /**
-     * @var        ChildAxysUser
+     * @var        ChildAxysAccount
      */
-    protected $aAxysUser;
+    protected $aAxysAccount;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -504,8 +504,8 @@ abstract class Wishlist implements ActiveRecordInterface
             $this->modifiedColumns[WishlistTableMap::COL_AXYS_USER_ID] = true;
         }
 
-        if ($this->aAxysUser !== null && $this->aAxysUser->getId() !== $v) {
-            $this->aAxysUser = null;
+        if ($this->aAxysAccount !== null && $this->aAxysAccount->getId() !== $v) {
+            $this->aAxysAccount = null;
         }
 
         return $this;
@@ -720,8 +720,8 @@ abstract class Wishlist implements ActiveRecordInterface
      */
     public function ensureConsistency(): void
     {
-        if ($this->aAxysUser !== null && $this->axys_user_id !== $this->aAxysUser->getId()) {
-            $this->aAxysUser = null;
+        if ($this->aAxysAccount !== null && $this->axys_user_id !== $this->aAxysAccount->getId()) {
+            $this->aAxysAccount = null;
         }
     }
 
@@ -762,7 +762,7 @@ abstract class Wishlist implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aAxysUser = null;
+            $this->aAxysAccount = null;
         } // if (deep)
     }
 
@@ -884,11 +884,11 @@ abstract class Wishlist implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aAxysUser !== null) {
-                if ($this->aAxysUser->isModified() || $this->aAxysUser->isNew()) {
-                    $affectedRows += $this->aAxysUser->save($con);
+            if ($this->aAxysAccount !== null) {
+                if ($this->aAxysAccount->isModified() || $this->aAxysAccount->isNew()) {
+                    $affectedRows += $this->aAxysAccount->save($con);
                 }
-                $this->setAxysUser($this->aAxysUser);
+                $this->setAxysAccount($this->aAxysAccount);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -1121,20 +1121,20 @@ abstract class Wishlist implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aAxysUser) {
+            if (null !== $this->aAxysAccount) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'axysUser';
+                        $key = 'axysAccount';
                         break;
                     case TableMap::TYPE_FIELDNAME:
                         $key = 'axys_accounts';
                         break;
                     default:
-                        $key = 'AxysUser';
+                        $key = 'AxysAccount';
                 }
 
-                $result[$key] = $this->aAxysUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aAxysAccount->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1427,13 +1427,13 @@ abstract class Wishlist implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildAxysUser object.
+     * Declares an association between this object and a ChildAxysAccount object.
      *
-     * @param ChildAxysUser|null $v
+     * @param ChildAxysAccount|null $v
      * @return $this The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function setAxysUser(ChildAxysUser $v = null)
+    public function setAxysAccount(ChildAxysAccount $v = null)
     {
         if ($v === null) {
             $this->setAxysUserId(NULL);
@@ -1441,10 +1441,10 @@ abstract class Wishlist implements ActiveRecordInterface
             $this->setAxysUserId($v->getId());
         }
 
-        $this->aAxysUser = $v;
+        $this->aAxysAccount = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildAxysUser object, it will not be re-added.
+        // If this object has already been added to the ChildAxysAccount object, it will not be re-added.
         if ($v !== null) {
             $v->addWishlist($this);
         }
@@ -1455,26 +1455,26 @@ abstract class Wishlist implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildAxysUser object
+     * Get the associated ChildAxysAccount object
      *
      * @param ConnectionInterface $con Optional Connection object.
-     * @return ChildAxysUser|null The associated ChildAxysUser object.
+     * @return ChildAxysAccount|null The associated ChildAxysAccount object.
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function getAxysUser(?ConnectionInterface $con = null)
+    public function getAxysAccount(?ConnectionInterface $con = null)
     {
-        if ($this->aAxysUser === null && ($this->axys_user_id != 0)) {
-            $this->aAxysUser = ChildAxysUserQuery::create()->findPk($this->axys_user_id, $con);
+        if ($this->aAxysAccount === null && ($this->axys_user_id != 0)) {
+            $this->aAxysAccount = ChildAxysAccountQuery::create()->findPk($this->axys_user_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aAxysUser->addWishlists($this);
+                $this->aAxysAccount->addWishlists($this);
              */
         }
 
-        return $this->aAxysUser;
+        return $this->aAxysAccount;
     }
 
     /**
@@ -1486,8 +1486,8 @@ abstract class Wishlist implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aAxysUser) {
-            $this->aAxysUser->removeWishlist($this);
+        if (null !== $this->aAxysAccount) {
+            $this->aAxysAccount->removeWishlist($this);
         }
         $this->wishlist_id = null;
         $this->axys_user_id = null;
@@ -1519,7 +1519,7 @@ abstract class Wishlist implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aAxysUser = null;
+        $this->aAxysAccount = null;
         return $this;
     }
 

@@ -6,7 +6,7 @@ namespace Biblys\Service;
 
 use DateTime;
 use Exception;
-use Model\AxysUser;
+use Model\AxysAccount;
 use Model\Cart;
 use Model\CartQuery;
 use Model\Option;
@@ -21,11 +21,11 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class CurrentUser
 {
-    private ?AxysUser $user;
+    private ?AxysAccount $user;
     private ?string $token;
     private ?CurrentSite $currentSite;
 
-    public function __construct(?AxysUser $user, ?string $token)
+    public function __construct(?AxysAccount $user, ?string $token)
     {
         $this->user = $user;
         $this->token = $token;
@@ -57,7 +57,7 @@ class CurrentUser
             return new CurrentUser(null, $token);
         }
 
-        $user = $session->getAxysUser();
+        $user = $session->getAxysAccount();
         if (!$user) {
             return new CurrentUser(null, $token);
         }
@@ -106,9 +106,9 @@ class CurrentUser
     }
 
     /**
-     * @return AxysUser
+     * @return AxysAccount
      */
-    public function getAxysUser(): AxysUser
+    public function getAxysUser(): AxysAccount
     {
         if ($this->user === null) {
             throw new UnauthorizedHttpException("","Identification requise.");
@@ -151,7 +151,7 @@ class CurrentUser
         }
 
         $option = OptionQuery::create()
-            ->filterByAxysUser($this->user)
+            ->filterByAxysAccount($this->user)
             ->filterByKey($key)
             ->findOne();
 
@@ -165,13 +165,13 @@ class CurrentUser
     public function setOption(string $key, string $value): void
     {
         $option = OptionQuery::create()
-            ->filterByAxysUser($this->user)
+            ->filterByAxysAccount($this->user)
             ->filterByKey($key)
             ->findOne();
 
         if (!$option) {
             $option = new Option();
-            $option->setAxysUser($this->user);
+            $option->setAxysAccount($this->user);
             $option->setKey($key);
         }
 
@@ -196,7 +196,7 @@ class CurrentUser
 
         return CartQuery::create()
             ->filterBySite($this->getCurrentSite()->getSite())
-            ->filterByAxysUser($this->user)
+            ->filterByAxysAccount($this->user)
             ->findOne();
     }
 

@@ -5,8 +5,8 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
-use Model\AxysUser as ChildAxysUser;
-use Model\AxysUserQuery as ChildAxysUserQuery;
+use Model\AxysAccount as ChildAxysAccount;
+use Model\AxysAccountQuery as ChildAxysAccountQuery;
 use Model\SessionQuery as ChildSessionQuery;
 use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
@@ -117,9 +117,9 @@ abstract class Session implements ActiveRecordInterface
     protected $session_updated;
 
     /**
-     * @var        ChildAxysUser
+     * @var        ChildAxysAccount
      */
-    protected $aAxysUser;
+    protected $aAxysAccount;
 
     /**
      * @var        ChildSite
@@ -527,8 +527,8 @@ abstract class Session implements ActiveRecordInterface
             $this->modifiedColumns[SessionTableMap::COL_AXYS_USER_ID] = true;
         }
 
-        if ($this->aAxysUser !== null && $this->aAxysUser->getId() !== $v) {
-            $this->aAxysUser = null;
+        if ($this->aAxysAccount !== null && $this->aAxysAccount->getId() !== $v) {
+            $this->aAxysAccount = null;
         }
 
         return $this;
@@ -713,8 +713,8 @@ abstract class Session implements ActiveRecordInterface
         if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
             $this->aSite = null;
         }
-        if ($this->aAxysUser !== null && $this->axys_user_id !== $this->aAxysUser->getId()) {
-            $this->aAxysUser = null;
+        if ($this->aAxysAccount !== null && $this->axys_user_id !== $this->aAxysAccount->getId()) {
+            $this->aAxysAccount = null;
         }
     }
 
@@ -755,7 +755,7 @@ abstract class Session implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aAxysUser = null;
+            $this->aAxysAccount = null;
             $this->aSite = null;
         } // if (deep)
     }
@@ -878,11 +878,11 @@ abstract class Session implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aAxysUser !== null) {
-                if ($this->aAxysUser->isModified() || $this->aAxysUser->isNew()) {
-                    $affectedRows += $this->aAxysUser->save($con);
+            if ($this->aAxysAccount !== null) {
+                if ($this->aAxysAccount->isModified() || $this->aAxysAccount->isNew()) {
+                    $affectedRows += $this->aAxysAccount->save($con);
                 }
-                $this->setAxysUser($this->aAxysUser);
+                $this->setAxysAccount($this->aAxysAccount);
             }
 
             if ($this->aSite !== null) {
@@ -1126,20 +1126,20 @@ abstract class Session implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aAxysUser) {
+            if (null !== $this->aAxysAccount) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'axysUser';
+                        $key = 'axysAccount';
                         break;
                     case TableMap::TYPE_FIELDNAME:
                         $key = 'axys_accounts';
                         break;
                     default:
-                        $key = 'AxysUser';
+                        $key = 'AxysAccount';
                 }
 
-                $result[$key] = $this->aAxysUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aAxysAccount->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aSite) {
 
@@ -1447,13 +1447,13 @@ abstract class Session implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildAxysUser object.
+     * Declares an association between this object and a ChildAxysAccount object.
      *
-     * @param ChildAxysUser|null $v
+     * @param ChildAxysAccount|null $v
      * @return $this The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function setAxysUser(ChildAxysUser $v = null)
+    public function setAxysAccount(ChildAxysAccount $v = null)
     {
         if ($v === null) {
             $this->setAxysUserId(NULL);
@@ -1461,10 +1461,10 @@ abstract class Session implements ActiveRecordInterface
             $this->setAxysUserId($v->getId());
         }
 
-        $this->aAxysUser = $v;
+        $this->aAxysAccount = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildAxysUser object, it will not be re-added.
+        // If this object has already been added to the ChildAxysAccount object, it will not be re-added.
         if ($v !== null) {
             $v->addSession($this);
         }
@@ -1475,26 +1475,26 @@ abstract class Session implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildAxysUser object
+     * Get the associated ChildAxysAccount object
      *
      * @param ConnectionInterface $con Optional Connection object.
-     * @return ChildAxysUser|null The associated ChildAxysUser object.
+     * @return ChildAxysAccount|null The associated ChildAxysAccount object.
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function getAxysUser(?ConnectionInterface $con = null)
+    public function getAxysAccount(?ConnectionInterface $con = null)
     {
-        if ($this->aAxysUser === null && ($this->axys_user_id != 0)) {
-            $this->aAxysUser = ChildAxysUserQuery::create()->findPk($this->axys_user_id, $con);
+        if ($this->aAxysAccount === null && ($this->axys_user_id != 0)) {
+            $this->aAxysAccount = ChildAxysAccountQuery::create()->findPk($this->axys_user_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aAxysUser->addSessions($this);
+                $this->aAxysAccount->addSessions($this);
              */
         }
 
-        return $this->aAxysUser;
+        return $this->aAxysAccount;
     }
 
     /**
@@ -1557,8 +1557,8 @@ abstract class Session implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aAxysUser) {
-            $this->aAxysUser->removeSession($this);
+        if (null !== $this->aAxysAccount) {
+            $this->aAxysAccount->removeSession($this);
         }
         if (null !== $this->aSite) {
             $this->aSite->removeSession($this);
@@ -1593,7 +1593,7 @@ abstract class Session implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aAxysUser = null;
+        $this->aAxysAccount = null;
         $this->aSite = null;
         return $this;
     }

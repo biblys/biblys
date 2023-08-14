@@ -13,7 +13,7 @@ use Firebase\JWT\Key;
 use Framework\Controller;
 use Http\Discovery\Psr17Factory;
 use JsonException;
-use Model\AxysUserQuery;
+use Model\AxysAccountQuery;
 use Model\Session;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
@@ -66,7 +66,7 @@ class OpenIDConnectController extends Controller
 
         $claims = $tokenSet->claims();
         $userId = $claims["sub"];
-        $user = AxysUserQuery::create()->findPk($userId);
+        $user = AxysAccountQuery::create()->findPk($userId);
         $sessionExpiresAt = new DateTime("@".$claims["exp"]);
         $session = Session::buildForUserAndCurrentSite($user, $currentSite, $sessionExpiresAt);
         $session->save();
