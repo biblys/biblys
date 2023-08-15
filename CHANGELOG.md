@@ -7,6 +7,8 @@ Corrections
 - Le message "Vous n'êtes pas autorisé à accéder à cette page." pouvait 
   apparaître pour un utilisateur avec des droits d'administration. C'est 
   corrigé.
+- Le vidage des paniers pouvait déclencher une erreur SQL. Ça n'arrivera 
+  plus.
 
 ### 2.70.1 (9 août 2023)
 

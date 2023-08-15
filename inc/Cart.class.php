@@ -307,8 +307,8 @@ class CartManager extends EntityManager
         $cart->set('customer_id', '');
         $cart->set('cart_title', '');
         $cart->set('cart_date', '');
-        $cart->set('cart_count', '');
-        $cart->set('cart_amount', '');
+        $cart->set('cart_count', 0);
+        $cart->set('cart_amount', 0);
 
         $this->update($cart);
 
