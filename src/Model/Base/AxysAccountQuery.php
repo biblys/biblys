@@ -903,7 +903,7 @@ abstract class AxysAccountQuery extends ModelCriteria
     {
         if ($axysConsent instanceof \Model\AxysConsent) {
             $this
-                ->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, $axysConsent->getUserId(), $comparison);
+                ->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, $axysConsent->getAxysAccountId(), $comparison);
 
             return $this;
         } elseif ($axysConsent instanceof ObjectCollection) {

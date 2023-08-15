@@ -21,14 +21,14 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildAxysConsentQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildAxysConsentQuery orderByAppId($order = Criteria::ASC) Order by the app_id column
- * @method     ChildAxysConsentQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
+ * @method     ChildAxysConsentQuery orderByAxysAccountId($order = Criteria::ASC) Order by the axys_account_id column
  * @method     ChildAxysConsentQuery orderByScopes($order = Criteria::ASC) Order by the scopes column
  * @method     ChildAxysConsentQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildAxysConsentQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
  * @method     ChildAxysConsentQuery groupById() Group by the id column
  * @method     ChildAxysConsentQuery groupByAppId() Group by the app_id column
- * @method     ChildAxysConsentQuery groupByUserId() Group by the user_id column
+ * @method     ChildAxysConsentQuery groupByAxysAccountId() Group by the axys_account_id column
  * @method     ChildAxysConsentQuery groupByScopes() Group by the scopes column
  * @method     ChildAxysConsentQuery groupByCreatedAt() Group by the created_at column
  * @method     ChildAxysConsentQuery groupByUpdatedAt() Group by the updated_at column
@@ -68,7 +68,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildAxysConsent|null findOneById(int $id) Return the first ChildAxysConsent filtered by the id column
  * @method     ChildAxysConsent|null findOneByAppId(int $app_id) Return the first ChildAxysConsent filtered by the app_id column
- * @method     ChildAxysConsent|null findOneByUserId(int $user_id) Return the first ChildAxysConsent filtered by the user_id column
+ * @method     ChildAxysConsent|null findOneByAxysAccountId(int $axys_account_id) Return the first ChildAxysConsent filtered by the axys_account_id column
  * @method     ChildAxysConsent|null findOneByScopes(string $scopes) Return the first ChildAxysConsent filtered by the scopes column
  * @method     ChildAxysConsent|null findOneByCreatedAt(string $created_at) Return the first ChildAxysConsent filtered by the created_at column
  * @method     ChildAxysConsent|null findOneByUpdatedAt(string $updated_at) Return the first ChildAxysConsent filtered by the updated_at column
@@ -78,7 +78,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildAxysConsent requireOneById(int $id) Return the first ChildAxysConsent filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysConsent requireOneByAppId(int $app_id) Return the first ChildAxysConsent filtered by the app_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysConsent requireOneByUserId(int $user_id) Return the first ChildAxysConsent filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysConsent requireOneByAxysAccountId(int $axys_account_id) Return the first ChildAxysConsent filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysConsent requireOneByScopes(string $scopes) Return the first ChildAxysConsent filtered by the scopes column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysConsent requireOneByCreatedAt(string $created_at) Return the first ChildAxysConsent filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysConsent requireOneByUpdatedAt(string $updated_at) Return the first ChildAxysConsent filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -90,8 +90,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildAxysConsent> findById(int|array<int> $id) Return ChildAxysConsent objects filtered by the id column
  * @method     ChildAxysConsent[]|Collection findByAppId(int|array<int> $app_id) Return ChildAxysConsent objects filtered by the app_id column
  * @psalm-method Collection&\Traversable<ChildAxysConsent> findByAppId(int|array<int> $app_id) Return ChildAxysConsent objects filtered by the app_id column
- * @method     ChildAxysConsent[]|Collection findByUserId(int|array<int> $user_id) Return ChildAxysConsent objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildAxysConsent> findByUserId(int|array<int> $user_id) Return ChildAxysConsent objects filtered by the user_id column
+ * @method     ChildAxysConsent[]|Collection findByAxysAccountId(int|array<int> $axys_account_id) Return ChildAxysConsent objects filtered by the axys_account_id column
+ * @psalm-method Collection&\Traversable<ChildAxysConsent> findByAxysAccountId(int|array<int> $axys_account_id) Return ChildAxysConsent objects filtered by the axys_account_id column
  * @method     ChildAxysConsent[]|Collection findByScopes(string|array<string> $scopes) Return ChildAxysConsent objects filtered by the scopes column
  * @psalm-method Collection&\Traversable<ChildAxysConsent> findByScopes(string|array<string> $scopes) Return ChildAxysConsent objects filtered by the scopes column
  * @method     ChildAxysConsent[]|Collection findByCreatedAt(string|array<string> $created_at) Return ChildAxysConsent objects filtered by the created_at column
@@ -197,7 +197,7 @@ abstract class AxysConsentQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, app_id, user_id, scopes, created_at, updated_at FROM axys_consents WHERE id = :p0';
+        $sql = 'SELECT id, app_id, axys_account_id, scopes, created_at, updated_at FROM axys_consents WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -380,18 +380,18 @@ abstract class AxysConsentQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the user_id column
+     * Filter the query on the axys_account_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByUserId(1234); // WHERE user_id = 1234
-     * $query->filterByUserId(array(12, 34)); // WHERE user_id IN (12, 34)
-     * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
+     * $query->filterByAxysAccountId(1234); // WHERE axys_account_id = 1234
+     * $query->filterByAxysAccountId(array(12, 34)); // WHERE axys_account_id IN (12, 34)
+     * $query->filterByAxysAccountId(array('min' => 12)); // WHERE axys_account_id > 12
      * </code>
      *
      * @see       filterByAxysAccount()
      *
-     * @param mixed $userId The value to use as filter.
+     * @param mixed $axysAccountId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -399,16 +399,16 @@ abstract class AxysConsentQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, ?string $comparison = null)
+    public function filterByAxysAccountId($axysAccountId = null, ?string $comparison = null)
     {
-        if (is_array($userId)) {
+        if (is_array($axysAccountId)) {
             $useMinMax = false;
-            if (isset($userId['min'])) {
-                $this->addUsingAlias(AxysConsentTableMap::COL_USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
+            if (isset($axysAccountId['min'])) {
+                $this->addUsingAlias(AxysConsentTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($userId['max'])) {
-                $this->addUsingAlias(AxysConsentTableMap::COL_USER_ID, $userId['max'], Criteria::LESS_EQUAL);
+            if (isset($axysAccountId['max'])) {
+                $this->addUsingAlias(AxysConsentTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -419,7 +419,7 @@ abstract class AxysConsentQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(AxysConsentTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(AxysConsentTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId, $comparison);
 
         return $this;
     }
@@ -731,14 +731,14 @@ abstract class AxysConsentQuery extends ModelCriteria
     {
         if ($axysAccount instanceof \Model\AxysAccount) {
             return $this
-                ->addUsingAlias(AxysConsentTableMap::COL_USER_ID, $axysAccount->getId(), $comparison);
+                ->addUsingAlias(AxysConsentTableMap::COL_AXYS_ACCOUNT_ID, $axysAccount->getId(), $comparison);
         } elseif ($axysAccount instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             $this
-                ->addUsingAlias(AxysConsentTableMap::COL_USER_ID, $axysAccount->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(AxysConsentTableMap::COL_AXYS_ACCOUNT_ID, $axysAccount->toKeyValue('PrimaryKey', 'Id'), $comparison);
 
             return $this;
         } else {

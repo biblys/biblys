@@ -86,9 +86,9 @@ class AxysConsentTableMap extends TableMap
     public const COL_APP_ID = 'axys_consents.app_id';
 
     /**
-     * the column name for the user_id field
+     * the column name for the axys_account_id field
      */
-    public const COL_USER_ID = 'axys_consents.user_id';
+    public const COL_AXYS_ACCOUNT_ID = 'axys_consents.axys_account_id';
 
     /**
      * the column name for the scopes field
@@ -119,10 +119,10 @@ class AxysConsentTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'AppId', 'UserId', 'Scopes', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'appId', 'userId', 'scopes', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [AxysConsentTableMap::COL_ID, AxysConsentTableMap::COL_APP_ID, AxysConsentTableMap::COL_USER_ID, AxysConsentTableMap::COL_SCOPES, AxysConsentTableMap::COL_CREATED_AT, AxysConsentTableMap::COL_UPDATED_AT, ],
-        self::TYPE_FIELDNAME     => ['id', 'app_id', 'user_id', 'scopes', 'created_at', 'updated_at', ],
+        self::TYPE_PHPNAME       => ['Id', 'AppId', 'AxysAccountId', 'Scopes', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'appId', 'axysAccountId', 'scopes', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [AxysConsentTableMap::COL_ID, AxysConsentTableMap::COL_APP_ID, AxysConsentTableMap::COL_AXYS_ACCOUNT_ID, AxysConsentTableMap::COL_SCOPES, AxysConsentTableMap::COL_CREATED_AT, AxysConsentTableMap::COL_UPDATED_AT, ],
+        self::TYPE_FIELDNAME     => ['id', 'app_id', 'axys_account_id', 'scopes', 'created_at', 'updated_at', ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, ]
     ];
 
@@ -135,10 +135,10 @@ class AxysConsentTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'AppId' => 1, 'UserId' => 2, 'Scopes' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'appId' => 1, 'userId' => 2, 'scopes' => 3, 'createdAt' => 4, 'updatedAt' => 5, ],
-        self::TYPE_COLNAME       => [AxysConsentTableMap::COL_ID => 0, AxysConsentTableMap::COL_APP_ID => 1, AxysConsentTableMap::COL_USER_ID => 2, AxysConsentTableMap::COL_SCOPES => 3, AxysConsentTableMap::COL_CREATED_AT => 4, AxysConsentTableMap::COL_UPDATED_AT => 5, ],
-        self::TYPE_FIELDNAME     => ['id' => 0, 'app_id' => 1, 'user_id' => 2, 'scopes' => 3, 'created_at' => 4, 'updated_at' => 5, ],
+        self::TYPE_PHPNAME       => ['Id' => 0, 'AppId' => 1, 'AxysAccountId' => 2, 'Scopes' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'appId' => 1, 'axysAccountId' => 2, 'scopes' => 3, 'createdAt' => 4, 'updatedAt' => 5, ],
+        self::TYPE_COLNAME       => [AxysConsentTableMap::COL_ID => 0, AxysConsentTableMap::COL_APP_ID => 1, AxysConsentTableMap::COL_AXYS_ACCOUNT_ID => 2, AxysConsentTableMap::COL_SCOPES => 3, AxysConsentTableMap::COL_CREATED_AT => 4, AxysConsentTableMap::COL_UPDATED_AT => 5, ],
+        self::TYPE_FIELDNAME     => ['id' => 0, 'app_id' => 1, 'axys_account_id' => 2, 'scopes' => 3, 'created_at' => 4, 'updated_at' => 5, ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, ]
     ];
 
@@ -163,14 +163,14 @@ class AxysConsentTableMap extends TableMap
         'COL_APP_ID' => 'APP_ID',
         'app_id' => 'APP_ID',
         'axys_consents.app_id' => 'APP_ID',
-        'UserId' => 'USER_ID',
-        'AxysConsent.UserId' => 'USER_ID',
-        'userId' => 'USER_ID',
-        'axysConsent.userId' => 'USER_ID',
-        'AxysConsentTableMap::COL_USER_ID' => 'USER_ID',
-        'COL_USER_ID' => 'USER_ID',
-        'user_id' => 'USER_ID',
-        'axys_consents.user_id' => 'USER_ID',
+        'AxysAccountId' => 'AXYS_ACCOUNT_ID',
+        'AxysConsent.AxysAccountId' => 'AXYS_ACCOUNT_ID',
+        'axysAccountId' => 'AXYS_ACCOUNT_ID',
+        'axysConsent.axysAccountId' => 'AXYS_ACCOUNT_ID',
+        'AxysConsentTableMap::COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
+        'COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
+        'axys_account_id' => 'AXYS_ACCOUNT_ID',
+        'axys_consents.axys_account_id' => 'AXYS_ACCOUNT_ID',
         'Scopes' => 'SCOPES',
         'AxysConsent.Scopes' => 'SCOPES',
         'scopes' => 'SCOPES',
@@ -215,7 +215,7 @@ class AxysConsentTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('app_id', 'AppId', 'INTEGER', 'axys_apps', 'id', true, null, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'axys_accounts', 'axys_account_id', true, null, null);
+        $this->addForeignKey('axys_account_id', 'AxysAccountId', 'INTEGER', 'axys_accounts', 'axys_account_id', true, null, null);
         $this->addColumn('scopes', 'Scopes', 'VARCHAR', true, 256, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
@@ -238,7 +238,7 @@ class AxysConsentTableMap extends TableMap
         $this->addRelation('AxysAccount', '\\Model\\AxysAccount', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':user_id',
+    0 => ':axys_account_id',
     1 => ':axys_account_id',
   ),
 ), null, null, null, false);
@@ -401,14 +401,14 @@ class AxysConsentTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(AxysConsentTableMap::COL_ID);
             $criteria->addSelectColumn(AxysConsentTableMap::COL_APP_ID);
-            $criteria->addSelectColumn(AxysConsentTableMap::COL_USER_ID);
+            $criteria->addSelectColumn(AxysConsentTableMap::COL_AXYS_ACCOUNT_ID);
             $criteria->addSelectColumn(AxysConsentTableMap::COL_SCOPES);
             $criteria->addSelectColumn(AxysConsentTableMap::COL_CREATED_AT);
             $criteria->addSelectColumn(AxysConsentTableMap::COL_UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.app_id');
-            $criteria->addSelectColumn($alias . '.user_id');
+            $criteria->addSelectColumn($alias . '.axys_account_id');
             $criteria->addSelectColumn($alias . '.scopes');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
@@ -432,14 +432,14 @@ class AxysConsentTableMap extends TableMap
         if (null === $alias) {
             $criteria->removeSelectColumn(AxysConsentTableMap::COL_ID);
             $criteria->removeSelectColumn(AxysConsentTableMap::COL_APP_ID);
-            $criteria->removeSelectColumn(AxysConsentTableMap::COL_USER_ID);
+            $criteria->removeSelectColumn(AxysConsentTableMap::COL_AXYS_ACCOUNT_ID);
             $criteria->removeSelectColumn(AxysConsentTableMap::COL_SCOPES);
             $criteria->removeSelectColumn(AxysConsentTableMap::COL_CREATED_AT);
             $criteria->removeSelectColumn(AxysConsentTableMap::COL_UPDATED_AT);
         } else {
             $criteria->removeSelectColumn($alias . '.id');
             $criteria->removeSelectColumn($alias . '.app_id');
-            $criteria->removeSelectColumn($alias . '.user_id');
+            $criteria->removeSelectColumn($alias . '.axys_account_id');
             $criteria->removeSelectColumn($alias . '.scopes');
             $criteria->removeSelectColumn($alias . '.created_at');
             $criteria->removeSelectColumn($alias . '.updated_at');

@@ -82,11 +82,11 @@ abstract class AxysConsent implements ActiveRecordInterface
     protected $app_id;
 
     /**
-     * The value for the user_id field.
+     * The value for the axys_account_id field.
      *
      * @var        int
      */
-    protected $user_id;
+    protected $axys_account_id;
 
     /**
      * The value for the scopes field.
@@ -374,13 +374,13 @@ abstract class AxysConsent implements ActiveRecordInterface
     }
 
     /**
-     * Get the [user_id] column value.
+     * Get the [axys_account_id] column value.
      *
      * @return int
      */
-    public function getUserId()
+    public function getAxysAccountId()
     {
-        return $this->user_id;
+        return $this->axys_account_id;
     }
 
     /**
@@ -482,20 +482,20 @@ abstract class AxysConsent implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [user_id] column.
+     * Set the value of [axys_account_id] column.
      *
      * @param int $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setUserId($v)
+    public function setAxysAccountId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->user_id !== $v) {
-            $this->user_id = $v;
-            $this->modifiedColumns[AxysConsentTableMap::COL_USER_ID] = true;
+        if ($this->axys_account_id !== $v) {
+            $this->axys_account_id = $v;
+            $this->modifiedColumns[AxysConsentTableMap::COL_AXYS_ACCOUNT_ID] = true;
         }
 
         if ($this->aAxysAccount !== null && $this->aAxysAccount->getId() !== $v) {
@@ -607,8 +607,8 @@ abstract class AxysConsent implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : AxysConsentTableMap::translateFieldName('AppId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->app_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : AxysConsentTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : AxysConsentTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->axys_account_id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : AxysConsentTableMap::translateFieldName('Scopes', TableMap::TYPE_PHPNAME, $indexType)];
             $this->scopes = (null !== $col) ? (string) $col : null;
@@ -658,7 +658,7 @@ abstract class AxysConsent implements ActiveRecordInterface
         if ($this->aAxysApp !== null && $this->app_id !== $this->aAxysApp->getId()) {
             $this->aAxysApp = null;
         }
-        if ($this->aAxysAccount !== null && $this->user_id !== $this->aAxysAccount->getId()) {
+        if ($this->aAxysAccount !== null && $this->axys_account_id !== $this->aAxysAccount->getId()) {
             $this->aAxysAccount = null;
         }
     }
@@ -880,8 +880,8 @@ abstract class AxysConsent implements ActiveRecordInterface
         if ($this->isColumnModified(AxysConsentTableMap::COL_APP_ID)) {
             $modifiedColumns[':p' . $index++]  = 'app_id';
         }
-        if ($this->isColumnModified(AxysConsentTableMap::COL_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'user_id';
+        if ($this->isColumnModified(AxysConsentTableMap::COL_AXYS_ACCOUNT_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'axys_account_id';
         }
         if ($this->isColumnModified(AxysConsentTableMap::COL_SCOPES)) {
             $modifiedColumns[':p' . $index++]  = 'scopes';
@@ -911,8 +911,8 @@ abstract class AxysConsent implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->app_id, PDO::PARAM_INT);
 
                         break;
-                    case 'user_id':
-                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+                    case 'axys_account_id':
+                        $stmt->bindValue($identifier, $this->axys_account_id, PDO::PARAM_INT);
 
                         break;
                     case 'scopes':
@@ -996,7 +996,7 @@ abstract class AxysConsent implements ActiveRecordInterface
                 return $this->getAppId();
 
             case 2:
-                return $this->getUserId();
+                return $this->getAxysAccountId();
 
             case 3:
                 return $this->getScopes();
@@ -1037,7 +1037,7 @@ abstract class AxysConsent implements ActiveRecordInterface
         $result = [
             $keys[0] => $this->getId(),
             $keys[1] => $this->getAppId(),
-            $keys[2] => $this->getUserId(),
+            $keys[2] => $this->getAxysAccountId(),
             $keys[3] => $this->getScopes(),
             $keys[4] => $this->getCreatedAt(),
             $keys[5] => $this->getUpdatedAt(),
@@ -1129,7 +1129,7 @@ abstract class AxysConsent implements ActiveRecordInterface
                 $this->setAppId($value);
                 break;
             case 2:
-                $this->setUserId($value);
+                $this->setAxysAccountId($value);
                 break;
             case 3:
                 $this->setScopes($value);
@@ -1173,7 +1173,7 @@ abstract class AxysConsent implements ActiveRecordInterface
             $this->setAppId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setUserId($arr[$keys[2]]);
+            $this->setAxysAccountId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
             $this->setScopes($arr[$keys[3]]);
@@ -1233,8 +1233,8 @@ abstract class AxysConsent implements ActiveRecordInterface
         if ($this->isColumnModified(AxysConsentTableMap::COL_APP_ID)) {
             $criteria->add(AxysConsentTableMap::COL_APP_ID, $this->app_id);
         }
-        if ($this->isColumnModified(AxysConsentTableMap::COL_USER_ID)) {
-            $criteria->add(AxysConsentTableMap::COL_USER_ID, $this->user_id);
+        if ($this->isColumnModified(AxysConsentTableMap::COL_AXYS_ACCOUNT_ID)) {
+            $criteria->add(AxysConsentTableMap::COL_AXYS_ACCOUNT_ID, $this->axys_account_id);
         }
         if ($this->isColumnModified(AxysConsentTableMap::COL_SCOPES)) {
             $criteria->add(AxysConsentTableMap::COL_SCOPES, $this->scopes);
@@ -1334,7 +1334,7 @@ abstract class AxysConsent implements ActiveRecordInterface
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
         $copyObj->setAppId($this->getAppId());
-        $copyObj->setUserId($this->getUserId());
+        $copyObj->setAxysAccountId($this->getAxysAccountId());
         $copyObj->setScopes($this->getScopes());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
@@ -1427,9 +1427,9 @@ abstract class AxysConsent implements ActiveRecordInterface
     public function setAxysAccount(ChildAxysAccount $v = null)
     {
         if ($v === null) {
-            $this->setUserId(NULL);
+            $this->setAxysAccountId(NULL);
         } else {
-            $this->setUserId($v->getId());
+            $this->setAxysAccountId($v->getId());
         }
 
         $this->aAxysAccount = $v;
@@ -1454,8 +1454,8 @@ abstract class AxysConsent implements ActiveRecordInterface
      */
     public function getAxysAccount(?ConnectionInterface $con = null)
     {
-        if ($this->aAxysAccount === null && ($this->user_id != 0)) {
-            $this->aAxysAccount = ChildAxysAccountQuery::create()->findPk($this->user_id, $con);
+        if ($this->aAxysAccount === null && ($this->axys_account_id != 0)) {
+            $this->aAxysAccount = ChildAxysAccountQuery::create()->findPk($this->axys_account_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1485,7 +1485,7 @@ abstract class AxysConsent implements ActiveRecordInterface
         }
         $this->id = null;
         $this->app_id = null;
-        $this->user_id = null;
+        $this->axys_account_id = null;
         $this->scopes = null;
         $this->created_at = null;
         $this->updated_at = null;

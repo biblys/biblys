@@ -147,14 +147,14 @@
   <table name="axys_consents" phpName="AxysConsent">
     <column name="id" primaryKey="true" required="true" type="INTEGER" autoIncrement="true" />
     <column name="app_id" required="true" type="INTEGER" />
-    <column name="user_id" required="true" type="INTEGER" />
+    <column name="axys_account_id" required="true" type="INTEGER" />
     <column name="scopes" required="true" type="VARCHAR" size="256" />
     <behavior name="timestampable" />
     <foreign-key foreignTable="axys_apps" skipSql="true">
       <reference local="app_id" foreign="id"/>
     </foreign-key>
     <foreign-key foreignTable="axys_accounts" skipSql="true">
-      <reference local="user_id" foreign="axys_account_id"/>
+      <reference local="axys_account_id" foreign="axys_account_id"/>
     </foreign-key>
   </table>
   <table name="axys_accounts" idMethod="native" phpName="AxysAccount">
@@ -176,9 +176,6 @@
       <parameter name="create_column" value="axys_account_created" />
       <parameter name="update_column" value="axys_account_updated" />
     </behavior>
-    <index name="Email">
-      <index-column name="Email"/>
-    </index>
     <unique name="axys_account_screen_name">
       <unique-column name="axys_account_screen_name"/>
     </unique>

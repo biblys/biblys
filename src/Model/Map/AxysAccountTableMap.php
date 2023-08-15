@@ -345,7 +345,7 @@ class AxysAccountTableMap extends TableMap
         $this->addRelation('AxysConsent', '\\Model\\AxysConsent', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':user_id',
+    0 => ':axys_account_id',
     1 => ':axys_account_id',
   ),
 ), null, null, 'AxysConsents', false);
