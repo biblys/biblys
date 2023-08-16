@@ -35,20 +35,18 @@ use StockManager;
 class EntityFactory
 {
     /**
-     * @param array $attributes
-     * @param People[]|null $authors
-     * @return Article
-     * @throws Exception
+     * @throws PropelException
      */
     public static function createArticle(
         array $attributes = [],
-        array $authors = null
+        array $authors = null,
+        string $title = null,
     ): Article
     {
         $am = new ArticleManager();
 
         if (!isset($attributes["article_title"])) {
-            $attributes["article_title"] = "L'Animalie";
+            $attributes["article_title"] = $title ?? "L'Animalie";
         }
 
         if (!isset($attributes["collection_id"])) {
