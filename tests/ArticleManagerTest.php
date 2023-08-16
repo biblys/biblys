@@ -42,6 +42,6 @@ class ArticleManagerTest extends TestCase
         $article = $am->refreshMetadata($article);
 
         // then
-        $this->assertEquals(1024, strlen($article->get("article_keywords")));
+        $this->assertEquals(1016, strlen($article->get("article_keywords")));
     }
 }

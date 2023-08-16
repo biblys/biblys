@@ -1402,7 +1402,7 @@ class ArticleManager extends EntityManager
     {
         global $_SQL;
 
-        $links = null;
+        $links = "";
         $authors = array();
         $authors_alpha = array();
 
@@ -1497,8 +1497,8 @@ class ArticleManager extends EntityManager
             $keywords .= ' lot';
         }
 
-        $article->set('article_keywords', truncate($keywords, 1024))
-            ->set('article_links', $links)
+        $article->set('article_keywords', truncate(text: $keywords, maxLength: 1024, truncateAtSpace: true, lengthInBytes: true))
+            ->set('article_links', truncate(text: $links, maxLength: 1024, truncateAtSpace: true, lengthInBytes: true))
             ->set('article_authors', truncate(implode(', ', $authors), 256))
             ->set('article_authors_alphabetic', truncate(implode(', ', $authors_alpha), 256))
             ->set('article_keywords_generated', date('Y-m-d H:i:s'));
