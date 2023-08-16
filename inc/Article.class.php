@@ -1497,7 +1497,7 @@ class ArticleManager extends EntityManager
             $keywords .= ' lot';
         }
 
-        $article->set('article_keywords', $keywords)
+        $article->set('article_keywords', truncate($keywords, 1024))
             ->set('article_links', $links)
             ->set('article_authors', truncate(implode(', ', $authors), 256))
             ->set('article_authors_alphabetic', truncate(implode(', ', $authors_alpha), 256))

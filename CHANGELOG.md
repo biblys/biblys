@@ -9,6 +9,9 @@ Corrections
   corrigé.
 - Le vidage des paniers pouvait déclencher une erreur SQL. Ça n'arrivera 
   plus.
+- La génération des termes de recherche d'un article pouvait déclencher une 
+  erreur si la chaine de caractères était trop longue. Désormais, elle est 
+  limitée à 1024 caractères.
 
 ### 2.70.1 (9 août 2023)
 
