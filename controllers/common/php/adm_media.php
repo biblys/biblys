@@ -40,7 +40,7 @@ if (!empty($_FILES)) {
         $file_name[0] = makeurl($file_name[0]);
         $file_name[1] = makeurl($file_name[1]);
         $file['name'] = $file_name[0].'.'.$file_name[1];
-        rename($file['tmp_name'], $mediaFolderPath.$_GET['dir'].'/'.$file['name']);
+        copy($file['tmp_name'], $mediaFolderPath.$_GET['dir'].'/'.$file['name']);
         chmod($mediaFolderPath.$_GET['dir'].'/'.$file['name'], 0604);
         /** @var Request $request */
         $insert = EntityManager::prepareAndExecute(

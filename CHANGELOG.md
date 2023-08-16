@@ -12,6 +12,8 @@ Corrections
 - La génération des termes de recherche d'un article pouvait déclencher une 
   erreur si la chaine de caractères était trop longue. Désormais, elle est 
   limitée à 1024 caractères.
+- Le téléversement d'un fichier depuis la page Gestion des médias échouait 
+  dans certains cas. Maintenant, ça marche.
 
 ### 2.70.1 (9 août 2023)
 
