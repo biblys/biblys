@@ -477,21 +477,27 @@ function s($x, $s = null, $p = null)
 /**
  * Truncate a string.
  */
-function truncate(string $string, int $max_length = 30, string $replacement = '', bool $trunc_at_space = false, bool $with_tooltip = false): array|string
+function truncate(
+    string $text,
+    int    $maxLength = 30,
+    string $replacement = '',
+    bool   $truncateAtSpace = false,
+    bool   $withTooltip = false
+): string
 {
-    $string = strip_tags($string);
-    $max_length -= mb_strlen($replacement);
-    $string_length = mb_strlen($string);
-    if ($string_length <= $max_length) {
-        return $string;
+    $text = strip_tags($text);
+    $maxLength -= mb_strlen($replacement);
+    $stringLength = mb_strlen($text);
+    if ($stringLength <= $maxLength) {
+        return $text;
     }
-    if ($trunc_at_space && ($space_position = strrpos($string, ' ', $max_length - $string_length))) {
-        $max_length = $space_position;
+    if ($truncateAtSpace && ($spacePosition = strrpos($text, ' ', $maxLength - $stringLength))) {
+        $maxLength = $spacePosition;
     }
-    if ($with_tooltip) {
-        return '<span title="' . strip_tags($string) . '">' . substr_replace($string, $replacement, $max_length) . '</span>';
+    if ($withTooltip) {
+        return '<span title="' . strip_tags($text) . '">' . substr_replace($text, $replacement, $maxLength) . '</span>';
     } else {
-        return substr_replace($string, $replacement, $max_length);
+        return substr_replace($text, $replacement, $maxLength);
     }
 }
 
