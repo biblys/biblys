@@ -20,7 +20,8 @@
     "propel:diff": "vendor/bin/propel diff",
     "propel:migrate": "vendor/bin/propel migrate",
     "db:reset": "bin/console db:reset",
-    "db:seed": "bin/console db:seed"
+    "db:seed": "bin/console db:seed",
+    "db:prepare": ["@db:reset", "@db:seed"]
   },
   "require": {
     "php": "~8.1",
