@@ -482,12 +482,18 @@ function truncate(
     int    $maxLength = 30,
     string $replacement = '',
     bool   $truncateAtSpace = false,
-    bool   $withTooltip = false
+    bool   $withTooltip = false,
+    bool   $lengthInBytes = false,
 ): string
 {
+    $lengthFunction = 'mb_strlen';
+    if ($lengthInBytes) {
+        $lengthFunction = 'strlen';
+    }
+
     $text = strip_tags($text);
-    $maxLength -= mb_strlen($replacement);
-    $stringLength = mb_strlen($text);
+    $maxLength -= $lengthFunction($replacement);
+    $stringLength = $lengthFunction($text);
     if ($stringLength <= $maxLength) {
         return $text;
     }
