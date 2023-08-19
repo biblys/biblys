@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\OpenIDConnectProviderService;
+use Biblys\Service\TemplateService;
 use Biblys\Service\TokenService;
 use DateTime;
 use Exception;
@@ -20,6 +21,8 @@ use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class OpenIDConnectController extends Controller
 {
@@ -46,12 +49,20 @@ class OpenIDConnectController extends Controller
         CurrentSite $currentSite,
         Config $config,
         OpenIDConnectProviderService $openIDConnectProviderService,
+        TemplateService $templateService,
     ):
-    RedirectResponse
+    Response|RedirectResponse
     {
         $psr17Factory = new Psr17Factory();
         $psrHttpFactory = new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
         $psrRequest = $psrHttpFactory->createRequest($request);
+
+        $error = $request->query->get("error");
+        if ($error === "access_denied") {
+            return $templateService->render("AppBundle:OpenIDConnect:callback.html.twig", [
+                "siteTitle" => $currentSite->getTitle(),
+            ]);
+        }
 
         $tokenSet = $openIDConnectProviderService->getTokenSet($psrRequest);
 

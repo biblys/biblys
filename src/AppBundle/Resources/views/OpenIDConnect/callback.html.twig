@@ -1,0 +1,20 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Accès refusé
+{% endblock %}
+
+{% block main %}
+  <h1>Accès refusé</h1>
+
+  <p class="alert alert-danger">
+    <span class="fa fa-times-circle"></span>
+    Vous avez refusé l'accès à votre compte Axys.
+  </p>
+
+  <p>
+    Pour continuer, vous devez autoriser <strong>{{ siteTitle }}</strong> à accéder à votre <strong>compte Axys</strong>.
+  </p>
+
+  <a href="{{ path('openid_axys') }}" class="btn btn-primary" id="authorize">Recommencer</a>
+{% endblock %}

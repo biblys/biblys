@@ -8,6 +8,8 @@ Améliorations
   site Biblys sur les réseaux sociaux a été améliorée. 
 - Il n'est plus possible d'inviter un utilisateur à être administrateur s'il 
   ne possède pas un compte au préalable.
+- L'erreur affichée lors du refus de la connexion avec Axys a été rendue 
+  plus explicite.
 
 ### 2.71.2 (31 août 2023)
 

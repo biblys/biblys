@@ -1,4 +1,5 @@
-<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
+<?php
+/** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace AppBundle\Controller;
 
@@ -6,9 +7,9 @@ use Biblys\Service\Axys;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\OpenIDConnectProviderService;
+use Biblys\Service\TemplateService;
 use Biblys\Service\TokenService;
 use Biblys\Test\ModelFactory;
-use Biblys\Test\RequestFactory;
 use DateTime;
 use Exception;
 use Facile\OpenIDClient\Token\TokenSetInterface;
@@ -18,6 +19,7 @@ use Model\SessionQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 require_once __DIR__."/../../setUp.php";
 
@@ -75,9 +77,16 @@ class OpenIDConnectControllerTest extends TestCase
         $tokenSet->method("claims")->willReturn(["sub" => $user->getId(), "exp" => 1682278410]);
         $openIDConnectProviderService = $this->createMock(OpenIDConnectProviderService::class);
         $openIDConnectProviderService->method("getTokenSet")->willReturn($tokenSet);
+        $templateService = $this->createMock(TemplateService::class);
 
         // when
-        $response = $controller->callback($request, $currentSite, $config, $openIDConnectProviderService);
+        $response = $controller->callback(
+            request: $request,
+            currentSite: $currentSite,
+            config: $config,
+            openIDConnectProviderService: $openIDConnectProviderService,
+            templateService: $templateService,
+        );
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
@@ -122,7 +131,13 @@ class OpenIDConnectControllerTest extends TestCase
         $openIDConnectProviderService->method("getTokenSet")->willReturn($tokenSet);
 
         // when
-        $response = $controller->callback($request, $currentSite, $config, $openIDConnectProviderService);
+        $response = $controller->callback(
+            request: $request,
+            currentSite: $currentSite,
+            config: $config,
+            openIDConnectProviderService: $openIDConnectProviderService,
+            templateService: $this->createMock(TemplateService::class),
+        );
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
@@ -140,5 +155,41 @@ class OpenIDConnectControllerTest extends TestCase
             ->findOneByToken($userUidCookie->getValue());
         $this->assertNotNull($session);
         $this->assertEquals(new DateTime("@1682278410"), $session->getExpiresAt());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testCallbackWithAccessDeniedError()
+    {
+        // given
+        $request = Request::create("https://www.biblys.fr/openid/callback?error=access_denied");
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $config = new Config(["axys" => ["client_secret" => "secret_key"]]);
+        $openIDConnectProviderService = $this->createMock(OpenIDConnectProviderService::class);
+        $expectedResponse = new Response("access_denied");
+        $templateService = $this->createMock(TemplateService::class);
+        $templateService
+            ->expects($this->once())
+            ->method("render")
+            ->with("AppBundle:OpenIDConnect:callback.html.twig", [
+                "siteTitle" => "Éditions Paronymie"
+            ])
+            ->willReturn($expectedResponse);
+        $controller = new OpenIDConnectController();
+
+        // when
+        $returnedResponse = $controller->callback(
+            request: $request,
+            currentSite: $currentSite,
+            config: $config,
+            openIDConnectProviderService: $openIDConnectProviderService,
+            templateService: $templateService
+        );
+
+        // then
+        $this->assertEquals($expectedResponse, $returnedResponse);
     }
 }
