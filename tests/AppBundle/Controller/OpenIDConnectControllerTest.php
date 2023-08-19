@@ -3,7 +3,6 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Service\Axys;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\OpenIDConnectProviderService;
@@ -31,8 +30,6 @@ class OpenIDConnectControllerTest extends TestCase
     public function testAxys()
     {
         // given
-        $axys = $this->createMock(Axys::class);
-        $axys->method("getClientSecret")->willReturn("secret_key");
         $request = new Request();
         $request->query->add(["return_url" => "/my-account"]);
         $tokenService = $this->createMock(TokenService::class);
