@@ -2723,6 +2723,32 @@ abstract class People implements ActiveRecordInterface
      * @return ObjectCollection|ChildRole[] List of ChildRole objects
      * @phpstan-return ObjectCollection&\Traversable<ChildRole}> List of ChildRole objects
      */
+    public function getRolesJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildRoleQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getRoles($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this People is new, it will return
+     * an empty collection; or if this People has previously
+     * been saved, it will retrieve related Roles from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in People.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildRole[] List of ChildRole objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildRole}> List of ChildRole objects
+     */
     public function getRolesJoinArticle(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildRoleQuery::create(null, $criteria);

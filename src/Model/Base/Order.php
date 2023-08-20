@@ -11,6 +11,8 @@ use Model\Payment as ChildPayment;
 use Model\PaymentQuery as ChildPaymentQuery;
 use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
+use Model\User as ChildUser;
+use Model\UserQuery as ChildUserQuery;
 use Model\Map\OrderTableMap;
 use Model\Map\PaymentTableMap;
 use Propel\Runtime\Propel;
@@ -97,6 +99,13 @@ abstract class Order implements ActiveRecordInterface
      * @var        int|null
      */
     protected $axys_account_id;
+
+    /**
+     * The value for the user_id field.
+     *
+     * @var        int|null
+     */
+    protected $user_id;
 
     /**
      * The value for the customer_id field.
@@ -409,6 +418,11 @@ abstract class Order implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $order_updated;
+
+    /**
+     * @var        ChildUser
+     */
+    protected $aUser;
 
     /**
      * @var        ChildSite
@@ -724,6 +738,16 @@ abstract class Order implements ActiveRecordInterface
     public function getAxysAccountId()
     {
         return $this->axys_account_id;
+    }
+
+    /**
+     * Get the [user_id] column value.
+     *
+     * @return int|null
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
     }
 
     /**
@@ -1343,6 +1367,30 @@ abstract class Order implements ActiveRecordInterface
         if ($this->axys_account_id !== $v) {
             $this->axys_account_id = $v;
             $this->modifiedColumns[OrderTableMap::COL_AXYS_ACCOUNT_ID] = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [user_id] column.
+     *
+     * @param int|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setUserId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->user_id !== $v) {
+            $this->user_id = $v;
+            $this->modifiedColumns[OrderTableMap::COL_USER_ID] = true;
+        }
+
+        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
+            $this->aUser = null;
         }
 
         return $this;
@@ -2300,157 +2348,160 @@ abstract class Order implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : OrderTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->axys_account_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : OrderTableMap::translateFieldName('CustomerId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : OrderTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->user_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : OrderTableMap::translateFieldName('CustomerId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->customer_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : OrderTableMap::translateFieldName('SellerId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : OrderTableMap::translateFieldName('SellerId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->seller_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : OrderTableMap::translateFieldName('Type', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : OrderTableMap::translateFieldName('Type', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_type = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : OrderTableMap::translateFieldName('AsAGift', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : OrderTableMap::translateFieldName('AsAGift', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_as_a_gift = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : OrderTableMap::translateFieldName('GiftRecipient', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : OrderTableMap::translateFieldName('GiftRecipient', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_gift_recipient = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : OrderTableMap::translateFieldName('Amount', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : OrderTableMap::translateFieldName('Amount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_amount = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : OrderTableMap::translateFieldName('Discount', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : OrderTableMap::translateFieldName('Discount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_discount = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : OrderTableMap::translateFieldName('AmountTobepaid', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : OrderTableMap::translateFieldName('AmountTobepaid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_amount_tobepaid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : OrderTableMap::translateFieldName('ShippingId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : OrderTableMap::translateFieldName('ShippingId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->shipping_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : OrderTableMap::translateFieldName('CountryId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : OrderTableMap::translateFieldName('CountryId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->country_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : OrderTableMap::translateFieldName('Shipping', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : OrderTableMap::translateFieldName('Shipping', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_shipping = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : OrderTableMap::translateFieldName('ShippingMode', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : OrderTableMap::translateFieldName('ShippingMode', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_shipping_mode = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : OrderTableMap::translateFieldName('TrackNumber', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : OrderTableMap::translateFieldName('TrackNumber', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_track_number = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : OrderTableMap::translateFieldName('PaymentMode', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 18 + $startcol : OrderTableMap::translateFieldName('PaymentMode', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_payment_mode = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 18 + $startcol : OrderTableMap::translateFieldName('PaymentCash', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 19 + $startcol : OrderTableMap::translateFieldName('PaymentCash', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_payment_cash = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 19 + $startcol : OrderTableMap::translateFieldName('PaymentCheque', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 20 + $startcol : OrderTableMap::translateFieldName('PaymentCheque', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_payment_cheque = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 20 + $startcol : OrderTableMap::translateFieldName('PaymentTransfer', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 21 + $startcol : OrderTableMap::translateFieldName('PaymentTransfer', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_payment_transfer = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 21 + $startcol : OrderTableMap::translateFieldName('PaymentCard', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 22 + $startcol : OrderTableMap::translateFieldName('PaymentCard', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_payment_card = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 22 + $startcol : OrderTableMap::translateFieldName('PaymentPaypal', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 23 + $startcol : OrderTableMap::translateFieldName('PaymentPaypal', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_payment_paypal = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 23 + $startcol : OrderTableMap::translateFieldName('PaymentPayplug', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 24 + $startcol : OrderTableMap::translateFieldName('PaymentPayplug', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_payment_payplug = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 24 + $startcol : OrderTableMap::translateFieldName('PaymentLeft', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 25 + $startcol : OrderTableMap::translateFieldName('PaymentLeft', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_payment_left = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 25 + $startcol : OrderTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 26 + $startcol : OrderTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_title = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 26 + $startcol : OrderTableMap::translateFieldName('Firstname', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 27 + $startcol : OrderTableMap::translateFieldName('Firstname', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_firstname = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 27 + $startcol : OrderTableMap::translateFieldName('Lastname', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 28 + $startcol : OrderTableMap::translateFieldName('Lastname', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_lastname = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 28 + $startcol : OrderTableMap::translateFieldName('Address1', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 29 + $startcol : OrderTableMap::translateFieldName('Address1', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_address1 = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 29 + $startcol : OrderTableMap::translateFieldName('Address2', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 30 + $startcol : OrderTableMap::translateFieldName('Address2', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_address2 = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 30 + $startcol : OrderTableMap::translateFieldName('Postalcode', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 31 + $startcol : OrderTableMap::translateFieldName('Postalcode', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_postalcode = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 31 + $startcol : OrderTableMap::translateFieldName('City', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 32 + $startcol : OrderTableMap::translateFieldName('City', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_city = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 32 + $startcol : OrderTableMap::translateFieldName('Country', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 33 + $startcol : OrderTableMap::translateFieldName('Country', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_country = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 33 + $startcol : OrderTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 34 + $startcol : OrderTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_email = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 34 + $startcol : OrderTableMap::translateFieldName('Phone', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 35 + $startcol : OrderTableMap::translateFieldName('Phone', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_phone = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 35 + $startcol : OrderTableMap::translateFieldName('Comment', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 36 + $startcol : OrderTableMap::translateFieldName('Comment', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_comment = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 36 + $startcol : OrderTableMap::translateFieldName('Utmz', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 37 + $startcol : OrderTableMap::translateFieldName('Utmz', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_utmz = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 37 + $startcol : OrderTableMap::translateFieldName('Referer', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 38 + $startcol : OrderTableMap::translateFieldName('Referer', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_referer = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 38 + $startcol : OrderTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 39 + $startcol : OrderTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->order_insert = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 39 + $startcol : OrderTableMap::translateFieldName('PaymentDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 40 + $startcol : OrderTableMap::translateFieldName('PaymentDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->order_payment_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 40 + $startcol : OrderTableMap::translateFieldName('ShippingDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 41 + $startcol : OrderTableMap::translateFieldName('ShippingDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->order_shipping_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 41 + $startcol : OrderTableMap::translateFieldName('FollowupDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 42 + $startcol : OrderTableMap::translateFieldName('FollowupDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->order_followup_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 42 + $startcol : OrderTableMap::translateFieldName('ConfirmationDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 43 + $startcol : OrderTableMap::translateFieldName('ConfirmationDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->order_confirmation_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 43 + $startcol : OrderTableMap::translateFieldName('CancelDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 44 + $startcol : OrderTableMap::translateFieldName('CancelDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->order_cancel_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 44 + $startcol : OrderTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 45 + $startcol : OrderTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->order_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 45 + $startcol : OrderTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 46 + $startcol : OrderTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->order_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 46 + $startcol : OrderTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 47 + $startcol : OrderTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -2463,7 +2514,7 @@ abstract class Order implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 47; // 47 = OrderTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 48; // 48 = OrderTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Order'), 0, $e);
@@ -2488,6 +2539,9 @@ abstract class Order implements ActiveRecordInterface
     {
         if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
             $this->aSite = null;
+        }
+        if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
+            $this->aUser = null;
         }
     }
 
@@ -2528,6 +2582,7 @@ abstract class Order implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aUser = null;
             $this->aSite = null;
             $this->collPayments = null;
 
@@ -2652,6 +2707,13 @@ abstract class Order implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aUser !== null) {
+                if ($this->aUser->isModified() || $this->aUser->isNew()) {
+                    $affectedRows += $this->aUser->save($con);
+                }
+                $this->setUser($this->aUser);
+            }
+
             if ($this->aSite !== null) {
                 if ($this->aSite->isModified() || $this->aSite->isNew()) {
                     $affectedRows += $this->aSite->save($con);
@@ -2725,6 +2787,9 @@ abstract class Order implements ActiveRecordInterface
         }
         if ($this->isColumnModified(OrderTableMap::COL_AXYS_ACCOUNT_ID)) {
             $modifiedColumns[':p' . $index++]  = 'axys_account_id';
+        }
+        if ($this->isColumnModified(OrderTableMap::COL_USER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'user_id';
         }
         if ($this->isColumnModified(OrderTableMap::COL_CUSTOMER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'customer_id';
@@ -2880,6 +2945,10 @@ abstract class Order implements ActiveRecordInterface
                         break;
                     case 'axys_account_id':
                         $stmt->bindValue($identifier, $this->axys_account_id, PDO::PARAM_INT);
+
+                        break;
+                    case 'user_id':
+                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
 
                         break;
                     case 'customer_id':
@@ -3129,132 +3198,135 @@ abstract class Order implements ActiveRecordInterface
                 return $this->getAxysAccountId();
 
             case 4:
-                return $this->getCustomerId();
+                return $this->getUserId();
 
             case 5:
-                return $this->getSellerId();
+                return $this->getCustomerId();
 
             case 6:
-                return $this->getType();
+                return $this->getSellerId();
 
             case 7:
-                return $this->getAsAGift();
+                return $this->getType();
 
             case 8:
-                return $this->getGiftRecipient();
+                return $this->getAsAGift();
 
             case 9:
-                return $this->getAmount();
+                return $this->getGiftRecipient();
 
             case 10:
-                return $this->getDiscount();
+                return $this->getAmount();
 
             case 11:
-                return $this->getAmountTobepaid();
+                return $this->getDiscount();
 
             case 12:
-                return $this->getShippingId();
+                return $this->getAmountTobepaid();
 
             case 13:
-                return $this->getCountryId();
+                return $this->getShippingId();
 
             case 14:
-                return $this->getShipping();
+                return $this->getCountryId();
 
             case 15:
-                return $this->getShippingMode();
+                return $this->getShipping();
 
             case 16:
-                return $this->getTrackNumber();
+                return $this->getShippingMode();
 
             case 17:
-                return $this->getPaymentMode();
+                return $this->getTrackNumber();
 
             case 18:
-                return $this->getPaymentCash();
+                return $this->getPaymentMode();
 
             case 19:
-                return $this->getPaymentCheque();
+                return $this->getPaymentCash();
 
             case 20:
-                return $this->getPaymentTransfer();
+                return $this->getPaymentCheque();
 
             case 21:
-                return $this->getPaymentCard();
+                return $this->getPaymentTransfer();
 
             case 22:
-                return $this->getPaymentPaypal();
+                return $this->getPaymentCard();
 
             case 23:
-                return $this->getPaymentPayplug();
+                return $this->getPaymentPaypal();
 
             case 24:
-                return $this->getPaymentLeft();
+                return $this->getPaymentPayplug();
 
             case 25:
-                return $this->getTitle();
+                return $this->getPaymentLeft();
 
             case 26:
-                return $this->getFirstname();
+                return $this->getTitle();
 
             case 27:
-                return $this->getLastname();
+                return $this->getFirstname();
 
             case 28:
-                return $this->getAddress1();
+                return $this->getLastname();
 
             case 29:
-                return $this->getAddress2();
+                return $this->getAddress1();
 
             case 30:
-                return $this->getPostalcode();
+                return $this->getAddress2();
 
             case 31:
-                return $this->getCity();
+                return $this->getPostalcode();
 
             case 32:
-                return $this->getCountry();
+                return $this->getCity();
 
             case 33:
-                return $this->getEmail();
+                return $this->getCountry();
 
             case 34:
-                return $this->getPhone();
+                return $this->getEmail();
 
             case 35:
-                return $this->getComment();
+                return $this->getPhone();
 
             case 36:
-                return $this->getUtmz();
+                return $this->getComment();
 
             case 37:
-                return $this->getReferer();
+                return $this->getUtmz();
 
             case 38:
-                return $this->getInsert();
+                return $this->getReferer();
 
             case 39:
-                return $this->getPaymentDate();
+                return $this->getInsert();
 
             case 40:
-                return $this->getShippingDate();
+                return $this->getPaymentDate();
 
             case 41:
-                return $this->getFollowupDate();
+                return $this->getShippingDate();
 
             case 42:
-                return $this->getConfirmationDate();
+                return $this->getFollowupDate();
 
             case 43:
-                return $this->getCancelDate();
+                return $this->getConfirmationDate();
 
             case 44:
-                return $this->getUpdate();
+                return $this->getCancelDate();
 
             case 45:
-                return $this->getCreatedAt();
+                return $this->getUpdate();
 
             case 46:
+                return $this->getCreatedAt();
+
+            case 47:
                 return $this->getUpdatedAt();
 
             default:
@@ -3289,54 +3361,51 @@ abstract class Order implements ActiveRecordInterface
             $keys[1] => $this->getSlug(),
             $keys[2] => $this->getSiteId(),
             $keys[3] => $this->getAxysAccountId(),
-            $keys[4] => $this->getCustomerId(),
-            $keys[5] => $this->getSellerId(),
-            $keys[6] => $this->getType(),
-            $keys[7] => $this->getAsAGift(),
-            $keys[8] => $this->getGiftRecipient(),
-            $keys[9] => $this->getAmount(),
-            $keys[10] => $this->getDiscount(),
-            $keys[11] => $this->getAmountTobepaid(),
-            $keys[12] => $this->getShippingId(),
-            $keys[13] => $this->getCountryId(),
-            $keys[14] => $this->getShipping(),
-            $keys[15] => $this->getShippingMode(),
-            $keys[16] => $this->getTrackNumber(),
-            $keys[17] => $this->getPaymentMode(),
-            $keys[18] => $this->getPaymentCash(),
-            $keys[19] => $this->getPaymentCheque(),
-            $keys[20] => $this->getPaymentTransfer(),
-            $keys[21] => $this->getPaymentCard(),
-            $keys[22] => $this->getPaymentPaypal(),
-            $keys[23] => $this->getPaymentPayplug(),
-            $keys[24] => $this->getPaymentLeft(),
-            $keys[25] => $this->getTitle(),
-            $keys[26] => $this->getFirstname(),
-            $keys[27] => $this->getLastname(),
-            $keys[28] => $this->getAddress1(),
-            $keys[29] => $this->getAddress2(),
-            $keys[30] => $this->getPostalcode(),
-            $keys[31] => $this->getCity(),
-            $keys[32] => $this->getCountry(),
-            $keys[33] => $this->getEmail(),
-            $keys[34] => $this->getPhone(),
-            $keys[35] => $this->getComment(),
-            $keys[36] => $this->getUtmz(),
-            $keys[37] => $this->getReferer(),
-            $keys[38] => $this->getInsert(),
-            $keys[39] => $this->getPaymentDate(),
-            $keys[40] => $this->getShippingDate(),
-            $keys[41] => $this->getFollowupDate(),
-            $keys[42] => $this->getConfirmationDate(),
-            $keys[43] => $this->getCancelDate(),
-            $keys[44] => $this->getUpdate(),
-            $keys[45] => $this->getCreatedAt(),
-            $keys[46] => $this->getUpdatedAt(),
+            $keys[4] => $this->getUserId(),
+            $keys[5] => $this->getCustomerId(),
+            $keys[6] => $this->getSellerId(),
+            $keys[7] => $this->getType(),
+            $keys[8] => $this->getAsAGift(),
+            $keys[9] => $this->getGiftRecipient(),
+            $keys[10] => $this->getAmount(),
+            $keys[11] => $this->getDiscount(),
+            $keys[12] => $this->getAmountTobepaid(),
+            $keys[13] => $this->getShippingId(),
+            $keys[14] => $this->getCountryId(),
+            $keys[15] => $this->getShipping(),
+            $keys[16] => $this->getShippingMode(),
+            $keys[17] => $this->getTrackNumber(),
+            $keys[18] => $this->getPaymentMode(),
+            $keys[19] => $this->getPaymentCash(),
+            $keys[20] => $this->getPaymentCheque(),
+            $keys[21] => $this->getPaymentTransfer(),
+            $keys[22] => $this->getPaymentCard(),
+            $keys[23] => $this->getPaymentPaypal(),
+            $keys[24] => $this->getPaymentPayplug(),
+            $keys[25] => $this->getPaymentLeft(),
+            $keys[26] => $this->getTitle(),
+            $keys[27] => $this->getFirstname(),
+            $keys[28] => $this->getLastname(),
+            $keys[29] => $this->getAddress1(),
+            $keys[30] => $this->getAddress2(),
+            $keys[31] => $this->getPostalcode(),
+            $keys[32] => $this->getCity(),
+            $keys[33] => $this->getCountry(),
+            $keys[34] => $this->getEmail(),
+            $keys[35] => $this->getPhone(),
+            $keys[36] => $this->getComment(),
+            $keys[37] => $this->getUtmz(),
+            $keys[38] => $this->getReferer(),
+            $keys[39] => $this->getInsert(),
+            $keys[40] => $this->getPaymentDate(),
+            $keys[41] => $this->getShippingDate(),
+            $keys[42] => $this->getFollowupDate(),
+            $keys[43] => $this->getConfirmationDate(),
+            $keys[44] => $this->getCancelDate(),
+            $keys[45] => $this->getUpdate(),
+            $keys[46] => $this->getCreatedAt(),
+            $keys[47] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[38]] instanceof \DateTimeInterface) {
-            $result[$keys[38]] = $result[$keys[38]]->format('Y-m-d H:i:s.u');
-        }
-
         if ($result[$keys[39]] instanceof \DateTimeInterface) {
             $result[$keys[39]] = $result[$keys[39]]->format('Y-m-d H:i:s.u');
         }
@@ -3369,12 +3438,31 @@ abstract class Order implements ActiveRecordInterface
             $result[$keys[46]] = $result[$keys[46]]->format('Y-m-d H:i:s.u');
         }
 
+        if ($result[$keys[47]] instanceof \DateTimeInterface) {
+            $result[$keys[47]] = $result[$keys[47]]->format('Y-m-d H:i:s.u');
+        }
+
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aUser) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'user';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'users';
+                        break;
+                    default:
+                        $key = 'User';
+                }
+
+                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aSite) {
 
                 switch ($keyType) {
@@ -3454,132 +3542,135 @@ abstract class Order implements ActiveRecordInterface
                 $this->setAxysAccountId($value);
                 break;
             case 4:
-                $this->setCustomerId($value);
+                $this->setUserId($value);
                 break;
             case 5:
-                $this->setSellerId($value);
+                $this->setCustomerId($value);
                 break;
             case 6:
-                $this->setType($value);
+                $this->setSellerId($value);
                 break;
             case 7:
-                $this->setAsAGift($value);
+                $this->setType($value);
                 break;
             case 8:
-                $this->setGiftRecipient($value);
+                $this->setAsAGift($value);
                 break;
             case 9:
-                $this->setAmount($value);
+                $this->setGiftRecipient($value);
                 break;
             case 10:
-                $this->setDiscount($value);
+                $this->setAmount($value);
                 break;
             case 11:
-                $this->setAmountTobepaid($value);
+                $this->setDiscount($value);
                 break;
             case 12:
-                $this->setShippingId($value);
+                $this->setAmountTobepaid($value);
                 break;
             case 13:
-                $this->setCountryId($value);
+                $this->setShippingId($value);
                 break;
             case 14:
-                $this->setShipping($value);
+                $this->setCountryId($value);
                 break;
             case 15:
-                $this->setShippingMode($value);
+                $this->setShipping($value);
                 break;
             case 16:
-                $this->setTrackNumber($value);
+                $this->setShippingMode($value);
                 break;
             case 17:
-                $this->setPaymentMode($value);
+                $this->setTrackNumber($value);
                 break;
             case 18:
-                $this->setPaymentCash($value);
+                $this->setPaymentMode($value);
                 break;
             case 19:
-                $this->setPaymentCheque($value);
+                $this->setPaymentCash($value);
                 break;
             case 20:
-                $this->setPaymentTransfer($value);
+                $this->setPaymentCheque($value);
                 break;
             case 21:
-                $this->setPaymentCard($value);
+                $this->setPaymentTransfer($value);
                 break;
             case 22:
-                $this->setPaymentPaypal($value);
+                $this->setPaymentCard($value);
                 break;
             case 23:
-                $this->setPaymentPayplug($value);
+                $this->setPaymentPaypal($value);
                 break;
             case 24:
-                $this->setPaymentLeft($value);
+                $this->setPaymentPayplug($value);
                 break;
             case 25:
-                $this->setTitle($value);
+                $this->setPaymentLeft($value);
                 break;
             case 26:
-                $this->setFirstname($value);
+                $this->setTitle($value);
                 break;
             case 27:
-                $this->setLastname($value);
+                $this->setFirstname($value);
                 break;
             case 28:
-                $this->setAddress1($value);
+                $this->setLastname($value);
                 break;
             case 29:
-                $this->setAddress2($value);
+                $this->setAddress1($value);
                 break;
             case 30:
-                $this->setPostalcode($value);
+                $this->setAddress2($value);
                 break;
             case 31:
-                $this->setCity($value);
+                $this->setPostalcode($value);
                 break;
             case 32:
-                $this->setCountry($value);
+                $this->setCity($value);
                 break;
             case 33:
-                $this->setEmail($value);
+                $this->setCountry($value);
                 break;
             case 34:
-                $this->setPhone($value);
+                $this->setEmail($value);
                 break;
             case 35:
-                $this->setComment($value);
+                $this->setPhone($value);
                 break;
             case 36:
-                $this->setUtmz($value);
+                $this->setComment($value);
                 break;
             case 37:
-                $this->setReferer($value);
+                $this->setUtmz($value);
                 break;
             case 38:
-                $this->setInsert($value);
+                $this->setReferer($value);
                 break;
             case 39:
-                $this->setPaymentDate($value);
+                $this->setInsert($value);
                 break;
             case 40:
-                $this->setShippingDate($value);
+                $this->setPaymentDate($value);
                 break;
             case 41:
-                $this->setFollowupDate($value);
+                $this->setShippingDate($value);
                 break;
             case 42:
-                $this->setConfirmationDate($value);
+                $this->setFollowupDate($value);
                 break;
             case 43:
-                $this->setCancelDate($value);
+                $this->setConfirmationDate($value);
                 break;
             case 44:
-                $this->setUpdate($value);
+                $this->setCancelDate($value);
                 break;
             case 45:
-                $this->setCreatedAt($value);
+                $this->setUpdate($value);
                 break;
             case 46:
+                $this->setCreatedAt($value);
+                break;
+            case 47:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -3621,133 +3712,136 @@ abstract class Order implements ActiveRecordInterface
             $this->setAxysAccountId($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setCustomerId($arr[$keys[4]]);
+            $this->setUserId($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setSellerId($arr[$keys[5]]);
+            $this->setCustomerId($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setType($arr[$keys[6]]);
+            $this->setSellerId($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setAsAGift($arr[$keys[7]]);
+            $this->setType($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setGiftRecipient($arr[$keys[8]]);
+            $this->setAsAGift($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setAmount($arr[$keys[9]]);
+            $this->setGiftRecipient($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setDiscount($arr[$keys[10]]);
+            $this->setAmount($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setAmountTobepaid($arr[$keys[11]]);
+            $this->setDiscount($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setShippingId($arr[$keys[12]]);
+            $this->setAmountTobepaid($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
-            $this->setCountryId($arr[$keys[13]]);
+            $this->setShippingId($arr[$keys[13]]);
         }
         if (array_key_exists($keys[14], $arr)) {
-            $this->setShipping($arr[$keys[14]]);
+            $this->setCountryId($arr[$keys[14]]);
         }
         if (array_key_exists($keys[15], $arr)) {
-            $this->setShippingMode($arr[$keys[15]]);
+            $this->setShipping($arr[$keys[15]]);
         }
         if (array_key_exists($keys[16], $arr)) {
-            $this->setTrackNumber($arr[$keys[16]]);
+            $this->setShippingMode($arr[$keys[16]]);
         }
         if (array_key_exists($keys[17], $arr)) {
-            $this->setPaymentMode($arr[$keys[17]]);
+            $this->setTrackNumber($arr[$keys[17]]);
         }
         if (array_key_exists($keys[18], $arr)) {
-            $this->setPaymentCash($arr[$keys[18]]);
+            $this->setPaymentMode($arr[$keys[18]]);
         }
         if (array_key_exists($keys[19], $arr)) {
-            $this->setPaymentCheque($arr[$keys[19]]);
+            $this->setPaymentCash($arr[$keys[19]]);
         }
         if (array_key_exists($keys[20], $arr)) {
-            $this->setPaymentTransfer($arr[$keys[20]]);
+            $this->setPaymentCheque($arr[$keys[20]]);
         }
         if (array_key_exists($keys[21], $arr)) {
-            $this->setPaymentCard($arr[$keys[21]]);
+            $this->setPaymentTransfer($arr[$keys[21]]);
         }
         if (array_key_exists($keys[22], $arr)) {
-            $this->setPaymentPaypal($arr[$keys[22]]);
+            $this->setPaymentCard($arr[$keys[22]]);
         }
         if (array_key_exists($keys[23], $arr)) {
-            $this->setPaymentPayplug($arr[$keys[23]]);
+            $this->setPaymentPaypal($arr[$keys[23]]);
         }
         if (array_key_exists($keys[24], $arr)) {
-            $this->setPaymentLeft($arr[$keys[24]]);
+            $this->setPaymentPayplug($arr[$keys[24]]);
         }
         if (array_key_exists($keys[25], $arr)) {
-            $this->setTitle($arr[$keys[25]]);
+            $this->setPaymentLeft($arr[$keys[25]]);
         }
         if (array_key_exists($keys[26], $arr)) {
-            $this->setFirstname($arr[$keys[26]]);
+            $this->setTitle($arr[$keys[26]]);
         }
         if (array_key_exists($keys[27], $arr)) {
-            $this->setLastname($arr[$keys[27]]);
+            $this->setFirstname($arr[$keys[27]]);
         }
         if (array_key_exists($keys[28], $arr)) {
-            $this->setAddress1($arr[$keys[28]]);
+            $this->setLastname($arr[$keys[28]]);
         }
         if (array_key_exists($keys[29], $arr)) {
-            $this->setAddress2($arr[$keys[29]]);
+            $this->setAddress1($arr[$keys[29]]);
         }
         if (array_key_exists($keys[30], $arr)) {
-            $this->setPostalcode($arr[$keys[30]]);
+            $this->setAddress2($arr[$keys[30]]);
         }
         if (array_key_exists($keys[31], $arr)) {
-            $this->setCity($arr[$keys[31]]);
+            $this->setPostalcode($arr[$keys[31]]);
         }
         if (array_key_exists($keys[32], $arr)) {
-            $this->setCountry($arr[$keys[32]]);
+            $this->setCity($arr[$keys[32]]);
         }
         if (array_key_exists($keys[33], $arr)) {
-            $this->setEmail($arr[$keys[33]]);
+            $this->setCountry($arr[$keys[33]]);
         }
         if (array_key_exists($keys[34], $arr)) {
-            $this->setPhone($arr[$keys[34]]);
+            $this->setEmail($arr[$keys[34]]);
         }
         if (array_key_exists($keys[35], $arr)) {
-            $this->setComment($arr[$keys[35]]);
+            $this->setPhone($arr[$keys[35]]);
         }
         if (array_key_exists($keys[36], $arr)) {
-            $this->setUtmz($arr[$keys[36]]);
+            $this->setComment($arr[$keys[36]]);
         }
         if (array_key_exists($keys[37], $arr)) {
-            $this->setReferer($arr[$keys[37]]);
+            $this->setUtmz($arr[$keys[37]]);
         }
         if (array_key_exists($keys[38], $arr)) {
-            $this->setInsert($arr[$keys[38]]);
+            $this->setReferer($arr[$keys[38]]);
         }
         if (array_key_exists($keys[39], $arr)) {
-            $this->setPaymentDate($arr[$keys[39]]);
+            $this->setInsert($arr[$keys[39]]);
         }
         if (array_key_exists($keys[40], $arr)) {
-            $this->setShippingDate($arr[$keys[40]]);
+            $this->setPaymentDate($arr[$keys[40]]);
         }
         if (array_key_exists($keys[41], $arr)) {
-            $this->setFollowupDate($arr[$keys[41]]);
+            $this->setShippingDate($arr[$keys[41]]);
         }
         if (array_key_exists($keys[42], $arr)) {
-            $this->setConfirmationDate($arr[$keys[42]]);
+            $this->setFollowupDate($arr[$keys[42]]);
         }
         if (array_key_exists($keys[43], $arr)) {
-            $this->setCancelDate($arr[$keys[43]]);
+            $this->setConfirmationDate($arr[$keys[43]]);
         }
         if (array_key_exists($keys[44], $arr)) {
-            $this->setUpdate($arr[$keys[44]]);
+            $this->setCancelDate($arr[$keys[44]]);
         }
         if (array_key_exists($keys[45], $arr)) {
-            $this->setCreatedAt($arr[$keys[45]]);
+            $this->setUpdate($arr[$keys[45]]);
         }
         if (array_key_exists($keys[46], $arr)) {
-            $this->setUpdatedAt($arr[$keys[46]]);
+            $this->setCreatedAt($arr[$keys[46]]);
+        }
+        if (array_key_exists($keys[47], $arr)) {
+            $this->setUpdatedAt($arr[$keys[47]]);
         }
 
         return $this;
@@ -3803,6 +3897,9 @@ abstract class Order implements ActiveRecordInterface
         }
         if ($this->isColumnModified(OrderTableMap::COL_AXYS_ACCOUNT_ID)) {
             $criteria->add(OrderTableMap::COL_AXYS_ACCOUNT_ID, $this->axys_account_id);
+        }
+        if ($this->isColumnModified(OrderTableMap::COL_USER_ID)) {
+            $criteria->add(OrderTableMap::COL_USER_ID, $this->user_id);
         }
         if ($this->isColumnModified(OrderTableMap::COL_CUSTOMER_ID)) {
             $criteria->add(OrderTableMap::COL_CUSTOMER_ID, $this->customer_id);
@@ -4024,6 +4121,7 @@ abstract class Order implements ActiveRecordInterface
         $copyObj->setSlug($this->getSlug());
         $copyObj->setSiteId($this->getSiteId());
         $copyObj->setAxysAccountId($this->getAxysAccountId());
+        $copyObj->setUserId($this->getUserId());
         $copyObj->setCustomerId($this->getCustomerId());
         $copyObj->setSellerId($this->getSellerId());
         $copyObj->setType($this->getType());
@@ -4107,6 +4205,57 @@ abstract class Order implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
+    }
+
+    /**
+     * Declares an association between this object and a ChildUser object.
+     *
+     * @param ChildUser|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setUser(ChildUser $v = null)
+    {
+        if ($v === null) {
+            $this->setUserId(NULL);
+        } else {
+            $this->setUserId($v->getId());
+        }
+
+        $this->aUser = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildUser object, it will not be re-added.
+        if ($v !== null) {
+            $v->addOrder($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildUser object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildUser|null The associated ChildUser object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getUser(?ConnectionInterface $con = null)
+    {
+        if ($this->aUser === null && ($this->user_id != 0)) {
+            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aUser->addOrders($this);
+             */
+        }
+
+        return $this->aUser;
     }
 
     /**
@@ -4451,6 +4600,9 @@ abstract class Order implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aUser) {
+            $this->aUser->removeOrder($this);
+        }
         if (null !== $this->aSite) {
             $this->aSite->removeOrder($this);
         }
@@ -4458,6 +4610,7 @@ abstract class Order implements ActiveRecordInterface
         $this->order_url = null;
         $this->site_id = null;
         $this->axys_account_id = null;
+        $this->user_id = null;
         $this->customer_id = null;
         $this->seller_id = null;
         $this->order_type = null;
@@ -4531,6 +4684,7 @@ abstract class Order implements ActiveRecordInterface
         } // if ($deep)
 
         $this->collPayments = null;
+        $this->aUser = null;
         $this->aSite = null;
         return $this;
     }

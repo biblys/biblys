@@ -63,7 +63,7 @@ class RoleTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 12;
+    public const NUM_COLUMNS = 13;
 
     /**
      * The number of lazy-loaded columns
@@ -73,7 +73,7 @@ class RoleTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 12;
+    public const NUM_HYDRATE_COLUMNS = 13;
 
     /**
      * the column name for the id field
@@ -109,6 +109,11 @@ class RoleTableMap extends TableMap
      * the column name for the axys_account_id field
      */
     public const COL_AXYS_ACCOUNT_ID = 'roles.axys_account_id';
+
+    /**
+     * the column name for the user_id field
+     */
+    public const COL_USER_ID = 'roles.user_id';
 
     /**
      * the column name for the role_hide field
@@ -149,11 +154,11 @@ class RoleTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'ArticleId', 'BookId', 'EventId', 'PeopleId', 'JobId', 'AxysAccountId', 'Hide', 'Presence', 'Date', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'articleId', 'bookId', 'eventId', 'peopleId', 'jobId', 'axysAccountId', 'hide', 'presence', 'date', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [RoleTableMap::COL_ID, RoleTableMap::COL_ARTICLE_ID, RoleTableMap::COL_BOOK_ID, RoleTableMap::COL_EVENT_ID, RoleTableMap::COL_PEOPLE_ID, RoleTableMap::COL_JOB_ID, RoleTableMap::COL_AXYS_ACCOUNT_ID, RoleTableMap::COL_ROLE_HIDE, RoleTableMap::COL_ROLE_PRESENCE, RoleTableMap::COL_ROLE_DATE, RoleTableMap::COL_ROLE_CREATED, RoleTableMap::COL_ROLE_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['id', 'article_id', 'book_id', 'event_id', 'people_id', 'job_id', 'axys_account_id', 'role_hide', 'role_presence', 'role_date', 'role_created', 'role_updated', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ]
+        self::TYPE_PHPNAME       => ['Id', 'ArticleId', 'BookId', 'EventId', 'PeopleId', 'JobId', 'AxysAccountId', 'UserId', 'Hide', 'Presence', 'Date', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'articleId', 'bookId', 'eventId', 'peopleId', 'jobId', 'axysAccountId', 'userId', 'hide', 'presence', 'date', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [RoleTableMap::COL_ID, RoleTableMap::COL_ARTICLE_ID, RoleTableMap::COL_BOOK_ID, RoleTableMap::COL_EVENT_ID, RoleTableMap::COL_PEOPLE_ID, RoleTableMap::COL_JOB_ID, RoleTableMap::COL_AXYS_ACCOUNT_ID, RoleTableMap::COL_USER_ID, RoleTableMap::COL_ROLE_HIDE, RoleTableMap::COL_ROLE_PRESENCE, RoleTableMap::COL_ROLE_DATE, RoleTableMap::COL_ROLE_CREATED, RoleTableMap::COL_ROLE_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['id', 'article_id', 'book_id', 'event_id', 'people_id', 'job_id', 'axys_account_id', 'user_id', 'role_hide', 'role_presence', 'role_date', 'role_created', 'role_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, ]
     ];
 
     /**
@@ -165,11 +170,11 @@ class RoleTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'ArticleId' => 1, 'BookId' => 2, 'EventId' => 3, 'PeopleId' => 4, 'JobId' => 5, 'AxysAccountId' => 6, 'Hide' => 7, 'Presence' => 8, 'Date' => 9, 'CreatedAt' => 10, 'UpdatedAt' => 11, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'articleId' => 1, 'bookId' => 2, 'eventId' => 3, 'peopleId' => 4, 'jobId' => 5, 'axysAccountId' => 6, 'hide' => 7, 'presence' => 8, 'date' => 9, 'createdAt' => 10, 'updatedAt' => 11, ],
-        self::TYPE_COLNAME       => [RoleTableMap::COL_ID => 0, RoleTableMap::COL_ARTICLE_ID => 1, RoleTableMap::COL_BOOK_ID => 2, RoleTableMap::COL_EVENT_ID => 3, RoleTableMap::COL_PEOPLE_ID => 4, RoleTableMap::COL_JOB_ID => 5, RoleTableMap::COL_AXYS_ACCOUNT_ID => 6, RoleTableMap::COL_ROLE_HIDE => 7, RoleTableMap::COL_ROLE_PRESENCE => 8, RoleTableMap::COL_ROLE_DATE => 9, RoleTableMap::COL_ROLE_CREATED => 10, RoleTableMap::COL_ROLE_UPDATED => 11, ],
-        self::TYPE_FIELDNAME     => ['id' => 0, 'article_id' => 1, 'book_id' => 2, 'event_id' => 3, 'people_id' => 4, 'job_id' => 5, 'axys_account_id' => 6, 'role_hide' => 7, 'role_presence' => 8, 'role_date' => 9, 'role_created' => 10, 'role_updated' => 11, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'ArticleId' => 1, 'BookId' => 2, 'EventId' => 3, 'PeopleId' => 4, 'JobId' => 5, 'AxysAccountId' => 6, 'UserId' => 7, 'Hide' => 8, 'Presence' => 9, 'Date' => 10, 'CreatedAt' => 11, 'UpdatedAt' => 12, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'articleId' => 1, 'bookId' => 2, 'eventId' => 3, 'peopleId' => 4, 'jobId' => 5, 'axysAccountId' => 6, 'userId' => 7, 'hide' => 8, 'presence' => 9, 'date' => 10, 'createdAt' => 11, 'updatedAt' => 12, ],
+        self::TYPE_COLNAME       => [RoleTableMap::COL_ID => 0, RoleTableMap::COL_ARTICLE_ID => 1, RoleTableMap::COL_BOOK_ID => 2, RoleTableMap::COL_EVENT_ID => 3, RoleTableMap::COL_PEOPLE_ID => 4, RoleTableMap::COL_JOB_ID => 5, RoleTableMap::COL_AXYS_ACCOUNT_ID => 6, RoleTableMap::COL_USER_ID => 7, RoleTableMap::COL_ROLE_HIDE => 8, RoleTableMap::COL_ROLE_PRESENCE => 9, RoleTableMap::COL_ROLE_DATE => 10, RoleTableMap::COL_ROLE_CREATED => 11, RoleTableMap::COL_ROLE_UPDATED => 12, ],
+        self::TYPE_FIELDNAME     => ['id' => 0, 'article_id' => 1, 'book_id' => 2, 'event_id' => 3, 'people_id' => 4, 'job_id' => 5, 'axys_account_id' => 6, 'user_id' => 7, 'role_hide' => 8, 'role_presence' => 9, 'role_date' => 10, 'role_created' => 11, 'role_updated' => 12, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, ]
     ];
 
     /**
@@ -233,6 +238,14 @@ class RoleTableMap extends TableMap
         'COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
         'axys_account_id' => 'AXYS_ACCOUNT_ID',
         'roles.axys_account_id' => 'AXYS_ACCOUNT_ID',
+        'UserId' => 'USER_ID',
+        'Role.UserId' => 'USER_ID',
+        'userId' => 'USER_ID',
+        'role.userId' => 'USER_ID',
+        'RoleTableMap::COL_USER_ID' => 'USER_ID',
+        'COL_USER_ID' => 'USER_ID',
+        'user_id' => 'USER_ID',
+        'roles.user_id' => 'USER_ID',
         'Hide' => 'ROLE_HIDE',
         'Role.Hide' => 'ROLE_HIDE',
         'hide' => 'ROLE_HIDE',
@@ -299,6 +312,7 @@ class RoleTableMap extends TableMap
         $this->addForeignKey('people_id', 'PeopleId', 'INTEGER', 'people', 'people_id', false, 10, null);
         $this->addColumn('job_id', 'JobId', 'INTEGER', false, 10, null);
         $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
         $this->addColumn('role_hide', 'Hide', 'BOOLEAN', false, 1, null);
         $this->addColumn('role_presence', 'Presence', 'VARCHAR', false, 256, null);
         $this->addColumn('role_date', 'Date', 'TIMESTAMP', false, null, null);
@@ -313,6 +327,13 @@ class RoleTableMap extends TableMap
      */
     public function buildRelations(): void
     {
+        $this->addRelation('User', '\\Model\\User', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
         $this->addRelation('Article', '\\Model\\Article', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
@@ -491,6 +512,7 @@ class RoleTableMap extends TableMap
             $criteria->addSelectColumn(RoleTableMap::COL_PEOPLE_ID);
             $criteria->addSelectColumn(RoleTableMap::COL_JOB_ID);
             $criteria->addSelectColumn(RoleTableMap::COL_AXYS_ACCOUNT_ID);
+            $criteria->addSelectColumn(RoleTableMap::COL_USER_ID);
             $criteria->addSelectColumn(RoleTableMap::COL_ROLE_HIDE);
             $criteria->addSelectColumn(RoleTableMap::COL_ROLE_PRESENCE);
             $criteria->addSelectColumn(RoleTableMap::COL_ROLE_DATE);
@@ -504,6 +526,7 @@ class RoleTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.people_id');
             $criteria->addSelectColumn($alias . '.job_id');
             $criteria->addSelectColumn($alias . '.axys_account_id');
+            $criteria->addSelectColumn($alias . '.user_id');
             $criteria->addSelectColumn($alias . '.role_hide');
             $criteria->addSelectColumn($alias . '.role_presence');
             $criteria->addSelectColumn($alias . '.role_date');
@@ -534,6 +557,7 @@ class RoleTableMap extends TableMap
             $criteria->removeSelectColumn(RoleTableMap::COL_PEOPLE_ID);
             $criteria->removeSelectColumn(RoleTableMap::COL_JOB_ID);
             $criteria->removeSelectColumn(RoleTableMap::COL_AXYS_ACCOUNT_ID);
+            $criteria->removeSelectColumn(RoleTableMap::COL_USER_ID);
             $criteria->removeSelectColumn(RoleTableMap::COL_ROLE_HIDE);
             $criteria->removeSelectColumn(RoleTableMap::COL_ROLE_PRESENCE);
             $criteria->removeSelectColumn(RoleTableMap::COL_ROLE_DATE);
@@ -547,6 +571,7 @@ class RoleTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.people_id');
             $criteria->removeSelectColumn($alias . '.job_id');
             $criteria->removeSelectColumn($alias . '.axys_account_id');
+            $criteria->removeSelectColumn($alias . '.user_id');
             $criteria->removeSelectColumn($alias . '.role_hide');
             $criteria->removeSelectColumn($alias . '.role_presence');
             $criteria->removeSelectColumn($alias . '.role_date');

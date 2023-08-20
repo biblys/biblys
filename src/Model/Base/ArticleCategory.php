@@ -2100,6 +2100,32 @@ abstract class ArticleCategory implements ActiveRecordInterface
      * @return ObjectCollection|ChildLink[] List of ChildLink objects
      * @phpstan-return ObjectCollection&\Traversable<ChildLink}> List of ChildLink objects
      */
+    public function getLinksJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildLinkQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getLinks($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this ArticleCategory is new, it will return
+     * an empty collection; or if this ArticleCategory has previously
+     * been saved, it will retrieve related Links from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in ArticleCategory.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildLink[] List of ChildLink objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildLink}> List of ChildLink objects
+     */
     public function getLinksJoinArticle(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildLinkQuery::create(null, $criteria);

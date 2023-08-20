@@ -3139,6 +3139,32 @@ abstract class AxysAccount implements ActiveRecordInterface
      * @return ObjectCollection|ChildCart[] List of ChildCart objects
      * @phpstan-return ObjectCollection&\Traversable<ChildCart}> List of ChildCart objects
      */
+    public function getCartsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildCartQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getCarts($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this AxysAccount is new, it will return
+     * an empty collection; or if this AxysAccount has previously
+     * been saved, it will retrieve related Carts from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in AxysAccount.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildCart[] List of ChildCart objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildCart}> List of ChildCart objects
+     */
     public function getCartsJoinSite(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildCartQuery::create(null, $criteria);
@@ -3404,6 +3430,32 @@ abstract class AxysAccount implements ActiveRecordInterface
      * @return ObjectCollection|ChildOption[] List of ChildOption objects
      * @phpstan-return ObjectCollection&\Traversable<ChildOption}> List of ChildOption objects
      */
+    public function getOptionsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildOptionQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getOptions($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this AxysAccount is new, it will return
+     * an empty collection; or if this AxysAccount has previously
+     * been saved, it will retrieve related Options from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in AxysAccount.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildOption[] List of ChildOption objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildOption}> List of ChildOption objects
+     */
     public function getOptionsJoinSite(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildOptionQuery::create(null, $criteria);
@@ -3649,6 +3701,32 @@ abstract class AxysAccount implements ActiveRecordInterface
         }
 
         return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this AxysAccount is new, it will return
+     * an empty collection; or if this AxysAccount has previously
+     * been saved, it will retrieve related Rights from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in AxysAccount.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildRight[] List of ChildRight objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildRight}> List of ChildRight objects
+     */
+    public function getRightsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildRightQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getRights($query, $con);
     }
 
 
@@ -3960,6 +4038,32 @@ abstract class AxysAccount implements ActiveRecordInterface
      * @return ObjectCollection|ChildSession[] List of ChildSession objects
      * @phpstan-return ObjectCollection&\Traversable<ChildSession}> List of ChildSession objects
      */
+    public function getSessionsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildSessionQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getSessions($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this AxysAccount is new, it will return
+     * an empty collection; or if this AxysAccount has previously
+     * been saved, it will retrieve related Sessions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in AxysAccount.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildSession[] List of ChildSession objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildSession}> List of ChildSession objects
+     */
     public function getSessionsJoinSite(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildSessionQuery::create(null, $criteria);
@@ -4205,6 +4309,32 @@ abstract class AxysAccount implements ActiveRecordInterface
         }
 
         return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this AxysAccount is new, it will return
+     * an empty collection; or if this AxysAccount has previously
+     * been saved, it will retrieve related Stocks from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in AxysAccount.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildStock[] List of ChildStock objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildStock}> List of ChildStock objects
+     */
+    public function getStocksJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildStockQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getStocks($query, $con);
     }
 
 
@@ -4524,6 +4654,32 @@ abstract class AxysAccount implements ActiveRecordInterface
         return $this;
     }
 
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this AxysAccount is new, it will return
+     * an empty collection; or if this AxysAccount has previously
+     * been saved, it will retrieve related Wishes from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in AxysAccount.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildWish[] List of ChildWish objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildWish}> List of ChildWish objects
+     */
+    public function getWishesJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildWishQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getWishes($query, $con);
+    }
+
     /**
      * Clears out the collWishlists collection
      *
@@ -4761,6 +4917,32 @@ abstract class AxysAccount implements ActiveRecordInterface
         }
 
         return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this AxysAccount is new, it will return
+     * an empty collection; or if this AxysAccount has previously
+     * been saved, it will retrieve related Wishlists from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in AxysAccount.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildWishlist[] List of ChildWishlist objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildWishlist}> List of ChildWishlist objects
+     */
+    public function getWishlistsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildWishlistQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getWishlists($query, $con);
     }
 
     /**

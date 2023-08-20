@@ -7,6 +7,8 @@ use \Exception;
 use \PDO;
 use Model\ArticleCategory as ChildArticleCategory;
 use Model\ArticleCategoryQuery as ChildArticleCategoryQuery;
+use Model\AuthenticationMethod as ChildAuthenticationMethod;
+use Model\AuthenticationMethodQuery as ChildAuthenticationMethodQuery;
 use Model\Cart as ChildCart;
 use Model\CartQuery as ChildCartQuery;
 use Model\CrowdfundingCampaign as ChildCrowdfundingCampaign;
@@ -33,7 +35,10 @@ use Model\SpecialOffer as ChildSpecialOffer;
 use Model\SpecialOfferQuery as ChildSpecialOfferQuery;
 use Model\Stock as ChildStock;
 use Model\StockQuery as ChildStockQuery;
+use Model\User as ChildUser;
+use Model\UserQuery as ChildUserQuery;
 use Model\Map\ArticleCategoryTableMap;
+use Model\Map\AuthenticationMethodTableMap;
 use Model\Map\CartTableMap;
 use Model\Map\CrowdfundingCampaignTableMap;
 use Model\Map\CrowfundingRewardTableMap;
@@ -47,6 +52,7 @@ use Model\Map\SessionTableMap;
 use Model\Map\SiteTableMap;
 use Model\Map\SpecialOfferTableMap;
 use Model\Map\StockTableMap;
+use Model\Map\UserTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -482,6 +488,20 @@ abstract class Site implements ActiveRecordInterface
     protected $collStocksPartial;
 
     /**
+     * @var        ObjectCollection|ChildUser[] Collection to store aggregation of ChildUser objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildUser> Collection to store aggregation of ChildUser objects.
+     */
+    protected $collUsers;
+    protected $collUsersPartial;
+
+    /**
+     * @var        ObjectCollection|ChildAuthenticationMethod[] Collection to store aggregation of ChildAuthenticationMethod objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildAuthenticationMethod> Collection to store aggregation of ChildAuthenticationMethod objects.
+     */
+    protected $collAuthenticationMethods;
+    protected $collAuthenticationMethodsPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -579,6 +599,20 @@ abstract class Site implements ActiveRecordInterface
      * @phpstan-var ObjectCollection&\Traversable<ChildStock>
      */
     protected $stocksScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildUser[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildUser>
+     */
+    protected $usersScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildAuthenticationMethod[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildAuthenticationMethod>
+     */
+    protected $authenticationMethodsScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -2598,6 +2632,10 @@ abstract class Site implements ActiveRecordInterface
 
             $this->collStocks = null;
 
+            $this->collUsers = null;
+
+            $this->collAuthenticationMethods = null;
+
         } // if (deep)
     }
 
@@ -2951,6 +2989,40 @@ abstract class Site implements ActiveRecordInterface
 
             if ($this->collStocks !== null) {
                 foreach ($this->collStocks as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->usersScheduledForDeletion !== null) {
+                if (!$this->usersScheduledForDeletion->isEmpty()) {
+                    \Model\UserQuery::create()
+                        ->filterByPrimaryKeys($this->usersScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->usersScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collUsers !== null) {
+                foreach ($this->collUsers as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->authenticationMethodsScheduledForDeletion !== null) {
+                if (!$this->authenticationMethodsScheduledForDeletion->isEmpty()) {
+                    \Model\AuthenticationMethodQuery::create()
+                        ->filterByPrimaryKeys($this->authenticationMethodsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->authenticationMethodsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collAuthenticationMethods !== null) {
+                foreach ($this->collAuthenticationMethods as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -3727,6 +3799,36 @@ abstract class Site implements ActiveRecordInterface
 
                 $result[$key] = $this->collStocks->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collUsers) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'users';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'userss';
+                        break;
+                    default:
+                        $key = 'Users';
+                }
+
+                $result[$key] = $this->collUsers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collAuthenticationMethods) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'authenticationMethods';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'authentication_methodss';
+                        break;
+                    default:
+                        $key = 'AuthenticationMethods';
+                }
+
+                $result[$key] = $this->collAuthenticationMethods->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
         }
 
         return $result;
@@ -4393,6 +4495,18 @@ abstract class Site implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getUsers() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addUser($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getAuthenticationMethods() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addAuthenticationMethod($relObj->copy($deepCopy));
+                }
+            }
+
         } // if ($deepCopy)
 
         if ($makeNew) {
@@ -4484,6 +4598,14 @@ abstract class Site implements ActiveRecordInterface
         }
         if ('Stock' === $relationName) {
             $this->initStocks();
+            return;
+        }
+        if ('User' === $relationName) {
+            $this->initUsers();
+            return;
+        }
+        if ('AuthenticationMethod' === $relationName) {
+            $this->initAuthenticationMethods();
             return;
         }
     }
@@ -4725,6 +4847,32 @@ abstract class Site implements ActiveRecordInterface
         }
 
         return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Carts from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildCart[] List of ChildCart objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildCart}> List of ChildCart objects
+     */
+    public function getCartsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildCartQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getCarts($query, $con);
     }
 
 
@@ -5753,6 +5901,32 @@ abstract class Site implements ActiveRecordInterface
      * @return ObjectCollection|ChildOption[] List of ChildOption objects
      * @phpstan-return ObjectCollection&\Traversable<ChildOption}> List of ChildOption objects
      */
+    public function getOptionsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildOptionQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getOptions($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Options from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildOption[] List of ChildOption objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildOption}> List of ChildOption objects
+     */
     public function getOptionsJoinAxysAccount(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildOptionQuery::create(null, $criteria);
@@ -5998,6 +6172,32 @@ abstract class Site implements ActiveRecordInterface
         }
 
         return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Orders from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildOrder[] List of ChildOrder objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildOrder}> List of ChildOrder objects
+     */
+    public function getOrdersJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildOrderQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getOrders($query, $con);
     }
 
     /**
@@ -7000,6 +7200,32 @@ abstract class Site implements ActiveRecordInterface
      * @return ObjectCollection|ChildRight[] List of ChildRight objects
      * @phpstan-return ObjectCollection&\Traversable<ChildRight}> List of ChildRight objects
      */
+    public function getRightsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildRightQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getRights($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Rights from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildRight[] List of ChildRight objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildRight}> List of ChildRight objects
+     */
     public function getRightsJoinAxysAccount(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildRightQuery::create(null, $criteria);
@@ -7271,6 +7497,32 @@ abstract class Site implements ActiveRecordInterface
         }
 
         return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Sessions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildSession[] List of ChildSession objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildSession}> List of ChildSession objects
+     */
+    public function getSessionsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildSessionQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getSessions($query, $con);
     }
 
 
@@ -7847,6 +8099,32 @@ abstract class Site implements ActiveRecordInterface
      * @return ObjectCollection|ChildStock[] List of ChildStock objects
      * @phpstan-return ObjectCollection&\Traversable<ChildStock}> List of ChildStock objects
      */
+    public function getStocksJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildStockQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getStocks($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Stocks from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildStock[] List of ChildStock objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildStock}> List of ChildStock objects
+     */
     public function getStocksJoinCart(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildStockQuery::create(null, $criteria);
@@ -7905,6 +8183,510 @@ abstract class Site implements ActiveRecordInterface
         $query->joinWith('AxysAccount', $joinBehavior);
 
         return $this->getStocks($query, $con);
+    }
+
+    /**
+     * Clears out the collUsers collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addUsers()
+     */
+    public function clearUsers()
+    {
+        $this->collUsers = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collUsers collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialUsers($v = true): void
+    {
+        $this->collUsersPartial = $v;
+    }
+
+    /**
+     * Initializes the collUsers collection.
+     *
+     * By default this just sets the collUsers collection to an empty array (like clearcollUsers());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initUsers(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collUsers && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = UserTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collUsers = new $collectionClassName;
+        $this->collUsers->setModel('\Model\User');
+    }
+
+    /**
+     * Gets an array of ChildUser objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildSite is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildUser[] List of ChildUser objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildUser> List of ChildUser objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getUsers(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collUsersPartial && !$this->isNew();
+        if (null === $this->collUsers || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collUsers) {
+                    $this->initUsers();
+                } else {
+                    $collectionClassName = UserTableMap::getTableMap()->getCollectionClassName();
+
+                    $collUsers = new $collectionClassName;
+                    $collUsers->setModel('\Model\User');
+
+                    return $collUsers;
+                }
+            } else {
+                $collUsers = ChildUserQuery::create(null, $criteria)
+                    ->filterBySite($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collUsersPartial && count($collUsers)) {
+                        $this->initUsers(false);
+
+                        foreach ($collUsers as $obj) {
+                            if (false == $this->collUsers->contains($obj)) {
+                                $this->collUsers->append($obj);
+                            }
+                        }
+
+                        $this->collUsersPartial = true;
+                    }
+
+                    return $collUsers;
+                }
+
+                if ($partial && $this->collUsers) {
+                    foreach ($this->collUsers as $obj) {
+                        if ($obj->isNew()) {
+                            $collUsers[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collUsers = $collUsers;
+                $this->collUsersPartial = false;
+            }
+        }
+
+        return $this->collUsers;
+    }
+
+    /**
+     * Sets a collection of ChildUser objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $users A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setUsers(Collection $users, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildUser[] $usersToDelete */
+        $usersToDelete = $this->getUsers(new Criteria(), $con)->diff($users);
+
+
+        $this->usersScheduledForDeletion = $usersToDelete;
+
+        foreach ($usersToDelete as $userRemoved) {
+            $userRemoved->setSite(null);
+        }
+
+        $this->collUsers = null;
+        foreach ($users as $user) {
+            $this->addUser($user);
+        }
+
+        $this->collUsers = $users;
+        $this->collUsersPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related User objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related User objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countUsers(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collUsersPartial && !$this->isNew();
+        if (null === $this->collUsers || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collUsers) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getUsers());
+            }
+
+            $query = ChildUserQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySite($this)
+                ->count($con);
+        }
+
+        return count($this->collUsers);
+    }
+
+    /**
+     * Method called to associate a ChildUser object to this object
+     * through the ChildUser foreign key attribute.
+     *
+     * @param ChildUser $l ChildUser
+     * @return $this The current object (for fluent API support)
+     */
+    public function addUser(ChildUser $l)
+    {
+        if ($this->collUsers === null) {
+            $this->initUsers();
+            $this->collUsersPartial = true;
+        }
+
+        if (!$this->collUsers->contains($l)) {
+            $this->doAddUser($l);
+
+            if ($this->usersScheduledForDeletion and $this->usersScheduledForDeletion->contains($l)) {
+                $this->usersScheduledForDeletion->remove($this->usersScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildUser $user The ChildUser object to add.
+     */
+    protected function doAddUser(ChildUser $user): void
+    {
+        $this->collUsers[]= $user;
+        $user->setSite($this);
+    }
+
+    /**
+     * @param ChildUser $user The ChildUser object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeUser(ChildUser $user)
+    {
+        if ($this->getUsers()->contains($user)) {
+            $pos = $this->collUsers->search($user);
+            $this->collUsers->remove($pos);
+            if (null === $this->usersScheduledForDeletion) {
+                $this->usersScheduledForDeletion = clone $this->collUsers;
+                $this->usersScheduledForDeletion->clear();
+            }
+            $this->usersScheduledForDeletion[]= clone $user;
+            $user->setSite(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collAuthenticationMethods collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addAuthenticationMethods()
+     */
+    public function clearAuthenticationMethods()
+    {
+        $this->collAuthenticationMethods = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collAuthenticationMethods collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialAuthenticationMethods($v = true): void
+    {
+        $this->collAuthenticationMethodsPartial = $v;
+    }
+
+    /**
+     * Initializes the collAuthenticationMethods collection.
+     *
+     * By default this just sets the collAuthenticationMethods collection to an empty array (like clearcollAuthenticationMethods());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initAuthenticationMethods(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collAuthenticationMethods && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = AuthenticationMethodTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collAuthenticationMethods = new $collectionClassName;
+        $this->collAuthenticationMethods->setModel('\Model\AuthenticationMethod');
+    }
+
+    /**
+     * Gets an array of ChildAuthenticationMethod objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildSite is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildAuthenticationMethod[] List of ChildAuthenticationMethod objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildAuthenticationMethod> List of ChildAuthenticationMethod objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getAuthenticationMethods(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collAuthenticationMethodsPartial && !$this->isNew();
+        if (null === $this->collAuthenticationMethods || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collAuthenticationMethods) {
+                    $this->initAuthenticationMethods();
+                } else {
+                    $collectionClassName = AuthenticationMethodTableMap::getTableMap()->getCollectionClassName();
+
+                    $collAuthenticationMethods = new $collectionClassName;
+                    $collAuthenticationMethods->setModel('\Model\AuthenticationMethod');
+
+                    return $collAuthenticationMethods;
+                }
+            } else {
+                $collAuthenticationMethods = ChildAuthenticationMethodQuery::create(null, $criteria)
+                    ->filterBySite($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collAuthenticationMethodsPartial && count($collAuthenticationMethods)) {
+                        $this->initAuthenticationMethods(false);
+
+                        foreach ($collAuthenticationMethods as $obj) {
+                            if (false == $this->collAuthenticationMethods->contains($obj)) {
+                                $this->collAuthenticationMethods->append($obj);
+                            }
+                        }
+
+                        $this->collAuthenticationMethodsPartial = true;
+                    }
+
+                    return $collAuthenticationMethods;
+                }
+
+                if ($partial && $this->collAuthenticationMethods) {
+                    foreach ($this->collAuthenticationMethods as $obj) {
+                        if ($obj->isNew()) {
+                            $collAuthenticationMethods[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collAuthenticationMethods = $collAuthenticationMethods;
+                $this->collAuthenticationMethodsPartial = false;
+            }
+        }
+
+        return $this->collAuthenticationMethods;
+    }
+
+    /**
+     * Sets a collection of ChildAuthenticationMethod objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $authenticationMethods A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setAuthenticationMethods(Collection $authenticationMethods, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildAuthenticationMethod[] $authenticationMethodsToDelete */
+        $authenticationMethodsToDelete = $this->getAuthenticationMethods(new Criteria(), $con)->diff($authenticationMethods);
+
+
+        $this->authenticationMethodsScheduledForDeletion = $authenticationMethodsToDelete;
+
+        foreach ($authenticationMethodsToDelete as $authenticationMethodRemoved) {
+            $authenticationMethodRemoved->setSite(null);
+        }
+
+        $this->collAuthenticationMethods = null;
+        foreach ($authenticationMethods as $authenticationMethod) {
+            $this->addAuthenticationMethod($authenticationMethod);
+        }
+
+        $this->collAuthenticationMethods = $authenticationMethods;
+        $this->collAuthenticationMethodsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related AuthenticationMethod objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related AuthenticationMethod objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countAuthenticationMethods(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collAuthenticationMethodsPartial && !$this->isNew();
+        if (null === $this->collAuthenticationMethods || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAuthenticationMethods) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getAuthenticationMethods());
+            }
+
+            $query = ChildAuthenticationMethodQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySite($this)
+                ->count($con);
+        }
+
+        return count($this->collAuthenticationMethods);
+    }
+
+    /**
+     * Method called to associate a ChildAuthenticationMethod object to this object
+     * through the ChildAuthenticationMethod foreign key attribute.
+     *
+     * @param ChildAuthenticationMethod $l ChildAuthenticationMethod
+     * @return $this The current object (for fluent API support)
+     */
+    public function addAuthenticationMethod(ChildAuthenticationMethod $l)
+    {
+        if ($this->collAuthenticationMethods === null) {
+            $this->initAuthenticationMethods();
+            $this->collAuthenticationMethodsPartial = true;
+        }
+
+        if (!$this->collAuthenticationMethods->contains($l)) {
+            $this->doAddAuthenticationMethod($l);
+
+            if ($this->authenticationMethodsScheduledForDeletion and $this->authenticationMethodsScheduledForDeletion->contains($l)) {
+                $this->authenticationMethodsScheduledForDeletion->remove($this->authenticationMethodsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildAuthenticationMethod $authenticationMethod The ChildAuthenticationMethod object to add.
+     */
+    protected function doAddAuthenticationMethod(ChildAuthenticationMethod $authenticationMethod): void
+    {
+        $this->collAuthenticationMethods[]= $authenticationMethod;
+        $authenticationMethod->setSite($this);
+    }
+
+    /**
+     * @param ChildAuthenticationMethod $authenticationMethod The ChildAuthenticationMethod object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeAuthenticationMethod(ChildAuthenticationMethod $authenticationMethod)
+    {
+        if ($this->getAuthenticationMethods()->contains($authenticationMethod)) {
+            $pos = $this->collAuthenticationMethods->search($authenticationMethod);
+            $this->collAuthenticationMethods->remove($pos);
+            if (null === $this->authenticationMethodsScheduledForDeletion) {
+                $this->authenticationMethodsScheduledForDeletion = clone $this->collAuthenticationMethods;
+                $this->authenticationMethodsScheduledForDeletion->clear();
+            }
+            $this->authenticationMethodsScheduledForDeletion[]= clone $authenticationMethod;
+            $authenticationMethod->setSite(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related AuthenticationMethods from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildAuthenticationMethod[] List of ChildAuthenticationMethod objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildAuthenticationMethod}> List of ChildAuthenticationMethod objects
+     */
+    public function getAuthenticationMethodsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildAuthenticationMethodQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getAuthenticationMethods($query, $con);
     }
 
     /**
@@ -8042,6 +8824,16 @@ abstract class Site implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collUsers) {
+                foreach ($this->collUsers as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collAuthenticationMethods) {
+                foreach ($this->collAuthenticationMethods as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
         $this->collCarts = null;
@@ -8057,6 +8849,8 @@ abstract class Site implements ActiveRecordInterface
         $this->collSessions = null;
         $this->collSpecialOffers = null;
         $this->collStocks = null;
+        $this->collUsers = null;
+        $this->collAuthenticationMethods = null;
         return $this;
     }
 

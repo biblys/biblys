@@ -6,6 +6,8 @@ use \DateTime;
 use \Exception;
 use \PDO;
 use Model\CouponQuery as ChildCouponQuery;
+use Model\User as ChildUser;
+use Model\UserQuery as ChildUserQuery;
 use Model\Map\CouponTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -85,6 +87,13 @@ abstract class Coupon implements ActiveRecordInterface
     protected $axys_account_id;
 
     /**
+     * The value for the user_id field.
+     *
+     * @var        int|null
+     */
+    protected $user_id;
+
+    /**
      * The value for the coupon_code field.
      *
      * @var        string|null
@@ -146,6 +155,11 @@ abstract class Coupon implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $coupon_update;
+
+    /**
+     * @var        ChildUser
+     */
+    protected $aUser;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -412,6 +426,16 @@ abstract class Coupon implements ActiveRecordInterface
     }
 
     /**
+     * Get the [user_id] column value.
+     *
+     * @return int|null
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+
+    /**
      * Get the [coupon_code] column value.
      *
      * @return string|null
@@ -592,6 +616,30 @@ abstract class Coupon implements ActiveRecordInterface
         if ($this->axys_account_id !== $v) {
             $this->axys_account_id = $v;
             $this->modifiedColumns[CouponTableMap::COL_AXYS_ACCOUNT_ID] = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [user_id] column.
+     *
+     * @param int|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setUserId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->user_id !== $v) {
+            $this->user_id = $v;
+            $this->modifiedColumns[CouponTableMap::COL_USER_ID] = true;
+        }
+
+        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
+            $this->aUser = null;
         }
 
         return $this;
@@ -822,37 +870,40 @@ abstract class Coupon implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : CouponTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->axys_account_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : CouponTableMap::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : CouponTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->user_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : CouponTableMap::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)];
             $this->coupon_code = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : CouponTableMap::translateFieldName('ArticleId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : CouponTableMap::translateFieldName('ArticleId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->article_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : CouponTableMap::translateFieldName('StockId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : CouponTableMap::translateFieldName('StockId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : CouponTableMap::translateFieldName('Amount', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : CouponTableMap::translateFieldName('Amount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->coupon_amount = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : CouponTableMap::translateFieldName('Note', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : CouponTableMap::translateFieldName('Note', TableMap::TYPE_PHPNAME, $indexType)];
             $this->coupon_note = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : CouponTableMap::translateFieldName('Used', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : CouponTableMap::translateFieldName('Used', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->coupon_used = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : CouponTableMap::translateFieldName('Creator', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : CouponTableMap::translateFieldName('Creator', TableMap::TYPE_PHPNAME, $indexType)];
             $this->coupon_creator = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : CouponTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : CouponTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->coupon_insert = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : CouponTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : CouponTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -865,7 +916,7 @@ abstract class Coupon implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 12; // 12 = CouponTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 13; // 13 = CouponTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Coupon'), 0, $e);
@@ -888,6 +939,9 @@ abstract class Coupon implements ActiveRecordInterface
      */
     public function ensureConsistency(): void
     {
+        if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
+            $this->aUser = null;
+        }
     }
 
     /**
@@ -927,6 +981,7 @@ abstract class Coupon implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aUser = null;
         } // if (deep)
     }
 
@@ -1043,6 +1098,18 @@ abstract class Coupon implements ActiveRecordInterface
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aUser !== null) {
+                if ($this->aUser->isModified() || $this->aUser->isNew()) {
+                    $affectedRows += $this->aUser->save($con);
+                }
+                $this->setUser($this->aUser);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -1088,6 +1155,9 @@ abstract class Coupon implements ActiveRecordInterface
         }
         if ($this->isColumnModified(CouponTableMap::COL_AXYS_ACCOUNT_ID)) {
             $modifiedColumns[':p' . $index++]  = 'axys_account_id';
+        }
+        if ($this->isColumnModified(CouponTableMap::COL_USER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'user_id';
         }
         if ($this->isColumnModified(CouponTableMap::COL_COUPON_CODE)) {
             $modifiedColumns[':p' . $index++]  = 'coupon_code';
@@ -1137,6 +1207,10 @@ abstract class Coupon implements ActiveRecordInterface
                         break;
                     case 'axys_account_id':
                         $stmt->bindValue($identifier, $this->axys_account_id, PDO::PARAM_INT);
+
+                        break;
+                    case 'user_id':
+                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
 
                         break;
                     case 'coupon_code':
@@ -1247,30 +1321,33 @@ abstract class Coupon implements ActiveRecordInterface
                 return $this->getAxysAccountId();
 
             case 3:
-                return $this->getCode();
+                return $this->getUserId();
 
             case 4:
-                return $this->getArticleId();
+                return $this->getCode();
 
             case 5:
-                return $this->getStockId();
+                return $this->getArticleId();
 
             case 6:
-                return $this->getAmount();
+                return $this->getStockId();
 
             case 7:
-                return $this->getNote();
+                return $this->getAmount();
 
             case 8:
-                return $this->getUsed();
+                return $this->getNote();
 
             case 9:
-                return $this->getCreator();
+                return $this->getUsed();
 
             case 10:
-                return $this->getCreatedAt();
+                return $this->getCreator();
 
             case 11:
+                return $this->getCreatedAt();
+
+            case 12:
                 return $this->getUpdatedAt();
 
             default:
@@ -1289,10 +1366,11 @@ abstract class Coupon implements ActiveRecordInterface
      *                    Defaults to TableMap::TYPE_PHPNAME.
      * @param bool $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
      * @param array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param bool $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array An associative array containing the field names (as keys) and field values
      */
-    public function toArray(string $keyType = TableMap::TYPE_PHPNAME, bool $includeLazyLoadColumns = true, array $alreadyDumpedObjects = []): array
+    public function toArray(string $keyType = TableMap::TYPE_PHPNAME, bool $includeLazyLoadColumns = true, array $alreadyDumpedObjects = [], bool $includeForeignObjects = false): array
     {
         if (isset($alreadyDumpedObjects['Coupon'][$this->hashCode()])) {
             return ['*RECURSION*'];
@@ -1303,26 +1381,27 @@ abstract class Coupon implements ActiveRecordInterface
             $keys[0] => $this->getId(),
             $keys[1] => $this->getSiteId(),
             $keys[2] => $this->getAxysAccountId(),
-            $keys[3] => $this->getCode(),
-            $keys[4] => $this->getArticleId(),
-            $keys[5] => $this->getStockId(),
-            $keys[6] => $this->getAmount(),
-            $keys[7] => $this->getNote(),
-            $keys[8] => $this->getUsed(),
-            $keys[9] => $this->getCreator(),
-            $keys[10] => $this->getCreatedAt(),
-            $keys[11] => $this->getUpdatedAt(),
+            $keys[3] => $this->getUserId(),
+            $keys[4] => $this->getCode(),
+            $keys[5] => $this->getArticleId(),
+            $keys[6] => $this->getStockId(),
+            $keys[7] => $this->getAmount(),
+            $keys[8] => $this->getNote(),
+            $keys[9] => $this->getUsed(),
+            $keys[10] => $this->getCreator(),
+            $keys[11] => $this->getCreatedAt(),
+            $keys[12] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[8]] instanceof \DateTimeInterface) {
-            $result[$keys[8]] = $result[$keys[8]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[10]] instanceof \DateTimeInterface) {
-            $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[9]] instanceof \DateTimeInterface) {
+            $result[$keys[9]] = $result[$keys[9]]->format('Y-m-d H:i:s.u');
         }
 
         if ($result[$keys[11]] instanceof \DateTimeInterface) {
             $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[12]] instanceof \DateTimeInterface) {
+            $result[$keys[12]] = $result[$keys[12]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1330,6 +1409,23 @@ abstract class Coupon implements ActiveRecordInterface
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->aUser) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'user';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'users';
+                        break;
+                    default:
+                        $key = 'User';
+                }
+
+                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+        }
 
         return $result;
     }
@@ -1375,30 +1471,33 @@ abstract class Coupon implements ActiveRecordInterface
                 $this->setAxysAccountId($value);
                 break;
             case 3:
-                $this->setCode($value);
+                $this->setUserId($value);
                 break;
             case 4:
-                $this->setArticleId($value);
+                $this->setCode($value);
                 break;
             case 5:
-                $this->setStockId($value);
+                $this->setArticleId($value);
                 break;
             case 6:
-                $this->setAmount($value);
+                $this->setStockId($value);
                 break;
             case 7:
-                $this->setNote($value);
+                $this->setAmount($value);
                 break;
             case 8:
-                $this->setUsed($value);
+                $this->setNote($value);
                 break;
             case 9:
-                $this->setCreator($value);
+                $this->setUsed($value);
                 break;
             case 10:
-                $this->setCreatedAt($value);
+                $this->setCreator($value);
                 break;
             case 11:
+                $this->setCreatedAt($value);
+                break;
+            case 12:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1437,31 +1536,34 @@ abstract class Coupon implements ActiveRecordInterface
             $this->setAxysAccountId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setCode($arr[$keys[3]]);
+            $this->setUserId($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setArticleId($arr[$keys[4]]);
+            $this->setCode($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setStockId($arr[$keys[5]]);
+            $this->setArticleId($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setAmount($arr[$keys[6]]);
+            $this->setStockId($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setNote($arr[$keys[7]]);
+            $this->setAmount($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setUsed($arr[$keys[8]]);
+            $this->setNote($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setCreator($arr[$keys[9]]);
+            $this->setUsed($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setCreatedAt($arr[$keys[10]]);
+            $this->setCreator($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setUpdatedAt($arr[$keys[11]]);
+            $this->setCreatedAt($arr[$keys[11]]);
+        }
+        if (array_key_exists($keys[12], $arr)) {
+            $this->setUpdatedAt($arr[$keys[12]]);
         }
 
         return $this;
@@ -1514,6 +1616,9 @@ abstract class Coupon implements ActiveRecordInterface
         }
         if ($this->isColumnModified(CouponTableMap::COL_AXYS_ACCOUNT_ID)) {
             $criteria->add(CouponTableMap::COL_AXYS_ACCOUNT_ID, $this->axys_account_id);
+        }
+        if ($this->isColumnModified(CouponTableMap::COL_USER_ID)) {
+            $criteria->add(CouponTableMap::COL_USER_ID, $this->user_id);
         }
         if ($this->isColumnModified(CouponTableMap::COL_COUPON_CODE)) {
             $criteria->add(CouponTableMap::COL_COUPON_CODE, $this->coupon_code);
@@ -1632,6 +1737,7 @@ abstract class Coupon implements ActiveRecordInterface
     {
         $copyObj->setSiteId($this->getSiteId());
         $copyObj->setAxysAccountId($this->getAxysAccountId());
+        $copyObj->setUserId($this->getUserId());
         $copyObj->setCode($this->getCode());
         $copyObj->setArticleId($this->getArticleId());
         $copyObj->setStockId($this->getStockId());
@@ -1670,6 +1776,57 @@ abstract class Coupon implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildUser object.
+     *
+     * @param ChildUser|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setUser(ChildUser $v = null)
+    {
+        if ($v === null) {
+            $this->setUserId(NULL);
+        } else {
+            $this->setUserId($v->getId());
+        }
+
+        $this->aUser = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildUser object, it will not be re-added.
+        if ($v !== null) {
+            $v->addCoupon($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildUser object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildUser|null The associated ChildUser object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getUser(?ConnectionInterface $con = null)
+    {
+        if ($this->aUser === null && ($this->user_id != 0)) {
+            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aUser->addCoupons($this);
+             */
+        }
+
+        return $this->aUser;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -1678,9 +1835,13 @@ abstract class Coupon implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aUser) {
+            $this->aUser->removeCoupon($this);
+        }
         $this->coupon_id = null;
         $this->site_id = null;
         $this->axys_account_id = null;
+        $this->user_id = null;
         $this->coupon_code = null;
         $this->article_id = null;
         $this->stock_id = null;
@@ -1713,6 +1874,7 @@ abstract class Coupon implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
+        $this->aUser = null;
         return $this;
     }
 

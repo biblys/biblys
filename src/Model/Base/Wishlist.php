@@ -7,6 +7,8 @@ use \Exception;
 use \PDO;
 use Model\AxysAccount as ChildAxysAccount;
 use Model\AxysAccountQuery as ChildAxysAccountQuery;
+use Model\User as ChildUser;
+use Model\UserQuery as ChildUserQuery;
 use Model\WishlistQuery as ChildWishlistQuery;
 use Model\Map\WishlistTableMap;
 use Propel\Runtime\Propel;
@@ -80,6 +82,13 @@ abstract class Wishlist implements ActiveRecordInterface
     protected $axys_account_id;
 
     /**
+     * The value for the user_id field.
+     *
+     * @var        int|null
+     */
+    protected $user_id;
+
+    /**
      * The value for the wishlist_name field.
      *
      * @var        string|null
@@ -113,6 +122,11 @@ abstract class Wishlist implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $wishlist_updated;
+
+    /**
+     * @var        ChildUser
+     */
+    protected $aUser;
 
     /**
      * @var        ChildAxysAccount
@@ -374,6 +388,16 @@ abstract class Wishlist implements ActiveRecordInterface
     }
 
     /**
+     * Get the [user_id] column value.
+     *
+     * @return int|null
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+
+    /**
      * Get the [wishlist_name] column value.
      *
      * @return string|null
@@ -506,6 +530,30 @@ abstract class Wishlist implements ActiveRecordInterface
 
         if ($this->aAxysAccount !== null && $this->aAxysAccount->getId() !== $v) {
             $this->aAxysAccount = null;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [user_id] column.
+     *
+     * @param int|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setUserId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->user_id !== $v) {
+            $this->user_id = $v;
+            $this->modifiedColumns[WishlistTableMap::COL_USER_ID] = true;
+        }
+
+        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
+            $this->aUser = null;
         }
 
         return $this;
@@ -669,22 +717,25 @@ abstract class Wishlist implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : WishlistTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->axys_account_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : WishlistTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : WishlistTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->user_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : WishlistTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
             $this->wishlist_name = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : WishlistTableMap::translateFieldName('Current', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : WishlistTableMap::translateFieldName('Current', TableMap::TYPE_PHPNAME, $indexType)];
             $this->wishlist_current = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : WishlistTableMap::translateFieldName('Public', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : WishlistTableMap::translateFieldName('Public', TableMap::TYPE_PHPNAME, $indexType)];
             $this->wishlist_public = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : WishlistTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : WishlistTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->wishlist_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : WishlistTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : WishlistTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -697,7 +748,7 @@ abstract class Wishlist implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = WishlistTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = WishlistTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Wishlist'), 0, $e);
@@ -722,6 +773,9 @@ abstract class Wishlist implements ActiveRecordInterface
     {
         if ($this->aAxysAccount !== null && $this->axys_account_id !== $this->aAxysAccount->getId()) {
             $this->aAxysAccount = null;
+        }
+        if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
+            $this->aUser = null;
         }
     }
 
@@ -762,6 +816,7 @@ abstract class Wishlist implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aUser = null;
             $this->aAxysAccount = null;
         } // if (deep)
     }
@@ -884,6 +939,13 @@ abstract class Wishlist implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aUser !== null) {
+                if ($this->aUser->isModified() || $this->aUser->isNew()) {
+                    $affectedRows += $this->aUser->save($con);
+                }
+                $this->setUser($this->aUser);
+            }
+
             if ($this->aAxysAccount !== null) {
                 if ($this->aAxysAccount->isModified() || $this->aAxysAccount->isNew()) {
                     $affectedRows += $this->aAxysAccount->save($con);
@@ -934,6 +996,9 @@ abstract class Wishlist implements ActiveRecordInterface
         if ($this->isColumnModified(WishlistTableMap::COL_AXYS_ACCOUNT_ID)) {
             $modifiedColumns[':p' . $index++]  = 'axys_account_id';
         }
+        if ($this->isColumnModified(WishlistTableMap::COL_USER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'user_id';
+        }
         if ($this->isColumnModified(WishlistTableMap::COL_WISHLIST_NAME)) {
             $modifiedColumns[':p' . $index++]  = 'wishlist_name';
         }
@@ -966,6 +1031,10 @@ abstract class Wishlist implements ActiveRecordInterface
                         break;
                     case 'axys_account_id':
                         $stmt->bindValue($identifier, $this->axys_account_id, PDO::PARAM_INT);
+
+                        break;
+                    case 'user_id':
+                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
 
                         break;
                     case 'wishlist_name':
@@ -1057,18 +1126,21 @@ abstract class Wishlist implements ActiveRecordInterface
                 return $this->getAxysAccountId();
 
             case 2:
-                return $this->getName();
+                return $this->getUserId();
 
             case 3:
-                return $this->getCurrent();
+                return $this->getName();
 
             case 4:
-                return $this->getPublic();
+                return $this->getCurrent();
 
             case 5:
-                return $this->getCreatedAt();
+                return $this->getPublic();
 
             case 6:
+                return $this->getCreatedAt();
+
+            case 7:
                 return $this->getUpdatedAt();
 
             default:
@@ -1101,18 +1173,19 @@ abstract class Wishlist implements ActiveRecordInterface
         $result = [
             $keys[0] => $this->getId(),
             $keys[1] => $this->getAxysAccountId(),
-            $keys[2] => $this->getName(),
-            $keys[3] => $this->getCurrent(),
-            $keys[4] => $this->getPublic(),
-            $keys[5] => $this->getCreatedAt(),
-            $keys[6] => $this->getUpdatedAt(),
+            $keys[2] => $this->getUserId(),
+            $keys[3] => $this->getName(),
+            $keys[4] => $this->getCurrent(),
+            $keys[5] => $this->getPublic(),
+            $keys[6] => $this->getCreatedAt(),
+            $keys[7] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[5]] instanceof \DateTimeInterface) {
-            $result[$keys[5]] = $result[$keys[5]]->format('Y-m-d H:i:s.u');
-        }
-
         if ($result[$keys[6]] instanceof \DateTimeInterface) {
             $result[$keys[6]] = $result[$keys[6]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[7]] instanceof \DateTimeInterface) {
+            $result[$keys[7]] = $result[$keys[7]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1121,6 +1194,21 @@ abstract class Wishlist implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aUser) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'user';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'users';
+                        break;
+                    default:
+                        $key = 'User';
+                }
+
+                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aAxysAccount) {
 
                 switch ($keyType) {
@@ -1179,18 +1267,21 @@ abstract class Wishlist implements ActiveRecordInterface
                 $this->setAxysAccountId($value);
                 break;
             case 2:
-                $this->setName($value);
+                $this->setUserId($value);
                 break;
             case 3:
-                $this->setCurrent($value);
+                $this->setName($value);
                 break;
             case 4:
-                $this->setPublic($value);
+                $this->setCurrent($value);
                 break;
             case 5:
-                $this->setCreatedAt($value);
+                $this->setPublic($value);
                 break;
             case 6:
+                $this->setCreatedAt($value);
+                break;
+            case 7:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1226,19 +1317,22 @@ abstract class Wishlist implements ActiveRecordInterface
             $this->setAxysAccountId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setName($arr[$keys[2]]);
+            $this->setUserId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setCurrent($arr[$keys[3]]);
+            $this->setName($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setPublic($arr[$keys[4]]);
+            $this->setCurrent($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setCreatedAt($arr[$keys[5]]);
+            $this->setPublic($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setUpdatedAt($arr[$keys[6]]);
+            $this->setCreatedAt($arr[$keys[6]]);
+        }
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setUpdatedAt($arr[$keys[7]]);
         }
 
         return $this;
@@ -1288,6 +1382,9 @@ abstract class Wishlist implements ActiveRecordInterface
         }
         if ($this->isColumnModified(WishlistTableMap::COL_AXYS_ACCOUNT_ID)) {
             $criteria->add(WishlistTableMap::COL_AXYS_ACCOUNT_ID, $this->axys_account_id);
+        }
+        if ($this->isColumnModified(WishlistTableMap::COL_USER_ID)) {
+            $criteria->add(WishlistTableMap::COL_USER_ID, $this->user_id);
         }
         if ($this->isColumnModified(WishlistTableMap::COL_WISHLIST_NAME)) {
             $criteria->add(WishlistTableMap::COL_WISHLIST_NAME, $this->wishlist_name);
@@ -1393,6 +1490,7 @@ abstract class Wishlist implements ActiveRecordInterface
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
         $copyObj->setAxysAccountId($this->getAxysAccountId());
+        $copyObj->setUserId($this->getUserId());
         $copyObj->setName($this->getName());
         $copyObj->setCurrent($this->getCurrent());
         $copyObj->setPublic($this->getPublic());
@@ -1424,6 +1522,57 @@ abstract class Wishlist implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
+    }
+
+    /**
+     * Declares an association between this object and a ChildUser object.
+     *
+     * @param ChildUser|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setUser(ChildUser $v = null)
+    {
+        if ($v === null) {
+            $this->setUserId(NULL);
+        } else {
+            $this->setUserId($v->getId());
+        }
+
+        $this->aUser = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildUser object, it will not be re-added.
+        if ($v !== null) {
+            $v->addWishlist($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildUser object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildUser|null The associated ChildUser object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getUser(?ConnectionInterface $con = null)
+    {
+        if ($this->aUser === null && ($this->user_id != 0)) {
+            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aUser->addWishlists($this);
+             */
+        }
+
+        return $this->aUser;
     }
 
     /**
@@ -1486,11 +1635,15 @@ abstract class Wishlist implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aUser) {
+            $this->aUser->removeWishlist($this);
+        }
         if (null !== $this->aAxysAccount) {
             $this->aAxysAccount->removeWishlist($this);
         }
         $this->wishlist_id = null;
         $this->axys_account_id = null;
+        $this->user_id = null;
         $this->wishlist_name = null;
         $this->wishlist_current = null;
         $this->wishlist_public = null;
@@ -1519,6 +1672,7 @@ abstract class Wishlist implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
+        $this->aUser = null;
         $this->aAxysAccount = null;
         return $this;
     }

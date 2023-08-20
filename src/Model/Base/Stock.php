@@ -14,6 +14,8 @@ use Model\CartQuery as ChildCartQuery;
 use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
 use Model\StockQuery as ChildStockQuery;
+use Model\User as ChildUser;
+use Model\UserQuery as ChildUserQuery;
 use Model\Map\StockTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -112,6 +114,13 @@ abstract class Stock implements ActiveRecordInterface
      * @var        int|null
      */
     protected $axys_account_id;
+
+    /**
+     * The value for the user_id field.
+     *
+     * @var        int|null
+     */
+    protected $user_id;
 
     /**
      * The value for the customer_id field.
@@ -377,6 +386,11 @@ abstract class Stock implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $stock_updated;
+
+    /**
+     * @var        ChildUser
+     */
+    protected $aUser;
 
     /**
      * @var        ChildCart
@@ -708,6 +722,16 @@ abstract class Stock implements ActiveRecordInterface
     public function getAxysAccountId()
     {
         return $this->axys_account_id;
+    }
+
+    /**
+     * Get the [user_id] column value.
+     *
+     * @return int|null
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
     }
 
     /**
@@ -1377,6 +1401,30 @@ abstract class Stock implements ActiveRecordInterface
 
         if ($this->aAxysAccount !== null && $this->aAxysAccount->getId() !== $v) {
             $this->aAxysAccount = null;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [user_id] column.
+     *
+     * @param int|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setUserId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->user_id !== $v) {
+            $this->user_id = $v;
+            $this->modifiedColumns[StockTableMap::COL_USER_ID] = true;
+        }
+
+        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
+            $this->aUser = null;
         }
 
         return $this;
@@ -2244,142 +2292,145 @@ abstract class Stock implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : StockTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->axys_account_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : StockTableMap::translateFieldName('CustomerId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : StockTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->user_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : StockTableMap::translateFieldName('CustomerId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->customer_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : StockTableMap::translateFieldName('WishId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : StockTableMap::translateFieldName('WishId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->wish_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : StockTableMap::translateFieldName('CartId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : StockTableMap::translateFieldName('CartId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->cart_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : StockTableMap::translateFieldName('OrderId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : StockTableMap::translateFieldName('OrderId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : StockTableMap::translateFieldName('CouponId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : StockTableMap::translateFieldName('CouponId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->coupon_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : StockTableMap::translateFieldName('Shop', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : StockTableMap::translateFieldName('Shop', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_shop = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : StockTableMap::translateFieldName('Invoice', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : StockTableMap::translateFieldName('Invoice', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_invoice = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : StockTableMap::translateFieldName('Depot', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : StockTableMap::translateFieldName('Depot', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_depot = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : StockTableMap::translateFieldName('Stockage', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : StockTableMap::translateFieldName('Stockage', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_stockage = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : StockTableMap::translateFieldName('Condition', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : StockTableMap::translateFieldName('Condition', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_condition = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : StockTableMap::translateFieldName('ConditionDetails', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : StockTableMap::translateFieldName('ConditionDetails', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_condition_details = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : StockTableMap::translateFieldName('PurchasePrice', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 18 + $startcol : StockTableMap::translateFieldName('PurchasePrice', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_purchase_price = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 18 + $startcol : StockTableMap::translateFieldName('SellingPrice', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 19 + $startcol : StockTableMap::translateFieldName('SellingPrice', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_selling_price = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 19 + $startcol : StockTableMap::translateFieldName('SellingPrice2', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 20 + $startcol : StockTableMap::translateFieldName('SellingPrice2', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_selling_price2 = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 20 + $startcol : StockTableMap::translateFieldName('SellingPriceSaved', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 21 + $startcol : StockTableMap::translateFieldName('SellingPriceSaved', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_selling_price_saved = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 21 + $startcol : StockTableMap::translateFieldName('SellingPriceHt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 22 + $startcol : StockTableMap::translateFieldName('SellingPriceHt', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_selling_price_ht = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 22 + $startcol : StockTableMap::translateFieldName('SellingPriceTva', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 23 + $startcol : StockTableMap::translateFieldName('SellingPriceTva', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_selling_price_tva = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 23 + $startcol : StockTableMap::translateFieldName('TvaRate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 24 + $startcol : StockTableMap::translateFieldName('TvaRate', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_tva_rate = (null !== $col) ? (double) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 24 + $startcol : StockTableMap::translateFieldName('Weight', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 25 + $startcol : StockTableMap::translateFieldName('Weight', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_weight = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 25 + $startcol : StockTableMap::translateFieldName('PubYear', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 26 + $startcol : StockTableMap::translateFieldName('PubYear', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_pub_year = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 26 + $startcol : StockTableMap::translateFieldName('AllowPredownload', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 27 + $startcol : StockTableMap::translateFieldName('AllowPredownload', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_allow_predownload = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 27 + $startcol : StockTableMap::translateFieldName('PhotoVersion', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 28 + $startcol : StockTableMap::translateFieldName('PhotoVersion', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_photo_version = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 28 + $startcol : StockTableMap::translateFieldName('PurchaseDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 29 + $startcol : StockTableMap::translateFieldName('PurchaseDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->stock_purchase_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 29 + $startcol : StockTableMap::translateFieldName('OnsaleDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 30 + $startcol : StockTableMap::translateFieldName('OnsaleDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->stock_onsale_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 30 + $startcol : StockTableMap::translateFieldName('CartDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 31 + $startcol : StockTableMap::translateFieldName('CartDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->stock_cart_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 31 + $startcol : StockTableMap::translateFieldName('SellingDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 32 + $startcol : StockTableMap::translateFieldName('SellingDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->stock_selling_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 32 + $startcol : StockTableMap::translateFieldName('ReturnDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 33 + $startcol : StockTableMap::translateFieldName('ReturnDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->stock_return_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 33 + $startcol : StockTableMap::translateFieldName('LostDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 34 + $startcol : StockTableMap::translateFieldName('LostDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->stock_lost_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 34 + $startcol : StockTableMap::translateFieldName('MediaOk', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 35 + $startcol : StockTableMap::translateFieldName('MediaOk', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_media_ok = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 35 + $startcol : StockTableMap::translateFieldName('FileUpdated', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 36 + $startcol : StockTableMap::translateFieldName('FileUpdated', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_file_updated = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 36 + $startcol : StockTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 37 + $startcol : StockTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->stock_insert = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 37 + $startcol : StockTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 38 + $startcol : StockTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->stock_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 38 + $startcol : StockTableMap::translateFieldName('Dl', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 39 + $startcol : StockTableMap::translateFieldName('Dl', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_dl = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 39 + $startcol : StockTableMap::translateFieldName('LemoninkTransactionId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 40 + $startcol : StockTableMap::translateFieldName('LemoninkTransactionId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->lemonink_transaction_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 40 + $startcol : StockTableMap::translateFieldName('LemoninkTransactionToken', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 41 + $startcol : StockTableMap::translateFieldName('LemoninkTransactionToken', TableMap::TYPE_PHPNAME, $indexType)];
             $this->lemonink_transaction_token = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 41 + $startcol : StockTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 42 + $startcol : StockTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->stock_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 42 + $startcol : StockTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 43 + $startcol : StockTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -2392,7 +2443,7 @@ abstract class Stock implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 43; // 43 = StockTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 44; // 44 = StockTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Stock'), 0, $e);
@@ -2423,6 +2474,9 @@ abstract class Stock implements ActiveRecordInterface
         }
         if ($this->aAxysAccount !== null && $this->axys_account_id !== $this->aAxysAccount->getId()) {
             $this->aAxysAccount = null;
+        }
+        if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
+            $this->aUser = null;
         }
         if ($this->aCart !== null && $this->cart_id !== $this->aCart->getId()) {
             $this->aCart = null;
@@ -2466,6 +2520,7 @@ abstract class Stock implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aUser = null;
             $this->aCart = null;
             $this->aSite = null;
             $this->aArticle = null;
@@ -2591,6 +2646,13 @@ abstract class Stock implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aUser !== null) {
+                if ($this->aUser->isModified() || $this->aUser->isNew()) {
+                    $affectedRows += $this->aUser->save($con);
+                }
+                $this->setUser($this->aUser);
+            }
+
             if ($this->aCart !== null) {
                 if ($this->aCart->isModified() || $this->aCart->isNew()) {
                     $affectedRows += $this->aCart->save($con);
@@ -2673,6 +2735,9 @@ abstract class Stock implements ActiveRecordInterface
         }
         if ($this->isColumnModified(StockTableMap::COL_AXYS_ACCOUNT_ID)) {
             $modifiedColumns[':p' . $index++]  = 'axys_account_id';
+        }
+        if ($this->isColumnModified(StockTableMap::COL_USER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'user_id';
         }
         if ($this->isColumnModified(StockTableMap::COL_CUSTOMER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'customer_id';
@@ -2818,6 +2883,10 @@ abstract class Stock implements ActiveRecordInterface
                         break;
                     case 'axys_account_id':
                         $stmt->bindValue($identifier, $this->axys_account_id, PDO::PARAM_INT);
+
+                        break;
+                    case 'user_id':
+                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
 
                         break;
                     case 'customer_id':
@@ -3049,114 +3118,117 @@ abstract class Stock implements ActiveRecordInterface
                 return $this->getAxysAccountId();
 
             case 6:
-                return $this->getCustomerId();
+                return $this->getUserId();
 
             case 7:
-                return $this->getWishId();
+                return $this->getCustomerId();
 
             case 8:
-                return $this->getCartId();
+                return $this->getWishId();
 
             case 9:
-                return $this->getOrderId();
+                return $this->getCartId();
 
             case 10:
-                return $this->getCouponId();
+                return $this->getOrderId();
 
             case 11:
-                return $this->getShop();
+                return $this->getCouponId();
 
             case 12:
-                return $this->getInvoice();
+                return $this->getShop();
 
             case 13:
-                return $this->getDepot();
+                return $this->getInvoice();
 
             case 14:
-                return $this->getStockage();
+                return $this->getDepot();
 
             case 15:
-                return $this->getCondition();
+                return $this->getStockage();
 
             case 16:
-                return $this->getConditionDetails();
+                return $this->getCondition();
 
             case 17:
-                return $this->getPurchasePrice();
+                return $this->getConditionDetails();
 
             case 18:
-                return $this->getSellingPrice();
+                return $this->getPurchasePrice();
 
             case 19:
-                return $this->getSellingPrice2();
+                return $this->getSellingPrice();
 
             case 20:
-                return $this->getSellingPriceSaved();
+                return $this->getSellingPrice2();
 
             case 21:
-                return $this->getSellingPriceHt();
+                return $this->getSellingPriceSaved();
 
             case 22:
-                return $this->getSellingPriceTva();
+                return $this->getSellingPriceHt();
 
             case 23:
-                return $this->getTvaRate();
+                return $this->getSellingPriceTva();
 
             case 24:
-                return $this->getWeight();
+                return $this->getTvaRate();
 
             case 25:
-                return $this->getPubYear();
+                return $this->getWeight();
 
             case 26:
-                return $this->getAllowPredownload();
+                return $this->getPubYear();
 
             case 27:
-                return $this->getPhotoVersion();
+                return $this->getAllowPredownload();
 
             case 28:
-                return $this->getPurchaseDate();
+                return $this->getPhotoVersion();
 
             case 29:
-                return $this->getOnsaleDate();
+                return $this->getPurchaseDate();
 
             case 30:
-                return $this->getCartDate();
+                return $this->getOnsaleDate();
 
             case 31:
-                return $this->getSellingDate();
+                return $this->getCartDate();
 
             case 32:
-                return $this->getReturnDate();
+                return $this->getSellingDate();
 
             case 33:
-                return $this->getLostDate();
+                return $this->getReturnDate();
 
             case 34:
-                return $this->getMediaOk();
+                return $this->getLostDate();
 
             case 35:
-                return $this->getFileUpdated();
+                return $this->getMediaOk();
 
             case 36:
-                return $this->getInsert();
+                return $this->getFileUpdated();
 
             case 37:
-                return $this->getUpdate();
+                return $this->getInsert();
 
             case 38:
-                return $this->getDl();
+                return $this->getUpdate();
 
             case 39:
-                return $this->getLemoninkTransactionId();
+                return $this->getDl();
 
             case 40:
-                return $this->getLemoninkTransactionToken();
+                return $this->getLemoninkTransactionId();
 
             case 41:
-                return $this->getCreatedAt();
+                return $this->getLemoninkTransactionToken();
 
             case 42:
+                return $this->getCreatedAt();
+
+            case 43:
                 return $this->getUpdatedAt();
 
             default:
@@ -3193,48 +3265,45 @@ abstract class Stock implements ActiveRecordInterface
             $keys[3] => $this->getCampaignId(),
             $keys[4] => $this->getRewardId(),
             $keys[5] => $this->getAxysAccountId(),
-            $keys[6] => $this->getCustomerId(),
-            $keys[7] => $this->getWishId(),
-            $keys[8] => $this->getCartId(),
-            $keys[9] => $this->getOrderId(),
-            $keys[10] => $this->getCouponId(),
-            $keys[11] => $this->getShop(),
-            $keys[12] => $this->getInvoice(),
-            $keys[13] => $this->getDepot(),
-            $keys[14] => $this->getStockage(),
-            $keys[15] => $this->getCondition(),
-            $keys[16] => $this->getConditionDetails(),
-            $keys[17] => $this->getPurchasePrice(),
-            $keys[18] => $this->getSellingPrice(),
-            $keys[19] => $this->getSellingPrice2(),
-            $keys[20] => $this->getSellingPriceSaved(),
-            $keys[21] => $this->getSellingPriceHt(),
-            $keys[22] => $this->getSellingPriceTva(),
-            $keys[23] => $this->getTvaRate(),
-            $keys[24] => $this->getWeight(),
-            $keys[25] => $this->getPubYear(),
-            $keys[26] => $this->getAllowPredownload(),
-            $keys[27] => $this->getPhotoVersion(),
-            $keys[28] => $this->getPurchaseDate(),
-            $keys[29] => $this->getOnsaleDate(),
-            $keys[30] => $this->getCartDate(),
-            $keys[31] => $this->getSellingDate(),
-            $keys[32] => $this->getReturnDate(),
-            $keys[33] => $this->getLostDate(),
-            $keys[34] => $this->getMediaOk(),
-            $keys[35] => $this->getFileUpdated(),
-            $keys[36] => $this->getInsert(),
-            $keys[37] => $this->getUpdate(),
-            $keys[38] => $this->getDl(),
-            $keys[39] => $this->getLemoninkTransactionId(),
-            $keys[40] => $this->getLemoninkTransactionToken(),
-            $keys[41] => $this->getCreatedAt(),
-            $keys[42] => $this->getUpdatedAt(),
+            $keys[6] => $this->getUserId(),
+            $keys[7] => $this->getCustomerId(),
+            $keys[8] => $this->getWishId(),
+            $keys[9] => $this->getCartId(),
+            $keys[10] => $this->getOrderId(),
+            $keys[11] => $this->getCouponId(),
+            $keys[12] => $this->getShop(),
+            $keys[13] => $this->getInvoice(),
+            $keys[14] => $this->getDepot(),
+            $keys[15] => $this->getStockage(),
+            $keys[16] => $this->getCondition(),
+            $keys[17] => $this->getConditionDetails(),
+            $keys[18] => $this->getPurchasePrice(),
+            $keys[19] => $this->getSellingPrice(),
+            $keys[20] => $this->getSellingPrice2(),
+            $keys[21] => $this->getSellingPriceSaved(),
+            $keys[22] => $this->getSellingPriceHt(),
+            $keys[23] => $this->getSellingPriceTva(),
+            $keys[24] => $this->getTvaRate(),
+            $keys[25] => $this->getWeight(),
+            $keys[26] => $this->getPubYear(),
+            $keys[27] => $this->getAllowPredownload(),
+            $keys[28] => $this->getPhotoVersion(),
+            $keys[29] => $this->getPurchaseDate(),
+            $keys[30] => $this->getOnsaleDate(),
+            $keys[31] => $this->getCartDate(),
+            $keys[32] => $this->getSellingDate(),
+            $keys[33] => $this->getReturnDate(),
+            $keys[34] => $this->getLostDate(),
+            $keys[35] => $this->getMediaOk(),
+            $keys[36] => $this->getFileUpdated(),
+            $keys[37] => $this->getInsert(),
+            $keys[38] => $this->getUpdate(),
+            $keys[39] => $this->getDl(),
+            $keys[40] => $this->getLemoninkTransactionId(),
+            $keys[41] => $this->getLemoninkTransactionToken(),
+            $keys[42] => $this->getCreatedAt(),
+            $keys[43] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[28]] instanceof \DateTimeInterface) {
-            $result[$keys[28]] = $result[$keys[28]]->format('Y-m-d H:i:s.u');
-        }
-
         if ($result[$keys[29]] instanceof \DateTimeInterface) {
             $result[$keys[29]] = $result[$keys[29]]->format('Y-m-d H:i:s.u');
         }
@@ -3255,20 +3324,24 @@ abstract class Stock implements ActiveRecordInterface
             $result[$keys[33]] = $result[$keys[33]]->format('Y-m-d H:i:s.u');
         }
 
-        if ($result[$keys[36]] instanceof \DateTimeInterface) {
-            $result[$keys[36]] = $result[$keys[36]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[34]] instanceof \DateTimeInterface) {
+            $result[$keys[34]] = $result[$keys[34]]->format('Y-m-d H:i:s.u');
         }
 
         if ($result[$keys[37]] instanceof \DateTimeInterface) {
             $result[$keys[37]] = $result[$keys[37]]->format('Y-m-d H:i:s.u');
         }
 
-        if ($result[$keys[41]] instanceof \DateTimeInterface) {
-            $result[$keys[41]] = $result[$keys[41]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[38]] instanceof \DateTimeInterface) {
+            $result[$keys[38]] = $result[$keys[38]]->format('Y-m-d H:i:s.u');
         }
 
         if ($result[$keys[42]] instanceof \DateTimeInterface) {
             $result[$keys[42]] = $result[$keys[42]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[43]] instanceof \DateTimeInterface) {
+            $result[$keys[43]] = $result[$keys[43]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -3277,6 +3350,21 @@ abstract class Stock implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aUser) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'user';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'users';
+                        break;
+                    default:
+                        $key = 'User';
+                }
+
+                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aCart) {
 
                 switch ($keyType) {
@@ -3392,114 +3480,117 @@ abstract class Stock implements ActiveRecordInterface
                 $this->setAxysAccountId($value);
                 break;
             case 6:
-                $this->setCustomerId($value);
+                $this->setUserId($value);
                 break;
             case 7:
-                $this->setWishId($value);
+                $this->setCustomerId($value);
                 break;
             case 8:
-                $this->setCartId($value);
+                $this->setWishId($value);
                 break;
             case 9:
-                $this->setOrderId($value);
+                $this->setCartId($value);
                 break;
             case 10:
-                $this->setCouponId($value);
+                $this->setOrderId($value);
                 break;
             case 11:
-                $this->setShop($value);
+                $this->setCouponId($value);
                 break;
             case 12:
-                $this->setInvoice($value);
+                $this->setShop($value);
                 break;
             case 13:
-                $this->setDepot($value);
+                $this->setInvoice($value);
                 break;
             case 14:
-                $this->setStockage($value);
+                $this->setDepot($value);
                 break;
             case 15:
-                $this->setCondition($value);
+                $this->setStockage($value);
                 break;
             case 16:
-                $this->setConditionDetails($value);
+                $this->setCondition($value);
                 break;
             case 17:
-                $this->setPurchasePrice($value);
+                $this->setConditionDetails($value);
                 break;
             case 18:
-                $this->setSellingPrice($value);
+                $this->setPurchasePrice($value);
                 break;
             case 19:
-                $this->setSellingPrice2($value);
+                $this->setSellingPrice($value);
                 break;
             case 20:
-                $this->setSellingPriceSaved($value);
+                $this->setSellingPrice2($value);
                 break;
             case 21:
-                $this->setSellingPriceHt($value);
+                $this->setSellingPriceSaved($value);
                 break;
             case 22:
-                $this->setSellingPriceTva($value);
+                $this->setSellingPriceHt($value);
                 break;
             case 23:
-                $this->setTvaRate($value);
+                $this->setSellingPriceTva($value);
                 break;
             case 24:
-                $this->setWeight($value);
+                $this->setTvaRate($value);
                 break;
             case 25:
-                $this->setPubYear($value);
+                $this->setWeight($value);
                 break;
             case 26:
-                $this->setAllowPredownload($value);
+                $this->setPubYear($value);
                 break;
             case 27:
-                $this->setPhotoVersion($value);
+                $this->setAllowPredownload($value);
                 break;
             case 28:
-                $this->setPurchaseDate($value);
+                $this->setPhotoVersion($value);
                 break;
             case 29:
-                $this->setOnsaleDate($value);
+                $this->setPurchaseDate($value);
                 break;
             case 30:
-                $this->setCartDate($value);
+                $this->setOnsaleDate($value);
                 break;
             case 31:
-                $this->setSellingDate($value);
+                $this->setCartDate($value);
                 break;
             case 32:
-                $this->setReturnDate($value);
+                $this->setSellingDate($value);
                 break;
             case 33:
-                $this->setLostDate($value);
+                $this->setReturnDate($value);
                 break;
             case 34:
-                $this->setMediaOk($value);
+                $this->setLostDate($value);
                 break;
             case 35:
-                $this->setFileUpdated($value);
+                $this->setMediaOk($value);
                 break;
             case 36:
-                $this->setInsert($value);
+                $this->setFileUpdated($value);
                 break;
             case 37:
-                $this->setUpdate($value);
+                $this->setInsert($value);
                 break;
             case 38:
-                $this->setDl($value);
+                $this->setUpdate($value);
                 break;
             case 39:
-                $this->setLemoninkTransactionId($value);
+                $this->setDl($value);
                 break;
             case 40:
-                $this->setLemoninkTransactionToken($value);
+                $this->setLemoninkTransactionId($value);
                 break;
             case 41:
-                $this->setCreatedAt($value);
+                $this->setLemoninkTransactionToken($value);
                 break;
             case 42:
+                $this->setCreatedAt($value);
+                break;
+            case 43:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -3547,115 +3638,118 @@ abstract class Stock implements ActiveRecordInterface
             $this->setAxysAccountId($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setCustomerId($arr[$keys[6]]);
+            $this->setUserId($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setWishId($arr[$keys[7]]);
+            $this->setCustomerId($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setCartId($arr[$keys[8]]);
+            $this->setWishId($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setOrderId($arr[$keys[9]]);
+            $this->setCartId($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setCouponId($arr[$keys[10]]);
+            $this->setOrderId($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setShop($arr[$keys[11]]);
+            $this->setCouponId($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setInvoice($arr[$keys[12]]);
+            $this->setShop($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
-            $this->setDepot($arr[$keys[13]]);
+            $this->setInvoice($arr[$keys[13]]);
         }
         if (array_key_exists($keys[14], $arr)) {
-            $this->setStockage($arr[$keys[14]]);
+            $this->setDepot($arr[$keys[14]]);
         }
         if (array_key_exists($keys[15], $arr)) {
-            $this->setCondition($arr[$keys[15]]);
+            $this->setStockage($arr[$keys[15]]);
         }
         if (array_key_exists($keys[16], $arr)) {
-            $this->setConditionDetails($arr[$keys[16]]);
+            $this->setCondition($arr[$keys[16]]);
         }
         if (array_key_exists($keys[17], $arr)) {
-            $this->setPurchasePrice($arr[$keys[17]]);
+            $this->setConditionDetails($arr[$keys[17]]);
         }
         if (array_key_exists($keys[18], $arr)) {
-            $this->setSellingPrice($arr[$keys[18]]);
+            $this->setPurchasePrice($arr[$keys[18]]);
         }
         if (array_key_exists($keys[19], $arr)) {
-            $this->setSellingPrice2($arr[$keys[19]]);
+            $this->setSellingPrice($arr[$keys[19]]);
         }
         if (array_key_exists($keys[20], $arr)) {
-            $this->setSellingPriceSaved($arr[$keys[20]]);
+            $this->setSellingPrice2($arr[$keys[20]]);
         }
         if (array_key_exists($keys[21], $arr)) {
-            $this->setSellingPriceHt($arr[$keys[21]]);
+            $this->setSellingPriceSaved($arr[$keys[21]]);
         }
         if (array_key_exists($keys[22], $arr)) {
-            $this->setSellingPriceTva($arr[$keys[22]]);
+            $this->setSellingPriceHt($arr[$keys[22]]);
         }
         if (array_key_exists($keys[23], $arr)) {
-            $this->setTvaRate($arr[$keys[23]]);
+            $this->setSellingPriceTva($arr[$keys[23]]);
         }
         if (array_key_exists($keys[24], $arr)) {
-            $this->setWeight($arr[$keys[24]]);
+            $this->setTvaRate($arr[$keys[24]]);
         }
         if (array_key_exists($keys[25], $arr)) {
-            $this->setPubYear($arr[$keys[25]]);
+            $this->setWeight($arr[$keys[25]]);
         }
         if (array_key_exists($keys[26], $arr)) {
-            $this->setAllowPredownload($arr[$keys[26]]);
+            $this->setPubYear($arr[$keys[26]]);
         }
         if (array_key_exists($keys[27], $arr)) {
-            $this->setPhotoVersion($arr[$keys[27]]);
+            $this->setAllowPredownload($arr[$keys[27]]);
         }
         if (array_key_exists($keys[28], $arr)) {
-            $this->setPurchaseDate($arr[$keys[28]]);
+            $this->setPhotoVersion($arr[$keys[28]]);
         }
         if (array_key_exists($keys[29], $arr)) {
-            $this->setOnsaleDate($arr[$keys[29]]);
+            $this->setPurchaseDate($arr[$keys[29]]);
         }
         if (array_key_exists($keys[30], $arr)) {
-            $this->setCartDate($arr[$keys[30]]);
+            $this->setOnsaleDate($arr[$keys[30]]);
         }
         if (array_key_exists($keys[31], $arr)) {
-            $this->setSellingDate($arr[$keys[31]]);
+            $this->setCartDate($arr[$keys[31]]);
         }
         if (array_key_exists($keys[32], $arr)) {
-            $this->setReturnDate($arr[$keys[32]]);
+            $this->setSellingDate($arr[$keys[32]]);
         }
         if (array_key_exists($keys[33], $arr)) {
-            $this->setLostDate($arr[$keys[33]]);
+            $this->setReturnDate($arr[$keys[33]]);
         }
         if (array_key_exists($keys[34], $arr)) {
-            $this->setMediaOk($arr[$keys[34]]);
+            $this->setLostDate($arr[$keys[34]]);
         }
         if (array_key_exists($keys[35], $arr)) {
-            $this->setFileUpdated($arr[$keys[35]]);
+            $this->setMediaOk($arr[$keys[35]]);
         }
         if (array_key_exists($keys[36], $arr)) {
-            $this->setInsert($arr[$keys[36]]);
+            $this->setFileUpdated($arr[$keys[36]]);
         }
         if (array_key_exists($keys[37], $arr)) {
-            $this->setUpdate($arr[$keys[37]]);
+            $this->setInsert($arr[$keys[37]]);
         }
         if (array_key_exists($keys[38], $arr)) {
-            $this->setDl($arr[$keys[38]]);
+            $this->setUpdate($arr[$keys[38]]);
         }
         if (array_key_exists($keys[39], $arr)) {
-            $this->setLemoninkTransactionId($arr[$keys[39]]);
+            $this->setDl($arr[$keys[39]]);
         }
         if (array_key_exists($keys[40], $arr)) {
-            $this->setLemoninkTransactionToken($arr[$keys[40]]);
+            $this->setLemoninkTransactionId($arr[$keys[40]]);
         }
         if (array_key_exists($keys[41], $arr)) {
-            $this->setCreatedAt($arr[$keys[41]]);
+            $this->setLemoninkTransactionToken($arr[$keys[41]]);
         }
         if (array_key_exists($keys[42], $arr)) {
-            $this->setUpdatedAt($arr[$keys[42]]);
+            $this->setCreatedAt($arr[$keys[42]]);
+        }
+        if (array_key_exists($keys[43], $arr)) {
+            $this->setUpdatedAt($arr[$keys[43]]);
         }
 
         return $this;
@@ -3717,6 +3811,9 @@ abstract class Stock implements ActiveRecordInterface
         }
         if ($this->isColumnModified(StockTableMap::COL_AXYS_ACCOUNT_ID)) {
             $criteria->add(StockTableMap::COL_AXYS_ACCOUNT_ID, $this->axys_account_id);
+        }
+        if ($this->isColumnModified(StockTableMap::COL_USER_ID)) {
+            $criteria->add(StockTableMap::COL_USER_ID, $this->user_id);
         }
         if ($this->isColumnModified(StockTableMap::COL_CUSTOMER_ID)) {
             $criteria->add(StockTableMap::COL_CUSTOMER_ID, $this->customer_id);
@@ -3922,6 +4019,7 @@ abstract class Stock implements ActiveRecordInterface
         $copyObj->setCampaignId($this->getCampaignId());
         $copyObj->setRewardId($this->getRewardId());
         $copyObj->setAxysAccountId($this->getAxysAccountId());
+        $copyObj->setUserId($this->getUserId());
         $copyObj->setCustomerId($this->getCustomerId());
         $copyObj->setWishId($this->getWishId());
         $copyObj->setCartId($this->getCartId());
@@ -3985,6 +4083,57 @@ abstract class Stock implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
+    }
+
+    /**
+     * Declares an association between this object and a ChildUser object.
+     *
+     * @param ChildUser|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setUser(ChildUser $v = null)
+    {
+        if ($v === null) {
+            $this->setUserId(NULL);
+        } else {
+            $this->setUserId($v->getId());
+        }
+
+        $this->aUser = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildUser object, it will not be re-added.
+        if ($v !== null) {
+            $v->addStock($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildUser object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildUser|null The associated ChildUser object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getUser(?ConnectionInterface $con = null)
+    {
+        if ($this->aUser === null && ($this->user_id != 0)) {
+            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aUser->addStocks($this);
+             */
+        }
+
+        return $this->aUser;
     }
 
     /**
@@ -4200,6 +4349,9 @@ abstract class Stock implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aUser) {
+            $this->aUser->removeStock($this);
+        }
         if (null !== $this->aCart) {
             $this->aCart->removeStock($this);
         }
@@ -4218,6 +4370,7 @@ abstract class Stock implements ActiveRecordInterface
         $this->campaign_id = null;
         $this->reward_id = null;
         $this->axys_account_id = null;
+        $this->user_id = null;
         $this->customer_id = null;
         $this->wish_id = null;
         $this->cart_id = null;
@@ -4279,6 +4432,7 @@ abstract class Stock implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
+        $this->aUser = null;
         $this->aCart = null;
         $this->aSite = null;
         $this->aArticle = null;

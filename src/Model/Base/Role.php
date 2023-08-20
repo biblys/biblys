@@ -10,6 +10,8 @@ use Model\ArticleQuery as ChildArticleQuery;
 use Model\People as ChildPeople;
 use Model\PeopleQuery as ChildPeopleQuery;
 use Model\RoleQuery as ChildRoleQuery;
+use Model\User as ChildUser;
+use Model\UserQuery as ChildUserQuery;
 use Model\Map\RoleTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -117,6 +119,13 @@ abstract class Role implements ActiveRecordInterface
     protected $axys_account_id;
 
     /**
+     * The value for the user_id field.
+     *
+     * @var        int|null
+     */
+    protected $user_id;
+
+    /**
      * The value for the role_hide field.
      *
      * @var        boolean|null
@@ -150,6 +159,11 @@ abstract class Role implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $role_updated;
+
+    /**
+     * @var        ChildUser
+     */
+    protected $aUser;
 
     /**
      * @var        ChildArticle
@@ -466,6 +480,16 @@ abstract class Role implements ActiveRecordInterface
     }
 
     /**
+     * Get the [user_id] column value.
+     *
+     * @return int|null
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+
+    /**
      * Get the [role_hide] column value.
      *
      * @return boolean|null
@@ -710,6 +734,30 @@ abstract class Role implements ActiveRecordInterface
     }
 
     /**
+     * Set the value of [user_id] column.
+     *
+     * @param int|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setUserId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->user_id !== $v) {
+            $this->user_id = $v;
+            $this->modifiedColumns[RoleTableMap::COL_USER_ID] = true;
+        }
+
+        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
+            $this->aUser = null;
+        }
+
+        return $this;
+    }
+
+    /**
      * Sets the value of the [role_hide] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
@@ -874,25 +922,28 @@ abstract class Role implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : RoleTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->axys_account_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : RoleTableMap::translateFieldName('Hide', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : RoleTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->user_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : RoleTableMap::translateFieldName('Hide', TableMap::TYPE_PHPNAME, $indexType)];
             $this->role_hide = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : RoleTableMap::translateFieldName('Presence', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : RoleTableMap::translateFieldName('Presence', TableMap::TYPE_PHPNAME, $indexType)];
             $this->role_presence = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : RoleTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : RoleTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->role_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : RoleTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : RoleTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->role_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : RoleTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : RoleTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -905,7 +956,7 @@ abstract class Role implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 12; // 12 = RoleTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 13; // 13 = RoleTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Role'), 0, $e);
@@ -933,6 +984,9 @@ abstract class Role implements ActiveRecordInterface
         }
         if ($this->aPeople !== null && $this->people_id !== $this->aPeople->getId()) {
             $this->aPeople = null;
+        }
+        if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
+            $this->aUser = null;
         }
     }
 
@@ -973,6 +1027,7 @@ abstract class Role implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aUser = null;
             $this->aArticle = null;
             $this->aPeople = null;
         } // if (deep)
@@ -1096,6 +1151,13 @@ abstract class Role implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aUser !== null) {
+                if ($this->aUser->isModified() || $this->aUser->isNew()) {
+                    $affectedRows += $this->aUser->save($con);
+                }
+                $this->setUser($this->aUser);
+            }
+
             if ($this->aArticle !== null) {
                 if ($this->aArticle->isModified() || $this->aArticle->isNew()) {
                     $affectedRows += $this->aArticle->save($con);
@@ -1168,6 +1230,9 @@ abstract class Role implements ActiveRecordInterface
         if ($this->isColumnModified(RoleTableMap::COL_AXYS_ACCOUNT_ID)) {
             $modifiedColumns[':p' . $index++]  = 'axys_account_id';
         }
+        if ($this->isColumnModified(RoleTableMap::COL_USER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'user_id';
+        }
         if ($this->isColumnModified(RoleTableMap::COL_ROLE_HIDE)) {
             $modifiedColumns[':p' . $index++]  = 'role_hide';
         }
@@ -1220,6 +1285,10 @@ abstract class Role implements ActiveRecordInterface
                         break;
                     case 'axys_account_id':
                         $stmt->bindValue($identifier, $this->axys_account_id, PDO::PARAM_INT);
+
+                        break;
+                    case 'user_id':
+                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
 
                         break;
                     case 'role_hide':
@@ -1326,18 +1395,21 @@ abstract class Role implements ActiveRecordInterface
                 return $this->getAxysAccountId();
 
             case 7:
-                return $this->getHide();
+                return $this->getUserId();
 
             case 8:
-                return $this->getPresence();
+                return $this->getHide();
 
             case 9:
-                return $this->getDate();
+                return $this->getPresence();
 
             case 10:
-                return $this->getCreatedAt();
+                return $this->getDate();
 
             case 11:
+                return $this->getCreatedAt();
+
+            case 12:
                 return $this->getUpdatedAt();
 
             default:
@@ -1375,16 +1447,13 @@ abstract class Role implements ActiveRecordInterface
             $keys[4] => $this->getPeopleId(),
             $keys[5] => $this->getJobId(),
             $keys[6] => $this->getAxysAccountId(),
-            $keys[7] => $this->getHide(),
-            $keys[8] => $this->getPresence(),
-            $keys[9] => $this->getDate(),
-            $keys[10] => $this->getCreatedAt(),
-            $keys[11] => $this->getUpdatedAt(),
+            $keys[7] => $this->getUserId(),
+            $keys[8] => $this->getHide(),
+            $keys[9] => $this->getPresence(),
+            $keys[10] => $this->getDate(),
+            $keys[11] => $this->getCreatedAt(),
+            $keys[12] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[9]] instanceof \DateTimeInterface) {
-            $result[$keys[9]] = $result[$keys[9]]->format('Y-m-d H:i:s.u');
-        }
-
         if ($result[$keys[10]] instanceof \DateTimeInterface) {
             $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
         }
@@ -1393,12 +1462,31 @@ abstract class Role implements ActiveRecordInterface
             $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
         }
 
+        if ($result[$keys[12]] instanceof \DateTimeInterface) {
+            $result[$keys[12]] = $result[$keys[12]]->format('Y-m-d H:i:s.u');
+        }
+
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aUser) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'user';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'users';
+                        break;
+                    default:
+                        $key = 'User';
+                }
+
+                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aArticle) {
 
                 switch ($keyType) {
@@ -1487,18 +1575,21 @@ abstract class Role implements ActiveRecordInterface
                 $this->setAxysAccountId($value);
                 break;
             case 7:
-                $this->setHide($value);
+                $this->setUserId($value);
                 break;
             case 8:
-                $this->setPresence($value);
+                $this->setHide($value);
                 break;
             case 9:
-                $this->setDate($value);
+                $this->setPresence($value);
                 break;
             case 10:
-                $this->setCreatedAt($value);
+                $this->setDate($value);
                 break;
             case 11:
+                $this->setCreatedAt($value);
+                break;
+            case 12:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1549,19 +1640,22 @@ abstract class Role implements ActiveRecordInterface
             $this->setAxysAccountId($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setHide($arr[$keys[7]]);
+            $this->setUserId($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setPresence($arr[$keys[8]]);
+            $this->setHide($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setDate($arr[$keys[9]]);
+            $this->setPresence($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setCreatedAt($arr[$keys[10]]);
+            $this->setDate($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setUpdatedAt($arr[$keys[11]]);
+            $this->setCreatedAt($arr[$keys[11]]);
+        }
+        if (array_key_exists($keys[12], $arr)) {
+            $this->setUpdatedAt($arr[$keys[12]]);
         }
 
         return $this;
@@ -1626,6 +1720,9 @@ abstract class Role implements ActiveRecordInterface
         }
         if ($this->isColumnModified(RoleTableMap::COL_AXYS_ACCOUNT_ID)) {
             $criteria->add(RoleTableMap::COL_AXYS_ACCOUNT_ID, $this->axys_account_id);
+        }
+        if ($this->isColumnModified(RoleTableMap::COL_USER_ID)) {
+            $criteria->add(RoleTableMap::COL_USER_ID, $this->user_id);
         }
         if ($this->isColumnModified(RoleTableMap::COL_ROLE_HIDE)) {
             $criteria->add(RoleTableMap::COL_ROLE_HIDE, $this->role_hide);
@@ -1736,6 +1833,7 @@ abstract class Role implements ActiveRecordInterface
         $copyObj->setPeopleId($this->getPeopleId());
         $copyObj->setJobId($this->getJobId());
         $copyObj->setAxysAccountId($this->getAxysAccountId());
+        $copyObj->setUserId($this->getUserId());
         $copyObj->setHide($this->getHide());
         $copyObj->setPresence($this->getPresence());
         $copyObj->setDate($this->getDate());
@@ -1767,6 +1865,57 @@ abstract class Role implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
+    }
+
+    /**
+     * Declares an association between this object and a ChildUser object.
+     *
+     * @param ChildUser|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setUser(ChildUser $v = null)
+    {
+        if ($v === null) {
+            $this->setUserId(NULL);
+        } else {
+            $this->setUserId($v->getId());
+        }
+
+        $this->aUser = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildUser object, it will not be re-added.
+        if ($v !== null) {
+            $v->addRole($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildUser object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildUser|null The associated ChildUser object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getUser(?ConnectionInterface $con = null)
+    {
+        if ($this->aUser === null && ($this->user_id != 0)) {
+            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aUser->addRoles($this);
+             */
+        }
+
+        return $this->aUser;
     }
 
     /**
@@ -1880,6 +2029,9 @@ abstract class Role implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aUser) {
+            $this->aUser->removeRole($this);
+        }
         if (null !== $this->aArticle) {
             $this->aArticle->removeRole($this);
         }
@@ -1893,6 +2045,7 @@ abstract class Role implements ActiveRecordInterface
         $this->people_id = null;
         $this->job_id = null;
         $this->axys_account_id = null;
+        $this->user_id = null;
         $this->role_hide = null;
         $this->role_presence = null;
         $this->role_date = null;
@@ -1921,6 +2074,7 @@ abstract class Role implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
+        $this->aUser = null;
         $this->aArticle = null;
         $this->aPeople = null;
         return $this;

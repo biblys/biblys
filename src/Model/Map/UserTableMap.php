@@ -2,8 +2,8 @@
 
 namespace Model\Map;
 
-use Model\Vote;
-use Model\VoteQuery;
+use Model\User;
+use Model\UserQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'votes' table.
+ * This class defines the structure of the 'users' table.
  *
  *
  *
@@ -25,7 +25,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
  */
-class VoteTableMap extends TableMap
+class UserTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -33,7 +33,7 @@ class VoteTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    public const CLASS_NAME = 'Model.Map.VoteTableMap';
+    public const CLASS_NAME = 'Model.Map.UserTableMap';
 
     /**
      * The default database name for this class
@@ -43,22 +43,22 @@ class VoteTableMap extends TableMap
     /**
      * The table name for this class
      */
-    public const TABLE_NAME = 'votes';
+    public const TABLE_NAME = 'users';
 
     /**
      * The PHP name of this class (PascalCase)
      */
-    public const TABLE_PHP_NAME = 'Vote';
+    public const TABLE_PHP_NAME = 'User';
 
     /**
      * The related Propel class for this table
      */
-    public const OM_CLASS = '\\Model\\Vote';
+    public const OM_CLASS = '\\Model\\User';
 
     /**
      * A class that can be returned by this tableMap
      */
-    public const CLASS_DEFAULT = 'Model.Vote';
+    public const CLASS_DEFAULT = 'Model.User';
 
     /**
      * The total number of columns
@@ -76,34 +76,34 @@ class VoteTableMap extends TableMap
     public const NUM_HYDRATE_COLUMNS = 6;
 
     /**
-     * the column name for the vote_id field
+     * the column name for the id field
      */
-    public const COL_VOTE_ID = 'votes.vote_id';
+    public const COL_ID = 'users.id';
 
     /**
-     * the column name for the axys_account_id field
+     * the column name for the site_id field
      */
-    public const COL_AXYS_ACCOUNT_ID = 'votes.axys_account_id';
+    public const COL_SITE_ID = 'users.site_id';
 
     /**
-     * the column name for the user_id field
+     * the column name for the email field
      */
-    public const COL_USER_ID = 'votes.user_id';
+    public const COL_EMAIL = 'users.email';
 
     /**
-     * the column name for the vote_F field
+     * the column name for the lastLoggedAt field
      */
-    public const COL_VOTE_F = 'votes.vote_F';
+    public const COL_LASTLOGGEDAT = 'users.lastLoggedAt';
 
     /**
-     * the column name for the vote_E field
+     * the column name for the created_at field
      */
-    public const COL_VOTE_E = 'votes.vote_E';
+    public const COL_CREATED_AT = 'users.created_at';
 
     /**
-     * the column name for the vote_date field
+     * the column name for the updated_at field
      */
-    public const COL_VOTE_DATE = 'votes.vote_date';
+    public const COL_UPDATED_AT = 'users.updated_at';
 
     /**
      * The default string format for model objects of the related table
@@ -119,10 +119,10 @@ class VoteTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'AxysAccountId', 'UserId', 'F', 'E', 'Date', ],
-        self::TYPE_CAMELNAME     => ['id', 'axysAccountId', 'userId', 'f', 'e', 'date', ],
-        self::TYPE_COLNAME       => [VoteTableMap::COL_VOTE_ID, VoteTableMap::COL_AXYS_ACCOUNT_ID, VoteTableMap::COL_USER_ID, VoteTableMap::COL_VOTE_F, VoteTableMap::COL_VOTE_E, VoteTableMap::COL_VOTE_DATE, ],
-        self::TYPE_FIELDNAME     => ['vote_id', 'axys_account_id', 'user_id', 'vote_F', 'vote_E', 'vote_date', ],
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'Email', 'LastLoggedAt', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'email', 'lastLoggedAt', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [UserTableMap::COL_ID, UserTableMap::COL_SITE_ID, UserTableMap::COL_EMAIL, UserTableMap::COL_LASTLOGGEDAT, UserTableMap::COL_CREATED_AT, UserTableMap::COL_UPDATED_AT, ],
+        self::TYPE_FIELDNAME     => ['id', 'site_id', 'email', 'lastLoggedAt', 'created_at', 'updated_at', ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, ]
     ];
 
@@ -135,10 +135,10 @@ class VoteTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'AxysAccountId' => 1, 'UserId' => 2, 'F' => 3, 'E' => 4, 'Date' => 5, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'axysAccountId' => 1, 'userId' => 2, 'f' => 3, 'e' => 4, 'date' => 5, ],
-        self::TYPE_COLNAME       => [VoteTableMap::COL_VOTE_ID => 0, VoteTableMap::COL_AXYS_ACCOUNT_ID => 1, VoteTableMap::COL_USER_ID => 2, VoteTableMap::COL_VOTE_F => 3, VoteTableMap::COL_VOTE_E => 4, VoteTableMap::COL_VOTE_DATE => 5, ],
-        self::TYPE_FIELDNAME     => ['vote_id' => 0, 'axys_account_id' => 1, 'user_id' => 2, 'vote_F' => 3, 'vote_E' => 4, 'vote_date' => 5, ],
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'Email' => 2, 'LastLoggedAt' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'email' => 2, 'lastLoggedAt' => 3, 'createdAt' => 4, 'updatedAt' => 5, ],
+        self::TYPE_COLNAME       => [UserTableMap::COL_ID => 0, UserTableMap::COL_SITE_ID => 1, UserTableMap::COL_EMAIL => 2, UserTableMap::COL_LASTLOGGEDAT => 3, UserTableMap::COL_CREATED_AT => 4, UserTableMap::COL_UPDATED_AT => 5, ],
+        self::TYPE_FIELDNAME     => ['id' => 0, 'site_id' => 1, 'email' => 2, 'lastLoggedAt' => 3, 'created_at' => 4, 'updated_at' => 5, ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, ]
     ];
 
@@ -148,54 +148,51 @@ class VoteTableMap extends TableMap
      * @var array<string>
      */
     protected $normalizedColumnNameMap = [
-        'Id' => 'VOTE_ID',
-        'Vote.Id' => 'VOTE_ID',
-        'id' => 'VOTE_ID',
-        'vote.id' => 'VOTE_ID',
-        'VoteTableMap::COL_VOTE_ID' => 'VOTE_ID',
-        'COL_VOTE_ID' => 'VOTE_ID',
-        'vote_id' => 'VOTE_ID',
-        'votes.vote_id' => 'VOTE_ID',
-        'AxysAccountId' => 'AXYS_ACCOUNT_ID',
-        'Vote.AxysAccountId' => 'AXYS_ACCOUNT_ID',
-        'axysAccountId' => 'AXYS_ACCOUNT_ID',
-        'vote.axysAccountId' => 'AXYS_ACCOUNT_ID',
-        'VoteTableMap::COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
-        'COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
-        'axys_account_id' => 'AXYS_ACCOUNT_ID',
-        'votes.axys_account_id' => 'AXYS_ACCOUNT_ID',
-        'UserId' => 'USER_ID',
-        'Vote.UserId' => 'USER_ID',
-        'userId' => 'USER_ID',
-        'vote.userId' => 'USER_ID',
-        'VoteTableMap::COL_USER_ID' => 'USER_ID',
-        'COL_USER_ID' => 'USER_ID',
-        'user_id' => 'USER_ID',
-        'votes.user_id' => 'USER_ID',
-        'F' => 'VOTE_F',
-        'Vote.F' => 'VOTE_F',
-        'f' => 'VOTE_F',
-        'vote.f' => 'VOTE_F',
-        'VoteTableMap::COL_VOTE_F' => 'VOTE_F',
-        'COL_VOTE_F' => 'VOTE_F',
-        'vote_F' => 'VOTE_F',
-        'votes.vote_F' => 'VOTE_F',
-        'E' => 'VOTE_E',
-        'Vote.E' => 'VOTE_E',
-        'e' => 'VOTE_E',
-        'vote.e' => 'VOTE_E',
-        'VoteTableMap::COL_VOTE_E' => 'VOTE_E',
-        'COL_VOTE_E' => 'VOTE_E',
-        'vote_E' => 'VOTE_E',
-        'votes.vote_E' => 'VOTE_E',
-        'Date' => 'VOTE_DATE',
-        'Vote.Date' => 'VOTE_DATE',
-        'date' => 'VOTE_DATE',
-        'vote.date' => 'VOTE_DATE',
-        'VoteTableMap::COL_VOTE_DATE' => 'VOTE_DATE',
-        'COL_VOTE_DATE' => 'VOTE_DATE',
-        'vote_date' => 'VOTE_DATE',
-        'votes.vote_date' => 'VOTE_DATE',
+        'Id' => 'ID',
+        'User.Id' => 'ID',
+        'id' => 'ID',
+        'user.id' => 'ID',
+        'UserTableMap::COL_ID' => 'ID',
+        'COL_ID' => 'ID',
+        'users.id' => 'ID',
+        'SiteId' => 'SITE_ID',
+        'User.SiteId' => 'SITE_ID',
+        'siteId' => 'SITE_ID',
+        'user.siteId' => 'SITE_ID',
+        'UserTableMap::COL_SITE_ID' => 'SITE_ID',
+        'COL_SITE_ID' => 'SITE_ID',
+        'site_id' => 'SITE_ID',
+        'users.site_id' => 'SITE_ID',
+        'Email' => 'EMAIL',
+        'User.Email' => 'EMAIL',
+        'email' => 'EMAIL',
+        'user.email' => 'EMAIL',
+        'UserTableMap::COL_EMAIL' => 'EMAIL',
+        'COL_EMAIL' => 'EMAIL',
+        'users.email' => 'EMAIL',
+        'LastLoggedAt' => 'LASTLOGGEDAT',
+        'User.LastLoggedAt' => 'LASTLOGGEDAT',
+        'lastLoggedAt' => 'LASTLOGGEDAT',
+        'user.lastLoggedAt' => 'LASTLOGGEDAT',
+        'UserTableMap::COL_LASTLOGGEDAT' => 'LASTLOGGEDAT',
+        'COL_LASTLOGGEDAT' => 'LASTLOGGEDAT',
+        'users.lastLoggedAt' => 'LASTLOGGEDAT',
+        'CreatedAt' => 'CREATED_AT',
+        'User.CreatedAt' => 'CREATED_AT',
+        'createdAt' => 'CREATED_AT',
+        'user.createdAt' => 'CREATED_AT',
+        'UserTableMap::COL_CREATED_AT' => 'CREATED_AT',
+        'COL_CREATED_AT' => 'CREATED_AT',
+        'created_at' => 'CREATED_AT',
+        'users.created_at' => 'CREATED_AT',
+        'UpdatedAt' => 'UPDATED_AT',
+        'User.UpdatedAt' => 'UPDATED_AT',
+        'updatedAt' => 'UPDATED_AT',
+        'user.updatedAt' => 'UPDATED_AT',
+        'UserTableMap::COL_UPDATED_AT' => 'UPDATED_AT',
+        'COL_UPDATED_AT' => 'UPDATED_AT',
+        'updated_at' => 'UPDATED_AT',
+        'users.updated_at' => 'UPDATED_AT',
     ];
 
     /**
@@ -208,19 +205,19 @@ class VoteTableMap extends TableMap
     public function initialize(): void
     {
         // attributes
-        $this->setName('votes');
-        $this->setPhpName('Vote');
+        $this->setName('users');
+        $this->setPhpName('User');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\Model\\Vote');
+        $this->setClassName('\\Model\\User');
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('vote_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
-        $this->addColumn('vote_F', 'F', 'INTEGER', false, 10, null);
-        $this->addColumn('vote_E', 'E', 'INTEGER', false, 10, null);
-        $this->addColumn('vote_date', 'Date', 'TIMESTAMP', false, null, null);
+        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, 10, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', true, 10, null);
+        $this->addColumn('email', 'Email', 'VARCHAR', false, 256, null);
+        $this->addColumn('lastLoggedAt', 'LastLoggedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     }
 
     /**
@@ -230,13 +227,173 @@ class VoteTableMap extends TableMap
      */
     public function buildRelations(): void
     {
-        $this->addRelation('User', '\\Model\\User', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, null, false);
+        $this->addRelation('Alert', '\\Model\\Alert', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':user_id',
     1 => ':id',
   ),
-), null, null, null, false);
+), null, null, 'Alerts', false);
+        $this->addRelation('Cart', '\\Model\\Cart', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'Carts', false);
+        $this->addRelation('Coupon', '\\Model\\Coupon', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'Coupons', false);
+        $this->addRelation('Customer', '\\Model\\Customer', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'Customers', false);
+        $this->addRelation('Download', '\\Model\\Download', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'Downloads', false);
+        $this->addRelation('File', '\\Model\\File', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'Files', false);
+        $this->addRelation('Link', '\\Model\\Link', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'Links', false);
+        $this->addRelation('StockItemList', '\\Model\\StockItemList', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'StockItemLists', false);
+        $this->addRelation('Option', '\\Model\\Option', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'Options', false);
+        $this->addRelation('Order', '\\Model\\Order', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'Orders', false);
+        $this->addRelation('Permission', '\\Model\\Permission', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'Permissions', false);
+        $this->addRelation('Post', '\\Model\\Post', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'Posts', false);
+        $this->addRelation('Right', '\\Model\\Right', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'Rights', false);
+        $this->addRelation('Role', '\\Model\\Role', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'Roles', false);
+        $this->addRelation('Session', '\\Model\\Session', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'Sessions', false);
+        $this->addRelation('Stock', '\\Model\\Stock', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'Stocks', false);
+        $this->addRelation('Subscription', '\\Model\\Subscription', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'Subscriptions', false);
+        $this->addRelation('AuthenticationMethod', '\\Model\\AuthenticationMethod', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'AuthenticationMethods', false);
+        $this->addRelation('Vote', '\\Model\\Vote', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'Votes', false);
+        $this->addRelation('Wish', '\\Model\\Wish', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'Wishes', false);
+        $this->addRelation('Wishlist', '\\Model\\Wishlist', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'Wishlists', false);
+    }
+
+    /**
+     *
+     * Gets the list of behaviors registered for this table
+     *
+     * @return array<string, array> Associative array (name => parameters) of behaviors
+     */
+    public function getBehaviors(): array
+    {
+        return [
+            'timestampable' => ['create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
+        ];
     }
 
     /**
@@ -296,7 +453,7 @@ class VoteTableMap extends TableMap
      */
     public static function getOMClass(bool $withPrefix = true): string
     {
-        return $withPrefix ? VoteTableMap::CLASS_DEFAULT : VoteTableMap::OM_CLASS;
+        return $withPrefix ? UserTableMap::CLASS_DEFAULT : UserTableMap::OM_CLASS;
     }
 
     /**
@@ -310,22 +467,22 @@ class VoteTableMap extends TableMap
      *
      * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array (Vote object, last column rank)
+     * @return array (User object, last column rank)
      */
     public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
-        $key = VoteTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = VoteTableMap::getInstanceFromPool($key))) {
+        $key = UserTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = UserTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + VoteTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + UserTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = VoteTableMap::OM_CLASS;
-            /** @var Vote $obj */
+            $cls = UserTableMap::OM_CLASS;
+            /** @var User $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            VoteTableMap::addInstanceToPool($obj, $key);
+            UserTableMap::addInstanceToPool($obj, $key);
         }
 
         return [$obj, $col];
@@ -348,18 +505,18 @@ class VoteTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = VoteTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = VoteTableMap::getInstanceFromPool($key))) {
+            $key = UserTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = UserTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Vote $obj */
+                /** @var User $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                VoteTableMap::addInstanceToPool($obj, $key);
+                UserTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -381,19 +538,19 @@ class VoteTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(VoteTableMap::COL_VOTE_ID);
-            $criteria->addSelectColumn(VoteTableMap::COL_AXYS_ACCOUNT_ID);
-            $criteria->addSelectColumn(VoteTableMap::COL_USER_ID);
-            $criteria->addSelectColumn(VoteTableMap::COL_VOTE_F);
-            $criteria->addSelectColumn(VoteTableMap::COL_VOTE_E);
-            $criteria->addSelectColumn(VoteTableMap::COL_VOTE_DATE);
+            $criteria->addSelectColumn(UserTableMap::COL_ID);
+            $criteria->addSelectColumn(UserTableMap::COL_SITE_ID);
+            $criteria->addSelectColumn(UserTableMap::COL_EMAIL);
+            $criteria->addSelectColumn(UserTableMap::COL_LASTLOGGEDAT);
+            $criteria->addSelectColumn(UserTableMap::COL_CREATED_AT);
+            $criteria->addSelectColumn(UserTableMap::COL_UPDATED_AT);
         } else {
-            $criteria->addSelectColumn($alias . '.vote_id');
-            $criteria->addSelectColumn($alias . '.axys_account_id');
-            $criteria->addSelectColumn($alias . '.user_id');
-            $criteria->addSelectColumn($alias . '.vote_F');
-            $criteria->addSelectColumn($alias . '.vote_E');
-            $criteria->addSelectColumn($alias . '.vote_date');
+            $criteria->addSelectColumn($alias . '.id');
+            $criteria->addSelectColumn($alias . '.site_id');
+            $criteria->addSelectColumn($alias . '.email');
+            $criteria->addSelectColumn($alias . '.lastLoggedAt');
+            $criteria->addSelectColumn($alias . '.created_at');
+            $criteria->addSelectColumn($alias . '.updated_at');
         }
     }
 
@@ -412,19 +569,19 @@ class VoteTableMap extends TableMap
     public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
-            $criteria->removeSelectColumn(VoteTableMap::COL_VOTE_ID);
-            $criteria->removeSelectColumn(VoteTableMap::COL_AXYS_ACCOUNT_ID);
-            $criteria->removeSelectColumn(VoteTableMap::COL_USER_ID);
-            $criteria->removeSelectColumn(VoteTableMap::COL_VOTE_F);
-            $criteria->removeSelectColumn(VoteTableMap::COL_VOTE_E);
-            $criteria->removeSelectColumn(VoteTableMap::COL_VOTE_DATE);
+            $criteria->removeSelectColumn(UserTableMap::COL_ID);
+            $criteria->removeSelectColumn(UserTableMap::COL_SITE_ID);
+            $criteria->removeSelectColumn(UserTableMap::COL_EMAIL);
+            $criteria->removeSelectColumn(UserTableMap::COL_LASTLOGGEDAT);
+            $criteria->removeSelectColumn(UserTableMap::COL_CREATED_AT);
+            $criteria->removeSelectColumn(UserTableMap::COL_UPDATED_AT);
         } else {
-            $criteria->removeSelectColumn($alias . '.vote_id');
-            $criteria->removeSelectColumn($alias . '.axys_account_id');
-            $criteria->removeSelectColumn($alias . '.user_id');
-            $criteria->removeSelectColumn($alias . '.vote_F');
-            $criteria->removeSelectColumn($alias . '.vote_E');
-            $criteria->removeSelectColumn($alias . '.vote_date');
+            $criteria->removeSelectColumn($alias . '.id');
+            $criteria->removeSelectColumn($alias . '.site_id');
+            $criteria->removeSelectColumn($alias . '.email');
+            $criteria->removeSelectColumn($alias . '.lastLoggedAt');
+            $criteria->removeSelectColumn($alias . '.created_at');
+            $criteria->removeSelectColumn($alias . '.updated_at');
         }
     }
 
@@ -437,13 +594,13 @@ class VoteTableMap extends TableMap
      */
     public static function getTableMap(): TableMap
     {
-        return Propel::getServiceContainer()->getDatabaseMap(VoteTableMap::DATABASE_NAME)->getTable(VoteTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(UserTableMap::DATABASE_NAME)->getTable(UserTableMap::TABLE_NAME);
     }
 
     /**
-     * Performs a DELETE on the database, given a Vote or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a User or Criteria object OR a primary key value.
      *
-     * @param mixed $values Criteria or Vote object or primary key or array of primary keys
+     * @param mixed $values Criteria or User object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -454,27 +611,27 @@ class VoteTableMap extends TableMap
      public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(VoteTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(UserTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \Model\Vote) { // it's a model object
+        } elseif ($values instanceof \Model\User) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(VoteTableMap::DATABASE_NAME);
-            $criteria->add(VoteTableMap::COL_VOTE_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(UserTableMap::DATABASE_NAME);
+            $criteria->add(UserTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = VoteQuery::create()->mergeWith($criteria);
+        $query = UserQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            VoteTableMap::clearInstancePool();
+            UserTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                VoteTableMap::removeInstanceFromPool($singleval);
+                UserTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -482,20 +639,20 @@ class VoteTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the votes table.
+     * Deletes all rows from the users table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
-        return VoteQuery::create()->doDeleteAll($con);
+        return UserQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Vote or Criteria object.
+     * Performs an INSERT on the database, given a User or Criteria object.
      *
-     * @param mixed $criteria Criteria or Vote object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or User object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed The new primary key.
      * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
@@ -504,22 +661,22 @@ class VoteTableMap extends TableMap
     public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(VoteTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(UserTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Vote object
+            $criteria = $criteria->buildCriteria(); // build Criteria from User object
         }
 
-        if ($criteria->containsKey(VoteTableMap::COL_VOTE_ID) && $criteria->keyContainsValue(VoteTableMap::COL_VOTE_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.VoteTableMap::COL_VOTE_ID.')');
+        if ($criteria->containsKey(UserTableMap::COL_ID) && $criteria->keyContainsValue(UserTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.UserTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = VoteQuery::create()->mergeWith($criteria);
+        $query = UserQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)

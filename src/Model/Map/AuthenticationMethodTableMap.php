@@ -2,8 +2,8 @@
 
 namespace Model\Map;
 
-use Model\Session;
-use Model\SessionQuery;
+use Model\AuthenticationMethod;
+use Model\AuthenticationMethodQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'session' table.
+ * This class defines the structure of the 'authentication_methods' table.
  *
  *
  *
@@ -25,7 +25,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
  */
-class SessionTableMap extends TableMap
+class AuthenticationMethodTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -33,7 +33,7 @@ class SessionTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    public const CLASS_NAME = 'Model.Map.SessionTableMap';
+    public const CLASS_NAME = 'Model.Map.AuthenticationMethodTableMap';
 
     /**
      * The default database name for this class
@@ -43,27 +43,27 @@ class SessionTableMap extends TableMap
     /**
      * The table name for this class
      */
-    public const TABLE_NAME = 'session';
+    public const TABLE_NAME = 'authentication_methods';
 
     /**
      * The PHP name of this class (PascalCase)
      */
-    public const TABLE_PHP_NAME = 'Session';
+    public const TABLE_PHP_NAME = 'AuthenticationMethod';
 
     /**
      * The related Propel class for this table
      */
-    public const OM_CLASS = '\\Model\\Session';
+    public const OM_CLASS = '\\Model\\AuthenticationMethod';
 
     /**
      * A class that can be returned by this tableMap
      */
-    public const CLASS_DEFAULT = 'Model.Session';
+    public const CLASS_DEFAULT = 'Model.AuthenticationMethod';
 
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 8;
+    public const NUM_COLUMNS = 9;
 
     /**
      * The number of lazy-loaded columns
@@ -73,47 +73,52 @@ class SessionTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 8;
+    public const NUM_HYDRATE_COLUMNS = 9;
 
     /**
-     * the column name for the session_id field
+     * the column name for the id field
      */
-    public const COL_SESSION_ID = 'session.session_id';
+    public const COL_ID = 'authentication_methods.id';
 
     /**
      * the column name for the site_id field
      */
-    public const COL_SITE_ID = 'session.site_id';
-
-    /**
-     * the column name for the axys_account_id field
-     */
-    public const COL_AXYS_ACCOUNT_ID = 'session.axys_account_id';
+    public const COL_SITE_ID = 'authentication_methods.site_id';
 
     /**
      * the column name for the user_id field
      */
-    public const COL_USER_ID = 'session.user_id';
+    public const COL_USER_ID = 'authentication_methods.user_id';
 
     /**
-     * the column name for the session_token field
+     * the column name for the identity_provider field
      */
-    public const COL_SESSION_TOKEN = 'session.session_token';
+    public const COL_IDENTITY_PROVIDER = 'authentication_methods.identity_provider';
 
     /**
-     * the column name for the session_created field
+     * the column name for the external_id field
      */
-    public const COL_SESSION_CREATED = 'session.session_created';
+    public const COL_EXTERNAL_ID = 'authentication_methods.external_id';
 
     /**
-     * the column name for the session_expires field
+     * the column name for the access_token field
      */
-    public const COL_SESSION_EXPIRES = 'session.session_expires';
+    public const COL_ACCESS_TOKEN = 'authentication_methods.access_token';
 
     /**
-     * the column name for the session_updated field
+     * the column name for the id_token field
      */
-    public const COL_SESSION_UPDATED = 'session.session_updated';
+    public const COL_ID_TOKEN = 'authentication_methods.id_token';
+
+    /**
+     * the column name for the created_at field
+     */
+    public const COL_CREATED_AT = 'authentication_methods.created_at';
+
+    /**
+     * the column name for the updated_at field
+     */
+    public const COL_UPDATED_AT = 'authentication_methods.updated_at';
 
     /**
      * The default string format for model objects of the related table
@@ -129,11 +134,11 @@ class SessionTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'AxysAccountId', 'UserId', 'Token', 'CreatedAt', 'ExpiresAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'axysAccountId', 'userId', 'token', 'createdAt', 'expiresAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [SessionTableMap::COL_SESSION_ID, SessionTableMap::COL_SITE_ID, SessionTableMap::COL_AXYS_ACCOUNT_ID, SessionTableMap::COL_USER_ID, SessionTableMap::COL_SESSION_TOKEN, SessionTableMap::COL_SESSION_CREATED, SessionTableMap::COL_SESSION_EXPIRES, SessionTableMap::COL_SESSION_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['session_id', 'site_id', 'axys_account_id', 'user_id', 'session_token', 'session_created', 'session_expires', 'session_updated', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, ]
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'UserId', 'IdentityProvider', 'ExternalId', 'AccessToken', 'IdToken', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'userId', 'identityProvider', 'externalId', 'accessToken', 'idToken', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [AuthenticationMethodTableMap::COL_ID, AuthenticationMethodTableMap::COL_SITE_ID, AuthenticationMethodTableMap::COL_USER_ID, AuthenticationMethodTableMap::COL_IDENTITY_PROVIDER, AuthenticationMethodTableMap::COL_EXTERNAL_ID, AuthenticationMethodTableMap::COL_ACCESS_TOKEN, AuthenticationMethodTableMap::COL_ID_TOKEN, AuthenticationMethodTableMap::COL_CREATED_AT, AuthenticationMethodTableMap::COL_UPDATED_AT, ],
+        self::TYPE_FIELDNAME     => ['id', 'site_id', 'user_id', 'identity_provider', 'external_id', 'access_token', 'id_token', 'created_at', 'updated_at', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, ]
     ];
 
     /**
@@ -145,11 +150,11 @@ class SessionTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'AxysAccountId' => 2, 'UserId' => 3, 'Token' => 4, 'CreatedAt' => 5, 'ExpiresAt' => 6, 'UpdatedAt' => 7, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'axysAccountId' => 2, 'userId' => 3, 'token' => 4, 'createdAt' => 5, 'expiresAt' => 6, 'updatedAt' => 7, ],
-        self::TYPE_COLNAME       => [SessionTableMap::COL_SESSION_ID => 0, SessionTableMap::COL_SITE_ID => 1, SessionTableMap::COL_AXYS_ACCOUNT_ID => 2, SessionTableMap::COL_USER_ID => 3, SessionTableMap::COL_SESSION_TOKEN => 4, SessionTableMap::COL_SESSION_CREATED => 5, SessionTableMap::COL_SESSION_EXPIRES => 6, SessionTableMap::COL_SESSION_UPDATED => 7, ],
-        self::TYPE_FIELDNAME     => ['session_id' => 0, 'site_id' => 1, 'axys_account_id' => 2, 'user_id' => 3, 'session_token' => 4, 'session_created' => 5, 'session_expires' => 6, 'session_updated' => 7, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'UserId' => 2, 'IdentityProvider' => 3, 'ExternalId' => 4, 'AccessToken' => 5, 'IdToken' => 6, 'CreatedAt' => 7, 'UpdatedAt' => 8, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'userId' => 2, 'identityProvider' => 3, 'externalId' => 4, 'accessToken' => 5, 'idToken' => 6, 'createdAt' => 7, 'updatedAt' => 8, ],
+        self::TYPE_COLNAME       => [AuthenticationMethodTableMap::COL_ID => 0, AuthenticationMethodTableMap::COL_SITE_ID => 1, AuthenticationMethodTableMap::COL_USER_ID => 2, AuthenticationMethodTableMap::COL_IDENTITY_PROVIDER => 3, AuthenticationMethodTableMap::COL_EXTERNAL_ID => 4, AuthenticationMethodTableMap::COL_ACCESS_TOKEN => 5, AuthenticationMethodTableMap::COL_ID_TOKEN => 6, AuthenticationMethodTableMap::COL_CREATED_AT => 7, AuthenticationMethodTableMap::COL_UPDATED_AT => 8, ],
+        self::TYPE_FIELDNAME     => ['id' => 0, 'site_id' => 1, 'user_id' => 2, 'identity_provider' => 3, 'external_id' => 4, 'access_token' => 5, 'id_token' => 6, 'created_at' => 7, 'updated_at' => 8, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, ]
     ];
 
     /**
@@ -158,70 +163,77 @@ class SessionTableMap extends TableMap
      * @var array<string>
      */
     protected $normalizedColumnNameMap = [
-        'Id' => 'SESSION_ID',
-        'Session.Id' => 'SESSION_ID',
-        'id' => 'SESSION_ID',
-        'session.id' => 'SESSION_ID',
-        'SessionTableMap::COL_SESSION_ID' => 'SESSION_ID',
-        'COL_SESSION_ID' => 'SESSION_ID',
-        'session_id' => 'SESSION_ID',
-        'session.session_id' => 'SESSION_ID',
+        'Id' => 'ID',
+        'AuthenticationMethod.Id' => 'ID',
+        'id' => 'ID',
+        'authenticationMethod.id' => 'ID',
+        'AuthenticationMethodTableMap::COL_ID' => 'ID',
+        'COL_ID' => 'ID',
+        'authentication_methods.id' => 'ID',
         'SiteId' => 'SITE_ID',
-        'Session.SiteId' => 'SITE_ID',
+        'AuthenticationMethod.SiteId' => 'SITE_ID',
         'siteId' => 'SITE_ID',
-        'session.siteId' => 'SITE_ID',
-        'SessionTableMap::COL_SITE_ID' => 'SITE_ID',
+        'authenticationMethod.siteId' => 'SITE_ID',
+        'AuthenticationMethodTableMap::COL_SITE_ID' => 'SITE_ID',
         'COL_SITE_ID' => 'SITE_ID',
         'site_id' => 'SITE_ID',
-        'session.site_id' => 'SITE_ID',
-        'AxysAccountId' => 'AXYS_ACCOUNT_ID',
-        'Session.AxysAccountId' => 'AXYS_ACCOUNT_ID',
-        'axysAccountId' => 'AXYS_ACCOUNT_ID',
-        'session.axysAccountId' => 'AXYS_ACCOUNT_ID',
-        'SessionTableMap::COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
-        'COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
-        'axys_account_id' => 'AXYS_ACCOUNT_ID',
-        'session.axys_account_id' => 'AXYS_ACCOUNT_ID',
+        'authentication_methods.site_id' => 'SITE_ID',
         'UserId' => 'USER_ID',
-        'Session.UserId' => 'USER_ID',
+        'AuthenticationMethod.UserId' => 'USER_ID',
         'userId' => 'USER_ID',
-        'session.userId' => 'USER_ID',
-        'SessionTableMap::COL_USER_ID' => 'USER_ID',
+        'authenticationMethod.userId' => 'USER_ID',
+        'AuthenticationMethodTableMap::COL_USER_ID' => 'USER_ID',
         'COL_USER_ID' => 'USER_ID',
         'user_id' => 'USER_ID',
-        'session.user_id' => 'USER_ID',
-        'Token' => 'SESSION_TOKEN',
-        'Session.Token' => 'SESSION_TOKEN',
-        'token' => 'SESSION_TOKEN',
-        'session.token' => 'SESSION_TOKEN',
-        'SessionTableMap::COL_SESSION_TOKEN' => 'SESSION_TOKEN',
-        'COL_SESSION_TOKEN' => 'SESSION_TOKEN',
-        'session_token' => 'SESSION_TOKEN',
-        'session.session_token' => 'SESSION_TOKEN',
-        'CreatedAt' => 'SESSION_CREATED',
-        'Session.CreatedAt' => 'SESSION_CREATED',
-        'createdAt' => 'SESSION_CREATED',
-        'session.createdAt' => 'SESSION_CREATED',
-        'SessionTableMap::COL_SESSION_CREATED' => 'SESSION_CREATED',
-        'COL_SESSION_CREATED' => 'SESSION_CREATED',
-        'session_created' => 'SESSION_CREATED',
-        'session.session_created' => 'SESSION_CREATED',
-        'ExpiresAt' => 'SESSION_EXPIRES',
-        'Session.ExpiresAt' => 'SESSION_EXPIRES',
-        'expiresAt' => 'SESSION_EXPIRES',
-        'session.expiresAt' => 'SESSION_EXPIRES',
-        'SessionTableMap::COL_SESSION_EXPIRES' => 'SESSION_EXPIRES',
-        'COL_SESSION_EXPIRES' => 'SESSION_EXPIRES',
-        'session_expires' => 'SESSION_EXPIRES',
-        'session.session_expires' => 'SESSION_EXPIRES',
-        'UpdatedAt' => 'SESSION_UPDATED',
-        'Session.UpdatedAt' => 'SESSION_UPDATED',
-        'updatedAt' => 'SESSION_UPDATED',
-        'session.updatedAt' => 'SESSION_UPDATED',
-        'SessionTableMap::COL_SESSION_UPDATED' => 'SESSION_UPDATED',
-        'COL_SESSION_UPDATED' => 'SESSION_UPDATED',
-        'session_updated' => 'SESSION_UPDATED',
-        'session.session_updated' => 'SESSION_UPDATED',
+        'authentication_methods.user_id' => 'USER_ID',
+        'IdentityProvider' => 'IDENTITY_PROVIDER',
+        'AuthenticationMethod.IdentityProvider' => 'IDENTITY_PROVIDER',
+        'identityProvider' => 'IDENTITY_PROVIDER',
+        'authenticationMethod.identityProvider' => 'IDENTITY_PROVIDER',
+        'AuthenticationMethodTableMap::COL_IDENTITY_PROVIDER' => 'IDENTITY_PROVIDER',
+        'COL_IDENTITY_PROVIDER' => 'IDENTITY_PROVIDER',
+        'identity_provider' => 'IDENTITY_PROVIDER',
+        'authentication_methods.identity_provider' => 'IDENTITY_PROVIDER',
+        'ExternalId' => 'EXTERNAL_ID',
+        'AuthenticationMethod.ExternalId' => 'EXTERNAL_ID',
+        'externalId' => 'EXTERNAL_ID',
+        'authenticationMethod.externalId' => 'EXTERNAL_ID',
+        'AuthenticationMethodTableMap::COL_EXTERNAL_ID' => 'EXTERNAL_ID',
+        'COL_EXTERNAL_ID' => 'EXTERNAL_ID',
+        'external_id' => 'EXTERNAL_ID',
+        'authentication_methods.external_id' => 'EXTERNAL_ID',
+        'AccessToken' => 'ACCESS_TOKEN',
+        'AuthenticationMethod.AccessToken' => 'ACCESS_TOKEN',
+        'accessToken' => 'ACCESS_TOKEN',
+        'authenticationMethod.accessToken' => 'ACCESS_TOKEN',
+        'AuthenticationMethodTableMap::COL_ACCESS_TOKEN' => 'ACCESS_TOKEN',
+        'COL_ACCESS_TOKEN' => 'ACCESS_TOKEN',
+        'access_token' => 'ACCESS_TOKEN',
+        'authentication_methods.access_token' => 'ACCESS_TOKEN',
+        'IdToken' => 'ID_TOKEN',
+        'AuthenticationMethod.IdToken' => 'ID_TOKEN',
+        'idToken' => 'ID_TOKEN',
+        'authenticationMethod.idToken' => 'ID_TOKEN',
+        'AuthenticationMethodTableMap::COL_ID_TOKEN' => 'ID_TOKEN',
+        'COL_ID_TOKEN' => 'ID_TOKEN',
+        'id_token' => 'ID_TOKEN',
+        'authentication_methods.id_token' => 'ID_TOKEN',
+        'CreatedAt' => 'CREATED_AT',
+        'AuthenticationMethod.CreatedAt' => 'CREATED_AT',
+        'createdAt' => 'CREATED_AT',
+        'authenticationMethod.createdAt' => 'CREATED_AT',
+        'AuthenticationMethodTableMap::COL_CREATED_AT' => 'CREATED_AT',
+        'COL_CREATED_AT' => 'CREATED_AT',
+        'created_at' => 'CREATED_AT',
+        'authentication_methods.created_at' => 'CREATED_AT',
+        'UpdatedAt' => 'UPDATED_AT',
+        'AuthenticationMethod.UpdatedAt' => 'UPDATED_AT',
+        'updatedAt' => 'UPDATED_AT',
+        'authenticationMethod.updatedAt' => 'UPDATED_AT',
+        'AuthenticationMethodTableMap::COL_UPDATED_AT' => 'UPDATED_AT',
+        'COL_UPDATED_AT' => 'UPDATED_AT',
+        'updated_at' => 'UPDATED_AT',
+        'authentication_methods.updated_at' => 'UPDATED_AT',
     ];
 
     /**
@@ -234,21 +246,22 @@ class SessionTableMap extends TableMap
     public function initialize(): void
     {
         // attributes
-        $this->setName('session');
-        $this->setPhpName('Session');
+        $this->setName('authentication_methods');
+        $this->setPhpName('AuthenticationMethod');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\Model\\Session');
+        $this->setClassName('\\Model\\AuthenticationMethod');
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('session_id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
-        $this->addForeignKey('axys_account_id', 'AxysAccountId', 'INTEGER', 'axys_accounts', 'axys_account_id', false, null, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
-        $this->addColumn('session_token', 'Token', 'VARCHAR', false, 32, null);
-        $this->addColumn('session_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('session_expires', 'ExpiresAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('session_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
+        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, 10, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', true, 10, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', true, 10, null);
+        $this->addColumn('identity_provider', 'IdentityProvider', 'VARCHAR', false, 16, null);
+        $this->addColumn('external_id', 'ExternalId', 'VARCHAR', false, 128, null);
+        $this->addColumn('access_token', 'AccessToken', 'VARCHAR', false, 1024, null);
+        $this->addColumn('id_token', 'IdToken', 'VARCHAR', false, 1024, null);
+        $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     }
 
     /**
@@ -258,25 +271,18 @@ class SessionTableMap extends TableMap
      */
     public function buildRelations(): void
     {
-        $this->addRelation('User', '\\Model\\User', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':user_id',
-    1 => ':id',
-  ),
-), null, null, null, false);
-        $this->addRelation('AxysAccount', '\\Model\\AxysAccount', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':axys_account_id',
-    1 => ':axys_account_id',
-  ),
-), null, null, null, false);
         $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':site_id',
     1 => ':site_id',
+  ),
+), null, null, null, false);
+        $this->addRelation('User', '\\Model\\User', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
   ),
 ), null, null, null, false);
     }
@@ -290,7 +296,7 @@ class SessionTableMap extends TableMap
     public function getBehaviors(): array
     {
         return [
-            'timestampable' => ['create_column' => 'session_created', 'update_column' => 'session_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
+            'timestampable' => ['create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         ];
     }
 
@@ -351,7 +357,7 @@ class SessionTableMap extends TableMap
      */
     public static function getOMClass(bool $withPrefix = true): string
     {
-        return $withPrefix ? SessionTableMap::CLASS_DEFAULT : SessionTableMap::OM_CLASS;
+        return $withPrefix ? AuthenticationMethodTableMap::CLASS_DEFAULT : AuthenticationMethodTableMap::OM_CLASS;
     }
 
     /**
@@ -365,22 +371,22 @@ class SessionTableMap extends TableMap
      *
      * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array (Session object, last column rank)
+     * @return array (AuthenticationMethod object, last column rank)
      */
     public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
-        $key = SessionTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = SessionTableMap::getInstanceFromPool($key))) {
+        $key = AuthenticationMethodTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = AuthenticationMethodTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + SessionTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + AuthenticationMethodTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = SessionTableMap::OM_CLASS;
-            /** @var Session $obj */
+            $cls = AuthenticationMethodTableMap::OM_CLASS;
+            /** @var AuthenticationMethod $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            SessionTableMap::addInstanceToPool($obj, $key);
+            AuthenticationMethodTableMap::addInstanceToPool($obj, $key);
         }
 
         return [$obj, $col];
@@ -403,18 +409,18 @@ class SessionTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = SessionTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = SessionTableMap::getInstanceFromPool($key))) {
+            $key = AuthenticationMethodTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = AuthenticationMethodTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Session $obj */
+                /** @var AuthenticationMethod $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                SessionTableMap::addInstanceToPool($obj, $key);
+                AuthenticationMethodTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -436,23 +442,25 @@ class SessionTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(SessionTableMap::COL_SESSION_ID);
-            $criteria->addSelectColumn(SessionTableMap::COL_SITE_ID);
-            $criteria->addSelectColumn(SessionTableMap::COL_AXYS_ACCOUNT_ID);
-            $criteria->addSelectColumn(SessionTableMap::COL_USER_ID);
-            $criteria->addSelectColumn(SessionTableMap::COL_SESSION_TOKEN);
-            $criteria->addSelectColumn(SessionTableMap::COL_SESSION_CREATED);
-            $criteria->addSelectColumn(SessionTableMap::COL_SESSION_EXPIRES);
-            $criteria->addSelectColumn(SessionTableMap::COL_SESSION_UPDATED);
+            $criteria->addSelectColumn(AuthenticationMethodTableMap::COL_ID);
+            $criteria->addSelectColumn(AuthenticationMethodTableMap::COL_SITE_ID);
+            $criteria->addSelectColumn(AuthenticationMethodTableMap::COL_USER_ID);
+            $criteria->addSelectColumn(AuthenticationMethodTableMap::COL_IDENTITY_PROVIDER);
+            $criteria->addSelectColumn(AuthenticationMethodTableMap::COL_EXTERNAL_ID);
+            $criteria->addSelectColumn(AuthenticationMethodTableMap::COL_ACCESS_TOKEN);
+            $criteria->addSelectColumn(AuthenticationMethodTableMap::COL_ID_TOKEN);
+            $criteria->addSelectColumn(AuthenticationMethodTableMap::COL_CREATED_AT);
+            $criteria->addSelectColumn(AuthenticationMethodTableMap::COL_UPDATED_AT);
         } else {
-            $criteria->addSelectColumn($alias . '.session_id');
+            $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.site_id');
-            $criteria->addSelectColumn($alias . '.axys_account_id');
             $criteria->addSelectColumn($alias . '.user_id');
-            $criteria->addSelectColumn($alias . '.session_token');
-            $criteria->addSelectColumn($alias . '.session_created');
-            $criteria->addSelectColumn($alias . '.session_expires');
-            $criteria->addSelectColumn($alias . '.session_updated');
+            $criteria->addSelectColumn($alias . '.identity_provider');
+            $criteria->addSelectColumn($alias . '.external_id');
+            $criteria->addSelectColumn($alias . '.access_token');
+            $criteria->addSelectColumn($alias . '.id_token');
+            $criteria->addSelectColumn($alias . '.created_at');
+            $criteria->addSelectColumn($alias . '.updated_at');
         }
     }
 
@@ -471,23 +479,25 @@ class SessionTableMap extends TableMap
     public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
-            $criteria->removeSelectColumn(SessionTableMap::COL_SESSION_ID);
-            $criteria->removeSelectColumn(SessionTableMap::COL_SITE_ID);
-            $criteria->removeSelectColumn(SessionTableMap::COL_AXYS_ACCOUNT_ID);
-            $criteria->removeSelectColumn(SessionTableMap::COL_USER_ID);
-            $criteria->removeSelectColumn(SessionTableMap::COL_SESSION_TOKEN);
-            $criteria->removeSelectColumn(SessionTableMap::COL_SESSION_CREATED);
-            $criteria->removeSelectColumn(SessionTableMap::COL_SESSION_EXPIRES);
-            $criteria->removeSelectColumn(SessionTableMap::COL_SESSION_UPDATED);
+            $criteria->removeSelectColumn(AuthenticationMethodTableMap::COL_ID);
+            $criteria->removeSelectColumn(AuthenticationMethodTableMap::COL_SITE_ID);
+            $criteria->removeSelectColumn(AuthenticationMethodTableMap::COL_USER_ID);
+            $criteria->removeSelectColumn(AuthenticationMethodTableMap::COL_IDENTITY_PROVIDER);
+            $criteria->removeSelectColumn(AuthenticationMethodTableMap::COL_EXTERNAL_ID);
+            $criteria->removeSelectColumn(AuthenticationMethodTableMap::COL_ACCESS_TOKEN);
+            $criteria->removeSelectColumn(AuthenticationMethodTableMap::COL_ID_TOKEN);
+            $criteria->removeSelectColumn(AuthenticationMethodTableMap::COL_CREATED_AT);
+            $criteria->removeSelectColumn(AuthenticationMethodTableMap::COL_UPDATED_AT);
         } else {
-            $criteria->removeSelectColumn($alias . '.session_id');
+            $criteria->removeSelectColumn($alias . '.id');
             $criteria->removeSelectColumn($alias . '.site_id');
-            $criteria->removeSelectColumn($alias . '.axys_account_id');
             $criteria->removeSelectColumn($alias . '.user_id');
-            $criteria->removeSelectColumn($alias . '.session_token');
-            $criteria->removeSelectColumn($alias . '.session_created');
-            $criteria->removeSelectColumn($alias . '.session_expires');
-            $criteria->removeSelectColumn($alias . '.session_updated');
+            $criteria->removeSelectColumn($alias . '.identity_provider');
+            $criteria->removeSelectColumn($alias . '.external_id');
+            $criteria->removeSelectColumn($alias . '.access_token');
+            $criteria->removeSelectColumn($alias . '.id_token');
+            $criteria->removeSelectColumn($alias . '.created_at');
+            $criteria->removeSelectColumn($alias . '.updated_at');
         }
     }
 
@@ -500,13 +510,13 @@ class SessionTableMap extends TableMap
      */
     public static function getTableMap(): TableMap
     {
-        return Propel::getServiceContainer()->getDatabaseMap(SessionTableMap::DATABASE_NAME)->getTable(SessionTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(AuthenticationMethodTableMap::DATABASE_NAME)->getTable(AuthenticationMethodTableMap::TABLE_NAME);
     }
 
     /**
-     * Performs a DELETE on the database, given a Session or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a AuthenticationMethod or Criteria object OR a primary key value.
      *
-     * @param mixed $values Criteria or Session object or primary key or array of primary keys
+     * @param mixed $values Criteria or AuthenticationMethod object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -517,27 +527,27 @@ class SessionTableMap extends TableMap
      public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(SessionTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AuthenticationMethodTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \Model\Session) { // it's a model object
+        } elseif ($values instanceof \Model\AuthenticationMethod) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(SessionTableMap::DATABASE_NAME);
-            $criteria->add(SessionTableMap::COL_SESSION_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(AuthenticationMethodTableMap::DATABASE_NAME);
+            $criteria->add(AuthenticationMethodTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = SessionQuery::create()->mergeWith($criteria);
+        $query = AuthenticationMethodQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            SessionTableMap::clearInstancePool();
+            AuthenticationMethodTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                SessionTableMap::removeInstanceFromPool($singleval);
+                AuthenticationMethodTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -545,20 +555,20 @@ class SessionTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the session table.
+     * Deletes all rows from the authentication_methods table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
-        return SessionQuery::create()->doDeleteAll($con);
+        return AuthenticationMethodQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Session or Criteria object.
+     * Performs an INSERT on the database, given a AuthenticationMethod or Criteria object.
      *
-     * @param mixed $criteria Criteria or Session object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or AuthenticationMethod object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed The new primary key.
      * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
@@ -567,22 +577,22 @@ class SessionTableMap extends TableMap
     public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(SessionTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AuthenticationMethodTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Session object
+            $criteria = $criteria->buildCriteria(); // build Criteria from AuthenticationMethod object
         }
 
-        if ($criteria->containsKey(SessionTableMap::COL_SESSION_ID) && $criteria->keyContainsValue(SessionTableMap::COL_SESSION_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.SessionTableMap::COL_SESSION_ID.')');
+        if ($criteria->containsKey(AuthenticationMethodTableMap::COL_ID) && $criteria->keyContainsValue(AuthenticationMethodTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.AuthenticationMethodTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = SessionQuery::create()->mergeWith($criteria);
+        $query = AuthenticationMethodQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)

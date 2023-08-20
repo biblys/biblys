@@ -25,6 +25,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockQuery orderByCampaignId($order = Criteria::ASC) Order by the campaign_id column
  * @method     ChildStockQuery orderByRewardId($order = Criteria::ASC) Order by the reward_id column
  * @method     ChildStockQuery orderByAxysAccountId($order = Criteria::ASC) Order by the axys_account_id column
+ * @method     ChildStockQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
  * @method     ChildStockQuery orderByCustomerId($order = Criteria::ASC) Order by the customer_id column
  * @method     ChildStockQuery orderByWishId($order = Criteria::ASC) Order by the wish_id column
  * @method     ChildStockQuery orderByCartId($order = Criteria::ASC) Order by the cart_id column
@@ -69,6 +70,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockQuery groupByCampaignId() Group by the campaign_id column
  * @method     ChildStockQuery groupByRewardId() Group by the reward_id column
  * @method     ChildStockQuery groupByAxysAccountId() Group by the axys_account_id column
+ * @method     ChildStockQuery groupByUserId() Group by the user_id column
  * @method     ChildStockQuery groupByCustomerId() Group by the customer_id column
  * @method     ChildStockQuery groupByWishId() Group by the wish_id column
  * @method     ChildStockQuery groupByCartId() Group by the cart_id column
@@ -115,6 +117,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildStockQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
+ * @method     ChildStockQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
+ * @method     ChildStockQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
+ * @method     ChildStockQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
+ *
+ * @method     ChildStockQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
+ *
+ * @method     ChildStockQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
+ * @method     ChildStockQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
+ * @method     ChildStockQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
+ *
  * @method     ChildStockQuery leftJoinCart($relationAlias = null) Adds a LEFT JOIN clause to the query using the Cart relation
  * @method     ChildStockQuery rightJoinCart($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Cart relation
  * @method     ChildStockQuery innerJoinCart($relationAlias = null) Adds a INNER JOIN clause to the query using the Cart relation
@@ -155,7 +167,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockQuery rightJoinWithAxysAccount() Adds a RIGHT JOIN clause and with to the query using the AxysAccount relation
  * @method     ChildStockQuery innerJoinWithAxysAccount() Adds a INNER JOIN clause and with to the query using the AxysAccount relation
  *
- * @method     \Model\CartQuery|\Model\SiteQuery|\Model\ArticleQuery|\Model\AxysAccountQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\UserQuery|\Model\CartQuery|\Model\SiteQuery|\Model\ArticleQuery|\Model\AxysAccountQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildStock|null findOne(?ConnectionInterface $con = null) Return the first ChildStock matching the query
  * @method     ChildStock findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildStock matching the query, or a new ChildStock object populated from the query conditions when no match is found
@@ -166,6 +178,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStock|null findOneByCampaignId(int $campaign_id) Return the first ChildStock filtered by the campaign_id column
  * @method     ChildStock|null findOneByRewardId(int $reward_id) Return the first ChildStock filtered by the reward_id column
  * @method     ChildStock|null findOneByAxysAccountId(int $axys_account_id) Return the first ChildStock filtered by the axys_account_id column
+ * @method     ChildStock|null findOneByUserId(int $user_id) Return the first ChildStock filtered by the user_id column
  * @method     ChildStock|null findOneByCustomerId(int $customer_id) Return the first ChildStock filtered by the customer_id column
  * @method     ChildStock|null findOneByWishId(int $wish_id) Return the first ChildStock filtered by the wish_id column
  * @method     ChildStock|null findOneByCartId(int $cart_id) Return the first ChildStock filtered by the cart_id column
@@ -213,6 +226,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStock requireOneByCampaignId(int $campaign_id) Return the first ChildStock filtered by the campaign_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStock requireOneByRewardId(int $reward_id) Return the first ChildStock filtered by the reward_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStock requireOneByAxysAccountId(int $axys_account_id) Return the first ChildStock filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildStock requireOneByUserId(int $user_id) Return the first ChildStock filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStock requireOneByCustomerId(int $customer_id) Return the first ChildStock filtered by the customer_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStock requireOneByWishId(int $wish_id) Return the first ChildStock filtered by the wish_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStock requireOneByCartId(int $cart_id) Return the first ChildStock filtered by the cart_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -266,6 +280,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildStock> findByRewardId(int|array<int> $reward_id) Return ChildStock objects filtered by the reward_id column
  * @method     ChildStock[]|Collection findByAxysAccountId(int|array<int> $axys_account_id) Return ChildStock objects filtered by the axys_account_id column
  * @psalm-method Collection&\Traversable<ChildStock> findByAxysAccountId(int|array<int> $axys_account_id) Return ChildStock objects filtered by the axys_account_id column
+ * @method     ChildStock[]|Collection findByUserId(int|array<int> $user_id) Return ChildStock objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildStock> findByUserId(int|array<int> $user_id) Return ChildStock objects filtered by the user_id column
  * @method     ChildStock[]|Collection findByCustomerId(int|array<int> $customer_id) Return ChildStock objects filtered by the customer_id column
  * @psalm-method Collection&\Traversable<ChildStock> findByCustomerId(int|array<int> $customer_id) Return ChildStock objects filtered by the customer_id column
  * @method     ChildStock[]|Collection findByWishId(int|array<int> $wish_id) Return ChildStock objects filtered by the wish_id column
@@ -439,7 +455,7 @@ abstract class StockQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT stock_id, site_id, article_id, campaign_id, reward_id, axys_account_id, customer_id, wish_id, cart_id, order_id, coupon_id, stock_shop, stock_invoice, stock_depot, stock_stockage, stock_condition, stock_condition_details, stock_purchase_price, stock_selling_price, stock_selling_price2, stock_selling_price_saved, stock_selling_price_ht, stock_selling_price_tva, stock_tva_rate, stock_weight, stock_pub_year, stock_allow_predownload, stock_photo_version, stock_purchase_date, stock_onsale_date, stock_cart_date, stock_selling_date, stock_return_date, stock_lost_date, stock_media_ok, stock_file_updated, stock_insert, stock_update, stock_dl, lemonink_transaction_id, lemonink_transaction_token, stock_created, stock_updated FROM stock WHERE stock_id = :p0';
+        $sql = 'SELECT stock_id, site_id, article_id, campaign_id, reward_id, axys_account_id, user_id, customer_id, wish_id, cart_id, order_id, coupon_id, stock_shop, stock_invoice, stock_depot, stock_stockage, stock_condition, stock_condition_details, stock_purchase_price, stock_selling_price, stock_selling_price2, stock_selling_price_saved, stock_selling_price_ht, stock_selling_price_tva, stock_tva_rate, stock_weight, stock_pub_year, stock_allow_predownload, stock_photo_version, stock_purchase_date, stock_onsale_date, stock_cart_date, stock_selling_date, stock_return_date, stock_lost_date, stock_media_ok, stock_file_updated, stock_insert, stock_update, stock_dl, lemonink_transaction_id, lemonink_transaction_token, stock_created, stock_updated FROM stock WHERE stock_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -793,6 +809,51 @@ abstract class StockQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(StockTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the user_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByUserId(1234); // WHERE user_id = 1234
+     * $query->filterByUserId(array(12, 34)); // WHERE user_id IN (12, 34)
+     * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
+     * </code>
+     *
+     * @see       filterByUser()
+     *
+     * @param mixed $userId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByUserId($userId = null, ?string $comparison = null)
+    {
+        if (is_array($userId)) {
+            $useMinMax = false;
+            if (isset($userId['min'])) {
+                $this->addUsingAlias(StockTableMap::COL_USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($userId['max'])) {
+                $this->addUsingAlias(StockTableMap::COL_USER_ID, $userId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(StockTableMap::COL_USER_ID, $userId, $comparison);
 
         return $this;
     }
@@ -2248,6 +2309,181 @@ abstract class StockQuery extends ModelCriteria
         $this->addUsingAlias(StockTableMap::COL_STOCK_UPDATED, $updatedAt, $comparison);
 
         return $this;
+    }
+
+    /**
+     * Filter the query by a related \Model\User object
+     *
+     * @param \Model\User|ObjectCollection $user The related object(s) to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByUser($user, ?string $comparison = null)
+    {
+        if ($user instanceof \Model\User) {
+            return $this
+                ->addUsingAlias(StockTableMap::COL_USER_ID, $user->getId(), $comparison);
+        } elseif ($user instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            $this
+                ->addUsingAlias(StockTableMap::COL_USER_ID, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
+        } else {
+            throw new PropelException('filterByUser() only accepts arguments of type \Model\User or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the User relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinUser(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('User');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'User');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the User relation User object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\UserQuery A secondary query class using the current class as primary query
+     */
+    public function useUserQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinUser($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'User', '\Model\UserQuery');
+    }
+
+    /**
+     * Use the User relation User object
+     *
+     * @param callable(\Model\UserQuery):\Model\UserQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withUserQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useUserQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to User table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\UserQuery The inner query object of the EXISTS statement
+     */
+    public function useUserExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useExistsQuery('User', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to User table for a NOT EXISTS query.
+     *
+     * @see useUserExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\UserQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useUserNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useExistsQuery('User', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to User table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\UserQuery The inner query object of the IN statement
+     */
+    public function useInUserQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useInQuery('User', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to User table for a NOT IN query.
+     *
+     * @see useUserInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\UserQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInUserQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useInQuery('User', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
     }
 
     /**

@@ -63,7 +63,7 @@ class CustomerTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 14;
+    public const NUM_COLUMNS = 15;
 
     /**
      * The number of lazy-loaded columns
@@ -73,7 +73,7 @@ class CustomerTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 14;
+    public const NUM_HYDRATE_COLUMNS = 15;
 
     /**
      * the column name for the customer_id field
@@ -89,6 +89,11 @@ class CustomerTableMap extends TableMap
      * the column name for the axys_account_id field
      */
     public const COL_AXYS_ACCOUNT_ID = 'customers.axys_account_id';
+
+    /**
+     * the column name for the user_id field
+     */
+    public const COL_USER_ID = 'customers.user_id';
 
     /**
      * the column name for the customer_type field
@@ -159,11 +164,11 @@ class CustomerTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'AxysAccountId', 'Type', 'FirstName', 'LastName', 'Email', 'Phone', 'CountryId', 'Privatization', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'axysAccountId', 'type', 'firstName', 'lastName', 'email', 'phone', 'countryId', 'privatization', 'insert', 'update', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [CustomerTableMap::COL_CUSTOMER_ID, CustomerTableMap::COL_SITE_ID, CustomerTableMap::COL_AXYS_ACCOUNT_ID, CustomerTableMap::COL_CUSTOMER_TYPE, CustomerTableMap::COL_CUSTOMER_FIRST_NAME, CustomerTableMap::COL_CUSTOMER_LAST_NAME, CustomerTableMap::COL_CUSTOMER_EMAIL, CustomerTableMap::COL_CUSTOMER_PHONE, CustomerTableMap::COL_COUNTRY_ID, CustomerTableMap::COL_CUSTOMER_PRIVATIZATION, CustomerTableMap::COL_CUSTOMER_INSERT, CustomerTableMap::COL_CUSTOMER_UPDATE, CustomerTableMap::COL_CUSTOMER_CREATED, CustomerTableMap::COL_CUSTOMER_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['customer_id', 'site_id', 'axys_account_id', 'customer_type', 'customer_first_name', 'customer_last_name', 'customer_email', 'customer_phone', 'country_id', 'customer_privatization', 'customer_insert', 'customer_update', 'customer_created', 'customer_updated', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'AxysAccountId', 'UserId', 'Type', 'FirstName', 'LastName', 'Email', 'Phone', 'CountryId', 'Privatization', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'axysAccountId', 'userId', 'type', 'firstName', 'lastName', 'email', 'phone', 'countryId', 'privatization', 'insert', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [CustomerTableMap::COL_CUSTOMER_ID, CustomerTableMap::COL_SITE_ID, CustomerTableMap::COL_AXYS_ACCOUNT_ID, CustomerTableMap::COL_USER_ID, CustomerTableMap::COL_CUSTOMER_TYPE, CustomerTableMap::COL_CUSTOMER_FIRST_NAME, CustomerTableMap::COL_CUSTOMER_LAST_NAME, CustomerTableMap::COL_CUSTOMER_EMAIL, CustomerTableMap::COL_CUSTOMER_PHONE, CustomerTableMap::COL_COUNTRY_ID, CustomerTableMap::COL_CUSTOMER_PRIVATIZATION, CustomerTableMap::COL_CUSTOMER_INSERT, CustomerTableMap::COL_CUSTOMER_UPDATE, CustomerTableMap::COL_CUSTOMER_CREATED, CustomerTableMap::COL_CUSTOMER_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['customer_id', 'site_id', 'axys_account_id', 'user_id', 'customer_type', 'customer_first_name', 'customer_last_name', 'customer_email', 'customer_phone', 'country_id', 'customer_privatization', 'customer_insert', 'customer_update', 'customer_created', 'customer_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, ]
     ];
 
     /**
@@ -175,11 +180,11 @@ class CustomerTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'AxysAccountId' => 2, 'Type' => 3, 'FirstName' => 4, 'LastName' => 5, 'Email' => 6, 'Phone' => 7, 'CountryId' => 8, 'Privatization' => 9, 'Insert' => 10, 'Update' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'axysAccountId' => 2, 'type' => 3, 'firstName' => 4, 'lastName' => 5, 'email' => 6, 'phone' => 7, 'countryId' => 8, 'privatization' => 9, 'insert' => 10, 'update' => 11, 'createdAt' => 12, 'updatedAt' => 13, ],
-        self::TYPE_COLNAME       => [CustomerTableMap::COL_CUSTOMER_ID => 0, CustomerTableMap::COL_SITE_ID => 1, CustomerTableMap::COL_AXYS_ACCOUNT_ID => 2, CustomerTableMap::COL_CUSTOMER_TYPE => 3, CustomerTableMap::COL_CUSTOMER_FIRST_NAME => 4, CustomerTableMap::COL_CUSTOMER_LAST_NAME => 5, CustomerTableMap::COL_CUSTOMER_EMAIL => 6, CustomerTableMap::COL_CUSTOMER_PHONE => 7, CustomerTableMap::COL_COUNTRY_ID => 8, CustomerTableMap::COL_CUSTOMER_PRIVATIZATION => 9, CustomerTableMap::COL_CUSTOMER_INSERT => 10, CustomerTableMap::COL_CUSTOMER_UPDATE => 11, CustomerTableMap::COL_CUSTOMER_CREATED => 12, CustomerTableMap::COL_CUSTOMER_UPDATED => 13, ],
-        self::TYPE_FIELDNAME     => ['customer_id' => 0, 'site_id' => 1, 'axys_account_id' => 2, 'customer_type' => 3, 'customer_first_name' => 4, 'customer_last_name' => 5, 'customer_email' => 6, 'customer_phone' => 7, 'country_id' => 8, 'customer_privatization' => 9, 'customer_insert' => 10, 'customer_update' => 11, 'customer_created' => 12, 'customer_updated' => 13, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'AxysAccountId' => 2, 'UserId' => 3, 'Type' => 4, 'FirstName' => 5, 'LastName' => 6, 'Email' => 7, 'Phone' => 8, 'CountryId' => 9, 'Privatization' => 10, 'Insert' => 11, 'Update' => 12, 'CreatedAt' => 13, 'UpdatedAt' => 14, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'axysAccountId' => 2, 'userId' => 3, 'type' => 4, 'firstName' => 5, 'lastName' => 6, 'email' => 7, 'phone' => 8, 'countryId' => 9, 'privatization' => 10, 'insert' => 11, 'update' => 12, 'createdAt' => 13, 'updatedAt' => 14, ],
+        self::TYPE_COLNAME       => [CustomerTableMap::COL_CUSTOMER_ID => 0, CustomerTableMap::COL_SITE_ID => 1, CustomerTableMap::COL_AXYS_ACCOUNT_ID => 2, CustomerTableMap::COL_USER_ID => 3, CustomerTableMap::COL_CUSTOMER_TYPE => 4, CustomerTableMap::COL_CUSTOMER_FIRST_NAME => 5, CustomerTableMap::COL_CUSTOMER_LAST_NAME => 6, CustomerTableMap::COL_CUSTOMER_EMAIL => 7, CustomerTableMap::COL_CUSTOMER_PHONE => 8, CustomerTableMap::COL_COUNTRY_ID => 9, CustomerTableMap::COL_CUSTOMER_PRIVATIZATION => 10, CustomerTableMap::COL_CUSTOMER_INSERT => 11, CustomerTableMap::COL_CUSTOMER_UPDATE => 12, CustomerTableMap::COL_CUSTOMER_CREATED => 13, CustomerTableMap::COL_CUSTOMER_UPDATED => 14, ],
+        self::TYPE_FIELDNAME     => ['customer_id' => 0, 'site_id' => 1, 'axys_account_id' => 2, 'user_id' => 3, 'customer_type' => 4, 'customer_first_name' => 5, 'customer_last_name' => 6, 'customer_email' => 7, 'customer_phone' => 8, 'country_id' => 9, 'customer_privatization' => 10, 'customer_insert' => 11, 'customer_update' => 12, 'customer_created' => 13, 'customer_updated' => 14, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, ]
     ];
 
     /**
@@ -212,6 +217,14 @@ class CustomerTableMap extends TableMap
         'COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
         'axys_account_id' => 'AXYS_ACCOUNT_ID',
         'customers.axys_account_id' => 'AXYS_ACCOUNT_ID',
+        'UserId' => 'USER_ID',
+        'Customer.UserId' => 'USER_ID',
+        'userId' => 'USER_ID',
+        'customer.userId' => 'USER_ID',
+        'CustomerTableMap::COL_USER_ID' => 'USER_ID',
+        'COL_USER_ID' => 'USER_ID',
+        'user_id' => 'USER_ID',
+        'customers.user_id' => 'USER_ID',
         'Type' => 'CUSTOMER_TYPE',
         'Customer.Type' => 'CUSTOMER_TYPE',
         'type' => 'CUSTOMER_TYPE',
@@ -322,6 +335,7 @@ class CustomerTableMap extends TableMap
         $this->addPrimaryKey('customer_id', 'Id', 'INTEGER', true, 10, null);
         $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
         $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
         $this->addColumn('customer_type', 'Type', 'VARCHAR', false, 16, 'Particulier');
         $this->addColumn('customer_first_name', 'FirstName', 'VARCHAR', false, 64, null);
         $this->addColumn('customer_last_name', 'LastName', 'VARCHAR', false, 64, null);
@@ -342,6 +356,13 @@ class CustomerTableMap extends TableMap
      */
     public function buildRelations(): void
     {
+        $this->addRelation('User', '\\Model\\User', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
     }
 
     /**
@@ -502,6 +523,7 @@ class CustomerTableMap extends TableMap
             $criteria->addSelectColumn(CustomerTableMap::COL_CUSTOMER_ID);
             $criteria->addSelectColumn(CustomerTableMap::COL_SITE_ID);
             $criteria->addSelectColumn(CustomerTableMap::COL_AXYS_ACCOUNT_ID);
+            $criteria->addSelectColumn(CustomerTableMap::COL_USER_ID);
             $criteria->addSelectColumn(CustomerTableMap::COL_CUSTOMER_TYPE);
             $criteria->addSelectColumn(CustomerTableMap::COL_CUSTOMER_FIRST_NAME);
             $criteria->addSelectColumn(CustomerTableMap::COL_CUSTOMER_LAST_NAME);
@@ -517,6 +539,7 @@ class CustomerTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.customer_id');
             $criteria->addSelectColumn($alias . '.site_id');
             $criteria->addSelectColumn($alias . '.axys_account_id');
+            $criteria->addSelectColumn($alias . '.user_id');
             $criteria->addSelectColumn($alias . '.customer_type');
             $criteria->addSelectColumn($alias . '.customer_first_name');
             $criteria->addSelectColumn($alias . '.customer_last_name');
@@ -549,6 +572,7 @@ class CustomerTableMap extends TableMap
             $criteria->removeSelectColumn(CustomerTableMap::COL_CUSTOMER_ID);
             $criteria->removeSelectColumn(CustomerTableMap::COL_SITE_ID);
             $criteria->removeSelectColumn(CustomerTableMap::COL_AXYS_ACCOUNT_ID);
+            $criteria->removeSelectColumn(CustomerTableMap::COL_USER_ID);
             $criteria->removeSelectColumn(CustomerTableMap::COL_CUSTOMER_TYPE);
             $criteria->removeSelectColumn(CustomerTableMap::COL_CUSTOMER_FIRST_NAME);
             $criteria->removeSelectColumn(CustomerTableMap::COL_CUSTOMER_LAST_NAME);
@@ -564,6 +588,7 @@ class CustomerTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.customer_id');
             $criteria->removeSelectColumn($alias . '.site_id');
             $criteria->removeSelectColumn($alias . '.axys_account_id');
+            $criteria->removeSelectColumn($alias . '.user_id');
             $criteria->removeSelectColumn($alias . '.customer_type');
             $criteria->removeSelectColumn($alias . '.customer_first_name');
             $criteria->removeSelectColumn($alias . '.customer_last_name');

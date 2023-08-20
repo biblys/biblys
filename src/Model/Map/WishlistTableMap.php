@@ -63,7 +63,7 @@ class WishlistTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 7;
+    public const NUM_COLUMNS = 8;
 
     /**
      * The number of lazy-loaded columns
@@ -73,7 +73,7 @@ class WishlistTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 7;
+    public const NUM_HYDRATE_COLUMNS = 8;
 
     /**
      * the column name for the wishlist_id field
@@ -84,6 +84,11 @@ class WishlistTableMap extends TableMap
      * the column name for the axys_account_id field
      */
     public const COL_AXYS_ACCOUNT_ID = 'wishlist.axys_account_id';
+
+    /**
+     * the column name for the user_id field
+     */
+    public const COL_USER_ID = 'wishlist.user_id';
 
     /**
      * the column name for the wishlist_name field
@@ -124,11 +129,11 @@ class WishlistTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'AxysAccountId', 'Name', 'Current', 'Public', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'axysAccountId', 'name', 'current', 'public', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [WishlistTableMap::COL_WISHLIST_ID, WishlistTableMap::COL_AXYS_ACCOUNT_ID, WishlistTableMap::COL_WISHLIST_NAME, WishlistTableMap::COL_WISHLIST_CURRENT, WishlistTableMap::COL_WISHLIST_PUBLIC, WishlistTableMap::COL_WISHLIST_CREATED, WishlistTableMap::COL_WISHLIST_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['wishlist_id', 'axys_account_id', 'wishlist_name', 'wishlist_current', 'wishlist_public', 'wishlist_created', 'wishlist_updated', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
+        self::TYPE_PHPNAME       => ['Id', 'AxysAccountId', 'UserId', 'Name', 'Current', 'Public', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'axysAccountId', 'userId', 'name', 'current', 'public', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [WishlistTableMap::COL_WISHLIST_ID, WishlistTableMap::COL_AXYS_ACCOUNT_ID, WishlistTableMap::COL_USER_ID, WishlistTableMap::COL_WISHLIST_NAME, WishlistTableMap::COL_WISHLIST_CURRENT, WishlistTableMap::COL_WISHLIST_PUBLIC, WishlistTableMap::COL_WISHLIST_CREATED, WishlistTableMap::COL_WISHLIST_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['wishlist_id', 'axys_account_id', 'user_id', 'wishlist_name', 'wishlist_current', 'wishlist_public', 'wishlist_created', 'wishlist_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, ]
     ];
 
     /**
@@ -140,11 +145,11 @@ class WishlistTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'AxysAccountId' => 1, 'Name' => 2, 'Current' => 3, 'Public' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'axysAccountId' => 1, 'name' => 2, 'current' => 3, 'public' => 4, 'createdAt' => 5, 'updatedAt' => 6, ],
-        self::TYPE_COLNAME       => [WishlistTableMap::COL_WISHLIST_ID => 0, WishlistTableMap::COL_AXYS_ACCOUNT_ID => 1, WishlistTableMap::COL_WISHLIST_NAME => 2, WishlistTableMap::COL_WISHLIST_CURRENT => 3, WishlistTableMap::COL_WISHLIST_PUBLIC => 4, WishlistTableMap::COL_WISHLIST_CREATED => 5, WishlistTableMap::COL_WISHLIST_UPDATED => 6, ],
-        self::TYPE_FIELDNAME     => ['wishlist_id' => 0, 'axys_account_id' => 1, 'wishlist_name' => 2, 'wishlist_current' => 3, 'wishlist_public' => 4, 'wishlist_created' => 5, 'wishlist_updated' => 6, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'AxysAccountId' => 1, 'UserId' => 2, 'Name' => 3, 'Current' => 4, 'Public' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'axysAccountId' => 1, 'userId' => 2, 'name' => 3, 'current' => 4, 'public' => 5, 'createdAt' => 6, 'updatedAt' => 7, ],
+        self::TYPE_COLNAME       => [WishlistTableMap::COL_WISHLIST_ID => 0, WishlistTableMap::COL_AXYS_ACCOUNT_ID => 1, WishlistTableMap::COL_USER_ID => 2, WishlistTableMap::COL_WISHLIST_NAME => 3, WishlistTableMap::COL_WISHLIST_CURRENT => 4, WishlistTableMap::COL_WISHLIST_PUBLIC => 5, WishlistTableMap::COL_WISHLIST_CREATED => 6, WishlistTableMap::COL_WISHLIST_UPDATED => 7, ],
+        self::TYPE_FIELDNAME     => ['wishlist_id' => 0, 'axys_account_id' => 1, 'user_id' => 2, 'wishlist_name' => 3, 'wishlist_current' => 4, 'wishlist_public' => 5, 'wishlist_created' => 6, 'wishlist_updated' => 7, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, ]
     ];
 
     /**
@@ -169,6 +174,14 @@ class WishlistTableMap extends TableMap
         'COL_AXYS_ACCOUNT_ID' => 'AXYS_ACCOUNT_ID',
         'axys_account_id' => 'AXYS_ACCOUNT_ID',
         'wishlist.axys_account_id' => 'AXYS_ACCOUNT_ID',
+        'UserId' => 'USER_ID',
+        'Wishlist.UserId' => 'USER_ID',
+        'userId' => 'USER_ID',
+        'wishlist.userId' => 'USER_ID',
+        'WishlistTableMap::COL_USER_ID' => 'USER_ID',
+        'COL_USER_ID' => 'USER_ID',
+        'user_id' => 'USER_ID',
+        'wishlist.user_id' => 'USER_ID',
         'Name' => 'WISHLIST_NAME',
         'Wishlist.Name' => 'WISHLIST_NAME',
         'name' => 'WISHLIST_NAME',
@@ -230,6 +243,7 @@ class WishlistTableMap extends TableMap
         // columns
         $this->addPrimaryKey('wishlist_id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('axys_account_id', 'AxysAccountId', 'INTEGER', 'axys_accounts', 'axys_account_id', false, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
         $this->addColumn('wishlist_name', 'Name', 'VARCHAR', false, 128, null);
         $this->addColumn('wishlist_current', 'Current', 'BOOLEAN', false, 1, null);
         $this->addColumn('wishlist_public', 'Public', 'BOOLEAN', false, 1, null);
@@ -244,6 +258,13 @@ class WishlistTableMap extends TableMap
      */
     public function buildRelations(): void
     {
+        $this->addRelation('User', '\\Model\\User', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
         $this->addRelation('AxysAccount', '\\Model\\AxysAccount', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
@@ -410,6 +431,7 @@ class WishlistTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(WishlistTableMap::COL_WISHLIST_ID);
             $criteria->addSelectColumn(WishlistTableMap::COL_AXYS_ACCOUNT_ID);
+            $criteria->addSelectColumn(WishlistTableMap::COL_USER_ID);
             $criteria->addSelectColumn(WishlistTableMap::COL_WISHLIST_NAME);
             $criteria->addSelectColumn(WishlistTableMap::COL_WISHLIST_CURRENT);
             $criteria->addSelectColumn(WishlistTableMap::COL_WISHLIST_PUBLIC);
@@ -418,6 +440,7 @@ class WishlistTableMap extends TableMap
         } else {
             $criteria->addSelectColumn($alias . '.wishlist_id');
             $criteria->addSelectColumn($alias . '.axys_account_id');
+            $criteria->addSelectColumn($alias . '.user_id');
             $criteria->addSelectColumn($alias . '.wishlist_name');
             $criteria->addSelectColumn($alias . '.wishlist_current');
             $criteria->addSelectColumn($alias . '.wishlist_public');
@@ -443,6 +466,7 @@ class WishlistTableMap extends TableMap
         if (null === $alias) {
             $criteria->removeSelectColumn(WishlistTableMap::COL_WISHLIST_ID);
             $criteria->removeSelectColumn(WishlistTableMap::COL_AXYS_ACCOUNT_ID);
+            $criteria->removeSelectColumn(WishlistTableMap::COL_USER_ID);
             $criteria->removeSelectColumn(WishlistTableMap::COL_WISHLIST_NAME);
             $criteria->removeSelectColumn(WishlistTableMap::COL_WISHLIST_CURRENT);
             $criteria->removeSelectColumn(WishlistTableMap::COL_WISHLIST_PUBLIC);
@@ -451,6 +475,7 @@ class WishlistTableMap extends TableMap
         } else {
             $criteria->removeSelectColumn($alias . '.wishlist_id');
             $criteria->removeSelectColumn($alias . '.axys_account_id');
+            $criteria->removeSelectColumn($alias . '.user_id');
             $criteria->removeSelectColumn($alias . '.wishlist_name');
             $criteria->removeSelectColumn($alias . '.wishlist_current');
             $criteria->removeSelectColumn($alias . '.wishlist_public');

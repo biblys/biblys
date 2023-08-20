@@ -10,7 +10,9 @@ use Model\Map\FileTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
+use Propel\Runtime\ActiveQuery\ModelJoin;
 use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -20,6 +22,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFileQuery orderById($order = Criteria::ASC) Order by the file_id column
  * @method     ChildFileQuery orderByArticleId($order = Criteria::ASC) Order by the article_id column
  * @method     ChildFileQuery orderByAxysAccountId($order = Criteria::ASC) Order by the axys_account_id column
+ * @method     ChildFileQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
  * @method     ChildFileQuery orderByTitle($order = Criteria::ASC) Order by the file_title column
  * @method     ChildFileQuery orderByType($order = Criteria::ASC) Order by the file_type column
  * @method     ChildFileQuery orderByAccess($order = Criteria::ASC) Order by the file_access column
@@ -35,6 +38,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFileQuery groupById() Group by the file_id column
  * @method     ChildFileQuery groupByArticleId() Group by the article_id column
  * @method     ChildFileQuery groupByAxysAccountId() Group by the axys_account_id column
+ * @method     ChildFileQuery groupByUserId() Group by the user_id column
  * @method     ChildFileQuery groupByTitle() Group by the file_title column
  * @method     ChildFileQuery groupByType() Group by the file_type column
  * @method     ChildFileQuery groupByAccess() Group by the file_access column
@@ -55,12 +59,25 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFileQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildFileQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
+ * @method     ChildFileQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
+ * @method     ChildFileQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
+ * @method     ChildFileQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
+ *
+ * @method     ChildFileQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
+ *
+ * @method     ChildFileQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
+ * @method     ChildFileQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
+ * @method     ChildFileQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
+ *
+ * @method     \Model\UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ *
  * @method     ChildFile|null findOne(?ConnectionInterface $con = null) Return the first ChildFile matching the query
  * @method     ChildFile findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildFile matching the query, or a new ChildFile object populated from the query conditions when no match is found
  *
  * @method     ChildFile|null findOneById(int $file_id) Return the first ChildFile filtered by the file_id column
  * @method     ChildFile|null findOneByArticleId(int $article_id) Return the first ChildFile filtered by the article_id column
  * @method     ChildFile|null findOneByAxysAccountId(int $axys_account_id) Return the first ChildFile filtered by the axys_account_id column
+ * @method     ChildFile|null findOneByUserId(int $user_id) Return the first ChildFile filtered by the user_id column
  * @method     ChildFile|null findOneByTitle(string $file_title) Return the first ChildFile filtered by the file_title column
  * @method     ChildFile|null findOneByType(string $file_type) Return the first ChildFile filtered by the file_type column
  * @method     ChildFile|null findOneByAccess(boolean $file_access) Return the first ChildFile filtered by the file_access column
@@ -79,6 +96,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFile requireOneById(int $file_id) Return the first ChildFile filtered by the file_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildFile requireOneByArticleId(int $article_id) Return the first ChildFile filtered by the article_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildFile requireOneByAxysAccountId(int $axys_account_id) Return the first ChildFile filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildFile requireOneByUserId(int $user_id) Return the first ChildFile filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildFile requireOneByTitle(string $file_title) Return the first ChildFile filtered by the file_title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildFile requireOneByType(string $file_type) Return the first ChildFile filtered by the file_type column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildFile requireOneByAccess(boolean $file_access) Return the first ChildFile filtered by the file_access column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -100,6 +118,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildFile> findByArticleId(int|array<int> $article_id) Return ChildFile objects filtered by the article_id column
  * @method     ChildFile[]|Collection findByAxysAccountId(int|array<int> $axys_account_id) Return ChildFile objects filtered by the axys_account_id column
  * @psalm-method Collection&\Traversable<ChildFile> findByAxysAccountId(int|array<int> $axys_account_id) Return ChildFile objects filtered by the axys_account_id column
+ * @method     ChildFile[]|Collection findByUserId(int|array<int> $user_id) Return ChildFile objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildFile> findByUserId(int|array<int> $user_id) Return ChildFile objects filtered by the user_id column
  * @method     ChildFile[]|Collection findByTitle(string|array<string> $file_title) Return ChildFile objects filtered by the file_title column
  * @psalm-method Collection&\Traversable<ChildFile> findByTitle(string|array<string> $file_title) Return ChildFile objects filtered by the file_title column
  * @method     ChildFile[]|Collection findByType(string|array<string> $file_type) Return ChildFile objects filtered by the file_type column
@@ -221,7 +241,7 @@ abstract class FileQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT file_id, article_id, axys_account_id, file_title, file_type, file_access, file_version, file_hash, file_size, file_ean, file_inserted, file_uploaded, file_updated, file_created FROM files WHERE file_id = :p0';
+        $sql = 'SELECT file_id, article_id, axys_account_id, user_id, file_title, file_type, file_access, file_version, file_hash, file_size, file_ean, file_inserted, file_uploaded, file_updated, file_created FROM files WHERE file_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -440,6 +460,51 @@ abstract class FileQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(FileTableMap::COL_AXYS_ACCOUNT_ID, $axysAccountId, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the user_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByUserId(1234); // WHERE user_id = 1234
+     * $query->filterByUserId(array(12, 34)); // WHERE user_id IN (12, 34)
+     * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
+     * </code>
+     *
+     * @see       filterByUser()
+     *
+     * @param mixed $userId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByUserId($userId = null, ?string $comparison = null)
+    {
+        if (is_array($userId)) {
+            $useMinMax = false;
+            if (isset($userId['min'])) {
+                $this->addUsingAlias(FileTableMap::COL_USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($userId['max'])) {
+                $this->addUsingAlias(FileTableMap::COL_USER_ID, $userId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(FileTableMap::COL_USER_ID, $userId, $comparison);
 
         return $this;
     }
@@ -849,6 +914,181 @@ abstract class FileQuery extends ModelCriteria
         $this->addUsingAlias(FileTableMap::COL_FILE_CREATED, $createdAt, $comparison);
 
         return $this;
+    }
+
+    /**
+     * Filter the query by a related \Model\User object
+     *
+     * @param \Model\User|ObjectCollection $user The related object(s) to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByUser($user, ?string $comparison = null)
+    {
+        if ($user instanceof \Model\User) {
+            return $this
+                ->addUsingAlias(FileTableMap::COL_USER_ID, $user->getId(), $comparison);
+        } elseif ($user instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            $this
+                ->addUsingAlias(FileTableMap::COL_USER_ID, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
+        } else {
+            throw new PropelException('filterByUser() only accepts arguments of type \Model\User or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the User relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinUser(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('User');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'User');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the User relation User object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\UserQuery A secondary query class using the current class as primary query
+     */
+    public function useUserQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinUser($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'User', '\Model\UserQuery');
+    }
+
+    /**
+     * Use the User relation User object
+     *
+     * @param callable(\Model\UserQuery):\Model\UserQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withUserQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useUserQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to User table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\UserQuery The inner query object of the EXISTS statement
+     */
+    public function useUserExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useExistsQuery('User', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to User table for a NOT EXISTS query.
+     *
+     * @see useUserExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\UserQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useUserNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useExistsQuery('User', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to User table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\UserQuery The inner query object of the IN statement
+     */
+    public function useInUserQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useInQuery('User', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to User table for a NOT IN query.
+     *
+     * @see useUserInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\UserQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInUserQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useInQuery('User', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
     }
 
     /**

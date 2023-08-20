@@ -5,14 +5,12 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
-use Model\AxysAccount as ChildAxysAccount;
-use Model\AxysAccountQuery as ChildAxysAccountQuery;
-use Model\OptionQuery as ChildOptionQuery;
+use Model\AuthenticationMethodQuery as ChildAuthenticationMethodQuery;
 use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
 use Model\User as ChildUser;
 use Model\UserQuery as ChildUserQuery;
-use Model\Map\OptionTableMap;
+use Model\Map\AuthenticationMethodTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -27,20 +25,20 @@ use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
 
 /**
- * Base class that represents a row from the 'options' table.
+ * Base class that represents a row from the 'authentication_methods' table.
  *
  *
  *
  * @package    propel.generator.Model.Base
  */
-abstract class Option implements ActiveRecordInterface
+abstract class AuthenticationMethod implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      *
      * @var string
      */
-    public const TABLE_MAP = '\\Model\\Map\\OptionTableMap';
+    public const TABLE_MAP = '\\Model\\Map\\AuthenticationMethodTableMap';
 
 
     /**
@@ -70,75 +68,77 @@ abstract class Option implements ActiveRecordInterface
     protected $virtualColumns = [];
 
     /**
-     * The value for the option_id field.
+     * The value for the id field.
      *
      * @var        int
      */
-    protected $option_id;
+    protected $id;
 
     /**
      * The value for the site_id field.
      *
-     * @var        int|null
+     * @var        int
      */
     protected $site_id;
 
     /**
-     * The value for the axys_account_id field.
-     *
-     * @var        int|null
-     */
-    protected $axys_account_id;
-
-    /**
      * The value for the user_id field.
      *
-     * @var        int|null
+     * @var        int
      */
     protected $user_id;
 
     /**
-     * The value for the option_key field.
+     * The value for the identity_provider field.
      *
      * @var        string|null
      */
-    protected $option_key;
+    protected $identity_provider;
 
     /**
-     * The value for the option_value field.
+     * The value for the external_id field.
      *
      * @var        string|null
      */
-    protected $option_value;
+    protected $external_id;
 
     /**
-     * The value for the option_created field.
+     * The value for the access_token field.
+     *
+     * @var        string|null
+     */
+    protected $access_token;
+
+    /**
+     * The value for the id_token field.
+     *
+     * @var        string|null
+     */
+    protected $id_token;
+
+    /**
+     * The value for the created_at field.
      *
      * @var        DateTime|null
      */
-    protected $option_created;
+    protected $created_at;
 
     /**
-     * The value for the option_updated field.
+     * The value for the updated_at field.
      *
      * @var        DateTime|null
      */
-    protected $option_updated;
-
-    /**
-     * @var        ChildUser
-     */
-    protected $aUser;
-
-    /**
-     * @var        ChildAxysAccount
-     */
-    protected $aAxysAccount;
+    protected $updated_at;
 
     /**
      * @var        ChildSite
      */
     protected $aSite;
+
+    /**
+     * @var        ChildUser
+     */
+    protected $aUser;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -149,7 +149,7 @@ abstract class Option implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * Initializes internal state of Model\Base\Option object.
+     * Initializes internal state of Model\Base\AuthenticationMethod object.
      */
     public function __construct()
     {
@@ -242,9 +242,9 @@ abstract class Option implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Option</code> instance.  If
-     * <code>obj</code> is an instance of <code>Option</code>, delegates to
-     * <code>equals(Option)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>AuthenticationMethod</code> instance.  If
+     * <code>obj</code> is an instance of <code>AuthenticationMethod</code>, delegates to
+     * <code>equals(AuthenticationMethod)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param mixed $obj The object to compare to.
      * @return bool Whether equal to the object specified.
@@ -375,19 +375,19 @@ abstract class Option implements ActiveRecordInterface
     }
 
     /**
-     * Get the [option_id] column value.
+     * Get the [id] column value.
      *
      * @return int
      */
     public function getId()
     {
-        return $this->option_id;
+        return $this->id;
     }
 
     /**
      * Get the [site_id] column value.
      *
-     * @return int|null
+     * @return int
      */
     public function getSiteId()
     {
@@ -395,19 +395,9 @@ abstract class Option implements ActiveRecordInterface
     }
 
     /**
-     * Get the [axys_account_id] column value.
-     *
-     * @return int|null
-     */
-    public function getAxysAccountId()
-    {
-        return $this->axys_account_id;
-    }
-
-    /**
      * Get the [user_id] column value.
      *
-     * @return int|null
+     * @return int
      */
     public function getUserId()
     {
@@ -415,27 +405,47 @@ abstract class Option implements ActiveRecordInterface
     }
 
     /**
-     * Get the [option_key] column value.
+     * Get the [identity_provider] column value.
      *
      * @return string|null
      */
-    public function getKey()
+    public function getIdentityProvider()
     {
-        return $this->option_key;
+        return $this->identity_provider;
     }
 
     /**
-     * Get the [option_value] column value.
+     * Get the [external_id] column value.
      *
      * @return string|null
      */
-    public function getValue()
+    public function getExternalId()
     {
-        return $this->option_value;
+        return $this->external_id;
     }
 
     /**
-     * Get the [optionally formatted] temporal [option_created] column value.
+     * Get the [access_token] column value.
+     *
+     * @return string|null
+     */
+    public function getAccessToken()
+    {
+        return $this->access_token;
+    }
+
+    /**
+     * Get the [id_token] column value.
+     *
+     * @return string|null
+     */
+    public function getIdToken()
+    {
+        return $this->id_token;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [created_at] column value.
      *
      *
      * @param string|null $format The date/time format string (either date()-style or strftime()-style).
@@ -450,14 +460,14 @@ abstract class Option implements ActiveRecordInterface
     public function getCreatedAt($format = null)
     {
         if ($format === null) {
-            return $this->option_created;
+            return $this->created_at;
         } else {
-            return $this->option_created instanceof \DateTimeInterface ? $this->option_created->format($format) : null;
+            return $this->created_at instanceof \DateTimeInterface ? $this->created_at->format($format) : null;
         }
     }
 
     /**
-     * Get the [optionally formatted] temporal [option_updated] column value.
+     * Get the [optionally formatted] temporal [updated_at] column value.
      *
      *
      * @param string|null $format The date/time format string (either date()-style or strftime()-style).
@@ -472,14 +482,14 @@ abstract class Option implements ActiveRecordInterface
     public function getUpdatedAt($format = null)
     {
         if ($format === null) {
-            return $this->option_updated;
+            return $this->updated_at;
         } else {
-            return $this->option_updated instanceof \DateTimeInterface ? $this->option_updated->format($format) : null;
+            return $this->updated_at instanceof \DateTimeInterface ? $this->updated_at->format($format) : null;
         }
     }
 
     /**
-     * Set the value of [option_id] column.
+     * Set the value of [id] column.
      *
      * @param int $v New value
      * @return $this The current object (for fluent API support)
@@ -490,9 +500,9 @@ abstract class Option implements ActiveRecordInterface
             $v = (int) $v;
         }
 
-        if ($this->option_id !== $v) {
-            $this->option_id = $v;
-            $this->modifiedColumns[OptionTableMap::COL_OPTION_ID] = true;
+        if ($this->id !== $v) {
+            $this->id = $v;
+            $this->modifiedColumns[AuthenticationMethodTableMap::COL_ID] = true;
         }
 
         return $this;
@@ -501,7 +511,7 @@ abstract class Option implements ActiveRecordInterface
     /**
      * Set the value of [site_id] column.
      *
-     * @param int|null $v New value
+     * @param int $v New value
      * @return $this The current object (for fluent API support)
      */
     public function setSiteId($v)
@@ -512,7 +522,7 @@ abstract class Option implements ActiveRecordInterface
 
         if ($this->site_id !== $v) {
             $this->site_id = $v;
-            $this->modifiedColumns[OptionTableMap::COL_SITE_ID] = true;
+            $this->modifiedColumns[AuthenticationMethodTableMap::COL_SITE_ID] = true;
         }
 
         if ($this->aSite !== null && $this->aSite->getId() !== $v) {
@@ -523,33 +533,9 @@ abstract class Option implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [axys_account_id] column.
-     *
-     * @param int|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setAxysAccountId($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->axys_account_id !== $v) {
-            $this->axys_account_id = $v;
-            $this->modifiedColumns[OptionTableMap::COL_AXYS_ACCOUNT_ID] = true;
-        }
-
-        if ($this->aAxysAccount !== null && $this->aAxysAccount->getId() !== $v) {
-            $this->aAxysAccount = null;
-        }
-
-        return $this;
-    }
-
-    /**
      * Set the value of [user_id] column.
      *
-     * @param int|null $v New value
+     * @param int $v New value
      * @return $this The current object (for fluent API support)
      */
     public function setUserId($v)
@@ -560,7 +546,7 @@ abstract class Option implements ActiveRecordInterface
 
         if ($this->user_id !== $v) {
             $this->user_id = $v;
-            $this->modifiedColumns[OptionTableMap::COL_USER_ID] = true;
+            $this->modifiedColumns[AuthenticationMethodTableMap::COL_USER_ID] = true;
         }
 
         if ($this->aUser !== null && $this->aUser->getId() !== $v) {
@@ -571,47 +557,87 @@ abstract class Option implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [option_key] column.
+     * Set the value of [identity_provider] column.
      *
      * @param string|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setKey($v)
+    public function setIdentityProvider($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->option_key !== $v) {
-            $this->option_key = $v;
-            $this->modifiedColumns[OptionTableMap::COL_OPTION_KEY] = true;
+        if ($this->identity_provider !== $v) {
+            $this->identity_provider = $v;
+            $this->modifiedColumns[AuthenticationMethodTableMap::COL_IDENTITY_PROVIDER] = true;
         }
 
         return $this;
     }
 
     /**
-     * Set the value of [option_value] column.
+     * Set the value of [external_id] column.
      *
      * @param string|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setValue($v)
+    public function setExternalId($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->option_value !== $v) {
-            $this->option_value = $v;
-            $this->modifiedColumns[OptionTableMap::COL_OPTION_VALUE] = true;
+        if ($this->external_id !== $v) {
+            $this->external_id = $v;
+            $this->modifiedColumns[AuthenticationMethodTableMap::COL_EXTERNAL_ID] = true;
         }
 
         return $this;
     }
 
     /**
-     * Sets the value of [option_created] column to a normalized version of the date/time value specified.
+     * Set the value of [access_token] column.
+     *
+     * @param string|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setAccessToken($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->access_token !== $v) {
+            $this->access_token = $v;
+            $this->modifiedColumns[AuthenticationMethodTableMap::COL_ACCESS_TOKEN] = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [id_token] column.
+     *
+     * @param string|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setIdToken($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->id_token !== $v) {
+            $this->id_token = $v;
+            $this->modifiedColumns[AuthenticationMethodTableMap::COL_ID_TOKEN] = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
@@ -620,10 +646,10 @@ abstract class Option implements ActiveRecordInterface
     public function setCreatedAt($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->option_created !== null || $dt !== null) {
-            if ($this->option_created === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->option_created->format("Y-m-d H:i:s.u")) {
-                $this->option_created = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[OptionTableMap::COL_OPTION_CREATED] = true;
+        if ($this->created_at !== null || $dt !== null) {
+            if ($this->created_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->created_at->format("Y-m-d H:i:s.u")) {
+                $this->created_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[AuthenticationMethodTableMap::COL_CREATED_AT] = true;
             }
         } // if either are not null
 
@@ -631,7 +657,7 @@ abstract class Option implements ActiveRecordInterface
     }
 
     /**
-     * Sets the value of [option_updated] column to a normalized version of the date/time value specified.
+     * Sets the value of [updated_at] column to a normalized version of the date/time value specified.
      *
      * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
@@ -640,10 +666,10 @@ abstract class Option implements ActiveRecordInterface
     public function setUpdatedAt($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->option_updated !== null || $dt !== null) {
-            if ($this->option_updated === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->option_updated->format("Y-m-d H:i:s.u")) {
-                $this->option_updated = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[OptionTableMap::COL_OPTION_UPDATED] = true;
+        if ($this->updated_at !== null || $dt !== null) {
+            if ($this->updated_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->updated_at->format("Y-m-d H:i:s.u")) {
+                $this->updated_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[AuthenticationMethodTableMap::COL_UPDATED_AT] = true;
             }
         } // if either are not null
 
@@ -686,35 +712,38 @@ abstract class Option implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : OptionTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->option_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : AuthenticationMethodTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : OptionTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : AuthenticationMethodTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : OptionTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->axys_account_id = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : OptionTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : AuthenticationMethodTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : OptionTableMap::translateFieldName('Key', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->option_key = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : AuthenticationMethodTableMap::translateFieldName('IdentityProvider', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->identity_provider = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : OptionTableMap::translateFieldName('Value', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->option_value = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : AuthenticationMethodTableMap::translateFieldName('ExternalId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->external_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : OptionTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : AuthenticationMethodTableMap::translateFieldName('AccessToken', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->access_token = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : AuthenticationMethodTableMap::translateFieldName('IdToken', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->id_token = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : AuthenticationMethodTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->option_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : OptionTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : AuthenticationMethodTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->option_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->updated_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
             $this->resetModified();
             $this->setNew(false);
@@ -723,10 +752,10 @@ abstract class Option implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 8; // 8 = OptionTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = AuthenticationMethodTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\Model\\Option'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\Model\\AuthenticationMethod'), 0, $e);
         }
     }
 
@@ -748,9 +777,6 @@ abstract class Option implements ActiveRecordInterface
     {
         if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
             $this->aSite = null;
-        }
-        if ($this->aAxysAccount !== null && $this->axys_account_id !== $this->aAxysAccount->getId()) {
-            $this->aAxysAccount = null;
         }
         if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
             $this->aUser = null;
@@ -778,13 +804,13 @@ abstract class Option implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(OptionTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(AuthenticationMethodTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildOptionQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildAuthenticationMethodQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -794,9 +820,8 @@ abstract class Option implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aUser = null;
-            $this->aAxysAccount = null;
             $this->aSite = null;
+            $this->aUser = null;
         } // if (deep)
     }
 
@@ -806,8 +831,8 @@ abstract class Option implements ActiveRecordInterface
      * @param ConnectionInterface $con
      * @return void
      * @throws \Propel\Runtime\Exception\PropelException
-     * @see Option::setDeleted()
-     * @see Option::isDeleted()
+     * @see AuthenticationMethod::setDeleted()
+     * @see AuthenticationMethod::isDeleted()
      */
     public function delete(?ConnectionInterface $con = null): void
     {
@@ -816,11 +841,11 @@ abstract class Option implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(OptionTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AuthenticationMethodTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildOptionQuery::create()
+            $deleteQuery = ChildAuthenticationMethodQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -855,7 +880,7 @@ abstract class Option implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(OptionTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AuthenticationMethodTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -866,16 +891,16 @@ abstract class Option implements ActiveRecordInterface
                 // timestampable behavior
                 $time = time();
                 $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
-                if (!$this->isColumnModified(OptionTableMap::COL_OPTION_CREATED)) {
+                if (!$this->isColumnModified(AuthenticationMethodTableMap::COL_CREATED_AT)) {
                     $this->setCreatedAt($highPrecision);
                 }
-                if (!$this->isColumnModified(OptionTableMap::COL_OPTION_UPDATED)) {
+                if (!$this->isColumnModified(AuthenticationMethodTableMap::COL_UPDATED_AT)) {
                     $this->setUpdatedAt($highPrecision);
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(OptionTableMap::COL_OPTION_UPDATED)) {
+                if ($this->isModified() && !$this->isColumnModified(AuthenticationMethodTableMap::COL_UPDATED_AT)) {
                     $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
                 }
             }
@@ -887,7 +912,7 @@ abstract class Option implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                OptionTableMap::addInstanceToPool($this);
+                AuthenticationMethodTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -918,25 +943,18 @@ abstract class Option implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aUser !== null) {
-                if ($this->aUser->isModified() || $this->aUser->isNew()) {
-                    $affectedRows += $this->aUser->save($con);
-                }
-                $this->setUser($this->aUser);
-            }
-
-            if ($this->aAxysAccount !== null) {
-                if ($this->aAxysAccount->isModified() || $this->aAxysAccount->isNew()) {
-                    $affectedRows += $this->aAxysAccount->save($con);
-                }
-                $this->setAxysAccount($this->aAxysAccount);
-            }
-
             if ($this->aSite !== null) {
                 if ($this->aSite->isModified() || $this->aSite->isNew()) {
                     $affectedRows += $this->aSite->save($con);
                 }
                 $this->setSite($this->aSite);
+            }
+
+            if ($this->aUser !== null) {
+                if ($this->aUser->isModified() || $this->aUser->isNew()) {
+                    $affectedRows += $this->aUser->save($con);
+                }
+                $this->setUser($this->aUser);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -970,39 +988,42 @@ abstract class Option implements ActiveRecordInterface
         $modifiedColumns = [];
         $index = 0;
 
-        $this->modifiedColumns[OptionTableMap::COL_OPTION_ID] = true;
-        if (null !== $this->option_id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . OptionTableMap::COL_OPTION_ID . ')');
+        $this->modifiedColumns[AuthenticationMethodTableMap::COL_ID] = true;
+        if (null !== $this->id) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . AuthenticationMethodTableMap::COL_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(OptionTableMap::COL_OPTION_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'option_id';
+        if ($this->isColumnModified(AuthenticationMethodTableMap::COL_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(OptionTableMap::COL_SITE_ID)) {
+        if ($this->isColumnModified(AuthenticationMethodTableMap::COL_SITE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'site_id';
         }
-        if ($this->isColumnModified(OptionTableMap::COL_AXYS_ACCOUNT_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'axys_account_id';
-        }
-        if ($this->isColumnModified(OptionTableMap::COL_USER_ID)) {
+        if ($this->isColumnModified(AuthenticationMethodTableMap::COL_USER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'user_id';
         }
-        if ($this->isColumnModified(OptionTableMap::COL_OPTION_KEY)) {
-            $modifiedColumns[':p' . $index++]  = 'option_key';
+        if ($this->isColumnModified(AuthenticationMethodTableMap::COL_IDENTITY_PROVIDER)) {
+            $modifiedColumns[':p' . $index++]  = 'identity_provider';
         }
-        if ($this->isColumnModified(OptionTableMap::COL_OPTION_VALUE)) {
-            $modifiedColumns[':p' . $index++]  = 'option_value';
+        if ($this->isColumnModified(AuthenticationMethodTableMap::COL_EXTERNAL_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'external_id';
         }
-        if ($this->isColumnModified(OptionTableMap::COL_OPTION_CREATED)) {
-            $modifiedColumns[':p' . $index++]  = 'option_created';
+        if ($this->isColumnModified(AuthenticationMethodTableMap::COL_ACCESS_TOKEN)) {
+            $modifiedColumns[':p' . $index++]  = 'access_token';
         }
-        if ($this->isColumnModified(OptionTableMap::COL_OPTION_UPDATED)) {
-            $modifiedColumns[':p' . $index++]  = 'option_updated';
+        if ($this->isColumnModified(AuthenticationMethodTableMap::COL_ID_TOKEN)) {
+            $modifiedColumns[':p' . $index++]  = 'id_token';
+        }
+        if ($this->isColumnModified(AuthenticationMethodTableMap::COL_CREATED_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'created_at';
+        }
+        if ($this->isColumnModified(AuthenticationMethodTableMap::COL_UPDATED_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'updated_at';
         }
 
         $sql = sprintf(
-            'INSERT INTO options (%s) VALUES (%s)',
+            'INSERT INTO authentication_methods (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -1011,36 +1032,40 @@ abstract class Option implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'option_id':
-                        $stmt->bindValue($identifier, $this->option_id, PDO::PARAM_INT);
+                    case 'id':
+                        $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
 
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
 
                         break;
-                    case 'axys_account_id':
-                        $stmt->bindValue($identifier, $this->axys_account_id, PDO::PARAM_INT);
-
-                        break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
 
                         break;
-                    case 'option_key':
-                        $stmt->bindValue($identifier, $this->option_key, PDO::PARAM_STR);
+                    case 'identity_provider':
+                        $stmt->bindValue($identifier, $this->identity_provider, PDO::PARAM_STR);
 
                         break;
-                    case 'option_value':
-                        $stmt->bindValue($identifier, $this->option_value, PDO::PARAM_STR);
+                    case 'external_id':
+                        $stmt->bindValue($identifier, $this->external_id, PDO::PARAM_STR);
 
                         break;
-                    case 'option_created':
-                        $stmt->bindValue($identifier, $this->option_created ? $this->option_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                    case 'access_token':
+                        $stmt->bindValue($identifier, $this->access_token, PDO::PARAM_STR);
 
                         break;
-                    case 'option_updated':
-                        $stmt->bindValue($identifier, $this->option_updated ? $this->option_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                    case 'id_token':
+                        $stmt->bindValue($identifier, $this->id_token, PDO::PARAM_STR);
+
+                        break;
+                    case 'created_at':
+                        $stmt->bindValue($identifier, $this->created_at ? $this->created_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
+                        break;
+                    case 'updated_at':
+                        $stmt->bindValue($identifier, $this->updated_at ? $this->updated_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
 
                         break;
                 }
@@ -1089,7 +1114,7 @@ abstract class Option implements ActiveRecordInterface
      */
     public function getByName(string $name, string $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = OptionTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = AuthenticationMethodTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1112,21 +1137,24 @@ abstract class Option implements ActiveRecordInterface
                 return $this->getSiteId();
 
             case 2:
-                return $this->getAxysAccountId();
-
-            case 3:
                 return $this->getUserId();
 
+            case 3:
+                return $this->getIdentityProvider();
+
             case 4:
-                return $this->getKey();
+                return $this->getExternalId();
 
             case 5:
-                return $this->getValue();
+                return $this->getAccessToken();
 
             case 6:
-                return $this->getCreatedAt();
+                return $this->getIdToken();
 
             case 7:
+                return $this->getCreatedAt();
+
+            case 8:
                 return $this->getUpdatedAt();
 
             default:
@@ -1151,27 +1179,28 @@ abstract class Option implements ActiveRecordInterface
      */
     public function toArray(string $keyType = TableMap::TYPE_PHPNAME, bool $includeLazyLoadColumns = true, array $alreadyDumpedObjects = [], bool $includeForeignObjects = false): array
     {
-        if (isset($alreadyDumpedObjects['Option'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['AuthenticationMethod'][$this->hashCode()])) {
             return ['*RECURSION*'];
         }
-        $alreadyDumpedObjects['Option'][$this->hashCode()] = true;
-        $keys = OptionTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['AuthenticationMethod'][$this->hashCode()] = true;
+        $keys = AuthenticationMethodTableMap::getFieldNames($keyType);
         $result = [
             $keys[0] => $this->getId(),
             $keys[1] => $this->getSiteId(),
-            $keys[2] => $this->getAxysAccountId(),
-            $keys[3] => $this->getUserId(),
-            $keys[4] => $this->getKey(),
-            $keys[5] => $this->getValue(),
-            $keys[6] => $this->getCreatedAt(),
-            $keys[7] => $this->getUpdatedAt(),
+            $keys[2] => $this->getUserId(),
+            $keys[3] => $this->getIdentityProvider(),
+            $keys[4] => $this->getExternalId(),
+            $keys[5] => $this->getAccessToken(),
+            $keys[6] => $this->getIdToken(),
+            $keys[7] => $this->getCreatedAt(),
+            $keys[8] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[6]] instanceof \DateTimeInterface) {
-            $result[$keys[6]] = $result[$keys[6]]->format('Y-m-d H:i:s.u');
-        }
-
         if ($result[$keys[7]] instanceof \DateTimeInterface) {
             $result[$keys[7]] = $result[$keys[7]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[8]] instanceof \DateTimeInterface) {
+            $result[$keys[8]] = $result[$keys[8]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1180,36 +1209,6 @@ abstract class Option implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aUser) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'user';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'users';
-                        break;
-                    default:
-                        $key = 'User';
-                }
-
-                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->aAxysAccount) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'axysAccount';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'axys_accounts';
-                        break;
-                    default:
-                        $key = 'AxysAccount';
-                }
-
-                $result[$key] = $this->aAxysAccount->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
             if (null !== $this->aSite) {
 
                 switch ($keyType) {
@@ -1224,6 +1223,21 @@ abstract class Option implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aSite->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aUser) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'user';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'users';
+                        break;
+                    default:
+                        $key = 'User';
+                }
+
+                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1243,7 +1257,7 @@ abstract class Option implements ActiveRecordInterface
      */
     public function setByName(string $name, $value, string $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = OptionTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = AuthenticationMethodTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
 
@@ -1268,21 +1282,24 @@ abstract class Option implements ActiveRecordInterface
                 $this->setSiteId($value);
                 break;
             case 2:
-                $this->setAxysAccountId($value);
-                break;
-            case 3:
                 $this->setUserId($value);
                 break;
+            case 3:
+                $this->setIdentityProvider($value);
+                break;
             case 4:
-                $this->setKey($value);
+                $this->setExternalId($value);
                 break;
             case 5:
-                $this->setValue($value);
+                $this->setAccessToken($value);
                 break;
             case 6:
-                $this->setCreatedAt($value);
+                $this->setIdToken($value);
                 break;
             case 7:
+                $this->setCreatedAt($value);
+                break;
+            case 8:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1309,7 +1326,7 @@ abstract class Option implements ActiveRecordInterface
      */
     public function fromArray(array $arr, string $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = OptionTableMap::getFieldNames($keyType);
+        $keys = AuthenticationMethodTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
@@ -1318,22 +1335,25 @@ abstract class Option implements ActiveRecordInterface
             $this->setSiteId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setAxysAccountId($arr[$keys[2]]);
+            $this->setUserId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setUserId($arr[$keys[3]]);
+            $this->setIdentityProvider($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setKey($arr[$keys[4]]);
+            $this->setExternalId($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setValue($arr[$keys[5]]);
+            $this->setAccessToken($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setCreatedAt($arr[$keys[6]]);
+            $this->setIdToken($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setUpdatedAt($arr[$keys[7]]);
+            $this->setCreatedAt($arr[$keys[7]]);
+        }
+        if (array_key_exists($keys[8], $arr)) {
+            $this->setUpdatedAt($arr[$keys[8]]);
         }
 
         return $this;
@@ -1376,31 +1396,34 @@ abstract class Option implements ActiveRecordInterface
      */
     public function buildCriteria(): Criteria
     {
-        $criteria = new Criteria(OptionTableMap::DATABASE_NAME);
+        $criteria = new Criteria(AuthenticationMethodTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(OptionTableMap::COL_OPTION_ID)) {
-            $criteria->add(OptionTableMap::COL_OPTION_ID, $this->option_id);
+        if ($this->isColumnModified(AuthenticationMethodTableMap::COL_ID)) {
+            $criteria->add(AuthenticationMethodTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(OptionTableMap::COL_SITE_ID)) {
-            $criteria->add(OptionTableMap::COL_SITE_ID, $this->site_id);
+        if ($this->isColumnModified(AuthenticationMethodTableMap::COL_SITE_ID)) {
+            $criteria->add(AuthenticationMethodTableMap::COL_SITE_ID, $this->site_id);
         }
-        if ($this->isColumnModified(OptionTableMap::COL_AXYS_ACCOUNT_ID)) {
-            $criteria->add(OptionTableMap::COL_AXYS_ACCOUNT_ID, $this->axys_account_id);
+        if ($this->isColumnModified(AuthenticationMethodTableMap::COL_USER_ID)) {
+            $criteria->add(AuthenticationMethodTableMap::COL_USER_ID, $this->user_id);
         }
-        if ($this->isColumnModified(OptionTableMap::COL_USER_ID)) {
-            $criteria->add(OptionTableMap::COL_USER_ID, $this->user_id);
+        if ($this->isColumnModified(AuthenticationMethodTableMap::COL_IDENTITY_PROVIDER)) {
+            $criteria->add(AuthenticationMethodTableMap::COL_IDENTITY_PROVIDER, $this->identity_provider);
         }
-        if ($this->isColumnModified(OptionTableMap::COL_OPTION_KEY)) {
-            $criteria->add(OptionTableMap::COL_OPTION_KEY, $this->option_key);
+        if ($this->isColumnModified(AuthenticationMethodTableMap::COL_EXTERNAL_ID)) {
+            $criteria->add(AuthenticationMethodTableMap::COL_EXTERNAL_ID, $this->external_id);
         }
-        if ($this->isColumnModified(OptionTableMap::COL_OPTION_VALUE)) {
-            $criteria->add(OptionTableMap::COL_OPTION_VALUE, $this->option_value);
+        if ($this->isColumnModified(AuthenticationMethodTableMap::COL_ACCESS_TOKEN)) {
+            $criteria->add(AuthenticationMethodTableMap::COL_ACCESS_TOKEN, $this->access_token);
         }
-        if ($this->isColumnModified(OptionTableMap::COL_OPTION_CREATED)) {
-            $criteria->add(OptionTableMap::COL_OPTION_CREATED, $this->option_created);
+        if ($this->isColumnModified(AuthenticationMethodTableMap::COL_ID_TOKEN)) {
+            $criteria->add(AuthenticationMethodTableMap::COL_ID_TOKEN, $this->id_token);
         }
-        if ($this->isColumnModified(OptionTableMap::COL_OPTION_UPDATED)) {
-            $criteria->add(OptionTableMap::COL_OPTION_UPDATED, $this->option_updated);
+        if ($this->isColumnModified(AuthenticationMethodTableMap::COL_CREATED_AT)) {
+            $criteria->add(AuthenticationMethodTableMap::COL_CREATED_AT, $this->created_at);
+        }
+        if ($this->isColumnModified(AuthenticationMethodTableMap::COL_UPDATED_AT)) {
+            $criteria->add(AuthenticationMethodTableMap::COL_UPDATED_AT, $this->updated_at);
         }
 
         return $criteria;
@@ -1418,8 +1441,8 @@ abstract class Option implements ActiveRecordInterface
      */
     public function buildPkeyCriteria(): Criteria
     {
-        $criteria = ChildOptionQuery::create();
-        $criteria->add(OptionTableMap::COL_OPTION_ID, $this->option_id);
+        $criteria = ChildAuthenticationMethodQuery::create();
+        $criteria->add(AuthenticationMethodTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -1456,7 +1479,7 @@ abstract class Option implements ActiveRecordInterface
     }
 
     /**
-     * Generic method to set the primary key (option_id column).
+     * Generic method to set the primary key (id column).
      *
      * @param int|null $key Primary key.
      * @return void
@@ -1482,7 +1505,7 @@ abstract class Option implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of \Model\Option (or compatible) type.
+     * @param object $copyObj An object of \Model\AuthenticationMethod (or compatible) type.
      * @param bool $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param bool $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws \Propel\Runtime\Exception\PropelException
@@ -1491,10 +1514,11 @@ abstract class Option implements ActiveRecordInterface
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
         $copyObj->setSiteId($this->getSiteId());
-        $copyObj->setAxysAccountId($this->getAxysAccountId());
         $copyObj->setUserId($this->getUserId());
-        $copyObj->setKey($this->getKey());
-        $copyObj->setValue($this->getValue());
+        $copyObj->setIdentityProvider($this->getIdentityProvider());
+        $copyObj->setExternalId($this->getExternalId());
+        $copyObj->setAccessToken($this->getAccessToken());
+        $copyObj->setIdToken($this->getIdToken());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         if ($makeNew) {
@@ -1512,7 +1536,7 @@ abstract class Option implements ActiveRecordInterface
      * objects.
      *
      * @param bool $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \Model\Option Clone of current object.
+     * @return \Model\AuthenticationMethod Clone of current object.
      * @throws \Propel\Runtime\Exception\PropelException
      */
     public function copy(bool $deepCopy = false)
@@ -1526,111 +1550,9 @@ abstract class Option implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildUser object.
-     *
-     * @param ChildUser|null $v
-     * @return $this The current object (for fluent API support)
-     * @throws \Propel\Runtime\Exception\PropelException
-     */
-    public function setUser(ChildUser $v = null)
-    {
-        if ($v === null) {
-            $this->setUserId(NULL);
-        } else {
-            $this->setUserId($v->getId());
-        }
-
-        $this->aUser = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildUser object, it will not be re-added.
-        if ($v !== null) {
-            $v->addOption($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildUser object
-     *
-     * @param ConnectionInterface $con Optional Connection object.
-     * @return ChildUser|null The associated ChildUser object.
-     * @throws \Propel\Runtime\Exception\PropelException
-     */
-    public function getUser(?ConnectionInterface $con = null)
-    {
-        if ($this->aUser === null && ($this->user_id != 0)) {
-            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aUser->addOptions($this);
-             */
-        }
-
-        return $this->aUser;
-    }
-
-    /**
-     * Declares an association between this object and a ChildAxysAccount object.
-     *
-     * @param ChildAxysAccount|null $v
-     * @return $this The current object (for fluent API support)
-     * @throws \Propel\Runtime\Exception\PropelException
-     */
-    public function setAxysAccount(ChildAxysAccount $v = null)
-    {
-        if ($v === null) {
-            $this->setAxysAccountId(NULL);
-        } else {
-            $this->setAxysAccountId($v->getId());
-        }
-
-        $this->aAxysAccount = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildAxysAccount object, it will not be re-added.
-        if ($v !== null) {
-            $v->addOption($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildAxysAccount object
-     *
-     * @param ConnectionInterface $con Optional Connection object.
-     * @return ChildAxysAccount|null The associated ChildAxysAccount object.
-     * @throws \Propel\Runtime\Exception\PropelException
-     */
-    public function getAxysAccount(?ConnectionInterface $con = null)
-    {
-        if ($this->aAxysAccount === null && ($this->axys_account_id != 0)) {
-            $this->aAxysAccount = ChildAxysAccountQuery::create()->findPk($this->axys_account_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aAxysAccount->addOptions($this);
-             */
-        }
-
-        return $this->aAxysAccount;
-    }
-
-    /**
      * Declares an association between this object and a ChildSite object.
      *
-     * @param ChildSite|null $v
+     * @param ChildSite $v
      * @return $this The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
@@ -1647,7 +1569,7 @@ abstract class Option implements ActiveRecordInterface
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the ChildSite object, it will not be re-added.
         if ($v !== null) {
-            $v->addOption($this);
+            $v->addAuthenticationMethod($this);
         }
 
 
@@ -1659,7 +1581,7 @@ abstract class Option implements ActiveRecordInterface
      * Get the associated ChildSite object
      *
      * @param ConnectionInterface $con Optional Connection object.
-     * @return ChildSite|null The associated ChildSite object.
+     * @return ChildSite The associated ChildSite object.
      * @throws \Propel\Runtime\Exception\PropelException
      */
     public function getSite(?ConnectionInterface $con = null)
@@ -1671,11 +1593,62 @@ abstract class Option implements ActiveRecordInterface
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aSite->addOptions($this);
+                $this->aSite->addAuthenticationMethods($this);
              */
         }
 
         return $this->aSite;
+    }
+
+    /**
+     * Declares an association between this object and a ChildUser object.
+     *
+     * @param ChildUser $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setUser(ChildUser $v = null)
+    {
+        if ($v === null) {
+            $this->setUserId(NULL);
+        } else {
+            $this->setUserId($v->getId());
+        }
+
+        $this->aUser = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildUser object, it will not be re-added.
+        if ($v !== null) {
+            $v->addAuthenticationMethod($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildUser object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildUser The associated ChildUser object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getUser(?ConnectionInterface $con = null)
+    {
+        if ($this->aUser === null && ($this->user_id != 0)) {
+            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aUser->addAuthenticationMethods($this);
+             */
+        }
+
+        return $this->aUser;
     }
 
     /**
@@ -1687,23 +1660,21 @@ abstract class Option implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aUser) {
-            $this->aUser->removeOption($this);
-        }
-        if (null !== $this->aAxysAccount) {
-            $this->aAxysAccount->removeOption($this);
-        }
         if (null !== $this->aSite) {
-            $this->aSite->removeOption($this);
+            $this->aSite->removeAuthenticationMethod($this);
         }
-        $this->option_id = null;
+        if (null !== $this->aUser) {
+            $this->aUser->removeAuthenticationMethod($this);
+        }
+        $this->id = null;
         $this->site_id = null;
-        $this->axys_account_id = null;
         $this->user_id = null;
-        $this->option_key = null;
-        $this->option_value = null;
-        $this->option_created = null;
-        $this->option_updated = null;
+        $this->identity_provider = null;
+        $this->external_id = null;
+        $this->access_token = null;
+        $this->id_token = null;
+        $this->created_at = null;
+        $this->updated_at = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1727,9 +1698,8 @@ abstract class Option implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aUser = null;
-        $this->aAxysAccount = null;
         $this->aSite = null;
+        $this->aUser = null;
         return $this;
     }
 
@@ -1740,7 +1710,7 @@ abstract class Option implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(OptionTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(AuthenticationMethodTableMap::DEFAULT_STRING_FORMAT);
     }
 
     // timestampable behavior
@@ -1752,7 +1722,7 @@ abstract class Option implements ActiveRecordInterface
      */
     public function keepUpdateDateUnchanged()
     {
-        $this->modifiedColumns[OptionTableMap::COL_OPTION_UPDATED] = true;
+        $this->modifiedColumns[AuthenticationMethodTableMap::COL_UPDATED_AT] = true;
 
         return $this;
     }

@@ -5,6 +5,8 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\User as ChildUser;
+use Model\UserQuery as ChildUserQuery;
 use Model\VoteQuery as ChildVoteQuery;
 use Model\Map\VoteTableMap;
 use Propel\Runtime\Propel;
@@ -78,6 +80,13 @@ abstract class Vote implements ActiveRecordInterface
     protected $axys_account_id;
 
     /**
+     * The value for the user_id field.
+     *
+     * @var        int|null
+     */
+    protected $user_id;
+
+    /**
      * The value for the vote_f field.
      *
      * @var        int|null
@@ -97,6 +106,11 @@ abstract class Vote implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $vote_date;
+
+    /**
+     * @var        ChildUser
+     */
+    protected $aUser;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -353,6 +367,16 @@ abstract class Vote implements ActiveRecordInterface
     }
 
     /**
+     * Get the [user_id] column value.
+     *
+     * @return int|null
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+
+    /**
      * Get the [vote_f] column value.
      *
      * @return int|null
@@ -429,6 +453,30 @@ abstract class Vote implements ActiveRecordInterface
         if ($this->axys_account_id !== $v) {
             $this->axys_account_id = $v;
             $this->modifiedColumns[VoteTableMap::COL_AXYS_ACCOUNT_ID] = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [user_id] column.
+     *
+     * @param int|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setUserId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->user_id !== $v) {
+            $this->user_id = $v;
+            $this->modifiedColumns[VoteTableMap::COL_USER_ID] = true;
+        }
+
+        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
+            $this->aUser = null;
         }
 
         return $this;
@@ -536,13 +584,16 @@ abstract class Vote implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : VoteTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->axys_account_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : VoteTableMap::translateFieldName('F', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : VoteTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->user_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : VoteTableMap::translateFieldName('F', TableMap::TYPE_PHPNAME, $indexType)];
             $this->vote_f = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : VoteTableMap::translateFieldName('E', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : VoteTableMap::translateFieldName('E', TableMap::TYPE_PHPNAME, $indexType)];
             $this->vote_e = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : VoteTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : VoteTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -555,7 +606,7 @@ abstract class Vote implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 5; // 5 = VoteTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = VoteTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Vote'), 0, $e);
@@ -578,6 +629,9 @@ abstract class Vote implements ActiveRecordInterface
      */
     public function ensureConsistency(): void
     {
+        if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
+            $this->aUser = null;
+        }
     }
 
     /**
@@ -617,6 +671,7 @@ abstract class Vote implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aUser = null;
         } // if (deep)
     }
 
@@ -720,6 +775,18 @@ abstract class Vote implements ActiveRecordInterface
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aUser !== null) {
+                if ($this->aUser->isModified() || $this->aUser->isNew()) {
+                    $affectedRows += $this->aUser->save($con);
+                }
+                $this->setUser($this->aUser);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -763,6 +830,9 @@ abstract class Vote implements ActiveRecordInterface
         if ($this->isColumnModified(VoteTableMap::COL_AXYS_ACCOUNT_ID)) {
             $modifiedColumns[':p' . $index++]  = 'axys_account_id';
         }
+        if ($this->isColumnModified(VoteTableMap::COL_USER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'user_id';
+        }
         if ($this->isColumnModified(VoteTableMap::COL_VOTE_F)) {
             $modifiedColumns[':p' . $index++]  = 'vote_F';
         }
@@ -789,6 +859,10 @@ abstract class Vote implements ActiveRecordInterface
                         break;
                     case 'axys_account_id':
                         $stmt->bindValue($identifier, $this->axys_account_id, PDO::PARAM_INT);
+
+                        break;
+                    case 'user_id':
+                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
 
                         break;
                     case 'vote_F':
@@ -872,12 +946,15 @@ abstract class Vote implements ActiveRecordInterface
                 return $this->getAxysAccountId();
 
             case 2:
-                return $this->getF();
+                return $this->getUserId();
 
             case 3:
-                return $this->getE();
+                return $this->getF();
 
             case 4:
+                return $this->getE();
+
+            case 5:
                 return $this->getDate();
 
             default:
@@ -896,10 +973,11 @@ abstract class Vote implements ActiveRecordInterface
      *                    Defaults to TableMap::TYPE_PHPNAME.
      * @param bool $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
      * @param array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param bool $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array An associative array containing the field names (as keys) and field values
      */
-    public function toArray(string $keyType = TableMap::TYPE_PHPNAME, bool $includeLazyLoadColumns = true, array $alreadyDumpedObjects = []): array
+    public function toArray(string $keyType = TableMap::TYPE_PHPNAME, bool $includeLazyLoadColumns = true, array $alreadyDumpedObjects = [], bool $includeForeignObjects = false): array
     {
         if (isset($alreadyDumpedObjects['Vote'][$this->hashCode()])) {
             return ['*RECURSION*'];
@@ -909,12 +987,13 @@ abstract class Vote implements ActiveRecordInterface
         $result = [
             $keys[0] => $this->getId(),
             $keys[1] => $this->getAxysAccountId(),
-            $keys[2] => $this->getF(),
-            $keys[3] => $this->getE(),
-            $keys[4] => $this->getDate(),
+            $keys[2] => $this->getUserId(),
+            $keys[3] => $this->getF(),
+            $keys[4] => $this->getE(),
+            $keys[5] => $this->getDate(),
         ];
-        if ($result[$keys[4]] instanceof \DateTimeInterface) {
-            $result[$keys[4]] = $result[$keys[4]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[5]] instanceof \DateTimeInterface) {
+            $result[$keys[5]] = $result[$keys[5]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -922,6 +1001,23 @@ abstract class Vote implements ActiveRecordInterface
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->aUser) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'user';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'users';
+                        break;
+                    default:
+                        $key = 'User';
+                }
+
+                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+        }
 
         return $result;
     }
@@ -964,12 +1060,15 @@ abstract class Vote implements ActiveRecordInterface
                 $this->setAxysAccountId($value);
                 break;
             case 2:
-                $this->setF($value);
+                $this->setUserId($value);
                 break;
             case 3:
-                $this->setE($value);
+                $this->setF($value);
                 break;
             case 4:
+                $this->setE($value);
+                break;
+            case 5:
                 $this->setDate($value);
                 break;
         } // switch()
@@ -1005,13 +1104,16 @@ abstract class Vote implements ActiveRecordInterface
             $this->setAxysAccountId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setF($arr[$keys[2]]);
+            $this->setUserId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setE($arr[$keys[3]]);
+            $this->setF($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setDate($arr[$keys[4]]);
+            $this->setE($arr[$keys[4]]);
+        }
+        if (array_key_exists($keys[5], $arr)) {
+            $this->setDate($arr[$keys[5]]);
         }
 
         return $this;
@@ -1061,6 +1163,9 @@ abstract class Vote implements ActiveRecordInterface
         }
         if ($this->isColumnModified(VoteTableMap::COL_AXYS_ACCOUNT_ID)) {
             $criteria->add(VoteTableMap::COL_AXYS_ACCOUNT_ID, $this->axys_account_id);
+        }
+        if ($this->isColumnModified(VoteTableMap::COL_USER_ID)) {
+            $criteria->add(VoteTableMap::COL_USER_ID, $this->user_id);
         }
         if ($this->isColumnModified(VoteTableMap::COL_VOTE_F)) {
             $criteria->add(VoteTableMap::COL_VOTE_F, $this->vote_f);
@@ -1160,6 +1265,7 @@ abstract class Vote implements ActiveRecordInterface
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
         $copyObj->setAxysAccountId($this->getAxysAccountId());
+        $copyObj->setUserId($this->getUserId());
         $copyObj->setF($this->getF());
         $copyObj->setE($this->getE());
         $copyObj->setDate($this->getDate());
@@ -1192,6 +1298,57 @@ abstract class Vote implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildUser object.
+     *
+     * @param ChildUser|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setUser(ChildUser $v = null)
+    {
+        if ($v === null) {
+            $this->setUserId(NULL);
+        } else {
+            $this->setUserId($v->getId());
+        }
+
+        $this->aUser = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildUser object, it will not be re-added.
+        if ($v !== null) {
+            $v->addVote($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildUser object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildUser|null The associated ChildUser object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getUser(?ConnectionInterface $con = null)
+    {
+        if ($this->aUser === null && ($this->user_id != 0)) {
+            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aUser->addVotes($this);
+             */
+        }
+
+        return $this->aUser;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -1200,8 +1357,12 @@ abstract class Vote implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aUser) {
+            $this->aUser->removeVote($this);
+        }
         $this->vote_id = null;
         $this->axys_account_id = null;
+        $this->user_id = null;
         $this->vote_f = null;
         $this->vote_e = null;
         $this->vote_date = null;
@@ -1228,6 +1389,7 @@ abstract class Vote implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
+        $this->aUser = null;
         return $this;
     }
 

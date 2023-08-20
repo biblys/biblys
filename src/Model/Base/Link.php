@@ -12,6 +12,8 @@ use Model\ArticleQuery as ChildArticleQuery;
 use Model\LinkQuery as ChildLinkQuery;
 use Model\Tag as ChildTag;
 use Model\TagQuery as ChildTagQuery;
+use Model\User as ChildUser;
+use Model\UserQuery as ChildUserQuery;
 use Model\Map\LinkTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -89,6 +91,13 @@ abstract class Link implements ActiveRecordInterface
      * @var        int|null
      */
     protected $axys_account_id;
+
+    /**
+     * The value for the user_id field.
+     *
+     * @var        int|null
+     */
+    protected $user_id;
 
     /**
      * The value for the article_id field.
@@ -236,6 +245,11 @@ abstract class Link implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $link_updated;
+
+    /**
+     * @var        ChildUser
+     */
+    protected $aUser;
 
     /**
      * @var        ChildArticle
@@ -514,6 +528,16 @@ abstract class Link implements ActiveRecordInterface
     public function getAxysAccountId()
     {
         return $this->axys_account_id;
+    }
+
+    /**
+     * Get the [user_id] column value.
+     *
+     * @return int|null
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
     }
 
     /**
@@ -837,6 +861,30 @@ abstract class Link implements ActiveRecordInterface
         if ($this->axys_account_id !== $v) {
             $this->axys_account_id = $v;
             $this->modifiedColumns[LinkTableMap::COL_AXYS_ACCOUNT_ID] = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [user_id] column.
+     *
+     * @param int|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setUserId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->user_id !== $v) {
+            $this->user_id = $v;
+            $this->modifiedColumns[LinkTableMap::COL_USER_ID] = true;
+        }
+
+        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
+            $this->aUser = null;
         }
 
         return $this;
@@ -1335,73 +1383,76 @@ abstract class Link implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : LinkTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->axys_account_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : LinkTableMap::translateFieldName('ArticleId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : LinkTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->user_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : LinkTableMap::translateFieldName('ArticleId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->article_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : LinkTableMap::translateFieldName('StockId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : LinkTableMap::translateFieldName('StockId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : LinkTableMap::translateFieldName('ListId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : LinkTableMap::translateFieldName('ListId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->list_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : LinkTableMap::translateFieldName('BookId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : LinkTableMap::translateFieldName('BookId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->book_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : LinkTableMap::translateFieldName('PeopleId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : LinkTableMap::translateFieldName('PeopleId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->people_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : LinkTableMap::translateFieldName('JobId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : LinkTableMap::translateFieldName('JobId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->job_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : LinkTableMap::translateFieldName('RayonId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : LinkTableMap::translateFieldName('RayonId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->rayon_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : LinkTableMap::translateFieldName('TagId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : LinkTableMap::translateFieldName('TagId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->tag_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : LinkTableMap::translateFieldName('EventId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : LinkTableMap::translateFieldName('EventId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->event_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : LinkTableMap::translateFieldName('PostId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : LinkTableMap::translateFieldName('PostId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->post_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : LinkTableMap::translateFieldName('CollectionId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : LinkTableMap::translateFieldName('CollectionId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->collection_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : LinkTableMap::translateFieldName('PublisherId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : LinkTableMap::translateFieldName('PublisherId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->publisher_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : LinkTableMap::translateFieldName('SupplierId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : LinkTableMap::translateFieldName('SupplierId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->supplier_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : LinkTableMap::translateFieldName('MediaId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : LinkTableMap::translateFieldName('MediaId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->media_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : LinkTableMap::translateFieldName('BundleId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 18 + $startcol : LinkTableMap::translateFieldName('BundleId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->bundle_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 18 + $startcol : LinkTableMap::translateFieldName('Hide', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 19 + $startcol : LinkTableMap::translateFieldName('Hide', TableMap::TYPE_PHPNAME, $indexType)];
             $this->link_hide = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 19 + $startcol : LinkTableMap::translateFieldName('DoNotReorder', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 20 + $startcol : LinkTableMap::translateFieldName('DoNotReorder', TableMap::TYPE_PHPNAME, $indexType)];
             $this->link_do_not_reorder = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 20 + $startcol : LinkTableMap::translateFieldName('SponsorAxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 21 + $startcol : LinkTableMap::translateFieldName('SponsorAxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->link_sponsor_axys_account_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 21 + $startcol : LinkTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 22 + $startcol : LinkTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->link_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 22 + $startcol : LinkTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 23 + $startcol : LinkTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->link_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 23 + $startcol : LinkTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 24 + $startcol : LinkTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -1414,7 +1465,7 @@ abstract class Link implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 24; // 24 = LinkTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 25; // 25 = LinkTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Link'), 0, $e);
@@ -1437,6 +1488,9 @@ abstract class Link implements ActiveRecordInterface
      */
     public function ensureConsistency(): void
     {
+        if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
+            $this->aUser = null;
+        }
         if ($this->aArticle !== null && $this->article_id !== $this->aArticle->getId()) {
             $this->aArticle = null;
         }
@@ -1485,6 +1539,7 @@ abstract class Link implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aUser = null;
             $this->aArticle = null;
             $this->aTag = null;
             $this->aArticleCategory = null;
@@ -1609,6 +1664,13 @@ abstract class Link implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aUser !== null) {
+                if ($this->aUser->isModified() || $this->aUser->isNew()) {
+                    $affectedRows += $this->aUser->save($con);
+                }
+                $this->setUser($this->aUser);
+            }
+
             if ($this->aArticle !== null) {
                 if ($this->aArticle->isModified() || $this->aArticle->isNew()) {
                     $affectedRows += $this->aArticle->save($con);
@@ -1675,6 +1737,9 @@ abstract class Link implements ActiveRecordInterface
         }
         if ($this->isColumnModified(LinkTableMap::COL_AXYS_ACCOUNT_ID)) {
             $modifiedColumns[':p' . $index++]  = 'axys_account_id';
+        }
+        if ($this->isColumnModified(LinkTableMap::COL_USER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'user_id';
         }
         if ($this->isColumnModified(LinkTableMap::COL_ARTICLE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'article_id';
@@ -1760,6 +1825,10 @@ abstract class Link implements ActiveRecordInterface
                         break;
                     case 'axys_account_id':
                         $stmt->bindValue($identifier, $this->axys_account_id, PDO::PARAM_INT);
+
+                        break;
+                    case 'user_id':
+                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
 
                         break;
                     case 'article_id':
@@ -1918,66 +1987,69 @@ abstract class Link implements ActiveRecordInterface
                 return $this->getAxysAccountId();
 
             case 3:
-                return $this->getArticleId();
+                return $this->getUserId();
 
             case 4:
-                return $this->getStockId();
+                return $this->getArticleId();
 
             case 5:
-                return $this->getListId();
+                return $this->getStockId();
 
             case 6:
-                return $this->getBookId();
+                return $this->getListId();
 
             case 7:
-                return $this->getPeopleId();
+                return $this->getBookId();
 
             case 8:
-                return $this->getJobId();
+                return $this->getPeopleId();
 
             case 9:
-                return $this->getRayonId();
+                return $this->getJobId();
 
             case 10:
-                return $this->getTagId();
+                return $this->getRayonId();
 
             case 11:
-                return $this->getEventId();
+                return $this->getTagId();
 
             case 12:
-                return $this->getPostId();
+                return $this->getEventId();
 
             case 13:
-                return $this->getCollectionId();
+                return $this->getPostId();
 
             case 14:
-                return $this->getPublisherId();
+                return $this->getCollectionId();
 
             case 15:
-                return $this->getSupplierId();
+                return $this->getPublisherId();
 
             case 16:
-                return $this->getMediaId();
+                return $this->getSupplierId();
 
             case 17:
-                return $this->getBundleId();
+                return $this->getMediaId();
 
             case 18:
-                return $this->getHide();
+                return $this->getBundleId();
 
             case 19:
-                return $this->getDoNotReorder();
+                return $this->getHide();
 
             case 20:
-                return $this->getSponsorAxysAccountId();
+                return $this->getDoNotReorder();
 
             case 21:
-                return $this->getDate();
+                return $this->getSponsorAxysAccountId();
 
             case 22:
-                return $this->getCreatedAt();
+                return $this->getDate();
 
             case 23:
+                return $this->getCreatedAt();
+
+            case 24:
                 return $this->getUpdatedAt();
 
             default:
@@ -2011,32 +2083,29 @@ abstract class Link implements ActiveRecordInterface
             $keys[0] => $this->getId(),
             $keys[1] => $this->getSiteId(),
             $keys[2] => $this->getAxysAccountId(),
-            $keys[3] => $this->getArticleId(),
-            $keys[4] => $this->getStockId(),
-            $keys[5] => $this->getListId(),
-            $keys[6] => $this->getBookId(),
-            $keys[7] => $this->getPeopleId(),
-            $keys[8] => $this->getJobId(),
-            $keys[9] => $this->getRayonId(),
-            $keys[10] => $this->getTagId(),
-            $keys[11] => $this->getEventId(),
-            $keys[12] => $this->getPostId(),
-            $keys[13] => $this->getCollectionId(),
-            $keys[14] => $this->getPublisherId(),
-            $keys[15] => $this->getSupplierId(),
-            $keys[16] => $this->getMediaId(),
-            $keys[17] => $this->getBundleId(),
-            $keys[18] => $this->getHide(),
-            $keys[19] => $this->getDoNotReorder(),
-            $keys[20] => $this->getSponsorAxysAccountId(),
-            $keys[21] => $this->getDate(),
-            $keys[22] => $this->getCreatedAt(),
-            $keys[23] => $this->getUpdatedAt(),
+            $keys[3] => $this->getUserId(),
+            $keys[4] => $this->getArticleId(),
+            $keys[5] => $this->getStockId(),
+            $keys[6] => $this->getListId(),
+            $keys[7] => $this->getBookId(),
+            $keys[8] => $this->getPeopleId(),
+            $keys[9] => $this->getJobId(),
+            $keys[10] => $this->getRayonId(),
+            $keys[11] => $this->getTagId(),
+            $keys[12] => $this->getEventId(),
+            $keys[13] => $this->getPostId(),
+            $keys[14] => $this->getCollectionId(),
+            $keys[15] => $this->getPublisherId(),
+            $keys[16] => $this->getSupplierId(),
+            $keys[17] => $this->getMediaId(),
+            $keys[18] => $this->getBundleId(),
+            $keys[19] => $this->getHide(),
+            $keys[20] => $this->getDoNotReorder(),
+            $keys[21] => $this->getSponsorAxysAccountId(),
+            $keys[22] => $this->getDate(),
+            $keys[23] => $this->getCreatedAt(),
+            $keys[24] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[21]] instanceof \DateTimeInterface) {
-            $result[$keys[21]] = $result[$keys[21]]->format('Y-m-d H:i:s.u');
-        }
-
         if ($result[$keys[22]] instanceof \DateTimeInterface) {
             $result[$keys[22]] = $result[$keys[22]]->format('Y-m-d H:i:s.u');
         }
@@ -2045,12 +2114,31 @@ abstract class Link implements ActiveRecordInterface
             $result[$keys[23]] = $result[$keys[23]]->format('Y-m-d H:i:s.u');
         }
 
+        if ($result[$keys[24]] instanceof \DateTimeInterface) {
+            $result[$keys[24]] = $result[$keys[24]]->format('Y-m-d H:i:s.u');
+        }
+
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aUser) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'user';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'users';
+                        break;
+                    default:
+                        $key = 'User';
+                }
+
+                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aArticle) {
 
                 switch ($keyType) {
@@ -2142,66 +2230,69 @@ abstract class Link implements ActiveRecordInterface
                 $this->setAxysAccountId($value);
                 break;
             case 3:
-                $this->setArticleId($value);
+                $this->setUserId($value);
                 break;
             case 4:
-                $this->setStockId($value);
+                $this->setArticleId($value);
                 break;
             case 5:
-                $this->setListId($value);
+                $this->setStockId($value);
                 break;
             case 6:
-                $this->setBookId($value);
+                $this->setListId($value);
                 break;
             case 7:
-                $this->setPeopleId($value);
+                $this->setBookId($value);
                 break;
             case 8:
-                $this->setJobId($value);
+                $this->setPeopleId($value);
                 break;
             case 9:
-                $this->setRayonId($value);
+                $this->setJobId($value);
                 break;
             case 10:
-                $this->setTagId($value);
+                $this->setRayonId($value);
                 break;
             case 11:
-                $this->setEventId($value);
+                $this->setTagId($value);
                 break;
             case 12:
-                $this->setPostId($value);
+                $this->setEventId($value);
                 break;
             case 13:
-                $this->setCollectionId($value);
+                $this->setPostId($value);
                 break;
             case 14:
-                $this->setPublisherId($value);
+                $this->setCollectionId($value);
                 break;
             case 15:
-                $this->setSupplierId($value);
+                $this->setPublisherId($value);
                 break;
             case 16:
-                $this->setMediaId($value);
+                $this->setSupplierId($value);
                 break;
             case 17:
-                $this->setBundleId($value);
+                $this->setMediaId($value);
                 break;
             case 18:
-                $this->setHide($value);
+                $this->setBundleId($value);
                 break;
             case 19:
-                $this->setDoNotReorder($value);
+                $this->setHide($value);
                 break;
             case 20:
-                $this->setSponsorAxysAccountId($value);
+                $this->setDoNotReorder($value);
                 break;
             case 21:
-                $this->setDate($value);
+                $this->setSponsorAxysAccountId($value);
                 break;
             case 22:
-                $this->setCreatedAt($value);
+                $this->setDate($value);
                 break;
             case 23:
+                $this->setCreatedAt($value);
+                break;
+            case 24:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -2240,67 +2331,70 @@ abstract class Link implements ActiveRecordInterface
             $this->setAxysAccountId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setArticleId($arr[$keys[3]]);
+            $this->setUserId($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setStockId($arr[$keys[4]]);
+            $this->setArticleId($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setListId($arr[$keys[5]]);
+            $this->setStockId($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setBookId($arr[$keys[6]]);
+            $this->setListId($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setPeopleId($arr[$keys[7]]);
+            $this->setBookId($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setJobId($arr[$keys[8]]);
+            $this->setPeopleId($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setRayonId($arr[$keys[9]]);
+            $this->setJobId($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setTagId($arr[$keys[10]]);
+            $this->setRayonId($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setEventId($arr[$keys[11]]);
+            $this->setTagId($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setPostId($arr[$keys[12]]);
+            $this->setEventId($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
-            $this->setCollectionId($arr[$keys[13]]);
+            $this->setPostId($arr[$keys[13]]);
         }
         if (array_key_exists($keys[14], $arr)) {
-            $this->setPublisherId($arr[$keys[14]]);
+            $this->setCollectionId($arr[$keys[14]]);
         }
         if (array_key_exists($keys[15], $arr)) {
-            $this->setSupplierId($arr[$keys[15]]);
+            $this->setPublisherId($arr[$keys[15]]);
         }
         if (array_key_exists($keys[16], $arr)) {
-            $this->setMediaId($arr[$keys[16]]);
+            $this->setSupplierId($arr[$keys[16]]);
         }
         if (array_key_exists($keys[17], $arr)) {
-            $this->setBundleId($arr[$keys[17]]);
+            $this->setMediaId($arr[$keys[17]]);
         }
         if (array_key_exists($keys[18], $arr)) {
-            $this->setHide($arr[$keys[18]]);
+            $this->setBundleId($arr[$keys[18]]);
         }
         if (array_key_exists($keys[19], $arr)) {
-            $this->setDoNotReorder($arr[$keys[19]]);
+            $this->setHide($arr[$keys[19]]);
         }
         if (array_key_exists($keys[20], $arr)) {
-            $this->setSponsorAxysAccountId($arr[$keys[20]]);
+            $this->setDoNotReorder($arr[$keys[20]]);
         }
         if (array_key_exists($keys[21], $arr)) {
-            $this->setDate($arr[$keys[21]]);
+            $this->setSponsorAxysAccountId($arr[$keys[21]]);
         }
         if (array_key_exists($keys[22], $arr)) {
-            $this->setCreatedAt($arr[$keys[22]]);
+            $this->setDate($arr[$keys[22]]);
         }
         if (array_key_exists($keys[23], $arr)) {
-            $this->setUpdatedAt($arr[$keys[23]]);
+            $this->setCreatedAt($arr[$keys[23]]);
+        }
+        if (array_key_exists($keys[24], $arr)) {
+            $this->setUpdatedAt($arr[$keys[24]]);
         }
 
         return $this;
@@ -2353,6 +2447,9 @@ abstract class Link implements ActiveRecordInterface
         }
         if ($this->isColumnModified(LinkTableMap::COL_AXYS_ACCOUNT_ID)) {
             $criteria->add(LinkTableMap::COL_AXYS_ACCOUNT_ID, $this->axys_account_id);
+        }
+        if ($this->isColumnModified(LinkTableMap::COL_USER_ID)) {
+            $criteria->add(LinkTableMap::COL_USER_ID, $this->user_id);
         }
         if ($this->isColumnModified(LinkTableMap::COL_ARTICLE_ID)) {
             $criteria->add(LinkTableMap::COL_ARTICLE_ID, $this->article_id);
@@ -2507,6 +2604,7 @@ abstract class Link implements ActiveRecordInterface
     {
         $copyObj->setSiteId($this->getSiteId());
         $copyObj->setAxysAccountId($this->getAxysAccountId());
+        $copyObj->setUserId($this->getUserId());
         $copyObj->setArticleId($this->getArticleId());
         $copyObj->setStockId($this->getStockId());
         $copyObj->setListId($this->getListId());
@@ -2554,6 +2652,57 @@ abstract class Link implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
+    }
+
+    /**
+     * Declares an association between this object and a ChildUser object.
+     *
+     * @param ChildUser|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setUser(ChildUser $v = null)
+    {
+        if ($v === null) {
+            $this->setUserId(NULL);
+        } else {
+            $this->setUserId($v->getId());
+        }
+
+        $this->aUser = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildUser object, it will not be re-added.
+        if ($v !== null) {
+            $v->addLink($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildUser object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildUser|null The associated ChildUser object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getUser(?ConnectionInterface $con = null)
+    {
+        if ($this->aUser === null && ($this->user_id != 0)) {
+            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aUser->addLinks($this);
+             */
+        }
+
+        return $this->aUser;
     }
 
     /**
@@ -2718,6 +2867,9 @@ abstract class Link implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aUser) {
+            $this->aUser->removeLink($this);
+        }
         if (null !== $this->aArticle) {
             $this->aArticle->removeLink($this);
         }
@@ -2730,6 +2882,7 @@ abstract class Link implements ActiveRecordInterface
         $this->link_id = null;
         $this->site_id = null;
         $this->axys_account_id = null;
+        $this->user_id = null;
         $this->article_id = null;
         $this->stock_id = null;
         $this->list_id = null;
@@ -2774,6 +2927,7 @@ abstract class Link implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
+        $this->aUser = null;
         $this->aArticle = null;
         $this->aTag = null;
         $this->aArticleCategory = null;
