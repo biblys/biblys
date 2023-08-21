@@ -9,6 +9,7 @@ use DateTime;
 use Exception;
 use Model\Article;
 use Model\ArticleCategory;
+use Model\AuthenticationMethod;
 use Model\AxysAccount;
 use Model\AxysAccountQuery;
 use Model\Invitation;

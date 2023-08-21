@@ -11,15 +11,16 @@ use Biblys\Service\TemplateService;
 use Biblys\Service\TokenService;
 use DateTime;
 use Exception;
+use Facile\OpenIDClient\Token\TokenSetInterface;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Framework\Controller;
 use Http\Discovery\Psr17Factory;
 use JsonException;
-use Model\AxysAccount;
-use Model\AxysAccountQuery;
+use Model\AuthenticationMethodQuery;
 use Model\Session;
+use Model\User;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -76,13 +77,30 @@ class OpenIDConnectController extends Controller
         ]);
 
         try {
-            [$externalId, $sessionExpiresAt] = OpenIDConnectController::_getClaimsFromOidcTokens($request, $openIDConnectProviderService);
+            $oidcTokens = OpenIDConnectController::_getOidcTokensFromIdentityProvider($request, $openIDConnectProviderService);
+            [$externalId, $sessionExpiresAt] = OpenIDConnectController::_getClaimsFromOidcTokens($oidcTokens);
             $returnUrl = OpenIDConnectController::_getReturnUrlFromState($request, $config);
-            $axysAccount = AxysAccountQuery::create()->findPk($externalId);
 
-            $sessionCookie = OpenIDConnectController::_createSession($axysAccount, $currentSite, $sessionExpiresAt);
+            $authenticationMethod = AuthenticationMethodQuery::create()
+                ->filterBySite($currentSite->getSite())
+                ->filterByIdentityProvider("axys")
+                ->findOneByExternalId($externalId);
+            if ($authenticationMethod === null) {
+                throw new Exception("Authentication method not found for given external id");
+            }
 
-            $currentUser->setUser($axysAccount);
+            // Save user last login date
+            $user = $authenticationMethod->getUser();
+            $user->setLastLoggedAt(new DateTime());
+            $user->save();
+
+            $sessionCookie = OpenIDConnectController::_createSession(
+                $currentSite,
+                $sessionExpiresAt,
+                $user
+            );
+
+            $currentUser->setUser($user);
             $currentUser->transfertVisitorCartToUser(visitorToken: $request->cookies->get("visitor_uid"));
 
             $response = new RedirectResponse($returnUrl);
@@ -94,23 +112,31 @@ class OpenIDConnectController extends Controller
             throw new BadRequestHttpException($exception->getMessage());
         }
     }
-
     /**
-     * @throws Exception
+     * @param Request $request
+     * @param OpenIDConnectProviderService $openIDConnectProviderService
+     * @return TokenSetInterface
      */
-    private static function _getClaimsFromOidcTokens(Request $request, OpenIDConnectProviderService $openIDConnectProviderService): array
+    private static function _getOidcTokensFromIdentityProvider(Request $request, OpenIDConnectProviderService $openIDConnectProviderService): TokenSetInterface
     {
         $psr17Factory = new Psr17Factory();
         $psrHttpFactory = new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
         $psrRequest = $psrHttpFactory->createRequest($request);
 
-        $oidcTokens = $openIDConnectProviderService->getTokenSet($psrRequest);
+        return $openIDConnectProviderService->getTokenSet($psrRequest);
+    }
 
+    /**
+     * @throws Exception
+     */
+    private static function _getClaimsFromOidcTokens(TokenSetInterface $oidcTokens): array
+    {
         $claims = $oidcTokens->claims();
         $externalId = $claims["sub"];
         $sessionExpiresAt = new DateTime("@" . $claims["exp"]);
+        $email = $claims["email"];
 
-        return [$externalId, $sessionExpiresAt];
+        return [$externalId, $email, $sessionExpiresAt];
     }
 
     private static function _getReturnUrlFromState(Request $request, Config $config): string
@@ -126,20 +152,21 @@ class OpenIDConnectController extends Controller
     }
 
     /**
-     * @param mixed $axysAccount
-     * @param CurrentSite $currentSite
-     * @param mixed $sessionExpiresAt
-     * @return Cookie
      * @throws PropelException
      */
     private static function _createSession(
-        AxysAccount $axysAccount,
         CurrentSite $currentSite,
-        mixed       $sessionExpiresAt
+        DateTime $sessionExpiresAt,
+        User $user,
     ): Cookie
     {
-        $session = Session::buildForUserAndCurrentSite($axysAccount, $currentSite, $sessionExpiresAt);
+        $session = new Session();
+        $session->setUser($user);
+        $session->setSite($currentSite->getSite());
+        $session->setToken(Session::generateToken());
+        $session->setExpiresAt($sessionExpiresAt);
         $session->save();
+
         return Cookie::create("user_uid")
             ->withValue($session->getToken())
             ->withExpires($sessionExpiresAt);

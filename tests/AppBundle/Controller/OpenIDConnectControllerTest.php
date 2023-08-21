@@ -18,7 +18,6 @@ use Facile\OpenIDClient\Token\TokenSetInterface;
 use Firebase\JWT\JWT;
 use JsonException;
 use Mockery;
-use Model\AxysAccount;
 use Model\SessionQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -65,10 +64,19 @@ class OpenIDConnectControllerTest extends TestCase
     public function testCallback()
     {
         // given
-        $axysAccount = ModelFactory::createAxysAccount();
+        $identityProvider = "axys";
+        $externalId = "AXYS1234";
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $openIDConnectProviderService = $this->_buildOIDCProviderService($axysAccount);
+        $openIDConnectProviderService = $this->_buildOIDCProviderService($externalId);
+
+        $user = ModelFactory::createUser(site: $site);
+        ModelFactory::createAuthenticationMethod(
+            site: $site,
+            user: $user,
+            identityProvider: $identityProvider,
+            externalId: $externalId,
+        );
 
         $request = self::_buildCallbackRequest();
         $controller = new OpenIDConnectController();
@@ -108,7 +116,7 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals(1682278410, $userUidCookie->getExpiresTime());
         $session = SessionQuery::create()
             ->filterBySite($site)
-            ->filterByAxysAccount($axysAccount)
+            ->filterByUser($user)
             ->findOneByToken($userUidCookie->getValue());
         $this->assertNotNull($session);
         $this->assertEquals(new DateTime("@1682278410"), $session->getExpiresAt());
@@ -121,10 +129,19 @@ class OpenIDConnectControllerTest extends TestCase
     public function testCallbackWithReturnUrl()
     {
         // given
-        $axysAccount = ModelFactory::createAxysAccount();
+        $identityProvider = "axys";
+        $externalId = "AXYS5678";
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $openIDConnectProviderService = $this->_buildOIDCProviderService($axysAccount);
+        $openIDConnectProviderService = $this->_buildOIDCProviderService($externalId);
+
+        $user = ModelFactory::createUser(site: $site);
+        ModelFactory::createAuthenticationMethod(
+            site: $site,
+            user: $user,
+            identityProvider: $identityProvider,
+            externalId: $externalId,
+        );
 
         $request = self::_buildCallbackRequest(returnUrl: "/my-account");
         $controller = new OpenIDConnectController();
@@ -260,14 +277,10 @@ class OpenIDConnectControllerTest extends TestCase
         return $request;
     }
 
-    /**
-     * @param AxysAccount $axysAccount
-     * @return OpenIDConnectProviderService
-     */
-    private function _buildOIDCProviderService(AxysAccount $axysAccount): OpenIDConnectProviderService
+    private function _buildOIDCProviderService(string $externalId): OpenIDConnectProviderService
     {
         $tokenSet = $this->createMock(TokenSetInterface::class);
-        $tokenSet->method("claims")->willReturn(["sub" => $axysAccount->getId(), "exp" => 1682278410]);
+        $tokenSet->method("claims")->willReturn(["sub" => $externalId, "exp" => 1682278410]);
         $openIDConnectProviderService = $this->createMock(OpenIDConnectProviderService::class);
         $openIDConnectProviderService->method("getTokenSet")->willReturn($tokenSet);
         return $openIDConnectProviderService;

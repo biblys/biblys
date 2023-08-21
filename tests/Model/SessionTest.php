@@ -41,7 +41,12 @@ class SessionTest extends TestCase
         $expiresAt = new DateTime("+1 day");
 
         // when
-        $session = Session::buildForUserAndCurrentSite($user, $currentSite , $expiresAt);
+        $session1 = new Session();
+        $session1->setAxysAccount($user);
+        $session1->setSite($currentSite->getSite());
+        $session1->setToken(Session::generateToken());
+        $session1->setExpiresAt($expiresAt);
+        $session = $session1;
 
         // then
         $this->assertNotNull($session->getToken(), "it creates a token");

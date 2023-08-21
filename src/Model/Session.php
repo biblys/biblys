@@ -31,23 +31,6 @@ class Session extends BaseSession
         return $session;
     }
 
-    /**
-     * @throws PropelException
-     */
-    public static function buildForUserAndCurrentSite(
-        AxysAccount $user,
-        CurrentSite $currentSite,
-        DateTime    $expiresAt
-    ): Session
-    {
-        $session = new Session();
-        $session->setAxysAccount($user);
-        $session->setSite($currentSite->getSite());
-        $session->setToken(Session::generateToken());
-        $session->setExpiresAt($expiresAt);
-        return $session;
-    }
-
     public static function generateToken(): string
     {
         $factory = new Factory();
