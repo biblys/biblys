@@ -1,9 +1,12 @@
 # Historique des modifications
 
-## 2.71.0 (DEV)
+## 2.71.0 (21 août 2023)
 
 Améliorations
 
+- Cette mise à jour essentiellement technique permet une importante 
+  migration des données des comptes Axys afin de préparer la possibilité de 
+  créer un compte directement sur le site.
 - Il n'est plus possible d'inviter un utilisateur à être administrateur s'il 
   ne possède pas un compte au préalable.
 
