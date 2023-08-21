@@ -6,18 +6,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-/** @var CurrentSite $currentSite */
-/** @var Request $request */
+return function (Request $request, CurrentSite $currentSite, $axysAccountEmail): Response|RedirectResponse
+{
+    $um = new AxysAccountManager();
 
-$um = new AxysAccountManager();
+    if ($request->getMethod() === "POST") {
 
-if ($request->getMethod() === "POST") {
-
-    $axysAccountEmail = $request->request->get("axys_account_email", false);
-
-    if (!$axysAccountEmail) {
-        trigger_error("Le champ Adresse e-mail est obligatoire.");
-    }
+        $axysAccountEmail = $request->request->get("axys_account_email");
+        if ($axysAccountEmail === null) {
+            throw new BadRequestHttpException("Le champ Adresse e-mail est obligatoire.");
+        }
 
         /** @var AxysAccount $user */
         $user = $um->get(['axys_account_id' => $axysAccountEmail]);
@@ -27,18 +25,17 @@ if ($request->getMethod() === "POST") {
             );
         }
 
+        if (!$user->hasRight('site', $currentSite->getId())) {
+            $user->giveRight('site', $currentSite->getId());
+        }
 
-    if (!$user->hasRight('site', $currentSite->getId())) {
-        $user->giveRight('site', $currentSite->getId());
-    }
-
-    $subject = $currentSite->getSite()->getTag() . ' | Votre accès au site';
+        $subject = $currentSite->getSite()->getTag() . ' | Votre accès au site';
         $message = '
             <p>Bonjour,</p>
             <p>
                 Votre accès administrateur a été créé sur le site 
-                <a href="https://'.$currentSite->getSite()->getDomain().'/">'
-                    .$currentSite->getSite()->getTitle().'
+                <a href="https://' . $currentSite->getSite()->getDomain() . '/">'
+            . $currentSite->getSite()->getTitle() . '
                 </a>.
             </p>
             <p>
@@ -48,18 +45,18 @@ if ($request->getMethod() === "POST") {
             </p>
         ';
 
-    $um->mail($user, $subject, $message);
+        $um->mail($user, $subject, $message);
 
-    $params["added"] = 1;
-    $params["email"] = $user->get("axys_account_email");
-    $queryParams = http_build_query($params);
+        $params["added"] = 1;
+        $params["email"] = $user->get("axys_account_email");
+        $queryParams = http_build_query($params);
 
-    return new RedirectResponse("/pages/adm_admins?$queryParams");
-}
+        return new RedirectResponse("/pages/adm_admins?$queryParams");
+    }
 
-$request->attributes->set("page_title", "Ajouter un administrateur");
+    $request->attributes->set("page_title", "Ajouter un administrateur");
 
-$content = '
+    $content = '
     <h2><span class="fa fa-user-plus"></span> Ajouter un administrateur</h2>
 
     <p class="alert alert-warning">
@@ -78,7 +75,7 @@ $content = '
         <fieldset>
             <p>
                 <label for="axys_account_email">Adresse e-mail :</label>
-                <input type="email" name="axys_account_email" id="axys_account_email" value="'.($axysAccountEmail ?? null).'" class="long" required>&nbsp;
+                <input type="email" name="axys_account_email" id="axys_account_email" value="' . ($axysAccountEmail ?? null) . '" class="long" required>&nbsp;
                 
             </p>
             <br>
@@ -89,4 +86,5 @@ $content = '
     </form>
 ';
 
-return new Response($content);
+    return new Response($content);
+};
