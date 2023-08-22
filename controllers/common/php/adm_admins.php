@@ -31,11 +31,11 @@ if (isset($_GET['added'])) {
 }
 
 $rights = $_SQL->prepare("
-    SELECT `axys_account_id`, `axys_account_email`, `axys_account_screen_name`, `'axys_account_login_date'`, `right_id`
+    SELECT `axys_accounts`.`axys_account_id`, `axys_account_email`, `axys_account_screen_name`, `axys_account_login_date`, `right_id`
         FROM `rights`
-        JOIN `axys_accounts` ON `axys_accounts`.`id` = `rights`.`axys_account_id`
+        JOIN `axys_accounts` ON `axys_accounts`.`axys_account_id` = `rights`.`axys_account_id`
     WHERE `rights`.`site_id` = :site_id
-    ORDER BY `'axys_account_login_date'` DESC
+    ORDER BY `axys_account_login_date` DESC
 ");
 $rights->execute(["site_id" => $_SITE->get("id")]);
 
@@ -46,7 +46,7 @@ while ($p = $rights->fetch(PDO::FETCH_ASSOC)) {
         <tr>
             <td>'.$p["axys_account_id"].'</td>
             <td>'.$p["axys_account_email"].'<br>'.$p["axys_account_screen_name"].'</td>
-            <td class="center">'._date($p["'axys_account_login_date'"],'d/m/Y Hhi').'</td>
+            <td class="center">'._date($p["axys_account_login_date"],'d/m/Y Hhi').'</td>
             <td>
                 <a class="btn btn-sm btn-danger" href="/pages/adm_admins?delete='.$p['right_id'].'&email='.$p['axys_account_email'].'" title="supprimer" data-confirm="Voulez-vous vraiment SUPPRIMER l\'accès administrateur de '.$p['axys_account_email'].'">
                     <span class="fa fa-trash-o"></span>

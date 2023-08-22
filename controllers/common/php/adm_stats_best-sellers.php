@@ -19,7 +19,7 @@ $query = "SELECT `article_title`, `article_url`, GROUP_CONCAT(DISTINCT `article_
     FROM `stock`
     JOIN `articles` USING(`article_id`)
     WHERE `stock`.`site_id` = ". LegacyCodeHelper::getLegacyCurrentSite()["site_id"]." AND `stock_selling_price` != 0 ".$query."
-    GROUP BY `article_item`, IF (`article_item` IS null, `article_id`, null)
+    GROUP BY `article_item`, IF (`article_item` IS null, `article_id`, null), `article_title`, `article_url`
     HAVING COUNT(`stock_id`) >= 3
     ORDER BY `Ventes` DESC, `CA`";
 

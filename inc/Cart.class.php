@@ -215,7 +215,7 @@ class Cart extends Entity
             return $this->get('cart_ip');
         }
 
-        return $user->get('Email');
+        return $user->get('axys_account_email');
     }
 
     /**

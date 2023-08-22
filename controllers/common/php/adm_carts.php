@@ -71,10 +71,10 @@ return function (Request $request, Session $session, CurrentSite $currentSite): 
     $carts = EntityManager::prepareAndExecute("
         SELECT
             `cart_id`, `carts`.`site_id`, `carts`.`axys_account_id`, `cart_ip`, `cart_date`, `cart_count`,
-            `cart_amount`, `Email`, COUNT(`stock_id`) AS `num`, SUM(`stock_selling_price`) AS `total`,
+            `cart_amount`, `axys_account_email`, COUNT(`stock_id`) AS `num`, SUM(`stock_selling_price`) AS `total`,
             MAX(`stock_cart_date`) AS `stock_cart_date`
         FROM `carts`
-        LEFT JOIN `axys_accounts` ON `carts`.`axys_account_id` = `axys_accounts`.`id`
+        LEFT JOIN `axys_accounts` ON `carts`.`axys_account_id` = `axys_accounts`.`axys_account_id`
         LEFT JOIN `stock` USING(`cart_id`)
         WHERE `carts`.`site_id` = :site_id AND `cart_type` = 'web'
         GROUP BY `cart_id`
@@ -82,7 +82,7 @@ return function (Request $request, Session $session, CurrentSite $currentSite): 
         ['site_id' => $currentSite->getId()]
     );
     while ($c = $carts->fetch(PDO::FETCH_ASSOC)) {
-        if (isset($c["Email"])) $c["user"] = $c["Email"];
+        if (isset($c["axys_account_email"])) $c["user"] = $c["axys_account_email"];
         else $c["user"] = $c["cart_ip"];
         $c["style"] = null;
 
@@ -91,7 +91,7 @@ return function (Request $request, Session $session, CurrentSite $currentSite): 
             $cm->updateFromStock($cart);
         }
 
-        if ($c["stock_cart_date"] < $datelimite && empty($c["Email"]) || empty($c["num"])) {
+        if ($c["stock_cart_date"] < $datelimite && empty($c["axys_account_email"]) || empty($c["num"])) {
             $c["style"] = ' style="text-decoration:line-through;"';
 
             if (isset($_GET["go"])) {

@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.71.1 (DEV)
+
+Corrections
+
+- Un certain nombre d'outils d'administration pouvait renvoyer des erreurs 
+  suite à une migration de données partielles. C'est corrigé.
+
 ## 2.71.0 (21 août 2023)
 
 Améliorations

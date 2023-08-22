@@ -203,10 +203,10 @@ if ($articleId) {
 
 $content .= '<h3>Toutes les ventes</h3>';
 
-$achats = $_SQL->prepare("SELECT `article_title`, `Email`,`stock_selling_price`,`stock_selling_date`, `stock_id`
+$achats = $_SQL->prepare("SELECT `article_title`, `axys_account_email`, `stock_selling_price`,`stock_selling_date`, `stock_id`
     FROM `articles`
     JOIN `stock` USING(`article_id`)
-    JOIN `axys_accounts` ON `axys_accounts`.`id` = `stock`.`axys_account_id`
+    JOIN `axys_accounts` ON `axys_accounts`.`axys_account_id` = `stock`.`axys_account_id`
     WHERE `stock`.`site_id` = :site_id AND (`type_id` = '2' OR `type_id` = 11) " .$req.$reqPeople."
     GROUP BY `stock_id`
 ORDER BY `stock_selling_date` DESC");
@@ -233,11 +233,11 @@ while ($a = $achats->fetch(PDO::FETCH_ASSOC)) {
             <td>' . $a["stock_id"] . '</td>
             <td>' . _date($a['stock_selling_date'], "j/m/Y") . '</td>
             <td>' . $a['article_title'] . '</td>
-            <td>' . $a['Email'] . '</td>
+            <td>' . $a['axys_account_email'] . '</td>
             <td class="right">' . price($a['stock_selling_price'], 'EUR') . '</td>
         </tr>
     ';
-    $customers[] = $a["Email"] . ', ';
+    $customers[] = $a["axys_account_email"] . ', ';
 }
 
 $content .= '</tbody></table>';
