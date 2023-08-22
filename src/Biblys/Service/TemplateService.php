@@ -56,7 +56,7 @@ class TemplateService
      * @throws SyntaxError
      * @throws Exception
      */
-    public function render(string $templatePath, array $vars): Response
+    public function render(string $templatePath, array $vars = []): Response
     {
         $twig = $this->_getTwigEnvironment();
         $template = $twig->load($templatePath);
