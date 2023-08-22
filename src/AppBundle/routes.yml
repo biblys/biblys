@@ -312,6 +312,12 @@ inventory_show:
   defaults:
     mode: null
 
+# Invitations
+
+invitation_new:
+  path: /admin/invitations/new
+  controller: AppBundle\Controller\InvitationController::newAction
+
 # Links
 
 link_delete:
