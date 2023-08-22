@@ -13,6 +13,8 @@ use Model\CrowdfundingCampaign as ChildCrowdfundingCampaign;
 use Model\CrowdfundingCampaignQuery as ChildCrowdfundingCampaignQuery;
 use Model\CrowfundingReward as ChildCrowfundingReward;
 use Model\CrowfundingRewardQuery as ChildCrowfundingRewardQuery;
+use Model\Invitation as ChildInvitation;
+use Model\InvitationQuery as ChildInvitationQuery;
 use Model\Option as ChildOption;
 use Model\OptionQuery as ChildOptionQuery;
 use Model\Order as ChildOrder;
@@ -33,6 +35,7 @@ use Model\Map\ArticleCategoryTableMap;
 use Model\Map\CartTableMap;
 use Model\Map\CrowdfundingCampaignTableMap;
 use Model\Map\CrowfundingRewardTableMap;
+use Model\Map\InvitationTableMap;
 use Model\Map\OptionTableMap;
 use Model\Map\OrderTableMap;
 use Model\Map\PageTableMap;
@@ -406,6 +409,13 @@ abstract class Site implements ActiveRecordInterface
     protected $collCrowfundingRewardsPartial;
 
     /**
+     * @var        ObjectCollection|ChildInvitation[] Collection to store aggregation of ChildInvitation objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildInvitation> Collection to store aggregation of ChildInvitation objects.
+     */
+    protected $collInvitations;
+    protected $collInvitationsPartial;
+
+    /**
      * @var        ObjectCollection|ChildOption[] Collection to store aggregation of ChildOption objects.
      * @phpstan-var ObjectCollection&\Traversable<ChildOption> Collection to store aggregation of ChildOption objects.
      */
@@ -489,6 +499,13 @@ abstract class Site implements ActiveRecordInterface
      * @phpstan-var ObjectCollection&\Traversable<ChildCrowfundingReward>
      */
     protected $crowfundingRewardsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildInvitation[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildInvitation>
+     */
+    protected $invitationsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -2544,6 +2561,8 @@ abstract class Site implements ActiveRecordInterface
 
             $this->collCrowfundingRewards = null;
 
+            $this->collInvitations = null;
+
             $this->collOptions = null;
 
             $this->collOrders = null;
@@ -2735,6 +2754,23 @@ abstract class Site implements ActiveRecordInterface
 
             if ($this->collCrowfundingRewards !== null) {
                 foreach ($this->collCrowfundingRewards as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->invitationsScheduledForDeletion !== null) {
+                if (!$this->invitationsScheduledForDeletion->isEmpty()) {
+                    \Model\InvitationQuery::create()
+                        ->filterByPrimaryKeys($this->invitationsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->invitationsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collInvitations !== null) {
+                foreach ($this->collInvitations as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -3505,6 +3541,21 @@ abstract class Site implements ActiveRecordInterface
 
                 $result[$key] = $this->collCrowfundingRewards->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collInvitations) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'invitations';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'invitationss';
+                        break;
+                    default:
+                        $key = 'Invitations';
+                }
+
+                $result[$key] = $this->collInvitations->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collOptions) {
 
                 switch ($keyType) {
@@ -4231,6 +4282,12 @@ abstract class Site implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getInvitations() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addInvitation($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getOptions() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addOption($relObj->copy($deepCopy));
@@ -4330,6 +4387,10 @@ abstract class Site implements ActiveRecordInterface
         }
         if ('CrowfundingReward' === $relationName) {
             $this->initCrowfundingRewards();
+            return;
+        }
+        if ('Invitation' === $relationName) {
+            $this->initInvitations();
             return;
         }
         if ('Option' === $relationName) {
@@ -5133,6 +5194,271 @@ abstract class Site implements ActiveRecordInterface
         $query->joinWith('CrowdfundingCampaign', $joinBehavior);
 
         return $this->getCrowfundingRewards($query, $con);
+    }
+
+    /**
+     * Clears out the collInvitations collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addInvitations()
+     */
+    public function clearInvitations()
+    {
+        $this->collInvitations = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collInvitations collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialInvitations($v = true): void
+    {
+        $this->collInvitationsPartial = $v;
+    }
+
+    /**
+     * Initializes the collInvitations collection.
+     *
+     * By default this just sets the collInvitations collection to an empty array (like clearcollInvitations());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initInvitations(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collInvitations && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = InvitationTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collInvitations = new $collectionClassName;
+        $this->collInvitations->setModel('\Model\Invitation');
+    }
+
+    /**
+     * Gets an array of ChildInvitation objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildSite is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildInvitation[] List of ChildInvitation objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildInvitation> List of ChildInvitation objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getInvitations(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collInvitationsPartial && !$this->isNew();
+        if (null === $this->collInvitations || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collInvitations) {
+                    $this->initInvitations();
+                } else {
+                    $collectionClassName = InvitationTableMap::getTableMap()->getCollectionClassName();
+
+                    $collInvitations = new $collectionClassName;
+                    $collInvitations->setModel('\Model\Invitation');
+
+                    return $collInvitations;
+                }
+            } else {
+                $collInvitations = ChildInvitationQuery::create(null, $criteria)
+                    ->filterBySite($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collInvitationsPartial && count($collInvitations)) {
+                        $this->initInvitations(false);
+
+                        foreach ($collInvitations as $obj) {
+                            if (false == $this->collInvitations->contains($obj)) {
+                                $this->collInvitations->append($obj);
+                            }
+                        }
+
+                        $this->collInvitationsPartial = true;
+                    }
+
+                    return $collInvitations;
+                }
+
+                if ($partial && $this->collInvitations) {
+                    foreach ($this->collInvitations as $obj) {
+                        if ($obj->isNew()) {
+                            $collInvitations[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collInvitations = $collInvitations;
+                $this->collInvitationsPartial = false;
+            }
+        }
+
+        return $this->collInvitations;
+    }
+
+    /**
+     * Sets a collection of ChildInvitation objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $invitations A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setInvitations(Collection $invitations, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildInvitation[] $invitationsToDelete */
+        $invitationsToDelete = $this->getInvitations(new Criteria(), $con)->diff($invitations);
+
+
+        $this->invitationsScheduledForDeletion = $invitationsToDelete;
+
+        foreach ($invitationsToDelete as $invitationRemoved) {
+            $invitationRemoved->setSite(null);
+        }
+
+        $this->collInvitations = null;
+        foreach ($invitations as $invitation) {
+            $this->addInvitation($invitation);
+        }
+
+        $this->collInvitations = $invitations;
+        $this->collInvitationsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Invitation objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related Invitation objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countInvitations(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collInvitationsPartial && !$this->isNew();
+        if (null === $this->collInvitations || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collInvitations) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getInvitations());
+            }
+
+            $query = ChildInvitationQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySite($this)
+                ->count($con);
+        }
+
+        return count($this->collInvitations);
+    }
+
+    /**
+     * Method called to associate a ChildInvitation object to this object
+     * through the ChildInvitation foreign key attribute.
+     *
+     * @param ChildInvitation $l ChildInvitation
+     * @return $this The current object (for fluent API support)
+     */
+    public function addInvitation(ChildInvitation $l)
+    {
+        if ($this->collInvitations === null) {
+            $this->initInvitations();
+            $this->collInvitationsPartial = true;
+        }
+
+        if (!$this->collInvitations->contains($l)) {
+            $this->doAddInvitation($l);
+
+            if ($this->invitationsScheduledForDeletion and $this->invitationsScheduledForDeletion->contains($l)) {
+                $this->invitationsScheduledForDeletion->remove($this->invitationsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildInvitation $invitation The ChildInvitation object to add.
+     */
+    protected function doAddInvitation(ChildInvitation $invitation): void
+    {
+        $this->collInvitations[]= $invitation;
+        $invitation->setSite($this);
+    }
+
+    /**
+     * @param ChildInvitation $invitation The ChildInvitation object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeInvitation(ChildInvitation $invitation)
+    {
+        if ($this->getInvitations()->contains($invitation)) {
+            $pos = $this->collInvitations->search($invitation);
+            $this->collInvitations->remove($pos);
+            if (null === $this->invitationsScheduledForDeletion) {
+                $this->invitationsScheduledForDeletion = clone $this->collInvitations;
+                $this->invitationsScheduledForDeletion->clear();
+            }
+            $this->invitationsScheduledForDeletion[]= clone $invitation;
+            $invitation->setSite(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Invitations from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildInvitation[] List of ChildInvitation objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildInvitation}> List of ChildInvitation objects
+     */
+    public function getInvitationsJoinArticle(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildInvitationQuery::create(null, $criteria);
+        $query->joinWith('Article', $joinBehavior);
+
+        return $this->getInvitations($query, $con);
     }
 
     /**
@@ -7314,6 +7640,11 @@ abstract class Site implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collInvitations) {
+                foreach ($this->collInvitations as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collOptions) {
                 foreach ($this->collOptions as $o) {
                     $o->clearAllReferences($deep);
@@ -7359,6 +7690,7 @@ abstract class Site implements ActiveRecordInterface
         $this->collCarts = null;
         $this->collCrowdfundingCampaigns = null;
         $this->collCrowfundingRewards = null;
+        $this->collInvitations = null;
         $this->collOptions = null;
         $this->collOrders = null;
         $this->collPages = null;

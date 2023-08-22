@@ -203,6 +203,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery rightJoinWithBookCollection() Adds a RIGHT JOIN clause and with to the query using the BookCollection relation
  * @method     ChildArticleQuery innerJoinWithBookCollection() Adds a INNER JOIN clause and with to the query using the BookCollection relation
  *
+ * @method     ChildArticleQuery leftJoinInvitation($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invitation relation
+ * @method     ChildArticleQuery rightJoinInvitation($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invitation relation
+ * @method     ChildArticleQuery innerJoinInvitation($relationAlias = null) Adds a INNER JOIN clause to the query using the Invitation relation
+ *
+ * @method     ChildArticleQuery joinWithInvitation($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Invitation relation
+ *
+ * @method     ChildArticleQuery leftJoinWithInvitation() Adds a LEFT JOIN clause and with to the query using the Invitation relation
+ * @method     ChildArticleQuery rightJoinWithInvitation() Adds a RIGHT JOIN clause and with to the query using the Invitation relation
+ * @method     ChildArticleQuery innerJoinWithInvitation() Adds a INNER JOIN clause and with to the query using the Invitation relation
+ *
  * @method     ChildArticleQuery leftJoinLink($relationAlias = null) Adds a LEFT JOIN clause to the query using the Link relation
  * @method     ChildArticleQuery rightJoinLink($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Link relation
  * @method     ChildArticleQuery innerJoinLink($relationAlias = null) Adds a INNER JOIN clause to the query using the Link relation
@@ -233,7 +243,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery rightJoinWithStock() Adds a RIGHT JOIN clause and with to the query using the Stock relation
  * @method     ChildArticleQuery innerJoinWithStock() Adds a INNER JOIN clause and with to the query using the Stock relation
  *
- * @method     \Model\PublisherQuery|\Model\BookCollectionQuery|\Model\LinkQuery|\Model\RoleQuery|\Model\StockQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\PublisherQuery|\Model\BookCollectionQuery|\Model\InvitationQuery|\Model\LinkQuery|\Model\RoleQuery|\Model\StockQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildArticle|null findOne(?ConnectionInterface $con = null) Return the first ChildArticle matching the query
  * @method     ChildArticle findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildArticle matching the query, or a new ChildArticle object populated from the query conditions when no match is found
@@ -3827,6 +3837,179 @@ abstract class ArticleQuery extends ModelCriteria
     {
         /** @var $q \Model\BookCollectionQuery */
         $q = $this->useInQuery('BookCollection', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\Invitation object
+     *
+     * @param \Model\Invitation|ObjectCollection $invitation the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByInvitation($invitation, ?string $comparison = null)
+    {
+        if ($invitation instanceof \Model\Invitation) {
+            $this
+                ->addUsingAlias(ArticleTableMap::COL_ARTICLE_ID, $invitation->getArticleId(), $comparison);
+
+            return $this;
+        } elseif ($invitation instanceof ObjectCollection) {
+            $this
+                ->useInvitationQuery()
+                ->filterByPrimaryKeys($invitation->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByInvitation() only accepts arguments of type \Model\Invitation or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Invitation relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinInvitation(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Invitation');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Invitation');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Invitation relation Invitation object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\InvitationQuery A secondary query class using the current class as primary query
+     */
+    public function useInvitationQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinInvitation($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Invitation', '\Model\InvitationQuery');
+    }
+
+    /**
+     * Use the Invitation relation Invitation object
+     *
+     * @param callable(\Model\InvitationQuery):\Model\InvitationQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withInvitationQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useInvitationQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Invitation table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\InvitationQuery The inner query object of the EXISTS statement
+     */
+    public function useInvitationExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\InvitationQuery */
+        $q = $this->useExistsQuery('Invitation', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Invitation table for a NOT EXISTS query.
+     *
+     * @see useInvitationExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\InvitationQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useInvitationNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\InvitationQuery */
+        $q = $this->useExistsQuery('Invitation', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Invitation table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\InvitationQuery The inner query object of the IN statement
+     */
+    public function useInInvitationQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\InvitationQuery */
+        $q = $this->useInQuery('Invitation', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Invitation table for a NOT IN query.
+     *
+     * @see useInvitationInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\InvitationQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInInvitationQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\InvitationQuery */
+        $q = $this->useInQuery('Invitation', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 

@@ -1238,6 +1238,13 @@ class ArticleTableMap extends TableMap
     1 => ':collection_id',
   ),
 ), null, null, null, false);
+        $this->addRelation('Invitation', '\\Model\\Invitation', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':article_id',
+    1 => ':article_id',
+  ),
+), null, null, 'Invitations', false);
         $this->addRelation('Link', '\\Model\\Link', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
