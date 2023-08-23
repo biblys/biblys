@@ -35,7 +35,7 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createAdminUser(Site $site = null): AxysAccount
+    public static function createAdminAxysAccount(Site $site = null): AxysAccount
     {
         $user = new AxysAccount();
         $user->save();
@@ -300,7 +300,7 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createUser(
+    public static function createAxysAccount(
         string $email = "user@biblys.fr",
         string $username = "User",
         string $password = "password",
@@ -333,7 +333,7 @@ class ModelFactory
     public static function createUserSession(AxysAccount $user = null): Session
     {
         if (!$user) {
-            $user = ModelFactory::createUser();
+            $user = ModelFactory::createAxysAccount();
         }
 
         $session = Session::buildForUser($user);
@@ -357,7 +357,7 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createPublisherUser(Publisher $publisher): AxysAccount
+    public static function createPublisherAxysAccount(Publisher $publisher): AxysAccount
     {
         $user = new AxysAccount();
         $user->save();

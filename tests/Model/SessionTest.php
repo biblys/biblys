@@ -18,7 +18,7 @@ class SessionTest extends TestCase
     public function testBuildForUser()
     {
         // given
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
 
         // when
         $session = Session::buildForUser($user);
@@ -35,7 +35,7 @@ class SessionTest extends TestCase
     public function testBuildForUserAndCurrentSite()
     {
         // given
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $expiresAt = new DateTime("+1 day");

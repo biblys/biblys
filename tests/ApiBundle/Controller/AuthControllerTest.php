@@ -23,7 +23,7 @@ class AuthControllerTest extends TestCase
     {
         // given
         $controller = new AuthController();
-        ModelFactory::createUser(
+        ModelFactory::createAxysAccount(
             email: "login@biblys.fr",
             username: "validUser",
             password: "p4ssword",
@@ -92,7 +92,7 @@ class AuthControllerTest extends TestCase
         // then
         $this->expectException(UnauthorizedHttpException::class);
         $this->expectExceptionMessage("Bad credentials");
-        ModelFactory::createUser(
+        ModelFactory::createAxysAccount(
             email: "login@biblys.fr",
             username: "validUser",
             password: "p4ssword",
@@ -117,7 +117,7 @@ class AuthControllerTest extends TestCase
         // then
         $this->expectException(AccessDeniedHttpException::class);
         $this->expectExceptionMessage("Email address has not been validated");
-        ModelFactory::createUser(
+        ModelFactory::createAxysAccount(
             email: "non-validated-email@biblys.fr",
             username: "nonValidatedEmail",
             password: "p4ssword",
@@ -142,7 +142,7 @@ class AuthControllerTest extends TestCase
     {
         // given
         $controller = new AuthController();
-        $user = ModelFactory::createUser(
+        $user = ModelFactory::createAxysAccount(
             email: "me@biblys.fr",
             username: "Me",
         );

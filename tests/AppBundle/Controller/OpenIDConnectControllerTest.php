@@ -63,7 +63,7 @@ class OpenIDConnectControllerTest extends TestCase
         $request->query->set("code", "authorization_code");
         $request->query->set("state", $stateToken);
 
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
 
@@ -115,7 +115,7 @@ class OpenIDConnectControllerTest extends TestCase
         $request->query->set("code", "authorization_code");
         $request->query->set("state", $stateToken);
 
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
 

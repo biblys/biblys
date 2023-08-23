@@ -15,7 +15,7 @@ class VisitorTest extends TestCase
     public function testConstructor()
     {
         // given
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
         $request = RequestFactory::createAuthRequest("", $user);
 
         // when
@@ -32,7 +32,7 @@ class VisitorTest extends TestCase
     public function testSetCurrentRight()
     {
         // given
-        $user = ModelFactory::createUser(
+        $user = ModelFactory::createAxysAccount(
             email: "admin-and-publisher@biblys.fr",
             username: "adminAndPublisher",
         );

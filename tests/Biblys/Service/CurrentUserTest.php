@@ -26,7 +26,7 @@ class CurrentUserTest extends TestCase
     public function testBuildFromRequestWithCookie()
     {
         // given
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
         $request = RequestFactory::createAuthRequest("", $user);
 
         // when
@@ -47,7 +47,7 @@ class CurrentUserTest extends TestCase
     public function testBuildFromRequestWithHeader()
     {
         // given
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
         $request = RequestFactory::createAuthRequest("", $user, "header");
 
         // when
@@ -147,7 +147,7 @@ class CurrentUserTest extends TestCase
     public function testIsAuthentifiedForUser()
     {
         // given
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
 
         // when
         $currentUser = new CurrentUser($user, "token");
@@ -245,7 +245,7 @@ class CurrentUserTest extends TestCase
         // given
         $config = new Config();
         $site = SiteQuery::create()->findOneById($config->get("site"));
-        $admin = ModelFactory::createAdminUser();
+        $admin = ModelFactory::createAdminAxysAccount();
 
         // when
         $currentUser = new CurrentUser($admin, "token");
@@ -265,7 +265,7 @@ class CurrentUserTest extends TestCase
         // given
         $config = new Config();
         $site = SiteQuery::create()->findOneById($config->get("site"));
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
 
         // when
         $currentUser = new CurrentUser($user, "token");
@@ -284,7 +284,7 @@ class CurrentUserTest extends TestCase
     {
         // given
         $publisher = ModelFactory::createPublisher();
-        $user = ModelFactory::createPublisherUser($publisher);
+        $user = ModelFactory::createPublisherAxysAccount($publisher);
         $currentUser = new CurrentUser($user, "token");
 
         // when
@@ -304,7 +304,7 @@ class CurrentUserTest extends TestCase
     {
         // given
         $publisher = ModelFactory::createPublisher();
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
         $currentUser = new CurrentUser($user, "token");
 
         // when
@@ -325,7 +325,7 @@ class CurrentUserTest extends TestCase
         // given
         $userPublisher = ModelFactory::createPublisher();
         $otherPublisher = ModelFactory::createPublisher();
-        $user = ModelFactory::createPublisherUser($userPublisher);
+        $user = ModelFactory::createPublisherAxysAccount($userPublisher);
         $currentUser = new CurrentUser($user, "token");
 
         // when
@@ -345,7 +345,7 @@ class CurrentUserTest extends TestCase
     {
         // given
         $publisher = ModelFactory::createPublisher();
-        $user = ModelFactory::createPublisherUser($publisher);
+        $user = ModelFactory::createPublisherAxysAccount($publisher);
         $currentUser = new CurrentUser($user, "token");
 
         // when
@@ -364,7 +364,7 @@ class CurrentUserTest extends TestCase
     public function testHasPublisherRightWithNonPublisher()
     {
         // given
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
         $currentUser = new CurrentUser($user, "token");
 
         // when
@@ -404,7 +404,7 @@ class CurrentUserTest extends TestCase
     public function testGetOption()
     {
         // given
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
         $option = new Option();
         $option->setAxysAccount($user);
         $option->setKey("days_since_last_login");
@@ -429,7 +429,7 @@ class CurrentUserTest extends TestCase
     public function testSetOption()
     {
         // given
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
         $currentUser = new CurrentUser($user, "token");
 
         // when
@@ -492,7 +492,7 @@ class CurrentUserTest extends TestCase
         $site = ModelFactory::createSite();
         $config = new Config();
         $config->set("site", $site->getId());
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
         $request = RequestFactory::createAuthRequest("", $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
         $cart = ModelFactory::createCart([], $site, $user);

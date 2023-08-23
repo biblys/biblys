@@ -17,7 +17,7 @@ class AxysAccountTest extends TestCase
     {
         // when
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
 
         // when
         $isAdmin = $user->isAdminForSite($site);
@@ -36,7 +36,7 @@ class AxysAccountTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createAdminUser($site);
+        $user = ModelFactory::createAdminAxysAccount($site);
 
         // when
         $isAdmin = $user->isAdminForSite($site);
@@ -55,7 +55,7 @@ class AxysAccountTest extends TestCase
     {
         // given
         $publisher = ModelFactory::createPublisher();
-        $user = ModelFactory::createPublisherUser($publisher);
+        $user = ModelFactory::createPublisherAxysAccount($publisher);
 
         // when
         $hasRightForPublisher = $user->hasRightForPublisher($publisher);
@@ -74,7 +74,7 @@ class AxysAccountTest extends TestCase
     {
         // given
         $publisher = ModelFactory::createPublisher();
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
 
         // when
         $hasRightForPublisher = $user->hasRightForPublisher($publisher);
@@ -93,7 +93,7 @@ class AxysAccountTest extends TestCase
     {
         // given
         $publisher = ModelFactory::createPublisher();
-        $user = ModelFactory::createPublisherUser($publisher);
+        $user = ModelFactory::createPublisherAxysAccount($publisher);
 
         // when
         $hasPublisherRight = $user->hasPublisherRight();
@@ -112,7 +112,7 @@ class AxysAccountTest extends TestCase
     {
         // given
         $publisher = ModelFactory::createPublisher();
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
 
         // when
         $hasPublisherRight = $user->hasPublisherRight();
@@ -132,7 +132,7 @@ class AxysAccountTest extends TestCase
         // given
         $userPublisher = ModelFactory::createPublisher();
         $otherPublisher = ModelFactory::createPublisher();
-        $user = ModelFactory::createPublisherUser($userPublisher);
+        $user = ModelFactory::createPublisherAxysAccount($userPublisher);
 
         // when
         $hasRightForPublisher = $user->hasRightForPublisher($otherPublisher);
@@ -150,7 +150,7 @@ class AxysAccountTest extends TestCase
     public function testGetCurrentRight()
     {
         // given
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
         $currentRight = new Right();
         $currentRight->setCurrent(true)->setAxysAccount($user);
         $currentRight->save();

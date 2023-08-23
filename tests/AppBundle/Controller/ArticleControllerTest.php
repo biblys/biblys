@@ -554,7 +554,7 @@ class ArticleControllerTest extends TestCase
         // given
         $request = RequestFactory::createAuthRequest();
         $article = ModelFactory::createArticle(price: 0, typeId: Type::EBOOK);
-        $user = ModelFactory::createUser(email: "free-reader@example.org", username: "Free Reader");
+        $user = ModelFactory::createAxysAccount(email: "free-reader@example.org", username: "Free Reader");
         $controller = new ArticleController();
         $currentSiteService = $this->createMock(CurrentSite::class);
         $currentSiteService
@@ -605,7 +605,7 @@ class ArticleControllerTest extends TestCase
         $request = RequestFactory::createAuthRequest();
         $article = ModelFactory::createArticle(price: 0, typeId: Type::EBOOK);
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createAxysAccount();
         ModelFactory::createStockItem(site: $site, article: $article, axysAccount: $user);
         $currentSiteService = $this->createMock(CurrentSite::class);
         $currentSiteService->expects($this->once())->method("getSite")->willReturn($site);

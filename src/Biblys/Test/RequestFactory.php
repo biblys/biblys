@@ -39,7 +39,7 @@ class RequestFactory
      */
     public static function createAuthRequestForAdminUser(string $content = ""): Request
     {
-        $adminUser = ModelFactory::createAdminUser();
+        $adminUser = ModelFactory::createAdminAxysAccount();
         return RequestFactory::createAuthRequest($content, $adminUser);
     }
 
@@ -55,7 +55,7 @@ class RequestFactory
             $publisher = ModelFactory::createPublisher();
         }
 
-        $publisherUser = ModelFactory::createPublisherUser($publisher);
+        $publisherUser = ModelFactory::createPublisherAxysAccount($publisher);
         return RequestFactory::createAuthRequest($content, $publisherUser);
     }
 }
