@@ -227,4 +227,9 @@ class CurrentUser
         return $this->axysAccount?->getCurrentRight();
 
     }
+
+    public function getEmail(): ?string
+    {
+        return $this->getAxysAccount()->getEmail();
+    }
 }

@@ -503,4 +503,21 @@ class CurrentUserTest extends TestCase
         // then
         $this->assertEquals($cart, $userCart);
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetEmail()
+    {
+        // given
+        $axysAccount = new AxysAccount();
+        $axysAccount->setEmail("get-email@biblys.fr");
+        $currentUser = new CurrentUser($axysAccount, "token");
+
+        // when
+        $email = $currentUser->getEmail();
+
+        // then
+        $this->assertEquals("get-email@biblys.fr", $email);
+    }
 }
