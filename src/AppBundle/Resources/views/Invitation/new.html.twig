@@ -13,7 +13,7 @@
     Il pourra ensuite télécharger à volonté l'article depuis sa bibliothèque.
   </p>
 
-  <form method="post">
+  <form method="post" action="{{ path("invitation_create") }}">
     <div class="form-group">
       <label for="article_id">Article à envoyer :</label>
       <select id="article_id" name="article_id" class="form-control" required>

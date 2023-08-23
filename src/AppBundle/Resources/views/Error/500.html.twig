@@ -30,4 +30,30 @@
       </li>
     {% endfor %}
   </ul>
+
+  {% if exception.previous %}
+    <p class="alert alert-danger">
+      {{ exception.previous.message }}
+    </p>
+
+    Détails:
+
+    <ul>
+      <li>
+        in
+        <strong>{{ exception.previous.file }}:{{ exception.previous.line }}</strong>
+      </li>
+      {% for trace in exception.previous.trace %}
+        <li>
+          in
+          {% if trace.file is defined %}
+            <strong>{{ trace.file }}:{{ trace.line }}</strong>
+          {% elseif trace.function is defined %}
+            <strong>{{ trace.class }}{{ trace.type }}{{ trace.function }}</strong>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
 {% endblock %}

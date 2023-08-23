@@ -319,6 +319,11 @@ invitation_new:
   path: /admin/invitations/new
   controller: AppBundle\Controller\InvitationController::newAction
 
+invitation_create:
+  methods: POST
+  path: /admin/invitations
+  controller: AppBundle\Controller\InvitationController::createAction
+
 # Links
 
 link_delete:
