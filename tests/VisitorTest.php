@@ -32,10 +32,10 @@ class VisitorTest extends TestCase
     public function testSetCurrentRight()
     {
         // given
-        $user = ModelFactory::createUser([
-            "username" => "adminAndPublisher",
-            "email" => "admin-and-publisher@biblys.fr",
-        ]);
+        $user = ModelFactory::createUser(
+            email: "admin-and-publisher@biblys.fr",
+            username: "adminAndPublisher",
+        );
         $request = RequestFactory::createAuthRequest("", $user);
         $visitor = new Visitor($request);
         $rm = new RightManager();

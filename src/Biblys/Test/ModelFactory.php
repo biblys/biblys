@@ -58,18 +58,22 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createArticle(
-        array $attributes = [],
+        string $title = "Article",
+        array $authors = [],
+        string $ean = "9781234567890",
+        int $price = 999,
+        int $typeId = Type::BOOK,
+        string $keywords = null,
         Publisher $publisher = null,
         BookCollection $collection = null,
-        array $authors = []
     ): Article
     {
         $article = new Article();
-        $article->setTitle($attributes["title"] ?? "Article");
-        $article->setEan($attributes["ean"] ?? "9781234567890");
-        $article->setPrice($attributes["price"] ?? 999);
-        $article->setKeywords($attributes["keywords"] ?? $attributes["title"] ?? "Article");
-        $article->setTypeId($attributes["type_id"] ?? Type::BOOK);
+        $article->setTitle($title);
+        $article->setEan($ean);
+        $article->setPrice($price);
+        $article->setKeywords($keywords ?? $title);
+        $article->setTypeId($typeId);
 
         $publisher = $publisher ?? self::createPublisher();
         $article->setPublisherId($publisher->getId());
@@ -273,19 +277,21 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createStockItem(
-        array        $attributes = [],
         ?Site        $site = null,
         ?Article     $article = null,
-        ?AxysAccount $user = null,
+        ?AxysAccount $axysAccount = null,
+        DateTime     $sellingDate = null,
+        DateTime     $returnDate = null,
+        DateTime     $lostDate = null,
     ): Stock
     {
         $stock = new Stock();
         $stock->setSite($site ?? self::createSite());
         $stock->setArticle($article ?? self::createArticle());
-        $stock->setAxysAccount($user);
-        $stock->setSellingDate($attributes["selling_date"] ?? null);
-        $stock->setReturnDate($attributes["return_date"] ?? null);
-        $stock->setLostDate($attributes["lost_date"] ?? null);
+        $stock->setAxysAccount($axysAccount);
+        $stock->setSellingDate($sellingDate);
+        $stock->setReturnDate($returnDate);
+        $stock->setLostDate($lostDate);
         $stock->save();
 
         return $stock;
@@ -294,30 +300,28 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createUser(array $attributes = []): AxysAccount
+    public static function createUser(
+        string $email = "user@biblys.fr",
+        string $username = "User",
+        string $password = "password",
+        string $emailKey = null
+    ): AxysAccount
     {
-        $attributes["email"] = $attributes["email"] ?? "user@biblys.fr";
-        $attributes["username"] = $attributes["username"] ?? "User";
-        $attributes["password"] = $attributes["password"] ?? "password";
-
-        $userByEmail = AxysAccountQuery::create()->findOneByEmail($attributes["email"]);
+        $userByEmail = AxysAccountQuery::create()->findOneByEmail($email);
         if ($userByEmail) {
             return $userByEmail;
         }
 
-        $userByUsername = AxysAccountQuery::create()->findOneByUsername($attributes["username"]);
+        $userByUsername = AxysAccountQuery::create()->findOneByUsername($username);
         if ($userByUsername) {
             return $userByUsername;
         }
 
         $user = new AxysAccount();
-        $user->setEmail($attributes["email"]);
-        $user->setUsername($attributes["username"]);
-        $user->setPassword(password_hash($attributes["password"], PASSWORD_DEFAULT));
-
-        if (isset($attributes["email_key"])) {
-            $user->setEmailKey($attributes["email_key"]);
-        }
+        $user->setEmail($email);
+        $user->setUsername($username);
+        $user->setPassword(password_hash($password, PASSWORD_DEFAULT));
+        $user->setEmailKey($emailKey);
         $user->save();
 
         return $user;
@@ -391,11 +395,14 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createPublisher($attributes = []): Publisher
+    public static function createPublisher(
+        string $name = "Les Éditions Paronymie",
+        string $url = "les-editions-paronymie.com",
+    ): Publisher
     {
         $publisher = new Publisher();
-        $publisher->setName($attributes["name"] ?? "Les Éditions Paronymie");
-        $publisher->setUrl($attributes["url"] ?? "les-editions-paronymie.com");
+        $publisher->setName($name);
+        $publisher->setUrl($url);
         $publisher->save();
 
         return $publisher;

@@ -27,33 +27,43 @@ class ArticleControllerTest extends TestCase
         $site->setName("paronymie");
         $currentSite = new CurrentSite($site);
 
-        $publisher = ModelFactory::createPublisher(["name" => "Les Éditions Paronymie"]);
+        $publisher = ModelFactory::createPublisher(name: "Un éditeur");
         $collection = ModelFactory::createCollection(["publisher" => $publisher]);
         $author = ModelFactory::createPeople(["first_name" => "Albert", "last_name" => "Koalanstein"]);
-        $article = ModelFactory::createArticle([
-            "title" => "L'Animalie",
-            "ean" => "9781234567897",
-            "price" => "1500",
-        ], $publisher, $collection, [$author]);
-        ModelFactory::createStockItem([], $site, $article);
-        ModelFactory::createArticle([
-            "title" => "Au-revoir, Mao",
-            "ean" => "9781234567844",
-            "price" => "999",
-        ], $publisher, $collection, [$author]);
-        ModelFactory::createArticle([
-            "title" => "Le \"Serpent\" sur la butte aux pommes",
-            "ean" => "9781234567833",
-            "price" => "0",
-        ], $publisher, $collection, [$author]);
+        $article = ModelFactory::createArticle(
+            title: "L'Animalie",
+            authors: [$author],
+            ean: "9781234567897",
+            price: "1500",
+            publisher: $publisher,
+            collection: $collection
+        );
+        ModelFactory::createStockItem(site: $site, article: $article);
+        ModelFactory::createArticle(
+            title: "Au-revoir, Mao",
+            authors: [$author],
+            ean: "9781234567844",
+            price: "999",
+            publisher: $publisher,
+            collection: $collection
+        );
+        ModelFactory::createArticle(
+            title: "Le \"Serpent\" sur la butte aux pommes",
+            authors: [$author],
+            ean: "9781234567833",
+            price: "0",
+            publisher: $publisher,
+            collection: $collection
+        );
         $currentSite->setOption("publisher_filter", $publisher->getId());
 
-        $publisher = ModelFactory::createPublisher(["name" => "Un autre éditeur"]);
-        ModelFactory::createArticle([
-            "title" => "Livre d'un autre éditeur",
-            "ean" => "9789876543210",
-            "price" => "21",
-        ], $publisher);
+        $publisher = ModelFactory::createPublisher(name: "Un autre éditeur");
+        ModelFactory::createArticle(
+            title: "Livre d'un autre éditeur",
+            ean: "9789876543210",
+            price: "21",
+            publisher: $publisher
+        );
 
         // when
         $response = $controller->export($request, $currentSite);
@@ -76,9 +86,9 @@ class ArticleControllerTest extends TestCase
         );
 
         $csv  = "EAN,Titre,Auteur·trice·s,Collection,Éditeur,Prix,Stock\n";
-        $csv .= "9781234567897,L'Animalie,\"Albert Koalanstein\",\"La Blanche\",\"Les Éditions Paronymie\",15,1\n";
-        $csv .= "9781234567844,\"Au-revoir, Mao\",\"Albert Koalanstein\",\"La Blanche\",\"Les Éditions Paronymie\",9.99,0\n";
-        $csv .= "9781234567833,\"Le \"\"Serpent\"\" sur la butte aux pommes\",\"Albert Koalanstein\",\"La Blanche\",\"Les Éditions Paronymie\",0,0\n";
+        $csv .= "9781234567897,L'Animalie,\"Albert Koalanstein\",\"La Blanche\",\"Un éditeur\",15,1\n";
+        $csv .= "9781234567844,\"Au-revoir, Mao\",\"Albert Koalanstein\",\"La Blanche\",\"Un éditeur\",9.99,0\n";
+        $csv .= "9781234567833,\"Le \"\"Serpent\"\" sur la butte aux pommes\",\"Albert Koalanstein\",\"La Blanche\",\"Un éditeur\",0,0\n";
         $this->assertEquals(
             $csv,
             $response->getContent(),

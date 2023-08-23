@@ -18,9 +18,9 @@ class ArticleQueryTest extends TestCase
     {
         // given
         $sitePublisher = ModelFactory::createPublisher();
-        $articleForSitePublisher = ModelFactory::createArticle([], $sitePublisher);
+        $articleForSitePublisher = ModelFactory::createArticle(publisher: $sitePublisher);
         $otherPublisher = ModelFactory::createPublisher();
-        $articleForOtherPublisher = ModelFactory::createArticle([], $otherPublisher);
+        $articleForOtherPublisher = ModelFactory::createArticle(publisher: $otherPublisher);
 
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
@@ -40,11 +40,11 @@ class ArticleQueryTest extends TestCase
     {
         // given
         $sitePublisher = ModelFactory::createPublisher();
-        $articleForSitePublisher = ModelFactory::createArticle([], $sitePublisher);
+        $articleForSitePublisher = ModelFactory::createArticle(publisher: $sitePublisher);
         $siteOtherPublisher = ModelFactory::createPublisher();
-        $articleForOtherSitePublisher = ModelFactory::createArticle([], $siteOtherPublisher);
+        $articleForOtherSitePublisher = ModelFactory::createArticle(publisher: $siteOtherPublisher);
         $publisherFromOtherSite = ModelFactory::createPublisher();
-        $articleForOtherPublisher = ModelFactory::createArticle([], $publisherFromOtherSite);
+        $articleForOtherPublisher = ModelFactory::createArticle(publisher: $publisherFromOtherSite);
 
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);

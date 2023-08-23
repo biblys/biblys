@@ -40,7 +40,7 @@ class ArticleControllerTest extends TestCase
     public function testShow()
     {
         // given
-        $article = ModelFactory::createArticle(["title" => "Citoyens de demain"]);
+        $article = ModelFactory::createArticle(title: "Citoyens de demain");
         $request = new Request();
         $config = $this->createMock(Config::class);
         $currentSiteService = $this->createMock(CurrentSite::class);
@@ -186,7 +186,7 @@ class ArticleControllerTest extends TestCase
         $controller = new ArticleController();
         $publisher = ModelFactory::createPublisher();
         $request = RequestFactory::createAuthRequestForPublisherUser($publisher);
-        $article = ModelFactory::createArticle([], $publisher);
+        $article = ModelFactory::createArticle(publisher: $publisher);
 
         // when
         $response = $controller->addTagsAction($request, $article->getId());
@@ -228,7 +228,7 @@ class ArticleControllerTest extends TestCase
         $controller = new ArticleController();
         $publisher = ModelFactory::createPublisher();
         $request = RequestFactory::createAuthRequestForPublisherUser($publisher);
-        $article = ModelFactory::createArticle([], $publisher);
+        $article = ModelFactory::createArticle(publisher: $publisher);
         $currentSite = ModelFactory::createSite();
         $category = ModelFactory::createArticleCategory($currentSite);
         $currentSiteService = $this->createMock(CurrentSite::class);
@@ -287,10 +287,8 @@ class ArticleControllerTest extends TestCase
     {
         // given
         ModelFactory::createArticle(
-            ["title" => "Résultat de recherche"],
-            null,
-            null,
-            [ModelFactory::createPeople()]
+            title: "Résultat de recherche",
+            authors : [ModelFactory::createPeople()],
         );
         $controller = new ArticleController();
         $request = new Request();
@@ -328,10 +326,8 @@ class ArticleControllerTest extends TestCase
     {
         // given
         ModelFactory::createArticle(
-            ["title" => "Résultat de recherche trié"],
-            null,
-            null,
-            [ModelFactory::createPeople()]
+            title: "Résultat de recherche trié",
+            authors: [ModelFactory::createPeople()]
         );
         $controller = new ArticleController();
         $request = new Request();
@@ -374,9 +370,7 @@ class ArticleControllerTest extends TestCase
 
         // given
         ModelFactory::createArticle(
-            ["title" => "Résultat de recherche trié"],
-            null,
-            null,
+            title: "Résultat de recherche trié",authors:
             [ModelFactory::createPeople()]
         );
         $controller = new ArticleController();
@@ -401,12 +395,10 @@ class ArticleControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $article = ModelFactory::createArticle(
-            ["title" => "Résultat de recherche avec stock"],
-            null,
-            null,
-            [ModelFactory::createPeople()]
+            title: "Résultat de recherche avec stock",
+            authors: [ModelFactory::createPeople()]
         );
-        ModelFactory::createStockItem([], $site, $article);
+        ModelFactory::createStockItem(site: $site, article: $article);user:
         $controller = new ArticleController();
         $request = new Request();
         $request->query->set("q", "Résultat de recherche avec stock");
@@ -445,12 +437,10 @@ class ArticleControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $article = ModelFactory::createArticle(
-            ["title" => "Résultat de recherche trié avec stock"],
-            null,
-            null,
-            [ModelFactory::createPeople()]
+            title: "Résultat de recherche trié avec stock",
+            authors: [ModelFactory::createPeople()]
         );
-        ModelFactory::createStockItem([], $site, $article);
+        ModelFactory::createStockItem(site: $site, article: $article);user:
         $controller = new ArticleController();
         $request = new Request();
         $request->query->set("q", "Résultat de recherche trié avec stock");
@@ -488,7 +478,7 @@ class ArticleControllerTest extends TestCase
         $this->expectExceptionMessage("Cet ISBN est déjà utilisé par un autre article");
 
         // given
-        ModelFactory::createArticle(["ean" => 9781234567897, "keywords" => "9781234567897"]);
+        ModelFactory::createArticle(ean: "9781234567897", keywords: 9781234567897);
         $otherArticle = ModelFactory::createArticle();
         $requestBody = json_encode(["article_id" => $otherArticle->getId(), "article_ean" => "9781234567897"]);
         $request = new Request([], [], [], [], [], [], $requestBody);
@@ -504,7 +494,7 @@ class ArticleControllerTest extends TestCase
     public function testCheckIsbnIgnoresSameArticle()
     {
         // given
-        $article = ModelFactory::createArticle(["ean" => 9781234567880, "keywords" => "9781234567880"]);
+        $article = ModelFactory::createArticle(ean: "9781234567880", keywords: "9781234567880");
         $requestBody = json_encode(["article_id" => (string) $article->getId(), "article_ean" => "9781234567880"]);
         $request = new Request([], [], [], [], [], [], $requestBody);
         $controller = new ArticleController();
@@ -530,7 +520,7 @@ class ArticleControllerTest extends TestCase
     {
         // given
         $request = RequestFactory::createAuthRequest();
-        $article = ModelFactory::createArticle(["type_id" => Type::EBOOK, "price" => 0]);
+        $article = ModelFactory::createArticle(price: 0, typeId: Type::EBOOK);
         $controller = new ArticleController();
         $currentSiteService = $this->createMock(CurrentSite::class);
         $currentUserService = $this->createMock(CurrentUser::class);
@@ -563,8 +553,8 @@ class ArticleControllerTest extends TestCase
     {
         // given
         $request = RequestFactory::createAuthRequest();
-        $article = ModelFactory::createArticle(["type_id" => Type::EBOOK, "price" => 0]);
-        $user = ModelFactory::createUser(["email" => "free-reader@example.org", "username" => "Free Reader"]);
+        $article = ModelFactory::createArticle(price: 0, typeId: Type::EBOOK);
+        $user = ModelFactory::createUser(email: "free-reader@example.org", username: "Free Reader");
         $controller = new ArticleController();
         $currentSiteService = $this->createMock(CurrentSite::class);
         $currentSiteService
@@ -613,10 +603,10 @@ class ArticleControllerTest extends TestCase
         // given
         $controller = new ArticleController();
         $request = RequestFactory::createAuthRequest();
-        $article = ModelFactory::createArticle(["type_id" => Type::EBOOK, "price" => 0]);
+        $article = ModelFactory::createArticle(price: 0, typeId: Type::EBOOK);
         $site = ModelFactory::createSite();
         $user = ModelFactory::createUser();
-        ModelFactory::createStockItem([], $site, $article, $user);
+        ModelFactory::createStockItem(site: $site, article: $article, axysAccount: $user);
         $currentSiteService = $this->createMock(CurrentSite::class);
         $currentSiteService->expects($this->once())->method("getSite")->willReturn($site);
         $currentUserService = $this->createMock(CurrentUser::class);
@@ -653,7 +643,7 @@ class ArticleControllerTest extends TestCase
 
         // given
         $request = new Request();
-        $article = ModelFactory::createArticle(["type_id" => Type::EBOOK, "price" => 0]);
+        $article = ModelFactory::createArticle(price: 0, typeId: Type::EBOOK);
         $controller = new ArticleController();
         $currentSiteService = $this->createMock(CurrentSite::class);
         $currentUserService = $this->createMock(CurrentUser::class);

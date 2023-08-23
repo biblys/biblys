@@ -1033,17 +1033,17 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     {
         // given
         $currentSite = ModelFactory::createSite();
-        $articleWithStock = ModelFactory::createArticle(["keywords" => "Article à trouver"]);
-        ModelFactory::createArticle(["keywords" => "Article à trouver"]);
-        ModelFactory::createStockItem([], $currentSite, $articleWithStock);
-        ModelFactory::createStockItem([], $currentSite, $articleWithStock);
-        $otherArticleWithStockToFound = ModelFactory::createArticle(["keywords" => "Article à trouver aussi"]);
-        ModelFactory::createStockItem([], $currentSite, $otherArticleWithStockToFound);
-        $otherArticleWithStock = ModelFactory::createArticle(["keywords" => "Sans rapport"]);
-        ModelFactory::createStockItem([], $currentSite, $otherArticleWithStock);
+        $articleWithStock = ModelFactory::createArticle(keywords: "Article à trouver");
+        ModelFactory::createArticle(keywords: "Article à trouver");
+        ModelFactory::createStockItem(site: $currentSite, article: $articleWithStock);
+        ModelFactory::createStockItem(site: $currentSite, article: $articleWithStock);
+        $otherArticleWithStockToFound = ModelFactory::createArticle(keywords: "Article à trouver aussi");
+        ModelFactory::createStockItem(site: $currentSite, article: $otherArticleWithStockToFound);
+        $otherArticleWithStock = ModelFactory::createArticle(keywords: "Sans rapport");
+        ModelFactory::createStockItem(site: $currentSite, article: $otherArticleWithStock);
         $otherSite = ModelFactory::createSite();
-        $articleWithStockFromOtherSite = ModelFactory::createArticle(["keywords" => "Article à trouver"]);
-        ModelFactory::createStockItem([], $otherSite, $articleWithStockFromOtherSite);
+        $articleWithStockFromOtherSite = ModelFactory::createArticle(keywords: "Article à trouver");
+        ModelFactory::createStockItem(site: $otherSite, article: $articleWithStockFromOtherSite);
         $am = new ArticleManager();
         $currentSiteService = new CurrentSite($currentSite);
 
@@ -1065,14 +1065,14 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     {
         // given
         $currentSite = ModelFactory::createSite();
-        $articleWithStock = ModelFactory::createArticle(["keywords" => "Article à trouver"]);
-        ModelFactory::createArticle(["keywords" => "Article à trouver"]);
-        ModelFactory::createStockItem([], $currentSite, $articleWithStock);
-        $otherArticleWithStock = ModelFactory::createArticle(["keywords" => "Sans rapport"]);
-        ModelFactory::createStockItem([], $currentSite, $otherArticleWithStock);
+        $articleWithStock = ModelFactory::createArticle(keywords: "Article à trouver");
+        ModelFactory::createArticle(keywords: "Article à trouver");
+        ModelFactory::createStockItem(site: $currentSite, article: $articleWithStock);
+        $otherArticleWithStock = ModelFactory::createArticle(keywords: "Sans rapport");
+        ModelFactory::createStockItem(site: $currentSite, article: $otherArticleWithStock);
         $otherSite = ModelFactory::createSite();
-        $articleWithStockFromOtherSite = ModelFactory::createArticle(["keywords" => "Article à trouver"]);
-        ModelFactory::createStockItem([], $otherSite, $articleWithStockFromOtherSite);
+        $articleWithStockFromOtherSite = ModelFactory::createArticle(keywords: "Article à trouver");
+        ModelFactory::createStockItem(site: $otherSite, article: $articleWithStockFromOtherSite);
         $am = new ArticleManager();
         $currentSiteService = new CurrentSite($currentSite);
 

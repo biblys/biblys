@@ -43,11 +43,11 @@ class ArticleTest extends TestCase
         $site = ModelFactory::createSite();
         $otherSite = ModelFactory::createSite();
         $article = ModelFactory::createArticle();
-        ModelFactory::createStockItem([], $site, $article);
-        ModelFactory::createStockItem([], $otherSite, $article);
-        ModelFactory::createStockItem(["selling_date" => new DateTime()], $site, $article);
-        ModelFactory::createStockItem(["return_date" => new DateTime()], $site, $article);
-        ModelFactory::createStockItem(["lost_date" => new DateTime()], $site, $article);
+        ModelFactory::createStockItem(site: $site, article: $article);
+        ModelFactory::createStockItem(site: $otherSite, article: $article);
+        ModelFactory::createStockItem(site: $site, article: $article, sellingDate: new DateTime());
+        ModelFactory::createStockItem(site: $site, article: $article, returnDate: new DateTime());
+        ModelFactory::createStockItem(site: $site, article: $article, lostDate: new DateTime());
 
         // when
         $count = $article->countAvailableStockItemsForSite($site);

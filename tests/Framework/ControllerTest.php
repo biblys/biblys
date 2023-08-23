@@ -180,7 +180,7 @@ class ControllerTest extends TestCase
 
         // given
         $userPublisher = ModelFactory::createPublisher();
-        $otherPublisher = ModelFactory::createPublisher(["name" => "Éditeur interdit"]);
+        $otherPublisher = ModelFactory::createPublisher(name: "Éditeur interdit");
         $controller = new Controller();
         $request = RequestFactory::createAuthRequestForPublisherUser($userPublisher);
 
@@ -199,7 +199,7 @@ class ControllerTest extends TestCase
         $this->expectExceptionMessage("Vous n'avez pas l'autorisation de modifier l'éditeur Éditeur interdit");
 
         // given
-        $publisher = ModelFactory::createPublisher(["name" => "Éditeur interdit"]);
+        $publisher = ModelFactory::createPublisher(name: "Éditeur interdit");
         $controller = new Controller();
         $request = RequestFactory::createAuthRequest();
 

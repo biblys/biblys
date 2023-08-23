@@ -22,8 +22,8 @@ class GleephServiceTest extends TestCase
         // given
         $sitePublisher = ModelFactory::createPublisher();
         $otherPublisher = ModelFactory::createPublisher();
-        ModelFactory::createArticle(["title" => "A similar article", "ean" => "9789876543210"], $sitePublisher);
-        ModelFactory::createArticle(["title" => "An article from another site", "ean" => "9788765432109"], $otherPublisher);
+        ModelFactory::createArticle(title: "A similar article", ean: "9789876543210", publisher: $sitePublisher);
+        ModelFactory::createArticle(title: "An article from another site", ean: "9788765432109", publisher: $otherPublisher);
         $api = $this->createMock(GleephAPI::class);
         $api
             ->method("getSimilarBooksByEan")

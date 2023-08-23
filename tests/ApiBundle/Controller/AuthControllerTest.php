@@ -3,11 +3,8 @@
 namespace ApiBundle\Controller;
 
 use Biblys\Service\CurrentUser;
-use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
-use Framework\Controller;
-use Framework\Exception\AuthException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,17 +18,16 @@ class AuthControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws AuthException
      */
     public function testAuthAction()
     {
         // given
         $controller = new AuthController();
-        ModelFactory::createUser([
-            "email" => "login@biblys.fr",
-            "username" => "validUser",
-            "password" => "p4ssword",
-        ]);
+        ModelFactory::createUser(
+            email: "login@biblys.fr",
+            username: "validUser",
+            password: "p4ssword",
+        );
         $request = new Request();
         $request->request->set("login", "login@biblys.fr");
         $request->request->set("password", "p4ssword");
@@ -96,11 +92,11 @@ class AuthControllerTest extends TestCase
         // then
         $this->expectException(UnauthorizedHttpException::class);
         $this->expectExceptionMessage("Bad credentials");
-        ModelFactory::createUser([
-            "email" => "login@biblys.fr",
-            "username" => "validUser",
-            "password" => "p4ssword",
-        ]);
+        ModelFactory::createUser(
+            email: "login@biblys.fr",
+            username: "validUser",
+            password: "p4ssword",
+        );
 
         // given
         $controller = new AuthController();
@@ -121,12 +117,12 @@ class AuthControllerTest extends TestCase
         // then
         $this->expectException(AccessDeniedHttpException::class);
         $this->expectExceptionMessage("Email address has not been validated");
-        ModelFactory::createUser([
-            "email" => "non-validated-email@biblys.fr",
-            "username" => "nonValidatedEmail",
-            "password" => "p4ssword",
-            "email_key" => "abcd1234"
-        ]);
+        ModelFactory::createUser(
+            email: "non-validated-email@biblys.fr",
+            username: "nonValidatedEmail",
+            password: "p4ssword",
+            emailKey: "abd1234",
+        );
 
         // given
         $controller = new AuthController();
@@ -140,18 +136,17 @@ class AuthControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws AuthException
      *
      */
     public function testMeAction()
     {
         // given
         $controller = new AuthController();
-        $user = ModelFactory::createUser([
-            "email" => "me@biblys.fr",
-            "username" => "Me",
-        ]);
-        $request = RequestFactory::createAuthRequest("", $user, $method = "header");
+        $user = ModelFactory::createUser(
+            email: "me@biblys.fr",
+            username: "Me",
+        );
+        $request = RequestFactory::createAuthRequest("", $user, "header");
         $currentUserService = CurrentUser::buildFromRequest($request);
 
         // when
