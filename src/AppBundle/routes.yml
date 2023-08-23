@@ -315,6 +315,7 @@ inventory_show:
 # Invitations
 
 invitation_new:
+  methods: GET
   path: /admin/invitations/new
   controller: AppBundle\Controller\InvitationController::newAction
 

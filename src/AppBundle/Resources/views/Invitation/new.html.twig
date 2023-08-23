@@ -6,4 +6,33 @@
 
 {% block main %}
   <h1>Créer une invitation de téléchargement</h1>
+
+  <p class="alert alert-info">
+    <span class="fa fa-info-circle"></span>
+    Le destinataire recevra par courriel avec un lien permettant d'ajouter l'article à sa bibliothèque numérique.
+    Il pourra ensuite télécharger à volonté l'article depuis sa bibliothèque.
+  </p>
+
+  <form method="post">
+    <div class="form-group">
+      <label for="article_id">Article à envoyer :</label>
+      <select id="article_id" name="article_id" class="form-control" required>
+        {% for article in downloadableArticles %}
+          <option value="{{ article.id }}">{{ article.title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="email_address">Adresse e-mail du destinataire :</label>
+      <input type="email"
+             class="form-control"
+             id="email_address"
+             name="email_address"
+             placeholder="amalia.vanesqwill@dehaven.net"
+             required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Envoyer l'invitation</button>
+  </form>
 {% endblock %}
