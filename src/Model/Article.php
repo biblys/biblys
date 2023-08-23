@@ -2,6 +2,7 @@
 
 namespace Model;
 
+use Biblys\Article\Type;
 use Exception;
 use Model\Base\Article as BaseArticle;
 use Model\StockQuery as ChildStockQuery;
@@ -55,5 +56,10 @@ class Article extends BaseArticle
         }
 
         return count($this->collStocks);
+    }
+
+    public function getType(): Type
+    {
+        return Type::getById($this->getTypeId());
     }
 }
