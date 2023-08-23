@@ -1,0 +1,37 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Télécharger {{ articleTitle }}
+{% endblock %}
+
+{% block main %}
+  <h1>Télécharger {{ articleTitle }}</h1>
+
+  {% if not currentUser.isAuthentified %}
+    <p>
+      L'article sera ajouté à votre bibliothèque numérique d'où vous pourrez le télécharger à volonté et dans le format de
+      votre choix.
+    </p>
+    <p>Pour continuer, vous devez vous identifier.</p>
+    <a href="{{ path("user_login") }}" class="btn btn-primary">Connexion</a>
+
+  {% endif %}
+
+  {% if currentUser.isAuthentified %}
+    <p class="text-center">
+      <strong>{{ articleTitle }}</strong> <br />
+      va être ajouté à la bibliothèque numérique <br />
+      de votre compte <strong>{{ currentUser.email }}</strong><br />
+      d'où vous pourrez le télécharger à volonté<br />
+      et dans le format de votre choix.
+    </p>
+
+    <form action="{{ path('invitation_consume') }}" method="post" class="text-center">
+      <input type="hidden" name="code" value="{{ code }}" />
+      <button type="submit" class="btn btn-primary">Ajouter à ma bibliothèque</button><br />
+      <a href="{{ path("user_logout") }}" class="btn btn-secondary">Changer de compte</a>
+    </form>
+
+  {% endif %}
+
+{% endblock %}

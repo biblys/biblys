@@ -5,12 +5,15 @@ namespace AppBundle\Controller;
 use Biblys\Article\Type;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Service\TemplateService;
+use DateTime;
 use Exception;
 use Framework\Controller;
-use Model\Base\ArticleQuery;
+use Model\ArticleQuery;
 use Model\Invitation;
+use Model\InvitationQuery;
 use Model\Map\ArticleTableMap;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Propel;
@@ -19,6 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -154,5 +158,47 @@ class InvitationController extends Controller
     public function listAction(UrlGenerator $urlGenerator): RedirectResponse
     {
         return new RedirectResponse($urlGenerator->generate("invitation_new"));
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function showAction(
+        CurrentSite $currentSite,
+        CurrentUser $currentUser,
+        TemplateService $templateService,
+        string $code
+    ): Response
+    {
+        $invitation = InvitationQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->findOneByCode($code);
+
+        if ($invitation === null) {
+            throw new BadRequestHttpException("Cette invitation n'existe pas.");
+        }
+
+        if ($invitation->getExpiresAt() <= new DateTime()) {
+            throw new BadRequestHttpException("Cette invitation a expirée.");
+        }
+
+        if ($invitation->getConsumedAt() !== null) {
+            throw new BadRequestHttpException("Cette invitation a déjà été utilisée.");
+        }
+
+        $article = ArticleQuery::create()
+            ->filterForCurrentSite($currentSite)
+            ->findOneById($invitation->getArticleId());
+        if ($article === null) {
+            throw new BadRequestHttpException("L'article {$invitation->getArticleId()} n'existe pas.");
+        }
+
+        return $templateService->render("AppBundle:Invitation:show.html.twig", [
+            "articleTitle" => $article->getTitle(),
+            "currentUser" => $currentUser,
+        ]);
     }
 }

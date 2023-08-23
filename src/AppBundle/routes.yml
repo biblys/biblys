@@ -329,6 +329,16 @@ invitation_list:
   path: /admin/invitations
   controller: AppBundle\Controller\InvitationController::listAction
 
+invitation_show:
+  methods: GET
+  path: /invitations/{code}
+  controller: AppBundle\Controller\InvitationController::showAction
+
+invitation_consume:
+  methods: POST
+  path: /invitations/consume
+  controller: AppBundle\Controller\InvitationController::consumeAction
+
 # Links
 
 link_delete:

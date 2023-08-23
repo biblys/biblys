@@ -9,6 +9,7 @@ use Model\Article;
 use Model\ArticleCategory;
 use Model\AxysAccount;
 use Model\AxysAccountQuery;
+use Model\Invitation;
 use Model\BookCollection;
 use Model\Cart;
 use Model\Country;
@@ -431,6 +432,26 @@ class ModelFactory
         $contribution->setPeople($contributor);
         $contribution->setJobId(1);
         $contribution->save();
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createInvitation(
+        Site $site = null,
+        Article $article = null,
+        string $code = "ABCD1234",
+    ): Invitation
+    {
+        $invitation = new Invitation();
+        $invitation->setSite($site ?? self::createSite());
+        $invitation->setArticle($article ?? self::createArticle());
+        $invitation->setEmail("invited-user@biblys.fr");
+        $invitation->setCode($code);
+        $invitation->setExpiresAt(strtotime("+1 month"));
+        $invitation->save();
+
+        return $invitation;
     }
 
 }
