@@ -46,7 +46,6 @@ class AuthControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      */
     public function testAuthActionWithMissingCredentials()
@@ -64,7 +63,6 @@ class AuthControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      */
     public function testAuthActionWithUnknownUser()
@@ -84,7 +82,6 @@ class AuthControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      */
     public function testAuthActionWithWrongPassword()
@@ -109,7 +106,6 @@ class AuthControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      */
     public function testAuthActionWithNonValidatedEmail()

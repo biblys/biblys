@@ -5,7 +5,6 @@ namespace ApiBundle\Controller;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Log;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use Model\AxysAccountQuery;
 use Model\Session;
 use Propel\Runtime\Exception\PropelException;
@@ -20,7 +19,6 @@ class AuthController extends Controller
 
     /**
      * POST /api/auth
-     * @throws AuthException
      * @throws PropelException
      */
     public function authAction(Request $request): JsonResponse
@@ -56,9 +54,6 @@ class AuthController extends Controller
         return new JsonResponse(['token' => $session->getToken()]);
     }
 
-    /**
-     * @throws AuthException
-     */
     public function meAction(CurrentUser $currentUserService): JsonResponse
     {
         $user = $currentUserService->getAxysAccount();
