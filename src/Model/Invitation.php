@@ -3,6 +3,7 @@
 namespace Model;
 
 use Model\Base\Invitation as BaseInvitation;
+use RandomLib\Factory;
 
 /**
  * Skeleton subclass for representing a row from the 'invitations' table.
@@ -16,4 +17,10 @@ use Model\Base\Invitation as BaseInvitation;
 class Invitation extends BaseInvitation
 {
 
+    public static function generateCode(): string
+    {
+        $randomFactory = new Factory();
+        $generator = $randomFactory->getMediumStrengthGenerator();
+        return $generator->generateString(8, "ABCDEFGHJKLMNPQRSTUVWXYZ23456789");
+    }
 }
