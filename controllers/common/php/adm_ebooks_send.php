@@ -3,6 +3,7 @@
 global $request;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 $am = new ArticleManager();
 $um = new AxysAccountManager();
@@ -84,8 +85,22 @@ $articles_options = array_map(function($article) {
   return '<option value="'.$article->get('id').'">'.$article->get('title').'</option>';
 }, $articles);
 
+/** @var UrlGenerator $urlGenerator
+ * @noinspection PhpRedundantVariableDocTypeInspection
+ */
+$newToolUrl = $urlGenerator->generate('invitation_list');
+
 $content = '
     <h1><span class="fa fa-send"></span> Envoyer des livres numériques</h1>
+    
+    <p class="alert alert-warning">
+        <fa class="fa fa-warning"></fa>
+        '."
+            <strong>Cet outil est déprécié et va être supprimé prochainement.</strong> <br />
+        ".'
+        Pour envoyer des livres numériques, utilisez le nouvel outil
+        <a href="'.$newToolUrl.'">Invitations de téléchargement</a>.
+    </p>
 
     '.$result.'
 
@@ -107,7 +122,15 @@ $content = '
             <p>
                 <input type="checkbox" name="predownload" id="predownload"> &nbsp; <label for="predownload" class="after">Autoriser le téléchargement des articles avant leur date de parution.</label><br>
                 <input type="checkbox" name="send_email" id="send_email" checked> &nbsp; <label for="send_email" class="after">Prévenir le destinataire par courriel de l\'ajout des articles à sa bibliothèque.</label><br>
-                <input type="checkbox" name="create_user" id="create_user" checked> &nbsp; <label for="create_user" class="after">Créer les comptes utilisateurs si nécessaires (sinon, les adresses inconnues seront ignorées).</label>
+                <input type="checkbox" name="create_user" id="create_user" disabled> &nbsp; <label for="create_user" class="after"><del>Créer les comptes utilisateurs si nécessaires</del>.</label>
+            </p>
+
+            <p class="alert alert-warning">
+                <fa class="fa fa-warning"></fa>
+                <strong>
+                    Les adresses e-mails ne correspondant pas à un compte 
+                    utilisateur existant seront ignorées.
+                </strong>
             </p>
 
             <p class="center">
