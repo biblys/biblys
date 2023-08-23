@@ -150,4 +150,9 @@ class InvitationController extends Controller
 
         return new RedirectResponse($urlGenerator->generate("invitation_new"));
     }
+
+    public function listAction(UrlGenerator $urlGenerator): RedirectResponse
+    {
+        return new RedirectResponse($urlGenerator->generate("invitation_new"));
+    }
 }

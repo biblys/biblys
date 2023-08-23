@@ -324,6 +324,11 @@ invitation_create:
   path: /admin/invitations
   controller: AppBundle\Controller\InvitationController::createAction
 
+invitation_list:
+  methods: GET
+  path: /admin/invitations
+  controller: AppBundle\Controller\InvitationController::listAction
+
 # Links
 
 link_delete:

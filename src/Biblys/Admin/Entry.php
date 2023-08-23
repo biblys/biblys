@@ -211,6 +211,7 @@ class Entry
         $entries[] = new Entry('Financement particip.', ['category' => 'sales', 'path' => 'cf_campaign_list', 'icon' => 'money']);
 
         $entries[] = new Entry('Ventes numériques', ['category' => 'ebooks', 'url' => '/pages/adm_ebooks', 'icon' => 'book']);
+        $entries[] = new Entry('Invitations de téléchargement', ['category' => 'ebooks', 'path' => 'invitation_list', 'icon' => 'send']);
         $entries[] = new Entry('Envoyer livre num.', ['category' => 'ebooks', 'url' => '/pages/adm_ebooks_send', 'icon' => 'send']);
 
         $entries[] = new Entry('Pages', ['category' => 'content', 'url' => '/pages/adm_pages', 'icon' => 'file']);
