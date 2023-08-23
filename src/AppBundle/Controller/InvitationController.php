@@ -15,6 +15,9 @@ use Model\ArticleQuery;
 use Model\Invitation;
 use Model\InvitationQuery;
 use Model\Map\ArticleTableMap;
+use Model\Map\InvitationTableMap;
+use Model\Stock;
+use Model\StockQuery;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Propel;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -22,7 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -132,7 +135,7 @@ class InvitationController extends Controller
             "expirationDate" => $invitation->getExpiresAt()->format("d/m/Y")
         ]);
 
-        $con = Propel::getWriteConnection(ArticleTableMap::DATABASE_NAME);
+        $con = Propel::getWriteConnection(InvitationTableMap::DATABASE_NAME);
         $con->beginTransaction();
 
         try {
@@ -173,32 +176,120 @@ class InvitationController extends Controller
         string $code
     ): Response
     {
+        $invitation = self::_getValidInvitationFromCode($currentSite, $code);
+        self::_validateArticleFromInvitation($currentSite, $currentUser, $invitation);
+
+        return $templateService->render("AppBundle:Invitation:show.html.twig", [
+            "articleTitle" => $invitation->getArticle()->getTitle(),
+            "currentUser" => $currentUser,
+        ]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function consumeAction(
+        Request $request,
+        CurrentSite $currentSite,
+        CurrentUser $currentUser,
+        Session $session,
+    ): RedirectResponse
+    {
+        self::authUser($request);
+
+        $code = $request->request->get("code");
+        $invitation = self::_getValidInvitationFromCode($currentSite, $code);
+        self::_validateArticleFromInvitation($currentSite, $currentUser, $invitation);
+
+        $invitation->setConsumedAt(new DateTime());
+
+        $libraryItem = new Stock();
+        $libraryItem->setSite($currentSite->getSite());
+        $libraryItem->setArticle($invitation->getArticle());
+        $libraryItem->setAxysAccountId($currentUser->getAxysAccount()->getId());
+        $libraryItem->setSellingPrice(0);
+        $libraryItem->setSellingDate(new DateTime());
+
+        $con = Propel::getWriteConnection(InvitationTableMap::DATABASE_NAME);
+        $con->beginTransaction();
+
+        try {
+            $invitation->save();
+            $libraryItem->save();
+        } catch (Exception $exception) {
+            $con->rollBack();
+            throw $exception;
+        }
+
+        $con->commit();
+
+        $session->getFlashBag()->add(
+            "success",
+            "{$invitation->getArticle()->getTitle()} a été ajouté à votre bibliothèque."
+        );
+
+        return new RedirectResponse("/pages/log_myebooks");
+    }
+
+    /**
+     * @throws PropelException
+     */
+    private static function _getValidInvitationFromCode(CurrentSite $currentSite, string $code): Invitation
+    {
         $invitation = InvitationQuery::create()
             ->filterBySite($currentSite->getSite())
             ->findOneByCode($code);
 
         if ($invitation === null) {
-            throw new BadRequestHttpException("Cette invitation n'existe pas.");
+            throw new NotFoundHttpException("Cette invitation n'existe pas.");
         }
 
         if ($invitation->getExpiresAt() <= new DateTime()) {
-            throw new BadRequestHttpException("Cette invitation a expirée.");
+            throw new BadRequestHttpException("Cette invitation a expiré.");
         }
 
         if ($invitation->getConsumedAt() !== null) {
             throw new BadRequestHttpException("Cette invitation a déjà été utilisée.");
         }
 
+        return $invitation;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    private static function _validateArticleFromInvitation(
+        CurrentSite $currentSite,
+        CurrentUser $currentUser,
+        Invitation  $invitation,
+    ): void
+    {
         $article = ArticleQuery::create()
             ->filterForCurrentSite($currentSite)
             ->findOneById($invitation->getArticleId());
+
         if ($article === null) {
             throw new BadRequestHttpException("L'article {$invitation->getArticleId()} n'existe pas.");
         }
 
-        return $templateService->render("AppBundle:Invitation:show.html.twig", [
-            "articleTitle" => $article->getTitle(),
-            "currentUser" => $currentUser,
-        ]);
+        $downloadablePublishersOptions = $currentSite->getOption("downloadable_publishers") ?? "";
+        $downloadablePublishersId = explode(",", $downloadablePublishersOptions);
+        if (!in_array($article->getPublisherId(), $downloadablePublishersId)) {
+            throw new BadRequestHttpException(
+                "Le téléchargement des articles de {$article->getPublisher()->getName()} n'est pas autorisé sur ce site."
+            );
+        }
+
+        if ($article->getType()->isDownloadable() === false) {
+            throw new BadRequestHttpException("L'article {$article->getTitle()} n'est pas téléchargeable.");
+        }
+
+        $stock = StockQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByArticle($article)
+            ->findOneByAxysAccountId($currentUser->getAxysAccount()->getId());
+        if ($stock) {
+            throw new BadRequestHttpException("L'article {$article->getTitle()} est déjà dans votre bibliothèque.");
+        }
     }
 }
