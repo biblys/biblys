@@ -4,8 +4,8 @@ namespace ApiBundle\Controller;
 
 use Biblys\Service\CurrentSite;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use League\Csv\CannotInsertRecord;
+use League\Csv\Exception;
 use League\Csv\Writer;
 use Model\ArticleQuery;
 use Propel\Runtime\Exception\PropelException;
@@ -16,9 +16,9 @@ class ArticleController extends Controller
 {
     /**
      * @route GET /admin/articles/export
-     * @throws AuthException
      * @throws PropelException
      * @throws CannotInsertRecord
+     * @throws Exception
      */
     public function export(Request $request, CurrentSite $currentSiteService): Response
     {

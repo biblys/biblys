@@ -5,8 +5,8 @@ namespace ApiBundle\Controller;
 use Biblys\Service\CurrentSite;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
-use Framework\Exception\AuthException;
 use League\Csv\CannotInsertRecord;
+use League\Csv\Exception;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
@@ -14,9 +14,9 @@ require_once __DIR__ . "/../../setUp.php";
 class ArticleControllerTest extends TestCase
 {
     /**
-     * @throws AuthException
      * @throws PropelException
      * @throws CannotInsertRecord
+     * @throws Exception
      */
     public function testExportCatalog()
     {
