@@ -1,11 +1,11 @@
 {% extends "layout:base.html.twig" %}
 
 {% block title %}
-  Créer une invitation de téléchargement
+  Créer des invitations de téléchargement
 {% endblock %}
 
 {% block main %}
-  <h1>Créer une invitation de téléchargement</h1>
+  <h1>Créer des invitations de téléchargement</h1>
 
   <p class="alert alert-info">
     <span class="fa fa-info-circle"></span>
@@ -24,15 +24,17 @@
     </div>
 
     <div class="form-group">
-      <label for="email_address">Adresse e-mail du destinataire :</label>
-      <input type="email"
-             class="form-control"
-             id="email_address"
-             name="email_address"
-             placeholder="amalia.vanesqwill@dehaven.net"
-             required>
+      <label for="email_addresses">Adresses e-mail des destinataires</label>
+      <p class="text-muted"><small>Entrez une ou plusieurs adresses, à raison d'une par ligne.</small></p>
+      <textarea
+            rows="10"
+            class="form-control"
+            id="email_addresses"
+            name="email_addresses"
+            placeholder="amalia.vanesqwill@example.org&#10;hirion.de.wautier@example.org&#10;yonas.russmor@example.org&#10;…"
+            required></textarea>
     </div>
 
-    <button type="submit" class="btn btn-primary">Envoyer l'invitation</button>
+    <button type="submit" class="btn btn-primary">Envoyer</button>
   </form>
 {% endblock %}

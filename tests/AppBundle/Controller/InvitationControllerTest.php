@@ -85,9 +85,14 @@ class InvitationControllerTest extends TestCase
     {
         // given
         $request = RequestFactory::createAuthRequestForAdminUser();
-        $request->request->set("email_address", "user@example.org");
-        $flashBag = $this->createMock(FlashBag::class);
-        $flashBag->method("add")->with("success", "Une invitation pour Sent Book a été envoyée à user@example.org");
+        $request->request->set("email_addresses", "send1@example.org\r\nsend2@example.org\r\nsend3@example.org");
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->shouldReceive("add")
+            ->with("success", "Une invitation pour Sent Book a été envoyée à send1@example.org");
+        $flashBag->shouldReceive("add")
+            ->with("success", "Une invitation pour Sent Book a été envoyée à send2@example.org");
+        $flashBag->shouldReceive("add")
+            ->with("success", "Une invitation pour Sent Book a été envoyée à send3@example.org");
         $publisher = ModelFactory::createPublisher();
         $article = ModelFactory::createArticle(title: "Sent Book", typeId: Type::EBOOK, publisher: $publisher);
         $request->request->set("article_id", $article->getId());
@@ -97,11 +102,14 @@ class InvitationControllerTest extends TestCase
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
-        $templateService->expects($this->once())->method("render")->willReturn(new Response("Invitation"));
+        $templateService->expects($this->exactly(3))->method("render")->willReturn(new Response("Invitation"));
         $mailer = $this->createMock(Mailer::class);
-        $mailer->expects($this->once())->method("send");
+        $mailer->expects($this->exactly(3))->method("send");
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/invitation/new");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->andReturn("/invitation/ANEWCODE");
         $controller = new InvitationController();
 
         // when
@@ -116,7 +124,7 @@ class InvitationControllerTest extends TestCase
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("/invitation/new", $response->getTargetUrl());
+        $this->assertEquals("/invitation/ANEWCODE", $response->getTargetUrl());
     }
 
     /**

@@ -11,6 +11,7 @@ use Biblys\Service\TemplateService;
 use DateTime;
 use Exception;
 use Framework\Controller;
+use Model\Article;
 use Model\ArticleQuery;
 use Model\Invitation;
 use Model\InvitationQuery;
@@ -83,8 +84,9 @@ class InvitationController extends Controller
     {
         self::authAdmin($request);
 
-        $recipientEmail = $request->request->get("email_address");
-        if ($recipientEmail === null) {
+        $recipientEmailsRaw = $request->request->get("email_addresses");
+        $recipientEmails = explode("\r\n", $recipientEmailsRaw);
+        if (count($recipientEmails) === 0) {
             throw new BadRequestHttpException("Le champ adresse e-mail est obligatoire.");
         }
 
@@ -98,44 +100,17 @@ class InvitationController extends Controller
             throw new BadRequestHttpException("L'article demandé n'est pas téléchargeable.");
         }
 
-        $invitation = new Invitation();
-        $invitation->setSite($currentSite->getSite());
-        $invitation->setArticle($article);
-        $invitation->setEmail($recipientEmail);
-        $invitation->setCode(Invitation::generateCode());
-        $invitation->setExpiresAt(strtotime("+1 month"));
-
-        $invitationUrl = $urlGenerator->generate("invitation_show", [
-            "code" => $invitation->getCode()
-        ], referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
-        $mailContent = $templateService->render(
-            "AppBundle:Invitation:email.html.twig",
-            [
-                "articleTitle" => $article->getTitle(),
-                "invitationUrl" => $invitationUrl,
-                "expirationDate" => $invitation->getExpiresAt()->format("d/m/Y")
-            ]
-        );
-
-        $con = Propel::getWriteConnection(InvitationTableMap::DATABASE_NAME);
-        $con->beginTransaction();
-
-        try {
-            $invitation->save();
-            $mailer->send(
-                to: $recipientEmail,
-                subject: "Téléchargez « {$article->getTitle()} » en numérique",
-                body: $mailContent->getContent(),
+        foreach ($recipientEmails as $recipientEmail) {
+            InvitationController::_createAndSendInvitations(
+                currentSite: $currentSite,
+                article: $article,
+                recipientEmail: $recipientEmail,
+                urlGenerator: $urlGenerator,
+                templateService: $templateService,
+                mailer: $mailer,
+                session: $session
             );
-            $con->commit();
-        } catch (Exception $exception) {
-            $con->rollBack();
-            throw $exception;
         }
-
-        $session->getFlashBag()->add("success",
-            "Une invitation pour {$article->getTitle()} a été envoyée à $recipientEmail"
-        );
 
         return new RedirectResponse($urlGenerator->generate("invitation_new"));
     }
@@ -293,5 +268,63 @@ class InvitationController extends Controller
         if ($stock) {
             throw new BadRequestHttpException("L'article {$article->getTitle()} est déjà dans votre bibliothèque.");
         }
+    }
+
+    /**
+     * @throws InvalidEmailAddressException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     */
+    private static function _createAndSendInvitations(
+        CurrentSite     $currentSite,
+        Article         $article,
+        string          $recipientEmail,
+        UrlGenerator    $urlGenerator,
+        TemplateService $templateService,
+        Mailer          $mailer,
+        Session         $session
+    ): void
+    {
+        $invitation = new Invitation();
+        $invitation->setSite($currentSite->getSite());
+        $invitation->setArticle($article);
+        $invitation->setEmail($recipientEmail);
+        $invitation->setCode(Invitation::generateCode());
+        $invitation->setExpiresAt(strtotime("+1 month"));
+
+        $invitationUrl = $urlGenerator->generate("invitation_show", [
+            "code" => $invitation->getCode()
+        ], referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
+        $mailContent = $templateService->render(
+            "AppBundle:Invitation:email.html.twig",
+            [
+                "articleTitle" => $article->getTitle(),
+                "invitationUrl" => $invitationUrl,
+                "expirationDate" => $invitation->getExpiresAt()->format("d/m/Y")
+            ]
+        );
+
+        $con = Propel::getWriteConnection(InvitationTableMap::DATABASE_NAME);
+        $con->beginTransaction();
+
+        try {
+            $invitation->save();
+            $mailer->send(
+                to: $recipientEmail,
+                subject: "Téléchargez « {$article->getTitle()} » en numérique",
+                body: $mailContent->getContent(),
+            );
+            $con->commit();
+        } catch (Exception $exception) {
+            $con->rollBack();
+            throw $exception;
+        }
+
+        $session->getFlashBag()->add("success",
+            "Une invitation pour {$article->getTitle()} a été envoyée à $recipientEmail"
+        );
     }
 }
