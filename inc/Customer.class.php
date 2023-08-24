@@ -41,15 +41,13 @@
 			
 			$q = $this->db->prepare('
 				SELECT * FROM `customers`
-				LEFT JOIN `mailing` ON `customer_email` = `mailing_email` AND `mailing`.`site_id` = :site_id AND `mailing_block` = 0
 				WHERE `customers`.`site_id` = :site_id AND '.$req);
 			$q->execute($params) or error($q->errorInfo());
 			
 			$list = array();
 			while ($d = $q->fetch(PDO::FETCH_ASSOC))
 			{
-				if (!empty($d['mailing_id']) && empty($d['mailing_block']) && !empty($d['mailing_checked'])) $d['customer_newsletter'] = 1;
-				else $d['customer_newsletter'] = 0;
+				$d['customer_newsletter'] = 0;
 				
 				$list[] = new Customer($d);
 			}

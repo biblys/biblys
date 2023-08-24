@@ -1,5 +1,11 @@
 # Historique des modifications
 
+### 2.71.2 (DEV)
+
+Corrections
+
+- La recherche d'un client depuis la caisse pouvait échouer. C'est corrigé.
+
 ### 2.71.1 (24 août 2023)
 
 Corrections
