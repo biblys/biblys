@@ -144,6 +144,8 @@ class InvitationControllerTest extends TestCase
             ->with("AppBundle:Invitation:show.html.twig", [
                 "articleTitle" => "The Code Show",
                 "currentUser" => $currentUser,
+                "code" => "SHOWCODE",
+                "error" => null,
             ])
             ->willReturn(new Response("Télécharger The Code Show"));
         $controller = new InvitationController();

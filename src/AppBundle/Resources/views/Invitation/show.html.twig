@@ -9,15 +9,22 @@
 
   {% if not currentUser.isAuthentified %}
     <p>
-      L'article sera ajouté à votre bibliothèque numérique d'où vous pourrez le télécharger à volonté et dans le format de
-      votre choix.
+      L'article sera ajouté à votre bibliothèque numérique d'où vous pourrez le télécharger à volonté et dans le format
+      de votre choix.
     </p>
     <p>Pour continuer, vous devez vous identifier.</p>
-    <a href="{{ path("user_login") }}" class="btn btn-primary">Connexion</a>
+    <a href="{{ path("user_login", { return_url: app.currentUrl.absoluteUrl }) }}" class="btn btn-primary">
+      Connexion
+    </a>
 
-  {% endif %}
+  {% elseif error %}
 
-  {% if currentUser.isAuthentified %}
+    <p class="alert alert-danger">
+      <span class="fa fa-times-circle"></span>
+      {{ error }}
+    </p>
+
+  {% elseif currentUser.isAuthentified %}
     <p class="text-center">
       <strong>{{ articleTitle }}</strong> <br />
       va être ajouté à la bibliothèque numérique <br />
