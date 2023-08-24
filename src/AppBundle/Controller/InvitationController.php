@@ -70,6 +70,7 @@ class InvitationController extends Controller
      * @throws PropelException
      * @throws SyntaxError
      * @throws TransportExceptionInterface
+     * @throws RuntimeError
      */
     public function createAction(
         Request         $request,
@@ -107,33 +108,14 @@ class InvitationController extends Controller
         $invitationUrl = $urlGenerator->generate("invitation_show", [
             "code" => $invitation->getCode()
         ], referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
-        $mailContent = $templateService->renderFromString("
-            <p>Bonjour,</p>
-            <p>
-                Vous avez reçu une invitation à télécharger 
-                <strong>{{ articleTitle }}</strong> 
-                en numérique.<br /> 
-                Suivez le lien ci-dessous pour l’ajouter à votre bibliothèque numérique 
-                <strong>{{ siteTitle }}</strong>
-                d’où vous pourrez le télécharger à volonté dans le format de votre choix.
-            </p>
-            <p>
-                <a href=\"{{ invitationUrl }}\">{{ invitationUrl }}</a>
-            </p>
-            <p>
-                Notez que ce lien n'est valable qu'une seule fois 
-                et expirera le {{ expirationDate }}. 
-            </p>
-            <p>
-                ---<br />
-                {{ siteTitle }} - Propulsé par Biblys
-            </p>
-        ", [
-            "articleTitle" => $article->getTitle(),
-            "siteTitle" => $currentSite->getTitle(),
-            "invitationUrl" => $invitationUrl,
-            "expirationDate" => $invitation->getExpiresAt()->format("d/m/Y")
-        ]);
+        $mailContent = $templateService->render(
+            "AppBundle:Invitation:email.html.twig",
+            [
+                "articleTitle" => $article->getTitle(),
+                "invitationUrl" => $invitationUrl,
+                "expirationDate" => $invitation->getExpiresAt()->format("d/m/Y")
+            ]
+        );
 
         $con = Propel::getWriteConnection(InvitationTableMap::DATABASE_NAME);
         $con->beginTransaction();

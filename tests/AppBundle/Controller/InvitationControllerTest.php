@@ -79,6 +79,7 @@ class InvitationControllerTest extends TestCase
      * @throws SyntaxError
      * @throws InvalidEmailAddressException
      * @throws TransportExceptionInterface
+     * @throws RuntimeError
      */
     public function testCreateAction()
     {
@@ -96,7 +97,7 @@ class InvitationControllerTest extends TestCase
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
-        $templateService->expects($this->once())->method("renderFromString")->willReturn(new Response("Invitation"));
+        $templateService->expects($this->once())->method("render")->willReturn(new Response("Invitation"));
         $mailer = $this->createMock(Mailer::class);
         $mailer->expects($this->once())->method("send");
         $urlGenerator = $this->createMock(UrlGenerator::class);
