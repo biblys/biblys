@@ -9,8 +9,9 @@
 
   <p class="alert alert-info">
     <span class="fa fa-info-circle"></span>
-    Le destinataire recevra par courriel avec un lien permettant d'ajouter l'article à sa bibliothèque numérique.
-    Il pourra ensuite télécharger à volonté l'article depuis sa bibliothèque.
+    Cet outil permet de générer des liens d'invitation de téléchargement.<br />
+    En cliquant sur le lien généré, le destinataire pourra ajouter l'article à la bibliothèque numérique du son compte,
+    puis le télécharger à volonté et dans le format de son choix.<br />
   </p>
 
   <form method="post" action="{{ path("invitation_create") }}">
@@ -33,6 +34,27 @@
             name="email_addresses"
             placeholder="amalia.vanesqwill@example.org&#10;hirion.de.wautier@example.org&#10;yonas.russmor@example.org&#10;…"
             required></textarea>
+    </div>
+
+    <label>Mode d'envoi</label>
+    <p>
+      <small class="text-muted">
+        Les liens d'invitation peuvent être envoyés par courriel directement depuis le site. Vous pouvez aussi
+        télécharger une liste d'invitation avec les adresses e-mails associés pour les transmettre par un autre moyen.
+      </small>
+    </p>
+    <div class="radio">
+      <label>
+        <input type="radio" name="mode" id="mode_send" value="send" checked>
+        Envoyer les liens d'invitation par e-mail
+      </label>
+    </div>
+    <div class="radio">
+      <label>
+        <input type="radio" name="mode" id="mode_download" value="download">
+        Télécharger les liens d'invitation en CSV
+        <small class="text-muted">(recommandé au-delà de 100 destinataires)</small>
+      </label>
     </div>
 
     <button type="submit" class="btn btn-primary">Envoyer</button>

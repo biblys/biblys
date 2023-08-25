@@ -12,6 +12,7 @@ use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use DateTime;
 use Exception;
+use League\Csv\CannotInsertRecord;
 use Mockery;
 use Model\InvitationQuery;
 use Model\StockQuery;
@@ -74,14 +75,16 @@ class InvitationControllerTest extends TestCase
     }
 
     /**
+     * @throws CannotInsertRecord
+     * @throws InvalidEmailAddressException
      * @throws LoaderError
      * @throws PropelException
-     * @throws SyntaxError
-     * @throws InvalidEmailAddressException
-     * @throws TransportExceptionInterface
      * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     * @throws \League\Csv\Exception
      */
-    public function testCreateAction()
+    public function testCreateActionWithSendOption()
     {
         // given
         $request = RequestFactory::createAuthRequestForAdminUser();
@@ -96,6 +99,7 @@ class InvitationControllerTest extends TestCase
         $publisher = ModelFactory::createPublisher();
         $article = ModelFactory::createArticle(title: "Sent Book", typeId: Type::EBOOK, publisher: $publisher);
         $request->request->set("article_id", $article->getId());
+        $request->request->set("mode", "send");
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $currentSite->setOption("publisher_filter", $publisher->getId());
@@ -105,11 +109,8 @@ class InvitationControllerTest extends TestCase
         $templateService->expects($this->exactly(3))->method("render")->willReturn(new Response("Invitation"));
         $mailer = $this->createMock(Mailer::class);
         $mailer->expects($this->exactly(3))->method("send");
-        $urlGenerator = $this->createMock(UrlGenerator::class);
-        $urlGenerator->method("generate")->willReturn("/invitation/new");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->shouldReceive("generate")
-            ->andReturn("/invitation/ANEWCODE");
+        $urlGenerator->shouldReceive("generate")->andReturn("/invitation/ANEWCODE");
         $controller = new InvitationController();
 
         // when
@@ -125,6 +126,62 @@ class InvitationControllerTest extends TestCase
         // then
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals("/invitation/ANEWCODE", $response->getTargetUrl());
+    }
+
+    /**
+     * @throws InvalidEmailAddressException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     * @throws CannotInsertRecord
+     * @throws \League\Csv\Exception
+     */
+    public function testCreateActionWithDownloadMode()
+    {
+        // given
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request->request->set("email_addresses", "download1@example.org\r\ndownload2@example.org\r\ndownload3@example.org");
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->shouldReceive("add")
+            ->with("success", "Une invitation pour Sent Book a été envoyée à download1@example.org");
+        $flashBag->shouldReceive("add")
+            ->with("success", "Une invitation pour Sent Book a été envoyée à download2@example.org");
+        $flashBag->shouldReceive("add")
+            ->with("success", "Une invitation pour Sent Book a été envoyée à download3@example.org");
+        $publisher = ModelFactory::createPublisher();
+        $article = ModelFactory::createArticle(title: "Sent Book", typeId: Type::EBOOK, publisher: $publisher);
+        $request->request->set("article_id", $article->getId());
+        $request->request->set("mode", "download");
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $currentSite->setOption("publisher_filter", $publisher->getId());
+        $session = $this->createMock(Session::class);
+        $session->method("getFlashBag")->willReturn($flashBag);
+        $templateService = $this->createMock(TemplateService::class);
+        $templateService->expects($this->exactly(3))->method("render")->willReturn(new Response("Invitation"));
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->shouldNotReceive("send");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/invitation/ANEWCODE");
+        $controller = new InvitationController();
+
+        // when
+        $response = $controller->createAction(
+            request: $request,
+            currentSite: $currentSite,
+            mailer: $mailer,
+            templateService: $templateService,
+            session: $session,
+            urlGenerator: $urlGenerator,
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("download1@example.org", $response->getContent());
+        $this->assertStringContainsString("download2@example.org", $response->getContent());
+        $this->assertStringContainsString("download3@example.org", $response->getContent());
     }
 
     /**

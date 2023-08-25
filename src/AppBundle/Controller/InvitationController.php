@@ -11,6 +11,8 @@ use Biblys\Service\TemplateService;
 use DateTime;
 use Exception;
 use Framework\Controller;
+use League\Csv\CannotInsertRecord;
+use League\Csv\Writer;
 use Model\Article;
 use Model\ArticleQuery;
 use Model\Invitation;
@@ -69,9 +71,11 @@ class InvitationController extends Controller
      * @throws InvalidEmailAddressException
      * @throws LoaderError
      * @throws PropelException
+     * @throws RuntimeError
      * @throws SyntaxError
      * @throws TransportExceptionInterface
-     * @throws RuntimeError
+     * @throws CannotInsertRecord
+     * @throws \League\Csv\Exception
      */
     public function createAction(
         Request         $request,
@@ -80,7 +84,7 @@ class InvitationController extends Controller
         TemplateService $templateService,
         Session         $session,
         UrlGenerator    $urlGenerator
-    ): RedirectResponse
+    ): Response|RedirectResponse
     {
         self::authAdmin($request);
 
@@ -100,16 +104,37 @@ class InvitationController extends Controller
             throw new BadRequestHttpException("L'article demandé n'est pas téléchargeable.");
         }
 
+        $shouldSendEmail = $request->request->getAlpha("mode") === "send";
+        $shouldWriteCSV = $request->request->getAlpha("mode") === "download";
+
+        if ($shouldWriteCSV) {
+            $csv = Writer::createFromString();
+            $csv->insertOne(["email", "code"]);
+        }
+
         foreach ($recipientEmails as $recipientEmail) {
-            InvitationController::_createAndSendInvitations(
+            $invitation = InvitationController::_createAndSendInvitations(
                 currentSite: $currentSite,
                 article: $article,
                 recipientEmail: $recipientEmail,
                 urlGenerator: $urlGenerator,
                 templateService: $templateService,
                 mailer: $mailer,
-                session: $session
+                session: $session,
+                shouldSendEmail: $shouldSendEmail,
             );
+
+            if ($shouldWriteCSV) {
+                $csv->insertOne([$recipientEmail, $invitation->getCode()]);
+            }
+        }
+
+        if ($shouldWriteCSV) {
+            $response = new Response();
+            $response->headers->set("Content-Type", "text/csv; charset=utf-8");
+            $response->headers->set("Content-Disposition", "attachment; filename=invitations.csv");
+            $response->setContent($csv);
+            return $response;
         }
 
         return new RedirectResponse($urlGenerator->generate("invitation_new"));
@@ -285,8 +310,9 @@ class InvitationController extends Controller
         UrlGenerator    $urlGenerator,
         TemplateService $templateService,
         Mailer          $mailer,
-        Session         $session
-    ): void
+        Session         $session,
+        bool            $shouldSendEmail,
+    ): Invitation
     {
         $invitation = new Invitation();
         $invitation->setSite($currentSite->getSite());
@@ -312,19 +338,25 @@ class InvitationController extends Controller
 
         try {
             $invitation->save();
-            $mailer->send(
-                to: $recipientEmail,
-                subject: "Téléchargez « {$article->getTitle()} » en numérique",
-                body: $mailContent->getContent(),
-            );
+            if ($shouldSendEmail) {
+                $mailer->send(
+                    to: $recipientEmail,
+                    subject: "Téléchargez « {$article->getTitle()} » en numérique",
+                    body: $mailContent->getContent(),
+                );
+            }
             $con->commit();
         } catch (Exception $exception) {
             $con->rollBack();
             throw $exception;
         }
 
-        $session->getFlashBag()->add("success",
-            "Une invitation pour {$article->getTitle()} a été envoyée à $recipientEmail"
-        );
+        if ($shouldSendEmail) {
+            $session->getFlashBag()->add("success",
+                "Une invitation pour {$article->getTitle()} a été envoyée à $recipientEmail"
+            );
+        }
+
+        return $invitation;
     }
 }
