@@ -16,6 +16,8 @@ use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -154,10 +156,12 @@ class TemplateService
         });
 
         // return relative url for a route
-        $functions[] = new TwigFunction('path', function ($route, $vars = []) {
+        $functions[] = new TwigFunction('path', function ($name, $parameters = [], $absolute = false) {
             $container = require __DIR__ . "/../../container.php";
+            /** @var UrlGenerator $urlGenerator */
             $urlGenerator = $container->get("url_generator");
-            return $urlGenerator->generate($route, $vars);
+            $referenceType = $absolute ? UrlGeneratorInterface::ABSOLUTE_URL : UrlGeneratorInterface::ABSOLUTE_PATH;
+            return $urlGenerator->generate($name, $parameters, $referenceType);
         });
 
         // return absolute url for a route
