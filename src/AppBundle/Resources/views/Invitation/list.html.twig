@@ -33,9 +33,9 @@
           </td>
           <td class="text-center">
             {% if invitation.isConsumed %}
-              <span class="fa fa-check" title="Utilisée"></span>
+              <span class="fa fa-check" title="Utilisée le {{ invitation.consumedAt|date('d/m/Y') }}"></span>
             {% elseif invitation.hasExpired %}
-              <span class="fa fa-clock-o" title="Expirée"></span>
+              <span class="fa fa-clock-o" title="Expirée {{ invitation.expiresAt|date('d/m/Y') }}"></span>
             {% else %}
               <button
                 class="btn btn-xs btn-default"

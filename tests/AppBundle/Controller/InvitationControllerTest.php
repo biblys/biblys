@@ -84,7 +84,64 @@ class InvitationControllerTest extends TestCase
      * @throws TransportExceptionInterface
      * @throws \League\Csv\Exception
      */
-    public function testCreateActionWithSendOption()
+    public function testCreateActionWithManualMode()
+    {
+        // given
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request->request->set("email_addresses", "manual1@example.org\r\nmanual2@example.org\r\nmanual3@example.org");
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->shouldReceive("add")
+            ->with("success", "Une invitation à télécharger Sent Book a été créée pour manual1@example.org");
+        $flashBag->shouldReceive("add")
+            ->with("success", "Une invitation à télécharger Sent Book a été créée pour manual2@example.org");
+        $flashBag->shouldReceive("add")
+            ->with("success", "Une invitation à télécharger Sent Book a été créée pour manual3@example.org");
+        $publisher = ModelFactory::createPublisher();
+        $article = ModelFactory::createArticle(title: "Sent Book", typeId: Type::EBOOK, publisher: $publisher);
+        $request->request->set("article_id", $article->getId());
+        $request->request->set("mode", "manual");
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $currentSite->setOption("publisher_filter", $publisher->getId());
+        $session = $this->createMock(Session::class);
+        $session->method("getFlashBag")->willReturn($flashBag);
+        $templateService = $this->createMock(TemplateService::class);
+        $templateService->expects($this->exactly(3))->method("render")->willReturn(new Response("Invitation"));
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->shouldNotReceive("send");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/admin/invitations");
+        $controller = new InvitationController();
+
+        // when
+        $response = $controller->createAction(
+            request: $request,
+            currentSite: $currentSite,
+            mailer: $mailer,
+            templateService: $templateService,
+            session: $session,
+            urlGenerator: $urlGenerator,
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/admin/invitations", $response->getTargetUrl());
+        $this->assertNotNull(InvitationQuery::create()->findOneByEmail("manual1@example.org"));
+        $this->assertNotNull(InvitationQuery::create()->findOneByEmail("manual2@example.org"));
+        $this->assertNotNull(InvitationQuery::create()->findOneByEmail("manual3@example.org"));
+    }
+
+    /**
+     * @throws CannotInsertRecord
+     * @throws InvalidEmailAddressException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     * @throws \League\Csv\Exception
+     */
+    public function testCreateActionWithSendMode()
     {
         // given
         $request = RequestFactory::createAuthRequestForAdminUser();

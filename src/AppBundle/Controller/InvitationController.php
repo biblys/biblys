@@ -105,6 +105,7 @@ class InvitationController extends Controller
             throw new BadRequestHttpException("L'article demandé n'est pas téléchargeable.");
         }
 
+        $isManualMode = $request->request->getAlpha("mode") === "manual";
         $shouldSendEmail = $request->request->getAlpha("mode") === "send";
         $shouldWriteCSV = $request->request->getAlpha("mode") === "download";
 
@@ -123,6 +124,7 @@ class InvitationController extends Controller
                 mailer: $mailer,
                 session: $session,
                 shouldSendEmail: $shouldSendEmail,
+                isManualMode: $isManualMode,
             );
 
             if ($shouldWriteCSV) {
@@ -327,6 +329,7 @@ class InvitationController extends Controller
         Mailer          $mailer,
         Session         $session,
         bool            $shouldSendEmail,
+        bool            $isManualMode,
     ): Invitation
     {
         $invitation = new Invitation();
@@ -369,6 +372,12 @@ class InvitationController extends Controller
         if ($shouldSendEmail) {
             $session->getFlashBag()->add("success",
                 "Une invitation pour {$article->getTitle()} a été envoyée à $recipientEmail"
+            );
+        }
+
+        if ($isManualMode) {
+            $session->getFlashBag()->add("success",
+                "Une invitation à télécharger {$article->getTitle()} a été créée pour $recipientEmail"
             );
         }
 

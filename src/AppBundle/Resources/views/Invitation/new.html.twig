@@ -39,20 +39,29 @@
     <label>Mode d'envoi</label>
     <p>
       <small class="text-muted">
-        Les liens d'invitation peuvent être envoyés par courriel directement depuis le site. Vous pouvez aussi
-        télécharger une liste d'invitation avec les adresses e-mails associés pour les transmettre par un autre moyen.
+        Par défaut, les liens d'invitation sont envoyés par courriel depuis le site immédiatement après leur
+        création. Vous pouvez aussi récupérer les liens pour les envoyer manuellement ou télécharger une liste
+        de liens avec les adresses e-mails associés pour les transmettre par un autre moyen, par exemple avec un outil
+        d'e-mailing.
       </small>
     </p>
     <div class="radio">
       <label>
-        <input type="radio" name="mode" id="mode_send" value="send" checked>
+        <input type="radio"  id="mode_send" name="mode" value="send" checked>
         Envoyer les liens d'invitation par e-mail
       </label>
     </div>
     <div class="radio">
       <label>
-        <input type="radio" name="mode" id="mode_download" value="download">
-        Télécharger les liens d'invitation en CSV
+        <input type="radio"  id="mode_manual" name="mode" value="manual">
+        Créer les liens d'invitation, sans les envoyer
+        <small class="text-muted">(pour un envoi manuel)</small>
+      </label>
+    </div>
+    <div class="radio">
+      <label>
+        <input type="radio"  id="mode_download" name="mode" value="download">
+        Télécharger un fichier CSV avec les liens d'invitations
         <small class="text-muted">(recommandé au-delà de 100 destinataires)</small>
       </label>
     </div>
