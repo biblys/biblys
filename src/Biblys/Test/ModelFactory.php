@@ -440,6 +440,7 @@ class ModelFactory
     public static function createInvitation(
         Site $site = null,
         Article $article = null,
+        string $email = "invited-user@biblys.fr",
         string $code = "ABCD1234",
         DateTime $expiresAt = null,
         DateTime $consumedAt = null,
@@ -448,7 +449,7 @@ class ModelFactory
         $invitation = new Invitation();
         $invitation->setSite($site ?? self::createSite());
         $invitation->setArticle($article ?? self::createArticle());
-        $invitation->setEmail("invited-user@biblys.fr");
+        $invitation->setEmail($email);
         $invitation->setCode($code);
         $invitation->setExpiresAt($expiresAt ?? strtotime("+1 month"));
         $invitation->setConsumedAt($consumedAt);

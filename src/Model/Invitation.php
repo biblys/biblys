@@ -2,7 +2,9 @@
 
 namespace Model;
 
+use DateTime;
 use Model\Base\Invitation as BaseInvitation;
+use Propel\Runtime\Exception\PropelException;
 use RandomLib\Factory;
 
 /**
@@ -16,6 +18,22 @@ use RandomLib\Factory;
  */
 class Invitation extends BaseInvitation
 {
+
+    /**
+     * @throws PropelException
+     */
+    public function isConsumed(): bool
+    {
+        return $this->getConsumedAt() !== null;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function hasExpired(): bool
+    {
+        return $this->getExpiresAt() < new DateTime("now");
+    }
 
     public static function generateCode(): string
     {

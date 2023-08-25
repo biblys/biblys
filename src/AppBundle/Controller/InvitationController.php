@@ -20,6 +20,7 @@ use Model\InvitationQuery;
 use Model\Map\InvitationTableMap;
 use Model\Stock;
 use Model\StockQuery;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Propel;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -137,12 +138,26 @@ class InvitationController extends Controller
             return $response;
         }
 
-        return new RedirectResponse($urlGenerator->generate("invitation_new"));
+        return new RedirectResponse($urlGenerator->generate("invitation_list"));
     }
 
-    public function listAction(UrlGenerator $urlGenerator): RedirectResponse
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function listAction(Request $request): Response
     {
-        return new RedirectResponse($urlGenerator->generate("invitation_new"));
+        self::authAdmin($request);
+
+        $invitations = InvitationQuery::create()
+            ->orderByCreatedAt(Criteria::DESC)
+            ->find();
+
+        return $this->render("AppBundle:Invitation:list.html.twig", [
+            "invitations" => $invitations,
+        ]);
     }
 
     /**

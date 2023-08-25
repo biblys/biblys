@@ -110,7 +110,7 @@ class InvitationControllerTest extends TestCase
         $mailer = $this->createMock(Mailer::class);
         $mailer->expects($this->exactly(3))->method("send");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->shouldReceive("generate")->andReturn("/invitation/ANEWCODE");
+        $urlGenerator->shouldReceive("generate")->andReturn("/admin/invitations");
         $controller = new InvitationController();
 
         // when
@@ -125,7 +125,10 @@ class InvitationControllerTest extends TestCase
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("/invitation/ANEWCODE", $response->getTargetUrl());
+        $this->assertEquals("/admin/invitations", $response->getTargetUrl());
+        $this->assertNotNull(InvitationQuery::create()->findOneByEmail("send1@example.org"));
+        $this->assertNotNull(InvitationQuery::create()->findOneByEmail("send2@example.org"));
+        $this->assertNotNull(InvitationQuery::create()->findOneByEmail("send3@example.org"));
     }
 
     /**
@@ -462,5 +465,33 @@ class InvitationControllerTest extends TestCase
         $this->assertEquals(0, $articleInLibrary->getSellingPrice());
         $this->assertNotNull($articleInLibrary->getSellingDate());
         $this->assertFalse($articleInLibrary->getAllowPredownload());
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function testListAction()
+    {
+        // given
+        $article = ModelFactory::createArticle(title: "Listed Book", typeId: Type::EBOOK);
+        ModelFactory::createInvitation(
+            article: $article,
+            email: "listed-invitation@biblys.fr",
+            code: "LISTEDIN",
+        );
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $controller = new InvitationController();
+
+        // when
+        $response = $controller->listAction($request);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Listed Book", $response->getContent());
+        $this->assertStringContainsString("listed-invitation@biblys.fr", $response->getContent());
+        $this->assertStringContainsString("LISTEDIN", $response->getContent());
     }
 }

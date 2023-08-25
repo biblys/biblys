@@ -1,0 +1,56 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Invitations de téléchargement
+{% endblock %}
+
+{% block main %}
+  <h1>Invitations de téléchargement</h1>
+
+  <p>
+    <a href="{{ path('invitation_new') }}" class="btn btn-primary">
+      <span class="fa fa-plus-circle"></span>
+      Créer
+    </a>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Article</th>
+        <th>Destinataire</th>
+        <th>Lien</th>
+        <th>Crée le</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for invitation in invitations %}
+        <tr>
+          <td>{{ invitation.article.title }}</td>
+          <td>
+            <a href="mailto:{{ invitation.email }}">
+              {{ invitation.email }}
+            </a>
+          </td>
+          <td class="text-center">
+            {% if invitation.isConsumed %}
+              <span class="fa fa-check" title="Utilisée"></span>
+            {% elseif invitation.hasExpired %}
+              <span class="fa fa-clock-o" title="Expirée"></span>
+            {% else %}
+              <button
+                class="btn btn-xs btn-default"
+                onClick="navigator.clipboard.writeText('{{ path('invitation_show', { code: invitation.code }, true) }}')">
+                <span class="fa fa-copy"></span>
+              </button>
+            {% endif %}
+          </td>
+          <td>{{ invitation.createdAt|date('d/m/Y') }}</td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="4" class="text-center">Aucune invitation de téléchargement.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
