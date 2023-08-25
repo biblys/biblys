@@ -74,7 +74,8 @@
   },
   "require-dev": {
     "phpunit/phpunit": "9.*",
-    "roave/security-advisories": "dev-master"
+    "roave/security-advisories": "dev-master",
+    "mockery/mockery": "^1.6"
   },
   "autoload": {
     "psr-0": {
