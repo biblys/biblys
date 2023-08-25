@@ -18,6 +18,7 @@
       <tr>
         <th>Article</th>
         <th>Destinataire</th>
+        <th></th>
         <th>Lien</th>
         <th>Crée le</th>
       </tr>
@@ -30,6 +31,11 @@
             <a href="mailto:{{ invitation.email }}">
               {{ invitation.email }}
             </a>
+          </td>
+          <td class="text-center">
+            {% if invitation.allowsPreDownload %}
+              <span class="fa fa-rocket" title="Téléchargement autorisé avant parution"></span>
+            {% endif %}
           </td>
           <td class="text-center">
             {% if invitation.isConsumed %}

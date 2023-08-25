@@ -108,6 +108,7 @@ class InvitationController extends Controller
         $isManualMode = $request->request->getAlpha("mode") === "manual";
         $shouldSendEmail = $request->request->getAlpha("mode") === "send";
         $shouldWriteCSV = $request->request->getAlpha("mode") === "download";
+        $allowsPreDownload = $request->request->getBoolean("allows_pre_download") ;
 
         if ($shouldWriteCSV) {
             $csv = Writer::createFromString();
@@ -125,6 +126,7 @@ class InvitationController extends Controller
                 session: $session,
                 shouldSendEmail: $shouldSendEmail,
                 isManualMode: $isManualMode,
+                allowsPreDownload: $allowsPreDownload,
             );
 
             if ($shouldWriteCSV) {
@@ -217,6 +219,7 @@ class InvitationController extends Controller
         $libraryItem->setSite($currentSite->getSite());
         $libraryItem->setArticle($invitation->getArticle());
         $libraryItem->setAxysAccountId($currentUser->getAxysAccount()->getId());
+        $libraryItem->setAllowPredownload($invitation->getAllowsPreDownload());
         $libraryItem->setSellingPrice(0);
         $libraryItem->setSellingDate(new DateTime());
 
@@ -330,6 +333,7 @@ class InvitationController extends Controller
         Session         $session,
         bool            $shouldSendEmail,
         bool            $isManualMode,
+        bool            $allowsPreDownload,
     ): Invitation
     {
         $invitation = new Invitation();
@@ -337,6 +341,7 @@ class InvitationController extends Controller
         $invitation->setArticle($article);
         $invitation->setEmail($recipientEmail);
         $invitation->setCode(Invitation::generateCode());
+        $invitation->setAllowsPreDownload($allowsPreDownload);
         $invitation->setExpiresAt(strtotime("+1 month"));
 
         $invitationUrl = $urlGenerator->generate("invitation_show", [

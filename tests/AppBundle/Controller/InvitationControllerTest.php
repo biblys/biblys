@@ -38,40 +38,55 @@ class InvitationControllerTest extends TestCase
 {
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws PropelException
+     * @throws InvalidEmailAddressException
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     * @throws CannotInsertRecord
+     * @throws \League\Csv\Exception
      */
-    public function testNewAction()
+    public function testCreateAction()
     {
         // given
         $request = RequestFactory::createAuthRequestForAdminUser();
+        $request->request->set("email_addresses", "user@example.org");
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->shouldReceive("add")
+            ->with("success", "Une invitation pour Sent Book a été envoyée à user@example.org");
         $publisher = ModelFactory::createPublisher();
-        ModelFactory::createArticle(title: "Book", publisher: $publisher);
-        $ebook = ModelFactory::createArticle(title: "E-book", typeId: Type::EBOOK, publisher: $publisher);
-        $controller = new InvitationController();
+        $article = ModelFactory::createArticle(title: "Sent Book", typeId: Type::EBOOK, publisher: $publisher);
+        $request->request->set("article_id", $article->getId());
+        $request->request->set("mode", "download");
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $currentSite->setOption("publisher_filter", $publisher->getId());
+        $session = $this->createMock(Session::class);
+        $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
-        $templateService
-            ->expects($this->once())
-            ->method("render")
-            ->with("AppBundle:Invitation:new.html.twig", [
-                "downloadableArticles" => [$ebook],
-            ])
-            ->willReturn(new Response("Créer une invitation de téléchargement"));
+        $templateService->expects($this->once())->method("render")->willReturn(new Response("Invitation"));
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->shouldNotReceive("send");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/invitation/ANEWCODE");
+        $controller = new InvitationController();
 
         // when
-        $response = $controller->newAction($request, $currentSite, $templateService);
+        $response = $controller->createAction(
+            request: $request,
+            currentSite: $currentSite,
+            mailer: $mailer,
+            templateService: $templateService,
+            session: $session,
+            urlGenerator: $urlGenerator,
+        );
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringContainsString(
-            "Créer une invitation de téléchargement",
-            $response->getContent()
-        );
+        $invitation = InvitationQuery::create()->findOneByEmail("user@example.org");
+        $this->assertNotNull($invitation);
+        $this->assertFalse($invitation->getAllowsPreDownload());
     }
 
     /**
@@ -242,6 +257,59 @@ class InvitationControllerTest extends TestCase
         $this->assertStringContainsString("download1@example.org", $response->getContent());
         $this->assertStringContainsString("download2@example.org", $response->getContent());
         $this->assertStringContainsString("download3@example.org", $response->getContent());
+    }
+
+    /**
+     * @throws InvalidEmailAddressException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     * @throws CannotInsertRecord
+     * @throws \League\Csv\Exception
+     */
+    public function testCreateActionWithAllowsPredownload()
+    {
+        // given
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request->request->set("email_addresses", "predownload@example.org");
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->shouldReceive("add")
+            ->with("success", "Une invitation pour Sent Book a été envoyée à predownload@example.org");
+        $publisher = ModelFactory::createPublisher();
+        $article = ModelFactory::createArticle(title: "Sent Book", typeId: Type::EBOOK, publisher: $publisher);
+        $request->request->set("article_id", $article->getId());
+        $request->request->set("mode", "download");
+        $request->request->set("allows_pre_download", "1");
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $currentSite->setOption("publisher_filter", $publisher->getId());
+        $session = $this->createMock(Session::class);
+        $session->method("getFlashBag")->willReturn($flashBag);
+        $templateService = $this->createMock(TemplateService::class);
+        $templateService->expects($this->once())->method("render")->willReturn(new Response("Invitation"));
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->shouldNotReceive("send");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/invitation/ANEWCODE");
+        $controller = new InvitationController();
+
+        // when
+        $response = $controller->createAction(
+            request: $request,
+            currentSite: $currentSite,
+            mailer: $mailer,
+            templateService: $templateService,
+            session: $session,
+            urlGenerator: $urlGenerator,
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $invitation = InvitationQuery::create()->findOneByEmail("predownload@example.org");
+        $this->assertNotNull($invitation);
+        $this->assertTrue($invitation->getAllowsPreDownload());
     }
 
     /**
@@ -522,6 +590,53 @@ class InvitationControllerTest extends TestCase
         $this->assertEquals(0, $articleInLibrary->getSellingPrice());
         $this->assertNotNull($articleInLibrary->getSellingDate());
         $this->assertFalse($articleInLibrary->getAllowPredownload());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testConsumeActionWithAllowsPreDownloadOption()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $article = ModelFactory::createArticle(title: "Livre numérique", typeId: Type::EBOOK);
+        $invitation = ModelFactory::createInvitation(
+            site: $site, article: $article, code: "ALLRIGHT", allowsPreDownload: true
+        );
+        $publisherId = $invitation->getArticle()->getPublisherId();
+        $currentSite->setOption("downloadable_publishers", $publisherId);
+        $axysAccount = ModelFactory::createAxysAccount();
+
+        $controller = new InvitationController();
+        $request = RequestFactory::createAuthRequest();
+        $request->request->set("code", "ALLRIGHT");
+        $currentUser = new CurrentUser($axysAccount, "token");
+        $flashBag = $this->createMock(FlashBag::class);
+        $flashBag->expects($this->once())->method("add")
+            ->with("success", "Livre numérique a été ajouté à votre bibliothèque.");
+        $session = $this->createMock(Session::class);
+        $session->expects($this->once())->method("getFlashBag")->willReturn($flashBag);
+
+        // when
+        $response = $controller->consumeAction($request, $currentSite, $currentUser, $session);
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/pages/log_myebooks", $response->getTargetUrl());
+        $consumedInvitation = InvitationQuery::create()->findPk($invitation->getId());
+        $this->assertNotNull(
+            $consumedInvitation->getConsumedAt(),
+            "it consumes the invitation"
+        );
+        $articleInLibrary = StockQuery::create()
+            ->filterBySite($site)
+            ->filterByArticle($article)
+            ->findOneByAxysAccountId($axysAccount->getId());
+        $this->assertNotNull($articleInLibrary, "it adds the article to the user's library");
+        $this->assertEquals(0, $articleInLibrary->getSellingPrice());
+        $this->assertNotNull($articleInLibrary->getSellingDate());
+        $this->assertTrue($articleInLibrary->getAllowPredownload());
     }
 
     /**

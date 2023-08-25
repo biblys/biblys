@@ -442,6 +442,7 @@ class ModelFactory
         Article $article = null,
         string $email = "invited-user@biblys.fr",
         string $code = "ABCD1234",
+        bool $allowsPreDownload = false,
         DateTime $expiresAt = null,
         DateTime $consumedAt = null,
     ): Invitation
@@ -451,6 +452,7 @@ class ModelFactory
         $invitation->setArticle($article ?? self::createArticle());
         $invitation->setEmail($email);
         $invitation->setCode($code);
+        $invitation->setAllowsPreDownload($allowsPreDownload);
         $invitation->setExpiresAt($expiresAt ?? strtotime("+1 month"));
         $invitation->setConsumedAt($consumedAt);
         $invitation->save();
