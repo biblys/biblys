@@ -21,7 +21,6 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildInvitationQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildInvitationQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
- * @method     ChildInvitationQuery orderByArticleId($order = Criteria::ASC) Order by the article_id column
  * @method     ChildInvitationQuery orderByEmail($order = Criteria::ASC) Order by the email column
  * @method     ChildInvitationQuery orderByCode($order = Criteria::ASC) Order by the code column
  * @method     ChildInvitationQuery orderByAllowsPreDownload($order = Criteria::ASC) Order by the allows_pre_download column
@@ -32,7 +31,6 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildInvitationQuery groupById() Group by the id column
  * @method     ChildInvitationQuery groupBySiteId() Group by the site_id column
- * @method     ChildInvitationQuery groupByArticleId() Group by the article_id column
  * @method     ChildInvitationQuery groupByEmail() Group by the email column
  * @method     ChildInvitationQuery groupByCode() Group by the code column
  * @method     ChildInvitationQuery groupByAllowsPreDownload() Group by the allows_pre_download column
@@ -59,24 +57,23 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvitationQuery rightJoinWithSite() Adds a RIGHT JOIN clause and with to the query using the Site relation
  * @method     ChildInvitationQuery innerJoinWithSite() Adds a INNER JOIN clause and with to the query using the Site relation
  *
- * @method     ChildInvitationQuery leftJoinArticle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Article relation
- * @method     ChildInvitationQuery rightJoinArticle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Article relation
- * @method     ChildInvitationQuery innerJoinArticle($relationAlias = null) Adds a INNER JOIN clause to the query using the Article relation
+ * @method     ChildInvitationQuery leftJoinInvitationsArticles($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvitationsArticles relation
+ * @method     ChildInvitationQuery rightJoinInvitationsArticles($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvitationsArticles relation
+ * @method     ChildInvitationQuery innerJoinInvitationsArticles($relationAlias = null) Adds a INNER JOIN clause to the query using the InvitationsArticles relation
  *
- * @method     ChildInvitationQuery joinWithArticle($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Article relation
+ * @method     ChildInvitationQuery joinWithInvitationsArticles($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the InvitationsArticles relation
  *
- * @method     ChildInvitationQuery leftJoinWithArticle() Adds a LEFT JOIN clause and with to the query using the Article relation
- * @method     ChildInvitationQuery rightJoinWithArticle() Adds a RIGHT JOIN clause and with to the query using the Article relation
- * @method     ChildInvitationQuery innerJoinWithArticle() Adds a INNER JOIN clause and with to the query using the Article relation
+ * @method     ChildInvitationQuery leftJoinWithInvitationsArticles() Adds a LEFT JOIN clause and with to the query using the InvitationsArticles relation
+ * @method     ChildInvitationQuery rightJoinWithInvitationsArticles() Adds a RIGHT JOIN clause and with to the query using the InvitationsArticles relation
+ * @method     ChildInvitationQuery innerJoinWithInvitationsArticles() Adds a INNER JOIN clause and with to the query using the InvitationsArticles relation
  *
- * @method     \Model\SiteQuery|\Model\ArticleQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\SiteQuery|\Model\InvitationsArticlesQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildInvitation|null findOne(?ConnectionInterface $con = null) Return the first ChildInvitation matching the query
  * @method     ChildInvitation findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildInvitation matching the query, or a new ChildInvitation object populated from the query conditions when no match is found
  *
  * @method     ChildInvitation|null findOneById(int $id) Return the first ChildInvitation filtered by the id column
  * @method     ChildInvitation|null findOneBySiteId(int $site_id) Return the first ChildInvitation filtered by the site_id column
- * @method     ChildInvitation|null findOneByArticleId(int $article_id) Return the first ChildInvitation filtered by the article_id column
  * @method     ChildInvitation|null findOneByEmail(string $email) Return the first ChildInvitation filtered by the email column
  * @method     ChildInvitation|null findOneByCode(string $code) Return the first ChildInvitation filtered by the code column
  * @method     ChildInvitation|null findOneByAllowsPreDownload(boolean $allows_pre_download) Return the first ChildInvitation filtered by the allows_pre_download column
@@ -90,7 +87,6 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildInvitation requireOneById(int $id) Return the first ChildInvitation filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvitation requireOneBySiteId(int $site_id) Return the first ChildInvitation filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvitation requireOneByArticleId(int $article_id) Return the first ChildInvitation filtered by the article_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvitation requireOneByEmail(string $email) Return the first ChildInvitation filtered by the email column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvitation requireOneByCode(string $code) Return the first ChildInvitation filtered by the code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvitation requireOneByAllowsPreDownload(boolean $allows_pre_download) Return the first ChildInvitation filtered by the allows_pre_download column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -106,8 +102,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildInvitation> findById(int|array<int> $id) Return ChildInvitation objects filtered by the id column
  * @method     ChildInvitation[]|Collection findBySiteId(int|array<int> $site_id) Return ChildInvitation objects filtered by the site_id column
  * @psalm-method Collection&\Traversable<ChildInvitation> findBySiteId(int|array<int> $site_id) Return ChildInvitation objects filtered by the site_id column
- * @method     ChildInvitation[]|Collection findByArticleId(int|array<int> $article_id) Return ChildInvitation objects filtered by the article_id column
- * @psalm-method Collection&\Traversable<ChildInvitation> findByArticleId(int|array<int> $article_id) Return ChildInvitation objects filtered by the article_id column
  * @method     ChildInvitation[]|Collection findByEmail(string|array<string> $email) Return ChildInvitation objects filtered by the email column
  * @psalm-method Collection&\Traversable<ChildInvitation> findByEmail(string|array<string> $email) Return ChildInvitation objects filtered by the email column
  * @method     ChildInvitation[]|Collection findByCode(string|array<string> $code) Return ChildInvitation objects filtered by the code column
@@ -221,7 +215,7 @@ abstract class InvitationQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, site_id, article_id, email, code, allows_pre_download, consumed_at, expires_at, created_at, updated_at FROM invitations WHERE id = :p0';
+        $sql = 'SELECT id, site_id, email, code, allows_pre_download, consumed_at, expires_at, created_at, updated_at FROM invitations WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -399,51 +393,6 @@ abstract class InvitationQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(InvitationTableMap::COL_SITE_ID, $siteId, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the article_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByArticleId(1234); // WHERE article_id = 1234
-     * $query->filterByArticleId(array(12, 34)); // WHERE article_id IN (12, 34)
-     * $query->filterByArticleId(array('min' => 12)); // WHERE article_id > 12
-     * </code>
-     *
-     * @see       filterByArticle()
-     *
-     * @param mixed $articleId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByArticleId($articleId = null, ?string $comparison = null)
-    {
-        if (is_array($articleId)) {
-            $useMinMax = false;
-            if (isset($articleId['min'])) {
-                $this->addUsingAlias(InvitationTableMap::COL_ARTICLE_ID, $articleId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($articleId['max'])) {
-                $this->addUsingAlias(InvitationTableMap::COL_ARTICLE_ID, $articleId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(InvitationTableMap::COL_ARTICLE_ID, $articleId, $comparison);
 
         return $this;
     }
@@ -889,46 +838,44 @@ abstract class InvitationQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \Model\Article object
+     * Filter the query by a related \Model\InvitationsArticles object
      *
-     * @param \Model\Article|ObjectCollection $article The related object(s) to use as filter
+     * @param \Model\InvitationsArticles|ObjectCollection $invitationsArticles the related object to use as filter
      * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByArticle($article, ?string $comparison = null)
+    public function filterByInvitationsArticles($invitationsArticles, ?string $comparison = null)
     {
-        if ($article instanceof \Model\Article) {
-            return $this
-                ->addUsingAlias(InvitationTableMap::COL_ARTICLE_ID, $article->getId(), $comparison);
-        } elseif ($article instanceof ObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
+        if ($invitationsArticles instanceof \Model\InvitationsArticles) {
             $this
-                ->addUsingAlias(InvitationTableMap::COL_ARTICLE_ID, $article->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(InvitationTableMap::COL_ID, $invitationsArticles->getInvitationId(), $comparison);
+
+            return $this;
+        } elseif ($invitationsArticles instanceof ObjectCollection) {
+            $this
+                ->useInvitationsArticlesQuery()
+                ->filterByPrimaryKeys($invitationsArticles->getPrimaryKeys())
+                ->endUse();
 
             return $this;
         } else {
-            throw new PropelException('filterByArticle() only accepts arguments of type \Model\Article or Collection');
+            throw new PropelException('filterByInvitationsArticles() only accepts arguments of type \Model\InvitationsArticles or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the Article relation
+     * Adds a JOIN clause to the query using the InvitationsArticles relation
      *
      * @param string|null $relationAlias Optional alias for the relation
      * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this The current query, for fluid interface
      */
-    public function joinArticle(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    public function joinInvitationsArticles(?string $relationAlias = null, ?string $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Article');
+        $relationMap = $tableMap->getRelation('InvitationsArticles');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -943,14 +890,14 @@ abstract class InvitationQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'Article');
+            $this->addJoinObject($join, 'InvitationsArticles');
         }
 
         return $this;
     }
 
     /**
-     * Use the Article relation Article object
+     * Use the InvitationsArticles relation InvitationsArticles object
      *
      * @see useQuery()
      *
@@ -958,19 +905,19 @@ abstract class InvitationQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \Model\ArticleQuery A secondary query class using the current class as primary query
+     * @return \Model\InvitationsArticlesQuery A secondary query class using the current class as primary query
      */
-    public function useArticleQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useInvitationsArticlesQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinArticle($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Article', '\Model\ArticleQuery');
+            ->joinInvitationsArticles($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'InvitationsArticles', '\Model\InvitationsArticlesQuery');
     }
 
     /**
-     * Use the Article relation Article object
+     * Use the InvitationsArticles relation InvitationsArticles object
      *
-     * @param callable(\Model\ArticleQuery):\Model\ArticleQuery $callable A function working on the related query
+     * @param callable(\Model\InvitationsArticlesQuery):\Model\InvitationsArticlesQuery $callable A function working on the related query
      *
      * @param string|null $relationAlias optional alias for the relation
      *
@@ -978,12 +925,12 @@ abstract class InvitationQuery extends ModelCriteria
      *
      * @return $this
      */
-    public function withArticleQuery(
+    public function withInvitationsArticlesQuery(
         callable $callable,
         string $relationAlias = null,
-        ?string $joinType = Criteria::LEFT_JOIN
+        ?string $joinType = Criteria::INNER_JOIN
     ) {
-        $relatedQuery = $this->useArticleQuery(
+        $relatedQuery = $this->useInvitationsArticlesQuery(
             $relationAlias,
             $joinType
         );
@@ -994,7 +941,7 @@ abstract class InvitationQuery extends ModelCriteria
     }
 
     /**
-     * Use the relation to Article table for an EXISTS query.
+     * Use the relation to InvitationsArticles table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
@@ -1002,34 +949,34 @@ abstract class InvitationQuery extends ModelCriteria
      * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
-     * @return \Model\ArticleQuery The inner query object of the EXISTS statement
+     * @return \Model\InvitationsArticlesQuery The inner query object of the EXISTS statement
      */
-    public function useArticleExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    public function useInvitationsArticlesExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        /** @var $q \Model\ArticleQuery */
-        $q = $this->useExistsQuery('Article', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\InvitationsArticlesQuery */
+        $q = $this->useExistsQuery('InvitationsArticles', $modelAlias, $queryClass, $typeOfExists);
         return $q;
     }
 
     /**
-     * Use the relation to Article table for a NOT EXISTS query.
+     * Use the relation to InvitationsArticles table for a NOT EXISTS query.
      *
-     * @see useArticleExistsQuery()
+     * @see useInvitationsArticlesExistsQuery()
      *
      * @param string|null $modelAlias sets an alias for the nested query
      * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      *
-     * @return \Model\ArticleQuery The inner query object of the NOT EXISTS statement
+     * @return \Model\InvitationsArticlesQuery The inner query object of the NOT EXISTS statement
      */
-    public function useArticleNotExistsQuery($modelAlias = null, $queryClass = null)
+    public function useInvitationsArticlesNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        /** @var $q \Model\ArticleQuery */
-        $q = $this->useExistsQuery('Article', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\InvitationsArticlesQuery */
+        $q = $this->useExistsQuery('InvitationsArticles', $modelAlias, $queryClass, 'NOT EXISTS');
         return $q;
     }
 
     /**
-     * Use the relation to Article table for an IN query.
+     * Use the relation to InvitationsArticles table for an IN query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
      *
@@ -1037,30 +984,49 @@ abstract class InvitationQuery extends ModelCriteria
      * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
      * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
      *
-     * @return \Model\ArticleQuery The inner query object of the IN statement
+     * @return \Model\InvitationsArticlesQuery The inner query object of the IN statement
      */
-    public function useInArticleQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    public function useInInvitationsArticlesQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
     {
-        /** @var $q \Model\ArticleQuery */
-        $q = $this->useInQuery('Article', $modelAlias, $queryClass, $typeOfIn);
+        /** @var $q \Model\InvitationsArticlesQuery */
+        $q = $this->useInQuery('InvitationsArticles', $modelAlias, $queryClass, $typeOfIn);
         return $q;
     }
 
     /**
-     * Use the relation to Article table for a NOT IN query.
+     * Use the relation to InvitationsArticles table for a NOT IN query.
      *
-     * @see useArticleInQuery()
+     * @see useInvitationsArticlesInQuery()
      *
      * @param string|null $modelAlias sets an alias for the nested query
      * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
      *
-     * @return \Model\ArticleQuery The inner query object of the NOT IN statement
+     * @return \Model\InvitationsArticlesQuery The inner query object of the NOT IN statement
      */
-    public function useNotInArticleQuery($modelAlias = null, $queryClass = null)
+    public function useNotInInvitationsArticlesQuery($modelAlias = null, $queryClass = null)
     {
-        /** @var $q \Model\ArticleQuery */
-        $q = $this->useInQuery('Article', $modelAlias, $queryClass, 'NOT IN');
+        /** @var $q \Model\InvitationsArticlesQuery */
+        $q = $this->useInQuery('InvitationsArticles', $modelAlias, $queryClass, 'NOT IN');
         return $q;
+    }
+
+    /**
+     * Filter the query by a related Article object
+     * using the invitations_articles table as cross reference
+     *
+     * @param Article $article the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL and Criteria::IN for queries
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByArticle($article, string $comparison = null)
+    {
+        $this
+            ->useInvitationsArticlesQuery()
+            ->filterByArticle($article, $comparison)
+            ->endUse();
+
+        return $this;
     }
 
     /**

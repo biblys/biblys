@@ -650,7 +650,6 @@
   <table name="invitations" idMethod="native" phpName="Invitation">
     <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int(11) unsigned" required="true"/>
-    <column name="article_id" phpName="ArticleId" type="INTEGER" sqlType="int(11) unsigned" />
     <column name="email" phpName="Email" type="VARCHAR" size="256" required="true"/>
     <column name="code" phpName="Code" type="VARCHAR" size="8" required="true"/>
     <column name="allows_pre_download" phpName="AllowsPreDownload" type="BOOLEAN" size="1"/>
@@ -659,10 +658,17 @@
     <foreign-key foreignTable="sites" skipSql="true">
       <reference local="site_id" foreign="site_id"/>
     </foreign-key>
+    <behavior name="timestampable"/>
+  </table>
+  <table name="invitations_articles" isCrossRef="true">
+    <column name="invitation_id" type="integer" primaryKey="true"/>
+    <column name="article_id" type="integer" primaryKey="true"/>
+    <foreign-key foreignTable="invitations" skipSql="true">
+      <reference local="invitation_id" foreign="id"/>
+    </foreign-key>
     <foreign-key foreignTable="articles" skipSql="true">
       <reference local="article_id" foreign="article_id"/>
     </foreign-key>
-    <behavior name="timestampable"/>
   </table>
   <table name="jobs" idMethod="native" phpName="Job">
     <column name="job_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>

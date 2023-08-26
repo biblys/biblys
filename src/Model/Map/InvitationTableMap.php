@@ -63,7 +63,7 @@ class InvitationTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 10;
+    public const NUM_COLUMNS = 9;
 
     /**
      * The number of lazy-loaded columns
@@ -73,7 +73,7 @@ class InvitationTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 10;
+    public const NUM_HYDRATE_COLUMNS = 9;
 
     /**
      * the column name for the id field
@@ -84,11 +84,6 @@ class InvitationTableMap extends TableMap
      * the column name for the site_id field
      */
     public const COL_SITE_ID = 'invitations.site_id';
-
-    /**
-     * the column name for the article_id field
-     */
-    public const COL_ARTICLE_ID = 'invitations.article_id';
 
     /**
      * the column name for the email field
@@ -139,11 +134,11 @@ class InvitationTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'ArticleId', 'Email', 'Code', 'AllowsPreDownload', 'ConsumedAt', 'ExpiresAt', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'articleId', 'email', 'code', 'allowsPreDownload', 'consumedAt', 'expiresAt', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [InvitationTableMap::COL_ID, InvitationTableMap::COL_SITE_ID, InvitationTableMap::COL_ARTICLE_ID, InvitationTableMap::COL_EMAIL, InvitationTableMap::COL_CODE, InvitationTableMap::COL_ALLOWS_PRE_DOWNLOAD, InvitationTableMap::COL_CONSUMED_AT, InvitationTableMap::COL_EXPIRES_AT, InvitationTableMap::COL_CREATED_AT, InvitationTableMap::COL_UPDATED_AT, ],
-        self::TYPE_FIELDNAME     => ['id', 'site_id', 'article_id', 'email', 'code', 'allows_pre_download', 'consumed_at', 'expires_at', 'created_at', 'updated_at', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'Email', 'Code', 'AllowsPreDownload', 'ConsumedAt', 'ExpiresAt', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'email', 'code', 'allowsPreDownload', 'consumedAt', 'expiresAt', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [InvitationTableMap::COL_ID, InvitationTableMap::COL_SITE_ID, InvitationTableMap::COL_EMAIL, InvitationTableMap::COL_CODE, InvitationTableMap::COL_ALLOWS_PRE_DOWNLOAD, InvitationTableMap::COL_CONSUMED_AT, InvitationTableMap::COL_EXPIRES_AT, InvitationTableMap::COL_CREATED_AT, InvitationTableMap::COL_UPDATED_AT, ],
+        self::TYPE_FIELDNAME     => ['id', 'site_id', 'email', 'code', 'allows_pre_download', 'consumed_at', 'expires_at', 'created_at', 'updated_at', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, ]
     ];
 
     /**
@@ -155,11 +150,11 @@ class InvitationTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'ArticleId' => 2, 'Email' => 3, 'Code' => 4, 'AllowsPreDownload' => 5, 'ConsumedAt' => 6, 'ExpiresAt' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'articleId' => 2, 'email' => 3, 'code' => 4, 'allowsPreDownload' => 5, 'consumedAt' => 6, 'expiresAt' => 7, 'createdAt' => 8, 'updatedAt' => 9, ],
-        self::TYPE_COLNAME       => [InvitationTableMap::COL_ID => 0, InvitationTableMap::COL_SITE_ID => 1, InvitationTableMap::COL_ARTICLE_ID => 2, InvitationTableMap::COL_EMAIL => 3, InvitationTableMap::COL_CODE => 4, InvitationTableMap::COL_ALLOWS_PRE_DOWNLOAD => 5, InvitationTableMap::COL_CONSUMED_AT => 6, InvitationTableMap::COL_EXPIRES_AT => 7, InvitationTableMap::COL_CREATED_AT => 8, InvitationTableMap::COL_UPDATED_AT => 9, ],
-        self::TYPE_FIELDNAME     => ['id' => 0, 'site_id' => 1, 'article_id' => 2, 'email' => 3, 'code' => 4, 'allows_pre_download' => 5, 'consumed_at' => 6, 'expires_at' => 7, 'created_at' => 8, 'updated_at' => 9, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'Email' => 2, 'Code' => 3, 'AllowsPreDownload' => 4, 'ConsumedAt' => 5, 'ExpiresAt' => 6, 'CreatedAt' => 7, 'UpdatedAt' => 8, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'email' => 2, 'code' => 3, 'allowsPreDownload' => 4, 'consumedAt' => 5, 'expiresAt' => 6, 'createdAt' => 7, 'updatedAt' => 8, ],
+        self::TYPE_COLNAME       => [InvitationTableMap::COL_ID => 0, InvitationTableMap::COL_SITE_ID => 1, InvitationTableMap::COL_EMAIL => 2, InvitationTableMap::COL_CODE => 3, InvitationTableMap::COL_ALLOWS_PRE_DOWNLOAD => 4, InvitationTableMap::COL_CONSUMED_AT => 5, InvitationTableMap::COL_EXPIRES_AT => 6, InvitationTableMap::COL_CREATED_AT => 7, InvitationTableMap::COL_UPDATED_AT => 8, ],
+        self::TYPE_FIELDNAME     => ['id' => 0, 'site_id' => 1, 'email' => 2, 'code' => 3, 'allows_pre_download' => 4, 'consumed_at' => 5, 'expires_at' => 6, 'created_at' => 7, 'updated_at' => 8, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, ]
     ];
 
     /**
@@ -183,14 +178,6 @@ class InvitationTableMap extends TableMap
         'COL_SITE_ID' => 'SITE_ID',
         'site_id' => 'SITE_ID',
         'invitations.site_id' => 'SITE_ID',
-        'ArticleId' => 'ARTICLE_ID',
-        'Invitation.ArticleId' => 'ARTICLE_ID',
-        'articleId' => 'ARTICLE_ID',
-        'invitation.articleId' => 'ARTICLE_ID',
-        'InvitationTableMap::COL_ARTICLE_ID' => 'ARTICLE_ID',
-        'COL_ARTICLE_ID' => 'ARTICLE_ID',
-        'article_id' => 'ARTICLE_ID',
-        'invitations.article_id' => 'ARTICLE_ID',
         'Email' => 'EMAIL',
         'Invitation.Email' => 'EMAIL',
         'email' => 'EMAIL',
@@ -266,7 +253,6 @@ class InvitationTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', true, null, null);
-        $this->addForeignKey('article_id', 'ArticleId', 'INTEGER', 'articles', 'article_id', false, null, null);
         $this->addColumn('email', 'Email', 'VARCHAR', true, 256, null);
         $this->addColumn('code', 'Code', 'VARCHAR', true, 8, null);
         $this->addColumn('allows_pre_download', 'AllowsPreDownload', 'BOOLEAN', false, 1, null);
@@ -290,13 +276,14 @@ class InvitationTableMap extends TableMap
     1 => ':site_id',
   ),
 ), null, null, null, false);
-        $this->addRelation('Article', '\\Model\\Article', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('InvitationsArticles', '\\Model\\InvitationsArticles', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':article_id',
-    1 => ':article_id',
+    0 => ':invitation_id',
+    1 => ':id',
   ),
-), null, null, null, false);
+), null, null, 'InvitationsArticless', false);
+        $this->addRelation('Article', '\\Model\\Article', RelationMap::MANY_TO_MANY, array(), null, null, 'Articles');
     }
 
     /**
@@ -456,7 +443,6 @@ class InvitationTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(InvitationTableMap::COL_ID);
             $criteria->addSelectColumn(InvitationTableMap::COL_SITE_ID);
-            $criteria->addSelectColumn(InvitationTableMap::COL_ARTICLE_ID);
             $criteria->addSelectColumn(InvitationTableMap::COL_EMAIL);
             $criteria->addSelectColumn(InvitationTableMap::COL_CODE);
             $criteria->addSelectColumn(InvitationTableMap::COL_ALLOWS_PRE_DOWNLOAD);
@@ -467,7 +453,6 @@ class InvitationTableMap extends TableMap
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.site_id');
-            $criteria->addSelectColumn($alias . '.article_id');
             $criteria->addSelectColumn($alias . '.email');
             $criteria->addSelectColumn($alias . '.code');
             $criteria->addSelectColumn($alias . '.allows_pre_download');
@@ -495,7 +480,6 @@ class InvitationTableMap extends TableMap
         if (null === $alias) {
             $criteria->removeSelectColumn(InvitationTableMap::COL_ID);
             $criteria->removeSelectColumn(InvitationTableMap::COL_SITE_ID);
-            $criteria->removeSelectColumn(InvitationTableMap::COL_ARTICLE_ID);
             $criteria->removeSelectColumn(InvitationTableMap::COL_EMAIL);
             $criteria->removeSelectColumn(InvitationTableMap::COL_CODE);
             $criteria->removeSelectColumn(InvitationTableMap::COL_ALLOWS_PRE_DOWNLOAD);
@@ -506,7 +490,6 @@ class InvitationTableMap extends TableMap
         } else {
             $criteria->removeSelectColumn($alias . '.id');
             $criteria->removeSelectColumn($alias . '.site_id');
-            $criteria->removeSelectColumn($alias . '.article_id');
             $criteria->removeSelectColumn($alias . '.email');
             $criteria->removeSelectColumn($alias . '.code');
             $criteria->removeSelectColumn($alias . '.allows_pre_download');

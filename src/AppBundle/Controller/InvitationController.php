@@ -189,7 +189,7 @@ class InvitationController extends Controller
         }
 
         return $templateService->render("AppBundle:Invitation:show.html.twig", [
-            "articleTitle" => $invitation->getArticle()->getTitle(),
+            "articleTitle" => $invitation->getArticles()->getFirst()->getTitle(),
             "currentUser" => $currentUser,
             "code" => $invitation->getCode(),
             "error" => $error,
@@ -217,7 +217,7 @@ class InvitationController extends Controller
 
         $libraryItem = new Stock();
         $libraryItem->setSite($currentSite->getSite());
-        $libraryItem->setArticle($invitation->getArticle());
+        $libraryItem->setArticle($invitation->getArticles()->getFirst());
         $libraryItem->setAxysAccountId($currentUser->getAxysAccount()->getId());
         $libraryItem->setAllowPredownload($invitation->getAllowsPreDownload());
         $libraryItem->setSellingPrice(0);
@@ -238,7 +238,7 @@ class InvitationController extends Controller
 
         $session->getFlashBag()->add(
             "success",
-            "{$invitation->getArticle()->getTitle()} a été ajouté à votre bibliothèque."
+            "{$invitation->getArticles()->getFirst()->getTitle()} a été ajouté à votre bibliothèque."
         );
 
         return new RedirectResponse("/pages/log_myebooks");
@@ -288,10 +288,10 @@ class InvitationController extends Controller
     {
         $article = ArticleQuery::create()
             ->filterForCurrentSite($currentSite)
-            ->findOneById($invitation->getArticleId());
+            ->findOneById($invitation->getArticles()->getFirst()->getId());
 
         if ($article === null) {
-            throw new BadRequestHttpException("L'article {$invitation->getArticleId()} n'existe pas.");
+            throw new BadRequestHttpException("L'article {$invitation->getArticles()->getFirst()->getId()} n'existe pas.");
         }
 
         $downloadablePublishersOptions = $currentSite->getOption("downloadable_publishers") ?? "";
@@ -338,7 +338,7 @@ class InvitationController extends Controller
     {
         $invitation = new Invitation();
         $invitation->setSite($currentSite->getSite());
-        $invitation->setArticle($article);
+        $invitation->addArticle($article);
         $invitation->setEmail($recipientEmail);
         $invitation->setCode(Invitation::generateCode());
         $invitation->setAllowsPreDownload($allowsPreDownload);

@@ -17,7 +17,6 @@ use Mockery;
 use Model\InvitationQuery;
 use Model\StockQuery;
 use PHPUnit\Framework\TestCase;
-use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -504,7 +503,7 @@ class InvitationControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         $article = ModelFactory::createArticle(title: "Livre papier");
         $invitation = ModelFactory::createInvitation(site: $site, article: $article, code: "PAPERBOO");
-        $publisherId = $invitation->getArticle()->getPublisherId();
+        $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
         $currentSite->setOption("downloadable_publishers", $publisherId);
 
         $controller = new InvitationController();
@@ -533,7 +532,7 @@ class InvitationControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         $article = ModelFactory::createArticle(title: "Dans ma bibliothèque", typeId: Type::EBOOK);
         $invitation = ModelFactory::createInvitation(site: $site, article: $article, code: "ELIBRARY");
-        $publisherId = $invitation->getArticle()->getPublisherId();
+        $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
         $currentSite->setOption("downloadable_publishers", $publisherId);
         ModelFactory::createStockItem(site: $site, article: $article, axysAccount: $axysAccount);
 
@@ -557,7 +556,7 @@ class InvitationControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         $article = ModelFactory::createArticle(title: "Livre numérique", typeId: Type::EBOOK);
         $invitation = ModelFactory::createInvitation(site: $site, article: $article, code: "ALLRIGHT");
-        $publisherId = $invitation->getArticle()->getPublisherId();
+        $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
         $currentSite->setOption("downloadable_publishers", $publisherId);
         $axysAccount = ModelFactory::createAxysAccount();
 
@@ -604,7 +603,7 @@ class InvitationControllerTest extends TestCase
         $invitation = ModelFactory::createInvitation(
             site: $site, article: $article, code: "ALLRIGHT", allowsPreDownload: true
         );
-        $publisherId = $invitation->getArticle()->getPublisherId();
+        $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
         $currentSite->setOption("downloadable_publishers", $publisherId);
         $axysAccount = ModelFactory::createAxysAccount();
 

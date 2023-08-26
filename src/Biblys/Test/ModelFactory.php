@@ -449,7 +449,7 @@ class ModelFactory
     {
         $invitation = new Invitation();
         $invitation->setSite($site ?? self::createSite());
-        $invitation->setArticle($article ?? self::createArticle());
+        $invitation->addArticle($article ?? self::createArticle());
         $invitation->setEmail($email);
         $invitation->setCode($code);
         $invitation->setAllowsPreDownload($allowsPreDownload);

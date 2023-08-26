@@ -26,7 +26,7 @@
     <tbody>
       {% for invitation in invitations %}
         <tr>
-          <td>{{ invitation.article.title }}</td>
+          <td>{{ invitation.articles.first.title }}</td>
           <td>
             <a href="mailto:{{ invitation.email }}">
               {{ invitation.email }}
