@@ -39,6 +39,7 @@ use Twig\Error\SyntaxError;
 
 class InvitationController extends Controller
 {
+
     /**
      * @throws SyntaxError
      * @throws RuntimeError
@@ -286,12 +287,30 @@ class InvitationController extends Controller
         Invitation  $invitation,
     ): void
     {
+        $articleId = $invitation->getArticles()->getFirst()->getId();
+
+        $article = self::_getValidDownloadableArticle($currentSite, $articleId);
+
+        $stock = StockQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByArticle($article)
+            ->findOneByAxysAccountId($currentUser->getAxysAccount()->getId());
+        if ($stock) {
+            throw new BadRequestHttpException("L'article {$article->getTitle()} est déjà dans votre bibliothèque.");
+        }
+    }
+
+    /**
+     * @throws PropelException
+     */
+    private static function _getValidDownloadableArticle(CurrentSite $currentSite, $articleId): Article
+    {
         $article = ArticleQuery::create()
             ->filterForCurrentSite($currentSite)
-            ->findOneById($invitation->getArticles()->getFirst()->getId());
+            ->findOneById($articleId);
 
         if ($article === null) {
-            throw new BadRequestHttpException("L'article {$invitation->getArticles()->getFirst()->getId()} n'existe pas.");
+            throw new BadRequestHttpException("L'article $articleId n'existe pas.");
         }
 
         $downloadablePublishersOptions = $currentSite->getOption("downloadable_publishers") ?? "";
@@ -305,14 +324,7 @@ class InvitationController extends Controller
         if ($article->getType()->isDownloadable() === false) {
             throw new BadRequestHttpException("L'article {$article->getTitle()} n'est pas téléchargeable.");
         }
-
-        $stock = StockQuery::create()
-            ->filterBySite($currentSite->getSite())
-            ->filterByArticle($article)
-            ->findOneByAxysAccountId($currentUser->getAxysAccount()->getId());
-        if ($stock) {
-            throw new BadRequestHttpException("L'article {$article->getTitle()} est déjà dans votre bibliothèque.");
-        }
+        return $article;
     }
 
     /**
