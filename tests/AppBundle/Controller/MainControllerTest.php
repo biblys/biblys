@@ -75,6 +75,7 @@ class MainControllerTest extends TestCase
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
             templateService: $templateService,
+            metaTagsService: $metaTagsService,
         );
 
         // then
@@ -131,7 +132,8 @@ class MainControllerTest extends TestCase
             currentSite: $currentSite,
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
-            templateService: $templateService
+            templateService: $templateService,
+            metaTagsService: $metaTagsService,
         );
 
         // then

@@ -11,6 +11,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
+use Biblys\Service\MetaTagsService;
 use Biblys\Service\Pagination;
 use Biblys\Service\TemplateService;
 use Biblys\Service\Updater\UpdaterException;
@@ -53,6 +54,7 @@ class MainController extends Controller
         CurrentUser $currentUser,
         UrlGenerator $urlGenerator,
         TemplateService $templateService,
+        MetaTagsService $metaTagsService,
     ): Response
     {
         global $_SITE;
@@ -153,6 +155,7 @@ class MainController extends Controller
                     currentUser: $currentUser,
                     urlGenerator: $urlGenerator,
                     templateService: $templateService,
+                    metaTagsService: $metaTagsService,
                 );
             }
         }
