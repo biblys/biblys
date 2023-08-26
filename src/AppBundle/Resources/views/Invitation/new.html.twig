@@ -16,8 +16,13 @@
 
   <form method="post" action="{{ path("invitation_create") }}">
     <div class="form-group">
-      <label for="article_id">Article à envoyer :</label>
-      <select id="article_id" name="article_id" class="form-control" required>
+      <label for="article_id">Articles à inclure</label>
+      <p>
+        <small class="text-muted">
+          Pour sélectionner plusieurs articles, maintenez la touche <kbd>Ctrl</kbd> (ou <kbd>Cmd</kbd> sur Mac) enfoncée.
+        </small>
+      </p>
+      <select id="article_id" name="article_ids[]" class="form-control" multiple required style="height: 200px">
         {% for article in downloadableArticles %}
           <option value="{{ article.id }}">{{ article.title }}</option>
         {% endfor %}

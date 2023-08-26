@@ -438,23 +438,32 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createInvitation(
-        Site $site = null,
-        Article $article = null,
-        string $email = "invited-user@biblys.fr",
-        string $code = "ABCD1234",
-        bool $allowsPreDownload = false,
-        DateTime $expiresAt = null,
-        DateTime $consumedAt = null,
+        Site        $site = null,
+        array       $articles = [],
+        string      $email = "invited-user@biblys.fr",
+        string      $code = "ABCD1234",
+        bool        $allowsPreDownload = false,
+        DateTime    $expiresAt = null,
+        DateTime    $consumedAt = null,
     ): Invitation
     {
+
+
         $invitation = new Invitation();
         $invitation->setSite($site ?? self::createSite());
-        $invitation->addArticle($article ?? self::createArticle());
         $invitation->setEmail($email);
         $invitation->setCode($code);
         $invitation->setAllowsPreDownload($allowsPreDownload);
         $invitation->setExpiresAt($expiresAt ?? strtotime("+1 month"));
         $invitation->setConsumedAt($consumedAt);
+
+        if (count($articles) === 0) {
+            $articles = [self::createArticle()];
+        }
+        foreach ($articles as $article) {
+            $invitation->addArticle($article);
+        }
+
         $invitation->save();
 
         return $invitation;

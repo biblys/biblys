@@ -1,11 +1,11 @@
 {% extends "layout:base.html.twig" %}
 
 {% block title %}
-  Télécharger {{ articleTitle }}
+  Ajout à la bibliothèque
 {% endblock %}
 
 {% block main %}
-  <h1>Télécharger {{ articleTitle }}</h1>
+  <h1>Ajout à la bibliothèque</h1>
 
   {% if not currentUser.isAuthentified %}
     <p>
@@ -26,8 +26,15 @@
 
   {% elseif currentUser.isAuthentified %}
     <p class="text-center">
-      <strong>{{ articleTitle }}</strong> <br />
-      va être ajouté à la bibliothèque numérique <br />
+      {% if articles.count == 1 %}
+        <strong>{{  articles.first.title }}</strong> <br />
+        va être ajouté à la bibliothèque numérique <br />
+      {% else %}
+        {% for article in articles %}
+          <strong>{{  article.title }}</strong> <br />
+        {% endfor %}
+        vont être ajoutés à la bibliothèque numérique <br />
+      {% endif %}
       de votre compte <strong>{{ currentUser.email }}</strong><br />
       d'où vous pourrez le télécharger à volonté<br />
       et dans le format de votre choix.

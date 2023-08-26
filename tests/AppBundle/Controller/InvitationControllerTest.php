@@ -14,6 +14,7 @@ use DateTime;
 use Exception;
 use League\Csv\CannotInsertRecord;
 use Mockery;
+use Model\ArticleQuery;
 use Model\InvitationQuery;
 use Model\StockQuery;
 use PHPUnit\Framework\TestCase;
@@ -56,7 +57,7 @@ class InvitationControllerTest extends TestCase
             ->with("success", "Une invitation pour Sent Book a été envoyée à user@example.org");
         $publisher = ModelFactory::createPublisher();
         $article = ModelFactory::createArticle(title: "Sent Book", typeId: Type::EBOOK, publisher: $publisher);
-        $request->request->set("article_id", $article->getId());
+        $request->request->set("article_ids", [$article->getId()]);
         $request->request->set("mode", "download");
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
@@ -106,14 +107,14 @@ class InvitationControllerTest extends TestCase
         $request->request->set("email_addresses", "manual1@example.org\r\nmanual2@example.org\r\nmanual3@example.org");
         $flashBag = Mockery::mock(FlashBag::class);
         $flashBag->shouldReceive("add")
-            ->with("success", "Une invitation à télécharger Sent Book a été créée pour manual1@example.org");
+            ->with("success", "Une invitation à télécharger « Sent Book » a été créée pour manual1@example.org");
         $flashBag->shouldReceive("add")
-            ->with("success", "Une invitation à télécharger Sent Book a été créée pour manual2@example.org");
+            ->with("success", "Une invitation à télécharger « Sent Book » a été créée pour manual2@example.org");
         $flashBag->shouldReceive("add")
-            ->with("success", "Une invitation à télécharger Sent Book a été créée pour manual3@example.org");
+            ->with("success", "Une invitation à télécharger « Sent Book » a été créée pour manual3@example.org");
         $publisher = ModelFactory::createPublisher();
         $article = ModelFactory::createArticle(title: "Sent Book", typeId: Type::EBOOK, publisher: $publisher);
-        $request->request->set("article_id", $article->getId());
+        $request->request->set("article_ids", [$article->getId()]);
         $request->request->set("mode", "manual");
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
@@ -164,14 +165,14 @@ class InvitationControllerTest extends TestCase
         $request->request->set("email_addresses", "send1@example.org\r\nsend2@example.org\r\nsend3@example.org");
         $flashBag = Mockery::mock(FlashBag::class);
         $flashBag->shouldReceive("add")
-            ->with("success", "Une invitation pour Sent Book a été envoyée à send1@example.org");
+            ->with("success", "Une invitation pour « Sent Book » a été envoyée à send1@example.org");
         $flashBag->shouldReceive("add")
-            ->with("success", "Une invitation pour Sent Book a été envoyée à send2@example.org");
+            ->with("success", "Une invitation pour « Sent Book » a été envoyée à send2@example.org");
         $flashBag->shouldReceive("add")
-            ->with("success", "Une invitation pour Sent Book a été envoyée à send3@example.org");
+            ->with("success", "Une invitation pour « Sent Book » a été envoyée à send3@example.org");
         $publisher = ModelFactory::createPublisher();
         $article = ModelFactory::createArticle(title: "Sent Book", typeId: Type::EBOOK, publisher: $publisher);
-        $request->request->set("article_id", $article->getId());
+        $request->request->set("article_ids", [$article->getId()]);
         $request->request->set("mode", "send");
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
@@ -229,7 +230,7 @@ class InvitationControllerTest extends TestCase
             ->with("success", "Une invitation pour Sent Book a été envoyée à download3@example.org");
         $publisher = ModelFactory::createPublisher();
         $article = ModelFactory::createArticle(title: "Sent Book", typeId: Type::EBOOK, publisher: $publisher);
-        $request->request->set("article_id", $article->getId());
+        $request->request->set("article_ids", [$article->getId()]);
         $request->request->set("mode", "download");
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
@@ -282,7 +283,7 @@ class InvitationControllerTest extends TestCase
             ->with("success", "Une invitation pour Sent Book a été envoyée à predownload@example.org");
         $publisher = ModelFactory::createPublisher();
         $article = ModelFactory::createArticle(title: "Sent Book", typeId: Type::EBOOK, publisher: $publisher);
-        $request->request->set("article_id", $article->getId());
+        $request->request->set("article_ids", [$article->getId()]);
         $request->request->set("mode", "download");
         $request->request->set("allows_pre_download", "1");
         $site = ModelFactory::createSite();
@@ -317,6 +318,63 @@ class InvitationControllerTest extends TestCase
     }
 
     /**
+     * @throws InvalidEmailAddressException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     * @throws CannotInsertRecord
+     * @throws \League\Csv\Exception
+     */
+    public function testCreateActionForMultipleArticles()
+    {
+        // given
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request->request->set("email_addresses", "multiple@example.org");
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->shouldReceive("add")
+            ->with("success", "Une invitation pour « Invited 1 » et 2 autres a été envoyée à multiple@example.org");
+        $publisher = ModelFactory::createPublisher();
+        $article1 = ModelFactory::createArticle(title: "Invited 1", typeId: Type::EBOOK, publisher: $publisher);
+        $article2 = ModelFactory::createArticle(title: "Invited 2", typeId: Type::EBOOK, publisher: $publisher);
+        $article3 = ModelFactory::createArticle(title: "Invited 3", typeId: Type::EBOOK, publisher: $publisher);
+        $request->request->set("article_ids", [$article1->getId(), $article2->getId(), $article3->getId()]);
+        $request->request->set("mode", "send");
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $currentSite->setOption("publisher_filter", $publisher->getId());
+        $currentSite->setOption("downloadable_publishers", $publisher->getId());
+        $session = $this->createMock(Session::class);
+        $session->method("getFlashBag")->willReturn($flashBag);
+        $templateService = $this->createMock(TemplateService::class);
+        $templateService->expects($this->once())->method("render")->willReturn(new Response("Invitation"));
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->shouldReceive("send")
+            ->with("multiple@example.org", "Téléchargez « Invited 1 » et 2 autres en numérique",
+                Mockery::any());
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/invitation/ANEWCODE");
+        $controller = new InvitationController();
+
+        // when
+        $response = $controller->createAction(
+            request: $request,
+            currentSite: $currentSite,
+            mailer: $mailer,
+            templateService: $templateService,
+            session: $session,
+            urlGenerator: $urlGenerator,
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $invitation = InvitationQuery::create()->findOneByEmail("multiple@example.org");
+        $this->assertNotNull($invitation);
+        $this->assertEquals([$article1, $article2, $article3], $invitation->getArticles()->getData());
+    }
+
+    /**
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
@@ -330,23 +388,23 @@ class InvitationControllerTest extends TestCase
         $article = ModelFactory::createArticle(
             title: "The Code Show", typeId: Type::EBOOK, publisher: $publisher
         );
-        ModelFactory::createInvitation(site: $site, article: $article, code: "SHOWCODE");
+        ModelFactory::createInvitation(
+            site: $site, articles: [$article], email: "SHOWCODE", code: "SHOWCODE"
+        );
 
         $currentSite = new CurrentSite($site);
         $currentSite->setOption("publisher_filter", $publisher->getId());
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $currentUser = $this->createMock(CurrentUser::class);
-        $templateService = $this->createMock(TemplateService::class);
-        $templateService
-            ->expects($this->once())
-            ->method("render")
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->shouldReceive("render")
             ->with("AppBundle:Invitation:show.html.twig", [
-                "articleTitle" => "The Code Show",
+                "articles" => ArticleQuery::create()->findById($article->getId()),
                 "currentUser" => $currentUser,
                 "code" => "SHOWCODE",
                 "error" => null,
             ])
-            ->willReturn(new Response("Télécharger The Code Show"));
+            ->andReturn(new Response("Télécharger The Code Show"));
         $controller = new InvitationController();
 
         // when
@@ -481,7 +539,9 @@ class InvitationControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $publisher = ModelFactory::createPublisher(name: "Éditeur filtré");
         $article = ModelFactory::createArticle(publisher: $publisher);
-        ModelFactory::createInvitation(site: $site, article: $article, code: "UNAUTHPU");
+        ModelFactory::createInvitation(
+            site: $site, articles: [$article], email: "UNAUTHPU", code: "UNAUTHPU"
+        );
         $currentSite = new CurrentSite($site);
 
         $controller = new InvitationController();
@@ -510,7 +570,9 @@ class InvitationControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $publisher = ModelFactory::createPublisher(name: "Éditeur non autorisé");
         $article = ModelFactory::createArticle(publisher: $publisher);
-        ModelFactory::createInvitation(site: $site, article: $article, code: "NONDOPUB");
+        ModelFactory::createInvitation(
+            site: $site, articles: [$article], email: "NONDOPUB", code: "NONDOPUB"
+        );
         $currentSite = new CurrentSite($site);
         $currentSite->setOption("publisher_filter", $publisher->getId());
 
@@ -538,7 +600,9 @@ class InvitationControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $article = ModelFactory::createArticle(title: "Livre papier");
-        $invitation = ModelFactory::createInvitation(site: $site, article: $article, code: "PAPERBOO");
+        $invitation = ModelFactory::createInvitation(
+            site: $site, articles: [$article], email: "PAPERBOO", code: "PAPERBOO"
+        );
         $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
         $currentSite->setOption("publisher_filter", $publisherId);
         $currentSite->setOption("downloadable_publishers", $publisherId);
@@ -568,7 +632,9 @@ class InvitationControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $article = ModelFactory::createArticle(title: "Dans ma bibliothèque", typeId: Type::EBOOK);
-        $invitation = ModelFactory::createInvitation(site: $site, article: $article, code: "ELIBRARY");
+        $invitation = ModelFactory::createInvitation(
+            site: $site, articles: [$article], code: "ELIBRARY"
+        );
         $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
         $currentSite->setOption("publisher_filter", $publisherId);
         $currentSite->setOption("downloadable_publishers", $publisherId);
@@ -593,7 +659,9 @@ class InvitationControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $article = ModelFactory::createArticle(title: "Livre numérique", typeId: Type::EBOOK);
-        $invitation = ModelFactory::createInvitation(site: $site, article: $article, code: "ALLRIGHT");
+        $invitation = ModelFactory::createInvitation(
+            site: $site, articles: [$article], email: "ALLRIGHT", code: "ALLRIGHT"
+        );
         $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
         $currentSite->setOption("publisher_filter", $publisherId);
         $currentSite->setOption("downloadable_publishers", $publisherId);
@@ -640,7 +708,8 @@ class InvitationControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         $article = ModelFactory::createArticle(title: "Livre numérique", typeId: Type::EBOOK);
         $invitation = ModelFactory::createInvitation(
-            site: $site, article: $article, code: "ALLRIGHT", allowsPreDownload: true
+            site: $site, articles: [$article], email: "ALLRIGHT", code: "ALLRIGHT",
+            allowsPreDownload: true
         );
         $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
         $currentSite->setOption("publisher_filter", $publisherId);
@@ -679,6 +748,77 @@ class InvitationControllerTest extends TestCase
     }
 
     /**
+     * @throws PropelException
+     */
+    public function testConsumeActionWithMultipleArticles()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $article1 = ModelFactory::createArticle(title: "Multiple 1", typeId: Type::EBOOK);
+        $article2 = ModelFactory::createArticle(title: "Multiple 2", typeId: Type::EBOOK);
+        $article3 = ModelFactory::createArticle(title: "Multiple 3", typeId: Type::EBOOK);
+        $invitation = ModelFactory::createInvitation(
+            site: $site, articles: [$article1, $article2, $article3],
+            email: "multiple@example.org", code: "ALLRIGHT"
+        );
+        $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
+        $currentSite->setOption("publisher_filter", $publisherId);
+        $currentSite->setOption("downloadable_publishers", $publisherId);
+        $axysAccount = ModelFactory::createAxysAccount();
+
+        $controller = new InvitationController();
+        $request = RequestFactory::createAuthRequest();
+        $request->request->set("code", "ALLRIGHT");
+        $currentUser = new CurrentUser($axysAccount, "token");
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->shouldReceive("add")
+            ->with("success", "Multiple 1 a été ajouté à votre bibliothèque.");
+        $flashBag->shouldReceive("add")
+            ->with("success", "Multiple 2 a été ajouté à votre bibliothèque.");
+        $flashBag->shouldReceive("add")
+            ->with("success", "Multiple 3 a été ajouté à votre bibliothèque.");
+        $session = Mockery::mock(Session::class);
+        $session->shouldReceive("getFlashBag")->andReturn($flashBag);
+
+        // when
+        $response = $controller->consumeAction($request, $currentSite, $currentUser, $session);
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/pages/log_myebooks", $response->getTargetUrl());
+        $consumedInvitation = InvitationQuery::create()->findPk($invitation->getId());
+        $this->assertNotNull(
+            $consumedInvitation->getConsumedAt(),
+            "it consumes the invitation"
+        );
+
+        $articleInLibrary1 = StockQuery::create()
+            ->filterBySite($site)
+            ->filterByArticle($article1)
+            ->findOneByAxysAccountId($axysAccount->getId());
+        $this->assertNotNull($articleInLibrary1, "it adds the article to the user's library");
+        $this->assertEquals(0, $articleInLibrary1->getSellingPrice());
+        $this->assertNotNull($articleInLibrary1->getSellingDate());
+
+        $articleInLibrary2 = StockQuery::create()
+            ->filterBySite($site)
+            ->filterByArticle($article2)
+            ->findOneByAxysAccountId($axysAccount->getId());
+        $this->assertNotNull($articleInLibrary2, "it adds the article to the user's library");
+        $this->assertEquals(0, $articleInLibrary2->getSellingPrice());
+        $this->assertNotNull($articleInLibrary2->getSellingDate());
+
+        $articleInLibrary3 = StockQuery::create()
+            ->filterBySite($site)
+            ->filterByArticle($article3)
+            ->findOneByAxysAccountId($axysAccount->getId());
+        $this->assertNotNull($articleInLibrary3, "it adds the article to the user's library");
+        $this->assertEquals(0, $articleInLibrary3->getSellingPrice());
+        $this->assertNotNull($articleInLibrary3->getSellingDate());
+    }
+
+    /**
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
@@ -689,9 +829,7 @@ class InvitationControllerTest extends TestCase
         // given
         $article = ModelFactory::createArticle(title: "Listed Book", typeId: Type::EBOOK);
         ModelFactory::createInvitation(
-            article: $article,
-            email: "listed-invitation@biblys.fr",
-            code: "LISTEDIN",
+            articles: [$article], email: "listed-invitation@biblys.fr", code: "LISTEDIN",
         );
         $request = RequestFactory::createAuthRequestForAdminUser();
         $controller = new InvitationController();

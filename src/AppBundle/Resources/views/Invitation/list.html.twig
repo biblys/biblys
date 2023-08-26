@@ -16,7 +16,7 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Article</th>
+        <th>Articles</th>
         <th>Destinataire</th>
         <th></th>
         <th>Lien</th>
@@ -26,7 +26,11 @@
     <tbody>
       {% for invitation in invitations %}
         <tr>
-          <td>{{ invitation.articles.first.title }}</td>
+          <td>
+            {% for article in invitation.articles %}
+              {{ article.title }}<br/>
+            {% endfor %}
+          </td>
           <td>
             <a href="mailto:{{ invitation.email }}">
               {{ invitation.email }}

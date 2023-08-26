@@ -15,12 +15,14 @@ use League\Csv\CannotInsertRecord;
 use League\Csv\Writer;
 use Model\Article;
 use Model\ArticleQuery;
+use Model\AxysAccount;
 use Model\Invitation;
 use Model\InvitationQuery;
 use Model\Map\InvitationTableMap;
 use Model\Stock;
 use Model\StockQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Propel;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -47,15 +49,15 @@ class InvitationController extends Controller
      * @throws PropelException
      */
     public function newAction(
-        Request $request,
-        CurrentSite $currentSite,
+        Request         $request,
+        CurrentSite     $currentSite,
         TemplateService $templateService,
     ): Response
     {
         self::authAdmin($request);
 
         $downloadableTypes = Type::getAllDownloadableTypes();
-        $downloadbleTypeIds = array_map(function($type) {
+        $downloadbleTypeIds = array_map(function ($type) {
             return $type->getId();
         }, $downloadableTypes);
 
@@ -96,15 +98,16 @@ class InvitationController extends Controller
             throw new BadRequestHttpException("Le champ adresse e-mail est obligatoire.");
         }
 
-        $articleId = $request->request->get("article_id");
-
-        $article = ArticleQuery::create()->findOneById($articleId);
-        self::_validateDownloadableArticle($currentSite, $article);
+        $articleIds = $request->request->all("article_ids");
+        $articles = ArticleQuery::create()->findById($articleIds);
+        foreach ($articles->getData() as $article) {
+            self::_validateDownloadableArticle($currentSite, $article);
+        }
 
         $isManualMode = $request->request->getAlpha("mode") === "manual";
         $shouldSendEmail = $request->request->getAlpha("mode") === "send";
         $shouldWriteCSV = $request->request->getAlpha("mode") === "download";
-        $allowsPreDownload = $request->request->getBoolean("allows_pre_download") ;
+        $allowsPreDownload = $request->request->getBoolean("allows_pre_download");
 
         if ($shouldWriteCSV) {
             $csv = Writer::createFromString();
@@ -114,7 +117,7 @@ class InvitationController extends Controller
         foreach ($recipientEmails as $recipientEmail) {
             $invitation = InvitationController::_createAndSendInvitations(
                 currentSite: $currentSite,
-                article: $article,
+                articles: $articles,
                 recipientEmail: $recipientEmail,
                 urlGenerator: $urlGenerator,
                 templateService: $templateService,
@@ -167,10 +170,10 @@ class InvitationController extends Controller
      * @throws LoaderError
      */
     public function showAction(
-        CurrentSite $currentSite,
-        CurrentUser $currentUser,
+        CurrentSite     $currentSite,
+        CurrentUser     $currentUser,
         TemplateService $templateService,
-        string $code
+        string          $code
     ): Response
     {
         $invitation = self::_getInvitationFromCode($currentSite, $code);
@@ -179,13 +182,13 @@ class InvitationController extends Controller
         try {
             self::_validateInvitation($invitation);
             self::_validateArticleFromInvitation($currentSite, $currentUser, $invitation);
-        } catch(UnauthorizedHttpException) {
-        } catch (NotFoundHttpException | BadRequestHttpException $exception) {
+        } catch (UnauthorizedHttpException) {
+        } catch (NotFoundHttpException|BadRequestHttpException $exception) {
             $error = $exception->getMessage();
         }
 
         return $templateService->render("AppBundle:Invitation:show.html.twig", [
-            "articleTitle" => $invitation->getArticles()->getFirst()->getTitle(),
+            "articles" => $invitation->getArticles(),
             "currentUser" => $currentUser,
             "code" => $invitation->getCode(),
             "error" => $error,
@@ -196,10 +199,10 @@ class InvitationController extends Controller
      * @throws PropelException
      */
     public function consumeAction(
-        Request $request,
+        Request     $request,
         CurrentSite $currentSite,
         CurrentUser $currentUser,
-        Session $session,
+        Session     $session,
     ): RedirectResponse
     {
         self::authUser($request);
@@ -208,34 +211,28 @@ class InvitationController extends Controller
         $invitation = self::_getInvitationFromCode($currentSite, $code);
         self::_validateInvitation($invitation);
         self::_validateArticleFromInvitation($currentSite, $currentUser, $invitation);
-
         $invitation->setConsumedAt(new DateTime());
-
-        $libraryItem = new Stock();
-        $libraryItem->setSite($currentSite->getSite());
-        $libraryItem->setArticle($invitation->getArticles()->getFirst());
-        $libraryItem->setAxysAccountId($currentUser->getAxysAccount()->getId());
-        $libraryItem->setAllowPredownload($invitation->getAllowsPreDownload());
-        $libraryItem->setSellingPrice(0);
-        $libraryItem->setSellingDate(new DateTime());
 
         $con = Propel::getWriteConnection(InvitationTableMap::DATABASE_NAME);
         $con->beginTransaction();
 
         try {
+            foreach ($invitation->getArticles() as $article) {
+                self::_addArticleToUserLibrary(
+                    article: $article,
+                    axysAccount: $currentUser->getAxysAccount(),
+                    allowsPreDownload: $invitation->getAllowsPreDownload(),
+                    currentSite: $currentSite,
+                    session: $session
+                );
+            }
             $invitation->save();
-            $libraryItem->save();
         } catch (Exception $exception) {
             $con->rollBack();
             throw $exception;
         }
 
         $con->commit();
-
-        $session->getFlashBag()->add(
-            "success",
-            "{$invitation->getArticles()->getFirst()->getTitle()} a été ajouté à votre bibliothèque."
-        );
 
         return new RedirectResponse("/pages/log_myebooks");
     }
@@ -299,7 +296,7 @@ class InvitationController extends Controller
      */
     private static function _validateDownloadableArticle(
         CurrentSite $currentSite,
-        ?Article $article
+        ?Article    $article
     ): void
     {
         if ($article === null) {
@@ -337,7 +334,7 @@ class InvitationController extends Controller
      */
     private static function _createAndSendInvitations(
         CurrentSite     $currentSite,
-        Article         $article,
+        Collection      $articles,
         string          $recipientEmail,
         UrlGenerator    $urlGenerator,
         TemplateService $templateService,
@@ -350,11 +347,16 @@ class InvitationController extends Controller
     {
         $invitation = new Invitation();
         $invitation->setSite($currentSite->getSite());
-        $invitation->addArticle($article);
+        $invitation->setArticles($articles);
         $invitation->setEmail($recipientEmail);
         $invitation->setCode(Invitation::generateCode());
         $invitation->setAllowsPreDownload($allowsPreDownload);
         $invitation->setExpiresAt(strtotime("+1 month"));
+
+        $articlesTitle = "« {$articles->getFirst()->getTitle()} »";
+        if ($articles->count() > 1) {
+            $articlesTitle .= " et " . ($articles->count() - 1) . " autres";
+        }
 
         $invitationUrl = $urlGenerator->generate("invitation_show", [
             "code" => $invitation->getCode()
@@ -362,7 +364,7 @@ class InvitationController extends Controller
         $mailContent = $templateService->render(
             "AppBundle:Invitation:email.html.twig",
             [
-                "articleTitle" => $article->getTitle(),
+                "articleTitle" => $articlesTitle,
                 "invitationUrl" => $invitationUrl,
                 "expirationDate" => $invitation->getExpiresAt()->format("d/m/Y")
             ]
@@ -376,7 +378,7 @@ class InvitationController extends Controller
             if ($shouldSendEmail) {
                 $mailer->send(
                     to: $recipientEmail,
-                    subject: "Téléchargez « {$article->getTitle()} » en numérique",
+                    subject: "Téléchargez $articlesTitle en numérique",
                     body: $mailContent->getContent(),
                 );
             }
@@ -388,16 +390,42 @@ class InvitationController extends Controller
 
         if ($shouldSendEmail) {
             $session->getFlashBag()->add("success",
-                "Une invitation pour {$article->getTitle()} a été envoyée à $recipientEmail"
+                "Une invitation pour $articlesTitle a été envoyée à $recipientEmail"
             );
         }
 
         if ($isManualMode) {
             $session->getFlashBag()->add("success",
-                "Une invitation à télécharger {$article->getTitle()} a été créée pour $recipientEmail"
+                "Une invitation à télécharger $articlesTitle a été créée pour $recipientEmail"
             );
         }
 
         return $invitation;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    private function _addArticleToUserLibrary(
+        mixed       $article,
+        AxysAccount $axysAccount,
+        bool        $allowsPreDownload,
+        CurrentSite $currentSite,
+        Session     $session
+    ): void
+    {
+        $libraryItem = new Stock();
+        $libraryItem->setArticle($article);
+        $libraryItem->setAxysAccountId($axysAccount->getId());
+        $libraryItem->setAllowPredownload($allowsPreDownload);
+        $libraryItem->setSite($currentSite->getSite());
+        $libraryItem->setSellingPrice(0);
+        $libraryItem->setSellingDate(new DateTime());
+        $libraryItem->save();
+
+        $session->getFlashBag()->add(
+            "success",
+            "{$article->getTitle()} a été ajouté à votre bibliothèque."
+        );
     }
 }
