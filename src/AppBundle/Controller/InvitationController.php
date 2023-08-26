@@ -31,7 +31,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -176,21 +175,24 @@ class InvitationController extends Controller
         string          $code
     ): Response
     {
-        $invitation = self::_getInvitationFromCode($currentSite, $code);
+        if (!$currentUser->isAuthentified()) {
+            return $templateService->render(
+                "AppBundle:Invitation:show-for-anonymous-user.html.twig",
+            );
+        }
 
+        $invitation = self::_getInvitationFromCode($currentSite, $code);
         $error = null;
         try {
             self::_validateInvitation($invitation);
             self::_validateArticleFromInvitation($currentSite, $currentUser, $invitation);
-        } catch (UnauthorizedHttpException) {
         } catch (NotFoundHttpException|BadRequestHttpException $exception) {
             $error = $exception->getMessage();
         }
 
         return $templateService->render("AppBundle:Invitation:show.html.twig", [
-            "articles" => $invitation->getArticles(),
             "currentUser" => $currentUser,
-            "code" => $invitation->getCode(),
+            "invitation" => $invitation,
             "error" => $error,
         ]);
     }
@@ -243,15 +245,9 @@ class InvitationController extends Controller
      */
     private static function _getInvitationFromCode(CurrentSite $currentSite, string $code): ?Invitation
     {
-        $invitation = InvitationQuery::create()
+        return InvitationQuery::create()
             ->filterBySite($currentSite->getSite())
             ->findOneByCode($code);
-
-        if ($invitation === null) {
-            throw new NotFoundHttpException("Cette invitation n'existe pas.");
-        }
-
-        return $invitation;
     }
 
     /**
@@ -259,8 +255,12 @@ class InvitationController extends Controller
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      */
-    private static function _validateInvitation(Invitation $invitation): void
+    private static function _validateInvitation(?Invitation $invitation): void
     {
+        if ($invitation === null) {
+            throw new NotFoundHttpException("Cette invitation n'existe pas.");
+        }
+
         if ($invitation->getExpiresAt() <= new DateTime()) {
             throw new BadRequestHttpException("Cette invitation a expiré.");
         }
@@ -272,6 +272,7 @@ class InvitationController extends Controller
 
     /**
      * @throws PropelException
+     * @throws BadRequestHttpException
      */
     private static function _validateArticleFromInvitation(
         CurrentSite $currentSite,

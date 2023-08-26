@@ -14,7 +14,6 @@ use DateTime;
 use Exception;
 use League\Csv\CannotInsertRecord;
 use Mockery;
-use Model\ArticleQuery;
 use Model\InvitationQuery;
 use Model\StockQuery;
 use PHPUnit\Framework\TestCase;
@@ -388,20 +387,22 @@ class InvitationControllerTest extends TestCase
         $article = ModelFactory::createArticle(
             title: "The Code Show", typeId: Type::EBOOK, publisher: $publisher
         );
-        ModelFactory::createInvitation(
+        $invitation = ModelFactory::createInvitation(
             site: $site, articles: [$article], email: "SHOWCODE", code: "SHOWCODE"
         );
 
         $currentSite = new CurrentSite($site);
         $currentSite->setOption("publisher_filter", $publisher->getId());
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
-        $currentUser = $this->createMock(CurrentUser::class);
+        $axysAccount = ModelFactory::createAxysAccount();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthentified")->andReturn(true);
+        $currentUser->shouldReceive("getAxysAccount")->andReturn($axysAccount);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->shouldReceive("render")
             ->with("AppBundle:Invitation:show.html.twig", [
-                "articles" => ArticleQuery::create()->findById($article->getId()),
                 "currentUser" => $currentUser,
-                "code" => "SHOWCODE",
+                "invitation" => $invitation,
                 "error" => null,
             ])
             ->andReturn(new Response("Télécharger The Code Show"));
@@ -418,6 +419,40 @@ class InvitationControllerTest extends TestCase
         // then
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString("Télécharger The Code Show", $response->getContent());
+    }
+
+
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function testShowActionForAnonymousUser()
+    {
+        // given
+        $controller = new InvitationController();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("render")
+            ->with("AppBundle:Invitation:show-for-anonymous-user.html.twig")
+            ->andReturn(new Response("Please log in."));
+
+        // when
+        $response = $controller->showAction(
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            templateService: $templateService,
+            code: "SHOWCODE"
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Please log in.", $response->getContent());
     }
 
     /**

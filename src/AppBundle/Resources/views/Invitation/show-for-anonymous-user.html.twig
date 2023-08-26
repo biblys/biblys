@@ -1,0 +1,18 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Ajout à la bibliothèque
+{% endblock %}
+
+{% block main %}
+  <h1>Ajout à la bibliothèque</h1>
+
+  <p>
+    L'article sera ajouté à votre bibliothèque numérique d'où vous pourrez le télécharger à volonté et dans le format
+    de votre choix.
+  </p>
+  <p>Pour continuer, vous devez vous identifier.</p>
+  <a href="{{ path("user_login", { return_url: app.currentUrl.absoluteUrl }) }}" class="btn btn-primary">
+    Connexion
+  </a>
+{% endblock %}
