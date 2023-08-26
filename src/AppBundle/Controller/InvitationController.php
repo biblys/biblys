@@ -97,14 +97,9 @@ class InvitationController extends Controller
         }
 
         $articleId = $request->request->get("article_id");
-        $article = ArticleQuery::create()->filterForCurrentSite($currentSite)->findOneById($articleId);
-        if ($article === null) {
-            throw new BadRequestHttpException("L'article $articleId n'existe pas.");
-        }
 
-        if ($article->getType()->isDownloadable() === false) {
-            throw new BadRequestHttpException("L'article demandé n'est pas téléchargeable.");
-        }
+        $article = ArticleQuery::create()->findOneById($articleId);
+        self::_validateDownloadableArticle($currentSite, $article);
 
         $isManualMode = $request->request->getAlpha("mode") === "manual";
         $shouldSendEmail = $request->request->getAlpha("mode") === "send";
@@ -287,9 +282,8 @@ class InvitationController extends Controller
         Invitation  $invitation,
     ): void
     {
-        $articleId = $invitation->getArticles()->getFirst()->getId();
-
-        $article = self::_getValidDownloadableArticle($currentSite, $articleId);
+        $article = $invitation->getArticles()->getFirst();
+        self::_validateDownloadableArticle($currentSite, $article);
 
         $stock = StockQuery::create()
             ->filterBySite($currentSite->getSite())
@@ -303,18 +297,25 @@ class InvitationController extends Controller
     /**
      * @throws PropelException
      */
-    private static function _getValidDownloadableArticle(CurrentSite $currentSite, $articleId): Article
+    private static function _validateDownloadableArticle(
+        CurrentSite $currentSite,
+        ?Article $article
+    ): void
     {
-        $article = ArticleQuery::create()
-            ->filterForCurrentSite($currentSite)
-            ->findOneById($articleId);
-
         if ($article === null) {
-            throw new BadRequestHttpException("L'article $articleId n'existe pas.");
+            throw new BadRequestHttpException("L'article n'existe pas.");
         }
 
-        $downloadablePublishersOptions = $currentSite->getOption("downloadable_publishers") ?? "";
-        $downloadablePublishersId = explode(",", $downloadablePublishersOptions);
+        $publisherFilterOption = $currentSite->getOption("publisher_filter") ?? "";
+        $publisherFilterIds = explode(",", $publisherFilterOption);
+        if (!in_array($article->getPublisherId(), $publisherFilterIds)) {
+            throw new BadRequestHttpException(
+                "Ce site n'est pas autorisé à distribuer les articles de {$article->getPublisher()->getName()}."
+            );
+        }
+
+        $downloadablePublishersOption = $currentSite->getOption("downloadable_publishers") ?? "";
+        $downloadablePublishersId = explode(",", $downloadablePublishersOption);
         if (!in_array($article->getPublisherId(), $downloadablePublishersId)) {
             throw new BadRequestHttpException(
                 "Le téléchargement des articles de {$article->getPublisher()->getName()} n'est pas autorisé sur ce site."
@@ -324,7 +325,6 @@ class InvitationController extends Controller
         if ($article->getType()->isDownloadable() === false) {
             throw new BadRequestHttpException("L'article {$article->getTitle()} n'est pas téléchargeable.");
         }
-        return $article;
     }
 
     /**

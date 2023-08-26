@@ -61,6 +61,7 @@ class InvitationControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $currentSite->setOption("publisher_filter", $publisher->getId());
+        $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
@@ -117,6 +118,7 @@ class InvitationControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $currentSite->setOption("publisher_filter", $publisher->getId());
+        $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
@@ -174,6 +176,7 @@ class InvitationControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $currentSite->setOption("publisher_filter", $publisher->getId());
+        $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
@@ -231,6 +234,7 @@ class InvitationControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $currentSite->setOption("publisher_filter", $publisher->getId());
+        $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
@@ -284,6 +288,7 @@ class InvitationControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $currentSite->setOption("publisher_filter", $publisher->getId());
+        $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
@@ -328,6 +333,7 @@ class InvitationControllerTest extends TestCase
         ModelFactory::createInvitation(site: $site, article: $article, code: "SHOWCODE");
 
         $currentSite = new CurrentSite($site);
+        $currentSite->setOption("publisher_filter", $publisher->getId());
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $currentUser = $this->createMock(CurrentUser::class);
         $templateService = $this->createMock(TemplateService::class);
@@ -463,6 +469,35 @@ class InvitationControllerTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
+    public function testConsumeActionForPublisherMissingInFilter()
+    {
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage(
+            "Ce site n'est pas autorisé à distribuer les articles de Éditeur filtré."
+        );
+
+        // given
+        $site = ModelFactory::createSite();
+        $publisher = ModelFactory::createPublisher(name: "Éditeur filtré");
+        $article = ModelFactory::createArticle(publisher: $publisher);
+        ModelFactory::createInvitation(site: $site, article: $article, code: "UNAUTHPU");
+        $currentSite = new CurrentSite($site);
+
+        $controller = new InvitationController();
+        $request = RequestFactory::createAuthRequest();
+        $request->request->set("code", "UNAUTHPU");
+        $currentUser = $this->createMock(CurrentUser::class);
+        $session = $this->createMock(Session::class);
+
+        // when
+        $controller->consumeAction($request, $currentSite, $currentUser, $session);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
     public function testConsumeActionForNonDownloadablePublisher()
     {
         // then
@@ -477,6 +512,7 @@ class InvitationControllerTest extends TestCase
         $article = ModelFactory::createArticle(publisher: $publisher);
         ModelFactory::createInvitation(site: $site, article: $article, code: "NONDOPUB");
         $currentSite = new CurrentSite($site);
+        $currentSite->setOption("publisher_filter", $publisher->getId());
 
         $controller = new InvitationController();
         $request = RequestFactory::createAuthRequest();
@@ -504,6 +540,7 @@ class InvitationControllerTest extends TestCase
         $article = ModelFactory::createArticle(title: "Livre papier");
         $invitation = ModelFactory::createInvitation(site: $site, article: $article, code: "PAPERBOO");
         $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
+        $currentSite->setOption("publisher_filter", $publisherId);
         $currentSite->setOption("downloadable_publishers", $publisherId);
 
         $controller = new InvitationController();
@@ -533,6 +570,7 @@ class InvitationControllerTest extends TestCase
         $article = ModelFactory::createArticle(title: "Dans ma bibliothèque", typeId: Type::EBOOK);
         $invitation = ModelFactory::createInvitation(site: $site, article: $article, code: "ELIBRARY");
         $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
+        $currentSite->setOption("publisher_filter", $publisherId);
         $currentSite->setOption("downloadable_publishers", $publisherId);
         ModelFactory::createStockItem(site: $site, article: $article, axysAccount: $axysAccount);
 
@@ -557,6 +595,7 @@ class InvitationControllerTest extends TestCase
         $article = ModelFactory::createArticle(title: "Livre numérique", typeId: Type::EBOOK);
         $invitation = ModelFactory::createInvitation(site: $site, article: $article, code: "ALLRIGHT");
         $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
+        $currentSite->setOption("publisher_filter", $publisherId);
         $currentSite->setOption("downloadable_publishers", $publisherId);
         $axysAccount = ModelFactory::createAxysAccount();
 
@@ -604,6 +643,7 @@ class InvitationControllerTest extends TestCase
             site: $site, article: $article, code: "ALLRIGHT", allowsPreDownload: true
         );
         $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
+        $currentSite->setOption("publisher_filter", $publisherId);
         $currentSite->setOption("downloadable_publishers", $publisherId);
         $axysAccount = ModelFactory::createAxysAccount();
 
