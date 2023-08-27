@@ -6,88 +6,74 @@ use InvalidArgumentException;
 
 class Pagination
 {
-    private $_currentPageIndex,
-        $_currentPageNumber,
-        $_itemCount,
-        $_limit,
-        $_totalPages,
-        $_offset;
+    private int $currentPageIndex;
+    private int $currentPageNumber;
+    private int $itemCount;
+    private int $limit;
+    private int $totalPages;
+    private int $offset;
+    private array $queryParams = [];
 
-    /**
-     * @var array
-     */
-    private $_queryParams = [];
-
-    public function __construct($currentPageIndex, $itemCount, $limit = null)
+    public function __construct($currentPageIndex, $itemCount, $limit = 10)
     {
-        global $_SITE;
-
         if ($currentPageIndex < 0) {
             throw new InvalidArgumentException("Page number cannot be less than 0");
         }
 
-        $this->_currentPageIndex = $currentPageIndex;
-        $this->_currentPageNumber = $currentPageIndex + 1;
-        $this->_itemCount = $itemCount;
-
-        $this->_limit = $_SITE->getOpt('articles_per_page');
-        if (!$this->_limit) {
-            $this->_limit = 10;
-        }
-        if ($limit) {
-            $this->_limit = $limit;
-        }
-
-        $this->_totalPages = ceil($this->_itemCount / $this->_limit);
-        $this->_offset = $currentPageIndex * $this->_limit;
+        $this->currentPageIndex = $currentPageIndex;
+        $this->currentPageNumber = $currentPageIndex + 1;
+        $this->itemCount = $itemCount;
+        $this->limit = $limit;
+        $this->totalPages = (int) ceil($this->itemCount / $this->limit);
+        $this->offset = $currentPageIndex * $this->limit;
     }
 
     public function getCurrent(): int
     {
-        return $this->_currentPageNumber;
+        return $this->currentPageNumber;
     }
 
-    public function getTotal()
+    public function getTotal(): int
     {
-        return $this->_totalPages;
+        return $this->totalPages;
     }
 
-    public function getOffset()
+    public function getOffset(): int
     {
-        return $this->_offset;
+        return $this->offset;
     }
 
     public function getLimit()
     {
-        return $this->_limit;
+        return $this->limit;
     }
 
-    public function getPrevious()
+    public function getPrevious(): bool|int
     {
-        if ($this->_currentPageIndex < 1) {
+        if ($this->currentPageIndex < 1) {
             return false;
         }
 
-        return $this->_currentPageIndex - 1;
+        return $this->currentPageIndex - 1;
     }
 
-    public function getNext()
+    public function getNext(): bool|int
     {
-        if ($this->_currentPageIndex >= $this->_totalPages - 1) {
+        if ($this->currentPageIndex >= $this->totalPages - 1) {
             return false;
         }
 
-        return $this->_currentPageIndex + 1;
+        return $this->currentPageIndex + 1;
     }
 
     public function setQueryParams(array $_queryParams): void
     {
-        $this->_queryParams = $_queryParams;
+        $this->queryParams = $_queryParams;
     }
 
     private function getQueryParams(): array
     {
-        return $this->_queryParams;
+        return $this->queryParams;
     }
 
     public function getQueryForPageNumber(int $pageNumber): ?string
