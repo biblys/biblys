@@ -4,6 +4,21 @@
 
 Améliorations
 
+La fonctionnalité d'envoi de livres numériques a été entièrement repensée, 
+l'outil s'appelle désormais "Invitations de téléchargement"
+
+- Les livres ne sont plus ajoutés directement à la bibliothèque de 
+  l'utilisateur, celui-ci reçoit par courriel un lien permettant de faire 
+  l'ajout au compte de son choix.
+- Il est possible de récupérer le lien créé pour faire un envoyer un 
+  courriel personnalisé plutôt que d'utiliser le courriel générique envoyé 
+  par le site.
+- Il est également possible de faire une création en lien en masse pour un 
+  grand nombre d'utilisateurs, puis de télécharger un fichier CSV avec les 
+  liens, pour faire par exemple un envoi avec un outil d'e-mailing.
+
+Autres améliorations
+
 - L'affichage de prévisualisation lors de la publication d'un lien vers un 
   site Biblys sur les réseaux sociaux a été améliorée. 
 - Il n'est plus possible d'inviter un utilisateur à être administrateur s'il 
