@@ -878,4 +878,30 @@ class InvitationControllerTest extends TestCase
         $this->assertStringContainsString("listed-invitation@biblys.fr", $response->getContent());
         $this->assertStringContainsString("LISTEDIN", $response->getContent());
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testDeleteAction()
+    {
+        // given
+        $invitation = ModelFactory::createInvitation(email: "delete.me@example.org");
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->shouldReceive("add")->with(
+            "success",
+            "L'invitation pour delete.me@example.org a été supprimée."
+        );
+        $session = $this->createMock(Session::class);
+        $session->method("getFlashBag")->willReturn($flashBag);
+        $controller = new InvitationController();
+
+        // when
+        $response = $controller->deleteAction($request, $session, $invitation->getId());
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/admin/invitations", $response->getTargetUrl());
+        $this->assertNull(InvitationQuery::create()->findPk($invitation->getId()));
+    }
 }

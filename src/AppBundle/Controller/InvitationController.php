@@ -258,6 +258,27 @@ class InvitationController extends Controller
 
     /**
      * @throws PropelException
+     */
+    public function deleteAction(Request $request, Session $session, int $id): RedirectResponse
+    {
+        self::authAdmin($request);
+
+        $invitation = InvitationQuery::create()->findPk($id);
+        if ($invitation === null) {
+            throw new NotFoundHttpException("Cette invitation n'existe pas.");
+        }
+
+        $invitation->delete();
+
+        $session->getFlashBag()->add("success",
+            "L'invitation pour {$invitation->getEmail()} a été supprimée."
+        );
+
+        return new RedirectResponse("/admin/invitations");
+    }
+
+    /**
+     * @throws PropelException
      * @throws NotFoundHttpException
      */
     private static function _getInvitationFromCode(CurrentSite $currentSite, string $code): ?Invitation

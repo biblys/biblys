@@ -339,6 +339,11 @@ invitation_consume:
   path: /invitations/consume
   controller: AppBundle\Controller\InvitationController::consumeAction
 
+invitation_delete:
+  methods: POST
+  path: /admin/invitations/{id}/delete
+  controller: AppBundle\Controller\InvitationController::deleteAction
+
 # Links
 
 link_delete:

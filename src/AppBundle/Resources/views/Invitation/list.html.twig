@@ -18,9 +18,9 @@
       <tr>
         <th>Destinataire</th>
         <th>Articles</th>
-        <th></th>
-        <th>Lien</th>
         <th>Crée le</th>
+        <th colspan="2">Statut</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -36,25 +36,36 @@
               {{ article.title }}<br/>
             {% endfor %}
           </td>
-          <td class="text-center">
-            {% if invitation.allowsPreDownload %}
-              <span class="fa fa-rocket" title="Téléchargement autorisé avant parution"></span>
-            {% endif %}
-          </td>
+          <td>{{ invitation.createdAt|date('d/m/Y') }}</td>
           <td class="text-center">
             {% if invitation.isConsumed %}
               <span class="fa fa-check" title="Utilisée le {{ invitation.consumedAt|date('d/m/Y') }}"></span>
             {% elseif invitation.hasExpired %}
-              <span class="fa fa-clock-o" title="Expirée {{ invitation.expiresAt|date('d/m/Y') }}"></span>
+              <span class="fa fa-clock-o" title="Expirée le {{ invitation.expiresAt|date('d/m/Y') }}"></span>
             {% else %}
-              <button
-                class="btn btn-xs btn-default"
-                onClick="navigator.clipboard.writeText('{{ path('invitation_show', { code: invitation.code }, true) }}')">
-                <span class="fa fa-copy"></span>
-              </button>
+              <span class="fa fa-hourglass" title="En attente"></span>
             {% endif %}
           </td>
-          <td>{{ invitation.createdAt|date('d/m/Y') }}</td>
+          <td class="text-center">
+            {% if invitation.allowsPreDownload %}
+              <span class="fa fa-rocket" title="Téléchargement avant parution autorisé"></span>
+            {% endif %}
+          </td>
+          <td>
+            <form class="form-inline" method="POST" action="{{ path('invitation_delete', { id: invitation.id }) }}">
+              <div class="btn-group" role="group" aria-label="Actions">
+                <button
+                  title="Copier le lien"
+                  class="btn btn-sm btn-info"
+                  onClick="navigator.clipboard.writeText('{{ path('invitation_show', { code: invitation.code }, true) }}')">
+                  <span class="fa fa-copy"></span>
+                </button>
+                <button title="Supprimer l'invitation" type="submit" class="btn btn-sm btn-danger">
+                  <span class="fa fa-trash"></span>
+                </button>
+              </div>
+            </form>
+          </td>
         </tr>
       {% else %}
         <tr>
