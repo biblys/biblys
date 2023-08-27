@@ -7,10 +7,12 @@ use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
+use Biblys\Service\Pagination;
 use Biblys\Service\TemplateService;
 use DateTime;
 use Exception;
 use Framework\Controller;
+use InvalidArgumentException;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Writer;
 use Model\Article;
@@ -153,12 +155,27 @@ class InvitationController extends Controller
     {
         self::authAdmin($request);
 
-        $invitations = InvitationQuery::create()
-            ->orderByCreatedAt(Criteria::DESC)
+        $invitationsQuery = InvitationQuery::create()
+            ->orderByCreatedAt(Criteria::DESC);
+
+        try {
+            $pageNumber = (int) $request->query->get("p", 0);
+            $invitationTotalCount = $invitationsQuery->count();
+            $invitationsPerPage = 100;
+            $pagination = new Pagination($pageNumber, $invitationTotalCount, $invitationsPerPage);
+        } catch (InvalidArgumentException $exception) {
+            throw new BadRequestHttpException($exception->getMessage(), $exception);
+        }
+
+        $invitations = $invitationsQuery
+            ->setLimit($pagination->getLimit())
+            ->setOffset($pagination->getOffset())
             ->find();
 
         return $this->render("AppBundle:Invitation:list.html.twig", [
             "invitations" => $invitations,
+            "pages" => $pagination,
+            "total" => $invitationTotalCount,
         ]);
     }
 

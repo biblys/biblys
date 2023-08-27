@@ -16,8 +16,8 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Articles</th>
         <th>Destinataire</th>
+        <th>Articles</th>
         <th></th>
         <th>Lien</th>
         <th>Crée le</th>
@@ -27,14 +27,14 @@
       {% for invitation in invitations %}
         <tr>
           <td>
-            {% for article in invitation.articles %}
-              {{ article.title }}<br/>
-            {% endfor %}
-          </td>
-          <td>
             <a href="mailto:{{ invitation.email }}">
               {{ invitation.email }}
             </a>
+          </td>
+          <td>
+            {% for article in invitation.articles %}
+              {{ article.title }}<br/>
+            {% endfor %}
           </td>
           <td class="text-center">
             {% if invitation.allowsPreDownload %}
@@ -63,4 +63,6 @@
       {% endfor %}
     </tbody>
   </table>
+
+  {% include 'AppBundle:Payment:_pagination.html.twig' %}
 {% endblock %}
