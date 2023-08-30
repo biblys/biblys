@@ -11,6 +11,8 @@ use Facile\OpenIDClient\Service\Builder\AuthorizationServiceBuilder;
 use Facile\OpenIDClient\Token\TokenSetInterface;
 use JsonException;
 use Psr\Http\Message\ServerRequestInterface;
+use RuntimeException;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class OpenIDConnectProviderService
 {
@@ -21,6 +23,9 @@ class OpenIDConnectProviderService
         $this->config = $config;
     }
 
+    /**
+     * @throws ServiceUnavailableHttpException
+     */
     public function getTokenSet(ServerRequestInterface $psrRequest): TokenSetInterface
     {
         $client = OpenIDConnectProviderService::getClient();
@@ -57,10 +62,18 @@ class OpenIDConnectProviderService
         );
     }
 
+    /**
+     * @throws ServiceUnavailableHttpException
+     */
     public function getClient(): ClientInterface
     {
-        $issuer = (new IssuerBuilder())
-            ->build('https://axys.me/.well-known/openid-configuration');
+        try {
+            $issuer = (new IssuerBuilder())
+                ->build('https://axys.me/.well-known/openid-configuration');
+        } catch(RuntimeException) {
+            throw new ServiceUnavailableHttpException("Invalid issuer");
+        }
+
         $clientMetadata = ClientMetadata::fromArray([
             'client_id' => $this->config->get("axys.client_id"),
             'client_secret' => $this->config->get("axys.client_secret"),

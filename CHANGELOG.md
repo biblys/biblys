@@ -7,6 +7,7 @@ Corrections
 - La recherche d'un client depuis la caisse pouvait échouer. C'est corrigé.
 - L'affichage d'un livre sans prix pouvait déclencher une erreur sur la page 
   catalogue de l'administration. Ce n'est plus le cas.
+- L'affichage des erreurs au moment de la connexion avec Axys a été améliorée.
 
 ### 2.71.1 (24 août 2023)
 
