@@ -12,6 +12,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Twig\Error\LoaderError;
@@ -242,6 +243,43 @@ class ErrorControllerTest extends TestCase
             "it should response with HTTP status 500"
         );
         $this->assertStringContainsString("An error occurred", $response->getContent());
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function testHandleServiceUnavailable()
+    {
+        // given
+        $controller = new ErrorController();
+        $request = new Request();
+        $exception = new ServiceUnavailableHttpException(60);
+
+        // when
+        $response = $controller->exception($request, $exception);
+
+        // then
+        $this->assertEquals(
+            503,
+            $response->getStatusCode(),
+            "it should response with HTTP status 500"
+        );
+        $this->assertStringContainsString(
+            "Service temporairement indisponible",
+            $response->getContent()
+        );
+        $this->assertStringContainsString(
+            "Merci de réessayer dans quelques instants",
+            $response->getContent()
+        );
+        $this->assertEquals(
+            60,
+            $response->headers->get("Retry-After"),
+            "it should include Retry-After header"
+        );
     }
 
     public function testFallbackToLegacyController()

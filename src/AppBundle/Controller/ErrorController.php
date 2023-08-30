@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
@@ -91,6 +92,10 @@ class ErrorController extends Controller
 
         if (is_a($exception, "Symfony\Component\HttpKernel\Exception\ConflictHttpException")) {
             return self::_defaultHandler(409, $exception, $request);
+        }
+
+        if (is_a($exception, ServiceUnavailableHttpException::class)) {
+            return self::_customTemplateHandler(503, $request, $exception);
         }
 
         return $this->handleServerError($request, $exception);
@@ -306,6 +311,9 @@ class ErrorController extends Controller
             "return_url" => $currentUrl,
         ]);
         $response->setStatusCode($statusCode);
+        foreach ($exception->getHeaders() as $name => $value) {
+            $response->headers->set($name, $value);
+        }
 
         return $response;
     }
