@@ -13,17 +13,18 @@ use Biblys\Exception\InvalidEntityFetchedException;
 use Biblys\Isbn\Isbn;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\SlugService;
 use Model\PeopleQuery;
 
 class Article extends Entity
 {
-    private $cover = null;
-    private $langOriginal = null;
-    private $originCountry = null;
-    private $awards;
+    private ?Media $cover = null;
+    private ?Lang $langOriginal = null;
+    private ?Country $originCountry = null;
+    private array $awards = [];
     protected $prefix = 'article';
 
-    public static $AVAILABILITY_DILICOM_VALUES = [
+    public static array $AVAILABILITY_DILICOM_VALUES = [
         0 => "00 - Inconnu",
         1 => "01 - Disponible",
         2 => "02 - Pas encore paru",
@@ -37,7 +38,7 @@ class Article extends Entity
         10 => "10 - Hors commerce"
     ];
 
-    public static $ARTICLE_TYPES = [
+    public static array $ARTICLE_TYPES = [
         0 => "Inconnu",
         1 => "Livre papier",
         2 => "Livre numérique",
@@ -256,7 +257,7 @@ class Article extends Entity
      * Get article cover
      * @throws Exception
      */
-    public function getCover($size = null)
+    public function getCover($size = null): Media|string|null
     {
         if (!isset($this->cover)) {
             $this->cover = new Media('article', $this->get('id'));
@@ -360,7 +361,7 @@ class Article extends Entity
      * Return article's cover url
      * @throws Exception
      */
-    public function getCoverUrl(array $options = [])
+    public function getCoverUrl(array $options = []): ?string
     {
         if (!$this->hasCover()) {
             return null;
@@ -524,7 +525,7 @@ class Article extends Entity
     /**
      * @throws Exception
      */
-    public function isInCart()
+    public function isInCart(): bool
     {
         
         return LegacyCodeHelper::getGlobalVisitor()->hasInCart('article', $this->get('id'));
@@ -533,7 +534,7 @@ class Article extends Entity
     /**
      * @throws Exception
      */
-    public function isInWishlist()
+    public function isInWishlist(): bool
     {
         
         return LegacyCodeHelper::getGlobalVisitor()->hasAWish($this->get('id'));
@@ -542,7 +543,7 @@ class Article extends Entity
     /**
      * @throws Exception
      */
-    public function isinAlerts()
+    public function isinAlerts(): bool
     {
         
         return LegacyCodeHelper::getGlobalVisitor()->hasAlert($this->get('id'));
@@ -705,6 +706,7 @@ class Article extends Entity
         $deletion_axys_account_id = $this->get('article_deletion_by');
         if ($deletion_axys_account_id) {
             $um = new AxysAccountManager();
+            /** @var AxysAccount $user */
             $user = $um->getById($deletion_axys_account_id);
             if ($user) {
                 return $user;
@@ -892,7 +894,9 @@ class Article extends Entity
     {
         if (!$this->langOriginal) {
             $lm = new LangManager();
-            $this->langOriginal = $lm->getById($this->get('lang_original'));
+            /** @var Lang $langOriginal */
+            $langOriginal = $lm->getById($this->get('lang_original'));
+            $this->langOriginal = $langOriginal;
         }
 
         return $this->langOriginal;
@@ -906,7 +910,9 @@ class Article extends Entity
     {
         if (!$this->originCountry) {
             $cm = new CountryManager();
-            $this->originCountry = $cm->getById($this->get('origin_country'));
+            /** @var Country $originCountry */
+            $originCountry = $cm->getById($this->get('origin_country'));
+            $this->originCountry = $originCountry;
         }
 
         return $this->originCountry;
@@ -930,7 +936,7 @@ class Article extends Entity
     /**
      * @throws Exception
      */
-    public function getShareButtons(array $options = [])
+    public function getShareButtons(array $options = []): string
     {
         global $request, $urlgenerator;
 
@@ -939,7 +945,7 @@ class Article extends Entity
         return share_buttons($url, $this->get('title') . ' de ' . $this->get('authors'), $options);
     }
 
-    public function setType(Type $type)
+    public function setType(Type $type): void
     {
         $this->set('type_id', $type->getId());
     }
@@ -947,7 +953,7 @@ class Article extends Entity
     /**
      * @throws Exception
      */
-    public function getType()
+    public function getType(): bool|Type
     {
         $type_id = $this->get('type_id');
         return Type::getById($type_id);
@@ -958,7 +964,7 @@ class Article extends Entity
      * @param [type] $stock [description]
      * @throws Exception
      */
-    public function getTaxRate()
+    public function getTaxRate(): bool|int
     {
         global $_SITE;
 
@@ -984,11 +990,6 @@ class Article extends Entity
         return $tax->getTaxRate();
     }
 
-    /**
-     * Set article's publisher
-     * @param publisher Publisher: the publisher object to set as article's publisher
-     * @return Article the current article
-     */
     public function setPublisher(Publisher $publisher): Article
     {
         $this->set('publisher_id', $publisher->get('id'));
@@ -997,11 +998,6 @@ class Article extends Entity
         return $this;
     }
 
-    /**
-     * Set article's collection
-     * @param collection Collection: the collection object to set as article's collection
-     * @return Article the current article
-     */
     public function setCollection(Collection $collection): Article
     {
         $this->set('collection_id', $collection->get('id'));
@@ -1093,41 +1089,46 @@ class ArticleManager extends EntityManager
     protected $prefix = 'article';
     protected $table = 'articles';
     protected $object = 'Article';
-    protected $ignoreSiteFilters = false;
+    protected bool $ignoreSiteFilters = false;
 
     /**
      * If set to true, Manager will ignore site filters
      * @param bool $setting true or false (default)
      */
-    public function setIgnoreSiteFilters(bool $setting)
+    public function setIgnoreSiteFilters(bool $setting): void
     {
         $this->ignoreSiteFilters = $setting;
     }
 
     /**
      * Add site filters if any defined
-     * @param [type] $where [description]
+     * @param $where
+     * @return mixed
+     * @throws Exception
      */
-    public function addSiteFilters($where)
+    public function addSiteFilters($where): mixed
     {
         if ($this->ignoreSiteFilters) {
             return $where;
         }
 
-        global $_SITE;
+        $currentSite = LegacyCodeHelper::getLegacyCurrentSite();
 
-        $publisherFilter = $_SITE->getOpt('publisher_filter');
+        $publisherFilter = $currentSite->getOpt('publisher_filter');
         if ($publisherFilter && !array_key_exists('publisher_id', $where)) {
             $where['publisher_id'] = explode(',', $publisherFilter);
         }
 
-        $collectionFilterHide = $_SITE->getOpt('collection_filter_hide');
+        $collectionFilterHide = $currentSite->getOpt('collection_filter_hide');
         if ($collectionFilterHide && !array_key_exists('collection_id', $where)) {
             $where['collection_id NOT IN'] = explode(',', $collectionFilterHide);
         }
         return $where;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getAll(array $where = array(), array $options = array(), $withJoins = true): array
     {
         $query = array();
@@ -1152,6 +1153,9 @@ class ArticleManager extends EntityManager
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function countAll()
     {
         $where = $this->addSiteFilters([]);
@@ -1162,6 +1166,9 @@ class ArticleManager extends EntityManager
         return $res->fetchColumn();
     }
 
+    /**
+     * @throws Exception
+     */
     public function countAllWithoutSearchTerms()
     {
         $where = $this->addSiteFilters([]);
@@ -1175,6 +1182,9 @@ class ArticleManager extends EntityManager
         return $res->fetchColumn();
     }
 
+    /**
+     * @throws Exception
+     */
     public function countAllFromPeople($people)
     {
         $where = ["article_links" => "LIKE %[people:" . $people->get('id') . "]%"];
@@ -1182,12 +1192,18 @@ class ArticleManager extends EntityManager
         return $this->_countAllForWhere($where);
     }
 
+    /**
+     * @throws Exception
+     */
     public function getAllFromPeople($people, $options = [], $withJoins = true): array
     {
         $where = ["article_links" => "LIKE %[people:" . $people->get('id') . "]%"];
         return $this->getAll($where, $options, $withJoins);
     }
 
+    /**
+     * @throws Exception
+     */
     public function countAllFromRayon($rayon)
     {
         $where = ["article_links" => "LIKE %[rayon:" . $rayon->get('id') . "]%"];
@@ -1195,6 +1211,9 @@ class ArticleManager extends EntityManager
         return $this->_countAllForWhere($where);
     }
 
+    /**
+     * @throws Exception
+     */
     public function getAllFromRayon($rayon, $options = [], $withJoins = true): array
     {
         $where = ["article_links" => "LIKE %[rayon:" . $rayon->get('id') . "]%"];
@@ -1214,6 +1233,9 @@ class ArticleManager extends EntityManager
         return $this->getAll($where, $options, $withJoins);
     }
 
+    /**
+     * @throws Exception
+     */
     public function countAllFromTag($tag)
     {
         $where = ["article_links" => "LIKE %[tag:" . $tag->get('id') . "]%"];
@@ -1223,10 +1245,7 @@ class ArticleManager extends EntityManager
 
     /**
      * Get all articles related to this rayon
-     * @param  [type]  $rayon     [description]
-     * @param  [type]  $options   [description]
-     * @param bool $withJoins [description]
-     * @return array of Articles
+     * @throws Exception
      */
     public function getAllFromTag($tag, $options = [], bool $withJoins = true): array
     {
@@ -1235,6 +1254,9 @@ class ArticleManager extends EntityManager
         return $this->getAll($where, $options, $withJoins);
     }
 
+    /**
+     * @throws Exception
+     */
     public function _buildSearchQuery($keywords): array
     {
         $query = array();
@@ -1258,6 +1280,9 @@ class ArticleManager extends EntityManager
         return ['query' => $query, 'params' => $params];
     }
 
+    /**
+     * @throws Exception
+     */
     public function _buildSearchQueryForAvailableStock(
         string      $keywords,
         CurrentSite $currentSite,
@@ -1282,6 +1307,9 @@ class ArticleManager extends EntityManager
         ];
     }
 
+    /**
+     * @throws Exception
+     */
     public function countSearchResults($keywords)
     {
         $q = $this->_buildSearchQuery($keywords);
@@ -1292,6 +1320,9 @@ class ArticleManager extends EntityManager
         return $res->fetchColumn();
     }
 
+    /**
+     * @throws Exception
+     */
     public function countSearchResultsForAvailableStock(
         string      $keywords,
         CurrentSite $currentSiteService
@@ -1309,6 +1340,9 @@ class ArticleManager extends EntityManager
         return $res->fetchColumn();
     }
 
+    /**
+     * @throws Exception
+     */
     public function search($keywords, $options = []): array
     {
         $q = $this->_buildSearchQuery($keywords);
@@ -1316,7 +1350,8 @@ class ArticleManager extends EntityManager
     }
 
     /**
-     * @return Article[]
+     * @throws Exception
+     * @throws Exception
      */
     public function searchWithAvailableStock(
         string      $keywords,
@@ -1344,7 +1379,7 @@ class ArticleManager extends EntityManager
      * @throws ArticleAlreadyInRayonException
      * @throws Exception
      */
-    public function addRayon($article, $rayon)
+    public function addRayon($article, $rayon): Entity
     {
         global $_SITE;
 
@@ -1506,7 +1541,7 @@ class ArticleManager extends EntityManager
         return $article;
     }
 
-    public function beforeDelete($article)
+    public function beforeDelete($article): void
     {
         global $_SQL;
 
@@ -1545,6 +1580,7 @@ class ArticleManager extends EntityManager
      */
     public function preprocess($article): Entity
     {
+        /** @var Article $article */
         $ean = $article->get('ean');
         if ($ean) {
             $article->set('article_ean', Isbn::convertToEan13($ean));
@@ -1580,8 +1616,10 @@ class ArticleManager extends EntityManager
         $authors = $article->getAuthors();
 
 
-        $slug = makeurl(self::_getAuthorsSegmentForSlug($authors)) .
-            '/' . makeurl($article->get('title'));
+        $slugService = new SlugService();
+        $authorsSlug = $slugService->slugify(self::_getAuthorsSegmentForSlug($authors));
+        $titleSlug = $slugService->slugify($article->get('title'));
+        $slug = "$authorsSlug/$titleSlug";
 
         // If slug is already used, add article id at the end
         $other = $this->get([
@@ -1612,7 +1650,7 @@ class ArticleManager extends EntityManager
         throw new Exception("Cannot create url for an article without authors");
     }
 
-    public function validate($article)
+    public function validate($article): void
     {
         if ($article->has('authors') && strlen($article->get('authors')) > 256) {
             throw new InvalidEntityException("Le champ Auteurs ne peut pas dépasser 256 caractères.");
@@ -1655,8 +1693,10 @@ class ArticleManager extends EntityManager
     /**
      * @param array $where
      * @return mixed
+     * @throws Exception
+     * @throws Exception
      */
-    private function _countAllForWhere(array $where)
+    private function _countAllForWhere(array $where): mixed
     {
         $where = $this->addSiteFilters($where);
 

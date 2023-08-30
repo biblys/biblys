@@ -42,6 +42,7 @@ class Media
         }
 
         // Exists
+        $this->setExists(true);
         if ($this->path() !== null && file_exists($this->path())) {
             $this->setExists(true);
         }
