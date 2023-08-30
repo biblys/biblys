@@ -3,6 +3,7 @@
 namespace Biblys\Service;
 
 use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Legacy\LegacyCodeHelper;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
@@ -19,7 +20,7 @@ class MailerTest extends TestCase
         $this->expectExceptionMessage("L'adresse customer.4.@biblys.fr est invalide.");
 
         // given
-        $mailer = new Mailer();
+        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
 
         // when
         $mailer->send(
@@ -39,7 +40,7 @@ class MailerTest extends TestCase
         $this->expectExceptionMessage("L'adresse vendor.4.@biblys.fr est invalide.");
 
         // given
-        $mailer = new Mailer();
+        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
 
         // when
         $mailer->send(
@@ -59,7 +60,7 @@ class MailerTest extends TestCase
         $this->expectExceptionMessage("L'adresse yes-reply.4.@biblys.fr est invalide.");
 
         // given
-        $mailer = new Mailer();
+        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
 
         // when
         $mailer->send(

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Legacy;
 
 use AppBundle\Controller\LegacyController;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -69,7 +70,7 @@ class OrderDeliveryTest extends TestCase
         $request->request->set("country_id", 1);
         $request->request->set("cgv_checkbox", 1);
         $session = new Session();
-        $mailer = new Mailer();
+        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
         $legacyController = new LegacyController();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
@@ -155,7 +156,7 @@ class OrderDeliveryTest extends TestCase
         $request->request->set("country_id", 1);
         $request->request->set("cgv_checkbox", 1);
         $session = new Session();
-        $mailer = new Mailer();
+        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
         $legacyController = new LegacyController();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
@@ -250,7 +251,7 @@ class OrderDeliveryTest extends TestCase
         $_POST["cgv_checkbox"] = 1;
 
         $session = new Session();
-        $mailer = new Mailer();
+        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
         $legacyController = new LegacyController();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);

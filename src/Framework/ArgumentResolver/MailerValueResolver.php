@@ -2,7 +2,9 @@
 
 namespace Framework\ArgumentResolver;
 
+use Biblys\Service\Config;
 use Biblys\Service\Mailer;
+use Exception;
 use Generator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
@@ -20,8 +22,12 @@ class MailerValueResolver implements ArgumentValueResolverInterface
         return true;
     }
 
+    /**
+     * @throws Exception
+     */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
-        yield new Mailer();
+        $config = Config::load();
+        yield new Mailer($config);
     }
 }

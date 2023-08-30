@@ -188,7 +188,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
                 $body = stripslashes($content);
                 $from = [$currentSite->getContact() => $o["order_firstname"] . " " . $o["order_lastname"]];
                 $options = ["reply-to" => $o["order_email"]];
-                $mailer = new Mailer();
+                $mailer = new Mailer($config);
                 $mailer->send($to, $subject, $body, $from, $options);
 
                 $order->set('order_confirmation_date', date('Y-m-d H:i:s'));

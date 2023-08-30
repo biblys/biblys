@@ -1139,7 +1139,7 @@ class OrderManager extends EntityManager
                 </body>
             </html>
         ';
-        $mailer = new Mailer();
+        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
         $mailer->send($order->get('email'), $subject, $message);
     }
 }

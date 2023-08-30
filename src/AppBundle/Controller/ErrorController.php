@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
@@ -329,7 +330,7 @@ class ErrorController extends Controller
     {
         $legacyController = new LegacyController();
         $session = new Session();
-        $mailer = new Mailer();
+        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
         $config = Config::load();
         $currentSite = CurrentSite::buildFromConfig($config);
         $routes = RouteLoader::load();

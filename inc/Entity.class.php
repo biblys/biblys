@@ -1,6 +1,7 @@
 <?php
 
 use Biblys\Exception\InvalidEntityFetchedException;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\Mailer;
 use Biblys\Service\Log;
@@ -709,7 +710,7 @@ class EntityManager
             return $this->mailer;
         }
 
-        $this->mailer = new Mailer();
+        $this->mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
 
         return $this->mailer;
     }

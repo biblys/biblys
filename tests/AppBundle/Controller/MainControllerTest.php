@@ -7,6 +7,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Cloud\CloudSubscription;
 use Biblys\Service\Config;
@@ -51,7 +52,7 @@ class MainControllerTest extends TestCase
         $site = EntityFactory::createSite();
         $config = new Config();
         $config->set("site", $site->get("site_id"));
-        $mailer = new Mailer();
+        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
         $session = new Session();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
@@ -109,7 +110,7 @@ class MainControllerTest extends TestCase
         $site->setOpt("home", "page:home");
         $config = new Config();
         $config->set("site", $site->get("site_id"));
-        $mailer = new Mailer();
+        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
         $session = new Session();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);

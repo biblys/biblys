@@ -384,7 +384,7 @@ class AxysAccountManager extends EntityManager
     </body>
 </html>
             ';
-        $mailer = new Biblys\Service\Mailer();
+        $mailer = new Biblys\Service\Mailer(LegacyCodeHelper::getGlobalConfig());
         $mailer->send($axysAccount->get('email'), $subject, $message);
     }
 
@@ -490,7 +490,7 @@ class AxysAccountManager extends EntityManager
                     ' . $newAxysAccount . '
                     <p>NB : Ces fichiers vous sont volontairement proposés sans dispositif de gestion des droits numériques (DRM ou GDN). Nous vous invitons à les transmettre à vos proches si vous souhaitez les leur faire découvrir, comme vous le feriez avec un livre papier, mais nous vous prions de ne pas les diffuser plus largement, par respect pour l\'auteur et l\'éditeur.</p>
                 ';
-            $mailer = new Mailer();
+            $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
             $mailer->send($axysAccount->get("axys_account_email"), $subject, $message);
         }
     }

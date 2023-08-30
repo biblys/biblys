@@ -51,7 +51,7 @@ class CartTest extends TestCase
         ]);
         $cm = new CartManager();
         $cm->addArticle($cart, $article);
-        $mailer = new Mailer();
+        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Legacy;
 
 use AppBundle\Controller\LegacyController;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -35,7 +36,7 @@ class ArticleEditTest extends TestCase
         $request->query->set("id", $article->getId());
 
         $session = new Session();
-        $mailer = new Mailer();
+        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
         $legacyController = new LegacyController();
         $config = Config::load();
         $currentSite = CurrentSite::buildFromConfig($config);
@@ -82,7 +83,7 @@ class ArticleEditTest extends TestCase
         $request->query->set("id", $article->getId());
 
         $session = new Session();
-        $mailer = new Mailer();
+        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
         $legacyController = new LegacyController();
         $config = Config::load();
         $currentSite = CurrentSite::buildFromConfig($config);
@@ -130,7 +131,7 @@ class ArticleEditTest extends TestCase
         $request->query->set("id", $article->getId());
 
         $session = new Session();
-        $mailer = new Mailer();
+        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
         $legacyController = new LegacyController();
         $config = Config::load();
         $currentSite = CurrentSite::buildFromConfig($config);

@@ -25,9 +25,9 @@ class Mailer
     private Address $defaultSender;
     private string $method = "sendmail";
 
-    public function __construct()
+    public function __construct(Config $config)
     {
-        global $_SITE, $config;
+        global $_SITE;
 
         $this->defaultSender = new Address($_SITE->get("site_contact"), $_SITE->get("site_title"));
         $this->transport = new SendmailTransport();
