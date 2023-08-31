@@ -1,0 +1,15 @@
+---
+title: '{{ post.title|raw }}'
+date: '{{ post.date|date('Y-m-d') }}T00:00:00.000Z'
+author:
+  name: 'Clément Latzarus'
+  picture: '/assets/blog/authors/clement-latzarus.jpeg'
+{% if cover.exists %}
+coverImage: {{ cover.url }}
+ogImage:
+  url: {{ cover.url }}
+{% endif %}
+published: {{ published }}
+---
+
+{{ content }}

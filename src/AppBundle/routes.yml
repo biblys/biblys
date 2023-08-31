@@ -457,6 +457,11 @@ post_old_path:
   path: /post/{slug}
   controller: AppBundle\Controller\PostController::oldUrlAction
 
+post_export:
+  methods: GET
+  path: /admin/posts/export
+  controller: AppBundle\Controller\PostController::exportAction
+
 # PostCategory
 
 category_show:

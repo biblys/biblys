@@ -2,13 +2,22 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Pagination;
+use Biblys\Service\SlugService;
+use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Controller;
+use League\HTMLToMarkdown\HtmlConverter;
+use Media;
+use Model\Post;
+use Model\PostQuery;
 use PostManager;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -176,4 +185,46 @@ class PostController extends Controller
         return new RedirectResponse('/blog/'.$slug);
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function exportAction(CurrentSite $currentSite, TemplateService $templateService): Response
+    {
+        $posts = PostQuery::create()->findBySiteId($currentSite->getId());
+        foreach ($posts as $post) {
+            $this->_writePostToFile($post, $templateService);
+        }
+
+        return new Response("OK");
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    private function _writePostToFile(Post $post, TemplateService $templateService): void
+    {
+        $cover = new Media("post", $post->getId());
+
+        $converter = new HtmlConverter();
+        $markdown = $converter->convert($post->getContent());
+
+        $response = $templateService->render('AppBundle:Post:export.md.twig', [
+            "post" => $post,
+            "cover" => $cover,
+            "content" => $markdown,
+            "published" => $post->getStatus() ? "true" : "false",
+        ]);
+        $response->headers->set('Content-Type', ' text/markdown');
+
+        $slugService = new SlugService();
+        $fileName = $slugService->slugify($post->getTitle());
+
+        $fs = new FileSystem();
+        $fs->dumpFile(__DIR__ . "/../../../posts/$fileName.md", $response->getContent());
+    }
 }
