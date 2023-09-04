@@ -55,9 +55,11 @@
             <form class="form-inline" method="POST" action="{{ path('invitation_delete', { id: invitation.id }) }}">
               <div class="btn-group" role="group" aria-label="Actions">
                 <button
+                  type="button"
                   title="Copier le lien"
                   class="btn btn-sm btn-info"
-                  onClick="navigator.clipboard.writeText('{{ path('invitation_show', { code: invitation.code }, true) }}')">
+                  onClick="navigator.clipboard.writeText('{{ path('invitation_show', { code: invitation.code }, true) }}')"
+                >
                   <span class="fa fa-copy"></span>
                 </button>
                 <button title="Supprimer l'invitation" type="submit" class="btn btn-sm btn-danger">
