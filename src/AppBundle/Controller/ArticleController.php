@@ -2,7 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use Article;
 use ArticleManager;
+use AxysAccount;
 use Biblys\Exception\ArticleAlreadyInRayonException;
 use Biblys\Gleeph\GleephAPI;
 use Biblys\Isbn\Isbn;
@@ -15,6 +17,7 @@ use Biblys\Service\LoggerService;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\MetaTagsService;
 use Biblys\Service\Pagination;
+use Biblys\Service\SlugService;
 use Exception;
 use Framework\Controller;
 use InvalidArgumentException;
@@ -136,13 +139,11 @@ class ArticleController extends Controller
     }
 
     /**
-     * Search results page.
-     *
-     * @route GET /articles/search
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws PropelException
+     * @throws Exception
      */
     public function searchAction(Request $request, CurrentSite $currentSite): Response
     {
@@ -260,6 +261,7 @@ class ArticleController extends Controller
         Controller::authUser($request);
 
         $am = new ArticleManager();
+        /** @var Article $article */
         $article = $am->getById($id);
 
         if (!$article) {
@@ -306,8 +308,9 @@ class ArticleController extends Controller
             // Subscribe to newsletter
             $newsletter_checked = $request->request->get('newsletter', false);
             $email = $currentUser->getEmail();
-            if ($newsletter_checked) {
+            if ($mailingListService->isConfigured() && $newsletter_checked) {
                 try {
+                    $mailingList = $mailingListService->getMailingList();
                     $mailingList->addContact($email, true);
                 } catch (Exception) {
                     // Ignore errors
@@ -316,6 +319,7 @@ class ArticleController extends Controller
 
             // Add book to library
             $um = new AxysAccountManager();
+            /** @var AxysAccount $current_user */
             $current_user = $um->getById($currentUser->getId());
             $um->addToLibrary($current_user, [$article], [], false, ['send_email' => false]);
 
@@ -330,14 +334,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * Mark an article for deletion.
-     *
      * @route POST /admin/article/{id}/delete
-     * @param Request $request
-     * @param UrlGenerator $urlGenerator
-     * @param CurrentSite $currentSite
-     * @param int $id
-     * @return Response
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
@@ -381,10 +378,6 @@ class ArticleController extends Controller
     }
 
     /**
-     * Show that a book has been deleted.
-     *
-     * @param Request $request
-     * @return Response
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -400,12 +393,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * Add tags to an article via an XHR request
-     * /articles/{id}/tags/add.
-     *
-     * @param Request $request
-     * @param $id
-     * @return Response
+     * @route /articles/{id}/tags/add.
      * @throws PropelException
      * @throws Exception
      */
@@ -444,8 +432,9 @@ class ArticleController extends Controller
             $tag = $tm->search($tag_name);
 
             // Else, create a new one
+            $slugService = new SlugService();
             if ($tag === null) {
-                $tag_url = makeurl($tag_name);
+                $tag_url = $slugService->slugify($tag_name);
                 $tag = $tm->create([
                     'tag_name' => $tag_name,
                     'tag_url' => $tag_url,
@@ -532,12 +521,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * Refresh articles search terms
-     * /admin/articles/search-terms.
-     *
-     * @param Request $request
-     * @param UrlGenerator $urlGenerator
-     * @return Response
+     * @route /admin/articles/search-terms.
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
@@ -595,12 +579,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * Refresh an article's search terms
-     * /admin/articles/{id}/refresh-search-terms.
-     *
-     * @param Request $request
-     * @param $id
-     * @return JsonResponse
+     * @route /admin/articles/{id}/refresh-search-terms.
      * @throws PropelException
      * @throws Exception
      */
@@ -609,6 +588,7 @@ class ArticleController extends Controller
         self::authAdmin($request);
 
         $am = new ArticleManager();
+        /** @var Article $article */
         $article = $am->getById($id);
 
         if (!$article) {
@@ -622,12 +602,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * Find article by ISBN
-     * /isbn/{ean}.
-     *
-     * @param UrlGenerator $urlGenerator
-     * @param string $ean An article's ISBN in EAN format
-     * @return Response
+     * @route /isbn/{ean}.
      */
     public function byIsbn(UrlGenerator $urlGenerator, string $ean): Response
     {
@@ -652,12 +627,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * List all articles in catalog.
-     *
      * @route GET /admin/articles/
-     * @param Request $request
-     * @param CurrentSite $currentSite
-     * @return Response
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
@@ -679,12 +649,6 @@ class ArticleController extends Controller
         ]);
     }
 
-    /**
-     * Check that ISBN is valid and isn't used.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function checkIsbn(Request $request): JsonResponse
     {
 
@@ -703,8 +667,6 @@ class ArticleController extends Controller
     }
 
     /**
-     * Update article's publisher stock property
-     *
      * @throws Exception
      */
     public function updatePublisherStock(Request $request, int $articleId): JsonResponse
