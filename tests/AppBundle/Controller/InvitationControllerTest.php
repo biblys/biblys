@@ -90,6 +90,75 @@ class InvitationControllerTest extends TestCase
     }
 
     /**
+     * @throws InvalidEmailAddressException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     * @throws CannotInsertRecord
+     * @throws \League\Csv\Exception
+     */
+    public function testCreateActionWithInvalidEmail()
+    {
+        // given
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request->request->set("mode", "send");
+        $request->request->set("email_addresses", "first-valid@example.org\r\ninvalid@example.org\r\nsecond-valid@example.org");
+
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->shouldReceive("add")
+            ->with("success", "Une invitation pour « Sent Book » a été envoyée à first-valid@example.org");
+        $flashBag->shouldReceive("add")
+            ->with("error", "La création de l'invitation pour invalid@example.org a échoué : L'adresse email n'est pas valide");
+        $flashBag->shouldReceive("add")
+            ->with("success", "Une invitation pour « Sent Book » a été envoyée à second-valid@example.org");
+        $session = $this->createMock(Session::class);
+        $session->method("getFlashBag")->willReturn($flashBag);
+
+        $publisher = ModelFactory::createPublisher();
+        $article = ModelFactory::createArticle(title: "Sent Book", typeId: Type::EBOOK, publisher: $publisher);
+        $request->request->set("article_ids", [$article->getId()]);
+
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $currentSite->setOption("publisher_filter", $publisher->getId());
+        $currentSite->setOption("downloadable_publishers", $publisher->getId());
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->shouldReceive("send")
+            ->with("first-valid@example.org", "Téléchargez « Sent Book » en numérique", "Invitation");
+        $mailer->shouldReceive("send")
+            ->with("invalid@example.org", "Téléchargez « Sent Book » en numérique", "Invitation")
+            ->andThrow(new InvalidEmailAddressException("L'adresse email n'est pas valide"));
+        $mailer->shouldReceive("send")
+            ->with("second-valid@example.org", "Téléchargez « Sent Book » en numérique", "Invitation");
+
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->shouldReceive("render")->andReturn(new Response("Invitation"));
+
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/invitation/ANEWCODE");
+
+        $controller = new InvitationController();
+
+        // when
+        $response = $controller->createAction(
+            request: $request,
+            currentSite: $currentSite,
+            mailer: $mailer,
+            templateService: $templateService,
+            session: $session,
+            urlGenerator: $urlGenerator,
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertNotNull(InvitationQuery::create()->findOneByEmail("first-valid@example.org"));
+        $this->assertNull(InvitationQuery::create()->findOneByEmail("invvalid@example.org"));
+        $this->assertNotNull(InvitationQuery::create()->findOneByEmail("second-valid@example.org"));
+    }
+
+    /**
      * @throws CannotInsertRecord
      * @throws InvalidEmailAddressException
      * @throws LoaderError

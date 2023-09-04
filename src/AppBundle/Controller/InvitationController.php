@@ -116,18 +116,25 @@ class InvitationController extends Controller
         }
 
         foreach ($recipientEmails as $recipientEmail) {
-            $invitation = InvitationController::_createAndSendInvitations(
-                currentSite: $currentSite,
-                articles: $articles,
-                recipientEmail: $recipientEmail,
-                urlGenerator: $urlGenerator,
-                templateService: $templateService,
-                mailer: $mailer,
-                session: $session,
-                shouldSendEmail: $shouldSendEmail,
-                isManualMode: $isManualMode,
-                allowsPreDownload: $allowsPreDownload,
-            );
+            try {
+                $invitation = InvitationController::_createAndSendInvitations(
+                    currentSite: $currentSite,
+                    articles: $articles,
+                    recipientEmail: $recipientEmail,
+                    urlGenerator: $urlGenerator,
+                    templateService: $templateService,
+                    mailer: $mailer,
+                    session: $session,
+                    shouldSendEmail: $shouldSendEmail,
+                    isManualMode: $isManualMode,
+                    allowsPreDownload: $allowsPreDownload,
+                );
+            } catch (Exception $exception) {
+                $session->getFlashBag()->add(
+                    "error",
+                    "La création de l'invitation pour $recipientEmail a échoué : {$exception->getMessage()}"
+                );
+            }
 
             if ($shouldWriteCSV) {
                 $csv->insertOne([$recipientEmail, $invitation->getCode()]);
