@@ -7,12 +7,6 @@
 {% block main %}
   <h1>Inscription à la newsletter</h1>
 
-  {% if success %}
-      <p class="alert alert-success">L'adresse a bien été inscrite à la newsletter.</p>
-  {% elseif error %}
-      <p class="alert alert-danger">{{ error }}</p>
-  {% endif %}
-
   <p>
       En validant le formulaire ci-dessous, j'accepte de recevoir par courriel la
       newsletter de {{app.currentSite.title}}. Je comprends que je peux me désabonner de ces

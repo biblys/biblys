@@ -7,12 +7,6 @@
 {% block main %}
   <h2>Désinscription de la newsletter</h2>
 
-  {% if success %}
-      <p class="alert alert-success">L'adresse a bien été désinscrite de la newsletter.</p>
-  {% elseif error %}
-      <p class="alert alert-danger">{{ error }}</p>
-  {% endif %}
-
   <p>Pour vous désabonner, entrez simplement ci-dessous votre adresse e-mail.</p>
   <form method="post" action="{{ path('mailing_unsubscribe') }}">
     <fieldset>

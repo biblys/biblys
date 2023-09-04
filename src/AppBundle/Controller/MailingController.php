@@ -5,18 +5,17 @@ namespace AppBundle\Controller;
 use Biblys\Exception\CaptchaValidationException;
 use Biblys\Service\Config;
 use Biblys\Service\MailingList\Exception\InvalidConfigurationException;
-use Biblys\Service\MailingList\Exception\InvalidEmailAddressException;
 use Biblys\Service\MailingList\Exception\MailingListServiceException;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
-use Payplug\Exception\NotFoundException;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use ReCaptcha\ReCaptcha as ReCaptcha;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
@@ -38,6 +37,7 @@ class MailingController extends Controller
         UrlGenerator $urlGenerator,
         Config $config,
         MailingListService $mailingListService,
+        Session $session,
     ): RedirectResponse|Response
     {
         if (!$mailingListService->isConfigured()) {
@@ -50,12 +50,11 @@ class MailingController extends Controller
         $recaptcha = false;
         $recaptcha_config = $config->get('recaptcha');
         $recaptcha_sitekey = false;
-        if ($recaptcha_config && isset($recaptcha_config['secret']) && isset($recaptcha_config['sitekey']) && !auth()) {
+        if ($recaptcha_config && isset($recaptcha_config['secret']) && isset($recaptcha_config['sitekey'])) {
             $recaptcha = new Recaptcha($recaptcha_config['secret']);
             $recaptcha_sitekey = $recaptcha_config["sitekey"];
         }
 
-        $error = null;
         if ($request->getMethod() == "POST") {
 
             $email = $request->request->get('email', false);
@@ -76,19 +75,21 @@ class MailingController extends Controller
 
                 $mailingList = $mailingListService->getMailingList();
                 $mailingList->addContact($email, true);
-                $successUrl = $urlGenerator->generate("mailing_subscribe", ["success" => 1]);
-                return new RedirectResponse($successUrl);
+
+                $session->getFlashBag()->add(
+                    "success",
+                    "Votre inscription avec l'adresse $email a bien été prise en compte."
+                );
+                return new RedirectResponse($urlGenerator->generate("mailing_subscribe"));
             } catch (CaptchaValidationException|MailingListServiceException $exception) {
-                $error = $exception->getMessage();
+                $session->getFlashBag()->add("error", $exception->getMessage());
+                return new RedirectResponse($urlGenerator->generate("mailing_subscribe"));
             }
         }
 
         $getEmail = $request->query->get("email", '');
         $fieldValue = $request->request->get('email', $getEmail);
-        $success = $request->query->get('success', false);
         return $this->render('AppBundle:Mailing:subscribe.html.twig', [
-            'error' => $error,
-            'success' => $success,
             'recaptcha_key' => $recaptcha_sitekey,
             'field_value' => $fieldValue,
         ]);
@@ -104,33 +105,35 @@ class MailingController extends Controller
         Request $request,
         UrlGenerator $urlGenerator,
         MailingListService $mailingListService,
+        Session $session,
     ): RedirectResponse|Response
     {
+        $request->attributes->set("page_title", "Désinscription de la newsletter");
+
         if (!$mailingListService->isConfigured()) {
             throw new NotFoundHttpException("Aucun service de gestion de liste de contacts n'est configuré.");
         }
-
-        $request->attributes->set("page_title", "Désinscription de la newsletter");
-        $error = null;
 
         if ($request->getMethod() === "POST") {
             $email = $request->request->get('email', false);
             try {
                 $mailingList = $mailingListService->getMailingList();
                 $mailingList->removeContact($email);
-                $successUrl = $urlGenerator->generate("mailing_unsubscribe", ["success" => 1]);
-                return new RedirectResponse($successUrl);
-            } catch (Exception $e) {
-                $error = $e->getMessage();
+
+                $session->getFlashBag()->add(
+                    "success",
+                    "Votre désinscription avec l'adresse $email a bien été prise en compte."
+                );
+                return new RedirectResponse($urlGenerator->generate("mailing_unsubscribe"));
+            } catch (Exception $exception) {
+                $session->getFlashBag()->add("error", $exception->getMessage());
+                return new RedirectResponse($urlGenerator->generate("mailing_unsubscribe"));
             }
         }
 
         $email = $request->query->get('email');
-        $success = $request->query->get('success', false);
         return $this->render('AppBundle:Mailing:unsubscribe.html.twig', [
             'email' => $email,
-            'error' => $error,
-            'success' => $success
         ]);
     }
 

@@ -4,13 +4,16 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
 use Biblys\Service\MailingList\Contact;
-use Biblys\Service\MailingList\Exception\AlreadySubscribedEmailAddressException;
+use Biblys\Service\MailingList\Exception\InvalidConfigurationException;
 use Biblys\Service\MailingList\MailingListInterface;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Test\RequestFactory;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -46,9 +49,22 @@ class MailingControllerTest extends TestCase
             ->method("getMailingList")
             ->with()
             ->willReturn($mailingList);
+        $flashBag = Mockery::mock(FlashBagInterface::class);
+        $flashBag->shouldReceive("add")->with(
+            "success",
+            "Votre inscription avec l'adresse valid-email@example.org a bien été prise en compte."
+        );
+        $session = Mockery::mock(Session::class);
+        $session->shouldReceive("getFlashBag")->andReturn($flashBag);
 
         // when
-        $response = $controller->subscribeAction($request, $urlGenerator, $config, $mailingListService);
+        $response = $controller->subscribeAction(
+            $request,
+            $urlGenerator,
+            $config,
+            $mailingListService,
+            $session,
+        );
 
         // then
         $this->assertEquals(
@@ -82,12 +98,20 @@ class MailingControllerTest extends TestCase
             ->method("getMailingList")
             ->with()
             ->willReturn($mailingList);
+        $flashBag = Mockery::mock(FlashBagInterface::class);
+        $flashBag->shouldReceive("add")->with(
+            "success",
+            "Votre désinscription avec l'adresse valid-email@example.org a bien été prise en compte."
+        );
+        $session = Mockery::mock(Session::class);
+        $session->shouldReceive("getFlashBag")->andReturn($flashBag);
 
         // when
         $response = $controller->unsubscribeAction(
             $request,
             $urlGenerator,
-            $mailingListService
+            $mailingListService,
+            $session,
         );
 
         // then
@@ -98,10 +122,11 @@ class MailingControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws InvalidConfigurationException
      */
     public function testContacts()
     {
