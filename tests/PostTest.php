@@ -229,29 +229,48 @@ class PostTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test if user can delete post
+     * @throws Exception
      */
-    public function testCanBeDeletedBy()
+    public function testPostCantBeDeletedByAnyone()
     {
-        $pm = new PostManager();
-        $um = new AxysAccountManager();
+        // given
+        $axysAccount = new AxysAccount(["axys_account_id" => 111]);
+        $post = new Post(["axys_account_id" => 222]);
 
-        /** @var AxysAccount $axysAccount */
-        $axysAccount = $um->create([
-            "id" => 927,
-            'axys_account_email' => 'author@biblys.fr'
-        ]);
-        $post = $pm->create();
+        // when
+        $canBeDeleted = $post->canBeDeletedBy($axysAccount);
 
-        $this->assertFalse(
-            $post->canBeDeletedBy($axysAccount),
-            "User should not be able to delete any post"
-        );
+        // then
+        $this->assertFalse($canBeDeleted, "User should not be able to delete any post");
+    }
 
-        $post->set('axys_account_id', $axysAccount->get('id'));
-        $this->assertTrue(
-            $post->canBeDeletedBy($axysAccount),
-            "Post author should be able to delete it"
-        );
+    public function testPostCanBeDeletedByItsAuthor()
+    {
+        // given
+        $postAuthor = new AxysAccount(["axys_account_id" => 111]);
+        $post = new Post(["axys_account_id" => 111]);
+        $post->set('axys_account_id', $postAuthor->get('id'));
+
+        // when
+        $canBeDeleted = $post->canBeDeletedBy($postAuthor);
+
+        // then
+        $this->assertTrue($canBeDeleted, "Post author should be able to delete it");
+    }
+
+    public function testAnyPostCanBeDeletedByAnAdmin()
+    {
+        // given
+        $admin = Mockery::mock(AxysAccount::class);
+        $admin->shouldReceive('isAdmin')->andReturn(true);
+        $post = new Post(["axys_account_id" => 111]);
+        $post->set('axys_account_id', 222);
+
+        // when
+        $canBeDeleted = $post->canBeDeletedBy($admin);
+
+        // then
+        $this->assertTrue($canBeDeleted, "Admin should be able to delete any post");
     }
 
     /**

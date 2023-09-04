@@ -5,6 +5,7 @@
 */
 
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
 use Propel\Runtime\Exception\PropelException;
 
 require_once "setUp.php";
@@ -123,7 +124,8 @@ class AxysAccountTest extends PHPUnit\Framework\TestCase
         $publisher = EntityFactory::createPublisher();
         $_SITE->set("publisher_id", $publisher->get("id"));
         $um = new AxysAccountManager();
-        $user = $um->create(["axys_account_email" => "customer@biblys.fr"]);
+        $axysAccount = ModelFactory::createAxysAccount(email: "customer@biblys.fr");
+        $user = $um->getById($axysAccount->getId());
         $am = new ArticleManager();
         $article = $am->create([
             "type_id" => 2,
