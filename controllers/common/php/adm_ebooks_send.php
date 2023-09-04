@@ -53,9 +53,8 @@ if ($request->getMethod() == "POST") {
             $user = $um->get(array('axys_account_email' => $email));
 
             // Else, create a new one
-            if (!$user && $create_user) {
-                $user = $um->create(array('axys_account_email' => $email));
-                $result .= '<p class="success">Compte Axys créé pour '.$email.'.</p>';
+            if (!$user) {
+                $result .= '<p class="error">Aucun compte Axys trouvé pour '.$email.'.</p>';
             }
 
             if (!$user) {
