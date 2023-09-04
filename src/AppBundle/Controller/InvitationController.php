@@ -116,6 +116,10 @@ class InvitationController extends Controller
         }
 
         foreach ($recipientEmails as $recipientEmail) {
+            if ($recipientEmail === "") {
+                continue;
+            }
+
             try {
                 $invitation = InvitationController::_createAndSendInvitations(
                     currentSite: $currentSite,

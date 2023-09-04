@@ -172,7 +172,7 @@ class InvitationControllerTest extends TestCase
     {
         // given
         $request = RequestFactory::createAuthRequestForAdminUser();
-        $request->request->set("email_addresses", "manual1@example.org\r\nmanual2@example.org\r\nmanual3@example.org");
+        $request->request->set("email_addresses", "manual1@example.org\r\nmanual2@example.org\r\nmanual3@example.org\r\n");
         $flashBag = Mockery::mock(FlashBag::class);
         $flashBag->shouldReceive("add")
             ->with("success", "Une invitation à télécharger « Sent Book » a été créée pour manual1@example.org");
