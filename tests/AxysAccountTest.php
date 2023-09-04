@@ -14,19 +14,32 @@ class AxysAccountTest extends PHPUnit\Framework\TestCase
 {
     public function testCreate()
     {
+        // then
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Impossible de créer un compte Axys depuis un site Biblys.");
+
+        // given
         $um = new AxysAccountManager();
+        $email = "user@biblys.fr";
 
-        $email = 'user'.rand(0,999).'@biblys.fr';
-
-        $user = $um->create(array('axys_account_email' => $email));
-
-        $this->assertInstanceOf(AxysAccount::class, $user);
-
-        return $user;
+        // when
+        $um->create(["axys_account_email" => $email]);
     }
 
     /**
-     * @depends testCreate
+     * @throws PropelException
+     */
+    public function testCreateModelForDependencies()
+    {
+        $this->expectNotToPerformAssertions();
+
+        $axysAccount = ModelFactory::createAxysAccount();
+        $aam = new AxysAccountManager();
+        return $aam->getById($axysAccount->getId());
+    }
+
+    /**
+     * @depends testCreateModelForDependencies
      */
     public function testGet(AxysAccount $user)
     {
@@ -98,7 +111,7 @@ class AxysAccountTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test if user has purchased a book
-     * @depends testCreate
+     * @depends testCreateModelForDependencies
      */
     public function testHasPurchased(AxysAccount $user)
     {

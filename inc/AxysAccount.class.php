@@ -325,50 +325,12 @@ class AxysAccountManager extends EntityManager
         $this->table = "axys_accounts";
     }
 
+    /**
+     * @throws Exception
+     */
     public function create(array $defaults = [], $text = null)
     {
-        if ($this->get(['axys_account_email' => $defaults['axys_account_email']])) {
-            throw new Exception('Cette adresse e-mail est déjà utilisée !');
-        }
-
-        // Generate a new password if necessary
-        if (isset($defaults['axys_account_new_password'])) {
-            $axys_account_password = $defaults['axys_account_new_password'];
-        } else {
-            $axys_account_password = null;
-            for ($i = 0; $i < 8; ++$i) {
-                $axys_account_password .= substr('ABCDEFGHJKMNPQRSTUVWXYZabcdefghijkmnopqrstuvxyz23456789', rand(0, 31), 1);
-            }
-        }
-        unset($defaults['axys_account_new_password']);
-
-        // Crypt the password
-        $defaults['axys_account_password'] = password_hash($axys_account_password, PASSWORD_DEFAULT);
-
-        // Creating the entity
-        /** @var AxysAccount $axysAccount */
-        $axysAccount = parent::create($defaults);
-        $axysAccount->set('axys_account_just_created', true);
-        $axysAccount->set('axys_account_new_password', $axys_account_password);
-
-        // Send mail
-        if (empty($text)) {
-            $text = '<p>Bienvenue sur Axys !</p>';
-        }
-        $message = $text . '
-<p>
-    Voici vos informations de connexion :<br />
-    Adresse e-mail : ' . $axysAccount->get('axys_account_email') . '<br />
-    Mot de passe : ' . $axys_account_password . '
-</p>
-
-<p>Grâce à votre compte, vous pourrez désormais vous identifier en un clic sur tous les sites du réseau Axys sans avoir à créer à chaque fois un nouveau compte. Retrouvez la liste sites du réseau sur <a href="https://axys.me">axys.me</a>.</a></p>
-
-<p>A très bientôt sur les sites du réseau Axys !</p>
-';
-        $this->mail($axysAccount, $this->site['site_tag'] . ' | Votre compte Axys', $message);
-
-        return $axysAccount;
+        throw new Exception("Impossible de créer un compte Axys depuis un site Biblys.");
     }
 
     public function mail(AxysAccount $axysAccount, $subject, $message, $headers = null)
