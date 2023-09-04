@@ -113,7 +113,6 @@ site: 1
 
 ## Mailjet
 #mailing:
-#  service: mailjet
-#  client_id: abcdef123456
-#  client_secret: ghijkl789012
+#  service: mailjet|brevo
+#  api_key: ghijkl789012
 #  list_id: 321654987

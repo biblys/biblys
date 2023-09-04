@@ -16,6 +16,11 @@ class MailingListService
             $this->list = new MailjetMailingList($config);
             $this->isConfigured = true;
         }
+
+        if ($config->get("mailing.service") === "brevo") {
+            $this->list = new BrevoMailingList($config);
+            $this->isConfigured = true;
+        }
     }
 
     public function isConfigured(): bool

@@ -19,6 +19,7 @@ l'outil s'appelle désormais "Invitations de téléchargement"
 
 Autres améliorations
 
+- Il est désormais possible d'utiliser Brevo pour gérer la liste de contacts.
 - L'affichage de prévisualisation lors de la publication d'un lien vers un 
   site Biblys sur les réseaux sociaux a été améliorée. 
 - Il n'est plus possible d'inviter un utilisateur à être administrateur s'il 
