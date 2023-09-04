@@ -151,7 +151,7 @@ class InvitationController extends Controller
      * @throws PropelException
      * @throws LoaderError
      */
-    public function listAction(Request $request): Response
+    public function listAction(Request $request, CurrentSite $currentSite): Response
     {
         self::authAdmin($request);
 
@@ -168,6 +168,7 @@ class InvitationController extends Controller
         }
 
         $invitations = $invitationsQuery
+            ->filterBySite($currentSite->getSite())
             ->setLimit($pagination->getLimit())
             ->setOffset($pagination->getOffset())
             ->find();
