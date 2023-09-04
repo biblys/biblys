@@ -862,15 +862,20 @@ class InvitationControllerTest extends TestCase
     public function testListAction()
     {
         // given
+        $site = ModelFactory::createSite();
         $article = ModelFactory::createArticle(title: "Listed Book", typeId: Type::EBOOK);
         ModelFactory::createInvitation(
-            articles: [$article], email: "listed-invitation@biblys.fr", code: "LISTEDIN",
+            site: $site,
+            articles: [$article],
+            email: "listed-invitation@biblys.fr",
+            code: "LISTEDIN",
         );
         $request = RequestFactory::createAuthRequestForAdminUser();
+        $currentSite = new CurrentSite($site);
         $controller = new InvitationController();
 
         // when
-        $response = $controller->listAction($request);
+        $response = $controller->listAction($request, $currentSite);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());

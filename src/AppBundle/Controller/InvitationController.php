@@ -156,7 +156,7 @@ class InvitationController extends Controller
         self::authAdmin($request);
 
         $invitationsQuery = InvitationQuery::create()
-            ->orderByCreatedAt(Criteria::DESC);
+            ->orderByUpdatedAt(Criteria::DESC);
 
         try {
             $pageNumber = (int) $request->query->get("p", 0);
