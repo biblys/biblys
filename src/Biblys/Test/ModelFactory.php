@@ -309,7 +309,7 @@ class ModelFactory
      */
     public static function createAxysAccount(
         string $email = "user@biblys.fr",
-        string $username = "User",
+        string $username = null,
         string $password = "password",
         string $emailKey = null
     ): AxysAccount
@@ -317,11 +317,6 @@ class ModelFactory
         $userByEmail = AxysAccountQuery::create()->findOneByEmail($email);
         if ($userByEmail) {
             return $userByEmail;
-        }
-
-        $userByUsername = AxysAccountQuery::create()->findOneByUsername($username);
-        if ($userByUsername) {
-            return $userByUsername;
         }
 
         $user = new AxysAccount();
