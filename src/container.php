@@ -18,6 +18,7 @@ use Framework\ArgumentResolver\TemplateServiceValueResolver;
 use Framework\ArgumentResolver\TokenServiceValueResolver;
 use Framework\ArgumentResolver\UpdaterValueResolver;
 use Framework\ArgumentResolver\UrlGeneratorValueResolver;
+use Framework\ArgumentResolver\WatermarkingServiceValueResolver;
 use Framework\RequestListener;
 use Framework\RouteLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -58,6 +59,7 @@ $argumentResolvers[] = new TemplateServiceValueResolver();
 $argumentResolvers[] = new TokenServiceValueResolver();
 $argumentResolvers[] = new UpdaterValueResolver();
 $argumentResolvers[] = new UrlGeneratorValueResolver();
+$argumentResolvers[] = new WatermarkingServiceValueResolver();
 $container->register("argument_resolver", ArgumentResolver::class)
     ->setArguments([null, $argumentResolvers]);
 
