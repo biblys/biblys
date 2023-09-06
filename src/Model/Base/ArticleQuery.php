@@ -96,6 +96,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery orderByDeletionBy($order = Criteria::ASC) Order by the article_deletion_by column
  * @method     ChildArticleQuery orderByDeletionDate($order = Criteria::ASC) Order by the article_deletion_date column
  * @method     ChildArticleQuery orderByDeletionReason($order = Criteria::ASC) Order by the article_deletion_reason column
+ * @method     ChildArticleQuery orderByLemoninkMasterId($order = Criteria::ASC) Order by the lemonink_master_id column
  *
  * @method     ChildArticleQuery groupById() Group by the article_id column
  * @method     ChildArticleQuery groupByItem() Group by the article_item column
@@ -174,6 +175,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery groupByDeletionBy() Group by the article_deletion_by column
  * @method     ChildArticleQuery groupByDeletionDate() Group by the article_deletion_date column
  * @method     ChildArticleQuery groupByDeletionReason() Group by the article_deletion_reason column
+ * @method     ChildArticleQuery groupByLemoninkMasterId() Group by the lemonink_master_id column
  *
  * @method     ChildArticleQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildArticleQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -325,6 +327,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticle|null findOneByDeletionBy(int $article_deletion_by) Return the first ChildArticle filtered by the article_deletion_by column
  * @method     ChildArticle|null findOneByDeletionDate(string $article_deletion_date) Return the first ChildArticle filtered by the article_deletion_date column
  * @method     ChildArticle|null findOneByDeletionReason(string $article_deletion_reason) Return the first ChildArticle filtered by the article_deletion_reason column
+ * @method     ChildArticle|null findOneByLemoninkMasterId(string $lemonink_master_id) Return the first ChildArticle filtered by the lemonink_master_id column
  *
  * @method     ChildArticle requirePk($key, ?ConnectionInterface $con = null) Return the ChildArticle by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOne(?ConnectionInterface $con = null) Return the first ChildArticle matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -406,6 +409,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticle requireOneByDeletionBy(int $article_deletion_by) Return the first ChildArticle filtered by the article_deletion_by column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByDeletionDate(string $article_deletion_date) Return the first ChildArticle filtered by the article_deletion_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByDeletionReason(string $article_deletion_reason) Return the first ChildArticle filtered by the article_deletion_reason column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildArticle requireOneByLemoninkMasterId(string $lemonink_master_id) Return the first ChildArticle filtered by the lemonink_master_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildArticle[]|Collection find(?ConnectionInterface $con = null) Return ChildArticle objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildArticle> find(?ConnectionInterface $con = null) Return ChildArticle objects based on current ModelCriteria
@@ -564,6 +568,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildArticle> findByDeletionDate(string|array<string> $article_deletion_date) Return ChildArticle objects filtered by the article_deletion_date column
  * @method     ChildArticle[]|Collection findByDeletionReason(string|array<string> $article_deletion_reason) Return ChildArticle objects filtered by the article_deletion_reason column
  * @psalm-method Collection&\Traversable<ChildArticle> findByDeletionReason(string|array<string> $article_deletion_reason) Return ChildArticle objects filtered by the article_deletion_reason column
+ * @method     ChildArticle[]|Collection findByLemoninkMasterId(string|array<string> $lemonink_master_id) Return ChildArticle objects filtered by the lemonink_master_id column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByLemoninkMasterId(string|array<string> $lemonink_master_id) Return ChildArticle objects filtered by the lemonink_master_id column
  *
  * @method     ChildArticle[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildArticle> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -663,7 +669,7 @@ abstract class ArticleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT article_id, article_item, article_textid, article_ean, article_ean_others, article_asin, article_noosfere_id, article_url, type_id, article_title, article_title_alphabetic, article_title_original, article_title_others, article_subtitle, article_lang_current, article_lang_original, article_origin_country, article_theme_bisac, article_theme_clil, article_theme_dewey, article_theme_electre, article_source_id, article_authors, article_authors_alphabetic, collection_id, article_collection, article_number, publisher_id, article_publisher, cycle_id, article_cycle, article_tome, article_cover_version, article_availability, article_availability_dilicom, article_preorder, article_price, article_price_editable, article_new_price, article_category, article_tva, article_pdf_ean, article_pdf_version, article_epub_ean, article_epub_version, article_azw_ean, article_azw_version, article_pages, article_weight, article_shaping, article_format, article_printing_process, article_age_min, article_age_max, article_summary, article_contents, article_bonus, article_catchline, article_biography, article_motsv, article_copyright, article_pubdate, article_keywords, article_links, article_keywords_generated, article_publisher_stock, article_hits, article_editing_user, article_insert, article_update, article_created, article_updated, article_done, article_to_check, article_deletion_by, article_deletion_date, article_deletion_reason FROM articles WHERE article_id = :p0';
+        $sql = 'SELECT article_id, article_item, article_textid, article_ean, article_ean_others, article_asin, article_noosfere_id, article_url, type_id, article_title, article_title_alphabetic, article_title_original, article_title_others, article_subtitle, article_lang_current, article_lang_original, article_origin_country, article_theme_bisac, article_theme_clil, article_theme_dewey, article_theme_electre, article_source_id, article_authors, article_authors_alphabetic, collection_id, article_collection, article_number, publisher_id, article_publisher, cycle_id, article_cycle, article_tome, article_cover_version, article_availability, article_availability_dilicom, article_preorder, article_price, article_price_editable, article_new_price, article_category, article_tva, article_pdf_ean, article_pdf_version, article_epub_ean, article_epub_version, article_azw_ean, article_azw_version, article_pages, article_weight, article_shaping, article_format, article_printing_process, article_age_min, article_age_max, article_summary, article_contents, article_bonus, article_catchline, article_biography, article_motsv, article_copyright, article_pubdate, article_keywords, article_links, article_keywords_generated, article_publisher_stock, article_hits, article_editing_user, article_insert, article_update, article_created, article_updated, article_done, article_to_check, article_deletion_by, article_deletion_date, article_deletion_reason, lemonink_master_id FROM articles WHERE article_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -3486,6 +3492,34 @@ abstract class ArticleQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_DELETION_REASON, $deletionReason, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the lemonink_master_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByLemoninkMasterId('fooValue');   // WHERE lemonink_master_id = 'fooValue'
+     * $query->filterByLemoninkMasterId('%fooValue%', Criteria::LIKE); // WHERE lemonink_master_id LIKE '%fooValue%'
+     * $query->filterByLemoninkMasterId(['foo', 'bar']); // WHERE lemonink_master_id IN ('foo', 'bar')
+     * </code>
+     *
+     * @param string|string[] $lemoninkMasterId The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByLemoninkMasterId($lemoninkMasterId = null, ?string $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($lemoninkMasterId)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(ArticleTableMap::COL_LEMONINK_MASTER_ID, $lemoninkMasterId, $comparison);
 
         return $this;
     }

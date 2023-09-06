@@ -97,6 +97,7 @@
     <column name="article_deletion_by" phpName="DeletionBy" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="article_deletion_date" phpName="DeletionDate" type="TIMESTAMP"/>
     <column name="article_deletion_reason" phpName="DeletionReason" type="VARCHAR" size="512"/>
+    <column name="lemonink_master_id" phpName="LemoninkMasterId" type="VARCHAR" size="64" />
     <behavior name="timestampable">
       <parameter name="create_column" value="article_created" />
       <parameter name="update_column" value="article_updated" />
@@ -1426,6 +1427,8 @@
     <column name="stock_insert" phpName="Insert" type="TIMESTAMP"/>
     <column name="stock_update" phpName="Update" type="TIMESTAMP"/>
     <column name="stock_dl" phpName="Dl" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="lemonink_transaction_id" phpName="LemoninkTransactionId" type="VARCHAR" size="64" />
+    <column name="lemonink_transaction_token" phpName="LemoninkTransactionToken" type="VARCHAR" size="64" />
     <column name="stock_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="stock_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">

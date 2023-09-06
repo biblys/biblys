@@ -363,6 +363,20 @@ abstract class Stock implements ActiveRecordInterface
     protected $stock_updated;
 
     /**
+     * The value for the lemonink_transaction_id field.
+     *
+     * @var        string|null
+     */
+    protected $lemonink_transaction_id;
+
+    /**
+     * The value for the lemonink_transaction_token field.
+     *
+     * @var        string|null
+     */
+    protected $lemonink_transaction_token;
+
+    /**
      * @var        ChildSite
      */
     protected $aSite;
@@ -1207,6 +1221,26 @@ abstract class Stock implements ActiveRecordInterface
         } else {
             return $this->stock_updated instanceof \DateTimeInterface ? $this->stock_updated->format($format) : null;
         }
+    }
+
+    /**
+     * Get the [lemonink_transaction_id] column value.
+     *
+     * @return string|null
+     */
+    public function getLemoninkTransactionId()
+    {
+        return $this->lemonink_transaction_id;
+    }
+
+    /**
+     * Get the [lemonink_transaction_token] column value.
+     *
+     * @return string|null
+     */
+    public function getLemoninkTransactionToken()
+    {
+        return $this->lemonink_transaction_token;
     }
 
     /**
@@ -2082,6 +2116,46 @@ abstract class Stock implements ActiveRecordInterface
     }
 
     /**
+     * Set the value of [lemonink_transaction_id] column.
+     *
+     * @param string|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setLemoninkTransactionId($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->lemonink_transaction_id !== $v) {
+            $this->lemonink_transaction_id = $v;
+            $this->modifiedColumns[StockTableMap::COL_LEMONINK_TRANSACTION_ID] = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [lemonink_transaction_token] column.
+     *
+     * @param string|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setLemoninkTransactionToken($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->lemonink_transaction_token !== $v) {
+            $this->lemonink_transaction_token = $v;
+            $this->modifiedColumns[StockTableMap::COL_LEMONINK_TRANSACTION_TOKEN] = true;
+        }
+
+        return $this;
+    }
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -2294,6 +2368,12 @@ abstract class Stock implements ActiveRecordInterface
             }
             $this->stock_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 41 + $startcol : StockTableMap::translateFieldName('LemoninkTransactionId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->lemonink_transaction_id = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 42 + $startcol : StockTableMap::translateFieldName('LemoninkTransactionToken', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->lemonink_transaction_token = (null !== $col) ? (string) $col : null;
+
             $this->resetModified();
             $this->setNew(false);
 
@@ -2301,7 +2381,7 @@ abstract class Stock implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 41; // 41 = StockTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 43; // 43 = StockTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Stock'), 0, $e);
@@ -2677,6 +2757,12 @@ abstract class Stock implements ActiveRecordInterface
         if ($this->isColumnModified(StockTableMap::COL_STOCK_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'stock_updated';
         }
+        if ($this->isColumnModified(StockTableMap::COL_LEMONINK_TRANSACTION_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'lemonink_transaction_id';
+        }
+        if ($this->isColumnModified(StockTableMap::COL_LEMONINK_TRANSACTION_TOKEN)) {
+            $modifiedColumns[':p' . $index++]  = 'lemonink_transaction_token';
+        }
 
         $sql = sprintf(
             'INSERT INTO stock (%s) VALUES (%s)',
@@ -2850,6 +2936,14 @@ abstract class Stock implements ActiveRecordInterface
                         break;
                     case 'stock_updated':
                         $stmt->bindValue($identifier, $this->stock_updated ? $this->stock_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
+                        break;
+                    case 'lemonink_transaction_id':
+                        $stmt->bindValue($identifier, $this->lemonink_transaction_id, PDO::PARAM_STR);
+
+                        break;
+                    case 'lemonink_transaction_token':
+                        $stmt->bindValue($identifier, $this->lemonink_transaction_token, PDO::PARAM_STR);
 
                         break;
                 }
@@ -3037,6 +3131,12 @@ abstract class Stock implements ActiveRecordInterface
             case 40:
                 return $this->getUpdatedAt();
 
+            case 41:
+                return $this->getLemoninkTransactionId();
+
+            case 42:
+                return $this->getLemoninkTransactionToken();
+
             default:
                 return null;
         } // switch()
@@ -3106,6 +3206,8 @@ abstract class Stock implements ActiveRecordInterface
             $keys[38] => $this->getDl(),
             $keys[39] => $this->getCreatedAt(),
             $keys[40] => $this->getUpdatedAt(),
+            $keys[41] => $this->getLemoninkTransactionId(),
+            $keys[42] => $this->getLemoninkTransactionToken(),
         ];
         if ($result[$keys[28]] instanceof \DateTimeInterface) {
             $result[$keys[28]] = $result[$keys[28]]->format('Y-m-d H:i:s.u');
@@ -3357,6 +3459,12 @@ abstract class Stock implements ActiveRecordInterface
             case 40:
                 $this->setUpdatedAt($value);
                 break;
+            case 41:
+                $this->setLemoninkTransactionId($value);
+                break;
+            case 42:
+                $this->setLemoninkTransactionToken($value);
+                break;
         } // switch()
 
         return $this;
@@ -3505,6 +3613,12 @@ abstract class Stock implements ActiveRecordInterface
         }
         if (array_key_exists($keys[40], $arr)) {
             $this->setUpdatedAt($arr[$keys[40]]);
+        }
+        if (array_key_exists($keys[41], $arr)) {
+            $this->setLemoninkTransactionId($arr[$keys[41]]);
+        }
+        if (array_key_exists($keys[42], $arr)) {
+            $this->setLemoninkTransactionToken($arr[$keys[42]]);
         }
 
         return $this;
@@ -3672,6 +3786,12 @@ abstract class Stock implements ActiveRecordInterface
         if ($this->isColumnModified(StockTableMap::COL_STOCK_UPDATED)) {
             $criteria->add(StockTableMap::COL_STOCK_UPDATED, $this->stock_updated);
         }
+        if ($this->isColumnModified(StockTableMap::COL_LEMONINK_TRANSACTION_ID)) {
+            $criteria->add(StockTableMap::COL_LEMONINK_TRANSACTION_ID, $this->lemonink_transaction_id);
+        }
+        if ($this->isColumnModified(StockTableMap::COL_LEMONINK_TRANSACTION_TOKEN)) {
+            $criteria->add(StockTableMap::COL_LEMONINK_TRANSACTION_TOKEN, $this->lemonink_transaction_token);
+        }
 
         return $criteria;
     }
@@ -3800,6 +3920,8 @@ abstract class Stock implements ActiveRecordInterface
         $copyObj->setDl($this->getDl());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
+        $copyObj->setLemoninkTransactionId($this->getLemoninkTransactionId());
+        $copyObj->setLemoninkTransactionToken($this->getLemoninkTransactionToken());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -4040,6 +4162,8 @@ abstract class Stock implements ActiveRecordInterface
         $this->stock_dl = null;
         $this->stock_created = null;
         $this->stock_updated = null;
+        $this->lemonink_transaction_id = null;
+        $this->lemonink_transaction_token = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->applyDefaultValues();

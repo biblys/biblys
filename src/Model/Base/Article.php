@@ -635,6 +635,13 @@ abstract class Article implements ActiveRecordInterface
     protected $article_deletion_reason;
 
     /**
+     * The value for the lemonink_master_id field.
+     *
+     * @var        string|null
+     */
+    protected $lemonink_master_id;
+
+    /**
      * @var        ChildPublisher
      */
     protected $aPublisher;
@@ -1868,6 +1875,16 @@ abstract class Article implements ActiveRecordInterface
     public function getDeletionReason()
     {
         return $this->article_deletion_reason;
+    }
+
+    /**
+     * Get the [lemonink_master_id] column value.
+     *
+     * @return string|null
+     */
+    public function getLemoninkMasterId()
+    {
+        return $this->lemonink_master_id;
     }
 
     /**
@@ -3451,6 +3468,26 @@ abstract class Article implements ActiveRecordInterface
     }
 
     /**
+     * Set the value of [lemonink_master_id] column.
+     *
+     * @param string|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setLemoninkMasterId($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->lemonink_master_id !== $v) {
+            $this->lemonink_master_id = $v;
+            $this->modifiedColumns[ArticleTableMap::COL_LEMONINK_MASTER_ID] = true;
+        }
+
+        return $this;
+    }
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -3786,6 +3823,9 @@ abstract class Article implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 76 + $startcol : ArticleTableMap::translateFieldName('DeletionReason', TableMap::TYPE_PHPNAME, $indexType)];
             $this->article_deletion_reason = (null !== $col) ? (string) $col : null;
 
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 77 + $startcol : ArticleTableMap::translateFieldName('LemoninkMasterId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->lemonink_master_id = (null !== $col) ? (string) $col : null;
+
             $this->resetModified();
             $this->setNew(false);
 
@@ -3793,7 +3833,7 @@ abstract class Article implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 77; // 77 = ArticleTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 78; // 78 = ArticleTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Article'), 0, $e);
@@ -4382,6 +4422,9 @@ abstract class Article implements ActiveRecordInterface
         if ($this->isColumnModified(ArticleTableMap::COL_ARTICLE_DELETION_REASON)) {
             $modifiedColumns[':p' . $index++]  = 'article_deletion_reason';
         }
+        if ($this->isColumnModified(ArticleTableMap::COL_LEMONINK_MASTER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'lemonink_master_id';
+        }
 
         $sql = sprintf(
             'INSERT INTO articles (%s) VALUES (%s)',
@@ -4701,6 +4744,10 @@ abstract class Article implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->article_deletion_reason, PDO::PARAM_STR);
 
                         break;
+                    case 'lemonink_master_id':
+                        $stmt->bindValue($identifier, $this->lemonink_master_id, PDO::PARAM_STR);
+
+                        break;
                 }
             }
             $stmt->execute();
@@ -4994,6 +5041,9 @@ abstract class Article implements ActiveRecordInterface
             case 76:
                 return $this->getDeletionReason();
 
+            case 77:
+                return $this->getLemoninkMasterId();
+
             default:
                 return null;
         } // switch()
@@ -5099,6 +5149,7 @@ abstract class Article implements ActiveRecordInterface
             $keys[74] => $this->getDeletionBy(),
             $keys[75] => $this->getDeletionDate(),
             $keys[76] => $this->getDeletionReason(),
+            $keys[77] => $this->getLemoninkMasterId(),
         ];
         if ($result[$keys[61]] instanceof \DateTimeInterface) {
             $result[$keys[61]] = $result[$keys[61]]->format('Y-m-d');
@@ -5491,6 +5542,9 @@ abstract class Article implements ActiveRecordInterface
             case 76:
                 $this->setDeletionReason($value);
                 break;
+            case 77:
+                $this->setLemoninkMasterId($value);
+                break;
         } // switch()
 
         return $this;
@@ -5747,6 +5801,9 @@ abstract class Article implements ActiveRecordInterface
         }
         if (array_key_exists($keys[76], $arr)) {
             $this->setDeletionReason($arr[$keys[76]]);
+        }
+        if (array_key_exists($keys[77], $arr)) {
+            $this->setLemoninkMasterId($arr[$keys[77]]);
         }
 
         return $this;
@@ -6022,6 +6079,9 @@ abstract class Article implements ActiveRecordInterface
         if ($this->isColumnModified(ArticleTableMap::COL_ARTICLE_DELETION_REASON)) {
             $criteria->add(ArticleTableMap::COL_ARTICLE_DELETION_REASON, $this->article_deletion_reason);
         }
+        if ($this->isColumnModified(ArticleTableMap::COL_LEMONINK_MASTER_ID)) {
+            $criteria->add(ArticleTableMap::COL_LEMONINK_MASTER_ID, $this->lemonink_master_id);
+        }
 
         return $criteria;
     }
@@ -6186,6 +6246,7 @@ abstract class Article implements ActiveRecordInterface
         $copyObj->setDeletionBy($this->getDeletionBy());
         $copyObj->setDeletionDate($this->getDeletionDate());
         $copyObj->setDeletionReason($this->getDeletionReason());
+        $copyObj->setLemoninkMasterId($this->getLemoninkMasterId());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -7828,6 +7889,7 @@ abstract class Article implements ActiveRecordInterface
         $this->article_deletion_by = null;
         $this->article_deletion_date = null;
         $this->article_deletion_reason = null;
+        $this->lemonink_master_id = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->applyDefaultValues();

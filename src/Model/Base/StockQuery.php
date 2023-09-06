@@ -60,6 +60,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockQuery orderByDl($order = Criteria::ASC) Order by the stock_dl column
  * @method     ChildStockQuery orderByCreatedAt($order = Criteria::ASC) Order by the stock_created column
  * @method     ChildStockQuery orderByUpdatedAt($order = Criteria::ASC) Order by the stock_updated column
+ * @method     ChildStockQuery orderByLemoninkTransactionId($order = Criteria::ASC) Order by the lemonink_transaction_id column
+ * @method     ChildStockQuery orderByLemoninkTransactionToken($order = Criteria::ASC) Order by the lemonink_transaction_token column
  *
  * @method     ChildStockQuery groupById() Group by the stock_id column
  * @method     ChildStockQuery groupBySiteId() Group by the site_id column
@@ -102,6 +104,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockQuery groupByDl() Group by the stock_dl column
  * @method     ChildStockQuery groupByCreatedAt() Group by the stock_created column
  * @method     ChildStockQuery groupByUpdatedAt() Group by the stock_updated column
+ * @method     ChildStockQuery groupByLemoninkTransactionId() Group by the lemonink_transaction_id column
+ * @method     ChildStockQuery groupByLemoninkTransactionToken() Group by the lemonink_transaction_token column
  *
  * @method     ChildStockQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildStockQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -187,6 +191,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStock|null findOneByDl(boolean $stock_dl) Return the first ChildStock filtered by the stock_dl column
  * @method     ChildStock|null findOneByCreatedAt(string $stock_created) Return the first ChildStock filtered by the stock_created column
  * @method     ChildStock|null findOneByUpdatedAt(string $stock_updated) Return the first ChildStock filtered by the stock_updated column
+ * @method     ChildStock|null findOneByLemoninkTransactionId(string $lemonink_transaction_id) Return the first ChildStock filtered by the lemonink_transaction_id column
+ * @method     ChildStock|null findOneByLemoninkTransactionToken(string $lemonink_transaction_token) Return the first ChildStock filtered by the lemonink_transaction_token column
  *
  * @method     ChildStock requirePk($key, ?ConnectionInterface $con = null) Return the ChildStock by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStock requireOne(?ConnectionInterface $con = null) Return the first ChildStock matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -232,6 +238,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStock requireOneByDl(boolean $stock_dl) Return the first ChildStock filtered by the stock_dl column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStock requireOneByCreatedAt(string $stock_created) Return the first ChildStock filtered by the stock_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStock requireOneByUpdatedAt(string $stock_updated) Return the first ChildStock filtered by the stock_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildStock requireOneByLemoninkTransactionId(string $lemonink_transaction_id) Return the first ChildStock filtered by the lemonink_transaction_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildStock requireOneByLemoninkTransactionToken(string $lemonink_transaction_token) Return the first ChildStock filtered by the lemonink_transaction_token column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildStock[]|Collection find(?ConnectionInterface $con = null) Return ChildStock objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildStock> find(?ConnectionInterface $con = null) Return ChildStock objects based on current ModelCriteria
@@ -318,6 +326,10 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildStock> findByCreatedAt(string|array<string> $stock_created) Return ChildStock objects filtered by the stock_created column
  * @method     ChildStock[]|Collection findByUpdatedAt(string|array<string> $stock_updated) Return ChildStock objects filtered by the stock_updated column
  * @psalm-method Collection&\Traversable<ChildStock> findByUpdatedAt(string|array<string> $stock_updated) Return ChildStock objects filtered by the stock_updated column
+ * @method     ChildStock[]|Collection findByLemoninkTransactionId(string|array<string> $lemonink_transaction_id) Return ChildStock objects filtered by the lemonink_transaction_id column
+ * @psalm-method Collection&\Traversable<ChildStock> findByLemoninkTransactionId(string|array<string> $lemonink_transaction_id) Return ChildStock objects filtered by the lemonink_transaction_id column
+ * @method     ChildStock[]|Collection findByLemoninkTransactionToken(string|array<string> $lemonink_transaction_token) Return ChildStock objects filtered by the lemonink_transaction_token column
+ * @psalm-method Collection&\Traversable<ChildStock> findByLemoninkTransactionToken(string|array<string> $lemonink_transaction_token) Return ChildStock objects filtered by the lemonink_transaction_token column
  *
  * @method     ChildStock[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildStock> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -417,7 +429,7 @@ abstract class StockQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT stock_id, site_id, article_id, campaign_id, reward_id, axys_account_id, customer_id, wish_id, cart_id, order_id, coupon_id, stock_shop, stock_invoice, stock_depot, stock_stockage, stock_condition, stock_condition_details, stock_purchase_price, stock_selling_price, stock_selling_price2, stock_selling_price_saved, stock_selling_price_ht, stock_selling_price_tva, stock_tva_rate, stock_weight, stock_pub_year, stock_allow_predownload, stock_photo_version, stock_purchase_date, stock_onsale_date, stock_cart_date, stock_selling_date, stock_return_date, stock_lost_date, stock_media_ok, stock_file_updated, stock_insert, stock_update, stock_dl, stock_created, stock_updated FROM stock WHERE stock_id = :p0';
+        $sql = 'SELECT stock_id, site_id, article_id, campaign_id, reward_id, axys_account_id, customer_id, wish_id, cart_id, order_id, coupon_id, stock_shop, stock_invoice, stock_depot, stock_stockage, stock_condition, stock_condition_details, stock_purchase_price, stock_selling_price, stock_selling_price2, stock_selling_price_saved, stock_selling_price_ht, stock_selling_price_tva, stock_tva_rate, stock_weight, stock_pub_year, stock_allow_predownload, stock_photo_version, stock_purchase_date, stock_onsale_date, stock_cart_date, stock_selling_date, stock_return_date, stock_lost_date, stock_media_ok, stock_file_updated, stock_insert, stock_update, stock_dl, stock_created, stock_updated, lemonink_transaction_id, lemonink_transaction_token FROM stock WHERE stock_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -2166,6 +2178,62 @@ abstract class StockQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(StockTableMap::COL_STOCK_UPDATED, $updatedAt, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the lemonink_transaction_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByLemoninkTransactionId('fooValue');   // WHERE lemonink_transaction_id = 'fooValue'
+     * $query->filterByLemoninkTransactionId('%fooValue%', Criteria::LIKE); // WHERE lemonink_transaction_id LIKE '%fooValue%'
+     * $query->filterByLemoninkTransactionId(['foo', 'bar']); // WHERE lemonink_transaction_id IN ('foo', 'bar')
+     * </code>
+     *
+     * @param string|string[] $lemoninkTransactionId The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByLemoninkTransactionId($lemoninkTransactionId = null, ?string $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($lemoninkTransactionId)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(StockTableMap::COL_LEMONINK_TRANSACTION_ID, $lemoninkTransactionId, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the lemonink_transaction_token column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByLemoninkTransactionToken('fooValue');   // WHERE lemonink_transaction_token = 'fooValue'
+     * $query->filterByLemoninkTransactionToken('%fooValue%', Criteria::LIKE); // WHERE lemonink_transaction_token LIKE '%fooValue%'
+     * $query->filterByLemoninkTransactionToken(['foo', 'bar']); // WHERE lemonink_transaction_token IN ('foo', 'bar')
+     * </code>
+     *
+     * @param string|string[] $lemoninkTransactionToken The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByLemoninkTransactionToken($lemoninkTransactionToken = null, ?string $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($lemoninkTransactionToken)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(StockTableMap::COL_LEMONINK_TRANSACTION_TOKEN, $lemoninkTransactionToken, $comparison);
 
         return $this;
     }
