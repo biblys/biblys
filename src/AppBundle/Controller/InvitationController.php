@@ -35,7 +35,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -73,13 +72,9 @@ class InvitationController extends Controller
     }
 
     /**
-     * @throws InvalidEmailAddressException
-     * @throws LoaderError
-     * @throws PropelException
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws TransportExceptionInterface
      * @throws CannotInsertRecord
+     * @throws PropelException
+     * @throws TransportExceptionInterface
      * @throws \League\Csv\Exception
      */
     public function createAction(
@@ -132,16 +127,17 @@ class InvitationController extends Controller
                     shouldSendEmail: $shouldSendEmail,
                     isManualMode: $isManualMode,
                     allowsPreDownload: $allowsPreDownload,
+                    request: $request,
                 );
+
+                if ($shouldWriteCSV) {
+                    $csv->insertOne([$recipientEmail, $invitation->getCode()]);
+                }
             } catch (Exception $exception) {
                 $session->getFlashBag()->add(
                     "error",
                     "La création de l'invitation pour $recipientEmail a échoué : {$exception->getMessage()}"
                 );
-            }
-
-            if ($shouldWriteCSV) {
-                $csv->insertOne([$recipientEmail, $invitation->getCode()]);
             }
         }
 
@@ -394,6 +390,7 @@ class InvitationController extends Controller
         bool            $shouldSendEmail,
         bool            $isManualMode,
         bool            $allowsPreDownload,
+        Request         $request,
     ): Invitation
     {
         $invitation = new Invitation();
@@ -409,9 +406,10 @@ class InvitationController extends Controller
             $articlesTitle .= " et " . ($articles->count() - 1) . " autres";
         }
 
-        $invitationUrl = $urlGenerator->generate("invitation_show", [
+        $invitationRelativeUrl = $urlGenerator->generate("invitation_show", [
             "code" => $invitation->getCode()
-        ], referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
+        ]);
+        $invitationUrl = $request->getSchemeAndHttpHost().$invitationRelativeUrl;
         $mailContent = $templateService->render(
             "AppBundle:Invitation:email.html.twig",
             [

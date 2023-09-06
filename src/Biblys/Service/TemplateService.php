@@ -17,7 +17,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGenerator;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -86,8 +85,14 @@ class TemplateService
         $currentSite = $this->currentSiteService;
         $currentUserService = $this->currentUserService;
         $currentUserIsAdmin = $currentUserService->isAdminForSite($currentSite->getSite());
+        $request = $this->request;
 
-        $functions = $this->_getCustomFunctions($config, $currentUserIsAdmin, $currentUserService);
+        $functions = $this->_getCustomFunctions(
+            $config,
+            $currentUserIsAdmin,
+            $currentUserService,
+            $request,
+        );
         $filters = $this->_getCustomFilters();
 
         $loader = new TemplateLoader($currentSite, new Filesystem());
@@ -132,7 +137,12 @@ class TemplateService
         return $twig;
     }
 
-    private function _getCustomFunctions(Config $config, bool $currentUserIsAdmin, CurrentUser $currentUserService): array
+    private function _getCustomFunctions(
+        Config      $config,
+        bool        $currentUserIsAdmin,
+        CurrentUser $currentUserService,
+        Request     $request,
+    ): array
     {
         $functions = [];
 
@@ -156,13 +166,21 @@ class TemplateService
         });
 
         // return relative url for a route
-        $functions[] = new TwigFunction('path', function ($name, $parameters = [], $absolute = false) {
-            $container = require __DIR__ . "/../../container.php";
-            /** @var UrlGenerator $urlGenerator */
-            $urlGenerator = $container->get("url_generator");
-            $referenceType = $absolute ? UrlGeneratorInterface::ABSOLUTE_URL : UrlGeneratorInterface::ABSOLUTE_PATH;
-            return $urlGenerator->generate($name, $parameters, $referenceType);
-        });
+        $functions[] = new TwigFunction(
+            "path",
+            function ($name, $parameters = [], $absolute = false) use($request) {
+                $container = require __DIR__ . "/../../container.php";
+                /** @var UrlGenerator $urlGenerator */
+                $urlGenerator = $container->get("url_generator");
+                $relativeUrl = $urlGenerator->generate($name, $parameters);
+
+                if ($absolute) {
+                    return $request->getSchemeAndHttpHost().$relativeUrl;
+                }
+
+                return $relativeUrl;
+            }
+        );
 
         // return absolute url for a route
         $functions[] = new TwigFunction('url', function ($route, $vars = []) {

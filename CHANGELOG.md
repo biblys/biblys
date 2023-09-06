@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.72.1 (DEV)
+
+Corrections
+
+- Le nom de domaine dans les liens d'invitations pouvait être incorrect. 
+  C'est corrigé. 
+
 ## 2.72.0 (6 septembre 2023)
 
 Améliorations

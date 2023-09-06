@@ -37,13 +37,9 @@ class InvitationControllerTest extends TestCase
 {
 
     /**
-     * @throws InvalidEmailAddressException
-     * @throws LoaderError
-     * @throws PropelException
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws TransportExceptionInterface
      * @throws CannotInsertRecord
+     * @throws PropelException
+     * @throws TransportExceptionInterface
      * @throws \League\Csv\Exception
      */
     public function testCreateAction()
@@ -90,13 +86,9 @@ class InvitationControllerTest extends TestCase
     }
 
     /**
-     * @throws InvalidEmailAddressException
-     * @throws LoaderError
-     * @throws PropelException
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws TransportExceptionInterface
      * @throws CannotInsertRecord
+     * @throws PropelException
+     * @throws TransportExceptionInterface
      * @throws \League\Csv\Exception
      */
     public function testCreateActionWithInvalidEmail()
@@ -160,11 +152,7 @@ class InvitationControllerTest extends TestCase
 
     /**
      * @throws CannotInsertRecord
-     * @throws InvalidEmailAddressException
-     * @throws LoaderError
      * @throws PropelException
-     * @throws RuntimeError
-     * @throws SyntaxError
      * @throws TransportExceptionInterface
      * @throws \League\Csv\Exception
      */
@@ -218,11 +206,7 @@ class InvitationControllerTest extends TestCase
 
     /**
      * @throws CannotInsertRecord
-     * @throws InvalidEmailAddressException
-     * @throws LoaderError
      * @throws PropelException
-     * @throws RuntimeError
-     * @throws SyntaxError
      * @throws TransportExceptionInterface
      * @throws \League\Csv\Exception
      */
@@ -275,13 +259,9 @@ class InvitationControllerTest extends TestCase
     }
 
     /**
-     * @throws InvalidEmailAddressException
-     * @throws LoaderError
-     * @throws PropelException
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws TransportExceptionInterface
      * @throws CannotInsertRecord
+     * @throws PropelException
+     * @throws TransportExceptionInterface
      * @throws \League\Csv\Exception
      */
     public function testCreateActionWithDownloadMode()
@@ -332,13 +312,9 @@ class InvitationControllerTest extends TestCase
     }
 
     /**
-     * @throws InvalidEmailAddressException
-     * @throws LoaderError
-     * @throws PropelException
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws TransportExceptionInterface
      * @throws CannotInsertRecord
+     * @throws PropelException
+     * @throws TransportExceptionInterface
      * @throws \League\Csv\Exception
      */
     public function testCreateActionWithAllowsPredownload()
@@ -386,13 +362,9 @@ class InvitationControllerTest extends TestCase
     }
 
     /**
-     * @throws InvalidEmailAddressException
-     * @throws LoaderError
-     * @throws PropelException
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws TransportExceptionInterface
      * @throws CannotInsertRecord
+     * @throws PropelException
+     * @throws TransportExceptionInterface
      * @throws \League\Csv\Exception
      */
     public function testCreateActionForMultipleArticles()
