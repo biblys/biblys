@@ -16,4 +16,16 @@ use Model\Base\Stock as BaseStock;
 class Stock extends BaseStock
 {
 
+    public function isWatermarked(): bool
+    {
+        if ($this->getLemoninkTransactionId() === null) {
+            return false;
+        }
+
+        if ($this->getLemoninkTransactionToken() === null) {
+            return false;
+        }
+
+        return true;
+    }
 }
