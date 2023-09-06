@@ -116,3 +116,8 @@ site: 1
 #  service: mailjet|brevo
 #  api_key: ghijkl789012
 #  list_id: 321654987
+
+## LemonInk Watermarking
+## https://lemonink.co
+#lemonink:
+#  api_key: mnopqrst345678
