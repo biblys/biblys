@@ -5,6 +5,7 @@
 
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Isbn\IsbnParsingException;
+use Biblys\Service\Config;
 use Model\ArticleCategory;
 use Model\ArticleCategoryQuery;
 use Model\LinkQuery;
@@ -26,10 +27,11 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
  * @throws PropelException
  */
 return function (
-    Request $request,
-    CurrentUser $currentUser,
-    CurrentSite $currentSite,
+    Request      $request,
+    CurrentUser  $currentUser,
+    CurrentSite  $currentSite,
     UrlGenerator $urlgenerator,
+    Config       $config,
 ): Response|RedirectResponse
 {
     $am = new ArticleManager();
@@ -614,6 +616,22 @@ return function (
         $submit_and_stock = null;
     }
 
+    $lemonInkIdField = "";
+    if ($article->isDownloadable() && $config->get('lemonink.api_key')) {
+        $lemonInkIdField = '
+          <br />
+          <div class="form-group">
+            <label for="lemonink_master_id">Identifiant LemonInk :</label><br />
+            <small class="form-text text-muted">
+              Pour configurer le téléchargement avec tatouage numérique, 
+              <a href="https://www.lemonink.co/masters" target="_blank">ajouter l\'article sur LemonInk</a>
+              et coller son identifiant dans ce champ.
+            </small>
+            <input type="text" class="form-control" id="lemonink_master_id" name="lemonink_master_id" value="'.$article->get("lemonink_master_id").'" />
+          </div>
+        ';
+    }
+
     /** @noinspection DuplicatedCode */
     $content .= '
     <form id="createCollection" class="event hidden">
@@ -941,6 +959,7 @@ return function (
                 </tfoot>
             </table>
 
+            '.$lemonInkIdField.'
         </fieldset>
 
         <fieldset>
