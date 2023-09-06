@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46c6a9d3c66540e7b7f6ec0e482a65e4",
+    "content-hash": "ef5ad0d235bdaa890211222087c97ef9",
     "packages": [
         {
             "name": "biblys/eurotax",
@@ -2039,6 +2039,52 @@
                 }
             ],
             "time": "2023-07-12T21:21:09+00:00"
+        },
+        {
+            "name": "lemonink/lemonink-php",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lemonink/lemonink-php.git",
+                "reference": "1dbd691bde67dac87af13ac34772104d785b31b7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lemonink/lemonink-php/zipball/1dbd691bde67dac87af13ac34772104d785b31b7",
+                "reference": "1dbd691bde67dac87af13ac34772104d785b31b7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "LemonInk\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "LemonInk",
+                    "homepage": "https://lemonink.co/"
+                }
+            ],
+            "description": "Official PHP client for LemonInk API",
+            "homepage": "https://lemonink.co/",
+            "keywords": [
+                "LemonInk",
+                "api",
+                "watermarking"
+            ],
+            "support": {
+                "issues": "https://github.com/lemonink/lemonink-php/issues",
+                "source": "https://github.com/lemonink/lemonink-php/tree/v1.1.0"
+            },
+            "time": "2023-02-16T07:24:10+00:00"
         },
         {
             "name": "mailjet/mailjet-apiv3-php",
