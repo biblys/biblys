@@ -5,7 +5,10 @@
 Corrections
 
 - Le nom de domaine dans les liens d'invitations pouvait être incorrect. 
-  C'est corrigé. 
+  C'est corrigé.
+- Le texte de prévisualisation du courriel d'invitation de téléchargement 
+  était un texte par défaut en anglais. Il a été remplacé par un texte en 
+  français.
 
 ## 2.72.0 (6 septembre 2023)
 
