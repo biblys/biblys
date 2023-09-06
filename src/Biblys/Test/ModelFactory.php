@@ -65,6 +65,7 @@ class ModelFactory
         int $price = 999,
         int $typeId = Type::BOOK,
         string $keywords = null,
+        string $lemoninkMasterId = null,
         Publisher $publisher = null,
         BookCollection $collection = null,
     ): Article
@@ -75,6 +76,7 @@ class ModelFactory
         $article->setPrice($price);
         $article->setKeywords($keywords ?? $title);
         $article->setTypeId($typeId);
+        $article->setLemonInkMasterId($lemoninkMasterId);
 
         $publisher = $publisher ?? self::createPublisher();
         $article->setPublisherId($publisher->getId());
@@ -284,6 +286,8 @@ class ModelFactory
         DateTime     $sellingDate = null,
         DateTime     $returnDate = null,
         DateTime     $lostDate = null,
+        string       $lemoninkTransactionId = null,
+        string       $lemoninkTransactionToken = null,
     ): Stock
     {
         $stock = new Stock();
@@ -293,6 +297,8 @@ class ModelFactory
         $stock->setSellingDate($sellingDate);
         $stock->setReturnDate($returnDate);
         $stock->setLostDate($lostDate);
+        $stock->setLemonInkTransactionId($lemoninkTransactionId);
+        $stock->setLemonInkTransactionToken($lemoninkTransactionToken);
         $stock->save();
 
         return $stock;

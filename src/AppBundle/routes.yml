@@ -132,6 +132,13 @@ article_update_publisher_stock:
   requirements:
     articleId: \d+
 
+article_download_with_watermark:
+  methods: GET
+  path: /articles/{id}/download-with-watermark
+  controller: AppBundle\Controller\ArticleController::downloadWithWatermarkAction
+  requirements:
+    id: \d+
+
 # Awards
 
 awards_index:

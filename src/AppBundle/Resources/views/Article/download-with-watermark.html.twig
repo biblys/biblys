@@ -1,0 +1,51 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Téléchargement avec tatouage numérique
+{% endblock %}
+
+{% block main %}
+  <h1>Téléchargement avec tatouage numérique</h1>
+
+  <p class="alert alert-warning">
+    <span class="fa fa-lock"></span>
+    Attention, vous vous apprêtez à télécharger
+    <strong>{{ article_title }}</strong>
+    qui est protégé par tatouage numérique.
+  </p>
+
+  <p>
+    Un identifiant unique (#{{ item_id }}), ainsi que votre adresse e-mail ({{ user_email }}),
+    seront insérés dans le fichier téléchargé, afin d'en décourager le partage.
+  </p>
+
+  {% if isWatermarked %}
+
+    {% for file in files %}
+
+      <a href="{{ file.url }}" class="btn btn-primary">
+        <span class="fa fa-download"></span>
+        Télécharger en {{ file.formatName }}
+      </a>
+
+    {% endfor %}
+
+  {% else %}
+
+    <form action="{{ path("article_watermark", { id: article_id }) }}" method="POST">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="consent" value="given" required>
+          J'accepte que mes données personnelles soient transmises au prestataire LemonInk et insérées par tatouage
+          numérique dans le fichier téléchargé.
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        Continuer
+      </button>
+    </form>
+
+  {% endif %}
+
+{% endblock %}

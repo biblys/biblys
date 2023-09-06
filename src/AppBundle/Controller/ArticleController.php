@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection DuplicatedCode */
 
 namespace AppBundle\Controller;
 
@@ -18,6 +18,8 @@ use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\MetaTagsService;
 use Biblys\Service\Pagination;
 use Biblys\Service\SlugService;
+use Biblys\Service\TemplateService;
+use Biblys\Service\Watermarking\WatermarkingService;
 use Exception;
 use Framework\Controller;
 use InvalidArgumentException;
@@ -689,5 +691,42 @@ class ArticleController extends Controller
         $am->update($article);
 
         return new JsonResponse();
+    }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function downloadWithWatermarkAction(
+        Request             $request,
+        CurrentSite         $currentSite,
+        CurrentUser         $currentUser,
+        WatermarkingService $watermarkingService,
+        TemplateService     $templateService,
+        int                 $id
+    ): Response
+    {
+        self::authUser($request);
+
+        $files = [];
+        $libraryItem = $this->_getLibraryItem($watermarkingService, $currentSite, $id, $currentUser);
+        if ($libraryItem->isWatermarked()) {
+            $files = $watermarkingService->getFiles(
+                masterId: $libraryItem->getArticle()->getLemoninkMasterId(),
+                transactionId: $libraryItem->getLemoninkTransactionId(),
+                transactionToken: $libraryItem->getLemoninkTransactionToken(),
+            );
+        }
+
+        return $templateService->render("AppBundle:Article:download-with-watermark.html.twig", [
+            "article_id" => $id,
+            "article_title" => $libraryItem->getArticle()->getTitle(),
+            "item_id" => $libraryItem->getId(),
+            "user_email" => $currentUser->getAxysAccount()->getEmail(),
+            "isWatermarked" => $libraryItem->isWatermarked(),
+            "files" => $files,
+        ]);
     }
 }

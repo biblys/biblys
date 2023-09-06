@@ -11,14 +11,19 @@ use Biblys\Service\LoggerService;
 use Biblys\Service\MailingList\MailingListInterface;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\MetaTagsService;
+use Biblys\Service\TemplateService;
+use Biblys\Service\Watermarking\WatermarkingFile;
+use Biblys\Service\Watermarking\WatermarkingService;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Exception;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -656,6 +661,137 @@ class ArticleControllerTest extends TestCase
             $currentUserService,
             $mailingListService,
             $article->getId(),
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function testDownloadWithWatermarkForWatermarkedItem()
+    {
+        // given
+        $controller = new ArticleController();
+
+        $article = ModelFactory::createArticle(
+            title: "A book about tatoo",
+            lemoninkMasterId: "zyxwvuts",
+        );
+        $axysAccount = ModelFactory::createAxysAccount(email: "i.love.tatoo@biblys.fr");
+        $site = ModelFactory::createSite();
+        $stock = ModelFactory::createStockItem(
+            site: $site,
+            article: $article,
+            axysAccount: $axysAccount,
+            lemoninkTransactionId: "123456789",
+            lemoninkTransactionToken: "abcdefgh",
+        );
+
+        $request = RequestFactory::createAuthRequest();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")
+            ->with("publisher_filter")->andReturn($article->getPublisherId());
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getAxysAccount")->andReturn($axysAccount);
+        $watermarkingFile = Mockery::mock(WatermarkingFile::class);
+        $watermarkingService = Mockery::mock(WatermarkingService::class);
+        $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
+        $watermarkingService->shouldReceive("getFiles")
+            ->with("zyxwvuts", "123456789", "abcdefgh")
+            ->andReturn([$watermarkingFile]);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->shouldReceive("render")
+            ->with("AppBundle:Article:download-with-watermark.html.twig", [
+                "article_id" => $article->getId(),
+                "article_title" => "A book about tatoo",
+                "item_id" => $stock->getId(),
+                "user_email" => "i.love.tatoo@biblys.fr",
+                "isWatermarked" => true,
+                "files" => [$watermarkingFile],
+            ])
+            ->andReturn(new Response());
+
+        // when
+        $response = $controller->downloadWithWatermarkAction(
+            request: $request,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            watermarkingService: $watermarkingService,
+            templateService: $templateService,
+            id: $article->getId(),
+        );
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should respond with http status 200"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function testDownloadWithWatermarkForUnWatermarkedItem()
+    {
+        // given
+        $controller = new ArticleController();
+
+        $article = ModelFactory::createArticle(
+            title: "A book about tatoo",
+            lemoninkMasterId: "zyxwvuts",
+        );
+        $axysAccount = ModelFactory::createAxysAccount(email: "i.hate.tatoo@biblys.fr");
+        $site = ModelFactory::createSite();
+        $stock = ModelFactory::createStockItem(
+            site: $site,
+            article: $article,
+            axysAccount: $axysAccount,
+        );
+
+        $request = RequestFactory::createAuthRequest();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")
+            ->with("publisher_filter")->andReturn($article->getPublisherId());
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getAxysAccount")->andReturn($axysAccount);
+        $watermarkingService = Mockery::mock(WatermarkingService::class);
+        $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
+        $watermarkingService->shouldNotReceive("getFiles");
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->shouldReceive("render")
+            ->with("AppBundle:Article:download-with-watermark.html.twig", [
+                "article_id" => $article->getId(),
+                "article_title" => "A book about tatoo",
+                "item_id" => $stock->getId(),
+                "user_email" => "i.hate.tatoo@biblys.fr",
+                "isWatermarked" => false,
+                "files" => [],
+            ])
+            ->andReturn(new Response());
+
+        // when
+        $response = $controller->downloadWithWatermarkAction(
+            request: $request,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            watermarkingService: $watermarkingService,
+            templateService: $templateService,
+            id: $article->getId(),
+        );
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should respond with http status 200"
         );
     }
 }
