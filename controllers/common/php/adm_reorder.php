@@ -146,7 +146,7 @@ elseif ($supplier && $_SERVER["REQUEST_METHOD"] == "GET")
                         <thead>
                             <tr class="pointer">
                                 <th>Titre</th>
-                                <th>Derni&egrave;re vente</th>
+                                <th>Dernière vente</th>
                                 <th>Stock</th>
                                 <th>Ventes</th>
                                 <th>Réa</th>
@@ -170,7 +170,7 @@ elseif ($supplier && $_SERVER["REQUEST_METHOD"] == "GET")
                 <thead>
                     <tr class="pointer">
                         <th>Titre</th>
-                        <th>Derni&egrave;re vente</th>
+                        <th>Dernière vente</th>
                         <th>Stock</th>
                         <th>Ventes</th>
                         <th></th>

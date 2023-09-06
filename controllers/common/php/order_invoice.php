@@ -109,7 +109,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
     // Payment
     $payment = null;
     if ($order->has('order_payment_date')) {
-        $payment = '<p class="center">R&egrave;glement effectué le '._date($order->get('payment_date'), 'd/m/Y').' par '.ucwords($order->get('payment_mode')).'.</p><br>';
+        $payment = '<p class="center">Règlement effectué le '._date($order->get('payment_date'), 'd/m/Y').' par '.ucwords($order->get('payment_mode')).'.</p><br>';
     }
 
     $content .= '

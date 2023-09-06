@@ -154,8 +154,8 @@ $content = '
             <label>Paiement :</label>
             <select name="p">
                 <option value="0">Tous</option>
-                <option value="order_payment_cash" '.$cash_sel.'>Esp&egrave;ces</option>
-                <option value="order_payment_cheque" '.$cheque_sel.'>Ch&egrave;que</option>
+                <option value="order_payment_cash" '.$cash_sel.'>Espèces</option>
+                <option value="order_payment_cheque" '.$cheque_sel.'>Chèque</option>
                 <option value="order_payment_card" '.$card_sel.'>Carte bancaire</option>
                 <option value="order_payment_paypal" '.$paypal_sel.'>Paypal</option>
             </select>
@@ -389,7 +389,7 @@ $content .= '
         <th colspan="2">Ventilation</th>
     </tr>
     <tr>
-        <td class="right">Esp&egrave;ces :</td>
+        <td class="right">Espèces :</td>
         <td>'.price($TotalCash - $TotalLeft, 'EUR').'</td>
         <td class="right">Neuf :</td>
         <td>'.price($TotalNeuf, 'EUR').'</td>

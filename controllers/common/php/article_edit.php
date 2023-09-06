@@ -997,7 +997,7 @@ return function (
         <fieldset class="collapsable-fieldset"
             data-collapsed="' . ($article->has('summary') ? 'false' : 'true') . '">
             <legend>
-                Quatri&egrave;me de couverture&nbsp;
+                Quatrième de couverture&nbsp;
                 <span class="fa fa-plus-square"></span>
             </legend>
             <div class="collapsable-element">
