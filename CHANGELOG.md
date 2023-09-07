@@ -9,6 +9,8 @@ Corrections
 - Le texte de prévisualisation du courriel d'invitation de téléchargement 
   était un texte par défaut en anglais. Il a été remplacé par un texte en 
   français.
+- Des images n'existant pas pouvait parfois être affichées alors qu'elles 
+  n'existaient pas. Ce n'est plus le cas. 
 
 ## 2.72.0 (6 septembre 2023)
 
