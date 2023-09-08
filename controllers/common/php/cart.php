@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpUnhandledExceptionInspection */
+<?php
+
+/** @noinspection PhpUnhandledExceptionInspection */
 
 global $urlgenerator;
 
@@ -12,6 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+
+/** @var CurrentSite $currentSite */
 
 $am  = new ArticleManager();
 
@@ -514,8 +518,11 @@ if (isset($Articles) && $Articles > 0) {
         ';
     }
 
-    // If cart contains downloadable and user not logged
-    if ($downloadable && !$currentUserService->isAuthentified()) {
+    $salesDisabled = $currentSite->getOption("sales_disabled");
+
+    if ($salesDisabled) {
+        $content .= '<p class="alert alert-warning">La vente en ligne est temporairement désactivée sur ce site.</p>';
+    } elseif ($downloadable && !$currentUserService->isAuthentified()) {
         $content .= '<br />'
         . '<div class="center">'
         . '<p class="warning">Votre panier contient au moins un livre numérique. Vous devez vous <a href="'.$loginUrl.'">identifier</a> pour continuer.</p>'

@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.73.0 (DEV)
+
+Améliorations
+
+- Une option de site "sales_disabled" a été ajoutée pour désactiver les
+  ventes sur le site.
+
 ### 2.72.2 (27 septembre 2023)
 
 Corrections
