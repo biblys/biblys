@@ -6,6 +6,8 @@ Améliorations
 
 - Une option de site "sales_disabled" a été ajoutée pour désactiver les
   ventes sur le site.
+- Le formulaire de contact affichera désormais une erreur si le contenu du 
+  champ "Sujet" est long de moins de 6 caractères.
 
 ### 2.72.2 (27 septembre 2023)
 

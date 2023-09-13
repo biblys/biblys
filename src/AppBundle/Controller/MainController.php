@@ -220,6 +220,12 @@ class MainController extends Controller
                     );
                 }
 
+                if (strlen($subject) < 10) {
+                    throw new ContactPageException(
+                        "Le sujet doit être long d'au moins 6 caractères."
+                    );
+                }
+
                 if (strlen($message) < 10) {
                     throw new ContactPageException(
                         "Le message doit être long d'au moins 10 caractères."

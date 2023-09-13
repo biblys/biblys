@@ -167,7 +167,7 @@ class MainControllerTest extends TestCase
         $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
         $request->request->set("email", "angry.customer.666.@biblys.fr");
         $request->request->set("name", "Angry Customer");
-        $request->request->set("subject", "I'm angry");
+        $request->request->set("subject", "I'm very angry");
         $request->request->set("message", "WHAT THE F*CK IS HAPPENING?!");
         $request->request->set("phone", "");
         $currentUserService = $this->createMock(CurrentUser::class);
@@ -213,6 +213,61 @@ class MainControllerTest extends TestCase
      * @throws TransportExceptionInterface
      * @throws Exception
      */
+    public function testContactWithTooShortSubject()
+    {
+        // given
+        $controller = new MainController();
+        $request = new Request();
+        $request->setMethod("POST");
+        $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
+        $request->request->set("email", "angry.customer.666.@biblys.fr");
+        $request->request->set("name", "Angry Customer");
+        $request->request->set("subject", "NOPE");
+        $request->request->set("message", "WHATTHEF******CK");
+        $request->request->set("phone", "WHATTHEF");
+        $currentUserService = $this->createMock(CurrentUser::class);
+        $currentUserService->method("isAuthentified")->willReturn(false);
+        $config = Config::load();
+        $currentSiteService = $this->createMock(CurrentSite::class);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = new TemplateService(
+            config: $config,
+            currentSiteService: $currentSiteService,
+            currentUserService: $currentUserService,
+            metaTagsService: $metaTagsService,
+            request: $request,
+        );
+        $mailer = $this->createMock(Mailer::class);
+
+        // when
+        $response = $controller->contactAction(
+            $request,
+            $currentUserService,
+            $templateService,
+            $mailer,
+        );
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should return HTTP 200"
+        );
+        $this->assertStringContainsString(
+            "Le sujet doit être long d&#039;au moins 6 caractères.",
+            $response->getContent(),
+            "displays an error message"
+        );
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     */
     public function testContactWithTooShortBody()
     {
         // given
@@ -222,7 +277,7 @@ class MainControllerTest extends TestCase
         $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
         $request->request->set("email", "angry.customer.666.@biblys.fr");
         $request->request->set("name", "Angry Customer");
-        $request->request->set("subject", "I'm angry");
+        $request->request->set("subject", "I'm very angry");
         $request->request->set("message", "WHATTHEF");
         $request->request->set("phone", "WHATTHEF");
         $currentUserService = $this->createMock(CurrentUser::class);
@@ -277,7 +332,7 @@ class MainControllerTest extends TestCase
         $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
         $request->request->set("email", "angry.customer.666.@biblys.fr");
         $request->request->set("name", "Angry Customer");
-        $request->request->set("subject", "I'm angry");
+        $request->request->set("subject", "I'm very angry");
         $request->request->set("message", "WHAT THE F*CK");
         $request->request->set("phone", "+33.1.23.45.67.89");
         $currentUserService = $this->createMock(CurrentUser::class);
