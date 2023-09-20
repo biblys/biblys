@@ -16,4 +16,20 @@ use Model\Base\ShippingFee as BaseShippingFee;
 class ShippingFee extends BaseShippingFee
 {
 
+    public function isCompliantWithFrenchLaw(): bool
+    {
+        if ($this->getType() === 'magasin') {
+            return true;
+        }
+
+        if ($this->getMinAmount() >= 3500) {
+            return true;
+        }
+
+        if ($this->getFee() >= 300) {
+            return true;
+        }
+
+        return false;
+    }
 }
