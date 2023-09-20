@@ -8,6 +8,7 @@ Améliorations
   ventes sur le site.
 - Le formulaire de contact affichera désormais une erreur si le contenu du 
   champ "Sujet" est long de moins de 6 caractères.
+- L'ancien outil d'envoi de livres numériques a été supprimé.
 
 ### 2.72.2 (27 septembre 2023)
 
