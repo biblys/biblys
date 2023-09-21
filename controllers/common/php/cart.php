@@ -221,7 +221,7 @@ if (isset($Articles) && $Articles > 0) {
     if (!$currentUserService->isAuthentified()) {
         $content .= '
             <p class="warning">
-                Attention : vous n\'&ecirc;tes pas connecté. Si vous quittez le site, votre
+                Attention : '."vous n'êtes pas connecté".'. Si vous quittez le site, votre
                 panier ne sera pas sauvegardé.
                 <a href="'.$loginUrl.'">Connectez-vous</a> 
                 pour sauvegarder votre panier.
@@ -327,6 +327,7 @@ if (isset($Articles) && $Articles > 0) {
 
         $price = null;
         $missing = $special_offer_amount - $copiesInCollection;
+        /** @var Article $fa */
         $fa = $am->getById($special_offer_article);
         $sentence = 'Ajoutez encore '.$missing.' titre'.s($missing).' de la collection<br/>
                 à votre panier pour en profiter&nbsp;!';
@@ -373,6 +374,8 @@ if (isset($Articles) && $Articles > 0) {
 
     // Special offer: article for revenue amount
     elseif ($special_offer_amount && $special_offer_article) {
+
+        /** @var Article $fa */
         $fa = $am->getById($special_offer_article);
 
         $missing = $special_offer_amount - $physical_total_price;
@@ -429,12 +432,12 @@ if (isset($Articles) && $Articles > 0) {
 
     // Pre-order books
     if ($pre_order) {
-        $content .= '<p class="warning">Certains des livres de votre panier (<span class="fa fa-square lightblue" title="Précommande"></span>) sont à paraître. Votre commande sera expédiée lorsque tous les articles qu\'elles contient seront parus.</p>';
+        $content .= '<p class="warning">Certains des livres de votre panier (<span class="fa fa-square lightblue" title="Précommande"></span>) sont à paraître. Votre commande sera expédiée lorsque tous les articles qu\'elle contient seront parus.</p>';
     }
 
     // On order books
     if ($on_order) {
-        $content .= '<p class="warning">Certains des livres de votre panier (<span class="fa fa-square lightblue" title="Sur commande"></span>) ne sont pas disponibles en stock et doivent être commandés. L\'expédition de votre commande peut-être retardée de 72h.</p>';
+        $content .= '<p class="warning">Certains des livres de votre panier (<span class="fa fa-square lightblue" title="Sur commande"></span>) ne sont pas disponibles en stock et doivent être commandés. L\'expédition de votre commande peut être retardée de 72h.</p>';
     }
 
     $content .= '
