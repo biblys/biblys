@@ -79,6 +79,7 @@ class ShippingControllerTest extends TestCase
                 'max_articles' => NULL,
                 'fee' => 90,
                 'info' => NULL,
+                'is_compliant_with_french_law' => false,
             ],
             [
                 'id' => 4,
@@ -91,6 +92,7 @@ class ShippingControllerTest extends TestCase
                 'max_articles' => NULL,
                 'fee' => 100,
                 'info' => NULL,
+                'is_compliant_with_french_law' => false,
             ],
             [
                 'id' => 3,
@@ -103,6 +105,7 @@ class ShippingControllerTest extends TestCase
                 'max_articles' => NULL,
                 'fee' => 100,
                 'info' => NULL,
+                'is_compliant_with_french_law' => false,
             ],
             [
                 'id' => 2,
@@ -115,6 +118,7 @@ class ShippingControllerTest extends TestCase
                 'max_articles' => NULL,
                 'fee' => 100,
                 'info' => NULL,
+                'is_compliant_with_french_law' => false,
             ],
             [
                 'id' => 1,
@@ -127,6 +131,7 @@ class ShippingControllerTest extends TestCase
                 'max_articles' => NULL,
                 'fee' => 100,
                 'info' => NULL,
+                'is_compliant_with_french_law' => false,
             ],
         ];
         $this->assertEquals(
@@ -419,6 +424,7 @@ class ShippingControllerTest extends TestCase
             "max_articles" => 4,
             "fee" => 90,
             "info" => "A shipping fee",
+            "is_compliant_with_french_law" => false,
         ];
         $this->assertEquals(
             200,

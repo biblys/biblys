@@ -169,6 +169,7 @@ class ShippingController extends Controller
             'max_articles' => $fee->getMaxArticles(),
             'fee' => $fee->getFee(),
             'info' => $fee->getInfo(),
+            'is_compliant_with_french_law' => $fee->isCompliantWithFrenchLaw(),
         ];
     }
 

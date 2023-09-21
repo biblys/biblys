@@ -76,9 +76,15 @@ export default class Shipping {
   }
 
   renderRow(range) {
+    let rowClass = '';
+    let warning = '';
+    if (!range.is_compliant_with_french_law) {
+      warning = '<span class="fa fa-exclamation-triangle" title="Ce tarif n\'est pas conforme à la loi française"></span>';
+      rowClass = 'warning';
+    }
     const tr = createElementFromHTML(`
-      <tr>
-        <td>${range.mode}</td>
+      <tr class="${rowClass}">
+        <td>${warning} ${range.mode}</td>
         <td>${range.type}</td>
         <td>${range.zone}</td>
         <td class="nowrap">${this.renderConditions(range)}</td>
