@@ -11,6 +11,7 @@ use Biblys\Service\Mailer;
 use Biblys\Service\MetaTagsService;
 use Biblys\Service\TemplateService;
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
 use CartManager;
 use Exception;
 use Framework\Exception\AuthException;
@@ -33,6 +34,7 @@ class CartTest extends TestCase
         global $_SITE;
 
         // given
+        ModelFactory::createCountry(name: "France");
         $_SITE->setOpt("virtual_stock", 1);
         $flashBag = $this
             ->getMockBuilder("Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface")

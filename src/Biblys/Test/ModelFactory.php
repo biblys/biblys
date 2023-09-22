@@ -148,10 +148,10 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createCountry(): Country
+    public static function createCountry($name = "France"): Country
     {
         $country = new Country();
-        $country->setName("France");
+        $country->setName($name);
         $country->setCode("FR");
         $country->save();
 
