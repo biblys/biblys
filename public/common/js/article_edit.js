@@ -84,7 +84,7 @@ function article_search() {
       });
       reloadArticleAdminEvents(this);
     }).catch(function (error) {
-      _alert(error);
+      _alert(error.message);
     });
   }
   return 0;
@@ -286,7 +286,7 @@ function reloadArticleAdminEvents(scope) {
       },
       error: function (data) {
         var error = data.responseJSON.error.message;
-        _alert(error);
+        _alert(error.message);
       }
     });
   }).removeClass('event');

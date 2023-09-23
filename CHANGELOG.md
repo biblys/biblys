@@ -1,5 +1,13 @@
 # Historique des modifications
 
+### 2.72.2 (DEV)
+
+Corrections
+
+- Si la recherche d'un article sur nooSFere échouait à cause d'une erreur, 
+  le message affiché était "Aucun résultat". Désormais, c'est le message 
+  d'erreur.
+
 ### 2.72.1 (13 septembre 2023)
 
 Corrections

@@ -3,6 +3,8 @@
 namespace Biblys\Noosfere;
 
 use Biblys\Isbn\Isbn as Isbn;
+use Exception;
+use SimpleXMLElement;
 
 class Noosfere
 {
@@ -70,7 +72,8 @@ class Noosfere
 
         $info = curl_getinfo($curl);
         if ($info['http_code'] != '200') {
-            return false;
+            $error = strip_tags($response);
+            throw new Exception("Noosfere a répondu « $error » pour l'url $url");
         }
 
         curl_close($curl);
@@ -82,8 +85,8 @@ class Noosfere
     {
         libxml_use_internal_errors(true);
         try {
-            $xml = new \SimpleXMLElement($response);
-        } catch (\Exception $e) {
+            $xml = new SimpleXMLElement($response);
+        } catch (Exception $e) {
             return false;
         }
         return $xml;
