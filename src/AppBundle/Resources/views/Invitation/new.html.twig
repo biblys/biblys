@@ -24,7 +24,7 @@
       </p>
       <select id="article_id" name="article_ids[]" class="form-control" multiple required style="height: 200px">
         {% for article in downloadableArticles %}
-          <option value="{{ article.id }}">{{ article.title }}</option>
+          <option value="{{ article.id }}">{{ article.titleAlphabetic }}</option>
         {% endfor %}
       </select>
     </div>
