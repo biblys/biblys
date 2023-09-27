@@ -7,6 +7,7 @@ use Biblys\Service\Mailer;
 use Biblys\Service\Watermarking\WatermarkingService;
 use Exception;
 use Generator;
+use LemonInk\Client;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -29,6 +30,8 @@ class WatermarkingServiceValueResolver implements ArgumentValueResolverInterface
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
         $config = Config::load();
-        yield new WatermarkingService($config);
+        $client = new Client($config->get("lemonink.api_key"));
+        $isConfigured = $config->has("lemonink.api_key");
+        yield new WatermarkingService($client, $isConfigured);
     }
 }

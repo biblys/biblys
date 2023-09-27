@@ -13,13 +13,13 @@ class WatermarkingService
 {
     private bool $isConfigured = false;
 
-    public function __construct(Config $config)
+    public function __construct(Client $client, bool $isConfigured)
     {
-        if (!$config->has("lemonink.api_key")) {
+        if (!$isConfigured) {
             return;
         }
 
-        $this->client = new Client($config->get('lemonink.api_key'));
+        $this->client = $client;
         $this->isConfigured = true;
     }
 
