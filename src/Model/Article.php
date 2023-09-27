@@ -62,4 +62,9 @@ class Article extends BaseArticle
     {
         return Type::getById($this->getTypeId());
     }
+
+    public function isWatermarkable(): bool
+    {
+        return $this->getLemoninkMasterId() !== null;
+    }
 }

@@ -55,4 +55,34 @@ class ArticleTest extends TestCase
         // then
         $this->assertEquals(1, $count);
     }
+
+    /**
+     * #isWatermarkable
+     */
+
+    public function testIsWatermarkableWithMasterIdReturnsTrue(): void
+    {
+        // given
+        $article = new Article();
+        $article->setLemoninkMasterId("1234");
+
+        // when
+        $isWatermarkable = $article->isWatermarkable();
+
+        // then
+        $this->assertTrue($isWatermarkable);
+    }
+
+    public function testIsWatermarkableWithoutMasterIdReturnsFalse(): void
+    {
+        // given
+        $article = new Article();
+        $article->setLemoninkMasterId(null);
+
+        // when
+        $isWatermarkable = $article->isWatermarkable();
+
+        // then
+        $this->assertFalse($isWatermarkable);
+    }
 }
