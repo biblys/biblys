@@ -4,6 +4,8 @@
 
 Améliorations
 
+- Les livres numériques peuvent maintenant être vendus avec tatouage 
+  numérique.
 - Un avertissement est affiché sur la page Frais de port de l'administration
   pour les tarifs ne respectant pas la loi française.
 - Une option de site "sales_disabled" a été ajoutée pour désactiver les
