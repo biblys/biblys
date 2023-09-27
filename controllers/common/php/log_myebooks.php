@@ -2,6 +2,7 @@
 
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Model\ArticleQuery;
 use Model\StockQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
@@ -108,10 +109,11 @@ return function (
     $am = new ArticleManager();
     foreach ($copies as $copy) {
 
-        /** @var Article $article */
-        $article = $am->getById($copy->getArticleId());
+        /** @var Article $articleEntity */
+        $articleEntity = $am->getById($copy->getArticleId());
+        $article = ArticleQuery::create()->findPk($copy->getArticleId());
 
-        if (!$article || !$article->isDownloadable()) {
+        if (!$articleEntity || !$articleEntity->isDownloadable()) {
             continue;
         }
 
@@ -125,29 +127,41 @@ return function (
             $download_icon = 'refresh';
         }
 
-        $files = $fm->getAll(['article_id' => $article->get('id'), 'file_access' => 1]);
+        $files = $fm->getAll(['article_id' => $articleEntity->get('id'), 'file_access' => 1]);
         foreach ($files as $f) {
             $download_links[] = '
-            <li>
-                <a href="' . $f->getUrl() . '" title="' . $f->get('version') . ' | ' . file_size($f->get('size')) . ' | ' . $f->getType('name') . '"
-                        aria-label="Télécharger ' . $f->getType('name') . '">
-                    <img src="' . $f->getType('icon') . '" width=16 alt="Télécharger"> ' . $f->getType('name') . '
-                </a>
-            </li>
-        ';
+                <li>
+                    <a href="' . $f->getUrl() . '" title="' . $f->get('version') . ' | ' . file_size($f->get('size')) . ' | ' . $f->getType('name') . '"
+                            aria-label="Télécharger ' . $f->getType('name') . '">
+                        <img src="' . $f->getType('icon') . '" width=16 alt="Télécharger"> ' . $f->getType('name') . '
+                    </a>
+                </li>
+            ';
         }
 
         // Couverture
         $article_cover = null;
-        if ($article->hasCover()) {
-            $article_cover = '<a href="/a/' . $article->get("url") . '">
-            <img src="' . $article->getCoverUrl(["size" => "h60"]) . '" alt="' . $article->get('title') . '" />
-        </a>';
+        if ($articleEntity->hasCover()) {
+            $article_cover = '<a href="/a/' . $articleEntity->get("url") . '">
+                <img src="' . $articleEntity->getCoverUrl(["size" => "h60"]) . '" alt="' . $articleEntity->get('title') . '" />
+            </a>';
         }
 
         // Liens de téléchargement
-        if ($article->get('pubdate') > date("Y-m-d") && !$copy->getAllowPredownload()) {
-            $dl_links = 'A para&icirc;tre<br />le ' . _date($article->get('pubdate'), 'd/m');
+        if ($articleEntity->get('pubdate') > date("Y-m-d") && !$copy->getAllowPredownload()) {
+            $dl_links = 'A para&icirc;tre<br />le ' . _date($articleEntity->get('pubdate'), 'd/m');
+        }
+        elseif ($article->isWatermarkable()) {
+            $dl_links = '
+                <a class="btn btn-primary"
+                    href="'.$urlGenerator->generate("article_download_with_watermark", [
+                        "id" => $article->getId()
+                    ]).'"
+                >
+                    <span class="fa fa-' . $download_icon . '"></span>
+                    &nbsp; Télécharger &nbsp; 
+                </a>
+            ';
         } elseif (empty($download_links)) {
             $dl_links = 'Aucun fichier disponible';
         } else {
@@ -170,7 +184,7 @@ return function (
         <tr' . $update_class . '>
             <td class="center">' . $article_cover . '</td>
             <td style="max-width: 50%">
-                 <a href="/' . $article->get('url') . '">' . $article->get('title') . '</a><br>' . $article->get('authors') . '
+                 <a href="/' . $articleEntity->get('url') . '">' . $articleEntity->get('title') . '</a><br>' . $articleEntity->get('authors') . '
             </td>
             <td class="center" style="width: 125px;">
                 ' . $dl_links . '
