@@ -12,19 +12,22 @@ use Biblys\Service\MailingList\MailingListInterface;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\MetaTagsService;
 use Biblys\Service\TemplateService;
-use Biblys\Service\Watermarking\WatermarkingFile;
+use Biblys\Service\Watermarking\WatermarkedFile;
 use Biblys\Service\Watermarking\WatermarkingService;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Exception;
+use LemonInk\Models\Transaction;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
@@ -696,7 +699,7 @@ class ArticleControllerTest extends TestCase
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getAxysAccount")->andReturn($axysAccount);
-        $watermarkingFile = Mockery::mock(WatermarkingFile::class);
+        $watermarkingFile = Mockery::mock(WatermarkedFile::class);
         $watermarkingService = Mockery::mock(WatermarkingService::class);
         $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
         $watermarkingService->shouldReceive("getFiles")
@@ -792,6 +795,342 @@ class ArticleControllerTest extends TestCase
             200,
             $response->getStatusCode(),
             "it should respond with http status 200"
+        );
+    }
+
+    /**
+     * #watermarkAction
+     */
+
+    /**
+     * @throws PropelException
+     */
+    public function testWatermarkIfServiceIsNotConfigured()
+    {
+        // given
+        $controller = new ArticleController();
+
+        $article = ModelFactory::createArticle();
+
+        $watermarkingService = Mockery::mock(WatermarkingService::class);
+        $watermarkingService->shouldReceive("isConfigured")->andReturn(false);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("article_download_with_watermark", ["id" => $article->getId()])
+            ->andReturn("/articles/{}/download-with-watermark");
+
+        // then
+        $this->expectException(ServiceUnavailableHttpException::class);
+        $this->expectExceptionMessage("Watermarking service is not configured (missing API key).");
+
+        // when
+        $controller->watermarkAction(
+            request: RequestFactory::createAuthRequest(),
+            watermarkingService: $watermarkingService,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            urlGenerator: $urlGenerator,
+            id: $article->getId(),
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testUnexistingArticle()
+    {
+        // given
+        $controller = new ArticleController();
+
+        $article = ModelFactory::createArticle();
+        $otherPublisher = ModelFactory::createPublisher();
+
+        $watermarkingService = Mockery::mock(WatermarkingService::class);
+        $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")
+            ->with("publisher_filter")
+            ->andReturn($otherPublisher->getId());
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("article_download_with_watermark", ["id" => $article->getId()])
+            ->andReturn("/articles/{}/download-with-watermark");
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("Article {$article->getId()} does not exist.");
+
+        // when
+        $controller->watermarkAction(
+            request: RequestFactory::createAuthRequest(),
+            watermarkingService: $watermarkingService,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            urlGenerator: $urlGenerator,
+            id: $article->getId(),
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testWatermarkWithoutMasterId()
+    {
+        // given
+        $controller = new ArticleController();
+
+        $article = ModelFactory::createArticle();
+
+        $watermarkingService = Mockery::mock(WatermarkingService::class);
+        $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")
+            ->with("publisher_filter")
+            ->andReturn($article->getPublisherId());
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("article_download_with_watermark", ["id" => $article->getId()])
+            ->andReturn("/articles/{}/download-with-watermark");
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("Article {$article->getId()} does not have a watermark master id.");
+
+        // when
+        $controller->watermarkAction(
+            request: RequestFactory::createAuthRequest(),
+            watermarkingService: $watermarkingService,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            urlGenerator: $urlGenerator,
+            id: $article->getId(),
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testWatermarkIfNotInUserLibrary()
+    {
+        // given
+        $controller = new ArticleController();
+
+        $article = ModelFactory::createArticle(lemoninkMasterId: "youpla");
+
+        $watermarkingService = Mockery::mock(WatermarkingService::class);
+        $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")
+            ->with("publisher_filter")
+            ->andReturn($article->getPublisherId());
+        $currentSite->shouldReceive("getSite")
+            ->andReturn(ModelFactory::createSite());
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getAxysAccount")
+            ->andReturn(ModelFactory::createAxysAccount());
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("article_download_with_watermark", ["id" => $article->getId()])
+            ->andReturn("/articles/{}/download-with-watermark");
+
+        $request = RequestFactory::createAuthRequest();
+        $request->request->set("consent", "given");
+
+        // then
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->expectExceptionMessage("Article {$article->getId()} is not in user library.");
+
+        // when
+        $controller->watermarkAction(
+            request: $request,
+            watermarkingService: $watermarkingService,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            urlGenerator: $urlGenerator,
+            id: $article->getId(),
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testWatermarkForAlreadyWatermarkedItem()
+    {
+        // given
+        $controller = new ArticleController();
+
+        $article = ModelFactory::createArticle(lemoninkMasterId: "youpla");
+        $axysAccount = ModelFactory::createAxysAccount();
+        $site = ModelFactory::createSite();
+        $libraryItem = ModelFactory::createStockItem(
+            site: $site,
+            article: $article,
+            axysAccount: $axysAccount,
+            lemoninkTransactionId: "123456789",
+            lemoninkTransactionToken: "abcdefgh",
+        );
+
+        $watermarkingService = Mockery::mock(WatermarkingService::class);
+        $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")
+            ->with("publisher_filter")
+            ->andReturn($article->getPublisherId());
+        $currentSite->shouldReceive("getSite")
+            ->andReturn($site);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getAxysAccount")
+            ->andReturn($axysAccount);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("article_download_with_watermark", ["id" => $article->getId()])
+            ->andReturn("/articles/{}/download-with-watermark");
+
+        $request = RequestFactory::createAuthRequest();
+        $request->request->set("consent", "given");
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("Item {$libraryItem->getId()} is already watermarked.");
+
+        // when
+        $controller->watermarkAction(
+            request: $request,
+            watermarkingService: $watermarkingService,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            urlGenerator: $urlGenerator,
+            id: $article->getId(),
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testWatermarkWithoutConsent()
+    {
+        // given
+        $controller = new ArticleController();
+
+        $article = ModelFactory::createArticle(lemoninkMasterId: "youpla");
+        $axysAccount = ModelFactory::createAxysAccount("downloader@example.org");
+        $site = ModelFactory::createSite();
+        $libraryItem = ModelFactory::createStockItem(
+            site: $site, article: $article, axysAccount: $axysAccount
+        );
+        $transaction = new Transaction();
+        $transaction->setId("123456789");
+        $transaction->setToken("abcdefgh");
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")
+            ->with("publisher_filter")
+            ->andReturn($article->getPublisherId());
+        $currentSite->shouldReceive("getSite")
+            ->andReturn($site);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getAxysAccount")
+            ->andReturn($axysAccount);
+        $watermarkingService = Mockery::mock(WatermarkingService::class);
+        $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
+        $watermarkingService->shouldReceive("watermark")
+            ->with("youpla", "Téléchargé par downloader@example.org (#{$libraryItem->getId()})")
+            ->andReturns($transaction);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("article_download_with_watermark", ["id" => $article->getId()])
+            ->andReturn("/articles/{}/download-with-watermark");
+
+        $request = RequestFactory::createAuthRequest();
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("Vous devez accepter le tatouage numérique du fichier pour continuer.");
+
+        // when
+        $controller->watermarkAction(
+            request: RequestFactory::createAuthRequest(),
+            watermarkingService: $watermarkingService,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            urlGenerator: $urlGenerator,
+            id: $article->getId(),
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testWatermarkSuccess()
+    {
+        // given
+        $controller = new ArticleController();
+
+        $article = ModelFactory::createArticle(lemoninkMasterId: "youpla");
+        $axysAccount = ModelFactory::createAxysAccount("downloader@example.org");
+        $site = ModelFactory::createSite();
+        $libraryItem = ModelFactory::createStockItem(
+            site: $site, article: $article, axysAccount: $axysAccount
+        );
+        $transaction = new Transaction();
+        $transaction->setId("123456789");
+        $transaction->setToken("abcdefgh");
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")
+            ->with("publisher_filter")
+            ->andReturn($article->getPublisherId());
+        $currentSite->shouldReceive("getSite")
+            ->andReturn($site);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getAxysAccount")
+            ->andReturn($axysAccount);
+        $watermarkingService = Mockery::mock(WatermarkingService::class);
+        $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
+        $watermarkingService->shouldReceive("watermark")
+            ->with("youpla", "Téléchargé par downloader@example.org (#{$libraryItem->getId()})")
+            ->andReturns($transaction);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("article_download_with_watermark", ["id" => $article->getId()])
+            ->andReturn("/articles/{}/download-with-watermark");
+
+        $request = RequestFactory::createAuthRequest();
+        $request->request->set("consent", "given");
+
+        // when
+        $response = $controller->watermarkAction(
+            request: $request,
+            watermarkingService: $watermarkingService,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            urlGenerator: $urlGenerator,
+            id: $article->getId(),
+        );
+
+        // then
+        $libraryItem->reload();
+        $this->assertEquals("123456789", $libraryItem->getLemoninkTransactionId());
+        $this->assertEquals("abcdefgh", $libraryItem->getLemoninkTransactionToken());
+        $this->assertEquals(
+            302,
+            $response->getStatusCode(),
+            "responds with http status 302"
+        );
+        $this->assertEquals(
+            "/articles/{}/download-with-watermark",
+            $response->getTargetUrl(),
+            "redirects to elibrary"
         );
     }
 }

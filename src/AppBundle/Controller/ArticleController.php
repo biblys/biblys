@@ -29,6 +29,7 @@ use Model\ArticleQuery;
 use Model\Link;
 use Model\LinkQuery;
 use Model\PublisherQuery;
+use Model\Stock;
 use Model\StockQuery;
 use Propel\Runtime\Exception\PropelException;
 use Psr\Http\Client\ClientExceptionInterface;
@@ -36,7 +37,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use TagManager;
@@ -728,5 +731,78 @@ class ArticleController extends Controller
             "isWatermarked" => $libraryItem->isWatermarked(),
             "files" => $files,
         ]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function watermarkAction(
+        Request $request,
+        WatermarkingService $watermarkingService,
+        CurrentSite $currentSite,
+        CurrentUser $currentUser,
+        UrlGenerator $urlGenerator,
+        int $id
+    ): RedirectResponse
+    {
+        self::authUser($request);
+
+        $libraryItem = $this->_getLibraryItem($watermarkingService, $currentSite, $id, $currentUser);
+        if ($libraryItem->isWatermarked()) {
+            throw new BadRequestHttpException("Item {$libraryItem->getId()} is already watermarked.");
+        }
+
+        $consent = $request->request->get("consent");
+        if ($consent !== "given") {
+            throw new BadRequestHttpException("Vous devez accepter le tatouage numérique du fichier pour continuer.");
+        }
+
+        $transaction = $watermarkingService->watermark(
+            masterId: $libraryItem->getArticle()->getLemoninkMasterId(),
+            text: "Téléchargé par {$currentUser->getAxysAccount()->getEmail()} (#{$libraryItem->getId()})",
+        );
+        $libraryItem->setLemoninkTransactionId($transaction->getId());
+        $libraryItem->setLemoninkTransactionToken($transaction->getToken());
+        $libraryItem->save();
+
+        $url = $urlGenerator->generate("article_download_with_watermark", ["id" => $id]);
+        return new RedirectResponse($url);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    private function _getLibraryItem(WatermarkingService $watermarkingService, CurrentSite $currentSite, int $id, CurrentUser $currentUser): Stock
+    {
+        if (!$watermarkingService->isConfigured()) {
+            throw new ServiceUnavailableHttpException(
+                3600,
+                "Watermarking service is not configured (missing API key)."
+            );
+        }
+
+        $article = ArticleQuery::create()->filterForCurrentSite($currentSite)->findPk($id);
+        if (!$article) {
+            throw new BadRequestHttpException("Article $id does not exist.");
+        }
+
+        if ($article->getLemoninkMasterId() === null) {
+            throw new BadRequestHttpException("Article $id does not have a watermark master id.");
+        }
+
+        $libraryItem = StockQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByAxysAccount($currentUser->getAxysAccount())
+            ->filterByArticleId($id)
+            ->findOne();
+        if (!$libraryItem) {
+            throw new AccessDeniedHttpException("Article $id is not in user library.");
+        }
+
+        return StockQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByAxysAccount($currentUser->getAxysAccount())
+            ->filterByArticleId($id)
+            ->findOne();
     }
 }

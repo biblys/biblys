@@ -139,6 +139,13 @@ article_download_with_watermark:
   requirements:
     id: \d+
 
+article_watermark:
+  methods: POST
+  path: /articles/{id}/watermark
+  controller: AppBundle\Controller\ArticleController::watermarkAction
+  requirements:
+    id: \d+
+
 # Awards
 
 awards_index:
