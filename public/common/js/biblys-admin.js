@@ -174,7 +174,7 @@ function reloadAdminEvents() {
 
       $.ajax({
         type: 'POST',
-        url: '/x/adm_article_files',
+        url: '/pages/adm_article_files',
         data: {
           file_id: '' + file_id + '',
           action: 'delete'
@@ -203,7 +203,7 @@ function reloadAdminEvents() {
 
       $.ajax({
         type: 'POST',
-        url: '/x/adm_article_files',
+        url: '/pages/adm_article_files',
         data: {
           file_id: '' + id + '',
           file_title: '' + title + '',
@@ -255,7 +255,7 @@ function reloadAdminEvents() {
 
       // Upload file
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', '/x/adm_article_files');
+      xhr.open('POST', '/pages/adm_article_files');
       xhr.upload.onprogress = function(e) {
         $('#dlfile_' + file_id + ' .size').html(file_size(e.loaded));
         $('#dlfile_' + file_id + ' progress').attr('value', e.loaded);
