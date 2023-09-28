@@ -1,133 +1,117 @@
 <?php
 
 use Biblys\Isbn\Isbn as Isbn;
-use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
+use Model\FileQuery;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 $r = array();
 
-    $controller = function() {
+return function (Request $request, CurrentSite $currentSite, CurrentUser $currentUser): Response
+{
+    if (!$request->getMethod() == "POST") {
+        throw new MethodNotAllowedHttpException(["POST"]);
+    }
 
-        global $request, $_SQL, $_SITE;
+    $action = $request->request->get("action");
+    $fileId = $request->request->get("file_id");
 
-        $fm = new FileManager();
-        $am = new ArticleManager();
+    $fm = new FileManager();
+    if ($fileId && !str_contains($fileId, 'new_')) {
 
-        if ($request->getMethod() == "POST") {
-
-            $action = $request->request->get('action');
-
-            // Associate a file from file manager
-            if ($action == 'associate') {
-
-                $file_path = $_SITE->get('path').$_POST['file'];
-
-                if (!file_exists($file_path)) {
-                    trigger_error("Le fichier $new_file n'existe pas !");
-                }
-
-                $article_id = $request->request->get('article_id');
-                $article = $am->getById($article_id);
-                if (!$article) {
-                    trigger_error("L'article n° $article_id n'existe pas !");
-                }
-                $article_title = $article->get('title');
-
-                $file_name = $request->request->get('name');
-                $file = $fm->create();
-                $fm->upload($file, $file_path, $file_name, $article->get('id'), LegacyCodeHelper::getGlobalVisitor()['axys_account_id']);
-
-                // Return new table line
-                $r['success'] = "Le fichier &laquo;&nbsp;$file_name&nbsp;&raquo; a bien été associé à l'article &laquo;&nbsp;$article_title&nbsp;&raquo;.";
-                $r['new_line'] = $file->getLine();
-                return new JsonResponse($r);
-            }
-
-            $file_id = $request->request->get('file_id');
-
-            // If file exist
-            if ($file_id && !strstr($file_id, 'new_')) {
-
-                $file = $fm->getById($file_id);
-                if (!$file) {
-                    throw new Exception("Le fichier n'existe pas !");
-                }
-
-            } elseif (strstr($file_id, 'new_')) {
-                $file = $fm->create();
-            } else {
-                throw new Exception("Le fichier n'existe pas !");
-            }
-
-
-            // Delete file
-            if ($action == 'delete')
-            {
-                try
-                {
-                    $fm->delete($file);
-                }
-                catch (Exception $e)
-                {
-                    error($e);
-                }
-
-                $r['success'] = 'Le fichier &laquo;&nbsp;'.$file->get('file_title').'&nbsp;&raquo; a bien été supprimé.';
-            }
-
-            // Update file
-            elseif ($action == 'update')
-            {
-                try
-                {
-                    $ean = $request->request->get('file_ean', false);
-
-                    // EAN check
-                    if ($ean) {
-                        $file->set('file_ean', Isbn::convertToEan13($ean));
-                    }
-
-                    $file->set('file_title', $_POST['file_title']);
-                    $file->set('file_access', $_POST['file_access']);
-                    $file->set('file_version', $_POST['file_version']);
-                    $fm->update($file);
-                }
-                catch (Exception $e)
-                {
-                    json_error(0, $e->getMessage());
-                }
-
-                $r['success'] = 'Le fichier &laquo;&nbsp;'.$file->get('file_title').'&nbsp;&raquo; a bien été mis à jour.';
-
-            }
-
-            // Upload a file from computer
-            elseif ($action == 'upload' && isset($_FILES['file']))
-            {
-
-                $f = $_FILES['file'];
-
-                // Copy file into the files directory
-                try
-                {
-                    $fm->upload($file, $f['tmp_name'], $f['name'], $_POST['article_id'], LegacyCodeHelper::getGlobalVisitor()['axys_account_id']);
-                    $file->markAsUpdated();
-                }
-                catch (Exception $e)
-                {
-                    error($e);
-                }
-
-                $file->markAsUpdated();
-
-                // Return new table line
-                $r['success'] = 'Le fichier &laquo;&nbsp;'.$f['name'].'&nbsp;&raquo; a bien été ajouté.';
-                $r['new_line'] = $file->getLine();
-            }
+        /** @var File $fileEntity */
+        $fileEntity = $fm->getById($fileId);
+        if (!$fileEntity) {
+            throw new Exception("Le fichier n'existe pas !");
         }
+
+    } elseif (str_contains($fileId, 'new_')) {
+        $fileEntity = $fm->create();
+    } else {
+        throw new Exception("Le fichier n'existe pas !");
+    }
+
+    $file = FileQuery::create()->findPk($fileEntity->get("id"));
+
+    if ($action === "delete") {
+        try {
+            $file->delete();
+        } catch (Exception $e) {
+            error($e);
+        }
+
+        $r['success'] = 'Le fichier &laquo;&nbsp;'.$file->getTitle().'&nbsp;&raquo; a bien été supprimé.';
         return new JsonResponse($r);
-    };
+    }
 
+    // Update file
+    if ($action == 'update') {
+        try {
+            $ean = $request->request->get('file_ean', false);
+            if ($ean) {
+                $file->setEan(Isbn::convertToEan13($ean));
+            }
 
-    $response = $controller();
-    $response->send();
+            $file->setTitle($request->request->get("file_title"));
+            $file->setAccess($request->request->get("file_access"));
+            $file->setVersion($request->request->get("file_version"));
+            $file->save();
+        } catch (Exception $e) {
+            json_error(0, $e->getMessage());
+        }
+
+        $r['success'] = 'Le fichier &laquo;&nbsp;'.$file->getTitle().'&nbsp;&raquo; a bien été mis à jour.';
+        return new JsonResponse($r);
+    }
+
+    if ($action === "upload" && isset($_FILES["file"])) {
+
+        $uploadedFile = $_FILES['file'];
+
+        // Copy file into the files directory
+        try {
+            $articleId = $request->request->get("article_id");
+
+            $name = explode('.', $uploadedFile["name"]);
+            $title = $name[0];
+            $ext = $name[1];
+            $size = filesize($uploadedFile["tmp_name"]);
+
+            $type = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $uploadedFile["tmp_name"]);
+            if ($type == 'application/octet-stream' && $ext === 'mobi') {
+                $type = 'application/x-mobipocket-ebook';
+            }
+
+            $file->setArticleId($articleId);
+            $file->setAxysAccountId($currentUser->getAxysAccount()->getId());
+            $file->setFileTitle($title);
+            $file->setFileType($type);
+            $file->setFileHash(md5_file($uploadedFile["tmp_name"]));
+            $file->setFileSize($size);
+            $file->setFileUploaded(date('Y-m-d H:i:s'));
+
+            if (copy($uploadedFile["tmp_name"], $file->getPath())) {
+                $file->save();
+            } else {
+                throw new Exception('Copy error');
+            }
+
+            $fileEntity->markAsUpdated();
+        } catch (Exception $e) {
+            error($e);
+        }
+
+        $fileEntity->markAsUpdated();
+
+        $r['success'] = 'Le fichier &laquo;&nbsp;'.$uploadedFile['name'].'&nbsp;&raquo; a bien été ajouté.';
+        $r['new_line'] = $fileEntity->getLine();
+        return new JsonResponse($r);
+    }
+
+    throw new BadRequestHttpException("Unknown action");
+};

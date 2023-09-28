@@ -290,38 +290,4 @@ class FileManager extends EntityManager
     protected $prefix = 'file';
     protected $table = 'files';
     protected $object = 'File';
-
-    /**
-     * Uploader un nouveau fichier.
-     */
-    public function upload(File $file, $path, $name, $article, $user)
-    {
-        // Get file data
-        $name = explode('.', $name);
-        $title = $name[0];
-        $ext = $name[1];
-        $type = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path);
-        $size = filesize($path);
-
-        // Unknown mime types
-        if ($type == 'application/octet-stream' && $ext = 'mobi') {
-            $type = 'application/x-mobipocket-ebook';
-        }
-
-        // Update file data
-        $file->set('article_id', $article);
-        $file->set('axys_account_id', $user);
-        $file->set('file_title', $title);
-        $file->set('file_type', $type);
-        $file->set('file_hash', md5_file($path));
-        $file->set('file_size', $size);
-        $file->set('file_uploaded', date('Y-m-d H:i:s'));
-
-        // Copy file from temp to directory
-        if (copy($path, $file->getPath())) {
-            $this->update($file);
-        } else {
-            throw new Exception('Copy error');
-        }
-    }
 }
