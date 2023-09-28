@@ -73,43 +73,40 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
 
         $uploadedFile = $_FILES['file'];
 
-        // Copy file into the files directory
-        try {
-            $articleId = $request->request->get("article_id");
+        $articleId = $request->request->get("article_id");
 
-            $name = explode('.', $uploadedFile["name"]);
-            $title = $name[0];
-            $ext = $name[1];
-            $size = filesize($uploadedFile["tmp_name"]);
+        $name = explode('.', $uploadedFile["name"]);
+        $title = $name[0];
+        $ext = $name[1];
+        $size = filesize($uploadedFile["tmp_name"]);
 
-            $type = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $uploadedFile["tmp_name"]);
-            if ($type == 'application/octet-stream' && $ext === 'mobi') {
-                $type = 'application/x-mobipocket-ebook';
-            }
+        $type = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $uploadedFile["tmp_name"]);
+        if ($type == 'application/octet-stream' && $ext === 'mobi') {
+            $type = 'application/x-mobipocket-ebook';
+        }
 
-            $file->setArticleId($articleId);
-            $file->setAxysAccountId($currentUser->getAxysAccount()->getId());
-            $file->setFileTitle($title);
-            $file->setFileType($type);
-            $file->setFileHash(md5_file($uploadedFile["tmp_name"]));
-            $file->setFileSize($size);
-            $file->setFileUploaded(date('Y-m-d H:i:s'));
+        if (strlen($title) > 32) {
+            throw new BadRequestHttpException("Le titre du fichier ne doit pas dépasser 32 caractères.");
+        }
 
-            if (copy($uploadedFile["tmp_name"], $file->getPath())) {
-                $file->save();
-            } else {
-                throw new Exception('Copy error');
-            }
+        $file->setArticleId($articleId);
+        $file->setAxysAccountId($currentUser->getAxysAccount()->getId());
+        $file->setFileTitle($title);
+        $file->setFileType($type);
+        $file->setFileHash(md5_file($uploadedFile["tmp_name"]));
+        $file->setFileSize($size);
+        $file->setFileUploaded(date('Y-m-d H:i:s'));
 
-            $fileEntity->markAsUpdated();
-        } catch (Exception $e) {
-            error($e);
+        if (copy($uploadedFile["tmp_name"], $file->getPath())) {
+            $file->save();
+        } else {
+            throw new Exception('Copy error');
         }
 
         $fileEntity->markAsUpdated();
-
         $r['success'] = 'Le fichier &laquo;&nbsp;'.$uploadedFile['name'].'&nbsp;&raquo; a bien été ajouté.';
         $r['new_line'] = $fileEntity->getLine();
+
         return new JsonResponse($r);
     }
 

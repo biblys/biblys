@@ -16,6 +16,12 @@ Améliorations
   champ "Sujet" est long de moins de 6 caractères.
 - L'ancien outil d'envoi de livres numériques a été supprimé.
 
+Corrections
+
+- Les erreurs lors de l'envoi ou de la mise à jour d'un fichier 
+  téléchargeable associé à un article n'était pas affiché. C'est désormais 
+  le cas.
+
 ### 2.72.2 (27 septembre 2023)
 
 Corrections

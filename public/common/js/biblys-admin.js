@@ -256,6 +256,7 @@ function reloadAdminEvents() {
       // Upload file
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '/pages/adm_article_files');
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
       xhr.upload.onprogress = function(e) {
         $('#dlfile_' + file_id + ' .size').html(file_size(e.loaded));
         $('#dlfile_' + file_id + ' progress').attr('value', e.loaded);
