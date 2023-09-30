@@ -1,6 +1,7 @@
 <?php /** @noinspection PhpUnhandledExceptionInspection */
 
 use Biblys\Service\CurrentSite;
+use Model\CountryQuery;
 use Model\ShippingFeeQuery;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -196,9 +197,10 @@ $feesList = [];
 $country = $order->get("country");
 if ($country instanceof Country) {
     /** @var CurrentSite $currentSite */
+    $countryModel = CountryQuery::create()->findPk($country->get("id"));
     $fees = ShippingFeeQuery::getForCountryWeightAndAmount(
         $currentSite,
-        $country,
+        $countryModel,
         $order->getTotalWeight(),
         $order->get('amount'),
     );

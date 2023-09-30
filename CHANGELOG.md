@@ -21,6 +21,7 @@ Corrections
 - Les erreurs lors de l'envoi ou de la mise à jour d'un fichier 
   téléchargeable associé à un article n'était pas affiché. C'est désormais 
   le cas.
+- La page d'édition d'une commande pouvait déclencher une erreur. C'est corrigé.
 
 ### 2.72.2 (27 septembre 2023)
 
