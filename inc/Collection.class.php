@@ -1,6 +1,7 @@
 <?php
 
 use Biblys\Exception\EntityAlreadyExistsException;
+use Biblys\Service\SlugService;
 
 class Collection extends Entity
     {
@@ -123,8 +124,9 @@ class Collection extends Entity
 
         public static function createSlug($publisherName, $collectionName)
         {
-            $publisherSlug = makeurl($publisherName);
-            $collectionSlug = makeurl($collectionName);
+            $slugService = new SlugService();
+            $publisherSlug = $slugService->slugify($publisherName);
+            $collectionSlug = $slugService->slugify($collectionName);
             if ($publisherSlug == $collectionSlug
                 || strstr($collectionSlug, $publisherSlug)
             ) {
@@ -133,7 +135,7 @@ class Collection extends Entity
                 $slug = $publisherName.' '.$collectionName;
             }
 
-            return makeurl($slug);
+            return $slugService->slugify($slug);
         }
 
         public function validate($collection)

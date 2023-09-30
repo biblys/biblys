@@ -330,8 +330,8 @@ class ErrorController extends Controller
     {
         $legacyController = new LegacyController();
         $session = new Session();
-        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
         $config = Config::load();
+        $mailer = new Mailer($config);
         $currentSite = CurrentSite::buildFromConfig($config);
         $routes = RouteLoader::load();
         $urlgenerator = new UrlGenerator($routes, new RequestContext());

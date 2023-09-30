@@ -1,124 +1,138 @@
 <?php
 
-use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
+use Model\PeopleQuery;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
-/** @var UrlGenerator $urlgenerator */
+/**
+ * @throws PropelException
+ */
+return function (
+    Request      $request,
+    CurrentSite  $currentSite,
+    CurrentUser  $currentUser,
+    UrlGenerator $urlgenerator,
+): Response|RedirectResponse
+{
+    $content = "";
 
-$content = "";
+    $pm = new PeopleManager();
+    $url = $request->query->get('url');
+    $peopleEntity = $pm->get(['people_url' => $url]);
+    if (!$peopleEntity) {
+        throw new ResourceNotFoundException('No people found for url ' . htmlentities($url));
+    }
+    
+    $people = PeopleQuery::create()->findPk($peopleEntity->get("id"));
 
-$pm = new PeopleManager();
-/** @var Request $request */
-$url = $request->query->get('url');
-$people = $pm->get(['people_url' => $url]);
-if (!$people) {
-    throw new ResourceNotFoundException('No people found for url '.htmlentities($url));
-}
+    $use_old_controller = $currentSite->getOption("use_old_people_controller");
+    if (!$use_old_controller) {
+        return new RedirectResponse("/p/$url/", 301);
+    }
 
-$use_old_controller = $_SITE->getOpt("use_old_people_controller");
-if (!$use_old_controller) {
-    return new RedirectResponse("/p/$url/", 301);
-}
-
-
-$p = $people;
-
-$_OPENGRAPH = '
-    <meta property="og:title" content="'.$p["people_name"].'"/>
+    $_OPENGRAPH = '
+    <meta property="og:title" content="' . $people->getName() . '"/>
     <meta property="og:type" content="author"/>
-    <meta property="og:url" content="https://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"].'"/>
-    <meta property="og:description" content="'.truncate($p["people_bio"], '500', '...', true).'"/>
+    <meta property="og:url" content="https://' . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . '"/>
+    <meta property="og:description" content="' . truncate(
+        $people->getBio() || "", 500, '...', true
+        ) . '"/>
     <meta property="og:locale" content="fr_FR"/>
-    <meta property="og:site_name" content="'. LegacyCodeHelper::getLegacyCurrentSite()["site_name"].'"/>
+    <meta property="og:site_name" content="' . $currentSite->getSite()->getName() . '"/>
 ';
 
-$photo = new Media("people", $p["people_id"]);
-if ($photo->exists()) {
-    $_OPENGRAPH .= '<meta property="og:image" content="'.$photo->getUrl().'" />';
-}
+    $photo = new Media("people", $people->getId());
+    if ($photo->exists()) {
+        $_OPENGRAPH .= '<meta property="og:image" content="' . $photo->getUrl() . '" />';
+    }
 
-if (auth("admin")) {
-    $content .= '
+    if ($currentUser->isAdmin()) {
+        $content .= '
         <div class="admin">
-            <p>Intervenant n° '.$p["people_id"].'</p>
-            <p><a href="'.$urlgenerator->generate("people_edit", ["id" => $people->get("id")]).'">modifier</a></p>
+            <p>Intervenant n° ' . $people->getId() . '</p>
+            <p><a href="' . $urlgenerator->generate("people_edit", ["id" => $peopleEntity->get("id")]) . '">modifier</a></p>
         </div>
     ';
-}
+    }
 
-$request->attributes->set("page_title", $people->get("name"));
-$content .= '<h2>'.$people->get("name").'</h2>';
+    $request->attributes->set("page_title", $peopleEntity->get("name"));
+    $content .= '<h2>' . $peopleEntity->get("name") . '</h2>';
 
 // Aliases
-$aliases = $pm->getAll(['people_pseudo' => $people->get('id')]);
-$aliases = array_map(function ($alias) {
-    return '<a href="/'.$alias->get('url').'/">'.$alias->get('name').'</a>';
-}, $aliases);
-if (count($aliases)) {
-    $content .= '<p>Ses pseudonymes : '.join(', ', $aliases).'</p>';
-}
-
-// Pseudonyme de...
-if ($people->has('pseudo')) {
-    $realName = $pm->get(['people_id' => $people->get('pseudo')]);
-    if ($realName) {
-        $content .= '<p>(Pseudonyme de <a href="/'.$realName["people_url"].'/">'.$realName["people_name"].'</a>)</p>';
+    $aliases = $pm->getAll(['people_pseudo' => $peopleEntity->get('id')]);
+    $aliases = array_map(function ($alias) {
+        return '<a href="/' . $alias->get('url') . '/">' . $alias->get('name') . '</a>';
+    }, $aliases);
+    if (count($aliases)) {
+        $content .= '<p>Ses pseudonymes : ' . join(', ', $aliases) . '</p>';
     }
-}
 
-// Linked post
-/** @var PDO $_SQL */
-$sql = $_SQL->query("SELECT * FROM `posts` JOIN `links` USING(`post_id`) WHERE `posts`.`site_id` = '". LegacyCodeHelper::getLegacyCurrentSite()["site_id"]."' AND `links`.`people_id` = '".$p["people_id"]."'");
-$posts = $sql->fetchAll();
+    // Pseudonyme de...
+    if ($peopleEntity->has('pseudo')) {
+        $realName = $pm->get(['people_id' => $peopleEntity->get('pseudo')]);
+        if ($realName) {
+            $content .= '<p>(Pseudonyme de <a href="/' . $realName["people_url"] . '/">' . $realName["people_name"] . '</a>)</p>';
+        }
+    }
 
-if ($posts) {
-    $posts = array_map(function ($p) {
-        return '<li><a href="/blog/'.$p["post_url"].'">'.$p["post_title"].'</a></li>';
-    }, $posts);
+    // Linked post
+    $sql = EntityManager::prepareAndExecute(
+        "SELECT * FROM `posts` JOIN `links` USING(`post_id`) WHERE `posts`.`site_id` = '" . $currentSite->getId() . "' AND `links`.`people_id` = '" . $people->getId() . "'",
+        []
+    );
+    $posts = $sql->fetchAll();
 
-    $content .= '<h3>À propos</h3><ul>'.implode($posts).'</ul>';
-}
+    if ($posts) {
+        $posts = array_map(function ($p) {
+            return '<li><a href="/blog/' . $p["post_url"] . '">' . $p["post_title"] . '</a></li>';
+        }, $posts);
 
-$flag = null;
-if (!empty($p["people_nation"])) {
-    $flag = '<img src="/common/flags/'.$p["people_nation"].'.png" alt="Nationalité '.$p["people_nation"].'" /> ';
-}
+        $content .= '<h3>À propos</h3><ul>' . implode($posts) . '</ul>';
+    }
 
-$dates = null;
-if (!empty($p["people_birth"]) and !empty($p["people_death"])) {
-    $dates = $p["people_birth"].' - '.$p["people_death"];
-} elseif (!empty($p["people_birth"])) {
-    $dates = 'Né en '.$p["people_birth"];
-}
+    $flag = null;
+    if (!empty($p["people_nation"])) {
+        $flag = '<img src="/common/flags/' . $p["people_nation"] . '.png" alt="Nationalité ' . $p["people_nation"] . '" /> ';
+    }
 
-$content .= '
+    $dates = null;
+    if (!empty($p["people_birth"]) and !empty($p["people_death"])) {
+        $dates = $p["people_birth"] . ' - ' . $p["people_death"];
+    } elseif (!empty($p["people_birth"])) {
+        $dates = 'Né en ' . $p["people_birth"];
+    }
+
+    $content .= '
     <div id="people" class="clearfix">
         <div id="people-photo">
 ';
-$photo = new Media("people", $p["people_id"]);
-if ($photo->exists()) {
-    $content .= '<img src="'.$photo->getUrl(["size" => "w200"]).'" alt="'.$p["people_name"].'" class="frame" />';
-}
-$content .= '<p class="center">'.$flag.' '.$dates.'</p>';
-if (!empty($p["people_site"])) {
-    $content .= '<p><a href="'.$p["people_site"].'" rel="nofollow" target="_blank">Site officiel</a></p>';
-}
+    $photo = new Media("people", $people->getId());
+    if ($photo->exists()) {
+        $content .= '<img src="' . $photo->getUrl(["size" => "w200"]) . '" alt="' . $people->getName() . '" class="frame" />';
+    }
+    $content .= '<p class="center">' . $flag . ' ' . $dates . '</p>';
+    if (!empty($p["people_site"])) {
+        $content .= '<p><a href="' . $p["people_site"] . '" rel="nofollow" target="_blank">Site officiel</a></p>';
+    }
 
-$content .= '
+    $content .= '
         </div>
 ';
 
-$content .= '<div id="people-bio">'.$p["people_bio"].'</div>';
+    $content .= '<div id="people-bio">' . $people->getBio() . '</div>';
 
-$_REQ = "`article_links` LIKE '%[people:".$p["people_id"]."]%'";
+    $_REQ = "`article_links` LIKE '%[people:" . $people->getId() . "]%'";
 
-$_REQ_ORDER = "ORDER BY `article_copyright` DESC, `article_pubdate` DESC";
+    $_REQ_ORDER = "ORDER BY `article_copyright` DESC, `article_pubdate` DESC";
 
-$path = get_controller_path('_list');
-$content .= require_once $path;
+    $path = get_controller_path('_list');
+    $content .= require_once $path;
 
-return new Response($content);
+    return new Response($content);
+};

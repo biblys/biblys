@@ -10,6 +10,7 @@ use SiteManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Visitor;
+use function trigger_deprecation;
 
 class LegacyCodeHelper
 {
@@ -18,6 +19,15 @@ class LegacyCodeHelper
      * @deprecated Using getLegacyCurrentSite is deprecated. Use CurrentSite service instead.
      */
     public static function getLegacyCurrentSite(): Site
+    {
+        return self::getGlobalSite();
+    }
+
+    /**
+     * @throws Exception
+     * @deprecated Using getGlobalSite is deprecated. Use CurrentSite service instead.
+     */
+    public static function getGlobalSite(): Site
     {
         trigger_deprecation(
             "biblys/biblys",
@@ -38,13 +48,6 @@ class LegacyCodeHelper
 
     /**
      * @throws Exception
-     * @deprecated Using getGlobalSite is deprecated. Use CurrentSite service instead.
-     */
-    public static function getGlobalSite(): Site {
-        return self::getLegacyCurrentSite();
-    }
-
-    /**
      * @deprecated Using getGlobalConfig is deprecated. Use CurrentUser service instead.
      */
     public static function getGlobalConfig(): Config
