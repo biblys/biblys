@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpComposerExtensionStubsInspection */
 
 use Biblys\Isbn\Isbn as Isbn;
 use Biblys\Service\CurrentSite;
@@ -36,6 +36,7 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
         throw new Exception("Le fichier n'existe pas !");
     }
 
+    /** @var \Model\File $file */
     $file = FileQuery::create()->findPk($fileEntity->get("id"));
 
     if ($action === "delete") {
@@ -91,18 +92,21 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
 
         $file->setArticleId($articleId);
         $file->setAxysAccountId($currentUser->getAxysAccount()->getId());
-        $file->setFileTitle($title);
-        $file->setFileType($type);
-        $file->setFileHash(md5_file($uploadedFile["tmp_name"]));
-        $file->setFileSize($size);
-        $file->setFileUploaded(date('Y-m-d H:i:s'));
+        $file->setTitle($title);
+        $file->setType($type);
+        $file->setHash(md5_file($uploadedFile["tmp_name"]));
+        $file->setSize($size);
+        $file->setUploaded(date('Y-m-d H:i:s'));
 
-        if (copy($uploadedFile["tmp_name"], $file->getPath())) {
+        $filePath = $fileEntity->getDir().$file->getHash();
+        if (copy($uploadedFile["tmp_name"], $filePath)) {
             $file->save();
         } else {
             throw new Exception('Copy error');
         }
 
+        /** @var File $fileEntity */
+        $fileEntity = $fm->getById($file->getId());
         $fileEntity->markAsUpdated();
         $r['success'] = 'Le fichier &laquo;&nbsp;'.$uploadedFile['name'].'&nbsp;&raquo; a bien été ajouté.';
         $r['new_line'] = $fileEntity->getLine();

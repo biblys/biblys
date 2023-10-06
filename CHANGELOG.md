@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.73.1 (DEV)
+
+Corrections
+
+- L'ajout d'un fichier téléchargeable à un article ne fonctionnait plus et 
+  échouait sans erreur. C'est corrigé.
+
 ## 2.73.0 (6 octobre 2023)
 
 Améliorations
