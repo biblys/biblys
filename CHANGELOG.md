@@ -6,6 +6,8 @@ Corrections
 
 - L'ajout d'un fichier téléchargeable à un article ne fonctionnait plus et 
   échouait sans erreur. C'est corrigé.
+- Lorsqu'un client ajoutait des articles à une commande, le courriel de 
+  confirmation n'incluait pas les nouveaux articles. C'est maintenant le cas.
 
 ## 2.73.0 (6 octobre 2023)
 

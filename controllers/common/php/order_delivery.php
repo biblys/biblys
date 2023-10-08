@@ -195,14 +195,14 @@ if ($request->getMethod() === "POST") {
         $cm->update($customer);
 
         // Hydrate order from cart
-        $om->hydrateFromCart($order, $cart);
+        $updatedOrder = $om->hydrateFromCart($order, $cart);
 
         /** @var Mailer $mailer */
         /** @var CurrentSite $currentSite */
         $termsPageId = $currentSite->getOption("cgv_page");
         $termsPage = PageQuery::create()->findPk($termsPageId);
         OrderDeliveryHelpers::sendOrderConfirmationMail(
-            $order,
+            $updatedOrder,
             $shipping,
             $mailer,
             LegacyCodeHelper::getGlobalSite(),

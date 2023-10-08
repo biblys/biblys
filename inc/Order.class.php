@@ -634,12 +634,7 @@ class OrderManager extends EntityManager
         }
     }
 
-    /**
-     * Ajouter les exemplaires d'un panier à la commande
-     * @param object $order
-     * @return object La nouvelle commande
-     */
-    public function hydrateFromCart(Order $order, Cart $cart)
+    public function hydrateFromCart(Order $order, Cart $cart): Order
     {
         $sm = new StockManager();
         $cm = new CartManager();
@@ -656,7 +651,7 @@ class OrderManager extends EntityManager
         $cm->updateFromStock($cart);
 
         // Update order from copies
-        $this->updateFromStock($order);
+        $updatedOrder = $this->updateFromStock($order);
 
         // Update campaign (if necessary)
         $campaign = $order->getCampaign();
@@ -673,6 +668,8 @@ class OrderManager extends EntityManager
                 $cfrm->updateQuantity($reward);
             }
         }
+
+        return $updatedOrder;
     }
 
     /**
@@ -749,9 +746,9 @@ class OrderManager extends EntityManager
 
     /**
      * Recalcule les montants de la commande en fonction des exemplaires
-     * @param object $order L'objet de la commande
+     * @throws Exception
      */
-    public function updateFromStock(Order $order)
+    public function updateFromStock(Order $order): Order
     {
         $sm = new StockManager();
 
@@ -764,6 +761,8 @@ class OrderManager extends EntityManager
         }
 
         $order->set('order_amount', $order_amount);
+
+        /** @var Order $order */
         $order = $this->update($order);
 
         return $order;
