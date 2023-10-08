@@ -1,8 +1,11 @@
 <?php
 
+/** @noinspection HttpUrlsUsage */
+
 namespace Biblys\Legacy;
 
 use Article;
+use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Exception\OrderDetailsValidationException;
 use Biblys\Service\Mailer;
 use Cart;
@@ -15,10 +18,12 @@ use Exception;
 use Model\Page;
 use Order;
 use OrderManager;
+use Propel\Runtime\Exception\PropelException;
 use Shipping;
 use ShippingManager;
 use Site;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Visitor;
 
 class OrderDeliveryHelpers
@@ -27,7 +32,7 @@ class OrderDeliveryHelpers
      * @throws OrderDetailsValidationException
      * @throws Exception
      */
-    public static function validateOrderDetails($request)
+    public static function validateOrderDetails($request): void
     {
         if (empty($request->request->get('order_firstname'))) {
             throw new OrderDetailsValidationException(
@@ -94,7 +99,7 @@ class OrderDeliveryHelpers
      * @param Visitor $visitor
      * @return false|mixed|null
      */
-    public static function getOrderInProgressForVisitor(Visitor $visitor)
+    public static function getOrderInProgressForVisitor(Visitor $visitor): mixed
     {
         if (!$visitor->isLogged()) {
             return null;
@@ -167,6 +172,7 @@ class OrderDeliveryHelpers
                 throw new BadRequestHttpException("shipping_id parameter is required when cart needs shipping");
             }
             $shm = new ShippingManager();
+            /** @var Shipping $shipping */
             $shipping = $shm->getById($shippingIdFromRequest);
             if (!$shipping) {
                 trigger_error("Frais de port incorrect.");
@@ -179,13 +185,9 @@ class OrderDeliveryHelpers
     }
 
     /**
-     * @param Order $order
-     * @param Shipping|null $shipping
-     * @param Mailer $mailer
-     * @param Site $site
-     * @param bool $isUpdatingAnExistingOrder
-     * @param Page|null $termsPage
-     * @return void
+     * @throws InvalidEmailAddressException
+     * @throws PropelException
+     * @throws TransportExceptionInterface
      * @throws Exception
      */
     public static function sendOrderConfirmationMail(

@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection HttpUrlsUsage */
+
 namespace Biblys\Legacy;
 
 use Biblys\Service\Mailer;
