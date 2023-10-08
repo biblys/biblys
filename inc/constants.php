@@ -1,3 +1,3 @@
 <?php
 
-const BIBLYS_VERSION = "2.73.1";
+const BIBLYS_VERSION = "2.74.0-dev";

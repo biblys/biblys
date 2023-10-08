@@ -108,6 +108,7 @@ return function (Request $request): Response
         `stock_selling_price`, `stock_selling_price_ht`, `stock_return_date`, `stock_selling_date`,
         `stock_tva_rate`, `order_id`, `order_type`, `order_url`, `order_amount`, `order_firstname`,
         `order_lastname`, `order_payment_date`,`order_payment_cash`, `order_payment_cheque`,
+        `order_payment_transfer`,
         `order_payment_card`, `order_payment_paypal`,  `order_payment_left`, `order_shipping`,
         `axys_accounts`.`axys_account_id`, `axys_account_email`,
         `axys_account_last_name`, `axys_account_first_name`,
@@ -209,6 +210,7 @@ return function (Request $request): Response
     $TotalCard = 0;
     $TotalPaypal = 0;
     $TotalCheque = 0;
+    $TotalTransfer = 0;
     $Total = null;
     $TotalHT = null;
     $TotalNeuf = 0;
@@ -260,19 +262,51 @@ return function (Request $request): Response
                     ' . _date($l["order_payment_date"], 'L j F Y - H:i') . '<br />
                     <a href="/pages/adm_order?order_id=' . $l["order_id"] . '">modifier</a> | <a href="/pages/adm_order?order_id=' . $l["order_id"] . '&delete=1" data-confirm="Voulez-vous vraiment ANNULER cet achat et remettre les livres en vente ?">annuler</a>
                 </td>
-                <td class="center">
-                    <img src="/common/icons/cash_16.png" alt="Espèces" title="Espèces" /><br />' . price($l["order_payment_cash"], 'EUR') . '
-                </td>
-                <td class="center">
-                    <img src="/common/icons/cheque_16.png" alt="Chèque" title="Chèque" /><br />' . price($l["order_payment_cheque"], 'EUR') . '
-                </td>
-                <td class="center">
-                    <img src="/common/icons/card_16.png" alt="Carte bancaire" title="Carte bancaire" /><br />' . price($l["order_payment_card"], 'EUR') . '
-                </td>
-                <td class="center">
-                    <img src="/common/icons/paypal_16.png" alt="Paypal" title="Paypal"><br />' . price($l["order_payment_paypal"], 'EUR') . '
-                </td>
-                <td class="center">
+            ';
+            if ($l["order_payment_cash"]) {
+                $content .= '
+                    <td class="center">
+                        Espèces<br />' . price($l["order_payment_cash"], 'EUR') . '
+                    </td>
+                ';
+            }
+            if ($l["order_payment_cheque"]) {
+                $content .= '
+                    <td class="center">
+                        Chèque<br />' . price($l["order_payment_cheque"], 'EUR') . '
+                    </td>
+                ';
+            }
+            if ($l["order_payment_cheque"]) {
+                $content .= '
+                    <td class="center">
+                        Chèque<br />' . price($l["order_payment_cheque"], 'EUR') . '
+                    </td>
+                ';
+            }
+            if ($l["order_payment_transfer"]) {
+                $content .= '
+                    <td class="center">
+                        Virement<br />' . price($l["order_payment_cheque"], 'EUR') . '
+                    </td>
+                ';
+            }
+            if ($l["order_payment_card"]) {
+                $content .= '
+                    <td class="center">
+                        Carte bancaire<br />' . price($l["order_payment_card"], 'EUR') . '
+                    </td>
+                ';
+            }
+            if ($l["order_payment_paypal"]) {
+                $content .= '
+                    <td class="center">
+                        Paypal<br />' . price($l["order_payment_paypal"], 'EUR') . '
+                    </td>
+                ';
+            }
+            $content .= '
+                    <td class="center">
                     Rendu<br />' . price($l["order_payment_left"], 'EUR') . '
                 </td>
                 <td class"right">' . price($l["total_payments"], 'EUR') . '</td>
@@ -281,6 +315,7 @@ return function (Request $request): Response
             $TotalCash += $l["order_payment_cash"];
             $TotalLeft += $l["order_payment_left"];
             $TotalCheque += $l["order_payment_cheque"];
+            $TotalTransfer += $l["order_payment_transfer"];
             $TotalCard += $l["order_payment_card"];
             $TotalPaypal += $l["order_payment_paypal"];
             $order_id = $l["order_id"];
@@ -356,7 +391,7 @@ return function (Request $request): Response
     </tbody>
 </table>';
 
-    $TotalPayments = $TotalCash + $TotalCheque + $TotalCard + $TotalPaypal - $TotalLeft;
+    $TotalPayments = $TotalCash + $TotalCheque + $TotalCard + $TotalPaypal + $TotalTransfer - $TotalLeft;
 
 // TVA
     $tva_th = null;
@@ -409,6 +444,10 @@ return function (Request $request): Response
         <td>' . price($TotalCard, 'EUR') . '</td>
         <td class="right">Frais de port :</td>
         <td>' . price($TotalShipping, 'EUR') . '</td>
+    </tr>
+    <tr>
+        <td class="right">Virement :</td>
+        <td>' . price($TotalTransfer, 'EUR') . '</td>
     </tr>
     <tr>
         <td class="right">Paypal :</td>

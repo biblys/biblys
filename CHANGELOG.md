@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.74.0 (DEV)
+
+Améliorations
+
+- Les paiements par virement sont désormais affichés sur la page 
+  récapitulative des commandes.
+
 ### 2.73.1 (18 octobre 2023)
 
 Corrections
