@@ -1,61 +1,64 @@
 <?php
 
-use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentSite;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Best-sellers');
+return function (Request $request, CurrentSite $currentSite): Response
+{
+    $request->attributes->set("page_title", "Best-sellers");
 
-$list = null;
-$query = null;
+    $list = null;
+    $query = null;
 
-// Fitrer par année
-if (isset($_GET["year"]) && !empty($_GET['year'])) $query .= " AND `stock_selling_date` LIKE '".$_GET["year"]."%'";
-else $query .= " AND `stock_selling_date` IS NOT null ";
+    $year = $request->query->get("year");
+    if (!empty($year)) $query .= " AND `stock_selling_date` LIKE '" . $year . "%'";
+    else $query .= " AND `stock_selling_date` IS NOT null ";
 
-// Fitrer par année
-if (isset($_GET["type"]) && !empty($_GET['type'])) $query .= " AND `type_id` = ".$_GET["type"]."";
-//else $query .= " AND `stock_selling_date` IS NOT null ";
+    $type = $request->query->get("type");
+    if (!empty($type)) $query .= " AND `type_id` = " . $type;
 
-$query = "SELECT `article_title`, `article_url`, GROUP_CONCAT(DISTINCT `article_id`) AS `ids`, COUNT(`stock_id`) AS `Ventes`, SUM(`stock_selling_price`) AS `CA`, GROUP_CONCAT(DISTINCT `article_publisher` SEPARATOR ', ') AS `publishers`
+    $query = "SELECT `article_title`, `article_url`, GROUP_CONCAT(DISTINCT `article_id`) AS `ids`, COUNT(`stock_id`) AS `Ventes`, SUM(`stock_selling_price`) AS `CA`, GROUP_CONCAT(DISTINCT `article_publisher` SEPARATOR ', ') AS `publishers`
     FROM `stock`
     JOIN `articles` USING(`article_id`)
-    WHERE `stock`.`site_id` = ". LegacyCodeHelper::getLegacyCurrentSite()["site_id"]." AND `stock_selling_price` != 0 ".$query."
+    WHERE `stock`.`site_id` = " . $currentSite->getId() . " AND `stock_selling_price` != 0 " . $query . "
     GROUP BY `article_item`, IF (`article_item` IS null, `article_id`, null), `article_title`, `article_url`
     HAVING COUNT(`stock_id`) >= 3
     ORDER BY `Ventes` DESC, `CA`";
 
-$sql = $_SQL->query($query);
+    $sql = EntityManager::prepareAndExecute($query, []);
 
-$i = 0; $total = 0;
-while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
-    $i++;
-    if (LegacyCodeHelper::getLegacyCurrentSite()['site_tva']) $x["CA"] = $x["CA"] / 1.055;
-    $list .= '
+    $i = 0;
+    $total = 0;
+    while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
+        $i++;
+        if ($currentSite->getSite()->getTva()) $x["CA"] = $x["CA"] / 1.055;
+        $list .= '
             <tr>
-                <td class="right">'.$i.'.</td>
-                <td><a href="/'.$x["article_url"].'">'.$x["article_title"].'</a></td>
-                <td>'.$x["publishers"].'</td>
-                <td class="right">'.$x["Ventes"].'</td>
-                <td sorttable_customkey="'.$x["CA"].'" class="right">'.price($x["CA"],'EUR').'</td>
+                <td class="right">' . $i . '.</td>
+                <td><a href="/' . $x["article_url"] . '">' . $x["article_title"] . '</a></td>
+                <td>' . $x["publishers"] . '</td>
+                <td class="right">' . $x["Ventes"] . '</td>
+                <td class="right">' . price($x["CA"], 'EUR') . '</td>
             </tr>
         ';
-    $total += $x["CA"];
-}
+        $total += $x["CA"];
+    }
 
-$years = null;
-for($y = date('Y'); $y >= 2010; $y--) {
-    if (isset($_GET['year']) && $y == $_GET["year"]) $sel = 'selected';
-    else $sel = null;
-    $years .= '<option value="'.$y.'" '.$sel.'>'.$y.'</option>';
-}
+    $years = null;
+    for ($y = date('Y'); $y >= 2010; $y--) {
+        if (isset($year) && $y == $year) $sel = 'selected';
+        else $sel = null;
+        $years .= '<option value="' . $y . '" ' . $sel . '>' . $y . '</option>';
+    }
 
-// Types d'articles
-$type_options = Biblys\Article\Type::getOptions($request->query->get('type'));
+    $type_options = Biblys\Article\Type::getOptions($request->query->get('type'));
 
-if (LegacyCodeHelper::getLegacyCurrentSite()['site_tva']) $HT = 'HT'; else $HT = 'TTC';
+    if ($currentSite->getSite()->getTva()) $HT = 'HT'; else $HT = 'TTC';
 
-$_ECHO .= '
+    $content = '
 
-        <h1><span class="fa fa-sort-amount-desc"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
+        <h1><span class="fa fa-sort-amount-desc"></span> Best-sellers</h1>
 
         <form class="fieldset">
             <fieldset>
@@ -65,7 +68,7 @@ $_ECHO .= '
                     <label for="year">Année :</label>
                     <select name="year" id="year">
                         <option value="0">Cumul</option>
-                        '.$years.'
+                        ' . $years . '
                     </select>
                 </p>
 
@@ -73,7 +76,7 @@ $_ECHO .= '
                     <label for="type">Type :</label>
                     <select name="type" id="type">
                         <option value="0">Tous</option>
-                        '.join($type_options).'
+                        ' . join($type_options) . '
                     </select>
                 </p>
 
@@ -84,8 +87,6 @@ $_ECHO .= '
             </fieldset>
         </form>
 
-        <!--p>Livres vendus &agrave trois exemplaires ou plus</p-->
-
         <table class="sortable admin-table">
             <thead class="pointer">
                 <tr>
@@ -93,20 +94,21 @@ $_ECHO .= '
                     <th>Titre</th>
                     <th>Collections</th>
                     <th>Ventes</th>
-                    <th>CA '.$HT.'</th>
+                    <th>CA ' . $HT . '</th>
                 </tr>
             </thead>
             <tbody>
-                '.$list.'
+                ' . $list . '
             </tbody>
             <tfoot>
                 <tr>
                     <th colspan=2></th>
-                    <th colspan=2>Total '.$HT.' :</th>
-                    <th>'.price($total,'EUR').'</th>
+                    <th colspan=2>Total ' . $HT . ' :</th>
+                    <th>' . price($total, 'EUR') . '</th>
                 </tr>
             </tfoot>
         </table>
     ';
 
-?>
+    return new Response($content);
+};
