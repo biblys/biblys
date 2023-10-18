@@ -1,11 +1,11 @@
 # Historique des modifications
 
-### 2.73.1 (DEV)
+### 2.73.1 (18 octobre 2023)
 
 Corrections
 
 - L'ajout d'un fichier téléchargeable à un article ne fonctionnait plus et 
-  échouait sans erreur. C'est corrigé.
+  échouait sans erreurs. C'est corrigé.
 - Lorsqu'un client ajoutait des articles à une commande, le courriel de 
   confirmation n'incluait pas les nouveaux articles. C'est maintenant le cas.
 
