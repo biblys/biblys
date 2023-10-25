@@ -394,7 +394,7 @@ function overlay(text) {
 
 function quickAdd() {
   $('body').append(
-    '<form id="stockQuickAdd"><br /><br /><fieldset for="stockQuickAddInput"><label>Article :</label> <input id="stockQuickAddInput" type="text" class="verylong" placeholder="ISBN, titre, auteur, collection..." autofocus /> <input type="submit" value="&raquo;" /></fieldset><audio controls="controls" class="hidden" autoplay><source src="/assets/sounds/beep.mp3" type="audio/mp3" /></audio></form>'
+    '<form id="stockQuickAdd"><br /><br /><fieldset for="stockQuickAddInput"><label>Article :</label> <input id="stockQuickAddInput" type="text" class="verylong" placeholder="ISBN, titre, auteur, collection..." autofocus /> <input type="submit" value="&raquo;" /></fieldset></form>'
   );
   $('#stockQuickAdd')
     .dialog({
