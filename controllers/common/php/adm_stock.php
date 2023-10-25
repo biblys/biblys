@@ -748,7 +748,7 @@ if ($article) {
                 />
                 <br /><br />
 
-                <label for="stock_condition" class="required">&Eacute;tat :</label>
+                <label for="stock_condition" class="required">État :</label>
                 <select name="stock_condition" id="stock_condition" class="required" autofocus required>
                     <option selected>' . $s['stock_condition'] . '</option>
                     <option>Neuf</option>

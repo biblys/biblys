@@ -97,7 +97,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
     <br>
     <table class="reassort admin-table">
     <thead>
-    <th>&Eacute;diteur</th>
+    <th>Éditeur</th>
     <th>Titre</th>
     <th>EAN</th>
     <th>Qté</th>

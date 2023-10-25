@@ -281,7 +281,7 @@ if (isset($Articles) && $Articles > 0) {
                             coll. '.$article->get('collection')->get('name').' '.numero($article->get('number')).'<br />
                 ';
                 if (!empty($s["stock_condition"])) {
-                    $content .= '&Eacute;tat : '.$s["stock_condition"].'<br />';
+                    $content .= 'État : '.$s["stock_condition"].'<br />';
                 }
                 $content .= '
                         </td>

@@ -167,7 +167,7 @@ return function (Request $request): Response
             </select>
         </p>
         <p>
-            <label>&Eacute;tat :</label>
+            <label>État :</label>
             <select name="e">
                 <option value="0">Tous</option>
                 <option value="neuf" ' . $neuf_sel . '>Neuf</option>

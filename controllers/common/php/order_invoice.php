@@ -41,7 +41,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
     // Condition column for bookshops
     $condition = null;
     if ($_SITE->get("shop")) {
-        $condition = '<th>&Eacute;tat</th>';
+        $condition = '<th>État</th>';
         $colspan = 3;
     }
 

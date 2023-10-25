@@ -23,7 +23,7 @@ if (!$publisher) {
     if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
         $_ECHO .= '
             <div class="admin">
-                <p>&Eacute;diteur n&deg; '.$publisher->get('id').'</p>
+                <p>Éditeur n&deg; '.$publisher->get('id').'</p>
                 <p><a href="'.$urlgenerator->generate('publisher_edit', ['id' => $publisher->get('id')]).'">modifier</a></p>
                 <p><a href="/pages/adm_stocks?publisher_id='.$publisher->get('id').'">stock</a></p>
             </div>

@@ -15,7 +15,7 @@ $publishers = $_SQL->prepare("SELECT `p`.`publisher_id`, `publisher_name` FROM `
 		';
 	}
 
-	\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('&Eacute;diteurs sans fournisseur');
+	\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Éditeurs sans fournisseur');
 	$_ECHO .= '
 		<h2>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>
 		
@@ -26,7 +26,7 @@ $publishers = $_SQL->prepare("SELECT `p`.`publisher_id`, `publisher_name` FROM `
 		<table class="sortable admin-table">
 			<thead>
 				<tr class="pointer">
-					<th>&Eacute;diteur</th>
+					<th>Éditeur</th>
 				</tr>
 			</thead>
 			<tbody>

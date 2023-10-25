@@ -28,7 +28,7 @@ if ($action === "delete") {
 
     $article = $stock->get('article');
 
-    if($_POST["field"] == 'stock_condition') $field = '&Eacute;tat';
+    if($_POST["field"] == 'stock_condition') $field = 'État';
     elseif($_POST["field"] == 'stock_purchase_price') $field = 'Prix d\'achat';
     elseif($_POST["field"] == 'stock_selling_price') $field = 'Prix de vente';
     elseif($_POST["field"] == 'stock_invoice') $field = 'Facture';

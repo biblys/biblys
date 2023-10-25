@@ -397,7 +397,7 @@ $content .= '
             <legend>Base de données</legend>
 
             <p>
-                <label for="publisher_id"">&Eacute;diteur n&deg; :</label>
+                <label for="publisher_id"">Éditeur n&deg; :</label>
                 <input type="text" name="publisher_id" id="publisher_id" value="'.$p["publisher_id"].'" class="short" readonly>
             </p>
             <br>
