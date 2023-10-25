@@ -290,7 +290,10 @@ class StockTest extends PHPUnit\Framework\TestCase
     public function testEditFreePrice()
     {
         // given
-        $article = EntityFactory::createArticle(["article_price_editable" => 1]);
+        $article = EntityFactory::createArticle([
+            "article_price_editable" => 1,
+            "article_price" => 100,
+        ]);
         $stock = EntityFactory::createStock([
             "article_id" => $article->get("id"),
             "stock_selling_price" => 100,

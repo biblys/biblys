@@ -463,8 +463,38 @@ return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
                 $plus30 = null;
             }
 
+            $freeShippingTargetAmount = $currentSite->getOption("free_shipping_target_amount");
+            $cartNeedsShipping = $cart->needsShipping();
+            $freeShippingNotice = null;
+            if ($cartNeedsShipping && $freeShippingTargetAmount) {
+                $missingAmount = $freeShippingTargetAmount - $Total;
+                if ($missingAmount <= 0) {
+                    $freeShippingNotice = '
+                        <p class="alert alert-success">
+                            <span class="fa fa-check-circle"></span> 
+                            Vous bénéficiez de la livraison offerte !
+                        </p>
+                    ';
+                } else {
+                    $freeShippingNotice = '
+                        <div class="alert alert-info">
+                            <h3>
+                                <span class="fa fa-gift"></span> 
+                                Livraison offerte à partir de ' . currency($freeShippingTargetAmount / 100) . ' d\'achat
+                            </h3>
+                            <progress value="' . $Total . '" max="' . $freeShippingTargetAmount . '"></progress>
+                            <p>
+                                Ajoutez encore <strong>' . currency($missingAmount / 100) . '</strong> à votre panier pour en bénéficier !
+                            </p>
+                        </div>
+                    ';
+                }
+            }
+
             $content .= '
                 <h3>Mode d\'expédition</h3>
+                
+                '.$freeShippingNotice.'
 
                 '.$plus30.'
 
@@ -545,3 +575,4 @@ return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
 
     return new Response($content);
 };
+

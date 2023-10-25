@@ -64,6 +64,7 @@ class EntityFactory
         }
 
         $attributes["article_number"] = $attributes["article_number"] ?? "19";
+        $attributes["article_price"] = $attributes["article_price"] ?? "999";
 
         $article = $am->create($attributes);
 

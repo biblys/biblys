@@ -15,8 +15,10 @@ use Biblys\Test\ModelFactory;
 use CartManager;
 use Exception;
 use Framework\Exception\AuthException;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Site;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
@@ -96,6 +98,53 @@ class CartTest extends TestCase
             "Finaliser votre commande",
             $response->getContent(),
             "it should display the finalize order button"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testFreeShippingNotice()
+    {
+        /** @var Site $_SITE */
+        global $_SITE;
+
+        // given
+        $controller = require __DIR__."/../../../../controllers/common/php/cart.php";
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("url");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite
+            ->shouldReceive("getOption")
+            ->with("sales_disabled")
+            ->andReturn(null);
+        $currentSite
+            ->shouldReceive("getOption")
+            ->with("free_shipping_target_amount")
+            ->andReturn(1000);
+
+        ModelFactory::createCountry();
+        $_SITE->setOpt("virtual_stock", 1);
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
+        $article = EntityFactory::createArticle(["type_id" => 1, "article_price" => 500]);
+        $cm = new CartManager();
+        $cm->vacuum($cart);
+        $cm->addArticle($cart, $article);
+
+        // when
+        $response = $controller($urlGenerator, $currentSite);
+
+        // then
+        $this->assertStringContainsString(
+            "Livraison offerte à partir de 10,00&nbsp;&euro; d'achat",
+            $response->getContent(),
+            "it displays the free shipping notice"
+        );
+        $this->assertStringContainsString(
+            "Ajoutez encore <strong>5,00&nbsp;&euro;</strong> à votre panier pour en bénéficier !",
+            $response->getContent(),
+            "it displays the missing amount for free shipping"
         );
     }
 }
