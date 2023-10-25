@@ -4,8 +4,10 @@
 
 Améliorations
 
-- Les paiements par virement sont désormais affichés sur la page 
-  récapitulative des commandes.
+- Les paiements par virement sont désormais affichés sur la page récapitulative 
+  des commandes.
+- Le champ permettant d'indiquer la raison de suppression d'un article a été 
+  rétiré.
 
 ### 2.73.1 (18 octobre 2023)
 
