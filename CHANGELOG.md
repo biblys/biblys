@@ -9,6 +9,12 @@ Améliorations
 - Le champ permettant d'indiquer la raison de suppression d'un article a été 
   rétiré.
 
+Corrections
+
+- L'ajout d'un nouvel administrateur déclenchait une erreur même si 
+  l'adresse email utilisée correspondait bien à un compte utilisateur. C'est 
+  corrigé.
+
 ### 2.73.1 (18 octobre 2023)
 
 Corrections

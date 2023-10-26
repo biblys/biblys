@@ -28,7 +28,7 @@ return function (
 
         try {
             /** @var AxysAccount $axysAccount */
-            $axysAccount = $um->get(['axys_account_id' => $axysAccountEmail]);
+            $axysAccount = $um->get(['axys_account_email' => $axysAccountEmail]);
             if (!$axysAccount) {
                 throw new BadRequestHttpException(
                     "L'adresse e-mail doit correspondre à un compte utilisateur existant."
@@ -49,10 +49,9 @@ return function (
         $message = '
             <p>Bonjour,</p>
             <p>
-                Votre accès administrateur a été créé sur le site 
+                Votre accès admin a été créé sur le site 
                 <a href="https://' . $currentSite->getSite()->getDomain() . '/">'
-            . $currentSite->getSite()->getTitle() . '
-                </a>.
+            . $currentSite->getSite()->getTitle() . '</a>.
             </p>
             <p>
                 Vos identifiants de connexion sont votre adresse e-mail (' . $axysAccount->get("axys_account_email") . ') 
