@@ -1,7 +1,7 @@
 <?php
 
 use Biblys\Exception\EntityAlreadyExistsException;
-use Biblys\Service\SlugService;
+use Biblys\Service\Slug\SlugService;
 
 class Collection extends Entity
     {

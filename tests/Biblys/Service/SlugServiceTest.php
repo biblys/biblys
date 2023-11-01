@@ -2,6 +2,7 @@
 
 namespace Biblys\Service;
 
+use Biblys\Service\Slug\SlugService;
 use PHPUnit\Framework\TestCase;
 
 class SlugServiceTest extends TestCase

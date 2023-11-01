@@ -2,19 +2,23 @@
 
 namespace Biblys\Service;
 
-use Symfony\Component\String\Slugger\AsciiSlugger;
-use Symfony\Component\String\UnicodeString;
-
+/**
+ * @deprecated
+ */
 class SlugService
 {
+    /**
+     * @deprecated
+     */
     public function slugify(string $input): string
     {
-        $replacements = [
-            "&" => "et"
-        ];
-        $slugger = new AsciiSlugger("fr", ["fr" => $replacements]);
-        $string = new UnicodeString($input);
-        $lowercaseString = $string->lower();
-        return $slugger->slug($lowercaseString);
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.74.0",
+            "Biblys\Service\SlugService is deprecated, use Biblys\Service\Slug\SlugService instead",
+        );
+
+        $slugService = new Slug\SlugService();
+        return $slugService->slugify($input);
     }
 }

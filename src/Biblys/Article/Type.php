@@ -2,7 +2,7 @@
 
 namespace Biblys\Article;
 
-use Biblys\Service\SlugService;
+use Biblys\Service\Slug\SlugService;
 
 class Type
 {

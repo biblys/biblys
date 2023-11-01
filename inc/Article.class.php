@@ -13,7 +13,7 @@ use Biblys\Exception\InvalidEntityFetchedException;
 use Biblys\Isbn\Isbn;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
-use Biblys\Service\SlugService;
+use Biblys\Service\Slug\SlugService;
 use Model\PeopleQuery;
 
 class Article extends Entity

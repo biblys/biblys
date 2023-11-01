@@ -3,7 +3,7 @@
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
-use Biblys\Service\SlugService;
+use Biblys\Service\Slug\SlugService;
 use JetBrains\PhpStorm\NoReturn;
 use Propel\Runtime\Exception\PropelException;
 use Rollbar\Rollbar;

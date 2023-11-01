@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Pagination;
-use Biblys\Service\SlugService;
+use Biblys\Service\Slug\SlugService;
 use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Controller;

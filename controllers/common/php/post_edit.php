@@ -7,7 +7,7 @@ global $urlgenerator, $_SITE;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
-use Biblys\Service\SlugService;
+use Biblys\Service\Slug\SlugService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;

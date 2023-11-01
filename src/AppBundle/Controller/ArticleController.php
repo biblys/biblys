@@ -17,7 +17,7 @@ use Biblys\Service\LoggerService;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\MetaTagsService;
 use Biblys\Service\Pagination;
-use Biblys\Service\SlugService;
+use Biblys\Service\Slug\SlugService;
 use Biblys\Service\TemplateService;
 use Biblys\Service\Watermarking\WatermarkingService;
 use Exception;
