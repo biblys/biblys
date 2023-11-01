@@ -17,4 +17,15 @@ class SlugService
         $lowercaseString = $string->lower();
         return $slugger->slug($lowercaseString);
     }
+
+    /**
+     * @throws InvalidSlugException
+     */
+    public function validateArticleSlug(string $string): void
+    {
+        $pattern = "/^[a-z0-9\-]+\/[a-z0-9\-]+$/";
+        if (!preg_match($pattern, $string)) {
+            throw new InvalidSlugException("Invalid article slug");
+        }
+    }
 }
