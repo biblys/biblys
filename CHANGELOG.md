@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.74.1 (8 novembre 2023)
+
+Corrections
+
+- Une url d'article pouvait être considéré comme invalide si elle contenait 
+  le caractère "_". C'est corrigé.
+
 ### 2.74.0 (1er novembre 2023)
 
 Améliorations

@@ -23,7 +23,7 @@ class SlugService
      */
     public function validateArticleSlug(string $string): void
     {
-        $pattern = "/^[a-z0-9\-]+\/[a-z0-9\-]+$/";
+        $pattern = "/^[a-z0-9\-]+\/[a-z0-9\-\_]+$/";
         if (!preg_match($pattern, $string)) {
             throw new InvalidSlugException("Invalid article slug");
         }

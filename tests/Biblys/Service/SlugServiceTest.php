@@ -56,7 +56,7 @@ class SlugServiceTest extends TestCase
         $this->expectNotToPerformAssertions();
 
         // when
-        $slugService->validateArticleSlug("walter-jon-williams/la-peste-du-leopard-vert");
+        $slugService->validateArticleSlug("walter-jon-williams/la-peste-du-leopard-vert_numerique");
     }
 
     public function testValidateArticleSlugFailure()
