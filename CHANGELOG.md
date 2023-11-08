@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 2.74.1 (8 novembre 2023)
+### 2.74.1 (8 novembre 2023)
 
 Corrections
 
@@ -8,7 +8,7 @@ Corrections
   le caractère "_". C'est corrigé.
 - La page "Ma liste d'envies" pouvait s'afficher vide. Ce n'est plus le cas.
 
-### 2.74.0 (1er novembre 2023)
+## 2.74.0 (1er novembre 2023)
 
 Améliorations
 
