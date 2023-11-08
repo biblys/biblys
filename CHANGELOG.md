@@ -6,6 +6,7 @@ Corrections
 
 - Une url d'article pouvait être considéré comme invalide si elle contenait 
   le caractère "_". C'est corrigé.
+- La page "Ma liste d'envies" pouvait s'afficher vide. Ce n'est plus le cas.
 
 ### 2.74.0 (1er novembre 2023)
 
