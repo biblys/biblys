@@ -59,6 +59,7 @@ class LegacyController extends Controller
         // Retrocompatibility for static page urls (eg. /pages/:page_slug)
         $staticPage = PageQuery::create()
             ->filterBySite($currentSite->getSite())
+            ->filterByStatus(1)
             ->findOneByUrl($pageQueryParam);
         if ($staticPage) {
             $staticPageUrl = $urlGenerator->generate("static_page_show", ["slug" => $staticPage->getUrl()]);
