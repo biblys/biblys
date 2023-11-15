@@ -206,9 +206,14 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createLink(): Link
+    public static function createLink(
+        Article $article = null,
+        ArticleCategory $articleCategory = null,
+    ): Link
     {
         $link = new Link();
+        $link->setArticle($article);
+        $link->setArticleCategory($articleCategory);
         $link->save();
 
         return $link;

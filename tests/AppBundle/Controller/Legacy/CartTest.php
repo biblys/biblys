@@ -15,6 +15,7 @@ use Biblys\Test\ModelFactory;
 use CartManager;
 use Exception;
 use Mockery;
+use Model\ArticleQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Site;
@@ -149,6 +150,8 @@ class CartTest extends TestCase
         $currentSite->shouldReceive("getOption")->with("special_offer_article")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("special_offer_collection")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("special_offer_amount")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("cart_suggestions_rayon_id")->andReturn(null);
+        $config = Mockery::mock(Config::class);
 
         // when
         $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator);
@@ -214,6 +217,8 @@ class CartTest extends TestCase
         $currentSite->shouldReceive("getOption")->with("special_offer_article")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("special_offer_collection")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("special_offer_amount")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("cart_suggestions_rayon_id")->andReturn(null);
+        $config = Mockery::mock(Config::class);
 
         // when
         $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator);
@@ -223,6 +228,81 @@ class CartTest extends TestCase
             "Vous bénéficiez de la livraison offerte !",
             $response->getContent(),
             "displays the success text when target amount is reached"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testCartSuggestions()
+    {
+        /** @var Site $_SITE */
+        global $_SITE;
+
+        // given
+        $controller = require __DIR__ . "/../../../../controllers/common/php/cart.php";
+
+        ModelFactory::createCountry();
+        $_SITE->setOpt("virtual_stock", 1);
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
+        $article = EntityFactory::createArticle([
+            "article_title" => "Article suggéré",
+            "type_id" => 1,
+            "article_price" => 500
+        ]);
+        $cm = new CartManager();
+        $cm->vacuum($cart);
+        $cm->addArticle($cart, $article);
+        $site = ModelFactory::createSite();
+        $articleModel = ArticleQuery::create()->findPk($article->get("id"));
+        $articleCategory = ModelFactory::createArticleCategory(site: $site);
+        ModelFactory::createLink(article: $articleModel, articleCategory: $articleCategory);
+
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("url");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite
+            ->shouldReceive("getSite")
+            ->andReturn($site);
+        $currentSite
+            ->shouldReceive("getOption")
+            ->with("sales_disabled")
+            ->andReturn(null);
+        $currentSite
+            ->shouldReceive("getOption")
+            ->with("free_shipping_target_amount")
+            ->andReturn(1000);
+        $currentSite
+            ->shouldReceive("getOption")
+            ->with(
+                "free_shipping_invite_text",
+                "Livraison offerte à partir de 10,00&nbsp;&euro; d'achat",
+            )
+            ->andReturn("Livraison offerte à partir de 10,00&nbsp;&euro; d'achat");
+        $request = new Request();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+        $currentSite->shouldReceive("getOption")->with("special_offer_amount")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("special_offer_article")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("special_offer_collection")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("special_offer_amount")->andReturn(null);
+        $currentSite->shouldReceive("getOption")
+            ->with("cart_suggestions_rayon_id")
+            ->andReturn($articleCategory->getId());
+        $config = Mockery::mock(Config::class);
+        $config->shouldReceive("get")->with("media_path")->andReturn(null);
+        $config->shouldReceive("get")->with("media_url")->andReturn(null);
+
+        // when
+        $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator);
+
+        // then
+        $this->assertStringContainsString(
+            "Article suggéré",
+            $response->getContent(),
+            "displays article in suggestions rayon"
         );
     }
 }

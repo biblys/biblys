@@ -1445,3 +1445,30 @@ table.unfold tbody {
   text-align: center;
   width: 100%;
 }
+
+/**
+ * Cart suggestions
+ */
+
+.cart-suggestions {
+  align-items: end;
+  display: flex;
+  margin-top: 8px;
+  gap: 16px;
+}
+
+.cart-suggestions_article {
+  max-width: 128px;
+}
+
+.cart-suggestions_article_cover img {
+  max-width: 100%;
+}
+
+.cart_suggestions_article_infos {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+  gap: 8px;
+}
