@@ -560,20 +560,6 @@ function user_name($x)
     return $name;
 }
 
-// Afficher page
-function render_page($page_id, $mode = 'standalone')
-{
-$config = Config::load();
-    $currentSiteService = CurrentSite::buildFromConfig($config);
-    global $_SQL;
-    $pages = $_SQL->query("SELECT `page_content` FROM `pages` WHERE `page_id` = '" . $page_id . "' AND `site_id` = '" . $currentSiteService->getId() . "' AND `page_status` = 1 LIMIT 1");
-    if ('include' == $mode && $p = $pages->fetch(PDO::FETCH_ASSOC)) {
-        return $p['page_content'];
-    }
-
-    return "";
-}
-
 // Unité de taille
 function file_size($s): string
 {
