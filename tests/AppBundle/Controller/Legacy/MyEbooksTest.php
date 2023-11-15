@@ -5,12 +5,14 @@ namespace AppBundle\Controller\Legacy;
 use Biblys\Article\Type;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\TemplateService;
 use Biblys\Test\ModelFactory;
 use DateTime;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 require_once __DIR__ . "/../../../setUp.php";
@@ -38,6 +40,11 @@ class MyEbooksTest extends TestCase
 
         $urlgenerator = Mockery::mock(UrlGenerator::class);
 
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->shouldReceive("render")->andReturn(
+            new Response("In my library")
+        );
+
         $article = ModelFactory::createArticle(title: "In my library", typeId: Type::EBOOK);
         ModelFactory::createStockItem(
             site: $currentSite->getSite(),
@@ -47,7 +54,7 @@ class MyEbooksTest extends TestCase
         );
 
         // when
-        $response = $controller($request, $urlgenerator, $currentSite, $currentUser);
+        $response = $controller($request, $urlgenerator, $currentSite, $currentUser, $templateService);
 
         // then
         $this->assertEquals(

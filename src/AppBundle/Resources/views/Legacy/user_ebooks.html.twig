@@ -1,0 +1,54 @@
+{#{% extends "layout:base.html.twig" %}#}
+
+{#{% block title %}#}
+{#  Ma bibliothèque numérique#}
+{#{% endblock %}#}
+
+{#{% block main %}#}
+  <h1>Ma bibliothèque numérique</h1>
+
+  <p>
+    Ci-dessous, vous retrouverez la liste de tous les livres numériques achetés sur notre plateforme. Vous pouvez les
+    télécharger à volonté et dans le format qui vous convient.
+  </p>
+  <p>
+    Besoin d'aide ? Découvrez
+    <a href="https://www.biblys.fr/pages/doc_ebooks" target="_blank">comment télécharger et lire des livres numériques</a>.
+  </p>
+
+  {% if updatesAvailable %}
+    <br>
+    <p class="alert alert-info">
+      <span class="fa fa-refresh"></span>&nbsp;
+      Certains fichiers ont été mis à jour depuis votre dernier téléchargement.
+    </p>
+  {% endif %}
+
+  <br />
+  <table class="ebooks">
+    <tbody>
+      {% for ebook in ebooks %}
+        <tr class="{{ ebook.updated ? "alert alert-info" : "" }}">
+          <td class="center">
+            {% if ebook.articleCoverUrl %}
+              <a href="{{ path("article_show", { slug: ebook.article.url }) }}">
+                <img src="{{ ebook.articleCoverUrl }}" alt="{{ ebook.article.title }}" />
+              </a>
+            {% endif %}
+          </td>
+          <td style="max-width: 50%">
+            <a href="{{ ebook.article.url }}">{{ ebook.article.title }}</a>
+            <br>{{ ebook.article.authors }}
+          </td>
+          <td class="center" style="width: 125px;">
+            {{ ebook.dlLinks|raw }}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h3 class="center">
+    <a href="https://www.biblys.fr/pages/doc_ebooks">Comment télécharger et lire des livres numériques ?</a>
+  </h3>
+{#{% endblock %}#}
