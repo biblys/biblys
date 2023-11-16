@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.75.0 (16 novembre 2023)
+
+Améliorations
+
+- Une page de documentation "Comment télécharger et lire des livres 
+  numériques" a été ajoutée.
+
 ### 2.74.2 (2 décembre 2023)
 
 Corrections

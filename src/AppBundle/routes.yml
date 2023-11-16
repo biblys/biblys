@@ -274,6 +274,13 @@ cycle_show:
   path: /cycle/{slug}
   controller: AppBundle\Controller\CycleController::showAction
 
+# Docs
+
+docs_ebooks:
+  methods: GET
+  path: /docs/ebooks
+  controller: AppBundle\Controller\DocsController::ebooksAction
+
 # Events
 
 event_index:
