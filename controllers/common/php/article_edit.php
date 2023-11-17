@@ -774,7 +774,7 @@ return function (
         </fieldset>
 
         <fieldset id="Contributeurs">
-            <a href="https://www.biblys.fr/pages/doc_article#Contributeurs" target="_blank" class="pull-right">Besoin d\'aide ?</a>
+            <a href="https://docs.biblys.fr/administrer/catalogue/fiche-article/#contributeurs" target="_blank" class="pull-right">Besoin d\'aide ?</a>
             <legend>Contributions</legend>
             <div id="people_list"></div>
             <br /><br />
@@ -1081,7 +1081,7 @@ return function (
                 <br>
                 <button class="btn btn-primary btn-sm" type="submit" name="article_submit_and_new">Valider et créer une autre fiche</button>
                 ' . $submit_and_stock . '
-                <p><a href="https://www.biblys.fr/pages/doc_article">Documentation</a></p>
+                <p><a href="https://docs.biblys.fr/administrer/catalogue/fiche-article/">Documentation</a></p>
             </div>
             <p class="center">
                 <button class="btn btn-primary btn-sm" type="submit" name="article_submit_and_show">Valider et aller à la fiche</button>

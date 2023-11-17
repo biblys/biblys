@@ -1035,11 +1035,11 @@ $(document).ready(function() {
             .removeAttr('disabled');
           if (field == 'article_authors')
             _alert(
-              '<p class="warning">Le champ Auteur(s) est obligatoire !</p> <p>Utilisez la section <strong>Contributeurs</strong> ajouter au moins un auteur &agrave; la fiche article.</p> <p>Plus d\'informations dans la <a href="http://www.biblys.fr/pages/doc_article#Contributeurs">documentation</a>.</p>'
+              '<p class="warning">Le champ Auteur(s) est obligatoire !</p> <p>Utilisez la section <strong>Contributeurs</strong> ajouter au moins un auteur &agrave; la fiche article.</p> <p>Plus d\'informations dans la <a href="https://docs.biblys.fr/administrer/catalogue/fiche-article/#contributeurs">documentation</a>.</p>'
             );
           else if (field == 'article_collection')
             _alert(
-              '<p class="warning">Le champ Collection est obligatoire !</p> <p>Si le titre est hors-collection, créez une collection ayant pour nom le nom de l\'éditeur.</p> <p>Plus d\'informations dans la <a href="http://www.biblys.fr/pages/doc_article">documentation</a>.</p>'
+              '<p class="warning">Le champ Collection est obligatoire !</p> <p>Si le titre est hors-collection, créez une collection ayant pour nom le nom de l\'éditeur.</p> <p>Plus d\'informations dans la <a href="https://docs.biblys.fr/administrer/catalogue/fiche-article/">documentation</a>.</p>'
             );
           else _alert('Le champ &laquo; ' + fieldlabel + ' &raquo; est obligatoire !');
           error = 1;

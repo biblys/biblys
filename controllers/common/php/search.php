@@ -173,7 +173,6 @@ if (!$input) {
 	}
 
 	$content .= '
-		<p class="floatR"><a href="https://www.biblys.fr/pages/doc_mots-cles-magiques">Recherche avancée</a></p>
 		<h2>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>
 	';
 

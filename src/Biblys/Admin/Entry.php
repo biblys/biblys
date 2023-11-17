@@ -242,7 +242,7 @@ class Entry
         if ($cloud->isConfigured()) {
             $entries[] = new Entry('Abonnement Cloud', ['category' => 'biblys', 'path' => 'main_admin_cloud', 'icon' => 'cloud']);
         }
-        $entries[] = new Entry('Documentation', ['category' => 'biblys', 'url' => 'https://www.biblys.fr/pages/doc_index', 'icon' => 'book']);
+        $entries[] = new Entry('Documentation', ['category' => 'biblys', 'url' => 'https://docs.biblys.fr/', 'icon' => 'book']);
         $entries[] = new Entry('Mise à jour', ['category' => 'biblys', 'path' => 'maintenance_update', 'icon' => 'cloud-download']);
         $entries[] = new Entry('Composants', ['category' => 'biblys', 'path' => 'maintenance_composer', 'icon' => 'puzzle-piece']);
         $entries[] = new Entry('Migration BDD', ['category' => 'biblys', 'path' => 'maintenance_migrate', 'icon' => 'database']);

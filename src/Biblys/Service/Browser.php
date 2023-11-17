@@ -60,7 +60,7 @@ class Browser extends BrowserDetector
                 <p class="error">
                     <strong>Erreur : votre  navigateur Internet Explorer est obsolète.</strong><br>
                     Certaines fonctionnalités de cette page nécessitent l\'utilisation d\'un navigateur récent.<br>
-                    Pour continuer, merci d\'en <a href="http://www.biblys.fr/pages/doc_browser-update">choisir un nouveau</a>.<br>
+                    Pour continuer, merci d\'en choisir un nouveau.<br>
                 </p>
             ';
 
@@ -69,7 +69,7 @@ class Browser extends BrowserDetector
                 <p class="error">
                     <strong>Erreur : votre  navigateur est obsolète.</strong><br>
                     Certaines fonctionnalités de cette page nécessitent l\'utilisation d\'un navigateur récent.<br>
-                    Pour continuer, merci de le <a href="http://www.biblys.fr/pages/doc_browser-update">mettre à jour</a>.<br>
+                    Pour continuer, merci de le mettre à jour.<br>
                     <br>
                     Votre navigateur : '.$this->getName().' version '.$this->getVersion().'<br>
                     Version minimum requise : '.$this->getMinimumVersion().'
@@ -79,7 +79,7 @@ class Browser extends BrowserDetector
             return '
                 <p class="warning">
                     <strong>Attention : votre navigateur est obsolète.</strong><br>
-                    Vous devriez le <a href="http://www.biblys.fr/pages/doc_browser-update">mettre à jour</a> pour éviter des problèmes<br>
+                    Vous devriez le mettre à jour pour éviter des problèmes<br>
                     et profiter des fonctionnalités avancées de Biblys.<br>
                     <br>
                     Votre navigateur : '.$this->getName().' version '.$this->getVersion().'<br>

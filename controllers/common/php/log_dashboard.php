@@ -64,8 +64,8 @@ return function(
     }
 
     // Biblys
-    $items["Assistance"][] = array('Documentation', 'https://www.biblys.fr/pages/doc_index');
-    $items["Assistance"][] = array('Besoin d\'aide ?', 'https://clemlatz.dev/contact/');
+    $items["Assistance"][] = array('Documentation', 'https://docs.biblys.fr/');
+    $items["Assistance"][] = array('Besoin d\'aide ?', 'https://www.biblys.fr/contact/');
 
     // Sections
     $sections = NULL;
