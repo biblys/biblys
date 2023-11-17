@@ -1,6 +1,5 @@
 <?php /** @noinspection PhpUnhandledExceptionInspection */
 
-use Biblys\Service\Browser;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\TemplateService;
@@ -30,11 +29,6 @@ return function(
     }
 
     $items = array();
-
-    // Check browser version
-    $browser = new Browser();
-    if ($browser->isUpToDate()) $browser_alert = null;
-    else $browser_alert = $browser->getUpdateAlert();
 
     $request->attributes->set("page_title", "Tableau de bord");
 
@@ -94,15 +88,12 @@ return function(
     $templateCode = '        
         <h1><i class="fa fa-dashboard"></i> Tableau de bord</h1>
     
-        {{browser_alert|raw}}
-    
         <div class="dashboard">
           {{sections|raw}}
         </div>
   ';
 
     return $templateService->renderFromString($templateCode, [
-        "browser_alert" => $browser_alert,
         "sections" => $sections,
     ]);
 };

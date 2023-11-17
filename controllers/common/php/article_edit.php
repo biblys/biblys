@@ -17,7 +17,6 @@ use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Biblys\Service\Browser;
 use Biblys\Isbn\Isbn;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -53,12 +52,6 @@ return function (
     $am->setIgnoreSiteFilters(true);
 
     $content = "";
-
-    // Check browser version
-    $browser = new Browser();
-    if (!$browser->isUpToDate()) {
-        $content .= $browser->getUpdateAlert('error');
-    }
 
     if ($request->getMethod() === "POST") {
         /** @var Article $article */
