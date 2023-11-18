@@ -141,6 +141,7 @@ class Controller
      * @return CurrentUser
      * @throws PropelException
      * @throws Exception
+     * @deprecated Controller::authUser is deprecated. Use CurrentService->authUser instead.
      */
     protected static function authUser(Request $request): CurrentUser
     {

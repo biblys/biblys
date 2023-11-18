@@ -335,6 +335,13 @@ class CurrentUser
         return $this->getAxysAccount()->getEmail();
     }
 
+    public function authUser(): void
+    {
+        if (!$this->isAuthentified()) {
+            throw new UnauthorizedHttpException("","Identification requise.");
+        }
+    }
+
     /**
      * @throws PropelException
      */

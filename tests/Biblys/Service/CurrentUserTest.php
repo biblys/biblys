@@ -641,6 +641,43 @@ class CurrentUserTest extends TestCase
     }
 
     /**
+     * #authUser
+     */
+
+    public function testAuthUserForAnonymousUser()
+    {
+        // given
+        $currentUser = new CurrentUser(null, "token");
+
+        // then
+        $this->expectException(UnauthorizedHttpException::class);
+        $this->expectExceptionMessage("Identification requise.");
+
+        // when
+        $currentUser->authUser();
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAuthUserForAuthentifiedUser()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createUser(site: $site);
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $config = new Config(["site" => $site->getId()]);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // then
+        $this->expectNotToPerformAssertions();
+
+        // when
+        $currentUser->authUser();
+    }
+
+    /**
      * @throws PropelException
      */
     public function testHasArticleInCartWithoutCart()
