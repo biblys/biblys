@@ -20,6 +20,7 @@ use Propel\Runtime\Exception\PropelException;
  * Base class that represents a query for the `wishlist` table.
  *
  * @method     ChildWishlistQuery orderById($order = Criteria::ASC) Order by the wishlist_id column
+ * @method     ChildWishlistQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
  * @method     ChildWishlistQuery orderByAxysAccountId($order = Criteria::ASC) Order by the axys_account_id column
  * @method     ChildWishlistQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
  * @method     ChildWishlistQuery orderByName($order = Criteria::ASC) Order by the wishlist_name column
@@ -29,6 +30,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildWishlistQuery orderByUpdatedAt($order = Criteria::ASC) Order by the wishlist_updated column
  *
  * @method     ChildWishlistQuery groupById() Group by the wishlist_id column
+ * @method     ChildWishlistQuery groupBySiteId() Group by the site_id column
  * @method     ChildWishlistQuery groupByAxysAccountId() Group by the axys_account_id column
  * @method     ChildWishlistQuery groupByUserId() Group by the user_id column
  * @method     ChildWishlistQuery groupByName() Group by the wishlist_name column
@@ -44,6 +46,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildWishlistQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
  * @method     ChildWishlistQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildWishlistQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ *
+ * @method     ChildWishlistQuery leftJoinSite($relationAlias = null) Adds a LEFT JOIN clause to the query using the Site relation
+ * @method     ChildWishlistQuery rightJoinSite($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Site relation
+ * @method     ChildWishlistQuery innerJoinSite($relationAlias = null) Adds a INNER JOIN clause to the query using the Site relation
+ *
+ * @method     ChildWishlistQuery joinWithSite($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Site relation
+ *
+ * @method     ChildWishlistQuery leftJoinWithSite() Adds a LEFT JOIN clause and with to the query using the Site relation
+ * @method     ChildWishlistQuery rightJoinWithSite() Adds a RIGHT JOIN clause and with to the query using the Site relation
+ * @method     ChildWishlistQuery innerJoinWithSite() Adds a INNER JOIN clause and with to the query using the Site relation
  *
  * @method     ChildWishlistQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
  * @method     ChildWishlistQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
@@ -65,12 +77,13 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildWishlistQuery rightJoinWithAxysAccount() Adds a RIGHT JOIN clause and with to the query using the AxysAccount relation
  * @method     ChildWishlistQuery innerJoinWithAxysAccount() Adds a INNER JOIN clause and with to the query using the AxysAccount relation
  *
- * @method     \Model\UserQuery|\Model\AxysAccountQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\SiteQuery|\Model\UserQuery|\Model\AxysAccountQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildWishlist|null findOne(?ConnectionInterface $con = null) Return the first ChildWishlist matching the query
  * @method     ChildWishlist findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildWishlist matching the query, or a new ChildWishlist object populated from the query conditions when no match is found
  *
  * @method     ChildWishlist|null findOneById(int $wishlist_id) Return the first ChildWishlist filtered by the wishlist_id column
+ * @method     ChildWishlist|null findOneBySiteId(int $site_id) Return the first ChildWishlist filtered by the site_id column
  * @method     ChildWishlist|null findOneByAxysAccountId(int $axys_account_id) Return the first ChildWishlist filtered by the axys_account_id column
  * @method     ChildWishlist|null findOneByUserId(int $user_id) Return the first ChildWishlist filtered by the user_id column
  * @method     ChildWishlist|null findOneByName(string $wishlist_name) Return the first ChildWishlist filtered by the wishlist_name column
@@ -83,6 +96,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildWishlist requireOne(?ConnectionInterface $con = null) Return the first ChildWishlist matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildWishlist requireOneById(int $wishlist_id) Return the first ChildWishlist filtered by the wishlist_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildWishlist requireOneBySiteId(int $site_id) Return the first ChildWishlist filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildWishlist requireOneByAxysAccountId(int $axys_account_id) Return the first ChildWishlist filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildWishlist requireOneByUserId(int $user_id) Return the first ChildWishlist filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildWishlist requireOneByName(string $wishlist_name) Return the first ChildWishlist filtered by the wishlist_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -96,6 +110,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildWishlist[]|Collection findById(int|array<int> $wishlist_id) Return ChildWishlist objects filtered by the wishlist_id column
  * @psalm-method Collection&\Traversable<ChildWishlist> findById(int|array<int> $wishlist_id) Return ChildWishlist objects filtered by the wishlist_id column
+ * @method     ChildWishlist[]|Collection findBySiteId(int|array<int> $site_id) Return ChildWishlist objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildWishlist> findBySiteId(int|array<int> $site_id) Return ChildWishlist objects filtered by the site_id column
  * @method     ChildWishlist[]|Collection findByAxysAccountId(int|array<int> $axys_account_id) Return ChildWishlist objects filtered by the axys_account_id column
  * @psalm-method Collection&\Traversable<ChildWishlist> findByAxysAccountId(int|array<int> $axys_account_id) Return ChildWishlist objects filtered by the axys_account_id column
  * @method     ChildWishlist[]|Collection findByUserId(int|array<int> $user_id) Return ChildWishlist objects filtered by the user_id column
@@ -209,7 +225,7 @@ abstract class WishlistQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT wishlist_id, axys_account_id, user_id, wishlist_name, wishlist_current, wishlist_public, wishlist_created, wishlist_updated FROM wishlist WHERE wishlist_id = :p0';
+        $sql = 'SELECT wishlist_id, site_id, axys_account_id, user_id, wishlist_name, wishlist_current, wishlist_public, wishlist_created, wishlist_updated FROM wishlist WHERE wishlist_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -342,6 +358,51 @@ abstract class WishlistQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_ID, $id, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the site_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterBySiteId(1234); // WHERE site_id = 1234
+     * $query->filterBySiteId(array(12, 34)); // WHERE site_id IN (12, 34)
+     * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
+     * </code>
+     *
+     * @see       filterBySite()
+     *
+     * @param mixed $siteId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
+    {
+        if (is_array($siteId)) {
+            $useMinMax = false;
+            if (isset($siteId['min'])) {
+                $this->addUsingAlias(WishlistTableMap::COL_SITE_ID, $siteId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($siteId['max'])) {
+                $this->addUsingAlias(WishlistTableMap::COL_SITE_ID, $siteId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(WishlistTableMap::COL_SITE_ID, $siteId, $comparison);
 
         return $this;
     }
@@ -610,6 +671,181 @@ abstract class WishlistQuery extends ModelCriteria
         $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_UPDATED, $updatedAt, $comparison);
 
         return $this;
+    }
+
+    /**
+     * Filter the query by a related \Model\Site object
+     *
+     * @param \Model\Site|ObjectCollection $site The related object(s) to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterBySite($site, ?string $comparison = null)
+    {
+        if ($site instanceof \Model\Site) {
+            return $this
+                ->addUsingAlias(WishlistTableMap::COL_SITE_ID, $site->getId(), $comparison);
+        } elseif ($site instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            $this
+                ->addUsingAlias(WishlistTableMap::COL_SITE_ID, $site->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
+        } else {
+            throw new PropelException('filterBySite() only accepts arguments of type \Model\Site or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Site relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinSite(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Site');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Site');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Site relation Site object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\SiteQuery A secondary query class using the current class as primary query
+     */
+    public function useSiteQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinSite($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Site', '\Model\SiteQuery');
+    }
+
+    /**
+     * Use the Site relation Site object
+     *
+     * @param callable(\Model\SiteQuery):\Model\SiteQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withSiteQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useSiteQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Site table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\SiteQuery The inner query object of the EXISTS statement
+     */
+    public function useSiteExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Site table for a NOT EXISTS query.
+     *
+     * @see useSiteExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SiteQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useSiteNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Site table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\SiteQuery The inner query object of the IN statement
+     */
+    public function useInSiteQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useInQuery('Site', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Site table for a NOT IN query.
+     *
+     * @see useSiteInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SiteQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInSiteQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useInQuery('Site', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
     }
 
     /**

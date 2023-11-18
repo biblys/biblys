@@ -63,7 +63,7 @@ class VoteTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 6;
+    public const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
@@ -73,12 +73,17 @@ class VoteTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 6;
+    public const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the vote_id field
      */
     public const COL_VOTE_ID = 'votes.vote_id';
+
+    /**
+     * the column name for the site_id field
+     */
+    public const COL_SITE_ID = 'votes.site_id';
 
     /**
      * the column name for the axys_account_id field
@@ -119,11 +124,11 @@ class VoteTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'AxysAccountId', 'UserId', 'F', 'E', 'Date', ],
-        self::TYPE_CAMELNAME     => ['id', 'axysAccountId', 'userId', 'f', 'e', 'date', ],
-        self::TYPE_COLNAME       => [VoteTableMap::COL_VOTE_ID, VoteTableMap::COL_AXYS_ACCOUNT_ID, VoteTableMap::COL_USER_ID, VoteTableMap::COL_VOTE_F, VoteTableMap::COL_VOTE_E, VoteTableMap::COL_VOTE_DATE, ],
-        self::TYPE_FIELDNAME     => ['vote_id', 'axys_account_id', 'user_id', 'vote_F', 'vote_E', 'vote_date', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, ]
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'AxysAccountId', 'UserId', 'F', 'E', 'Date', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'axysAccountId', 'userId', 'f', 'e', 'date', ],
+        self::TYPE_COLNAME       => [VoteTableMap::COL_VOTE_ID, VoteTableMap::COL_SITE_ID, VoteTableMap::COL_AXYS_ACCOUNT_ID, VoteTableMap::COL_USER_ID, VoteTableMap::COL_VOTE_F, VoteTableMap::COL_VOTE_E, VoteTableMap::COL_VOTE_DATE, ],
+        self::TYPE_FIELDNAME     => ['vote_id', 'site_id', 'axys_account_id', 'user_id', 'vote_F', 'vote_E', 'vote_date', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
     ];
 
     /**
@@ -135,11 +140,11 @@ class VoteTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'AxysAccountId' => 1, 'UserId' => 2, 'F' => 3, 'E' => 4, 'Date' => 5, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'axysAccountId' => 1, 'userId' => 2, 'f' => 3, 'e' => 4, 'date' => 5, ],
-        self::TYPE_COLNAME       => [VoteTableMap::COL_VOTE_ID => 0, VoteTableMap::COL_AXYS_ACCOUNT_ID => 1, VoteTableMap::COL_USER_ID => 2, VoteTableMap::COL_VOTE_F => 3, VoteTableMap::COL_VOTE_E => 4, VoteTableMap::COL_VOTE_DATE => 5, ],
-        self::TYPE_FIELDNAME     => ['vote_id' => 0, 'axys_account_id' => 1, 'user_id' => 2, 'vote_F' => 3, 'vote_E' => 4, 'vote_date' => 5, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'AxysAccountId' => 2, 'UserId' => 3, 'F' => 4, 'E' => 5, 'Date' => 6, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'axysAccountId' => 2, 'userId' => 3, 'f' => 4, 'e' => 5, 'date' => 6, ],
+        self::TYPE_COLNAME       => [VoteTableMap::COL_VOTE_ID => 0, VoteTableMap::COL_SITE_ID => 1, VoteTableMap::COL_AXYS_ACCOUNT_ID => 2, VoteTableMap::COL_USER_ID => 3, VoteTableMap::COL_VOTE_F => 4, VoteTableMap::COL_VOTE_E => 5, VoteTableMap::COL_VOTE_DATE => 6, ],
+        self::TYPE_FIELDNAME     => ['vote_id' => 0, 'site_id' => 1, 'axys_account_id' => 2, 'user_id' => 3, 'vote_F' => 4, 'vote_E' => 5, 'vote_date' => 6, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
     ];
 
     /**
@@ -156,6 +161,14 @@ class VoteTableMap extends TableMap
         'COL_VOTE_ID' => 'VOTE_ID',
         'vote_id' => 'VOTE_ID',
         'votes.vote_id' => 'VOTE_ID',
+        'SiteId' => 'SITE_ID',
+        'Vote.SiteId' => 'SITE_ID',
+        'siteId' => 'SITE_ID',
+        'vote.siteId' => 'SITE_ID',
+        'VoteTableMap::COL_SITE_ID' => 'SITE_ID',
+        'COL_SITE_ID' => 'SITE_ID',
+        'site_id' => 'SITE_ID',
+        'votes.site_id' => 'SITE_ID',
         'AxysAccountId' => 'AXYS_ACCOUNT_ID',
         'Vote.AxysAccountId' => 'AXYS_ACCOUNT_ID',
         'axysAccountId' => 'AXYS_ACCOUNT_ID',
@@ -216,6 +229,7 @@ class VoteTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('vote_id', 'Id', 'INTEGER', true, 10, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
         $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
         $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
         $this->addColumn('vote_F', 'F', 'INTEGER', false, 10, null);
@@ -230,6 +244,13 @@ class VoteTableMap extends TableMap
      */
     public function buildRelations(): void
     {
+        $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, null, false);
         $this->addRelation('User', '\\Model\\User', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
@@ -382,6 +403,7 @@ class VoteTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(VoteTableMap::COL_VOTE_ID);
+            $criteria->addSelectColumn(VoteTableMap::COL_SITE_ID);
             $criteria->addSelectColumn(VoteTableMap::COL_AXYS_ACCOUNT_ID);
             $criteria->addSelectColumn(VoteTableMap::COL_USER_ID);
             $criteria->addSelectColumn(VoteTableMap::COL_VOTE_F);
@@ -389,6 +411,7 @@ class VoteTableMap extends TableMap
             $criteria->addSelectColumn(VoteTableMap::COL_VOTE_DATE);
         } else {
             $criteria->addSelectColumn($alias . '.vote_id');
+            $criteria->addSelectColumn($alias . '.site_id');
             $criteria->addSelectColumn($alias . '.axys_account_id');
             $criteria->addSelectColumn($alias . '.user_id');
             $criteria->addSelectColumn($alias . '.vote_F');
@@ -413,6 +436,7 @@ class VoteTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(VoteTableMap::COL_VOTE_ID);
+            $criteria->removeSelectColumn(VoteTableMap::COL_SITE_ID);
             $criteria->removeSelectColumn(VoteTableMap::COL_AXYS_ACCOUNT_ID);
             $criteria->removeSelectColumn(VoteTableMap::COL_USER_ID);
             $criteria->removeSelectColumn(VoteTableMap::COL_VOTE_F);
@@ -420,6 +444,7 @@ class VoteTableMap extends TableMap
             $criteria->removeSelectColumn(VoteTableMap::COL_VOTE_DATE);
         } else {
             $criteria->removeSelectColumn($alias . '.vote_id');
+            $criteria->removeSelectColumn($alias . '.site_id');
             $criteria->removeSelectColumn($alias . '.axys_account_id');
             $criteria->removeSelectColumn($alias . '.user_id');
             $criteria->removeSelectColumn($alias . '.vote_F');

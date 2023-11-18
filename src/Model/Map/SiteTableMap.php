@@ -63,7 +63,7 @@ class SiteTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 39;
+    public const NUM_COLUMNS = 38;
 
     /**
      * The number of lazy-loaded columns
@@ -73,7 +73,7 @@ class SiteTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 39;
+    public const NUM_HYDRATE_COLUMNS = 38;
 
     /**
      * the column name for the site_id field
@@ -174,11 +174,6 @@ class SiteTableMap extends TableMap
      * the column name for the site_shipping_fee field
      */
     public const COL_SITE_SHIPPING_FEE = 'sites.site_shipping_fee';
-
-    /**
-     * the column name for the site_wishlist field
-     */
-    public const COL_SITE_WISHLIST = 'sites.site_wishlist';
 
     /**
      * the column name for the site_payment_cheque field
@@ -284,11 +279,11 @@ class SiteTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'Name', 'Pass', 'Title', 'Domain', 'Version', 'Tag', 'Flag', 'Contact', 'Address', 'Tva', 'HtmlRenderer', 'Axys', 'Noosfere', 'Amazon', 'EventId', 'EventDate', 'Shop', 'Vpc', 'ShippingFee', 'Wishlist', 'PaymentCheque', 'PaymentPaypal', 'PaymentPayplug', 'PaymentTransfer', 'Bookshop', 'BookshopId', 'Publisher', 'PublisherStock', 'PublisherId', 'EbookBundle', 'FbPageId', 'FbPageToken', 'AnalyticsId', 'PiwikId', 'SitemapUpdated', 'Monitoring', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'name', 'pass', 'title', 'domain', 'version', 'tag', 'flag', 'contact', 'address', 'tva', 'htmlRenderer', 'axys', 'noosfere', 'amazon', 'eventId', 'eventDate', 'shop', 'vpc', 'shippingFee', 'wishlist', 'paymentCheque', 'paymentPaypal', 'paymentPayplug', 'paymentTransfer', 'bookshop', 'bookshopId', 'publisher', 'publisherStock', 'publisherId', 'ebookBundle', 'fbPageId', 'fbPageToken', 'analyticsId', 'piwikId', 'sitemapUpdated', 'monitoring', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [SiteTableMap::COL_SITE_ID, SiteTableMap::COL_SITE_NAME, SiteTableMap::COL_SITE_PASS, SiteTableMap::COL_SITE_TITLE, SiteTableMap::COL_SITE_DOMAIN, SiteTableMap::COL_SITE_VERSION, SiteTableMap::COL_SITE_TAG, SiteTableMap::COL_SITE_FLAG, SiteTableMap::COL_SITE_CONTACT, SiteTableMap::COL_SITE_ADDRESS, SiteTableMap::COL_SITE_TVA, SiteTableMap::COL_SITE_HTML_RENDERER, SiteTableMap::COL_SITE_AXYS, SiteTableMap::COL_SITE_NOOSFERE, SiteTableMap::COL_SITE_AMAZON, SiteTableMap::COL_SITE_EVENT_ID, SiteTableMap::COL_SITE_EVENT_DATE, SiteTableMap::COL_SITE_SHOP, SiteTableMap::COL_SITE_VPC, SiteTableMap::COL_SITE_SHIPPING_FEE, SiteTableMap::COL_SITE_WISHLIST, SiteTableMap::COL_SITE_PAYMENT_CHEQUE, SiteTableMap::COL_SITE_PAYMENT_PAYPAL, SiteTableMap::COL_SITE_PAYMENT_PAYPLUG, SiteTableMap::COL_SITE_PAYMENT_TRANSFER, SiteTableMap::COL_SITE_BOOKSHOP, SiteTableMap::COL_SITE_BOOKSHOP_ID, SiteTableMap::COL_SITE_PUBLISHER, SiteTableMap::COL_SITE_PUBLISHER_STOCK, SiteTableMap::COL_PUBLISHER_ID, SiteTableMap::COL_SITE_EBOOK_BUNDLE, SiteTableMap::COL_SITE_FB_PAGE_ID, SiteTableMap::COL_SITE_FB_PAGE_TOKEN, SiteTableMap::COL_SITE_ANALYTICS_ID, SiteTableMap::COL_SITE_PIWIK_ID, SiteTableMap::COL_SITE_SITEMAP_UPDATED, SiteTableMap::COL_SITE_MONITORING, SiteTableMap::COL_SITE_CREATED, SiteTableMap::COL_SITE_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['site_id', 'site_name', 'site_pass', 'site_title', 'site_domain', 'site_version', 'site_tag', 'site_flag', 'site_contact', 'site_address', 'site_tva', 'site_html_renderer', 'site_axys', 'site_noosfere', 'site_amazon', 'site_event_id', 'site_event_date', 'site_shop', 'site_vpc', 'site_shipping_fee', 'site_wishlist', 'site_payment_cheque', 'site_payment_paypal', 'site_payment_payplug', 'site_payment_transfer', 'site_bookshop', 'site_bookshop_id', 'site_publisher', 'site_publisher_stock', 'publisher_id', 'site_ebook_bundle', 'site_fb_page_id', 'site_fb_page_token', 'site_analytics_id', 'site_piwik_id', 'site_sitemap_updated', 'site_monitoring', 'site_created', 'site_updated', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, ]
+        self::TYPE_PHPNAME       => ['Id', 'Name', 'Pass', 'Title', 'Domain', 'Version', 'Tag', 'Flag', 'Contact', 'Address', 'Tva', 'HtmlRenderer', 'Axys', 'Noosfere', 'Amazon', 'EventId', 'EventDate', 'Shop', 'Vpc', 'ShippingFee', 'PaymentCheque', 'PaymentPaypal', 'PaymentPayplug', 'PaymentTransfer', 'Bookshop', 'BookshopId', 'Publisher', 'PublisherStock', 'PublisherId', 'EbookBundle', 'FbPageId', 'FbPageToken', 'AnalyticsId', 'PiwikId', 'SitemapUpdated', 'Monitoring', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'name', 'pass', 'title', 'domain', 'version', 'tag', 'flag', 'contact', 'address', 'tva', 'htmlRenderer', 'axys', 'noosfere', 'amazon', 'eventId', 'eventDate', 'shop', 'vpc', 'shippingFee', 'paymentCheque', 'paymentPaypal', 'paymentPayplug', 'paymentTransfer', 'bookshop', 'bookshopId', 'publisher', 'publisherStock', 'publisherId', 'ebookBundle', 'fbPageId', 'fbPageToken', 'analyticsId', 'piwikId', 'sitemapUpdated', 'monitoring', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [SiteTableMap::COL_SITE_ID, SiteTableMap::COL_SITE_NAME, SiteTableMap::COL_SITE_PASS, SiteTableMap::COL_SITE_TITLE, SiteTableMap::COL_SITE_DOMAIN, SiteTableMap::COL_SITE_VERSION, SiteTableMap::COL_SITE_TAG, SiteTableMap::COL_SITE_FLAG, SiteTableMap::COL_SITE_CONTACT, SiteTableMap::COL_SITE_ADDRESS, SiteTableMap::COL_SITE_TVA, SiteTableMap::COL_SITE_HTML_RENDERER, SiteTableMap::COL_SITE_AXYS, SiteTableMap::COL_SITE_NOOSFERE, SiteTableMap::COL_SITE_AMAZON, SiteTableMap::COL_SITE_EVENT_ID, SiteTableMap::COL_SITE_EVENT_DATE, SiteTableMap::COL_SITE_SHOP, SiteTableMap::COL_SITE_VPC, SiteTableMap::COL_SITE_SHIPPING_FEE, SiteTableMap::COL_SITE_PAYMENT_CHEQUE, SiteTableMap::COL_SITE_PAYMENT_PAYPAL, SiteTableMap::COL_SITE_PAYMENT_PAYPLUG, SiteTableMap::COL_SITE_PAYMENT_TRANSFER, SiteTableMap::COL_SITE_BOOKSHOP, SiteTableMap::COL_SITE_BOOKSHOP_ID, SiteTableMap::COL_SITE_PUBLISHER, SiteTableMap::COL_SITE_PUBLISHER_STOCK, SiteTableMap::COL_PUBLISHER_ID, SiteTableMap::COL_SITE_EBOOK_BUNDLE, SiteTableMap::COL_SITE_FB_PAGE_ID, SiteTableMap::COL_SITE_FB_PAGE_TOKEN, SiteTableMap::COL_SITE_ANALYTICS_ID, SiteTableMap::COL_SITE_PIWIK_ID, SiteTableMap::COL_SITE_SITEMAP_UPDATED, SiteTableMap::COL_SITE_MONITORING, SiteTableMap::COL_SITE_CREATED, SiteTableMap::COL_SITE_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['site_id', 'site_name', 'site_pass', 'site_title', 'site_domain', 'site_version', 'site_tag', 'site_flag', 'site_contact', 'site_address', 'site_tva', 'site_html_renderer', 'site_axys', 'site_noosfere', 'site_amazon', 'site_event_id', 'site_event_date', 'site_shop', 'site_vpc', 'site_shipping_fee', 'site_payment_cheque', 'site_payment_paypal', 'site_payment_payplug', 'site_payment_transfer', 'site_bookshop', 'site_bookshop_id', 'site_publisher', 'site_publisher_stock', 'publisher_id', 'site_ebook_bundle', 'site_fb_page_id', 'site_fb_page_token', 'site_analytics_id', 'site_piwik_id', 'site_sitemap_updated', 'site_monitoring', 'site_created', 'site_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, ]
     ];
 
     /**
@@ -300,11 +295,11 @@ class SiteTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'Name' => 1, 'Pass' => 2, 'Title' => 3, 'Domain' => 4, 'Version' => 5, 'Tag' => 6, 'Flag' => 7, 'Contact' => 8, 'Address' => 9, 'Tva' => 10, 'HtmlRenderer' => 11, 'Axys' => 12, 'Noosfere' => 13, 'Amazon' => 14, 'EventId' => 15, 'EventDate' => 16, 'Shop' => 17, 'Vpc' => 18, 'ShippingFee' => 19, 'Wishlist' => 20, 'PaymentCheque' => 21, 'PaymentPaypal' => 22, 'PaymentPayplug' => 23, 'PaymentTransfer' => 24, 'Bookshop' => 25, 'BookshopId' => 26, 'Publisher' => 27, 'PublisherStock' => 28, 'PublisherId' => 29, 'EbookBundle' => 30, 'FbPageId' => 31, 'FbPageToken' => 32, 'AnalyticsId' => 33, 'PiwikId' => 34, 'SitemapUpdated' => 35, 'Monitoring' => 36, 'CreatedAt' => 37, 'UpdatedAt' => 38, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'name' => 1, 'pass' => 2, 'title' => 3, 'domain' => 4, 'version' => 5, 'tag' => 6, 'flag' => 7, 'contact' => 8, 'address' => 9, 'tva' => 10, 'htmlRenderer' => 11, 'axys' => 12, 'noosfere' => 13, 'amazon' => 14, 'eventId' => 15, 'eventDate' => 16, 'shop' => 17, 'vpc' => 18, 'shippingFee' => 19, 'wishlist' => 20, 'paymentCheque' => 21, 'paymentPaypal' => 22, 'paymentPayplug' => 23, 'paymentTransfer' => 24, 'bookshop' => 25, 'bookshopId' => 26, 'publisher' => 27, 'publisherStock' => 28, 'publisherId' => 29, 'ebookBundle' => 30, 'fbPageId' => 31, 'fbPageToken' => 32, 'analyticsId' => 33, 'piwikId' => 34, 'sitemapUpdated' => 35, 'monitoring' => 36, 'createdAt' => 37, 'updatedAt' => 38, ],
-        self::TYPE_COLNAME       => [SiteTableMap::COL_SITE_ID => 0, SiteTableMap::COL_SITE_NAME => 1, SiteTableMap::COL_SITE_PASS => 2, SiteTableMap::COL_SITE_TITLE => 3, SiteTableMap::COL_SITE_DOMAIN => 4, SiteTableMap::COL_SITE_VERSION => 5, SiteTableMap::COL_SITE_TAG => 6, SiteTableMap::COL_SITE_FLAG => 7, SiteTableMap::COL_SITE_CONTACT => 8, SiteTableMap::COL_SITE_ADDRESS => 9, SiteTableMap::COL_SITE_TVA => 10, SiteTableMap::COL_SITE_HTML_RENDERER => 11, SiteTableMap::COL_SITE_AXYS => 12, SiteTableMap::COL_SITE_NOOSFERE => 13, SiteTableMap::COL_SITE_AMAZON => 14, SiteTableMap::COL_SITE_EVENT_ID => 15, SiteTableMap::COL_SITE_EVENT_DATE => 16, SiteTableMap::COL_SITE_SHOP => 17, SiteTableMap::COL_SITE_VPC => 18, SiteTableMap::COL_SITE_SHIPPING_FEE => 19, SiteTableMap::COL_SITE_WISHLIST => 20, SiteTableMap::COL_SITE_PAYMENT_CHEQUE => 21, SiteTableMap::COL_SITE_PAYMENT_PAYPAL => 22, SiteTableMap::COL_SITE_PAYMENT_PAYPLUG => 23, SiteTableMap::COL_SITE_PAYMENT_TRANSFER => 24, SiteTableMap::COL_SITE_BOOKSHOP => 25, SiteTableMap::COL_SITE_BOOKSHOP_ID => 26, SiteTableMap::COL_SITE_PUBLISHER => 27, SiteTableMap::COL_SITE_PUBLISHER_STOCK => 28, SiteTableMap::COL_PUBLISHER_ID => 29, SiteTableMap::COL_SITE_EBOOK_BUNDLE => 30, SiteTableMap::COL_SITE_FB_PAGE_ID => 31, SiteTableMap::COL_SITE_FB_PAGE_TOKEN => 32, SiteTableMap::COL_SITE_ANALYTICS_ID => 33, SiteTableMap::COL_SITE_PIWIK_ID => 34, SiteTableMap::COL_SITE_SITEMAP_UPDATED => 35, SiteTableMap::COL_SITE_MONITORING => 36, SiteTableMap::COL_SITE_CREATED => 37, SiteTableMap::COL_SITE_UPDATED => 38, ],
-        self::TYPE_FIELDNAME     => ['site_id' => 0, 'site_name' => 1, 'site_pass' => 2, 'site_title' => 3, 'site_domain' => 4, 'site_version' => 5, 'site_tag' => 6, 'site_flag' => 7, 'site_contact' => 8, 'site_address' => 9, 'site_tva' => 10, 'site_html_renderer' => 11, 'site_axys' => 12, 'site_noosfere' => 13, 'site_amazon' => 14, 'site_event_id' => 15, 'site_event_date' => 16, 'site_shop' => 17, 'site_vpc' => 18, 'site_shipping_fee' => 19, 'site_wishlist' => 20, 'site_payment_cheque' => 21, 'site_payment_paypal' => 22, 'site_payment_payplug' => 23, 'site_payment_transfer' => 24, 'site_bookshop' => 25, 'site_bookshop_id' => 26, 'site_publisher' => 27, 'site_publisher_stock' => 28, 'publisher_id' => 29, 'site_ebook_bundle' => 30, 'site_fb_page_id' => 31, 'site_fb_page_token' => 32, 'site_analytics_id' => 33, 'site_piwik_id' => 34, 'site_sitemap_updated' => 35, 'site_monitoring' => 36, 'site_created' => 37, 'site_updated' => 38, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'Name' => 1, 'Pass' => 2, 'Title' => 3, 'Domain' => 4, 'Version' => 5, 'Tag' => 6, 'Flag' => 7, 'Contact' => 8, 'Address' => 9, 'Tva' => 10, 'HtmlRenderer' => 11, 'Axys' => 12, 'Noosfere' => 13, 'Amazon' => 14, 'EventId' => 15, 'EventDate' => 16, 'Shop' => 17, 'Vpc' => 18, 'ShippingFee' => 19, 'PaymentCheque' => 20, 'PaymentPaypal' => 21, 'PaymentPayplug' => 22, 'PaymentTransfer' => 23, 'Bookshop' => 24, 'BookshopId' => 25, 'Publisher' => 26, 'PublisherStock' => 27, 'PublisherId' => 28, 'EbookBundle' => 29, 'FbPageId' => 30, 'FbPageToken' => 31, 'AnalyticsId' => 32, 'PiwikId' => 33, 'SitemapUpdated' => 34, 'Monitoring' => 35, 'CreatedAt' => 36, 'UpdatedAt' => 37, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'name' => 1, 'pass' => 2, 'title' => 3, 'domain' => 4, 'version' => 5, 'tag' => 6, 'flag' => 7, 'contact' => 8, 'address' => 9, 'tva' => 10, 'htmlRenderer' => 11, 'axys' => 12, 'noosfere' => 13, 'amazon' => 14, 'eventId' => 15, 'eventDate' => 16, 'shop' => 17, 'vpc' => 18, 'shippingFee' => 19, 'paymentCheque' => 20, 'paymentPaypal' => 21, 'paymentPayplug' => 22, 'paymentTransfer' => 23, 'bookshop' => 24, 'bookshopId' => 25, 'publisher' => 26, 'publisherStock' => 27, 'publisherId' => 28, 'ebookBundle' => 29, 'fbPageId' => 30, 'fbPageToken' => 31, 'analyticsId' => 32, 'piwikId' => 33, 'sitemapUpdated' => 34, 'monitoring' => 35, 'createdAt' => 36, 'updatedAt' => 37, ],
+        self::TYPE_COLNAME       => [SiteTableMap::COL_SITE_ID => 0, SiteTableMap::COL_SITE_NAME => 1, SiteTableMap::COL_SITE_PASS => 2, SiteTableMap::COL_SITE_TITLE => 3, SiteTableMap::COL_SITE_DOMAIN => 4, SiteTableMap::COL_SITE_VERSION => 5, SiteTableMap::COL_SITE_TAG => 6, SiteTableMap::COL_SITE_FLAG => 7, SiteTableMap::COL_SITE_CONTACT => 8, SiteTableMap::COL_SITE_ADDRESS => 9, SiteTableMap::COL_SITE_TVA => 10, SiteTableMap::COL_SITE_HTML_RENDERER => 11, SiteTableMap::COL_SITE_AXYS => 12, SiteTableMap::COL_SITE_NOOSFERE => 13, SiteTableMap::COL_SITE_AMAZON => 14, SiteTableMap::COL_SITE_EVENT_ID => 15, SiteTableMap::COL_SITE_EVENT_DATE => 16, SiteTableMap::COL_SITE_SHOP => 17, SiteTableMap::COL_SITE_VPC => 18, SiteTableMap::COL_SITE_SHIPPING_FEE => 19, SiteTableMap::COL_SITE_PAYMENT_CHEQUE => 20, SiteTableMap::COL_SITE_PAYMENT_PAYPAL => 21, SiteTableMap::COL_SITE_PAYMENT_PAYPLUG => 22, SiteTableMap::COL_SITE_PAYMENT_TRANSFER => 23, SiteTableMap::COL_SITE_BOOKSHOP => 24, SiteTableMap::COL_SITE_BOOKSHOP_ID => 25, SiteTableMap::COL_SITE_PUBLISHER => 26, SiteTableMap::COL_SITE_PUBLISHER_STOCK => 27, SiteTableMap::COL_PUBLISHER_ID => 28, SiteTableMap::COL_SITE_EBOOK_BUNDLE => 29, SiteTableMap::COL_SITE_FB_PAGE_ID => 30, SiteTableMap::COL_SITE_FB_PAGE_TOKEN => 31, SiteTableMap::COL_SITE_ANALYTICS_ID => 32, SiteTableMap::COL_SITE_PIWIK_ID => 33, SiteTableMap::COL_SITE_SITEMAP_UPDATED => 34, SiteTableMap::COL_SITE_MONITORING => 35, SiteTableMap::COL_SITE_CREATED => 36, SiteTableMap::COL_SITE_UPDATED => 37, ],
+        self::TYPE_FIELDNAME     => ['site_id' => 0, 'site_name' => 1, 'site_pass' => 2, 'site_title' => 3, 'site_domain' => 4, 'site_version' => 5, 'site_tag' => 6, 'site_flag' => 7, 'site_contact' => 8, 'site_address' => 9, 'site_tva' => 10, 'site_html_renderer' => 11, 'site_axys' => 12, 'site_noosfere' => 13, 'site_amazon' => 14, 'site_event_id' => 15, 'site_event_date' => 16, 'site_shop' => 17, 'site_vpc' => 18, 'site_shipping_fee' => 19, 'site_payment_cheque' => 20, 'site_payment_paypal' => 21, 'site_payment_payplug' => 22, 'site_payment_transfer' => 23, 'site_bookshop' => 24, 'site_bookshop_id' => 25, 'site_publisher' => 26, 'site_publisher_stock' => 27, 'publisher_id' => 28, 'site_ebook_bundle' => 29, 'site_fb_page_id' => 30, 'site_fb_page_token' => 31, 'site_analytics_id' => 32, 'site_piwik_id' => 33, 'site_sitemap_updated' => 34, 'site_monitoring' => 35, 'site_created' => 36, 'site_updated' => 37, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, ]
     ];
 
     /**
@@ -473,14 +468,6 @@ class SiteTableMap extends TableMap
         'COL_SITE_SHIPPING_FEE' => 'SITE_SHIPPING_FEE',
         'site_shipping_fee' => 'SITE_SHIPPING_FEE',
         'sites.site_shipping_fee' => 'SITE_SHIPPING_FEE',
-        'Wishlist' => 'SITE_WISHLIST',
-        'Site.Wishlist' => 'SITE_WISHLIST',
-        'wishlist' => 'SITE_WISHLIST',
-        'site.wishlist' => 'SITE_WISHLIST',
-        'SiteTableMap::COL_SITE_WISHLIST' => 'SITE_WISHLIST',
-        'COL_SITE_WISHLIST' => 'SITE_WISHLIST',
-        'site_wishlist' => 'SITE_WISHLIST',
-        'sites.site_wishlist' => 'SITE_WISHLIST',
         'PaymentCheque' => 'SITE_PAYMENT_CHEQUE',
         'Site.PaymentCheque' => 'SITE_PAYMENT_CHEQUE',
         'paymentCheque' => 'SITE_PAYMENT_CHEQUE',
@@ -664,7 +651,6 @@ class SiteTableMap extends TableMap
         $this->addColumn('site_shop', 'Shop', 'BOOLEAN', false, 1, null);
         $this->addColumn('site_vpc', 'Vpc', 'BOOLEAN', false, 1, null);
         $this->addColumn('site_shipping_fee', 'ShippingFee', 'VARCHAR', false, 8, null);
-        $this->addColumn('site_wishlist', 'Wishlist', 'BOOLEAN', false, 1, false);
         $this->addColumn('site_payment_cheque', 'PaymentCheque', 'BOOLEAN', false, 1, true);
         $this->addColumn('site_payment_paypal', 'PaymentPaypal', 'VARCHAR', false, 32, null);
         $this->addColumn('site_payment_payplug', 'PaymentPayplug', 'BOOLEAN', false, 1, false);
@@ -692,6 +678,13 @@ class SiteTableMap extends TableMap
      */
     public function buildRelations(): void
     {
+        $this->addRelation('Alert', '\\Model\\Alert', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, 'Alerts', false);
         $this->addRelation('Cart', '\\Model\\Cart', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -797,6 +790,20 @@ class SiteTableMap extends TableMap
     1 => ':site_id',
   ),
 ), null, null, 'AuthenticationMethods', false);
+        $this->addRelation('Vote', '\\Model\\Vote', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, 'Votes', false);
+        $this->addRelation('Wishlist', '\\Model\\Wishlist', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, 'Wishlists', false);
     }
 
     /**
@@ -974,7 +981,6 @@ class SiteTableMap extends TableMap
             $criteria->addSelectColumn(SiteTableMap::COL_SITE_SHOP);
             $criteria->addSelectColumn(SiteTableMap::COL_SITE_VPC);
             $criteria->addSelectColumn(SiteTableMap::COL_SITE_SHIPPING_FEE);
-            $criteria->addSelectColumn(SiteTableMap::COL_SITE_WISHLIST);
             $criteria->addSelectColumn(SiteTableMap::COL_SITE_PAYMENT_CHEQUE);
             $criteria->addSelectColumn(SiteTableMap::COL_SITE_PAYMENT_PAYPAL);
             $criteria->addSelectColumn(SiteTableMap::COL_SITE_PAYMENT_PAYPLUG);
@@ -1014,7 +1020,6 @@ class SiteTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.site_shop');
             $criteria->addSelectColumn($alias . '.site_vpc');
             $criteria->addSelectColumn($alias . '.site_shipping_fee');
-            $criteria->addSelectColumn($alias . '.site_wishlist');
             $criteria->addSelectColumn($alias . '.site_payment_cheque');
             $criteria->addSelectColumn($alias . '.site_payment_paypal');
             $criteria->addSelectColumn($alias . '.site_payment_payplug');
@@ -1071,7 +1076,6 @@ class SiteTableMap extends TableMap
             $criteria->removeSelectColumn(SiteTableMap::COL_SITE_SHOP);
             $criteria->removeSelectColumn(SiteTableMap::COL_SITE_VPC);
             $criteria->removeSelectColumn(SiteTableMap::COL_SITE_SHIPPING_FEE);
-            $criteria->removeSelectColumn(SiteTableMap::COL_SITE_WISHLIST);
             $criteria->removeSelectColumn(SiteTableMap::COL_SITE_PAYMENT_CHEQUE);
             $criteria->removeSelectColumn(SiteTableMap::COL_SITE_PAYMENT_PAYPAL);
             $criteria->removeSelectColumn(SiteTableMap::COL_SITE_PAYMENT_PAYPLUG);
@@ -1111,7 +1115,6 @@ class SiteTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.site_shop');
             $criteria->removeSelectColumn($alias . '.site_vpc');
             $criteria->removeSelectColumn($alias . '.site_shipping_fee');
-            $criteria->removeSelectColumn($alias . '.site_wishlist');
             $criteria->removeSelectColumn($alias . '.site_payment_cheque');
             $criteria->removeSelectColumn($alias . '.site_payment_paypal');
             $criteria->removeSelectColumn($alias . '.site_payment_payplug');

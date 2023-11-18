@@ -2,6 +2,10 @@
 <database name="default" defaultIdMethod="native" namespace="Model" defaultPhpNamingMethod="underscore">
   <table name="alerts" idMethod="native" phpName="Alert">
     <column name="alert_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
     <column name="axys_account_id" phpName="AxysAccountId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <foreign-key foreignTable="users" skipSql="true">
@@ -1423,7 +1427,6 @@
     <column name="site_shop" phpName="Shop" type="BOOLEAN" size="1"/>
     <column name="site_vpc" phpName="Vpc" type="BOOLEAN" size="1"/>
     <column name="site_shipping_fee" phpName="ShippingFee" type="VARCHAR" size="8"/>
-    <column name="site_wishlist" phpName="Wishlist" type="BOOLEAN" size="1" defaultValue="false"/>
     <column name="site_payment_cheque" phpName="PaymentCheque" type="BOOLEAN" size="1" defaultValue="true"/>
     <column name="site_payment_paypal" phpName="PaymentPaypal" type="VARCHAR" size="32"/>
     <column name="site_payment_payplug" phpName="PaymentPayplug" type="BOOLEAN" size="1" defaultValue="false"/>
@@ -1671,6 +1674,10 @@
   </table>
   <table name="votes" idMethod="native" phpName="Vote">
     <column name="vote_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
     <column name="axys_account_id" phpName="AxysAccountId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <foreign-key foreignTable="users" skipSql="true">
@@ -1713,6 +1720,10 @@
   </table>
   <table name="wishlist" idMethod="native" phpName="Wishlist">
     <column name="wishlist_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
     <column name="axys_account_id" phpName="AxysAccountId" type="INTEGER" sqlType="int(11) unsigned"/>
     <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <foreign-key foreignTable="users" skipSql="true">

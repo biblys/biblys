@@ -39,7 +39,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery orderByShop($order = Criteria::ASC) Order by the site_shop column
  * @method     ChildSiteQuery orderByVpc($order = Criteria::ASC) Order by the site_vpc column
  * @method     ChildSiteQuery orderByShippingFee($order = Criteria::ASC) Order by the site_shipping_fee column
- * @method     ChildSiteQuery orderByWishlist($order = Criteria::ASC) Order by the site_wishlist column
  * @method     ChildSiteQuery orderByPaymentCheque($order = Criteria::ASC) Order by the site_payment_cheque column
  * @method     ChildSiteQuery orderByPaymentPaypal($order = Criteria::ASC) Order by the site_payment_paypal column
  * @method     ChildSiteQuery orderByPaymentPayplug($order = Criteria::ASC) Order by the site_payment_payplug column
@@ -79,7 +78,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery groupByShop() Group by the site_shop column
  * @method     ChildSiteQuery groupByVpc() Group by the site_vpc column
  * @method     ChildSiteQuery groupByShippingFee() Group by the site_shipping_fee column
- * @method     ChildSiteQuery groupByWishlist() Group by the site_wishlist column
  * @method     ChildSiteQuery groupByPaymentCheque() Group by the site_payment_cheque column
  * @method     ChildSiteQuery groupByPaymentPaypal() Group by the site_payment_paypal column
  * @method     ChildSiteQuery groupByPaymentPayplug() Group by the site_payment_payplug column
@@ -106,6 +104,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
  * @method     ChildSiteQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildSiteQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ *
+ * @method     ChildSiteQuery leftJoinAlert($relationAlias = null) Adds a LEFT JOIN clause to the query using the Alert relation
+ * @method     ChildSiteQuery rightJoinAlert($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Alert relation
+ * @method     ChildSiteQuery innerJoinAlert($relationAlias = null) Adds a INNER JOIN clause to the query using the Alert relation
+ *
+ * @method     ChildSiteQuery joinWithAlert($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Alert relation
+ *
+ * @method     ChildSiteQuery leftJoinWithAlert() Adds a LEFT JOIN clause and with to the query using the Alert relation
+ * @method     ChildSiteQuery rightJoinWithAlert() Adds a RIGHT JOIN clause and with to the query using the Alert relation
+ * @method     ChildSiteQuery innerJoinWithAlert() Adds a INNER JOIN clause and with to the query using the Alert relation
  *
  * @method     ChildSiteQuery leftJoinCart($relationAlias = null) Adds a LEFT JOIN clause to the query using the Cart relation
  * @method     ChildSiteQuery rightJoinCart($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Cart relation
@@ -257,7 +265,27 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery rightJoinWithAuthenticationMethod() Adds a RIGHT JOIN clause and with to the query using the AuthenticationMethod relation
  * @method     ChildSiteQuery innerJoinWithAuthenticationMethod() Adds a INNER JOIN clause and with to the query using the AuthenticationMethod relation
  *
- * @method     \Model\CartQuery|\Model\CrowdfundingCampaignQuery|\Model\CrowfundingRewardQuery|\Model\InvitationQuery|\Model\OptionQuery|\Model\OrderQuery|\Model\PageQuery|\Model\PaymentQuery|\Model\ArticleCategoryQuery|\Model\RightQuery|\Model\SessionQuery|\Model\SpecialOfferQuery|\Model\StockQuery|\Model\UserQuery|\Model\AuthenticationMethodQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildSiteQuery leftJoinVote($relationAlias = null) Adds a LEFT JOIN clause to the query using the Vote relation
+ * @method     ChildSiteQuery rightJoinVote($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Vote relation
+ * @method     ChildSiteQuery innerJoinVote($relationAlias = null) Adds a INNER JOIN clause to the query using the Vote relation
+ *
+ * @method     ChildSiteQuery joinWithVote($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Vote relation
+ *
+ * @method     ChildSiteQuery leftJoinWithVote() Adds a LEFT JOIN clause and with to the query using the Vote relation
+ * @method     ChildSiteQuery rightJoinWithVote() Adds a RIGHT JOIN clause and with to the query using the Vote relation
+ * @method     ChildSiteQuery innerJoinWithVote() Adds a INNER JOIN clause and with to the query using the Vote relation
+ *
+ * @method     ChildSiteQuery leftJoinWishlist($relationAlias = null) Adds a LEFT JOIN clause to the query using the Wishlist relation
+ * @method     ChildSiteQuery rightJoinWishlist($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Wishlist relation
+ * @method     ChildSiteQuery innerJoinWishlist($relationAlias = null) Adds a INNER JOIN clause to the query using the Wishlist relation
+ *
+ * @method     ChildSiteQuery joinWithWishlist($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Wishlist relation
+ *
+ * @method     ChildSiteQuery leftJoinWithWishlist() Adds a LEFT JOIN clause and with to the query using the Wishlist relation
+ * @method     ChildSiteQuery rightJoinWithWishlist() Adds a RIGHT JOIN clause and with to the query using the Wishlist relation
+ * @method     ChildSiteQuery innerJoinWithWishlist() Adds a INNER JOIN clause and with to the query using the Wishlist relation
+ *
+ * @method     \Model\AlertQuery|\Model\CartQuery|\Model\CrowdfundingCampaignQuery|\Model\CrowfundingRewardQuery|\Model\InvitationQuery|\Model\OptionQuery|\Model\OrderQuery|\Model\PageQuery|\Model\PaymentQuery|\Model\ArticleCategoryQuery|\Model\RightQuery|\Model\SessionQuery|\Model\SpecialOfferQuery|\Model\StockQuery|\Model\UserQuery|\Model\AuthenticationMethodQuery|\Model\VoteQuery|\Model\WishlistQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildSite|null findOne(?ConnectionInterface $con = null) Return the first ChildSite matching the query
  * @method     ChildSite findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildSite matching the query, or a new ChildSite object populated from the query conditions when no match is found
@@ -282,7 +310,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSite|null findOneByShop(boolean $site_shop) Return the first ChildSite filtered by the site_shop column
  * @method     ChildSite|null findOneByVpc(boolean $site_vpc) Return the first ChildSite filtered by the site_vpc column
  * @method     ChildSite|null findOneByShippingFee(string $site_shipping_fee) Return the first ChildSite filtered by the site_shipping_fee column
- * @method     ChildSite|null findOneByWishlist(boolean $site_wishlist) Return the first ChildSite filtered by the site_wishlist column
  * @method     ChildSite|null findOneByPaymentCheque(boolean $site_payment_cheque) Return the first ChildSite filtered by the site_payment_cheque column
  * @method     ChildSite|null findOneByPaymentPaypal(string $site_payment_paypal) Return the first ChildSite filtered by the site_payment_paypal column
  * @method     ChildSite|null findOneByPaymentPayplug(boolean $site_payment_payplug) Return the first ChildSite filtered by the site_payment_payplug column
@@ -325,7 +352,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSite requireOneByShop(boolean $site_shop) Return the first ChildSite filtered by the site_shop column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByVpc(boolean $site_vpc) Return the first ChildSite filtered by the site_vpc column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByShippingFee(string $site_shipping_fee) Return the first ChildSite filtered by the site_shipping_fee column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildSite requireOneByWishlist(boolean $site_wishlist) Return the first ChildSite filtered by the site_wishlist column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByPaymentCheque(boolean $site_payment_cheque) Return the first ChildSite filtered by the site_payment_cheque column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByPaymentPaypal(string $site_payment_paypal) Return the first ChildSite filtered by the site_payment_paypal column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByPaymentPayplug(boolean $site_payment_payplug) Return the first ChildSite filtered by the site_payment_payplug column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -388,8 +414,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildSite> findByVpc(boolean|array<boolean> $site_vpc) Return ChildSite objects filtered by the site_vpc column
  * @method     ChildSite[]|Collection findByShippingFee(string|array<string> $site_shipping_fee) Return ChildSite objects filtered by the site_shipping_fee column
  * @psalm-method Collection&\Traversable<ChildSite> findByShippingFee(string|array<string> $site_shipping_fee) Return ChildSite objects filtered by the site_shipping_fee column
- * @method     ChildSite[]|Collection findByWishlist(boolean|array<boolean> $site_wishlist) Return ChildSite objects filtered by the site_wishlist column
- * @psalm-method Collection&\Traversable<ChildSite> findByWishlist(boolean|array<boolean> $site_wishlist) Return ChildSite objects filtered by the site_wishlist column
  * @method     ChildSite[]|Collection findByPaymentCheque(boolean|array<boolean> $site_payment_cheque) Return ChildSite objects filtered by the site_payment_cheque column
  * @psalm-method Collection&\Traversable<ChildSite> findByPaymentCheque(boolean|array<boolean> $site_payment_cheque) Return ChildSite objects filtered by the site_payment_cheque column
  * @method     ChildSite[]|Collection findByPaymentPaypal(string|array<string> $site_payment_paypal) Return ChildSite objects filtered by the site_payment_paypal column
@@ -525,7 +549,7 @@ abstract class SiteQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT site_id, site_name, site_pass, site_title, site_domain, site_version, site_tag, site_flag, site_contact, site_address, site_tva, site_html_renderer, site_axys, site_noosfere, site_amazon, site_event_id, site_event_date, site_shop, site_vpc, site_shipping_fee, site_wishlist, site_payment_cheque, site_payment_paypal, site_payment_payplug, site_payment_transfer, site_bookshop, site_bookshop_id, site_publisher, site_publisher_stock, publisher_id, site_ebook_bundle, site_fb_page_id, site_fb_page_token, site_analytics_id, site_piwik_id, site_sitemap_updated, site_monitoring, site_created, site_updated FROM sites WHERE site_id = :p0';
+        $sql = 'SELECT site_id, site_name, site_pass, site_title, site_domain, site_version, site_tag, site_flag, site_contact, site_address, site_tva, site_html_renderer, site_axys, site_noosfere, site_amazon, site_event_id, site_event_date, site_shop, site_vpc, site_shipping_fee, site_payment_cheque, site_payment_paypal, site_payment_payplug, site_payment_transfer, site_bookshop, site_bookshop_id, site_publisher, site_publisher_stock, publisher_id, site_ebook_bundle, site_fb_page_id, site_fb_page_token, site_analytics_id, site_piwik_id, site_sitemap_updated, site_monitoring, site_created, site_updated FROM sites WHERE site_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1231,35 +1255,6 @@ abstract class SiteQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the site_wishlist column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByWishlist(true); // WHERE site_wishlist = true
-     * $query->filterByWishlist('yes'); // WHERE site_wishlist = true
-     * </code>
-     *
-     * @param bool|string $wishlist The value to use as filter.
-     *              Non-boolean arguments are converted using the following rules:
-     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByWishlist($wishlist = null, ?string $comparison = null)
-    {
-        if (is_string($wishlist)) {
-            $wishlist = in_array(strtolower($wishlist), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
-        }
-
-        $this->addUsingAlias(SiteTableMap::COL_SITE_WISHLIST, $wishlist, $comparison);
-
-        return $this;
-    }
-
-    /**
      * Filter the query on the site_payment_cheque column
      *
      * Example usage:
@@ -1894,6 +1889,179 @@ abstract class SiteQuery extends ModelCriteria
         $this->addUsingAlias(SiteTableMap::COL_SITE_UPDATED, $updatedAt, $comparison);
 
         return $this;
+    }
+
+    /**
+     * Filter the query by a related \Model\Alert object
+     *
+     * @param \Model\Alert|ObjectCollection $alert the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByAlert($alert, ?string $comparison = null)
+    {
+        if ($alert instanceof \Model\Alert) {
+            $this
+                ->addUsingAlias(SiteTableMap::COL_SITE_ID, $alert->getSiteId(), $comparison);
+
+            return $this;
+        } elseif ($alert instanceof ObjectCollection) {
+            $this
+                ->useAlertQuery()
+                ->filterByPrimaryKeys($alert->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByAlert() only accepts arguments of type \Model\Alert or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Alert relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinAlert(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Alert');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Alert');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Alert relation Alert object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\AlertQuery A secondary query class using the current class as primary query
+     */
+    public function useAlertQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinAlert($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Alert', '\Model\AlertQuery');
+    }
+
+    /**
+     * Use the Alert relation Alert object
+     *
+     * @param callable(\Model\AlertQuery):\Model\AlertQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withAlertQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useAlertQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Alert table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\AlertQuery The inner query object of the EXISTS statement
+     */
+    public function useAlertExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\AlertQuery */
+        $q = $this->useExistsQuery('Alert', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Alert table for a NOT EXISTS query.
+     *
+     * @see useAlertExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\AlertQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useAlertNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\AlertQuery */
+        $q = $this->useExistsQuery('Alert', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Alert table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\AlertQuery The inner query object of the IN statement
+     */
+    public function useInAlertQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\AlertQuery */
+        $q = $this->useInQuery('Alert', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Alert table for a NOT IN query.
+     *
+     * @see useAlertInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\AlertQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInAlertQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\AlertQuery */
+        $q = $this->useInQuery('Alert', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
     }
 
     /**
@@ -4488,6 +4656,352 @@ abstract class SiteQuery extends ModelCriteria
     {
         /** @var $q \Model\AuthenticationMethodQuery */
         $q = $this->useInQuery('AuthenticationMethod', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\Vote object
+     *
+     * @param \Model\Vote|ObjectCollection $vote the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByVote($vote, ?string $comparison = null)
+    {
+        if ($vote instanceof \Model\Vote) {
+            $this
+                ->addUsingAlias(SiteTableMap::COL_SITE_ID, $vote->getSiteId(), $comparison);
+
+            return $this;
+        } elseif ($vote instanceof ObjectCollection) {
+            $this
+                ->useVoteQuery()
+                ->filterByPrimaryKeys($vote->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByVote() only accepts arguments of type \Model\Vote or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Vote relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinVote(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Vote');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Vote');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Vote relation Vote object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\VoteQuery A secondary query class using the current class as primary query
+     */
+    public function useVoteQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinVote($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Vote', '\Model\VoteQuery');
+    }
+
+    /**
+     * Use the Vote relation Vote object
+     *
+     * @param callable(\Model\VoteQuery):\Model\VoteQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withVoteQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useVoteQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Vote table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\VoteQuery The inner query object of the EXISTS statement
+     */
+    public function useVoteExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\VoteQuery */
+        $q = $this->useExistsQuery('Vote', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Vote table for a NOT EXISTS query.
+     *
+     * @see useVoteExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\VoteQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useVoteNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\VoteQuery */
+        $q = $this->useExistsQuery('Vote', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Vote table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\VoteQuery The inner query object of the IN statement
+     */
+    public function useInVoteQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\VoteQuery */
+        $q = $this->useInQuery('Vote', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Vote table for a NOT IN query.
+     *
+     * @see useVoteInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\VoteQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInVoteQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\VoteQuery */
+        $q = $this->useInQuery('Vote', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\Wishlist object
+     *
+     * @param \Model\Wishlist|ObjectCollection $wishlist the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByWishlist($wishlist, ?string $comparison = null)
+    {
+        if ($wishlist instanceof \Model\Wishlist) {
+            $this
+                ->addUsingAlias(SiteTableMap::COL_SITE_ID, $wishlist->getSiteId(), $comparison);
+
+            return $this;
+        } elseif ($wishlist instanceof ObjectCollection) {
+            $this
+                ->useWishlistQuery()
+                ->filterByPrimaryKeys($wishlist->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByWishlist() only accepts arguments of type \Model\Wishlist or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Wishlist relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinWishlist(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Wishlist');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Wishlist');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Wishlist relation Wishlist object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\WishlistQuery A secondary query class using the current class as primary query
+     */
+    public function useWishlistQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinWishlist($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Wishlist', '\Model\WishlistQuery');
+    }
+
+    /**
+     * Use the Wishlist relation Wishlist object
+     *
+     * @param callable(\Model\WishlistQuery):\Model\WishlistQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withWishlistQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useWishlistQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Wishlist table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\WishlistQuery The inner query object of the EXISTS statement
+     */
+    public function useWishlistExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\WishlistQuery */
+        $q = $this->useExistsQuery('Wishlist', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Wishlist table for a NOT EXISTS query.
+     *
+     * @see useWishlistExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\WishlistQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useWishlistNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\WishlistQuery */
+        $q = $this->useExistsQuery('Wishlist', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Wishlist table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\WishlistQuery The inner query object of the IN statement
+     */
+    public function useInWishlistQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\WishlistQuery */
+        $q = $this->useInQuery('Wishlist', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Wishlist table for a NOT IN query.
+     *
+     * @see useWishlistInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\WishlistQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInWishlistQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\WishlistQuery */
+        $q = $this->useInQuery('Wishlist', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 

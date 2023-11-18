@@ -5,6 +5,8 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\Alert as ChildAlert;
+use Model\AlertQuery as ChildAlertQuery;
 use Model\ArticleCategory as ChildArticleCategory;
 use Model\ArticleCategoryQuery as ChildArticleCategoryQuery;
 use Model\AuthenticationMethod as ChildAuthenticationMethod;
@@ -37,6 +39,11 @@ use Model\Stock as ChildStock;
 use Model\StockQuery as ChildStockQuery;
 use Model\User as ChildUser;
 use Model\UserQuery as ChildUserQuery;
+use Model\Vote as ChildVote;
+use Model\VoteQuery as ChildVoteQuery;
+use Model\Wishlist as ChildWishlist;
+use Model\WishlistQuery as ChildWishlistQuery;
+use Model\Map\AlertTableMap;
 use Model\Map\ArticleCategoryTableMap;
 use Model\Map\AuthenticationMethodTableMap;
 use Model\Map\CartTableMap;
@@ -53,6 +60,8 @@ use Model\Map\SiteTableMap;
 use Model\Map\SpecialOfferTableMap;
 use Model\Map\StockTableMap;
 use Model\Map\UserTableMap;
+use Model\Map\VoteTableMap;
+use Model\Map\WishlistTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -258,14 +267,6 @@ abstract class Site implements ActiveRecordInterface
     protected $site_shipping_fee;
 
     /**
-     * The value for the site_wishlist field.
-     *
-     * Note: this column has a database default value of: false
-     * @var        boolean|null
-     */
-    protected $site_wishlist;
-
-    /**
      * The value for the site_payment_cheque field.
      *
      * Note: this column has a database default value of: true
@@ -397,6 +398,13 @@ abstract class Site implements ActiveRecordInterface
     protected $site_updated;
 
     /**
+     * @var        ObjectCollection|ChildAlert[] Collection to store aggregation of ChildAlert objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildAlert> Collection to store aggregation of ChildAlert objects.
+     */
+    protected $collAlerts;
+    protected $collAlertsPartial;
+
+    /**
      * @var        ObjectCollection|ChildCart[] Collection to store aggregation of ChildCart objects.
      * @phpstan-var ObjectCollection&\Traversable<ChildCart> Collection to store aggregation of ChildCart objects.
      */
@@ -502,12 +510,33 @@ abstract class Site implements ActiveRecordInterface
     protected $collAuthenticationMethodsPartial;
 
     /**
+     * @var        ObjectCollection|ChildVote[] Collection to store aggregation of ChildVote objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildVote> Collection to store aggregation of ChildVote objects.
+     */
+    protected $collVotes;
+    protected $collVotesPartial;
+
+    /**
+     * @var        ObjectCollection|ChildWishlist[] Collection to store aggregation of ChildWishlist objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildWishlist> Collection to store aggregation of ChildWishlist objects.
+     */
+    protected $collWishlists;
+    protected $collWishlistsPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
      * @var bool
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildAlert[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildAlert>
+     */
+    protected $alertsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -615,6 +644,20 @@ abstract class Site implements ActiveRecordInterface
     protected $authenticationMethodsScheduledForDeletion = null;
 
     /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildVote[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildVote>
+     */
+    protected $votesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildWishlist[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildWishlist>
+     */
+    protected $wishlistsScheduledForDeletion = null;
+
+    /**
      * Applies default values to this object.
      * This method should be called from the object's constructor (or
      * equivalent initialization method).
@@ -629,7 +672,6 @@ abstract class Site implements ActiveRecordInterface
         $this->site_contact = '';
         $this->site_address = '';
         $this->site_axys = true;
-        $this->site_wishlist = false;
         $this->site_payment_cheque = true;
         $this->site_payment_payplug = false;
         $this->site_bookshop = false;
@@ -1123,26 +1165,6 @@ abstract class Site implements ActiveRecordInterface
     public function getShippingFee()
     {
         return $this->site_shipping_fee;
-    }
-
-    /**
-     * Get the [site_wishlist] column value.
-     *
-     * @return boolean|null
-     */
-    public function getWishlist()
-    {
-        return $this->site_wishlist;
-    }
-
-    /**
-     * Get the [site_wishlist] column value.
-     *
-     * @return boolean|null
-     */
-    public function isWishlist()
-    {
-        return $this->getWishlist();
     }
 
     /**
@@ -1880,34 +1902,6 @@ abstract class Site implements ActiveRecordInterface
     }
 
     /**
-     * Sets the value of the [site_wishlist] column.
-     * Non-boolean arguments are converted using the following rules:
-     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
-     * @param bool|integer|string|null $v The new value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setWishlist($v)
-    {
-        if ($v !== null) {
-            if (is_string($v)) {
-                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-            } else {
-                $v = (boolean) $v;
-            }
-        }
-
-        if ($this->site_wishlist !== $v) {
-            $this->site_wishlist = $v;
-            $this->modifiedColumns[SiteTableMap::COL_SITE_WISHLIST] = true;
-        }
-
-        return $this;
-    }
-
-    /**
      * Sets the value of the [site_payment_cheque] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
@@ -2361,10 +2355,6 @@ abstract class Site implements ActiveRecordInterface
                 return false;
             }
 
-            if ($this->site_wishlist !== false) {
-                return false;
-            }
-
             if ($this->site_payment_cheque !== true) {
                 return false;
             }
@@ -2471,67 +2461,64 @@ abstract class Site implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 19 + $startcol : SiteTableMap::translateFieldName('ShippingFee', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_shipping_fee = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 20 + $startcol : SiteTableMap::translateFieldName('Wishlist', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->site_wishlist = (null !== $col) ? (boolean) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 21 + $startcol : SiteTableMap::translateFieldName('PaymentCheque', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 20 + $startcol : SiteTableMap::translateFieldName('PaymentCheque', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_payment_cheque = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 22 + $startcol : SiteTableMap::translateFieldName('PaymentPaypal', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 21 + $startcol : SiteTableMap::translateFieldName('PaymentPaypal', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_payment_paypal = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 23 + $startcol : SiteTableMap::translateFieldName('PaymentPayplug', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 22 + $startcol : SiteTableMap::translateFieldName('PaymentPayplug', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_payment_payplug = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 24 + $startcol : SiteTableMap::translateFieldName('PaymentTransfer', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 23 + $startcol : SiteTableMap::translateFieldName('PaymentTransfer', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_payment_transfer = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 25 + $startcol : SiteTableMap::translateFieldName('Bookshop', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 24 + $startcol : SiteTableMap::translateFieldName('Bookshop', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_bookshop = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 26 + $startcol : SiteTableMap::translateFieldName('BookshopId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 25 + $startcol : SiteTableMap::translateFieldName('BookshopId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_bookshop_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 27 + $startcol : SiteTableMap::translateFieldName('Publisher', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 26 + $startcol : SiteTableMap::translateFieldName('Publisher', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_publisher = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 28 + $startcol : SiteTableMap::translateFieldName('PublisherStock', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 27 + $startcol : SiteTableMap::translateFieldName('PublisherStock', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_publisher_stock = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 29 + $startcol : SiteTableMap::translateFieldName('PublisherId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 28 + $startcol : SiteTableMap::translateFieldName('PublisherId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->publisher_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 30 + $startcol : SiteTableMap::translateFieldName('EbookBundle', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 29 + $startcol : SiteTableMap::translateFieldName('EbookBundle', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_ebook_bundle = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 31 + $startcol : SiteTableMap::translateFieldName('FbPageId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 30 + $startcol : SiteTableMap::translateFieldName('FbPageId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_fb_page_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 32 + $startcol : SiteTableMap::translateFieldName('FbPageToken', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 31 + $startcol : SiteTableMap::translateFieldName('FbPageToken', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_fb_page_token = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 33 + $startcol : SiteTableMap::translateFieldName('AnalyticsId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 32 + $startcol : SiteTableMap::translateFieldName('AnalyticsId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_analytics_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 34 + $startcol : SiteTableMap::translateFieldName('PiwikId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 33 + $startcol : SiteTableMap::translateFieldName('PiwikId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_piwik_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 35 + $startcol : SiteTableMap::translateFieldName('SitemapUpdated', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 34 + $startcol : SiteTableMap::translateFieldName('SitemapUpdated', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->site_sitemap_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 36 + $startcol : SiteTableMap::translateFieldName('Monitoring', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 35 + $startcol : SiteTableMap::translateFieldName('Monitoring', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_monitoring = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 37 + $startcol : SiteTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 36 + $startcol : SiteTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->site_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 38 + $startcol : SiteTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 37 + $startcol : SiteTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -2544,7 +2531,7 @@ abstract class Site implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 39; // 39 = SiteTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 38; // 38 = SiteTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Site'), 0, $e);
@@ -2606,6 +2593,8 @@ abstract class Site implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collAlerts = null;
+
             $this->collCarts = null;
 
             $this->collCrowdfundingCampaigns = null;
@@ -2635,6 +2624,10 @@ abstract class Site implements ActiveRecordInterface
             $this->collUsers = null;
 
             $this->collAuthenticationMethods = null;
+
+            $this->collVotes = null;
+
+            $this->collWishlists = null;
 
         } // if (deep)
     }
@@ -2761,6 +2754,24 @@ abstract class Site implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->alertsScheduledForDeletion !== null) {
+                if (!$this->alertsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->alertsScheduledForDeletion as $alert) {
+                        // need to save related object because we set the relation to null
+                        $alert->save($con);
+                    }
+                    $this->alertsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collAlerts !== null) {
+                foreach ($this->collAlerts as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->cartsScheduledForDeletion !== null) {
@@ -3029,6 +3040,42 @@ abstract class Site implements ActiveRecordInterface
                 }
             }
 
+            if ($this->votesScheduledForDeletion !== null) {
+                if (!$this->votesScheduledForDeletion->isEmpty()) {
+                    foreach ($this->votesScheduledForDeletion as $vote) {
+                        // need to save related object because we set the relation to null
+                        $vote->save($con);
+                    }
+                    $this->votesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collVotes !== null) {
+                foreach ($this->collVotes as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->wishlistsScheduledForDeletion !== null) {
+                if (!$this->wishlistsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->wishlistsScheduledForDeletion as $wishlist) {
+                        // need to save related object because we set the relation to null
+                        $wishlist->save($con);
+                    }
+                    $this->wishlistsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collWishlists !== null) {
+                foreach ($this->collWishlists as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             $this->alreadyInSave = false;
 
         }
@@ -3114,9 +3161,6 @@ abstract class Site implements ActiveRecordInterface
         }
         if ($this->isColumnModified(SiteTableMap::COL_SITE_SHIPPING_FEE)) {
             $modifiedColumns[':p' . $index++]  = 'site_shipping_fee';
-        }
-        if ($this->isColumnModified(SiteTableMap::COL_SITE_WISHLIST)) {
-            $modifiedColumns[':p' . $index++]  = 'site_wishlist';
         }
         if ($this->isColumnModified(SiteTableMap::COL_SITE_PAYMENT_CHEQUE)) {
             $modifiedColumns[':p' . $index++]  = 'site_payment_cheque';
@@ -3261,10 +3305,6 @@ abstract class Site implements ActiveRecordInterface
                         break;
                     case 'site_shipping_fee':
                         $stmt->bindValue($identifier, $this->site_shipping_fee, PDO::PARAM_STR);
-
-                        break;
-                    case 'site_wishlist':
-                        $stmt->bindValue($identifier, (int) $this->site_wishlist, PDO::PARAM_INT);
 
                         break;
                     case 'site_payment_cheque':
@@ -3462,60 +3502,57 @@ abstract class Site implements ActiveRecordInterface
                 return $this->getShippingFee();
 
             case 20:
-                return $this->getWishlist();
-
-            case 21:
                 return $this->getPaymentCheque();
 
-            case 22:
+            case 21:
                 return $this->getPaymentPaypal();
 
-            case 23:
+            case 22:
                 return $this->getPaymentPayplug();
 
-            case 24:
+            case 23:
                 return $this->getPaymentTransfer();
 
-            case 25:
+            case 24:
                 return $this->getBookshop();
 
-            case 26:
+            case 25:
                 return $this->getBookshopId();
 
-            case 27:
+            case 26:
                 return $this->getPublisher();
 
-            case 28:
+            case 27:
                 return $this->getPublisherStock();
 
-            case 29:
+            case 28:
                 return $this->getPublisherId();
 
-            case 30:
+            case 29:
                 return $this->getEbookBundle();
 
-            case 31:
+            case 30:
                 return $this->getFbPageId();
 
-            case 32:
+            case 31:
                 return $this->getFbPageToken();
 
-            case 33:
+            case 32:
                 return $this->getAnalyticsId();
 
-            case 34:
+            case 33:
                 return $this->getPiwikId();
 
-            case 35:
+            case 34:
                 return $this->getSitemapUpdated();
 
-            case 36:
+            case 35:
                 return $this->getMonitoring();
 
-            case 37:
+            case 36:
                 return $this->getCreatedAt();
 
-            case 38:
+            case 37:
                 return $this->getUpdatedAt();
 
             default:
@@ -3566,36 +3603,35 @@ abstract class Site implements ActiveRecordInterface
             $keys[17] => $this->getShop(),
             $keys[18] => $this->getVpc(),
             $keys[19] => $this->getShippingFee(),
-            $keys[20] => $this->getWishlist(),
-            $keys[21] => $this->getPaymentCheque(),
-            $keys[22] => $this->getPaymentPaypal(),
-            $keys[23] => $this->getPaymentPayplug(),
-            $keys[24] => $this->getPaymentTransfer(),
-            $keys[25] => $this->getBookshop(),
-            $keys[26] => $this->getBookshopId(),
-            $keys[27] => $this->getPublisher(),
-            $keys[28] => $this->getPublisherStock(),
-            $keys[29] => $this->getPublisherId(),
-            $keys[30] => $this->getEbookBundle(),
-            $keys[31] => $this->getFbPageId(),
-            $keys[32] => $this->getFbPageToken(),
-            $keys[33] => $this->getAnalyticsId(),
-            $keys[34] => $this->getPiwikId(),
-            $keys[35] => $this->getSitemapUpdated(),
-            $keys[36] => $this->getMonitoring(),
-            $keys[37] => $this->getCreatedAt(),
-            $keys[38] => $this->getUpdatedAt(),
+            $keys[20] => $this->getPaymentCheque(),
+            $keys[21] => $this->getPaymentPaypal(),
+            $keys[22] => $this->getPaymentPayplug(),
+            $keys[23] => $this->getPaymentTransfer(),
+            $keys[24] => $this->getBookshop(),
+            $keys[25] => $this->getBookshopId(),
+            $keys[26] => $this->getPublisher(),
+            $keys[27] => $this->getPublisherStock(),
+            $keys[28] => $this->getPublisherId(),
+            $keys[29] => $this->getEbookBundle(),
+            $keys[30] => $this->getFbPageId(),
+            $keys[31] => $this->getFbPageToken(),
+            $keys[32] => $this->getAnalyticsId(),
+            $keys[33] => $this->getPiwikId(),
+            $keys[34] => $this->getSitemapUpdated(),
+            $keys[35] => $this->getMonitoring(),
+            $keys[36] => $this->getCreatedAt(),
+            $keys[37] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[35]] instanceof \DateTimeInterface) {
-            $result[$keys[35]] = $result[$keys[35]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[34]] instanceof \DateTimeInterface) {
+            $result[$keys[34]] = $result[$keys[34]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[36]] instanceof \DateTimeInterface) {
+            $result[$keys[36]] = $result[$keys[36]]->format('Y-m-d H:i:s.u');
         }
 
         if ($result[$keys[37]] instanceof \DateTimeInterface) {
             $result[$keys[37]] = $result[$keys[37]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[38]] instanceof \DateTimeInterface) {
-            $result[$keys[38]] = $result[$keys[38]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -3604,6 +3640,21 @@ abstract class Site implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->collAlerts) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'alerts';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'alertss';
+                        break;
+                    default:
+                        $key = 'Alerts';
+                }
+
+                $result[$key] = $this->collAlerts->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collCarts) {
 
                 switch ($keyType) {
@@ -3829,6 +3880,36 @@ abstract class Site implements ActiveRecordInterface
 
                 $result[$key] = $this->collAuthenticationMethods->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collVotes) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'votes';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'votess';
+                        break;
+                    default:
+                        $key = 'Votes';
+                }
+
+                $result[$key] = $this->collVotes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collWishlists) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'wishlists';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'wishlists';
+                        break;
+                    default:
+                        $key = 'Wishlists';
+                }
+
+                $result[$key] = $this->collWishlists->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
         }
 
         return $result;
@@ -3926,60 +4007,57 @@ abstract class Site implements ActiveRecordInterface
                 $this->setShippingFee($value);
                 break;
             case 20:
-                $this->setWishlist($value);
-                break;
-            case 21:
                 $this->setPaymentCheque($value);
                 break;
-            case 22:
+            case 21:
                 $this->setPaymentPaypal($value);
                 break;
-            case 23:
+            case 22:
                 $this->setPaymentPayplug($value);
                 break;
-            case 24:
+            case 23:
                 $this->setPaymentTransfer($value);
                 break;
-            case 25:
+            case 24:
                 $this->setBookshop($value);
                 break;
-            case 26:
+            case 25:
                 $this->setBookshopId($value);
                 break;
-            case 27:
+            case 26:
                 $this->setPublisher($value);
                 break;
-            case 28:
+            case 27:
                 $this->setPublisherStock($value);
                 break;
-            case 29:
+            case 28:
                 $this->setPublisherId($value);
                 break;
-            case 30:
+            case 29:
                 $this->setEbookBundle($value);
                 break;
-            case 31:
+            case 30:
                 $this->setFbPageId($value);
                 break;
-            case 32:
+            case 31:
                 $this->setFbPageToken($value);
                 break;
-            case 33:
+            case 32:
                 $this->setAnalyticsId($value);
                 break;
-            case 34:
+            case 33:
                 $this->setPiwikId($value);
                 break;
-            case 35:
+            case 34:
                 $this->setSitemapUpdated($value);
                 break;
-            case 36:
+            case 35:
                 $this->setMonitoring($value);
                 break;
-            case 37:
+            case 36:
                 $this->setCreatedAt($value);
                 break;
-            case 38:
+            case 37:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -4069,61 +4147,58 @@ abstract class Site implements ActiveRecordInterface
             $this->setShippingFee($arr[$keys[19]]);
         }
         if (array_key_exists($keys[20], $arr)) {
-            $this->setWishlist($arr[$keys[20]]);
+            $this->setPaymentCheque($arr[$keys[20]]);
         }
         if (array_key_exists($keys[21], $arr)) {
-            $this->setPaymentCheque($arr[$keys[21]]);
+            $this->setPaymentPaypal($arr[$keys[21]]);
         }
         if (array_key_exists($keys[22], $arr)) {
-            $this->setPaymentPaypal($arr[$keys[22]]);
+            $this->setPaymentPayplug($arr[$keys[22]]);
         }
         if (array_key_exists($keys[23], $arr)) {
-            $this->setPaymentPayplug($arr[$keys[23]]);
+            $this->setPaymentTransfer($arr[$keys[23]]);
         }
         if (array_key_exists($keys[24], $arr)) {
-            $this->setPaymentTransfer($arr[$keys[24]]);
+            $this->setBookshop($arr[$keys[24]]);
         }
         if (array_key_exists($keys[25], $arr)) {
-            $this->setBookshop($arr[$keys[25]]);
+            $this->setBookshopId($arr[$keys[25]]);
         }
         if (array_key_exists($keys[26], $arr)) {
-            $this->setBookshopId($arr[$keys[26]]);
+            $this->setPublisher($arr[$keys[26]]);
         }
         if (array_key_exists($keys[27], $arr)) {
-            $this->setPublisher($arr[$keys[27]]);
+            $this->setPublisherStock($arr[$keys[27]]);
         }
         if (array_key_exists($keys[28], $arr)) {
-            $this->setPublisherStock($arr[$keys[28]]);
+            $this->setPublisherId($arr[$keys[28]]);
         }
         if (array_key_exists($keys[29], $arr)) {
-            $this->setPublisherId($arr[$keys[29]]);
+            $this->setEbookBundle($arr[$keys[29]]);
         }
         if (array_key_exists($keys[30], $arr)) {
-            $this->setEbookBundle($arr[$keys[30]]);
+            $this->setFbPageId($arr[$keys[30]]);
         }
         if (array_key_exists($keys[31], $arr)) {
-            $this->setFbPageId($arr[$keys[31]]);
+            $this->setFbPageToken($arr[$keys[31]]);
         }
         if (array_key_exists($keys[32], $arr)) {
-            $this->setFbPageToken($arr[$keys[32]]);
+            $this->setAnalyticsId($arr[$keys[32]]);
         }
         if (array_key_exists($keys[33], $arr)) {
-            $this->setAnalyticsId($arr[$keys[33]]);
+            $this->setPiwikId($arr[$keys[33]]);
         }
         if (array_key_exists($keys[34], $arr)) {
-            $this->setPiwikId($arr[$keys[34]]);
+            $this->setSitemapUpdated($arr[$keys[34]]);
         }
         if (array_key_exists($keys[35], $arr)) {
-            $this->setSitemapUpdated($arr[$keys[35]]);
+            $this->setMonitoring($arr[$keys[35]]);
         }
         if (array_key_exists($keys[36], $arr)) {
-            $this->setMonitoring($arr[$keys[36]]);
+            $this->setCreatedAt($arr[$keys[36]]);
         }
         if (array_key_exists($keys[37], $arr)) {
-            $this->setCreatedAt($arr[$keys[37]]);
-        }
-        if (array_key_exists($keys[38], $arr)) {
-            $this->setUpdatedAt($arr[$keys[38]]);
+            $this->setUpdatedAt($arr[$keys[37]]);
         }
 
         return $this;
@@ -4227,9 +4302,6 @@ abstract class Site implements ActiveRecordInterface
         }
         if ($this->isColumnModified(SiteTableMap::COL_SITE_SHIPPING_FEE)) {
             $criteria->add(SiteTableMap::COL_SITE_SHIPPING_FEE, $this->site_shipping_fee);
-        }
-        if ($this->isColumnModified(SiteTableMap::COL_SITE_WISHLIST)) {
-            $criteria->add(SiteTableMap::COL_SITE_WISHLIST, $this->site_wishlist);
         }
         if ($this->isColumnModified(SiteTableMap::COL_SITE_PAYMENT_CHEQUE)) {
             $criteria->add(SiteTableMap::COL_SITE_PAYMENT_CHEQUE, $this->site_payment_cheque);
@@ -4392,7 +4464,6 @@ abstract class Site implements ActiveRecordInterface
         $copyObj->setShop($this->getShop());
         $copyObj->setVpc($this->getVpc());
         $copyObj->setShippingFee($this->getShippingFee());
-        $copyObj->setWishlist($this->getWishlist());
         $copyObj->setPaymentCheque($this->getPaymentCheque());
         $copyObj->setPaymentPaypal($this->getPaymentPaypal());
         $copyObj->setPaymentPayplug($this->getPaymentPayplug());
@@ -4416,6 +4487,12 @@ abstract class Site implements ActiveRecordInterface
             // important: temporarily setNew(false) because this affects the behavior of
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
+
+            foreach ($this->getAlerts() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addAlert($relObj->copy($deepCopy));
+                }
+            }
 
             foreach ($this->getCarts() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
@@ -4507,6 +4584,18 @@ abstract class Site implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getVotes() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addVote($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getWishlists() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addWishlist($relObj->copy($deepCopy));
+                }
+            }
+
         } // if ($deepCopy)
 
         if ($makeNew) {
@@ -4548,6 +4637,10 @@ abstract class Site implements ActiveRecordInterface
      */
     public function initRelation($relationName): void
     {
+        if ('Alert' === $relationName) {
+            $this->initAlerts();
+            return;
+        }
         if ('Cart' === $relationName) {
             $this->initCarts();
             return;
@@ -4608,6 +4701,279 @@ abstract class Site implements ActiveRecordInterface
             $this->initAuthenticationMethods();
             return;
         }
+        if ('Vote' === $relationName) {
+            $this->initVotes();
+            return;
+        }
+        if ('Wishlist' === $relationName) {
+            $this->initWishlists();
+            return;
+        }
+    }
+
+    /**
+     * Clears out the collAlerts collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addAlerts()
+     */
+    public function clearAlerts()
+    {
+        $this->collAlerts = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collAlerts collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialAlerts($v = true): void
+    {
+        $this->collAlertsPartial = $v;
+    }
+
+    /**
+     * Initializes the collAlerts collection.
+     *
+     * By default this just sets the collAlerts collection to an empty array (like clearcollAlerts());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initAlerts(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collAlerts && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = AlertTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collAlerts = new $collectionClassName;
+        $this->collAlerts->setModel('\Model\Alert');
+    }
+
+    /**
+     * Gets an array of ChildAlert objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildSite is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildAlert[] List of ChildAlert objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildAlert> List of ChildAlert objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getAlerts(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collAlertsPartial && !$this->isNew();
+        if (null === $this->collAlerts || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collAlerts) {
+                    $this->initAlerts();
+                } else {
+                    $collectionClassName = AlertTableMap::getTableMap()->getCollectionClassName();
+
+                    $collAlerts = new $collectionClassName;
+                    $collAlerts->setModel('\Model\Alert');
+
+                    return $collAlerts;
+                }
+            } else {
+                $collAlerts = ChildAlertQuery::create(null, $criteria)
+                    ->filterBySite($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collAlertsPartial && count($collAlerts)) {
+                        $this->initAlerts(false);
+
+                        foreach ($collAlerts as $obj) {
+                            if (false == $this->collAlerts->contains($obj)) {
+                                $this->collAlerts->append($obj);
+                            }
+                        }
+
+                        $this->collAlertsPartial = true;
+                    }
+
+                    return $collAlerts;
+                }
+
+                if ($partial && $this->collAlerts) {
+                    foreach ($this->collAlerts as $obj) {
+                        if ($obj->isNew()) {
+                            $collAlerts[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collAlerts = $collAlerts;
+                $this->collAlertsPartial = false;
+            }
+        }
+
+        return $this->collAlerts;
+    }
+
+    /**
+     * Sets a collection of ChildAlert objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $alerts A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setAlerts(Collection $alerts, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildAlert[] $alertsToDelete */
+        $alertsToDelete = $this->getAlerts(new Criteria(), $con)->diff($alerts);
+
+
+        $this->alertsScheduledForDeletion = $alertsToDelete;
+
+        foreach ($alertsToDelete as $alertRemoved) {
+            $alertRemoved->setSite(null);
+        }
+
+        $this->collAlerts = null;
+        foreach ($alerts as $alert) {
+            $this->addAlert($alert);
+        }
+
+        $this->collAlerts = $alerts;
+        $this->collAlertsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Alert objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related Alert objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countAlerts(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collAlertsPartial && !$this->isNew();
+        if (null === $this->collAlerts || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAlerts) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getAlerts());
+            }
+
+            $query = ChildAlertQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySite($this)
+                ->count($con);
+        }
+
+        return count($this->collAlerts);
+    }
+
+    /**
+     * Method called to associate a ChildAlert object to this object
+     * through the ChildAlert foreign key attribute.
+     *
+     * @param ChildAlert $l ChildAlert
+     * @return $this The current object (for fluent API support)
+     */
+    public function addAlert(ChildAlert $l)
+    {
+        if ($this->collAlerts === null) {
+            $this->initAlerts();
+            $this->collAlertsPartial = true;
+        }
+
+        if (!$this->collAlerts->contains($l)) {
+            $this->doAddAlert($l);
+
+            if ($this->alertsScheduledForDeletion and $this->alertsScheduledForDeletion->contains($l)) {
+                $this->alertsScheduledForDeletion->remove($this->alertsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildAlert $alert The ChildAlert object to add.
+     */
+    protected function doAddAlert(ChildAlert $alert): void
+    {
+        $this->collAlerts[]= $alert;
+        $alert->setSite($this);
+    }
+
+    /**
+     * @param ChildAlert $alert The ChildAlert object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeAlert(ChildAlert $alert)
+    {
+        if ($this->getAlerts()->contains($alert)) {
+            $pos = $this->collAlerts->search($alert);
+            $this->collAlerts->remove($pos);
+            if (null === $this->alertsScheduledForDeletion) {
+                $this->alertsScheduledForDeletion = clone $this->collAlerts;
+                $this->alertsScheduledForDeletion->clear();
+            }
+            $this->alertsScheduledForDeletion[]= $alert;
+            $alert->setSite(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Alerts from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildAlert[] List of ChildAlert objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildAlert}> List of ChildAlert objects
+     */
+    public function getAlertsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildAlertQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getAlerts($query, $con);
     }
 
     /**
@@ -8690,6 +9056,562 @@ abstract class Site implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collVotes collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addVotes()
+     */
+    public function clearVotes()
+    {
+        $this->collVotes = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collVotes collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialVotes($v = true): void
+    {
+        $this->collVotesPartial = $v;
+    }
+
+    /**
+     * Initializes the collVotes collection.
+     *
+     * By default this just sets the collVotes collection to an empty array (like clearcollVotes());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initVotes(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collVotes && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = VoteTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collVotes = new $collectionClassName;
+        $this->collVotes->setModel('\Model\Vote');
+    }
+
+    /**
+     * Gets an array of ChildVote objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildSite is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildVote[] List of ChildVote objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildVote> List of ChildVote objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getVotes(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collVotesPartial && !$this->isNew();
+        if (null === $this->collVotes || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collVotes) {
+                    $this->initVotes();
+                } else {
+                    $collectionClassName = VoteTableMap::getTableMap()->getCollectionClassName();
+
+                    $collVotes = new $collectionClassName;
+                    $collVotes->setModel('\Model\Vote');
+
+                    return $collVotes;
+                }
+            } else {
+                $collVotes = ChildVoteQuery::create(null, $criteria)
+                    ->filterBySite($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collVotesPartial && count($collVotes)) {
+                        $this->initVotes(false);
+
+                        foreach ($collVotes as $obj) {
+                            if (false == $this->collVotes->contains($obj)) {
+                                $this->collVotes->append($obj);
+                            }
+                        }
+
+                        $this->collVotesPartial = true;
+                    }
+
+                    return $collVotes;
+                }
+
+                if ($partial && $this->collVotes) {
+                    foreach ($this->collVotes as $obj) {
+                        if ($obj->isNew()) {
+                            $collVotes[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collVotes = $collVotes;
+                $this->collVotesPartial = false;
+            }
+        }
+
+        return $this->collVotes;
+    }
+
+    /**
+     * Sets a collection of ChildVote objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $votes A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setVotes(Collection $votes, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildVote[] $votesToDelete */
+        $votesToDelete = $this->getVotes(new Criteria(), $con)->diff($votes);
+
+
+        $this->votesScheduledForDeletion = $votesToDelete;
+
+        foreach ($votesToDelete as $voteRemoved) {
+            $voteRemoved->setSite(null);
+        }
+
+        $this->collVotes = null;
+        foreach ($votes as $vote) {
+            $this->addVote($vote);
+        }
+
+        $this->collVotes = $votes;
+        $this->collVotesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Vote objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related Vote objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countVotes(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collVotesPartial && !$this->isNew();
+        if (null === $this->collVotes || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collVotes) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getVotes());
+            }
+
+            $query = ChildVoteQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySite($this)
+                ->count($con);
+        }
+
+        return count($this->collVotes);
+    }
+
+    /**
+     * Method called to associate a ChildVote object to this object
+     * through the ChildVote foreign key attribute.
+     *
+     * @param ChildVote $l ChildVote
+     * @return $this The current object (for fluent API support)
+     */
+    public function addVote(ChildVote $l)
+    {
+        if ($this->collVotes === null) {
+            $this->initVotes();
+            $this->collVotesPartial = true;
+        }
+
+        if (!$this->collVotes->contains($l)) {
+            $this->doAddVote($l);
+
+            if ($this->votesScheduledForDeletion and $this->votesScheduledForDeletion->contains($l)) {
+                $this->votesScheduledForDeletion->remove($this->votesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildVote $vote The ChildVote object to add.
+     */
+    protected function doAddVote(ChildVote $vote): void
+    {
+        $this->collVotes[]= $vote;
+        $vote->setSite($this);
+    }
+
+    /**
+     * @param ChildVote $vote The ChildVote object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeVote(ChildVote $vote)
+    {
+        if ($this->getVotes()->contains($vote)) {
+            $pos = $this->collVotes->search($vote);
+            $this->collVotes->remove($pos);
+            if (null === $this->votesScheduledForDeletion) {
+                $this->votesScheduledForDeletion = clone $this->collVotes;
+                $this->votesScheduledForDeletion->clear();
+            }
+            $this->votesScheduledForDeletion[]= $vote;
+            $vote->setSite(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Votes from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildVote[] List of ChildVote objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildVote}> List of ChildVote objects
+     */
+    public function getVotesJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildVoteQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getVotes($query, $con);
+    }
+
+    /**
+     * Clears out the collWishlists collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addWishlists()
+     */
+    public function clearWishlists()
+    {
+        $this->collWishlists = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collWishlists collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialWishlists($v = true): void
+    {
+        $this->collWishlistsPartial = $v;
+    }
+
+    /**
+     * Initializes the collWishlists collection.
+     *
+     * By default this just sets the collWishlists collection to an empty array (like clearcollWishlists());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initWishlists(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collWishlists && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = WishlistTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collWishlists = new $collectionClassName;
+        $this->collWishlists->setModel('\Model\Wishlist');
+    }
+
+    /**
+     * Gets an array of ChildWishlist objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildSite is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildWishlist[] List of ChildWishlist objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildWishlist> List of ChildWishlist objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getWishlists(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collWishlistsPartial && !$this->isNew();
+        if (null === $this->collWishlists || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collWishlists) {
+                    $this->initWishlists();
+                } else {
+                    $collectionClassName = WishlistTableMap::getTableMap()->getCollectionClassName();
+
+                    $collWishlists = new $collectionClassName;
+                    $collWishlists->setModel('\Model\Wishlist');
+
+                    return $collWishlists;
+                }
+            } else {
+                $collWishlists = ChildWishlistQuery::create(null, $criteria)
+                    ->filterBySite($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collWishlistsPartial && count($collWishlists)) {
+                        $this->initWishlists(false);
+
+                        foreach ($collWishlists as $obj) {
+                            if (false == $this->collWishlists->contains($obj)) {
+                                $this->collWishlists->append($obj);
+                            }
+                        }
+
+                        $this->collWishlistsPartial = true;
+                    }
+
+                    return $collWishlists;
+                }
+
+                if ($partial && $this->collWishlists) {
+                    foreach ($this->collWishlists as $obj) {
+                        if ($obj->isNew()) {
+                            $collWishlists[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collWishlists = $collWishlists;
+                $this->collWishlistsPartial = false;
+            }
+        }
+
+        return $this->collWishlists;
+    }
+
+    /**
+     * Sets a collection of ChildWishlist objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $wishlists A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setWishlists(Collection $wishlists, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildWishlist[] $wishlistsToDelete */
+        $wishlistsToDelete = $this->getWishlists(new Criteria(), $con)->diff($wishlists);
+
+
+        $this->wishlistsScheduledForDeletion = $wishlistsToDelete;
+
+        foreach ($wishlistsToDelete as $wishlistRemoved) {
+            $wishlistRemoved->setSite(null);
+        }
+
+        $this->collWishlists = null;
+        foreach ($wishlists as $wishlist) {
+            $this->addWishlist($wishlist);
+        }
+
+        $this->collWishlists = $wishlists;
+        $this->collWishlistsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Wishlist objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related Wishlist objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countWishlists(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collWishlistsPartial && !$this->isNew();
+        if (null === $this->collWishlists || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collWishlists) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getWishlists());
+            }
+
+            $query = ChildWishlistQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySite($this)
+                ->count($con);
+        }
+
+        return count($this->collWishlists);
+    }
+
+    /**
+     * Method called to associate a ChildWishlist object to this object
+     * through the ChildWishlist foreign key attribute.
+     *
+     * @param ChildWishlist $l ChildWishlist
+     * @return $this The current object (for fluent API support)
+     */
+    public function addWishlist(ChildWishlist $l)
+    {
+        if ($this->collWishlists === null) {
+            $this->initWishlists();
+            $this->collWishlistsPartial = true;
+        }
+
+        if (!$this->collWishlists->contains($l)) {
+            $this->doAddWishlist($l);
+
+            if ($this->wishlistsScheduledForDeletion and $this->wishlistsScheduledForDeletion->contains($l)) {
+                $this->wishlistsScheduledForDeletion->remove($this->wishlistsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildWishlist $wishlist The ChildWishlist object to add.
+     */
+    protected function doAddWishlist(ChildWishlist $wishlist): void
+    {
+        $this->collWishlists[]= $wishlist;
+        $wishlist->setSite($this);
+    }
+
+    /**
+     * @param ChildWishlist $wishlist The ChildWishlist object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeWishlist(ChildWishlist $wishlist)
+    {
+        if ($this->getWishlists()->contains($wishlist)) {
+            $pos = $this->collWishlists->search($wishlist);
+            $this->collWishlists->remove($pos);
+            if (null === $this->wishlistsScheduledForDeletion) {
+                $this->wishlistsScheduledForDeletion = clone $this->collWishlists;
+                $this->wishlistsScheduledForDeletion->clear();
+            }
+            $this->wishlistsScheduledForDeletion[]= $wishlist;
+            $wishlist->setSite(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Wishlists from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildWishlist[] List of ChildWishlist objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildWishlist}> List of ChildWishlist objects
+     */
+    public function getWishlistsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildWishlistQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getWishlists($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Wishlists from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildWishlist[] List of ChildWishlist objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildWishlist}> List of ChildWishlist objects
+     */
+    public function getWishlistsJoinAxysAccount(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildWishlistQuery::create(null, $criteria);
+        $query->joinWith('AxysAccount', $joinBehavior);
+
+        return $this->getWishlists($query, $con);
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -8718,7 +9640,6 @@ abstract class Site implements ActiveRecordInterface
         $this->site_shop = null;
         $this->site_vpc = null;
         $this->site_shipping_fee = null;
-        $this->site_wishlist = null;
         $this->site_payment_cheque = null;
         $this->site_payment_paypal = null;
         $this->site_payment_payplug = null;
@@ -8759,6 +9680,11 @@ abstract class Site implements ActiveRecordInterface
     public function clearAllReferences(bool $deep = false)
     {
         if ($deep) {
+            if ($this->collAlerts) {
+                foreach ($this->collAlerts as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collCarts) {
                 foreach ($this->collCarts as $o) {
                     $o->clearAllReferences($deep);
@@ -8834,8 +9760,19 @@ abstract class Site implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collVotes) {
+                foreach ($this->collVotes as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collWishlists) {
+                foreach ($this->collWishlists as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
+        $this->collAlerts = null;
         $this->collCarts = null;
         $this->collCrowdfundingCampaigns = null;
         $this->collCrowfundingRewards = null;
@@ -8851,6 +9788,8 @@ abstract class Site implements ActiveRecordInterface
         $this->collStocks = null;
         $this->collUsers = null;
         $this->collAuthenticationMethods = null;
+        $this->collVotes = null;
+        $this->collWishlists = null;
         return $this;
     }
 
