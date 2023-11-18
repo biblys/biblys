@@ -74,7 +74,7 @@ class OpenIDConnectControllerTest extends TestCase
         $controller = new OpenIDConnectController();
 
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("setAxysAccount")->with($axysAccount);
+        $currentUser->expects("setUser")->with($user);
         $currentUser->expects("transfertVisitorCartToUser")->with("visitor_token");
         $queryParamsService = Mockery::mock(QueryParamsService::class);
         $queryParamsService->shouldReceive("parse")->with([
@@ -130,7 +130,7 @@ class OpenIDConnectControllerTest extends TestCase
         $controller = new OpenIDConnectController();
 
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("setAxysAccount")->with($axysAccount);
+        $currentUser->expects("setUser")->with($user);
         $currentUser->expects("transfertVisitorCartToUser")->with("visitor_token");
         $queryParamsService = Mockery::mock(QueryParamsService::class);
         $queryParamsService->shouldReceive("parse")->with([

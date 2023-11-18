@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,7 +10,8 @@ $om = new OrderManager();
 $content = "<h2>Mes commandes</h2>";
 
 $request = Request::createFromGlobals();
-$currentUserService = CurrentUser::buildFromRequest($request);
+$config = Config::load();
+$currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
 
 $orders = $om->getAll([
     'order_type' => 'web',

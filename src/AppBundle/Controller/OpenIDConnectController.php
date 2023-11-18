@@ -82,7 +82,7 @@ class OpenIDConnectController extends Controller
 
             $sessionCookie = OpenIDConnectController::_createSession($axysAccount, $currentSite, $sessionExpiresAt);
 
-            $currentUser->setAxysAccount($axysAccount);
+            $currentUser->setUser($axysAccount);
             $currentUser->transfertVisitorCartToUser(visitorToken: $request->cookies->get("visitor_uid"));
 
             $response = new RedirectResponse($returnUrl);

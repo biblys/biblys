@@ -32,6 +32,7 @@ use Model\Site;
 use Model\SiteQuery;
 use Model\SpecialOffer;
 use Model\Stock;
+use Model\User;
 use Propel\Runtime\Exception\PropelException;
 
 class ModelFactory
@@ -130,7 +131,7 @@ class ModelFactory
      */
     public static function createCart(
         Site        $site = null,
-        AxysAccount $user = null,
+        User $user = null,
         string      $uniqueId = null,
         int         $amount = 0,
         int         $count = 0,
@@ -139,7 +140,7 @@ class ModelFactory
         $cart = new Cart();
         $cart->setUid($uniqueId ?? "cart-uid");
         $cart->setSite($site ?? self::createSite());
-        $cart->setAxysAccount($user);
+        $cart->setUser($user);
         $cart->setAmount($amount);
         $cart->setCount($count);
         $cart->save();
@@ -338,6 +339,7 @@ class ModelFactory
         ?Site        $site = null,
         ?Article     $article = null,
         ?AxysAccount $axysAccount = null,
+        ?User        $user = null,
         ?Cart        $cart = null,
         int          $sellingPrice = 0,
         DateTime     $sellingDate = null,
@@ -351,6 +353,7 @@ class ModelFactory
         $stock->setSite($site ?? self::createSite());
         $stock->setArticle($article ?? self::createArticle());
         $stock->setAxysAccount($axysAccount);
+        $stock->setUser($user);
         $stock->setCart($cart);
         $stock->setCondition("Neuf");
         $stock->setSellingPrice($sellingPrice);
@@ -392,10 +395,10 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createUserSession(AxysAccount $user = null): Session
+    public static function createUserSession(User $user = null): Session
     {
         if (!$user) {
-            $user = ModelFactory::createAxysAccount();
+            $user = ModelFactory::createUser();
         }
 
         $session = Session::buildForUser($user);
@@ -530,6 +533,88 @@ class ModelFactory
         $invitation->save();
 
         return $invitation;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createUser(
+        Site $site = null,
+        string $email = "user@biblys.fr",
+    ): User
+    {
+        $user = new User();
+        $user->setSite($site ?? self::createSite());
+        $user->setEmail($email);
+        $user->save();
+
+        return $user;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createAuthenticationMethod(
+        Site $site = null,
+        User $user = null,
+        string $identityProvider = "axys",
+        string $externalId = "AXYS1234",
+    ): AuthenticationMethod
+    {
+        $authenticationMethod = new AuthenticationMethod();
+        $authenticationMethod->setSite($site ?? self::createSite());
+        $authenticationMethod->setUser($user ?? self::createUser());
+        $authenticationMethod->setIdentityProvider($identityProvider);
+        $authenticationMethod->setExternalId($externalId);
+        $authenticationMethod->save();
+
+        return $authenticationMethod;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createAdminUser(Site $site = null): User
+    {
+        $site = $site ?? self::createSite();
+
+        $user = self::createUser($site);
+        self::createRight(user: $user, site: $site);
+
+        return $user;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createPublisherUser(
+        Site $site = null,
+        Publisher $publisher = null,
+    ): User
+    {
+        $site = $site ?? self::createSite();
+        $publisher = $publisher ?? self::createPublisher();
+
+        $user = self::createUser($site);
+        self::createRight(user: $user, publisher: $publisher);
+
+        return $user;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    private static function createRight(
+        User $user,
+        Site $site = null,
+        Publisher $publisher = null,
+    ): void
+    {
+        $right = new Right();
+        $right->setUser($user);
+        $right->setSite($site);
+        $right->setPublisher($publisher);
+        $right->save();
     }
 
     /**

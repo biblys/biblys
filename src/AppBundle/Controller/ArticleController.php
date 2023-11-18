@@ -301,7 +301,7 @@ class ArticleController extends Controller
         $currentUser = $currentUserService->getAxysAccount();
         $currentUserPurchasesForArticle = StockQuery::create()
             ->filterBySite($currentSiteService->getSite())
-            ->filterByAxysAccount($currentUser)
+            ->filterByUser($currentUser)
             ->filterByArticleId($article->get("id"))
             ->count();
         if ($currentUserPurchasesForArticle > 0) {
@@ -819,7 +819,7 @@ class ArticleController extends Controller
 
         $libraryItem = StockQuery::create()
             ->filterBySite($currentSite->getSite())
-            ->filterByAxysAccount($currentUser->getAxysAccount())
+            ->filterByUser($currentUser->getAxysAccount())
             ->filterByArticleId($id)
             ->findOne();
         if (!$libraryItem) {
@@ -828,7 +828,7 @@ class ArticleController extends Controller
 
         return StockQuery::create()
             ->filterBySite($currentSite->getSite())
-            ->filterByAxysAccount($currentUser->getAxysAccount())
+            ->filterByUser($currentUser->getAxysAccount())
             ->filterByArticleId($id)
             ->findOne();
     }

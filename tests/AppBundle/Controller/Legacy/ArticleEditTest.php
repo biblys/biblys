@@ -184,11 +184,11 @@ class ArticleEditTest extends TestCase
         $request = RequestFactory::createAuthRequestForAdminUser();
         $request->query->set("id", $article->getId());
 
-        $axysAccount = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("isAdmin")->andReturn(true);
         $currentUser->shouldReceive("getCurrentRight")->andReturn(null);
-        $currentUser->shouldReceive("getAxysAccount")->andReturn($axysAccount);
+        $currentUser->shouldReceive("getAxysAccount")->andReturn($user);
 
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);

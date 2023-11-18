@@ -9,9 +9,7 @@ use Exception;
 use Mockery;
 use Model\CartQuery;
 use Model\Option;
-use Model\Right;
-use Model\SiteQuery;
-use Model\AxysAccount;
+use Model\User;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,15 +22,16 @@ class CurrentUserTest extends TestCase
     /**
      * @throws UnauthorizedHttpException
      * @throws PropelException
+     * @throws Exception
      */
     public function testBuildFromRequestWithCookie()
     {
         // given
-        $user = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest("", $user);
 
         // when
-        $currentUser = CurrentUser::buildFromRequest($request);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, Config::load());
 
         // then
         $this->assertEquals(
@@ -45,15 +44,16 @@ class CurrentUserTest extends TestCase
     /**
      * @throws UnauthorizedHttpException
      * @throws PropelException
+     * @throws Exception
      */
     public function testBuildFromRequestWithHeader()
     {
         // given
-        $user = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest("", $user, "header");
 
         // when
-        $currentUser = CurrentUser::buildFromRequest($request);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, Config::load());
 
         // then
         $this->assertEquals(
@@ -66,6 +66,7 @@ class CurrentUserTest extends TestCase
     /**
      * @throws UnauthorizedHttpException
      * @throws PropelException
+     * @throws Exception
      */
     public function testBuildFromRequestWithoutToken()
     {
@@ -75,7 +76,7 @@ class CurrentUserTest extends TestCase
 
         // given
         $request = new Request();
-        $currentUser = CurrentUser::buildFromRequest($request);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, Config::load());
 
         // when
         $currentUser->getAxysAccount();
@@ -84,6 +85,7 @@ class CurrentUserTest extends TestCase
     /**
      * @throws UnauthorizedHttpException
      * @throws PropelException
+     * @throws Exception
      */
     public function testBuildFromRequestWithInvalidToken()
     {
@@ -94,7 +96,7 @@ class CurrentUserTest extends TestCase
         // given
         $request = new Request();
         $request->headers->set("AuthToken", "InvalidToken");
-        $currentUser = CurrentUser::buildFromRequest($request);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, Config::load());
 
         // when
         $currentUser->getAxysAccount();
@@ -103,6 +105,7 @@ class CurrentUserTest extends TestCase
     /**
      * @throws UnauthorizedHttpException
      * @throws PropelException
+     * @throws Exception
      */
     public function testBuildFromRequestWithExpiredSession()
     {
@@ -116,7 +119,7 @@ class CurrentUserTest extends TestCase
         $session->save();
         $request = new Request();
         $request->headers->set("AuthToken", $session->getToken());
-        $currentUser = CurrentUser::buildFromRequest($request);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, Config::load());
 
         // when
         $currentUser->getAxysAccount();
@@ -125,6 +128,7 @@ class CurrentUserTest extends TestCase
     /**
      * @throws UnauthorizedHttpException
      * @throws PropelException
+     * @throws Exception
      */
     public function testBuildFromRequestWithDeletedUser()
     {
@@ -134,10 +138,10 @@ class CurrentUserTest extends TestCase
 
         // given
         $session = ModelFactory::createUserSession();
-        $session->setAxysAccountId(12345);
+        $session->setUserId(12345);
         $request = new Request();
         $request->headers->set("AuthToken", $session->getToken());
-        $currentUser = CurrentUser::buildFromRequest($request);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, Config::load());
 
         // when
         $currentUser->getAxysAccount();
@@ -146,20 +150,20 @@ class CurrentUserTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function testSetAxysAccount()
+    public function testSetUser()
     {
         // given
-        $axysAccount = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
         $currentUser = new CurrentUser(null, "token");
 
         // when
-        $currentUser->setAxysAccount($axysAccount);
+        $currentUser->setUser($user);
 
         // then
         $this->assertEquals(
-            $axysAccount,
+            $user,
             $currentUser->getAxysAccount(),
-            "it sets the axys account"
+            "it sets the user"
         );
         $this->assertNull(
             $currentUser->getToken(),
@@ -173,7 +177,7 @@ class CurrentUserTest extends TestCase
     public function testIsAuthentifiedForUser()
     {
         // given
-        $user = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
 
         // when
         $currentUser = new CurrentUser($user, "token");
@@ -207,8 +211,10 @@ class CurrentUserTest extends TestCase
     public function testIsAdmin()
     {
         // given
-        $request = RequestFactory::createAuthRequestForAdminUser();
-        $config = new Config();
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createAdminUser(site: $site);
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $config = new Config(["site" => $site->getId()]);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
@@ -217,7 +223,7 @@ class CurrentUserTest extends TestCase
         // then
         $this->assertTrue(
             $isAdmin,
-            "it returns true for admin user"
+            "returns true for admin user"
         );
     }
 
@@ -266,51 +272,51 @@ class CurrentUserTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function testIsAdminForSite()
+    public function testIsAdminForSiteReturnsTrueForAdmin()
     {
         // given
-        $config = new Config();
-        $site = SiteQuery::create()->findOneById($config->get("site"));
-        $admin = ModelFactory::createAdminAxysAccount();
+        $site = ModelFactory::createSite();
+        $admin = ModelFactory::createAdminUser(site: $site);
+        $currentUser = new CurrentUser($admin, "token");
 
         // when
-        $currentUser = new CurrentUser($admin, "token");
+        $isAdminForSite = $currentUser->isAdminForSite($site);
 
         // then
         $this->assertTrue(
-            $currentUser->isAdminForSite($site),
-            "it returns true for admin user"
+            $isAdminForSite,
+            "returns true for admin user"
         );
     }
 
     /**
      * @throws PropelException
      */
-    public function testIsAdminForSiteForNonAdmin()
+    public function testIsAdminForSiteReturnsFalseForNonAdmin()
     {
         // given
-        $config = new Config();
-        $site = SiteQuery::create()->findOneById($config->get("site"));
-        $user = ModelFactory::createAxysAccount();
+        $site = ModelFactory::createSite();
+        $admin = ModelFactory::createUser(site: $site);
+        $currentUser = new CurrentUser($admin, "token");
 
         // when
-        $currentUser = new CurrentUser($user, "token");
+        $isAdminForSite = $currentUser->isAdminForSite($site);
 
         // then
         $this->assertFalse(
-            $currentUser->isAdminForSite($site),
-            "it returns false for non-admin user"
+            $isAdminForSite,
+            "returns false for simple user"
         );
     }
 
     /**
      * @throws PropelException
      */
-    public function testHasPublisher()
+    public function testHasRightForPublisherWithPublisherUser()
     {
         // given
         $publisher = ModelFactory::createPublisher();
-        $user = ModelFactory::createPublisherAxysAccount($publisher);
+        $user = ModelFactory::createPublisherUser(publisher: $publisher);
         $currentUser = new CurrentUser($user, "token");
 
         // when
@@ -330,7 +336,7 @@ class CurrentUserTest extends TestCase
     {
         // given
         $publisher = ModelFactory::createPublisher();
-        $user = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
         $currentUser = new CurrentUser($user, "token");
 
         // when
@@ -351,7 +357,7 @@ class CurrentUserTest extends TestCase
         // given
         $userPublisher = ModelFactory::createPublisher();
         $otherPublisher = ModelFactory::createPublisher();
-        $user = ModelFactory::createPublisherAxysAccount($userPublisher);
+        $user = ModelFactory::createPublisherUser(publisher: $userPublisher);
         $currentUser = new CurrentUser($user, "token");
 
         // when
@@ -370,8 +376,7 @@ class CurrentUserTest extends TestCase
     public function testHasPublisherRight()
     {
         // given
-        $publisher = ModelFactory::createPublisher();
-        $user = ModelFactory::createPublisherAxysAccount($publisher);
+        $user = ModelFactory::createPublisherUser();
         $currentUser = new CurrentUser($user, "token");
 
         // when
@@ -380,7 +385,7 @@ class CurrentUserTest extends TestCase
         // then
         $this->assertTrue(
             $hasRightforPublisher,
-            "it returns true for user with rights for at least one publisher"
+            "returns true for user with rights for at least one publisher"
         );
     }
 
@@ -390,16 +395,16 @@ class CurrentUserTest extends TestCase
     public function testHasPublisherRightWithNonPublisher()
     {
         // given
-        $user = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
         $currentUser = new CurrentUser($user, "token");
 
         // when
-        $hasRightForPublisher = $currentUser->hasPublisherRight();
+        $hasRightforPublisher = $currentUser->hasPublisherRight();
 
         // then
         $this->assertFalse(
-            $hasRightForPublisher,
-            "it returns false for user with no publisher rights"
+            $hasRightforPublisher,
+            "returns false for user with no publisher rights"
         );
     }
 
@@ -409,19 +414,18 @@ class CurrentUserTest extends TestCase
     public function testGetCurrentRight()
     {
         // given
-        $currentRight = $this->createMock(Right::class);
-        $currentRight->method("getId")->willReturn("1111");
-        $user = $this->createMock(AxysAccount::class);
-        $user->expects($this->once())
-            ->method("getCurrentRight")
-            ->willReturn($currentRight);
+        $publisher = ModelFactory::createPublisher();
+        $user = ModelFactory::createPublisherUser(publisher: $publisher);
         $currentUser = new CurrentUser($user, "token");
 
         // when
-        $returnedRight = $currentUser->getCurrentRight();
+        $right = $currentUser->getCurrentRight();
 
         // then
-        $this->assertEquals($currentRight, $returnedRight);
+        $this->assertEquals(
+            $publisher,
+            $right->getPublisher(),
+        );
     }
 
     /**
@@ -430,9 +434,9 @@ class CurrentUserTest extends TestCase
     public function testGetOption()
     {
         // given
-        $user = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
         $option = new Option();
-        $option->setAxysAccount($user);
+        $option->setUser($user);
         $option->setKey("days_since_last_login");
         $option->setValue("31");
         $option->save();
@@ -455,7 +459,7 @@ class CurrentUserTest extends TestCase
     public function testSetOption()
     {
         // given
-        $user = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
         $currentUser = new CurrentUser($user, "token");
 
         // when
@@ -471,12 +475,13 @@ class CurrentUserTest extends TestCase
 
     /**
      * @throws PropelException
+     * @throws Exception
      */
     public function testGetUserToken()
     {
         // given
         $request = RequestFactory::createAuthRequest();
-        $currentUser = CurrentUser::buildFromRequest($request);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, Config::load());
         $requestToken = $request->cookies->get("user_uid");
 
         // when
@@ -492,6 +497,7 @@ class CurrentUserTest extends TestCase
 
     /**
      * @throws PropelException
+     * @throws Exception
      */
     public function testGetCartForAnonymousUser()
     {
@@ -531,7 +537,7 @@ class CurrentUserTest extends TestCase
 
         // then
         $this->assertEquals($cart, $anonymousUserCart);
-        $this->assertNull($anonymousUserCart->getAxysAccountId());
+        $this->assertNull($anonymousUserCart->getUserId());
     }
 
     /**
@@ -553,7 +559,7 @@ class CurrentUserTest extends TestCase
         // then
         $this->assertEquals("visitor-uid-without-cart", $anonymousUserCart->getUid());
         $this->assertEquals("web", $anonymousUserCart->getType());
-        $this->assertNull($anonymousUserCart->getAxysAccountId());
+        $this->assertNull($anonymousUserCart->getUserId());
     }
 
     /**
@@ -565,7 +571,7 @@ class CurrentUserTest extends TestCase
         $site = ModelFactory::createSite();
         $config = new Config();
         $config->set("site", $site->getId());
-        $user = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest("", $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
         $cart = ModelFactory::createCart(site: $site, user: $user);
@@ -586,7 +592,7 @@ class CurrentUserTest extends TestCase
         $site = ModelFactory::createSite();
         $config = new Config();
         $config->set("site", $site->getId());
-        $user = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest("", $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
         $cart = ModelFactory::createCart(site: $site, user: $user);
@@ -607,15 +613,15 @@ class CurrentUserTest extends TestCase
         $site = ModelFactory::createSite();
         $config = new Config();
         $config->set("site", $site->getId());
-        $axysAccount = ModelFactory::createAxysAccount();
-        $request = RequestFactory::createAuthRequest("", $axysAccount);
+        $user = ModelFactory::createUser();
+        $request = RequestFactory::createAuthRequest("", $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
         $userCart = $currentUser->getOrCreateCart();
 
         // then
-        $this->assertEquals($axysAccount->getId(), $userCart->getAxysAccountId());
+        $this->assertEquals($user->getId(), $userCart->getUserId());
         $this->assertEquals("web", $userCart->getType());
         $this->assertNull($userCart->getUid());
     }
@@ -623,9 +629,9 @@ class CurrentUserTest extends TestCase
     public function testGetEmail()
     {
         // given
-        $axysAccount = new AxysAccount();
-        $axysAccount->setEmail("get-email@biblys.fr");
-        $currentUser = new CurrentUser($axysAccount, "token");
+        $user = new User();
+        $user->setEmail("get-email@biblys.fr");
+        $currentUser = new CurrentUser($user, "token");
 
         // when
         $email = $currentUser->getEmail();
@@ -644,8 +650,8 @@ class CurrentUserTest extends TestCase
         $config = new Config();
         $config->set("site", $site->getId());
         $article = ModelFactory::createArticle();
-        $axysAccount = ModelFactory::createAxysAccount();
-        $request = RequestFactory::createAuthRequest(user: $axysAccount);
+        $user = ModelFactory::createUser();
+        $request = RequestFactory::createAuthRequest(user: $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
@@ -665,10 +671,10 @@ class CurrentUserTest extends TestCase
         $config = new Config();
         $config->set("site", $site->getId());
         $article = ModelFactory::createArticle();
-        $axysAccount = ModelFactory::createAxysAccount();
-        $request = RequestFactory::createAuthRequest(user: $axysAccount);
+        $user = ModelFactory::createUser();
+        $request = RequestFactory::createAuthRequest(user: $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        ModelFactory::createCart(site: $site, user: $axysAccount);
+        ModelFactory::createCart(site: $site, user: $user);
 
         // when
         $hasArticleInCart = $currentUser->hasArticleInCart($article);
@@ -687,10 +693,10 @@ class CurrentUserTest extends TestCase
         $config = new Config();
         $config->set("site", $site->getId());
         $article = ModelFactory::createArticle();
-        $axysAccount = ModelFactory::createAxysAccount();
-        $request = RequestFactory::createAuthRequest(user: $axysAccount);
+        $user = ModelFactory::createUser();
+        $request = RequestFactory::createAuthRequest(user: $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        $cart = ModelFactory::createCart(site: $site, user: $axysAccount);
+        $cart = ModelFactory::createCart(site: $site, user: $user);
         ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
 
         // when
@@ -710,8 +716,8 @@ class CurrentUserTest extends TestCase
         $config = new Config();
         $config->set("site", $site->getId());
         $stockItem = ModelFactory::createStockItem();
-        $axysAccount = ModelFactory::createAxysAccount();
-        $request = RequestFactory::createAuthRequest(user: $axysAccount);
+        $user = ModelFactory::createUser();
+        $request = RequestFactory::createAuthRequest(user: $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
@@ -731,10 +737,10 @@ class CurrentUserTest extends TestCase
         $config = new Config();
         $config->set("site", $site->getId());
         $stockItem = ModelFactory::createStockItem();
-        $axysAccount = ModelFactory::createAxysAccount();
-        $request = RequestFactory::createAuthRequest(user: $axysAccount);
+        $user = ModelFactory::createUser();
+        $request = RequestFactory::createAuthRequest(user: $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        ModelFactory::createCart(site: $site, user: $axysAccount);
+        ModelFactory::createCart(site: $site, user: $user);
 
         // when
         $hasStockItemInCart = $currentUser->hasStockItemInCart($stockItem);
@@ -752,10 +758,10 @@ class CurrentUserTest extends TestCase
         $site = ModelFactory::createSite();
         $config = new Config();
         $config->set("site", $site->getId());
-        $axysAccount = ModelFactory::createAxysAccount();
-        $request = RequestFactory::createAuthRequest(user: $axysAccount);
+        $user = ModelFactory::createUser();
+        $request = RequestFactory::createAuthRequest(user: $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        $cart = ModelFactory::createCart(site: $site, user: $axysAccount);
+        $cart = ModelFactory::createCart(site: $site, user: $user);
         $stockItem = ModelFactory::createStockItem(site: $site, cart: $cart);
 
         // when
@@ -790,10 +796,10 @@ class CurrentUserTest extends TestCase
     public function testCartTransferWhenVisitorCartDoesNotExist()
     {
         // given
-        $axysAccount = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
 
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentUser = new CurrentUser($axysAccount, null);
+        $currentUser = new CurrentUser($user, null);
         $currentUser->injectCurrentSite($currentSite);
 
         // when
@@ -812,14 +818,14 @@ class CurrentUserTest extends TestCase
         $site = ModelFactory::createSite();
         $visitorCart = ModelFactory::createCart(site: $site, uniqueId: "visitor-token");
         $stockItemInVisitorCart = ModelFactory::createStockItem(site: $site, cart: $visitorCart, sellingPrice: 999);
-        $axysAccount = ModelFactory::createAxysAccount();
-        $userCart = ModelFactory::createCart(site: $site, user: $axysAccount);
+        $user = ModelFactory::createUser();
+        $userCart = ModelFactory::createCart(site: $site, user: $user);
         $stockItemInUserCart = ModelFactory::createStockItem(site: $site, cart: $userCart, sellingPrice: 2499);
 
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
-        $currentUser = new CurrentUser($axysAccount, null);
+        $currentUser = new CurrentUser($user, null);
         $currentUser->injectCurrentSite($currentSite);
 
         // when

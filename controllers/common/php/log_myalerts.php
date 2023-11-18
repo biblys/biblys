@@ -67,7 +67,7 @@ if ($alertToDeleteId) {
 }
 
 /** @noinspection PhpUnhandledExceptionInspection */
-$currentUserService = CurrentUser::buildFromRequest($request);
+$currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
 /** @noinspection PhpUnhandledExceptionInspection */
 $currentUser = $currentUserService->getAxysAccount();
 

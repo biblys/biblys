@@ -140,10 +140,12 @@ class Controller
      * @param Request $request
      * @return CurrentUser
      * @throws PropelException
+     * @throws Exception
      */
     protected static function authUser(Request $request): CurrentUser
     {
-        $currentUser = CurrentUser::buildFromRequest($request);
+        $config = Config::load();
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         if (!$currentUser->isAuthentified()) {
             throw new UnauthorizedHttpException("","Identification requise.");

@@ -3,7 +3,7 @@
 namespace Biblys\Test;
 
 use Model\Publisher;
-use Model\AxysAccount;
+use Model\User;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -14,9 +14,10 @@ class RequestFactory
      * @throws PropelException
      */
     public static function createAuthRequest(
-        string      $content = "",
-        AxysAccount $user = null,
-        string      $authMethod = "cookie"): Request
+        string $content = "",
+        User   $user = null,
+        string $authMethod = "cookie"
+    ): Request
     {
         $session = ModelFactory::createUserSession($user);
         $request = Request::create("", "", [], [], [], [], $content);
@@ -39,14 +40,11 @@ class RequestFactory
      */
     public static function createAuthRequestForAdminUser(string $content = ""): Request
     {
-        $adminUser = ModelFactory::createAdminAxysAccount();
+        $adminUser = ModelFactory::createAdminUser();
         return RequestFactory::createAuthRequest($content, $adminUser);
     }
 
     /**
-     * @param Publisher|null $publisher
-     * @param string|null $content
-     * @return Request
      * @throws PropelException
      */
     public static function createAuthRequestForPublisherUser(Publisher $publisher = null, string $content = ""): Request
@@ -55,7 +53,7 @@ class RequestFactory
             $publisher = ModelFactory::createPublisher();
         }
 
-        $publisherUser = ModelFactory::createPublisherAxysAccount($publisher);
+        $publisherUser = ModelFactory::createPublisherUser(publisher: $publisher);
         return RequestFactory::createAuthRequest($content, $publisherUser);
     }
 }

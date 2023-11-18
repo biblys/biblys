@@ -2,7 +2,6 @@
 
 namespace Model;
 
-use Biblys\Service\CurrentSite;
 use DateTime;
 use Model\Base\Session as BaseSession;
 use Propel\Runtime\Exception\PropelException;
@@ -21,14 +20,12 @@ use RandomLib\Generator;
 class Session extends BaseSession
 {
     /**
-     * @param AxysAccount $user
-     * @return Session
      * @throws PropelException
      */
-    public static function buildForUser(AxysAccount $user): Session
+    public static function buildForUser(User $user): Session
     {
         $session = new Session();
-        $session->setAxysAccount($user);
+        $session->setUser($user);
         $session->setToken(Session::generateToken());
         $session->setExpiresAt(new DateTime('tomorrow'));
         return $session;

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biblys\Service;
-
 
 use DateTime;
 use Exception;
@@ -14,25 +12,28 @@ use Model\Option;
 use Model\OptionQuery;
 use Model\Publisher;
 use Model\Right;
+use Model\RightQuery;
 use Model\SessionQuery;
 use Model\Site;
 use Model\Stock;
 use Model\StockQuery;
+use Model\User;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class CurrentUser
 {
-    private ?AxysAccount $axysAccount;
+    private ?User $user;
     private ?string $token;
     private ?CurrentSite $currentSite = null;
     private bool $cartWasFetched = false;
     private ?Cart $fetchedCart = null;
 
-    public function __construct(?AxysAccount $axysAccount, ?string $token)
+    public function __construct(?User $user, ?string $token)
     {
-        $this->axysAccount = $axysAccount;
+        $this->user = $user;
         $this->token = $token;
     }
 
@@ -41,7 +42,7 @@ class CurrentUser
      * @return CurrentUser
      * @throws PropelException
      */
-    public static function buildFromRequest(Request $request): CurrentUser
+    private static function buildFromRequest(Request $request): CurrentUser
     {
         $cookieToken = $request->cookies->get("user_uid");
         $headerToken = $request->headers->get("AuthToken");
@@ -62,12 +63,12 @@ class CurrentUser
             return new CurrentUser(null, $token);
         }
 
-        $axysAccount = $session->getAxysAccount();
-        if (!$axysAccount) {
+        $user = $session->getUser();
+        if (!$user) {
             return new CurrentUser(null, $token);
         }
 
-        return new CurrentUser($axysAccount, $token);
+        return new CurrentUser($user, $token);
     }
 
     /**
@@ -84,15 +85,15 @@ class CurrentUser
         return $currentUser;
     }
 
-    public function setAxysAccount(AxysAccount $axysAccount): void
+    public function setUser(User $user): void
     {
-        $this->axysAccount = $axysAccount;
+        $this->user = $user;
         $this->token = null;
     }
 
     public function isAuthentified(): bool
     {
-        if ($this->axysAccount) {
+        if ($this->user) {
             return true;
         }
 
@@ -104,29 +105,41 @@ class CurrentUser
      */
     public function isAdmin(): bool
     {
+        if (!$this->isAuthentified()) {
+            return false;
+        }
+
         $site = $this->getCurrentSite()->getSite();
         return $this->isAdminForSite($site);
     }
 
+    /**
+     * @throws PropelException
+     */
     public function isAdminForSite(Site $site): bool
     {
-        if ($this->axysAccount) {
-            return $this->axysAccount->isAdminForSite($site);
+        $adminRight = RightQuery::create()
+            ->filterByUser($this->user)
+            ->filterBySite($site)
+            ->findOne();
+
+        if($adminRight) {
+            return true;
         }
 
         return false;
     }
 
     /**
-     * @return AxysAccount
+     * @return User
      */
-    public function getAxysAccount(): AxysAccount
+    public function getAxysAccount(): User
     {
-        if ($this->axysAccount === null) {
+        if ($this->user === null) {
             throw new UnauthorizedHttpException("", "Identification requise.");
         }
 
-        return $this->axysAccount;
+        return $this->user;
     }
 
     /**
@@ -134,8 +147,13 @@ class CurrentUser
      */
     public function hasRightForPublisher(Publisher $publisher): bool
     {
-        if ($this->axysAccount) {
-            return $this->axysAccount->hasRightForPublisher($publisher);
+        $publisherRight = RightQuery::create()
+            ->filterByUser($this->user)
+            ->filterByPublisher($publisher)
+            ->findOne();
+
+        if ($publisherRight) {
+            return true;
         }
 
         return false;
@@ -146,8 +164,13 @@ class CurrentUser
      */
     public function hasPublisherRight(): bool
     {
-        if ($this->axysAccount) {
-            return $this->axysAccount->hasPublisherRight();
+        $publisherRight = RightQuery::create()
+            ->filterByUser($this->user)
+            ->filterByPublisherId(null, Criteria::NOT_EQUAL)
+            ->findOne();
+
+        if ($publisherRight) {
+            return true;
         }
 
         return false;
@@ -158,17 +181,16 @@ class CurrentUser
      */
     public function getOption(string $key): ?string
     {
-        if (!$this->axysAccount) {
+        if (!$this->user) {
             return null;
         }
 
         $option = OptionQuery::create()
-            ->filterByAxysAccount($this->axysAccount)
+            ->filterByUser($this->user)
             ->filterByKey($key)
             ->findOne();
 
         return $option?->getValue();
-
     }
 
     /**
@@ -177,13 +199,13 @@ class CurrentUser
     public function setOption(string $key, string $value): void
     {
         $option = OptionQuery::create()
-            ->filterByAxysAccount($this->axysAccount)
+            ->filterByUser($this->user)
             ->filterByKey($key)
             ->findOne();
 
         if (!$option) {
             $option = new Option();
-            $option->setAxysAccount($this->axysAccount);
+            $option->setUser($this->user);
             $option->setKey($key);
         }
 
@@ -206,7 +228,7 @@ class CurrentUser
             $cartQuery = CartQuery::create()->filterBySite($this->getCurrentSite()->getSite());
 
             if ($this->isAuthentified()) {
-                $cartQuery = $cartQuery->filterByAxysAccount($this->axysAccount);
+                $cartQuery = $cartQuery->filterByUser($this->user);
             } else {
                 $cartQuery = $cartQuery->filterByUid($this->token);
             }
@@ -232,7 +254,7 @@ class CurrentUser
             $cart->setType("web");
 
             if ($this->isAuthentified()) {
-                $cart->setAxysAccount($this->axysAccount);
+                $cart->setUser($this->user);
             } else {
                 $cart->setUid($this->token);
             }
@@ -303,8 +325,9 @@ class CurrentUser
      */
     public function getCurrentRight(): ?Right
     {
-        return $this->axysAccount?->getCurrentRight();
-
+        return RightQuery::create()
+            ->filterByUser($this->user)
+            ->findOne();
     }
 
     public function getEmail(): ?string

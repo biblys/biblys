@@ -618,7 +618,7 @@ class ArticleControllerTest extends TestCase
         // given
         $request = RequestFactory::createAuthRequest();
         $article = ModelFactory::createArticle(price: 0, typeId: Type::EBOOK);
-        $user = ModelFactory::createAxysAccount(email: "free-reader@example.org", username: "Free Reader");
+        $user = ModelFactory::createUser(email: "free-reader@example.org");
         $controller = new ArticleController();
         $currentSiteService = $this->createMock(CurrentSite::class);
         $currentSiteService
@@ -669,8 +669,8 @@ class ArticleControllerTest extends TestCase
         $request = RequestFactory::createAuthRequest();
         $article = ModelFactory::createArticle(price: 0, typeId: Type::EBOOK);
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createAxysAccount();
-        ModelFactory::createStockItem(site: $site, article: $article, axysAccount: $user);
+        $user = ModelFactory::createUser();
+        ModelFactory::createStockItem(site: $site, article: $article, user: $user);
         $currentSiteService = $this->createMock(CurrentSite::class);
         $currentSiteService->expects($this->once())->method("getSite")->willReturn($site);
         $currentUserService = $this->createMock(CurrentUser::class);
@@ -738,12 +738,12 @@ class ArticleControllerTest extends TestCase
             title: "A book about tatoo",
             lemoninkMasterId: "zyxwvuts",
         );
-        $axysAccount = ModelFactory::createAxysAccount(email: "i.love.tatoo@biblys.fr");
+        $user = ModelFactory::createUser(email: "i.love.tatoo@biblys.fr");
         $site = ModelFactory::createSite();
         $stock = ModelFactory::createStockItem(
             site: $site,
             article: $article,
-            axysAccount: $axysAccount,
+            user: $user,
             lemoninkTransactionId: "123456789",
             lemoninkTransactionToken: "abcdefgh",
         );
@@ -754,7 +754,7 @@ class ArticleControllerTest extends TestCase
             ->with("publisher_filter")->andReturn($article->getPublisherId());
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("getAxysAccount")->andReturn($axysAccount);
+        $currentUser->shouldReceive("getAxysAccount")->andReturn($user);
         $watermarkingFile = Mockery::mock(WatermarkedFile::class);
         $watermarkingService = Mockery::mock(WatermarkingService::class);
         $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
@@ -806,12 +806,12 @@ class ArticleControllerTest extends TestCase
             title: "A book about tatoo",
             lemoninkMasterId: "zyxwvuts",
         );
-        $axysAccount = ModelFactory::createAxysAccount(email: "i.hate.tatoo@biblys.fr");
+        $user = ModelFactory::createUser(email: "i.hate.tatoo@biblys.fr");
         $site = ModelFactory::createSite();
         $stock = ModelFactory::createStockItem(
             site: $site,
             article: $article,
-            axysAccount: $axysAccount,
+            user: $user,
         );
 
         $request = RequestFactory::createAuthRequest();
@@ -820,7 +820,7 @@ class ArticleControllerTest extends TestCase
             ->with("publisher_filter")->andReturn($article->getPublisherId());
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("getAxysAccount")->andReturn($axysAccount);
+        $currentUser->shouldReceive("getAxysAccount")->andReturn($user);
         $watermarkingService = Mockery::mock(WatermarkingService::class);
         $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
         $watermarkingService->shouldNotReceive("getFiles");
@@ -990,7 +990,7 @@ class ArticleControllerTest extends TestCase
             ->andReturn(ModelFactory::createSite());
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getAxysAccount")
-            ->andReturn(ModelFactory::createAxysAccount());
+            ->andReturn(ModelFactory::createUser());
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")
             ->with("article_download_with_watermark", ["id" => $article->getId()])
@@ -1024,12 +1024,12 @@ class ArticleControllerTest extends TestCase
         $controller = new ArticleController();
 
         $article = ModelFactory::createArticle(lemoninkMasterId: "youpla");
-        $axysAccount = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
         $site = ModelFactory::createSite();
         $libraryItem = ModelFactory::createStockItem(
             site: $site,
             article: $article,
-            axysAccount: $axysAccount,
+            user: $user,
             lemoninkTransactionId: "123456789",
             lemoninkTransactionToken: "abcdefgh",
         );
@@ -1044,7 +1044,7 @@ class ArticleControllerTest extends TestCase
             ->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getAxysAccount")
-            ->andReturn($axysAccount);
+            ->andReturn($user);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")
             ->with("article_download_with_watermark", ["id" => $article->getId()])
@@ -1078,10 +1078,10 @@ class ArticleControllerTest extends TestCase
         $controller = new ArticleController();
 
         $article = ModelFactory::createArticle(lemoninkMasterId: "youpla");
-        $axysAccount = ModelFactory::createAxysAccount("downloader@example.org");
+        $user = ModelFactory::createUser(email: "downloader@example.org");
         $site = ModelFactory::createSite();
         $libraryItem = ModelFactory::createStockItem(
-            site: $site, article: $article, axysAccount: $axysAccount
+            site: $site, article: $article, user: $user
         );
         $transaction = new Transaction();
         $transaction->setId("123456789");
@@ -1095,7 +1095,7 @@ class ArticleControllerTest extends TestCase
             ->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getAxysAccount")
-            ->andReturn($axysAccount);
+            ->andReturn($user);
         $watermarkingService = Mockery::mock(WatermarkingService::class);
         $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
         $watermarkingService->shouldReceive("watermark")
@@ -1133,10 +1133,10 @@ class ArticleControllerTest extends TestCase
         $controller = new ArticleController();
 
         $article = ModelFactory::createArticle(lemoninkMasterId: "youpla");
-        $axysAccount = ModelFactory::createAxysAccount("downloader@example.org");
+        $user = ModelFactory::createUser(email: "downloader@example.org");
         $site = ModelFactory::createSite();
         $libraryItem = ModelFactory::createStockItem(
-            site: $site, article: $article, axysAccount: $axysAccount
+            site: $site, article: $article, user: $user
         );
         $transaction = new Transaction();
         $transaction->setId("123456789");
@@ -1150,7 +1150,7 @@ class ArticleControllerTest extends TestCase
             ->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getAxysAccount")
-            ->andReturn($axysAccount);
+            ->andReturn($user);
         $watermarkingService = Mockery::mock(WatermarkingService::class);
         $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
         $watermarkingService->shouldReceive("watermark")
