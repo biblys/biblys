@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use ArticleManager;
+use Biblys\Service\CurrentUser;
+use Biblys\Service\TemplateService;
 use CFCampaignManager;
 use CFReward;
 use CFRewardManager;
@@ -57,9 +59,14 @@ class CFRewardController extends Controller
      * @throws PropelException
      * @throws Exception
      */
-    public function newAction(Request $request, UrlGenerator $urlGenerator, $campaign_id): RedirectResponse|Response
+    public function newAction(
+        Request      $request,
+        UrlGenerator $urlGenerator,
+        CurrentUser  $currentUser,
+        $campaign_id
+    ): RedirectResponse|Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $cfcm = new CFCampaignManager();
         $campaign = $cfcm->getById($campaign_id);
@@ -111,9 +118,14 @@ class CFRewardController extends Controller
      * @throws Exception
      * @throws Exception
      */
-    public function editAction(Request $request, UrlGenerator $urlGenerator, $id): RedirectResponse|Response
+    public function editAction(
+        Request      $request,
+        UrlGenerator $urlGenerator,
+        CurrentUser  $currentUser,
+                     $id,
+    ): RedirectResponse|Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $cfrm = new CFRewardManager();
         $reward = $cfrm->getById($id);

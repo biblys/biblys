@@ -3,7 +3,9 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\TemplateService;
+use Exception;
 use Framework\Controller;
 use Model\ArticleQuery;
 use Model\BookCollectionQuery;
@@ -26,14 +28,15 @@ class SpecialOfferController extends Controller
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
+     * @throws Exception
      */
     public function indexAction(
-        Request $request,
         CurrentSite $currentSite,
+        CurrentUser $currentUser,
         TemplateService $templateService
     ): Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $offers = SpecialOfferQuery::create()
             ->filterBySite($currentSite->getSite())
@@ -49,15 +52,16 @@ class SpecialOfferController extends Controller
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
     public function editAction(
-        Request $request,
         CurrentSite $currentSite,
+        CurrentUser $currentUser,
         TemplateService $templateService,
         int $id,
     ): Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $offer = SpecialOfferQuery::create()
             ->filterBySite($currentSite->getSite())
@@ -88,16 +92,18 @@ class SpecialOfferController extends Controller
 
     /**
      * @throws PropelException
+     * @throws Exception
      */
     public function updateAction(
         Request $request,
         CurrentSite $currentSite,
+        CurrentUser $currentUser,
         Session $session,
         UrlGenerator $urlGenerator,
         int $id,
     ): RedirectResponse
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $offer = SpecialOfferQuery::create()
             ->filterBySite($currentSite->getSite())

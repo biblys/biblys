@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Database\Database;
 use Biblys\Service\Config;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Pagination;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\Updater\ReleaseNotFoundException;
@@ -42,11 +43,15 @@ class MaintenanceController extends Controller
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws PropelException
+     * @throws Exception
      */
-    public function updateAction(Request $request, Updater $updater, Config $config): Response
+    public function updateAction(
+        Updater $updater,
+        Config  $config,
+        CurrentUser $currentUser,
+    ): Response
     {
-        self::authAdmin($request);
-        $request->attributes->set("page_title", "Mise à jour de Biblys");
+        $currentUser->authAdmin();
 
         // Download available updates
         $error = null;

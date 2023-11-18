@@ -45,7 +45,7 @@ class InvitationControllerTest extends TestCase
     public function testCreateAction()
     {
         // given
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $request->request->set("email_addresses", "user@example.org");
         $flashBag = Mockery::mock(FlashBag::class);
         $flashBag->shouldReceive("add")
@@ -67,6 +67,8 @@ class InvitationControllerTest extends TestCase
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")->andReturn("/invitation/ANEWCODE");
         $controller = new InvitationController();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
 
         // when
         $response = $controller->createAction(
@@ -76,6 +78,7 @@ class InvitationControllerTest extends TestCase
             templateService: $templateService,
             session: $session,
             urlGenerator: $urlGenerator,
+            currentUser: $currentUser,
         );
 
         // then
@@ -94,7 +97,7 @@ class InvitationControllerTest extends TestCase
     public function testCreateActionWithInvalidEmail()
     {
         // given
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $request->request->set("mode", "send");
         $request->request->set("email_addresses", "first-valid@example.org\r\ninvalid@example.org\r\nsecond-valid@example.org");
 
@@ -131,6 +134,9 @@ class InvitationControllerTest extends TestCase
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")->andReturn("/invitation/ANEWCODE");
 
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+
         $controller = new InvitationController();
 
         // when
@@ -141,6 +147,7 @@ class InvitationControllerTest extends TestCase
             templateService: $templateService,
             session: $session,
             urlGenerator: $urlGenerator,
+            currentUser: $currentUser,
         );
 
         // then
@@ -159,7 +166,7 @@ class InvitationControllerTest extends TestCase
     public function testCreateActionWithManualMode()
     {
         // given
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $request->request->set("email_addresses", "manual1@example.org\r\nmanual2@example.org\r\nmanual3@example.org\r\n");
         $flashBag = Mockery::mock(FlashBag::class);
         $flashBag->shouldReceive("add")
@@ -184,6 +191,8 @@ class InvitationControllerTest extends TestCase
         $mailer->shouldNotReceive("send");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")->andReturn("/admin/invitations");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
         $controller = new InvitationController();
 
         // when
@@ -194,6 +203,7 @@ class InvitationControllerTest extends TestCase
             templateService: $templateService,
             session: $session,
             urlGenerator: $urlGenerator,
+            currentUser: $currentUser,
         );
 
         // then
@@ -213,7 +223,7 @@ class InvitationControllerTest extends TestCase
     public function testCreateActionWithSendMode()
     {
         // given
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $request->request->set("email_addresses", "send1@example.org\r\nsend2@example.org\r\nsend3@example.org");
         $flashBag = Mockery::mock(FlashBag::class);
         $flashBag->shouldReceive("add")
@@ -238,6 +248,8 @@ class InvitationControllerTest extends TestCase
         $mailer->expects($this->exactly(3))->method("send");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")->andReturn("/admin/invitations");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
         $controller = new InvitationController();
 
         // when
@@ -248,6 +260,7 @@ class InvitationControllerTest extends TestCase
             templateService: $templateService,
             session: $session,
             urlGenerator: $urlGenerator,
+            currentUser: $currentUser,
         );
 
         // then
@@ -267,7 +280,7 @@ class InvitationControllerTest extends TestCase
     public function testCreateActionWithDownloadMode()
     {
         // given
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $request->request->set("email_addresses", "download1@example.org\r\ndownload2@example.org\r\ndownload3@example.org");
         $flashBag = Mockery::mock(FlashBag::class);
         $flashBag->shouldReceive("add")
@@ -292,6 +305,8 @@ class InvitationControllerTest extends TestCase
         $mailer->shouldNotReceive("send");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")->andReturn("/invitation/ANEWCODE");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
         $controller = new InvitationController();
 
         // when
@@ -302,6 +317,7 @@ class InvitationControllerTest extends TestCase
             templateService: $templateService,
             session: $session,
             urlGenerator: $urlGenerator,
+            currentUser: $currentUser,
         );
 
         // then
@@ -320,7 +336,7 @@ class InvitationControllerTest extends TestCase
     public function testCreateActionWithAllowsPredownload()
     {
         // given
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $request->request->set("email_addresses", "predownload@example.org");
         $flashBag = Mockery::mock(FlashBag::class);
         $flashBag->shouldReceive("add")
@@ -342,6 +358,8 @@ class InvitationControllerTest extends TestCase
         $mailer->shouldNotReceive("send");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")->andReturn("/invitation/ANEWCODE");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
         $controller = new InvitationController();
 
         // when
@@ -352,6 +370,7 @@ class InvitationControllerTest extends TestCase
             templateService: $templateService,
             session: $session,
             urlGenerator: $urlGenerator,
+            currentUser: $currentUser,
         );
 
         // then
@@ -370,7 +389,7 @@ class InvitationControllerTest extends TestCase
     public function testCreateActionForMultipleArticles()
     {
         // given
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $request->request->set("email_addresses", "multiple@example.org");
         $flashBag = Mockery::mock(FlashBag::class);
         $flashBag->shouldReceive("add")
@@ -395,6 +414,8 @@ class InvitationControllerTest extends TestCase
                 Mockery::any());
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")->andReturn("/invitation/ANEWCODE");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
         $controller = new InvitationController();
 
         // when
@@ -405,6 +426,7 @@ class InvitationControllerTest extends TestCase
             templateService: $templateService,
             session: $session,
             urlGenerator: $urlGenerator,
+            currentUser: $currentUser,
         );
 
         // then
@@ -942,12 +964,14 @@ class InvitationControllerTest extends TestCase
             email: "listed-invitation@biblys.fr",
             code: "LISTEDIN",
         );
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $currentSite = new CurrentSite($site);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
         $controller = new InvitationController();
 
         // when
-        $response = $controller->listAction($request, $currentSite);
+        $response = $controller->listAction($request, $currentSite, $currentUser);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -963,7 +987,6 @@ class InvitationControllerTest extends TestCase
     {
         // given
         $invitation = ModelFactory::createInvitation(email: "delete.me@example.org");
-        $request = RequestFactory::createAuthRequestForAdminUser();
         $flashBag = Mockery::mock(FlashBag::class);
         $flashBag->shouldReceive("add")->with(
             "success",
@@ -971,10 +994,12 @@ class InvitationControllerTest extends TestCase
         );
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
         $controller = new InvitationController();
 
         // when
-        $response = $controller->deleteAction($request, $session, $invitation->getId());
+        $response = $controller->deleteAction($session, $currentUser, $invitation->getId());
 
         // then
         $this->assertEquals(302, $response->getStatusCode());

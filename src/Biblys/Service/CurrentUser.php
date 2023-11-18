@@ -5,7 +5,6 @@ namespace Biblys\Service;
 use DateTime;
 use Exception;
 use Model\Article;
-use Model\AxysAccount;
 use Model\Cart;
 use Model\CartQuery;
 use Model\Option;
@@ -21,6 +20,7 @@ use Model\User;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class CurrentUser
@@ -101,7 +101,7 @@ class CurrentUser
     }
 
     /**
-     * @throws Exception
+     * @throws PropelException
      */
     public function isAdmin(): bool
     {
@@ -306,17 +306,8 @@ class CurrentUser
         $this->currentSite = $currentSite;
     }
 
-    /**
-     * @throws Exception
-     */
     public function getCurrentSite(): CurrentSite
     {
-        if ($this->currentSite === null) {
-            throw new Exception(
-                "CurrentSite dependency was not injected in the CurrentUserService. Use the buildFromRequestAndConfig static method to build CurrentUser"
-            );
-        }
-
         return $this->currentSite;
     }
 
@@ -339,6 +330,19 @@ class CurrentUser
     {
         if (!$this->isAuthentified()) {
             throw new UnauthorizedHttpException("","Identification requise.");
+        }
+    }
+
+    /**
+     * @throws AccessDeniedHttpException
+     * @throws Exception
+     */
+    public function authAdmin(): void
+    {
+        $this->authUser();
+
+        if (!$this->isAdmin()) {
+            throw new AccessDeniedHttpException("Accès réservé aux administrateurs.");
         }
     }
 

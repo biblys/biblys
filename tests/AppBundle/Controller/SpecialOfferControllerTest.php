@@ -3,13 +3,14 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\TemplateService;
 use Biblys\Test\ModelFactory;
-use Biblys\Test\RequestFactory;
 use Mockery;
 use Model\ArticleQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -35,11 +36,12 @@ class SpecialOfferControllerTest extends TestCase
     {
         // given
         $specialOfferController = new SpecialOfferController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
         $site = ModelFactory::createSite();
         $offer = ModelFactory::createSpecialOffer(site: $site);
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->andReturn();
         $templateService = Mockery::mock(TemplateService::class);
         $templateService
             ->shouldReceive("renderResponse")
@@ -49,7 +51,11 @@ class SpecialOfferControllerTest extends TestCase
             ->andReturn(new Response());
 
         // when
-        $response = $specialOfferController->indexAction($request, $currentSite, $templateService);
+        $response = $specialOfferController->indexAction(
+            $currentSite,
+            $currentUser,
+            $templateService
+        );
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -67,10 +73,11 @@ class SpecialOfferControllerTest extends TestCase
     {
         // given
         $specialOfferController = new SpecialOfferController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->andReturn();
         $templateService = Mockery::mock(TemplateService::class);
 
         // then
@@ -78,7 +85,12 @@ class SpecialOfferControllerTest extends TestCase
         $this->expectExceptionMessage("Special offer not found");
 
         // when
-        $specialOfferController->editAction($request, $currentSite, $templateService, 999);
+        $specialOfferController->editAction(
+            $currentSite,
+            $currentUser,
+            $templateService,
+            999
+        );
     }
 
     /**
@@ -98,11 +110,12 @@ class SpecialOfferControllerTest extends TestCase
         $article = ModelFactory::createArticle(publisher: $publisher, collection: $collection);
         $offer = ModelFactory::createSpecialOffer(site: $site, targetCollection: $collection, freeArticle: $article);
 
-        $request = RequestFactory::createAuthRequestForAdminUser();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $currentSite->shouldReceive("getOption")->with("publisher_filter")
             ->andReturn($publisher->getId());
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->andReturn();
 
         $givenResponse = new Response();
         $expectedArticle = ArticleQuery::create()
@@ -120,8 +133,8 @@ class SpecialOfferControllerTest extends TestCase
 
         // when
         $response = $specialOfferController->editAction(
-            $request,
             $currentSite,
+            $currentUser,
             $templateService,
             id: $offer->getId(),
         );
@@ -139,10 +152,12 @@ class SpecialOfferControllerTest extends TestCase
     {
         // given
         $specialOfferController = new SpecialOfferController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->andReturn();
         $session = Mockery::mock(Session::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
 
@@ -151,7 +166,14 @@ class SpecialOfferControllerTest extends TestCase
         $this->expectExceptionMessage("Special offer not found");
 
         // when
-        $specialOfferController->updateAction($request, $currentSite, $session, $urlGenerator, 999);
+        $specialOfferController->updateAction(
+            $request,
+            $currentSite,
+            $currentUser,
+            $session,
+            $urlGenerator,
+            999
+        );
     }
 
     /**
@@ -165,9 +187,11 @@ class SpecialOfferControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $offer = ModelFactory::createSpecialOffer(site: $site, name: "Super offre");
 
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->andReturn();
         $flashBag = Mockery::mock(FlashBag::class);
         $flashBag->shouldReceive("add")
             ->with("success", "Offre spéciale « Nouvelle offre » mise à jour avec succès")
@@ -189,7 +213,12 @@ class SpecialOfferControllerTest extends TestCase
         $request->request->set("target_collection_id", "999");
         $request->request->set("free_article_id", "9999");
         $response = $specialOfferController->updateAction(
-            $request, $currentSite, $session, $urlGenerator, id: $offer->getId()
+            $request,
+            $currentSite,
+            $currentUser,
+            $session,
+            $urlGenerator,
+            id: $offer->getId()
         );
 
         // then

@@ -3,12 +3,15 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use DateTime;
 use Framework\Exception\AuthException;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -23,33 +26,13 @@ class PaymentControllerTest extends TestCase
      * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
+     * @throws AuthException
      */
     public function testIndex()
     {
         // given
         $controller = new PaymentController();
-        $request = RequestFactory::createAuthRequest();
-        $currentSite = $this->createMock(CurrentSite::class);
-
-        // then
-        $this->expectException(AccessDeniedHttpException::class);
-
-        // when
-        $controller->index($request, $currentSite);
-    }
-
-    /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws LoaderError
-     * @throws PropelException
-     * @throws AuthException
-     */
-    public function testIndexForAdmin()
-    {
-        // given
-        $controller = new PaymentController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $site = ModelFactory::createSite();
         $order = ModelFactory::createOrder();
         $currentSite = $this->createMock(CurrentSite::class);
@@ -68,9 +51,11 @@ class PaymentControllerTest extends TestCase
             $otherSite
         );
         ModelFactory::createPayment(["executed" => null, "mode" => "not executed"], $site);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
 
         // when
-        $response = $controller->index($request, $currentSite);
+        $response = $controller->index($request, $currentSite, $currentUser);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -114,9 +99,11 @@ class PaymentControllerTest extends TestCase
         $controller = new PaymentController();
         $request = RequestFactory::createAuthRequestForAdminUser();
         $request->query->set("mode", "stripe");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
 
         // when
-        $response = $controller->index($request, $currentSite);
+        $response = $controller->index($request, $currentSite, $currentUser);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -146,9 +133,11 @@ class PaymentControllerTest extends TestCase
         $request = RequestFactory::createAuthRequestForAdminUser();
         $request->query->set("start_date", "2019-04-27");
         $request->query->set("end_date", "2019-04-29");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
 
         // when
-        $response = $controller->index($request, $currentSite);
+        $response = $controller->index($request, $currentSite, $currentUser);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());

@@ -2,9 +2,10 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\CurrentUser;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
-use Framework\Exception\AuthException;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -19,7 +20,6 @@ class CFRewardControllerTest extends TestCase
 {
     /**
      * @throws PropelException
-     * @throws AuthException
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -38,9 +38,15 @@ class CFRewardControllerTest extends TestCase
         $request->request->set("highlighted", $reward->getHighlighted());
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
+        $currentUser = Mockery::mock(CurrentUser::class);
 
         // when
-        $response = $controller->newAction($request, $urlGenerator, $reward->getId());
+        $response = $controller->newAction(
+            $request,
+            $urlGenerator,
+            $currentUser,
+            $reward->getId()
+        );
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
@@ -48,7 +54,6 @@ class CFRewardControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws AuthException
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -67,18 +72,23 @@ class CFRewardControllerTest extends TestCase
         $request->request->set("highlighted", $reward->getHighlighted());
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
+        $currentUser = Mockery::mock(CurrentUser::class);
 
         // then
         $this->expectException(BadRequestException::class);
         $this->expectExceptionMessage("L'article 9999 n'existe pas");
 
         // when
-        $controller->newAction($request, $urlGenerator, $reward->getCampaignId());
+        $controller->newAction(
+            $request,
+            $urlGenerator,
+            $currentUser,
+            $reward->getCampaignId(),
+        );
     }
 
     /**
      * @throws PropelException
-     * @throws AuthException
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -97,9 +107,16 @@ class CFRewardControllerTest extends TestCase
         $request->request->set("highlighted", $reward->getHighlighted());
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
 
         // when
-        $response = $controller->editAction($request, $urlGenerator, $reward->getId());
+        $response = $controller->editAction(
+            $request,
+            $urlGenerator,
+            $currentUser,
+            $reward->getId()
+        );
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
@@ -107,7 +124,6 @@ class CFRewardControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws AuthException
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -126,12 +142,19 @@ class CFRewardControllerTest extends TestCase
         $request->request->set("highlighted", $reward->getHighlighted());
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
 
         // then
         $this->expectException(BadRequestException::class);
         $this->expectExceptionMessage("L'article 9999 n'existe pas");
 
         // when
-        $controller->editAction($request, $urlGenerator, $reward->getId());
+        $controller->editAction(
+            $request,
+            $urlGenerator,
+            $currentUser,
+            $reward->getId()
+        );
     }
 }

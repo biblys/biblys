@@ -3,6 +3,7 @@
 namespace ApiBundle\Controller;
 
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Framework\Controller;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Exception;
@@ -18,11 +19,11 @@ class ArticleController extends Controller
      * @route GET /admin/articles/export
      * @throws PropelException
      * @throws CannotInsertRecord
-     * @throws Exception
+     * @throws \Exception
      */
-    public function export(Request $request, CurrentSite $currentSiteService): Response
+    public function export(CurrentUser $currentUser, CurrentSite $currentSiteService): Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $currentSite = $currentSiteService->getSite();
         $fileName = "{$currentSite->getName()}-catalog.csv";

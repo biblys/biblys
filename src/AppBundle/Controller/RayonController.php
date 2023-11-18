@@ -6,6 +6,7 @@ use ArticleManager;
 use Biblys\Article\Type;
 use Biblys\Isbn\Isbn as Isbn;
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
@@ -205,11 +206,6 @@ class RayonController extends Controller
      * Adding an Article to a Rayon
      * /rayon/:id/add.
      *
-     * @param Request $request
-     * @param Session $session
-     * @param UrlGenerator $urlGenerator
-     * @param $id
-     * @return RedirectResponse|Response
      * @throws AuthException
      * @throws LoaderError
      * @throws PropelException
@@ -220,12 +216,13 @@ class RayonController extends Controller
         Request $request,
         Session $session,
         UrlGenerator $urlGenerator,
+        CurrentUser $currentUser,
         $id
-    )
+    ): RedirectResponse|Response
     {
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
-        self::authPublisher($request, null);
+        $currentUser->authPublisher();
 
         $rm = new RayonManager();
 
@@ -296,18 +293,17 @@ class RayonController extends Controller
 
     /**
      * Display all articles in a Rayon.
-     * @param Request $request
-     * @param $id
-     * @return Response
+     *
      * @throws AuthException
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
-    public function rayonArticlesAction(Request $request, $id): Response
+    public function rayonArticlesAction(Request $request, CurrentUser $currentUser, $id): Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $rm = new RayonManager();
 

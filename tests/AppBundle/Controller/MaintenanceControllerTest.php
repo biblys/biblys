@@ -3,9 +3,9 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Updater\Updater;
-use Biblys\Test\RequestFactory;
-use Framework\Exception\AuthException;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Twig\Error\LoaderError;
@@ -18,7 +18,6 @@ class MaintenanceControllerTest extends TestCase
 {
 
     /**
-     * @throws AuthException
      * @throws PropelException
      * @throws LoaderError
      * @throws RuntimeError
@@ -28,12 +27,13 @@ class MaintenanceControllerTest extends TestCase
     {
         // given
         $controller = new MaintenanceController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
         $updater = $this->createMock(Updater::class);
         $config = new Config();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
 
         // when
-        $response = $controller->updateAction($request, $updater, $config);
+        $response = $controller->updateAction($updater, $config, $currentUser);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());

@@ -4,10 +4,11 @@ namespace ApiBundle\Controller;
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Exception;
-use Framework\Exception\AuthException;
+use Mockery;
 use Model\ShippingFee;
 use Model\ShippingFeeQuery;
 use PHPUnit\Framework\TestCase;
@@ -21,7 +22,7 @@ class ShippingControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws AuthException
+     * @throws Exception
      */
     public function testIndexAction()
     {
@@ -60,11 +61,13 @@ class ShippingControllerTest extends TestCase
         $otherSiteShippingFee->setSiteId(2);
         $otherSiteShippingFee->save();
         $controller = new ShippingController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
 
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
+
         // when
-        $response = $controller->indexAction($request, $config);
+        $response = $controller->indexAction($currentUser, $config);
 
         // then
         $expectedResponse = [
@@ -147,7 +150,6 @@ class ShippingControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      */
     public function testCreateAction()
@@ -157,9 +159,11 @@ class ShippingControllerTest extends TestCase
         $content = '{"id":"","mode":"Colissimo","type":"suivi","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
         $request = RequestFactory::createAuthRequestForAdminUser($content);
         $config = new Config();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
 
         // when
-        $response = $controller->createAction($request, $config);
+        $response = $controller->createAction($request, $config, $currentUser);
 
         // then
         $this->assertEquals(
@@ -186,7 +190,6 @@ class ShippingControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      */
     public function testUpdateAction()
@@ -197,9 +200,16 @@ class ShippingControllerTest extends TestCase
         $request = RequestFactory::createAuthRequestForAdminUser($content);
         $shippingFee = ModelFactory::createShippingFee();
         $config = new Config();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
 
         // when
-        $response = $controller->updateAction($request, $config, $shippingFee->getId());
+        $response = $controller->updateAction(
+            $request,
+            $config,
+            $currentUser,
+            $shippingFee->getId()
+        );
 
         // then
         $this->assertEquals(
@@ -221,7 +231,6 @@ class ShippingControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      */
     public function testUpdateFeeFromOtherSite()
@@ -234,6 +243,8 @@ class ShippingControllerTest extends TestCase
         $shippingFee->setSiteId(2);
         $shippingFee->save();
         $config = new Config();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
 
         // then
         $this->expectException("Symfony\Component\Routing\Exception\ResourceNotFoundException");
@@ -242,23 +253,23 @@ class ShippingControllerTest extends TestCase
         );
 
         // when
-        $controller->updateAction($request, $config, $shippingFee->getId());
+        $controller->updateAction($request, $config, $currentUser, $shippingFee->getId());
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      */
     public function testDeleteAction()
     {
         // given
         $controller = new ShippingController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
         $shippingFee = ModelFactory::createShippingFee();
         $config = new Config();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
 
         // when
-        $response = $controller->deleteAction($request, $config, $shippingFee->getId());
+        $response = $controller->deleteAction($config, $currentUser, $shippingFee->getId());
 
         // then
         $this->assertEquals(
@@ -269,19 +280,19 @@ class ShippingControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      */
     public function testDeleteFeeFromOtherSite()
     {
         // given
         $controller = new ShippingController();
-        $content = '{"id":"","mode":"Colissimo","type":"suivi","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
-        $request = RequestFactory::createAuthRequestForAdminUser($content);
         $shippingFee = ModelFactory::createShippingFee();
         $shippingFee->setSiteId(2);
         $shippingFee->save();
         $config = new Config();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
 
         // then
         $this->expectException("Symfony\Component\Routing\Exception\ResourceNotFoundException");
@@ -290,7 +301,7 @@ class ShippingControllerTest extends TestCase
         );
 
         // when
-        $controller->deleteAction($request, $config, $shippingFee->getId());
+        $controller->deleteAction($config, $currentUser, $shippingFee->getId());
     }
 
     /**
@@ -389,7 +400,6 @@ class ShippingControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws AuthException
      */
     public function testGetAction()
     {

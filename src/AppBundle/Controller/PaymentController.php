@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Log;
 use Biblys\Service\Pagination;
 use DateTime;
@@ -38,10 +39,13 @@ class PaymentController extends Controller
      * @throws LoaderError
      * @throws Exception
      */
-    public function index(Request $request, CurrentSite $currentSite): Response
+    public function index(
+        Request     $request,
+        CurrentSite $currentSite,
+        CurrentUser $currentUser,
+    ): Response
     {
-        self::authAdmin($request);
-        $request->attributes->set("page_title", "Paiements");
+        $currentUser->authAdmin();
 
         $paymentQuery = PaymentQuery::create()
             ->filterBySiteId($currentSite->getSite()->getId())

@@ -380,7 +380,6 @@ class MainControllerTest extends TestCase
     {
         // given
         $controller = new MainController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
         $config->set("environment", "test");
         $config->set("cloud", ["expires" => "2020-01-01"]);
@@ -389,13 +388,15 @@ class MainControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = new CloudService($config, new Client());
-        $currentUser = $this->createMock(CurrentUser::class);
-        $currentUser->method("getOption")->willReturn("1");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getOption")->once()->andReturn("1");
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+        $currentUser->shouldReceive("setOption")->once()->with("last_version_known", BIBLYS_VERSION);
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("getOption")->with("downloadable_publishers")->willReturn(null);
 
         // when
-        $response = $controller->adminAction($request, $config, $urlGenerator, $cloud, $currentUser, $currentSite);
+        $response = $controller->adminAction($config, $urlGenerator, $cloud, $currentUser, $currentSite);
 
         // then
         $this->assertEquals(
@@ -424,7 +425,6 @@ class MainControllerTest extends TestCase
     {
         // given
         $controller = new MainController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
         $hotNews = ["date" => "2019-04-28", "message" => "Un message à caractère informatif", "link" => "https://www.biblys.fr"];
         $config->set("cloud", ["hot_news" => $hotNews]);
@@ -433,12 +433,14 @@ class MainControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = new CloudService($config, new Client());
-        $currentUser = $this->createMock(CurrentUser::class);
-        $currentUser->method("getOption")->willReturn(null);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getOption")->once()->andReturn(null);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+        $currentUser->shouldReceive("setOption")->once()->with("last_version_known", BIBLYS_VERSION);
         $currentSite = $this->createMock(CurrentSite::class);
 
         // when
-        $response = $controller->adminAction($request, $config, $urlGenerator, $cloud, $currentUser, $currentSite);
+        $response = $controller->adminAction($config, $urlGenerator, $cloud, $currentUser, $currentSite);
 
         // then
         $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
@@ -458,7 +460,6 @@ class MainControllerTest extends TestCase
     {
         // given
         $controller = new MainController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
         $hotNews = ["date" => "2019-04-28", "message" => "Un message à caractère informatif", "link" => "https://www.biblys.fr"];
         $config->set("cloud", ["hot_news" => $hotNews]);
@@ -467,12 +468,14 @@ class MainControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = new CloudService($config, new Client());
-        $currentUser = $this->createMock(CurrentUser::class);
-        $currentUser->method("getOption")->willReturn("1");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getOption")->once()->andReturn("1");
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+        $currentUser->shouldReceive("setOption")->once()->with("last_version_known", BIBLYS_VERSION);
         $currentSite = $this->createMock(CurrentSite::class);
 
         // when
-        $response = $controller->adminAction($request, $config, $urlGenerator, $cloud, $currentUser, $currentSite);
+        $response = $controller->adminAction($config, $urlGenerator, $cloud, $currentUser, $currentSite);
 
         // then
         $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
@@ -492,7 +495,6 @@ class MainControllerTest extends TestCase
     {
         // given
         $controller = new MainController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
         $config->set("environment", "test");
         $config->set("cloud", ["customer_id" => "12345"]);
@@ -508,7 +510,13 @@ class MainControllerTest extends TestCase
         $currentSite = $this->createMock(CurrentSite::class);
 
         // when
-        $response = $controller->adminAction($request, $config, $urlGenerator, $cloudService, $currentUser, $currentSite);
+        $response = $controller->adminAction(
+            $config,
+            $urlGenerator,
+            $cloudService,
+            $currentUser,
+            $currentSite
+        );
 
         // then
         $this->assertEquals(
@@ -527,7 +535,6 @@ class MainControllerTest extends TestCase
     {
         // given
         $controller = new MainController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
         $config->set("environment", "test");
         $config->set("cloud", ["customer_id" => "12345"]);
@@ -540,12 +547,13 @@ class MainControllerTest extends TestCase
         $cloudService = $this->createMock(CloudService::class);
         $cloudService->method("isConfigured")->willReturn(true);
         $cloudService->method("getSubscription")->willReturn($cloudSubscription);
-        $currentUser = $this->createMock(CurrentUser::class);
-        $currentUser->method("getOption")->willReturn("1");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getOption")->once()->andReturn("1");
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
         $currentSite = $this->createMock(CurrentSite::class);
 
         // when
-        $response = $controller->adminAction($request, $config, $urlGenerator, $cloudService, $currentUser, $currentSite);
+        $response = $controller->adminAction($config, $urlGenerator, $cloudService, $currentUser, $currentSite);
 
         // then
         $this->assertEquals(
@@ -579,7 +587,9 @@ class MainControllerTest extends TestCase
         $request = RequestFactory::createAuthRequestForAdminUser();
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
-        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+        $currentUser->shouldReceive("getOption")->once()->with("shortcuts")->andReturn("");
 
         // when
         $response = $controller->adminShortcutsAction($request, $urlGenerator, $currentUser);
@@ -611,9 +621,11 @@ class MainControllerTest extends TestCase
         ]);
         $cloud = $this->createMock(CloudService::class);
         $cloud->method("getSubscription")->willReturn(null);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
 
         // when
-        $response = $controller->adminCloud($request, $config, $cloud);
+        $response = $controller->adminCloud($request, $config, $cloud, $currentUser);
 
         // then
         $this->assertEquals(
@@ -649,9 +661,11 @@ class MainControllerTest extends TestCase
         $cloud->method("getSubscription")->willReturn(new CloudSubscription(
             "active",
         ));
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
 
         // when
-        $response = $controller->adminCloud($request, $config, $cloud);
+        $response = $controller->adminCloud($request, $config, $cloud, $currentUser);
 
         // then
         $this->assertEquals(
@@ -684,9 +698,11 @@ class MainControllerTest extends TestCase
         $cloudSubscription = $this->createMock(CloudSubscription::class);
         $cloudService = $this->createMock(CloudService::class);
         $cloudService->method("getSubscription")->willReturn($cloudSubscription);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
 
         // when
-        $response = $controller->adminCloud($request, $config, $cloudService);
+        $response = $controller->adminCloud($request, $config, $cloudService, $currentUser);
 
         // then
         $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
@@ -702,7 +718,6 @@ class MainControllerTest extends TestCase
     {
         // given
         $controller = new MainController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
         $updater = $this->createMock(Updater::class);
         $updater->method("isUpdateAvailable")->willReturn(false);
@@ -715,7 +730,7 @@ class MainControllerTest extends TestCase
         $currentSite->method("getOption")->with("downloadable_publishers")->willReturn("1");
 
         // when
-        $response = $controller->adminAction($request, $config, $urlGenerator, $cloud, $currentUser, $currentSite);
+        $response = $controller->adminAction($config, $urlGenerator, $cloud, $currentUser, $currentSite);
 
         // then
         $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
@@ -736,7 +751,6 @@ class MainControllerTest extends TestCase
     {
         // given
         $controller = new MainController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config(["smtp" => null]);
         $updater = $this->createMock(Updater::class);
         $updater->method("isUpdateAvailable")->willReturn(false);
@@ -748,7 +762,7 @@ class MainControllerTest extends TestCase
         $currentSite = $this->createMock(CurrentSite::class);
 
         // when
-        $response = $controller->adminAction($request, $config, $urlGenerator, $cloud, $currentUser, $currentSite);
+        $response = $controller->adminAction($config, $urlGenerator, $cloud, $currentUser, $currentSite);
 
         // then
         $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
@@ -773,9 +787,11 @@ class MainControllerTest extends TestCase
         $cloudService->method("getPortalUrl")
             ->with("return-url")
             ->willReturn("https://stripe.com/portal?return-url");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
 
         // when
-        $response = $controller->adminCloudPortal($request, $cloudService);
+        $response = $controller->adminCloudPortal($request, $cloudService, $currentUser);
 
         // then
         $this->assertEquals(
@@ -797,7 +813,6 @@ class MainControllerTest extends TestCase
     {
         // given
         $controller = new MainController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator
             ->method("generate")
@@ -808,9 +823,10 @@ class MainControllerTest extends TestCase
             ->expects($this->once())
             ->method("setOption")
             ->with("hot_news_read", 1);
+        $currentUser->expects($this->once())->method("authAdmin");
 
         // when
-        $response = $controller->hotNewsMarkAsRead($request, $urlGenerator, $currentUser);
+        $response = $controller->hotNewsMarkAsRead($urlGenerator, $currentUser);
 
         // then
         $this->assertEquals(302, $response->getStatusCode(), "returns HTTP 302");

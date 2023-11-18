@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\MailingList\Contact;
 use Biblys\Service\MailingList\Exception\InvalidConfigurationException;
 use Biblys\Service\MailingList\MailingListInterface;
@@ -145,9 +146,11 @@ class MailingControllerTest extends TestCase
             ->method("getMailingList")
             ->with()
             ->willReturn($mailingList);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
 
         // when
-        $response = $controller->contacts($request, $mailingListService);
+        $response = $controller->contacts($currentUser, $mailingListService, $request);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());

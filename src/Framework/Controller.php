@@ -161,6 +161,7 @@ class Controller
      * @return CurrentUser
      * @throws PropelException
      * @throws Exception
+     * @deprecated Controller::authAdmin is deprecated. Use CurrentService->authAdmin instead.
      */
     protected static function authAdmin(
         Request $request,

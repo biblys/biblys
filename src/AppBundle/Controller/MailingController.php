@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Exception\CaptchaValidationException;
 use Biblys\Service\Config;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\MailingList\Exception\InvalidConfigurationException;
 use Biblys\Service\MailingList\Exception\MailingListServiceException;
 use Biblys\Service\MailingList\MailingListService;
@@ -143,19 +144,19 @@ class MailingController extends Controller
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws InvalidConfigurationException
+     * @throws Exception
      */
     public function contacts(
-        Request $request,
+        CurrentUser $currentUser,
         MailingListService $mailingListService,
+        Request $request,
     ): Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         if (!$mailingListService->isConfigured()) {
             throw new NotFoundHttpException("Aucun service de gestion de liste de contacts n'est configuré.");
         }
-
-        $request->attributes->set("page_title", "Liste de contacts");
 
         $currentPage = $request->query->get("p", 0);
         $contactsPerPage = 1000;

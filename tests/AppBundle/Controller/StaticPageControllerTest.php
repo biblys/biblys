@@ -3,9 +3,9 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Test\ModelFactory;
-use Biblys\Test\RequestFactory;
-use Symfony\Component\HttpFoundation\Request;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -35,10 +35,10 @@ class StaticPageControllerTest extends TestCase
         ]);
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("getId")->willReturn(1);
-        $request = new Request();
+        $currentUser = Mockery::mock(CurrentUser::class);
 
         // when
-        $response = $controller->showAction($request, $currentSite, "mentions-legales");
+        $response = $controller->showAction($currentSite, $currentUser, "mentions-legales");
 
         // then
         $this->assertEquals(
@@ -74,10 +74,10 @@ class StaticPageControllerTest extends TestCase
         $controller = new StaticPageController();
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("getId")->willReturn(1);
-        $request = new Request();
+        $currentUser = Mockery::mock(CurrentUser::class);
 
         // when
-        $controller->showAction($request, $currentSite,  "page-inexistante");
+        $controller->showAction($currentSite, $currentUser,  "page-inexistante");
     }
 
     /**
@@ -97,10 +97,13 @@ class StaticPageControllerTest extends TestCase
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("getId")->willReturn(1);
         ModelFactory::createPage(["page_url" => "offline-page", "status" => 0]);
-        $request = RequestFactory::createAuthRequest();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()
+            ->with("Page \"offline-page\" is offline.")
+            ->andThrow(new AccessDeniedHttpException("Page \"offline-page\" is offline."));
 
         // when
-        $controller->showAction($request, $currentSite, "offline-page");
+        $controller->showAction($currentSite, $currentUser, "offline-page");
     }
 
     /**
@@ -116,10 +119,11 @@ class StaticPageControllerTest extends TestCase
         ModelFactory::createPage(["page_url" => "for-admin-only", "status" => 0]);
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("getId")->willReturn(1);
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
 
         // when
-        $response = $controller->showAction($request, $currentSite, "for-admin-only");
+        $response = $controller->showAction($currentSite, $currentUser, slug: "for-admin-only");
 
         // then
         $this->assertEquals(

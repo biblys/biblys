@@ -3,10 +3,11 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
+use Exception;
 use Framework\Controller;
 use Model\PageQuery;
 use Propel\Runtime\Exception\PropelException;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig\Error\LoaderError;
@@ -22,8 +23,13 @@ class StaticPageController extends Controller
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws PropelException
+     * @throws Exception
      */
-    public function showAction(Request $request, CurrentSite $currentSite, string $slug): Response
+    public function showAction(
+        CurrentSite $currentSite,
+        CurrentUser $currentUser,
+        string      $slug,
+    ): Response
     {
         $pageQuery = PageQuery::create()
             ->filterBySiteId($currentSite->getId())
@@ -35,7 +41,7 @@ class StaticPageController extends Controller
         }
 
         if (!$staticPage->isOnline()) {
-            Controller::authAdmin($request, "Page \"$slug\" is offline.");
+            $currentUser->authAdmin( "Page \"$slug\" is offline.");
         }
 
         return $this->render("AppBundle:StaticPage:show.html.twig", [

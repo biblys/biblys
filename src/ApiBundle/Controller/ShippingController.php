@@ -4,9 +4,9 @@ namespace ApiBundle\Controller;
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Exception;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use Model\CountryQuery;
 use Model\ShippingFee;
 use Model\ShippingFeeQuery;
@@ -24,12 +24,11 @@ class ShippingController extends Controller
      *
      * @route GET /api/admin/shipping
      *
-     * @throws AuthException
-     * @throws PropelException
+     * @throws Exception
      */
-    public function indexAction(Request $request, Config $config): JsonResponse
+    public function indexAction(CurrentUser $currentUser, Config $config): JsonResponse
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $currentSite = CurrentSite::buildFromConfig($config);
         $allFees = ShippingFeeQuery::createForSite($currentSite)
@@ -51,12 +50,12 @@ class ShippingController extends Controller
      *
      * @route POST /api/admin/shipping
      *
-     * @throws AuthException
      * @throws PropelException
+     * @throws Exception
      */
-    public function createAction(Request $request, Config $config): JsonResponse
+    public function createAction(Request $request, Config $config, CurrentUser $currentUser): JsonResponse
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
         $currentSite = CurrentSite::buildFromConfig($config);
 
         $data = self::_getDataFromRequest($request);
@@ -74,12 +73,17 @@ class ShippingController extends Controller
      *
      * @route PUT /api/admin/shipping/{id}
      *
-     * @throws AuthException
      * @throws PropelException
+     * @throws Exception
      */
-    public function updateAction(Request $request, Config $config, int $id): JsonResponse
+    public function updateAction(
+        Request $request,
+        Config $config,
+        CurrentUser $currentUser,
+        int $id
+    ): JsonResponse
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $fee = self::_getFeeFromId($config, $id);
         $data = self::_getDataFromRequest($request);
@@ -92,12 +96,16 @@ class ShippingController extends Controller
     /**
      * @route DELETE /api/admin/shipping/{id}
      *
-     * @throws AuthException
      * @throws PropelException
+     * @throws Exception
      */
-    public function deleteAction(Request $request, Config $config, int $id): JsonResponse
+    public function deleteAction(
+        Config $config,
+        CurrentUser $currentUser,
+        int $id
+    ): JsonResponse
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $fee = self::_getFeeFromId($config, $id);
         $fee->delete();

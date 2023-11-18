@@ -10,6 +10,7 @@ use Exception;
 use Framework\TemplateLoader;
 use Media;
 use Model\Article;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Component\Filesystem\Filesystem;
@@ -92,12 +93,15 @@ class TemplateService
         return new Response($rendered);
     }
 
+    /**
+     * @throws PropelException
+     */
     private function _getTwigEnvironment(): Environment
     {
         $config = $this->config;
         $currentSite = $this->currentSiteService;
         $currentUserService = $this->currentUserService;
-        $currentUserIsAdmin = $currentUserService->isAdminForSite($currentSite->getSite());
+        $currentUserIsAdmin = $currentUserService->isAdmin();
         $request = $this->request;
 
         $functions = $this->_getCustomFunctions(

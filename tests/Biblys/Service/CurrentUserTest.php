@@ -13,6 +13,7 @@ use Model\User;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 require_once __DIR__."/../../setUp.php";
@@ -675,6 +676,67 @@ class CurrentUserTest extends TestCase
 
         // when
         $currentUser->authUser();
+    }
+
+    /**
+     * #authAdmin
+     */
+
+    /**
+     * @throws Exception
+     */
+    public function testAuthAdminForAnonymousUser()
+    {
+        // given
+        $currentUser = new CurrentUser(null, "token");
+
+        // then
+        $this->expectException(UnauthorizedHttpException::class);
+        $this->expectExceptionMessage("Identification requise.");
+
+        // when
+        $currentUser->authAdmin();
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAuthAdminForNonAdmin()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createUser(site: $site);
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $config = new Config(["site" => $site->getId()]);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // then
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->expectExceptionMessage("Accès réservé aux administrateurs");
+
+        // when
+        $currentUser->authAdmin();
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAuthAdminForAdmin()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createAdminUser(site: $site);
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $config = new Config(["site" => $site->getId()]);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // then
+        $this->expectNotToPerformAssertions();
+
+        // when
+        $currentUser->authAdmin();
     }
 
     /**

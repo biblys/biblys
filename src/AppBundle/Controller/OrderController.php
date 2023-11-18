@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\LoggerService;
 use Exception;
 use Framework\Controller;
@@ -112,15 +113,15 @@ class OrderController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param CurrentSite $currentSite
-     * @param int $id
-     * @return RedirectResponse
      * @throws PropelException
      */
-    public function show(Request $request, CurrentSite $currentSite, int $id): RedirectResponse
+    public function show(
+        CurrentSite $currentSite,
+        CurrentUser $currentUser,
+        int         $id,
+    ): RedirectResponse
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $order = OrderQuery::create()
             ->filterBySite($currentSite->getSite())

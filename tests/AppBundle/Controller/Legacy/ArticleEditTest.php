@@ -15,7 +15,6 @@ use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Exception;
 use Mockery;
-use Model\AxysAccount;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -131,7 +130,7 @@ class ArticleEditTest extends TestCase
         // given
         $article = ModelFactory::createArticle();
 
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $request->query->set("page", "article_edit");
         $request->query->set("id", $article->getId());
 
@@ -181,7 +180,7 @@ class ArticleEditTest extends TestCase
         $controller = require __DIR__."/../../../../controllers/common/php/article_edit.php";
 
         $article = ModelFactory::createArticle(typeId: Type::EBOOK);
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $request->query->set("id", $article->getId());
 
         $user = ModelFactory::createUser();

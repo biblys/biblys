@@ -34,8 +34,9 @@ class RequestFactory
     }
 
     /**
-     * @param string $content
-     * @return Request
+     * @deprecated createAuthRequestForAdminUser is deprecated. Stub CurrentUserService->authAdmin
+     * instead.
+     *
      * @throws PropelException
      */
     public static function createAuthRequestForAdminUser(string $content = ""): Request

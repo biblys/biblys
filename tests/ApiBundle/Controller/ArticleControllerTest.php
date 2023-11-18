@@ -3,10 +3,12 @@
 namespace ApiBundle\Controller;
 
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Exception;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
@@ -22,10 +24,11 @@ class ArticleControllerTest extends TestCase
     {
         // given
         $controller = new ArticleController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
         $site = ModelFactory::createSite();
         $site->setName("paronymie");
         $currentSite = new CurrentSite($site);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
 
         $publisher = ModelFactory::createPublisher(name: "Un éditeur");
         $collection = ModelFactory::createCollection(publisher: $publisher);
@@ -66,7 +69,7 @@ class ArticleControllerTest extends TestCase
         );
 
         // when
-        $response = $controller->export($request, $currentSite);
+        $response = $controller->export($currentUser, $currentSite);
 
         // then
         $this->assertEquals(

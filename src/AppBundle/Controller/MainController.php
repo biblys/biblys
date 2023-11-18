@@ -142,7 +142,11 @@ class MainController extends Controller
 
                 $staticPageSlug = $matches[1];
                 $staticPageController = new StaticPageController();
-                return $staticPageController->showAction($request, $currentSite, $staticPageSlug);
+                return $staticPageController->showAction(
+                    $currentSite,
+                    $currentUser,
+                    $staticPageSlug
+                );
 
             // Old controller
             } elseif ($homeOption == 'old_controller') {
@@ -269,7 +273,6 @@ class MainController extends Controller
      * @throws GuzzleException
      */
     public function adminAction(
-        Request $request,
         Config $config,
         UrlGenerator $urlGenerator,
         CloudService $cloud,
@@ -279,8 +282,7 @@ class MainController extends Controller
     {
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
-        self::authAdmin($request);
-        $request->attributes->set("page_title", "Administration Biblys");
+        $currentUser->authAdmin();
 
         if ($cloud->isConfigured()
             && $cloud->getSubscription() !== null
@@ -340,6 +342,7 @@ class MainController extends Controller
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws UpdaterException
+     * @throws Exception
      */
     public function adminShortcutsAction(
         Request $request,
@@ -349,7 +352,7 @@ class MainController extends Controller
     {
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
-        self::authAdmin($request);
+        $currentUserService->authAdmin();
 
         // If XHR request, return the shortcuts as an JSON array
         if ($request->isXmlHttpRequest()) {
@@ -443,9 +446,15 @@ class MainController extends Controller
      * @throws Exception
      * @throws GuzzleException
      */
-    public function adminCloud(Request $request, Config $config, CloudService $cloud): Response
+    public function adminCloud(
+        Request      $request,
+        Config       $config,
+        CloudService $cloud,
+        CurrentUser  $currentUser,
+    ): Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
+
         $cloudConfig = $config->get("cloud");
         if (!$cloudConfig) {
             throw new ResourceNotFoundException();
@@ -461,11 +470,15 @@ class MainController extends Controller
 
     /**
      * @throws GuzzleException
-     * @throws PropelException
+     * @throws Exception
      */
-    public function adminCloudPortal(Request $request, CloudService $cloud): RedirectResponse
+    public function adminCloudPortal(
+        Request      $request,
+        CloudService $cloud,
+        CurrentUser  $currentUser,
+    ): RedirectResponse
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $returnUrl = $request->query->get("return_url");
         $portalUrl = $cloud->getPortalUrl($returnUrl);
@@ -475,14 +488,14 @@ class MainController extends Controller
 
     /**
      * @throws PropelException
+     * @throws Exception
      */
     public function hotNewsMarkAsRead(
-        Request $request,
         UrlGenerator $urlGenerator,
         CurrentUser $currentUser
     ): RedirectResponse
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $currentUser->setOption("hot_news_read", 1);
 

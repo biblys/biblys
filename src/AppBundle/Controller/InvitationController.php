@@ -75,6 +75,7 @@ class InvitationController extends Controller
      * @throws PropelException
      * @throws TransportExceptionInterface
      * @throws \League\Csv\Exception
+     * @throws Exception
      */
     public function createAction(
         Request         $request,
@@ -82,10 +83,11 @@ class InvitationController extends Controller
         Mailer          $mailer,
         TemplateService $templateService,
         Session         $session,
-        UrlGenerator    $urlGenerator
+        UrlGenerator    $urlGenerator,
+        CurrentUser $currentUser
     ): Response|RedirectResponse
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $recipientEmailsRaw = $request->request->get("email_addresses");
         $recipientEmails = explode("\r\n", $recipientEmailsRaw);
@@ -156,10 +158,15 @@ class InvitationController extends Controller
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
+     * @throws Exception
      */
-    public function listAction(Request $request, CurrentSite $currentSite): Response
+    public function listAction(
+        Request     $request,
+        CurrentSite $currentSite,
+        CurrentUser $currentUser,
+    ): Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $invitationsQuery = InvitationQuery::create()
             ->filterBySite($currentSite->getSite())
@@ -268,10 +275,15 @@ class InvitationController extends Controller
 
     /**
      * @throws PropelException
+     * @throws Exception
      */
-    public function deleteAction(Request $request, Session $session, int $id): RedirectResponse
+    public function deleteAction(
+        Session $session,
+        CurrentUser $currentUser,
+        int     $id,
+    ): RedirectResponse
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $invitation = InvitationQuery::create()->findPk($id);
         if ($invitation === null) {
