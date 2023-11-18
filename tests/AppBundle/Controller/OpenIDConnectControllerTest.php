@@ -14,6 +14,7 @@ use Exception;
 use Facile\OpenIDClient\Token\TokenSetInterface;
 use Firebase\JWT\JWT;
 use JsonException;
+use Model\AxysAccount;
 use Model\SessionQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -58,31 +59,21 @@ class OpenIDConnectControllerTest extends TestCase
     public function testCallback()
     {
         // given
-        $request = Request::create("https://www.biblys.fr/openid/callback");
-        $stateToken = JWT::encode(["return_url" => ""], "secret_key", "HS256");
-        $request->query->set("code", "authorization_code");
-        $request->query->set("state", $stateToken);
-
-        $user = ModelFactory::createAxysAccount();
+        $axysAccount = ModelFactory::createAxysAccount();
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
+        $openIDConnectProviderService = $this->buildOIDCProviderService($axysAccount);
 
+        $request = self::_buildCallbackRequest();
         $controller = new OpenIDConnectController();
-        $config = new Config(["axys" => ["client_secret" => "secret_key"]]);
-
-        $tokenSet = $this->createMock(TokenSetInterface::class);
-        $tokenSet->method("claims")->willReturn(["sub" => $user->getId(), "exp" => 1682278410]);
-        $openIDConnectProviderService = $this->createMock(OpenIDConnectProviderService::class);
-        $openIDConnectProviderService->method("getTokenSet")->willReturn($tokenSet);
-        $templateService = $this->createMock(TemplateService::class);
 
         // when
         $response = $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            config: $config,
+            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
             openIDConnectProviderService: $openIDConnectProviderService,
-            templateService: $templateService,
+            templateService: $this->createMock(TemplateService::class),
         );
 
         // then
@@ -97,7 +88,7 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals(1682278410, $userUidCookie->getExpiresTime());
         $session = SessionQuery::create()
             ->filterBySite($site)
-            ->filterByAxysAccount($user)
+            ->filterByAxysAccount($axysAccount)
             ->findOneByToken($userUidCookie->getValue());
         $this->assertNotNull($session);
         $this->assertEquals(new DateTime("@1682278410"), $session->getExpiresAt());
@@ -110,28 +101,19 @@ class OpenIDConnectControllerTest extends TestCase
     public function testCallbackWithReturnUrl()
     {
         // given
-        $request = Request::create("https://www.biblys.fr/openid/callback");
-        $stateToken = JWT::encode(["return_url" => "/my-account"], "secret_key", "HS256");
-        $request->query->set("code", "authorization_code");
-        $request->query->set("state", $stateToken);
-
-        $user = ModelFactory::createAxysAccount();
+        $axysAccount = ModelFactory::createAxysAccount();
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
+        $openIDConnectProviderService = $this->buildOIDCProviderService($axysAccount);
 
+        $request = self::_buildCallbackRequest(returnUrl: "/my-account");
         $controller = new OpenIDConnectController();
-        $config = new Config(["axys" => ["client_secret" => "secret_key"]]);
-
-        $tokenSet = $this->createMock(TokenSetInterface::class);
-        $tokenSet->method("claims")->willReturn(["sub" => $user->getId(), "exp" => 1682278410]);
-        $openIDConnectProviderService = $this->createMock(OpenIDConnectProviderService::class);
-        $openIDConnectProviderService->method("getTokenSet")->willReturn($tokenSet);
 
         // when
         $response = $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            config: $config,
+            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             templateService: $this->createMock(TemplateService::class),
         );
@@ -139,19 +121,6 @@ class OpenIDConnectControllerTest extends TestCase
         // then
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals("/my-account", $response->getTargetUrl());
-
-        $cookies = $response->headers->getCookies();
-        $this->assertCount(1, $cookies);
-
-        $userUidCookie = $cookies[0];
-        $this->assertEquals("user_uid", $userUidCookie->getName());
-        $this->assertEquals(1682278410, $userUidCookie->getExpiresTime());
-        $session = SessionQuery::create()
-            ->filterBySite($site)
-            ->filterByAxysAccount($user)
-            ->findOneByToken($userUidCookie->getValue());
-        $this->assertNotNull($session);
-        $this->assertEquals(new DateTime("@1682278410"), $session->getExpiresAt());
     }
 
     /**
@@ -162,9 +131,9 @@ class OpenIDConnectControllerTest extends TestCase
     {
         // given
         $request = Request::create("https://www.biblys.fr/openid/callback?error=access_denied");
+
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $config = new Config(["axys" => ["client_secret" => "secret_key"]]);
         $openIDConnectProviderService = $this->createMock(OpenIDConnectProviderService::class);
         $expectedResponse = new Response("access_denied");
         $templateService = $this->createMock(TemplateService::class);
@@ -181,12 +150,38 @@ class OpenIDConnectControllerTest extends TestCase
         $returnedResponse = $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            config: $config,
+            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             templateService: $templateService
         );
 
         // then
         $this->assertEquals($expectedResponse, $returnedResponse);
+    }
+
+    /**
+     * @param string $returnUrl
+     * @return Request
+     */
+    private static function _buildCallbackRequest(string $returnUrl = ""): Request
+    {
+        $request = Request::create("https://www.biblys.fr/openid/callback");
+        $stateToken = JWT::encode(["return_url" => $returnUrl], "secret_key", "HS256");
+        $request->query->set("code", "authorization_code");
+        $request->query->set("state", $stateToken);
+        return $request;
+    }
+
+    /**
+     * @param AxysAccount $axysAccount
+     * @return OpenIDConnectProviderService
+     */
+    private function buildOIDCProviderService(AxysAccount $axysAccount): OpenIDConnectProviderService
+    {
+        $tokenSet = $this->createMock(TokenSetInterface::class);
+        $tokenSet->method("claims")->willReturn(["sub" => $axysAccount->getId(), "exp" => 1682278410]);
+        $openIDConnectProviderService = $this->createMock(OpenIDConnectProviderService::class);
+        $openIDConnectProviderService->method("getTokenSet")->willReturn($tokenSet);
+        return $openIDConnectProviderService;
     }
 }
