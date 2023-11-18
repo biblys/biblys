@@ -347,6 +347,37 @@ class CurrentUser
     }
 
     /**
+     * @throws AccessDeniedHttpException
+     * @throws PropelException
+     */
+    public function authPublisher(Publisher $publisher = null): void
+    {
+        $this->authUser();
+
+        if ($publisher !== null && $this->hasRightForPublisher($publisher)) {
+            return;
+        }
+
+        if ($publisher === null && $this->hasPublisherRight()) {
+            return;
+        }
+
+        if ($this->isAdmin()) {
+            return;
+        }
+
+        if ($publisher !== null) {
+            throw new AccessDeniedHttpException(
+                "Vous n'avez pas le droit de gérer l'éditeur {$publisher->getName()}."
+            );
+        }
+
+        throw new AccessDeniedHttpException(
+            "Vous n'avez pas le droit de gérer une maison d'édition."
+        );
+    }
+
+    /**
      * @throws PropelException
      */
     public function transfertVisitorCartToUser(?string $visitorToken): void

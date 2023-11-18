@@ -357,11 +357,13 @@ class ArticleController extends Controller
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
     public function deleteAction(
         Request $request,
         UrlGenerator $urlGenerator,
         CurrentSite $currentSite,
+        CurrentUser $currentUser,
         int $id
     ): Response
     {
@@ -370,7 +372,7 @@ class ArticleController extends Controller
             throw new NotFoundException("L'article $id n'existe pas.");
         }
 
-        self::authPublisher($request, $article->getPublisher());
+        $currentUser->authPublisher($article->getPublisher());
 
         $error = null;
         if ($request->getMethod() == 'POST') {

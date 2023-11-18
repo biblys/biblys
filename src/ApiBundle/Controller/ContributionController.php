@@ -5,8 +5,8 @@ namespace ApiBundle\Controller;
 use Biblys\Contributor\Contributor;
 use Biblys\Contributor\Job;
 use Biblys\Contributor\UnknownJobException;
+use Biblys\Service\CurrentUser;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use Model\ArticleQuery;
 use Model\PublisherQuery;
 use Model\Role;
@@ -19,18 +19,17 @@ class ContributionController extends Controller
 {
     /**
      * @route GET /api/admin/articles/{articleId}/contributions
-     * @throws AuthException
      * @throws PropelException
      * @throws UnknownJobException
      */
-    public function index(Request $request, $articleId): JsonResponse
+    public function index(CurrentUser $currentUser, $articleId): JsonResponse
     {
         $article = ArticleQuery::create()->findPk($articleId);
         $articlePublisher = PublisherQuery::create()->findPk($article->getPublisherId());
+
+        $currentUser->authPublisher($articlePublisher);
+
         $contributions = $article->getRolesJoinPeople();
-
-        self::authPublisher($request, $articlePublisher);
-
         $contributors = array_map(function(Role $contribution) {
             $contributor = new Contributor(
                 $contribution->getPeople(),
@@ -58,15 +57,14 @@ class ContributionController extends Controller
 
     /**
      * @route POST /api/admin/articles/{articleId}/contributions
-     * @throws AuthException
      * @throws PropelException
      * @throws UnknownJobException
      */
-    public function create(Request $request, int $articleId): JsonResponse
+    public function create(Request $request, CurrentUser $currentUser, int $articleId): JsonResponse
     {
         $article = ArticleQuery::create()->findPk($articleId);
         $articlePublisher = PublisherQuery::create()->findPk($article->getPublisherId());
-        self::authPublisher($request, $articlePublisher);
+        $currentUser->authPublisher($articlePublisher);
 
         $encodedContent = $request->getContent();
         $params = json_decode($encodedContent, true);
@@ -102,9 +100,8 @@ class ContributionController extends Controller
     /**
      * @route PUT /api/admin/articles/{articleId}/contributions/{id}
      * @throws PropelException
-     * @throws AuthException
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function update(Request $request, CurrentUser $currentUser, int $id): JsonResponse
     {
         $encodedContent = $request->getContent();
         $params = json_decode($encodedContent, true);
@@ -113,7 +110,7 @@ class ContributionController extends Controller
         $contribution = RoleQuery::create()->findPk($id);
 
         $articlePublisher = PublisherQuery::create()->findPk($contribution->getArticle()->getPublisherId());
-        self::authPublisher($request, $articlePublisher);
+        $currentUser->authPublisher($articlePublisher);
 
         $contribution->setJobId($jobId);
         $contribution->save();
@@ -125,14 +122,13 @@ class ContributionController extends Controller
     /**
      * @route DELETE /api/admin/articles/{articleId}/contributions/{id}
      * @throws PropelException
-     * @throws AuthException
      */
-    public function delete(Request $request, int $id): JsonResponse
+    public function delete(CurrentUser $currentUser, int $id): JsonResponse
     {
         $contribution = RoleQuery::create()->findPk($id);
 
         $articlePublisher = PublisherQuery::create()->findPk($contribution->getArticle()->getPublisherId());
-        self::authPublisher($request, $articlePublisher);
+        $currentUser->authPublisher($articlePublisher);
 
         $contribution->delete();
 

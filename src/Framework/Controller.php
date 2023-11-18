@@ -184,6 +184,7 @@ class Controller
      * @return CurrentUser
      * @throws PropelException
      * @throws Exception
+     * @deprecated Controller::authPublisher is deprecated. Use CurrentService->authPublisher instead.
      */
     protected static function authPublisher(Request $request, ?Publisher $publisher): CurrentUser
     {

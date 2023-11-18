@@ -2,11 +2,12 @@
 
 namespace ApiBundle\Controller;
 
+use Biblys\Service\CurrentUser;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Exception;
-use Framework\Exception\AuthException;
+use Mockery;
 use Model\Role;
 use Model\RoleQuery;
 use PHPUnit\Framework\TestCase;
@@ -30,11 +31,12 @@ class ContributionControllerTest extends TestCase
         $contribution->setPeopleId($person->get("id"));
         $contribution->setJobId(1);
         $contribution->save();
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authPublisher")->once()->andReturn(true);
         $controller = new ContributionController();
 
         // when
-        $response = $controller->index($request, $article->get("id"));
+        $response = $controller->index($currentUser, $article->get("id"));
 
         // then
         $this->assertEquals(
@@ -71,33 +73,8 @@ class ContributionControllerTest extends TestCase
         );
     }
 
-
     /**
      * @throws PropelException
-     * @throws Exception
-     */
-    public function testIndexActionAsAPublisher()
-    {
-        // given
-        $publisher = ModelFactory::createPublisher();
-        $article = EntityFactory::createArticle(["publisher_id" => $publisher->getId()]);
-        $request = RequestFactory::createAuthRequestForPublisherUser($publisher);
-        $controller = new ContributionController();
-
-        // when
-        $response = $controller->index($request, $article->get("id"));
-
-        // then
-        $this->assertEquals(
-            200,
-            $response->getStatusCode(),
-            "it should allow authorized publisher to read contributions"
-        );
-    }
-
-    /**
-     * @throws PropelException
-     * @throws AuthException
      * @throws Exception
      */
     public function testCreateAction()
@@ -110,10 +87,12 @@ class ContributionControllerTest extends TestCase
             "job_id" => 14,
         ]);
         $request = RequestFactory::createAuthRequestForAdminUser($content);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authPublisher")->once()->andReturn(true);
         $controller = new ContributionController();
 
         // when
-        $response = $controller->create($request, $article->get("id"));
+        $response = $controller->create($request, $currentUser, $article->get("id"));
 
         // then
         $this->assertEquals(
@@ -162,43 +141,12 @@ class ContributionControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws AuthException
-     * @throws Exception
-     */
-    public function testCreateActionAsPublisher()
-    {
-        // given
-        $publisher = ModelFactory::createPublisher();
-        $article = EntityFactory::createArticle(["publisher_id" => $publisher->getId()]);
-        $person = EntityFactory::createPeople(["people_first_name" => "Lili", "people_last_name" => "Raton"]);
-        $content = json_encode([
-            "people_id" => $person->get("id"),
-            "job_id" => 14,
-        ]);
-        $request = RequestFactory::createAuthRequestForPublisherUser($publisher, $content);
-        $controller = new ContributionController();
-
-        // when
-        $response = $controller->create($request, $article->get("id"));
-
-        // then
-        $this->assertEquals(
-            200,
-            $response->getStatusCode(),
-            "it should respond with http 200"
-        );
-    }
-
-    /**
-     * @throws PropelException
-     * @throws AuthException
      * @throws Exception
      */
     public function testUpdateAction()
     {
         // given
         $article = EntityFactory::createArticle();
-        $people = ModelFactory::createPeople();
         $content = '{"job_id":"2"}';
         $request = RequestFactory::createAuthRequestForAdminUser($content);
         $contribution = new Role();
@@ -206,10 +154,12 @@ class ContributionControllerTest extends TestCase
         $contribution->setPeople(ModelFactory::createPeople());
         $contribution->setJobId(1);
         $contribution->save();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authPublisher")->once()->andReturn(true);
         $controller = new ContributionController();
 
         // when
-        $response = $controller->update($request, $contribution->getId());
+        $response = $controller->update($request, $currentUser, $contribution->getId());
 
         // then
         $this->assertEquals(
@@ -232,53 +182,23 @@ class ContributionControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws AuthException
-     * @throws Exception
-     */
-    public function testUpdateActionAsPublisher()
-    {
-        // given
-        $publisher = ModelFactory::createPublisher();
-        $article = EntityFactory::createArticle(["publisher_id" => $publisher->getId()]);
-        $content = '{"job_id":"2"}';
-        $request = RequestFactory::createAuthRequestForPublisherUser($publisher, $content);
-        $contribution = new Role();
-        $contribution->setArticleId($article->get("id"));
-        $contribution->setPeople(ModelFactory::createPeople());
-        $contribution->setJobId(1);
-        $contribution->save();
-        $controller = new ContributionController();
-
-        // when
-        $response = $controller->update($request, $contribution->getId());
-
-        // then
-        $this->assertEquals(
-            200,
-            $response->getStatusCode(),
-            "it should respond with http 200"
-        );
-    }
-
-    /**
-     * @throws PropelException
-     * @throws AuthException
      * @throws Exception
      */
     public function testDeleteAction()
     {
         // given
         $article = EntityFactory::createArticle();
-        $request = RequestFactory::createAuthRequestForAdminUser();
         $contribution = new Role();
         $contribution->setArticleId($article->get("id"));
         $contribution->setPeople(ModelFactory::createPeople());
         $contribution->setJobId(1);
         $contribution->save();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authPublisher")->once()->andReturn(true);
         $controller = new ContributionController();
 
         // when
-        $response = $controller->delete($request, $contribution->getId());
+        $response = $controller->delete($currentUser, $contribution->getId());
 
         // then
         $this->assertEquals(
@@ -295,35 +215,6 @@ class ContributionControllerTest extends TestCase
             "{\"authors\":\"Herv\u00e9 LE TERRIER\"}",
             $response->getContent(),
             "it should response with authors"
-        );
-    }
-
-    /**
-     * @throws PropelException
-     * @throws AuthException
-     * @throws Exception
-     */
-    public function testDeleteActionAsPublisher()
-    {
-        // given
-        $publisher = ModelFactory::createPublisher();
-        $article = EntityFactory::createArticle(["publisher_id" => $publisher->getId()]);
-        $request = RequestFactory::createAuthRequestForPublisherUser($publisher);
-        $contribution = new Role();
-        $contribution->setArticleId($article->get("id"));
-        $contribution->setPeople(ModelFactory::createPeople());
-        $contribution->setJobId(1);
-        $contribution->save();
-        $controller = new ContributionController();
-
-        // when
-        $response = $controller->delete($request, $contribution->getId());
-
-        // then
-        $this->assertEquals(
-            200,
-            $response->getStatusCode(),
-            "it should respond with http 200"
         );
     }
 }

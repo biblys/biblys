@@ -39,9 +39,7 @@ return function (
     $pm = new PublisherManager();
     $cm = new CollectionManager();
 
-    if (!$currentUser->isAdmin() && !$currentUser->hasPublisherRight()) {
-        throw new AccessDeniedHttpException("Vous n'avez pas le droit d'accéder à cette page.");
-    }
+    $currentUser->authPublisher();
 
     $publisherId = $currentUser->getCurrentRight()?->getPublisherId();
     $publisher = PublisherQuery::create()->findPk($publisherId);

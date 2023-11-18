@@ -272,12 +272,18 @@ class ArticleControllerTest extends TestCase
         $currentSite = $this->createMock(CurrentSite::class);
         $article = ModelFactory::createArticle();
         $controller = new ArticleController();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser
+            ->shouldReceive("authPublisher")
+            ->with($article->getPublisher())
+            ->andReturn();
 
         // when
         $response = $controller->deleteAction(
             $request,
             $urlGenerator,
             $currentSite,
+            $currentUser,
             $article->getId()
         );
 
@@ -304,12 +310,24 @@ class ArticleControllerTest extends TestCase
         $article = ModelFactory::createArticle();
         $controller = new ArticleController();
         ModelFactory::createStockItem(article: $article);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser
+            ->shouldReceive("authPublisher")
+            ->with($article->getPublisher())
+            ->andReturn();
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->andReturn(new Response(""));
+
 
         // when
         $response = $controller->deleteAction(
             $request,
             $urlGenerator,
             $currentSite,
+            $currentUser,
+            $templateService,
             $article->getId()
         );
 

@@ -740,6 +740,173 @@ class CurrentUserTest extends TestCase
     }
 
     /**
+     * #authPublisher (for specific publisher)
+     */
+
+    /**
+     * @throws Exception
+     */
+    public function testAuthPublisherWithSpecificPublisherForAnonymousUser()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $currentUser = new CurrentUser(null, "token");
+
+        // then
+        $this->expectException(UnauthorizedHttpException::class);
+        $this->expectExceptionMessage("Identification requise.");
+
+        // when
+        $currentUser->authPublisher($publisher);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAuthPublisherWithSpecificPublisherForAuthentifiedUser()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher(name: "STOP");
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createUser(site: $site);
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $config = new Config(["site" => $site->getId()]);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // then
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->expectExceptionMessage("Vous n'avez pas le droit de gérer l'éditeur STOP");
+
+        // when
+        $currentUser->authPublisher($publisher);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAuthPublisherWithSpecificPublisherForPublisherUser()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createPublisherUser(site: $site, publisher: $publisher);
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $config = new Config(["site" => $site->getId()]);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // then
+        $this->expectNotToPerformAssertions();
+
+        // when
+        $currentUser->authPublisher($publisher);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAuthPublisherWithSpecificPublisherForAdmin()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createAdminUser(site: $site);
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $config = new Config(["site" => $site->getId()]);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // then
+        $this->expectNotToPerformAssertions();
+
+        // when
+        $currentUser->authPublisher($publisher);
+    }
+
+    /**
+     * #authPublisher (for any publisher)
+     */
+
+    /**
+     * @throws Exception
+     */
+    public function testAuthPublisherForAnonymousUser()
+    {
+        // given
+        $currentUser = new CurrentUser(null, "token");
+
+        // then
+        $this->expectException(UnauthorizedHttpException::class);
+        $this->expectExceptionMessage("Identification requise.");
+
+        // when
+        $currentUser->authPublisher();
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAuthPublisherForAuthentifiedUser()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createUser(site: $site);
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $config = new Config(["site" => $site->getId()]);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // then
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->expectExceptionMessage("Vous n'avez pas le droit de gérer une maison d'édition.");
+
+        // when
+        $currentUser->authPublisher();
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAuthPublisherForPublisherUser()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createPublisherUser(site: $site, publisher: $publisher);
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $config = new Config(["site" => $site->getId()]);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // then
+        $this->expectNotToPerformAssertions();
+
+        // when
+        $currentUser->authPublisher();
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAuthPublisherForAdmin()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createAdminUser(site: $site);
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $config = new Config(["site" => $site->getId()]);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // then
+        $this->expectNotToPerformAssertions();
+
+        // when
+        $currentUser->authPublisher();
+    }
+
+    /**
      * @throws PropelException
      */
     public function testHasArticleInCartWithoutCart()
