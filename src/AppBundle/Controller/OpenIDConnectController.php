@@ -18,6 +18,7 @@ use Firebase\JWT\Key;
 use Framework\Controller;
 use Http\Discovery\Psr17Factory;
 use JsonException;
+use Model\AuthenticationMethod;
 use Model\AuthenticationMethodQuery;
 use Model\Session;
 use Model\User;
@@ -78,7 +79,7 @@ class OpenIDConnectController extends Controller
 
         try {
             $oidcTokens = OpenIDConnectController::_getOidcTokensFromIdentityProvider($request, $openIDConnectProviderService);
-            [$externalId, $sessionExpiresAt] = OpenIDConnectController::_getClaimsFromOidcTokens($oidcTokens);
+            [$externalId, $email, $sessionExpiresAt] = OpenIDConnectController::_getClaimsFromOidcTokens($oidcTokens);
             $returnUrl = OpenIDConnectController::_getReturnUrlFromState($request, $config);
 
             $authenticationMethod = AuthenticationMethodQuery::create()
@@ -86,7 +87,12 @@ class OpenIDConnectController extends Controller
                 ->filterByIdentityProvider("axys")
                 ->findOneByExternalId($externalId);
             if ($authenticationMethod === null) {
-                throw new Exception("Authentication method not found for given external id");
+                $authenticationMethod = self::_importUserFromAxys(
+                    $currentSite,
+                    $email,
+                    $externalId,
+                    $oidcTokens
+                );
             }
 
             // Save user last login date
@@ -172,4 +178,29 @@ class OpenIDConnectController extends Controller
             ->withExpires($sessionExpiresAt);
     }
 
+    /**
+     * @throws PropelException
+     */
+    private static function _importUserFromAxys(
+        CurrentSite       $currentSite,
+        string            $email,
+        string            $externalId,
+        TokenSetInterface $oidcTokens
+    ): AuthenticationMethod
+    {
+        $user = new User();
+        $user->setSite($currentSite->getSite());
+        $user->setEmail($email);
+        $user->save();
+
+        $authenticationMethod = new AuthenticationMethod();
+        $authenticationMethod->setSite($currentSite->getSite());
+        $authenticationMethod->setUser($user);
+        $authenticationMethod->setIdentityProvider("axys");
+        $authenticationMethod->setExternalId($externalId);
+        $authenticationMethod->setAccessToken($oidcTokens->getAccessToken());
+        $authenticationMethod->setIdToken($oidcTokens->getIdToken());
+        $authenticationMethod->save();
+        return $authenticationMethod;
+    }
 }

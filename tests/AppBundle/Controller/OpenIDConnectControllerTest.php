@@ -17,8 +17,10 @@ use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Token\TokenSetInterface;
 use Firebase\JWT\JWT;
 use JsonException;
+use Model\AuthenticationMethodQuery;
 use Mockery;
 use Model\SessionQuery;
+use Model\UserQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -178,6 +180,52 @@ class OpenIDConnectControllerTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
+    public function testCallbackWithUserImport()
+    {
+        // given
+        $identityProvider = "axys";
+        $externalId = "AXYS9876";
+        $userEmail = "user-to-import@biblys.fr";
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $openIDConnectProviderService = $this->_buildOIDCProviderService(
+            externalId: $externalId,
+            email: $userEmail,
+        );
+
+        $request = self::_buildCallbackRequest();
+        $controller = new OpenIDConnectController();
+
+        // when
+        $response = $controller->callback(
+            request: $request,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
+            openIDConnectProviderService: $openIDConnectProviderService,
+            templateService: $this->createMock(TemplateService::class),
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+
+        $user = UserQuery::create()
+            ->filterBySite($site)
+            ->findOneByEmail($userEmail);
+        $this->assertNotNull($user);
+        $authenticationMethod = AuthenticationMethodQuery::create()
+            ->filterBySite($site)
+            ->filterByUser($user)
+            ->filterByIdentityProvider($identityProvider)
+            ->filterByExternalId($externalId)
+            ->findOneByExternalId($externalId);
+        $this->assertNotNull($authenticationMethod);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
     public function testCallbackWithAccessDeniedError()
     {
         // given
@@ -277,10 +325,15 @@ class OpenIDConnectControllerTest extends TestCase
         return $request;
     }
 
-    private function _buildOIDCProviderService(string $externalId): OpenIDConnectProviderService
+    private function _buildOIDCProviderService(
+        string $externalId,
+        string $email = "oidc-user@biblys.fr",
+    ): OpenIDConnectProviderService
     {
         $tokenSet = $this->createMock(TokenSetInterface::class);
-        $tokenSet->method("claims")->willReturn(["sub" => $externalId, "exp" => 1682278410]);
+        $tokenSet->method("claims")->willReturn(
+            ["sub" => $externalId, "email" => $email, "exp" => 1682278410]
+    );
         $openIDConnectProviderService = $this->createMock(OpenIDConnectProviderService::class);
         $openIDConnectProviderService->method("getTokenSet")->willReturn($tokenSet);
         return $openIDConnectProviderService;
