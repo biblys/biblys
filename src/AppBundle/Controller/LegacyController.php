@@ -118,7 +118,7 @@ class LegacyController extends Controller
             $request->attributes->set("page_title", $GLOBALS["_PAGE_TITLE"]);
         }
 
-        return $this->render("AppBundle:Legacy:default.html.twig", [
+        return $templateService->renderResponse("AppBundle:Legacy:default.html.twig", [
             "title" => $request->attributes->get("page_title"),
             "content" => $response->getContent(),
         ]);

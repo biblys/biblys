@@ -39,6 +39,7 @@ class CFRewardControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
 
         // when
         $response = $controller->newAction(
@@ -73,6 +74,7 @@ class CFRewardControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
 
         // then
         $this->expectException(BadRequestException::class);

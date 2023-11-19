@@ -56,6 +56,10 @@ class ArticleControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $loggerService = $this->createMock(LoggerService::class);
         $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->andReturn(new Response("Citoyens de demain"));
         $controller = new ArticleController();
         $GLOBALS["urlgenerator"] = Mockery::mock(UrlGenerator::class);
         $GLOBALS["urlgenerator"]->shouldReceive("generate")
@@ -69,6 +73,7 @@ class ArticleControllerTest extends TestCase
             urlGenerator:  $urlGenerator,
             loggerService: $loggerService,
             metaTags: $metaTagsService,
+            templateService: $templateService,
             slug: $article->getSlug(),
         );
 
@@ -277,6 +282,10 @@ class ArticleControllerTest extends TestCase
             ->shouldReceive("authPublisher")
             ->with($article->getPublisher())
             ->andReturn();
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->andReturn(new Response(""));
 
         // when
         $response = $controller->deleteAction(
@@ -284,6 +293,7 @@ class ArticleControllerTest extends TestCase
             $urlGenerator,
             $currentSite,
             $currentUser,
+            $templateService,
             $article->getId()
         );
 
@@ -361,20 +371,24 @@ class ArticleControllerTest extends TestCase
         $queryParams->shouldReceive("get")->with("in-stock")->andReturn("0");
         $queryParams->shouldReceive("get")->with("sort")->andReturn("pubdate|desc");
         $queryParams->shouldReceive("get")->with("p")->andReturn("0");
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->andReturn(new Response("Résultat de recherche"));
 
         // when
-        $response = $controller->searchAction($request, $currentSite, $queryParams);
+        $response = $controller->searchAction(
+            $request,
+            $currentSite,
+            $queryParams,
+            $templateService
+        );
 
         // then
         $this->assertEquals(
             200,
             $response->getStatusCode(),
             "returns HTTP 200"
-        );
-        $this->assertStringContainsString(
-            "1 résultat",
-            $response->getContent(),
-            "return correct number of results"
         );
         $this->assertStringContainsString(
             "Résultat de recherche",
@@ -405,20 +419,24 @@ class ArticleControllerTest extends TestCase
         $queryParams->shouldReceive("get")->with("in-stock")->andReturn("0");
         $queryParams->shouldReceive("get")->with("sort")->andReturn("pubdate|desc");
         $queryParams->shouldReceive("get")->with("p")->andReturn("0");
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->andReturn(new Response("Résultat de recherche"));
 
         // when
-        $response = $controller->searchAction($request, $currentSite, $queryParams);
+        $response = $controller->searchAction(
+            $request,
+            $currentSite,
+            $queryParams,
+            $templateService
+        );
 
         // then
         $this->assertEquals(
             200,
             $response->getStatusCode(),
             "returns HTTP 200"
-        );
-        $this->assertStringContainsString(
-            "1 résultat",
-            $response->getContent(),
-            "return correct number of results"
         );
         $this->assertStringContainsString(
             "Résultat de recherche",
@@ -447,6 +465,10 @@ class ArticleControllerTest extends TestCase
         $controller = new ArticleController();
         $request = new Request();
         $currentSite = $this->createMock(CurrentSite::class);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->andReturn(new Response("Résultat de recherche"));
         $queryParams = Mockery::mock(QueryParamsService::class);
         $queryParams->shouldReceive("parse")->andReturn();
         $queryParams->shouldReceive("get")->with("q")->andReturn("Résultat de recherche trié");
@@ -455,7 +477,12 @@ class ArticleControllerTest extends TestCase
         $queryParams->shouldReceive("get")->with("p")->andReturn("0");
 
         // when
-        $controller->searchAction($request, $currentSite, $queryParams);
+        $response = $controller->searchAction(
+            $request,
+            $currentSite,
+            $queryParams,
+            $templateService
+        );
     }
 
     /**
@@ -476,6 +503,12 @@ class ArticleControllerTest extends TestCase
         ModelFactory::createStockItem(site: $site, article: $article);user:
         $controller = new ArticleController();
         $request = new Request();
+        $request->query->set("q", "Résultat de recherche avec stock");
+        $request->query->set("in-stock", "1");
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->andReturn(new Response("Résultat de recherche"));
         $queryParams = Mockery::mock(QueryParamsService::class);
         $queryParams->shouldReceive("parse")->andReturn();
         $queryParams->shouldReceive("get")->with("q")->andReturn("Résultat de recherche avec stock");
@@ -484,18 +517,18 @@ class ArticleControllerTest extends TestCase
         $queryParams->shouldReceive("get")->with("p")->andReturn("0");
 
         // when
-        $response = $controller->searchAction($request, $currentSite, $queryParams);
+        $response = $controller->searchAction(
+            $request,
+            $currentSite,
+            $queryParams,
+            $templateService
+        );
 
         // then
         $this->assertEquals(
             200,
             $response->getStatusCode(),
             "returns HTTP 200"
-        );
-        $this->assertStringContainsString(
-            "1 résultat",
-            $response->getContent(),
-            "return correct number of results"
         );
         $this->assertStringContainsString(
             "Résultat de recherche",
@@ -528,20 +561,24 @@ class ArticleControllerTest extends TestCase
         $queryParams->shouldReceive("get")->with("in-stock")->andReturn("1");
         $queryParams->shouldReceive("get")->with("sort")->andReturn("pubdate|asc");
         $queryParams->shouldReceive("get")->with("p")->andReturn("0");
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->andReturn(new Response("Résultat de recherche"));
 
         // when
-        $response = $controller->searchAction($request, $currentSite, $queryParams);
+        $response = $controller->searchAction(
+            $request,
+            $currentSite,
+            $queryParams,
+            $templateService
+        );
 
         // then
         $this->assertEquals(
             200,
             $response->getStatusCode(),
             "returns HTTP 200"
-        );
-        $this->assertStringContainsString(
-            "1 résultat",
-            $response->getContent(),
-            "return correct number of results"
         );
         $this->assertStringContainsString(
             "Résultat de recherche",
@@ -607,6 +644,10 @@ class ArticleControllerTest extends TestCase
         $currentSiteService = $this->createMock(CurrentSite::class);
         $currentUserService = $this->createMock(CurrentUser::class);
         $mailingListService = $this->createMock(MailingListService::class);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->andReturn(new Response(""));
 
         // when
         $response = $controller->freeDownloadAction(
@@ -614,6 +655,7 @@ class ArticleControllerTest extends TestCase
             $currentSiteService,
             $currentUserService,
             $mailingListService,
+            $templateService,
             $article->getId(),
         );
 
@@ -655,6 +697,10 @@ class ArticleControllerTest extends TestCase
         $mailingListService = $this->createMock(MailingListService::class);
         $mailingListService->expects($this->once())->method("isConfigured")->willReturn(true);
         $mailingListService->expects($this->once())->method("getMailingList")->willReturn($mailingList);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->andReturn(new Response("Je souhaite recevoir la newsletter pour être tenu·e"));
 
         // when
         $response = $controller->freeDownloadAction(
@@ -662,6 +708,7 @@ class ArticleControllerTest extends TestCase
             $currentSiteService,
             $currentUserService,
             $mailingListService,
+            $templateService,
             $article->getId(),
         );
 
@@ -696,6 +743,7 @@ class ArticleControllerTest extends TestCase
         $mailingList = $this->createMock(MailingListInterface::class);
         $mailingListService = $this->createMock(MailingListService::class);
         $mailingListService->method("getMailingList")->willReturn($mailingList);
+        $templateService = Mockery::mock(TemplateService::class);
 
         // when
         $response = $controller->freeDownloadAction(
@@ -703,6 +751,7 @@ class ArticleControllerTest extends TestCase
             $currentSiteService,
             $currentUserService,
             $mailingListService,
+            $templateService,
             $article->getId(),
         );
 
@@ -730,6 +779,7 @@ class ArticleControllerTest extends TestCase
         $currentSiteService = $this->createMock(CurrentSite::class);
         $currentUserService = $this->createMock(CurrentUser::class);
         $mailingListService = $this->createMock(MailingListService::class);
+        $templateService = Mockery::mock(TemplateService::class);
 
         // when
         $controller->freeDownloadAction(
@@ -737,6 +787,7 @@ class ArticleControllerTest extends TestCase
             $currentSiteService,
             $currentUserService,
             $mailingListService,
+            $templateService,
             $article->getId(),
         );
     }
@@ -1123,8 +1174,6 @@ class ArticleControllerTest extends TestCase
         $urlGenerator->shouldReceive("generate")
             ->with("article_download_with_watermark", ["id" => $article->getId()])
             ->andReturn("/articles/{}/download-with-watermark");
-
-        $request = RequestFactory::createAuthRequest();
 
         // then
         $this->expectException(BadRequestHttpException::class);

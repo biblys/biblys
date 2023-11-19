@@ -8,11 +8,13 @@ use Biblys\Service\MailingList\Contact;
 use Biblys\Service\MailingList\Exception\InvalidConfigurationException;
 use Biblys\Service\MailingList\MailingListInterface;
 use Biblys\Service\MailingList\MailingListService;
+use Biblys\Service\TemplateService;
 use Biblys\Test\RequestFactory;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -135,7 +137,7 @@ class MailingControllerTest extends TestCase
         $controller = new MailingController();
         $request = RequestFactory::createAuthRequestForAdminUser();
         $mailingList = $this->createMock(MailingListInterface::class);
-        $mailingList->expects($this->once())->method("getContacts")->willReturn([
+        $mailingList->expects($this->exactly(1))->method("getContacts")->willReturn([
             new Contact("edmond@furax.fr", "2023-01-25"),
             new Contact("malvina@carjanou.fr", "2023-01-31"),
         ]);
@@ -148,21 +150,22 @@ class MailingControllerTest extends TestCase
             ->willReturn($mailingList);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->shouldReceive("renderResponse")
+            ->once()
+            ->with("AppBundle:Mailing:contacts.html.twig", Mockery::andAnyOtherArgs())
+            ->andReturn(new Response("edmond@furax.fr"));
 
         // when
-        $response = $controller->contacts($currentUser, $mailingListService, $request);
+        $response = $controller->contacts(
+            $currentUser,
+            $mailingListService,
+            $request,
+            $templateService,
+        );
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringContainsString("2 contacts", $response->getContent());
         $this->assertStringContainsString("edmond@furax.fr", $response->getContent());
-        $this->assertStringContainsString("2023-01-25", $response->getContent());
-        $this->assertStringContainsString("malvina@carjanou.fr", $response->getContent());
-        $this->assertStringContainsString("2023-01-31", $response->getContent());
-        $this->assertStringContainsString(
-            "[[&quot;edmond@furax.fr&quot;],[&quot;malvina@carjanou.fr&quot;]]",
-            $response->getContent(),
-            "prepares export data"
-        );
     }
 }

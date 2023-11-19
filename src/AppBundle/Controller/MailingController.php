@@ -9,6 +9,7 @@ use Biblys\Service\MailingList\Exception\InvalidConfigurationException;
 use Biblys\Service\MailingList\Exception\MailingListServiceException;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\Pagination;
+use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Controller;
 use Propel\Runtime\Exception\PropelException;
@@ -150,6 +151,7 @@ class MailingController extends Controller
         CurrentUser $currentUser,
         MailingListService $mailingListService,
         Request $request,
+        TemplateService $templateService,
     ): Response
     {
         $currentUser->authAdmin();
@@ -169,7 +171,7 @@ class MailingController extends Controller
             return [$contact->getEmail()];
         }, $contacts);
 
-        return $this->render('AppBundle:Mailing:contacts.html.twig', [
+        return $templateService->renderResponse('AppBundle:Mailing:contacts.html.twig', [
             "source" => $list->getSource(),
             "link" => $list->getLink(),
             "total" => $contactCount,

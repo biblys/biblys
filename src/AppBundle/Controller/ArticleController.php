@@ -66,6 +66,7 @@ class ArticleController extends Controller
         UrlGenerator    $urlGenerator,
         LoggerService   $loggerService,
         MetaTagsService $metaTags,
+        TemplateService $templateService,
                         $slug
     ): RedirectResponse|Response
     {
@@ -138,7 +139,7 @@ class ArticleController extends Controller
         $articleModel = ArticleQuery::create()->findPk($article->get("id"));
         $metaTags->setTitle($articleModel->getTitle());
 
-        return $this->render("AppBundle:Article:show.html.twig", [
+        return $templateService->renderResponse("AppBundle:Article:show.html.twig", [
             "article" => $article,
             "articleModel" => $articleModel,
             "similarArticles" => $similarArticles,
@@ -149,13 +150,12 @@ class ArticleController extends Controller
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws PropelException
-     * @throws Exception
      */
     public function searchAction(
         Request $request,
         CurrentSite $currentSite,
         QueryParamsService $queryParamsService,
+        TemplateService $templateService,
     ): Response
     {
         $am = new ArticleManager();
@@ -250,7 +250,7 @@ class ArticleController extends Controller
             }
         }
 
-        return $this->render('AppBundle:Article:search.html.twig', [
+        return $templateService->renderResponse('AppBundle:Article:search.html.twig', [
             'articles' => $articles,
             'pages' => $pagination,
             'count' => $count,
@@ -273,6 +273,7 @@ class ArticleController extends Controller
         CurrentSite $currentSiteService,
         CurrentUser $currentUserService,
         MailingListService $mailingListService,
+        TemplateService $templateService,
         $id,
     ): RedirectResponse|Response
     {
@@ -344,7 +345,7 @@ class ArticleController extends Controller
             return new RedirectResponse("/pages/log_myebooks");
         }
 
-        return $this->render('AppBundle:Article:freeDownload.html.twig', [
+        return $templateService->renderResponse('AppBundle:Article:freeDownload.html.twig', [
             'article' => $article,
             'newsletter' => $newsletter,
             'newsletter_checked' => $newsletter_checked,
@@ -364,6 +365,7 @@ class ArticleController extends Controller
         UrlGenerator $urlGenerator,
         CurrentSite $currentSite,
         CurrentUser $currentUser,
+        TemplateService $templateService,
         int $id
     ): Response
     {
@@ -391,7 +393,7 @@ class ArticleController extends Controller
 
         $request->attributes->set("page_title", "Suppression de l'article {$article->getTitle()}");
 
-        return $this->render('AppBundle:Article:delete.html.twig', [
+        return $templateService->renderResponse('AppBundle:Article:delete.html.twig', [
             'article' => $article,
             'error' => $error,
         ]);

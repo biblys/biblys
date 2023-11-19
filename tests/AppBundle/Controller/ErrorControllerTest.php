@@ -6,6 +6,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
 use Biblys\Test\ModelFactory;
+use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Exception\AuthException;
 use Mockery;
@@ -14,6 +15,7 @@ use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
@@ -34,7 +36,6 @@ class ErrorControllerTest extends TestCase
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
-     * @throws PropelException
      */
     public function testHandlePageNotFound()
     {
@@ -45,6 +46,11 @@ class ErrorControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("publisher_filter")->andReturn(null);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->once()
+            ->andReturn(new Response("Page not found"));
         $config = Mockery::mock(Config::class);
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
         $session = Mockery::mock(Session::class);
@@ -57,6 +63,7 @@ class ErrorControllerTest extends TestCase
             $currentUrlService,
             $urlGenerator,
             $session,
+            $templateService,
             $exception
         );
 
@@ -90,6 +97,11 @@ class ErrorControllerTest extends TestCase
         $urlGenerator->shouldReceive("generate")
             ->with("article_show", ["slug" => "author/article_404"])
             ->andReturn("/a/author/article_404");
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->once()
+            ->andReturn(new Response("Page not found"));
         $config = Mockery::mock(Config::class);
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
         $session = Mockery::mock(Session::class);
@@ -102,6 +114,7 @@ class ErrorControllerTest extends TestCase
             $currentUrlService,
             $urlGenerator,
             $session,
+            $templateService,
             $exception
         );
 
@@ -140,6 +153,11 @@ class ErrorControllerTest extends TestCase
         $urlGenerator->shouldReceive("generate")
             ->with("people_show", ["slug" => "great-author"])
             ->andReturn("/p/great-author/");
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->once()
+            ->andReturn(new Response("Page not found"));
         $config = Mockery::mock(Config::class);
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
         $session = Mockery::mock(Session::class);
@@ -152,7 +170,7 @@ class ErrorControllerTest extends TestCase
             $currentUrlService,
             $urlGenerator,
             $session,
-            $exception
+            $templateService, $exception
         );
 
         // then
@@ -172,7 +190,6 @@ class ErrorControllerTest extends TestCase
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
-     * @throws PropelException
      */
     public function testHandlePageNotFoundAsJson()
     {
@@ -184,6 +201,7 @@ class ErrorControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("publisher_filter")->andReturn(null);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $templateService = Mockery::mock(TemplateService::class);
         $config = Mockery::mock(Config::class);
         $config->shouldReceive("get")->with("environment")->andReturn("prod");
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
@@ -197,6 +215,7 @@ class ErrorControllerTest extends TestCase
             $currentUrlService,
             $urlGenerator,
             $session,
+            $templateService,
             $exception
         );
 
@@ -217,7 +236,6 @@ class ErrorControllerTest extends TestCase
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
-     * @throws PropelException
      */
     public function testHandleBadRequest()
     {
@@ -225,6 +243,11 @@ class ErrorControllerTest extends TestCase
         $controller = new ErrorController();
         $request = new Request();
         $exception = new BadRequestHttpException("Bad request");
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->once()
+            ->andReturn(new Response("Requête invalide"));
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $config = Mockery::mock(Config::class);
@@ -240,6 +263,7 @@ class ErrorControllerTest extends TestCase
             $currentUrlService,
             $urlGenerator,
             $session,
+            $templateService,
             $exception
         );
 
@@ -250,7 +274,7 @@ class ErrorControllerTest extends TestCase
             "it should response with HTTP status 400"
         );
         $this->assertStringContainsString(
-            "Requête invalid",
+            "Requête invalide",
             $response->getContent(),
             "it should response with HTTP status 400"
         );
@@ -260,7 +284,6 @@ class ErrorControllerTest extends TestCase
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
-     * @throws PropelException
      */
     public function testHandleUnauthorized()
     {
@@ -275,6 +298,11 @@ class ErrorControllerTest extends TestCase
                 "return_url" => "/current",
             ])
             ->andReturn("/user/login?return_url=/current");
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->once()
+            ->andReturn(new Response("Erreur d'authentification"));
         $config = Mockery::mock(Config::class);
         $config->shouldReceive("environment")->andReturn("prod");
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
@@ -294,6 +322,7 @@ class ErrorControllerTest extends TestCase
             $currentUrlService,
             $urlGenerator,
             $session,
+            $templateService,
             $exception
         );
 
@@ -312,7 +341,6 @@ class ErrorControllerTest extends TestCase
     /**
      * @throws SyntaxError
      * @throws RuntimeError
-     * @throws PropelException
      * @throws LoaderError
      */
     public function testHandleAccessDenied()
@@ -323,6 +351,11 @@ class ErrorControllerTest extends TestCase
         $exception = new AccessDeniedHttpException("Access if forbidden for user.");
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->once()
+            ->andReturn(new Response("Accès refusé"));
         $config = Mockery::mock(Config::class);
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
         $session = Mockery::mock(Session::class);
@@ -335,6 +368,7 @@ class ErrorControllerTest extends TestCase
             $currentUrlService,
             $urlGenerator,
             $session,
+            $templateService,
             $exception
         );
 
@@ -342,17 +376,12 @@ class ErrorControllerTest extends TestCase
         $this->assertEquals(
             403,
             $response->getStatusCode(),
-            "it should response with HTTP status 403"
+            "responds with HTTP status 403"
         );
         $this->assertStringContainsString(
             "Accès refusé",
             $response->getContent(),
-            "it should return the error title"
-        );
-        $this->assertStringContainsString(
-            "Vous n'êtes pas autorisé à accéder à cette page.",
-            $response->getContent(),
-            "it should return the error message"
+            "returns the error title"
         );
     }
 
@@ -360,7 +389,6 @@ class ErrorControllerTest extends TestCase
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
-     * @throws PropelException
      */
     public function testHandleLegacyAuthException()
     {
@@ -370,6 +398,11 @@ class ErrorControllerTest extends TestCase
         $exception = new AuthException("Unauthorized");
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->once()
+            ->andReturn(new Response("Erreur d'authentification"));
         $urlGenerator->shouldReceive("generate")
             ->with("user_login", [
                 "return_url" => "/current",
@@ -395,6 +428,7 @@ class ErrorControllerTest extends TestCase
             $currentUrlService,
             $urlGenerator,
             $session,
+            $templateService,
             $exception
         );
 
@@ -414,7 +448,6 @@ class ErrorControllerTest extends TestCase
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
-     * @throws PropelException
      */
     public function testMethodNotAllowedAsJson()
     {
@@ -425,6 +458,7 @@ class ErrorControllerTest extends TestCase
         $exception = new MethodNotAllowedHttpException(["GET"], "Method PUT is not allowed");
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $templateService = Mockery::mock(TemplateService::class);
         $config = Mockery::mock(Config::class);
         $config->shouldReceive("get")->with("environment")->andReturn("prod");
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
@@ -438,6 +472,7 @@ class ErrorControllerTest extends TestCase
             $currentUrlService,
             $urlGenerator,
             $session,
+            $templateService,
             $exception
         );
 
@@ -463,7 +498,6 @@ class ErrorControllerTest extends TestCase
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
-     * @throws PropelException
      */
     public function testHandleConflictAsJson()
     {
@@ -474,6 +508,7 @@ class ErrorControllerTest extends TestCase
         $exception = new ConflictHttpException("Cannot add article to cart because it is unavailable.");
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $templateService = Mockery::mock(TemplateService::class);
         $config = Mockery::mock(Config::class);
         $config->shouldReceive("get")->with("environment")->andReturn("prod");
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
@@ -487,6 +522,7 @@ class ErrorControllerTest extends TestCase
             $currentUrlService,
             $urlGenerator,
             $session,
+            $templateService,
             $exception
         );
 
@@ -512,7 +548,6 @@ class ErrorControllerTest extends TestCase
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
-     * @throws PropelException
      */
     public function testHandleServerError()
     {
@@ -522,6 +557,11 @@ class ErrorControllerTest extends TestCase
         $exception = new Exception("An error occurred");
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->once()
+            ->andReturn(new Response("An error occurred"));
         $config = Mockery::mock(Config::class);
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
         $session = Mockery::mock(Session::class);
@@ -534,6 +574,7 @@ class ErrorControllerTest extends TestCase
             $currentUrlService,
             $urlGenerator,
             $session,
+            $templateService,
             $exception
         );
 
@@ -550,7 +591,6 @@ class ErrorControllerTest extends TestCase
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
-     * @throws PropelException
      */
     public function testHandleServerErrorAsJson()
     {
@@ -565,6 +605,7 @@ class ErrorControllerTest extends TestCase
         $config->shouldReceive("get")->with("environment")->andReturn("dev");
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
         $session = Mockery::mock(Session::class);
+        $templateService = Mockery::mock(TemplateService::class);
 
         // when
         $response = $controller->exception(
@@ -574,6 +615,7 @@ class ErrorControllerTest extends TestCase
             $currentUrlService,
             $urlGenerator,
             $session,
+            $templateService,
             $exception
         );
 
@@ -599,7 +641,6 @@ class ErrorControllerTest extends TestCase
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
-     * @throws PropelException
      */
     public function testHandleServerErrorAsJsonInProductionEnvironment()
     {
@@ -615,6 +656,8 @@ class ErrorControllerTest extends TestCase
             ->andReturn("prod");
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
         $session = Mockery::mock(Session::class);
+        $templateService = Mockery::mock(TemplateService::class);
+
 
         // when
         $response = $controller->exception(
@@ -624,6 +667,7 @@ class ErrorControllerTest extends TestCase
             $currentUrlService,
             $urlGenerator,
             $session,
+            $templateService,
             $exception
         );
 
@@ -646,7 +690,6 @@ class ErrorControllerTest extends TestCase
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
-     * @throws PropelException
      */
     public function testHandleServiceUnavailable()
     {
@@ -656,6 +699,11 @@ class ErrorControllerTest extends TestCase
         $exception = new ServiceUnavailableHttpException(60);
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->once()
+            ->andReturn(new Response("Service temporairement indisponible"));
         $config = Mockery::mock(Config::class);
         $config->shouldReceive("environment")->andReturn("prod");
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
@@ -669,6 +717,7 @@ class ErrorControllerTest extends TestCase
             $currentUrlService,
             $urlGenerator,
             $session,
+            $templateService,
             $exception
         );
 
@@ -680,10 +729,6 @@ class ErrorControllerTest extends TestCase
         );
         $this->assertStringContainsString(
             "Service temporairement indisponible",
-            $response->getContent()
-        );
-        $this->assertStringContainsString(
-            "Merci de réessayer dans quelques instants",
             $response->getContent()
         );
         $this->assertEquals(

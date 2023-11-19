@@ -15,6 +15,7 @@ use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -41,13 +42,14 @@ class LegacyControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
         $metaTagsService = $this->createMock(MetaTagsService::class);
-        $templateService = new TemplateService(
-            config: $config,
-            currentSiteService: $currentSite,
-            currentUserService: $currentUser,
-            metaTagsService: $metaTagsService,
-            request: $request,
-        );
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->with("AppBundle:Legacy:default.html.twig", [
+                "title" => null,
+                "content" => '<p>Bientôt…</p>',
+            ])
+            ->andReturn(new Response("bientôt"));
 
         // when
         $response = $legacyController->defaultAction(
@@ -66,7 +68,12 @@ class LegacyControllerTest extends TestCase
         $this->assertEquals(
             "200",
             $response->getStatusCode(),
-            "it should respond with status code 200"
+            "responds with status code 200"
+        );
+        $this->assertStringContainsString(
+            "bientôt",
+            $response->getContent(),
+            "renders the bientot template"
         );
     }
 

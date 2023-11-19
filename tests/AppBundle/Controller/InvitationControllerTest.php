@@ -968,15 +968,15 @@ class InvitationControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->shouldReceive("renderResponse")->once()->andReturn(new Response("LISTEDIN"));
         $controller = new InvitationController();
 
         // when
-        $response = $controller->listAction($request, $currentSite, $currentUser);
+        $response = $controller->listAction($request, $currentSite, $currentUser, $templateService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringContainsString("Listed Book", $response->getContent());
-        $this->assertStringContainsString("listed-invitation@biblys.fr", $response->getContent());
         $this->assertStringContainsString("LISTEDIN", $response->getContent());
     }
 

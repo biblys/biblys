@@ -164,6 +164,7 @@ class InvitationController extends Controller
         Request     $request,
         CurrentSite $currentSite,
         CurrentUser $currentUser,
+        TemplateService $templateService,
     ): Response
     {
         $currentUser->authAdmin();
@@ -186,7 +187,7 @@ class InvitationController extends Controller
             ->setOffset($pagination->getOffset())
             ->find();
 
-        return $this->render("AppBundle:Invitation:list.html.twig", [
+        return $templateService->renderResponse("AppBundle:Invitation:list.html.twig", [
             "invitations" => $invitations,
             "pages" => $pagination,
             "total" => $invitationTotalCount,

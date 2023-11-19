@@ -6,12 +6,12 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
 use Biblys\Service\Log;
+use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use Model\ArticleQuery;
 use Model\PeopleQuery;
-use Propel\Runtime\Exception\PropelException;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,7 +40,6 @@ class ErrorController extends Controller
 
     /**
      * @throws LoaderError
-     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      */
@@ -51,6 +50,7 @@ class ErrorController extends Controller
         CurrentUrlService $currentUrlService,
         UrlGenerator      $urlGenerator,
         Session           $session,
+        TemplateService $templateService,
         Exception         $exception
     ): Response
     {
@@ -60,11 +60,11 @@ class ErrorController extends Controller
             is_a($exception, ResourceNotFoundException::class)
             || is_a($exception, InvalidParameterException::class)
             || is_a($exception, NotFoundHttpException::class)) {
-            return $this->handlePageNotFound($request, $currentSite, $urlGenerator, $exception);
+            return $this->handlePageNotFound($request, $currentSite, $urlGenerator, $templateService, $exception);
         }
 
         if (is_a($exception, BadRequestHttpException::class)) {
-            return $this->handleBadRequest($request, $exception);
+            return $this->handleBadRequest($request, $templateService, $exception);
         }
 
         if (
@@ -83,7 +83,7 @@ class ErrorController extends Controller
         }
 
         if (is_a($exception, AccessDeniedHttpException::class)) {
-            return $this->_customTemplateHandler(403, $request, $exception);
+            return $this->_customTemplateHandler(403, $request, $templateService, $exception);
         }
 
         if (is_a($exception, MethodNotAllowedHttpException::class)) {
@@ -95,24 +95,24 @@ class ErrorController extends Controller
         }
 
         if (is_a($exception, ServiceUnavailableHttpException::class)) {
-            return $this->_customTemplateHandler(503, $request, $exception);
+            return $this->_customTemplateHandler(503, $request, $templateService, $exception);
         }
 
-        return $this->handleServerError($request, $exception);
+        return $this->handleServerError($request, $templateService, $exception);
     }
 
     /**
      * HTTP 400
      *
-     * @param Request $request
-     * @param BadRequestHttpException $exception
-     * @return Response
      * @throws LoaderError
-     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    private function handleBadRequest(Request $request, BadRequestHttpException $exception): Response
+    private function handleBadRequest(
+        Request                 $request,
+        TemplateService         $templateService,
+        BadRequestHttpException $exception
+    ): Response
     {
         if (
             $request->isXmlHttpRequest()
@@ -121,7 +121,7 @@ class ErrorController extends Controller
             return $this->_toJsonErrorResponse($exception, 400);
         }
 
-        $response = $this->render("AppBundle:Error:400.html.twig", [
+        $response = $templateService->renderResponse("AppBundle:Error:400.html.twig", [
             "message" => $exception->getMessage(),
         ]);
         $response->setStatusCode(400);
@@ -133,7 +133,6 @@ class ErrorController extends Controller
      * HTTP 404
      *
      * @throws LoaderError
-     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      */
@@ -141,6 +140,7 @@ class ErrorController extends Controller
         Request                                                                   $request,
         CurrentSite                                                               $currentSite,
         UrlGenerator                                                              $urlGenerator,
+        TemplateService $templateService,
         NotFoundHttpException|ResourceNotFoundException|InvalidParameterException $exception,
     ): Response
     {
@@ -172,7 +172,7 @@ class ErrorController extends Controller
 
         $request->attributes->set("page_title", "Erreur 404");
 
-        $response = $this->render("AppBundle:Error:404.html.twig", [
+        $response = $templateService->renderResponse("AppBundle:Error:404.html.twig", [
             "exception" => $exception,
             "exceptionClass" => get_class($exception),
         ]);
@@ -184,15 +184,15 @@ class ErrorController extends Controller
     /**
      * HTTP 500
      *
-     * @param Request $request
-     * @param Exception $exception
-     * @return Response
      * @throws LoaderError
-     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    private function handleServerError(Request $request, Exception $exception): Response
+    private function handleServerError(
+        Request   $request,
+        TemplateService $templateService,
+        Exception $exception
+    ): Response
     {
         $currentUrl = $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 
@@ -217,7 +217,7 @@ class ErrorController extends Controller
             $currentException = $previous;
         }
 
-        $response = $this->render("AppBundle:Error:500.html.twig", [
+        $response = $templateService->renderResponse("AppBundle:Error:500.html.twig", [
             "exception" => $exception,
             "exceptionClass" => get_class($exception),
             "previousExceptions" => $previousExceptions,
@@ -250,14 +250,14 @@ class ErrorController extends Controller
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
-     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     private function _customTemplateHandler(
         int                         $statusCode,
         Request                     $request,
+        TemplateService $templateService,
         HttpException|AuthException $exception
     ): Response
     {
@@ -270,7 +270,7 @@ class ErrorController extends Controller
 
         $currentUrlService = new CurrentUrlService($request);
         $currentUrl = $currentUrlService->getRelativeUrl();
-        $response = $this->render("AppBundle:Error:$statusCode.html.twig", [
+        $response = $templateService->renderResponse("AppBundle:Error:$statusCode.html.twig", [
             "message" => $exception->getMessage(),
             "return_url" => $currentUrl,
         ]);
