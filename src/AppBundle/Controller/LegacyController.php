@@ -3,6 +3,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -55,6 +56,8 @@ class LegacyController extends Controller
         if ($pagePrefix == 'log_') {
             self::authUser($request);
         }
+
+        LegacyCodeHelper::saveRouteParams($request->attributes->get("_route_params"));
 
         // Retrocompatibility for static page urls (eg. /pages/:page_slug)
         $staticPage = PageQuery::create()
