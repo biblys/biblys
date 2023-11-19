@@ -35,14 +35,3 @@ AddType video/webm .webm
   ExpiresActive On
   ExpiresDefault "access plus 1 months"
 </FilesMatch>
-
-
-## CONTROLLERS TO REMOVE ? ##
-
-## Redirection /feed/
-#RewriteRule ^feed/(.*) /feed.php/$1 [QSA,L]
-#
-## Redirection /photos/
-#RewriteRule ^photos/(.*)/$  /index.php?page=photos&url=$1 [QSA,L]
-#RewriteRule ^photos/(.*)/(.*)$  /index.php?page=photos&url=$1&image=$2 [QSA,L]
-#

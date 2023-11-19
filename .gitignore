@@ -10,7 +10,6 @@ config.yml
 public/*
 !public/index.php
 !public/api.php
-!public/feed.php
 !public/x.php
 !public/robots.txt
 !public/security.txt
