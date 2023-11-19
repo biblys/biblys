@@ -3,83 +3,17 @@ RewriteEngine on
 
 ErrorDocument 404 /pages/404
 
-RewriteRule ^api/(.*)$  /api.php [QSA,L]
-
-# Redirections /mobile & /m
-RewriteRule ^mobile/(.*)$  /$1 [R=301,L]
-RewriteRule ^m/(.*)$  /$1 [R=301,L]
-
-# Redirection /x
-RewriteRule ^x/(.*)$  /x.php?page=$1 [QSA,L]
-
-# Redirection /pages
-RewriteRule ^pages/(.*)$  /index.php?page=$1 [QSA,L]
-
-# Redirections /blog /post
-RewriteRule ^o/blog/$  /index.php?page=posts [QSA,L]
-RewriteRule ^o/blog/author/(.*)/$  /index.php?page=posts&author=$1 [QSA,L]
-RewriteRule ^o/blog/(.*)/$  /index.php?page=posts&category=$1 [QSA,L]
-RewriteRule ^o/blog/(.*)$  /index.php?page=post&url=$1 [QSA,L]
-
-# Redirection /order/
-RewriteRule ^order/(.*)$  /index.php?page=order&url=$1 [QSA,L]
-
-# Redirection /payment/
-RewriteRule ^payment/(.*)$  /index.php?page=order_payment&url=$1 [QSA,L]
-
-# Redirection /invoice/
-RewriteRule ^invoice/(.*)$  /index.php?page=order_invoice&url=$1 [QSA,L]
-
-# Redirection /editeur/
-RewriteRule ^o/editeur/(.*)  /index.php?page=publisher&url=$1 [QSA,L]
-
-# Redirection /collection/
-RewriteRule ^o/collection/(.*)  /index.php?page=collection&url=$1 [QSA,L]
-
-# Redirection /collection/*/*
-RewriteRule ^collection/(.*)/(.*)$ /index.php?page=collection&url=$1/$2 [QSA,L]
-
-# Redirection /librairie/
-RewriteRule ^librairie/(.*)  /index.php?page=bookshop&url=$1 [QSA,L]
-
-# Redirection /bibliotheque/
-RewriteRule ^bibliotheque/(.*)  /index.php?page=library&url=$1 [QSA,L]
-
-# Redirection /serie/
-RewriteRule ^serie/(.*)  /index.php?page=serie&url=$1 [QSA,L]
-
-# Redirection /feed/
-RewriteRule ^feed/(.*) /feed.php/$1 [QSA,L]
-
-# Redirection /list/
-RewriteRule ^list/(.*)  /index.php?page=list&url=$1 [QSA,L]
-
-# Redirection /wishlist/
-RewriteRule ^wishlist/(.*)  /index.php?page=wishlist&slug=$1 [QSA,L]
-
-# Redirection /photos/
-RewriteRule ^photos/(.*)/$  /index.php?page=photos&url=$1 [QSA,L]
-RewriteRule ^photos/(.*)/(.*)$  /index.php?page=photos&url=$1&image=$2 [QSA,L]
-
-# Redirection /ys/ /catalogue/
-RewriteRule ^ys/(.*)$  /$1 [R=301,L]
-RewriteRule ^catalogue/(.*)/(.*)$  /$1/$2 [R=301,L]
-RewriteRule ^catalogue/(.*)$  /$1/ [R=301,L]
-
-# Redirection people
-RewriteRule ^legacy/p/(.*)/$ /index.php?page=people&url=$1 [QSA,L]
-
-# Redirection article
-RewriteRule ^legacy/a/(.*)$  /index.php?page=article&url=$1 [QSA,L]
-
-# Redirection people
-RewriteCond %{REQUEST_URI} !/common/
-RewriteRule ^(.*)/$  /index.php?page=legacy-people&url=$1 [QSA,L]
-
-# Redirection article
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)/(.*)$  /index.php?page=legacy-article&url=$1/$2 [QSA,L]
+RewriteRule ^(.*)$  /index.php [QSA,L]
+
+## Redirection people
+#RewriteCond %{REQUEST_URI} !/common/
+#RewriteRule ^(.*)/$  /index.php?page=legacy-people&url=$1 [QSA,L]
+#
+## Redirection article
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^(.*)/(.*)$  /index.php?page=legacy-article&url=$1/$2 [QSA,L]
 
 <IfModule mod_expires.c>
  ExpiresActive On
@@ -101,3 +35,20 @@ AddType video/webm .webm
   ExpiresActive On
   ExpiresDefault "access plus 1 months"
 </FilesMatch>
+
+
+## CONTROLLERS TO REMOVE ? ##
+
+## Redirection /librairie/
+#RewriteRule ^librairie/(.*)  /index.php?page=bookshop&url=$1 [QSA,L]
+#
+## Redirection /bibliotheque/
+#RewriteRule ^bibliotheque/(.*)  /index.php?page=library&url=$1 [QSA,L]
+#
+## Redirection /feed/
+#RewriteRule ^feed/(.*) /feed.php/$1 [QSA,L]
+#
+## Redirection /photos/
+#RewriteRule ^photos/(.*)/$  /index.php?page=photos&url=$1 [QSA,L]
+#RewriteRule ^photos/(.*)/(.*)$  /index.php?page=photos&url=$1&image=$2 [QSA,L]
+#

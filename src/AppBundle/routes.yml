@@ -715,8 +715,68 @@ user_signup:
   path: /user/signup
   controller: AppBundle\Controller\UserController::signup
 
-# Old controllers
+# Legacy controllers
 
-contact:
-  path: /pages/contact
+legacy_article:
+  path: /legacy/a/{slug}
   controller: AppBundle\Controller\LegacyController::defaultAction
+  defaults:
+    page: article
+  requirements:
+    slug: .+
+
+legacy_invoice:
+  path: /invoice/{url}
+  controller: AppBundle\Controller\LegacyController::defaultAction
+  defaults:
+    page: order_invoice
+
+legacy_o_collection:
+  path: /o/collection/{url}
+  controller: AppBundle\Controller\LegacyController::defaultAction
+  defaults:
+    page: collection
+
+legacy_o_editeur:
+  path: /o/editeur/{url}
+  controller: AppBundle\Controller\LegacyController::defaultAction
+  defaults:
+    page: publisher
+
+legacy_order:
+  path: /order/{url}
+  controller: AppBundle\Controller\LegacyController::defaultAction
+  defaults:
+    page: order
+
+legacy_payment:
+  path: /payment/{url}
+  controller: AppBundle\Controller\LegacyController::defaultAction
+  defaults:
+    page: order_payment
+
+legacy_pages:
+  path: /pages/{page}
+  controller: AppBundle\Controller\LegacyController::defaultAction
+
+legacy_people:
+  path: /legacy/p/{slug}
+  controller: AppBundle\Controller\LegacyController::defaultAction
+  defaults:
+    page: people
+
+legacy_serie:
+  path: /serie/{slug}
+  controller: AppBundle\Controller\LegacyController::defaultAction
+  defaults:
+    page: serie
+
+legacy_x_adm_images:
+  path: /x/adm_images
+  controller: AppBundle\Controller\LegacyController::defaultAction
+
+legacy_wishlist:
+  path: /wishlist/{slug}
+  controller: AppBundle\Controller\LegacyController::defaultAction
+  defaults:
+    page: wishlist

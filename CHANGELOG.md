@@ -7,6 +7,11 @@ Améliorations
 - Une page de documentation "Comment télécharger et lire des livres 
   numériques" a été ajoutée.
 
+Déploiement
+
+- Remplacer les query params par `LegacyCodeHelper::getRouteParam($key)` 
+  dans les controllers legacy.
+
 ### 2.74.2 (2 décembre 2023)
 
 Corrections

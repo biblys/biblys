@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 $cm = new CollectionManager();
 
 /** @var $request */
-$collectionUrl = $request->query->get("url");
+$collectionUrl = LegacyCodeHelper::getRouteParam("url");
 $collection = $cm->get(["collection_url" => $collectionUrl]);
 
 $content = '';

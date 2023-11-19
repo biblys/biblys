@@ -281,30 +281,4 @@ class ErrorControllerTest extends TestCase
             "it should include Retry-After header"
         );
     }
-
-    public function testFallbackToLegacyController()
-    {
-        // given
-        $controller = new ErrorController();
-        $request = new Request();
-        $request->query->set("page", "bientot");
-        $previousException = new ResourceNotFoundException("No routes found for GET /bientot");
-        $exception = new NotFoundHttpException("Page not found", $previousException);
-        $GLOBALS["originalRequest"] = $request;
-
-        // when
-        $response = $controller->exception($request, $exception);
-
-        // then
-        $this->assertEquals(
-            200,
-            $response->getStatusCode(),
-            "it should response with HTTP status 200"
-        );
-        $this->assertEquals(
-            "true",
-            $response->headers->get("SHOULD_RESET_STATUS_CODE_TO_200"),
-            "it should include header SHOULD_RESET_STATUS_CODE_TO_200"
-        );
-    }
 }

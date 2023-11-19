@@ -15,7 +15,8 @@ $colspan = 2;
 $content = "";
 
 /** @var Order $order */
-if ($order = $om->get(array('order_url' => $_GET['url']))) {
+$orderUrl = LegacyCodeHelper::getRouteParam("url");
+if ($order = $om->get(["order_url" => $orderUrl])) {
     $pageTitle = "Facture n° {$order->get('id')}";
     $request->attributes->set("page_title", $pageTitle);
 

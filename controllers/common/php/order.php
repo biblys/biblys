@@ -24,11 +24,11 @@ $request = Request::createFromGlobals();
 $currentSiteService = CurrentSite::buildFromConfig($config);
 $currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
 
-$order_url = $request->query->get("url");
-$order = $om->get(["order_url" => $order_url]);
+$orderUrl = LegacyCodeHelper::getRouteParam("url");
+$order = $om->get(["order_url" => $orderUrl]);
 
 if (!$order) {
-    throw new NotFoundException("Order $order_url not found.");
+    throw new NotFoundException("Order $orderUrl not found.");
 }
 
 $o = $order;

@@ -1,6 +1,7 @@
 <?php /** @noinspection HtmlUnknownTarget */
 
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,12 +23,12 @@ $cheque = null;
 
 $om = new OrderManager();
 
-$order_url = $request->query->get("url");
+$orderUrl = LegacyCodeHelper::getRouteParam("url");
 /** @var Order $order */
-$order = $om->get(["order_url" => $order_url]);
+$order = $om->get(["order_url" => $orderUrl]);
 
 if (!$order) {
-    throw new NotFoundException("Order $order_url not found.");
+    throw new NotFoundException("Order $orderUrl not found.");
 }
 
 // Is Paypal available ?

@@ -4,7 +4,8 @@ use Biblys\Legacy\LegacyCodeHelper;
 
 $pm = new PublisherManager();
 
-$publisher = $pm->get(['publisher_url' => $request->query->get('url')]);
+$publisherSlug = LegacyCodeHelper::getRouteParam("url");
+$publisher = $pm->get(['publisher_url' => $publisherSlug]);
 
 if (!$publisher) {
 

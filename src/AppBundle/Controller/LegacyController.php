@@ -57,7 +57,8 @@ class LegacyController extends Controller
             self::authUser($request);
         }
 
-        LegacyCodeHelper::saveRouteParams($request->attributes->get("_route_params"));
+        $routeParams = $request->attributes->get("_route_params", []);
+        LegacyCodeHelper::saveRouteParams($routeParams);
 
         // Retrocompatibility for static page urls (eg. /pages/:page_slug)
         $staticPage = PageQuery::create()

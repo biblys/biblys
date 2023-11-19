@@ -3,15 +3,17 @@
 global $request;
 global $_SITE;
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 $um = new AxysAccountManager();
 $wlm = new WishlistManager();
 
-$user = $um->get(array('axys_account_slug' => $request->query->get('slug')));
+$wishlistSlug = LegacyCodeHelper::getRouteParam("slug");
+$user = $um->get(['axys_account_slug' => $wishlistSlug]);
 if (!$user) {
-    throw new ResourceNotFoundException('Utilisateur '.$request->query->get('slug').' inconnu');
+    throw new ResourceNotFoundException('Utilisateur '. $wishlistSlug .' inconnu');
 }
 
 $wishlist = $wlm->get(array('axys_account_id' => $user->get('id')));

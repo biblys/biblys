@@ -4,7 +4,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
-$cycleSlug = $request->query->get("url");
+$cycleSlug = LegacyCodeHelper::getRouteParam("slug");
 
 $cm = new CycleManager();
 $cycle = $cm->get(["cycle_url" => $cycleSlug]);

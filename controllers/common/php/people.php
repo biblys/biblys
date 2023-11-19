@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Model\PeopleQuery;
@@ -23,17 +24,17 @@ return function (
     $content = "";
 
     $pm = new PeopleManager();
-    $url = $request->query->get('url');
-    $peopleEntity = $pm->get(['people_url' => $url]);
+    $peopleSlug = LegacyCodeHelper::getRouteParam("slug");
+    $peopleEntity = $pm->get(['people_url' => $peopleSlug]);
     if (!$peopleEntity) {
-        throw new ResourceNotFoundException('No people found for url ' . htmlentities($url));
+        throw new ResourceNotFoundException('No people found for url ' . htmlentities($peopleSlug));
     }
     
     $people = PeopleQuery::create()->findPk($peopleEntity->get("id"));
 
     $use_old_controller = $currentSite->getOption("use_old_people_controller");
     if (!$use_old_controller) {
-        return new RedirectResponse("/p/$url/", 301);
+        return new RedirectResponse("/p/$peopleSlug/", 301);
     }
 
     $_OPENGRAPH = '
