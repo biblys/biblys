@@ -1,19 +1,8 @@
 Options +FollowSymlinks
+
 RewriteEngine on
-
-ErrorDocument 404 /pages/404
-
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$  /index.php [QSA,L]
-
-## Redirection people
-#RewriteCond %{REQUEST_URI} !/common/
-#RewriteRule ^(.*)/$  /index.php?page=legacy-people&url=$1 [QSA,L]
-#
-## Redirection article
-#RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteCond %{REQUEST_FILENAME} !-d
-#RewriteRule ^(.*)/(.*)$  /index.php?page=legacy-article&url=$1/$2 [QSA,L]
 
 <IfModule mod_expires.c>
  ExpiresActive On
@@ -30,7 +19,6 @@ AddType video/mp4  .mp4
 AddType video/webm .webm
 
 # Cache
-
 <FilesMatch "\.(gif|jpg|png|js|css)$">
   ExpiresActive On
   ExpiresDefault "access plus 1 months"
