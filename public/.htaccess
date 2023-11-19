@@ -39,9 +39,6 @@ AddType video/webm .webm
 
 ## CONTROLLERS TO REMOVE ? ##
 
-## Redirection /bibliotheque/
-#RewriteRule ^bibliotheque/(.*)  /index.php?page=library&url=$1 [QSA,L]
-#
 ## Redirection /feed/
 #RewriteRule ^feed/(.*) /feed.php/$1 [QSA,L]
 #
