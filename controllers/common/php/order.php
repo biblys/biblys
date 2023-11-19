@@ -132,15 +132,6 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
     // Paiement de la commande
     if (isset($_GET["payed"])) $content .= '<p class="success">La commande a été payée.</p><br />';
 
-    // Confirmation
-    if (isset($_GET["confirm"])) {
-        $order->set('order_confirmation_date', date('Y-m-d H:i:s'));
-        $om->update($order);
-        return new RedirectResponse("/order/{$o["order_url"]}?confirmed=1");
-    } elseif (isset($_GET["confirmed"])) {
-        $content .= '<p class="success">Merci d\'avoir confirmé la réception de votre commande.</p><br />';
-    }
-
     // Signaler un incident
     if (isset($_GET["flagged"])) $content .= '<p class="success">L\'incident a bien été enregistré.</p><br />';
 

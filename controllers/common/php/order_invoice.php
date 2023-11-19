@@ -171,14 +171,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
             </tfoot>
         </table>
 
-        '.$notva.$payment.'
-
-        <p class="text-center">
-            Confirmez la réception de votre commande ou signalez un incident : <br>
-            <strong>'.$_SITE->get("domain").'/confirmer/'.$order->get('order_id').'</strong>
-        </p>
-
-    ';
+        '.$notva.$payment;
 
         $notice = $_SITE->getOpt('invoice_notice');
     if ($notice) {
