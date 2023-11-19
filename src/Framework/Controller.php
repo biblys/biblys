@@ -28,6 +28,8 @@ class Controller
     /**
      * Returns a Response with a rendered template.
      *
+     * @deprecated Controller->render is deprecated. Use TemplateService->render instead.
+     *
      * @param string $templatePath template file path
      * @param array $vars template variables
      *
