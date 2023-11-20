@@ -457,10 +457,10 @@ class InvitationControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         $currentSite->setOption("publisher_filter", $publisher->getId());
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
-        $axysAccount = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("isAuthentified")->andReturn(true);
-        $currentUser->shouldReceive("getAxysAccount")->andReturn($axysAccount);
+        $currentUser->shouldReceive("getAxysAccount")->andReturn($user);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->shouldReceive("renderResponse")
             ->with("AppBundle:Invitation:show.html.twig", [
@@ -736,12 +736,12 @@ class InvitationControllerTest extends TestCase
         $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
         $currentSite->setOption("publisher_filter", $publisherId);
         $currentSite->setOption("downloadable_publishers", $publisherId);
-        $axysAccount = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
 
         $controller = new InvitationController();
         $request = RequestFactory::createAuthRequest();
         $request->request->set("code", "ALLRIGHT");
-        $currentUser = new CurrentUser($axysAccount, "token");
+        $currentUser = new CurrentUser($user, "token");
         $flashBag = $this->createMock(FlashBag::class);
         $flashBag->expects($this->once())->method("add")
             ->with("success", "Livre numérique a été ajouté à votre bibliothèque.");
@@ -762,7 +762,7 @@ class InvitationControllerTest extends TestCase
         $articleInLibrary = StockQuery::create()
             ->filterBySite($site)
             ->filterByArticle($article)
-            ->findOneByAxysAccountId($axysAccount->getId());
+            ->findOneByUserId($user->getId());
         $this->assertNotNull($articleInLibrary, "it adds the article to the user's library");
         $this->assertEquals(0, $articleInLibrary->getSellingPrice());
         $this->assertNotNull($articleInLibrary->getSellingDate());
@@ -776,7 +776,7 @@ class InvitationControllerTest extends TestCase
     public function testConsumeActionIgnoringArticleAlreadyInUserLibrary()
     {
         // given
-        $axysAccount = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $validArticle = ModelFactory::createArticle(title: "Autre article", typeId: Type::EBOOK);
@@ -787,7 +787,7 @@ class InvitationControllerTest extends TestCase
         $publisherIds = "{$validArticle->getPublisherId()},{$articleInLibrary->getPublisherId()}";
         $currentSite->setOption("publisher_filter", $publisherIds);
         $currentSite->setOption("downloadable_publishers", $publisherIds);
-        ModelFactory::createStockItem(site: $site, article: $articleInLibrary, axysAccount: $axysAccount);
+        ModelFactory::createStockItem(site: $site, article: $articleInLibrary, user: $user);
         $flashBag = Mockery::mock(FlashBag::class);
         $flashBag->shouldReceive("add")
             ->once()
@@ -799,9 +799,9 @@ class InvitationControllerTest extends TestCase
         $session->shouldReceive("getFlashBag")->once()->andReturn($flashBag);
 
         $controller = new InvitationController();
-        $request = RequestFactory::createAuthRequest(user: $axysAccount);
+        $request = RequestFactory::createAuthRequest(user: $user);
         $request->request->set("code", "ELIBRARY");
-        $currentUser = new CurrentUser($axysAccount, "token");
+        $currentUser = new CurrentUser($user, "token");
 
         // when
         $response = $controller->consumeAction($request, $currentSite, $currentUser, $session);
@@ -811,14 +811,14 @@ class InvitationControllerTest extends TestCase
         $newLibraryItem = StockQuery::create()
             ->filterBySite($site)
             ->filterByArticle($validArticle)
-            ->findOneByAxysAccountId($axysAccount->getId());
+            ->findOneByUserId($user->getId());
         $this->assertNotNull($newLibraryItem, "it adds the article to the user's library");
-        $existingLibraryItems = StockQuery::create()
+        $existingLibraryItemsCount = StockQuery::create()
             ->filterBySite($site)
             ->filterByArticle($articleInLibrary)
-            ->filterByAxysAccountId($axysAccount->getId())
-            ->find();
-        $this->assertEquals(1, $existingLibraryItems->count());
+            ->filterByUser($user)
+            ->count();
+        $this->assertEquals(1, $existingLibraryItemsCount);
     }
 
     /**
@@ -837,12 +837,12 @@ class InvitationControllerTest extends TestCase
         $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
         $currentSite->setOption("publisher_filter", $publisherId);
         $currentSite->setOption("downloadable_publishers", $publisherId);
-        $axysAccount = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
 
         $controller = new InvitationController();
         $request = RequestFactory::createAuthRequest();
         $request->request->set("code", "ALLRIGHT");
-        $currentUser = new CurrentUser($axysAccount, "token");
+        $currentUser = new CurrentUser($user, "token");
         $flashBag = $this->createMock(FlashBag::class);
         $flashBag->expects($this->once())->method("add")
             ->with("success", "Livre numérique a été ajouté à votre bibliothèque.");
@@ -863,7 +863,7 @@ class InvitationControllerTest extends TestCase
         $articleInLibrary = StockQuery::create()
             ->filterBySite($site)
             ->filterByArticle($article)
-            ->findOneByAxysAccountId($axysAccount->getId());
+            ->findOneByUserId($user->getId());
         $this->assertNotNull($articleInLibrary, "it adds the article to the user's library");
         $this->assertEquals(0, $articleInLibrary->getSellingPrice());
         $this->assertNotNull($articleInLibrary->getSellingDate());
@@ -894,12 +894,12 @@ class InvitationControllerTest extends TestCase
         );
         $currentSite->setOption("publisher_filter", $publisher->getId());
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
-        $axysAccount = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
 
         $controller = new InvitationController();
         $request = RequestFactory::createAuthRequest();
         $request->request->set("code", "ALLRIGHT");
-        $currentUser = new CurrentUser($axysAccount, "token");
+        $currentUser = new CurrentUser($user, "token");
         $flashBag = Mockery::mock(FlashBag::class);
         $flashBag->shouldReceive("add")
             ->with("success", "Multiple 1 a été ajouté à votre bibliothèque.");
@@ -925,7 +925,7 @@ class InvitationControllerTest extends TestCase
         $articleInLibrary1 = StockQuery::create()
             ->filterBySite($site)
             ->filterByArticle($article1)
-            ->findOneByAxysAccountId($axysAccount->getId());
+            ->findOneByUserId($user->getId());
         $this->assertNotNull($articleInLibrary1, "it adds the article to the user's library");
         $this->assertEquals(0, $articleInLibrary1->getSellingPrice());
         $this->assertNotNull($articleInLibrary1->getSellingDate());
@@ -933,7 +933,7 @@ class InvitationControllerTest extends TestCase
         $articleInLibrary2 = StockQuery::create()
             ->filterBySite($site)
             ->filterByArticle($article2)
-            ->findOneByAxysAccountId($axysAccount->getId());
+            ->findOneByUserId($user->getId());
         $this->assertNotNull($articleInLibrary2, "it adds the article to the user's library");
         $this->assertEquals(0, $articleInLibrary2->getSellingPrice());
         $this->assertNotNull($articleInLibrary2->getSellingDate());
@@ -941,7 +941,7 @@ class InvitationControllerTest extends TestCase
         $articleInLibrary3 = StockQuery::create()
             ->filterBySite($site)
             ->filterByArticle($article3)
-            ->findOneByAxysAccountId($axysAccount->getId());
+            ->findOneByUserId($user->getId());
         $this->assertNotNull($articleInLibrary3, "it adds the article to the user's library");
         $this->assertEquals(0, $articleInLibrary3->getSellingPrice());
         $this->assertNotNull($articleInLibrary3->getSellingDate());

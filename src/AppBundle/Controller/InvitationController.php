@@ -17,12 +17,12 @@ use League\Csv\CannotInsertRecord;
 use League\Csv\Writer;
 use Model\Article;
 use Model\ArticleQuery;
-use Model\AxysAccount;
 use Model\Invitation;
 use Model\InvitationQuery;
 use Model\Map\InvitationTableMap;
 use Model\Stock;
 use Model\StockQuery;
+use Model\User;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Exception\PropelException;
@@ -257,7 +257,7 @@ class InvitationController extends Controller
             foreach ($articles as $article) {
                 self::_addArticleToUserLibrary(
                     article: $article,
-                    axysAccount: $currentUser->getAxysAccount(),
+                    user: $currentUser->getAxysAccount(),
                     allowsPreDownload: $invitation->getAllowsPreDownload(),
                     currentSite: $currentSite,
                     session: $session
@@ -395,7 +395,7 @@ class InvitationController extends Controller
             $stock = StockQuery::create()
                 ->filterBySite($currentSite->getSite())
                 ->filterByArticle($article)
-                ->findOneByAxysAccountId($currentUser->getAxysAccount()->getId());
+                ->findOneByUserId($currentUser->getAxysAccount()->getId());
 
             if ($stock) {
                 $session->getFlashBag()->add(
@@ -494,7 +494,7 @@ class InvitationController extends Controller
      */
     private function _addArticleToUserLibrary(
         mixed       $article,
-        AxysAccount $axysAccount,
+        User        $user,
         bool        $allowsPreDownload,
         CurrentSite $currentSite,
         Session     $session
@@ -502,7 +502,7 @@ class InvitationController extends Controller
     {
         $libraryItem = new Stock();
         $libraryItem->setArticle($article);
-        $libraryItem->setAxysAccountId($axysAccount->getId());
+        $libraryItem->setUser($user);
         $libraryItem->setAllowPredownload($allowsPreDownload);
         $libraryItem->setSite($currentSite->getSite());
         $libraryItem->setSellingPrice(0);

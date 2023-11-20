@@ -30,9 +30,9 @@ class MyEbooksTest extends TestCase
 
         $request = new Request();
 
-        $axysAccount = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("getAxysAccount")->andReturn($axysAccount);
+        $currentUser->shouldReceive("getAxysAccount")->andReturn($user);
 
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);
@@ -49,7 +49,7 @@ class MyEbooksTest extends TestCase
         ModelFactory::createStockItem(
             site: $currentSite->getSite(),
             article: $article,
-            axysAccount: $axysAccount,
+            user: $user,
             sellingDate: new DateTime(),
         );
 
