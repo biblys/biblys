@@ -2,20 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Legacy\LegacyCodeHelper;
-use Biblys\Service\Config;
-use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
-use Biblys\Service\CurrentUser;
 use Biblys\Service\Log;
-use Biblys\Service\Mailer;
-use Biblys\Service\MetaTagsService;
-use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
-use Framework\RouteLoader;
-use Opengraph\Writer;
 use PDO;
 use Propel\Runtime\Exception\PropelException;
 use ReflectionClass;
@@ -23,7 +14,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -32,8 +22,6 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Generator\UrlGenerator;
-use Symfony\Component\Routing\RequestContext;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -229,24 +217,6 @@ class ErrorController extends Controller
     }
 
     /**
-     * HTTP 503
-     *
-     * @param Request $request
-     * @return Response
-     */
-    private function handleServiceUnavailable(Request $request): Response
-    {
-        $response = self::_defaultHandler(
-            503,
-            new Exception("Maintenance en cours. Merci de réessayer dans quelques instants…"),
-            $request
-        );
-        $response->headers->set('Retry-After', 3600);
-
-        return $response;
-    }
-
-    /**
      * @param int $statusCode
      * @param Exception $exception
      * @param $request
@@ -304,66 +274,5 @@ class ErrorController extends Controller
         }
 
         return $response;
-    }
-
-    /**
-     * @return Response
-     * @throws PropelException
-     * @throws Exception
-     */
-    private static function _handleLegacyController(): Response
-    {
-        $legacyController = new LegacyController();
-        $session = new Session();
-        $config = Config::load();
-        $mailer = new Mailer($config);
-        $currentSite = CurrentSite::buildFromConfig($config);
-        $routes = RouteLoader::load();
-        $urlgenerator = new UrlGenerator($routes, new RequestContext());
-        global $originalRequest;
-        $currentUser = CurrentUser::buildFromRequestAndConfig($originalRequest, $config);
-        $metaTagsService = new MetaTagsService(new Writer());
-        $templateService = new TemplateService(
-            config: $config,
-            currentSiteService: $currentSite,
-            currentUserService: $currentUser,
-            metaTagsService: $metaTagsService,
-            request: $originalRequest,
-        );
-        $response = $legacyController->defaultAction(
-            request: $originalRequest,
-            session: $session,
-            mailer: $mailer,
-            config: $config,
-            currentSite: $currentSite,
-            currentUser: $currentUser,
-            urlGenerator: $urlgenerator,
-            templateService: $templateService,
-            metaTagsService: $metaTagsService,
-        );
-        $response->headers->set("SHOULD_RESET_STATUS_CODE_TO_200", "true");
-        return $response;
-    }
-
-    /**
-     * @param Exception $exception
-     * @return bool
-     */
-    private static function _isAnExceptionThrownByRouter(Exception $exception): bool
-    {
-        if (!is_a($exception, NotFoundHttpException::class)) {
-            return false;
-        }
-
-        $previous = $exception->getPrevious();
-        if (!is_a($previous, ResourceNotFoundException::class)) {
-            return false;
-        }
-
-        if (!str_contains($previous->getMessage(), "No routes found for")) {
-            return false;
-        }
-
-        return true;
     }
 }
