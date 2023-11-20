@@ -51,22 +51,6 @@ class ErrorController extends Controller
      */
     public function exception(Request $request, Exception $exception): Response
     {
-        // If route is not found in route.yml, we might be dealing with a legacy
-        // controller. We try to handle the route below. If not, default action
-        // will throw a resourceNotFoundException that will be catched below.
-//        if (self::_isAnExceptionThrownByRouter($exception)) {
-//            dump("plop");
-//            try {
-//                return self::_handleLegacyController();
-//            } catch (Exception $exception) {
-//                // TODO: find a better way
-//                // This is necessary because of legacy controller can throw exceptions
-//                // that won't be caught by event dispatcher
-//                $errorController = new ErrorController();
-//                return $errorController->exception($request, $exception);
-//            }
-//        }
-
         if (
             is_a($exception, ResourceNotFoundException::class)
             || is_a($exception, InvalidParameterException::class)
