@@ -14,7 +14,6 @@ use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use CartManager;
 use Exception;
-use Framework\Exception\AuthException;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -27,7 +26,6 @@ require_once __DIR__ . "/../../../setUp.php";
 class CartTest extends TestCase
 {
     /**
-     * @throws AuthException
      * @throws PropelException
      * @throws Exception
      */
@@ -36,7 +34,8 @@ class CartTest extends TestCase
         global $_SITE;
 
         // given
-        ModelFactory::createCountry(name: "France");
+        ModelFactory::createCountry();
+        /* @var Site $_SITE */
         $_SITE->setOpt("virtual_stock", 1);
         $flashBag = $this
             ->getMockBuilder("Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface")
