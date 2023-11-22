@@ -15,12 +15,10 @@ use Biblys\Test\ModelFactory;
 use CartManager;
 use EntityManager;
 use Exception;
-use Framework\Exception\AuthException;
 use OrderManager;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use ShippingManager;
-use Site;
 use StockManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -36,24 +34,18 @@ class OrderDeliveryTest extends TestCase
      */
     public function testValidatingAnOrder()
     {
-        global $_SQL;
-
         // given
-        $cart = \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart("create");
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $article = EntityFactory::createArticle();
         $sm = new StockManager();
         $sm->create(["article_id" => $article->get("id")]);
         $cm = new CartManager();
         $cm->addArticle($cart, $article);
-        $shm = new ShippingManager();
         $shipping = ModelFactory::createShippingFee(["type" => "suivi"]);
-        $site = new Site(["site_contact" => "merchant@biblys.fr", "site_tva" => "FR"]);
-        $_POST = [
-            "order_email" => "customer@biblys.fr",
-            "order_firstname" => "Barnabé",
-            "order_lastname" => "Famagouste"
-        ];
-                $country = ModelFactory::createCountry();
+        $_POST["order_email"] = "customer@biblys.fr";
+        $_POST["order_firstname"] = "Barnabé";
+        $_POST["order_lastname"] = "Famagouste";
+        $country = ModelFactory::createCountry();
 
         $request = new Request();
         $request->setMethod("POST");
@@ -107,7 +99,7 @@ class OrderDeliveryTest extends TestCase
             "it should redirect after order validation"
         );
         $this->assertEquals(
-            "/order/".$order->get("url")."?created=1",
+            "/order/" . $order->get("url") . "?created=1",
             $response->headers->get("Location"),
             "it should redirect to the correct url"
         );
@@ -123,10 +115,8 @@ class OrderDeliveryTest extends TestCase
      */
     public function testValidatingAnOrderWithoutShipping()
     {
-        global $_SQL;
-
         // given
-        $cart = \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart("create");
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $article = EntityFactory::createArticle([
             "article_title" => "Livre numérique téléchargeable",
             "type_id" => 2
@@ -135,13 +125,10 @@ class OrderDeliveryTest extends TestCase
         $sm->create(["article_id" => $article->get("id")]);
         $cm = new CartManager();
         $cm->addArticle($cart, $article);
-        $site = new Site(["site_contact" => "merchant@biblys.fr"]);
-        $_POST = [
-            "order_email" => "e-customer@biblys.fr",
-            "order_firstname" => "Barnabé",
-            "order_lastname" => "Famagouste"
-        ];
-        
+        $_POST["order_email"] = "e-customer@biblys.fr";
+        $_POST["order_firstname"] = "Barnabé";
+        $_POST["order_lastname"] = "Famagouste";
+
         $request = new Request();
         $request->setMethod("POST");
         $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
@@ -193,7 +180,7 @@ class OrderDeliveryTest extends TestCase
             "it should redirect after order validation"
         );
         $this->assertEquals(
-            "/order/".$order->get("url")."?created=1",
+            "/order/" . $order->get("url") . "?created=1",
             $response->headers->get("Location"),
             "it should redirect to the correct url"
         );
@@ -210,22 +197,12 @@ class OrderDeliveryTest extends TestCase
      */
     public function testValidatingAnOrderWithAnEmptyCart()
     {
-        global $_SQL;
-
         // given
-        $cart = \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $article = EntityFactory::createArticle();
         EntityFactory::createStock(["article_id" => $article->get("id")]);
-        $cm = new CartManager();
         $shm = new ShippingManager();
-        $shipping = $shm->create([]);
-        $site = new Site(["site_contact" => "merchant@biblys.fr"]);
-        $_POST = [
-            "order_email" => "customer@biblys.fr",
-            "order_firstname" => "Barnabé",
-            "order_lastname" => "Famagouste"
-        ];
-        
+        $shipping = $shm->create();
+
         $request = new Request();
         $request->setMethod("POST");
         $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
@@ -280,11 +257,6 @@ class OrderDeliveryTest extends TestCase
         );
 
         // then
-        $this->assertInstanceOf(
-            "Symfony\Component\HttpFoundation\Response",
-            $response,
-            "it should answer with a Response"
-        );
         $this->assertEquals(200, $response->getStatusCode(), "it should answer with http status 200");
         $this->assertStringContainsString(
             "Votre panier est vide",
@@ -297,16 +269,15 @@ class OrderDeliveryTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      * @throws Exception
      */
     public function testSendingOrderConfirmationMail()
     {
-        global $_SQL;
-
         // given
-        $cart = \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart("create");
+        $controller = require __DIR__ . "/../../../../controllers/common/php/order_delivery.php";
+
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $article = EntityFactory::createArticle(["article_title" => "Le livre commandé"]);
         $sm = new StockManager();
         $sm->create(["article_id" => $article->get("id")]);
@@ -333,10 +304,8 @@ class OrderDeliveryTest extends TestCase
         $request->request->set("order_email", "customer@biblys.fr");
         $request->request->set("country_id", 1);
         $request->request->set("cgv_checkbox", 1);
-        $session = new Session();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
-        $legacyController = new LegacyController();
         $urlGenerator = $this->createMock(UrlGenerator::class);
 
         $mailer = $this->createMock(Mailer::class);
@@ -356,27 +325,9 @@ class OrderDeliveryTest extends TestCase
             )
             ->willReturn(true);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        $metaTagsService = $this->createMock(MetaTagsService::class);
-        $templateService = new TemplateService(
-            config: $config,
-            currentSiteService: $currentSite,
-            currentUserService: $currentUser,
-            metaTagsService: $metaTagsService,
-            request: $request,
-        );
 
         // when
-        $response = $legacyController->defaultAction(
-            request: $request,
-            session: $session,
-            mailer: $mailer,
-            config: $config,
-            currentSite: $currentSite,
-            currentUser: $currentUser,
-            urlGenerator: $urlGenerator,
-            templateService: $templateService,
-            metaTagsService: $metaTagsService,
-        );
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer);
 
         // then
         $this->assertInstanceOf(
