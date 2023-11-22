@@ -77,7 +77,7 @@ class ArticleController extends Controller
 
         $use_old_controller = $currentSiteService->getOption('use_old_article_controller');
         if ($use_old_controller) {
-            return new RedirectResponse("/".$slug);
+            return new RedirectResponse("/legacy/a/".$slug);
         }
 
         $request->attributes->set(

@@ -66,7 +66,7 @@ class PeopleController extends Controller
 
         $use_old_controller = $_SITE->getOpt('use_old_people_controller');
         if ($use_old_controller) {
-            return new RedirectResponse("/$slug/");
+            return new RedirectResponse("/legacy/p/$slug/");
         }
 
         $request->attributes->set("page_title", $people->getName());
