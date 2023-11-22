@@ -605,17 +605,19 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    private static function createRight(
+    public static function createRight(
         User $user,
         Site $site = null,
         Publisher $publisher = null,
-    ): void
+    ): Right
     {
         $right = new Right();
         $right->setUser($user);
         $right->setSite($site);
         $right->setPublisher($publisher);
         $right->save();
+
+        return $right;
     }
 
     /**

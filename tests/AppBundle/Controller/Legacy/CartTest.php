@@ -2,9 +2,11 @@
 
 namespace AppBundle\Controller\Legacy;
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use Exception;
 use Mockery;

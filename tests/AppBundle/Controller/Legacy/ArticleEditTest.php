@@ -15,6 +15,7 @@ use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Exception;
 use Mockery;
+use Model\Right;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,7 +59,7 @@ class ArticleEditTest extends TestCase
 
         // then
         $this->expectException(AccessDeniedHttpException::class);
-        $this->expectExceptionMessage("Vous n'avez pas le droit d'accéder à cette page.");
+        $this->expectExceptionMessage("Vous n'avez pas le droit de gérer une maison d'édition.");
 
         // when
         $legacyController->defaultAction(
@@ -124,40 +125,29 @@ class ArticleEditTest extends TestCase
     public function testAdminUserHasAccess()
     {
         // given
+        $controller = require __DIR__."/../../../../controllers/common/php/article_edit.php";
+
         $article = ModelFactory::createArticle();
 
         $request = new Request();
         $request->query->set("page", "article_edit");
         $request->query->set("id", $article->getId());
 
-        $session = new Session();
-        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
-        $legacyController = new LegacyController();
         $config = Config::load();
         $currentSite = CurrentSite::buildFromConfig($config);
-        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $publisher = ModelFactory::createPublisher();
+        $right = Mockery::mock(Right::class);
+        $right->shouldReceive("getPublisherId")->once()->andReturn($publisher->getId());
+        $admin = ModelFactory::createAdminUser();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authPublisher")->once()->andReturn();
+        $currentUser->shouldReceive("getCurrentRight")->once()->andReturn($right);
+        $currentUser->shouldReceive("getAxysAccount")->once()->andReturn($admin);
+        $currentUser->shouldReceive("isAdmin")->once()->andReturn(true);
         $urlGenerator = $this->createMock(UrlGenerator::class);
-        $metaTagsService = $this->createMock(MetaTagsService::class);
-        $templateService = new TemplateService(
-            config: $config,
-            currentSiteService: $currentSite,
-            currentUserService: $currentUser,
-            metaTagsService: $metaTagsService,
-            request: $request,
-        );
 
         // when
-        $response = $legacyController->defaultAction(
-            request: $request,
-            session: $session,
-            mailer: $mailer,
-            config: $config,
-            currentSite: $currentSite,
-            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
-            urlGenerator: $urlGenerator,
-            templateService: $templateService,
-            metaTagsService: $metaTagsService,
-        );
+        $response = $controller($request, $currentUser, $currentSite, $urlGenerator, $config);
 
         // then
         $this->assertEquals(

@@ -201,7 +201,6 @@ class OrderDeliveryTest extends TestCase
         $_POST["cgv_checkbox"] = 1;
 
         $mailer = Mockery::mock(Mailer::class);
-
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
