@@ -5,7 +5,7 @@
         <env name="PHP_ENV" value="test" />
       </envs>
     </CommandLine>
-    <TestRunner directory="$PROJECT_DIR$/tests" options="--stop-on-error --stop-on-failure" />
+    <TestRunner directory="$PROJECT_DIR$/tests" />
     <method v="2" />
   </configuration>
 </component>
