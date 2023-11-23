@@ -412,6 +412,24 @@ class CurrentUserTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function testHasPublisherRightForAnonymousUser()
+    {
+        // given
+        $currentUser = new CurrentUser(null, "token");
+
+        // when
+        $hasRightforPublisher = $currentUser->hasPublisherRight();
+
+        // then
+        $this->assertFalse(
+            $hasRightforPublisher,
+            "returns false for anonymous user"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testGetCurrentRight()
     {
         // given

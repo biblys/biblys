@@ -164,6 +164,10 @@ class CurrentUser
      */
     public function hasPublisherRight(): bool
     {
+        if (!$this->isAuthentified()) {
+            return false;
+        }
+
         $publisherRight = RightQuery::create()
             ->filterByUser($this->user)
             ->filterByPublisherId(null, Criteria::NOT_EQUAL)
