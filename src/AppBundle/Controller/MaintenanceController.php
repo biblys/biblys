@@ -44,8 +44,6 @@ class MaintenanceController extends Controller
      */
     public function updateAction(Request $request, Updater $updater, Config $config): Response
     {
-        global $urlgenerator;
-
         self::authAdmin($request);
         $request->attributes->set("page_title", "Mise à jour de Biblys");
 
@@ -64,47 +62,10 @@ class MaintenanceController extends Controller
         // Get releases newer than current version
         $releases = $updater->getReleasesNewerThan(BIBLYS_VERSION);
 
-        // Update for good
-        if ($request->getMethod() == 'POST') {
-            // Applying update
-            $latest = $updater->getLatestRelease();
-            $updater->applyRelease($latest);
-
-            return new RedirectResponse($urlgenerator->generate('maintenance_updating', [
-                'version' => $latest->version,
-            ]));
-        }
-
         return $this->render('AppBundle:Maintenance:update.html.twig', [
             'releases' => $releases,
             'version' => BIBLYS_VERSION,
             'error' => $error,
-        ]);
-    }
-
-    /**
-     * @throws AuthException
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws PropelException
-     */
-    public function updatingAction(
-        Request $request,
-        UrlGenerator $urlGenerator,
-        string $version
-    ): Response
-    {
-        self::authAdmin($request);
-        $request->attributes->set("page_title", "Mise à jour de Biblys en cours");
-
-        if (BIBLYS_VERSION == $version) {
-            return new RedirectResponse($urlGenerator->generate('maintenance_update'));
-        }
-
-        return $this->render('AppBundle:Maintenance:updating.html.twig', [
-            'current' => BIBLYS_VERSION,
-            'target' => $version,
         ]);
     }
 

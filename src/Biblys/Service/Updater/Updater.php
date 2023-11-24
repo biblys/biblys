@@ -148,17 +148,6 @@ class Updater
     }
 
     /**
-     * Apply update with a git checkout
-     * @param  Release  $release the git tag to use
-     */
-    public function applyRelease(Release $release): void
-    {
-        $repository = $this->getRepository();
-        $wc = $repository->getWorkingCopy();
-        $wc->checkout($release->version);
-    }
-
-    /**
      * Get the current repository with logger
      * @return object git repository
      */

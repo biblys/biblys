@@ -6,6 +6,8 @@ Améliorations
 
 - Une page de documentation "Comment télécharger et lire des livres 
   numériques" a été ajoutée.
+- La fonctionnalité de mise à jour de Biblys via l'administration a été 
+  supprimée.
 
 Déploiement
 
