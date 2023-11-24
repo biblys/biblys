@@ -109,28 +109,6 @@ class MaintenanceController extends Controller
     }
 
     /**
-     * @throws AuthException
-     * @throws Exception
-     */
-    public function migrateAction(Request $request, Config $config): Response
-    {
-        self::authAdmin($request);
-
-        try {
-            $dbConfig = $config->get("db");
-            $db = new Database($dbConfig);
-            $db->migrate();
-        } catch (ComposerException $exception) {
-            return $this->render('AppBundle:Maintenance:migrate.html.twig', [
-                'error' => $exception->getMessage(),
-                'output' => $exception->getOutput(),
-            ]);
-        }
-
-        return $this->render('AppBundle:Maintenance:migrate.html.twig');
-    }
-
-    /**
      * @param Request $request
      * @param Updater $updater
      * @return Response

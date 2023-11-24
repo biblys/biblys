@@ -244,7 +244,6 @@ class Entry
         }
         $entries[] = new Entry('Documentation', ['category' => 'biblys', 'url' => 'https://docs.biblys.fr/', 'icon' => 'book']);
         $entries[] = new Entry('Mise à jour', ['category' => 'biblys', 'path' => 'maintenance_update', 'icon' => 'cloud-download']);
-        $entries[] = new Entry('Migration BDD', ['category' => 'biblys', 'path' => 'maintenance_migrate', 'icon' => 'database']);
 
         return $entries;
     }
