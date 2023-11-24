@@ -12,10 +12,6 @@ maintenance_updating:
   path: /admin/updating/{version}
   controller: AppBundle\Controller\MaintenanceController::updatingAction
 
-maintenance_composer:
-  path: /admin/composer
-  controller: AppBundle\Controller\MaintenanceController::composerAction
-
 maintenance_migrate:
   path: /admin/migrate
   controller: AppBundle\Controller\MaintenanceController::migrateAction

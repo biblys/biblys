@@ -112,26 +112,6 @@ class MaintenanceController extends Controller
      * @throws AuthException
      * @throws Exception
      */
-    public function composerAction(Request $request): Response
-    {
-        self::authAdmin($request);
-
-        try {
-            ScriptRunner::run('install');
-        } catch (ComposerException $exception) {
-            return $this->render('AppBundle:Maintenance:composer.html.twig', [
-                'error' => $exception->getMessage(),
-                'output' => $exception->getOutput(),
-            ]);
-        }
-
-        return $this->render('AppBundle:Maintenance:composer.html.twig');
-    }
-
-    /**
-     * @throws AuthException
-     * @throws Exception
-     */
     public function migrateAction(Request $request, Config $config): Response
     {
         self::authAdmin($request);
