@@ -402,7 +402,10 @@ class ModelFactory
             $user = ModelFactory::createUser();
         }
 
-        $session = Session::buildForUser($user);
+        $session = new Session();
+        $session->setUser($user);
+        $session->setToken(Session::generateToken());
+        $session->setExpiresAt(new DateTime('tomorrow'));
         $session->save();
 
         return $session;

@@ -19,17 +19,6 @@ use RandomLib\Generator;
  */
 class Session extends BaseSession
 {
-    /**
-     * @throws PropelException
-     */
-    public static function buildForUser(User $user): Session
-    {
-        $session = new Session();
-        $session->setUser($user);
-        $session->setToken(Session::generateToken());
-        $session->setExpiresAt(new DateTime('tomorrow'));
-        return $session;
-    }
 
     public static function generateToken(): string
     {

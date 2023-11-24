@@ -15,23 +15,6 @@ class SessionTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function testBuildForUser()
-    {
-        // given
-        $user = ModelFactory::createAxysAccount();
-
-        // when
-        $session = Session::buildForUser($user);
-
-        // then
-        $this->assertNotNull($session->getToken(), "it creates a token");
-        $this->assertEquals($user, $session->getAxysAccount(), "it associates given user");
-        $this->assertTrue($session->getExpiresAt() > new DateTime(), "it sets an expire date in the future");
-    }
-
-    /**
-     * @throws PropelException
-     */
     public function testBuildForUserAndCurrentSite()
     {
         // given
