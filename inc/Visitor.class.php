@@ -151,33 +151,6 @@ class Visitor extends AxysAccount
     }
 
     /**
-     * Allow the visitor to choose from his different rights
-     * @throws Exception
-     */
-    public function setCurrentRight(Right $right): bool
-    {
-        $rm = new RightManager();
-
-        // Reset all current rights
-        $rights = $this->getRights();
-        foreach ($rights as $r) {
-            if ($r->has('right_current')) {
-                $r->set('right_current', 0);
-                $rm->update($r);
-            }
-        }
-
-        // Set current right
-        if ($right->get('axys_account_id') === $this->get('id')) {
-            $right->set('right_current', 1);
-            $rm->update($right);
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * @throws Exception
      */
     public function getCurrentRight(): Right

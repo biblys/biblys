@@ -28,35 +28,4 @@ class VisitorTest extends TestCase
             "should set user when request has a session token"
         );
     }
-
-    public function testSetCurrentRight()
-    {
-        // given
-        $user = ModelFactory::createAxysAccount(
-            email: "admin-and-publisher@biblys.fr",
-            username: "adminAndPublisher",
-        );
-        $request = RequestFactory::createAuthRequest("", $user);
-        $visitor = new Visitor($request);
-        $rm = new RightManager();
-        $oldRight = $rm->create(["axys_account_id" => $user->getId(), "right_current" => 1]);
-        $newRight = $rm->create(["axys_account_id" => $user->getId()]);
-
-        // when
-        $visitor->setCurrentRight($newRight);
-
-        // then
-        $updatedNewRight = $rm->getById($newRight->get("id"));
-        $this->assertEquals(
-            1,
-            $updatedNewRight->get("right_current"),
-            "new right should be current"
-        );
-        $updatedOldRight = $rm->getById($oldRight->get("id"));
-        $this->assertEquals(
-            0,
-            $updatedOldRight->get("right_current"),
-            "new right should be not be current"
-        );
-    }
 }
