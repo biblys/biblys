@@ -1,13 +1,14 @@
 <?php
 
-use Model\AxysAccountQuery;
+use Model\User;
+use Model\UserQuery;
 use Symfony\Component\HttpFoundation\Request;
 
 class Visitor extends AxysAccount
 {
     private bool $logged = false;
     private mixed $visitor_uid;
-    private ?\Model\AxysAccount $axysAccount = null;
+    private ?User $user = null;
 
     public function __construct(Request $request)
     {
@@ -54,8 +55,8 @@ class Visitor extends AxysAccount
             return false;
         }
 
-        if (method_exists($this->axysAccount, $methodName)) {
-            return $this->axysAccount->$methodName();
+        if (method_exists($this->user, $methodName)) {
+            return $this->user->$methodName();
         }
 
         throw new ArgumentCountError("Method $methodName does not exist on AxysAccount");
@@ -132,13 +133,13 @@ class Visitor extends AxysAccount
             return;
         }
 
-        $axysAccount = AxysAccountQuery::create()->findPk($session->get('axys_account_id'));
-        if (!$axysAccount) {
+        $user = UserQuery::create()->findPk($session->get('user_id'));
+        if (!$user) {
             return;
         }
 
         $this->logged = true;
-        $this->axysAccount = $axysAccount;
+        $this->user = $user;
         $this->set('user_uid', $token);
     }
 }

@@ -15,7 +15,7 @@ class VisitorTest extends TestCase
     public function testConstructor()
     {
         // given
-        $user = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest("", $user);
 
         // when
