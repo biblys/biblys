@@ -758,6 +758,27 @@ class CurrentUserTest extends TestCase
     }
 
     /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAuthAdminForNonAdminWithErrorMessage()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createUser(site: $site);
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $config = new Config(["site" => $site->getId()]);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // then
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->expectExceptionMessage("You shall not pass!");
+
+        // when
+        $currentUser->authAdmin(errorMessage: "You shall not pass!");
+    }
+
+    /**
      * #authPublisher (for specific publisher)
      */
 

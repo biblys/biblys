@@ -341,12 +341,14 @@ class CurrentUser
      * @throws AccessDeniedHttpException
      * @throws Exception
      */
-    public function authAdmin(): void
+    public function authAdmin(
+        $errorMessage = "Accès réservé aux administrateurs.",
+    ): void
     {
         $this->authUser();
 
         if (!$this->isAdmin()) {
-            throw new AccessDeniedHttpException("Accès réservé aux administrateurs.");
+            throw new AccessDeniedHttpException($errorMessage);
         }
     }
 
