@@ -91,7 +91,7 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
         }
 
         $file->setArticleId($articleId);
-        $file->setAxysAccountId($currentUser->getAxysAccount()->getId());
+        $file->setAxysAccountId($currentUser->getUser()->getId());
         $file->setTitle($title);
         $file->setType($type);
         $file->setHash(md5_file($uploadedFile["tmp_name"]));

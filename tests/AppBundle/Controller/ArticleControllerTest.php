@@ -687,7 +687,7 @@ class ArticleControllerTest extends TestCase
             ->with("newsletter")
             ->willReturn("1");
         $currentUserService = $this->createMock(CurrentUser::class);
-        $currentUserService->expects($this->once())->method("getAxysAccount")->willReturn($user);
+        $currentUserService->expects($this->once())->method("getUser")->willReturn($user);
         $mailingList = $this->createMock(MailingListInterface::class);
         $mailingList
             ->expects($this->once())
@@ -739,7 +739,7 @@ class ArticleControllerTest extends TestCase
         $currentSiteService = $this->createMock(CurrentSite::class);
         $currentSiteService->expects($this->once())->method("getSite")->willReturn($site);
         $currentUserService = $this->createMock(CurrentUser::class);
-        $currentUserService->expects($this->once())->method("getAxysAccount")->willReturn($user);
+        $currentUserService->expects($this->once())->method("getUser")->willReturn($user);
         $mailingList = $this->createMock(MailingListInterface::class);
         $mailingListService = $this->createMock(MailingListService::class);
         $mailingListService->method("getMailingList")->willReturn($mailingList);
@@ -823,7 +823,7 @@ class ArticleControllerTest extends TestCase
             ->with("publisher_filter")->andReturn($article->getPublisherId());
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("getAxysAccount")->andReturn($user);
+        $currentUser->shouldReceive("getUser")->andReturn($user);
         $watermarkingFile = Mockery::mock(WatermarkedFile::class);
         $watermarkingService = Mockery::mock(WatermarkingService::class);
         $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
@@ -889,7 +889,7 @@ class ArticleControllerTest extends TestCase
             ->with("publisher_filter")->andReturn($article->getPublisherId());
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("getAxysAccount")->andReturn($user);
+        $currentUser->shouldReceive("getUser")->andReturn($user);
         $watermarkingService = Mockery::mock(WatermarkingService::class);
         $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
         $watermarkingService->shouldNotReceive("getFiles");
@@ -1058,7 +1058,7 @@ class ArticleControllerTest extends TestCase
         $currentSite->shouldReceive("getSite")
             ->andReturn(ModelFactory::createSite());
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("getAxysAccount")
+        $currentUser->shouldReceive("getUser")
             ->andReturn(ModelFactory::createUser());
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")
@@ -1112,7 +1112,7 @@ class ArticleControllerTest extends TestCase
         $currentSite->shouldReceive("getSite")
             ->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("getAxysAccount")
+        $currentUser->shouldReceive("getUser")
             ->andReturn($user);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")
@@ -1163,7 +1163,7 @@ class ArticleControllerTest extends TestCase
         $currentSite->shouldReceive("getSite")
             ->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("getAxysAccount")
+        $currentUser->shouldReceive("getUser")
             ->andReturn($user);
         $watermarkingService = Mockery::mock(WatermarkingService::class);
         $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
@@ -1216,7 +1216,7 @@ class ArticleControllerTest extends TestCase
         $currentSite->shouldReceive("getSite")
             ->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("getAxysAccount")
+        $currentUser->shouldReceive("getUser")
             ->andReturn($user);
         $watermarkingService = Mockery::mock(WatermarkingService::class);
         $watermarkingService->shouldReceive("isConfigured")->andReturn(true);

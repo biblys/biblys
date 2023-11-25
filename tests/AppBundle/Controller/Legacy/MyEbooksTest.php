@@ -32,7 +32,7 @@ class MyEbooksTest extends TestCase
 
         $user = ModelFactory::createUser();
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("getAxysAccount")->andReturn($user);
+        $currentUser->shouldReceive("getUser")->andReturn($user);
 
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);

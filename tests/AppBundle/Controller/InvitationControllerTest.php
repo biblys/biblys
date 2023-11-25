@@ -460,7 +460,7 @@ class InvitationControllerTest extends TestCase
         $user = ModelFactory::createUser();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("isAuthentified")->andReturn(true);
-        $currentUser->shouldReceive("getAxysAccount")->andReturn($user);
+        $currentUser->shouldReceive("getUser")->andReturn($user);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->shouldReceive("renderResponse")
             ->with("AppBundle:Invitation:show.html.twig", [

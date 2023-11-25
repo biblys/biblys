@@ -265,7 +265,7 @@ return function (
     ORDER BY `article_editing_user` LIMIT 1',
         [
             'article_id' => $request->query->get('id'),
-            'axys_account_id' => $currentUser->getAxysAccount()->getId(),
+            'axys_account_id' => $currentUser->getUser()->getId(),
         ]
     );
     if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
@@ -359,7 +359,7 @@ return function (
         // Creer un nouvel article
         EntityManager::prepareAndExecute(
             'INSERT INTO `articles`(`article_editing_user`, `article_created`) VALUES(:axys_account_id, NOW())',
-            ['axys_account_id' => $currentUser->getAxysAccount()->getId()]
+            ['axys_account_id' => $currentUser->getUser()->getId()]
         );
 
         $import = $request->query->get('import');

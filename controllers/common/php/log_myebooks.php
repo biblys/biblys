@@ -27,7 +27,7 @@ return function (
 
     $copies = StockQuery::create()
         ->filterBySite($currentSite->getSite())
-        ->filterByUser($currentUser->getAxysAccount())
+        ->filterByUser($currentUser->getUser())
         ->orderBySellingDate(Criteria::DESC)
         ->find();
 

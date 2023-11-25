@@ -37,7 +37,7 @@ class CurrentUserTest extends TestCase
         // then
         $this->assertEquals(
             $user,
-            $currentUser->getAxysAccount(),
+            $currentUser->getUser(),
             "it returns authentified user"
         );
     }
@@ -59,7 +59,7 @@ class CurrentUserTest extends TestCase
         // then
         $this->assertEquals(
             $user,
-            $currentUser->getAxysAccount(),
+            $currentUser->getUser(),
             "it returns authentified user"
         );
     }
@@ -80,7 +80,7 @@ class CurrentUserTest extends TestCase
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, Config::load());
 
         // when
-        $currentUser->getAxysAccount();
+        $currentUser->getUser();
     }
 
     /**
@@ -100,7 +100,7 @@ class CurrentUserTest extends TestCase
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, Config::load());
 
         // when
-        $currentUser->getAxysAccount();
+        $currentUser->getUser();
     }
 
     /**
@@ -123,7 +123,7 @@ class CurrentUserTest extends TestCase
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, Config::load());
 
         // when
-        $currentUser->getAxysAccount();
+        $currentUser->getUser();
     }
 
     /**
@@ -145,7 +145,7 @@ class CurrentUserTest extends TestCase
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, Config::load());
 
         // when
-        $currentUser->getAxysAccount();
+        $currentUser->getUser();
     }
 
     /**

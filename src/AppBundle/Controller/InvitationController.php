@@ -257,7 +257,7 @@ class InvitationController extends Controller
             foreach ($articles as $article) {
                 self::_addArticleToUserLibrary(
                     article: $article,
-                    user: $currentUser->getAxysAccount(),
+                    user: $currentUser->getUser(),
                     allowsPreDownload: $invitation->getAllowsPreDownload(),
                     currentSite: $currentSite,
                     session: $session
@@ -395,7 +395,7 @@ class InvitationController extends Controller
             $stock = StockQuery::create()
                 ->filterBySite($currentSite->getSite())
                 ->filterByArticle($article)
-                ->findOneByUserId($currentUser->getAxysAccount()->getId());
+                ->findOneByUserId($currentUser->getUser()->getId());
 
             if ($stock) {
                 $session->getFlashBag()->add(

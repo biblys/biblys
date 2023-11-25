@@ -69,7 +69,7 @@ if ($alertToDeleteId) {
 /** @noinspection PhpUnhandledExceptionInspection */
 $currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
 /** @noinspection PhpUnhandledExceptionInspection */
-$currentUser = $currentUserService->getAxysAccount();
+$currentUser = $currentUserService->getUser();
 
 /** @var PDO $_SQL */
 $_SQL->query("SET SESSION sql_mode=''")->execute();

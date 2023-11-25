@@ -229,7 +229,7 @@ return function (
             $order = $om->get(
                 [
                     'order_type' => 'web',
-                    'axys_account_id' => $currentUser->getAxysAccount()->getId(),
+                    'axys_account_id' => $currentUser->getUser()->getId(),
                     'order_payment_date' => 'NULL',
                     'order_shipping_date' => 'NULL',
                     'order_cancel_date' => 'NULL'

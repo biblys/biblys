@@ -299,7 +299,7 @@ class ArticleController extends Controller
             throw new NotFoundException($article->get('title')." n'est pas disponible.");
         }
 
-        $currentUser = $currentUserService->getAxysAccount();
+        $currentUser = $currentUserService->getUser();
         $currentUserPurchasesForArticle = StockQuery::create()
             ->filterBySite($currentSiteService->getSite())
             ->filterByUser($currentUser)
@@ -758,7 +758,7 @@ class ArticleController extends Controller
             "article_id" => $id,
             "article_title" => $libraryItem->getArticle()->getTitle(),
             "item_id" => $libraryItem->getId(),
-            "user_email" => $currentUser->getAxysAccount()->getEmail(),
+            "user_email" => $currentUser->getUser()->getEmail(),
             "isWatermarked" => $libraryItem->isWatermarked(),
             "files" => $files,
         ]);
@@ -790,7 +790,7 @@ class ArticleController extends Controller
 
         $transaction = $watermarkingService->watermark(
             masterId: $libraryItem->getArticle()->getLemoninkMasterId(),
-            text: "Téléchargé par {$currentUser->getAxysAccount()->getEmail()} (#{$libraryItem->getId()})",
+            text: "Téléchargé par {$currentUser->getUser()->getEmail()} (#{$libraryItem->getId()})",
         );
         $libraryItem->setLemoninkTransactionId($transaction->getId());
         $libraryItem->setLemoninkTransactionToken($transaction->getToken());
@@ -823,7 +823,7 @@ class ArticleController extends Controller
 
         $libraryItem = StockQuery::create()
             ->filterBySite($currentSite->getSite())
-            ->filterByUser($currentUser->getAxysAccount())
+            ->filterByUser($currentUser->getUser())
             ->filterByArticleId($id)
             ->findOne();
         if (!$libraryItem) {
@@ -832,7 +832,7 @@ class ArticleController extends Controller
 
         return StockQuery::create()
             ->filterBySite($currentSite->getSite())
-            ->filterByUser($currentUser->getAxysAccount())
+            ->filterByUser($currentUser->getUser())
             ->filterByArticleId($id)
             ->findOne();
     }

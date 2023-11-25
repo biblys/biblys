@@ -133,13 +133,24 @@ class CurrentUser
     /**
      * @return User
      */
-    public function getAxysAccount(): User
+    public function getUser(): User
     {
         if ($this->user === null) {
             throw new UnauthorizedHttpException("", "Identification requise.");
         }
 
         return $this->user;
+    }
+
+    public function getAxysAccount(): User
+    {
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.75.0",
+            "CurrentUser->getAxysAccount() is deprecated. Use CurrentUser->getUser() instead.",
+        );
+
+        return $this->getUser();
     }
 
     /**
@@ -327,7 +338,7 @@ class CurrentUser
 
     public function getEmail(): ?string
     {
-        return $this->getAxysAccount()->getEmail();
+        return $this->getUser()->getEmail();
     }
 
     public function authUser(): void

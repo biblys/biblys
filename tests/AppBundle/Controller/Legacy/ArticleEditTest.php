@@ -142,7 +142,7 @@ class ArticleEditTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authPublisher")->once()->andReturn();
         $currentUser->shouldReceive("getCurrentRight")->once()->andReturn($right);
-        $currentUser->shouldReceive("getAxysAccount")->once()->andReturn($admin);
+        $currentUser->shouldReceive("getUser")->once()->andReturn($admin);
         $currentUser->shouldReceive("isAdmin")->once()->andReturn(true);
         $urlGenerator = $this->createMock(UrlGenerator::class);
 
@@ -173,7 +173,7 @@ class ArticleEditTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("isAdmin")->andReturn(true);
         $currentUser->shouldReceive("getCurrentRight")->andReturn(null);
-        $currentUser->shouldReceive("getAxysAccount")->andReturn($user);
+        $currentUser->shouldReceive("getUser")->andReturn($user);
 
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);

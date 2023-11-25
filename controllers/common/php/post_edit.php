@@ -108,7 +108,7 @@ $config = Config::load();
 $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
 // Valeurs par defaut pour un nouveau billet
-$p["axys_account_id"] = $currentUser->getAxysAccount()->getId();
+$p["axys_account_id"] = $currentUser->getUser()->getId();
 $p["post_date"] = date("Y-m-d");
 $p["post_time"] = date("H:i");
 
