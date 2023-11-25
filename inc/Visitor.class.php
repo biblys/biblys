@@ -1,16 +1,13 @@
 <?php
 
-use Biblys\Service\Config;
-use Biblys\Service\CurrentSite;
+use Model\AxysAccountQuery;
 use Symfony\Component\HttpFoundation\Request;
 
 class Visitor extends AxysAccount
 {
     private bool $logged = false;
     private mixed $visitor_uid;
-    private ?AxysAccount $user = null;
-
-    private ?bool $isAdmin = null;
+    private ?\Model\AxysAccount $axysAccount = null;
 
     public function __construct(Request $request)
     {
@@ -32,20 +29,27 @@ class Visitor extends AxysAccount
 
     public function has($field): bool
     {
-        if (isset($this->user)) {
-            return $this->user->has($field);
-        }
+        $value = $this->get($field);
 
-        return false;
+        return (bool) $value;
     }
 
     public function get($field)
     {
-        if (isset($this->user)) {
-            return $this->user->get($field);
+        if (!$this->isLogged()) {
+            return null;
         }
 
-        return false;
+        $fieldWords = explode('_', $field);
+        $capitalizedFieldWords = array_map('ucfirst', $fieldWords);
+        $pascalCaseFieldName = join('', $capitalizedFieldWords);
+        $methodName = "get$pascalCaseFieldName";
+
+        if (method_exists($this->axysAccount, $methodName)) {
+            return $this->axysAccount->$methodName();
+        }
+
+        throw new ArgumentCountError("Method $methodName does not exist on AxysAccount");
     }
 
     /**
@@ -175,15 +179,13 @@ class Visitor extends AxysAccount
             return;
         }
 
-        $um = new AxysAccountManager();
-        /** @var AxysAccount|false $user */
-        $user = $um->getById($session->get('axys_account_id'));
-        if (!$user) {
+        $axysAccount = AxysAccountQuery::create()->findPk($session->get('axys_account_id'));
+        if (!$axysAccount) {
             return;
         }
 
         $this->logged = true;
-        $this->user = $user;
+        $this->axysAccount = $axysAccount;
         $this->set('user_uid', $token);
     }
 }
