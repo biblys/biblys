@@ -5,6 +5,7 @@ namespace Framework;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
+use Model\SiteQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use ReflectionException;
@@ -125,8 +126,9 @@ class ControllerTest extends TestCase
         $this->expectNotToPerformAssertions();
 
         // given
+        $site = SiteQuery::create()->findPk(1);
         $controller = new Controller();
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = RequestFactory::createAuthRequestForAdminUser(site: $site);
 
         // when
         Helpers::callPrivateMethod($controller, "authAdmin", [$request]);
@@ -160,9 +162,10 @@ class ControllerTest extends TestCase
         $this->expectNotToPerformAssertions();
 
         // given
+        $site = SiteQuery::create()->findPk(1);
         $publisher = ModelFactory::createPublisher();
         $controller = new Controller();
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = RequestFactory::createAuthRequestForAdminUser(site: $site);
 
         // when
         Helpers::callPrivateMethod($controller, "authPublisher", [$request, $publisher]);
