@@ -1,6 +1,7 @@
 <?php
 
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentUser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -158,7 +159,8 @@ if ($list) {
         $TotalPrice += $a['stock_selling_price'];
     }
 
-    if (isset($_GET['action']) && $_GET['action'] == 'return' and auth('admin')) {
+    /** @var CurrentUser $currentUser */
+    if (isset($_GET['action']) && $_GET['action'] == 'return' and $currentUser->isAdmin()) {
         return new RedirectResponse('/list/'.$l['list_url'].'?returned=1');
     }
 

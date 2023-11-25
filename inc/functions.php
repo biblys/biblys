@@ -111,51 +111,6 @@ if (!defined('SITE_PATH')) {
     define('SITE_PATH', $sitePath);
 }
 
-// Identification
-/**
- * @throws PropelException
- * @throws Exception
- * @deprecated Using auth() is deprecated. Use Controller::auth… functions instead.
- */
-function auth(string $type = 'user'): bool|Visitor
-{
-    trigger_deprecation(
-        "biblys/biblys",
-        "2.68.0",
-        "Using auth() is deprecated. Use CurrentUser service instead."
-    );
-
-    global $request, $config;
-
-    $currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
-
-    if (!$currentUserService->isAuthentified()) {
-        return false;
-    }
-
-    if ($type === "log") {
-        return new Visitor($request);
-    }
-
-    if ($type === "user") {
-        return true;
-    }
-
-    if ($type === "publisher") {
-        return $currentUserService->hasPublisherRight();
-    }
-
-    if ($type === "admin") {
-        return $currentUserService->isAdmin();
-    }
-
-    if ($type === "root") {
-        throw new InvalidArgumentException('"root" is not a valid auth type');
-    }
-
-    return false;
-}
-
 function authors($x, $m = null): ?string
 {
     if ($x === null) {
