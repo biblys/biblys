@@ -20,6 +20,7 @@ use Http\Discovery\Psr17Factory;
 use JsonException;
 use Model\AuthenticationMethod;
 use Model\AuthenticationMethodQuery;
+use Model\CartQuery;
 use Model\Session;
 use Model\User;
 use Propel\Runtime\Exception\PropelException;
@@ -201,6 +202,17 @@ class OpenIDConnectController extends Controller
         $authenticationMethod->setAccessToken($oidcTokens->getAccessToken());
         $authenticationMethod->setIdToken($oidcTokens->getIdToken());
         $authenticationMethod->save();
+
+        $carts = CartQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByAxysAccountId($externalId)
+            ->find();
+        foreach ($carts as $cart) {
+            $cart->setUser($user);
+            $cart->setAxysAccountId(null);
+            $cart->save();
+        }
+
         return $authenticationMethod;
     }
 }

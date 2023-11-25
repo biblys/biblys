@@ -193,6 +193,12 @@ class OpenIDConnectControllerTest extends TestCase
             email: $userEmail,
         );
 
+        $cart = ModelFactory::createCart(site: $site, axysAccountId: $externalId);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("setUser");
+        $currentUser->expects("transfertVisitorCartToUser");
+
         $request = self::_buildCallbackRequest();
         $controller = new OpenIDConnectController();
 
@@ -220,6 +226,10 @@ class OpenIDConnectControllerTest extends TestCase
             ->filterByExternalId($externalId)
             ->findOneByExternalId($externalId);
         $this->assertNotNull($authenticationMethod);
+
+        $cart->reload();
+        $this->assertEquals($user->getId(), $cart->getUserId());
+        $this->assertNull($cart->getAxysAccountId());
     }
 
     /**

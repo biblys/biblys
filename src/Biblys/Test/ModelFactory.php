@@ -127,12 +127,12 @@ class ModelFactory
     }
 
     /**
-     * @param int $amount
      * @throws PropelException
      */
     public static function createCart(
         Site        $site = null,
-        User $user = null,
+        User        $user = null,
+        int         $axysAccountId = null,
         string      $uniqueId = null,
         int         $amount = 0,
         int         $count = 0,
@@ -142,6 +142,7 @@ class ModelFactory
         $cart->setUid($uniqueId ?? "cart-uid");
         $cart->setSite($site ?? self::createSite());
         $cart->setUser($user);
+        $cart->setAxysAccountId($axysAccountId);
         $cart->setAmount($amount);
         $cart->setCount($count);
         $cart->save();
