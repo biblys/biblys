@@ -3,6 +3,7 @@
 namespace Model;
 
 use Model\Base\RightQuery as BaseRightQuery;
+use Propel\Runtime\Exception\PropelException;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'rights' table.
@@ -15,5 +16,21 @@ use Model\Base\RightQuery as BaseRightQuery;
  */
 class RightQuery extends BaseRightQuery
 {
+    /**
+     * @throws PropelException
+     */
+    public function isUserAdminForSite(User $user, Site $site): bool
+    {
+        $adminRight = RightQuery::create()
+            ->filterByUser($user)
+            ->filterBySite($site)
+            ->filterByIsAdmin(true)
+            ->findOne();
 
+        if($adminRight) {
+            return true;
+        }
+
+        return false;
+    }
 }

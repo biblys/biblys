@@ -13,7 +13,6 @@ use Model\Publisher;
 use Model\Right;
 use Model\RightQuery;
 use Model\SessionQuery;
-use Model\Site;
 use Model\Stock;
 use Model\StockQuery;
 use Model\User;
@@ -112,17 +111,7 @@ class CurrentUser
 
         $site = $this->getCurrentSite()->getSite();
 
-        $adminRight = RightQuery::create()
-            ->filterByUser($this->user)
-            ->filterBySite($site)
-            ->filterByIsAdmin(true)
-            ->findOne();
-
-        if($adminRight) {
-            return true;
-        }
-
-        return false;
+        return RightQuery::create()->isUserAdminForSite($this->user, $site);
     }
 
     /**
@@ -130,7 +119,7 @@ class CurrentUser
      *
      * @deprecated CurrentUser->isAdminForSite() is deprecated. Use CurrentUser->isAdmin() instead.
      */
-    public function isAdminForSite(Site $site): bool
+    public function isAdminForSite(): bool
     {
         return $this->isAdmin();
     }
