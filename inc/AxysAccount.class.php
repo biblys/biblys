@@ -233,26 +233,6 @@ class AxysAccount extends Entity
 
     /* RIGHTS */
 
-    /**
-     * @deprecated AxysAccount->isRoot() is deprecated. Use AxysAccount->isAdmin() instead.
-     */
-    public function isRoot(): bool
-    {
-        trigger_deprecation(
-            "biblys/biblys",
-            "2.75.0",
-            "AxysAccount->isRoot() is deprecated. Use AxysAccount->isAdmin() instead."
-        );
-
-        return $this->isAdmin();
-    }
-
-    public function isAdmin(): bool
-    {
-        
-        return $this->hasRight('site', LegacyCodeHelper::getGlobalSite()['id']);
-    }
-
     public function getRights()
     {
         $config = Config::load();
@@ -269,26 +249,6 @@ class AxysAccount extends Entity
         }
 
         return $rights;
-    }
-
-    public function hasRight(string $type, int $id): bool
-    {
-        $rights = $this->getRights();
-        foreach ($rights as $r) {
-            if ($r->get($type . '_id') === $id) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public function giveRight($type, $id)
-    {
-        $rm = new RightManager();
-        $right = $rm->create();
-        $right->set('axys_account_id', $this->get('id'))->set($type . '_id', $id);
-        $rm->update($right);
     }
 
     public function removeRight($type, $id)
