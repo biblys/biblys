@@ -247,11 +247,13 @@ class ModelFactory
      */
     public static function createOrder(
         Site   $site = null,
+        string $axysAccountId = null,
         string $slug = null,
     ): Order
     {
         $order = new Order();
         $order->setSite($site ?? ModelFactory::createSite());
+        $order->setAxysAccountId($axysAccountId);
         $order->setSlug($slug ?? "order-slug");
         $order->save();
 

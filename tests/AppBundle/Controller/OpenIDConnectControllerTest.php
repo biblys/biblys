@@ -197,6 +197,7 @@ class OpenIDConnectControllerTest extends TestCase
         $customer = ModelFactory::createCustomer(site: $site, axysAccountId: $externalId);
         $list = ModelFactory::createStockItemList(site: $site, axysAccountId: $externalId);
         $option = ModelFactory::createUserOption(site: $site, axysAccountId: $externalId);
+        $order = ModelFactory::createOrder(site: $site, axysAccountId: $externalId);
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("setUser");
@@ -245,6 +246,10 @@ class OpenIDConnectControllerTest extends TestCase
         $option->reload();
         $this->assertEquals($user->getId(), $option->getUserId());
         $this->assertNull($option->getAxysAccountId());
+
+        $order->reload();
+        $this->assertEquals($user->getId(), $order->getUserId());
+        $this->assertNull($order->getAxysAccountId());
     }
 
     /**
