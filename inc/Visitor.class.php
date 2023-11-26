@@ -1,5 +1,7 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentUser;
 use Model\User;
 use Model\UserQuery;
 use Symfony\Component\HttpFoundation\Request;
@@ -106,6 +108,15 @@ class Visitor extends AxysAccount
             return true;
         }
         return false;
+    }
+
+    public function isAdmin(): bool
+    {
+        $request = LegacyCodeHelper::getGlobalRequest();
+        $config = LegacyCodeHelper::getGlobalConfig();
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        return $currentUser->isAdmin();
     }
 
     /**

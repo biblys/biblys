@@ -259,21 +259,6 @@ class PostTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($canBeDeleted, "Post author should be able to delete it");
     }
 
-    public function testAnyPostCanBeDeletedByAnAdmin()
-    {
-        // given
-        $admin = Mockery::mock(AxysAccount::class);
-        $admin->shouldReceive('isAdmin')->andReturn(true);
-        $post = new Post(["axys_account_id" => 111]);
-        $post->set('axys_account_id', 222);
-
-        // when
-        $canBeDeleted = $post->canBeDeletedBy($admin);
-
-        // then
-        $this->assertTrue($canBeDeleted, "Admin should be able to delete any post");
-    }
-
     /**
      * Test deleting a post
      * @depends testGet

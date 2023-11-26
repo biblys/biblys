@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Pagination;
 use Biblys\Service\Slug\SlugService;
 use Biblys\Service\TemplateService;
@@ -85,13 +86,13 @@ class PostController extends Controller
 
         // Offline post
         if ($post && $post->get('status') == 0 &&
-                $post->get('axys_account_id') !== \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->get('id') && !\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
+                $post->get('axys_account_id') !== LegacyCodeHelper::getGlobalVisitor()->get('id') && !LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
             $post = false;
         }
 
         // Future post
         if ($post && $post->get('date') > date("Y-m-d H:i:s") &&
-                $post->get('axys_account_id') !== \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->get('id') && !\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
+                $post->get('axys_account_id') !== LegacyCodeHelper::getGlobalVisitor()->get('id') && !LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
             $post = false;
         }
 
@@ -138,7 +139,7 @@ class PostController extends Controller
     // GET /admin/posts/
     public function adminAction(): RedirectResponse
     {
-        if (\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
+        if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
             return new RedirectResponse('/pages/adm_posts');
         }
 
@@ -150,15 +151,20 @@ class PostController extends Controller
     /**
      * @throws Exception
      */
-    public function deleteAction(UrlGenerator $urlGenerator, $id): RedirectResponse
+    public function deleteAction(
+        UrlGenerator $urlGenerator,
+        CurrentUser $currentUser,
+        $id
+    ): RedirectResponse
     {
         $pm = new PostManager();
         $post = $pm->getById($id);
+        /** @var \Post $post */
         if (!$post) {
             throw new NotFoundException("Post $id not found.");
         }
 
-        if (!$post->canBeDeletedBy(\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor())) {
+        if (!$currentUser->isAdmin() && !$post->canBeDeletedBy(LegacyCodeHelper::getGlobalVisitor())) {
             throw new Exception("Vous n'avez pas le droit de supprimer ce billet.");
         }
 

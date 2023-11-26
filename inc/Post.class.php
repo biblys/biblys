@@ -156,10 +156,6 @@
          */
         public function canBeDeletedBy(AxysAccount $user): bool
         {
-            if ($user->isAdmin()) {
-                return true;
-            }
-
             if ($user->get('id') === $this->get('axys_account_id')) {
                 return true;
             }
