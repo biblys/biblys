@@ -345,7 +345,6 @@ class ModelFactory
     public static function createStockItem(
         ?Site        $site = null,
         ?Article     $article = null,
-        ?AxysAccount $axysAccount = null,
         ?User        $user = null,
         ?Cart        $cart = null,
         int          $sellingPrice = 0,
@@ -354,12 +353,12 @@ class ModelFactory
         DateTime     $lostDate = null,
         string       $lemoninkTransactionId = null,
         string       $lemoninkTransactionToken = null,
+        string       $axysAccountId = null,
     ): Stock
     {
         $stock = new Stock();
         $stock->setSite($site ?? self::createSite());
         $stock->setArticle($article ?? self::createArticle());
-        $stock->setAxysAccount($axysAccount);
         $stock->setUser($user);
         $stock->setCart($cart);
         $stock->setCondition("Neuf");
@@ -369,6 +368,7 @@ class ModelFactory
         $stock->setLostDate($lostDate);
         $stock->setLemonInkTransactionId($lemoninkTransactionId);
         $stock->setLemonInkTransactionToken($lemoninkTransactionToken);
+        $stock->setAxysAccountId($axysAccountId);
         $stock->save();
 
         return $stock;

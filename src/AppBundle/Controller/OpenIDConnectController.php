@@ -28,6 +28,7 @@ use Model\PostQuery;
 use Model\RightQuery;
 use Model\Session;
 use Model\StockItemListQuery;
+use Model\StockQuery;
 use Model\User;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
@@ -278,6 +279,16 @@ class OpenIDConnectController extends Controller
             $adminRight->setAxysAccountId(null);
             $adminRight->setIsAdmin(true);
             $adminRight->save();
+        }
+
+        $libraryItems = StockQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByAxysAccountId($externalId)
+            ->find();
+        foreach ($libraryItems as $libraryItem) {
+            $libraryItem->setUser($user);
+            $libraryItem->setAxysAccountId(null);
+            $libraryItem->save();
         }
 
         return $authenticationMethod;
