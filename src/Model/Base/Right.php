@@ -107,6 +107,14 @@ abstract class Right implements ActiveRecordInterface
     protected $site_id;
 
     /**
+     * The value for the is_admin field.
+     *
+     * Note: this column has a database default value of: false
+     * @var        boolean|null
+     */
+    protected $is_admin;
+
+    /**
      * The value for the publisher_id field.
      *
      * @var        int|null
@@ -150,14 +158,14 @@ abstract class Right implements ActiveRecordInterface
     protected $right_updated;
 
     /**
-     * @var        ChildUser
-     */
-    protected $aUser;
-
-    /**
      * @var        ChildAxysAccount
      */
     protected $aAxysAccount;
+
+    /**
+     * @var        ChildUser
+     */
+    protected $aUser;
 
     /**
      * @var        ChildSite
@@ -185,6 +193,7 @@ abstract class Right implements ActiveRecordInterface
      */
     public function applyDefaultValues(): void
     {
+        $this->is_admin = false;
         $this->right_current = false;
     }
 
@@ -467,6 +476,26 @@ abstract class Right implements ActiveRecordInterface
     }
 
     /**
+     * Get the [is_admin] column value.
+     *
+     * @return boolean|null
+     */
+    public function getisAdmin()
+    {
+        return $this->is_admin;
+    }
+
+    /**
+     * Get the [is_admin] column value.
+     *
+     * @return boolean|null
+     */
+    public function isAdmin()
+    {
+        return $this->getisAdmin();
+    }
+
+    /**
      * Get the [publisher_id] column value.
      *
      * @return int|null
@@ -673,6 +702,34 @@ abstract class Right implements ActiveRecordInterface
     }
 
     /**
+     * Sets the value of the [is_admin] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param bool|integer|string|null $v The new value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setisAdmin($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->is_admin !== $v) {
+            $this->is_admin = $v;
+            $this->modifiedColumns[RightTableMap::COL_IS_ADMIN] = true;
+        }
+
+        return $this;
+    }
+
+    /**
      * Set the value of [publisher_id] column.
      *
      * @param int|null $v New value
@@ -814,6 +871,10 @@ abstract class Right implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues(): bool
     {
+            if ($this->is_admin !== false) {
+                return false;
+            }
+
             if ($this->right_current !== false) {
                 return false;
             }
@@ -859,25 +920,28 @@ abstract class Right implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : RightTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : RightTableMap::translateFieldName('PublisherId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : RightTableMap::translateFieldName('isAdmin', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->is_admin = (null !== $col) ? (boolean) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : RightTableMap::translateFieldName('PublisherId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->publisher_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : RightTableMap::translateFieldName('BookshopId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : RightTableMap::translateFieldName('BookshopId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->bookshop_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : RightTableMap::translateFieldName('LibraryId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : RightTableMap::translateFieldName('LibraryId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->library_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : RightTableMap::translateFieldName('Current', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : RightTableMap::translateFieldName('Current', TableMap::TYPE_PHPNAME, $indexType)];
             $this->right_current = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : RightTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : RightTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->right_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : RightTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : RightTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -890,7 +954,7 @@ abstract class Right implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 11; // 11 = RightTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 12; // 12 = RightTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Right'), 0, $e);
@@ -964,8 +1028,8 @@ abstract class Right implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aUser = null;
             $this->aAxysAccount = null;
+            $this->aUser = null;
             $this->aSite = null;
             $this->aPublisher = null;
         } // if (deep)
@@ -1089,18 +1153,18 @@ abstract class Right implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aUser !== null) {
-                if ($this->aUser->isModified() || $this->aUser->isNew()) {
-                    $affectedRows += $this->aUser->save($con);
-                }
-                $this->setUser($this->aUser);
-            }
-
             if ($this->aAxysAccount !== null) {
                 if ($this->aAxysAccount->isModified() || $this->aAxysAccount->isNew()) {
                     $affectedRows += $this->aAxysAccount->save($con);
                 }
                 $this->setAxysAccount($this->aAxysAccount);
+            }
+
+            if ($this->aUser !== null) {
+                if ($this->aUser->isModified() || $this->aUser->isNew()) {
+                    $affectedRows += $this->aUser->save($con);
+                }
+                $this->setUser($this->aUser);
             }
 
             if ($this->aSite !== null) {
@@ -1169,6 +1233,9 @@ abstract class Right implements ActiveRecordInterface
         if ($this->isColumnModified(RightTableMap::COL_SITE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'site_id';
         }
+        if ($this->isColumnModified(RightTableMap::COL_IS_ADMIN)) {
+            $modifiedColumns[':p' . $index++]  = 'is_admin';
+        }
         if ($this->isColumnModified(RightTableMap::COL_PUBLISHER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'publisher_id';
         }
@@ -1216,6 +1283,10 @@ abstract class Right implements ActiveRecordInterface
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
+                        break;
+                    case 'is_admin':
+                        $stmt->bindValue($identifier, (int) $this->is_admin, PDO::PARAM_INT);
 
                         break;
                     case 'publisher_id':
@@ -1320,21 +1391,24 @@ abstract class Right implements ActiveRecordInterface
                 return $this->getSiteId();
 
             case 5:
-                return $this->getPublisherId();
+                return $this->getisAdmin();
 
             case 6:
-                return $this->getBookshopId();
+                return $this->getPublisherId();
 
             case 7:
-                return $this->getLibraryId();
+                return $this->getBookshopId();
 
             case 8:
-                return $this->getCurrent();
+                return $this->getLibraryId();
 
             case 9:
-                return $this->getCreatedAt();
+                return $this->getCurrent();
 
             case 10:
+                return $this->getCreatedAt();
+
+            case 11:
                 return $this->getUpdatedAt();
 
             default:
@@ -1370,19 +1444,20 @@ abstract class Right implements ActiveRecordInterface
             $keys[2] => $this->getAxysAccountId(),
             $keys[3] => $this->getUserId(),
             $keys[4] => $this->getSiteId(),
-            $keys[5] => $this->getPublisherId(),
-            $keys[6] => $this->getBookshopId(),
-            $keys[7] => $this->getLibraryId(),
-            $keys[8] => $this->getCurrent(),
-            $keys[9] => $this->getCreatedAt(),
-            $keys[10] => $this->getUpdatedAt(),
+            $keys[5] => $this->getisAdmin(),
+            $keys[6] => $this->getPublisherId(),
+            $keys[7] => $this->getBookshopId(),
+            $keys[8] => $this->getLibraryId(),
+            $keys[9] => $this->getCurrent(),
+            $keys[10] => $this->getCreatedAt(),
+            $keys[11] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[9]] instanceof \DateTimeInterface) {
-            $result[$keys[9]] = $result[$keys[9]]->format('Y-m-d H:i:s.u');
-        }
-
         if ($result[$keys[10]] instanceof \DateTimeInterface) {
             $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[11]] instanceof \DateTimeInterface) {
+            $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1391,21 +1466,6 @@ abstract class Right implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aUser) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'user';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'users';
-                        break;
-                    default:
-                        $key = 'User';
-                }
-
-                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
             if (null !== $this->aAxysAccount) {
 
                 switch ($keyType) {
@@ -1420,6 +1480,21 @@ abstract class Right implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aAxysAccount->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aUser) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'user';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'users';
+                        break;
+                    default:
+                        $key = 'User';
+                }
+
+                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aSite) {
 
@@ -1503,21 +1578,24 @@ abstract class Right implements ActiveRecordInterface
                 $this->setSiteId($value);
                 break;
             case 5:
-                $this->setPublisherId($value);
+                $this->setisAdmin($value);
                 break;
             case 6:
-                $this->setBookshopId($value);
+                $this->setPublisherId($value);
                 break;
             case 7:
-                $this->setLibraryId($value);
+                $this->setBookshopId($value);
                 break;
             case 8:
-                $this->setCurrent($value);
+                $this->setLibraryId($value);
                 break;
             case 9:
-                $this->setCreatedAt($value);
+                $this->setCurrent($value);
                 break;
             case 10:
+                $this->setCreatedAt($value);
+                break;
+            case 11:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1562,22 +1640,25 @@ abstract class Right implements ActiveRecordInterface
             $this->setSiteId($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setPublisherId($arr[$keys[5]]);
+            $this->setisAdmin($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setBookshopId($arr[$keys[6]]);
+            $this->setPublisherId($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setLibraryId($arr[$keys[7]]);
+            $this->setBookshopId($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setCurrent($arr[$keys[8]]);
+            $this->setLibraryId($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setCreatedAt($arr[$keys[9]]);
+            $this->setCurrent($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setUpdatedAt($arr[$keys[10]]);
+            $this->setCreatedAt($arr[$keys[10]]);
+        }
+        if (array_key_exists($keys[11], $arr)) {
+            $this->setUpdatedAt($arr[$keys[11]]);
         }
 
         return $this;
@@ -1636,6 +1717,9 @@ abstract class Right implements ActiveRecordInterface
         }
         if ($this->isColumnModified(RightTableMap::COL_SITE_ID)) {
             $criteria->add(RightTableMap::COL_SITE_ID, $this->site_id);
+        }
+        if ($this->isColumnModified(RightTableMap::COL_IS_ADMIN)) {
+            $criteria->add(RightTableMap::COL_IS_ADMIN, $this->is_admin);
         }
         if ($this->isColumnModified(RightTableMap::COL_PUBLISHER_ID)) {
             $criteria->add(RightTableMap::COL_PUBLISHER_ID, $this->publisher_id);
@@ -1747,6 +1831,7 @@ abstract class Right implements ActiveRecordInterface
         $copyObj->setAxysAccountId($this->getAxysAccountId());
         $copyObj->setUserId($this->getUserId());
         $copyObj->setSiteId($this->getSiteId());
+        $copyObj->setisAdmin($this->getisAdmin());
         $copyObj->setPublisherId($this->getPublisherId());
         $copyObj->setBookshopId($this->getBookshopId());
         $copyObj->setLibraryId($this->getLibraryId());
@@ -1779,57 +1864,6 @@ abstract class Right implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
-    }
-
-    /**
-     * Declares an association between this object and a ChildUser object.
-     *
-     * @param ChildUser|null $v
-     * @return $this The current object (for fluent API support)
-     * @throws \Propel\Runtime\Exception\PropelException
-     */
-    public function setUser(ChildUser $v = null)
-    {
-        if ($v === null) {
-            $this->setUserId(NULL);
-        } else {
-            $this->setUserId($v->getId());
-        }
-
-        $this->aUser = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildUser object, it will not be re-added.
-        if ($v !== null) {
-            $v->addRight($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildUser object
-     *
-     * @param ConnectionInterface $con Optional Connection object.
-     * @return ChildUser|null The associated ChildUser object.
-     * @throws \Propel\Runtime\Exception\PropelException
-     */
-    public function getUser(?ConnectionInterface $con = null)
-    {
-        if ($this->aUser === null && ($this->user_id != 0)) {
-            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aUser->addRights($this);
-             */
-        }
-
-        return $this->aUser;
     }
 
     /**
@@ -1881,6 +1915,57 @@ abstract class Right implements ActiveRecordInterface
         }
 
         return $this->aAxysAccount;
+    }
+
+    /**
+     * Declares an association between this object and a ChildUser object.
+     *
+     * @param ChildUser|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setUser(ChildUser $v = null)
+    {
+        if ($v === null) {
+            $this->setUserId(NULL);
+        } else {
+            $this->setUserId($v->getId());
+        }
+
+        $this->aUser = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildUser object, it will not be re-added.
+        if ($v !== null) {
+            $v->addRight($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildUser object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildUser|null The associated ChildUser object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getUser(?ConnectionInterface $con = null)
+    {
+        if ($this->aUser === null && ($this->user_id != 0)) {
+            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aUser->addRights($this);
+             */
+        }
+
+        return $this->aUser;
     }
 
     /**
@@ -1994,11 +2079,11 @@ abstract class Right implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aUser) {
-            $this->aUser->removeRight($this);
-        }
         if (null !== $this->aAxysAccount) {
             $this->aAxysAccount->removeRight($this);
+        }
+        if (null !== $this->aUser) {
+            $this->aUser->removeRight($this);
         }
         if (null !== $this->aSite) {
             $this->aSite->removeRight($this);
@@ -2011,6 +2096,7 @@ abstract class Right implements ActiveRecordInterface
         $this->axys_account_id = null;
         $this->user_id = null;
         $this->site_id = null;
+        $this->is_admin = null;
         $this->publisher_id = null;
         $this->bookshop_id = null;
         $this->library_id = null;
@@ -2041,8 +2127,8 @@ abstract class Right implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aUser = null;
         $this->aAxysAccount = null;
+        $this->aUser = null;
         $this->aSite = null;
         $this->aPublisher = null;
         return $this;

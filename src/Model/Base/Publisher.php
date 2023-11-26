@@ -3995,10 +3995,10 @@ abstract class Publisher implements ActiveRecordInterface
      * @return ObjectCollection|ChildRight[] List of ChildRight objects
      * @phpstan-return ObjectCollection&\Traversable<ChildRight}> List of ChildRight objects
      */
-    public function getRightsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getRightsJoinAxysAccount(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildRightQuery::create(null, $criteria);
-        $query->joinWith('User', $joinBehavior);
+        $query->joinWith('AxysAccount', $joinBehavior);
 
         return $this->getRights($query, $con);
     }
@@ -4021,10 +4021,10 @@ abstract class Publisher implements ActiveRecordInterface
      * @return ObjectCollection|ChildRight[] List of ChildRight objects
      * @phpstan-return ObjectCollection&\Traversable<ChildRight}> List of ChildRight objects
      */
-    public function getRightsJoinAxysAccount(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getRightsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildRightQuery::create(null, $criteria);
-        $query->joinWith('AxysAccount', $joinBehavior);
+        $query->joinWith('User', $joinBehavior);
 
         return $this->getRights($query, $con);
     }

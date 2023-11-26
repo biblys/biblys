@@ -1256,12 +1256,22 @@
     <column name="right_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="right_uid" phpName="Uid" type="VARCHAR" size="32"/>
     <column name="axys_account_id" phpName="AxysAccountId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <foreign-key foreignTable="axys_accounts" skipSql="true">
+      <reference local="axys_account_id" foreign="axys_account_id"/>
+    </foreign-key>
     <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <foreign-key foreignTable="users" skipSql="true">
       <reference local="user_id" foreign="id"/>
     </foreign-key>
     <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
+    <column name="is_admin" phpName="isAdmin" type="BOOLEAN" size="1" defaultValue="false"/>
     <column name="publisher_id" phpName="PublisherId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <foreign-key foreignTable="publishers" skipSql="true">
+      <reference local="publisher_id" foreign="publisher_id"/>
+    </foreign-key>
     <column name="bookshop_id" phpName="BookshopId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="library_id" phpName="LibraryId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="right_current" phpName="Current" type="BOOLEAN" size="1" defaultValue="false"/>
@@ -1271,15 +1281,6 @@
       <parameter name="create_column" value="right_created" />
       <parameter name="update_column" value="right_updated" />
     </behavior>
-    <foreign-key foreignTable="axys_accounts" skipSql="true">
-      <reference local="axys_account_id" foreign="axys_account_id"/>
-    </foreign-key>
-    <foreign-key foreignTable="sites" skipSql="true">
-      <reference local="site_id" foreign="site_id"/>
-    </foreign-key>
-    <foreign-key foreignTable="publishers" skipSql="true">
-      <reference local="publisher_id" foreign="publisher_id"/>
-    </foreign-key>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>

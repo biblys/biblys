@@ -24,6 +24,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRightQuery orderByAxysAccountId($order = Criteria::ASC) Order by the axys_account_id column
  * @method     ChildRightQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
  * @method     ChildRightQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
+ * @method     ChildRightQuery orderByisAdmin($order = Criteria::ASC) Order by the is_admin column
  * @method     ChildRightQuery orderByPublisherId($order = Criteria::ASC) Order by the publisher_id column
  * @method     ChildRightQuery orderByBookshopId($order = Criteria::ASC) Order by the bookshop_id column
  * @method     ChildRightQuery orderByLibraryId($order = Criteria::ASC) Order by the library_id column
@@ -36,6 +37,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRightQuery groupByAxysAccountId() Group by the axys_account_id column
  * @method     ChildRightQuery groupByUserId() Group by the user_id column
  * @method     ChildRightQuery groupBySiteId() Group by the site_id column
+ * @method     ChildRightQuery groupByisAdmin() Group by the is_admin column
  * @method     ChildRightQuery groupByPublisherId() Group by the publisher_id column
  * @method     ChildRightQuery groupByBookshopId() Group by the bookshop_id column
  * @method     ChildRightQuery groupByLibraryId() Group by the library_id column
@@ -51,16 +53,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRightQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildRightQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildRightQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
- * @method     ChildRightQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
- * @method     ChildRightQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
- *
- * @method     ChildRightQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
- *
- * @method     ChildRightQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
- * @method     ChildRightQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
- * @method     ChildRightQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
- *
  * @method     ChildRightQuery leftJoinAxysAccount($relationAlias = null) Adds a LEFT JOIN clause to the query using the AxysAccount relation
  * @method     ChildRightQuery rightJoinAxysAccount($relationAlias = null) Adds a RIGHT JOIN clause to the query using the AxysAccount relation
  * @method     ChildRightQuery innerJoinAxysAccount($relationAlias = null) Adds a INNER JOIN clause to the query using the AxysAccount relation
@@ -70,6 +62,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRightQuery leftJoinWithAxysAccount() Adds a LEFT JOIN clause and with to the query using the AxysAccount relation
  * @method     ChildRightQuery rightJoinWithAxysAccount() Adds a RIGHT JOIN clause and with to the query using the AxysAccount relation
  * @method     ChildRightQuery innerJoinWithAxysAccount() Adds a INNER JOIN clause and with to the query using the AxysAccount relation
+ *
+ * @method     ChildRightQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
+ * @method     ChildRightQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
+ * @method     ChildRightQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
+ *
+ * @method     ChildRightQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
+ *
+ * @method     ChildRightQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
+ * @method     ChildRightQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
+ * @method     ChildRightQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
  *
  * @method     ChildRightQuery leftJoinSite($relationAlias = null) Adds a LEFT JOIN clause to the query using the Site relation
  * @method     ChildRightQuery rightJoinSite($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Site relation
@@ -91,7 +93,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRightQuery rightJoinWithPublisher() Adds a RIGHT JOIN clause and with to the query using the Publisher relation
  * @method     ChildRightQuery innerJoinWithPublisher() Adds a INNER JOIN clause and with to the query using the Publisher relation
  *
- * @method     \Model\UserQuery|\Model\AxysAccountQuery|\Model\SiteQuery|\Model\PublisherQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\AxysAccountQuery|\Model\UserQuery|\Model\SiteQuery|\Model\PublisherQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildRight|null findOne(?ConnectionInterface $con = null) Return the first ChildRight matching the query
  * @method     ChildRight findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildRight matching the query, or a new ChildRight object populated from the query conditions when no match is found
@@ -101,6 +103,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRight|null findOneByAxysAccountId(int $axys_account_id) Return the first ChildRight filtered by the axys_account_id column
  * @method     ChildRight|null findOneByUserId(int $user_id) Return the first ChildRight filtered by the user_id column
  * @method     ChildRight|null findOneBySiteId(int $site_id) Return the first ChildRight filtered by the site_id column
+ * @method     ChildRight|null findOneByisAdmin(boolean $is_admin) Return the first ChildRight filtered by the is_admin column
  * @method     ChildRight|null findOneByPublisherId(int $publisher_id) Return the first ChildRight filtered by the publisher_id column
  * @method     ChildRight|null findOneByBookshopId(int $bookshop_id) Return the first ChildRight filtered by the bookshop_id column
  * @method     ChildRight|null findOneByLibraryId(int $library_id) Return the first ChildRight filtered by the library_id column
@@ -116,6 +119,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRight requireOneByAxysAccountId(int $axys_account_id) Return the first ChildRight filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRight requireOneByUserId(int $user_id) Return the first ChildRight filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRight requireOneBySiteId(int $site_id) Return the first ChildRight filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRight requireOneByisAdmin(boolean $is_admin) Return the first ChildRight filtered by the is_admin column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRight requireOneByPublisherId(int $publisher_id) Return the first ChildRight filtered by the publisher_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRight requireOneByBookshopId(int $bookshop_id) Return the first ChildRight filtered by the bookshop_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRight requireOneByLibraryId(int $library_id) Return the first ChildRight filtered by the library_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -136,6 +140,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildRight> findByUserId(int|array<int> $user_id) Return ChildRight objects filtered by the user_id column
  * @method     ChildRight[]|Collection findBySiteId(int|array<int> $site_id) Return ChildRight objects filtered by the site_id column
  * @psalm-method Collection&\Traversable<ChildRight> findBySiteId(int|array<int> $site_id) Return ChildRight objects filtered by the site_id column
+ * @method     ChildRight[]|Collection findByisAdmin(boolean|array<boolean> $is_admin) Return ChildRight objects filtered by the is_admin column
+ * @psalm-method Collection&\Traversable<ChildRight> findByisAdmin(boolean|array<boolean> $is_admin) Return ChildRight objects filtered by the is_admin column
  * @method     ChildRight[]|Collection findByPublisherId(int|array<int> $publisher_id) Return ChildRight objects filtered by the publisher_id column
  * @psalm-method Collection&\Traversable<ChildRight> findByPublisherId(int|array<int> $publisher_id) Return ChildRight objects filtered by the publisher_id column
  * @method     ChildRight[]|Collection findByBookshopId(int|array<int> $bookshop_id) Return ChildRight objects filtered by the bookshop_id column
@@ -247,7 +253,7 @@ abstract class RightQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT right_id, right_uid, axys_account_id, user_id, site_id, publisher_id, bookshop_id, library_id, right_current, right_created, right_updated FROM rights WHERE right_id = :p0';
+        $sql = 'SELECT right_id, right_uid, axys_account_id, user_id, site_id, is_admin, publisher_id, bookshop_id, library_id, right_current, right_created, right_updated FROM rights WHERE right_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -548,6 +554,35 @@ abstract class RightQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the is_admin column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByisAdmin(true); // WHERE is_admin = true
+     * $query->filterByisAdmin('yes'); // WHERE is_admin = true
+     * </code>
+     *
+     * @param bool|string $isAdmin The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByisAdmin($isAdmin = null, ?string $comparison = null)
+    {
+        if (is_string($isAdmin)) {
+            $isAdmin = in_array(strtolower($isAdmin), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
+        }
+
+        $this->addUsingAlias(RightTableMap::COL_IS_ADMIN, $isAdmin, $comparison);
+
+        return $this;
+    }
+
+    /**
      * Filter the query on the publisher_id column
      *
      * Example usage:
@@ -798,181 +833,6 @@ abstract class RightQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \Model\User object
-     *
-     * @param \Model\User|ObjectCollection $user The related object(s) to use as filter
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByUser($user, ?string $comparison = null)
-    {
-        if ($user instanceof \Model\User) {
-            return $this
-                ->addUsingAlias(RightTableMap::COL_USER_ID, $user->getId(), $comparison);
-        } elseif ($user instanceof ObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            $this
-                ->addUsingAlias(RightTableMap::COL_USER_ID, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
-
-            return $this;
-        } else {
-            throw new PropelException('filterByUser() only accepts arguments of type \Model\User or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the User relation
-     *
-     * @param string|null $relationAlias Optional alias for the relation
-     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function joinUser(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('User');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'User');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the User relation User object
-     *
-     * @see useQuery()
-     *
-     * @param string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \Model\UserQuery A secondary query class using the current class as primary query
-     */
-    public function useUserQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        return $this
-            ->joinUser($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'User', '\Model\UserQuery');
-    }
-
-    /**
-     * Use the User relation User object
-     *
-     * @param callable(\Model\UserQuery):\Model\UserQuery $callable A function working on the related query
-     *
-     * @param string|null $relationAlias optional alias for the relation
-     *
-     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this
-     */
-    public function withUserQuery(
-        callable $callable,
-        string $relationAlias = null,
-        ?string $joinType = Criteria::LEFT_JOIN
-    ) {
-        $relatedQuery = $this->useUserQuery(
-            $relationAlias,
-            $joinType
-        );
-        $callable($relatedQuery);
-        $relatedQuery->endUse();
-
-        return $this;
-    }
-
-    /**
-     * Use the relation to User table for an EXISTS query.
-     *
-     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
-     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
-     *
-     * @return \Model\UserQuery The inner query object of the EXISTS statement
-     */
-    public function useUserExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
-    {
-        /** @var $q \Model\UserQuery */
-        $q = $this->useExistsQuery('User', $modelAlias, $queryClass, $typeOfExists);
-        return $q;
-    }
-
-    /**
-     * Use the relation to User table for a NOT EXISTS query.
-     *
-     * @see useUserExistsQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
-     *
-     * @return \Model\UserQuery The inner query object of the NOT EXISTS statement
-     */
-    public function useUserNotExistsQuery($modelAlias = null, $queryClass = null)
-    {
-        /** @var $q \Model\UserQuery */
-        $q = $this->useExistsQuery('User', $modelAlias, $queryClass, 'NOT EXISTS');
-        return $q;
-    }
-
-    /**
-     * Use the relation to User table for an IN query.
-     *
-     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
-     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
-     *
-     * @return \Model\UserQuery The inner query object of the IN statement
-     */
-    public function useInUserQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
-    {
-        /** @var $q \Model\UserQuery */
-        $q = $this->useInQuery('User', $modelAlias, $queryClass, $typeOfIn);
-        return $q;
-    }
-
-    /**
-     * Use the relation to User table for a NOT IN query.
-     *
-     * @see useUserInQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
-     *
-     * @return \Model\UserQuery The inner query object of the NOT IN statement
-     */
-    public function useNotInUserQuery($modelAlias = null, $queryClass = null)
-    {
-        /** @var $q \Model\UserQuery */
-        $q = $this->useInQuery('User', $modelAlias, $queryClass, 'NOT IN');
-        return $q;
-    }
-
-    /**
      * Filter the query by a related \Model\AxysAccount object
      *
      * @param \Model\AxysAccount|ObjectCollection $axysAccount The related object(s) to use as filter
@@ -1144,6 +1004,181 @@ abstract class RightQuery extends ModelCriteria
     {
         /** @var $q \Model\AxysAccountQuery */
         $q = $this->useInQuery('AxysAccount', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\User object
+     *
+     * @param \Model\User|ObjectCollection $user The related object(s) to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByUser($user, ?string $comparison = null)
+    {
+        if ($user instanceof \Model\User) {
+            return $this
+                ->addUsingAlias(RightTableMap::COL_USER_ID, $user->getId(), $comparison);
+        } elseif ($user instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            $this
+                ->addUsingAlias(RightTableMap::COL_USER_ID, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
+        } else {
+            throw new PropelException('filterByUser() only accepts arguments of type \Model\User or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the User relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinUser(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('User');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'User');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the User relation User object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\UserQuery A secondary query class using the current class as primary query
+     */
+    public function useUserQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinUser($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'User', '\Model\UserQuery');
+    }
+
+    /**
+     * Use the User relation User object
+     *
+     * @param callable(\Model\UserQuery):\Model\UserQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withUserQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useUserQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to User table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\UserQuery The inner query object of the EXISTS statement
+     */
+    public function useUserExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useExistsQuery('User', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to User table for a NOT EXISTS query.
+     *
+     * @see useUserExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\UserQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useUserNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useExistsQuery('User', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to User table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\UserQuery The inner query object of the IN statement
+     */
+    public function useInUserQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useInQuery('User', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to User table for a NOT IN query.
+     *
+     * @see useUserInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\UserQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInUserQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useInQuery('User', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 
