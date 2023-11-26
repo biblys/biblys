@@ -145,6 +145,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery rightJoinWithCrowfundingReward() Adds a RIGHT JOIN clause and with to the query using the CrowfundingReward relation
  * @method     ChildSiteQuery innerJoinWithCrowfundingReward() Adds a INNER JOIN clause and with to the query using the CrowfundingReward relation
  *
+ * @method     ChildSiteQuery leftJoinCustomer($relationAlias = null) Adds a LEFT JOIN clause to the query using the Customer relation
+ * @method     ChildSiteQuery rightJoinCustomer($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Customer relation
+ * @method     ChildSiteQuery innerJoinCustomer($relationAlias = null) Adds a INNER JOIN clause to the query using the Customer relation
+ *
+ * @method     ChildSiteQuery joinWithCustomer($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Customer relation
+ *
+ * @method     ChildSiteQuery leftJoinWithCustomer() Adds a LEFT JOIN clause and with to the query using the Customer relation
+ * @method     ChildSiteQuery rightJoinWithCustomer() Adds a RIGHT JOIN clause and with to the query using the Customer relation
+ * @method     ChildSiteQuery innerJoinWithCustomer() Adds a INNER JOIN clause and with to the query using the Customer relation
+ *
  * @method     ChildSiteQuery leftJoinInvitation($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invitation relation
  * @method     ChildSiteQuery rightJoinInvitation($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invitation relation
  * @method     ChildSiteQuery innerJoinInvitation($relationAlias = null) Adds a INNER JOIN clause to the query using the Invitation relation
@@ -154,6 +164,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery leftJoinWithInvitation() Adds a LEFT JOIN clause and with to the query using the Invitation relation
  * @method     ChildSiteQuery rightJoinWithInvitation() Adds a RIGHT JOIN clause and with to the query using the Invitation relation
  * @method     ChildSiteQuery innerJoinWithInvitation() Adds a INNER JOIN clause and with to the query using the Invitation relation
+ *
+ * @method     ChildSiteQuery leftJoinStockItemList($relationAlias = null) Adds a LEFT JOIN clause to the query using the StockItemList relation
+ * @method     ChildSiteQuery rightJoinStockItemList($relationAlias = null) Adds a RIGHT JOIN clause to the query using the StockItemList relation
+ * @method     ChildSiteQuery innerJoinStockItemList($relationAlias = null) Adds a INNER JOIN clause to the query using the StockItemList relation
+ *
+ * @method     ChildSiteQuery joinWithStockItemList($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the StockItemList relation
+ *
+ * @method     ChildSiteQuery leftJoinWithStockItemList() Adds a LEFT JOIN clause and with to the query using the StockItemList relation
+ * @method     ChildSiteQuery rightJoinWithStockItemList() Adds a RIGHT JOIN clause and with to the query using the StockItemList relation
+ * @method     ChildSiteQuery innerJoinWithStockItemList() Adds a INNER JOIN clause and with to the query using the StockItemList relation
  *
  * @method     ChildSiteQuery leftJoinOption($relationAlias = null) Adds a LEFT JOIN clause to the query using the Option relation
  * @method     ChildSiteQuery rightJoinOption($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Option relation
@@ -194,6 +214,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery leftJoinWithPayment() Adds a LEFT JOIN clause and with to the query using the Payment relation
  * @method     ChildSiteQuery rightJoinWithPayment() Adds a RIGHT JOIN clause and with to the query using the Payment relation
  * @method     ChildSiteQuery innerJoinWithPayment() Adds a INNER JOIN clause and with to the query using the Payment relation
+ *
+ * @method     ChildSiteQuery leftJoinPost($relationAlias = null) Adds a LEFT JOIN clause to the query using the Post relation
+ * @method     ChildSiteQuery rightJoinPost($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Post relation
+ * @method     ChildSiteQuery innerJoinPost($relationAlias = null) Adds a INNER JOIN clause to the query using the Post relation
+ *
+ * @method     ChildSiteQuery joinWithPost($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Post relation
+ *
+ * @method     ChildSiteQuery leftJoinWithPost() Adds a LEFT JOIN clause and with to the query using the Post relation
+ * @method     ChildSiteQuery rightJoinWithPost() Adds a RIGHT JOIN clause and with to the query using the Post relation
+ * @method     ChildSiteQuery innerJoinWithPost() Adds a INNER JOIN clause and with to the query using the Post relation
  *
  * @method     ChildSiteQuery leftJoinArticleCategory($relationAlias = null) Adds a LEFT JOIN clause to the query using the ArticleCategory relation
  * @method     ChildSiteQuery rightJoinArticleCategory($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ArticleCategory relation
@@ -245,6 +275,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery rightJoinWithStock() Adds a RIGHT JOIN clause and with to the query using the Stock relation
  * @method     ChildSiteQuery innerJoinWithStock() Adds a INNER JOIN clause and with to the query using the Stock relation
  *
+ * @method     ChildSiteQuery leftJoinSubscription($relationAlias = null) Adds a LEFT JOIN clause to the query using the Subscription relation
+ * @method     ChildSiteQuery rightJoinSubscription($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Subscription relation
+ * @method     ChildSiteQuery innerJoinSubscription($relationAlias = null) Adds a INNER JOIN clause to the query using the Subscription relation
+ *
+ * @method     ChildSiteQuery joinWithSubscription($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Subscription relation
+ *
+ * @method     ChildSiteQuery leftJoinWithSubscription() Adds a LEFT JOIN clause and with to the query using the Subscription relation
+ * @method     ChildSiteQuery rightJoinWithSubscription() Adds a RIGHT JOIN clause and with to the query using the Subscription relation
+ * @method     ChildSiteQuery innerJoinWithSubscription() Adds a INNER JOIN clause and with to the query using the Subscription relation
+ *
  * @method     ChildSiteQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
  * @method     ChildSiteQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
  * @method     ChildSiteQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
@@ -285,7 +325,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery rightJoinWithWishlist() Adds a RIGHT JOIN clause and with to the query using the Wishlist relation
  * @method     ChildSiteQuery innerJoinWithWishlist() Adds a INNER JOIN clause and with to the query using the Wishlist relation
  *
- * @method     \Model\AlertQuery|\Model\CartQuery|\Model\CrowdfundingCampaignQuery|\Model\CrowfundingRewardQuery|\Model\InvitationQuery|\Model\OptionQuery|\Model\OrderQuery|\Model\PageQuery|\Model\PaymentQuery|\Model\ArticleCategoryQuery|\Model\RightQuery|\Model\SessionQuery|\Model\SpecialOfferQuery|\Model\StockQuery|\Model\UserQuery|\Model\AuthenticationMethodQuery|\Model\VoteQuery|\Model\WishlistQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\AlertQuery|\Model\CartQuery|\Model\CrowdfundingCampaignQuery|\Model\CrowfundingRewardQuery|\Model\CustomerQuery|\Model\InvitationQuery|\Model\StockItemListQuery|\Model\OptionQuery|\Model\OrderQuery|\Model\PageQuery|\Model\PaymentQuery|\Model\PostQuery|\Model\ArticleCategoryQuery|\Model\RightQuery|\Model\SessionQuery|\Model\SpecialOfferQuery|\Model\StockQuery|\Model\SubscriptionQuery|\Model\UserQuery|\Model\AuthenticationMethodQuery|\Model\VoteQuery|\Model\WishlistQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildSite|null findOne(?ConnectionInterface $con = null) Return the first ChildSite matching the query
  * @method     ChildSite findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildSite matching the query, or a new ChildSite object populated from the query conditions when no match is found
@@ -2584,6 +2624,179 @@ abstract class SiteQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related \Model\Customer object
+     *
+     * @param \Model\Customer|ObjectCollection $customer the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByCustomer($customer, ?string $comparison = null)
+    {
+        if ($customer instanceof \Model\Customer) {
+            $this
+                ->addUsingAlias(SiteTableMap::COL_SITE_ID, $customer->getSiteId(), $comparison);
+
+            return $this;
+        } elseif ($customer instanceof ObjectCollection) {
+            $this
+                ->useCustomerQuery()
+                ->filterByPrimaryKeys($customer->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByCustomer() only accepts arguments of type \Model\Customer or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Customer relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinCustomer(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Customer');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Customer');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Customer relation Customer object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\CustomerQuery A secondary query class using the current class as primary query
+     */
+    public function useCustomerQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCustomer($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Customer', '\Model\CustomerQuery');
+    }
+
+    /**
+     * Use the Customer relation Customer object
+     *
+     * @param callable(\Model\CustomerQuery):\Model\CustomerQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withCustomerQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useCustomerQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Customer table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\CustomerQuery The inner query object of the EXISTS statement
+     */
+    public function useCustomerExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\CustomerQuery */
+        $q = $this->useExistsQuery('Customer', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Customer table for a NOT EXISTS query.
+     *
+     * @see useCustomerExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\CustomerQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useCustomerNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\CustomerQuery */
+        $q = $this->useExistsQuery('Customer', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Customer table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\CustomerQuery The inner query object of the IN statement
+     */
+    public function useInCustomerQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\CustomerQuery */
+        $q = $this->useInQuery('Customer', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Customer table for a NOT IN query.
+     *
+     * @see useCustomerInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\CustomerQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInCustomerQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\CustomerQuery */
+        $q = $this->useInQuery('Customer', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
      * Filter the query by a related \Model\Invitation object
      *
      * @param \Model\Invitation|ObjectCollection $invitation the related object to use as filter
@@ -2753,6 +2966,179 @@ abstract class SiteQuery extends ModelCriteria
     {
         /** @var $q \Model\InvitationQuery */
         $q = $this->useInQuery('Invitation', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\StockItemList object
+     *
+     * @param \Model\StockItemList|ObjectCollection $stockItemList the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByStockItemList($stockItemList, ?string $comparison = null)
+    {
+        if ($stockItemList instanceof \Model\StockItemList) {
+            $this
+                ->addUsingAlias(SiteTableMap::COL_SITE_ID, $stockItemList->getSiteId(), $comparison);
+
+            return $this;
+        } elseif ($stockItemList instanceof ObjectCollection) {
+            $this
+                ->useStockItemListQuery()
+                ->filterByPrimaryKeys($stockItemList->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByStockItemList() only accepts arguments of type \Model\StockItemList or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the StockItemList relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinStockItemList(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('StockItemList');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'StockItemList');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the StockItemList relation StockItemList object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\StockItemListQuery A secondary query class using the current class as primary query
+     */
+    public function useStockItemListQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinStockItemList($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'StockItemList', '\Model\StockItemListQuery');
+    }
+
+    /**
+     * Use the StockItemList relation StockItemList object
+     *
+     * @param callable(\Model\StockItemListQuery):\Model\StockItemListQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withStockItemListQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useStockItemListQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to StockItemList table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\StockItemListQuery The inner query object of the EXISTS statement
+     */
+    public function useStockItemListExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\StockItemListQuery */
+        $q = $this->useExistsQuery('StockItemList', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to StockItemList table for a NOT EXISTS query.
+     *
+     * @see useStockItemListExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\StockItemListQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useStockItemListNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\StockItemListQuery */
+        $q = $this->useExistsQuery('StockItemList', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to StockItemList table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\StockItemListQuery The inner query object of the IN statement
+     */
+    public function useInStockItemListQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\StockItemListQuery */
+        $q = $this->useInQuery('StockItemList', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to StockItemList table for a NOT IN query.
+     *
+     * @see useStockItemListInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\StockItemListQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInStockItemListQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\StockItemListQuery */
+        $q = $this->useInQuery('StockItemList', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 
@@ -3445,6 +3831,179 @@ abstract class SiteQuery extends ModelCriteria
     {
         /** @var $q \Model\PaymentQuery */
         $q = $this->useInQuery('Payment', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\Post object
+     *
+     * @param \Model\Post|ObjectCollection $post the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByPost($post, ?string $comparison = null)
+    {
+        if ($post instanceof \Model\Post) {
+            $this
+                ->addUsingAlias(SiteTableMap::COL_SITE_ID, $post->getSiteId(), $comparison);
+
+            return $this;
+        } elseif ($post instanceof ObjectCollection) {
+            $this
+                ->usePostQuery()
+                ->filterByPrimaryKeys($post->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByPost() only accepts arguments of type \Model\Post or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Post relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinPost(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Post');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Post');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Post relation Post object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\PostQuery A secondary query class using the current class as primary query
+     */
+    public function usePostQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinPost($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Post', '\Model\PostQuery');
+    }
+
+    /**
+     * Use the Post relation Post object
+     *
+     * @param callable(\Model\PostQuery):\Model\PostQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withPostQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->usePostQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Post table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\PostQuery The inner query object of the EXISTS statement
+     */
+    public function usePostExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\PostQuery */
+        $q = $this->useExistsQuery('Post', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Post table for a NOT EXISTS query.
+     *
+     * @see usePostExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\PostQuery The inner query object of the NOT EXISTS statement
+     */
+    public function usePostNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\PostQuery */
+        $q = $this->useExistsQuery('Post', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Post table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\PostQuery The inner query object of the IN statement
+     */
+    public function useInPostQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\PostQuery */
+        $q = $this->useInQuery('Post', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Post table for a NOT IN query.
+     *
+     * @see usePostInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\PostQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInPostQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\PostQuery */
+        $q = $this->useInQuery('Post', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 
@@ -4310,6 +4869,179 @@ abstract class SiteQuery extends ModelCriteria
     {
         /** @var $q \Model\StockQuery */
         $q = $this->useInQuery('Stock', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\Subscription object
+     *
+     * @param \Model\Subscription|ObjectCollection $subscription the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterBySubscription($subscription, ?string $comparison = null)
+    {
+        if ($subscription instanceof \Model\Subscription) {
+            $this
+                ->addUsingAlias(SiteTableMap::COL_SITE_ID, $subscription->getSiteId(), $comparison);
+
+            return $this;
+        } elseif ($subscription instanceof ObjectCollection) {
+            $this
+                ->useSubscriptionQuery()
+                ->filterByPrimaryKeys($subscription->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterBySubscription() only accepts arguments of type \Model\Subscription or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Subscription relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinSubscription(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Subscription');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Subscription');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Subscription relation Subscription object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\SubscriptionQuery A secondary query class using the current class as primary query
+     */
+    public function useSubscriptionQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinSubscription($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Subscription', '\Model\SubscriptionQuery');
+    }
+
+    /**
+     * Use the Subscription relation Subscription object
+     *
+     * @param callable(\Model\SubscriptionQuery):\Model\SubscriptionQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withSubscriptionQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useSubscriptionQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Subscription table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\SubscriptionQuery The inner query object of the EXISTS statement
+     */
+    public function useSubscriptionExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\SubscriptionQuery */
+        $q = $this->useExistsQuery('Subscription', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Subscription table for a NOT EXISTS query.
+     *
+     * @see useSubscriptionExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SubscriptionQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useSubscriptionNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\SubscriptionQuery */
+        $q = $this->useExistsQuery('Subscription', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Subscription table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\SubscriptionQuery The inner query object of the IN statement
+     */
+    public function useInSubscriptionQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\SubscriptionQuery */
+        $q = $this->useInQuery('Subscription', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Subscription table for a NOT IN query.
+     *
+     * @see useSubscriptionInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SubscriptionQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInSubscriptionQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\SubscriptionQuery */
+        $q = $this->useInQuery('Subscription', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 

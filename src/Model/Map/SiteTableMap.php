@@ -706,6 +706,13 @@ class SiteTableMap extends TableMap
     1 => ':site_id',
   ),
 ), null, null, 'CrowfundingRewards', false);
+        $this->addRelation('Customer', '\\Model\\Customer', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, 'Customers', false);
         $this->addRelation('Invitation', '\\Model\\Invitation', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -713,6 +720,13 @@ class SiteTableMap extends TableMap
     1 => ':site_id',
   ),
 ), null, null, 'Invitations', false);
+        $this->addRelation('StockItemList', '\\Model\\StockItemList', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, 'StockItemLists', false);
         $this->addRelation('Option', '\\Model\\Option', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -741,6 +755,13 @@ class SiteTableMap extends TableMap
     1 => ':site_id',
   ),
 ), null, null, 'Payments', false);
+        $this->addRelation('Post', '\\Model\\Post', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, 'Posts', false);
         $this->addRelation('ArticleCategory', '\\Model\\ArticleCategory', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -776,6 +797,13 @@ class SiteTableMap extends TableMap
     1 => ':site_id',
   ),
 ), null, null, 'Stocks', false);
+        $this->addRelation('Subscription', '\\Model\\Subscription', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, 'Subscriptions', false);
         $this->addRelation('User', '\\Model\\User', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

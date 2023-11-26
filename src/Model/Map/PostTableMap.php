@@ -452,7 +452,7 @@ class PostTableMap extends TableMap
         $this->addPrimaryKey('post_id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
         $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
-        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, 10, null);
         $this->addColumn('category_id', 'CategoryId', 'INTEGER', false, 10, null);
         $this->addColumn('post_url', 'Url', 'LONGVARCHAR', false, null, null);
@@ -487,6 +487,13 @@ class PostTableMap extends TableMap
   array (
     0 => ':user_id',
     1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
   ),
 ), null, null, null, false);
     }

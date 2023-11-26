@@ -17,6 +17,8 @@ use Model\CrowdfundingCampaign as ChildCrowdfundingCampaign;
 use Model\CrowdfundingCampaignQuery as ChildCrowdfundingCampaignQuery;
 use Model\CrowfundingReward as ChildCrowfundingReward;
 use Model\CrowfundingRewardQuery as ChildCrowfundingRewardQuery;
+use Model\Customer as ChildCustomer;
+use Model\CustomerQuery as ChildCustomerQuery;
 use Model\Invitation as ChildInvitation;
 use Model\InvitationQuery as ChildInvitationQuery;
 use Model\Option as ChildOption;
@@ -27,6 +29,8 @@ use Model\Page as ChildPage;
 use Model\PageQuery as ChildPageQuery;
 use Model\Payment as ChildPayment;
 use Model\PaymentQuery as ChildPaymentQuery;
+use Model\Post as ChildPost;
+use Model\PostQuery as ChildPostQuery;
 use Model\Right as ChildRight;
 use Model\RightQuery as ChildRightQuery;
 use Model\Session as ChildSession;
@@ -36,7 +40,11 @@ use Model\SiteQuery as ChildSiteQuery;
 use Model\SpecialOffer as ChildSpecialOffer;
 use Model\SpecialOfferQuery as ChildSpecialOfferQuery;
 use Model\Stock as ChildStock;
+use Model\StockItemList as ChildStockItemList;
+use Model\StockItemListQuery as ChildStockItemListQuery;
 use Model\StockQuery as ChildStockQuery;
+use Model\Subscription as ChildSubscription;
+use Model\SubscriptionQuery as ChildSubscriptionQuery;
 use Model\User as ChildUser;
 use Model\UserQuery as ChildUserQuery;
 use Model\Vote as ChildVote;
@@ -49,16 +57,20 @@ use Model\Map\AuthenticationMethodTableMap;
 use Model\Map\CartTableMap;
 use Model\Map\CrowdfundingCampaignTableMap;
 use Model\Map\CrowfundingRewardTableMap;
+use Model\Map\CustomerTableMap;
 use Model\Map\InvitationTableMap;
 use Model\Map\OptionTableMap;
 use Model\Map\OrderTableMap;
 use Model\Map\PageTableMap;
 use Model\Map\PaymentTableMap;
+use Model\Map\PostTableMap;
 use Model\Map\RightTableMap;
 use Model\Map\SessionTableMap;
 use Model\Map\SiteTableMap;
 use Model\Map\SpecialOfferTableMap;
+use Model\Map\StockItemListTableMap;
 use Model\Map\StockTableMap;
+use Model\Map\SubscriptionTableMap;
 use Model\Map\UserTableMap;
 use Model\Map\VoteTableMap;
 use Model\Map\WishlistTableMap;
@@ -426,11 +438,25 @@ abstract class Site implements ActiveRecordInterface
     protected $collCrowfundingRewardsPartial;
 
     /**
+     * @var        ObjectCollection|ChildCustomer[] Collection to store aggregation of ChildCustomer objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildCustomer> Collection to store aggregation of ChildCustomer objects.
+     */
+    protected $collCustomers;
+    protected $collCustomersPartial;
+
+    /**
      * @var        ObjectCollection|ChildInvitation[] Collection to store aggregation of ChildInvitation objects.
      * @phpstan-var ObjectCollection&\Traversable<ChildInvitation> Collection to store aggregation of ChildInvitation objects.
      */
     protected $collInvitations;
     protected $collInvitationsPartial;
+
+    /**
+     * @var        ObjectCollection|ChildStockItemList[] Collection to store aggregation of ChildStockItemList objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildStockItemList> Collection to store aggregation of ChildStockItemList objects.
+     */
+    protected $collStockItemLists;
+    protected $collStockItemListsPartial;
 
     /**
      * @var        ObjectCollection|ChildOption[] Collection to store aggregation of ChildOption objects.
@@ -459,6 +485,13 @@ abstract class Site implements ActiveRecordInterface
      */
     protected $collPayments;
     protected $collPaymentsPartial;
+
+    /**
+     * @var        ObjectCollection|ChildPost[] Collection to store aggregation of ChildPost objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildPost> Collection to store aggregation of ChildPost objects.
+     */
+    protected $collPosts;
+    protected $collPostsPartial;
 
     /**
      * @var        ObjectCollection|ChildArticleCategory[] Collection to store aggregation of ChildArticleCategory objects.
@@ -494,6 +527,13 @@ abstract class Site implements ActiveRecordInterface
      */
     protected $collStocks;
     protected $collStocksPartial;
+
+    /**
+     * @var        ObjectCollection|ChildSubscription[] Collection to store aggregation of ChildSubscription objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildSubscription> Collection to store aggregation of ChildSubscription objects.
+     */
+    protected $collSubscriptions;
+    protected $collSubscriptionsPartial;
 
     /**
      * @var        ObjectCollection|ChildUser[] Collection to store aggregation of ChildUser objects.
@@ -561,10 +601,24 @@ abstract class Site implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildCustomer[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildCustomer>
+     */
+    protected $customersScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
      * @var ObjectCollection|ChildInvitation[]
      * @phpstan-var ObjectCollection&\Traversable<ChildInvitation>
      */
     protected $invitationsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildStockItemList[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildStockItemList>
+     */
+    protected $stockItemListsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -593,6 +647,13 @@ abstract class Site implements ActiveRecordInterface
      * @phpstan-var ObjectCollection&\Traversable<ChildPayment>
      */
     protected $paymentsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildPost[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildPost>
+     */
+    protected $postsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -628,6 +689,13 @@ abstract class Site implements ActiveRecordInterface
      * @phpstan-var ObjectCollection&\Traversable<ChildStock>
      */
     protected $stocksScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildSubscription[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildSubscription>
+     */
+    protected $subscriptionsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -2601,7 +2669,11 @@ abstract class Site implements ActiveRecordInterface
 
             $this->collCrowfundingRewards = null;
 
+            $this->collCustomers = null;
+
             $this->collInvitations = null;
+
+            $this->collStockItemLists = null;
 
             $this->collOptions = null;
 
@@ -2610,6 +2682,8 @@ abstract class Site implements ActiveRecordInterface
             $this->collPages = null;
 
             $this->collPayments = null;
+
+            $this->collPosts = null;
 
             $this->collArticleCategories = null;
 
@@ -2620,6 +2694,8 @@ abstract class Site implements ActiveRecordInterface
             $this->collSpecialOffers = null;
 
             $this->collStocks = null;
+
+            $this->collSubscriptions = null;
 
             $this->collUsers = null;
 
@@ -2828,6 +2904,24 @@ abstract class Site implements ActiveRecordInterface
                 }
             }
 
+            if ($this->customersScheduledForDeletion !== null) {
+                if (!$this->customersScheduledForDeletion->isEmpty()) {
+                    foreach ($this->customersScheduledForDeletion as $customer) {
+                        // need to save related object because we set the relation to null
+                        $customer->save($con);
+                    }
+                    $this->customersScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCustomers !== null) {
+                foreach ($this->collCustomers as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->invitationsScheduledForDeletion !== null) {
                 if (!$this->invitationsScheduledForDeletion->isEmpty()) {
                     \Model\InvitationQuery::create()
@@ -2839,6 +2933,24 @@ abstract class Site implements ActiveRecordInterface
 
             if ($this->collInvitations !== null) {
                 foreach ($this->collInvitations as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->stockItemListsScheduledForDeletion !== null) {
+                if (!$this->stockItemListsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->stockItemListsScheduledForDeletion as $stockItemList) {
+                        // need to save related object because we set the relation to null
+                        $stockItemList->save($con);
+                    }
+                    $this->stockItemListsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collStockItemLists !== null) {
+                foreach ($this->collStockItemLists as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -2911,6 +3023,24 @@ abstract class Site implements ActiveRecordInterface
 
             if ($this->collPayments !== null) {
                 foreach ($this->collPayments as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->postsScheduledForDeletion !== null) {
+                if (!$this->postsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->postsScheduledForDeletion as $post) {
+                        // need to save related object because we set the relation to null
+                        $post->save($con);
+                    }
+                    $this->postsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collPosts !== null) {
+                foreach ($this->collPosts as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -3000,6 +3130,24 @@ abstract class Site implements ActiveRecordInterface
 
             if ($this->collStocks !== null) {
                 foreach ($this->collStocks as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->subscriptionsScheduledForDeletion !== null) {
+                if (!$this->subscriptionsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->subscriptionsScheduledForDeletion as $subscription) {
+                        // need to save related object because we set the relation to null
+                        $subscription->save($con);
+                    }
+                    $this->subscriptionsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collSubscriptions !== null) {
+                foreach ($this->collSubscriptions as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -3700,6 +3848,21 @@ abstract class Site implements ActiveRecordInterface
 
                 $result[$key] = $this->collCrowfundingRewards->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collCustomers) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'customers';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'customerss';
+                        break;
+                    default:
+                        $key = 'Customers';
+                }
+
+                $result[$key] = $this->collCustomers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collInvitations) {
 
                 switch ($keyType) {
@@ -3714,6 +3877,21 @@ abstract class Site implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->collInvitations->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collStockItemLists) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'stockItemLists';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'listss';
+                        break;
+                    default:
+                        $key = 'StockItemLists';
+                }
+
+                $result[$key] = $this->collStockItemLists->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOptions) {
 
@@ -3774,6 +3952,21 @@ abstract class Site implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->collPayments->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collPosts) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'posts';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'postss';
+                        break;
+                    default:
+                        $key = 'Posts';
+                }
+
+                $result[$key] = $this->collPosts->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collArticleCategories) {
 
@@ -3849,6 +4042,21 @@ abstract class Site implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->collStocks->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collSubscriptions) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'subscriptions';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'subscriptionss';
+                        break;
+                    default:
+                        $key = 'Subscriptions';
+                }
+
+                $result[$key] = $this->collSubscriptions->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collUsers) {
 
@@ -4512,9 +4720,21 @@ abstract class Site implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getCustomers() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCustomer($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getInvitations() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addInvitation($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getStockItemLists() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addStockItemList($relObj->copy($deepCopy));
                 }
             }
 
@@ -4539,6 +4759,12 @@ abstract class Site implements ActiveRecordInterface
             foreach ($this->getPayments() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addPayment($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getPosts() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addPost($relObj->copy($deepCopy));
                 }
             }
 
@@ -4569,6 +4795,12 @@ abstract class Site implements ActiveRecordInterface
             foreach ($this->getStocks() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addStock($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getSubscriptions() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addSubscription($relObj->copy($deepCopy));
                 }
             }
 
@@ -4653,8 +4885,16 @@ abstract class Site implements ActiveRecordInterface
             $this->initCrowfundingRewards();
             return;
         }
+        if ('Customer' === $relationName) {
+            $this->initCustomers();
+            return;
+        }
         if ('Invitation' === $relationName) {
             $this->initInvitations();
+            return;
+        }
+        if ('StockItemList' === $relationName) {
+            $this->initStockItemLists();
             return;
         }
         if ('Option' === $relationName) {
@@ -4671,6 +4911,10 @@ abstract class Site implements ActiveRecordInterface
         }
         if ('Payment' === $relationName) {
             $this->initPayments();
+            return;
+        }
+        if ('Post' === $relationName) {
+            $this->initPosts();
             return;
         }
         if ('ArticleCategory' === $relationName) {
@@ -4691,6 +4935,10 @@ abstract class Site implements ActiveRecordInterface
         }
         if ('Stock' === $relationName) {
             $this->initStocks();
+            return;
+        }
+        if ('Subscription' === $relationName) {
+            $this->initSubscriptions();
             return;
         }
         if ('User' === $relationName) {
@@ -5772,6 +6020,271 @@ abstract class Site implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collCustomers collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addCustomers()
+     */
+    public function clearCustomers()
+    {
+        $this->collCustomers = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collCustomers collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialCustomers($v = true): void
+    {
+        $this->collCustomersPartial = $v;
+    }
+
+    /**
+     * Initializes the collCustomers collection.
+     *
+     * By default this just sets the collCustomers collection to an empty array (like clearcollCustomers());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCustomers(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collCustomers && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = CustomerTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collCustomers = new $collectionClassName;
+        $this->collCustomers->setModel('\Model\Customer');
+    }
+
+    /**
+     * Gets an array of ChildCustomer objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildSite is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildCustomer[] List of ChildCustomer objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildCustomer> List of ChildCustomer objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getCustomers(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collCustomersPartial && !$this->isNew();
+        if (null === $this->collCustomers || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collCustomers) {
+                    $this->initCustomers();
+                } else {
+                    $collectionClassName = CustomerTableMap::getTableMap()->getCollectionClassName();
+
+                    $collCustomers = new $collectionClassName;
+                    $collCustomers->setModel('\Model\Customer');
+
+                    return $collCustomers;
+                }
+            } else {
+                $collCustomers = ChildCustomerQuery::create(null, $criteria)
+                    ->filterBySite($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collCustomersPartial && count($collCustomers)) {
+                        $this->initCustomers(false);
+
+                        foreach ($collCustomers as $obj) {
+                            if (false == $this->collCustomers->contains($obj)) {
+                                $this->collCustomers->append($obj);
+                            }
+                        }
+
+                        $this->collCustomersPartial = true;
+                    }
+
+                    return $collCustomers;
+                }
+
+                if ($partial && $this->collCustomers) {
+                    foreach ($this->collCustomers as $obj) {
+                        if ($obj->isNew()) {
+                            $collCustomers[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCustomers = $collCustomers;
+                $this->collCustomersPartial = false;
+            }
+        }
+
+        return $this->collCustomers;
+    }
+
+    /**
+     * Sets a collection of ChildCustomer objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $customers A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setCustomers(Collection $customers, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildCustomer[] $customersToDelete */
+        $customersToDelete = $this->getCustomers(new Criteria(), $con)->diff($customers);
+
+
+        $this->customersScheduledForDeletion = $customersToDelete;
+
+        foreach ($customersToDelete as $customerRemoved) {
+            $customerRemoved->setSite(null);
+        }
+
+        $this->collCustomers = null;
+        foreach ($customers as $customer) {
+            $this->addCustomer($customer);
+        }
+
+        $this->collCustomers = $customers;
+        $this->collCustomersPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Customer objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related Customer objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countCustomers(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collCustomersPartial && !$this->isNew();
+        if (null === $this->collCustomers || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCustomers) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCustomers());
+            }
+
+            $query = ChildCustomerQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySite($this)
+                ->count($con);
+        }
+
+        return count($this->collCustomers);
+    }
+
+    /**
+     * Method called to associate a ChildCustomer object to this object
+     * through the ChildCustomer foreign key attribute.
+     *
+     * @param ChildCustomer $l ChildCustomer
+     * @return $this The current object (for fluent API support)
+     */
+    public function addCustomer(ChildCustomer $l)
+    {
+        if ($this->collCustomers === null) {
+            $this->initCustomers();
+            $this->collCustomersPartial = true;
+        }
+
+        if (!$this->collCustomers->contains($l)) {
+            $this->doAddCustomer($l);
+
+            if ($this->customersScheduledForDeletion and $this->customersScheduledForDeletion->contains($l)) {
+                $this->customersScheduledForDeletion->remove($this->customersScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildCustomer $customer The ChildCustomer object to add.
+     */
+    protected function doAddCustomer(ChildCustomer $customer): void
+    {
+        $this->collCustomers[]= $customer;
+        $customer->setSite($this);
+    }
+
+    /**
+     * @param ChildCustomer $customer The ChildCustomer object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeCustomer(ChildCustomer $customer)
+    {
+        if ($this->getCustomers()->contains($customer)) {
+            $pos = $this->collCustomers->search($customer);
+            $this->collCustomers->remove($pos);
+            if (null === $this->customersScheduledForDeletion) {
+                $this->customersScheduledForDeletion = clone $this->collCustomers;
+                $this->customersScheduledForDeletion->clear();
+            }
+            $this->customersScheduledForDeletion[]= $customer;
+            $customer->setSite(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Customers from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildCustomer[] List of ChildCustomer objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildCustomer}> List of ChildCustomer objects
+     */
+    public function getCustomersJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildCustomerQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getCustomers($query, $con);
+    }
+
+    /**
      * Clears out the collInvitations collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -6008,6 +6521,271 @@ abstract class Site implements ActiveRecordInterface
         }
 
         return $this;
+    }
+
+    /**
+     * Clears out the collStockItemLists collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addStockItemLists()
+     */
+    public function clearStockItemLists()
+    {
+        $this->collStockItemLists = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collStockItemLists collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialStockItemLists($v = true): void
+    {
+        $this->collStockItemListsPartial = $v;
+    }
+
+    /**
+     * Initializes the collStockItemLists collection.
+     *
+     * By default this just sets the collStockItemLists collection to an empty array (like clearcollStockItemLists());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initStockItemLists(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collStockItemLists && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = StockItemListTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collStockItemLists = new $collectionClassName;
+        $this->collStockItemLists->setModel('\Model\StockItemList');
+    }
+
+    /**
+     * Gets an array of ChildStockItemList objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildSite is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildStockItemList[] List of ChildStockItemList objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildStockItemList> List of ChildStockItemList objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getStockItemLists(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collStockItemListsPartial && !$this->isNew();
+        if (null === $this->collStockItemLists || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collStockItemLists) {
+                    $this->initStockItemLists();
+                } else {
+                    $collectionClassName = StockItemListTableMap::getTableMap()->getCollectionClassName();
+
+                    $collStockItemLists = new $collectionClassName;
+                    $collStockItemLists->setModel('\Model\StockItemList');
+
+                    return $collStockItemLists;
+                }
+            } else {
+                $collStockItemLists = ChildStockItemListQuery::create(null, $criteria)
+                    ->filterBySite($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collStockItemListsPartial && count($collStockItemLists)) {
+                        $this->initStockItemLists(false);
+
+                        foreach ($collStockItemLists as $obj) {
+                            if (false == $this->collStockItemLists->contains($obj)) {
+                                $this->collStockItemLists->append($obj);
+                            }
+                        }
+
+                        $this->collStockItemListsPartial = true;
+                    }
+
+                    return $collStockItemLists;
+                }
+
+                if ($partial && $this->collStockItemLists) {
+                    foreach ($this->collStockItemLists as $obj) {
+                        if ($obj->isNew()) {
+                            $collStockItemLists[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collStockItemLists = $collStockItemLists;
+                $this->collStockItemListsPartial = false;
+            }
+        }
+
+        return $this->collStockItemLists;
+    }
+
+    /**
+     * Sets a collection of ChildStockItemList objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $stockItemLists A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setStockItemLists(Collection $stockItemLists, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildStockItemList[] $stockItemListsToDelete */
+        $stockItemListsToDelete = $this->getStockItemLists(new Criteria(), $con)->diff($stockItemLists);
+
+
+        $this->stockItemListsScheduledForDeletion = $stockItemListsToDelete;
+
+        foreach ($stockItemListsToDelete as $stockItemListRemoved) {
+            $stockItemListRemoved->setSite(null);
+        }
+
+        $this->collStockItemLists = null;
+        foreach ($stockItemLists as $stockItemList) {
+            $this->addStockItemList($stockItemList);
+        }
+
+        $this->collStockItemLists = $stockItemLists;
+        $this->collStockItemListsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related StockItemList objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related StockItemList objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countStockItemLists(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collStockItemListsPartial && !$this->isNew();
+        if (null === $this->collStockItemLists || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collStockItemLists) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getStockItemLists());
+            }
+
+            $query = ChildStockItemListQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySite($this)
+                ->count($con);
+        }
+
+        return count($this->collStockItemLists);
+    }
+
+    /**
+     * Method called to associate a ChildStockItemList object to this object
+     * through the ChildStockItemList foreign key attribute.
+     *
+     * @param ChildStockItemList $l ChildStockItemList
+     * @return $this The current object (for fluent API support)
+     */
+    public function addStockItemList(ChildStockItemList $l)
+    {
+        if ($this->collStockItemLists === null) {
+            $this->initStockItemLists();
+            $this->collStockItemListsPartial = true;
+        }
+
+        if (!$this->collStockItemLists->contains($l)) {
+            $this->doAddStockItemList($l);
+
+            if ($this->stockItemListsScheduledForDeletion and $this->stockItemListsScheduledForDeletion->contains($l)) {
+                $this->stockItemListsScheduledForDeletion->remove($this->stockItemListsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildStockItemList $stockItemList The ChildStockItemList object to add.
+     */
+    protected function doAddStockItemList(ChildStockItemList $stockItemList): void
+    {
+        $this->collStockItemLists[]= $stockItemList;
+        $stockItemList->setSite($this);
+    }
+
+    /**
+     * @param ChildStockItemList $stockItemList The ChildStockItemList object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeStockItemList(ChildStockItemList $stockItemList)
+    {
+        if ($this->getStockItemLists()->contains($stockItemList)) {
+            $pos = $this->collStockItemLists->search($stockItemList);
+            $this->collStockItemLists->remove($pos);
+            if (null === $this->stockItemListsScheduledForDeletion) {
+                $this->stockItemListsScheduledForDeletion = clone $this->collStockItemLists;
+                $this->stockItemListsScheduledForDeletion->clear();
+            }
+            $this->stockItemListsScheduledForDeletion[]= $stockItemList;
+            $stockItemList->setSite(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related StockItemLists from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildStockItemList[] List of ChildStockItemList objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildStockItemList}> List of ChildStockItemList objects
+     */
+    public function getStockItemListsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildStockItemListQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getStockItemLists($query, $con);
     }
 
     /**
@@ -7068,6 +7846,271 @@ abstract class Site implements ActiveRecordInterface
         $query->joinWith('Order', $joinBehavior);
 
         return $this->getPayments($query, $con);
+    }
+
+    /**
+     * Clears out the collPosts collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addPosts()
+     */
+    public function clearPosts()
+    {
+        $this->collPosts = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collPosts collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialPosts($v = true): void
+    {
+        $this->collPostsPartial = $v;
+    }
+
+    /**
+     * Initializes the collPosts collection.
+     *
+     * By default this just sets the collPosts collection to an empty array (like clearcollPosts());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initPosts(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collPosts && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = PostTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collPosts = new $collectionClassName;
+        $this->collPosts->setModel('\Model\Post');
+    }
+
+    /**
+     * Gets an array of ChildPost objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildSite is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildPost[] List of ChildPost objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildPost> List of ChildPost objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getPosts(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collPostsPartial && !$this->isNew();
+        if (null === $this->collPosts || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collPosts) {
+                    $this->initPosts();
+                } else {
+                    $collectionClassName = PostTableMap::getTableMap()->getCollectionClassName();
+
+                    $collPosts = new $collectionClassName;
+                    $collPosts->setModel('\Model\Post');
+
+                    return $collPosts;
+                }
+            } else {
+                $collPosts = ChildPostQuery::create(null, $criteria)
+                    ->filterBySite($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collPostsPartial && count($collPosts)) {
+                        $this->initPosts(false);
+
+                        foreach ($collPosts as $obj) {
+                            if (false == $this->collPosts->contains($obj)) {
+                                $this->collPosts->append($obj);
+                            }
+                        }
+
+                        $this->collPostsPartial = true;
+                    }
+
+                    return $collPosts;
+                }
+
+                if ($partial && $this->collPosts) {
+                    foreach ($this->collPosts as $obj) {
+                        if ($obj->isNew()) {
+                            $collPosts[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collPosts = $collPosts;
+                $this->collPostsPartial = false;
+            }
+        }
+
+        return $this->collPosts;
+    }
+
+    /**
+     * Sets a collection of ChildPost objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $posts A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setPosts(Collection $posts, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildPost[] $postsToDelete */
+        $postsToDelete = $this->getPosts(new Criteria(), $con)->diff($posts);
+
+
+        $this->postsScheduledForDeletion = $postsToDelete;
+
+        foreach ($postsToDelete as $postRemoved) {
+            $postRemoved->setSite(null);
+        }
+
+        $this->collPosts = null;
+        foreach ($posts as $post) {
+            $this->addPost($post);
+        }
+
+        $this->collPosts = $posts;
+        $this->collPostsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Post objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related Post objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countPosts(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collPostsPartial && !$this->isNew();
+        if (null === $this->collPosts || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPosts) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getPosts());
+            }
+
+            $query = ChildPostQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySite($this)
+                ->count($con);
+        }
+
+        return count($this->collPosts);
+    }
+
+    /**
+     * Method called to associate a ChildPost object to this object
+     * through the ChildPost foreign key attribute.
+     *
+     * @param ChildPost $l ChildPost
+     * @return $this The current object (for fluent API support)
+     */
+    public function addPost(ChildPost $l)
+    {
+        if ($this->collPosts === null) {
+            $this->initPosts();
+            $this->collPostsPartial = true;
+        }
+
+        if (!$this->collPosts->contains($l)) {
+            $this->doAddPost($l);
+
+            if ($this->postsScheduledForDeletion and $this->postsScheduledForDeletion->contains($l)) {
+                $this->postsScheduledForDeletion->remove($this->postsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildPost $post The ChildPost object to add.
+     */
+    protected function doAddPost(ChildPost $post): void
+    {
+        $this->collPosts[]= $post;
+        $post->setSite($this);
+    }
+
+    /**
+     * @param ChildPost $post The ChildPost object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removePost(ChildPost $post)
+    {
+        if ($this->getPosts()->contains($post)) {
+            $pos = $this->collPosts->search($post);
+            $this->collPosts->remove($pos);
+            if (null === $this->postsScheduledForDeletion) {
+                $this->postsScheduledForDeletion = clone $this->collPosts;
+                $this->postsScheduledForDeletion->clear();
+            }
+            $this->postsScheduledForDeletion[]= $post;
+            $post->setSite(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Posts from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildPost[] List of ChildPost objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildPost}> List of ChildPost objects
+     */
+    public function getPostsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildPostQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getPosts($query, $con);
     }
 
     /**
@@ -8552,6 +9595,271 @@ abstract class Site implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collSubscriptions collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addSubscriptions()
+     */
+    public function clearSubscriptions()
+    {
+        $this->collSubscriptions = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collSubscriptions collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialSubscriptions($v = true): void
+    {
+        $this->collSubscriptionsPartial = $v;
+    }
+
+    /**
+     * Initializes the collSubscriptions collection.
+     *
+     * By default this just sets the collSubscriptions collection to an empty array (like clearcollSubscriptions());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initSubscriptions(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collSubscriptions && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = SubscriptionTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collSubscriptions = new $collectionClassName;
+        $this->collSubscriptions->setModel('\Model\Subscription');
+    }
+
+    /**
+     * Gets an array of ChildSubscription objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildSite is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildSubscription[] List of ChildSubscription objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildSubscription> List of ChildSubscription objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getSubscriptions(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collSubscriptionsPartial && !$this->isNew();
+        if (null === $this->collSubscriptions || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collSubscriptions) {
+                    $this->initSubscriptions();
+                } else {
+                    $collectionClassName = SubscriptionTableMap::getTableMap()->getCollectionClassName();
+
+                    $collSubscriptions = new $collectionClassName;
+                    $collSubscriptions->setModel('\Model\Subscription');
+
+                    return $collSubscriptions;
+                }
+            } else {
+                $collSubscriptions = ChildSubscriptionQuery::create(null, $criteria)
+                    ->filterBySite($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collSubscriptionsPartial && count($collSubscriptions)) {
+                        $this->initSubscriptions(false);
+
+                        foreach ($collSubscriptions as $obj) {
+                            if (false == $this->collSubscriptions->contains($obj)) {
+                                $this->collSubscriptions->append($obj);
+                            }
+                        }
+
+                        $this->collSubscriptionsPartial = true;
+                    }
+
+                    return $collSubscriptions;
+                }
+
+                if ($partial && $this->collSubscriptions) {
+                    foreach ($this->collSubscriptions as $obj) {
+                        if ($obj->isNew()) {
+                            $collSubscriptions[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collSubscriptions = $collSubscriptions;
+                $this->collSubscriptionsPartial = false;
+            }
+        }
+
+        return $this->collSubscriptions;
+    }
+
+    /**
+     * Sets a collection of ChildSubscription objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $subscriptions A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setSubscriptions(Collection $subscriptions, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildSubscription[] $subscriptionsToDelete */
+        $subscriptionsToDelete = $this->getSubscriptions(new Criteria(), $con)->diff($subscriptions);
+
+
+        $this->subscriptionsScheduledForDeletion = $subscriptionsToDelete;
+
+        foreach ($subscriptionsToDelete as $subscriptionRemoved) {
+            $subscriptionRemoved->setSite(null);
+        }
+
+        $this->collSubscriptions = null;
+        foreach ($subscriptions as $subscription) {
+            $this->addSubscription($subscription);
+        }
+
+        $this->collSubscriptions = $subscriptions;
+        $this->collSubscriptionsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Subscription objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related Subscription objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countSubscriptions(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collSubscriptionsPartial && !$this->isNew();
+        if (null === $this->collSubscriptions || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collSubscriptions) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getSubscriptions());
+            }
+
+            $query = ChildSubscriptionQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySite($this)
+                ->count($con);
+        }
+
+        return count($this->collSubscriptions);
+    }
+
+    /**
+     * Method called to associate a ChildSubscription object to this object
+     * through the ChildSubscription foreign key attribute.
+     *
+     * @param ChildSubscription $l ChildSubscription
+     * @return $this The current object (for fluent API support)
+     */
+    public function addSubscription(ChildSubscription $l)
+    {
+        if ($this->collSubscriptions === null) {
+            $this->initSubscriptions();
+            $this->collSubscriptionsPartial = true;
+        }
+
+        if (!$this->collSubscriptions->contains($l)) {
+            $this->doAddSubscription($l);
+
+            if ($this->subscriptionsScheduledForDeletion and $this->subscriptionsScheduledForDeletion->contains($l)) {
+                $this->subscriptionsScheduledForDeletion->remove($this->subscriptionsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildSubscription $subscription The ChildSubscription object to add.
+     */
+    protected function doAddSubscription(ChildSubscription $subscription): void
+    {
+        $this->collSubscriptions[]= $subscription;
+        $subscription->setSite($this);
+    }
+
+    /**
+     * @param ChildSubscription $subscription The ChildSubscription object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeSubscription(ChildSubscription $subscription)
+    {
+        if ($this->getSubscriptions()->contains($subscription)) {
+            $pos = $this->collSubscriptions->search($subscription);
+            $this->collSubscriptions->remove($pos);
+            if (null === $this->subscriptionsScheduledForDeletion) {
+                $this->subscriptionsScheduledForDeletion = clone $this->collSubscriptions;
+                $this->subscriptionsScheduledForDeletion->clear();
+            }
+            $this->subscriptionsScheduledForDeletion[]= $subscription;
+            $subscription->setSite(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Subscriptions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildSubscription[] List of ChildSubscription objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildSubscription}> List of ChildSubscription objects
+     */
+    public function getSubscriptionsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildSubscriptionQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getSubscriptions($query, $con);
+    }
+
+    /**
      * Clears out the collUsers collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -9700,8 +11008,18 @@ abstract class Site implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collCustomers) {
+                foreach ($this->collCustomers as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collInvitations) {
                 foreach ($this->collInvitations as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collStockItemLists) {
+                foreach ($this->collStockItemLists as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -9722,6 +11040,11 @@ abstract class Site implements ActiveRecordInterface
             }
             if ($this->collPayments) {
                 foreach ($this->collPayments as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collPosts) {
+                foreach ($this->collPosts as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -9747,6 +11070,11 @@ abstract class Site implements ActiveRecordInterface
             }
             if ($this->collStocks) {
                 foreach ($this->collStocks as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collSubscriptions) {
+                foreach ($this->collSubscriptions as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -9776,16 +11104,20 @@ abstract class Site implements ActiveRecordInterface
         $this->collCarts = null;
         $this->collCrowdfundingCampaigns = null;
         $this->collCrowfundingRewards = null;
+        $this->collCustomers = null;
         $this->collInvitations = null;
+        $this->collStockItemLists = null;
         $this->collOptions = null;
         $this->collOrders = null;
         $this->collPages = null;
         $this->collPayments = null;
+        $this->collPosts = null;
         $this->collArticleCategories = null;
         $this->collRights = null;
         $this->collSessions = null;
         $this->collSpecialOffers = null;
         $this->collStocks = null;
+        $this->collSubscriptions = null;
         $this->collUsers = null;
         $this->collAuthenticationMethods = null;
         $this->collVotes = null;

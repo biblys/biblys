@@ -468,6 +468,9 @@
   <table name="customers" idMethod="native" phpName="Customer">
     <column name="customer_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
     <column name="axys_account_id" phpName="AxysAccountId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <foreign-key foreignTable="users" skipSql="true">
@@ -857,6 +860,9 @@
       <reference local="user_id" foreign="id"/>
     </foreign-key>
     <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
     <column name="list_title" phpName="Title" type="VARCHAR" size="256"/>
     <column name="list_url" phpName="Url" type="VARCHAR" size="256"/>
     <column name="list_created" phpName="CreatedAt" type="TIMESTAMP"/>
@@ -1096,6 +1102,9 @@
       <reference local="user_id" foreign="id"/>
     </foreign-key>
     <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
     <column name="publisher_id" phpName="PublisherId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="category_id" phpName="CategoryId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="post_url" phpName="Url" type="LONGVARCHAR"/>
@@ -1577,6 +1586,9 @@
   <table name="subscriptions" idMethod="native" phpName="Subscription">
     <column name="subscription_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
     <column name="axys_account_id" phpName="AxysAccountId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <foreign-key foreignTable="users" skipSql="true">

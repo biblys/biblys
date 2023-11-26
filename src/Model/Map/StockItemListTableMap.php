@@ -244,7 +244,7 @@ class StockItemListTableMap extends TableMap
         $this->addPrimaryKey('list_id', 'Id', 'INTEGER', true, 10, null);
         $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
         $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
-        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
         $this->addColumn('list_title', 'Title', 'VARCHAR', false, 256, null);
         $this->addColumn('list_url', 'Url', 'VARCHAR', false, 256, null);
         $this->addColumn('list_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
@@ -263,6 +263,13 @@ class StockItemListTableMap extends TableMap
   array (
     0 => ':user_id',
     1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
   ),
 ), null, null, null, false);
     }
