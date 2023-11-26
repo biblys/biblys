@@ -615,10 +615,11 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createRight(
-        User $user,
+        ?User $user,
         Site $site,
         Publisher $publisher = null,
         bool $isAdmin = false,
+        string $axysAccountId = null,
     ): Right
     {
         $right = new Right();
@@ -626,6 +627,7 @@ class ModelFactory
         $right->setSite($site);
         $right->setPublisher($publisher);
         $right->setIsAdmin($isAdmin);
+        $right->setAxysAccountId($axysAccountId);
         $right->save();
 
         return $right;

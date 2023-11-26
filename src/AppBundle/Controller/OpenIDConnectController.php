@@ -25,6 +25,7 @@ use Model\CustomerQuery;
 use Model\OptionQuery;
 use Model\OrderQuery;
 use Model\PostQuery;
+use Model\RightQuery;
 use Model\Session;
 use Model\StockItemListQuery;
 use Model\User;
@@ -266,6 +267,17 @@ class OpenIDConnectController extends Controller
             $post->setUser($user);
             $post->setAxysAccountId(null);
             $post->save();
+        }
+
+        $adminRights = RightQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByAxysAccountId($externalId)
+            ->find();
+        foreach ($adminRights as $adminRight) {
+            $adminRight->setUser($user);
+            $adminRight->setAxysAccountId(null);
+            $adminRight->setIsAdmin(true);
+            $adminRight->save();
         }
 
         return $authenticationMethod;

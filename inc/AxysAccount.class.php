@@ -233,24 +233,6 @@ class AxysAccount extends Entity
 
     /* RIGHTS */
 
-    public function getRights()
-    {
-        $config = Config::load();
-        $currentSiteService = CurrentSite::buildFromConfig($config);
-
-        $rm = new RightManager();
-        $rights = $rm->getAll(['axys_account_id' => $this->get('id')], [], false);
-
-        // Keep only admin rights for current site
-        foreach ($rights as $key => $right) {
-            if ($right->has('site_id') && $right->get('site_id') != $currentSiteService->getId()) {
-                unset($rights[$key]);
-            }
-        }
-
-        return $rights;
-    }
-
     public function removeRight($type, $id)
     {
         $rm = new RightManager();
