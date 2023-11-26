@@ -21,6 +21,7 @@ use JsonException;
 use Model\AuthenticationMethod;
 use Model\AuthenticationMethodQuery;
 use Model\CartQuery;
+use Model\CustomerQuery;
 use Model\Session;
 use Model\User;
 use Propel\Runtime\Exception\PropelException;
@@ -211,6 +212,16 @@ class OpenIDConnectController extends Controller
             $cart->setUser($user);
             $cart->setAxysAccountId(null);
             $cart->save();
+        }
+
+        $customers = CustomerQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByAxysAccountId($externalId)
+            ->find();
+        foreach ($customers as $customer) {
+            $customer->setUser($user);
+            $customer->setAxysAccountId(null);
+            $customer->save();
         }
 
         return $authenticationMethod;

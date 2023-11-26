@@ -12,6 +12,7 @@ use Model\ArticleCategory;
 use Model\AuthenticationMethod;
 use Model\AxysAccount;
 use Model\AxysAccountQuery;
+use Model\Customer;
 use Model\Invitation;
 use Model\BookCollection;
 use Model\Cart;
@@ -622,6 +623,23 @@ class ModelFactory
         $right->save();
 
         return $right;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createCustomer(
+        Site $site,
+        string $axysAccountId = null,
+    ): Customer
+    {
+        $customer = new Customer();
+
+        $customer->setSite($site);
+        $customer->setAxysAccountId($axysAccountId);
+        $customer->save();
+
+        return $customer;
     }
 
     /**
