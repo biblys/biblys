@@ -1,81 +1,101 @@
 <?php
 
-use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
+use Model\RightQuery;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/** @var PDO $_SQL */
-/** @var Request $request */
-
-$request->attributes->set("page_title", "Admininistrateur·trice·s");
-
-// Supprimer une right
-if (isset($_GET['delete']))
+/**
+ * @throws InvalidDateFormatException
+ * @throws PropelException
+ */
+return function (
+    Request $request,
+    CurrentSite $currentSite,
+    \Symfony\Component\HttpFoundation\Session\Session $session
+): Response|RedirectResponse
 {
-    $rm = new RightManager();
-    $right = $rm->getById($_GET['delete']);
-    $rm->delete($right);
-    return new RedirectResponse('/pages/adm_admins?deleted=1&email='.$_GET['email']);
-}
+    $request->attributes->set("page_title", "Admininistrateur·trice·s");
 
-// Permission supprimée
-if (isset($_GET['deleted'])) {
-    $message = '<p class="success">L\'utilisateur '.$_GET['email'].' a été supprimé.</p>';
-}
+    if ($request->getMethod() === "POST") {
+        $userToDeleteId = $request->request->get("user_id");
 
-$rights = $_SQL->prepare("
-    SELECT `axys_accounts`.`axys_account_id`, `axys_account_email`, `axys_account_screen_name`, `axys_account_login_date`, `right_id`
-        FROM `rights`
-        JOIN `axys_accounts` ON `axys_accounts`.`axys_account_id` = `rights`.`axys_account_id`
-    WHERE `rights`.`site_id` = :site_id
-    ORDER BY `axys_account_login_date` DESC
-");
-$rights->execute(["site_id" => $globalSite->get("id")]);
+        $adminRightToDelete = RightQuery::create()
+            ->filterByUserId($userToDeleteId)
+            ->filterBySite($currentSite->getSite())
+            ->filterByIsAdmin(true)
+            ->findOne();
 
-$table = NULL;
-while ($p = $rights->fetch(PDO::FETCH_ASSOC)) {
+        if ($adminRightToDelete) {
+            $adminRightToDelete->delete();
 
-    $table .= '
-        <tr>
-            <td>'.$p["axys_account_id"].'</td>
-            <td>'.$p["axys_account_email"].'<br>'.$p["axys_account_screen_name"].'</td>
-            <td class="center">'._date($p["axys_account_login_date"],'d/m/Y Hhi').'</td>
-            <td>
-                <a class="btn btn-sm btn-danger" href="/pages/adm_admins?delete='.$p['right_id'].'&email='.$p['axys_account_email'].'" title="supprimer" data-confirm="Voulez-vous vraiment SUPPRIMER l\'accès administrateur de '.$p['axys_account_email'].'">
-                    <span class="fa fa-trash-o"></span>
-                </a>
-            </td>
-        </tr>
-    ';
-}
+            $session->getFlashBag()->add(
+                "success",
+                "L'accès administrateur de {$adminRightToDelete->getUser()->getEmail()} a bien été supprimé."
+            );
+        }
+    }
 
-$content = '
-    <h1><span class="fa fa-users"></span> Administrateur·trice·s</h1>
+    $adminRights = RightQuery::create()
+        ->filterByIsAdmin(true)
+        ->filterBySite($currentSite->getSite())
+        ->joinWithUser()
+        ->find();
 
-    '.($message ?? null).'<br>
+    $table = NULL;
+    foreach ($adminRights as $adminRight) {
 
-    <div class="center">
-        <a href="/pages/adm_admin_add" class="btn btn-primary">
-            <span class="fa fa-user-plus"></span> &nbsp;
-                Ajouter un administrateur
-        </a>
-    </div>
-    <br>
-
-    <table class="liste sortable admin-table">
-        <thead>
+        $user = $adminRight->getUser();
+        $table .= '
             <tr>
-                <th></th>
-                <th class="left">Utilisateur</th>
-                <th>Dernière connexion</th>
-                <th></th>
+                <td>' . $user->getId() . '</td>
+                <td>' . $user->getEmail() . '</td>
+                <td class="center">' . _date($user->getLastLoggedAt(), 'd/m/Y Hhi') . '</td>
+                <td>
+                    <form method="post">
+                        <button
+                            class="btn btn-sm btn-danger" 
+                            title="supprimer" 
+                            data-confirm="Voulez-vous vraiment SUPPRIMER l\'accès administrateur de ' . $user->getEmail() . '"
+                        >
+                            <input type="hidden" name="user_id" value="' . $user->getId() . '">
+                            <span class="fa fa-trash-o"></span>
+                        </button>
+                    </form>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            '.$table.'
-        </tbody>
-    </table>
-';
+        ';
+    }
 
-return new Response($content);
+    $content = '
+        <h1><span class="fa fa-users"></span> Administrateur·trice·s</h1>
+    
+        ' . ($message ?? null) . '<br>
+    
+        <div class="center">
+            <a href="/pages/adm_admin_add" class="btn btn-primary">
+                <span class="fa fa-user-plus"></span> &nbsp;
+                    Ajouter un administrateur
+            </a>
+        </div>
+        <br>
+    
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="left">Utilisateur</th>
+                    <th>Dernière connexion</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                ' . $table . '
+            </tbody>
+        </table>
+    ';
+
+    return new Response($content);
+};

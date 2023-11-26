@@ -3,6 +3,8 @@
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
 use Biblys\Service\TemplateService;
+use Model\RightQuery;
+use Model\UserQuery;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,35 +19,38 @@ return function (
     HttpSession     $session,
 ): Response|RedirectResponse
 {
-    $um = new AxysAccountManager();
-
     if ($request->getMethod() === "POST") {
 
-        $axysAccountEmail = $request->request->get("axys_account_email");
-        if ($axysAccountEmail === null) {
+        $userEmail = $request->request->get("user_email");
+        if ($userEmail === null) {
             throw new BadRequestHttpException("Le champ Adresse e-mail est obligatoire.");
         }
 
         try {
-            /** @var AxysAccount $axysAccount */
-            $axysAccount = $um->get(['axys_account_email' => $axysAccountEmail]);
-            if (!$axysAccount) {
+            $user = UserQuery::create()->findOneByEmail($userEmail);
+            if (!$user) {
                 throw new BadRequestHttpException(
                     "L'adresse e-mail doit correspondre à un compte utilisateur existant."
                 );
             }
 
-            if ($axysAccount->hasRight('site', $currentSite->getId())) {
-                throw new BadRequestHttpException("L'utilisateur $axysAccountEmail a déjà un accès administrateur.");
+            $isUserAlreadyAdmin = RightQuery::create()
+                ->isUserAdminForSite($user, $currentSite->getSite());
+            if ($isUserAlreadyAdmin) {
+                throw new BadRequestHttpException("L'utilisateur $userEmail a déjà un accès administrateur.");
             }
         } catch (BadRequestHttpException $exception) {
             $session->getFlashBag()->add("error", $exception->getMessage());
             return new RedirectResponse("/pages/adm_admin_add");
         }
 
-        $axysAccount->giveRight('site', $currentSite->getId());
+        $right = new \Model\Right();
+        $right->setUser($user);
+        $right->setSite($currentSite->getSite());
+        $right->setIsAdmin(true);
+        $right->save();
 
-        $subject = $currentSite->getSite()->getTag() . ' | Votre accès au site';
+        $subject = "Votre accès admin au site {$currentSite->getSite()->getTitle()}";
         $message = '
             <p>Bonjour,</p>
             <p>
@@ -54,17 +59,17 @@ return function (
             . $currentSite->getSite()->getTitle() . '</a>.
             </p>
             <p>
-                Vos identifiants de connexion sont votre adresse e-mail (' . $axysAccount->get("axys_account_email") . ') 
+                Vos identifiants de connexion sont votre adresse e-mail (' . $user->getEmail() . ') 
                 et le mot de passe que vous avez défini au moment de la création de votre compte 
                 (vous pourrez demander à en recevoir un nouveau si besoin).
             </p>
         ';
 
-        $um->mail($axysAccount, $subject, $message);
+        $mailer->send(to: $user->getEmail(), subject: $subject, body: $message);
 
         $session->getFlashBag()->add(
             "success",
-            "Un accès administrateur a été ajouté pour le compte $axysAccountEmail."
+            "Un accès administrateur a été ajouté pour le compte $userEmail."
         );
 
         return new RedirectResponse("/pages/adm_admins");
@@ -90,9 +95,8 @@ return function (
         <form method="post" class="check">
         <fieldset>
             <p>
-                <label for="axys_account_email">Adresse e-mail :</label>
-                <input type="email" name="axys_account_email" id="axys_account_email" value="' . ($axysAccountEmail ?? null) . '" class="long" required>&nbsp;
-                
+                <label for="user_email">Adresse e-mail :</label>
+                <input type="email" name="user_email" id="user_email" value="' . ($userEmail ?? null) . '" class="long" required>&nbsp;
             </p>
             <br>
             <div class="center">

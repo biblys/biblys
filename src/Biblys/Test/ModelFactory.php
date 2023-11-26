@@ -589,7 +589,7 @@ class ModelFactory
         $site = $site ?? self::createSite();
 
         $user = self::createUser($site);
-        self::createRight(user: $user, site: $site);
+        self::createRight(user: $user, site: $site, isAdmin: true);
 
         return $user;
     }
@@ -606,7 +606,7 @@ class ModelFactory
         $publisher = $publisher ?? self::createPublisher();
 
         $user = self::createUser($site);
-        self::createRight(user: $user, publisher: $publisher);
+        self::createRight(user: $user, site: $site, publisher: $publisher);
 
         return $user;
     }
@@ -616,14 +616,16 @@ class ModelFactory
      */
     public static function createRight(
         User $user,
-        Site $site = null,
+        Site $site,
         Publisher $publisher = null,
+        bool $isAdmin = false,
     ): Right
     {
         $right = new Right();
         $right->setUser($user);
         $right->setSite($site);
         $right->setPublisher($publisher);
+        $right->setIsAdmin($isAdmin);
         $right->save();
 
         return $right;

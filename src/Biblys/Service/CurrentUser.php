@@ -102,6 +102,7 @@ class CurrentUser
 
     /**
      * @throws PropelException
+     * @throws Exception
      */
     public function isAdmin(): bool
     {
@@ -114,6 +115,7 @@ class CurrentUser
         $adminRight = RightQuery::create()
             ->filterByUser($this->user)
             ->filterBySite($site)
+            ->filterByIsAdmin(true)
             ->findOne();
 
         if($adminRight) {

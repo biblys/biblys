@@ -206,6 +206,10 @@ class CurrentUserTest extends TestCase
     }
 
     /**
+     * #isAdmin
+     */
+
+    /**
      * @throws PropelException
      * @throws Exception
      */
@@ -225,6 +229,29 @@ class CurrentUserTest extends TestCase
         $this->assertTrue(
             $isAdmin,
             "returns true for admin user"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testIsAdminWithPublisherUser()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createPublisherUser(site: $site);
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $config = new Config(["site" => $site->getId()]);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // when
+        $isAdmin = $currentUser->isAdmin();
+
+        // then
+        $this->assertFalse(
+            $isAdmin,
+            "returns false for publisher user"
         );
     }
 

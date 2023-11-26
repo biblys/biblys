@@ -2,19 +2,16 @@
 
 namespace Command;
 
-use Biblys\Contributor\Job;
+use Model\AuthenticationMethod;
 use Biblys\Test\ModelFactory;
-use Model\Article;
 use Model\AxysApp;
 use Model\BookCollection;
 use Model\Country;
-use Model\People;
 use Model\Publisher;
 use Model\Right;
-use Model\Role;
 use Model\ShippingFee;
 use Model\Site;
-use Model\AxysAccount;
+use Model\User;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -54,24 +51,31 @@ class CreateSeedsCommand extends Command
         $output->writeln(["Inserted Axys app: paronymie"]);
 
         // Admin
-        $admin = new AxysAccount();
+        $admin = new User();
         $admin->setEmail("admin@paronymie.fr");
-        $admin->setUsername("admin");
-        $admin->setPassword("$2y$10\$uBSKxkPvkt8UQM8B98u61e.GGOEdLHzU470Nw4X17zq05i1wIYftm");
+        $admin->setSite($site);
         $admin->save();
+
+        $authMethod = new AuthenticationMethod();
+        $authMethod->setUser($admin);
+        $authMethod->setSite($site);
+        $authMethod->setExternalId(1);
+        $authMethod->setIdentityProvider("axys");
+        $authMethod->save();
+
         $right = new Right();
         $right->setSite($site);
-        $right->setAxysAccount($admin);
+        $right->setUser($admin);
+        $right->setIsAdmin(true);
         $right->save();
-        $output->writeln(["Inserted user: admin@paronymie.fr (password: password)"]);
+        $output->writeln(["Inserted user: admin@paronymie.fr"]);
 
         // Simple user
-        $user = new AxysAccount();
+        $user = new User();
+        $user->setSite($site);
         $user->setEmail("user@paronymie.fr");
-        $user->setUsername("user");
-        $user->setPassword("$2y$10\$uBSKxkPvkt8UQM8B98u61e.GGOEdLHzU470Nw4X17zq05i1wIYftm");
         $user->save();
-        $output->writeln(["Inserted user: user@paronymie.fr (password: password)"]);
+        $output->writeln(["Inserted user: user@paronymie.fr"]);
 
         // Publisher
         $publisher = new Publisher();
@@ -80,17 +84,18 @@ class CreateSeedsCommand extends Command
         $publisher->save();
 
         // User with publisher right
-        $publisherUser = new AxysAccount();
+        $publisherUser = new User();
+        $publisherUser->setSite($site);
         $publisherUser->setEmail("publisher@paronymie.fr");
-        $publisherUser->setUsername("publisher");
-        $publisherUser->setPassword("$2y$10\$uBSKxkPvkt8UQM8B98u61e.GGOEdLHzU470Nw4X17zq05i1wIYftm");
         $publisherUser->save();
 
+
         $right = new Right();
-        $right->setAxysAccount($publisherUser);
+        $right->setUser($publisherUser);
         $right->setPublisher($publisher);
+        $right->setSite($site);
         $right->save();
-        $output->writeln(["Inserted user: publisher@paronymie.fr (password: password)"]);
+        $output->writeln(["Inserted user: publisher@paronymie.fr"]);
 
         $country = new Country();
         $country->setName("France");
