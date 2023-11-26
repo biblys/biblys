@@ -22,6 +22,7 @@ use Model\AuthenticationMethod;
 use Model\AuthenticationMethodQuery;
 use Model\CartQuery;
 use Model\CustomerQuery;
+use Model\OptionQuery;
 use Model\Session;
 use Model\StockItemListQuery;
 use Model\User;
@@ -233,6 +234,16 @@ class OpenIDConnectController extends Controller
             $list->setUser($user);
             $list->setAxysAccountId(null);
             $list->save();
+        }
+
+        $options = OptionQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByAxysAccountId($externalId)
+            ->find();
+        foreach ($options as $option) {
+            $option->setUser($user);
+            $option->setAxysAccountId(null);
+            $option->save();
         }
 
         return $authenticationMethod;

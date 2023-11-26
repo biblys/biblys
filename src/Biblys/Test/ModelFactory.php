@@ -663,6 +663,23 @@ class ModelFactory
     /**
      * @throws PropelException
      */
+    public static function createUserOption(
+        Site   $site,
+        string $axysAccountId = null
+    ): Option
+    {
+        $option = new Option();
+
+        $option->setSite($site);
+        $option->setAxysAccountId($axysAccountId);
+        $option->save();
+
+        return $option;
+    }
+
+    /**
+     * @throws PropelException
+     */
     public static function createSpecialOffer(
         Site $site,
         string $name = "Offre spéciale",
