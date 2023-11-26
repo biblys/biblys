@@ -25,6 +25,7 @@ use Model\Order;
 use Model\Page;
 use Model\Payment;
 use Model\People;
+use Model\Post;
 use Model\Publisher;
 use Model\Right;
 use Model\Role;
@@ -677,6 +678,23 @@ class ModelFactory
         $option->save();
 
         return $option;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createPost(
+        Site $site,
+        string $axysAccountId = null,
+    ): Post
+    {
+        $post = new Post();
+
+        $post->setSite($site);
+        $post->setAxysAccountId($axysAccountId);
+        $post->save();
+
+        return $post;
     }
 
     /**
