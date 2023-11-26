@@ -34,6 +34,7 @@ use Model\Site;
 use Model\SiteQuery;
 use Model\SpecialOffer;
 use Model\Stock;
+use Model\StockItemList;
 use Model\User;
 use Propel\Runtime\Exception\PropelException;
 
@@ -640,6 +641,23 @@ class ModelFactory
         $customer->save();
 
         return $customer;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createStockItemList(
+        Site   $site,
+        string $axysAccountId = null,
+    ): StockItemList
+    {
+        $stockItemList = new StockItemList();
+
+        $stockItemList->setSite($site);
+        $stockItemList->setAxysAccountId($axysAccountId);
+        $stockItemList->save();
+
+        return $stockItemList;
     }
 
     /**

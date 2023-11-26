@@ -23,6 +23,7 @@ use Model\AuthenticationMethodQuery;
 use Model\CartQuery;
 use Model\CustomerQuery;
 use Model\Session;
+use Model\StockItemListQuery;
 use Model\User;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
@@ -222,6 +223,16 @@ class OpenIDConnectController extends Controller
             $customer->setUser($user);
             $customer->setAxysAccountId(null);
             $customer->save();
+        }
+
+        $lists = StockItemListQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByAxysAccountId($externalId)
+            ->find();
+        foreach ($lists as $list) {
+            $list->setUser($user);
+            $list->setAxysAccountId(null);
+            $list->save();
         }
 
         return $authenticationMethod;
