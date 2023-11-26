@@ -38,7 +38,7 @@ class OrderControllerTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $order = ModelFactory::createOrder(["slug" => "order-slug"], $site);
+        $order = ModelFactory::createOrder(site: $site);
         $request = RequestFactory::createAuthRequestForAdminUser();
         $controller = new OrderController();
         $currentSite = new CurrentSite($site);
