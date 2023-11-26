@@ -272,13 +272,16 @@ class CurrentUserTest extends TestCase
 
     /**
      * @throws PropelException
+     * @throws Exception
      */
     public function testIsAdminForSiteReturnsTrueForAdmin()
     {
         // given
         $site = ModelFactory::createSite();
-        $admin = ModelFactory::createAdminUser(site: $site);
-        $currentUser = new CurrentUser($admin, "token");
+        $user = ModelFactory::createAdminUser(site: $site);
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $config = new Config(["site" => $site->getId()]);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
         $isAdminForSite = $currentUser->isAdminForSite($site);
@@ -292,13 +295,16 @@ class CurrentUserTest extends TestCase
 
     /**
      * @throws PropelException
+     * @throws Exception
      */
     public function testIsAdminForSiteReturnsFalseForNonAdmin()
     {
         // given
         $site = ModelFactory::createSite();
-        $admin = ModelFactory::createUser(site: $site);
-        $currentUser = new CurrentUser($admin, "token");
+        $user = ModelFactory::createUser(site: $site);
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $config = new Config(["site" => $site->getId()]);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
         $isAdminForSite = $currentUser->isAdminForSite($site);

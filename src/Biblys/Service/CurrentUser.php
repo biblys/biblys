@@ -110,14 +110,7 @@ class CurrentUser
         }
 
         $site = $this->getCurrentSite()->getSite();
-        return $this->isAdminForSite($site);
-    }
 
-    /**
-     * @throws PropelException
-     */
-    public function isAdminForSite(Site $site): bool
-    {
         $adminRight = RightQuery::create()
             ->filterByUser($this->user)
             ->filterBySite($site)
@@ -128,6 +121,16 @@ class CurrentUser
         }
 
         return false;
+    }
+
+    /**
+     * @throws PropelException
+     *
+     * @deprecated CurrentUser->isAdminForSite() is deprecated. Use CurrentUser->isAdmin() instead.
+     */
+    public function isAdminForSite(Site $site): bool
+    {
+        return $this->isAdmin();
     }
 
     /**
@@ -321,8 +324,15 @@ class CurrentUser
         $this->currentSite = $currentSite;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getCurrentSite(): CurrentSite
     {
+        if ($this->currentSite === null) {
+            throw new Exception("CurrentSite service was not injected.");
+        }
+
         return $this->currentSite;
     }
 
