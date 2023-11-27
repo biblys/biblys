@@ -36,6 +36,7 @@ use Model\SiteQuery;
 use Model\SpecialOffer;
 use Model\Stock;
 use Model\StockItemList;
+use Model\Subscription;
 use Model\User;
 use Propel\Runtime\Exception\PropelException;
 
@@ -699,6 +700,23 @@ class ModelFactory
         $post->save();
 
         return $post;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createSubscription(
+        Site   $site,
+        string $axysAccountId = null
+    ): Subscription
+    {
+        $subscription = new Subscription();
+
+        $subscription->setSite($site);
+        $subscription->setAxysAccountId($axysAccountId);
+        $subscription->save();
+
+        return $subscription;
     }
 
     /**

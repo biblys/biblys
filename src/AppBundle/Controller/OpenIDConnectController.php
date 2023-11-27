@@ -29,6 +29,7 @@ use Model\RightQuery;
 use Model\Session;
 use Model\StockItemListQuery;
 use Model\StockQuery;
+use Model\SubscriptionQuery;
 use Model\User;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
@@ -289,6 +290,16 @@ class OpenIDConnectController extends Controller
             $libraryItem->setUser($user);
             $libraryItem->setAxysAccountId(null);
             $libraryItem->save();
+        }
+
+        $subscriptions = SubscriptionQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByAxysAccountId($externalId)
+            ->find();
+        foreach ($subscriptions as $subscription) {
+            $subscription->setUser($user);
+            $subscription->setAxysAccountId(null);
+            $subscription->save();
         }
 
         return $authenticationMethod;
