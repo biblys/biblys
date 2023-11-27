@@ -396,6 +396,21 @@ class CurrentUser
     }
 
     /**
+     * @deprecated CurrentUser->getAxysAccount() is deprecated. Use CurrentUser->getUser()
+     * instead.
+     */
+    public function getAxysAcount(): User
+    {
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.75.0",
+            "CurrentUser->getAxysAcount() is deprecated. Use CurrentUser->getUser() instead.",
+        );
+
+        return $this->getUser();
+    }
+
+    /**
      * @throws PropelException
      */
     public function transfertVisitorCartToUser(?string $visitorToken): void
