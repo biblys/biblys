@@ -1,5 +1,11 @@
 # Historique des modifications
 
+### 2.74.2 (DEV)
+
+Corrections
+
+- Le paiement via Stripe pouvait déclencher une erreur. C'est corrigé.
+
 ### 2.74.1 (8 novembre 2023)
 
 Corrections

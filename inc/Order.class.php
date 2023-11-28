@@ -12,7 +12,12 @@ use PayPal\Api\Payment;
 use PayPal\Api\PaymentExecution;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Rest\ApiContext;
 use Payplug\Exception\HttpException;
+use Stripe\Exception\ApiErrorException;
+use Stripe\Product;
+use Stripe\Stripe;
 
 class Order extends Entity
 {
@@ -60,7 +65,7 @@ class Order extends Entity
 
     /**
      * Returns true if order is payed
-     * @return boolean
+     * @return bool
      */
     public function isPayed()
     {
@@ -80,7 +85,7 @@ class Order extends Entity
 
     /**
      * Returns true if order has been shipped (= has a shipping date)
-     * @return boolean
+     * @return bool
      */
     public function isShipped()
     {
@@ -212,8 +217,8 @@ class Order extends Entity
             throw new Exception("Paypal is not properly configured.");
         }
 
-        $apiContext = new \PayPal\Rest\ApiContext(
-            new \PayPal\Auth\OAuthTokenCredential(
+        $apiContext = new ApiContext(
+            new OAuthTokenCredential(
                 $paypal_config["client_id"],         // ClientID
                 $paypal_config["client_secret"]      // ClientSecret
             )
@@ -335,31 +340,33 @@ class Order extends Entity
             throw new Exception("Missing Stripe endpoint secret.");
         }
 
-        \Stripe\Stripe::setApiKey($stripe['secret_key']);
+        Stripe::setApiKey($stripe['secret_key']);
 
         // Add each copy to Stripe line items
         $copies = $this->getCopies();
         $lineItems = array_map(function($copy) {
-            return [
-                "quantity" => 1,
-                "amount" => $copy->get('selling_price'),
+            $product = Product::create(["name" => $copy->get("article")->get("title")]);
+            $price = \Stripe\Price::create([
+                "product" => $product->id,
+                "unit_amount" => $copy->get("selling_price"),
                 "currency" => "EUR",
-                "name" => $copy->getArticle()->get('title'),
-            ];
+            ]);
+            return [ "quantity" => 1, "price" => $price->id ];
         }, $copies);
-        $amountToPay = array_reduce($lineItems, function($total, $current) {
-            return $total + $current["amount"];
+        $amountToPay = array_reduce($copies, function($total, $current) {
+            return $total + $current->get("selling_price");
         }, 0);
 
         // Add shipping cost as a line item
         $shippingCost = $this->get('shipping');
         if ($shippingCost && $shippingCost !== 0) {
-            $lineItems[] = [
-                "quantity" => 1,
-                "amount" => $shippingCost,
+            $product = Product::create(["name" => "Frais de port"]);
+            $price = \Stripe\Price::create([
+                "product" => $product->id,
+                "unit_amount" => $shippingCost,
                 "currency" => "EUR",
-                "name" => "Frais de port"
-            ];
+            ]);
+            $lineItems[] = [ "quantity" => 1, "price" => $price->id ];
             $amountToPay += $shippingCost;
         }
 
@@ -710,7 +717,7 @@ class OrderManager extends EntityManager
      * Remove a copy from an order
      * @param Order $order the order to remove from
      * @param Stock $stock the copy to remove
-     * @return boolean
+     * @return bool
      * @throws Exception
      */
     public function removeStock(Order $order, Stock $stock)
