@@ -61,6 +61,45 @@ class CurrentSiteTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function testGetOptionWithUnsetKey()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+
+        // when
+        $option = $currentSite->getOption("shpping_notice");
+
+        // then
+        $this->assertNull(
+            $option,
+            "returns null if option is unset"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetOptionWithDefaultValue()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+
+        // when
+        $option = $currentSite->getOption("shpping_notice", "Votre commande a été expédiée.");
+
+        // then
+        $this->assertEquals(
+            "Votre commande a été expédiée.",
+            $option,
+            "returns the default value if option is unset but has a default value"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testSetOption()
     {
         // given

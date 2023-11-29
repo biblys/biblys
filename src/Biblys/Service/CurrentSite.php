@@ -52,15 +52,22 @@ class CurrentSite
     /**
      * @throws PropelException
      */
-    public function getOption(string $key): ?string
+    public function getOption(string $key, string $defaultValue = null): ?string
     {
         $option = OptionQuery::create()
             ->filterBySite($this->site)
             ->filterByKey($key)
             ->findOne();
 
-        return $option?->getValue();
+        if ($option) {
+            return $option->getValue();
+        }
 
+        if ($defaultValue) {
+            return $defaultValue;
+        }
+
+        return null;
     }
 
     /**
