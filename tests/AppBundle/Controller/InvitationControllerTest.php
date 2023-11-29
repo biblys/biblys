@@ -701,40 +701,6 @@ class InvitationControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws Exception
-     */
-    public function testConsumeActionForArticleAlreadyInUserLibrary()
-    {
-        // then
-        $this->expectException(BadRequestHttpException::class);
-        $this->expectExceptionMessage("L'article Dans ma bibliothèque est déjà dans votre bibliothèque.");
-
-        // given
-        $axysAccount = ModelFactory::createAxysAccount();
-        $site = ModelFactory::createSite();
-        $currentSite = new CurrentSite($site);
-        $validArticle = ModelFactory::createArticle(title: "Autre article", typeId: Type::EBOOK);
-        $articleInLibrary = ModelFactory::createArticle(title: "Dans ma bibliothèque", typeId: Type::EBOOK);
-        ModelFactory::createInvitation(
-            site: $site, articles: [$validArticle, $articleInLibrary], code: "ELIBRARY"
-        );
-        $publisherIds = "{$validArticle->getPublisherId()},{$articleInLibrary->getPublisherId()}";
-        $currentSite->setOption("publisher_filter", $publisherIds);
-        $currentSite->setOption("downloadable_publishers", $publisherIds);
-        ModelFactory::createStockItem(site: $site, article: $articleInLibrary, axysAccount: $axysAccount);
-
-        $controller = new InvitationController();
-        $request = RequestFactory::createAuthRequest(user: $axysAccount);
-        $request->request->set("code", "ELIBRARY");
-        $currentUser = new CurrentUser($axysAccount, "token");
-        $session = $this->createMock(Session::class);
-
-        // when
-        $controller->consumeAction($request, $currentSite, $currentUser, $session);
-    }
-
-    /**
-     * @throws PropelException
      */
     public function testConsumeAction()
     {
@@ -779,6 +745,58 @@ class InvitationControllerTest extends TestCase
         $this->assertEquals(0, $articleInLibrary->getSellingPrice());
         $this->assertNotNull($articleInLibrary->getSellingDate());
         $this->assertFalse($articleInLibrary->getAllowPredownload());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testConsumeActionIgnoringArticleAlreadyInUserLibrary()
+    {
+        // given
+        $axysAccount = ModelFactory::createAxysAccount();
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $validArticle = ModelFactory::createArticle(title: "Autre article", typeId: Type::EBOOK);
+        $articleInLibrary = ModelFactory::createArticle(title: "Dans ma bibliothèque", typeId: Type::EBOOK);
+        ModelFactory::createInvitation(
+            site: $site, articles: [$validArticle, $articleInLibrary], code: "ELIBRARY"
+        );
+        $publisherIds = "{$validArticle->getPublisherId()},{$articleInLibrary->getPublisherId()}";
+        $currentSite->setOption("publisher_filter", $publisherIds);
+        $currentSite->setOption("downloadable_publishers", $publisherIds);
+        ModelFactory::createStockItem(site: $site, article: $articleInLibrary, axysAccount: $axysAccount);
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->shouldReceive("add")
+            ->once()
+            ->with("success", "Autre article a été ajouté à votre bibliothèque.");
+        $flashBag->shouldReceive("add")
+            ->once()
+            ->with("warning", "Dans ma bibliothèque était déjà dans votre bibliothèque.");
+        $session = Mockery::mock(Session::class);
+        $session->shouldReceive("getFlashBag")->once()->andReturn($flashBag);
+
+        $controller = new InvitationController();
+        $request = RequestFactory::createAuthRequest(user: $axysAccount);
+        $request->request->set("code", "ELIBRARY");
+        $currentUser = new CurrentUser($axysAccount, "token");
+
+        // when
+        $response = $controller->consumeAction($request, $currentSite, $currentUser, $session);
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $newLibraryItem = StockQuery::create()
+            ->filterBySite($site)
+            ->filterByArticle($validArticle)
+            ->findOneByAxysAccountId($axysAccount->getId());
+        $this->assertNotNull($newLibraryItem, "it adds the article to the user's library");
+        $existingLibraryItems = StockQuery::create()
+            ->filterBySite($site)
+            ->filterByArticle($articleInLibrary)
+            ->filterByAxysAccountId($axysAccount->getId())
+            ->find();
+        $this->assertEquals(1, $existingLibraryItems->count());
     }
 
     /**

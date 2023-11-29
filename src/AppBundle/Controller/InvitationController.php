@@ -41,7 +41,6 @@ use Twig\Error\SyntaxError;
 
 class InvitationController extends Controller
 {
-
     /**
      * @throws SyntaxError
      * @throws RuntimeError
@@ -210,7 +209,7 @@ class InvitationController extends Controller
         $error = null;
         try {
             self::_validateInvitation($invitation);
-            self::_validateArticlesFromInvitation($currentSite, $currentUser, $invitation);
+            self::_validateArticlesFromInvitation($currentSite, $invitation);
         } catch (NotFoundHttpException|BadRequestHttpException $exception) {
             $error = $exception->getMessage();
         }
@@ -237,14 +236,17 @@ class InvitationController extends Controller
         $code = $request->request->get("code");
         $invitation = self::_getInvitationFromCode($currentSite, $code);
         self::_validateInvitation($invitation);
-        self::_validateArticlesFromInvitation($currentSite, $currentUser, $invitation);
+        self::_validateArticlesFromInvitation($currentSite, $invitation);
+        $articles = self::_getArticlesNotAlreadyInLibrary(
+            $currentSite, $currentUser, $invitation, $session
+        );
         $invitation->setConsumedAt(new DateTime());
 
         $con = Propel::getWriteConnection(InvitationTableMap::DATABASE_NAME);
         $con->beginTransaction();
 
         try {
-            foreach ($invitation->getArticles() as $article) {
+            foreach ($articles as $article) {
                 self::_addArticleToUserLibrary(
                     article: $article,
                     axysAccount: $currentUser->getAxysAccount(),
@@ -322,21 +324,12 @@ class InvitationController extends Controller
      */
     private static function _validateArticlesFromInvitation(
         CurrentSite $currentSite,
-        CurrentUser $currentUser,
         Invitation  $invitation,
     ): void
     {
         $articles = $invitation->getArticles();
         foreach ($articles as $article) {
             self::_validateDownloadableArticle($currentSite, $article);
-
-            $stock = StockQuery::create()
-                ->filterBySite($currentSite->getSite())
-                ->filterByArticle($article)
-                ->findOneByAxysAccountId($currentUser->getAxysAccount()->getId());
-            if ($stock) {
-                throw new BadRequestHttpException("L'article {$article->getTitle()} est déjà dans votre bibliothèque.");
-            }
         }
     }
 
@@ -371,6 +364,35 @@ class InvitationController extends Controller
         if ($article->getType()->isDownloadable() === false) {
             throw new BadRequestHttpException("L'article {$article->getTitle()} n'est pas téléchargeable.");
         }
+    }
+
+    /**
+     * @throws PropelException
+     * @return Article[]
+     */
+    private static function _getArticlesNotAlreadyInLibrary(
+        CurrentSite $currentSite,
+        CurrentUser $currentUser,
+        Invitation  $invitation,
+        Session     $session,
+    ): array
+    {
+        return array_filter($invitation->getArticles()->getData(), function ($article) use
+        ($currentSite, $currentUser, $session) {
+            $stock = StockQuery::create()
+                ->filterBySite($currentSite->getSite())
+                ->filterByArticle($article)
+                ->findOneByAxysAccountId($currentUser->getAxysAccount()->getId());
+
+            if ($stock) {
+                $session->getFlashBag()->add(
+                    "warning",
+                    "{$article->getTitle()} était déjà dans votre bibliothèque."
+                );
+            }
+
+            return $stock === null;
+        });
     }
 
     /**

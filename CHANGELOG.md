@@ -8,6 +8,10 @@ Améliorations
   `free_shipping_success_text` ont été ajoutées pour personnaliser les 
   textes sur le panier pour encourager les clients à atteindre le montant 
   autorisant la gratuité des frais de port.
+- Un utilisateur ne pouvait pas accepter une invitation de téléchargement 
+  si au moins l'un des articles associés était déjà dans sa bibliothèque. 
+  Désormais, les articles déjà présents seront ignorés et les autres seront 
+  ajoutés. 
 - Une page de documentation "Comment télécharger et lire des livres 
   numériques" a été ajoutée.
 - La fonctionnalité de mise à jour de Biblys via l'administration a été 
