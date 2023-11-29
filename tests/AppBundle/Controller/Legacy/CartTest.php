@@ -110,7 +110,7 @@ class CartTest extends TestCase
         global $_SITE;
 
         // given
-        $controller = require __DIR__."/../../../../controllers/common/php/cart.php";
+        $controller = require __DIR__ . "/../../../../controllers/common/php/cart.php";
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")->andReturn("url");
         $currentSite = Mockery::mock(CurrentSite::class);
@@ -122,6 +122,13 @@ class CartTest extends TestCase
             ->shouldReceive("getOption")
             ->with("free_shipping_target_amount")
             ->andReturn(1000);
+        $currentSite
+            ->shouldReceive("getOption")
+            ->with(
+                "free_shipping_invite_text",
+                "Livraison offerte à partir de 10,00&nbsp;&euro; d'achat",
+            )
+            ->andReturn("Livraison offerte à partir de 10,00&nbsp;&euro; d'achat");
 
         ModelFactory::createCountry();
         $_SITE->setOpt("virtual_stock", 1);
@@ -144,6 +151,55 @@ class CartTest extends TestCase
             "Ajoutez encore <strong>5,00&nbsp;&euro;</strong> à votre panier pour en bénéficier !",
             $response->getContent(),
             "it displays the missing amount for free shipping"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testFreeShippingNoticeWithTargetAmountReached()
+    {
+        /** @var Site $_SITE */
+        global $_SITE;
+
+        // given
+        $controller = require __DIR__ . "/../../../../controllers/common/php/cart.php";
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("url");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite
+            ->shouldReceive("getOption")
+            ->with("sales_disabled")
+            ->andReturn(null);
+        $currentSite
+            ->shouldReceive("getOption")
+            ->with("free_shipping_target_amount")
+            ->andReturn(1000);
+        $currentSite
+            ->shouldReceive("getOption")
+            ->with(
+                "free_shipping_success_text",
+                "Vous bénéficiez de la livraison offerte !",
+            )
+            ->andReturn("Vous bénéficiez de la livraison offerte !");
+
+        ModelFactory::createCountry();
+        $_SITE->setOpt("virtual_stock", 1);
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
+        $article = EntityFactory::createArticle(["type_id" => 1, "article_price" => 1500]);
+        $cm = new CartManager();
+        $cm->vacuum($cart);
+        $cm->addArticle($cart, $article);
+
+        // when
+        $response = $controller($urlGenerator, $currentSite);
+
+        // then
+        $this->assertStringContainsString(
+            "Vous bénéficiez de la livraison offerte !",
+            $response->getContent(),
+            "displays the success text when target amount is reached"
         );
     }
 }

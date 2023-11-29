@@ -468,19 +468,28 @@ return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
             $freeShippingNotice = null;
             if ($cartNeedsShipping && $freeShippingTargetAmount) {
                 $missingAmount = $freeShippingTargetAmount - $Total;
+                $formattedTargetAmount = currency($freeShippingTargetAmount / 100);
                 if ($missingAmount <= 0) {
+                    $freeShippingSuccessText = $currentSite->getOption(
+                        "free_shipping_success_text",
+                        "Vous bénéficiez de la livraison offerte !"
+                    );
                     $freeShippingNotice = '
                         <p class="alert alert-success">
                             <span class="fa fa-check-circle"></span> 
-                            Vous bénéficiez de la livraison offerte !
+                            ' . $freeShippingSuccessText . '
                         </p>
                     ';
                 } else {
+                    $freeShippingInviteText = $currentSite->getOption(
+                        "free_shipping_invite_text",
+                        "Livraison offerte à partir de $formattedTargetAmount d'achat"
+                    );
                     $freeShippingNotice = '
                         <div class="alert alert-info">
                             <h3>
                                 <span class="fa fa-gift"></span> 
-                                Livraison offerte à partir de ' . currency($freeShippingTargetAmount / 100) . ' d\'achat
+                                '.$freeShippingInviteText.'
                             </h3>
                             <progress value="' . $Total . '" max="' . $freeShippingTargetAmount . '"></progress>
                             <p>

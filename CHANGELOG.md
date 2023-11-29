@@ -4,6 +4,10 @@
 
 Améliorations
 
+- Deux nouvelles options `free_shipping_invite_text` et 
+  `free_shipping_success_text` ont été ajoutées pour personnaliser les 
+  textes sur le panier pour encourager les clients à atteindre le montant 
+  autorisant la gratuité des frais de port.
 - Une page de documentation "Comment télécharger et lire des livres 
   numériques" a été ajoutée.
 - La fonctionnalité de mise à jour de Biblys via l'administration a été 
