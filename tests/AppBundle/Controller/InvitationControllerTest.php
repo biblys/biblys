@@ -612,9 +612,9 @@ class InvitationControllerTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $validPublisher = ModelFactory::createPublisher(name: "Éditeur autorisé");
-        $validArticle = ModelFactory::createArticle(publisher: $validPublisher, typeId: Type::EBOOK);
+        $validArticle = ModelFactory::createArticle(typeId: Type::EBOOK, publisher: $validPublisher);
         $invalidPublisher = ModelFactory::createPublisher(name: "Éditeur filtré");
-        $invalidArticle = ModelFactory::createArticle(publisher: $invalidPublisher, typeId: Type::EBOOK);
+        $invalidArticle = ModelFactory::createArticle(typeId: Type::EBOOK, publisher: $invalidPublisher);
         ModelFactory::createInvitation(
             site: $site, articles: [$validArticle, $invalidArticle], email: "UNAUTHPU", code: "UNAUTHPU"
         );
@@ -647,9 +647,9 @@ class InvitationControllerTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $validPublisher = ModelFactory::createPublisher(name: "Éditeur autorisé");
-        $validArticle = ModelFactory::createArticle(publisher: $validPublisher, typeId: Type::EBOOK);
+        $validArticle = ModelFactory::createArticle(typeId: Type::EBOOK, publisher: $validPublisher);
         $invalidPublisher = ModelFactory::createPublisher(name: "Éditeur non autorisé");
-        $invalidArticle = ModelFactory::createArticle(publisher: $invalidPublisher, typeId: Type::EBOOK);
+        $invalidArticle = ModelFactory::createArticle(typeId: Type::EBOOK, publisher: $invalidPublisher);
         ModelFactory::createInvitation(
             site: $site, articles: [$validArticle, $invalidArticle], email: "NONDOPUB", code: "NONDOPUB"
         );
@@ -682,7 +682,7 @@ class InvitationControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         $validArticle = ModelFactory::createArticle(title: "Livre papier", typeId: Type::EBOOK);
         $invalidArticle = ModelFactory::createArticle(title: "Livre papier");
-        $invitation = ModelFactory::createInvitation(
+        ModelFactory::createInvitation(
             site: $site, articles: [$validArticle, $invalidArticle], email: "PAPERBOO", code: "PAPERBOO"
         );
         $publisherIds = "{$validArticle->getPublisherId()},{$invalidArticle->getPublisherId()}";

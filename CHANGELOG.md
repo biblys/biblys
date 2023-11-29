@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 2.75.0 (16 novembre 2023)
+## 2.75.0 (DEV)
 
 Améliorations
 
@@ -17,6 +17,16 @@ Déploiement
 
 - Remplacer les query params par `LegacyCodeHelper::getRouteParam($key)` 
   dans les controllers legacy.
+- Seul le premier article d'une invitation était validé au moment de 
+  l'acceptation de l'invitation. Désormais, ils le sont tous.
+
+### 2.74.2 (DEV)
+
+Corrections
+
+- Le paiement via Stripe pouvait déclencher une erreur. C'est corrigé.
+- Seul le premier article d'une invitation était validé au moment de
+  l'acceptation de l'invitation. Désormais, ils le sont tous.
 
 ### 2.74.2 (2 décembre 2023)
 
