@@ -210,7 +210,7 @@ class InvitationController extends Controller
         $error = null;
         try {
             self::_validateInvitation($invitation);
-            self::_validateArticleFromInvitation($currentSite, $currentUser, $invitation);
+            self::_validateArticlesFromInvitation($currentSite, $currentUser, $invitation);
         } catch (NotFoundHttpException|BadRequestHttpException $exception) {
             $error = $exception->getMessage();
         }
@@ -237,7 +237,7 @@ class InvitationController extends Controller
         $code = $request->request->get("code");
         $invitation = self::_getInvitationFromCode($currentSite, $code);
         self::_validateInvitation($invitation);
-        self::_validateArticleFromInvitation($currentSite, $currentUser, $invitation);
+        self::_validateArticlesFromInvitation($currentSite, $currentUser, $invitation);
         $invitation->setConsumedAt(new DateTime());
 
         $con = Propel::getWriteConnection(InvitationTableMap::DATABASE_NAME);
@@ -320,21 +320,23 @@ class InvitationController extends Controller
      * @throws PropelException
      * @throws BadRequestHttpException
      */
-    private static function _validateArticleFromInvitation(
+    private static function _validateArticlesFromInvitation(
         CurrentSite $currentSite,
         CurrentUser $currentUser,
         Invitation  $invitation,
     ): void
     {
-        $article = $invitation->getArticles()->getFirst();
-        self::_validateDownloadableArticle($currentSite, $article);
+        $articles = $invitation->getArticles();
+        foreach ($articles as $article) {
+            self::_validateDownloadableArticle($currentSite, $article);
 
-        $stock = StockQuery::create()
-            ->filterBySite($currentSite->getSite())
-            ->filterByArticle($article)
-            ->findOneByAxysAccountId($currentUser->getAxysAccount()->getId());
-        if ($stock) {
-            throw new BadRequestHttpException("L'article {$article->getTitle()} est déjà dans votre bibliothèque.");
+            $stock = StockQuery::create()
+                ->filterBySite($currentSite->getSite())
+                ->filterByArticle($article)
+                ->findOneByAxysAccountId($currentUser->getAxysAccount()->getId());
+            if ($stock) {
+                throw new BadRequestHttpException("L'article {$article->getTitle()} est déjà dans votre bibliothèque.");
+            }
         }
     }
 

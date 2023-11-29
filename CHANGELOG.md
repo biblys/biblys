@@ -5,6 +5,8 @@
 Corrections
 
 - Le paiement via Stripe pouvait déclencher une erreur. C'est corrigé.
+- Seul le premier article d'une invitation était validé au moment de 
+  l'acceptation de l'invitation. Désormais, ils le sont tous.
 
 ### 2.74.1 (8 novembre 2023)
 

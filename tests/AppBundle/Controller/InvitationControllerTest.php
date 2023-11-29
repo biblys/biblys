@@ -462,8 +462,6 @@ class InvitationControllerTest extends TestCase
         $this->assertStringContainsString("Télécharger The Code Show", $response->getContent());
     }
 
-
-
     /**
      * @throws SyntaxError
      * @throws RuntimeError
@@ -613,12 +611,16 @@ class InvitationControllerTest extends TestCase
 
         // given
         $site = ModelFactory::createSite();
-        $publisher = ModelFactory::createPublisher(name: "Éditeur filtré");
-        $article = ModelFactory::createArticle(publisher: $publisher);
+        $validPublisher = ModelFactory::createPublisher(name: "Éditeur autorisé");
+        $validArticle = ModelFactory::createArticle(publisher: $validPublisher, typeId: Type::EBOOK);
+        $invalidPublisher = ModelFactory::createPublisher(name: "Éditeur filtré");
+        $invalidArticle = ModelFactory::createArticle(publisher: $invalidPublisher, typeId: Type::EBOOK);
         ModelFactory::createInvitation(
-            site: $site, articles: [$article], email: "UNAUTHPU", code: "UNAUTHPU"
+            site: $site, articles: [$validArticle, $invalidArticle], email: "UNAUTHPU", code: "UNAUTHPU"
         );
         $currentSite = new CurrentSite($site);
+        $currentSite->setOption("publisher_filter", $validPublisher->getId());
+        $currentSite->setOption("downloadable_publishers", $validPublisher->getId());
 
         $controller = new InvitationController();
         $request = RequestFactory::createAuthRequest();
@@ -644,13 +646,16 @@ class InvitationControllerTest extends TestCase
 
         // given
         $site = ModelFactory::createSite();
-        $publisher = ModelFactory::createPublisher(name: "Éditeur non autorisé");
-        $article = ModelFactory::createArticle(publisher: $publisher);
+        $validPublisher = ModelFactory::createPublisher(name: "Éditeur autorisé");
+        $validArticle = ModelFactory::createArticle(publisher: $validPublisher, typeId: Type::EBOOK);
+        $invalidPublisher = ModelFactory::createPublisher(name: "Éditeur non autorisé");
+        $invalidArticle = ModelFactory::createArticle(publisher: $invalidPublisher, typeId: Type::EBOOK);
         ModelFactory::createInvitation(
-            site: $site, articles: [$article], email: "NONDOPUB", code: "NONDOPUB"
+            site: $site, articles: [$validArticle, $invalidArticle], email: "NONDOPUB", code: "NONDOPUB"
         );
         $currentSite = new CurrentSite($site);
-        $currentSite->setOption("publisher_filter", $publisher->getId());
+        $currentSite->setOption("publisher_filter", "{$validPublisher->getId()},{$invalidPublisher->getId()}");
+        $currentSite->setOption("downloadable_publishers", $validPublisher->getId());
 
         $controller = new InvitationController();
         $request = RequestFactory::createAuthRequest();
@@ -675,13 +680,14 @@ class InvitationControllerTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $article = ModelFactory::createArticle(title: "Livre papier");
+        $validArticle = ModelFactory::createArticle(title: "Livre papier", typeId: Type::EBOOK);
+        $invalidArticle = ModelFactory::createArticle(title: "Livre papier");
         $invitation = ModelFactory::createInvitation(
-            site: $site, articles: [$article], email: "PAPERBOO", code: "PAPERBOO"
+            site: $site, articles: [$validArticle, $invalidArticle], email: "PAPERBOO", code: "PAPERBOO"
         );
-        $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
-        $currentSite->setOption("publisher_filter", $publisherId);
-        $currentSite->setOption("downloadable_publishers", $publisherId);
+        $publisherIds = "{$validArticle->getPublisherId()},{$invalidArticle->getPublisherId()}";
+        $currentSite->setOption("publisher_filter", $publisherIds);
+        $currentSite->setOption("downloadable_publishers", $publisherIds);
 
         $controller = new InvitationController();
         $request = RequestFactory::createAuthRequest();
@@ -707,14 +713,15 @@ class InvitationControllerTest extends TestCase
         $axysAccount = ModelFactory::createAxysAccount();
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $article = ModelFactory::createArticle(title: "Dans ma bibliothèque", typeId: Type::EBOOK);
-        $invitation = ModelFactory::createInvitation(
-            site: $site, articles: [$article], code: "ELIBRARY"
+        $validArticle = ModelFactory::createArticle(title: "Autre article", typeId: Type::EBOOK);
+        $articleInLibrary = ModelFactory::createArticle(title: "Dans ma bibliothèque", typeId: Type::EBOOK);
+        ModelFactory::createInvitation(
+            site: $site, articles: [$validArticle, $articleInLibrary], code: "ELIBRARY"
         );
-        $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
-        $currentSite->setOption("publisher_filter", $publisherId);
-        $currentSite->setOption("downloadable_publishers", $publisherId);
-        ModelFactory::createStockItem(site: $site, article: $article, axysAccount: $axysAccount);
+        $publisherIds = "{$validArticle->getPublisherId()},{$articleInLibrary->getPublisherId()}";
+        $currentSite->setOption("publisher_filter", $publisherIds);
+        $currentSite->setOption("downloadable_publishers", $publisherIds);
+        ModelFactory::createStockItem(site: $site, article: $articleInLibrary, axysAccount: $axysAccount);
 
         $controller = new InvitationController();
         $request = RequestFactory::createAuthRequest(user: $axysAccount);
@@ -831,16 +838,22 @@ class InvitationControllerTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $article1 = ModelFactory::createArticle(title: "Multiple 1", typeId: Type::EBOOK);
-        $article2 = ModelFactory::createArticle(title: "Multiple 2", typeId: Type::EBOOK);
-        $article3 = ModelFactory::createArticle(title: "Multiple 3", typeId: Type::EBOOK);
+        $publisher = ModelFactory::createPublisher();
+        $article1 = ModelFactory::createArticle(
+            title: "Multiple 1", typeId: Type::EBOOK, publisher: $publisher
+        );
+        $article2 = ModelFactory::createArticle(
+            title: "Multiple 2", typeId: Type::EBOOK, publisher: $publisher
+        );
+        $article3 = ModelFactory::createArticle(
+            title: "Multiple 3", typeId: Type::EBOOK, publisher: $publisher
+        );
         $invitation = ModelFactory::createInvitation(
             site: $site, articles: [$article1, $article2, $article3],
             email: "multiple@example.org", code: "ALLRIGHT"
         );
-        $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
-        $currentSite->setOption("publisher_filter", $publisherId);
-        $currentSite->setOption("downloadable_publishers", $publisherId);
+        $currentSite->setOption("publisher_filter", $publisher->getId());
+        $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $axysAccount = ModelFactory::createAxysAccount();
 
         $controller = new InvitationController();
