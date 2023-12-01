@@ -618,7 +618,7 @@ class ModelFactory
      */
     public static function createRight(
         ?User $user,
-        Site $site,
+        ?Site $site,
         Publisher $publisher = null,
         bool $isAdmin = false,
         string $axysAccountId = null,

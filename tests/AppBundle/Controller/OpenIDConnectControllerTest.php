@@ -203,6 +203,9 @@ class OpenIDConnectControllerTest extends TestCase
         $libraryItem = ModelFactory::createStockItem(site: $site, axysAccountId: $externalId);
         $subscription = ModelFactory::createSubscription(site: $site, axysAccountId: $externalId);
         $alert = ModelFactory::createAlert(axysAccountId: $externalId);
+        $publisherRight = ModelFactory::createRight(
+            user: null, site: null, publisher: ModelFactory::createPublisher(), axysAccountId: $externalId
+        );
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("setUser");
@@ -277,6 +280,11 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals($externalId, $alert->getAxysAccountId());
         $this->assertNull($alert->getUserId());
         $this->assertNull($alert->getSiteId());
+
+        $publisherRight->reload();
+        $this->assertEquals($externalId, $publisherRight->getAxysAccountId());
+        $this->assertNull($publisherRight->getUserId());
+        $this->assertNull($publisherRight->getSiteId());
     }
 
     /**
@@ -325,6 +333,65 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals($user->getId(), $alert->getUserId());
         $this->assertEquals($site->getId(), $alert->getSiteId());
         $this->assertNull($alert->getAxysAccountId());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testCallbackWithPublisherRightsImport()
+    {
+        // given
+        $externalId = "AXYS9876";
+        $userEmail = "user-to-import@biblys.fr";
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $currentSite->setOption("publisher_rights_managment", true);
+        $openIDConnectProviderService = $this->_buildOIDCProviderService(
+            externalId: $externalId,
+            email: $userEmail,
+        );
+
+        $adminRightForOtherSite = ModelFactory::createRight(
+            user: null, site: ModelFactory::createSite(), axysAccountId: $externalId
+        );
+        $publisherRight = ModelFactory::createRight(
+            user: null, site: null, publisher: ModelFactory::createPublisher(), axysAccountId: $externalId
+        );
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("setUser");
+        $currentUser->expects("transfertVisitorCartToUser");
+
+        $request = self::_buildCallbackRequest();
+        $controller = new OpenIDConnectController();
+
+        // when
+        $response = $controller->callback(
+            request: $request,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
+            openIDConnectProviderService: $openIDConnectProviderService,
+            templateService: $this->createMock(TemplateService::class),
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+
+        $user = UserQuery::create()
+            ->filterBySite($site)
+            ->findOneByEmail($userEmail);
+
+        $adminRightForOtherSite->reload();
+        $this->assertNull($adminRightForOtherSite->getUserId());
+        $this->assertNotEquals($site->getId(), $adminRightForOtherSite->getSiteId());
+        $this->assertEquals(0, $adminRightForOtherSite->getAxysAccountId());
+
+        $publisherRight->reload();
+        $this->assertEquals($user->getId(), $publisherRight->getUserId());
+        $this->assertEquals($site->getId(), $publisherRight->getSiteId());
+        $this->assertFalse($publisherRight->isAdmin());
+        $this->assertNull($publisherRight->getAxysAccountId());
     }
 
     /**

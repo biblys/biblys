@@ -32,6 +32,7 @@ use Model\StockItemListQuery;
 use Model\StockQuery;
 use Model\SubscriptionQuery;
 use Model\User;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -312,6 +313,20 @@ class OpenIDConnectController extends Controller
                 $alert->setUser($user);
                 $alert->setAxysAccountId(null);
                 $alert->save();
+            }
+        }
+
+        if ($currentSite->getOption("publisher_rights_managment")) {
+            $publisherRights = RightQuery::create()
+                ->filterBySiteId(null, Criteria::ISNULL)
+                ->filterByPublisherId(null, Criteria::ISNOTNULL)
+                ->filterByAxysAccountId($externalId)
+                ->find();
+            foreach ($publisherRights as $adminRight) {
+                $adminRight->setSite($currentSite->getSite());
+                $adminRight->setUser($user);
+                $adminRight->setAxysAccountId(null);
+                $adminRight->save();
             }
         }
 
