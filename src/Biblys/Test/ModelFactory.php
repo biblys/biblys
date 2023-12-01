@@ -7,6 +7,7 @@ use Biblys\Service\Config;
 use Biblys\Service\Slug\SlugService;
 use DateTime;
 use Exception;
+use Model\Alert;
 use Model\Article;
 use Model\ArticleCategory;
 use Model\AuthenticationMethod;
@@ -717,6 +718,22 @@ class ModelFactory
         $subscription->save();
 
         return $subscription;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createAlert(
+        Site $site = null,
+        string $axysAccountId = null): Alert
+    {
+        $alert = new Alert();
+
+        $alert->setSite($site);
+        $alert->setAxysAccountId($axysAccountId);
+        $alert->save();
+
+        return $alert;
     }
 
     /**

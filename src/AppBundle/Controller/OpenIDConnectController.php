@@ -18,6 +18,7 @@ use Firebase\JWT\Key;
 use Framework\Controller;
 use Http\Discovery\Psr17Factory;
 use JsonException;
+use Model\AlertQuery;
 use Model\AuthenticationMethod;
 use Model\AuthenticationMethodQuery;
 use Model\CartQuery;
@@ -300,6 +301,18 @@ class OpenIDConnectController extends Controller
             $subscription->setUser($user);
             $subscription->setAxysAccountId(null);
             $subscription->save();
+        }
+
+        if ($currentSite->getOption("alerts")) {
+            $alerts = AlertQuery::create()
+                ->filterByAxysAccountId($externalId)
+                ->find();
+            foreach ($alerts as $alert) {
+                $alert->setSite($currentSite->getSite());
+                $alert->setUser($user);
+                $alert->setAxysAccountId(null);
+                $alert->save();
+            }
         }
 
         return $authenticationMethod;

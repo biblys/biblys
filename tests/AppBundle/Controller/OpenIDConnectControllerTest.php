@@ -184,7 +184,7 @@ class OpenIDConnectControllerTest extends TestCase
     {
         // given
         $identityProvider = "axys";
-        $externalId = "AXYS9876";
+        $externalId = "1234";
         $userEmail = "user-to-import@biblys.fr";
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
@@ -202,6 +202,7 @@ class OpenIDConnectControllerTest extends TestCase
         $adminRight = ModelFactory::createRight(user: null, site: $site, axysAccountId: $externalId);
         $libraryItem = ModelFactory::createStockItem(site: $site, axysAccountId: $externalId);
         $subscription = ModelFactory::createSubscription(site: $site, axysAccountId: $externalId);
+        $alert = ModelFactory::createAlert(axysAccountId: $externalId);
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("setUser");
@@ -271,6 +272,59 @@ class OpenIDConnectControllerTest extends TestCase
         $subscription->reload();
         $this->assertEquals($user->getId(), $subscription->getUserId());
         $this->assertNull($subscription->getAxysAccountId());
+
+        $alert->reload();
+        $this->assertEquals($externalId, $alert->getAxysAccountId());
+        $this->assertNull($alert->getUserId());
+        $this->assertNull($alert->getSiteId());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testCallbackWithAlertsImport()
+    {
+        // given
+        $externalId = "AXYS9876";
+        $userEmail = "user-to-import@biblys.fr";
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $currentSite->setOption("alerts", true);
+        $openIDConnectProviderService = $this->_buildOIDCProviderService(
+            externalId: $externalId,
+            email: $userEmail,
+        );
+
+        $alert = ModelFactory::createAlert(site: $site, axysAccountId: $externalId);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("setUser");
+        $currentUser->expects("transfertVisitorCartToUser");
+
+        $request = self::_buildCallbackRequest();
+        $controller = new OpenIDConnectController();
+
+        // when
+        $response = $controller->callback(
+            request: $request,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
+            openIDConnectProviderService: $openIDConnectProviderService,
+            templateService: $this->createMock(TemplateService::class),
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+
+        $user = UserQuery::create()
+            ->filterBySite($site)
+            ->findOneByEmail($userEmail);
+
+        $alert->reload();
+        $this->assertEquals($user->getId(), $alert->getUserId());
+        $this->assertEquals($site->getId(), $alert->getSiteId());
+        $this->assertNull($alert->getAxysAccountId());
     }
 
     /**
