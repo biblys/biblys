@@ -213,9 +213,19 @@ class File extends Entity
     }
 
     /* Get file download url */
-    public function getUrl()
+    /**
+     * @deprecated File->getUrl() is deprecated, use UrlGenerator service with "file_download" route
+     * instead.
+     */
+    public function getUrl(): string
     {
         global $urlgenerator;
+
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.75.0",
+            "File->getUrl() is deprecated, use UrlGenerator service with \"file_download\" route instead."
+        );
 
         return $urlgenerator->generate('file_download', [
             'id' => $this->get('id'),
