@@ -162,6 +162,7 @@ class InvitationController extends Controller
         self::authAdmin($request);
 
         $invitationsQuery = InvitationQuery::create()
+            ->filterBySite($currentSite->getSite())
             ->orderByUpdatedAt(Criteria::DESC);
 
         try {
@@ -174,7 +175,6 @@ class InvitationController extends Controller
         }
 
         $invitations = $invitationsQuery
-            ->filterBySite($currentSite->getSite())
             ->setLimit($pagination->getLimit())
             ->setOffset($pagination->getOffset())
             ->find();

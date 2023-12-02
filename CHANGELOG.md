@@ -11,18 +11,22 @@ Améliorations
 - Un utilisateur ne pouvait pas accepter une invitation de téléchargement 
   si au moins l'un des articles associés était déjà dans sa bibliothèque. 
   Désormais, les articles déjà présents seront ignorés et les autres seront 
-  ajoutés. 
+  ajoutés.
 - Une page de documentation "Comment télécharger et lire des livres 
   numériques" a été ajoutée.
 - La fonctionnalité de mise à jour de Biblys via l'administration a été 
   supprimée.
 
+Corrections
+
+- La pagination de la liste des invitations de téléchargement pouvait
+  afficher un nombre de page plus important que le nombre de page réel.
+  C'est corrigé.
+
 Déploiement
 
 - Remplacer les query params par `LegacyCodeHelper::getRouteParam($key)` 
   dans les controllers legacy.
-- Seul le premier article d'une invitation était validé au moment de 
-  l'acceptation de l'invitation. Désormais, ils le sont tous.
 
 ### 2.74.2 (DEV)
 
