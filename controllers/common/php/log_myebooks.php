@@ -53,12 +53,20 @@ return function (
         }
 
         $files = $fm->getAll(['article_id' => $articleEntity->get('id'), 'file_access' => 1]);
-        foreach ($files as $f) {
+        foreach ($files as $file) {
+            $downloadUrl = $urlGenerator->generate('file_download', [
+                'id' => $file->get('id'),
+                'format' => ltrim($file->getType('ext') ?: ".ext", '.'),
+            ]);
+
             $download_links[] = '
                 <li>
-                    <a href="' . $f->getUrl() . '" title="' . $f->get('version') . ' | ' . file_size($f->get('size')) . ' | ' . $f->getType('name') . '"
-                            aria-label="Télécharger ' . $f->getType('name') . '">
-                        <img src="' . $f->getType('icon') . '" width=16 alt="Télécharger"> ' . $f->getType('name') . '
+                    <a 
+                        href="'.$downloadUrl.'" 
+                        title="' . $file->get('version') . ' | ' . file_size($file->get ('size')) . ' | ' . $file->getType('name') . '"
+                        aria-label="Télécharger ' . $file->getType('name') . '"
+                    >
+                        <img src="' . $file->getType('icon') . '" width=16 alt="Télécharger"> ' . $file->getType('name') . '
                     </a>
                 </li>
             ';
