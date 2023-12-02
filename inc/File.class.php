@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Exception\InvalidEntityException;
 use Framework\Exception\AuthException;
 
 class File extends Entity
@@ -212,10 +213,10 @@ class File extends Entity
         return $types[$type][$data];
     }
 
-    /* Get file download url */
     /**
      * @deprecated File->getUrl() is deprecated, use UrlGenerator service with "file_download" route
      * instead.
+     * @throws InvalidEntityException
      */
     public function getUrl(): string
     {
@@ -226,6 +227,12 @@ class File extends Entity
             "2.75.0",
             "File->getUrl() is deprecated, use UrlGenerator service with \"file_download\" route instead."
         );
+
+        if ($this->getType("ext") === "") {
+            throw new InvalidEntityException(
+                "Cannot generate url for file {$this->get("id")} without extension."
+            );
+        }
 
         return $urlgenerator->generate('file_download', [
             'id' => $this->get('id'),
