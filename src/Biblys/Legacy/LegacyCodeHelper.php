@@ -165,8 +165,12 @@ class LegacyCodeHelper
         $GLOBALS["LEGACY_ROUTE_PARAMS"] = $params;
     }
 
-    public static function getRouteParam(string $key): string
+    public static function getRouteParam(string $key): ?string
     {
-        return $GLOBALS["LEGACY_ROUTE_PARAMS"][$key];
+        if (isset($GLOBALS["LEGACY_ROUTE_PARAMS"][$key])) {
+            return $GLOBALS["LEGACY_ROUTE_PARAMS"][$key];
+        }
+
+        return null;
     }
 }
