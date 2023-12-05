@@ -25,7 +25,8 @@ Corrections
 
 Déploiement
 
-- Remplacer les query params par `LegacyCodeHelper::getRouteParam($key)` 
+- Remplacer `$request->query->get($key)`
+  par `LegacyCodeHelper::getRouteParam($key)` 
   dans les controllers legacy.
 
 ### 2.74.2 (DEV)
