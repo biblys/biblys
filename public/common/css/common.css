@@ -710,6 +710,7 @@ table.cart td {
   position: absolute;
   right: 12px;
   top: 8px;
+  z-index: 10;
 }
 
 .order-delivery-form__checkbox {

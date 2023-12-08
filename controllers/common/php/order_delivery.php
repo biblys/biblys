@@ -85,7 +85,7 @@ return function (
     }
 
     $countryId = $request->query->get('country_id');
-    $countryInput = OrderDeliveryHelpers::getCountryInput($cart, $countryId, LegacyCodeHelper::getGlobalVisitor()->get("country"));
+    $countryInput = OrderDeliveryHelpers::getCountryInput($cart, $countryId);
 
     $shipping = OrderDeliveryHelpers::calculateShippingFees($cart, $request->query->get('shipping_id'));
     $shippingMode = $shipping ? $shipping->get("mode") : "";

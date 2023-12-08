@@ -118,11 +118,9 @@ class OrderDeliveryHelpers
     /**
      * @param Cart $cart
      * @param int|null $countryId
-     * @param string|null $visitorCountry
      * @return string
-     * @throws Exception
      */
-    public static function getCountryInput(Cart $cart, ?int $countryId, ?string $visitorCountry): string
+    public static function getCountryInput(Cart $cart, ?int $countryId): string
     {
         $com = new CountryManager();
         if ($cart->needsShipping()) {
@@ -141,12 +139,8 @@ class OrderDeliveryHelpers
         } else {
 
             $countries = $com->getAll();
-            $countriesOptions = array_map(function ($country) use ($visitorCountry) {
-                $selected = null;
-                if ($country->get('name') === $visitorCountry) {
-                    $selected = " selected";
-                }
-                return '<option value="'.$country->get('id').'" '.$selected.'>'.$country->get('name').'</option>';
+            $countriesOptions = array_map(function ($country) {
+                return '<option value="'.$country->get('id').'">'.$country->get('name').'</option>';
             }, $countries);
 
             $countryInput = '
@@ -253,8 +247,7 @@ class OrderDeliveryHelpers
                 <p>
                     Après paiement de votre commande, vous pourrez télécharger les articles numériques de votre commande depuis
                     <a href="http://'.$_SERVER['HTTP_HOST'].'/pages/log_myebooks">
-                        votre bibliothèque numérique
-                    </a>.
+                        votre bibliothèque numérique</a>.
                 </p>
             ';
         }
@@ -322,7 +315,7 @@ class OrderDeliveryHelpers
                     '.$mailComment.'
 
                     <p>
-                        Si ce n\'est pas déjà fait, vous pouvez payer votre commande à l\'adresse ci-dessous :<br />
+                        Si ce '."n'est".' pas déjà fait, vous pouvez payer votre commande à l\'adresse ci-dessous :<br />
                         http://'.$_SERVER['HTTP_HOST'].'/order/'.$order->get('url').'
                     </p>
                     
