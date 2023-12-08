@@ -233,19 +233,24 @@ class AxysAccount extends Entity
 
     /* RIGHTS */
 
-    public function isRoot()
+    /**
+     * @deprecated AxysAccount->isRoot() is deprecated. Use AxysAccount->isAdmin() instead.
+     */
+    public function isRoot(): bool
     {
-        return $this->get('axys_account_id') == 1;
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.75.0",
+            "AxysAccount->isRoot() is deprecated. Use AxysAccount->isAdmin() instead."
+        );
+
+        return $this->isAdmin();
     }
 
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         
-        if ($this->isRoot()) {
-            return true;
-        } else {
-            return $this->hasRight('site', LegacyCodeHelper::getLegacyCurrentSite()['id']);
-        }
+        return $this->hasRight('site', LegacyCodeHelper::getLegacyCurrentSite()['id']);
     }
 
     public function getRights()

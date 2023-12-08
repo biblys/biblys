@@ -45,6 +45,15 @@ class Visitor extends AxysAccount
         $pascalCaseFieldName = join('', $capitalizedFieldWords);
         $methodName = "get$pascalCaseFieldName";
 
+        if ($methodName === "getIsAdmin") {
+            trigger_deprecation(
+                "biblys/biblys",
+                "2.75.0",
+                "Visitor->isAdmin is deprecated. Use CurrentUser->isAdmin instead."
+            );
+            return false;
+        }
+
         if (method_exists($this->axysAccount, $methodName)) {
             return $this->axysAccount->$methodName();
         }

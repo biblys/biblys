@@ -547,13 +547,4 @@ $content .= '
     </form>
 ';
 
-if (LegacyCodeHelper::getGlobalVisitor()->isRoot()) {
-    $content .= '
-    <br />
-    <div class="center">
-        <textarea>'.$req.' AND `site_id` = '. LegacyCodeHelper::getLegacyCurrentSite()['site_id'].'</textarea>
-    </div>
-    ';
-}
-
 return new Response($content);
