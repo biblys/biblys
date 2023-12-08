@@ -54,8 +54,8 @@ return function (
     $content = "";
 
     if ($request->getMethod() === "POST") {
-        /** @var Article $article */
-        $article = $am->getById($_POST['article_id']);
+        /** @var Article $articleEntity */
+        $articleEntity = $am->getById($_POST['article_id']);
 
         $params = array();
 
@@ -157,13 +157,13 @@ return function (
         $cover = new Media('article', $_POST['article_id']);
         if (!empty($_FILES['article_cover_upload']['tmp_name'])) {
             $cover->upload($_FILES['article_cover_upload']['tmp_name']);
-            $article->bumpCoverVersion();
+            $articleEntity->bumpCoverVersion();
         } elseif (!empty($_POST['article_cover_import'])) {
             $cover->upload($_POST['article_cover_import']);
-            $article->bumpCoverVersion();
+            $articleEntity->bumpCoverVersion();
         } elseif (isset($_POST['article_cover_delete']) && $_POST['article_cover_delete']) {
             $cover->delete();
-            $article->bumpCoverVersion();
+            $articleEntity->bumpCoverVersion();
         }
         unset($_POST['article_cover_upload']);
         unset($_POST['article_cover_import']);
@@ -176,23 +176,23 @@ return function (
         if (!$collection) {
             throw new Exception('Collection unknown');
         }
-        $article->setCollection($collection);
+        $articleEntity->setCollection($collection);
 
         // VALIDATION
         foreach ($_POST as $key => $val) {
-            $article->set($key, $val);
+            $articleEntity->set($key, $val);
         }
-        $article->set('article_editing_user', 0);
+        $articleEntity->set('article_editing_user', 0);
 
         // Persist & refresh article
         try {
-            $am->update($article);
-            /** @var Article $article */
-            $article = $am->getById($article->get('id'));
+            $am->update($articleEntity);
+            /** @var Article $articleEntity */
+            $articleEntity = $am->getById($articleEntity->get('id'));
 
             // Update keywords & links
-            $article = $am->refreshMetadata($article);
-            $am->update($article);
+            $articleEntity = $am->refreshMetadata($articleEntity);
+            $am->update($articleEntity);
 
             // Update related contributors pages
             $peopleToUpdate = EntityManager::prepareAndExecute(
@@ -209,17 +209,17 @@ return function (
             // Virtual stock: update available copies if necessary
             if ($currentSite->getOption('virtual_stock')) {
                 $stm = new StockManager();
-                $stock = $stm->getAll(['article_id' => $article->get('id')]);
+                $stock = $stm->getAll(['article_id' => $articleEntity->get('id')]);
                 $params['stock_updated'] = 0;
                 foreach ($stock as $copy) {
                     if ($copy->isAvailable()) {
                         // Update copies price
-                        if ($copy->get('selling_price') != $article->get('price')) {
-                            $copy->set('stock_selling_price', $article->get('price'));
+                        if ($copy->get('selling_price') != $articleEntity->get('price')) {
+                            $copy->set('stock_selling_price', $articleEntity->get('price'));
                             ++$params['stock_updated'];
                         }
                         // Return copies if article is sold out
-                        if ($article->isSoldOut()) {
+                        if ($articleEntity->isSoldOut()) {
                             $copy->setReturned();
                         }
                         $stm->update($copy);
@@ -234,7 +234,7 @@ return function (
                 return new RedirectResponse('/pages/article_edit');
             } else {
                 $articleUrl = $urlgenerator->generate('article_show', [
-                    'slug' => $article->get('url'),
+                    'slug' => $articleEntity->get('url'),
                 ]);
                 return new RedirectResponse($articleUrl);
             }
@@ -270,7 +270,7 @@ return function (
         ]
     );
     if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
-        $article = $am->getById($a['article_id']);
+        $articleEntity = $am->getById($a['article_id']);
 
         $default_tags = '';
 
@@ -281,7 +281,7 @@ return function (
             }
 
             // Biblys publisher's catalog can only be edited on its own site
-            $publisher = $article->get('publisher');
+            $publisher = $articleEntity->get('publisher');
             $publisher_site = $sm->get(array('publisher_id' => $publisher->get('id')));
             if (
                 $publisher_site &&
@@ -294,20 +294,20 @@ return function (
             $request->attributes->set("page_title", "Modifier {$a["article_title"]}");
             $_MODE = 'update';
 
-            $article = $am->getById($a['article_id']);
+            $articleEntity = $am->getById($a['article_id']);
             $articleUrl = $urlgenerator->generate(
                 'article_show',
                 [
-                    'slug' => $article->get('url'),
+                    'slug' => $articleEntity->get('url'),
                 ]
             );
 
             $articleCover = null;
-            if ($article->hasCover()) {
+            if ($articleEntity->hasCover()) {
                 $articleCover = '<img 
-                src="' . $article->getCoverUrl(["height" => 85]) . '" 
+                src="' . $articleEntity->getCoverUrl(["height" => 85]) . '" 
                 class="article-thumb-cover" 
-                alt="' . $article->get("title") . '"
+                alt="' . $articleEntity->get("title") . '"
                 height=85>';
             }
 
@@ -345,7 +345,7 @@ return function (
 
             // Default type
             if ($currentSite->getOption('default_type_id')) {
-                $article->set('type_id', $currentSite->getOption('default_type_id'));
+                $articleEntity->set('type_id', $currentSite->getOption('default_type_id'));
             }
 
             $a['collection_id'] = $currentSite->getOption('default_collection_id') ? $currentSite->getOption('default_collection_id') : $a['collection_id'];
@@ -371,7 +371,7 @@ return function (
     $article_ean_class = null;
     $article_title_class = null;
 
-    $type_options = Biblys\Article\Type::getOptions($article->get('type_id'));
+    $type_options = Biblys\Article\Type::getOptions($articleEntity->get('type_id'));
 
     if ($a['type_id'] == 2) {
         $article_ean_div_class = 'hidden';
@@ -387,7 +387,7 @@ return function (
     if (!empty($a['collection_id'])) {
         $collections = EntityManager::prepareAndExecute(
             'SELECT `collection_name`, `site_id`, `pricegrid_id`, `publisher_id` FROM `collections` WHERE `collection_id` = :collection_id LIMIT 1',
-            ["collection_id" => $article->get("collection_id")],
+            ["collection_id" => $articleEntity->get("collection_id")],
         );
         $c = $collections->fetch(PDO::FETCH_ASSOC);
         $a['publisher_id'] = $c['publisher_id'];
@@ -400,12 +400,12 @@ return function (
     // Availability
     $availability_options = [];
     foreach (Article::$AVAILABILITY_DILICOM_VALUES as $key => $value) {
-        $availability_options[] = "<option value=\"$key\"" . ($article->get('availability_dilicom') == $key ? 'selected' : null) . ">$value</option>";
+        $availability_options[] = "<option value=\"$key\"" . ($articleEntity->get('availability_dilicom') == $key ? 'selected' : null) . ">$value</option>";
     }
 
     // Preorder
     $preorder = null;
-    if ($article->get('preorder') == 1) {
+    if ($articleEntity->get('preorder') == 1) {
         $preorder = 'checked';
     }
 
@@ -432,7 +432,7 @@ return function (
     // Countries
     $cm = new CountryManager();
     $countries = $cm->getAll([], ['order' => 'country_name']);
-    $articleOriginCountry = $article->get('origin_country');
+    $articleOriginCountry = $articleEntity->get('origin_country');
     $origin_country_options = array_map(function ($country) use ($articleOriginCountry) {
         $selected = $country->get('id') == $articleOriginCountry ? ' selected' : null;
         return '<option value=' . $country->get('id') . $selected . '>' . $country->get('name') . '</option>';
@@ -440,7 +440,7 @@ return function (
 
     // Collection
     $cm = new CollectionManager();
-    $collection = $cm->getById($article->get('collection_id'));
+    $collection = $cm->getById($articleEntity->get('collection_id'));
     if ($collection) {
         $collection = '
         <input type="text" id="article_collection" value="' . $collection->get('name') . '" class="long pointer changeThis" required readonly />
@@ -482,7 +482,7 @@ return function (
 
     // Cycle
     $cym = new CycleManager();
-    $cycle = $cym->getById($article->get('cycle_id'));
+    $cycle = $cym->getById($articleEntity->get('cycle_id'));
     if ($cycle) {
         $cycle = '
         <input type="text" id="article_cycle" name="article_cycle" value="' . $cycle->get('name') . '" class="long pointer changeThis" readonly />
@@ -500,7 +500,7 @@ return function (
     if ($_MODE == 'insert') {
         EntityManager::prepareAndExecute(
             query: 'DELETE FROM `roles` WHERE `article_id` = :article_id',
-            params: ['article_id' => $article->get('id')]
+            params: ['article_id' => $articleEntity->get('id')]
         );
     }
 
@@ -508,7 +508,7 @@ return function (
 
     // Couverture
     $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg" />';
-    if ($article->hasCover()) {
+    if ($articleEntity->hasCover()) {
         $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg" hidden /> <label class="after btn btn-default" for="article_cover_upload">Remplacer</label> <input type="checkbox" id="article_cover_delete" name="article_cover_delete" value="1" /> <label for="article_cover_delete" class="after">Supprimer</label>';
     }
 
@@ -525,7 +525,7 @@ return function (
     // ** METADONNEES ** //
 
     $articleCategoryLinks = LinkQuery::create()
-        ->filterByArticleId($article->get('id'))
+        ->filterByArticleId($articleEntity->get('id'))
         ->filterByRayonId(null, Criteria::ISNOTNULL)
         ->find();
     $currentArticleCategories = "";
@@ -569,7 +569,7 @@ return function (
     // Tags
     $tags = EntityManager::prepareAndExecute(
         'SELECT `link_id`, `tag_name` FROM `links` JOIN `tags` USING(`tag_id`) WHERE `article_id` = :article_id ORDER BY `tag_name`',
-        ['article_id' => $article->get('id')],
+        ['article_id' => $articleEntity->get('id')],
     );
     $the_tags = null;
     while ($t = $tags->fetch(PDO::FETCH_ASSOC)) {
@@ -579,7 +579,7 @@ return function (
     // Recompenses
     $awards = EntityManager::prepareAndExecute(
         'SELECT `award_id`, `award_name`, `award_year`, `award_category` FROM `awards` WHERE `article_id` = :article_id ORDER BY `award_year` DESC',
-        ['article_id' => $article->get('id')],
+        ['article_id' => $articleEntity->get('id')],
     );
     $the_awards = null;
     while ($aw = $awards->fetch(PDO::FETCH_ASSOC)) {
@@ -591,7 +591,7 @@ return function (
     if ($a['type_id'] == 8) {
         $bundle = EntityManager::prepareAndExecute(
             query: 'SELECT `article_title`, `article_authors`, `article_url`, `article_collection`, `link_id` FROM `articles` JOIN `links` USING(`article_id`) WHERE `bundle_id` = :article_id ORDER BY `link_id`',
-            params: ['article_id' => $article->get('id')],
+            params: ['article_id' => $articleEntity->get('id')],
         );
         while ($bu = $bundle->fetch(PDO::FETCH_ASSOC)) {
             $bundle_articles .= '<li id="link_' . $bu['link_id'] . '"><img alt="Supprimer" src="/common/icons/delete_16.png" data-link_id="' . $bu['link_id'] . '" class="deleteLink pointer" /> <a href="/' . $bu['article_url'] . '">' . $bu['article_title'] . '</a> de ' . $bu['article_authors'] . ' (' . $bu['article_collection'] . ')</li>';
@@ -610,7 +610,7 @@ return function (
     }
 
     $lemonInkIdField = "";
-    if ($article->isDownloadable() && $config->get('lemonink.api_key')) {
+    if ($articleEntity->isDownloadable() && $config->get('lemonink.api_key')) {
         $lemonInkIdField = '
           <br />
           <div class="form-group">
@@ -620,7 +620,7 @@ return function (
               <a href="https://www.lemonink.co/masters" target="_blank">ajouter l\'article sur LemonInk</a>
               et coller son identifiant dans ce champ.
             </small>
-            <input type="text" class="form-control" id="lemonink_master_id" name="lemonink_master_id" value="'.$article->get("lemonink_master_id").'" />
+            <input type="text" class="form-control" id="lemonink_master_id" name="lemonink_master_id" value="'.$articleEntity->get("lemonink_master_id").'" />
           </div>
         ';
     }
@@ -745,7 +745,7 @@ return function (
             </p>
             <p>
                 <label class="floating" for="article_price_editable">Prix libre:</label>
-                <input type="checkbox" name="article_price_editable" id="article_price_editable" value="1"' . ($article->has('price_editable') ? ' checked' : null) . '>
+                <input type="checkbox" name="article_price_editable" id="article_price_editable" value="1"' . ($articleEntity->has('price_editable') ? ' checked' : null) . '>
             </p>
             <br />
         </fieldset>
@@ -812,16 +812,16 @@ return function (
             <legend>Données bibliographiques</legend>
 
             <label class="floating" for="article_title_alphabetic">Titre pour le tri :</label>
-            <input type="text" id="article_title_alphabetic" name="article_title_alphabetic" value="' . ($article->has("article_title_alphabetic") ? htmlspecialchars($a['article_title_alphabetic']) : "") . '" class="long" placeholder="Champ rempli automatiquement" />
+            <input type="text" id="article_title_alphabetic" name="article_title_alphabetic" value="' . ($articleEntity->has("article_title_alphabetic") ? htmlspecialchars($a['article_title_alphabetic']) : "") . '" class="long" placeholder="Champ rempli automatiquement" />
             <br />
             <label class="floating" for="article_subtitle">Sous-titre :</label>
-            <input type="text" id="article_subtitle" name="article_subtitle" id="article_subtitle" value="' . ($article->has("article_subtitle") ? htmlspecialchars($a['article_subtitle']) : "") . '" class="long" />
+            <input type="text" id="article_subtitle" name="article_subtitle" id="article_subtitle" value="' . ($articleEntity->has("article_subtitle") ? htmlspecialchars($a['article_subtitle']) : "") . '" class="long" />
             <br />
             <label class="floating" for="article_title_original">Titre original :</label>
-            <input type="text" id="article_title_original" name="article_title_original" value="' . ($article->has("article_title_original") ? htmlspecialchars($a['article_title_original']) : "") . '" class="long" />
+            <input type="text" id="article_title_original" name="article_title_original" value="' . ($articleEntity->has("article_title_original") ? htmlspecialchars($a['article_title_original']) : "") . '" class="long" />
             <br />
             <label class="floating" for="article_title_others">Autres titres :</label>
-            <input type="text" id="article_title_others" name="article_title_others" value="' . ($article->has("article_title_others") ? htmlspecialchars($a['article_title_others']) : "") . '" class="long" />
+            <input type="text" id="article_title_others" name="article_title_others" value="' . ($articleEntity->has("article_title_others") ? htmlspecialchars($a['article_title_others']) : "") . '" class="long" />
             <br /><br />
 
             <label class="floating" for="article_copyright">Copyright :</label>
@@ -895,7 +895,7 @@ return function (
 
             <p>
                 <label class="floating" for="article_format">Format :</label>
-                <input type="text" id="article_format" name="article_format" value="' . ($article->has("format") ? htmlspecialchars($article->get('format')) : "") . '" placeholder="10 x 18 cm" class="medium">
+                <input type="text" id="article_format" name="article_format" value="' . ($articleEntity->has("format") ? htmlspecialchars($articleEntity->get('format')) : "") . '" placeholder="10 x 18 cm" class="medium">
             </p>
 
             <p>
@@ -919,7 +919,7 @@ return function (
 
             <p>
                 <label>Version :</label>
-                <input value="' . $article->get('cover_version') . '" class="mini" disabled />
+                <input value="' . $articleEntity->get('cover_version') . '" class="mini" disabled />
             </p>
         </fieldset>
 
@@ -1007,7 +1007,7 @@ return function (
         </fieldset>
 
         <fieldset class="collapsable-fieldset"
-            data-collapsed="' . ($article->has('summary') ? 'false' : 'true') . '">
+            data-collapsed="' . ($articleEntity->has('summary') ? 'false' : 'true') . '">
             <legend>
                 Quatrième de couverture&nbsp;
                 <span class="fa fa-plus-square"></span>
@@ -1019,7 +1019,7 @@ return function (
         </fieldset>
 
         <fieldset class="collapsable-fieldset"
-            data-collapsed="' . ($article->has('contents') ? 'false' : 'true') . '">
+            data-collapsed="' . ($articleEntity->has('contents') ? 'false' : 'true') . '">
             <legend>
                 Sommaire&nbsp;
                 <span class="fa fa-plus-square"></span>
@@ -1031,7 +1031,7 @@ return function (
         </fieldset>
 
         <fieldset class="collapsable-fieldset ' . $bonus_fieldset_class . '"
-            data-collapsed="' . ($article->has('bonus') ? 'false' : 'true') . '">
+            data-collapsed="' . ($articleEntity->has('bonus') ? 'false' : 'true') . '">
             <legend>
                 Bonus&nbsp;
                 <span class="fa fa-plus-square"></span>
@@ -1043,26 +1043,26 @@ return function (
         </fieldset>
 
         <fieldset class="collapsable-fieldset"
-            data-collapsed="' . ($article->has('catchline') ? 'false' : 'true') . '">
+            data-collapsed="' . ($articleEntity->has('catchline') ? 'false' : 'true') . '">
             <legend>
                 Accroche&nbsp;
                 <span class="fa fa-plus-square"></span>
             </legend>
             <div class="collapsable-element">
                 <textarea id="article_catchline" name="article_catchline"
-                    class="wysiwyg">' . $article->get('catchline') . '</textarea>
+                    class="wysiwyg">' . $articleEntity->get('catchline') . '</textarea>
             </div>
         </fieldset>
 
         <fieldset class="collapsable-fieldset"
-            data-collapsed="' . ($article->has('biography') ? 'false' : 'true') . '">
+            data-collapsed="' . ($articleEntity->has('biography') ? 'false' : 'true') . '">
             <legend>
                 Notice biographique&nbsp;
                 <span class="fa fa-plus-square"></span>
             </legend>
             <div class="collapsable-element">
                 <textarea id="article_biography" name="article_biography"
-                    class="wysiwyg">' . $article->get('biography') . '</textarea>
+                    class="wysiwyg">' . $articleEntity->get('biography') . '</textarea>
             </div>
         </fieldset>
 
@@ -1087,7 +1087,7 @@ return function (
         <fieldset>
             <legend>Suppression</legend>
             <p class="text-center">
-                <a class="btn btn-danger" href=' . $urlgenerator->generate('article_delete', ['id' => $article->get('id')]) . '>
+                <a class="btn btn-danger" href=' . $urlgenerator->generate('article_delete', ['id' => $articleEntity->get('id')]) . '>
                     <span class="fa fa-trash-o"></span>
                     Supprimer définitivement cet article
                 </a>
