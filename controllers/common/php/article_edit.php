@@ -8,6 +8,7 @@ use Biblys\Isbn\IsbnParsingException;
 use Biblys\Service\Config;
 use Model\ArticleCategory;
 use Model\ArticleCategoryQuery;
+use Model\ArticleQuery;
 use Model\LinkQuery;
 use Model\PublisherQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -271,6 +272,7 @@ return function (
     );
     if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
         $articleEntity = $am->getById($a['article_id']);
+        $article = ArticleQuery::create()->findPk($a['article_id']);
 
         $default_tags = '';
 
@@ -286,9 +288,11 @@ return function (
             if (
                 $publisher_site &&
                 $publisher_site->get('id') != $currentSite->getId() &&
-                !$currentUser->hasRightForPublisher($publisher->get('id'))
+                !$currentUser->hasRightForPublisher($article->getPublisher())
             ) {
-                trigger_error("Vous n'avez pas l'autorisation de modifier les articles du catalogue " . $publisher->get('name') . ", merci de <a href='https://" . $publisher_site->get('domaine') . "/contact/'>contacter l'éditeur</a>.");
+                throw new AccessDeniedHttpException(
+                    "Vous n'avez pas l'autorisation de modifier les articles du catalogue {$publisher->get('name')}, merci de contacter l'éditeur."
+                );
             }
 
             $request->attributes->set("page_title", "Modifier {$a["article_title"]}");
