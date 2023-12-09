@@ -18,7 +18,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 	
 	$stock = $_SQL->prepare($req);
 	$stock->bindValue('site_id', LegacyCodeHelper::getLegacyCurrentSite()['site_id'],PDO::PARAM_INT);
-	$stock->bindValue('axys_account_id', LegacyCodeHelper::getGlobalVisitor()['axys_account_id'],PDO::PARAM_INT);
+	$stock->bindValue('axys_account_id', LegacyCodeHelper::getGlobalVisitor()["id"],PDO::PARAM_INT);
 	$stock->execute() or error($stock->errorInfo());
 	while ($s = $stock->fetch(PDO::FETCH_ASSOC))
 	{
