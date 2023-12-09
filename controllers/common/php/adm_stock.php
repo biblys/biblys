@@ -552,7 +552,7 @@ if ($article) {
     // TVA d'après article
     $tva = null;
     $s['stock_tva'] = 0;
-    if ($su && !$su['supplier_notva'] && !LegacyCodeHelper::getLegacyCurrentSite()['default_notva']) {
+    if ($su && !$su['supplier_notva'] && !LegacyCodeHelper::getGlobalSite()['default_notva']) {
         $s['stock_tva'] = $article->getTaxRate();
         $tva = '
             <label for="stock_tva" class="disabled">TVA :</label>
@@ -617,8 +617,8 @@ if ($article) {
     }
 
     // Rabais sur le prix neuf
-    if (!empty(LegacyCodeHelper::getLegacyCurrentSite()['Rabais']) and !empty($a['article_price'])) {
-        $s['stock_selling_price'] = $a['article_price'] - ($a['article_price'] / 100 * LegacyCodeHelper::getLegacyCurrentSite()['Rabais']);
+    if (!empty(LegacyCodeHelper::getGlobalSite()['Rabais']) and !empty($a['article_price'])) {
+        $s['stock_selling_price'] = $a['article_price'] - ($a['article_price'] / 100 * LegacyCodeHelper::getGlobalSite()['Rabais']);
     }
 
     $invoice = '<input type="text" name="stock_invoice" id="stock_invoice" value="' . $s['stock_invoice'] . '" />';
@@ -671,7 +671,7 @@ if ($article) {
         ';
     }
 
-    $stock_shop = '<input type="hidden" name="stock_shop" value="' . LegacyCodeHelper::getLegacyCurrentSite()['site_id'] . '" />';
+    $stock_shop = '<input type="hidden" name="stock_shop" value="' . LegacyCodeHelper::getGlobalSite()['site_id'] . '" />';
 
     // Add article to rayons
     $rayons = $rm->getAll();

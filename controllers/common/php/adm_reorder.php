@@ -49,7 +49,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 
         $lm = new LinkManager();
 
-        $link = $lm->get(array('site_id' => LegacyCodeHelper::getLegacyCurrentSite()['site_id'], 'article_id' => $article->get('id'), 'link_do_not_reorder' => 1));
+        $link = $lm->get(array('site_id' => LegacyCodeHelper::getGlobalSite()['site_id'], 'article_id' => $article->get('id'), 'link_do_not_reorder' => 1));
 
         if ($link)
         {
@@ -58,7 +58,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
         }
         else
         {
-            $link = $lm->create(array('site_id' => LegacyCodeHelper::getLegacyCurrentSite()['site_id'], 'article_id' => $article->get('id'), 'link_do_not_reorder' => 1));
+            $link = $lm->create(array('site_id' => LegacyCodeHelper::getGlobalSite()['site_id'], 'article_id' => $article->get('id'), 'link_do_not_reorder' => 1));
             $dnr = '1';
         }
 

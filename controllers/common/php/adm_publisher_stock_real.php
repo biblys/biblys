@@ -7,7 +7,7 @@ use Biblys\Legacy\LegacyCodeHelper;
     $am = new ArticleManager();
     $sm = new StockManager();
 
-    $articles = $am->getAll(array('publisher_id' => LegacyCodeHelper::getLegacyCurrentSite()['publisher_id']));
+    $articles = $am->getAll(array('publisher_id' => LegacyCodeHelper::getGlobalSite()['publisher_id']));
     
     $table = array();
     foreach ($articles as $article)

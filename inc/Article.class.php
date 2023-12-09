@@ -422,7 +422,7 @@ class Article extends Entity
 
         if ($mode == 'available') {
             foreach ($stock as $s) {
-                if (!$s->get('purchase_date') || $s->get('selling_date') || $s->get('return_date') || $s->get('lost_date') || $s->get('site_id') != LegacyCodeHelper::getLegacyCurrentSite()['site_id']) {
+                if (!$s->get('purchase_date') || $s->get('selling_date') || $s->get('return_date') || $s->get('lost_date') || $s->get('site_id') != LegacyCodeHelper::getGlobalSite()['site_id']) {
                     continue;
                 } else {
                     $uid = $s->get('selling_price') . '-' . $s->get('condition');
@@ -793,7 +793,7 @@ class Article extends Entity
         ");
         $sql->execute([
             ':article_id' => $this->get('id'),
-            ':site_id' => LegacyCodeHelper::getLegacyCurrentSite()->get('id')
+            ':site_id' => LegacyCodeHelper::getGlobalSite()->get('id')
         ]);
         $rayons = $sql->fetchAll();
 
@@ -1112,7 +1112,7 @@ class ArticleManager extends EntityManager
             return $where;
         }
 
-        $currentSite = LegacyCodeHelper::getLegacyCurrentSite();
+        $currentSite = LegacyCodeHelper::getGlobalSite();
 
         $publisherFilter = $currentSite->getOpt('publisher_filter');
         if ($publisherFilter && !array_key_exists('publisher_id', $where)) {

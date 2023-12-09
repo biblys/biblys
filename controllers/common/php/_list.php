@@ -87,7 +87,7 @@ if (!empty($_GET["q"])) {
                 $sql[] = "`stock_condition` != 'Neuf'";
                 $filters .= ' d\'occasion';
             } elseif ($q == "commande") {
-                $sql[] = "`stock_id` IS NULL AND `article_links` LIKE '%[onorder:". LegacyCodeHelper::getLegacyCurrentSite()['site_id']."]%' AND `article_availability` = 1";
+                $sql[] = "`stock_id` IS NULL AND `article_links` LIKE '%[onorder:". LegacyCodeHelper::getGlobalSite()['site_id']."]%' AND `article_availability` = 1";
                 $filters .= ' sur commande';
             } elseif ($q == "indisp") {
                 $sql[] = "`stock_id` IS NULL";
@@ -264,7 +264,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
 
 
         // Sur commande
-    } elseif (strstr($x["article_links"], '[onorder:'. LegacyCodeHelper::getLegacyCurrentSite()["site_id"].']') && $x["article_availability"] == 1) {
+    } elseif (strstr($x["article_links"], '[onorder:'. LegacyCodeHelper::getGlobalSite()["site_id"].']') && $x["article_availability"] == 1) {
         $x["availability"] = '<img src="/common/img/square_blue.png" alt="Sur commande" title="Sur commande" />';
         $x["price"] = price($x["article_price"], 'EUR');
         $x["condition"] = ' onorder';
@@ -485,7 +485,7 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
         <meta property="og:type" content="website"/>
         <meta property="og:title" content="'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'" <meta property="og:url" content="http://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"].'"/>
         <meta property="og:description" content="'.strip_tags(truncate(strip_tags($_og_description), '500', '...', true)).'"/>
-        <meta property="og:site_name" content="'. LegacyCodeHelper::getLegacyCurrentSite()["site_name"].'"/>
+        <meta property="og:site_name" content="'. LegacyCodeHelper::getGlobalSite()["site_name"].'"/>
     '.$_og_image;
 }
 

@@ -250,7 +250,7 @@ class AxysAccount extends Entity
     public function isAdmin(): bool
     {
         
-        return $this->hasRight('site', LegacyCodeHelper::getLegacyCurrentSite()['id']);
+        return $this->hasRight('site', LegacyCodeHelper::getGlobalSite()['id']);
     }
 
     public function getRights()

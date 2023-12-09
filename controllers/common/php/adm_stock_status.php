@@ -30,7 +30,7 @@ if (empty($_GET["date"])) $_GET["date"] = date("Y-m-d");
 			`a`.`article_id`, `article_tva`, `type_id`, `article_pubdate`, `article_links`
 		FROM `stock` AS `s`
 		JOIN `articles` AS `a` ON `s`.`article_id` = `a`.`article_id`
-		WHERE `s`.`site_id` = '. LegacyCodeHelper::getLegacyCurrentSite()["site_id"].' '.$_QUERY);
+		WHERE `s`.`site_id` = '. LegacyCodeHelper::getGlobalSite()["site_id"].' '.$_QUERY);
 	$query->execute($params) or error($query->errorInfo());
 
 	$sales = $query->fetchAll();
@@ -67,7 +67,7 @@ if (empty($_GET["date"])) $_GET["date"] = date("Y-m-d");
 	}
 
 	// Rayons
-	$rayons = $_SQL->query('SELECT `rayon_id`, `rayon_name` FROM `rayons` WHERE `site_id` = '. LegacyCodeHelper::getLegacyCurrentSite()['site_id'].' ORDER BY `rayon_order`');
+	$rayons = $_SQL->query('SELECT `rayon_id`, `rayon_name` FROM `rayons` WHERE `site_id` = '. LegacyCodeHelper::getGlobalSite()['site_id'].' ORDER BY `rayon_order`');
 	$rayons = $rayons->fetchAll(PDO::FETCH_ASSOC);
 	$ra = array();
 	foreach ($rayons as $r)
@@ -154,7 +154,7 @@ if (empty($_GET["date"])) $_GET["date"] = date("Y-m-d");
 	{
 
 		// Prix HT
-		if (LegacyCodeHelper::getLegacyCurrentSite()['site_tva'])
+		if (LegacyCodeHelper::getGlobalSite()['site_tva'])
 		{
 			$s['tva_rate'] = tva_rate($s['article_tva'],$s["stock_purchase_date"]) / 100;
 			$s['ti'] = $s['tva_rate'] * 1000;
@@ -169,13 +169,13 @@ if (empty($_GET["date"])) $_GET["date"] = date("Y-m-d");
 
 		// Total
 		$total_purchase_ttc += $s['stock_purchase_price'];
-		if (LegacyCodeHelper::getLegacyCurrentSite()['site_tva']) $total_purchase_ht += $s['stock_purchase_price_ht'];
+		if (LegacyCodeHelper::getGlobalSite()['site_tva']) $total_purchase_ht += $s['stock_purchase_price_ht'];
 		$total_selling_ttc += $s['stock_selling_price'];
 		$total_selling_ht += $s['stock_selling_price_ht'];
 		$total_stock[] = $s['article_id'];
 
 		// Par taux de TVA
-        if (LegacyCodeHelper::getLegacyCurrentSite()['site_tva'])
+        if (LegacyCodeHelper::getGlobalSite()['site_tva'])
         {
     		$tva[$s['ti']]['revenue_ht'] += $s['stock_selling_price_ht'];
         	$tva[$s['ti']]['revenue_ttc'] += $s['stock_selling_price'];

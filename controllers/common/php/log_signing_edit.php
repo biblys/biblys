@@ -98,7 +98,7 @@ if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin() && !LegacyCodeHelper::getGl
         
         
         // Stand LAL
-        if (LegacyCodeHelper::getLegacyCurrentSite()['site_id'] == 11 && LegacyCodeHelper::getGlobalVisitor()->isPublisher())
+        if (LegacyCodeHelper::getGlobalSite()['site_id'] == 11 && LegacyCodeHelper::getGlobalVisitor()->isPublisher())
         {
             $sum = new SubscriptionManager();
             if ($su = $sum->get(array('site_id' => 11, 'publisher_id' => LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id'))))

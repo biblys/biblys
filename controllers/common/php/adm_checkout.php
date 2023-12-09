@@ -288,7 +288,7 @@ else $alert = NULL;
 \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Caisse');
 $content = '';
 
-if (LegacyCodeHelper::getLegacyCurrentSite()['site_tva'] === 'fr') {
+if (LegacyCodeHelper::getGlobalSite()['site_tva'] === 'fr') {
     $content .= '
         <p class="alert alert-warning">
             <span class="fa fa-warning"></span>

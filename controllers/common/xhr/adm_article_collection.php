@@ -15,7 +15,7 @@ if ($getTerm) {
     $publisherId = null;
 
     // Si on est sur un site editeur
-    if (!empty(LegacyCodeHelper::getLegacyCurrentSite()["publisher_id"])) {
+    if (!empty(LegacyCodeHelper::getGlobalSite()["publisher_id"])) {
         $_REQ_SITE = "AND `publisher_id` = :publisher_id";
         $publisherId = \Biblys\Legacy\LegacyCodeHelper::getGlobalSite()->get('publisher_id');
         $params["publisher_id"] = $publisherId;

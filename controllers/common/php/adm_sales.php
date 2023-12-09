@@ -32,7 +32,7 @@ $months = null;
 $mois = EntityManager::prepareAndExecute(
     "SELECT DATE_FORMAT(`order_payment_date`, '%Y-%m') as `date`, MAX(`order_payment_date`)
     FROM `orders`
-    WHERE `orders`.`site_id` = '" . LegacyCodeHelper::getLegacyCurrentSite()["site_id"] . "' AND `order_cancel_date` IS null
+    WHERE `orders`.`site_id` = '" . LegacyCodeHelper::getGlobalSite()["site_id"] . "' AND `order_cancel_date` IS null
     GROUP BY `date`
     ORDER BY `date` DESC",
     ["site_id" => $_SITE->get("id")]

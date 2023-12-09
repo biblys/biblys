@@ -46,7 +46,7 @@ $stock = $_SQL->prepare(
     GROUP BY `s`.`stock_id`
     ORDER BY `stock_purchase_date`'
 );
-$params['site_id'] = LegacyCodeHelper::getLegacyCurrentSite()["site_id"];
+$params['site_id'] = LegacyCodeHelper::getGlobalSite()["site_id"];
 $stock->execute($params) or error($orders->errorInfo());
 
 // Export to CSV
@@ -62,7 +62,7 @@ while ($s = $stock->fetch(PDO::FETCH_ASSOC)) {
         $s['stock_condition'] = 'Occasion';
     }
     // Prix HT
-    if (LegacyCodeHelper::getLegacyCurrentSite()['site_tva']) {
+    if (LegacyCodeHelper::getGlobalSite()['site_tva']) {
         $s['tva_rate'] = tva_rate(
             $s['article_tva'], $s["stock_purchase_date"]
         ) / 100;
@@ -142,7 +142,7 @@ $_ECHO .= '
     <form action="/pages/export_to_csv" method="post">
         <fieldset class="right">
             <input type="hidden" name="filename" 
-                value="stock_'. LegacyCodeHelper::getLegacyCurrentSite()['site_name'].'_au_'.$_GET["date"].'">
+                value="stock_'. LegacyCodeHelper::getGlobalSite()['site_name'].'_au_'.$_GET["date"].'">
             <input type="hidden" name="header" 
                 value="'.htmlentities(json_encode($header)).'">
             <input type="hidden" name="data" 

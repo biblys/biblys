@@ -33,7 +33,7 @@ if ($order = $om->get(["order_url" => $orderUrl])) {
 
         // Calculate customer reference
         /** @var PDO $_SQL */
-                $stock = $_SQL->query("SELECT COUNT(`order_id`) AS `orders`, SUM(`order_amount`) AS `revenue` FROM `orders` WHERE `customer_id` = '".$customer->get('id')."' AND `site_id` = ". LegacyCodeHelper::getLegacyCurrentSite()["site_id"]." AND `order_payment_date` IS NOT NULL AND `order_cancel_date` IS NULL GROUP BY `axys_account_id`");
+                $stock = $_SQL->query("SELECT COUNT(`order_id`) AS `orders`, SUM(`order_amount`) AS `revenue` FROM `orders` WHERE `customer_id` = '".$customer->get('id')."' AND `site_id` = ". LegacyCodeHelper::getGlobalSite()["site_id"]." AND `order_payment_date` IS NOT NULL AND `order_cancel_date` IS NULL GROUP BY `axys_account_id`");
         if ($s = $stock->fetch(PDO::FETCH_ASSOC)) {
             $customer_ref = '<p>Ref. client '.$customer->get('id').'-'.$s["orders"].'-'.round($s["revenue"]/100).'</p>';
         }

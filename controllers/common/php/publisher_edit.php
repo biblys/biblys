@@ -225,7 +225,7 @@ $content .= '
 ';
 if (
     LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id') == $p['publisher_id'] || // Utilisateur connecté avec les droits pour l'editeur
-    $p["publisher_id"] == LegacyCodeHelper::getLegacyCurrentSite()["publisher_id"] || // Site de l'editeur
+    $p["publisher_id"] == LegacyCodeHelper::getGlobalSite()["publisher_id"] || // Site de l'editeur
     (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) && ($_SITE->get("id") == 11) // Admin de l'autre livre ou lvdi
 )
 {
@@ -319,7 +319,7 @@ if (
             </fieldset>
     ';
 
-    if (LegacyCodeHelper::getLegacyCurrentSite()['site_id'] == 11)
+    if (LegacyCodeHelper::getGlobalSite()['site_id'] == 11)
     {
         $content .= '
             <fieldset>
@@ -435,7 +435,7 @@ $content .= '
 ';
 
 // Gestion des fournisseurs
-if (LegacyCodeHelper::getLegacyCurrentSite()["site_shop"]) {
+if (LegacyCodeHelper::getGlobalSite()["site_shop"]) {
     $sm = new SupplierManager();
 
     $addSupplier = $request->query->get('add_supplier');

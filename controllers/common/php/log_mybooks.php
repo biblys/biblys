@@ -17,7 +17,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 	$header = array('Ref.','Titre','Auteurs','Editeur','Langue','ISBN',"Date d'achat");
 	
 	$stock = $_SQL->prepare($req);
-	$stock->bindValue('site_id', LegacyCodeHelper::getLegacyCurrentSite()['site_id'],PDO::PARAM_INT);
+	$stock->bindValue('site_id', LegacyCodeHelper::getGlobalSite()['site_id'],PDO::PARAM_INT);
 	$stock->bindValue('axys_account_id', LegacyCodeHelper::getGlobalVisitor()["id"],PDO::PARAM_INT);
 	$stock->execute() or error($stock->errorInfo());
 
@@ -53,7 +53,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 		
 		<form action="/pages/export_to_csv" method="post">
 			<fieldset class="center">
-				<input type="hidden" name="filename" value="achats-'. LegacyCodeHelper::getLegacyCurrentSite()['site_name'].'-'.makeurl($currentUser->getAxysAccount()->getUsername()) .'">
+				<input type="hidden" name="filename" value="achats-'. LegacyCodeHelper::getGlobalSite()['site_name'].'-'.makeurl($currentUser->getAxysAccount()->getUsername()) .'">
 				<input type="hidden" name="header" value="'.htmlentities(json_encode($header)).'">
 				<input type="hidden" name="data" value="'.htmlentities(json_encode($export)).'">
 				<button type="submit">Télécharger au format CSV</button>
