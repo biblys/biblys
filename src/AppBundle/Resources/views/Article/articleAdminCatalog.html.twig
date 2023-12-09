@@ -47,9 +47,11 @@
           {{ article.collectionName }}<br>
           <small>{{ article.publisherName }}</small>
         </td>
-        {% if article.price %}
-          <td>{{ article.price|currency(true)|raw }}</td>
-        {% endif %}
+        <td>
+          {% if article.price %}
+            {{ article.price|currency(true)|raw }}
+          {% endif %}
+        </td>
         <td class="text-right">
           {{ article.countAvailableStockItemsForSite(site) }}
         </td>
