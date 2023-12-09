@@ -644,13 +644,27 @@ class ArticleController extends Controller
 
         $request->attributes->set("page_title", "Catalogue");
 
+        $page = (int) $request->query->get("p", 0);
+        $count = ArticleQuery::create()
+            ->filterForCurrentSite($currentSite)
+            ->count();
+
+        try {
+            $pagination = new Pagination($page, $count, limit: 100);
+        } catch (InvalidArgumentException $exception) {
+            throw new BadRequestHttpException($exception->getMessage());
+        }
         $articles = ArticleQuery::create()
             ->filterForCurrentSite($currentSite)
+            ->limit($pagination->getLimit())
+            ->offset($pagination->getOffset())
             ->find();
 
         return $this->render("AppBundle:Article:articleAdminCatalog.html.twig", [
             "articles" => $articles,
+            "count" => $count,
             "site" => $currentSite->getSite(),
+            "pages" => $pagination,
         ]);
     }
 

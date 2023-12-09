@@ -12,8 +12,10 @@
 
   <a class="btn btn-primary" href="{{ path("api_articles_export") }}">
     <span class="fa fa-cloud-download"></span>
-    Télécharger (au format CSV)
+    Télécharger le catalogue (CSV)
   </a>
+
+  <h2>{{ count }} articles</h2>
 
   <table id="catalog" class="table">
     <thead>
@@ -55,4 +57,6 @@
     {% endfor %}
     </tbody>
   </table>
+
+  {% include 'AppBundle:Article:_list_pagination.html.twig' %}
 {% endblock %}
