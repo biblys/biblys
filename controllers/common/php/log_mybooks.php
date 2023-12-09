@@ -34,7 +34,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 			<tr>
 				<td class="center va-middle">'.$s['cover'].'</td>
 				<td class="va-middle">
-					<a href="/'.$s['article_url'].'">'.$s['article_title'].'</a><br>
+					<a href="/a/'.$s['article_url'].'">'.$s['article_title'].'</a><br>
 					de '.authors($s['article_authors']).'<br>
 					Ed. '.$s['article_publisher'].'
 				</td>

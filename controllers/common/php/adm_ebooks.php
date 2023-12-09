@@ -95,7 +95,7 @@ while ($l = $ventes->fetch(PDO::FETCH_ASSOC)) {
     $tbody .= '
         <tr>
             <td>' . authors($l["article_authors"]) . '</td>
-            <td><a href="/' . $l["article_url"] . '">' . $l["article_title"] . '</a></td>
+            <td><a href="/a/' . $l["article_url"] . '">' . $l["article_title"] . '</a></td>
             <td class="right">' . $v["ventes"] . '</td>
             <td class="right">' . $g["gratuits"] . '</td>
             <td class="right">' . price($v["ca"], 'EUR') . '</td>

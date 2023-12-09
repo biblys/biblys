@@ -56,7 +56,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
 
         $this->expectException("Symfony\Component\HttpKernel\Exception\ConflictHttpException");
         $this->expectExceptionMessage(
-            "L'article <a href=\"/\">L'Animalie</a> n'a pas pu être ajouté au panier car il n'est pas encore disponible."
+            "L'article <a href=\"/a/\">L'Animalie</a> n'a pas pu être ajouté au panier car il n'est pas encore disponible."
         );
 
         // given

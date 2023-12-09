@@ -86,7 +86,7 @@ while ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
     $L[$a["article_collection"]] .= '
             <tr id="article_'.$a["article_id"].'">
                 <td>'.$a["dispo"].'</td>
-                <td><a href="/'.$a["article_url"].'">'.$a["article_title"].'</a></td>
+                <td><a href="/a/'.$a["article_url"].'">'.$a["article_title"].'</a></td>
                 <td>'.$a["isbn"].'</td>
                 <td>'._date($a["article_pubdate"], 'd/m/Y').'</td>
                 <td>

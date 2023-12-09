@@ -297,7 +297,7 @@ foreach ($sql as $x) {
                 <td colspan="7">
                     <p class="floatR"><a href="/pages/adm_stock?add='.$_GET['article_id'].'" class="btn btn-success">Ajouter un exemplaire</a></p>
                     <h4>
-                        <a href="/'.$x['article_url'].'">'.$x['article_title'].'</a> de '.$x['article_authors'].'<br />
+                        <a href="/a/'.$x['article_url'].'">'.$x['article_title'].'</a> de '.$x['article_authors'].'<br />
                         ('.$x['article_collection'].numero($x['article_number']).')
                     </h4>
                     <p id="stocks_'.$x['article_id'].'" class="hidden"></p> </td>

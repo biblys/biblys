@@ -89,7 +89,7 @@ while ($s = $stock->fetch(PDO::FETCH_ASSOC)) {
     if ($s['stock']) {
         $tbody .= '
                 <tr>
-                    <td title="'.$s['article_authors'].'"><a href="/'.$s['article_url'].'">'.$s['article_title'].'</a></td>
+                    <td title="'.$s['article_authors'].'"><a href="/a/'.$s['article_url'].'">'.$s['article_title'].'</a></td>
                     <td title="'.$s['article_publisher'].'">'.$s['article_collection'].'</a></td>
                     <td class="right">'.$s['stock'].'</td>
                     <td class="right">'.$s['sales'].'</td>

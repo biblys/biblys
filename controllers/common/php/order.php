@@ -274,7 +274,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
                 <td class="center">' . $copyId . '</td>
                 <td class="center">' . $cover . '</td>
                 <td>
-                    <strong><a href="/' . $a["article_url"] . '">' . $article->get("title") . '</a><br /></strong>
+                    <strong><a href="/a/' . $a["article_url"] . '">' . $article->get("title") . '</a><br /></strong>
                     <em>de ' . $a["article_authors"] . '</em><br />
                     coll. ' . $a["article_collection"] . ' ' . numero($a["article_number"]) . '<br />
                     ' . $a["dl_links"] . '

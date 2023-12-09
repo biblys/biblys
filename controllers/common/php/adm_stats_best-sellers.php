@@ -36,7 +36,7 @@ return function (Request $request, CurrentSite $currentSite): Response
         $list .= '
             <tr>
                 <td class="right">' . $i . '.</td>
-                <td><a href="/' . $x["article_url"] . '">' . $x["article_title"] . '</a></td>
+                <td><a href="/a/' . $x["article_url"] . '">' . $x["article_title"] . '</a></td>
                 <td>' . $x["publishers"] . '</td>
                 <td class="right">' . $x["Ventes"] . '</td>
                 <td class="right">' . price($x["CA"], 'EUR') . '</td>

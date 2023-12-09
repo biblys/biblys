@@ -22,7 +22,7 @@ $table = null;
 while($l = $articles->fetch(PDO::FETCH_ASSOC)) {
     $table .= '
         <tr>
-            <td><a href="/'.$l["article_url"].'">'.$l["article_title"].'</a></td>
+            <td><a href="/a/'.$l["article_url"].'">'.$l["article_title"].'</a></td>
             <td>'.authors($l["article_authors"]).'</td>
             <td>'.$l["article_collection"].'</td>
             <td class="right"><del>'.price($l["stock_selling_price_saved"],'EUR').'</del><br />'.price($l["stock_selling_price"],'EUR').'</td>

@@ -474,11 +474,11 @@ class CartManager extends EntityManager
         if ($this->site->getOpt('virtual_stock') || $reward && !$reward->isLimited()) {
 
             if (!$article->isPublished() && !$article->isPreorderable()) {
-                throw new CartException('L\'article <a href="/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'est pas encore disponible.');
+                throw new CartException('L\'article <a href="/a/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'est pas encore disponible.');
             }
 
             if ($article->isSoldOut()) {
-                throw new CartException('L\'article <a href="/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'est plus disponible.');
+                throw new CartException('L\'article <a href="/a/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'est plus disponible.');
             }
 
             if ($article->isPrivatelyPrinted()) {
@@ -512,11 +512,11 @@ class CartManager extends EntityManager
         // Bookshop : on order
         if ($this->site['site_bookshop'] && strstr($a->get('links'), '[onorder:' . $this->site["site_id"] . ']')) {
             if (!$a->has('weight')) {
-                throw new Exception('Le livre <a href="/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'a pas de poids. Merci de <a href="/contact/">nous contacter</a>.');
+                throw new Exception('Le livre <a href="/a/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'a pas de poids. Merci de <a href="/contact/">nous contacter</a>.');
             } elseif (!$a->has('price')) {
-                throw new Exception('Le livre <a href="/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'a pas de prix. Merci de <a href="/contact/">nous contacter</a>.');
+                throw new Exception('Le livre <a href="/a/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'a pas de prix. Merci de <a href="/contact/">nous contacter</a>.');
             } elseif (!$a->has('availability')) {
-                throw new Exception('Le livre <a href="/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il est indisponible. Merci de <a href="/contact/">nous contacter</a>.');
+                throw new Exception('Le livre <a href="/a/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il est indisponible. Merci de <a href="/contact/">nous contacter</a>.');
             } else {
                 // Create a new on-order copy
                 $this->db->beginTransaction();

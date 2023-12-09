@@ -282,7 +282,7 @@ class CartTest extends PHPUnit\Framework\TestCase
 
         // given
         $this->expectException("Entity\Exception\CartException");
-        $this->expectExceptionMessage("L'article <a href=\"/\">L'Animalie</a> n'a pas pu être ajouté au panier car il n'est pas encore disponible.");
+        $this->expectExceptionMessage("L'article <a href=\"/a/\">L'Animalie</a> n'a pas pu être ajouté au panier car il n'est pas encore disponible.");
 
         // given
         $cm = new CartManager();

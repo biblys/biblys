@@ -79,7 +79,7 @@ while ($s = $stock->fetch(PDO::FETCH_ASSOC)) {
                 </a>
             </td>
             <td title="'.$s['article_authors'].'">
-                <a href="/'.$s['article_url'].'">'.$s['article_title'].'</a>
+                <a href="/a/'.$s['article_url'].'">'.$s['article_title'].'</a>
             </td>
             <td>'.$s['stock_condition'].'</td>
             <td class="right">'.price($s['stock_purchase_price'], 'EUR').'</td>

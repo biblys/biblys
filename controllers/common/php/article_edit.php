@@ -598,7 +598,7 @@ return function (
             params: ['article_id' => $articleEntity->get('id')],
         );
         while ($bu = $bundle->fetch(PDO::FETCH_ASSOC)) {
-            $bundle_articles .= '<li id="link_' . $bu['link_id'] . '"><img alt="Supprimer" src="/common/icons/delete_16.png" data-link_id="' . $bu['link_id'] . '" class="deleteLink pointer" /> <a href="/' . $bu['article_url'] . '">' . $bu['article_title'] . '</a> de ' . $bu['article_authors'] . ' (' . $bu['article_collection'] . ')</li>';
+            $bundle_articles .= '<li id="link_' . $bu['link_id'] . '"><img alt="Supprimer" src="/common/icons/delete_16.png" data-link_id="' . $bu['link_id'] . '" class="deleteLink pointer" /> <a href="/a/' . $bu['article_url'] . '">' . $bu['article_title'] . '</a> de ' . $bu['article_authors'] . ' (' . $bu['article_collection'] . ')</li>';
         }
     }
 

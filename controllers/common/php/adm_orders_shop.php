@@ -347,7 +347,7 @@ return function (Request $request): Response
             <td></td>
             <td class="center"><a href="/pages/adm_stock?id=' . $l["stock_id"] . '">' . $l["stock_id"] . '</a></td>
             <td colspan="6">
-                <a href="/' . $l["article_url"] . '">' . $l["article_title"] . '</a><br />
+                <a href="/a/' . $l["article_url"] . '">' . $l["article_title"] . '</a><br />
                 <em>' . $l["article_authors"] . '</em><br />
                 ' . $l["article_collection"] . ' ' . numero($l["article_number"]) . '<br />
             </td>

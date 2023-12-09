@@ -17,7 +17,7 @@ while($a = $alerts->fetch()) {
     $table .= '
         <tr>
             <td>
-                <a href="/'.$a["article_url"].'">'.$a["article_title"].'</a><br>
+                <a href="/a/'.$a["article_url"].'">'.$a["article_title"].'</a><br>
                 '.authors($a["article_authors"]).'
             </td>
             <td>'.$a["article_collection"].numero($a["article_number"]).'</td>
