@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 /** @var PDO $_SQL */
 /** @var Request $request */
 
-$request->attributes->set("page_title", "Admininistrateurs");
+$request->attributes->set("page_title", "Admininistrateur·trice·s");
 
 // Supprimer une right
 if (isset($_GET['delete']))
@@ -51,7 +51,7 @@ while ($p = $rights->fetch(PDO::FETCH_ASSOC)) {
 }
 
 $content = '
-    <h1><span class="fa fa-users"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
+    <h1><span class="fa fa-users"></span> Administrateur·trice·s</h1>
 
     '.($message ?? null).'<br>
 
