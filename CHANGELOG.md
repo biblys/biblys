@@ -1,11 +1,13 @@
 # Historique des modifications
 
-### 2.75.1 (DEV)
+### 2.75.1 (13 décembre 2023)
 
 Corrections
 
 - Le bouton permettant de modifier le pays au moment de la validation de 
-  commande n'était plus cliquable. C'est corrigé. 
+  commande n'était plus cliquable. C'est corrigé.
+- Certains liens vers la page article n'étaient plus valide. Ils le sont à 
+  présent.
 
 ## 2.75.0 (5 décembre 2023)
 
