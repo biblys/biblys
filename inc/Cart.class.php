@@ -572,7 +572,7 @@ class CartManager extends EntityManager
     /**
      * Retirer un exemplaire du panier
      * @param object $cart L'objet Cart du panier
-     * @param int $stock L'id de l'exemplaire à retirer
+     * @param int|Stock $stock L'id de l'exemplaire à retirer
      */
 
     public function removeStock(Cart $cart, &$stock)

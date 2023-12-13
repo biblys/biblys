@@ -3,13 +3,17 @@
 
 namespace AppBundle\Controller;
 
+use Article;
 use ArticleManager;
 use Biblys\Legacy\LegacyCodeHelper;
 use Cart;
 use CartManager;
+use CFReward;
 use CFRewardManager;
 use Entity\Exception\CartException;
+use Exception;
 use Framework\Controller;
+use Stock;
 use StockManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -20,9 +24,13 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class CartController extends Controller
 {
+    /**
+     * @throws Exception
+     */
     public function addArticleAction(int $articleId): Response
     {
         $am = new ArticleManager();
+        /** @var Article $article */
         $article = $am->getById($articleId);
         if (!$article) {
             throw new BadRequestHttpException(
@@ -42,6 +50,9 @@ class CartController extends Controller
         return new JsonResponse();
     }
 
+    /**
+     * @throws Exception
+     */
     public function addStockAction(int $stockId): Response
     {
         $sm = new StockManager();
@@ -53,7 +64,7 @@ class CartController extends Controller
         }
 
         $cm = new CartManager();
-        $cart = \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart("create");
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $cm->addStock($cart, $stock);
         $cm->updateFromStock($cart);
 
@@ -63,6 +74,7 @@ class CartController extends Controller
     public function addCrowdfundingRewardAction(int $rewardId): Response
     {
         $cfrm = new CFRewardManager();
+        /** @var CFReward $reward */
         $reward = $cfrm->getById($rewardId);
         if (!$reward) {
             throw new BadRequestHttpException(
@@ -71,16 +83,20 @@ class CartController extends Controller
         }
 
         $cm = new CartManager();
-        $cart = \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart("create");
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $cm->addCFReward($cart, $reward);
         $cm->updateFromStock($cart);
 
         return new JsonResponse();
     }
 
+    /**
+     * @throws Exception
+     */
     public function removeStockAction(Request $request, int $stockId): Response
     {
         $sm = new StockManager();
+        /** @var Stock $stock */
         $stock = $sm->getById($stockId);
         if (!$stock) {
             throw new BadRequestHttpException(
@@ -89,7 +105,7 @@ class CartController extends Controller
         }
 
         $cm = new CartManager();
-        $cart = \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart("create");
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $cm->removeStock($cart, $stock);
         $cm->updateFromStock($cart);
 
@@ -106,7 +122,7 @@ class CartController extends Controller
      */
     public function summaryAction(): JsonResponse
     {
-        $cart = \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart();
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart();
         if (!$cart) {
             $cartSummary = Cart::getOneLineEmpty();
             return new JsonResponse($cartSummary);

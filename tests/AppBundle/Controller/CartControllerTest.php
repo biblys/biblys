@@ -5,17 +5,31 @@
  * @backupStaticAttributes disabled
  */
 
-use AppBundle\Controller\CartController;
+namespace AppBundle\Controller;
+
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
+use CartManager;
+use DateTime;
+use Exception;
+use PHPUnit\Framework\TestCase;
+use Propel\Runtime\Exception\PropelException;
+use Site;
 use Symfony\Component\HttpFoundation\Request;
+
 
 require_once __DIR__."/../../setUp.php";
 
-class CartControllerTest extends PHPUnit\Framework\TestCase
+class CartControllerTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     * @throws Exception
+     * @throws Exception
+     */
     public function testAddArticle()
     {
+        /** @var Site $_SITE */
         global $_SITE;
 
         // given
@@ -50,8 +64,13 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
     public function testAddArticleNotYetAvailable()
     {
+        /** @var Site $_SITE */
         global $_SITE;
 
         $this->expectException("Symfony\Component\HttpKernel\Exception\ConflictHttpException");
@@ -90,8 +109,12 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testAddStockCopy()
     {
+        /** @var Site $_SITE */
         global $_SITE;
 
         // given
@@ -125,6 +148,10 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
     public function testAddCrowdfundingReward()
     {
         // given
@@ -157,6 +184,9 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testRemoveStock()
     {
         // given
@@ -194,6 +224,9 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testRemoveStockLegacyUsage()
     {
         // given
@@ -236,6 +269,9 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetSummaryWhenCartIsEmpty()
     {
         
@@ -265,6 +301,9 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetSummaryWhenCartIsFull()
     {
         
