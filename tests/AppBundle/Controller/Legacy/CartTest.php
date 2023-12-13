@@ -256,7 +256,10 @@ class CartTest extends TestCase
         $cm->addArticle($cart, $article);
         $site = ModelFactory::createSite();
         $articleModel = ArticleQuery::create()->findPk($article->get("id"));
-        $articleCategory = ModelFactory::createArticleCategory(site: $site);
+        $articleCategory = ModelFactory::createArticleCategory(
+            site: $site,
+            name: "Suggestions du panier",
+        );
         ModelFactory::createLink(article: $articleModel, articleCategory: $articleCategory);
 
         $urlGenerator = Mockery::mock(UrlGenerator::class);
@@ -299,6 +302,11 @@ class CartTest extends TestCase
         $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator);
 
         // then
+        $this->assertStringContainsString(
+            "Suggestions du panier",
+            $response->getContent(),
+            "displays article in suggestions rayon"
+        );
         $this->assertStringContainsString(
             "Article suggéré",
             $response->getContent(),

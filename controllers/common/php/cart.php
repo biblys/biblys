@@ -481,7 +481,7 @@ return function (
                     ->find();
                 if ($articles) {
                     $content .= '
-                        <h3>Vous serez peut-être intéressé·e par…</h3>
+                        <h3>'.$articleCategory->getName().'</h3>
                         <div class="cart-suggestions">
                     ';
                     /** @var \Model\Article $article */

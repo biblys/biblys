@@ -105,10 +105,13 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createArticleCategory(Site $site): ArticleCategory
+    public static function createArticleCategory(
+        Site $site,
+        string $name = "Rayon de lune",
+    ): ArticleCategory
     {
         $category = new ArticleCategory();
-        $category->setName("Rayon de lune");
+        $category->setName($name);
         $category->setSite($site);
         $category->save();
 

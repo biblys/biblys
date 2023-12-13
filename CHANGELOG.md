@@ -1,5 +1,13 @@
 # Historique des modifications
 
+## 2.76.0 (DEV)
+
+Améliorations
+
+- Il est maintenant possible de suggérer aux clients d'ajouter des articles
+  dans leur panier au moment de la validation de commande, grâce à l'option
+  de site `cart_suggestions_rayon_id`.
+
 ### 2.75.3 (27 décembre 2023)
 
 Corrections
