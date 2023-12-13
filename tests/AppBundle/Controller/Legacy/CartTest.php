@@ -116,6 +116,9 @@ class CartTest extends TestCase
         $urlGenerator->shouldReceive("generate")->andReturn("url");
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite
+            ->shouldReceive("getSite")
+            ->andReturn(ModelFactory::createSite());
+        $currentSite
             ->shouldReceive("getOption")
             ->with("sales_disabled")
             ->andReturn(null);
@@ -138,9 +141,17 @@ class CartTest extends TestCase
         $cm = new CartManager();
         $cm->vacuum($cart);
         $cm->addArticle($cart, $article);
+        $request = new Request();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+        $currentSite->shouldReceive("getOption")->with("special_offer_amount")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("special_offer_article")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("special_offer_collection")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("special_offer_amount")->andReturn(null);
 
         // when
-        $response = $controller($urlGenerator, $currentSite);
+        $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator);
 
         // then
         $this->assertStringContainsString(
@@ -170,6 +181,9 @@ class CartTest extends TestCase
         $urlGenerator->shouldReceive("generate")->andReturn("url");
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite
+            ->shouldReceive("getSite")
+            ->andReturn(ModelFactory::createSite());
+        $currentSite
             ->shouldReceive("getOption")
             ->with("sales_disabled")
             ->andReturn(null);
@@ -192,9 +206,17 @@ class CartTest extends TestCase
         $cm = new CartManager();
         $cm->vacuum($cart);
         $cm->addArticle($cart, $article);
+        $request = new Request();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+        $currentSite->shouldReceive("getOption")->with("special_offer_amount")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("special_offer_article")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("special_offer_collection")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("special_offer_amount")->andReturn(null);
 
         // when
-        $response = $controller($urlGenerator, $currentSite);
+        $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator);
 
         // then
         $this->assertStringContainsString(

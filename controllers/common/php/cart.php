@@ -20,7 +20,13 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
  * @throws InvalidDateFormatException
  * @throws PropelException
  */
-return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
+return function (
+    Request $request,
+    Config $config,
+    CurrentSite $currentSite,
+    CurrentUser $currentUser,
+    UrlGenerator $urlGenerator,
+): Response
 {
     $am = new ArticleManager();
     $cm = new CartManager();
@@ -29,13 +35,6 @@ return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
 
     $content = null;
 
-    $config = Config::load();
-    $request = Request::createFromGlobals();
-    $currentSiteService = CurrentSite::buildFromConfig($config);
-    $currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
-
-    /** @var Request $request */
-    /** @var UrlGenerator $urlGenerator */
     $currentUrlService = new CurrentUrlService($request);
     $currentUrl = $currentUrlService->getRelativeUrl();
     $loginUrl = $urlGenerator->generate("user_login", ["return_url" => $currentUrl]);
@@ -43,7 +42,7 @@ return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
     $cart_id = $request->query->get('cart_id', false);
     if ($cart_id) {
 
-        if (!$currentUserService->isAdmin()) {
+        if (!$currentUser->isAdmin()) {
             throw new AccessDeniedHttpException("Seuls les administrateurs peuvent prévisualiser un panier.");
         }
 
@@ -112,7 +111,7 @@ return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
 
         // On order
         $availability = null;
-        if (!$stock->get('purchase_date') && $currentSiteService->getSite()->getPublisherId() === null) {
+        if (!$stock->get('purchase_date') && $currentSite->getSite()->getPublisherId() === null) {
             $on_order = 1;
             $availability = '<span class="fa fa-square lightblue" title="Sur commande"></span>&nbsp;';
         }
@@ -154,7 +153,7 @@ return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
                 '.($stock->has('condition') ? 'État : '.$stock->get('condition').'<br>' : null).'
                 '.$editable_price_form.'
             </td>
-            '.($currentSiteService->getSite()->getShippingFee() == "fr" ? '<td class="right">'.$stock->get('weight').'g</td>' : null).'
+            '.($currentSite->getSite()->getShippingFee() == "fr" ? '<td class="right">'.$stock->get('weight').'g</td>' : null).'
             <td class="right">
                 '.$availability.'
                 '.currency($stock->get('selling_price') / 100).'<br />
@@ -181,7 +180,7 @@ return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
         $Articles++;
     }
 
-    if ($currentUserService->isAdmin()) {
+    if ($currentUser->isAdmin()) {
         $content .= '
         <div class="admin">
             <p>Panier n&deg; '.$cart->get('id').'</p>
@@ -201,7 +200,7 @@ return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
                 <th></th>
                 <th>Article</th>
 ';
-    if ($currentSiteService->getSite()->getShippingFee() == "fr") {
+    if ($currentSite->getSite()->getShippingFee() == "fr") {
         $content .= '<th class="center">Poids</th>';
     }
     $content .= '
@@ -213,7 +212,7 @@ return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
 '.implode($cart_content);
 
     if (isset($Articles) && $Articles > 0) {
-        if (!$currentUserService->isAuthentified()) {
+        if (!$currentUser->isAuthentified()) {
             $content .= '
             <p class="warning">
                 Attention : '."vous n'êtes pas connecté".'. Si vous quittez le site, votre
@@ -224,11 +223,11 @@ return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
         }
 
         // Deja une commande en cours ?
-        if ($currentUserService->isAuthentified()) {
+        if ($currentUser->isAuthentified()) {
             $order = $om->get(
                 [
                     'order_type' => 'web',
-                    'axys_account_id' => $currentUserService->getAxysAccount()->getId(),
+                    'axys_account_id' => $currentUser->getAxysAccount()->getId(),
                     'order_payment_date' => 'NULL',
                     'order_shipping_date' => 'NULL',
                     'order_cancel_date' => 'NULL'
@@ -281,7 +280,7 @@ return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
                     $content .= '
                         </td>
                 ';
-                    if ($currentSiteService->getSite()->getShippingFee() == "fr") {
+                    if ($currentSite->getSite()->getShippingFee() == "fr") {
                         $content .= '<td class="right">'.$s["stock_weight"].'g</td>';
                     }
                     $content .= '
@@ -302,9 +301,9 @@ return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
         }
 
         // Special offers
-        $special_offer_amount = $currentSiteService->getOption('special_offer_amount');
-        $special_offer_article = $currentSiteService->getOption('special_offer_article');
-        $special_offer_collection = $currentSiteService->getOption('special_offer_collection');
+        $special_offer_amount = $currentSite->getOption('special_offer_amount');
+        $special_offer_article = $currentSite->getOption('special_offer_article');
+        $special_offer_collection = $currentSite->getOption('special_offer_collection');
 
         // Special offer: article for amount of articles in collection
         if ($special_offer_collection && $special_offer_amount
@@ -412,7 +411,7 @@ return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
                     <td colspan="3" class="right">Total :</td>
     ';
 
-        if ($currentSiteService->getSite()->getShippingFee() == "fr") {
+        if ($currentSite->getSite()->getShippingFee() == "fr") {
             $content .= '<td class="right">'.$Poids.'g <input type="hidden" id="stock_weight" value="'.$Poids.'"></td>';
         }
         $content .= '
@@ -450,7 +449,7 @@ return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
             }, $countries);
             $default_destination = $com->get(["country_name" => "France"]);
 
-            if ($currentUserService->isAuthentified() && $customer = LegacyCodeHelper::getGlobalVisitor()->getCustomer()) {
+            if ($currentUser->isAuthentified() && $customer = LegacyCodeHelper::getGlobalVisitor()->getCustomer()) {
                 $country_id = $customer->get('country_id');
                 $country = $com->getById($country_id);
                 if ($country) {
@@ -556,7 +555,7 @@ return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
 
         if ($salesDisabled) {
             $content .= '<p class="alert alert-warning">La vente en ligne est temporairement désactivée sur ce site.</p>';
-        } elseif ($downloadable && !$currentUserService->isAuthentified()) {
+        } elseif ($downloadable && !$currentUser->isAuthentified()) {
             $content .= '<br />'
                .'<div class="center">'
                .'<p class="warning">Votre panier contient au moins un livre numérique. Vous devez vous <a href="'.$loginUrl.'">identifier</a> pour continuer.</p>'
@@ -564,7 +563,7 @@ return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
                .'</div>';
 
             // If cart contains crowdfunding rewards and user not logged
-        } elseif (!empty($crowdfunding) && !$currentUserService->isAuthentified()) {
+        } elseif (!empty($crowdfunding) && !$currentUser->isAuthentified()) {
             $content .= '<br>'
                .'<div class="center">'
                .'<p class="warning">Votre panier contient au moins une contrepartie de financement participatif.<br>Vous devez vous <a href="'.$loginUrl.'">identifier</a> pour continuer.</p>'
