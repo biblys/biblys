@@ -21,13 +21,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class CartController extends Controller
 {
     /**
      * @throws Exception
      */
-    public function addArticleAction(int $articleId): Response
+    public function addArticleAction(
+        Request $request,
+        int $articleId
+    ): JsonResponse|RedirectResponse
     {
         $am = new ArticleManager();
         /** @var Article $article */
@@ -47,7 +51,11 @@ class CartController extends Controller
             throw new ConflictHttpException($exception->getMessage());
         }
 
-        return new JsonResponse();
+        if (in_array("application/json", $request->getAcceptableContentTypes())) {
+            return new JsonResponse();
+        }
+
+        return new RedirectResponse("/pages/cart");
     }
 
     /**

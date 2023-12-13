@@ -25,9 +25,8 @@ class CartControllerTest extends TestCase
     /**
      * @throws PropelException
      * @throws Exception
-     * @throws Exception
      */
-    public function testAddArticle()
+    public function testAddArticleWithJsonResponse()
     {
         /** @var Site $_SITE */
         global $_SITE;
@@ -38,19 +37,25 @@ class CartControllerTest extends TestCase
         $controller = new CartController();
         $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
 
+        $request = new Request();
+        $request->headers->set("Accept", "application/json");
+
         $cm->vacuum($cart);
         $article = EntityFactory::createArticle();
 
         // when
-        $response = $controller->addArticleAction(
-            $article->get("id")
-        );
+        $response = $controller->addArticleAction($request, $article->get("id"));
 
         // then
         $this->assertEquals(
             200,
             $response->getStatusCode(),
-            "it should respond with http 200"
+            "responds with http status 200"
+        );
+        $this->assertEquals(
+            "application/json",
+            $response->headers->get("Content-Type"),
+            "responds with json"
         );
         $this->assertTrue(
             $cart->containsArticle($article),
@@ -61,6 +66,41 @@ class CartControllerTest extends TestCase
             1,
             $updatedCart->get("count"),
             "it should have updated cart article count"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAddArticleWithRedirection()
+    {
+        /** @var Site $_SITE */
+        global $_SITE;
+
+        // given
+        $cm = new CartManager();
+        $_SITE->setOpt("virtual_stock", 1);
+        $controller = new CartController();
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
+
+        $request = new Request();
+        $request->headers->set("Accept", "text/html");
+
+        $cm->vacuum($cart);
+        $article = EntityFactory::createArticle();
+
+        // when
+        $response = $controller->addArticleAction($request, $article->get("id"));
+
+        // then
+        $this->assertTrue(
+            $response->isRedirection(),
+            "responds with HTTP status 301"
+        );
+        $this->assertTrue(
+            $response->isRedirect("/pages/cart"),
+            "redirects to cart page"
         );
     }
 
@@ -86,11 +126,11 @@ class CartControllerTest extends TestCase
         $cm->vacuum($cart);
         $tomorrow = new DateTime('tomorrow');
         $article = EntityFactory::createArticle(["article_pubdate" => $tomorrow->format("Y-m-d")]);
+        $request = new Request();
+        $request->headers->set("Accept", "application/json");
 
         // when
-        $response = $controller->addArticleAction(
-            $article->get("id")
-        );
+        $response = $controller->addArticleAction($request, $article->get("id"));
 
         // then
         $this->assertEquals(
