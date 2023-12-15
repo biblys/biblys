@@ -113,7 +113,7 @@ $p["post_time"] = date("H:i");
 
 // Auteur
 if ($currentUser->isAdmin()) {
-    if(!empty(LegacyCodeHelper::getGlobalVisitor()["axys_account_screen_name"])) $author = LegacyCodeHelper::getGlobalVisitor()["axys_account_screen_name"];
+    if(!empty($currentUser->getAxysAccount()->getUsername())) $author = $currentUser->getAxysAccount()->getUsername();
     else $author = $_SITE->get("id");
 }
 elseif ($currentUser->hasPublisherRight()) {

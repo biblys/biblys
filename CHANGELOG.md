@@ -1,5 +1,11 @@
 # Historique des modifications
 
+### 2.75.2 (DEV)
+
+Corrections
+
+- La page d'édition de billet ne s'affichait pas correctement. C'est corrigé.
+
 ### 2.75.1 (13 décembre 2023)
 
 Corrections
