@@ -439,6 +439,63 @@ return function (
             $content .= '<p class="warning">Certains des livres de votre panier (<span class="fa fa-square lightblue" title="Sur commande"></span>) ne sont pas disponibles en stock et doivent être commandés. L\'expédition de votre commande peut être retardée de 72h.</p>';
         }
 
+        $cartSuggestionsRayonId = $currentSite->getOption("cart_suggestions_rayon_id");
+        if ($cartSuggestionsRayonId) {
+            $articleCategory = ArticleCategoryQuery::create()
+                ->filterBySite($currentSite->getSite())
+                ->findPk($cartSuggestionsRayonId);
+            $articleCategoryLinks = LinkQuery::create()
+                ->filterByArticleCategory($articleCategory)
+                ->find();
+            $articleIds = array_map(function ($link) {
+                return $link->getArticleId();
+            }, $articleCategoryLinks->getData());
+            $articles = ArticleQuery::create()
+                ->filterById($articleIds)
+                ->find();
+            if ($articles) {
+                $content .= '
+                        <h3>'.$articleCategory->getName().'</h3>
+                        <div class="cart-suggestions">
+                    ';
+                /** @var \Model\Article $article */
+                foreach ($articles as $article) {
+                    $cartUrl = $urlGenerator->generate("cart_add_article", ["articleId" => $article->getId()]);
+                    $coverHtml = "";
+                    if ($imagesService->articleHasCoverImage($article)) {
+                        $articleCover = $imagesService->getCoverImageForArticle($article);
+                        $coverHtml = '
+                                <div class="cart-suggestions_article_cover">
+                                    <a href="'.$urlGenerator->generate("article_show", ["slug" => $article->getUrl()]).'">
+                                        <img 
+                                            src="'.$articleCover->getUrl().'" 
+                                            alt="' .$article->getTitle().'"
+                                            title="'.$article->getTitle().'" 
+                                        />
+                                    </a>
+                                </div>';
+                    }
+                    $content .= '
+                            <article class="cart-suggestions_article">
+                                '.$coverHtml.'
+                                <div class="cart_suggestions_article_infos">
+                                    <strong>'.currency($article->getPrice(), cents: true) .'</strong>
+                                    <form class="form-inline" action="'. $cartUrl .'" method="post"> 
+                                        <button type="submit"
+                                            class="btn btn-primary btn-sm"
+                                            aria-label="Ajouter au panier"
+                                        >
+                                            <span class="fa fa-shopping-cart"></span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </article>
+                        ';
+                }
+                $content .= '</div><br />';
+            }
+        }
+
         $content .= '
             <form id="validate_cart" action="order_delivery" method="get">
                 <fieldset>
@@ -468,63 +525,6 @@ return function (
                 $plus30 = '<br><p class="warning"> Attention ! Votre commande excède le poids maximum autorisé par La Poste pour un colis (30 kg). Votre commande sera expédiée en plusieurs colis.</p>';
             } else {
                 $plus30 = null;
-            }
-
-            $cartSuggestionsRayonId = $currentSite->getOption("cart_suggestions_rayon_id");
-            if ($cartSuggestionsRayonId) {
-                $articleCategory = ArticleCategoryQuery::create()
-                    ->filterBySite($currentSite->getSite())
-                    ->findPk($cartSuggestionsRayonId);
-                $articleCategoryLinks = LinkQuery::create()
-                    ->filterByArticleCategory($articleCategory)
-                    ->find();
-                $articleIds = array_map(function ($link) {
-                    return $link->getArticleId();
-                }, $articleCategoryLinks->getData());
-                $articles = ArticleQuery::create()
-                    ->filterById($articleIds)
-                    ->find();
-                if ($articles) {
-                    $content .= '
-                        <h3>'.$articleCategory->getName().'</h3>
-                        <div class="cart-suggestions">
-                    ';
-                    /** @var \Model\Article $article */
-                    foreach ($articles as $article) {
-                        $cartUrl = $urlGenerator->generate("cart_add_article", ["articleId" => $article->getId()]);
-                        $coverHtml = "";
-                        if ($imagesService->articleHasCoverImage($article)) {
-                            $articleCover = $imagesService->getCoverImageForArticle($article);
-                            $coverHtml = '
-                                <div class="cart-suggestions_article_cover">
-                                    <a href="'.$urlGenerator->generate("article_show", ["slug" => $article->getUrl()]).'">
-                                        <img 
-                                            src="'.$articleCover->getUrl().'" 
-                                            alt="' .$article->getTitle().'"
-                                            title="'.$article->getTitle().'" 
-                                        />
-                                    </a>
-                                </div>';
-                        }
-                        $content .= '
-                            <article class="cart-suggestions_article">
-                                '.$coverHtml.'
-                                <div class="cart_suggestions_article_infos">
-                                    <strong>'.currency($article->getPrice(), cents: true) .'</strong>
-                                    <form class="form-inline" action="'. $cartUrl .'" method="post"> 
-                                        <button type="submit"
-                                            class="btn btn-primary btn-sm"
-                                            aria-label="Ajouter au panier"
-                                        >
-                                            <span class="fa fa-shopping-cart"></span>
-                                        </button>
-                                    </form>
-                                </div>
-                            </article>
-                        ';
-                    }
-                    $content .= '</div>';
-                }
             }
 
             $freeShippingTargetAmount = $currentSite->getOption("free_shipping_target_amount");
