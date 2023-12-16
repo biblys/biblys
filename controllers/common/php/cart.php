@@ -439,6 +439,11 @@ return function (
             $content .= '<p class="warning">Certains des livres de votre panier (<span class="fa fa-square lightblue" title="Sur commande"></span>) ne sont pas disponibles en stock et doivent être commandés. L\'expédition de votre commande peut être retardée de 72h.</p>';
         }
 
+        $content .= '
+            <form id="validate_cart" action="order_delivery" method="get">
+                <fieldset>
+        ';
+
         // If cart contains physical articles that needs to be shipped
         if ($cart->needsShipping()) {
             $com = new CountryManager();
@@ -521,12 +526,6 @@ return function (
                     $content .= '</div>';
                 }
             }
-
-            $content .= '
-
-                <form id="validate_cart" action="order_delivery" method="get">
-                    <fieldset>
-            ';
 
             $freeShippingTargetAmount = $currentSite->getOption("free_shipping_target_amount");
             $cartNeedsShipping = $cart->needsShipping();
