@@ -7,6 +7,8 @@ Corrections
 - La page d'édition de billet ne s'affichait pas correctement. C'est corrigé.
 - Les erreurs lors de l'import d'un article pouvaient ne pas être affichées 
   correctement. C'est réparé.
+- La création d'une liste d'exemplaires pouvait déclencher une erreur. 
+  Maintenant, ça marche.
 
 ### 2.75.1 (13 décembre 2023)
 
