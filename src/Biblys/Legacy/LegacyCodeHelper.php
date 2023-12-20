@@ -20,20 +20,28 @@ class LegacyCodeHelper
      */
     public static function getLegacyCurrentSite(): Site
     {
-        return self::getGlobalSite();
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.69.0",
+            "Using getGlobalSite is deprecated. Use CurrentSite service instead.",
+        );
+
+        return self::getGlobalSite(ignoreDeprecation: true);
     }
 
     /**
      * @throws Exception
      * @deprecated Using getGlobalSite is deprecated. Use CurrentSite service instead.
      */
-    public static function getGlobalSite(): Site
+    public static function getGlobalSite($ignoreDeprecation = false): Site
     {
-        trigger_deprecation(
-            "biblys/biblys",
-            "2.69.0",
-            "Using getLegacyCurrentSite is deprecated. Use CurrentSite service instead.",
-        );
+        if (!$ignoreDeprecation) {
+            trigger_deprecation(
+                "biblys/biblys",
+                "2.69.0",
+                "Using getGlobalSite is deprecated. Use CurrentSite service instead.",
+            );
+        }
 
         if (!isset($GLOBALS["LEGACY_CURRENT_SITE"])) {
             $config = Config::load();
@@ -119,14 +127,14 @@ class LegacyCodeHelper
     }
 
     /**
-     * @deprecated Using getLegacyVisitor is deprecated. Use CurrentUser service instead.
+     * @deprecated Using getGlobalVisitor is deprecated. Use CurrentUser service instead.
      */
     public static function getGlobalVisitor(): Visitor
     {
         trigger_deprecation(
             "biblys/biblys",
             "2.68.0",
-            "Using getLegacyVisitor is deprecated. Use CurrentUser service instead.",
+            "Using getGlobalVisitor is deprecated. Use CurrentUser service instead.",
         );
 
         if (!isset($GLOBALS["LEGACY_VISITOR"])) {
