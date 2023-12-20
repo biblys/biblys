@@ -1,6 +1,6 @@
 # Historique des modifications
 
-### 2.75.2 (DEV)
+### 2.75.2 (20 décembre 2013)
 
 Corrections
 
