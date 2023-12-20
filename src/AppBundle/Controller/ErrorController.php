@@ -226,11 +226,16 @@ class ErrorController extends Controller
     {
         if ($request->isXmlHttpRequest() || $request->headers->get('Accept') == 'application/json') {
             return new JsonResponse([
-                "error" => $exception->getMessage(),
+                "error" => [
+                    "exception" => get_class($exception),
+                    "message" => $exception->getMessage(),
+                    "file" => $exception->getFile(),
+                    "line" => $exception->getLine(),
+                    "trace" => $exception->getTrace(),
+                ]
             ], $statusCode);
         }
         $exceptionClass = new ReflectionClass($exception);
-
 
         // TODO: use render and twig template
         return new Response('
