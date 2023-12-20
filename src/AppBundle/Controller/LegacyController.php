@@ -6,6 +6,7 @@ namespace AppBundle\Controller;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUrlService;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Service\MetaTagsService;
@@ -20,9 +21,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class LegacyController extends Controller
@@ -31,13 +30,13 @@ class LegacyController extends Controller
      * @throws Exception
      */
     public function defaultAction(
-        Request $request,
-        Session $session,
-        Mailer $mailer,
-        Config $config,
-        CurrentSite $currentSite,
-        CurrentUser $currentUser,
-        UrlGenerator $urlGenerator,
+        Request         $request,
+        Session         $session,
+        Mailer          $mailer,
+        Config          $config,
+        CurrentSite     $currentSite,
+        CurrentUser     $currentUser,
+        UrlGenerator    $urlGenerator,
         TemplateService $templateService,
         MetaTagsService $metaTagsService,
     ): Response
@@ -80,7 +79,7 @@ class LegacyController extends Controller
 
         if ($response instanceof Closure) {
             $legacyController = $response;
-            $container = include __DIR__."/../../container.php";
+            $container = include __DIR__ . "/../../container.php";
             $argumentResolver = $container->get("argument_resolver");
             $arguments = $argumentResolver->getArguments($request, $legacyController);
             $response = $legacyController(...$arguments);
@@ -88,14 +87,14 @@ class LegacyController extends Controller
             trigger_deprecation(
                 "biblys/biblys",
                 "2.70.0",
-                "Using global \$_ECHO (in legacy controller {$controllerPath}) is deprecated. Return an anonymous function instead."
+                "Using global \$_ECHO (in legacy controller $controllerPath) is deprecated. Return an anonymous function instead."
             );
             $response = new Response($_ECHO);
         } elseif (isset($response)) {
             trigger_deprecation(
                 "biblys/biblys",
                 "2.70.0",
-                "Returning a Response (in legacy controller {$controllerPath}) is deprecated. Return an anonymous function instead."
+                "Returning a Response (in legacy controller $controllerPath) is deprecated. Return an anonymous function instead."
             );
         } else {
             throw new Exception("Legacy controller must expose a legacyController function.");

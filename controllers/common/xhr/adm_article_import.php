@@ -287,13 +287,10 @@ if ($_GET["mode"] == "search") { // Mode recherche
             $x['article_publisher'] = null;
         }
 
-        /** @var PDO $_SQL */
-        $publishers = $_SQL->prepare(
+        $publishers = EntityManager::prepareAndExecute(
             "SELECT `publisher_id`, `publisher_name` FROM `publishers`
                 WHERE `publisher_noosfere_id` = :noosfere_IdEditeur OR `publisher_name` = :publisher_name
-                ORDER BY `publisher_noosfere_id` LIMIT 1"
-        );
-        $publishers->execute(
+                ORDER BY `publisher_noosfere_id` LIMIT 1",
             [
                 'noosfere_IdEditeur' => $x["noosfere_IdEditeur"],
                 'publisher_name' => $x["article_publisher"],
@@ -420,15 +417,13 @@ if ($_GET["mode"] == "search") { // Mode recherche
                 $c['people_noosfere_id'] = null;
             }
 
-            $people = $_SQL->prepare(
+            $people = EntityManager::prepareAndExecute(
                 "SELECT `people_id`, `people_name` FROM `people`
                 WHERE
                     `people_noosfere_id` = :people_noosfere_id OR
                     `people_name` = :people_name OR
                     `people_url` = :people_url
-                ORDER BY `people_noosfere_id` DESC LIMIT 1"
-            );
-            $people->execute(
+                ORDER BY `people_noosfere_id` DESC LIMIT 1",
                 [
                     'people_noosfere_id' => $c['people_noosfere_id'],
                     'people_name' => $c['people_name'],
@@ -470,12 +465,10 @@ if ($_GET["mode"] == "search") { // Mode recherche
 
     // Reconnaissance des catégories
     if (isset($x["pricegrid_id"]) && isset($x["article_price"])) {
-        $prices = $_SQL->prepare(
+        $prices = EntityManager::prepareAndExecute(
             "SELECT `price_cat` FROM `prices`
             WHERE `price_amount` = :price_amount AND
-                `pricegrid_id` = :pricegrid_id LIMIT 1"
-        );
-        $prices->execute(
+                `pricegrid_id` = :pricegrid_id LIMIT 1",
             [
                 'price_amount' => $x['article_price'],
                 'pricegrid_id' => $x['pricegrid_id']

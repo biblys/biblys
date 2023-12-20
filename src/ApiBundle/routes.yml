@@ -68,3 +68,21 @@ api_shipping_get:
   path: /api/shipping/{id}
   methods: GET
   controller: ApiBundle\Controller\ShippingController::get
+
+# Legacy
+
+legacy_x_adm_articles:
+  path: /x/adm_articles
+  controller: ApiBundle\Controller\LegacyController::defaultAction
+  defaults:
+    page: adm_articles
+
+legacy_x_adm_article_import:
+  path: /x/adm_article_import
+  controller: ApiBundle\Controller\LegacyController::defaultAction
+  defaults:
+    page: adm_article_import
+
+legacy_x_adm_images:
+  path: /x/adm_images
+  controller: ApiBundle\Controller\LegacyController::defaultAction

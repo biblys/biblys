@@ -759,10 +759,6 @@ legacy_serie:
   defaults:
     page: serie
 
-legacy_x_adm_images:
-  path: /x/adm_images
-  controller: AppBundle\Controller\LegacyController::defaultAction
-
 legacy_wishlist:
   path: /wishlist/{slug}
   controller: AppBundle\Controller\LegacyController::defaultAction
