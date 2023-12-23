@@ -71,18 +71,68 @@ api_shipping_get:
 
 # Legacy
 
+legacy_x_adm_article_award:
+  path: /x/adm_article_award
+  controller: ApiBundle\Controller\LegacyController::defaultAction
+
+legacy_x_adm_article_collection:
+  path: /x/adm_article_collection
+  controller: ApiBundle\Controller\LegacyController::defaultAction
+
+legacy_x_adm_article_cycle:
+  path: /x/adm_article_cycle
+  controller: ApiBundle\Controller\LegacyController::defaultAction
+
+legacy_x_adm_article_duplicate_check:
+  path: /x/adm_article_duplicate_check
+  controller: ApiBundle\Controller\LegacyController::defaultAction
+
+legacy_x_adm_article_import:
+  path: /x/adm_article_import
+  controller: ApiBundle\Controller\LegacyController::defaultAction
+
+legacy_x_adm_article_people:
+  path: /x/adm_article_people
+  controller: ApiBundle\Controller\LegacyController::defaultAction
+
+legacy_x_adm_article_prices:
+  path: /x/adm_article_prices
+  controller: ApiBundle\Controller\LegacyController::defaultAction
+
+legacy_x_adm_article_publisher:
+  path: /x/adm_article_publisher
+  controller: ApiBundle\Controller\LegacyController::defaultAction
+
+legacy_x_adm_customers:
+  path: /x/adm_customers
+  controller: ApiBundle\Controller\LegacyController::defaultAction
+
 legacy_x_adm_articles:
   path: /x/adm_articles
   controller: ApiBundle\Controller\LegacyController::defaultAction
   defaults:
     page: adm_articles
 
-legacy_x_adm_article_import:
-  path: /x/adm_article_import
-  controller: ApiBundle\Controller\LegacyController::defaultAction
-  defaults:
-    page: adm_article_import
-
 legacy_x_adm_images:
   path: /x/adm_images
+  controller: ApiBundle\Controller\LegacyController::defaultAction
+
+legacy_x_adm_links:
+  path: /x/adm_links
+  controller: ApiBundle\Controller\LegacyController::defaultAction
+
+legacy_x_adm_reorder:
+  path: /x/adm_reorder
+  controller: ApiBundle\Controller\LegacyController::defaultAction
+
+legacy_x_adm_stock:
+  path: /x/adm_stock
+  controller: ApiBundle\Controller\LegacyController::defaultAction
+
+legacy_x_countries:
+  path: /x/countries
+  controller: ApiBundle\Controller\LegacyController::defaultAction
+
+legacy_x_list:
+  path: /x/list
   controller: ApiBundle\Controller\LegacyController::defaultAction
