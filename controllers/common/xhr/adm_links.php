@@ -2,6 +2,8 @@
 
 use Biblys\Legacy\LegacyCodeHelper;
 
+global $_SQL;
+
 $j = array();
 $req = null;
 
