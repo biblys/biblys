@@ -756,7 +756,7 @@ legacy_pages:
   controller: AppBundle\Controller\LegacyController::defaultAction
 
 legacy_people:
-  path: /legacy/p/{slug}
+  path: /legacy/p/{slug}/
   controller: AppBundle\Controller\LegacyController::defaultAction
   defaults:
     page: people

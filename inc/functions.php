@@ -113,6 +113,8 @@ if (!defined('SITE_PATH')) {
 
 function authors($x, $m = null): ?string
 {
+    global $urlgenerator;
+
     if ($x === null) {
         return null;
     }
@@ -123,7 +125,8 @@ function authors($x, $m = null): ?string
         foreach ($x as $k => $v) {
             $slugService = new SlugService();
             $slug = $slugService->slugify($v);
-            $x[$k] = '<a href="/' . $slug . '/">' . $v . '</a>';
+            $url = $urlgenerator->generate('legacy_people', ['slug' => $slug]);
+            $x[$k] = '<a href="'.$url.'">' . $v . '</a>';
         }
     }
     if ($c > 2) {
