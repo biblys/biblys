@@ -1058,22 +1058,6 @@ $(document).ready(function() {
     })
     .removeClass('event');
 
-  // Masquer un livre
-  $('.hideArticle')
-    .click(function(e) {
-      article_id = $(this).data('article_id');
-      $.post('/x/adm_hide', { article_id: '' + article_id }, function(data) {
-        var res = jQuery.parseJSON(data);
-        if (res.error) _alert(res.error);
-        else {
-          notify(res.message);
-          if (res.result == 'hide') $('#article_' + article_id).fadeTo('200', 0.25);
-          else if (res.result == 'show') $('#article_' + article_id).fadeTo('200', 1);
-        }
-      });
-    })
-    .removeClass('hideArticle');
-
   // Countdown
   if ($('.countdown').length) {
     var timer = $('.countdown');

@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.75.3 (DEV)
+
+Corrections
+
+- L'association d'un article à un billet de blog ne fonctionnait plus. C'est 
+  corrigé.
+
 ### 2.75.2 (20 décembre 2013)
 
 Corrections
