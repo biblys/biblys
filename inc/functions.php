@@ -111,30 +111,39 @@ if (!defined('SITE_PATH')) {
     define('SITE_PATH', $sitePath);
 }
 
-function authors($x, $m = null): ?string
+function authors(?string $nameString, string $mode = null): ?string
 {
     global $urlgenerator;
 
-    if ($x === null) {
+    if ($nameString === null) {
         return null;
     }
 
-    $x = explode(',', $x);
-    $c = count($x);
-    if ('url' == $m) {
-        foreach ($x as $k => $v) {
-            $slugService = new SlugService();
-            $slug = $slugService->slugify($v);
-            $url = $urlgenerator->generate('legacy_people', ['slug' => $slug]);
-            $x[$k] = '<a href="'.$url.'">' . $v . '</a>';
-        }
+    $names = explode(',', $nameString);
+    $nameCount = count($names);
+
+    if ($nameCount > 2) {
+        return "COLLECTIF";
     }
-    if ($c > 2) {
-        return 'COLLECTIF';
-    } elseif (2 == $c) {
-        return $x[0] . ' & ' . $x[1];
+
+    if ($mode === "url") {
+        $names = array_map(function ($name) use ($urlgenerator) {
+            $slugService = new SlugService();
+            $slug = $slugService->slugify($name);
+
+            if ($slug === "") {
+                return $name;
+            }
+
+            $url = $urlgenerator->generate("legacy_people", ["slug" => $slug]);
+            return "<a href=\"$url\">$name</a>";
+        }, $names);
+    }
+
+     if ($nameCount === 2) {
+        return $names[0] . ' & ' . $names[1];
     } else {
-        return $x[0];
+        return $names[0];
     }
 }
 
