@@ -2,9 +2,11 @@
 
 namespace Biblys\Legacy;
 
+use Biblys\Database\Connection;
 use Biblys\Service\Config;
 use Biblys\Service\LoggerService;
 use Exception;
+use PDO;
 use Site;
 use SiteManager;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,13 +60,15 @@ class LegacyCodeHelper
      * @throws Exception
      * @deprecated Using getGlobalConfig is deprecated. Use CurrentUser service instead.
      */
-    public static function getGlobalConfig(): Config
+    public static function getGlobalConfig($ignoreDeprecation = false): Config
     {
-        trigger_deprecation(
-            "biblys/biblys",
-            "2.69.0",
-            "Using getGlobalConfig is deprecated. Use Config service instead.",
-        );
+        if (!$ignoreDeprecation) {
+            trigger_deprecation(
+                "biblys/biblys",
+                "2.69.0",
+                "Using getGlobalConfig is deprecated. Use Config service instead.",
+            );
+        }
 
         if (!isset($GLOBALS["LEGACY_CONFIG"])) {
             $GLOBALS["LEGACY_CONFIG"] = Config::load();
@@ -180,5 +184,24 @@ class LegacyCodeHelper
         }
 
         return null;
+    }
+
+    /**
+     * @deprecated Using getGlobalDatabaseConnection is deprecated. Use EntityManager instead.
+     */
+    public static function getGlobalDatabaseConnection(): PDO
+    {
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.76.0",
+            "Using getGlobalDatabaseConnection is deprecated. Use EntityManager instead.",
+        );
+
+        if (!isset($GLOBALS["LEGACY_DATABASE_CONNECTION"])) {
+            $config = self::getGlobalConfig(ignoreDeprecation: true);
+            $GLOBALS["LEGACY_DATABASE_CONNECTION"] = Connection::init($config);
+        }
+
+        return $GLOBALS["LEGACY_DATABASE_CONNECTION"];
     }
 }
