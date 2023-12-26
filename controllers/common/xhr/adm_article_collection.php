@@ -17,7 +17,7 @@ if ($getTerm) {
     // Si on est sur un site editeur
     if (!empty(LegacyCodeHelper::getLegacyCurrentSite()["publisher_id"])) {
         $_REQ_SITE = "AND `publisher_id` = :publisher_id";
-        $publisherId = $_SITE->get('publisher_id');
+        $publisherId = \Biblys\Legacy\LegacyCodeHelper::getGlobalSite()->get('publisher_id');
         $params["publisher_id"] = $publisherId;
     }
 
@@ -51,7 +51,7 @@ if ($getTerm) {
         WHERE `collection_name` LIKE :query 
             ".$_REQ_SITE." 
         ORDER BY `collection_name`";
-    $collectionQuery = $_SQL->prepare($qu1);
+    $collectionQuery = \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection()->prepare($qu1);
     if ($publisherId) {
         $collectionQuery->bindParam('publisher_id', $params['publisher_id']);
     }
@@ -63,7 +63,7 @@ if ($getTerm) {
         FROM `collections` JOIN `publishers` USING(`publisher_id`) 
         WHERE ".$_REQ." ".$_REQ_SITE." 
         ORDER BY `collection_name`";
-    $collectionsQuery = $_SQL->prepare($qu2);
+    $collectionsQuery = \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection()->prepare($qu2);
     $collectionsQuery->execute(array_merge($params, $termsParams));
 
     while ($c = $collectionQuery->fetch() or $c = $collectionsQuery->fetch()) {
@@ -80,7 +80,8 @@ if ($getTerm) {
         $json[$i]["collection_id"] = $c["collection_id"];
         $json[$i]["publisher_id"] = $c["publisher_id"];
         $json[$i]["pricegrid_id"] = $c["pricegrid_id"];
-                $json[$i]["publisher_allowed_on_site"] = $_SITE->allowsPublisherWithId($c["publisher_id"]) ? 1 : 0;
+                $json[$i]["publisher_allowed_on_site"] = \Biblys\Legacy\LegacyCodeHelper::getGlobalSite()->allowsPublisherWithId
+                ($c["publisher_id"]) ? 1 : 0;
 
         $i++;
         $j_colls[] = $c["collection_id"];

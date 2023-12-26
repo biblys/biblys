@@ -24,7 +24,7 @@ if ($field && $value) {
     if (isset($req)) {
         $req = "SELECT `article_id`, `article_item`, `article_title`, `article_url`, `article_collection`, `article_number` 
             FROM `articles` WHERE `article_id` != :article_id AND (".$req.")";
-        $articles = $_SQL->prepare($req);
+        $articles = \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection()->prepare($req);
         $articles->execute($params);
 
         $i = 0;

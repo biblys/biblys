@@ -2,7 +2,7 @@
 
 use Biblys\Legacy\LegacyCodeHelper;
 
-global $_SQL;
+global \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection();
 
 $j = array();
 $req = null;
@@ -22,12 +22,12 @@ if ($_POST) {
     $elementId = $request->request->get('element_id');
     $linkToId = $request->request->get('linkto_id');
     $req = 'INSERT INTO `links`(`'.$elementType.'`, `'.$linkToType.'`) VALUES(:elementId, :linkToId)';
-    $insert = $_SQL->prepare($req);
+    $insert = \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection()->prepare($req);
     $insert->execute([
         'elementId' => $elementId,
         'linkToId' => $linkToId,
     ]);
-    $link_id = $_SQL->lastInsertId();
+    $link_id = \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection()->lastInsertId();
 
     if ($_POST["linkto_type"] == "article") {
         $article = $am->getById($linkToId);
@@ -86,7 +86,7 @@ if ($_POST) {
             }
             $req .= "`people_name` LIKE '%".$q."%'";
         }
-        $people = $_SQL->query("SELECT `people_id`, `people_name` FROM `people` WHERE ".$req." ORDER BY `people_alpha`");
+        $people = \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection()->query("SELECT `people_id`, `people_name` FROM `people` WHERE ".$req." ORDER BY `people_alpha`");
         while ($p = $people->fetch(PDO::FETCH_ASSOC)) {
             $j[$i]["label"] = $p["people_name"];
             $j[$i]["value"] = '';
@@ -102,7 +102,7 @@ if ($_POST) {
             }
             $req .= "`publisher_name` LIKE '%".$q."%'";
         }
-        $publishers = $_SQL->query("SELECT `publisher_id`, `publisher_name` FROM `publishers` WHERE ".$req." ORDER BY `publisher_name_alphabetic`");
+        $publishers = \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection()->query("SELECT `publisher_id`, `publisher_name` FROM `publishers` WHERE ".$req." ORDER BY `publisher_name_alphabetic`");
         while ($p = $publishers->fetch(PDO::FETCH_ASSOC)) {
             $j[$i]["label"] = $p["publisher_name"];
             $j[$i]["value"] = '';
@@ -118,7 +118,7 @@ if ($_POST) {
             }
             $req .= "`event_title` LIKE '%".$q."%'";
         }
-        $events = $_SQL->query("SELECT `event_id`, `event_title` FROM `events` WHERE ".$req." AND `site_id` = '". LegacyCodeHelper::getLegacyCurrentSite()["site_id"]."' ORDER BY `event_title`");
+        $events = \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection()->query("SELECT `event_id`, `event_title` FROM `events` WHERE ".$req." AND `site_id` = '". LegacyCodeHelper::getLegacyCurrentSite()["site_id"]."' ORDER BY `event_title`");
         while ($e = $events->fetch(PDO::FETCH_ASSOC)) {
             $j[$i]["label"] = $e["event_title"];
             $j[$i]["value"] = '';
@@ -134,7 +134,7 @@ if ($_POST) {
             }
             $req .= "`post_title` LIKE '%".$q."%'";
         }
-        $posts = $_SQL->query("SELECT `post_id`, `post_title` FROM `posts` WHERE ".$req." AND `site_id` = '". LegacyCodeHelper::getLegacyCurrentSite()["site_id"]."' ORDER BY `post_title`");
+        $posts = \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection()->query("SELECT `post_id`, `post_title` FROM `posts` WHERE ".$req." AND `site_id` = '". LegacyCodeHelper::getLegacyCurrentSite()["site_id"]."' ORDER BY `post_title`");
         while ($p = $posts->fetch(PDO::FETCH_ASSOC)) {
             $j[$i]["label"] = $p["post_title"];
             $j[$i]["value"] = '';

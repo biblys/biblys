@@ -13,7 +13,7 @@ if ($collection = $cm->getById($_GET['collection_id'])) {
 
     try
     {
-        $articles = $_SQL->query($query);
+        $articles = \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection()->query($query);
         $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (Exception $e)
@@ -25,7 +25,7 @@ if ($collection = $cm->getById($_GET['collection_id'])) {
 
     foreach ($articles as $a) {
 
-        $ventes = $_SQL->query("SELECT DATE_FORMAT(`stock_selling_date`,'%Y-%m-%d') AS `lastSale` FROM `stock` WHERE `article_id` = '".$a["article_id"]."' AND `site_id` = '". LegacyCodeHelper::getLegacyCurrentSite()["site_id"]."' AND `stock_condition` = 'Neuf' AND `stock_selling_date` IS NOT NULL ORDER BY `stock_selling_date` DESC");
+        $ventes = \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection()->query("SELECT DATE_FORMAT(`stock_selling_date`,'%Y-%m-%d') AS `lastSale` FROM `stock` WHERE `article_id` = '".$a["article_id"]."' AND `site_id` = '". LegacyCodeHelper::getLegacyCurrentSite()["site_id"]."' AND `stock_condition` = 'Neuf' AND `stock_selling_date` IS NOT NULL ORDER BY `stock_selling_date` DESC");
         $v = $ventes->fetch(PDO::FETCH_ASSOC);
         $a["lastSale"] = $v["lastSale"];
         $a["sales"] = $ventes->rowCount();
@@ -34,7 +34,7 @@ if ($collection = $cm->getById($_GET['collection_id'])) {
             continue;
         }
 
-        $stock = $_SQL->query("SELECT `stock_id` FROM `stock` WHERE `stock`.`article_id` = '".$a["article_id"]."' AND `stock`.`site_id` = '". LegacyCodeHelper::getLegacyCurrentSite()["site_id"]."' AND `stock_condition` = 'Neuf' AND `stock`.`stock_selling_date` IS NULL AND `stock`.`stock_return_date` IS NULL AND `stock_lost_date` IS NULL");
+        $stock = \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection()->query("SELECT `stock_id` FROM `stock` WHERE `stock`.`article_id` = '".$a["article_id"]."' AND `stock`.`site_id` = '". LegacyCodeHelper::getLegacyCurrentSite()["site_id"]."' AND `stock_condition` = 'Neuf' AND `stock`.`stock_selling_date` IS NULL AND `stock`.`stock_return_date` IS NULL AND `stock_lost_date` IS NULL");
         $a["stock"] = $stock->rowCount();
 
         $collection_articles[] = $a;

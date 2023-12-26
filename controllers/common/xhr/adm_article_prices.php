@@ -48,7 +48,7 @@ if ($request->getMethod() === 'POST') { // Creer une nouvelle categorie
     $json[$i]["none"] = 1;
     $i++;
     
-    $prices = $_SQL->prepare(
+    $prices = \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection()->prepare(
         "SELECT `price_id`, `price_cat`, `price_amount` FROM `prices` 
             WHERE `pricegrid_id` = :pricegrid_id ".$req." 
             ORDER BY `price_amount`"

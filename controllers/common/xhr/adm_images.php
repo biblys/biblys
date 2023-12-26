@@ -3,7 +3,7 @@
 	$r = array();
 	
 	require_once biblysPath().'/inc/Image.class.php';
-	$_IMAGES = new ImagesManager($_SQL);
+	$_IMAGES = new ImagesManager(\Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection());
 
 	if (isset($_POST['action']))
 	{

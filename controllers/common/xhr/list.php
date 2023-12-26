@@ -38,7 +38,7 @@ if ($query) {
             AND `stock_return_date` IS NULL
             AND `stock_lost_date` IS NULL
     ";
-    $params["site_id"] = $_SITE->get("id");
+    $params["site_id"] = \Biblys\Legacy\LegacyCodeHelper::getGlobalSite()->get("id");
 
     // EXEMPLAIRES
     $num = 0;

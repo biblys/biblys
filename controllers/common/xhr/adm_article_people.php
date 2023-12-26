@@ -42,8 +42,8 @@ if (isset($term)) {
         $i++;
     }
 
-    /** @var PDO $_SQL */
-    $people = $_SQL->prepare(
+    /** @var PDO \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection() */
+    $people = \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection()->prepare(
         "SELECT `people_id`, `people_name` FROM `people` 
         WHERE ".$req." ORDER BY `people_alpha`"
     );

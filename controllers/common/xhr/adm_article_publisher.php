@@ -5,7 +5,7 @@ $searchTerm = $request->query->get('term');
 if ($searchTerm) {
     $i = 0;
     
-    $publisher = $_SQL->prepare(
+    $publisher = \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection()->prepare(
         "SELECT `publisher_id`, `publisher_name` 
         FROM `publishers` 
         WHERE `publisher_name` LIKE :term
@@ -19,7 +19,7 @@ if ($searchTerm) {
         $json[$i]["value"] = $p["publisher_name"];
         $json[$i]["publisher_name"] = $p["publisher_name"];
         $json[$i]["publisher_id"] = $p["publisher_id"];
-                $json[$i]["allowed_on_site"] = $_SITE->allowsPublisherWithId($p["publisher_id"]) ? 1 : 0;
+                $json[$i]["allowed_on_site"] = \Biblys\Legacy\LegacyCodeHelper::getGlobalSite()->allowsPublisherWithId($p["publisher_id"]) ? 1 : 0;
         $i++;
     }
     $json[$i]["label"] = '=> Créer : '.$_GET["term"];
