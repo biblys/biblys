@@ -1,5 +1,7 @@
 <?php
 
+global $urlgenerator, $request;
+
 use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -281,6 +283,8 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     if (media_exists('article', $x['article_id']) && count($covers) < 12) {
         $covers[] = $x;
     }
+
+    $x["article_url"] = $urlgenerator->generate("article_show", ["slug" => $x["article_url"]]);
 
     // Auteurs
     $x["authors"] = authors($x["article_authors"], 'url');

@@ -2,8 +2,7 @@
 
 let listLoading = false;
 
-function loadList(start) {
-
+function loadList(start = 0) {
   listLoading = true; // Chargement en cours
 
   const articleListElement = jQuery('#articleList');
@@ -41,7 +40,7 @@ function loadList(start) {
 
           const line =
 						'<tr class="item '+article.condition+'" data-keywords="'+article.article_keywords+'">' +
-							'<td><a href="/a/'+article.article_url+'" class="article_title">'+article.article_title+'</a>'+article.cycle+'</td>'+
+							'<td><a href="'+article.article_url+'" class="article_title">'+article.article_title+'</a>'+article.cycle+'</td>'+
 							'<td title="'+article.article_authors+'">'+article.authors+'</td>' +
 							'<td class="right"><a href="/collection/'+article.collection_url+'">'+article.article_collection+'</a>'+article.number+'</td>' +
 							'<td class="right nowrap">'+article.availability+'</td>' +

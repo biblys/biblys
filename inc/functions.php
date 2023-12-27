@@ -135,7 +135,7 @@ function authors(?string $nameString, string $mode = null): ?string
                 return $name;
             }
 
-            $url = $urlgenerator->generate("legacy_people", ["slug" => $slug]);
+            $url = $urlgenerator->generate("people_show", ["slug" => $slug]);
             return "<a href=\"$url\">$name</a>";
         }, $names);
     }
