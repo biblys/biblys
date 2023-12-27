@@ -347,7 +347,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
 
     $table .= '
         <tr class="item'.$x["condition"].'" data-keywords="'.$x["article_keywords"].'">
-            <td><a href="/a/'.$x["article_url"].'" class="article_title">'.$x["article_title"].'</a>'.$x['cycle'].'</td>
+            <td><a href="'.$x["article_url"].'" class="article_title">'.$x["article_title"].'</a>'.$x['cycle'].'</td>
             <td title="'.$x["article_authors"].'">'.$x["authors"].'</td>
             <td class="right"><a href="/collection/'.$x['collection_url'].'">'.$x["article_collection"].'</a>'.$x["number"].'</td>
             <td class="right nowrap">'.$x["availability"].'</td>

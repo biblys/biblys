@@ -2,6 +2,7 @@
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Entity\Exception\CartException;
+use Propel\Runtime\Exception\PropelException;
 
 class Cart extends Entity
 {
@@ -40,8 +41,13 @@ class Cart extends Entity
         parent::set($field, $value);
     }
 
-    public function getLine($stock)
+    /**
+     * @throws PropelException
+     */
+    public function getLine($stock): string
     {
+        global $urlgenerator;
+
         $article = $stock->get('article');
 
         // Image
@@ -52,16 +58,14 @@ class Cart extends Entity
         elseif ($stock_cover->exists()) $cover = '<a href="' . $stock_cover->url() . '" rel="lightbox"><img src="' . $stock_cover->url('h100') . '" height=55 alt="' . $article->get('title') . '"></a>';
         else $cover = NULL;
 
-        // Etat
-        if ($stock->get('condition') == 'Neuf') $condition = '<span class="green">Neuf</span>';
-        else $condition = '<span class="orange">' . $stock->get('condition') . '</span>';
+        $articleUrl = $urlgenerator->generate("article_show", ["slug" => $article->get("url")]);
 
         $line = '
                 <tr id="stock_' . $stock->get('id') . '">
                     <td class="va-middle right"><a href="/pages/adm_stock?id=' . $stock->get('id') . '">' . $stock->get('id') . '</a></td>
                     <td class="va-middle center">' . $cover . '</td>
                     <td class="va-middle">
-                        <a href="/' . $article->get('url') . '">' . $article->get('title') . '</a><br>
+                        <a href="'.$articleUrl.'">' . $article->get('title') . '</a><br>
                         de ' . authors($article->get('authors')) . '<br>
                         Ed. ' . $article->get('publisher')->get('name') . '
                     </td>

@@ -140,12 +140,14 @@ return function (UrlGenerator $urlGenerator, CurrentSite $currentSite): Response
         ';
         }
 
+        $articleUrl = $urlGenerator->generate("article_show", ["slug" => $article->get("url")]);
+
         $cart_content[] = '
         <tr id="cart_tr_'.$stock->get('id').'">
             <td class="center">'.$stock->get('id').'</td>
             <td class="center">'.$cover.'</td>
             <td>
-                <a href="/'.$article->get('url').'">'.$article->get('title').'</a>'.$article_type.'<br>
+                <a href="'.$articleUrl.'">'.$article->get('title').'</a>'.$article_type.'<br>
                 de '.authors($article->get('authors')).'<br>
                 coll. '.$article->get('collection')->get('name').' '.numero($article->get('number')).'<br>
                 '.$purchased.$preorder.'

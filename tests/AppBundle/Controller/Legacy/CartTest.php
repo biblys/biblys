@@ -50,6 +50,7 @@ class CartTest extends TestCase
         $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $article = EntityFactory::createArticle([
             "article_title" => "Papeete",
+            "article_url" => "author/papeete",
             "type_id" => 1,
         ]);
         $cm = new CartManager();
