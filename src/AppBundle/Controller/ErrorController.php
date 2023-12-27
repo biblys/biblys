@@ -120,33 +120,6 @@ class ErrorController extends Controller
         NotFoundHttpException|ResourceNotFoundException|InvalidParameterException $exception
     ): Response
     {
-        global $_SQL, $_SITE;
-
-        $protocol = $request->isSecure() ? 'https' : 'http';
-
-        $currentUrl = "$protocol://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-        $parsedUrl = parse_url($currentUrl);
-        $redirectionOld = $parsedUrl["path"];
-        if (!empty($parsedUrl["query"])) {
-            $redirectionOld .= '?' . $parsedUrl["query"];
-        }
-
-        $redirections = $_SQL->prepare(
-            "SELECT `redirection_id`, `redirection_new`
-          FROM `redirections` WHERE (`redirection_old` = :redirection_old)
-              AND `redirection_old` != `redirection_new`
-              AND (`site_id` = :site_id OR `site_id` IS NULL) LIMIT 1"
-        );
-        $redirections->execute(
-            [
-                'redirection_old' => $redirectionOld,
-                'site_id' => $_SITE->get('id')
-            ]
-        );
-        if ($r = $redirections->fetch(PDO::FETCH_ASSOC)) {
-            return new RedirectResponse($r['redirection_new'], 301);
-        }
-
         if ($request->headers->get("Accept") === "application/json") {
             $response = new JsonResponse(["error" => $exception->getMessage()]);
             $response->setStatusCode(404);

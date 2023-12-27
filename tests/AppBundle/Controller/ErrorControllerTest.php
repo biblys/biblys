@@ -11,7 +11,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -23,6 +22,12 @@ require_once __DIR__ . "/../../setUp.php";
 
 class ErrorControllerTest extends TestCase
 {
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
     public function testHandlePageNotFound()
     {
         // given
@@ -41,6 +46,12 @@ class ErrorControllerTest extends TestCase
         );
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
     public function testHandlePageNotFoundAsJson()
     {
         // given
@@ -65,6 +76,12 @@ class ErrorControllerTest extends TestCase
         );
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
     public function testHandleBadRequest()
     {
         // given
@@ -88,6 +105,12 @@ class ErrorControllerTest extends TestCase
         );
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
     public function testHandleUnauthorized()
     {
         // given
@@ -145,6 +168,12 @@ class ErrorControllerTest extends TestCase
         );
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
     public function testHandleLegacyAuthException()
     {
         // given
@@ -168,6 +197,12 @@ class ErrorControllerTest extends TestCase
         );
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
     public function testMethodNotAllowed()
     {
         // given
@@ -197,6 +232,12 @@ class ErrorControllerTest extends TestCase
         );
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
     public function testHandleConflict()
     {
         // given
@@ -226,6 +267,12 @@ class ErrorControllerTest extends TestCase
         );
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
     public function testHandleServerError()
     {
         // given
