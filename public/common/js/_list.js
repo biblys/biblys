@@ -1,147 +1,153 @@
+/* global jQuery */
 
-	function loadList(start) {
+let listLoading = false;
 
-		listLoading = true; // Chargement en cours
+function loadList(start) {
 
-		// Variables de la requête
-		var query = $('#articleList').data('search_terms'); // Termes de recherche
-		var sort = $('#articleList').data('sort'); // Ordre de tri
-		var order = $('#articleList').data('order'); // Tri descendant/ascendant
-		start = typeof start !== 'undefined' ? start : '0'; // Première ligne
+  listLoading = true; // Chargement en cours
 
-		// Chargement... (remplacer ou ajouter)
-		if (start == 0) $(".list tbody").html('<tr id="loadingTr"><td colspan=6 class="center loading">Chargement...</td></tr>');
-		else $(".list tbody").append('<tr id="loadingTr"><td colspan=6 class="center loading">Chargement...</td></tr>');
+  const articleListElement = jQuery('#articleList');
 
-		// Mise à jour dynamique de l'URL
-		window.history.pushState(null, "Title", window.location.pathname+"?q="+query+"&o="+sort+"&d="+order);
+  // Variables de la requête
+  const query = articleListElement.data('search_terms'); // Termes de recherche
+  const sort = articleListElement.data('sort'); // Ordre de tri
+  const order = articleListElement.data('order'); // Tri descendant/ascendant
+  start = typeof start !== 'undefined' ? start : '0'; // Première ligne
 
-		// Requête
-		$.get(window.location.pathname+"?_FORMAT=json&q="+query+"&o="+sort+"&d="+order+"&s="+start, function(ws) {
-			listLoading = false; // Fin du chargement
-			if(ws.error) {
-				_alert("Erreur : impossible d\'afficher les résultats.");
-				$("#list_num").html("0");
-				$(".list tbody").html('<tr><td colspan=6 class="center article_title">Aucun résultat !</td></tr>');
-			} else {
-				var table = null;
-				if(ws.results == 0) {
-					$("#listCount").html("0");
-					$(".list tbody").html('<tr><td colspan=6 class="center article_title">Aucun résultat !</td></tr>');
-				} else {
-					$("#listCount").html(ws.results);
-					for(var i = 0; i < ws.articles.length; i++) {
-						var a = ws.articles[i];
+  // Chargement... (remplacer ou ajouter)
+  if (start === 0) jQuery('.list tbody').html('<tr id="loadingTr"><td colspan=6 class="center loading">Chargement...</td></tr>');
+  else jQuery('.list tbody').append('<tr id="loadingTr"><td colspan=6 class="center loading">Chargement...</td></tr>');
 
-						line =
-						'<tr class="item '+a.condition+'" data-keywords="'+a.article_keywords+'">' +
-							'<td><a href="/'+a.article_url+'" class="article_title">'+a.article_title+'</a>'+a.cycle+'</td>'+
-							'<td title="'+a.article_authors+'">'+a.authors+'</td>' +
-							'<td class="right"><a href="/collection/'+a.collection_url+'">'+a.article_collection+'</a>'+a.number+'</td>' +
-							'<td class="right nowrap">'+a.availability+'</td>' +
-							'<td>'+a.price+'</td>' +
-							a.cart + a.wish + a.alert +
+  // Mise à jour dynamique de l'URL
+  window.history.pushState(null, 'Title', window.location.pathname+'?q='+query+'&o='+sort+'&d='+order);
+
+  // Requête
+  jQuery.get(window.location.pathname+'?_FORMAT=json&q='+query+'&o='+sort+'&d='+order+'&s='+start, function(ws) {
+    listLoading = false; // Fin du chargement
+    if(ws.error) {
+      window._alert('Erreur : impossible d\'afficher les résultats.');
+      jQuery('#list_num').html('0');
+      jQuery('.list tbody').html('<tr><td colspan=6 class="center article_title">Aucun résultat !</td></tr>');
+    } else {
+      let table = null;
+      if(ws.results === 0) {
+        jQuery('#listCount').html('0');
+        jQuery('.list tbody').html('<tr><td colspan=6 class="center article_title">Aucun résultat !</td></tr>');
+      } else {
+        jQuery('#listCount').html(ws.results);
+        let article;
+        for(let i = 0; i < ws.articles.length; i++) {
+          article = ws.articles[i];
+
+          const line =
+						'<tr class="item '+article.condition+'" data-keywords="'+article.article_keywords+'">' +
+							'<td><a href="/a/'+article.article_url+'" class="article_title">'+article.article_title+'</a>'+article.cycle+'</td>'+
+							'<td title="'+article.article_authors+'">'+article.authors+'</td>' +
+							'<td class="right"><a href="/collection/'+article.collection_url+'">'+article.article_collection+'</a>'+article.number+'</td>' +
+							'<td class="right nowrap">'+article.availability+'</td>' +
+							'<td>'+article.price+'</td>' +
+							article.cart + article.wish + article.alert +
 						'</tr>';
-						table += line;
-					}
-					if(ws.nextPage != 0) $('#nextPage').data('next_page',ws.nextPage).show();
-					$('#loadingTr').remove();
-					if(start == 0) $('.list tbody').html(table);
-					else $('.list tbody').append(table);
-					$('#coverLane').html(a.covers);
-					reloadEvents();
-				}
-			}
-			$("#search input").removeClass("loading");
-		}, 'json');
-	}
-
-	function filterList() {
-		var query = $('#listSearch').val();
-		$('tr').show();
-		var videoTitle = "star wars";
-		var reQ =  RegExp(query ,"i");
-		$('tr').filter(function() {
-			if($(this).data('keywords').toLowerCase().indexOf(query.toLowerCase()) == -1) return true;
-			else return false;
-		}).hide();
-
-	}
-
-
-	$(document).ready(function() {
-
-		listLoading = false;
-
-		// Modifier le filtre
-		$('#listFilter li').click( function(event) {
-			var label = $(this).html().replace('<a>', '').replace('</a>', '');
-			var filter = $(this).data('filter');
-			$('#articleList').data('filter',filter).data('filter',filter);
-			var search_terms = $('#articleList').data('search_terms');
-			search_terms = search_terms.toString().replace(/[ ]?etat:[\S]+/g, '');
-			if (filter !== "all") search_terms += ' etat:'+filter;
-			$('#articleList').data('search_terms',search_terms);
-			$("#search input").val(search_terms);
-			$('#listFilter button').html(label+' <span class="caret"></span>');
-
-			loadList();
-		});
-
-		// Modifier l'ordre de tri
-		$('#listSort li').click( function(event) {
-			var label = $(this).html().replace('<a>', '').replace('</a>', '');
-			var sort = $(this).data('sort');
-			var order = $(this).data('order');
-			$('#articleList').data('sort',sort).data('order',order);
-			$('#listSort button').html(label+' <img src="/common/icons/dropdown.svg" width=8>');
-			loadList();
-		});
-
-		// Option par défaut
-		$('#listFilter li[data-selected=true]').each( function() {
-			var label = $(this).html();
-			$('#listFilterButton').html(label+' <img src="/common/icons/dropdown.svg" width=8>');
-			$(this).data('selected','false');
-		});
-		$('#listSort li[data-selected=true]').each( function() {
-			var label = $(this).html();
-			$('#listSortButton').html(label+' <img src="/common/icons/dropdown.svg" width=8>');
-			$(this).data('selected','false');
-		});
-
-		// Afficher plus de résultats
-		$("#nextPage").click( function() {
-			$(this).hide();
-			var nextPage = $(this).data('next_page');
-			loadList(nextPage);
-		});
-
-		// Filtrer la liste
-		$('#listSearch').keyup( function() {
-			filterList();
-		})
-
-		/* Infinite scroll */
-
-		// L'élément est-il visible par l'utilisateur ?
-		function isScrolledIntoView(elem) {
-            var docViewTop = $(window).scrollTop();
-            var docViewBottom = docViewTop + $(window).height();
-            var elemTop = $(elem).offset().top;
-            var elemBottom = elemTop + $(elem).height();
-            return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+          table += line;
         }
+        if(ws.nextPage !== 0) jQuery('#nextPage').data('next_page',ws.nextPage).show();
+        jQuery('#loadingTr').remove();
+        if(start === 0) jQuery('.list tbody').html(table);
+        else jQuery('.list tbody').append(table);
+        jQuery('#coverLane').html(article.covers);
+        window.reloadEvents();
+      }
+    }
+    jQuery('#search input').removeClass('loading');
+  }, 'json');
+}
 
-		// On surveille l'évènement scroll
-		$(window).scroll( function() {
-			// Si le dernier rang est affiché, bouton page suivante présent et pas de chargement en cours
-			if ($('#nextPage').is(':visible')) {
-				if (isScrolledIntoView($('.item:last')) && listLoading == false) {
-					$('#nextPage').hide();
-					loadList($('#nextPage').data('next_page'));
-				}
-			}
-		});
+function filterList() {
+  const query = jQuery('#listSearch').val();
+  const tableRows = jQuery('tr');
+  tableRows.show();
+  tableRows.filter(function() {
+    return jQuery(this).data('keywords').toLowerCase().indexOf(query.toLowerCase()) === -1;
+  }).hide();
 
-	});
+}
+
+
+jQuery(document).ready(function() {
+
+  listLoading = false;
+
+  // Modifier le filtre
+  jQuery('#listFilter li').click( function() {
+    const articleListElement = jQuery('#articleList');
+    const label = jQuery(this).html().replace('<a>', '').replace('</a>', '');
+    const filter = jQuery(this).data('filter');
+    articleListElement.data('filter',filter).data('filter',filter);
+    let search_terms = articleListElement.data('search_terms');
+    search_terms = search_terms.toString().replace(/ ?etat:\S+/g, '');
+    if (filter !== 'all') search_terms += ' etat:'+filter;
+    articleListElement.data('search_terms',search_terms);
+    jQuery('#search input').val(search_terms);
+    jQuery('#listFilter button').html(label+' <span class="caret"></span>');
+
+    loadList();
+  });
+
+  // Modifier l'ordre de tri
+  jQuery('#listSort li').click( function() {
+    const label = jQuery(this).html().replace('<a>', '').replace('</a>', '');
+    const sort = jQuery(this).data('sort');
+    const order = jQuery(this).data('order');
+    jQuery('#articleList').data('sort',sort).data('order',order);
+    jQuery('#listSort button').html(label+' <img src="/common/icons/dropdown.svg" width=8 alt="">');
+    loadList();
+  });
+
+  // Option par défaut
+  jQuery('#listFilter li[data-selected=true]').each( function() {
+    const label = jQuery(this).html();
+    jQuery('#listFilterButton').html(label+' <img src="/common/icons/dropdown.svg" width=8 alt="">');
+    jQuery(this).data('selected','false');
+  });
+  jQuery('#listSort li[data-selected=true]').each( function() {
+    const label = jQuery(this).html();
+    jQuery('#listSortButton').html(label+' <img src="/common/icons/dropdown.svg" width=8 alt="">');
+    jQuery(this).data('selected','false');
+  });
+
+  // Afficher plus de résultats
+  jQuery('#nextPage').click( function() {
+    jQuery(this).hide();
+    const nextPage = jQuery(this).data('next_page');
+    loadList(nextPage);
+  });
+
+  // Filtrer la liste
+  jQuery('#listSearch').keyup( function() {
+    filterList();
+  });
+
+  /* Infinite scroll */
+
+  // L'élément est-il visible par l'utilisateur ?
+  function isScrolledIntoView(elem) {
+    const docViewTop = jQuery(window).scrollTop();
+    const docViewBottom = docViewTop + jQuery(window).height();
+    const elemTop = jQuery(elem).offset().top;
+    const elemBottom = elemTop + jQuery(elem).height();
+    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+  }
+
+  // On surveille l'évènement scroll
+  jQuery(window).scroll( function() {
+    // Si le dernier rang est affiché, bouton page suivante présent et pas de chargement en cours
+    const nextPageElement = jQuery('#nextPage');
+    if (nextPageElement.is(':visible')) {
+      if (isScrolledIntoView(jQuery('.item:last')) && listLoading === false) {
+        nextPageElement.hide();
+        loadList(nextPageElement.data('next_page'));
+      }
+    }
+  });
+
+});
