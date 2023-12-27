@@ -6,6 +6,8 @@ Corrections
 
 - L'association d'un article à un billet de blog ne fonctionnait plus. C'est 
   corrigé.
+- Les anciennes urls des pages articles et contributeurs pouvaient renvoyer 
+  une erreur 404. Désormais, elles redirigent vers les urls des nouvelles pages.
 
 ### 2.75.2 (20 décembre 2013)
 

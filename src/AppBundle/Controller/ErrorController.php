@@ -9,6 +9,7 @@ use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use Model\ArticleQuery;
+use Model\PeopleQuery;
 use Propel\Runtime\Exception\PropelException;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -129,7 +130,7 @@ class ErrorController extends Controller
     {
         $currentUrlService = new CurrentUrlService($request);
         $currentUrl = $currentUrlService->getRelativeUrl();
-        $currentUrlWithoutSlash = ltrim($currentUrl, "/");
+        $currentUrlWithoutFirstSlash = ltrim($currentUrl, "/");
 
         $article = ArticleQuery::create()
             ->filterForCurrentSite($currentSite)
@@ -138,6 +139,15 @@ class ErrorController extends Controller
         if ($article) {
             $articleUrl = $urlGenerator->generate("article_show", ["slug" => $article->getSlug()]);
             return new RedirectResponse($articleUrl, 301);
+        }
+
+        $currentUrlWithoutSlash = str_replace("/", "", $currentUrl);
+        $contributor = PeopleQuery::create()
+            ->filterByUrl($currentUrlWithoutSlash)
+            ->findOne();
+        if ($contributor) {
+            $contributorUrl = $urlGenerator->generate("people_show", ["slug" => $contributor->getUrl()]);
+            return new RedirectResponse($contributorUrl, 301);
         }
 
         if ($request->headers->get("Accept") === "application/json") {

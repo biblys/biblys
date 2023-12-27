@@ -98,6 +98,45 @@ class ErrorControllerTest extends TestCase
      * @throws LoaderError
      * @throws PropelException
      */
+    public function testHandlePageNotFoundMatchingAContributorUrl()
+    {
+        // given
+        ModelFactory::createContributor(url: "great-author");
+        $controller = new ErrorController();
+
+        $request = Mockery::mock(Request::class);
+        $request->shouldReceive("getBaseUrl")->andReturn("");
+        $request->shouldReceive("getPathInfo")->andReturn("/great-author/");
+        $exception = new ResourceNotFoundException("Page not found");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")->with("publisher_filter")->andReturn(null);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("people_show", ["slug" => "great-author"])
+            ->andReturn("/p/great-author/");
+
+        // when
+        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
+
+        // then
+        $this->assertEquals(
+            301,
+            $response->getStatusCode(),
+            "responds with HTTP status 301"
+        );
+        $this->assertEquals(
+            "/p/great-author/",
+            $response->headers->get("Location"),
+            "redirects to the article url"
+        );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
     public function testHandlePageNotFoundAsJson()
     {
         // given

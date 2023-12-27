@@ -5,6 +5,7 @@ namespace Biblys\Test;
 use Biblys\Article\Type;
 use Biblys\Service\Config;
 use DateTime;
+use Exception;
 use Model\Article;
 use Model\ArticleCategory;
 use Model\AxysAccount;
@@ -35,6 +36,7 @@ class ModelFactory
 {
     /**
      * @throws PropelException
+     * @throws Exception
      */
     public static function createAdminAxysAccount(Site $site = null): AxysAccount
     {
@@ -59,15 +61,15 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createArticle(
-        string $title = "Article",
-        array $authors = [],
-        string $ean = "9781234567890",
-        string $url = "author/article",
-        int $price = 999,
-        int $typeId = Type::BOOK,
-        string $keywords = null,
-        string $lemoninkMasterId = null,
-        Publisher $publisher = null,
+        string         $title = "Article",
+        array          $authors = [],
+        string         $ean = "9781234567890",
+        string         $url = "author/article",
+        int            $price = 999,
+        int            $typeId = Type::BOOK,
+        string         $keywords = null,
+        string         $lemoninkMasterId = null,
+        Publisher      $publisher = null,
         BookCollection $collection = null,
     ): Article
     {
@@ -88,7 +90,7 @@ class ModelFactory
         $article->setCollectionId($collection->getId());
         $article->setCollectionName($collection->getName());
 
-        $authorNames = array_map(function($author) use($article) {
+        $authorNames = array_map(function ($author) use ($article) {
             self::createContribution($article, $author);
             return $author->getFullName();
         }, $authors);
@@ -117,8 +119,8 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createCart(
-        array $attributes = [],
-        Site $site = null,
+        array       $attributes = [],
+        Site        $site = null,
         AxysAccount $user = null
     ): Cart
     {
@@ -216,7 +218,7 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createOrder(
-        Site $site = null,
+        Site   $site = null,
         string $slug = null,
     ): Order
     {
@@ -248,8 +250,8 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createPayment(
-        array $attributes,
-        Site $site,
+        array  $attributes,
+        Site   $site,
         ?Order $order = null
     ): Payment
     {
@@ -268,6 +270,9 @@ class ModelFactory
 
     /**
      * @throws PropelException
+     *
+     * @deprecated ModelFactory::createPeople is deprecated.
+     *             Use ModelFactory::createContributor instead
      */
     public static function createPeople(array $attributes = []): People
     {
@@ -279,6 +284,26 @@ class ModelFactory
         $people->save();
 
         return $people;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createContributor(
+        string $firstName = "Lili",
+        string $lastName = "Raton",
+        string $gender = "N",
+        string $url = "lili-raton",
+    ): People
+    {
+        $contributor = new People();
+        $contributor->setFirstName($firstName);
+        $contributor->setLastName($lastName);
+        $contributor->setGender($gender);
+        $contributor->setUrl($url);
+        $contributor->save();
+
+        return $contributor;
     }
 
     /**
@@ -352,7 +377,7 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createSiteOption($site, $key, $value)
+    public static function createSiteOption($site, $key, $value): void
     {
         $option = new Option();
         $option->setSite($site);
@@ -444,13 +469,13 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createInvitation(
-        Site        $site = null,
-        array       $articles = [],
-        string      $email = "invited-user@biblys.fr",
-        string      $code = "ABCD1234",
-        bool        $allowsPreDownload = false,
-        DateTime    $expiresAt = null,
-        DateTime    $consumedAt = null,
+        Site     $site = null,
+        array    $articles = [],
+        string   $email = "invited-user@biblys.fr",
+        string   $code = "ABCD1234",
+        bool     $allowsPreDownload = false,
+        DateTime $expiresAt = null,
+        DateTime $consumedAt = null,
     ): Invitation
     {
 
