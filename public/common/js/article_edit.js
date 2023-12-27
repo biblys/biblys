@@ -298,8 +298,7 @@ function reloadArticleAdminEvents(scope) {
     $.get('/x/adm_links', {
       del: 1,
       link_id: link_id
-    }, function (data) {
-      var res = jQuery.parseJSON(data);
+    }, function (res) {
       if (res.error) {
         $('#link_' + link_id).fadeTo('fast', 1);
         _alert(res.error);
@@ -598,8 +597,7 @@ $(document).ready(function () {
         element_id: $('#article_id').val(),
         linkto_type: 'article',
         linkto_id: ui.item.article_id
-      }, function (data) {
-        var res = jQuery.parseJSON(data);
+      }, function (res) {
         if (res.error) {
           _alert(res.error);
         } else {

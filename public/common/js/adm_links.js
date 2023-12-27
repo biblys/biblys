@@ -5,8 +5,7 @@ function addLink(type,id) {
     element_id: ''+window.jQuery('#element').data('id')+'',
     linkto_type: ''+type+'',
     linkto_id: ''+id+''
-  }, function(data) {
-    const res = window.jQuery.parseJSON(data);
+  }, function(res) {
     if(res.error) window._alert(res.error);
     else {
       window.jQuery('#linked_'+type+'s').append(res.link);
@@ -24,8 +23,7 @@ function reloadLinksEvents(scope) {
     window.jQuery.get('/x/adm_links', {
       del: 1,
       link_id: ''+link_id+''
-    }, function(data) {
-      const res = window.jQuery.parseJSON(data);
+    }, function(res) {
       if(res.error) {
         window.jQuery('#link_'+link_id).fadeTo('fast',1);
         window._alert(res.error);

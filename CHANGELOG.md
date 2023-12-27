@@ -8,6 +8,8 @@ Corrections
   corrigé.
 - Les anciennes urls des pages articles et contributeurs pouvaient renvoyer 
   une erreur 404. Désormais, elles redirigent vers les urls des nouvelles pages.
+- L'ajout d'un article à un lot pouvait échouer sans erreur. Maintenant, ça 
+  marche.
 
 ### 2.75.2 (20 décembre 2013)
 
