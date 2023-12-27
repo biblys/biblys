@@ -2,8 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\CurrentSite;
+use Biblys\Test\ModelFactory;
 use Exception;
 use Framework\Exception\AuthException;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +17,7 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -34,15 +38,57 @@ class ErrorControllerTest extends TestCase
         $controller = new ErrorController();
         $request = new Request();
         $exception = new ResourceNotFoundException("Page not found");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")->with("publisher_filter")->andReturn(null);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
 
         // when
-        $response = $controller->exception($request, $exception);
+        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
 
         // then
         $this->assertEquals(
             404,
             $response->getStatusCode(),
             "it should response with HTTP status 404"
+        );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function testHandlePageNotFoundMatchingAnArticleUrl()
+    {
+        // given
+        ModelFactory::createArticle(url: "author/article_404");
+        $controller = new ErrorController();
+
+        $request = Mockery::mock(Request::class);
+        $request->shouldReceive("getBaseUrl")->andReturn("");
+        $request->shouldReceive("getPathInfo")->andReturn("/author/article_404");
+        $exception = new ResourceNotFoundException("Page not found");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")->with("publisher_filter")->andReturn(null);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("article_show", ["slug" => "author/article_404"])
+            ->andReturn("/a/author/article_404");
+
+        // when
+        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
+
+        // then
+        $this->assertEquals(
+            301,
+            $response->getStatusCode(),
+            "responds with HTTP status 301"
+        );
+        $this->assertEquals(
+            "/a/author/article_404",
+            $response->headers->get("Location"),
+            "redirects to the article url"
         );
     }
 
@@ -59,9 +105,12 @@ class ErrorControllerTest extends TestCase
         $request = new Request();
         $request->headers->set("Accept", "application/json");
         $exception = new ResourceNotFoundException("Page not found");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")->with("publisher_filter")->andReturn(null);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
 
         // when
-        $response = $controller->exception($request, $exception);
+        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
 
         // then
         $this->assertEquals(
@@ -88,9 +137,11 @@ class ErrorControllerTest extends TestCase
         $controller = new ErrorController();
         $request = new Request();
         $exception = new BadRequestHttpException("Bad request");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
 
         // when
-        $response = $controller->exception($request, $exception);
+        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
 
         // then
         $this->assertEquals(
@@ -117,9 +168,11 @@ class ErrorControllerTest extends TestCase
         $controller = new ErrorController();
         $request = new Request();
         $exception = new UnauthorizedHttpException("User should login.");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
 
         // when
-        $response = $controller->exception($request, $exception);
+        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
 
         // then
         $this->assertEquals(
@@ -146,9 +199,11 @@ class ErrorControllerTest extends TestCase
         $controller = new ErrorController();
         $request = new Request();
         $exception = new AccessDeniedHttpException("Access if forbidden for user.");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
 
         // when
-        $response = $controller->exception($request, $exception);
+        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
 
         // then
         $this->assertEquals(
@@ -180,9 +235,11 @@ class ErrorControllerTest extends TestCase
         $controller = new ErrorController();
         $request = new Request();
         $exception = new AuthException("Unauthorized");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
 
         // when
-        $response = $controller->exception($request, $exception);
+        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
 
         // then
         $this->assertEquals(
@@ -210,9 +267,11 @@ class ErrorControllerTest extends TestCase
         $request = new Request();
         $request->headers->set("Accept", "application/json");
         $exception = new MethodNotAllowedHttpException(["GET"],"Method PUT is not allowed");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
 
         // when
-        $response = $controller->exception($request, $exception);
+        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
 
         // then
         $this->assertEquals(
@@ -245,9 +304,11 @@ class ErrorControllerTest extends TestCase
         $request = new Request();
         $request->headers->set("Accept", "application/json");
         $exception = new ConflictHttpException("Cannot add article to cart because it is unavailable.");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
 
         // when
-        $response = $controller->exception($request, $exception);
+        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
 
         // then
         $this->assertEquals(
@@ -279,9 +340,11 @@ class ErrorControllerTest extends TestCase
         $controller = new ErrorController();
         $request = new Request();
         $exception = new Exception("An error occurred");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
 
         // when
-        $response = $controller->exception($request, $exception);
+        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
 
         // then
         $this->assertEquals(
@@ -304,9 +367,11 @@ class ErrorControllerTest extends TestCase
         $controller = new ErrorController();
         $request = new Request();
         $exception = new ServiceUnavailableHttpException(60);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
 
         // when
-        $response = $controller->exception($request, $exception);
+        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
 
         // then
         $this->assertEquals(

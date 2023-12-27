@@ -2,12 +2,13 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
 use Biblys\Service\Log;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
-use PDO;
+use Model\ArticleQuery;
 use Propel\Runtime\Exception\PropelException;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,6 +23,7 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -29,21 +31,23 @@ use Twig\Error\SyntaxError;
 class ErrorController extends Controller
 {
     /**
-     * @param Request $request
-     * @param Exception $exception
-     * @return Response
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function exception(Request $request, Exception $exception): Response
+    public function exception(
+        Request     $request,
+        CurrentSite $currentSite,
+        UrlGenerator $urlGenerator,
+        Exception   $exception
+    ): Response
     {
         if (
             is_a($exception, ResourceNotFoundException::class)
             || is_a($exception, InvalidParameterException::class)
             || is_a($exception, NotFoundHttpException::class)) {
-            return $this->handlePageNotFound($request, $exception);
+            return $this->handlePageNotFound($request, $currentSite, $urlGenerator, $exception);
         }
 
         if (is_a($exception, BadRequestHttpException::class)) {
@@ -110,16 +114,32 @@ class ErrorController extends Controller
     /**
      * HTTP 404
      *
+     * @param UrlGenerator $urlGenerator
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      */
     private function handlePageNotFound(
-        Request $request,
-        NotFoundHttpException|ResourceNotFoundException|InvalidParameterException $exception
+        Request                                                                   $request,
+        CurrentSite                                                               $currentSite,
+        UrlGenerator                                                              $urlGenerator,
+        NotFoundHttpException|ResourceNotFoundException|InvalidParameterException $exception,
     ): Response
     {
+        $currentUrlService = new CurrentUrlService($request);
+        $currentUrl = $currentUrlService->getRelativeUrl();
+        $currentUrlWithoutSlash = ltrim($currentUrl, "/");
+
+        $article = ArticleQuery::create()
+            ->filterForCurrentSite($currentSite)
+            ->filterBySlug($currentUrlWithoutFirstSlash)
+            ->findOne();
+        if ($article) {
+            $articleUrl = $urlGenerator->generate("article_show", ["slug" => $article->getSlug()]);
+            return new RedirectResponse($articleUrl, 301);
+        }
+
         if ($request->headers->get("Accept") === "application/json") {
             $response = new JsonResponse(["error" => $exception->getMessage()]);
             $response->setStatusCode(404);
@@ -150,7 +170,7 @@ class ErrorController extends Controller
      */
     private function handleServerError(Request $request, Exception $exception): Response
     {
-        $currentUrl = $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
+        $currentUrl = $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 
         Log::error("ERROR", $exception->getMessage(), [
             "URL" => $currentUrl,
@@ -213,7 +233,7 @@ class ErrorController extends Controller
         // TODO: use render and twig template
         return new Response('
             <div>
-                <h1>Une erreur '.$exceptionClass->getShortName().' est survenue.</h1>
+                <h1>Une erreur ' . $exceptionClass->getShortName() . ' est survenue.</h1>
                 <p>' . $exception->getMessage() . '</p>
             </div>
         ', $statusCode);
@@ -226,8 +246,8 @@ class ErrorController extends Controller
      * @throws PropelException
      */
     private function _customTemplateHandler(
-        int $statusCode,
-        Request $request,
+        int                         $statusCode,
+        Request                     $request,
         HttpException|AuthException $exception
     ): Response
     {

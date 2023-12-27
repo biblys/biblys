@@ -62,6 +62,7 @@ class ModelFactory
         string $title = "Article",
         array $authors = [],
         string $ean = "9781234567890",
+        string $url = "author/article",
         int $price = 999,
         int $typeId = Type::BOOK,
         string $keywords = null,
@@ -73,6 +74,7 @@ class ModelFactory
         $article = new Article();
         $article->setTitle($title);
         $article->setEan($ean);
+        $article->setUrl($url);
         $article->setPrice($price);
         $article->setKeywords($keywords ?? $title);
         $article->setTypeId($typeId);
