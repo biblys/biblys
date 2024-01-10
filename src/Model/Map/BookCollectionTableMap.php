@@ -405,6 +405,13 @@ class BookCollectionTableMap extends TableMap
     1 => ':collection_id',
   ),
 ), null, null, 'Articles', false);
+        $this->addRelation('SpecialOffer', '\\Model\\SpecialOffer', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':target_collection_id',
+    1 => ':collection_id',
+  ),
+), null, null, 'SpecialOffers', false);
     }
 
     /**

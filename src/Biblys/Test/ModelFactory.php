@@ -29,6 +29,7 @@ use Model\Session;
 use Model\ShippingFee;
 use Model\Site;
 use Model\SiteQuery;
+use Model\SpecialOffer;
 use Model\Stock;
 use Propel\Runtime\Exception\PropelException;
 
@@ -523,6 +524,32 @@ class ModelFactory
         $invitation->save();
 
         return $invitation;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createSpecialOffer(
+        Site $site,
+        string $name = "Offre spéciale",
+        BookCollection $targetCollection = null,
+        Article $freeArticle = null,
+        int $targetQuantity = 2,
+        DateTime $startDate = new DateTime("- 1 day"),
+        DateTime $endDate = new DateTime("+ 1 day"),
+    ): SpecialOffer
+    {
+        $specialOffer = new SpecialOffer();
+        $specialOffer->setSite($site);
+        $specialOffer->setName($name);
+        $specialOffer->setTargetCollection($targetCollection ?? self::createCollection());
+        $specialOffer->setTargetQuantity($targetQuantity);
+        $specialOffer->setFreeArticle($freeArticle ?? ModelFactory::createArticle());
+        $specialOffer->setStartDate($startDate);
+        $specialOffer->setEndDate($endDate);
+        $specialOffer->save();
+
+        return $specialOffer;
     }
 
 }

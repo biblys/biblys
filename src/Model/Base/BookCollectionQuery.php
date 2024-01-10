@@ -75,7 +75,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookCollectionQuery rightJoinWithArticle() Adds a RIGHT JOIN clause and with to the query using the Article relation
  * @method     ChildBookCollectionQuery innerJoinWithArticle() Adds a INNER JOIN clause and with to the query using the Article relation
  *
- * @method     \Model\ArticleQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildBookCollectionQuery leftJoinSpecialOffer($relationAlias = null) Adds a LEFT JOIN clause to the query using the SpecialOffer relation
+ * @method     ChildBookCollectionQuery rightJoinSpecialOffer($relationAlias = null) Adds a RIGHT JOIN clause to the query using the SpecialOffer relation
+ * @method     ChildBookCollectionQuery innerJoinSpecialOffer($relationAlias = null) Adds a INNER JOIN clause to the query using the SpecialOffer relation
+ *
+ * @method     ChildBookCollectionQuery joinWithSpecialOffer($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the SpecialOffer relation
+ *
+ * @method     ChildBookCollectionQuery leftJoinWithSpecialOffer() Adds a LEFT JOIN clause and with to the query using the SpecialOffer relation
+ * @method     ChildBookCollectionQuery rightJoinWithSpecialOffer() Adds a RIGHT JOIN clause and with to the query using the SpecialOffer relation
+ * @method     ChildBookCollectionQuery innerJoinWithSpecialOffer() Adds a INNER JOIN clause and with to the query using the SpecialOffer relation
+ *
+ * @method     \Model\ArticleQuery|\Model\SpecialOfferQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildBookCollection|null findOne(?ConnectionInterface $con = null) Return the first ChildBookCollection matching the query
  * @method     ChildBookCollection findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildBookCollection matching the query, or a new ChildBookCollection object populated from the query conditions when no match is found
@@ -1188,6 +1198,179 @@ abstract class BookCollectionQuery extends ModelCriteria
     {
         /** @var $q \Model\ArticleQuery */
         $q = $this->useInQuery('Article', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\SpecialOffer object
+     *
+     * @param \Model\SpecialOffer|ObjectCollection $specialOffer the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterBySpecialOffer($specialOffer, ?string $comparison = null)
+    {
+        if ($specialOffer instanceof \Model\SpecialOffer) {
+            $this
+                ->addUsingAlias(BookCollectionTableMap::COL_COLLECTION_ID, $specialOffer->getTargetCollectionId(), $comparison);
+
+            return $this;
+        } elseif ($specialOffer instanceof ObjectCollection) {
+            $this
+                ->useSpecialOfferQuery()
+                ->filterByPrimaryKeys($specialOffer->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterBySpecialOffer() only accepts arguments of type \Model\SpecialOffer or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the SpecialOffer relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinSpecialOffer(?string $relationAlias = null, ?string $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('SpecialOffer');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'SpecialOffer');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the SpecialOffer relation SpecialOffer object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\SpecialOfferQuery A secondary query class using the current class as primary query
+     */
+    public function useSpecialOfferQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinSpecialOffer($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'SpecialOffer', '\Model\SpecialOfferQuery');
+    }
+
+    /**
+     * Use the SpecialOffer relation SpecialOffer object
+     *
+     * @param callable(\Model\SpecialOfferQuery):\Model\SpecialOfferQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withSpecialOfferQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::INNER_JOIN
+    ) {
+        $relatedQuery = $this->useSpecialOfferQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to SpecialOffer table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\SpecialOfferQuery The inner query object of the EXISTS statement
+     */
+    public function useSpecialOfferExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\SpecialOfferQuery */
+        $q = $this->useExistsQuery('SpecialOffer', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to SpecialOffer table for a NOT EXISTS query.
+     *
+     * @see useSpecialOfferExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SpecialOfferQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useSpecialOfferNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\SpecialOfferQuery */
+        $q = $this->useExistsQuery('SpecialOffer', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to SpecialOffer table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\SpecialOfferQuery The inner query object of the IN statement
+     */
+    public function useInSpecialOfferQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\SpecialOfferQuery */
+        $q = $this->useInQuery('SpecialOffer', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to SpecialOffer table for a NOT IN query.
+     *
+     * @see useSpecialOfferInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SpecialOfferQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInSpecialOfferQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\SpecialOfferQuery */
+        $q = $this->useInQuery('SpecialOffer', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 

@@ -769,6 +769,13 @@ class SiteTableMap extends TableMap
     1 => ':site_id',
   ),
 ), null, null, 'Sessions', false);
+        $this->addRelation('SpecialOffer', '\\Model\\SpecialOffer', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, 'SpecialOffers', false);
         $this->addRelation('Stock', '\\Model\\Stock', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

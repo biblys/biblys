@@ -19,12 +19,15 @@ use Model\Publisher as ChildPublisher;
 use Model\PublisherQuery as ChildPublisherQuery;
 use Model\Role as ChildRole;
 use Model\RoleQuery as ChildRoleQuery;
+use Model\SpecialOffer as ChildSpecialOffer;
+use Model\SpecialOfferQuery as ChildSpecialOfferQuery;
 use Model\Stock as ChildStock;
 use Model\StockQuery as ChildStockQuery;
 use Model\Map\ArticleTableMap;
 use Model\Map\InvitationsArticlesTableMap;
 use Model\Map\LinkTableMap;
 use Model\Map\RoleTableMap;
+use Model\Map\SpecialOfferTableMap;
 use Model\Map\StockTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -673,6 +676,13 @@ abstract class Article implements ActiveRecordInterface
     protected $collRolesPartial;
 
     /**
+     * @var        ObjectCollection|ChildSpecialOffer[] Collection to store aggregation of ChildSpecialOffer objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildSpecialOffer> Collection to store aggregation of ChildSpecialOffer objects.
+     */
+    protected $collSpecialOffers;
+    protected $collSpecialOffersPartial;
+
+    /**
      * @var        ObjectCollection|ChildStock[] Collection to store aggregation of ChildStock objects.
      * @phpstan-var ObjectCollection&\Traversable<ChildStock> Collection to store aggregation of ChildStock objects.
      */
@@ -725,6 +735,13 @@ abstract class Article implements ActiveRecordInterface
      * @phpstan-var ObjectCollection&\Traversable<ChildRole>
      */
     protected $rolesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildSpecialOffer[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildSpecialOffer>
+     */
+    protected $specialOffersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -3909,6 +3926,8 @@ abstract class Article implements ActiveRecordInterface
 
             $this->collRoles = null;
 
+            $this->collSpecialOffers = null;
+
             $this->collStocks = null;
 
             $this->collInvitations = null;
@@ -4141,6 +4160,23 @@ abstract class Article implements ActiveRecordInterface
 
             if ($this->collRoles !== null) {
                 foreach ($this->collRoles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->specialOffersScheduledForDeletion !== null) {
+                if (!$this->specialOffersScheduledForDeletion->isEmpty()) {
+                    \Model\SpecialOfferQuery::create()
+                        ->filterByPrimaryKeys($this->specialOffersScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->specialOffersScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collSpecialOffers !== null) {
+                foreach ($this->collSpecialOffers as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -5260,6 +5296,21 @@ abstract class Article implements ActiveRecordInterface
 
                 $result[$key] = $this->collRoles->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collSpecialOffers) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'specialOffers';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'special_offerss';
+                        break;
+                    default:
+                        $key = 'SpecialOffers';
+                }
+
+                $result[$key] = $this->collSpecialOffers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collStocks) {
 
                 switch ($keyType) {
@@ -6271,6 +6322,12 @@ abstract class Article implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getSpecialOffers() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addSpecialOffer($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getStocks() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addStock($relObj->copy($deepCopy));
@@ -6430,6 +6487,10 @@ abstract class Article implements ActiveRecordInterface
         }
         if ('Role' === $relationName) {
             $this->initRoles();
+            return;
+        }
+        if ('SpecialOffer' === $relationName) {
+            $this->initSpecialOffers();
             return;
         }
         if ('Stock' === $relationName) {
@@ -7263,6 +7324,297 @@ abstract class Article implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collSpecialOffers collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addSpecialOffers()
+     */
+    public function clearSpecialOffers()
+    {
+        $this->collSpecialOffers = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collSpecialOffers collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialSpecialOffers($v = true): void
+    {
+        $this->collSpecialOffersPartial = $v;
+    }
+
+    /**
+     * Initializes the collSpecialOffers collection.
+     *
+     * By default this just sets the collSpecialOffers collection to an empty array (like clearcollSpecialOffers());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initSpecialOffers(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collSpecialOffers && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = SpecialOfferTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collSpecialOffers = new $collectionClassName;
+        $this->collSpecialOffers->setModel('\Model\SpecialOffer');
+    }
+
+    /**
+     * Gets an array of ChildSpecialOffer objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildArticle is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildSpecialOffer[] List of ChildSpecialOffer objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildSpecialOffer> List of ChildSpecialOffer objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getSpecialOffers(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collSpecialOffersPartial && !$this->isNew();
+        if (null === $this->collSpecialOffers || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collSpecialOffers) {
+                    $this->initSpecialOffers();
+                } else {
+                    $collectionClassName = SpecialOfferTableMap::getTableMap()->getCollectionClassName();
+
+                    $collSpecialOffers = new $collectionClassName;
+                    $collSpecialOffers->setModel('\Model\SpecialOffer');
+
+                    return $collSpecialOffers;
+                }
+            } else {
+                $collSpecialOffers = ChildSpecialOfferQuery::create(null, $criteria)
+                    ->filterByFreeArticle($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collSpecialOffersPartial && count($collSpecialOffers)) {
+                        $this->initSpecialOffers(false);
+
+                        foreach ($collSpecialOffers as $obj) {
+                            if (false == $this->collSpecialOffers->contains($obj)) {
+                                $this->collSpecialOffers->append($obj);
+                            }
+                        }
+
+                        $this->collSpecialOffersPartial = true;
+                    }
+
+                    return $collSpecialOffers;
+                }
+
+                if ($partial && $this->collSpecialOffers) {
+                    foreach ($this->collSpecialOffers as $obj) {
+                        if ($obj->isNew()) {
+                            $collSpecialOffers[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collSpecialOffers = $collSpecialOffers;
+                $this->collSpecialOffersPartial = false;
+            }
+        }
+
+        return $this->collSpecialOffers;
+    }
+
+    /**
+     * Sets a collection of ChildSpecialOffer objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $specialOffers A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setSpecialOffers(Collection $specialOffers, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildSpecialOffer[] $specialOffersToDelete */
+        $specialOffersToDelete = $this->getSpecialOffers(new Criteria(), $con)->diff($specialOffers);
+
+
+        $this->specialOffersScheduledForDeletion = $specialOffersToDelete;
+
+        foreach ($specialOffersToDelete as $specialOfferRemoved) {
+            $specialOfferRemoved->setFreeArticle(null);
+        }
+
+        $this->collSpecialOffers = null;
+        foreach ($specialOffers as $specialOffer) {
+            $this->addSpecialOffer($specialOffer);
+        }
+
+        $this->collSpecialOffers = $specialOffers;
+        $this->collSpecialOffersPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related SpecialOffer objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related SpecialOffer objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countSpecialOffers(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collSpecialOffersPartial && !$this->isNew();
+        if (null === $this->collSpecialOffers || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collSpecialOffers) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getSpecialOffers());
+            }
+
+            $query = ChildSpecialOfferQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByFreeArticle($this)
+                ->count($con);
+        }
+
+        return count($this->collSpecialOffers);
+    }
+
+    /**
+     * Method called to associate a ChildSpecialOffer object to this object
+     * through the ChildSpecialOffer foreign key attribute.
+     *
+     * @param ChildSpecialOffer $l ChildSpecialOffer
+     * @return $this The current object (for fluent API support)
+     */
+    public function addSpecialOffer(ChildSpecialOffer $l)
+    {
+        if ($this->collSpecialOffers === null) {
+            $this->initSpecialOffers();
+            $this->collSpecialOffersPartial = true;
+        }
+
+        if (!$this->collSpecialOffers->contains($l)) {
+            $this->doAddSpecialOffer($l);
+
+            if ($this->specialOffersScheduledForDeletion and $this->specialOffersScheduledForDeletion->contains($l)) {
+                $this->specialOffersScheduledForDeletion->remove($this->specialOffersScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildSpecialOffer $specialOffer The ChildSpecialOffer object to add.
+     */
+    protected function doAddSpecialOffer(ChildSpecialOffer $specialOffer): void
+    {
+        $this->collSpecialOffers[]= $specialOffer;
+        $specialOffer->setFreeArticle($this);
+    }
+
+    /**
+     * @param ChildSpecialOffer $specialOffer The ChildSpecialOffer object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeSpecialOffer(ChildSpecialOffer $specialOffer)
+    {
+        if ($this->getSpecialOffers()->contains($specialOffer)) {
+            $pos = $this->collSpecialOffers->search($specialOffer);
+            $this->collSpecialOffers->remove($pos);
+            if (null === $this->specialOffersScheduledForDeletion) {
+                $this->specialOffersScheduledForDeletion = clone $this->collSpecialOffers;
+                $this->specialOffersScheduledForDeletion->clear();
+            }
+            $this->specialOffersScheduledForDeletion[]= clone $specialOffer;
+            $specialOffer->setFreeArticle(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Article is new, it will return
+     * an empty collection; or if this Article has previously
+     * been saved, it will retrieve related SpecialOffers from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Article.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildSpecialOffer[] List of ChildSpecialOffer objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildSpecialOffer}> List of ChildSpecialOffer objects
+     */
+    public function getSpecialOffersJoinSite(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildSpecialOfferQuery::create(null, $criteria);
+        $query->joinWith('Site', $joinBehavior);
+
+        return $this->getSpecialOffers($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Article is new, it will return
+     * an empty collection; or if this Article has previously
+     * been saved, it will retrieve related SpecialOffers from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Article.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildSpecialOffer[] List of ChildSpecialOffer objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildSpecialOffer}> List of ChildSpecialOffer objects
+     */
+    public function getSpecialOffersJoinTargetCollection(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildSpecialOfferQuery::create(null, $criteria);
+        $query->joinWith('TargetCollection', $joinBehavior);
+
+        return $this->getSpecialOffers($query, $con);
+    }
+
+    /**
      * Clears out the collStocks collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -7953,6 +8305,11 @@ abstract class Article implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collSpecialOffers) {
+                foreach ($this->collSpecialOffers as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collStocks) {
                 foreach ($this->collStocks as $o) {
                     $o->clearAllReferences($deep);
@@ -7968,6 +8325,7 @@ abstract class Article implements ActiveRecordInterface
         $this->collInvitationsArticless = null;
         $this->collLinks = null;
         $this->collRoles = null;
+        $this->collSpecialOffers = null;
         $this->collStocks = null;
         $this->collInvitations = null;
         $this->aPublisher = null;

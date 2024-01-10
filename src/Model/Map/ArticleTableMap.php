@@ -1273,6 +1273,13 @@ class ArticleTableMap extends TableMap
     1 => ':article_id',
   ),
 ), null, null, 'Roles', false);
+        $this->addRelation('SpecialOffer', '\\Model\\SpecialOffer', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':free_article_id',
+    1 => ':article_id',
+  ),
+), null, null, 'SpecialOffers', false);
         $this->addRelation('Stock', '\\Model\\Stock', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

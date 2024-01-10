@@ -1390,6 +1390,35 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
+  <table name="special_offers" idMethod="native" phpName="SpecialOffer">
+    <column name="id" type="INTEGER" size="10" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" required="true" type="INTEGER" size="10"/>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
+    <column name="name" required="true" type="VARCHAR" size="128"/>
+    <column name="description" type="LONGVARCHAR" />
+    <column name="target_collection_id" required="true" type="INTEGER" size="10"/>
+    <foreign-key foreignTable="collections" phpName="TargetCollection" skipSql="true">
+      <reference local="target_collection_id" foreign="collection_id"/>
+    </foreign-key>
+    <column name="target_quantity" required="true" type="INTEGER" size="10"/>
+    <column name="free_article_id" required="true" type="INTEGER" size="10"/>
+    <foreign-key foreignTable="articles" phpName="FreeArticle" skipSql="true">
+      <reference local="free_article_id" foreign="article_id"/>
+    </foreign-key>
+    <column name="start_date" required="true" type="TIMESTAMP"/>
+    <column name="end_date" required="true" type="TIMESTAMP"/>
+    <column name="created_at" required="true" type="TIMESTAMP"/>
+    <column name="updated_at" required="true" type="TIMESTAMP"/>
+    <behavior name="timestampable">
+      <parameter name="create_column" value="created_at" />
+      <parameter name="update_column" value="updated_at" />
+    </behavior>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
   <table name="stock" idMethod="native" phpName="Stock">
     <column name="stock_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="TINYINT" sqlType="tinyint(4) unsigned"/>
