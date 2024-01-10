@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 2.76.0 (DEV)
+## 2.76.0 (10 janvier 2024)
 
 Améliorations
 
@@ -19,7 +19,7 @@ Corrections
 - L'ajout d'un article à un lot pouvait échouer sans erreur. Maintenant, ça 
   marche.
 
-### 2.75.2 (20 décembre 2013)
+### 2.75.2 (20 décembre 2023)
 
 Corrections
 
