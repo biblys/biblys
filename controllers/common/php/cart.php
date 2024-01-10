@@ -4,15 +4,13 @@
 
 global $urlgenerator;
 
+use Biblys\Legacy\CartHelpers;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
-use Model\ArticleCategoryQuery;
-use Model\ArticleQuery;
-use Model\LinkQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
@@ -439,62 +437,7 @@ return function (
             $content .= '<p class="warning">Certains des livres de votre panier (<span class="fa fa-square lightblue" title="Sur commande"></span>) ne sont pas disponibles en stock et doivent être commandés. L\'expédition de votre commande peut être retardée de 72h.</p>';
         }
 
-        $cartSuggestionsRayonId = $currentSite->getOption("cart_suggestions_rayon_id");
-        if ($cartSuggestionsRayonId) {
-            $articleCategory = ArticleCategoryQuery::create()
-                ->filterBySite($currentSite->getSite())
-                ->findPk($cartSuggestionsRayonId);
-            $articleCategoryLinks = LinkQuery::create()
-                ->filterByArticleCategory($articleCategory)
-                ->find();
-            $articleIds = array_map(function ($link) {
-                return $link->getArticleId();
-            }, $articleCategoryLinks->getData());
-            $articles = ArticleQuery::create()
-                ->filterById($articleIds)
-                ->find();
-            if ($articles) {
-                $content .= '
-                        <h3>'.$articleCategory->getName().'</h3>
-                        <div class="cart-suggestions">
-                    ';
-                /** @var \Model\Article $article */
-                foreach ($articles as $article) {
-                    $cartUrl = $urlGenerator->generate("cart_add_article", ["articleId" => $article->getId()]);
-                    $coverHtml = "";
-                    if ($imagesService->articleHasCoverImage($article)) {
-                        $articleCover = $imagesService->getCoverImageForArticle($article);
-                        $coverHtml = '
-                                <div class="cart-suggestions_article_cover">
-                                    <a href="'.$urlGenerator->generate("article_show", ["slug" => $article->getUrl()]).'">
-                                        <img 
-                                            src="'.$articleCover->getUrl().'" 
-                                            alt="' .$article->getTitle().'"
-                                            title="'.$article->getTitle().'" 
-                                        />
-                                    </a>
-                                </div>';
-                    }
-                    $content .= '
-                            <article class="cart-suggestions_article">
-                                '.$coverHtml.'
-                                <div class="cart_suggestions_article_infos">
-                                    <strong>'.currency($article->getPrice(), cents: true) .'</strong>
-                                    <form class="form-inline" action="'. $cartUrl .'" method="post"> 
-                                        <button type="submit"
-                                            class="btn btn-primary btn-sm"
-                                            aria-label="Ajouter au panier"
-                                        >
-                                            <span class="fa fa-shopping-cart"></span>
-                                        </button>
-                                    </form>
-                                </div>
-                            </article>
-                        ';
-                }
-                $content .= '</div><br />';
-            }
-        }
+        $content .= CartHelpers::getCartSuggestions($currentSite, $urlGenerator, $imagesService);
 
         $content .= '
             <form id="validate_cart" action="order_delivery" method="get">
