@@ -23,6 +23,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
  * @throws InvalidDateFormatException
  * @throws PropelException
  */
+
 return function (
     Request $request,
     Config $config,
@@ -470,42 +471,7 @@ return function (
                 $plus30 = null;
             }
 
-            $freeShippingTargetAmount = $currentSite->getOption("free_shipping_target_amount");
-            $cartNeedsShipping = $cart->needsShipping();
-            $freeShippingNotice = null;
-            if ($cartNeedsShipping && $freeShippingTargetAmount) {
-                $missingAmount = $freeShippingTargetAmount - $Total;
-                $formattedTargetAmount = currency($freeShippingTargetAmount / 100);
-                if ($missingAmount <= 0) {
-                    $freeShippingSuccessText = $currentSite->getOption(
-                        "free_shipping_success_text",
-                        "Vous bénéficiez de la livraison offerte !"
-                    );
-                    $freeShippingNotice = '
-                        <p class="alert alert-success">
-                            <span class="fa fa-check-circle"></span> 
-                            ' . $freeShippingSuccessText . '
-                        </p>
-                    ';
-                } else {
-                    $freeShippingInviteText = $currentSite->getOption(
-                        "free_shipping_invite_text",
-                        "Livraison offerte à partir de $formattedTargetAmount d'achat"
-                    );
-                    $freeShippingNotice = '
-                        <div class="alert alert-info">
-                            <h3>
-                                <span class="fa fa-gift"></span> 
-                                '.$freeShippingInviteText.'
-                            </h3>
-                            <progress value="' . $Total . '" max="' . $freeShippingTargetAmount . '"></progress>
-                            <p>
-                                Ajoutez encore <strong>' . currency($missingAmount / 100) . '</strong> à votre panier pour en bénéficier !
-                            </p>
-                        </div>
-                    ';
-                }
-            }
+            $freeShippingNotice = CartHelpers::getFreeShippingNotice($currentSite, $cart, $Total);
 
             $content .= '
                 <h3>Mode d\'expédition</h3>

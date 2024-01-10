@@ -4,6 +4,8 @@ namespace Biblys\Legacy;
 
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Images\ImagesService;
+use Cart;
+use Entity;
 use Model\Article;
 use Model\ArticleCategoryQuery;
 use Model\ArticleQuery;
@@ -83,5 +85,52 @@ class CartHelpers
         $cartSuggestions .= '</div><br />';
 
         return $cartSuggestions;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function getFreeShippingNotice(CurrentSite $currentSite, Entity|Cart $cart, mixed $cartTotal): string
+    {
+        if (!$cart->needsShipping()) {
+            return "";
+        }
+
+        $freeShippingTargetAmount = $currentSite->getOption("free_shipping_target_amount");
+        if (!$freeShippingTargetAmount) {
+            return "";
+        }
+
+        $missingAmount = $freeShippingTargetAmount - $cartTotal;
+        $formattedTargetAmount = currency($freeShippingTargetAmount / 100);
+        if ($missingAmount <= 0) {
+            $freeShippingSuccessText = $currentSite->getOption(
+                "free_shipping_success_text",
+                "Vous bénéficiez de la livraison offerte !"
+            );
+            return '
+                    <p class="alert alert-success">
+                        <span class="fa fa-check-circle"></span> 
+                        ' . $freeShippingSuccessText . '
+                    </p>
+                ';
+        } else {
+            $freeShippingInviteText = $currentSite->getOption(
+                "free_shipping_invite_text",
+                "Livraison offerte à partir de $formattedTargetAmount d'achat"
+            );
+            return '
+                    <div class="alert alert-info">
+                        <h3>
+                            <span class="fa fa-gift"></span> 
+                            ' . $freeShippingInviteText . '
+                        </h3>
+                        <progress value="' . $cartTotal . '" max="' . $freeShippingTargetAmount . '"></progress>
+                        <p>
+                            Ajoutez encore <strong>' . currency($missingAmount / 100) . '</strong> à votre panier pour en bénéficier !
+                        </p>
+                    </div>
+                ';
+        }
     }
 }
