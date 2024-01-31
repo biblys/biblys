@@ -189,6 +189,7 @@ if ($request->getMethod() === 'POST') {
             if ($order) {
                 $om->updateFromStock($order);
             }
+            $session->getFlashBag()->add('success', "Le montant de la commande n° $orderId a été mis à jour.");
         }
 
         // Update related campaign

@@ -114,6 +114,8 @@ class EntityFactory
 
         $country = self::createCountry();
         $order->set("country_id", $country->get("id"));
+        $order->set("order_shipping", $attributes["order_shipping"] ?? 0);
+        $order->set("order_payment_date", $attributes["order_payment_date"] ?? null);
 
         return $order;
     }

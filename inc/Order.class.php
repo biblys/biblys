@@ -769,6 +769,10 @@ class OrderManager extends EntityManager
 
         $order->set('order_amount', $order_amount);
 
+        if (!$order->isPayed()) {
+            $order->set("order_amount_tobepaid", $order_amount + $order->get('order_shipping'));
+        }
+
         /** @var Order $order */
         $order = $this->update($order);
 

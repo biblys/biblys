@@ -534,7 +534,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
     {
         // given
         $om = new OrderManager();
-        $order = $om->create();
+        $order = EntityFactory::createOrder(["order_shipping" => 247]);
         $stock = EntityFactory::createStock(["stock_selling_price" => 1000]);
         $om->addStock($order, $stock);
 
@@ -544,9 +544,42 @@ class OrderTest extends PHPUnit\Framework\TestCase
         // then
         $updatedOrder = $om->getById($order->get("id"));
         $this->assertEquals(
-            $updatedOrder->get("order_amount"),
             1000,
-            "updates order amount"
+            $updatedOrder->get("order_amount"),
+            "updates order's amount"
+        );
+        $this->assertEquals(
+            1247,
+            $updatedOrder->get("order_amount_tobepaid"),
+            "updates order's amount to be paid including shipping fee"
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testUpdateFromStockIfOrderIsPayed()
+    {
+        // given
+        $om = new OrderManager();
+        $stock = EntityFactory::createStock(["stock_selling_price" => 1000]);
+        $order = EntityFactory::createOrder(["order_shipping" => 247, "order_payment_date" => "2016-02-15 00:10:00"]);
+        $om->addStock($order, $stock);
+
+        // when
+        $om->updateFromStock($order);
+
+        // then
+        $updatedOrder = $om->getById($order->get("id"));
+        $this->assertEquals(
+            1000,
+            $updatedOrder->get("order_amount"),
+            "updates order's amount"
+        );
+        $this->assertEquals(
+            0,
+            $updatedOrder->get("order_amount_tobepaid"),
+            "does not updates order's amount to be paid"
         );
     }
 }

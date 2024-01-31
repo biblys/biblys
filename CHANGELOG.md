@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.77.0 (DEV)
+
+Améliorations
+
+- Lors de la modification du prix d'un exemplaire vendu, le montant de la
+  commande sera mis à jour si elle n'a pas encore été payée.
+
 ## 2.76.0 (10 janvier 2024)
 
 Améliorations
