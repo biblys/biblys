@@ -526,4 +526,27 @@ class OrderTest extends PHPUnit\Framework\TestCase
 
         $this->assertFalse($Orderxists);
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testUpdateFromStock()
+    {
+        // given
+        $om = new OrderManager();
+        $order = $om->create();
+        $stock = EntityFactory::createStock(["stock_selling_price" => 1000]);
+        $om->addStock($order, $stock);
+
+        // when
+        $om->updateFromStock($order);
+
+        // then
+        $updatedOrder = $om->getById($order->get("id"));
+        $this->assertEquals(
+            $updatedOrder->get("order_amount"),
+            1000,
+            "updates order amount"
+        );
+    }
 }

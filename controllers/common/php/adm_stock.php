@@ -181,6 +181,16 @@ if ($request->getMethod() === 'POST') {
         $stock = $sm->calculateTax($stock);
         $sm->update($stock);
 
+        // Update related order
+        $orderId = $stock->get("order_id");
+        if ($orderId) {
+            /** @var Order $order */
+            $order = $om->getById($orderId);
+            if ($order) {
+                $om->updateFromStock($order);
+            }
+        }
+
         // Update related campaign
         if ($campaign_id) {
             $cfcm = new CFCampaignManager();
