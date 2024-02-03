@@ -28,7 +28,8 @@ if ($collection) {
     if (LegacyCodeHelper::getGlobalSite()->has("publisher")) {
         $pageTitle .= ' ('.$c["collection_publisher"].')';
     }
-    $request->attributes->set("page_title", $pageTitle);
+    $collectionTitle = $c["collection_name"];
+    $request->attributes->set("page_title", "Collection « $collectionTitle »");
 
     $content .= '
         <h2>Collection &laquo;&nbsp;'.$c["collection_name"].'&nbsp;&raquo;</h2>
