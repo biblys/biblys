@@ -448,7 +448,7 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
 
             <div id="listSort" class="btn-group">
                 <button class="btn btn-default btn-sm" dropdown-toggle" data-toggle="dropdown">
-                    date de parution <span class="caret"></span>
+                    date d\'ajout au stock <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
                     <li class="pointer" data-sort="article_title_alphabetic" data-order=0'.$sel['article_title_alphabetic0'].'><a>titre</a></li>
