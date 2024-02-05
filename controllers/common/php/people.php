@@ -130,8 +130,6 @@ return function (
 
     $_REQ = "`article_links` LIKE '%[people:" . $people->getId() . "]%'";
 
-    $_REQ_ORDER = "ORDER BY `article_copyright` DESC, `article_pubdate` DESC";
-
     $path = get_controller_path('_list');
     $content .= require_once $path;
 

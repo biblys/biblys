@@ -39,10 +39,5 @@ if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
 
 $_REQ = "`cycle_id` = '".$cycle->get('id')."'";
 
-// Trier par tome
-$defaultOrderBy = 'article_tome';
-$defaultSortOrder = 0;
-$_REQ_ORDER = 'ORDER BY CAST(`article_tome` AS SIGNED), `article_pubdate`';
-
 $path = get_controller_path('_list');
 include $path;

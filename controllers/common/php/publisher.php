@@ -49,8 +49,6 @@ if (!$publisher) {
 
     // Catalogue
     $_REQ = "`articles`.`publisher_id` = '".$p["publisher_id"]."'";
-    if($p["publisher_order_by"] == "article_pubdate") $_REQ_ORDER = 'ORDER BY `article_pubdate` DESC';
-    else  $_REQ_ORDER = 'ORDER BY `'.$p["publisher_order_by"].'`';
 
     $path = get_controller_path('_list');
     include($path);

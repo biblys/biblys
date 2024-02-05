@@ -62,11 +62,6 @@ if ($collection) {
 
     $_REQ = "`collection_id` = '".$c["collection_id"]."'";
 
-    // Trier par numero de collection
-    $defaultOrderBy = 'article_number';
-    $defaultSortOrder = 0;
-    $_REQ_ORDER = 'ORDER BY `article_number`, `article_pubdate`';
-
     $path = get_controller_path('_list');
     $content .= include($path);
 } else {
