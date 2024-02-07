@@ -23,6 +23,7 @@ use Model\AuthenticationMethod;
 use Model\AuthenticationMethodQuery;
 use Model\CartQuery;
 use Model\CustomerQuery;
+use Model\Map\UserTableMap;
 use Model\OptionQuery;
 use Model\OrderQuery;
 use Model\PostQuery;
@@ -32,12 +33,12 @@ use Model\StockItemListQuery;
 use Model\StockQuery;
 use Model\SubscriptionQuery;
 use Model\User;
-use Model\Vote;
 use Model\VoteQuery;
 use Model\WishlistQuery;
 use Model\WishQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
+use Propel\Runtime\Propel;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -203,169 +204,181 @@ class OpenIDConnectController extends Controller
         TokenSetInterface $oidcTokens
     ): AuthenticationMethod
     {
-        $user = new User();
-        $user->setSite($currentSite->getSite());
-        $user->setEmail($email);
-        $user->save();
+        $con = Propel::getWriteConnection(UserTableMap::DATABASE_NAME);
 
-        $authenticationMethod = new AuthenticationMethod();
-        $authenticationMethod->setSite($currentSite->getSite());
-        $authenticationMethod->setUser($user);
-        $authenticationMethod->setIdentityProvider("axys");
-        $authenticationMethod->setExternalId($externalId);
-        $authenticationMethod->setAccessToken($oidcTokens->getAccessToken());
-        $authenticationMethod->setIdToken($oidcTokens->getIdToken());
-        $authenticationMethod->save();
+        try {
+            $con->beginTransaction();
 
-        $carts = CartQuery::create()
-            ->filterBySite($currentSite->getSite())
-            ->filterByAxysAccountId($externalId)
-            ->find();
-        foreach ($carts as $cart) {
-            $cart->setUser($user);
-            $cart->setAxysAccountId(null);
-            $cart->save();
-        }
+            $user = new User();
+            $user->setSite($currentSite->getSite());
+            $user->setEmail($email);
+            $user->save($con);
 
-        $customers = CustomerQuery::create()
-            ->filterBySite($currentSite->getSite())
-            ->filterByAxysAccountId($externalId)
-            ->find();
-        foreach ($customers as $customer) {
-            $customer->setUser($user);
-            $customer->setAxysAccountId(null);
-            $customer->save();
-        }
+            $authenticationMethod = new AuthenticationMethod();
+            $authenticationMethod->setSite($currentSite->getSite());
+            $authenticationMethod->setUser($user);
+            $authenticationMethod->setIdentityProvider("axys");
+            $authenticationMethod->setExternalId($externalId);
+            $authenticationMethod->setAccessToken($oidcTokens->getAccessToken());
+            $authenticationMethod->setIdToken($oidcTokens->getIdToken());
+            $authenticationMethod->save($con);
 
-        $lists = StockItemListQuery::create()
-            ->filterBySite($currentSite->getSite())
-            ->filterByAxysAccountId($externalId)
-            ->find();
-        foreach ($lists as $list) {
-            $list->setUser($user);
-            $list->setAxysAccountId(null);
-            $list->save();
-        }
-
-        $options = OptionQuery::create()
-            ->filterBySite($currentSite->getSite())
-            ->filterByAxysAccountId($externalId)
-            ->find();
-        foreach ($options as $option) {
-            $option->setUser($user);
-            $option->setAxysAccountId(null);
-            $option->save();
-        }
-
-        $orders = OrderQuery::create()
-            ->filterBySite($currentSite->getSite())
-            ->filterByAxysAccountId($externalId)
-            ->find();
-        foreach ($orders as $order) {
-            $order->setUser($user);
-            $order->setAxysAccountId(null);
-            $order->save();
-        }
-
-        $posts = PostQuery::create()
-            ->filterBySite($currentSite->getSite())
-            ->filterByAxysAccountId($externalId)
-            ->find();
-        foreach ($posts as $post) {
-            $post->setUser($user);
-            $post->setAxysAccountId(null);
-            $post->save();
-        }
-
-        $adminRights = RightQuery::create()
-            ->filterBySite($currentSite->getSite())
-            ->filterByAxysAccountId($externalId)
-            ->find();
-        foreach ($adminRights as $adminRight) {
-            $adminRight->setUser($user);
-            $adminRight->setAxysAccountId(null);
-            $adminRight->setIsAdmin(true);
-            $adminRight->save();
-        }
-
-        $libraryItems = StockQuery::create()
-            ->filterBySite($currentSite->getSite())
-            ->filterByAxysAccountId($externalId)
-            ->find();
-        foreach ($libraryItems as $libraryItem) {
-            $libraryItem->setUser($user);
-            $libraryItem->setAxysAccountId(null);
-            $libraryItem->save();
-        }
-
-        $subscriptions = SubscriptionQuery::create()
-            ->filterBySite($currentSite->getSite())
-            ->filterByAxysAccountId($externalId)
-            ->find();
-        foreach ($subscriptions as $subscription) {
-            $subscription->setUser($user);
-            $subscription->setAxysAccountId(null);
-            $subscription->save();
-        }
-
-        if ($currentSite->getOption("alerts")) {
-            $alerts = AlertQuery::create()
+            $carts = CartQuery::create()
+                ->filterBySite($currentSite->getSite())
                 ->filterByAxysAccountId($externalId)
                 ->find();
-            foreach ($alerts as $alert) {
-                $alert->setSite($currentSite->getSite());
-                $alert->setUser($user);
-                $alert->setAxysAccountId(null);
-                $alert->save();
+            foreach ($carts as $cart) {
+                $cart->setUser($user);
+                $cart->setAxysAccountId(null);
+                $cart->save($con);
             }
-        }
 
-        if ($currentSite->getOption("publisher_rights_managment")) {
-            $publisherRights = RightQuery::create()
-                ->filterBySiteId(null, Criteria::ISNULL)
-                ->filterByPublisherId(null, Criteria::ISNOTNULL)
+            $customers = CustomerQuery::create()
+                ->filterBySite($currentSite->getSite())
                 ->filterByAxysAccountId($externalId)
                 ->find();
-            foreach ($publisherRights as $adminRight) {
-                $adminRight->setSite($currentSite->getSite());
+            foreach ($customers as $customer) {
+                $customer->setUser($user);
+                $customer->setAxysAccountId(null);
+                $customer->save($con);
+            }
+
+            $lists = StockItemListQuery::create()
+                ->filterBySite($currentSite->getSite())
+                ->filterByAxysAccountId($externalId)
+                ->find();
+            foreach ($lists as $list) {
+                $list->setUser($user);
+                $list->setAxysAccountId(null);
+                $list->save($con);
+            }
+
+            $options = OptionQuery::create()
+                ->filterBySite($currentSite->getSite())
+                ->filterByAxysAccountId($externalId)
+                ->find();
+            foreach ($options as $option) {
+                $option->setUser($user);
+                $option->setAxysAccountId(null);
+                $option->save($con);
+            }
+
+            $orders = OrderQuery::create()
+                ->filterBySite($currentSite->getSite())
+                ->filterByAxysAccountId($externalId)
+                ->find();
+            foreach ($orders as $order) {
+                $order->setUser($user);
+                $order->setAxysAccountId(null);
+                $order->save($con);
+            }
+
+            $posts = PostQuery::create()
+                ->filterBySite($currentSite->getSite())
+                ->filterByAxysAccountId($externalId)
+                ->find();
+            foreach ($posts as $post) {
+                $post->setUser($user);
+                $post->setAxysAccountId(null);
+                $post->save($con);
+            }
+
+            $adminRights = RightQuery::create()
+                ->filterBySite($currentSite->getSite())
+                ->filterByAxysAccountId($externalId)
+                ->find();
+            foreach ($adminRights as $adminRight) {
                 $adminRight->setUser($user);
                 $adminRight->setAxysAccountId(null);
-                $adminRight->save();
+                $adminRight->setIsAdmin(true);
+                $adminRight->save($con);
             }
-        }
 
-        if ($currentSite->getOption("voting")) {
-            $votes = VoteQuery::create()
+            $libraryItems = StockQuery::create()
+                ->filterBySite($currentSite->getSite())
                 ->filterByAxysAccountId($externalId)
                 ->find();
-            foreach ($votes as $vote) {
-                $vote->setUser($user);
-                $vote->setSite($currentSite->getSite());
-                $vote->setAxysAccountId(null);
-                $vote->save();
+            foreach ($libraryItems as $libraryItem) {
+                $libraryItem->setUser($user);
+                $libraryItem->setAxysAccountId(null);
+                $libraryItem->save($con);
             }
-        }
 
-        if ($currentSite->getOption("wishlist")) {
-            $wishlists = WishlistQuery::create()
+            $subscriptions = SubscriptionQuery::create()
+                ->filterBySite($currentSite->getSite())
                 ->filterByAxysAccountId($externalId)
                 ->find();
-            foreach ($wishlists as $wishlist) {
-                $wishlist->setUser($user);
-                $wishlist->setSite($currentSite->getSite());
-                $wishlist->setAxysAccountId(null);
-                $wishlist->save();
+            foreach ($subscriptions as $subscription) {
+                $subscription->setUser($user);
+                $subscription->setAxysAccountId(null);
+                $subscription->save($con);
+            }
 
-                $wishes = WishQuery::create()
-                    ->filterByWishlistId($wishlist->getId())
+            if ($currentSite->getOption("alerts")) {
+                $alerts = AlertQuery::create()
+                    ->filterByAxysAccountId($externalId)
                     ->find();
-                foreach ($wishes as $wish) {
-                    $wish->setUser($user);
-                    $wish->setSiteId($currentSite->getSite()->getId());
-                    $wish->setAxysAccountId(null);
-                    $wish->save();
+                foreach ($alerts as $alert) {
+                    $alert->setSite($currentSite->getSite());
+                    $alert->setUser($user);
+                    $alert->setAxysAccountId(null);
+                    $alert->save($con);
                 }
             }
+
+            if ($currentSite->getOption("publisher_rights_managment")) {
+                $publisherRights = RightQuery::create()
+                    ->filterBySiteId(null, Criteria::ISNULL)
+                    ->filterByPublisherId(null, Criteria::ISNOTNULL)
+                    ->filterByAxysAccountId($externalId)
+                    ->find();
+                foreach ($publisherRights as $adminRight) {
+                    $adminRight->setSite($currentSite->getSite());
+                    $adminRight->setUser($user);
+                    $adminRight->setAxysAccountId(null);
+                    $adminRight->save($con);
+                }
+            }
+
+            if ($currentSite->getOption("voting")) {
+                $votes = VoteQuery::create()
+                    ->filterByAxysAccountId($externalId)
+                    ->find();
+                foreach ($votes as $vote) {
+                    $vote->setUser($user);
+                    $vote->setSite($currentSite->getSite());
+                    $vote->setAxysAccountId(null);
+                    $vote->save($con);
+                }
+            }
+
+            if ($currentSite->getOption("wishlist")) {
+                $wishlists = WishlistQuery::create()
+                    ->filterByAxysAccountId($externalId)
+                    ->find();
+                foreach ($wishlists as $wishlist) {
+                    $wishlist->setUser($user);
+                    $wishlist->setSite($currentSite->getSite());
+                    $wishlist->setAxysAccountId(null);
+                    $wishlist->save($con);
+
+                    $wishes = WishQuery::create()
+                        ->filterByWishlistId($wishlist->getId())
+                        ->find();
+                    foreach ($wishes as $wish) {
+                        $wish->setUser($user);
+                        $wish->setSiteId($currentSite->getSite()->getId());
+                        $wish->setAxysAccountId(null);
+                        $wish->save($con);
+                    }
+                }
+            }
+
+            $con->commit();
+
+        } catch (PropelException $e) {
+            $con->rollBack();
+            throw $e;
         }
 
         return $authenticationMethod;
