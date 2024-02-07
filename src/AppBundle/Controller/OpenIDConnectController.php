@@ -34,6 +34,8 @@ use Model\SubscriptionQuery;
 use Model\User;
 use Model\Vote;
 use Model\VoteQuery;
+use Model\WishlistQuery;
+use Model\WishQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
@@ -341,6 +343,28 @@ class OpenIDConnectController extends Controller
                 $vote->setSite($currentSite->getSite());
                 $vote->setAxysAccountId(null);
                 $vote->save();
+            }
+        }
+
+        if ($currentSite->getOption("wishlist")) {
+            $wishlists = WishlistQuery::create()
+                ->filterByAxysAccountId($externalId)
+                ->find();
+            foreach ($wishlists as $wishlist) {
+                $wishlist->setUser($user);
+                $wishlist->setSite($currentSite->getSite());
+                $wishlist->setAxysAccountId(null);
+                $wishlist->save();
+
+                $wishes = WishQuery::create()
+                    ->filterByWishlistId($wishlist->getId())
+                    ->find();
+                foreach ($wishes as $wish) {
+                    $wish->setUser($user);
+                    $wish->setSiteId($currentSite->getSite()->getId());
+                    $wish->setAxysAccountId(null);
+                    $wish->save();
+                }
             }
         }
 

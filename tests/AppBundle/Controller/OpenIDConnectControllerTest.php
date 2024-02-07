@@ -207,6 +207,8 @@ class OpenIDConnectControllerTest extends TestCase
             user: null, site: null, publisher: ModelFactory::createPublisher(), axysAccountId: $externalId
         );
         $vote = ModelFactory::createVote(axysAccountId: $externalId);
+        $wishlist = ModelFactory::createWishlist(axysAccountId: $externalId);
+        $wish = ModelFactory::createWish(wishlist: $wishlist, axysAccountId: $externalId);
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("setUser");
@@ -291,6 +293,16 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals($externalId, $vote->getAxysAccountId());
         $this->assertNull($vote->getSiteId());
         $this->assertNull($vote->getUserId());
+
+        $wishlist->reload();
+        $this->assertEquals($externalId, $wishlist->getAxysAccountId());
+        $this->assertNull($wishlist->getSiteId());
+        $this->assertNull($wishlist->getUserId());
+
+        $wish->reload();
+        $this->assertEquals($externalId, $wish->getAxysAccountId());
+        $this->assertNull($wish->getSiteId());
+        $this->assertNull($wish->getUserId());
     }
 
     /**
@@ -445,6 +457,61 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals($user->getId(), $vote->getUserId());
         $this->assertEquals($site->getId(), $vote->getSiteId());
         $this->assertNull($vote->getAxysAccountId());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testCallbackWithWishlistImport()
+    {
+        // given
+        $externalId = "AXYS2345";
+        $userEmail = "user-to-import@biblys.fr";
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $currentSite->setOption("wishlist", true);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("setUser");
+        $currentUser->expects("transfertVisitorCartToUser");
+
+        $openIDConnectProviderService = $this->_buildOIDCProviderService(
+            externalId: $externalId,
+            email: $userEmail,
+        );
+
+        $wishlist = ModelFactory::createWishlist(axysAccountId: $externalId);
+        $wish = ModelFactory::createWish(wishlist: $wishlist, axysAccountId: $externalId);
+
+        $request = self::_buildCallbackRequest();
+        $controller = new OpenIDConnectController();
+
+        // when
+        $response = $controller->callback(
+            request: $request,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
+            openIDConnectProviderService: $openIDConnectProviderService,
+            templateService: $this->createMock(TemplateService::class),
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+
+        $user = UserQuery::create()
+            ->filterBySite($site)
+            ->findOneByEmail($userEmail);
+
+        $wishlist->reload();
+        $this->assertEquals($user->getId(), $wishlist->getUserId());
+        $this->assertEquals($site->getId(), $wishlist->getSiteId());
+        $this->assertNull($wishlist->getAxysAccountId());
+
+        $wish->reload();
+        $this->assertEquals($user->getId(), $wish->getUserId());
+        $this->assertEquals($site->getId(), $wish->getSiteId());
+        $this->assertNull($wish->getAxysAccountId());
     }
 
     /**

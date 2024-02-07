@@ -40,6 +40,8 @@ use Model\StockItemList;
 use Model\Subscription;
 use Model\User;
 use Model\Vote;
+use Model\Wish;
+use Model\Wishlist;
 use Propel\Runtime\Exception\PropelException;
 
 class ModelFactory
@@ -748,6 +750,33 @@ class ModelFactory
         $vote->save();
 
         return $vote;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createWishlist(string $axysAccountId): Wishlist
+    {
+        $wishlist = new Wishlist();
+
+        $wishlist->setAxysAccountId($axysAccountId);
+        $wishlist->save();
+
+        return $wishlist;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createWish(Wishlist $wishlist, string $axysAccountId): Wish
+    {
+        $wish = new Wish();
+
+        $wish->setWishlistId($wishlist->getId());
+        $wish->setAxysAccountId($axysAccountId);
+        $wish->save();
+
+        return $wish;
     }
 
     /**
