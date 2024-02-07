@@ -4,6 +4,7 @@ namespace ApiBundle\Controller;
 
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Log;
+use DateTime;
 use Framework\Controller;
 use Model\AxysAccountQuery;
 use Model\Session;
@@ -48,7 +49,10 @@ class AuthController extends Controller
             throw new AccessDeniedHttpException("Email address has not been validated");
         }
 
-        $session = Session::buildForUser($user);
+        $session = new Session();
+        $session->setAxysAccount($axysAccount);
+        $session->setToken(Session::generateToken());
+        $session->setExpiresAt(new DateTime('tomorrow'));
         $session->save();
 
         return new JsonResponse(['token' => $session->getToken()]);
