@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 2.77.0 (DEV)
+## 2.77.0 (7 février 2024)
 
 Améliorations
 
