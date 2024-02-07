@@ -32,6 +32,8 @@ use Model\StockItemListQuery;
 use Model\StockQuery;
 use Model\SubscriptionQuery;
 use Model\User;
+use Model\Vote;
+use Model\VoteQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
@@ -327,6 +329,18 @@ class OpenIDConnectController extends Controller
                 $adminRight->setUser($user);
                 $adminRight->setAxysAccountId(null);
                 $adminRight->save();
+            }
+        }
+
+        if ($currentSite->getOption("voting")) {
+            $votes = VoteQuery::create()
+                ->filterByAxysAccountId($externalId)
+                ->find();
+            foreach ($votes as $vote) {
+                $vote->setUser($user);
+                $vote->setSite($currentSite->getSite());
+                $vote->setAxysAccountId(null);
+                $vote->save();
             }
         }
 

@@ -206,6 +206,7 @@ class OpenIDConnectControllerTest extends TestCase
         $publisherRight = ModelFactory::createRight(
             user: null, site: null, publisher: ModelFactory::createPublisher(), axysAccountId: $externalId
         );
+        $vote = ModelFactory::createVote(axysAccountId: $externalId);
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("setUser");
@@ -285,6 +286,11 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals($externalId, $publisherRight->getAxysAccountId());
         $this->assertNull($publisherRight->getUserId());
         $this->assertNull($publisherRight->getSiteId());
+
+        $vote->reload();
+        $this->assertEquals($externalId, $vote->getAxysAccountId());
+        $this->assertNull($vote->getSiteId());
+        $this->assertNull($vote->getUserId());
     }
 
     /**
@@ -392,6 +398,53 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals($site->getId(), $publisherRight->getSiteId());
         $this->assertFalse($publisherRight->isAdmin());
         $this->assertNull($publisherRight->getAxysAccountId());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testCallbackWithVotesImport()
+    {
+        // given
+        $externalId = "AXYS5432";
+        $userEmail = "user-to-import@biblys.fr";
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $currentSite->setOption("voting", true);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("setUser");
+        $currentUser->expects("transfertVisitorCartToUser");
+        $openIDConnectProviderService = $this->_buildOIDCProviderService(
+            externalId: $externalId,
+            email: $userEmail,
+        );
+        $vote = ModelFactory::createVote(axysAccountId: $externalId);
+
+        $request = self::_buildCallbackRequest();
+        $controller = new OpenIDConnectController();
+
+        // when
+        $response = $controller->callback(
+            request: $request,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
+            openIDConnectProviderService: $openIDConnectProviderService,
+            templateService: $this->createMock(TemplateService::class),
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+
+        $user = UserQuery::create()
+            ->filterBySite($site)
+            ->findOneByEmail($userEmail);
+
+        $vote->reload();
+        $this->assertEquals($user->getId(), $vote->getUserId());
+        $this->assertEquals($site->getId(), $vote->getSiteId());
+        $this->assertNull($vote->getAxysAccountId());
     }
 
     /**

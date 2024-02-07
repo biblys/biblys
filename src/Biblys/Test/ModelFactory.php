@@ -39,6 +39,7 @@ use Model\Stock;
 use Model\StockItemList;
 use Model\Subscription;
 use Model\User;
+use Model\Vote;
 use Propel\Runtime\Exception\PropelException;
 
 class ModelFactory
@@ -734,6 +735,19 @@ class ModelFactory
         $alert->save();
 
         return $alert;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createVote(string $axysAccountId = null): Vote
+    {
+        $vote = new Vote();
+
+        $vote->setAxysAccountId($axysAccountId);
+        $vote->save();
+
+        return $vote;
     }
 
     /**
