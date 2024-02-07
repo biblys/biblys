@@ -31,21 +31,21 @@ class AuthController extends Controller
             throw new BadRequestHttpException("Credentials are missing");
         }
 
-        $userByEmail = AxysAccountQuery::create()->findOneByEmail($login);
-        $userByUsername = AxysAccountQuery::create()->findOneByUsername($login);
-        $user = $userByEmail ?: $userByUsername;
+        $axysAccountByEmail = AxysAccountQuery::create()->findOneByEmail($login);
+        $axysAccountByUsername = AxysAccountQuery::create()->findOneByUsername($login);
+        $axysAccount = $axysAccountByEmail ?: $axysAccountByUsername;
 
-        if (!$user) {
+        if (!$axysAccount) {
             Log::security("ERROR", "User unknown for login $login");
             throw new UnauthorizedHttpException("", "Bad credentials");
         }
 
-        if (!password_verify($password, $user->getPassword())) {
+        if (!password_verify($password, $axysAccount->getPassword())) {
             Log::security("ERROR", "Wrong password for login $login");
             throw new UnauthorizedHttpException("", "Bad credentials");
         }
 
-        if ($user->getEmailKey() !== null) {
+        if ($axysAccount->getEmailKey() !== null) {
             throw new AccessDeniedHttpException("Email address has not been validated");
         }
 
