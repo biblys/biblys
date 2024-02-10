@@ -1115,10 +1115,10 @@ class CurrentUserTest extends TestCase
     public function testCartTransferWhenVisitorHasNoCookie()
     {
         // given
-        $axysAccount = ModelFactory::createAxysAccount();
+        $user = ModelFactory::createUser();
 
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentUser = new CurrentUser($axysAccount, null);
+        $currentUser = new CurrentUser($user, null);
         $currentUser->injectCurrentSite($currentSite);
 
         // when

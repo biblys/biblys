@@ -2,6 +2,7 @@
 
 use Biblys\Exception\CannotAddStockItemToCartException;
 use Biblys\Legacy\LegacyCodeHelper;
+use Model\UserQuery;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Propel\Runtime\Exception\PropelException;
@@ -26,8 +27,7 @@ return function (
 ): Response|JsonResponse|RedirectResponse {
     $_SQL = LegacyCodeHelper::getGlobalDatabaseConnection();
 
-    $cm = new CartManager();
-    $um = new AxysAccountManager();
+$cm = new CartManager();
 
     $cartId = $request->query->get("cart_id");
     if (!$cartId) {
@@ -223,12 +223,13 @@ return function (
     }
 
 // Current cart's seller
-    $seller_field = null;
-    if ($cart->has('seller_id')) {
-        if ($seller = $um->get(array('axys_account_id' => $cart->get('seller_id')))) {
-            $seller_field = '
-            <input type="text" name="seller" id="seller" value="' . $seller->getUserName() . '" class="long" required readonly>
-            <input type="hidden" name="seller_id" id="seller_id" value="' . $seller->get('axys_account_id') . '" required>
+$seller_field = null;
+if ($cart->has('seller_id')) {
+    $seller = UserQuery::create()->findPk($cart->get('seller_id'));
+    if ($seller) {
+        $seller_field = '
+            <input type="text" name="seller" id="seller" value="'.$seller->getEmail().'" class="long" required readonly>
+            <input type="hidden" name="seller_id" id="seller_id" value="'.$seller->getId().'" required>
         ';
         }
     } else trigger_error('No seller id.');

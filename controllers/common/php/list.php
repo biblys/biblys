@@ -33,7 +33,7 @@ return function (
     $newList = $request->request->get('new_list');
     if ($newList) {
         /** @var Liste $list */
-        $list = $lm->create(['axys_account_id' => $currentUser->getAxysAccount()->getId()]);
+        $list = $lm->create(['user_id' => $currentUser->getUser()->getId()]);
 
         $listUrl = $request->request->get('list_url', false);
         if (!$listUrl) {

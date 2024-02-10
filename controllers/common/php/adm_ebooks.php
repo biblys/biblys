@@ -1,15 +1,17 @@
 <?php /** @noinspection SqlCheckUsingColumns */
 
-use Biblys\Service\Config;
+use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentSite;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /** @var PDO $_SQL */
 /** @var Request $request */
+/** @var CurrentSite $currentSite */
 
 $request->attributes->set("page_title", "Ventes numériques");
 
-if (!$globalSite->getOpt('downloadable_publishers')) {
+if (!$currentSite->getOption('downloadable_publishers')) {
     throw new Exception("L'option de site `downloadable_publishers` doit être définie.");
 }
 
@@ -17,7 +19,7 @@ if (!$globalSite->getOpt('downloadable_publishers')) {
 $ao = array();
 $articles = $_SQL->query("SELECT `article_id`, `article_title`, `article_collection` FROM `articles`
     WHERE
-        `publisher_id` IN (" . $globalSite->getOpt('downloadable_publishers') . ")
+        `publisher_id` IN (" . $currentSite->getOption('downloadable_publishers') . ")
         AND (`type_id` = 2 OR `type_id` = 11) ORDER BY `article_collection`, `article_title_alphabetic`");
 while ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
     $ao[$a["article_collection"]][] = '<option value="' . $a["article_id"] . '"' . (isset($_GET["article_id"]) && $_GET["article_id"] == $a["article_id"] ? ' selected' : null) . '>' . $a["article_title"] . '</option>';
@@ -31,14 +33,14 @@ foreach ($ao as $c => $a) {
 // People select
 $people_options = NULL;
 $people = $_SQL->prepare("SELECT `people_id`, `people_name` FROM `articles` JOIN `roles` USING(`article_id`) JOIN `people` USING(`people_id`) JOIN `collections` USING(`collection_id`) WHERE `collections`.`site_id` = :site_id AND `type_id` = 2 AND `job_id` = 1 GROUP BY `people_id` ORDER BY `people_last_name`");
-$people->execute(['site_id' => $globalSite->get('id')]);
+$people->execute(['site_id' => $currentSite->getSite()->getId()]);
 while ($p = $people->fetch(PDO::FETCH_ASSOC)) {
     $people_options .= '<option value="' . $p["people_id"] . '">' . $p["people_name"] . '</option>';
 }
 
 $req = NULL;
 $reqPeople = null;
-$reqParams = ['site_id' => $globalSite->get('id')];
+$reqParams = ['site_id' => $currentSite->getSite()->getId()];
 $reqPeopleParams = [];
 
 if (!empty($_GET["date1"])) {
@@ -67,7 +69,9 @@ $ventes = EntityManager::prepareAndExecute("
     FROM `articles`
     JOIN `stock` USING(`article_id`)
     WHERE
-        `site_id` = :site_id AND (`type_id` = 2 OR `type_id` = 11) AND `stock`.`axys_account_id` IS NOT NULL
+        `site_id` = :site_id 
+        AND (`type_id` = 2 OR `type_id` = 11) 
+        AND (`stock`.`axys_account_id` IS NOT NULL OR `stock`.`user_id` IS NOT NULL)
         " . $req . $reqPeople . "
     GROUP BY `article_id`
     ORDER BY `article_authors_alphabetic` ", array_merge($reqParams, $reqPeopleParams));
@@ -79,12 +83,20 @@ $Gratuits = null;
 $subReqParams = $reqParams;
 while ($l = $ventes->fetch(PDO::FETCH_ASSOC)) {
 
-    if (!empty($_GET["people_id"])) \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle("Ventes numériques : " . authors($l["article_authors"]));
-    if (!empty($_GET["article_id"])) \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle("Ventes numériques : " . $l["article_title"]);
+    if (!empty($_GET["people_id"])) LegacyCodeHelper::setGlobalPageTitle("Ventes numériques : " . authors($l["article_authors"]));
+    if (!empty($_GET["article_id"])) LegacyCodeHelper::setGlobalPageTitle("Ventes numériques : " . $l["article_title"]);
 
     $subReqParams['article_id'] = $l['article_id'];
 
-    $numVentes = $_SQL->prepare("SELECT COUNT(`stock_id`) AS `ventes`, SUM(`stock_selling_price`) AS `ca`, SUM(`stock_selling_price_ht`) AS `ca_ht` FROM `stock` WHERE `article_id` = :article_id AND `stock_selling_price` != '0' AND `stock_selling_date` AND `site_id` = :site_id " . $req . " AND `stock`.`axys_account_id` IS NOT NULL");
+    $numVentes = $_SQL->prepare("
+        SELECT COUNT(`stock_id`) AS `ventes`, SUM(`stock_selling_price`) AS `ca`, SUM(`stock_selling_price_ht`) AS `ca_ht` 
+        FROM `stock` 
+        WHERE `article_id` = :article_id 
+            AND `stock_selling_price` != '0' 
+            AND `stock_selling_date` 
+            AND `site_id` = :site_id " . $req . " 
+            AND (`stock`.`axys_account_id` IS NOT NULL OR `stock`.`user_id` IS NOT NULL)
+        ");
     $numVentes->execute($subReqParams);
     $v = $numVentes->fetch(PDO::FETCH_ASSOC);
 
@@ -203,10 +215,14 @@ if ($articleId) {
 
 $content .= '<h3>Toutes les ventes</h3>';
 
-$achats = $_SQL->prepare("SELECT `article_title`, `axys_account_email`, `stock_selling_price`,`stock_selling_date`, `stock_id`
+$achats = $_SQL->prepare("SELECT 
+    `article_title`, 
+    `users`.`email`,
+    `stock`.`axys_account_id`,
+    `stock_selling_price`,`stock_selling_date`, `stock_id`
     FROM `articles`
     JOIN `stock` USING(`article_id`)
-    JOIN `axys_accounts` ON `axys_accounts`.`axys_account_id` = `stock`.`axys_account_id`
+    LEFT JOIN `users` ON `users`.`id` = `stock`.`user_id`
     WHERE `stock`.`site_id` = :site_id AND (`type_id` = '2' OR `type_id` = 11) " .$req.$reqPeople."
     GROUP BY `stock_id`
 ORDER BY `stock_selling_date` DESC");
@@ -228,28 +244,20 @@ $content .= '<br />
 
 $customers = [];
 while ($a = $achats->fetch(PDO::FETCH_ASSOC)) {
+    $userIdentity = $a["email"] ?: "Utilisateur Axys n°" . $a["axys_account_id"];
+
     $content .= '
         <tr>
             <td>' . $a["stock_id"] . '</td>
             <td>' . _date($a['stock_selling_date'], "j/m/Y") . '</td>
             <td>' . $a['article_title'] . '</td>
-            <td>' . $a['axys_account_email'] . '</td>
+            <td>' . $userIdentity . '</td>
             <td class="right">' . price($a['stock_selling_price'], 'EUR') . '</td>
         </tr>
     ';
-    $customers[] = $a["axys_account_email"] . ', ';
+    $customers[] = $userIdentity . ', ';
 }
 
 $content .= '</tbody></table>';
-
-if (!empty($customers)) {
-    $customers = array_unique($customers);
-    $count = count($customers);
-    $content .= '<h3>Tous les clients (' . $count . ')</h3><p>';
-    foreach ($customers as $c) {
-        $content .= $c;
-    }
-    $content .= '</p>';
-}
 
 return new Response($content);

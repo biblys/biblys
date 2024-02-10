@@ -2,12 +2,13 @@
     
     // Check user rights
 use Biblys\Legacy\LegacyCodeHelper;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) $mode = 'admin';
 	elseif (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $mode = 'publisher';
-	else trigger_error('Accès non autorisé pour '. LegacyCodeHelper::getGlobalVisitor()->get('axys_account_email'));
+	else throw new AccessDeniedHttpException('Accès non autorisé');
     
-    \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Gestion des dédicaces');
+    LegacyCodeHelper::setGlobalPageTitle('Gestion des dédicaces');
     
     $sm = new SigningManager();
     
@@ -41,7 +42,7 @@ if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) $mode = 'admin';
     if (isset($_GET['success'])) $alert = '<p class="success">'.$_GET['success'].'</p><br>';
     
     $_ECHO .= '
-        <h1><i class="fa fa-pencil"></i> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
+        <h1><i class="fa fa-pencil"></i> '. LegacyCodeHelper::getGlobalPageTitle().'</h1>
 
         <form action="/pages/export_to_csv" method="post">
 			<fieldset>

@@ -70,11 +70,13 @@ return function (Request $request, Session $session, CurrentSite $currentSite): 
     $emptied = 0;
     $carts = EntityManager::prepareAndExecute("
         SELECT
-            `cart_id`, `carts`.`site_id`, `carts`.`axys_account_id`, `cart_uid`, `cart_date`, `cart_count`, 
-            `cart_amount`, `axys_account_email`, COUNT(`stock_id`) AS `num`, SUM(`stock_selling_price`) AS `total`,
-            MAX(`stock_cart_date`) AS `stock_cart_date`
+            `cart_id`, `carts`.`site_id`, `carts`.`user_id`, `cart_uid`, `cart_date`, `cart_count`, 
+            `cart_amount`, `users`.`email`, COUNT(`stock_id`) AS `num`, SUM(`stock_selling_price`) AS `total`,
+            MAX(`stock_cart_date`) AS `stock_cart_date`,
+            `carts`.`user_id`,
+            `carts`.`axys_account_id`
         FROM `carts`
-        LEFT JOIN `axys_accounts` ON `carts`.`axys_account_id` = `axys_accounts`.`axys_account_id`
+        LEFT JOIN `users` ON `carts`.`user_id` = `users`.`id`
         LEFT JOIN `stock` USING(`cart_id`)
         WHERE `carts`.`site_id` = :site_id AND `cart_type` = 'web'
         GROUP BY `cart_id`
@@ -82,16 +84,20 @@ return function (Request $request, Session $session, CurrentSite $currentSite): 
         ['site_id' => $currentSite->getId()]
     );
     while ($c = $carts->fetch(PDO::FETCH_ASSOC)) {
-        if (isset($c["axys_account_email"])) $c["user"] = $c["axys_account_email"];
-        else $c["user"] = "Anonyme (".substr($c["cart_uid"], 0, 7)."…)";
-        $c["style"] = null;
+        $userIdentity = "Anonyme (".substr($c["cart_uid"], 0, 7)."…)";;
+        $cartBelongsToAnUser = $c["user_id"] || $c["axys_account_id"];
+        if ($cartBelongsToAnUser) {
+            $userIdentity = $c["email"] ?: "Utilisateur Axys n°" . $c["axys_account_id"];
+        }
 
         if ($refresh) {
             $cart = $cm->get(array('cart_id' => $c['cart_id'], 'site_id' => $c['site_id']));
             $cm->updateFromStock($cart);
         }
 
-        if ($c["stock_cart_date"] < $datelimite && empty($c["axys_account_email"]) || empty($c["num"])) {
+        $c["style"] = null;
+        $cartHasExpired = $c["stock_cart_date"] < $datelimite;
+        if ($cartHasExpired && !$cartBelongsToAnUser) {
             $c["style"] = ' style="text-decoration:line-through;"';
 
             if (isset($_GET["go"])) {
@@ -106,7 +112,7 @@ return function (Request $request, Session $session, CurrentSite $currentSite): 
         $content .= '
         <tr>
             <td><a href="/pages/cart?cart_id=' . $c["cart_id"] . '">' . $c["cart_id"] . '</a></td>
-            <td' . $c["style"] . '>' . $c["user"] . '</td>
+            <td' . $c["style"] . '>' . $userIdentity . '</td>
             <td class="right">' . $c["cart_count"] . '</td>
             <td class="right">' . price($c["cart_amount"], 'EUR') . '</td>
             <td class="center">' . _date($c["stock_cart_date"], 'd/m/Y H:i:s') . '</td>

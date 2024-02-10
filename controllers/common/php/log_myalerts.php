@@ -1,6 +1,7 @@
 <?php
 
 /** @noinspection HtmlUnknownTarget */
+/** @noinspection PhpUnhandledExceptionInspection */
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
@@ -15,16 +16,17 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 $config = Config::load();
 $currentSiteService = CurrentSite::buildFromConfig($config);
 $currentSite = $currentSiteService->getSite();
-/** @noinspection PhpUnhandledExceptionInspection */
 if (!$currentSiteService->hasOptionEnabled("alerts")) {
     throw new ResourceNotFoundException("Alerts are not enabled for this site");
 }
+/** @var Request $request */
+$currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
+$currentUser = $currentUserService->getUser();
 
 $am = new AlertManager();
 
 $result = array();
 
-/** @var Request $request */
 if ($request->getMethod() === "POST") {
     $body = $request->getContent();
     $params = json_decode($body, true);
@@ -33,14 +35,15 @@ if ($request->getMethod() === "POST") {
         /** @noinspection PhpUnhandledExceptionInspection */
         $alert = $am->create();
 
-        $alert->set('axys_account_id', LegacyCodeHelper::getGlobalVisitor()->get('id'));
+        $alert->set("user_id", $currentUser->getId());
+        $alert->set("site_id", $currentSite->getId());
         $alert->set('article_id', $params["article_id"]);
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $am->update($alert);
         $result['created'] = 1;
     } else {
-        $alert = $am->get(array('axys_account_id' => LegacyCodeHelper::getGlobalVisitor()->get('id'), 'article_id' => $params["article_id"]));
+        $alert = $am->get(array('user_id' => $currentUser->getId(), 'article_id' => $params["article_id"]));
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $am->delete($alert);
@@ -52,7 +55,7 @@ if ($request->getMethod() === "POST") {
 
 $table = null;
 
-\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Mes alertes Biblys');
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle("Mes alertes");
 
 $content = null;
 
@@ -65,11 +68,6 @@ if ($alertToDeleteId) {
     }
     return new RedirectResponse('/pages/log_myalerts?deleted=1');
 }
-
-/** @noinspection PhpUnhandledExceptionInspection */
-$currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
-/** @noinspection PhpUnhandledExceptionInspection */
-$currentUser = $currentUserService->getUser();
 
 /** @var PDO $_SQL */
 $_SQL->query("SET SESSION sql_mode=''")->execute();
@@ -86,11 +84,11 @@ $sql = $_SQL->prepare("
             AND `stock_selling_date` IS NULL 
             AND `stock_return_date` IS NULL 
             AND `stock_lost_date` IS NULL
-    WHERE `alerts`.`axys_account_id` = :axys_account_id
+    WHERE `alerts`.`user_id` = :user_id
     GROUP BY `alert_id`
     ORDER BY `alert_id`, `stock_purchase_date`
 ");
-$sql->execute(['axys_account_id' => $currentUser->getId(), 'site_id' => $currentSite->getId()]);
+$sql->execute(['user_id' => $currentUser->getId(), 'site_id' => $currentSite->getId()]);
 
 while ($a = $sql->fetch(PDO::FETCH_ASSOC)) {
     if ($a["alert_max_price"]) {

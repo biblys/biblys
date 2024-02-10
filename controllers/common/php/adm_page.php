@@ -49,7 +49,6 @@ if ($pageId && $page) {
     $pageTitle = 'Nouvelle page statique';
     $p = array();
     
-    $p["axys_account_id"] = LegacyCodeHelper::getGlobalVisitor()->get("id");
     $p["page_date"] = date("Y-m-d H:i:s");
 }
 

@@ -6,6 +6,8 @@ use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
+use Model\UserQuery;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +18,6 @@ $sm = new StockManager();
 $am = new ArticleManager();
 $alm = new AlertManager();
 $om = new OrderManager();
-$um = new AxysAccountManager();
 $rm = new RayonManager();
 
 $content = null;
@@ -258,7 +259,7 @@ if ($request->getMethod() === 'POST') {
         /** @var Mailer $mailer */
         $copyYear = $request->request->get("stock_pub_year");
         $copyPrice = $request->request->get("stock_selling_price");
-        $result = _sendAlertsForArticle($article, $copyYear, $copyPrice, $copyCondition, $mailer, $globalSite);
+        $result = _sendAlertsForArticle($article, $copyYear, $copyPrice, $copyCondition, $mailer, $_SITE, $currentSite);
         if ($result["sent"] > 0) {
             $session->getFlashBag()->add(
                 "info",
@@ -505,8 +506,14 @@ if ($article) {
         $ex = null;
         $als = null;
         $alerts = $alm->getAll(['article_id' => $article->get('id')]);
-        $alerts = array_map(function ($alert) use ($um) {
-            $user = $um->getById($alert->get('axys_account_id'));
+        $alerts = array_map(/**
+         * @throws PropelException
+         */ function ($alert) use($currentSite) {
+            $userIdentity = "Utilisateur Axys n°" . $alert->get("axys_account_id");
+            $user = UserQuery::create()->filterBySite($currentSite->getSite())->findPk($alert->get("user_id"));
+            if ($user) {
+                $userIdentity = $user->getEmail();
+            }
 
             if (!$user) {
                 return "";
@@ -514,7 +521,7 @@ if ($article) {
 
             return '
                 <tr>
-                    <td>' . $user->get('email') . '</a></td>
+                    <td>' . $userIdentity . '</a></td>
                     <td>' . $alert->get('condition') . '</td>
                     <td>' . $alert->get('pub_year') . '</td>
                     <td>' . ($alert->get('max_price') ? currency($alert->get('max_price'), true) : "" ). '</td>
@@ -966,6 +973,7 @@ function _shouldAlertsBeSent(string $mode, string $copyCondition, CurrentSite $c
 
 /**
  * @throws TransportExceptionInterface
+ * @throws PropelException
  */
 function _sendAlertsForArticle(
     Article $article,
@@ -973,25 +981,30 @@ function _sendAlertsForArticle(
     string $copyPrice,
     string $copyCondition,
     Mailer  $mailer,
-    Site    $currentSite
+    Site $_SITE,
+    CurrentSite $currentSite,
 ): array
 {
     $am = new AlertManager();
-    $um = new AxysAccountManager();
 
     $alerts = $am->getAll(["article_id" => $article->get("id")]);
 
     $sentAlerts = 0;
     $errors = [];
     foreach ($alerts as $alert) {
+        $user = UserQuery::create()->filterBySite($currentSite->getSite())->findPk($alert->get("user_id"));
+        if (!$user) {
+            continue;
+        }
+
         $subject = "{$article->get("title")} est disponible !";
 
         $customMessage = null;
-        if ($currentSite->getOpt("alerts_custom_message")) {
-            $customMessage = '<p><strong>'.$currentSite->getOpt('alerts_custom_message').'</strong></p>';
+        if ($_SITE->getOpt("alerts_custom_message")) {
+            $customMessage = '<p><strong>'.$_SITE->getOpt('alerts_custom_message').'</strong></p>';
         }
 
-        $articleUrl = "https://{$currentSite->get("domain")}/a/{$article->get("url")}";
+        $articleUrl = "https://{$_SITE->get("domain")}/a/{$article->get("url")}";
 
         $message = '
             <p>Bonjour,</p>
@@ -1003,7 +1016,7 @@ function _sendAlertsForArticle(
             </p>
             <p>
                 Un exemplaire de ce livre vient d\'être mis en vente chez 
-                <a href="https://'.$currentSite->get("domain").'/a/'.$article->get("url").'">'.$currentSite['site_title'].'</a>&nbsp;!
+                <a href="https://'.$_SITE->get("domain").'/a/'.$article->get("url").'">'.$_SITE['site_title'].'</a>&nbsp;!
             </p>
             <p>
                 Édition de '.$copyYear.'<br />
@@ -1027,13 +1040,8 @@ function _sendAlertsForArticle(
             <p>À très bientôt dans les librairies Biblys !</p>
         ';
 
-        $user = $um->getById($alert->get("axys_account_id"));
-        if (!$user) {
-            continue;
-        }
-
         try {
-            $mailer->send($user->get("email"), $subject, $message);
+            $mailer->send($user->getEmail(), $subject, $message);
             $sentAlerts++;
         } catch(InvalidEmailAddressException $exception) {
             $errors[] = [

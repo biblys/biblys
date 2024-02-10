@@ -29,19 +29,19 @@ return function (
 
     // Get or create current wishlist
     $wishlist = $wlm->get([
-        "axys_account_id" => $currentUserService->getUser()->getId(),
+        "user_id" => $currentUserService->getUser()->getId(),
         "wishlist_current" => 1
     ]);
     if (!$wishlist) {
 
         // Create a current wishlist for current user
-        $wishlist = $wlm->create(array(
-            'axys_account_id' => $currentUserService->getUser()->getId(),
+        $wishlist = $wlm->create([
+            'user_id' => $currentUserService->getUser()->getId(),
             'wishlist_current' => 1
-        ));
+        ]);
 
         // Add wishes
-        $wishes = $wm->getAll(array('axys_account_id' => $currentUserService->getUser()->getId(), 'wishlist_id' => 'NULL'));
+        $wishes = $wm->getAll(['user_id' => $currentUserService->getUser()->getId(), 'wishlist_id' => 'NULL']);
         foreach ($wishes as $wish) {
             $wish->set('wishlist', $wishlist);
             $wm->update($wish);
@@ -69,7 +69,7 @@ return function (
         } // Else create it
         else {
             $wish = $wm->create();
-            $wish->set('axys_account_id', $currentUserService->getUser()->getId());
+            $wish->set('user_id', $currentUserService->getUser()->getId());
             $wish->set('article', $article);
             $wish->set('wishlist', $wishlist);
             $wm->update($wish);
@@ -86,34 +86,6 @@ return function (
     else {
 
         $request->attributes->set("page_title", $wishlist->get('name'));
-
-        // Is username set ?
-        if (!$currentUserService->getUser()->getUsername()) {
-            $share = '<p class="alert alert-warning"><i class="fa fa-info-circle"></i> Pour pouvoir partager votre liste d\'envies, commencez par <a href="https://axys.me/#Profil">choisir un nom d\'utilisateur</a>.</p>';
-        } // Is wishlist public ?
-        elseif (!$wishlist->has('public')) {
-            $share = '<p class="alert alert-warning">'
-                . "Cette liste d'envies n'est pas publique. Cliquez sur <strong>Modifier</strong> pour changer sa visibilité." .
-                '</p>';
-        } // Show wishlist url & share buttons
-        else {
-            $url = 'https://' . $currentSiteService->getSite()->getDomain() . '/wishlist/' .
-                $currentUserService->getUser()->getSlug();
-            $share = '
-			<br>
-
-			<p class="center">Adresse publique de votre liste :<br><a href="/wishlist/' . $currentUserService->getUser()->getSlug() . '">' . $url . '</a></p>
-
-			<div class="text-center">
-				' . share_buttons($url, $wishlist->get('name')) . '
-			</div>
-
-			<p class="center">
-				Partagez cette adresse pour vous faire offrir des livres !
-			</p>
-			';
-        }
-
 
         $content .= '
 
