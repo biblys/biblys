@@ -1,16 +1,19 @@
 <?php
 
-use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
 use Model\User;
 use Model\UserQuery;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 
-class Visitor extends AxysAccount
+class Visitor
 {
     private bool $logged = false;
     private mixed $visitor_uid;
     private ?User $user = null;
+    private ?array $alerts = null;
+    private ?array $purchases = null;
 
     public function __construct(Request $request)
     {
@@ -26,8 +29,6 @@ class Visitor extends AxysAccount
         if ($userUidCookie) {
             $this->_setUserFromToken($userUidCookie);
         }
-
-        parent::__construct([]);
     }
 
     public function has($field): bool
@@ -61,7 +62,7 @@ class Visitor extends AxysAccount
             return $this->user->$methodName();
         }
 
-        throw new ArgumentCountError("Method $methodName does not exist on AxysAccount");
+        throw new ArgumentCountError("Method $methodName does not exist on User");
     }
 
     /**
@@ -110,10 +111,14 @@ class Visitor extends AxysAccount
         return false;
     }
 
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
     public function isAdmin(): bool
     {
-        $request = LegacyCodeHelper::getGlobalRequest();
-        $config = LegacyCodeHelper::getGlobalConfig();
+        $request = Request::createFromGlobals();
+        $config = Config::load();
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         return $currentUser->isAdmin();
@@ -125,7 +130,7 @@ class Visitor extends AxysAccount
     public function getCurrentRight(): Right
     {
         $rm = new RightManager();
-        if ($right = $rm->get(['axys_account_id' => $this->get('id')])) {
+        if ($right = $rm->get(['user_id' => $this->get('id')])) {
             return $right;
         }
 
@@ -151,6 +156,5 @@ class Visitor extends AxysAccount
 
         $this->logged = true;
         $this->user = $user;
-        $this->set('user_uid', $token);
     }
 }
