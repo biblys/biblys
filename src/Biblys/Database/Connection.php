@@ -84,7 +84,14 @@ class Connection
     public static function getDsnFromConfig(Config $config): string
     {
         $dbPort = self::_getDbPortFromConfig($config);
-        return "mysql:host=" . $config->get("db.host") . ";port=" . $dbPort . ";dbname=" . $config->get("db.base");}
+
+        $host = $config->get("db.host");
+        $hostForCli = $config->get("db.host_for_cli");
+        if (php_sapi_name() === "cli" && $config->get("db.host_for_cli")) {
+            $host = $hostForCli;
+        }
+
+        return "mysql:host=" . $host . ";port=" . $dbPort . ";dbname=" . $config->get("db.base");}
 
     private static function _getDbPortFromConfig(Config $config): int
     {
