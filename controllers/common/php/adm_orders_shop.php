@@ -125,7 +125,6 @@ return function (Request $request): Response
     $sql->execute($sqlParams);
 
     $content = '
-    <a href="/pages/adm_sales" class="floatR">Future interface</a>
     <h1>
         <span class="fa fa-line-chart"></span>
         Ventes
