@@ -118,20 +118,12 @@ return function (
         $content .= '
 
 			<div class="pull-right">
-				<button class="btn btn-success" data-toggle="share">
-					<i class="fa fa-share-square-o"></i> Partager
-				</button>
-
 				<a href="/pages/log_wishlist?id=' . $wishlist->get('id') . '" class="btn btn-info">
 					<i class="fa fa-cog"></i> Modifier
 				</a>
 			</div>
 
 			<h2>' . $wishlist->get("name") . '</h2>
-
-			<div id="share" class="hidden">
-				' . $share . '
-			</div>
 		';
 
         $wishes = $currentUserService->getUser()->getWishes();
