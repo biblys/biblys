@@ -158,9 +158,10 @@
       <path value="$PROJECT_DIR$/vendor/lcobucci/jwt" />
       <path value="$PROJECT_DIR$/vendor/steverhoades/oauth2-openid-connect-client" />
       <path value="$PROJECT_DIR$/vendor/lemonink/lemonink-php" />
+      <path value="$PROJECT_DIR$/vendor/sinergi/browser-detector" />
     </include_path>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="8.1">
+  <component name="PhpProjectSharedConfiguration" php_language_level="8.2">
     <option name="suggestChangeDefaultLanguageLevel" value="false" />
   </component>
   <component name="PhpStanOptionsConfiguration">
