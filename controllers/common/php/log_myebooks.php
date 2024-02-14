@@ -118,7 +118,7 @@ return function (
         ];
     }
 
-    return $templateService->render("AppBundle:Legacy:user_ebooks.html.twig", [
+    return $templateService->renderResponse("AppBundle:Legacy:user_ebooks.html.twig", [
         "updatesAvailable" => $updated > 0,
         "ebooks" => $ebooks,
     ]);

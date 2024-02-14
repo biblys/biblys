@@ -102,5 +102,5 @@ return function (
     </form>
 ';
 
-    return $templateService->renderFromString($template);
+    return $templateService->renderResponseFromString($template);
 };

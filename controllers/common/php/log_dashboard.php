@@ -93,7 +93,7 @@ return function(
         </div>
   ';
 
-    return $templateService->renderFromString($templateCode, [
+    return $templateService->renderResponseFromString($templateCode, [
         "sections" => $sections,
     ]);
 };

@@ -17,6 +17,6 @@ class DocsController
      */
     public function ebooksAction(TemplateService $templateService): Response
     {
-        return $templateService->render("AppBundle:Docs:ebooks.html.twig");
+        return $templateService->renderResponse("AppBundle:Docs:ebooks.html.twig");
     }
 }

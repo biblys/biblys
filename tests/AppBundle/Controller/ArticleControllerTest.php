@@ -706,7 +706,7 @@ class ArticleControllerTest extends TestCase
             ->with("zyxwvuts", "123456789", "abcdefgh")
             ->andReturn([$watermarkingFile]);
         $templateService = Mockery::mock(TemplateService::class);
-        $templateService->shouldReceive("render")
+        $templateService->shouldReceive("renderResponse")
             ->with("AppBundle:Article:download-with-watermark.html.twig", [
                 "article_id" => $article->getId(),
                 "article_title" => "A book about tatoo",
@@ -769,7 +769,7 @@ class ArticleControllerTest extends TestCase
         $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
         $watermarkingService->shouldNotReceive("getFiles");
         $templateService = Mockery::mock(TemplateService::class);
-        $templateService->shouldReceive("render")
+        $templateService->shouldReceive("renderResponse")
             ->with("AppBundle:Article:download-with-watermark.html.twig", [
                 "article_id" => $article->getId(),
                 "article_title" => "A book about tatoo",

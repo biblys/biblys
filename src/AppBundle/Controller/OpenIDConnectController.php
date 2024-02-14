@@ -54,7 +54,7 @@ class OpenIDConnectController extends Controller
     {
         $error = $request->query->get("error");
         if ($error === "access_denied") {
-            return $templateService->render("AppBundle:OpenIDConnect:callback.html.twig", [
+            return $templateService->renderResponse("AppBundle:OpenIDConnect:callback.html.twig", [
                 "siteTitle" => $currentSite->getTitle(),
             ]);
         }

@@ -54,7 +54,7 @@ class Controller
             metaTagsService: $metaTagsService,
             request: $request,
         );
-        return $templateService->render($templatePath, $vars);
+        return $templateService->renderResponse($templatePath, $vars);
     }
 
     /**

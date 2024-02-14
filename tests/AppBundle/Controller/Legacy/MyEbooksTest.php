@@ -41,7 +41,7 @@ class MyEbooksTest extends TestCase
         $urlgenerator = Mockery::mock(UrlGenerator::class);
 
         $templateService = Mockery::mock(TemplateService::class);
-        $templateService->shouldReceive("render")->andReturn(
+        $templateService->shouldReceive("renderResponse")->andReturn(
             new Response("In my library")
         );
 

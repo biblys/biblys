@@ -61,7 +61,7 @@ class InvitationControllerTest extends TestCase
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
-        $templateService->expects($this->once())->method("render")->willReturn(new Response("Invitation"));
+        $templateService->expects($this->once())->method("renderResponse")->willReturn(new Response("Invitation"));
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldNotReceive("send");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
@@ -126,7 +126,7 @@ class InvitationControllerTest extends TestCase
             ->with("second-valid@example.org", "Téléchargez « Sent Book » en numérique", "Invitation");
 
         $templateService = Mockery::mock(TemplateService::class);
-        $templateService->shouldReceive("render")->andReturn(new Response("Invitation"));
+        $templateService->shouldReceive("renderResponse")->andReturn(new Response("Invitation"));
 
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")->andReturn("/invitation/ANEWCODE");
@@ -179,7 +179,7 @@ class InvitationControllerTest extends TestCase
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
-        $templateService->expects($this->exactly(3))->method("render")->willReturn(new Response("Invitation"));
+        $templateService->expects($this->exactly(3))->method("renderResponse")->willReturn(new Response("Invitation"));
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldNotReceive("send");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
@@ -233,7 +233,7 @@ class InvitationControllerTest extends TestCase
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
-        $templateService->expects($this->exactly(3))->method("render")->willReturn(new Response("Invitation"));
+        $templateService->expects($this->exactly(3))->method("renderResponse")->willReturn(new Response("Invitation"));
         $mailer = $this->createMock(Mailer::class);
         $mailer->expects($this->exactly(3))->method("send");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
@@ -287,7 +287,7 @@ class InvitationControllerTest extends TestCase
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
-        $templateService->expects($this->exactly(3))->method("render")->willReturn(new Response("Invitation"));
+        $templateService->expects($this->exactly(3))->method("renderResponse")->willReturn(new Response("Invitation"));
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldNotReceive("send");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
@@ -337,7 +337,7 @@ class InvitationControllerTest extends TestCase
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
-        $templateService->expects($this->once())->method("render")->willReturn(new Response("Invitation"));
+        $templateService->expects($this->once())->method("renderResponse")->willReturn(new Response("Invitation"));
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldNotReceive("send");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
@@ -388,7 +388,7 @@ class InvitationControllerTest extends TestCase
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
-        $templateService->expects($this->once())->method("render")->willReturn(new Response("Invitation"));
+        $templateService->expects($this->once())->method("renderResponse")->willReturn(new Response("Invitation"));
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldReceive("send")
             ->with("multiple@example.org", "Téléchargez « Invited 1 » et 2 autres en numérique",
@@ -440,7 +440,7 @@ class InvitationControllerTest extends TestCase
         $currentUser->shouldReceive("isAuthentified")->andReturn(true);
         $currentUser->shouldReceive("getAxysAccount")->andReturn($axysAccount);
         $templateService = Mockery::mock(TemplateService::class);
-        $templateService->shouldReceive("render")
+        $templateService->shouldReceive("renderResponse")
             ->with("AppBundle:Invitation:show.html.twig", [
                 "currentUser" => $currentUser,
                 "invitation" => $invitation,
@@ -477,7 +477,7 @@ class InvitationControllerTest extends TestCase
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService
-            ->shouldReceive("render")
+            ->shouldReceive("renderResponse")
             ->with("AppBundle:Invitation:show-for-anonymous-user.html.twig")
             ->andReturn(new Response("Please log in."));
 

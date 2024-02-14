@@ -65,7 +65,7 @@ class InvitationController extends Controller
             ->filterByTypeId($downloadbleTypeIds)
             ->orderByTitleAlphabetic()
             ->find();
-        return $templateService->render("AppBundle:Invitation:new.html.twig", [
+        return $templateService->renderResponse("AppBundle:Invitation:new.html.twig", [
             "downloadableArticles" => $downloadableArticles->getData(),
         ]);
     }
@@ -200,7 +200,7 @@ class InvitationController extends Controller
     ): Response
     {
         if (!$currentUser->isAuthentified()) {
-            return $templateService->render(
+            return $templateService->renderResponse(
                 "AppBundle:Invitation:show-for-anonymous-user.html.twig",
             );
         }
@@ -214,7 +214,7 @@ class InvitationController extends Controller
             $error = $exception->getMessage();
         }
 
-        return $templateService->render("AppBundle:Invitation:show.html.twig", [
+        return $templateService->renderResponse("AppBundle:Invitation:show.html.twig", [
             "currentUser" => $currentUser,
             "invitation" => $invitation,
             "error" => $error,
@@ -434,7 +434,7 @@ class InvitationController extends Controller
             "code" => $invitation->getCode()
         ]);
         $invitationUrl = $request->getSchemeAndHttpHost().$invitationRelativeUrl;
-        $mailContent = $templateService->render(
+        $mailContent = $templateService->renderResponse(
             "AppBundle:Invitation:email.html.twig",
             [
                 "articleTitle" => $articlesTitle,

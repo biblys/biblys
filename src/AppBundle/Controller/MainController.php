@@ -249,7 +249,7 @@ class MainController extends Controller
             }
         }
 
-        return $templateService->render('AppBundle:Main:contact.html.twig', [
+        return $templateService->renderResponse('AppBundle:Main:contact.html.twig', [
             'name' => $name,
             'email' => $email,
             'subject' => $subject,

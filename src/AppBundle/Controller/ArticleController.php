@@ -723,7 +723,7 @@ class ArticleController extends Controller
             );
         }
 
-        return $templateService->render("AppBundle:Article:download-with-watermark.html.twig", [
+        return $templateService->renderResponse("AppBundle:Article:download-with-watermark.html.twig", [
             "article_id" => $id,
             "article_title" => $libraryItem->getArticle()->getTitle(),
             "item_id" => $libraryItem->getId(),

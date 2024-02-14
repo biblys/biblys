@@ -139,7 +139,7 @@ class OpenIDConnectControllerTest extends TestCase
         $templateService = $this->createMock(TemplateService::class);
         $templateService
             ->expects($this->once())
-            ->method("render")
+            ->method("renderResponse")
             ->with("AppBundle:OpenIDConnect:callback.html.twig", [
                 "siteTitle" => "Éditions Paronymie"
             ])

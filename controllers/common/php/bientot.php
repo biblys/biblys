@@ -11,5 +11,5 @@ use Twig\Error\SyntaxError;
  */
 return function (TemplateService $templateService): Response
 {
-    return $templateService->renderFromString("<p>Bientôt…</p>");
+    return $templateService->renderResponseFromString("<p>Bientôt…</p>");
 };

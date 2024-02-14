@@ -33,7 +33,7 @@ class TemplateServiceTest extends TestCase
         );
 
         // when
-        $response = $templateService->renderFromString(
+        $response = $templateService->renderResponseFromString(
             "Hello <b>{{ name }}</b>!",
             ["name" => "World"]
         );

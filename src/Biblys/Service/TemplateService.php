@@ -57,7 +57,7 @@ class TemplateService
      * @throws SyntaxError
      * @throws Exception
      */
-    public function render(string $templatePath, array $vars = []): Response
+    public function renderResponse(string $templatePath, array $vars = []): Response
     {
         $twig = $this->_getTwigEnvironment();
         $template = $twig->load($templatePath);
@@ -70,7 +70,7 @@ class TemplateService
      * @throws SyntaxError
      * @throws LoaderError
      */
-    public function renderFromString(string $templateString, array $vars = []): Response
+    public function renderResponseFromString(string $templateString, array $vars = []): Response
     {
         $twig = $this->_getTwigEnvironment();
         $template = $twig->createTemplate($templateString);

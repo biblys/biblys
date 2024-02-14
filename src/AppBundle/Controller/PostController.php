@@ -213,7 +213,7 @@ class PostController extends Controller
         $converter = new HtmlConverter();
         $markdown = $converter->convert($post->getContent());
 
-        $response = $templateService->render('AppBundle:Post:export.md.twig', [
+        $response = $templateService->renderResponse('AppBundle:Post:export.md.twig', [
             "post" => $post,
             "cover" => $cover,
             "content" => $markdown,
