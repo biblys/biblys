@@ -743,7 +743,7 @@ function reloadEvents(scope) {
 
           // If error
           if (data.error) {
-            _alert(data.error);
+            _alert(data.error.message || data.error);
 
             // If success
           } else {
