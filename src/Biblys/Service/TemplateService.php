@@ -52,6 +52,21 @@ class TemplateService
     }
 
     /**
+     * @param string $templatePath
+     * @param array $vars
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function render(string $templatePath, array $vars): string
+    {
+        $twig = $this->_getTwigEnvironment();
+        $template = $twig->load($templatePath);
+        return $template->render($vars);
+    }
+
+    /**
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -59,10 +74,7 @@ class TemplateService
      */
     public function renderResponse(string $templatePath, array $vars = []): Response
     {
-        $twig = $this->_getTwigEnvironment();
-        $template = $twig->load($templatePath);
-        $rendered = $template->render($vars);
-
+        $rendered = $this->render($templatePath, $vars);
         return new Response($rendered);
     }
 
