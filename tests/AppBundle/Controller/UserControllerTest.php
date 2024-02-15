@@ -100,6 +100,12 @@ class UserControllerTest extends TestCase
         );
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
     public function testAccount()
     {
         // given

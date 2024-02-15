@@ -73,7 +73,7 @@ class UserController extends Controller
         return $this->render("AppBundle:User:loggedOut.html.twig");
     }
 
-    public function signup(): Response
+    public function signup(): RedirectResponse
     {
         return new RedirectResponse("https://axys.me");
     }
