@@ -47,11 +47,12 @@ class UserController extends Controller
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
-     * @throws PropelException
      */
-    public function account(TemplateService $templateService): Response
+    public function account(CurrentUser $currentUser, TemplateService $templateService): Response
     {
-        return $templateService->renderResponse("AppBundle:User:account.html.twig");
+        return $templateService->renderResponse("AppBundle:User:account.html.twig", [
+            "user_email" => $currentUser->getAxysAccount()->getEmail(),
+        ]);
     }
 
     public function logout(UrlGenerator $urlGenerator): Response

@@ -1,6 +1,13 @@
 # Historique des modifications
 
-## 2.77.1 (21 février 2024)
+## 2.78.0 (DEV)
+
+Améliorations
+
+- L'adresse e-mail du compte courant est désormais affiché sur la page "Mon
+  compte"
+
+### 2.77.1 (21 février 2024)
 
 Corrections
 

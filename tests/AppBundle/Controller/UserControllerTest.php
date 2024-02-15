@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentUser;
 use Biblys\Service\TemplateService;
+use Biblys\Test\ModelFactory;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -113,12 +114,18 @@ class UserControllerTest extends TestCase
     {
         // given
         $userController = new UserController();
+
+        $axysAccount = ModelFactory::createAxysAccount("logged-user@biblys.fr");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("getAxysAccount")->andReturn($axysAccount);
+
         $templateService = Mockery::mock(TemplateService::class);
-        $templateService->expects("renderResponse")->with("AppBundle:User:account.html.twig")
-            ->andReturn(new Response("Vous êtes connecté·e à l'aide d'un compte Axys."));
+        $templateService->expects("renderResponse")->with("AppBundle:User:account.html.twig", [
+            "user_email" => "logged-user@biblys.fr",
+        ])->andReturn(new Response("Vous êtes connecté·e à l'aide d'un compte Axys."));
 
         // when
-        $response = $userController->account($templateService);
+        $response = $userController->account($currentUser, $templateService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
