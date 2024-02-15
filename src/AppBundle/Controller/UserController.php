@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentUser;
+use Biblys\Service\TemplateService;
 use Framework\Controller;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -48,9 +49,9 @@ class UserController extends Controller
      * @throws LoaderError
      * @throws PropelException
      */
-    public function account(): Response
+    public function account(TemplateService $templateService): Response
     {
-        return $this->render("AppBundle:User:account.html.twig");
+        return $templateService->renderResponse("AppBundle:User:account.html.twig");
     }
 
     public function logout(UrlGenerator $urlGenerator): Response

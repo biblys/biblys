@@ -3,9 +3,12 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentUser;
+use Biblys\Service\TemplateService;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -110,9 +113,12 @@ class UserControllerTest extends TestCase
     {
         // given
         $userController = new UserController();
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("renderResponse")->with("AppBundle:User:account.html.twig")
+            ->andReturn(new Response("Vous êtes connecté·e à l'aide d'un compte Axys."));
 
         // when
-        $response = $userController->account();
+        $response = $userController->account($templateService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
