@@ -26,11 +26,11 @@ Améliorations
 
 Corrections
 
-- L'association d'un article à un billet de blog ne fonctionnait plus. C'est 
+- L'association d'un article à un billet de blog ne fonctionnait plus. C'est
   corrigé.
-- Les anciennes urls des pages articles et contributeurs pouvaient renvoyer 
+- Les anciennes urls des pages articles et contributeurs pouvaient renvoyer
   une erreur 404. Désormais, elles redirigent vers les urls des nouvelles pages.
-- L'ajout d'un article à un lot pouvait échouer sans erreur. Maintenant, ça 
+- L'ajout d'un article à un lot pouvait échouer sans erreur. Maintenant, ça
   marche.
 
 ### 2.75.2 (20 décembre 2023)
@@ -38,35 +38,35 @@ Corrections
 Corrections
 
 - La page d'édition de billet ne s'affichait pas correctement. C'est corrigé.
-- Les erreurs lors de l'import d'un article pouvaient ne pas être affichées 
+- Les erreurs lors de l'import d'un article pouvaient ne pas être affichées
   correctement. C'est réparé.
-- La création d'une liste d'exemplaires pouvait déclencher une erreur. 
+- La création d'une liste d'exemplaires pouvait déclencher une erreur.
   Maintenant, ça marche.
 
 ### 2.75.1 (13 décembre 2023)
 
 Corrections
 
-- Le bouton permettant de modifier le pays au moment de la validation de 
+- Le bouton permettant de modifier le pays au moment de la validation de
   commande n'était plus cliquable. C'est corrigé.
-- Certains liens vers la page article n'étaient plus valide. Ils le sont à 
+- Certains liens vers la page article n'étaient plus valide. Ils le sont à
   présent.
 
 ## 2.75.0 (5 décembre 2023)
 
 Améliorations
 
-- Deux nouvelles options `free_shipping_invite_text` et 
-  `free_shipping_success_text` ont été ajoutées pour personnaliser les 
-  textes sur le panier pour encourager les clients à atteindre le montant 
+- Deux nouvelles options `free_shipping_invite_text` et
+  `free_shipping_success_text` ont été ajoutées pour personnaliser les
+  textes sur le panier pour encourager les clients à atteindre le montant
   autorisant la gratuité des frais de port.
-- Un utilisateur ne pouvait pas accepter une invitation de téléchargement 
-  si au moins l'un des articles associés était déjà dans sa bibliothèque. 
-  Désormais, les articles déjà présents seront ignorés et les autres seront 
+- Un utilisateur ne pouvait pas accepter une invitation de téléchargement
+  si au moins l'un des articles associés était déjà dans sa bibliothèque.
+  Désormais, les articles déjà présents seront ignorés et les autres seront
   ajoutés.
-- Une page de documentation "Comment télécharger et lire des livres 
+- Une page de documentation "Comment télécharger et lire des livres
   numériques" a été ajoutée.
-- La fonctionnalité de mise à jour de Biblys via l'administration a été 
+- La fonctionnalité de mise à jour de Biblys via l'administration a été
   supprimée.
 
 Corrections
@@ -78,7 +78,7 @@ Corrections
 Déploiement
 
 - Remplacer `$request->query->get($key)`
-  par `LegacyCodeHelper::getRouteParam($key)` 
+  par `LegacyCodeHelper::getRouteParam($key)`
   dans les controllers legacy.
 
 ### 2.74.2 (DEV)
@@ -94,14 +94,14 @@ Corrections
 Corrections
 
 - Le paiement via Stripe pouvait déclencher une erreur. C'est corrigé.
-- Seul le premier article d'une invitation était validé au moment de 
+- Seul le premier article d'une invitation était validé au moment de
   l'acceptation de l'invitation. Désormais, ils le sont tous.
 
 ### 2.74.1 (8 novembre 2023)
 
 Corrections
 
-- Une url d'article pouvait être considéré comme invalide si elle contenait 
+- Une url d'article pouvait être considéré comme invalide si elle contenait
   le caractère "_". C'est corrigé.
 - La page "Ma liste d'envies" pouvait s'afficher vide. Ce n'est plus le cas.
 
@@ -109,50 +109,50 @@ Corrections
 
 Améliorations
 
-- Il est désormais possible d'afficher sur la page panier une jauge 
-  encourageant le client à atteindre un certain montant pour bénéficier de 
-  la gratuité des frais de port. Le montant cible se configure à l'aide de 
+- Il est désormais possible d'afficher sur la page panier une jauge
+  encourageant le client à atteindre un certain montant pour bénéficier de
+  la gratuité des frais de port. Le montant cible se configure à l'aide de
   l'option de configuration `free_shipping_target_amount`.
-- Les paiements par virement sont désormais affichés sur la page récapitulative 
+- Les paiements par virement sont désormais affichés sur la page récapitulative
   des commandes.
-- Le champ permettant d'indiquer la raison de suppression d'un article a été 
+- Le champ permettant d'indiquer la raison de suppression d'un article a été
   rétiré.
 
 Corrections
 
-- L'ajout d'un nouvel administrateur déclenchait une erreur même si 
-  l'adresse email utilisée correspondait bien à un compte utilisateur. C'est 
+- L'ajout d'un nouvel administrateur déclenchait une erreur même si
+  l'adresse email utilisée correspondait bien à un compte utilisateur. C'est
   corrigé.
 
 ### 2.73.1 (18 octobre 2023)
 
 Corrections
 
-- L'ajout d'un fichier téléchargeable à un article ne fonctionnait plus et 
+- L'ajout d'un fichier téléchargeable à un article ne fonctionnait plus et
   échouait sans erreurs. C'est corrigé.
-- Lorsqu'un client ajoutait des articles à une commande, le courriel de 
+- Lorsqu'un client ajoutait des articles à une commande, le courriel de
   confirmation n'incluait pas les nouveaux articles. C'est maintenant le cas.
 
 ## 2.73.0 (6 octobre 2023)
 
 Améliorations
 
-- Les livres numériques peuvent maintenant être vendus avec tatouage 
+- Les livres numériques peuvent maintenant être vendus avec tatouage
   numérique.
-- Les titres d'articles triés alphabétiquement sont désormais affichés sans 
+- Les titres d'articles triés alphabétiquement sont désormais affichés sans
   article sur la page de création d'invitation de téléchargement.
 - Un avertissement est affiché sur la page Frais de port de l'administration
   pour les tarifs ne respectant pas la loi française.
 - Une option de site "sales_disabled" a été ajoutée pour désactiver les
   ventes sur le site.
-- Le formulaire de contact affichera désormais une erreur si le contenu du 
+- Le formulaire de contact affichera désormais une erreur si le contenu du
   champ "Sujet" est long de moins de 6 caractères.
 - L'ancien outil d'envoi de livres numériques a été supprimé.
 
 Corrections
 
-- Les erreurs lors de l'envoi ou de la mise à jour d'un fichier 
-  téléchargeable associé à un article n'était pas affiché. C'est désormais 
+- Les erreurs lors de l'envoi ou de la mise à jour d'un fichier
+  téléchargeable associé à un article n'était pas affiché. C'est désormais
   le cas.
 - La page d'édition d'une commande pouvait déclencher une erreur. C'est corrigé.
 
@@ -160,47 +160,47 @@ Corrections
 
 Corrections
 
-- Si la recherche d'un article sur nooSFere échouait à cause d'une erreur, 
-  le message affiché était "Aucun résultat". Désormais, c'est le message 
+- Si la recherche d'un article sur nooSFere échouait à cause d'une erreur,
+  le message affiché était "Aucun résultat". Désormais, c'est le message
   d'erreur renvoyé par noosSFere.
 
 ### 2.72.1 (13 septembre 2023)
 
 Corrections
 
-- Le nom de domaine dans les liens d'invitations pouvait être incorrect. 
+- Le nom de domaine dans les liens d'invitations pouvait être incorrect.
   C'est corrigé.
-- Le texte de prévisualisation du courriel d'invitation de téléchargement 
-  était un texte par défaut en anglais. Il a été remplacé par un texte en 
+- Le texte de prévisualisation du courriel d'invitation de téléchargement
+  était un texte par défaut en anglais. Il a été remplacé par un texte en
   français.
-- Des images n'existant pas pouvait parfois être affichées alors qu'elles 
-  n'existaient pas. Ce n'est plus le cas. 
+- Des images n'existant pas pouvait parfois être affichées alors qu'elles
+  n'existaient pas. Ce n'est plus le cas.
 
 ## 2.72.0 (6 septembre 2023)
 
 Améliorations
 
-La fonctionnalité d'envoi de livres numériques a été entièrement repensée, 
+La fonctionnalité d'envoi de livres numériques a été entièrement repensée,
 l'outil s'appelle désormais "Invitations de téléchargement"
 
-- Les livres ne sont plus ajoutés directement à la bibliothèque de 
-  l'utilisateur, celui-ci reçoit par courriel un lien permettant de faire 
+- Les livres ne sont plus ajoutés directement à la bibliothèque de
+  l'utilisateur, celui-ci reçoit par courriel un lien permettant de faire
   l'ajout au compte de son choix.
-- Il est possible de récupérer le lien créé pour faire un envoyer un 
-  courriel personnalisé plutôt que d'utiliser le courriel générique envoyé 
+- Il est possible de récupérer le lien créé pour faire un envoyer un
+  courriel personnalisé plutôt que d'utiliser le courriel générique envoyé
   par le site.
-- Il est également possible de faire une création en lien en masse pour un 
-  grand nombre d'utilisateurs, puis de télécharger un fichier CSV avec les 
+- Il est également possible de faire une création en lien en masse pour un
+  grand nombre d'utilisateurs, puis de télécharger un fichier CSV avec les
   liens, pour faire par exemple un envoi avec un outil d'e-mailing.
 
 Autres améliorations
 
 - Il est désormais possible d'utiliser Brevo pour gérer la liste de contacts.
-- L'affichage de prévisualisation lors de la publication d'un lien vers un 
-  site Biblys sur les réseaux sociaux a été améliorée. 
-- Il n'est plus possible d'inviter un utilisateur à être administrateur s'il 
+- L'affichage de prévisualisation lors de la publication d'un lien vers un
+  site Biblys sur les réseaux sociaux a été améliorée.
+- Il n'est plus possible d'inviter un utilisateur à être administrateur s'il
   ne possède pas un compte au préalable.
-- L'erreur affichée lors du refus de la connexion avec Axys a été rendue 
+- L'erreur affichée lors du refus de la connexion avec Axys a été rendue
   plus explicite.
 
 ### 2.71.2 (31 août 2023)
@@ -208,7 +208,7 @@ Autres améliorations
 Corrections
 
 - La recherche d'un client depuis la caisse pouvait échouer. C'est corrigé.
-- L'affichage d'un livre sans prix pouvait déclencher une erreur sur la page 
+- L'affichage d'un livre sans prix pouvait déclencher une erreur sur la page
   catalogue de l'administration. Ce n'est plus le cas.
 - L'affichage des erreurs au moment de la connexion avec Axys a été améliorée.
 
@@ -216,32 +216,32 @@ Corrections
 
 Corrections
 
-- Un certain nombre d'outils d'administration pouvait renvoyer des erreurs 
+- Un certain nombre d'outils d'administration pouvait renvoyer des erreurs
   suite à une migration de données partielles. C'est corrigé.
 
 ## 2.71.0 (21 août 2023)
 
 Améliorations
 
-- Cette mise à jour essentiellement technique permet une importante 
-  migration des données des comptes Axys afin de préparer la possibilité de 
+- Cette mise à jour essentiellement technique permet une importante
+  migration des données des comptes Axys afin de préparer la possibilité de
   créer un compte directement sur le site.
-- Il n'est plus possible d'inviter un utilisateur à être administrateur s'il 
+- Il n'est plus possible d'inviter un utilisateur à être administrateur s'il
   ne possède pas un compte au préalable.
 
 ### 2.70.2 (16 août 2023)
 
 Corrections
 
-- Le message "Vous n'êtes pas autorisé à accéder à cette page." pouvait 
-  apparaître pour un utilisateur avec des droits d'administration. C'est 
+- Le message "Vous n'êtes pas autorisé à accéder à cette page." pouvait
+  apparaître pour un utilisateur avec des droits d'administration. C'est
   corrigé.
-- Le vidage des paniers pouvait déclencher une erreur SQL. Ça n'arrivera 
+- Le vidage des paniers pouvait déclencher une erreur SQL. Ça n'arrivera
   plus.
-- La génération des termes de recherche d'un article pouvait déclencher une 
-  erreur si la chaine de caractères était trop longue. Désormais, elle est 
+- La génération des termes de recherche d'un article pouvait déclencher une
+  erreur si la chaine de caractères était trop longue. Désormais, elle est
   limitée à 1024 caractères.
-- Le téléversement d'un fichier depuis la page Gestion des médias échouait 
+- Le téléversement d'un fichier depuis la page Gestion des médias échouait
   dans certains cas. Maintenant, ça marche.
 
 ### 2.70.1 (9 août 2023)
@@ -265,91 +265,94 @@ Déploiement
 
 Corrections
 
-- Une erreur 404 pouvait survenir lors de l'ajout d'un nouvel article ou 
+- Une erreur 404 pouvait survenir lors de l'ajout d'un nouvel article ou
   l'accès au catalogue en tant qu'éditeur. C'est corrigé.
 
 ### 2.69.2 (26 juillet 2023)
 
 Corrections
 
-- Une erreur "Votre maison d'édition n'est pas autorisée sur ce site." 
-  pouvait apparaître sur la page d'édition d'article pour les 
+- Une erreur "Votre maison d'édition n'est pas autorisée sur ce site."
+  pouvait apparaître sur la page d'édition d'article pour les
   administrateurs. C'est corrigé.
-- Une alerte créée sans prix maximum pouvait déclencher une erreur sur la 
+- Une alerte créée sans prix maximum pouvait déclencher une erreur sur la
   page d'ajout d'un exemplaire au stock. Ça n'arrivera plus.
 
 ### 2.69.1 (20 juilet 2023)
 
 Corrections
 
-- Une erreur pouvait survenir lors de l'affichage de l'éditeur de commande 
-  pour une commande dont le pays de livraison n'était pas renseigné. C'est 
+- Une erreur pouvait survenir lors de l'affichage de l'éditeur de commande
+  pour une commande dont le pays de livraison n'était pas renseigné. C'est
   corrigé.
-- L'option de site `old_controller` pour la page d'accueil pouvait 
+- L'option de site `old_controller` pour la page d'accueil pouvait
   déclencher une erreur 404. A présent, la page d'accueil s'affiche.
-- L'affichage de la page d'édition article pouvait échouer avec une erreur. 
+- L'affichage de la page d'édition article pouvait échouer avec une erreur.
   Ce n'est plus le cas.
 
 ## 2.69.0 (5 juillet 2023)
 
 Améliorations
 
-- La protection anti-spam du formulaire de contact a été renforcée avec 
+- La protection anti-spam du formulaire de contact a été renforcée avec
   l'ajout d'un mécanisme de type "honey pot".
 
 Déploiement
 
-- Dans les controllers, remplacer `$_LOG` par `LegacyCodeHelper::getGlobalVisitor()`.
-- Dans les controllers, remplacer `$_SITE` par `LegacyCodeHelper::getGlobalSite()`.
-- Dans les controllers, remplacer `$site` par `LegacyCodeHelper::getGlobalSite()`.
+- Dans les controllers, remplacer `$_LOG`
+  par `LegacyCodeHelper::getGlobalVisitor()`.
+- Dans les controllers, remplacer `$_SITE`
+  par `LegacyCodeHelper::getGlobalSite()`.
+- Dans les controllers, remplacer `$site`
+  par `LegacyCodeHelper::getGlobalSite()`.
 - Remplacer liens vers `adm_article` par `article_edit`.
 
 ### 2.68.6 (14 juin 2023)
 
 Corrections
 
-- Certaines dates n'apparaissaient pas dans le filtre "Ajoutés le" sur la 
+- Certaines dates n'apparaissaient pas dans le filtre "Ajoutés le" sur la
   page des stocks. C'est corrigé.
-- L'affichage de la page d'édition d'article pouvait échouer pour un article 
+- L'affichage de la page d'édition d'article pouvait échouer pour un article
   associé à un rayon supprimé. C'est corrigé.
 
 ### 2.68.5 (9 juin 2023)
 
 Corrections
 
-- La redirection vers la page d'accueil après la connexion pouvait échouer. 
+- La redirection vers la page d'accueil après la connexion pouvait échouer.
   C'est corrigé.
-- L'affichage de la facture d'une commande à laquelle n'était associé aucun 
+- L'affichage de la facture d'une commande à laquelle n'était associé aucun
   pays de livraison déclenchait une erreur. C'est corrigé.
 
 ### 2.68.4 (27 mai 2023)
 
 Corrections
 
-- Un problème de variable indéfini empêchait le bon fonctionnement de la 
+- Un problème de variable indéfini empêchait le bon fonctionnement de la
   page d'édition des billets.
 
 ### 2.68.3 (17 mai 2023)
 
 Corrections
 
-- La journalisation des notices de dépréciation pouvait créer des journaux très 
+- La journalisation des notices de dépréciation pouvait créer des journaux très
   lourds très rapidement. Elle est désormais désactivée par défaut.
 
 ### 2.68.2 (10 mai 2023)
 
 Corrections
 
-- Les rayons pouvaient ne pas correctement s'afficher sur la page d'édition 
+- Les rayons pouvaient ne pas correctement s'afficher sur la page d'édition
   d'un article. C'est corrigé.
-- L'accès anonyme à une page de commande pouvait déclencher une erreur. 
+- L'accès anonyme à une page de commande pouvait déclencher une erreur.
   Désormais, c'est l'invite à s'identifier qui s'affiche.
 
 ### 2.68.1 (7 mai 2023)
 
 Corrections
 
-- La dépendance du gestionnaire d'erreur Rollbar pouvait déclencher une 
+- La dépendance du gestionnaire d'erreur Rollbar pouvait déclencher une
   erreur fatale. C'est corrigé.
 
 ## 2.68.0 (3 mai 2023)
@@ -357,11 +360,11 @@ Corrections
 Améliorations
 
 - Biblys ne supporte plus PHP 8.0. La version minimale requise est PHP 8.1.
-- La durée des sessions créées lors d'une connexion à Axys a été allongée 
+- La durée des sessions créées lors d'une connexion à Axys a été allongée
   quand la case "Se souvenir de moi" est cochée.
 - Mailjet peut désormais être utilisé comme gestionnaire de liste de contacts.
 - L'option de paiement "Échange" a été ajoutée.
-- Un numéro de version a été ajouté aux images d'illustrations des billets 
+- Un numéro de version a été ajouté aux images d'illustrations des billets
   afin de contourner la mise en cache lorsqu'elles sont mises à jour.
 - L'affichage des messages flash d'information, de succès, d'avertissement
   et d'erreur a été améliorée.
@@ -369,7 +372,7 @@ Améliorations
 Deploiement
 
 - Utiliser PHP 8.1
-- Ajouter `{% include "layout:_flash_messages.html.twig" %}` au fichier de 
+- Ajouter `{% include "layout:_flash_messages.html.twig" %}` au fichier de
   layout `base.html.twig`, juste après l'inclusion
   du partiel `_overall_menu.html.twig`.
 - Dans les controllers, remplacer `$_V` par `getLegacyVisitor()`.
@@ -379,33 +382,33 @@ Deploiement
 
 Corrections
 
-- Le raccourci clavier "copier" pouvait parfois déclencher le raccourci 
+- Le raccourci clavier "copier" pouvait parfois déclencher le raccourci
   d'accès rapide à la caisse. C'est corrigé.
-- Une erreur pouvait empêcher le bon affichage de la page "Mes souhaits". 
+- Une erreur pouvait empêcher le bon affichage de la page "Mes souhaits".
   C'est corrigé.
 
 ### 2.67.2 (19 avril 2023)
 
 Corrections
 
-- Le message d'erreur affiché lors de l'utilisateur d'un critère de tri 
+- Le message d'erreur affiché lors de l'utilisateur d'un critère de tri
   invalide était peu clair. C'est corrigé.
-- L'échec de la connexion à la base de données n'arrêtait pas l'execution. 
+- L'échec de la connexion à la base de données n'arrêtait pas l'execution.
   C'est désormais le cas.
-- La validation des adresses des sites webs d'éditeurs exigeaient qu'elles 
+- La validation des adresses des sites webs d'éditeurs exigeaient qu'elles
   commencent par "http://". À présent, "https://" est aussi accepté.
-- L'envoi d'un livre numérique à une adresse e-mail invalide échouait 
+- L'envoi d'un livre numérique à une adresse e-mail invalide échouait
   silencieusement. Désormais, un message d'avertissement est affiché.
-- Les images de couvertures et photos d'exemplaires pouvaient ne pas 
+- Les images de couvertures et photos d'exemplaires pouvaient ne pas
   s'afficher sur la page panier. C'est corrigé.
 
 ### 2.67.1 (12 avril 2023)
 
 Corrections
 
-- Une erreur pouvait se produire lors de l'ajout d'un·e contributeur·trice à 
+- Une erreur pouvait se produire lors de l'ajout d'un·e contributeur·trice à
   un article. C'est corrigé.
-- La section "Numérique" de l'administration est masquée si l'option de site 
+- La section "Numérique" de l'administration est masquée si l'option de site
   `downloadable_publishers` n'est pas renseignée.
 - Les options de site sont désormais supprimées lorsque leur valeur est vidée.
 
@@ -417,22 +420,22 @@ Améliorations
   un menu utilisateur local.
 - Le moteur de suggestions Gleeph a été ajouté.
 - L'outil de statistiques Umami a été ajouté.
-- Les outils de statistiques ignorent désormais les visiteurs qui sont 
+- Les outils de statistiques ignorent désormais les visiteurs qui sont
   identifiés comme des administrateurs.
-- Après la connexion, l'utilisateur sera désormais redirigé vers la page où 
+- Après la connexion, l'utilisateur sera désormais redirigé vers la page où
   il se trouvait lorsqu'il a cliqué sur le bouton "Connexion".
 - L'outil d'envoi de newsletter a été supprimé.
 
 Déploiement
-    
-- Ajouter `{% include "layout:_overall_menu.html.twig" %}` au fichier de layout 
+
+- Ajouter `{% include "layout:_overall_menu.html.twig" %}` au fichier de layout
   base.html.twig, juste après l'ouverture de la base `<body>`
 
 ### 2.66.3 (27 mars 2023)
 
 Corrections
 
-- Le code du tracker de suivi Matomo Analytics n'était plus inséré, même si 
+- Le code du tracker de suivi Matomo Analytics n'était plus inséré, même si
   l'option de configuration correspondant été présente. C'est corrigé.
 
 ### 2.66.2 (15 mars 2023)
@@ -441,11 +444,11 @@ Corrections
 
 - Les fichiers javascripts pouvaient ne pas être importés dans certains
   controllers dépréciés. C'est corrigé.
-- L'auto-complétion des contributeurs depuis la page d'édition des articles 
-  ne fonctionnaient plus pour les utilisateurs avec des droits éditeurs. 
+- L'auto-complétion des contributeurs depuis la page d'édition des articles
+  ne fonctionnaient plus pour les utilisateurs avec des droits éditeurs.
   C'est réparé.
-- La présence d'un article supprimé dans une commande pouvait déclencher une 
-  erreur. Désormais, la mention "Article inconnu" s'affichera à la place du 
+- La présence d'un article supprimé dans une commande pouvait déclencher une
+  erreur. Désormais, la mention "Article inconnu" s'affichera à la place du
   titre.
 
 ### 2.66.1 (8 mars 2023)
@@ -462,27 +465,27 @@ Corrections
 
 Améliorations
 
-- Lorsqu'un contributeur est modifié, les mots-clés des articles associés 
+- Lorsqu'un contributeur est modifié, les mots-clés des articles associés
   seront désormais rafraîchis.
 - L'outil de support intégré a été déprécié
-- Un lien a été ajouté dans l'administration vers la nouvelle plateforme 
+- Un lien a été ajouté dans l'administration vers la nouvelle plateforme
   Améliorer Biblys
 
 Corrections
 
-- Un problème d'affichage pouvait affecter le bon fonctionnement de l'outil 
+- Un problème d'affichage pouvait affecter le bon fonctionnement de l'outil
   d'inventaire. C'est corrigé.
 
 Déploiement
 
-- L'option de site permettant d'utiliser une page statique comme page 
+- L'option de site permettant d'utiliser une page statique comme page
   d'accueil s'écrit désormais `page:{slug}` plutôt que `page:{id}`.
 
 ### 2.65.4 (15 février 2023)
 
 Corrections
 
-- Le masquage des éléments lors de l'impression d'une facture ne 
+- Le masquage des éléments lors de l'impression d'une facture ne
   fonctionnait plus, c'est corrigé.
 
 ### 2.65.3 (1 février 2023)
@@ -490,27 +493,27 @@ Corrections
 Corrections
 
 - Le lien pour le suivi Colissimo ne fonctionnait plus. C'est corrigé.
-- Une erreur "RuntimeException" pouvait s'afficher lors de l'affichage de la 
+- Une erreur "RuntimeException" pouvait s'afficher lors de l'affichage de la
   page d'édition d'un contributeur. Ça n'arrivera plus.
-- Une erreur pouvait survenir lors de l'ajout d'un administrateur. 
+- Une erreur pouvait survenir lors de l'ajout d'un administrateur.
   Maintenant, ça marche.
 
 ### 2.65.2 (21 janvier 2023)
 
 Corrections
 
-- L'option d'affichage d'un rayon sur la page d'accueil provoquait un 
+- L'option d'affichage d'un rayon sur la page d'accueil provoquait un
   dédoublement de l'en-tête du site. C'est corrigé.
-- Une erreur "WARNING" du mode développement pouvait parfois apparaître en 
+- Une erreur "WARNING" du mode développement pouvait parfois apparaître en
   mode production. Ça n'arrivera plus.
 
 ### 2.65.1 (11 janvier 2023)
 
 Corrections
 
-- L'invite à la connexion lors du téléchargement d'un livre numérique 
+- L'invite à la connexion lors du téléchargement d'un livre numérique
   gratuit déclenchait une erreur. C'est corrigé.
-- Le message d'échec du test captcha lors de l'inscription à la newsletter 
+- Le message d'échec du test captcha lors de l'inscription à la newsletter
   ne s'affichait pas correctement. C'est mieux.
 
 ## 2.65.0 (4 janvier 2023)
@@ -518,7 +521,7 @@ Corrections
 Améliorations
 
 - Biblys ne supporte plus PHP 7.4. La version minimale requise est PHP 8.0.
-- Les urls des pages articles et contributeurs dépréciées sont désormais 
+- Les urls des pages articles et contributeurs dépréciées sont désormais
   préfixées par /legacy/a/ et /legacy/p/
 
 Déploiement
@@ -529,26 +532,26 @@ Déploiement
 
 Corrections
 
-- L'édition d'un modèle du thème pouvait renvoyer une erreur. Ce n'est plus 
+- L'édition d'un modèle du thème pouvait renvoyer une erreur. Ce n'est plus
   le cas.
-- Sur la page des stocks éditeur, le nombre de livre en stock n'était plus 
+- Sur la page des stocks éditeur, le nombre de livre en stock n'était plus
   mis à jour lorsque le champ était déselectionné. C'est corrigé.
 
 ### 2.64.2 (16 décembre 2022)
 
 Corrections
 
-- Les erreurs "Requête invalide" (HTTP 400) étaient mal prises en compte. 
+- Les erreurs "Requête invalide" (HTTP 400) étaient mal prises en compte.
   C'est réparé.
 
 ### 2.64.1 (11 décembre 2022)
 
 Corrections
 
-- Lors de l'accès non-authentifié à la page d'une commande associée à un 
-  utilisateur, une erreur pouvait s'afficher. Désormais, c'est la page 
+- Lors de l'accès non-authentifié à la page d'une commande associée à un
+  utilisateur, une erreur pouvait s'afficher. Désormais, c'est la page
   invitant à la connexion.
-- L'accès à la page d'édition d'un billet pouvait provoquer une erreur 
+- L'accès à la page d'édition d'un billet pouvait provoquer une erreur
   "Type Post inconnu". C'est corrigé.
 
 ## 2.64.0 (2 décembre 2022)
@@ -556,35 +559,35 @@ Corrections
 Améliorations
 
 - La page Contributeur·trice affiche désormais la photo si elle est disponible.
-- Le message d'erreur lors de l'échec d'un paiement via Paypal est désormais 
+- Le message d'erreur lors de l'échec d'un paiement via Paypal est désormais
   plus explicite.
-- Une option "mode" a été ajoutée à la configuration Paypal pour pouvoir 
+- Une option "mode" a été ajoutée à la configuration Paypal pour pouvoir
   choisir d'activer le mode "sandbox" ou le mode "live" (par défaut)
 
 ### 2.63.1 (23 septembre 2022)
 
 Corrections
 
-- Sur certaines pages avec pagination, le retour à la page précédente ne 
+- Sur certaines pages avec pagination, le retour à la page précédente ne
   fonctionnait plus. C'est corrigé.
 
 ## 2.63.0 (2 septembre 2022)
 
 Améliorations
 
-- Les résultats de recherche peuvent désormais être triés par date de 
+- Les résultats de recherche peuvent désormais être triés par date de
   parution croissante ou décroissante.
 - Le moteur de recherche accepte désormais des mots-clés à partir d'un
   caractère (contre trois auparavant).
-- Une option de configuration permettant l'activation du mode maintenance 
+- Une option de configuration permettant l'activation du mode maintenance
   avec un message a été ajoutée, elle remplace l'option de site équivalente.
-- Lorsqu'une alerte est envoyée à une adresse e-mail invalide, l'erreur 
-  affichée est désormais plus claire et n'empêche plus l'envoi des autres 
+- Lorsqu'une alerte est envoyée à une adresse e-mail invalide, l'erreur
+  affichée est désormais plus claire et n'empêche plus l'envoi des autres
   alertes.
 
 Corrections
 
-- La page "Chiffre d'affaires" de l'administration ne s'affichait pas 
+- La page "Chiffre d'affaires" de l'administration ne s'affichait pas
   correctement. C'est corrigé.
 
 Déploiement
@@ -595,17 +598,17 @@ Déploiement
 
 Corrections
 
-- L'erreur "Cet ISBN est déjà utilisé par un autre article" pouvait 
-  apparaître lors de la création d'un article pour de mauvaises raisons. 
+- L'erreur "Cet ISBN est déjà utilisé par un autre article" pouvait
+  apparaître lors de la création d'un article pour de mauvaises raisons.
   C'est corrigé.
-- Certains boutons et fonctionnalités de la page de gestion des stocks 
+- Certains boutons et fonctionnalités de la page de gestion des stocks
   étaient parfois ignorées. C'est réparé.
 
 ### 2.62.1 (12 juillet 2022)
 
 Corrections
 
-- Une erreur pouvait empêcher l'utilisation des anciens modèles principaux. 
+- Une erreur pouvait empêcher l'utilisation des anciens modèles principaux.
   C'est corrigé.
 
 ## 2.62.0 (8 juillet 2022)
@@ -613,21 +616,21 @@ Corrections
 Améliorations
 
 - Le modèle principal du thème utilise désormais le langage Twig.
-- Les vues des thèmes utilisent désormais des blocks de manière à pouvoir 
+- Les vues des thèmes utilisent désormais des blocks de manière à pouvoir
   utiliser différentes modèles principaux en fonction du contexte.
-- Un filtre "Articles en stock uniquement" a été ajouté à la page des 
+- Un filtre "Articles en stock uniquement" a été ajouté à la page des
   résultats de recherche.
 
 Corrections
 
-- Les illustrations des billets ne s'affichaient pas sur la page d'accueil. 
+- Les illustrations des billets ne s'affichaient pas sur la page d'accueil.
   C'est corrigé.
 
 ## 2.61.0 (6 mai 2022)
 
 Améliorations
 
-Cette mise à jour apporte le support de la nouvelle version d'Axys basée sur 
+Cette mise à jour apporte le support de la nouvelle version d'Axys basée sur
 le standard OpenID Connect.
 
 ### 2.60.2 (15 avril 2022)
@@ -642,21 +645,21 @@ Corrections
 
 - Une erreur pouvait empêcher la page Mise à jour de s'afficher correctement.
   Elle a été corrigée.
-- Le calcul du temps restant avant la fin d'une campagne de financement 
-  participatif pouvait être faussé quand il restait exactement un mois. Il 
+- Le calcul du temps restant avant la fin d'une campagne de financement
+  participatif pouvait être faussé quand il restait exactement un mois. Il
   est maintenant correct.
-- Le champ "Client n°" sur la page des ventes permettrait d'entrer du texte. 
+- Le champ "Client n°" sur la page des ventes permettrait d'entrer du texte.
   On ne peut maintenant entrer qu'un identifiant numérique.
 
 ## 2.60.0 (1er avril 2022)
 
 Améliorations
 
-- Une page "Paiements", avec des filtres par date et mode de paiement a été 
+- Une page "Paiements", avec des filtres par date et mode de paiement a été
   ajoutée à l'administration.
-- Deux colonnes "Auteur·trice·s" et "Stock" ont été ajoutées à la page 
+- Deux colonnes "Auteur·trice·s" et "Stock" ont été ajoutées à la page
   Catalogue et à la fonctionnalité d'export en CSV.
-- Les performances de la page Catalogue dans l'administration ont été 
+- Les performances de la page Catalogue dans l'administration ont été
   améliorées.
 
 Corrections
@@ -669,54 +672,54 @@ Corrections
 
 Correction
 
-Une erreur est empêchait l'utilisateur de la page ”Ventes numériques” de 
+Une erreur est empêchait l'utilisateur de la page ”Ventes numériques” de
 l'administration. C'est corrigé.
 
 ### 2.59.2 (18 mars 2022)
 
 Correction
 
-La création d'une alerte pouvait échouer silencieusement si l'utilisateur 
+La création d'une alerte pouvait échouer silencieusement si l'utilisateur
 n'était pas authentifié. Un message d'erreur est désormais affiché.
 
 ### 2.59.1 (11 mars 2022)
 
 Corrections
 
-- Une erreur pouvait s'afficher sur la page de gestion des raccourcis de 
+- Une erreur pouvait s'afficher sur la page de gestion des raccourcis de
   l'administration. C'est corrigé.
-- Un problème pouvait empêcher de valider un panier sur un site ne proposant 
+- Un problème pouvait empêcher de valider un panier sur un site ne proposant
   qu'un seul mode d'expédition. Ça n'arrivera plus.
-- La barre d'administration pouvait apparaître pour un utilisateur qui 
+- La barre d'administration pouvait apparaître pour un utilisateur qui
   n'avait pas les droits d'adminstration. Ce n'est plus le cas.
-- Une erreur pouvait empêcher un éditeur d'ajouter des mots-clés à un 
+- Une erreur pouvait empêcher un éditeur d'ajouter des mots-clés à un
   article ou de les supprimer. Maintenant, ça marche.
 
 ## 2.59.0 (4 mars 2022)
 
 Améliorations
 
-- Une option de site "alerts" a été ajoutée pour activer l'envoi d'alertes 
+- Une option de site "alerts" a été ajoutée pour activer l'envoi d'alertes
   par courriel lors de l'ajout d'exemplaires au stock.
-- Une option de site "countries_blocked_for_shipping" a été ajoutée pour 
+- Une option de site "countries_blocked_for_shipping" a été ajoutée pour
   permettre de bloquer l'expédition vers certains pays.
 - Une vérification a été ajoutée à la création de contreparties de
   financement pour empêcher l'association d'articles inexistant.
-- Les titres des articles de la page Catalogue de l'administration sont 
+- Les titres des articles de la page Catalogue de l'administration sont
   désormais cliquables.
-- L'affichage du chemin d'accès des fichiers sur la page Gestion des médias 
+- L'affichage du chemin d'accès des fichiers sur la page Gestion des médias
   a été amélioré.
 
 Corrections
 
-- Les quantités de contreparties d'une campagne de financement participatif 
+- Les quantités de contreparties d'une campagne de financement participatif
   terminée pouvait être mises à jour. C'est corrigé.
-- L'annulation d'une commande contenant un exemplaire associé à une campagne 
+- L'annulation d'une commande contenant un exemplaire associé à une campagne
   de financement participatif pouvait déclencher une erreur. Plus maintenant.
 
 ### 2.58.4 (20 février 2022)
 
-Correction : l'enregistrement d'un modèle de thème pouvait échouer sans 
+Correction : l'enregistrement d'un modèle de thème pouvait échouer sans
 erreur dans certain cas. C'est corrigé.
 
 ### 2.58.3 (11 février 2022)
@@ -727,8 +730,8 @@ Corrections
   "Ventes par article". C'est corrigé.
 - L'erreur affichée lors de l'enregistrement d'un modèle était laconique.
   C'est amélioré.
-- L'enregistrement du fichier de styles CSS pouvait déclencher une erreur 
-  500. Ce n'est plus le cas.
+- L'enregistrement du fichier de styles CSS pouvait déclencher une erreur
+    500. Ce n'est plus le cas.
 
 ### 2.58.2 (4 février 2022)
 
@@ -736,18 +739,18 @@ Corrections
 
 - Le sélecteur de pays de la page de confirmation de commande ne s'affichait pas
   correctement. C'est mieux.
-- L'affichage de la page d'accueil pouvait déclencher une erreur si aucune 
+- L'affichage de la page d'accueil pouvait déclencher une erreur si aucune
   option n'était configuré. Ce n'est plus le cas.
-- L'enregistrement d'une commande sans frais de port pouvait déclencher une 
+- L'enregistrement d'une commande sans frais de port pouvait déclencher une
   erreur. Ça fonctionne à présent.
 
 ### 2.58.1 (4 février 2022)
 
 Corrections
 
-- Certaines configurations de page d'accueil pouvait déclencher une erreur à 
+- Certaines configurations de page d'accueil pouvait déclencher une erreur à
   cause d'une dépendance manquante. C'est corrigé.
-- Le formattage d'une date pouvait déclencher une erreur sous certaines 
+- Le formattage d'une date pouvait déclencher une erreur sous certaines
   conditions. Les pendules ont été remises à l'heure.
 
 ## 2.58.0 (28 janvier 2022
@@ -755,14 +758,14 @@ Corrections
 Améliorations
 
 - Le formulaire d'enregistrement de l'adresse d'expédition lors de
-  l'enregistrement d'une commande a été amélioré, notamment pour mieux 
+  l'enregistrement d'une commande a été amélioré, notamment pour mieux
   distinguer les champs obligatoires des champs facultatifs.
 - Un lien vers la page des conditions générales de vente a été ajouté au
   courriel de confirmation de commande.
 
 ### 2.57.4 (28 janvier 2022)
 
-Cette mise à jour purement technique ajoute une option de configuration 
+Cette mise à jour purement technique ajoute une option de configuration
 nécessaire pour préparer une migration de la base de données.
 
 ### 2.57.3 (21 janvier 2022)
@@ -784,10 +787,10 @@ qu'éditeur provoquait une erreur. C'est corrigé.
 
 Améliorations
 
-- La page "frais de port" de l'administration sont désormais triés par type, 
+- La page "frais de port" de l'administration sont désormais triés par type,
   zone et montant pour permettre une lecture plus facile.
-- Cette mise à jour apporte également un certain nombre de modifications 
-  purement techniques visant à améliorer la stabilité et la maintenabilité de 
+- Cette mise à jour apporte également un certain nombre de modifications
+  purement techniques visant à améliorer la stabilité et la maintenabilité de
   Biblys, tout en préparant la refonte prochaine du panier.
 
 ### 2.56.3 (24 décembre 2021)
@@ -818,7 +821,7 @@ Améliorations
 
 Corrections
 
-- Un e-mail était envoyé lors de l'annulation d'une vente magasin. C'est 
+- Un e-mail était envoyé lors de l'annulation d'une vente magasin. C'est
   corrigé.
 
 ### 2.55.4 (29 octobre 2021)
@@ -836,7 +839,7 @@ Corrections
 
 Corrections
 
-- L'ajout d'un contributeur à un article pouvait parfois échouer sans message 
+- L'ajout d'un contributeur à un article pouvait parfois échouer sans message
   d'erreur. Ça n'arrivera plus.
 - L'ajout d'un rayon à un article pouvait parfois provoquer l'apparition du
   message d'erreur "Cet éditeur ne fait pas partie des éditeurs autorisés".
@@ -857,9 +860,9 @@ Corrections
 
 Corrections
 
-- L'erreur affichée lorsqu'on tentait d'afficher un article associé à un 
+- L'erreur affichée lorsqu'on tentait d'afficher un article associé à un
   contributeur supprimé était peu claire. Maintenant, c'est mieux.
-- La page Rayons de l'administration ne s'affichait plus du tout. C'est 
+- La page Rayons de l'administration ne s'affichait plus du tout. C'est
   corrigé.
 - L'erreur affichée lorsqu'une collection était créée avec un nom déjà utilisé
   était sybilline. Elle est désormais plus bavarde.
@@ -868,7 +871,7 @@ Corrections
 
 Améliorations
 
-- Il est désormais possible de préciser le genre à utiliser pour les 
+- Il est désormais possible de préciser le genre à utiliser pour les
   contributeurs ("féminin", "masculin" ou "neutre")
 - Le genre par défaut est désormais "neutre" et plus "masculin"
 
@@ -977,7 +980,7 @@ Corrections
 
 - Le calcul des frais de port ne provoque plus d'erreurs serveur lorsqu'appelé
   avec de mauvais paramètres
-- L'affichage d'une version de Biblys inexistante provoque une erreur 404 
+- L'affichage d'une version de Biblys inexistante provoque une erreur 404
   plutôt qu'une erreur serveur
 - Les performances de la page « Historique des mises à jour » ont été améliorées
 - La réception d'une notification d'un remboursement PayPlug ne provoque plus
@@ -996,7 +999,7 @@ Corrections
 
 Corrections
 
-- La présence d'une adresse e-mail invalide dans les abonnés ne bloque plus 
+- La présence d'une adresse e-mail invalide dans les abonnés ne bloque plus
   l'envoi de la newsletter
 - L'envoi d'une newsletter avec un nom de campagne fonctionne à nouveau
 - L'utilisation de l'ancienne page de recherche renvoie vers la nouvelle plutôt
@@ -1007,14 +1010,19 @@ Corrections
 
 Corrections
 
-- L'erreur affichée lors de l'accès à un article via son ISBN en utilisant un ISBN invalid a été améliorée
-- L'affichage d'une erreur lorsqu'un éditeur est créé avec un nom déjà utilisé a été améliorée
-- L'affichage d'une erreur lors de l'export du stock vers Place des Libraires fonctionne à nouveau
+- L'erreur affichée lors de l'accès à un article via son ISBN en utilisant un
+  ISBN invalid a été améliorée
+- L'affichage d'une erreur lorsqu'un éditeur est créé avec un nom déjà utilisé a
+  été améliorée
+- L'affichage d'une erreur lors de l'export du stock vers Place des Libraires
+  fonctionne à nouveau
 - L'ajout d'un exemplaire à une liste est à nouveau possible
 - La page d'ajout au stock s'affiche à nouveau correctement
 - L'ajout d'un livre au panier depuis la caisse fonctionne à nouveau
-- Les erreurs de validation lors la modification d'un cycle s'affichent correctement
-- L'erreur 404 s'affiche à nouveau correctement lorsqu'un visiteur accède à la page d'une série inexistante
+- Les erreurs de validation lors la modification d'un cycle s'affichent
+  correctement
+- L'erreur 404 s'affiche à nouveau correctement lorsqu'un visiteur accède à la
+  page d'une série inexistante
 - L'export du stock vers Place des Libraires fonctionne à nouveau
 
 ## 2.52.0 (2 avril 2021)
@@ -1202,7 +1210,8 @@ Améliorations
 
 Corrections
 
-- La case d'abonnement à la newsletter lors du téléchargement d'un livre numérique
+- La case d'abonnement à la newsletter lors du téléchargement d'un livre
+  numérique
   gratuit n'est plus cochée par défaut
 - La suppression de tous les panier fonctionne à nouveau
 - Amélioration des messages d'erreur lors d'une tentative de téléchargement d'un
@@ -1445,7 +1454,8 @@ Déploiement:
 - Correction d'une faille de sécurité dans le panier
 - Lors de l'ajout d'un article au panier, sont désormais ajoutés en priorité
   les exemplaires qui ne sont pas déjà dans le panier d'un autre client
-- Correction d'un problème affectant l'éditeur de thème sur d'anciennes versions de
+- Correction d'un problème affectant l'éditeur de thème sur d'anciennes versions
+  de
   Safari
 
 ## 2.38.0 (25 novembre 2018)
@@ -1510,9 +1520,11 @@ Déploiement:
 
 - Refonte des galeries photos
 - Ajout du prix dans le catalogue éditeur exportable
-- Correction d'un bug laissant apparaître des articles supprimés lorsqu'ils étaient liés
+- Correction d'un bug laissant apparaître des articles supprimés lorsqu'ils
+  étaient liés
   aux articles
-- Correction d'un bug lors de l'accès à une fiche article depuis le formulaire de
+- Correction d'un bug lors de l'accès à une fiche article depuis le formulaire
+  de
   modification
 - Correction un bug affectant l'ajout au panier sur Internet Explorer
 
@@ -1523,10 +1535,12 @@ Déploiement:
 
 ## 2.34.0 (27 janvier 2018)
 
-- Ajout d'une page d'administration listant tous les articles avec une option d'export
+- Ajout d'une page d'administration listant tous les articles avec une option
+  d'export
   au format CSV
 - Correction d'un bug affectant la création d'adresse unique pour les articles
-- Correction d'un bug affectant l'affichage d'un message d'erreur lors de l'ajout d'un
+- Correction d'un bug affectant l'affichage d'un message d'erreur lors de
+  l'ajout d'un
   livre non disponible au panier
 
 ## 2.33.1 (12 janvier 2018)
@@ -1546,9 +1560,11 @@ Déploiement:
 ## 2.32.0 (24 novembre 2017)
 
 - Ajout d'un type de reliure "Integra"
-- Ajout d'une option de site "collection_filter_hide" pour masquer des collections
+- Ajout d'une option de site "collection_filter_hide" pour masquer des
+  collections
 - Le panier listent désormais les livres triés par date d'ajout (#121)
-- Les mots-clés s'affichent désormais par ordre alphabetique sur les fiches articles (#129)
+- Les mots-clés s'affichent désormais par ordre alphabetique sur les fiches
+  articles (#129)
 
 ## 2.31.1 (10 octobre 2017)
 
@@ -1765,7 +1781,8 @@ Déploiement:
   déjà existant
 - Correction d'un problème affectant le champ "Prix sauvegardé" de la fiche
   exemplaire
-- Correction : l'exemplaire disparaît après suppression depuis la page des stocks
+- Correction : l'exemplaire disparaît après suppression depuis la page des
+  stocks
 
 ## 2.19.0 (21 mai 2016)
 
@@ -2068,7 +2085,8 @@ Déploiement:
 - Ajout d'une page d'accueil configurable
 - Intégration de la nouvelle interface de paiement Paypal
 - Ajout d'une option pour demander la suppression d'un article
-- Les articles à paraître ne peuvent plus être ajoutés au panier (sauf précommande)
+- Les articles à paraître ne peuvent plus être ajoutés au panier (sauf
+  précommande)
 
 ## 2.3.18.5 (6 septembre 2015)
 
@@ -2111,7 +2129,8 @@ Déploiement:
 
 - Choix du mode de paiement lorsqu'une commande est marquée comme payée
 - Recherche libre dans les commandes (nom du client, numéro de commande, etc.)
-- Les commandes disparaissent après une seconde si elles ne correspondent plus au filtre en cours
+- Les commandes disparaissent après une seconde si elles ne correspondent plus
+  au filtre en cours
 - Ajout d'un champ pour associer un client à une commande après coup
 - Ajout d'un rapport téléchargeable type immatériel pour les ventes numériques
 - Affichage d'un lien sur les pages auteurs vers les billets associés
@@ -2119,14 +2138,19 @@ Déploiement:
 
 ## 2.3.15 (28 juin 2015)
 
-- Le formulaire de contact peut désormais être protégé contre le spam par ReCaptcha
+- Le formulaire de contact peut désormais être protégé contre le spam par
+  ReCaptcha
 
 ## 2.3.14 (16 juin 2015)
 
 - Refonte de la page de gestion des commandes web
-- Les boutons de gestion d'une commande sont toujours visibles et plus dans un menu déroulant
-- La liste est mise à jour lorsqu'une commande change de statut (expédiée, payée, etc.)
-- Les commandes sont automatiquement marquées comme expédiées quand elles sont payées si elles ne contiennent que des articles immatériels (livres numériques, abonnements, etc.)
+- Les boutons de gestion d'une commande sont toujours visibles et plus dans un
+  menu déroulant
+- La liste est mise à jour lorsqu'une commande change de statut (expédiée,
+  payée, etc.)
+- Les commandes sont automatiquement marquées comme expédiées quand elles sont
+  payées si elles ne contiennent que des articles immatériels (livres
+  numériques, abonnements, etc.)
 
 ## 2.3.13 (12 juin 2015)
 
@@ -2148,7 +2172,8 @@ Déploiement:
 
 ## 2.3.9 (7 mai 2015)
 
-- Ajout d'une API d'authentification pour les services externes, notamment le forum du Bélial'
+- Ajout d'une API d'authentification pour les services externes, notamment le
+  forum du Bélial'
 
 ## 2.3.8 (2 mai 2015)
 
@@ -2174,9 +2199,11 @@ Déploiement:
 
 ## 2.3.3 (28 mars 2015)
 
-- Il n'est plus possible de modifier les articles d'un éditeur Biblys depuis un autre site
+- Il n'est plus possible de modifier les articles d'un éditeur Biblys depuis un
+  autre site
 - (Correction) L'annulation de commande fonctionne à nouveau
-- (Correction) La vérification du prix article/exemplaire avant ajout au panier est désactivé sur les sites libraires
+- (Correction) La vérification du prix article/exemplaire avant ajout au panier
+  est désactivé sur les sites libraires
 
 ## 2.3.2 (12 mars 2015)
 
@@ -2196,31 +2223,37 @@ Biblys 2.3 : Financement participatif
 
 ## 2.2.20 (16 février 2015)
 
-- Liste d'exemplaires : Ajout d'un bouton pour regrouper les exemplaires par article
+- Liste d'exemplaires : Ajout d'un bouton pour regrouper les exemplaires par
+  article
 - Évènements : Ajout d'un module pour associer des images à un évènement
 - (Correction) Le bouton de masquage des articles fonctionne à nouveau
 
 ## 2.2.19 (5 février 2015)
 
-- Liste d'envies : il est possible de changer le nom et la visibilité (publique/privée) d'une liste
+- Liste d'envies : il est possible de changer le nom et la visibilité (
+  publique/privée) d'une liste
 
 ## 2.2.18 (1er février 2015)
 
-- Traitement par lot : application d'une promotion sur tous les exemplaires d'une liste
+- Traitement par lot : application d'une promotion sur tous les exemplaires d'
+  une liste
 - Page d'inventaire : Ajout d'un filtre par type d'article
 - Il est désormais possible de lier un billet de blog à un éditeur
 
 ## 2.2.17 (30 janvier 2015)
 
 - Ajout d'une case à cocher "Dépôt" sur les pages de stock
-- (Correction) Affichage d'un message d'erreur lors de la création d'un contributeur déjà existant depuis la fiche article
-- (Correction) Inversion du montant de la TVA et du CA HT sur la page Chiffre d'affaires
+- (Correction) Affichage d'un message d'erreur lors de la création d'un
+  contributeur déjà existant depuis la fiche article
+- (Correction) Inversion du montant de la TVA et du CA HT sur la page Chiffre
+  d'affaires
 
 ## 2.2.16 (26 janvier 2015)
 
 - Calcul de la TVA au moment de l'achat d'un article
 - Ajout d'une liste des liste sur la page inventaire
-- Ajout d'un menu déroulant pour sélectionner un pays sur le formulaire de modification des commandes
+- Ajout d'un menu déroulant pour sélectionner un pays sur le formulaire de
+  modification des commandes
 - (Correction) Affichage des factures si le pays du client n'est pas spécifié
 
 ## 2.2.15 (16 janvier 2015)
