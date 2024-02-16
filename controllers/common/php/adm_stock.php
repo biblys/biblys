@@ -978,7 +978,7 @@ function _sendAlertsForArticle(
     $sentAlerts = 0;
     $errors = [];
     foreach ($alerts as $alert) {
-        $subject = "Alerte : {$article->get("title")} est disponible !";
+        $subject = "{$article->get("title")} est disponible !";
 
         $customMessage = null;
         if ($currentSite->getOpt("alerts_custom_message")) {
@@ -989,7 +989,7 @@ function _sendAlertsForArticle(
 
         $message = '
             <p>Bonjour,</p>
-            <p>Vous avez créé une alerte Biblys pour le livre&nbsp;:</p>
+            <p>Vous avez créé une alerte pour le livre&nbsp;:</p>
             <p>
                 <a href="'.$articleUrl.'">'.$article->get("title").'</a><br />
                 de '.authors($article->get("authors")).'<br />
@@ -1017,7 +1017,7 @@ function _sendAlertsForArticle(
                 premier servi. Il se peut donc que le livre ne soit déjà plus disponible lors de votre visite. Ne 
                 perdez pas de temps !
             </p>
-            <p><a href="https://www.biblys.fr/pages/log_myalerts">Modifier ou annuler mes alertes</a></p>
+            <p><a href="https://'.$currentSite->get("domain").'/pages/log_myalerts">Modifier ou annuler mes alertes</a></p>
             <p>À très bientôt dans les librairies Biblys !</p>
         ';
 

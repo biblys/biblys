@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.77.1 (DEV)
+
+Corrections
+
+- L'adresse url du lien "Modifier ou annuler mes alertes" dans le courriel de
+  notification des alertes était incorrecte. C'est corrigé.
+
 ## 2.77.0 (7 février 2024)
 
 Améliorations
