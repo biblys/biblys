@@ -471,10 +471,13 @@ class CurrentUserTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
         $request = new Request();
         $request->cookies->set("visitor_uid", "this-visitor-uid");
+        ModelFactory::createCart(["uid" => "this-visitor-uid"], ModelFactory::createSite());
         $cart = ModelFactory::createCart(["uid" => "this-visitor-uid"], $site);
-        $currentUser = CurrentUser::buildFromRequest($request);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
         $userCart = $currentUser->getCart();
@@ -504,9 +507,6 @@ class CurrentUserTest extends TestCase
         $this->assertEquals($cart, $userCart);
     }
 
-    /**
-     * @throws PropelException
-     */
     public function testGetEmail()
     {
         // given

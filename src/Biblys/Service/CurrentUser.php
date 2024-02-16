@@ -190,14 +190,15 @@ class CurrentUser
      */
     public function getCart(): ?Cart
     {
-        if (!$this->isAuthentified()) {
-            return CartQuery::create()->findOneByUid($this->token);
+        $cartQuery = CartQuery::create()->filterBySite($this->getCurrentSite()->getSite());
+
+        if ($this->isAuthentified()) {
+            $cartQuery = $cartQuery->filterByAxysAccount($this->axysAccount);
+        } else {
+            $cartQuery = $cartQuery->filterByUid($this->token);
         }
 
-        return CartQuery::create()
-            ->filterBySite($this->getCurrentSite()->getSite())
-            ->filterByAxysAccount($this->axysAccount)
-            ->findOne();
+        return $cartQuery->findOne();
     }
 
     private function injectCurrentSite(CurrentSite $currentSite): void
