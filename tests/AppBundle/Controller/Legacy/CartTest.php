@@ -2,14 +2,10 @@
 
 namespace AppBundle\Controller\Legacy;
 
-use AppBundle\Controller\LegacyController;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
-use Biblys\Service\Mailer;
-use Biblys\Service\MetaTagsService;
-use Biblys\Service\TemplateService;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use CartManager;
@@ -35,6 +31,8 @@ class CartTest extends TestCase
         global $_SITE;
 
         // given
+        $controller = require __DIR__ . "/../../../../controllers/common/php/cart.php";
+
         ModelFactory::createCountry();
         /* @var Site $_SITE */
         $_SITE->setOpt("virtual_stock", 1);
@@ -56,33 +54,13 @@ class CartTest extends TestCase
         ]);
         $cm = new CartManager();
         $cm->addArticle($cart, $article);
-        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
-        $legacyController = new LegacyController();
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        $metaTagsService = $this->createMock(MetaTagsService::class);
-        $templateService = new TemplateService(
-            config: $config,
-            currentSiteService: $currentSite,
-            currentUserService: $currentUser,
-            metaTagsService: $metaTagsService,
-            request: $request,
-        );
 
         // when
-        $response = $legacyController->defaultAction(
-            request: $request,
-            session: $session,
-            mailer: $mailer,
-            config: $config,
-            currentSite: $currentSite,
-            currentUser: $currentUser,
-            urlGenerator: $urlGenerator,
-            templateService: $templateService,
-            metaTagsService: $metaTagsService,
-        );
+        $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator);
 
         // then
         $this->assertEquals(

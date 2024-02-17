@@ -2,14 +2,11 @@
 
 namespace AppBundle\Controller\Legacy;
 
-use AppBundle\Controller\LegacyController;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
-use Biblys\Service\MetaTagsService;
-use Biblys\Service\TemplateService;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use CartManager;
@@ -21,11 +18,9 @@ use Propel\Runtime\Exception\PropelException;
 use ShippingManager;
 use StockManager;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 require_once __DIR__ . "/../../../setUp.php";
-
 
 class OrderDeliveryTest extends TestCase
 {
@@ -35,6 +30,8 @@ class OrderDeliveryTest extends TestCase
     public function testValidatingAnOrder()
     {
         // given
+        $controller = require __DIR__ . "/../../../../controllers/common/php/order_delivery.php";
+
         $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $article = EntityFactory::createArticle();
         $sm = new StockManager();
@@ -61,34 +58,14 @@ class OrderDeliveryTest extends TestCase
         $request->request->set("order_email", "customer@biblys.fr");
         $request->request->set("country_id", 1);
         $request->request->set("cgv_checkbox", 1);
-        $session = new Session();
         $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
-        $legacyController = new LegacyController();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        $metaTagsService = $this->createMock(MetaTagsService::class);
-        $templateService = new TemplateService(
-            config: $config,
-            currentSiteService: $currentSite,
-            currentUserService: $currentUser,
-            metaTagsService: $metaTagsService,
-            request: $request,
-        );
 
         // when
-        $response = $legacyController->defaultAction(
-            request: $request,
-            session: $session,
-            mailer: $mailer,
-            config: $config,
-            currentSite: $currentSite,
-            currentUser: $currentUser,
-            urlGenerator: $urlGenerator,
-            templateService: $templateService,
-            metaTagsService: $metaTagsService,
-        );
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer);
 
         // then
         $om = new OrderManager();
@@ -116,6 +93,8 @@ class OrderDeliveryTest extends TestCase
     public function testValidatingAnOrderWithoutShipping()
     {
         // given
+        $controller = require __DIR__ . "/../../../../controllers/common/php/order_delivery.php";
+
         $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $article = EntityFactory::createArticle([
             "article_title" => "Livre numérique téléchargeable",
@@ -142,34 +121,14 @@ class OrderDeliveryTest extends TestCase
         $request->request->set("order_email", "e-customer@biblys.fr");
         $request->request->set("country_id", 1);
         $request->request->set("cgv_checkbox", 1);
-        $session = new Session();
         $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
-        $legacyController = new LegacyController();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        $metaTagsService = $this->createMock(MetaTagsService::class);
-        $templateService = new TemplateService(
-            config: $config,
-            currentSiteService: $currentSite,
-            currentUserService: $currentUser,
-            metaTagsService: $metaTagsService,
-            request: $request,
-        );
 
         // when
-        $response = $legacyController->defaultAction(
-            request: $request,
-            session: $session,
-            mailer: $mailer,
-            config: $config,
-            currentSite: $currentSite,
-            currentUser: $currentUser,
-            urlGenerator: $urlGenerator,
-            templateService: $templateService,
-            metaTagsService: $metaTagsService,
-        );
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer);
 
         // then
         $om = new OrderManager();
@@ -198,6 +157,8 @@ class OrderDeliveryTest extends TestCase
     public function testValidatingAnOrderWithAnEmptyCart()
     {
         // given
+        $controller = require __DIR__ . "/../../../../controllers/common/php/order_delivery.php";
+
         $article = EntityFactory::createArticle();
         EntityFactory::createStock(["article_id" => $article->get("id")]);
         $shm = new ShippingManager();
@@ -227,34 +188,14 @@ class OrderDeliveryTest extends TestCase
         $_POST["country_id"] = 1;
         $_POST["cgv_checkbox"] = 1;
 
-        $session = new Session();
         $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
-        $legacyController = new LegacyController();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        $metaTagsService = $this->createMock(MetaTagsService::class);
-        $templateService = new TemplateService(
-            config: $config,
-            currentSiteService: $currentSite,
-            currentUserService: $currentUser,
-            metaTagsService: $metaTagsService,
-            request: $request,
-        );
 
         // when
-        $response = $legacyController->defaultAction(
-            request: $request,
-            session: $session,
-            mailer: $mailer,
-            config: $config,
-            currentSite: $currentSite,
-            currentUser: $currentUser,
-            urlGenerator: $urlGenerator,
-            templateService: $templateService,
-            metaTagsService: $metaTagsService,
-        );
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer);
 
         // then
         $this->assertEquals(200, $response->getStatusCode(), "it should answer with http status 200");
