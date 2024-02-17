@@ -1,5 +1,6 @@
-<?php
+<?php /** @noinspection PhpDeprecationInspection */
 
+use Biblys\Legacy\CartHelpers;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Legacy\OrderDeliveryHelpers;
 use Biblys\Service\Config;
@@ -43,10 +44,16 @@ return function (
         throw new NotFoundHttpException("La vente en ligne est temporairement désactivée sur ce site.");
     }
 
-    $cart = LegacyCodeHelper::getGlobalVisitor()->getCart();
+    $cart = $currentUser->getCart();
     if (!$cart) {
         return new Response('<p class="error">Le panier n\'existe pas</p>');
     }
+    /** @var Cart $cartEntity */
+    $cartManager = new CartManager();
+    $cartEntity = $cartManager->getAll([
+        "cart_id" => $cart->getId(),
+        "site_id" => $currentSite->getSite()->getId(),
+    ])[0];
 
     $cm = new CustomerManager();
     $com = new CountryManager();
@@ -72,7 +79,11 @@ return function (
         $isUpdatingAnExistingOrder = true;
     }
 
-    $stock = $cart->getStock();
+    $stockManager = new StockManager();
+    $stock = $stockManager->getAll([
+        'cart_id' => $cart->getId(),
+        'site_id' => $currentSite->getSite()->getId(),
+    ]);
     $numberOfCopiesInCart = count($stock);
 
     if ($numberOfCopiesInCart === 0) {
@@ -92,7 +103,7 @@ return function (
     $shippingFee = $shipping ? $shipping->get("fee") : 0;
     $shippingType = $shipping?->get("type");
 
-// Add shipping to order total amount
+    // Add shipping to order total amount
     $total = $totalPrice;
     if ($shipping) {
         $total += $shipping->get('fee');
@@ -198,7 +209,7 @@ return function (
             $cm->update($customer);
 
             // Hydrate order from cart
-            $updatedOrder = $om->hydrateFromCart($order, $cart);
+            $updatedOrder = $om->hydrateFromCart($order, $cartEntity);
 
             $termsPageId = $currentSite->getOption("cgv_page");
             $termsPage = PageQuery::create()->findPk($termsPageId);
@@ -260,7 +271,7 @@ return function (
                 </tr>
     ';
     }
-    if ($cart->needsShipping()) {
+    if (CartHelpers::cartNeedsShipping($cart)) {
         $content .= '
             <tr>
                 <td class="right">Sous-total : </td>
@@ -291,14 +302,14 @@ return function (
 
     $form_class = null;
     if (!$currentUser->isAuthentified()) {
-        $content .= '
+        $content .= "
         <h3>Vos coordonnées</h3>
-        <h4>Vous avez un compte Axys ?</h4> <p><a href="' . $loginUrl . '" class="btn btn-primary">Connectez-vous</a> pour remplir automatiquement vos coordonnées.</p>
-        <h4>Vous n\'avez pas de compte Axys ?</h4> <p><a href="' . $signupUrl . '" class="btn btn-primary">Inscrivez-vous</a> pour sauvegarder vos coordonnées pour une prochaine commande.</p>
+        <h4>Vous avez un compte Axys ?</h4> <p><a href=\"$loginUrl\" class=\"btn btn-primary\">Connectez-vous</a> pour remplir automatiquement vos coordonnées.</p>
+        <h4>Vous n'avez pas de compte Axys ?</h4> <p><a href=\"$signupUrl\" class=\"btn btn-primary\">Inscrivez-vous</a> pour sauvegarder vos coordonnées pour une prochaine commande.</p>
         <br />
-        <button id="show_orderForm" class="showThis btn btn-warning">Je souhaite commander sans utiliser un compte Axys</button>
+        <button id=\"show_orderForm\" class=\"showThis btn btn-warning\">Je souhaite commander sans utiliser un compte Axys</button>
         <br /><br />
-    ';
+    ";
         $form_class = 'hidden';
     }
 

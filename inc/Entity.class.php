@@ -385,7 +385,7 @@ class EntityManager
      */
     public function getAll(array $where = array(), array $options = array(), $withJoins = true)
     {
-        if ($this->siteAgnostic === false) {
+        if ($this->siteAgnostic === false && !isset($where['site_id'])) {
             global $_SITE;
             $where['site_id'] = $_SITE->get('id');
         }

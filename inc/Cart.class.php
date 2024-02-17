@@ -250,37 +250,6 @@ class CartManager extends EntityManager
         $object = 'Cart',
         $siteAgnostic = false;
 
-    /**
-     *
-     * @param string $query
-     * @param type $params
-     * @param type $options
-     * @return object
-     * @throws Exception
-     */
-    public function getQuery($query, $params, $options = array(), $withJoins = true)
-    {
-        try {
-            if (isset($query)) $query = ' AND ' . $query;
-            $params['site_id'] = $this->site['site_id'];
-
-            $query = 'SELECT * FROM `carts`
-                    WHERE `carts`.`site_id` = :site_id ' . $query . '
-                    GROUP BY `cart_id`';
-            $qu = $this->db->prepare($query);
-            $qu->execute($params);
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage() . '<br>query: ' . $query . '<br>params: ' . print_r($params, true));
-        }
-
-        $entities = array();
-        while ($x = $qu->fetch(PDO::FETCH_ASSOC)) {
-            $entities[] = new $this->object($x);
-        }
-
-        return $entities;
-    }
-
     public function create(array $defaults = array())
     {
         if (empty($defaults)) $defaults = array('site_id' => $this->site['site_id'], 'cart_uid' => md5(uniqid('', true)));

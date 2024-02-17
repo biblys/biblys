@@ -70,7 +70,7 @@ class ModelFactory
         string         $keywords = null,
         string         $lemoninkMasterId = null,
         Publisher      $publisher = null,
-        BookCollection $collection = null,
+        BookCollection $collection = null
     ): Article
     {
         $article = new Article();

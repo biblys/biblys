@@ -8,13 +8,13 @@ use Article;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Exception\OrderDetailsValidationException;
 use Biblys\Service\Mailer;
-use Cart;
 use CountryManager;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\DNSCheckValidation;
 use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use Exception;
+use Model\Cart;
 use Model\Page;
 use Order;
 use OrderManager;
@@ -116,14 +116,12 @@ class OrderDeliveryHelpers
     }
 
     /**
-     * @param Cart $cart
-     * @param int|null $countryId
-     * @return string
+     * @throws PropelException
      */
     public static function getCountryInput(Cart $cart, ?int $countryId): string
     {
         $com = new CountryManager();
-        if ($cart->needsShipping()) {
+        if (CartHelpers::cartNeedsShipping($cart)) {
             if (!is_int($countryId)) {
                 throw new BadRequestHttpException("country_id parameter is required when cart needs shipping");
             }
@@ -155,13 +153,11 @@ class OrderDeliveryHelpers
     }
 
     /**
-     * @param Cart $cart
-     * @param int|null $shippingIdFromRequest
-     * @return Shipping|null
+     * @throws PropelException
      */
     public static function calculateShippingFees(Cart $cart, ?int $shippingIdFromRequest): ?Shipping
     {
-        if ($cart->needsShipping()) {
+        if (CartHelpers::cartNeedsShipping($cart)) {
             if (!is_int($shippingIdFromRequest)) {
                 throw new BadRequestHttpException("shipping_id parameter is required when cart needs shipping");
             }
