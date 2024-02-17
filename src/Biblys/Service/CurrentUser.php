@@ -23,7 +23,7 @@ class CurrentUser
 {
     private ?AxysAccount $axysAccount;
     private ?string $token;
-    private ?CurrentSite $currentSite;
+    private ?CurrentSite $currentSite = null;
 
     public function __construct(?AxysAccount $axysAccount, ?string $token)
     {
@@ -111,7 +111,7 @@ class CurrentUser
     public function getAxysAccount(): AxysAccount
     {
         if ($this->axysAccount === null) {
-            throw new UnauthorizedHttpException("","Identification requise.");
+            throw new UnauthorizedHttpException("", "Identification requise.");
         }
 
         return $this->axysAccount;
@@ -199,6 +199,31 @@ class CurrentUser
         }
 
         return $cartQuery->findOne();
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function getOrCreateCart(): Cart
+    {
+        $cart = $this->getCart();
+
+        if (!$cart) {
+            $cart = new Cart();
+            $cart->setSite($this->getCurrentSite()->getSite());
+            $cart->setType("web");
+
+            if ($this->isAuthentified()) {
+                $cart->setAxysAccount($this->axysAccount);
+            } else {
+                $cart->setUid($this->token);
+            }
+
+            $cart->save();
+        }
+
+        return $cart;
     }
 
     private function injectCurrentSite(CurrentSite $currentSite): void

@@ -489,6 +489,50 @@ class CurrentUserTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function testGetOrCreateCartForAnonymousUserWhenCartExists()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $request = new Request();
+        $request->cookies->set("visitor_uid", "this-visitor-uid");
+        $cart = ModelFactory::createCart(["uid" => "this-visitor-uid"], $site);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // when
+        $anonymousUserCart = $currentUser->getOrCreateCart();
+
+        // then
+        $this->assertEquals($cart, $anonymousUserCart);
+        $this->assertNull($anonymousUserCart->getAxysAccountId());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetOrCreateCartForAnonymousUserWhenCartDoesNotExist()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $request = new Request();
+        $request->cookies->set("visitor_uid", "visitor-uid-without-cart");
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // when
+        $anonymousUserCart = $currentUser->getOrCreateCart();
+
+        // then
+        $this->assertEquals("visitor-uid-without-cart", $anonymousUserCart->getUid());
+        $this->assertEquals("web", $anonymousUserCart->getType());
+        $this->assertNull($anonymousUserCart->getAxysAccountId());
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testGetCartForAuthentifiedUser()
     {
         // given
@@ -507,6 +551,52 @@ class CurrentUserTest extends TestCase
         $this->assertEquals($cart, $userCart);
     }
 
+    /**
+     * @throws PropelException
+     */
+    public function testGetOrCreateCartForAuthentifiedUserWhenCartExists()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $user = ModelFactory::createAxysAccount();
+        $request = RequestFactory::createAuthRequest("", $user);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $cart = ModelFactory::createCart([], $site, $user);
+
+        // when
+        $userCart = $currentUser->getOrCreateCart();
+
+        // then
+        $this->assertEquals($cart, $userCart);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetOrCreateCartForAuthentifiedUserWhenCartDoesNotExist()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $axysAccount = ModelFactory::createAxysAccount();
+        $request = RequestFactory::createAuthRequest("", $axysAccount);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // when
+        $userCart = $currentUser->getOrCreateCart();
+
+        // then
+        $this->assertEquals($axysAccount->getId(), $userCart->getAxysAccountId());
+        $this->assertEquals("web", $userCart->getType());
+        $this->assertNull($userCart->getUid());
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testGetEmail()
     {
         // given
