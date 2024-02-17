@@ -2,13 +2,10 @@
 
 namespace AppBundle\Controller\Legacy;
 
-use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
-use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
-use CartManager;
 use Exception;
 use Mockery;
 use Model\ArticleQuery;
@@ -28,14 +25,11 @@ class CartTest extends TestCase
      */
     public function testCartDisplay()
     {
-        global $_SITE;
-
         // given
         $controller = require __DIR__ . "/../../../../controllers/common/php/cart.php";
 
         ModelFactory::createCountry();
         /* @var Site $_SITE */
-        $_SITE->setOpt("virtual_stock", 1);
         $flashBag = $this
             ->getMockBuilder("Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface")
             ->getMock();
@@ -45,18 +39,20 @@ class CartTest extends TestCase
             ->getMock();
         $session->method("getFlashBag")->willReturn($flashBag);
         $request = new Request();
-        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
-        $article = EntityFactory::createArticle([
-            "article_title" => "Papeete",
-            "article_url" => "author/papeete",
-            "type_id" => 1,
-        ]);
-        $cm = new CartManager();
-        $cm->addArticle($cart, $article);
+
+        $site = ModelFactory::createSite();
+        $cart = ModelFactory::createCart(site: $site);
+        $article = ModelFactory::createArticle(title: "Le livre dans mon panier");
+        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
         $config = new Config();
-        $currentSite = CurrentSite::buildFromConfig($config);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("getOption")->andReturn(null);
         $urlGenerator = $this->createMock(UrlGenerator::class);
-        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
+        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
 
         // when
         $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator);
@@ -68,7 +64,7 @@ class CartTest extends TestCase
             "it should respond with http 200"
         );
         $this->assertStringContainsString(
-            "Papeete",
+            "Le livre dans mon panier",
             $response->getContent(),
             "it should display article in cart"
         );
@@ -85,17 +81,15 @@ class CartTest extends TestCase
      */
     public function testFreeShippingNotice()
     {
-        /** @var Site $_SITE */
-        global $_SITE;
-
         // given
         $controller = require __DIR__ . "/../../../../controllers/common/php/cart.php";
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")->andReturn("url");
+        $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite
             ->shouldReceive("getSite")
-            ->andReturn(ModelFactory::createSite());
+            ->andReturn($site);
         $currentSite
             ->shouldReceive("getOption")
             ->with("sales_disabled")
@@ -111,23 +105,22 @@ class CartTest extends TestCase
                 "Livraison offerte à partir de 10,00&nbsp;&euro; d'achat",
             )
             ->andReturn("Livraison offerte à partir de 10,00&nbsp;&euro; d'achat");
-
-        ModelFactory::createCountry();
-        $_SITE->setOpt("virtual_stock", 1);
-        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
-        $article = EntityFactory::createArticle(["type_id" => 1, "article_price" => 500]);
-        $cm = new CartManager();
-        $cm->vacuum($cart);
-        $cm->addArticle($cart, $article);
-        $request = new Request();
-        $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("isAdmin")->andReturn(false);
-        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
         $currentSite->shouldReceive("getOption")->with("special_offer_amount")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("special_offer_article")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("special_offer_collection")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("special_offer_amount")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("cart_suggestions_rayon_id")->andReturn(null);
+
+        ModelFactory::createCountry();
+        $cart = ModelFactory::createCart(site: $site);
+        $article = ModelFactory::createArticle(title: "Le livre dans mon panier");
+        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart, sellingPrice: 500);
+
+        $request = new Request();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+        $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
         $config = Mockery::mock(Config::class);
 
         // when
@@ -152,17 +145,15 @@ class CartTest extends TestCase
      */
     public function testFreeShippingNoticeWithTargetAmountReached()
     {
-        /** @var Site $_SITE */
-        global $_SITE;
-
         // given
         $controller = require __DIR__ . "/../../../../controllers/common/php/cart.php";
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")->andReturn("url");
         $currentSite = Mockery::mock(CurrentSite::class);
+        $site = ModelFactory::createSite();
         $currentSite
             ->shouldReceive("getSite")
-            ->andReturn(ModelFactory::createSite());
+            ->andReturn($site);
         $currentSite
             ->shouldReceive("getOption")
             ->with("sales_disabled")
@@ -178,23 +169,22 @@ class CartTest extends TestCase
                 "Vous bénéficiez de la livraison offerte !",
             )
             ->andReturn("Vous bénéficiez de la livraison offerte !");
-
-        ModelFactory::createCountry();
-        $_SITE->setOpt("virtual_stock", 1);
-        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
-        $article = EntityFactory::createArticle(["type_id" => 1, "article_price" => 1500]);
-        $cm = new CartManager();
-        $cm->vacuum($cart);
-        $cm->addArticle($cart, $article);
-        $request = new Request();
-        $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("isAdmin")->andReturn(false);
-        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
         $currentSite->shouldReceive("getOption")->with("special_offer_amount")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("special_offer_article")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("special_offer_collection")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("special_offer_amount")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("cart_suggestions_rayon_id")->andReturn(null);
+
+        ModelFactory::createCountry();
+        $cart = ModelFactory::createCart(site: $site);
+        $article = ModelFactory::createArticle(title: "Le livre dans mon panier");
+        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart, sellingPrice: 1500);
+
+        $request = new Request();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
         $config = Mockery::mock(Config::class);
 
         // when
@@ -214,30 +204,20 @@ class CartTest extends TestCase
      */
     public function testCartSuggestions()
     {
-        /** @var Site $_SITE */
-        global $_SITE;
-
         // given
         $controller = require __DIR__ . "/../../../../controllers/common/php/cart.php";
 
         ModelFactory::createCountry();
-        $_SITE->setOpt("virtual_stock", 1);
-        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
-        $article = EntityFactory::createArticle([
-            "article_title" => "Article suggéré",
-            "type_id" => 1,
-            "article_price" => 500
-        ]);
-        $cm = new CartManager();
-        $cm->vacuum($cart);
-        $cm->addArticle($cart, $article);
         $site = ModelFactory::createSite();
-        $articleModel = ArticleQuery::create()->findPk($article->get("id"));
+        $cart = ModelFactory::createCart(site: $site);
+        $article = ModelFactory::createArticle();
+        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart, sellingPrice: 500);
         $articleCategory = ModelFactory::createArticleCategory(
             site: $site,
             name: "Suggestions du panier",
         );
-        ModelFactory::createLink(article: $articleModel, articleCategory: $articleCategory);
+        $suggestedArticle = ModelFactory::createArticle(title: "Article suggéré");
+        ModelFactory::createLink(article: $suggestedArticle, articleCategory: $articleCategory);
 
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")->andReturn("url");
@@ -252,7 +232,7 @@ class CartTest extends TestCase
         $currentSite
             ->shouldReceive("getOption")
             ->with("free_shipping_target_amount")
-            ->andReturn(1000);
+            ->andReturn(null);
         $currentSite
             ->shouldReceive("getOption")
             ->with(
@@ -260,10 +240,6 @@ class CartTest extends TestCase
                 "Livraison offerte à partir de 10,00&nbsp;&euro; d'achat",
             )
             ->andReturn("Livraison offerte à partir de 10,00&nbsp;&euro; d'achat");
-        $request = new Request();
-        $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("isAdmin")->andReturn(false);
-        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
         $currentSite->shouldReceive("getOption")->with("special_offer_amount")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("special_offer_article")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("special_offer_collection")->andReturn(null);
@@ -271,6 +247,12 @@ class CartTest extends TestCase
         $currentSite->shouldReceive("getOption")
             ->with("cart_suggestions_rayon_id")
             ->andReturn($articleCategory->getId());
+        $request = new Request();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
         $config = Mockery::mock(Config::class);
         $config->shouldReceive("get")->with("media_path")->andReturn(null);
         $config->shouldReceive("get")->with("media_url")->andReturn(null);

@@ -11,6 +11,8 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
+use Model\CartQuery;
+use Model\StockQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +35,6 @@ return function (
 ): Response
 {
     $am = new ArticleManager();
-    $cm = new CartManager();
     $com = new CollectionManager();
     $om = new OrderManager();
 
@@ -45,22 +46,20 @@ return function (
     $currentUrl = $currentUrlService->getRelativeUrl();
     $loginUrl = $urlGenerator->generate("user_login", ["return_url" => $currentUrl]);
 
-    $cart_id = $request->query->get('cart_id', false);
-    if ($cart_id) {
+    $cartId = $request->query->get('cart_id', false);
+    if ($cartId) {
 
         if (!$currentUser->isAdmin()) {
             throw new AccessDeniedHttpException("Seuls les administrateurs peuvent prévisualiser un panier.");
         }
 
-        $cart = $cm->getById($cart_id);
+        /** @var \Model\Cart $cart */
+        $cart = CartQuery::create()->filterBySite($currentSite->getSite())->findPk($cartId);
         if (!$cart) {
-            throw new NotFoundException(sprintf("Panier %s introuvable.", htmlentities($cart_id)));
+            throw new NotFoundException(sprintf("Panier %s introuvable.", htmlentities($cartId)));
         }
     } else {
-        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart('create');
-        if (!$cart) {
-            throw new Exception("Impossible de créer le panier.");
-        }
+        $cart = $currentUser->getOrCreateCart();
     }
 
     $request->attributes->set("page_title", "Panier");
@@ -77,7 +76,10 @@ return function (
     $physical_total_price = 0;
 
     $sm = new StockManager();
-    $stocks = $sm->getAll(['cart_id' => $cart->get('id')], ['order' => 'stock_cart_date']);
+    $stocks = $sm->getAll([
+        'cart_id' => $cart->getId(),
+        'site_id' => $currentSite->getSite()->getId(),
+    ], ['order' => 'stock_cart_date']);
 
     $cart_content = array();
 
@@ -189,7 +191,7 @@ return function (
     if ($currentUser->isAdmin()) {
         $content .= '
         <div class="admin">
-            <p>Panier n&deg; '.$cart->get('id').'</p>
+            <p>Panier n&deg; '.$cart->getId().'</p>
         </div>
     ';
     }
@@ -314,12 +316,15 @@ return function (
         // Special offer: article for amount of articles in collection
         if ($special_offer_collection && $special_offer_amount
             && $special_offer_article) {
-            $copies = $cart->getStock();
+            $copies = StockQuery::create()
+                ->filterByCartId($cart->getId())
+                ->find();
 
             // Count copies in offer's collection
             $copiesInCollection = array_reduce($copies, function ($total, $copy) use ($special_offer_collection) {
+                /** @var \Model\Article $article */
                 $article = $copy->getArticle();
-                if ($article->get('collection_id') === $special_offer_collection) {
+                if ($article->getCollectionId() === $special_offer_collection) {
                     $total++;
                 }
                 return $total;
@@ -446,7 +451,7 @@ return function (
         ';
 
         // If cart contains physical articles that needs to be shipped
-        if ($cart->needsShipping()) {
+        if (CartHelpers::cartNeedsShipping($cart)) {
             $com = new CountryManager();
 
             // Countries

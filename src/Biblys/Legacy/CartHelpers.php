@@ -4,12 +4,13 @@ namespace Biblys\Legacy;
 
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Images\ImagesService;
-use Cart;
-use Entity;
 use Model\Article;
 use Model\ArticleCategoryQuery;
 use Model\ArticleQuery;
+use Model\Cart;
 use Model\LinkQuery;
+use Model\Stock;
+use Model\StockQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
@@ -73,7 +74,7 @@ class CartHelpers
                             <form class="form-inline" action="' . $cartUrl . '" method="post"> 
                                 <button type="submit"
                                     class="btn btn-primary btn-sm"
-                                    aria-label="Ajouter au panier"
+                                    aria-label="Ajouter '.$article->getTitle().' au panier"
                                 >
                                     <span class="fa fa-shopping-cart"></span>
                                 </button>
@@ -90,9 +91,9 @@ class CartHelpers
     /**
      * @throws PropelException
      */
-    public static function getFreeShippingNotice(CurrentSite $currentSite, Entity|Cart $cart, mixed $cartTotal): string
+    public static function getFreeShippingNotice(CurrentSite $currentSite, Cart $cart, mixed $cartTotal): string
     {
-        if (!$cart->needsShipping()) {
+        if (!CartHelpers::cartNeedsShipping($cart)) {
             return "";
         }
 
@@ -132,5 +133,21 @@ class CartHelpers
                     </div>
                 ';
         }
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function cartNeedsShipping(Cart $cart): bool
+    {
+        $stockItems = StockQuery::create()->findByCartId($cart->getId());
+        /** @var Stock $stockItem */
+        foreach ($stockItems as $stockItem) {
+            $type = $stockItem->getArticle()->getType();
+            if ($type->isPhysical()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -321,6 +321,8 @@ class ModelFactory
         ?Site        $site = null,
         ?Article     $article = null,
         ?AxysAccount $axysAccount = null,
+        ?Cart        $cart = null,
+        int          $sellingPrice = 0,
         DateTime     $sellingDate = null,
         DateTime     $returnDate = null,
         DateTime     $lostDate = null,
@@ -332,6 +334,8 @@ class ModelFactory
         $stock->setSite($site ?? self::createSite());
         $stock->setArticle($article ?? self::createArticle());
         $stock->setAxysAccount($axysAccount);
+        $stock->setCart($cart);
+        $stock->setSellingPrice($sellingPrice);
         $stock->setSellingDate($sellingDate);
         $stock->setReturnDate($returnDate);
         $stock->setLostDate($lostDate);
