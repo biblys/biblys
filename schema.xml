@@ -1397,6 +1397,9 @@
     <column name="customer_id" phpName="CustomerId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="wish_id" phpName="WishId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="cart_id" phpName="CartId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <foreign-key foreignTable="carts" skipSql="true">
+      <reference local="cart_id" foreign="cart_id"/>
+    </foreign-key>
     <column name="order_id" phpName="OrderId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="coupon_id" phpName="CouponId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="stock_shop" phpName="Shop" type="INTEGER" size="10" sqlType="int(10) unsigned"/>

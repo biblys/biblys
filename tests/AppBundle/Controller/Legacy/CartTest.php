@@ -45,7 +45,6 @@ class CartTest extends TestCase
             ->getMock();
         $session->method("getFlashBag")->willReturn($flashBag);
         $request = new Request();
-        $request->query->set("page", "cart");
         $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $article = EntityFactory::createArticle([
             "article_title" => "Papeete",

@@ -412,6 +412,13 @@ class CartTableMap extends TableMap
     1 => ':axys_account_id',
   ),
 ), null, null, null, false);
+        $this->addRelation('Stock', '\\Model\\Stock', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':cart_id',
+    1 => ':cart_id',
+  ),
+), null, null, 'Stocks', false);
     }
 
     /**
