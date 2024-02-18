@@ -70,7 +70,8 @@ class ModelFactory
         string         $keywords = null,
         string         $lemoninkMasterId = null,
         Publisher      $publisher = null,
-        BookCollection $collection = null
+        BookCollection $collection = null,
+        bool           $isPriceEditable = false,
     ): Article
     {
         $article = new Article();
@@ -81,6 +82,7 @@ class ModelFactory
         $article->setKeywords($keywords ?? $title);
         $article->setTypeId($typeId);
         $article->setLemonInkMasterId($lemoninkMasterId);
+        $article->setPriceEditable($isPriceEditable);
 
         $publisher = $publisher ?? self::createPublisher();
         $article->setPublisherId($publisher->getId());
@@ -106,7 +108,7 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createArticleCategory(
-        Site $site,
+        Site   $site,
         string $name = "Rayon de lune",
     ): ArticleCategory
     {
@@ -119,18 +121,21 @@ class ModelFactory
     }
 
     /**
+     * @param int $amount
      * @throws PropelException
      */
     public static function createCart(
         Site        $site = null,
         AxysAccount $user = null,
         string      $uniqueId = null,
+        int         $amount = 0,
     ): Cart
     {
         $cart = new Cart();
         $cart->setUid($uniqueId ?? "cart-uid");
         $cart->setSite($site ?? self::createSite());
         $cart->setAxysAccount($user);
+        $cart->setAmount($amount);
         $cart->save();
 
         return $cart;
@@ -210,7 +215,7 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createLink(
-        Article $article = null,
+        Article         $article = null,
         ArticleCategory $articleCategory = null,
     ): Link
     {

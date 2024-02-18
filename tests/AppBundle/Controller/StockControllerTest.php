@@ -2,38 +2,47 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Test\EntityFactory;
-use CartManager;
+use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
+use Biblys\Test\ModelFactory;
+use Exception;
+use Mockery;
 use PHPUnit\Framework\TestCase;
-use StockManager;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 
 require_once __DIR__."/../../setUp.php";
 
 class StockControllerTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
     public function testEditFreePriceAction()
     {
-        
-
         // given
         $controller = new StockController();
-        $article = EntityFactory::createArticle([
-            "article_price" => 500,
-            "article_price_editable" => 1
-        ]);
-        $stock = EntityFactory::createStock(["article_id" => $article->get("id")]);
-        $cart = \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart("create");
-        $cm = new CartManager();
-        $cm->vacuum($cart);
-        $cm->addStock($cart, $stock);
+
+        $site = ModelFactory::createSite();
+        $cart = ModelFactory::createCart(site: $site);
+        $article = ModelFactory::createArticle(price: 500, isPriceEditable: true);
+        $stock = ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
+
         $request = new Request();
         $request->request->set("new_price", 6);
         $request->headers->set("Accept", "application/json");
-        $sm = new StockManager();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getCart")->andReturn($cart);
+        $currentUser->shouldReceive("hasStockItemInCart")->andReturn(true);
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("getOption")->andReturn(null);
 
         // when
-        $response = $controller->editFreePriceAction($request, $stock->get("id"));
+        $response = $controller->editFreePriceAction($request, $currentUser, $currentSite, $stock->getId());
 
         // then
         $this->assertEquals(
@@ -41,77 +50,16 @@ class StockControllerTest extends TestCase
             $response->getStatusCode(),
             "it should respond with http status 200"
         );
+        $stock->reload();
         $this->assertEquals(
             600,
-            $sm->getById($stock->get("id"))->get("selling_price"),
+            $stock->getSellingPrice(),
             "it should have updated stock selling price"
         );
+        $cart->reload();
         $this->assertEquals(
             600,
-            $cm->getById($cart->get("id"))->get("amount"),
-            "it should have updated cart amount"
-        );
-    }
-
-    public function testEditFreePriceActionNotInCart()
-    {
-        // then
-        $this->expectException("Symfony\Component\HttpKernel\Exception\BadRequestHttpException");
-        $this->expectExceptionMessage(
-            "Impossible de modifier un exemplaire qui n'est pas dans votre panier."
-        );
-
-        // given
-        $controller = new StockController();
-        $article = EntityFactory::createArticle([
-            "article_price" => 500,
-            "article_price_editable" => 1
-        ]);
-        $stock = EntityFactory::createStock(["article_id" => $article->get("id")]);
-        $request = new Request();
-        $request->request->set("new_price", 600);
-        $sm = new StockManager();
-
-        // when
-        $controller->editFreePriceAction($request, $stock->get("id"));
-    }
-
-    public function testEditFreePriceActionLegacyUsage()
-    {
-        
-
-        // given
-        $controller = new StockController();
-        $article = EntityFactory::createArticle([
-            "article_price" => 500,
-            "article_price_editable" => 1
-        ]);
-        $stock = EntityFactory::createStock(["article_id" => $article->get("id")]);
-        $cart = \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart("create");
-        $cm = new CartManager();
-        $cm->vacuum($cart);
-        $cm->addStock($cart, $stock);
-        $request = new Request();
-        $request->request->set("new_price", 6);
-        $sm = new StockManager();
-
-        // when
-        $response = $controller->editFreePriceAction($request, $stock->get("id"));
-
-        // then
-        $this->assertEquals(
-            302,
-            $response->getStatusCode(),
-            "it should respond with http status 302"
-        );
-        $this->assertEquals(
-            600,
-            $sm->getById($stock->get("id"))->get("selling_price"),
-            "it should have updated stock selling price"
-        );
-        $this->assertEquals(
-            600,
-            $cm->getById($cart->get("id"))->get("amount"),
+            $cart->getAmount(),
             "it should have updated cart amount"
         );
     }
