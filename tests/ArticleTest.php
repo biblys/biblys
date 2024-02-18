@@ -674,42 +674,6 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $pm->delete($publisher);
     }
 
-    /** Test getting rayons as a JS array
-     * @throws ArticleAlreadyInRayonException
-     * @throws Exception
-     */
-    public function testGetJsArray()
-    {
-        $rm = new RayonManager();
-        $article = EntityFactory::createArticle();
-
-        $rayon1 = $rm->create(["rayon_name" => "Rayon 1"]);
-        $rayon2 = $rm->create(["rayon_name" => "Rayon 2"]);
-        $rayon3 = $rm->create(["rayon_name" => "Rayon 3"]);
-        $rayon4 = $rm->create(["rayon_name" => "Rayon 4"]);
-        $rayon5 = $rm->create(["rayon_name" => "Rayon 5"]);
-        $rayon6 = $rm->create(["rayon_name" => "Rayon 6"]);
-
-        $this->m->addRayon($article, $rayon1);
-        $this->m->addRayon($article, $rayon2);
-        $this->m->addRayon($article, $rayon3);
-        $this->m->addRayon($article, $rayon4);
-        $this->m->addRayon($article, $rayon5);
-        $this->m->addRayon($article, $rayon6);
-
-        $this->assertEquals(
-            '["Rayon 1","Rayon 2","Rayon 3","Rayon 4","Rayon 5"]',
-            $article->getRayonsAsJsArray()
-        );
-
-        $rm->delete($rayon1);
-        $rm->delete($rayon2);
-        $rm->delete($rayon3);
-        $rm->delete($rayon4);
-        $rm->delete($rayon5);
-        $rm->delete($rayon6);
-    }
-
     /**
      * Test that adding a too long string as article_authors does not validate
      * @throws Exception

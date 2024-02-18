@@ -808,18 +808,6 @@ class Article extends Entity
     /**
      * @throws Exception
      */
-    public function getRayonsAsJsArray(): string
-    {
-        $rayons = array_slice($this->getRayons(), 0, 5);
-        $rayonNames = array_map(function ($rayon) {
-            return '"' . $rayon->get('name') . '"';
-        }, $rayons);
-        return "[" . join(",", $rayonNames) . "]";
-    }
-
-    /**
-     * @throws Exception
-     */
     public function hasRayon(Rayon $rayon): bool
     {
         $rayons = $this->getRayons();

@@ -355,46 +355,6 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
         </table>
     ';
 
-    $matomo = $config->get("matomo");
-    if ($matomo && $order->isPayed()) {
-
-        $groups = StockManager::groupByArticles($order->getCopies());
-        foreach ($groups as $group) {
-            $article = $group["article"] ?: ArticleManager::buildUnknownArticle();
-            $content .= "
-                <script>
-                    _paq.push(['addEcommerceItem',
-                        // (required) SKU: Product unique identifier
-                        " . ($article->has("ean") ?
-                $article->get("ean") :
-                $article->get("id")) . ",
-                        // (optional) Product name
-                        '" . addSlashes($article->get("title")) . "',
-                        // (optional) Product category.
-                        " . $article->getRayonsAsJsArray() . ",
-                         // (recommended) Product price
-                        " . price($group["unit_price"]) . ",
-                         // (optional, default to 1) Product quantity
-                        " . $group["quantity"] . "
-                    ])
-                </script>
-            ";
-        }
-
-        $content .= "
-            <script>
-                _paq.push(['trackEcommerceOrder',
-                    " . $order->get("id") . ", // (required) Unique Order ID
-                    " . price($order->getTotal()) . ", // (required) Order Revenue grand total (includes tax, shipping, and subtracted discount)
-                    " . price($order->get("amount")) . ", // (optional) Order sub total (excludes shipping)
-                    0, // (optional) Tax amount
-                    " . price($order->get("shipping")) . ", // (optional) Shipping amount
-                    // false // (optional) Discount offered (set to false for unspecified parameter)
-                ])
-
-            </script>
-        ";
-    }
 } elseif (!$currentUserService->isAuthentified()) {
     throw new UnauthorizedHttpException("", "Vous n'avez pas le droit d'accéder à cette page.");
 } else {
