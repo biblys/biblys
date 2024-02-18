@@ -16,6 +16,7 @@ use Model\Publisher;
 use Model\Right;
 use Model\SessionQuery;
 use Model\Site;
+use Model\Stock;
 use Model\StockQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -244,6 +245,24 @@ class CurrentUser
             ->count();
 
         return $articleInCartCount > 0;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function hasStockItemInCart(Stock $stockItem): bool
+    {
+        $cart = $this->getCart();
+        if (!$cart) {
+            return false;
+        }
+
+        $stockItemInCart = StockQuery::create()
+            ->filterByCart($cart)
+            ->filterById($stockItem->getId())
+            ->count();
+
+        return $stockItemInCart > 0;
     }
 
     private function injectCurrentSite(CurrentSite $currentSite): void

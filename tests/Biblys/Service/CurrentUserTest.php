@@ -673,4 +673,69 @@ class CurrentUserTest extends TestCase
         // then
         $this->assertTrue($hasArticleInCart);
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasStockItemInCartWithoutCart()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $stockItem = ModelFactory::createStockItem();
+        $axysAccount = ModelFactory::createAxysAccount();
+        $request = RequestFactory::createAuthRequest(user: $axysAccount);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // when
+        $hasStockItemInCart = $currentUser->hasStockItemInCart($stockItem);
+
+        // then
+        $this->assertFalse($hasStockItemInCart);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasStockItemInCartWithoutStockItemInCart()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $stockItem = ModelFactory::createStockItem();
+        $axysAccount = ModelFactory::createAxysAccount();
+        $request = RequestFactory::createAuthRequest(user: $axysAccount);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        ModelFactory::createCart(site: $site, user: $axysAccount);
+
+        // when
+        $hasStockItemInCart = $currentUser->hasStockItemInCart($stockItem);
+
+        // then
+        $this->assertFalse($hasStockItemInCart);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasStockItemInCartWithStockItemInCart()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $axysAccount = ModelFactory::createAxysAccount();
+        $request = RequestFactory::createAuthRequest(user: $axysAccount);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $cart = ModelFactory::createCart(site: $site, user: $axysAccount);
+        $stockItem = ModelFactory::createStockItem(site: $site, cart: $cart);
+
+        // when
+        $hasStockItemInCart = $currentUser->hasStockItemInCart($stockItem);
+
+        // then
+        $this->assertTrue($hasStockItemInCart);
+    }
 }
