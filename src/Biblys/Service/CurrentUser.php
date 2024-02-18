@@ -6,6 +6,7 @@ namespace Biblys\Service;
 
 use DateTime;
 use Exception;
+use Model\Article;
 use Model\AxysAccount;
 use Model\Cart;
 use Model\CartQuery;
@@ -15,6 +16,7 @@ use Model\Publisher;
 use Model\Right;
 use Model\SessionQuery;
 use Model\Site;
+use Model\StockQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -224,6 +226,24 @@ class CurrentUser
         }
 
         return $cart;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function hasArticleInCart(Article $article): bool
+    {
+        $cart = $this->getCart();
+        if (!$cart) {
+            return false;
+        }
+
+        $articleInCartCount = StockQuery::create()
+            ->filterByCart($cart)
+            ->filterByArticle($article)
+            ->count();
+
+        return $articleInCartCount > 0;
     }
 
     private function injectCurrentSite(CurrentSite $currentSite): void
