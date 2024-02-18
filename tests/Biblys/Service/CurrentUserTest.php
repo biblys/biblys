@@ -475,8 +475,8 @@ class CurrentUserTest extends TestCase
         $config->set("site", $site->getId());
         $request = new Request();
         $request->cookies->set("visitor_uid", "this-visitor-uid");
-        ModelFactory::createCart(["uid" => "this-visitor-uid"], ModelFactory::createSite());
-        $cart = ModelFactory::createCart(["uid" => "this-visitor-uid"], $site);
+        ModelFactory::createCart(site: ModelFactory::createSite(), uniqueId: "this-visitor-uid");
+        $cart = ModelFactory::createCart(site: $site, uniqueId: "this-visitor-uid");
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
@@ -497,7 +497,7 @@ class CurrentUserTest extends TestCase
         $config->set("site", $site->getId());
         $request = new Request();
         $request->cookies->set("visitor_uid", "this-visitor-uid");
-        $cart = ModelFactory::createCart(["uid" => "this-visitor-uid"], $site);
+        $cart = ModelFactory::createCart(site: $site, uniqueId: "this-visitor-uid");
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
@@ -542,7 +542,7 @@ class CurrentUserTest extends TestCase
         $user = ModelFactory::createAxysAccount();
         $request = RequestFactory::createAuthRequest("", $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        $cart = ModelFactory::createCart([], $site, $user);
+        $cart = ModelFactory::createCart(site: $site, user: $user);
 
         // when
         $userCart = $currentUser->getCart();
@@ -563,7 +563,7 @@ class CurrentUserTest extends TestCase
         $user = ModelFactory::createAxysAccount();
         $request = RequestFactory::createAuthRequest("", $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        $cart = ModelFactory::createCart([], $site, $user);
+        $cart = ModelFactory::createCart(site: $site, user: $user);
 
         // when
         $userCart = $currentUser->getOrCreateCart();
@@ -594,9 +594,6 @@ class CurrentUserTest extends TestCase
         $this->assertNull($userCart->getUid());
     }
 
-    /**
-     * @throws PropelException
-     */
     public function testGetEmail()
     {
         // given

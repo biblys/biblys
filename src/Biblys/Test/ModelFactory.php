@@ -122,13 +122,13 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createCart(
-        array       $attributes = [],
         Site        $site = null,
-        AxysAccount $user = null
+        AxysAccount $user = null,
+        string      $uniqueId = null,
     ): Cart
     {
         $cart = new Cart();
-        $cart->setUid($attributes["uid"] ?? "cart-uid");
+        $cart->setUid($uniqueId ?? "cart-uid");
         $cart->setSite($site ?? self::createSite());
         $cart->setAxysAccount($user);
         $cart->save();
