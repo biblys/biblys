@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -12,6 +11,7 @@ use Biblys\Service\TemplateService;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Exception;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,7 +34,7 @@ class LegacyControllerTest extends TestCase
         $request = new Request();
         $request->query->set("page", "bientot");
         $session = new Session();
-        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
+        $mailer = Mockery::mock(Mailer::class);
         $legacyController = new LegacyController();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
@@ -84,7 +84,7 @@ class LegacyControllerTest extends TestCase
         $request = new Request();
         $request->query->set("page", "log_page");
         $session = new Session();
-        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
+        $mailer = Mockery::mock(Mailer::class);
         $legacyController = new LegacyController();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
@@ -127,7 +127,7 @@ class LegacyControllerTest extends TestCase
         $request = RequestFactory::createAuthRequest();
         $request->query->set("page", "pub_page");
         $session = new Session();
-        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
+        $mailer = Mockery::mock(Mailer::class);
         $legacyController = new LegacyController();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
@@ -170,7 +170,7 @@ class LegacyControllerTest extends TestCase
         $request = RequestFactory::createAuthRequestForPublisherUser();
         $request->query->set("page", "adm_page");
         $session = new Session();
-        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
+        $mailer = Mockery::mock(Mailer::class);
         $legacyController = new LegacyController();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
@@ -210,7 +210,7 @@ class LegacyControllerTest extends TestCase
         ModelFactory::createPage(["page_url" => "page-statique"]);
         $request->query->set("page", "page-statique");
         $session = new Session();
-        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
+        $mailer = Mockery::mock(Mailer::class);
         $legacyController = new LegacyController();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);

@@ -7,7 +7,6 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Cloud\CloudSubscription;
 use Biblys\Service\Config;
@@ -23,6 +22,7 @@ use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,7 +52,7 @@ class MainControllerTest extends TestCase
         $site = EntityFactory::createSite();
         $config = new Config();
         $config->set("site", $site->get("site_id"));
-        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
+        $mailer = Mockery::mock(Mailer::class);
         $session = new Session();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
@@ -110,7 +110,7 @@ class MainControllerTest extends TestCase
         $site->setOpt("home", "page:home");
         $config = new Config();
         $config->set("site", $site->get("site_id"));
-        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
+        $mailer = Mockery::mock(Mailer::class);
         $session = new Session();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
