@@ -41,7 +41,9 @@ class LegacyController extends Controller
         MetaTagsService $metaTagsService,
     ): Response
     {
-        global $_SITE, $_ECHO, $_SQL, $urlgenerator;
+        global $_ECHO, $_SQL, $urlgenerator;
+
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $pageQueryParam = $request->get('page', 'home');
 

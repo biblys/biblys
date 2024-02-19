@@ -25,7 +25,7 @@ class OrderDeliveryHelpersTest extends TestCase
         // given
         $site = EntityFactory::createSite();
         $site->setOpt("virtual_stock", 1);
-        $GLOBALS["_SITE"] = $site;
+        $GLOBALS["LEGACY_CURRENT_SITE"] = $site;
         $cm = new CartManager();
         $om = new OrderManager();
         $cart = EntityFactory::createCart();

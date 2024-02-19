@@ -6,6 +6,7 @@ use ArticleManager;
 use Biblys\Admin\Entry;
 use Biblys\Exception\ContactPageException;
 use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
@@ -57,7 +58,7 @@ class MainController extends Controller
         MetaTagsService $metaTagsService,
     ): Response
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $opengraph = ['title' => $_SITE->get('title')];
         $twitterCards = ['title' => $_SITE->get('title')];
@@ -177,7 +178,8 @@ class MainController extends Controller
         TemplateService $templateService,
         Mailer $mailer): Response
     {
-        global $_SITE, $config;
+        global $config;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $name = $request->request->get('name');
         $email = $request->request->get('email');
@@ -275,7 +277,7 @@ class MainController extends Controller
         CurrentSite $currentSite,
     ): Response
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         self::authAdmin($request);
         $request->attributes->set("page_title", "Administration Biblys");
@@ -343,7 +345,7 @@ class MainController extends Controller
         CurrentUser $currentUserService,
     ): RedirectResponse|JsonResponse|Response
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         self::authAdmin($request);
 

@@ -4,6 +4,7 @@
 * @backupStaticAttributes disabled
 */
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -14,7 +15,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
     // Set site TVA before tests
     public static function setUpBeforeClass(): void
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
         $sm = new SiteManager();
         $_SITE->set('site_tva', 'fr');
         $sm->update($_SITE);
@@ -497,8 +498,8 @@ class OrderTest extends PHPUnit\Framework\TestCase
     public function testRemoveStockAssociatedWithReward()
     {
         // given
-        $GLOBALS["_SITE"] = EntityFactory::createSite();
-        $reward = EntityFactory::createCrowdfundingReward(["site_id" => $GLOBALS["_SITE"]->get("id")]);
+        $GLOBALS["LEGACY_CURRENT_SITE"] = EntityFactory::createSite();
+        $reward = EntityFactory::createCrowdfundingReward(["site_id" => $GLOBALS["LEGACY_CURRENT_SITE"]->get("id")]);
         $stock = EntityFactory::createStock(["reward_id" => $reward->get("id")]);
         $order = EntityFactory::createOrder();
         $om = new OrderManager();

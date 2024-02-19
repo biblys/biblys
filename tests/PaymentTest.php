@@ -4,6 +4,8 @@
 * @backupStaticAttributes disabled
 */
 
+use Biblys\Legacy\LegacyCodeHelper;
+
 require_once "setUp.php";
 
 class PaymentTest extends PHPUnit\Framework\TestCase
@@ -13,7 +15,7 @@ class PaymentTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $lm = new PaymentManager();
 

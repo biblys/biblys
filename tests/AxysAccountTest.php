@@ -4,6 +4,7 @@
 * @backupStaticAttributes disabled
 */
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use Propel\Runtime\Exception\PropelException;
@@ -131,7 +132,7 @@ class AxysAccountTest extends PHPUnit\Framework\TestCase
 
     public function testAddToLibrary()
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         // given
         $publisher = EntityFactory::createPublisher();

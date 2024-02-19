@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use CronJobManager;
 use EntityManager;
@@ -162,7 +163,7 @@ class CronsController extends Controller
      */
     public function exportPdlAction(Request $request): JsonResponse
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
         global $config;
 
         $request->headers->set('Accept', 'application/json');

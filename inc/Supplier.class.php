@@ -1,6 +1,8 @@
 <?php
 
-    class Supplier extends Entity
+use Biblys\Legacy\LegacyCodeHelper;
+
+class Supplier extends Entity
 	{
 		protected $prefix = 'supplier';
 
@@ -27,7 +29,7 @@
          */
         public function getPublishers()
         {
-            global $_SITE;
+            $_SITE = LegacyCodeHelper::getGlobalSite();
 
             // Get links for this suppliers
             $lm = new LinkManager();

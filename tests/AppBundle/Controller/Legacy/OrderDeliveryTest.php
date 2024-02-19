@@ -33,7 +33,7 @@ class OrderDeliveryTest extends TestCase
 
         $site = ModelFactory::createSite();
         $siteManager = new SiteManager();
-        $GLOBALS["_SITE"] = $siteManager->getById($site->getId());
+        $GLOBALS["LEGACY_CURRENT_SITE"] = $siteManager->getById($site->getId());
         $cart = ModelFactory::createCart(site: $site);
         $article = ModelFactory::createArticle();
         ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
@@ -104,7 +104,7 @@ class OrderDeliveryTest extends TestCase
 
         $site = ModelFactory::createSite();
         $siteManager = new SiteManager();
-        $GLOBALS["_SITE"] = $siteManager->getById($site->getId());
+        $GLOBALS["LEGACY_CURRENT_SITE"] = $siteManager->getById($site->getId());
         $cart = ModelFactory::createCart(site: $site);
         $article = ModelFactory::createArticle(typeId: Type::EBOOK);
         ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
@@ -238,7 +238,7 @@ class OrderDeliveryTest extends TestCase
 
         $site = ModelFactory::createSite();
         $siteManager = new SiteManager();
-        $GLOBALS["_SITE"] = $siteManager->getById($site->getId());
+        $GLOBALS["LEGACY_CURRENT_SITE"] = $siteManager->getById($site->getId());
         $cart = ModelFactory::createCart(site: $site);
         $article = ModelFactory::createArticle(title: "Livre commandé");
         ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
@@ -279,12 +279,12 @@ class OrderDeliveryTest extends TestCase
             ->withConsecutive(
                 [
                     "customer@biblys.fr",
-                    $this->stringContains("YS | Commande n° "),
+                    $this->stringContains("PAR | Commande n° "),
                     $this->stringContains("Livre commandé")
                 ],
                 [
-                    "contact@biblys.fr",
-                    $this->stringContains("YS | Commande n° "),
+                    "contact@paronymie.fr",
+                    $this->stringContains("PAR | Commande n° "),
                     $this->stringContains("Livre commandé")
                 ]
             )

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Pagination;
 use CategoryManager;
 use Framework\Controller;
@@ -28,7 +29,7 @@ class PostCategoryController extends Controller
      */
     public function showAction(Request $request, $slug): RedirectResponse|Response
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $use_old_controller = $_SITE->getOpt('use_old_post_controller');
         if ($use_old_controller) {

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Legacy\LegacyCodeHelper;
 use EventManager;
 use Framework\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,7 +50,9 @@ class EventController extends Controller
 
     public function showAction(Request $request, $slug)
     {
-        global $_SITE, $urlgenerator;
+        global $urlgenerator;
+
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $em = new EventManager();
         $event = $em->get(["event_url" => $slug]);

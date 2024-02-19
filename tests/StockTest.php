@@ -4,6 +4,7 @@
 * @backupStaticAttributes disabled
 */
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
 
 require_once __DIR__."/setUp.php";
@@ -13,7 +14,7 @@ class StockTest extends PHPUnit\Framework\TestCase
     // Set site TVA before tests
     public static function setUpBeforeClass(): void
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
         $sm = new SiteManager();
         $_SITE->set('site_tva', 'fr');
         $sm->update($_SITE);

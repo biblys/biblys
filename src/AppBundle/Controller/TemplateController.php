@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Template\Template;
 use Exception;
 use Framework\Controller;
@@ -53,7 +54,7 @@ class TemplateController extends Controller
         $request->attributes->set("page_title", "Éditer ".$template->getName());
 
         if ($request->getMethod() === 'POST') {
-            global $_SITE;
+            $_SITE = LegacyCodeHelper::getGlobalSite();
             $body = $request->toArray();
             $filesystem = new Filesystem();
             $template->updateContent($_SITE, $body["content"], $filesystem);

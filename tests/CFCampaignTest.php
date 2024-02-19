@@ -1,5 +1,7 @@
 <?php
 use AppBundle\Controller\CFCampaignController;
+use Biblys\Legacy\LegacyCodeHelper;
+
 /**
 * @backupGlobals disabled
 * @backupStaticAttributes disabled
@@ -14,7 +16,7 @@ class CFCampaignTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $cm = new CFCampaignManager();
 

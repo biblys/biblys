@@ -21,7 +21,7 @@ class AxysAccount extends Entity
 
     public function getOpt($key)
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $om = new OptionManager();
 
@@ -36,7 +36,7 @@ class AxysAccount extends Entity
 
     public function setOpt($key, $value)
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $om = new OptionManager();
 
@@ -357,7 +357,7 @@ class AxysAccountManager extends EntityManager
 
     public function addToLibrary(AxysAccount $axysAccount, array $articles = [], array $stocks = [], $predownload = false, $options = [])
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $added = [];
         $errors = [];

@@ -1,5 +1,6 @@
 <?php /** @noinspection PhpUnhandledExceptionInspection */
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -96,14 +97,10 @@ try {
     die();
 }
 
-/* CURRENT SITE DETECTION */
+$config = Config::load();
+Biblys\Database\Connection::initPropel($config);
 
-$sm = new SiteManager();
-$siteId = $config->get('site');
-$_SITE = $sm->getById($siteId);
-if (!$_SITE) {
-    throw new Exception('No site defined with id ' . $siteId);
-}
+$_SITE = LegacyCodeHelper::getGlobalSite();
 
 // Define site_path (should be replaced with $site->get("path"))
 if (!defined('SITE_PATH')) {
@@ -683,7 +680,7 @@ function share_buttons($url, $text = null, $options = []): string
 function get_controller_path($controller): bool|string
 {
     /** @noinspection PhpUnusedLocalVariableInspection */
-    global $_SITE;
+    $_SITE = LegacyCodeHelper::getGlobalSite();
 
     $default_path = __DIR__."/../controllers/common/php/".$controller.".php";
     $app_path = __DIR__."/../app/controllers/".$controller.".php";

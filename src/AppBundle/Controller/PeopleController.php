@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use ArticleManager;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
@@ -54,7 +55,7 @@ class PeopleController extends Controller
      */
     public function showAction(Request $request, $slug): RedirectResponse|Response
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $pm = new PeopleManager();
         $am = new ArticleManager();

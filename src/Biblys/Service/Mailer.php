@@ -3,6 +3,7 @@
 namespace Biblys\Service;
 
 use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Legacy\LegacyCodeHelper;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\DNSCheckValidation;
 use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
@@ -27,7 +28,7 @@ class Mailer
 
     public function __construct(Config $config)
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $this->defaultSender = new Address($_SITE->get("site_contact"), $_SITE->get("site_title"));
         $this->transport = new SendmailTransport();

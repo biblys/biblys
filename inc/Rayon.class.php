@@ -1,5 +1,7 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
+
 class Rayon extends Entity
 {
     protected $prefix = 'rayon';
@@ -26,7 +28,7 @@ class Rayon extends Entity
 
     public function addArticle($article)
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $lm = new LinkManager();
 
@@ -50,7 +52,7 @@ class Rayon extends Entity
 
     public function removeArticle($article)
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $lm = new LinkManager();
         $am = new ArticleManager();

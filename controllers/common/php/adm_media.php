@@ -46,7 +46,7 @@ if (!empty($_FILES)) {
         $insert = EntityManager::prepareAndExecute(
             'INSERT INTO `medias`(`site_id`,`media_dir`,`media_file`,`media_ext`,`media_insert`)
             VALUES(:site_id, :media_dir, :media_file, :media_ext, NOW())',[
-            'site_id' => $GLOBALS["_SITE"]->get('id'),
+            'site_id' => $GLOBALS["LEGACY_CURRENT_SITE"]->get('id'),
             'media_dir' => $request->query->get('dir'),
             'media_file' => $file_name[0],
             'media_ext' => $file_name[1],
@@ -129,7 +129,7 @@ if ($getDir && $getFile) {
         $media = EntityManager::prepareAndExecute(
             'SELECT * FROM `medias` WHERE `site_id` = :site_id AND `media_dir` = :media_dir AND `media_file` = :media_file AND `media_ext` = :media_ext LIMIT 1',
             [
-                "site_id" => $GLOBALS["_SITE"]->get("id"),
+                "site_id" => $GLOBALS["LEGACY_CURRENT_SITE"]->get("id"),
                 "media_dir" => $media_dir,
                 "media_file" => $media_file,
                 "media_ext" => $media_ext,
@@ -144,7 +144,7 @@ if ($getDir && $getFile) {
             $selected[$m['category_id']] = 'selected="selected"';
             $categories = EntityManager::prepareAndExecute(
                 'SELECT `category_id`, `category_name` FROM `categories` WHERE `site_id` = :site_id',
-                ['site_id' => $GLOBALS["_SITE"]->get('id')]
+                ['site_id' => $GLOBALS["LEGACY_CURRENT_SITE"]->get('id')]
             );
             while ($c = $categories->fetch(PDO::FETCH_ASSOC)) {
                 $categories_options .= '<option value="'.$c['category_id'].'" '.($m['category_id'] == $c['category_id'] ? 'selected' : null).'>'.$c['category_name'].'</option>';

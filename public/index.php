@@ -13,8 +13,6 @@ use Symfony\Component\HttpKernel\EventListener\ErrorListener;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\RequestContext;
 
-
-// INCLUDES
 include __DIR__."/../inc/functions.php";
 
 $config = Config::load();

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AwardManager;
+use Biblys\Legacy\LegacyCodeHelper;
 use Framework\Controller;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,7 @@ class AwardsController extends Controller
      */
     public function indexAction(): Response
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $awm = new AwardManager();
 

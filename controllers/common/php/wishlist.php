@@ -1,7 +1,7 @@
 <?php
 
 global $request;
-global $_SITE;
+$_SITE = LegacyCodeHelper::getGlobalSite();
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\Response;

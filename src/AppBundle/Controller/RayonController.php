@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use ArticleManager;
 use Biblys\Article\Type;
 use Biblys\Isbn\Isbn as Isbn;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
@@ -97,7 +98,7 @@ class RayonController extends Controller
      */
     public function editAction(Request $request, UrlGenerator $urlGenerator, $id)
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         self::authAdmin($request);
 
@@ -222,7 +223,7 @@ class RayonController extends Controller
         $id
     )
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         self::authPublisher($request, null);
 

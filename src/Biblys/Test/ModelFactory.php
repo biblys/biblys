@@ -465,6 +465,8 @@ class ModelFactory
         $site = new Site();
         $site->setName($attributes["name"] ?? "paronymie");
         $site->setTitle($attributes["title"] ?? "Éditions Paronymie");
+        $site->setContact("contact@paronymie.fr");
+        $site->setTag("PAR");
         $site->save();
 
         return $site;

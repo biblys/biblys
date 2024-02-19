@@ -5,6 +5,8 @@
  * @backupStaticAttributes disabled
  */
 
+use Biblys\Legacy\LegacyCodeHelper;
+
 require_once "setUp.php";
 
 class MediaFileTest extends PHPUnit\Framework\TestCase
@@ -63,7 +65,7 @@ class MediaFileTest extends PHPUnit\Framework\TestCase
      */
     public function testGetUrl()
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $mfm = new MediaFileManager();
         $media = $mfm->create([

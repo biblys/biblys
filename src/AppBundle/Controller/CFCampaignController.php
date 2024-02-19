@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Legacy\LegacyCodeHelper;
 use CFCampaign;
 use CFCampaignManager;
 use CFRewardManager;
@@ -26,7 +27,9 @@ class CFCampaignController extends Controller
      */
     public function showAction(Request $request, $slug): Response
     {
-        global $_SITE, $urlgenerator;
+        global $urlgenerator;
+
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $cfcm = new CFCampaignManager();
         $campaign = $cfcm->get(['campaign_url' => $slug]);

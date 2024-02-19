@@ -4,6 +4,7 @@
 * @backupStaticAttributes disabled
 */
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
 
 require_once "setUp.php";
@@ -23,7 +24,7 @@ class CollectionTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $cm = new CollectionManager();
 

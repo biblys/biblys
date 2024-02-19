@@ -106,7 +106,8 @@ class Order extends Entity
      */
     public function createPaypalPaymentLink()
     {
-        global $_SITE, $config, $urlgenerator;
+        global $config, $urlgenerator;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $sm = new StockManager();
 
@@ -552,7 +553,7 @@ class OrderManager extends EntityManager
 
     public function getAllFromAnalytics($filters, $options)
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $req = [];
         $params = ['site_id' => $_SITE->get('id')];
@@ -596,7 +597,7 @@ class OrderManager extends EntityManager
      */
     public function search($keywords, array $where = [], array $options = [], $withJoins = false)
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $queries = ["site_id = ".$_SITE->get('id')];
         $i = 0;
@@ -841,7 +842,7 @@ class OrderManager extends EntityManager
      */
     public function markAsPayed(Order $order)
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $mailer = $this->getMailer();
 
@@ -941,7 +942,7 @@ class OrderManager extends EntityManager
      */
     public function markAsShipped(Order $order, $trackingNumber = null)
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $mailer = $this->getMailer();
 
@@ -1011,7 +1012,7 @@ class OrderManager extends EntityManager
 
     public function followUp(Order $order)
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $mailer = $this->getMailer();
 

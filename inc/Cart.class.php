@@ -307,7 +307,7 @@ class CartManager extends EntityManager
      */
     public function addStock(Cart $cart, $stock, $wish_id = 'undefined', CFReward $reward = null)
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
         $sm = new StockManager();
 
         if (!is_object($stock)) {

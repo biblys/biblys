@@ -29,7 +29,7 @@ class CartControllerTest extends TestCase
     public function testAddArticleWithJsonResponse()
     {
         /** @var Site $_SITE */
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         // given
         $cm = new CartManager();
@@ -76,7 +76,7 @@ class CartControllerTest extends TestCase
     public function testAddArticleWithRedirection()
     {
         /** @var Site $_SITE */
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         // given
         $cm = new CartManager();
@@ -111,7 +111,7 @@ class CartControllerTest extends TestCase
     public function testAddArticleNotYetAvailable()
     {
         /** @var Site $_SITE */
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $this->expectException("Symfony\Component\HttpKernel\Exception\ConflictHttpException");
         $this->expectExceptionMessage(
@@ -155,7 +155,7 @@ class CartControllerTest extends TestCase
     public function testAddStockCopy()
     {
         /** @var Site $_SITE */
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         // given
         $cm = new CartManager();

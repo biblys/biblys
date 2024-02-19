@@ -1,6 +1,7 @@
 <?php
 
 use Biblys\Exception\EntityAlreadyExistsException;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Slug\SlugService;
 
 class Collection extends Entity
@@ -56,7 +57,7 @@ class Collection extends Entity
                 return $where;
             }
 
-            global $_SITE;
+            $_SITE = LegacyCodeHelper::getGlobalSite();
 
             $publisher_filter = $_SITE->getOpt('publisher_filter');
             if ($publisher_filter && !array_key_exists('publisher_id', $where)) {

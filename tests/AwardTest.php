@@ -4,6 +4,8 @@
 * @backupStaticAttributes disabled
 */
 
+use Biblys\Legacy\LegacyCodeHelper;
+
 require_once "setUp.php";
 
 class AwardTest extends PHPUnit\Framework\TestCase
@@ -13,7 +15,7 @@ class AwardTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $am = new AwardManager();
 

@@ -4,6 +4,8 @@
 * @backupStaticAttributes disabled
 */
 
+use Biblys\Legacy\LegacyCodeHelper;
+
 require_once "setUp.php";
 
 class PublisherTest extends PHPUnit\Framework\TestCase
@@ -28,7 +30,7 @@ class PublisherTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $pm = new PublisherManager();
 

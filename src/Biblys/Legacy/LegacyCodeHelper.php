@@ -6,6 +6,7 @@ use Biblys\Database\Connection;
 use Biblys\Service\Config;
 use Biblys\Service\LoggerService;
 use Exception;
+use Model\SiteQuery;
 use PDO;
 use Site;
 use SiteManager;
@@ -48,9 +49,13 @@ class LegacyCodeHelper
         if (!isset($GLOBALS["LEGACY_CURRENT_SITE"])) {
             $config = Config::load();
             $currentSiteId = $config->get("site");
-            $sm = new SiteManager();
-            $currentSite = $sm->getById($currentSiteId);
-            $GLOBALS["LEGACY_CURRENT_SITE"] = $currentSite;
+            $currentSite = SiteQuery::create()->findPk($currentSiteId);
+            $GLOBALS["LEGACY_CURRENT_SITE"] = new Site([
+                "site_id" => $currentSite->getId(),
+                "site_title" => $currentSite->getTitle(),
+                "site_contact" => $currentSite->getContact(),
+                "site_tag" => $currentSite->getTag(),
+            ]);
         }
 
         return $GLOBALS["LEGACY_CURRENT_SITE"];

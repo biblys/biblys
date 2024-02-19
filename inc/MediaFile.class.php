@@ -1,5 +1,7 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
+
 class MediaFile extends Entity
 {
     protected $prefix = 'media';
@@ -7,7 +9,7 @@ class MediaFile extends Entity
 
     public function getUrl()
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         return '/' . $_SITE->get('name') . '/media/' . $this->get('dir') . '/' . $this->get('file')
             . '.' . $this->get('ext');

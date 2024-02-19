@@ -1,6 +1,7 @@
 <?php
 
-global $request, $_SITE, $_SQL;
+global $request, $_SQL;
+$_SITE = LegacyCodeHelper::getGlobalSite();
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;

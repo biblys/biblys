@@ -223,7 +223,8 @@ class Article extends Entity
      */
     public function getCFRewards(): array
     {
-        global $_SQL, $_SITE;
+        global $_SQL;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $result = array();
         $rewards = $_SQL->query('SELECT * FROM `cf_rewards` WHERE `reward_articles` LIKE "%' . $this->get('id') . '%" AND `site_id` = "' . $_SITE->get('id') . '"');
@@ -954,7 +955,7 @@ class Article extends Entity
      */
     public function getTaxRate(): bool|int
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         // If site doesn't use TVA, no tax
         if (!$_SITE->get('site_tva')) {
@@ -1369,7 +1370,7 @@ class ArticleManager extends EntityManager
      */
     public function addRayon($article, $rayon): Entity
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $lm = new LinkManager();
 

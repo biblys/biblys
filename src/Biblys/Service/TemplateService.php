@@ -3,6 +3,7 @@
 namespace Biblys\Service;
 
 use Biblys\Isbn\Isbn;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Legacy\TemplateGlobal\Site;
 use Cart;
 use Exception;
@@ -196,7 +197,8 @@ class TemplateService
 
         // return absolute url for a route
         $functions[] = new TwigFunction('url', function ($route, $vars = []) {
-            global $urlgenerator, $_SITE;
+            global $urlgenerator;
+            $_SITE = LegacyCodeHelper::getGlobalSite();
 
             return 'https://' . $_SITE->get('domain') . $urlgenerator->generate($route, $vars);
         });

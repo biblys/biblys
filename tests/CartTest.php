@@ -5,6 +5,7 @@
  * @backupStaticAttributes disabled
  */
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
 use Propel\Runtime\Exception\PropelException;
 
@@ -216,7 +217,7 @@ class CartTest extends PHPUnit\Framework\TestCase
      */
     public function testNeedsShipping()
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $cm = new CartManager();
         $am = new ArticleManager();
@@ -256,7 +257,7 @@ class CartTest extends PHPUnit\Framework\TestCase
      */
     public function testAddArticle()
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $cm = new CartManager();
         $am = new ArticleManager();
@@ -278,7 +279,7 @@ class CartTest extends PHPUnit\Framework\TestCase
      */
     public function testAddArticleForUnreleaseArticle()
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         // given
         $this->expectException("Entity\Exception\CartException");
@@ -303,7 +304,7 @@ class CartTest extends PHPUnit\Framework\TestCase
      */
     public function testAddArticleCooldown()
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $cm = new CartManager();
         $am = new ArticleManager();
@@ -367,7 +368,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         $this->expectException("Exception");
         $this->expectExceptionMessage("L'article Plop n'a pas pu être ajouté au panier car il est hors commerce.");
 
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $cm = new CartManager();
         $am = new ArticleManager();
@@ -400,7 +401,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         $this->expectExceptionMessage("L'article À réimprimer n'a pas pu être ajouté au panier car il est en cours de réimpression.");
 
         // given
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
         $_SITE->setOpt('virtual_stock', 1);
         $cm = new CartManager();
         $cart = $cm->create();
@@ -460,9 +461,9 @@ class CartTest extends PHPUnit\Framework\TestCase
     public function testContainsReward()
     {
         // given
-        $GLOBALS["_SITE"] = EntityFactory::createSite();
+        $GLOBALS["LEGACY_CURRENT_SITE"] = EntityFactory::createSite();
         $reward = EntityFactory::createCrowdfundingReward([
-            "site_id" => $GLOBALS["_SITE"]->get("id"),
+            "site_id" => $GLOBALS["LEGACY_CURRENT_SITE"]->get("id"),
             "limited" => 0,
         ]);
         $cart = EntityFactory::createCart();
@@ -483,7 +484,7 @@ class CartTest extends PHPUnit\Framework\TestCase
     public function testDelete()
     {
         // given
-        $GLOBALS["_SITE"] = EntityFactory::createSite();
+        $GLOBALS["LEGACY_CURRENT_SITE"] = EntityFactory::createSite();
         $cm = new CartManager();
         $webCart = EntityFactory::createCart(["cart_type" => "web"]);
         $shopCart = EntityFactory::createCart(["cart_type" => "shop"]);

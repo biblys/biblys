@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Pagination;
 use Biblys\Service\Slug\SlugService;
@@ -35,7 +36,7 @@ class PostController extends Controller
      */
     public function indexAction(Request $request)
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $use_old_controller = $_SITE->getOpt('use_old_post_controller');
         if ($use_old_controller) {
@@ -80,7 +81,9 @@ class PostController extends Controller
      */
     public function showAction(Request $request, $slug)
     {
-        global $_SITE, $urlgenerator;
+        global $urlgenerator;
+
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $use_old_controller = $_SITE->getOpt('use_old_post_controller');
         if ($use_old_controller) {

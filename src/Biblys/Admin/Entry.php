@@ -2,6 +2,7 @@
 
 namespace Biblys\Admin;
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Config;
 use Biblys\Service\Updater\UpdaterException;
@@ -254,7 +255,7 @@ class Entry
      */
     public static function getCustomEntries(): array
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $entries = json_decode($_SITE->getOpt('admin_entries'));
 

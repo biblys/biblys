@@ -2,7 +2,8 @@
 /** @noinspection PhpPossiblePolymorphicInvocationInspection */
 /** @noinspection PhpUnhandledExceptionInspection */
 
-global $urlgenerator, $_SITE;
+global $urlgenerator;
+$_SITE = LegacyCodeHelper::getGlobalSite();
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;

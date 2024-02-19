@@ -5,6 +5,7 @@
 */
 
 use Biblys\Exception\ArticleAlreadyInRayonException;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
@@ -149,7 +150,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
      */
     public function testOnOrder(Article $article)
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
         $siteId = $_SITE->get("id");
 
         // Create a fake publisher for article
@@ -764,8 +765,8 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $pm = new PublisherManager();
         $publisherFiltered = $pm->create(["publisher_name" => "Éditeur filtré"]);
         $publisherAllowed = $pm->create(["publisher_name" => "Éditeur autorisé"]);
-        $GLOBALS["_SITE"] = EntityFactory::createSite();
-        $GLOBALS["_SITE"]->setOpt("publisher_filter", $publisherAllowed->get("id"));
+        $GLOBALS["LEGACY_CURRENT_SITE"] = EntityFactory::createSite();
+        $GLOBALS["LEGACY_CURRENT_SITE"]->setOpt("publisher_filter", $publisherAllowed->get("id"));
         $am = new ArticleManager();
 
         $article = $am->create([
@@ -790,8 +791,8 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $pm = new PublisherManager();
         $publisherAllowed = $pm->create(["publisher_name" => "Éditeur inexistant"]);
         $sm = new SiteManager();
-        $GLOBALS["_SITE"] = $sm->create([]);
-        $GLOBALS["_SITE"]->setOpt("publisher_filter", $publisherAllowed->get("id"));
+        $GLOBALS["LEGACY_CURRENT_SITE"] = $sm->create([]);
+        $GLOBALS["LEGACY_CURRENT_SITE"]->setOpt("publisher_filter", $publisherAllowed->get("id"));
         $am = new ArticleManager();
 
         $am->setIgnoreSiteFilters(true);
@@ -811,7 +812,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     public function testPreprocessSlugWithOneAuthor()
     {
         // given
-        $GLOBALS["_SITE"] = EntityFactory::createSite();
+        $GLOBALS["LEGACY_CURRENT_SITE"] = EntityFactory::createSite();
         $am = new ArticleManager();
         $article = EntityFactory::createArticle([
             "article_title" => "Pénates du soir"

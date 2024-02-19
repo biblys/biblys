@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use ArticleManager;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Pagination;
 use CollectionManager;
 use Exception;
@@ -41,7 +42,7 @@ class PublisherController extends Controller
      */
     public function indexAction(Request $request): Response
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
         
         $pm = new PublisherManager();
 
@@ -79,7 +80,7 @@ class PublisherController extends Controller
      */
     public function showAction(Request $request, $slug): Response
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $pm = new PublisherManager();
         $am = new ArticleManager();

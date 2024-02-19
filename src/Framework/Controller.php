@@ -2,6 +2,7 @@
 
 namespace Framework;
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -83,7 +84,7 @@ class Controller
         }
 
         if (!isset($tags['site_name'])) {
-            global $_SITE;
+            $_SITE = LegacyCodeHelper::getGlobalSite();
             $tags['site_name'] = $_SITE->get('title');
         }
 

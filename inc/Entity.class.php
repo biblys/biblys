@@ -208,11 +208,9 @@ class EntityManager
     public function __construct()
     {
         global $_SQL;
-        
-        global $_SITE;
 
         $this->db = $_SQL;
-        $this->site = $_SITE;
+        $this->site = LegacyCodeHelper::getGlobalSite();
         $this->idField = $this->prefix.'_id';
     }
 
@@ -357,7 +355,7 @@ class EntityManager
     public function count(array $where = [])
     {
         if ($this->siteAgnostic === false) {
-            global $_SITE;
+            $_SITE = LegacyCodeHelper::getGlobalSite();
             $where['site_id'] = $_SITE->get('id');
         }
 
@@ -386,7 +384,7 @@ class EntityManager
     public function getAll(array $where = array(), array $options = array(), $withJoins = true)
     {
         if ($this->siteAgnostic === false && !isset($where['site_id'])) {
-            global $_SITE;
+            $_SITE = LegacyCodeHelper::getGlobalSite();
             $where['site_id'] = $_SITE->get('id');
         }
 
@@ -479,7 +477,7 @@ class EntityManager
     {
         // If not site agnostic, add site id
         if ($this->siteAgnostic === false) {
-            global $_SITE;
+            $_SITE = LegacyCodeHelper::getGlobalSite();
             $defaults['site_id'] = $_SITE->get('id');
         }
 

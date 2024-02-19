@@ -1,6 +1,7 @@
 <?php
 
 use Biblys\EuroTax as Tax;
+use Biblys\Legacy\LegacyCodeHelper;
 
 class Stock extends Entity
 {
@@ -98,7 +99,7 @@ class Stock extends Entity
      */
     public function isAvailable()
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         if (!$this->has('id')) {
             return false;

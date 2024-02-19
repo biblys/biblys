@@ -2,6 +2,7 @@
 
 use Biblys\Exception\EntityAlreadyExistsException;
 use Biblys\Exception\InvalidEntityException;
+use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Publisher extends Entity
@@ -64,7 +65,9 @@ class Publisher extends Entity
      */
     public function getSuppliers(): array
     {
-        global $_SITE, $_SQL;
+        global $_SQL;
+
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $query = $_SQL->prepare("SELECT `supplier_id`, `supplier_name` FROM `links` JOIN `suppliers` USING(`supplier_id`) WHERE `links`.`site_id` = :site AND `suppliers`.`site_id` = :site AND `publisher_id` = :publisher");
         $query->execute(['site' => $_SITE->get('id'), 'publisher' => $this->get('id')]);
@@ -84,7 +87,7 @@ class Publisher extends Entity
      */
     public function addSupplier(Supplier $supplier)
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $lm = new LinkManager();
 
@@ -109,7 +112,7 @@ class Publisher extends Entity
      */
     public function removeSupplier(Supplier $supplier)
     {
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $lm = new LinkManager();
 
@@ -191,7 +194,7 @@ class PublisherManager extends EntityManager
             return $where;
         }
 
-        global $_SITE;
+        $_SITE = LegacyCodeHelper::getGlobalSite();
 
         $publisherFilter = $_SITE->getOpt('publisher_filter');
         if ($publisherFilter && !array_key_exists('publisher_id', $where)) {
