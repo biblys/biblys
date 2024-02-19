@@ -107,16 +107,6 @@ class Visitor extends AxysAccount
         return false;
     }
 
-    // Get wishes from parent class only if logged in
-    public function getWishes(): array
-    {
-        if ($this->isLogged()) {
-            return parent::getWishes();
-        } else {
-            return array();
-        }
-    }
-
     /**
      * @throws Exception
      */
