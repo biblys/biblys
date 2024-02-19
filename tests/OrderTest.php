@@ -15,10 +15,10 @@ class OrderTest extends PHPUnit\Framework\TestCase
     // Set site TVA before tests
     public static function setUpBeforeClass(): void
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
         $sm = new SiteManager();
-        $_SITE->set('site_tva', 'fr');
-        $sm->update($_SITE);
+        $globalSite->set('site_tva', 'fr');
+        $sm->update($globalSite);
     }
 
     /**

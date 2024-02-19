@@ -9,7 +9,7 @@ $um = new AxysAccountManager();
 $pp = null;
 
 // Use new post controller and redirect ?
-$use_old_controller = $_SITE->getOpt('use_old_post_controller');
+$use_old_controller = $globalSite->getOpt('use_old_post_controller');
 
 if (LegacyCodeHelper::getGlobalVisitor()->isAdmin())
 {

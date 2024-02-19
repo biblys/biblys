@@ -52,7 +52,7 @@ class EventController extends Controller
     {
         global $urlgenerator;
 
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $em = new EventManager();
         $event = $em->get(["event_url" => $slug]);
@@ -83,7 +83,7 @@ class EventController extends Controller
             "url" => "https://".$request->getHost().
                 $urlgenerator->generate("event_show", ["slug" => $event->get("url")]),
             "description" => truncate(strip_tags($event->get('content')), '500', '...', true),
-            "site_name" => $_SITE->get("title"),
+            "site_name" => $globalSite->get("title"),
             "locale" => "fr_FR",
             "article:published_time" => $event->get('date'),
             "article:modified_time" => $event->get('updated')

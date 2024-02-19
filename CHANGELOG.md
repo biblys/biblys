@@ -7,6 +7,11 @@ Améliorations
 - L'adresse e-mail du compte courant est désormais affiché sur la page "Mon
   compte"
 
+Déploiement
+
+- Dans les controllers, remplacer `$_SITE` par `LegacyCodeHelper::getGlobalSite()`.
+
+
 ### 2.77.1 (21 février 2024)
 
 Corrections

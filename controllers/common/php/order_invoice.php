@@ -41,7 +41,7 @@ if ($order = $om->get(["order_url" => $orderUrl])) {
 
     // Condition column for bookshops
     $condition = null;
-    if ($_SITE->get("shop")) {
+    if ($globalSite->get("shop")) {
         $condition = '<th>État</th>';
         $colspan = 3;
     }
@@ -78,7 +78,7 @@ if ($order = $om->get(["order_url" => $orderUrl])) {
                     <em>de '.truncate($article->get('authors'), 100, '...', true, true).'</em><br>
                     coll. '.$article->get('collection')->get('name').' '.numero($article->get('number')).'
                 </td>
-                '.($_SITE->get("shop") ? '<td class="center">'.$stock->get('condition').'</td>' : null).'
+                '.($globalSite->get("shop") ? '<td class="center">'.$stock->get('condition').'</td>' : null).'
                 <td class="right">
                     '.currency($stock->get('selling_price') / 100).'
                 </td>
@@ -103,7 +103,7 @@ if ($order = $om->get(["order_url" => $orderUrl])) {
 
     // No TVA legal notice
     $notva = null;
-    if (!$_SITE->get("tva")) {
+    if (!$globalSite->get("tva")) {
         $notva = '<p class="center"><strong>TVA non applicable en application de l\'article 293 B du CGI.</strong></p><br>';
     }
 
@@ -127,7 +127,7 @@ if ($order = $om->get(["order_url" => $orderUrl])) {
             <p>'.$order->get('order_email').'</p>
         </div>
 
-        <h3>'.$_SITE->get("title").'<br />'.str_replace("|","<br />",$_SITE->get("address")).'</h3>
+        <h3>'.$globalSite->get("title").'<br />'.str_replace("|","<br />",$globalSite->get("address")).'</h3>
 
         <h2>'.$pageTitle.'</h2>
 
@@ -174,7 +174,7 @@ if ($order = $om->get(["order_url" => $orderUrl])) {
 
         '.$notva.$payment;
 
-        $notice = $_SITE->getOpt('invoice_notice');
+        $notice = $globalSite->getOpt('invoice_notice');
     if ($notice) {
         $content .= '<p class="text-center">'.str_replace('\n', '<br/>', $notice).'</p>';
     }

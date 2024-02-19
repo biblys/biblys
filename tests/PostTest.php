@@ -16,14 +16,14 @@ class PostTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $pm = new PostManager();
 
         $post = $pm->create();
 
         $this->assertInstanceOf('Post', $post);
-        $this->assertEquals($post->get('site_id'), $_SITE->get('id'));
+        $this->assertEquals($post->get('site_id'), $globalSite->get('id'));
 
         return $post;
     }

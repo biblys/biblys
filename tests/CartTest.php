@@ -217,14 +217,14 @@ class CartTest extends PHPUnit\Framework\TestCase
      */
     public function testNeedsShipping()
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $cm = new CartManager();
         $am = new ArticleManager();
 
         $not_virtual_stock = false;
-        if (!$_SITE->getOpt('virtual_stock')) {
-            $_SITE->setOpt('virtual_stock', 1);
+        if (!$globalSite->getOpt('virtual_stock')) {
+            $globalSite->setOpt('virtual_stock', 1);
             $not_virtual_stock = true;
         }
 
@@ -246,7 +246,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($cart->needsShipping(), "Carts with physical article need shipping");
 
         if ($not_virtual_stock) {
-            $_SITE->setOpt('virtual_stock', 0);
+            $globalSite->setOpt('virtual_stock', 0);
         }
 
         $cm->delete($cart);
@@ -257,12 +257,12 @@ class CartTest extends PHPUnit\Framework\TestCase
      */
     public function testAddArticle()
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $cm = new CartManager();
         $am = new ArticleManager();
 
-        $_SITE->setOpt('virtual_stock', 1);
+        $globalSite->setOpt('virtual_stock', 1);
 
         $cart = $cm->create();
         $article = EntityFactory::createArticle(["article_availability_dilicom" => 1]);
@@ -279,7 +279,7 @@ class CartTest extends PHPUnit\Framework\TestCase
      */
     public function testAddArticleForUnreleaseArticle()
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         // given
         $this->expectException("Entity\Exception\CartException");
@@ -287,7 +287,7 @@ class CartTest extends PHPUnit\Framework\TestCase
 
         // given
         $cm = new CartManager();
-        $_SITE->setOpt('virtual_stock', 1);
+        $globalSite->setOpt('virtual_stock', 1);
         $cart = $cm->create();
         $tomorrow = new DateTime("tomorrow");
         $article = EntityFactory::createArticle([
@@ -304,15 +304,15 @@ class CartTest extends PHPUnit\Framework\TestCase
      */
     public function testAddArticleCooldown()
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $cm = new CartManager();
         $am = new ArticleManager();
         $sm = new StockManager();
 
         $not_virtual_stock = false;
-        if (!$_SITE->getOpt('virtual_stock')) {
-            $_SITE->setOpt('virtual_stock', 1);
+        if (!$globalSite->getOpt('virtual_stock')) {
+            $globalSite->setOpt('virtual_stock', 1);
             $not_virtual_stock = true;
         }
 
@@ -351,7 +351,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         );
 
         if ($not_virtual_stock) {
-            $_SITE->setOpt('virtual_stock', 0);
+            $globalSite->setOpt('virtual_stock', 0);
         }
 
         $this->stocks = $article->getStock();
@@ -368,14 +368,14 @@ class CartTest extends PHPUnit\Framework\TestCase
         $this->expectException("Exception");
         $this->expectExceptionMessage("L'article Plop n'a pas pu être ajouté au panier car il est hors commerce.");
 
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $cm = new CartManager();
         $am = new ArticleManager();
 
         $not_virtual_stock = false;
-        if (!$_SITE->getOpt('virtual_stock')) {
-            $_SITE->setOpt('virtual_stock', 1);
+        if (!$globalSite->getOpt('virtual_stock')) {
+            $globalSite->setOpt('virtual_stock', 1);
             $not_virtual_stock = true;
         }
 
@@ -387,7 +387,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         $cm->addArticle($cart, $article);
 
         if ($not_virtual_stock) {
-            $_SITE->setOpt('virtual_stock', 0);
+            $globalSite->setOpt('virtual_stock', 0);
         }
     }
 
@@ -401,8 +401,8 @@ class CartTest extends PHPUnit\Framework\TestCase
         $this->expectExceptionMessage("L'article À réimprimer n'a pas pu être ajouté au panier car il est en cours de réimpression.");
 
         // given
-        $_SITE = LegacyCodeHelper::getGlobalSite();
-        $_SITE->setOpt('virtual_stock', 1);
+        $globalSite = LegacyCodeHelper::getGlobalSite();
+        $globalSite->setOpt('virtual_stock', 1);
         $cm = new CartManager();
         $cart = $cm->create();
         $article = EntityFactory::createArticle([

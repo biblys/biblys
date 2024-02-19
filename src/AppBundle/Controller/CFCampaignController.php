@@ -29,7 +29,7 @@ class CFCampaignController extends Controller
     {
         global $urlgenerator;
 
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $cfcm = new CFCampaignManager();
         $campaign = $cfcm->get(['campaign_url' => $slug]);
@@ -41,12 +41,12 @@ class CFCampaignController extends Controller
         $this->setOpengraphTags([
             'type' => 'website',
             'title' => 'Financement participatif : '.$campaign->get('title'),
-            'url' => 'https://'.$_SITE->get('domain').
+            'url' => 'https://'.$globalSite->get('domain').
                 $urlgenerator->generate('cf_campaign_show', ['slug' => $campaign->get('url')]),
             'description' => truncate(strip_tags($campaign->get('description')), '500', '...', true),
             'locale' => 'fr_FR',
             'image' => $campaign->get('image'),
-            'site_name' => $_SITE->get('name'),
+            'site_name' => $globalSite->get('name'),
         ]);
 
         $cfrm = new CFRewardManager();

@@ -17,7 +17,7 @@ if (!$post) {
 
 // Unless site option is defined to use old post controller
 // redirect to to new post controller immediately
-$use_old_controller = $_SITE->getOpt('use_old_post_controller');
+$use_old_controller = $globalSite->getOpt('use_old_post_controller');
 if (!$use_old_controller) {
     $newUrl = $urlgenerator->generate('post_show', ['slug' => $post->get('url')]);
     return new RedirectResponse($newUrl);

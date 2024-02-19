@@ -1,7 +1,7 @@
 <?php
 
 global $request;
-$_SITE = LegacyCodeHelper::getGlobalSite();
+$globalSite = LegacyCodeHelper::getGlobalSite();
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,8 +38,8 @@ foreach ($wishes as $w) {
 
         $a = $am->get(array('article_id' => $w['article_id']));
 
-        if ($_SITE->has("publisher_id")) {
-            if ($a->get('publisher_id') == $_SITE->get('publisher_id')) {
+        if ($globalSite->has("publisher_id")) {
+            if ($a->get('publisher_id') == $globalSite->get('publisher_id')) {
                 $table .= '
                     <tr>
                         <td class="center">'.$a->getPhotoTag(['size' => 'h50']).'</td>
@@ -88,7 +88,7 @@ $_OPENGRAPH = '
     <meta property="og:url" content="http://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"].'">
     <meta property="og:description" content="Offrez un livre à '.$user->get('screen_name').' en soutenant l\'édition et la librairie indépendante !">
     <meta property="og:locale" content="fr_FR">
-    <meta property="og:site_name" content="'.$_SITE->get("name").'">
+    <meta property="og:site_name" content="'.$globalSite->get("name").'">
 ';
 shuffle($og_images);
 if (!empty($og_images)) $_OPENGRAPH .= '<meta property="og:image" content="'.$og_images[0].'">';

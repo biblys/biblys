@@ -98,13 +98,13 @@ class RayonController extends Controller
      */
     public function editAction(Request $request, UrlGenerator $urlGenerator, $id)
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         self::authAdmin($request);
 
         $rm = new RayonManager();
 
-        $rayon = $rm->get(['rayon_id' => $id, 'site_id' => $_SITE->get('id')]);
+        $rayon = $rm->get(['rayon_id' => $id, 'site_id' => $globalSite->get('id')]);
         if (!$rayon) {
             throw new NotFoundException("Rayon $id not found.");
         }
@@ -223,13 +223,13 @@ class RayonController extends Controller
         $id
     )
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         self::authPublisher($request, null);
 
         $rm = new RayonManager();
 
-        $rayon = $rm->get(['rayon_id' => $id, 'site_id' => $_SITE->get('id')]);
+        $rayon = $rm->get(['rayon_id' => $id, 'site_id' => $globalSite->get('id')]);
         if (!$rayon) {
             throw new NotFoundException("Rayon $id not found.");
         }

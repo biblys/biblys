@@ -84,8 +84,8 @@ class Controller
         }
 
         if (!isset($tags['site_name'])) {
-            $_SITE = LegacyCodeHelper::getGlobalSite();
-            $tags['site_name'] = $_SITE->get('title');
+            $globalSite = LegacyCodeHelper::getGlobalSite();
+            $tags['site_name'] = $globalSite->get('title');
         }
 
         if (!isset($tags['locale'])) {

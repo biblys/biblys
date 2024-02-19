@@ -13,7 +13,7 @@ $buttons = '<button type="submit" form="event" class="btn btn-primary"><i class=
 
 $em = new EventManager();
 
-$where = array('events`.`site_id' => $_SITE->get("id"));
+$where = array('events`.`site_id' => $globalSite->get("id"));
 
 if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin())
 {
@@ -25,7 +25,7 @@ if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin())
 // Edit an existing event
 if (isset($_GET['id']))
 {
-    if ($e = $em->get(array('event_id' => $_GET['id'], 'site_id' => $_SITE->get("id"))))
+    if ($e = $em->get(array('event_id' => $_GET['id'], 'site_id' => $globalSite->get("id"))))
     {
         $pageTitle = 'Modifier <a href="/evenements/'.$e['event_url'].'">'.$e['event_title'].'</a>';
         $buttons .= ' <button type="submit" form="event" formaction="?delete" class="btn btn-danger" formnovalidate data-confirm="Voulez-vous vraiment supprimer cet évènement ?"><i class="fa fa-trash-o"></i> Supprimer</button>';
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
     if (isset($_GET['delete']))
     {
-        if ($e = $em->get(array('event_id' => $_POST['event_id'], 'site_id' => $_SITE->get("id"))))
+        if ($e = $em->get(array('event_id' => $_POST['event_id'], 'site_id' => $globalSite->get("id"))))
         {
 
             try
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             $_POST['event_id'] = $e->get('id');
         }
 
-        if ($e = $em->get(array('event_id' => $_POST['event_id'], 'site_id' => $_SITE->get("id"))))
+        if ($e = $em->get(array('event_id' => $_POST['event_id'], 'site_id' => $globalSite->get("id"))))
         {
             foreach ($_POST as $key => $val)
             {

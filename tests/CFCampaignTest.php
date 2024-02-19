@@ -16,14 +16,14 @@ class CFCampaignTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $cm = new CFCampaignManager();
 
         $campaign = $cm->create();
 
         $this->assertInstanceOf('CFCampaign', $campaign);
-        $this->assertEquals($campaign->get('site_id'), $_SITE->get('id'));
+        $this->assertEquals($campaign->get('site_id'), $globalSite->get('id'));
 
         return $campaign;
     }

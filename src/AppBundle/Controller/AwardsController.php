@@ -21,12 +21,12 @@ class AwardsController extends Controller
      */
     public function indexAction(): Response
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $awm = new AwardManager();
 
         $where = [];
-        $filter = $_SITE->getOpt('publisher_filter');
+        $filter = $globalSite->getOpt('publisher_filter');
         if ($filter) {
             $where = ['publisher_id' => explode(',', $filter)];
         }

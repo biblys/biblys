@@ -36,9 +36,9 @@ class PostController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
-        $use_old_controller = $_SITE->getOpt('use_old_post_controller');
+        $use_old_controller = $globalSite->getOpt('use_old_post_controller');
         if ($use_old_controller) {
             return new RedirectResponse("/o/blog/");
         }
@@ -83,9 +83,9 @@ class PostController extends Controller
     {
         global $urlgenerator;
 
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
-        $use_old_controller = $_SITE->getOpt('use_old_post_controller');
+        $use_old_controller = $globalSite->getOpt('use_old_post_controller');
         if ($use_old_controller) {
             return new RedirectResponse('/o/blog/'.$slug);
         }
@@ -109,7 +109,7 @@ class PostController extends Controller
             throw new NotFoundException("Post $slug not found.");
         }
 
-        $use_old_controller = $_SITE->getOpt('use_old_post_controller');
+        $use_old_controller = $globalSite->getOpt('use_old_post_controller');
         if ($use_old_controller) {
             return new RedirectResponse('/o/blog/'.$slug, 301);
         }
@@ -127,7 +127,7 @@ class PostController extends Controller
             "url" => "https://" .$request->getHost().
                 $urlgenerator->generate("post_show", ["slug" => $post->get("url")]),
             "description" => $description,
-            "site_name" => $_SITE->get("title"),
+            "site_name" => $globalSite->get("title"),
             "locale" => "fr_FR",
             "article:published_time" => $post->get('date'),
             "article:modified_time" => $post->get('updated')

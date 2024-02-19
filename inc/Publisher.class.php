@@ -67,10 +67,10 @@ class Publisher extends Entity
     {
         global $_SQL;
 
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $query = $_SQL->prepare("SELECT `supplier_id`, `supplier_name` FROM `links` JOIN `suppliers` USING(`supplier_id`) WHERE `links`.`site_id` = :site AND `suppliers`.`site_id` = :site AND `publisher_id` = :publisher");
-        $query->execute(['site' => $_SITE->get('id'), 'publisher' => $this->get('id')]);
+        $query->execute(['site' => $globalSite->get('id'), 'publisher' => $this->get('id')]);
         $query = $query->fetchAll();
 
         $suppliers = [];
@@ -87,19 +87,19 @@ class Publisher extends Entity
      */
     public function addSupplier(Supplier $supplier)
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $lm = new LinkManager();
 
         $link = $lm->get([
-            'site_id' => $_SITE->get('id'),
+            'site_id' => $globalSite->get('id'),
             'supplier_id' => $supplier->get('id'),
             'publisher_id' => $this->get('id')
         ]);
 
         if (!$link) {
             $lm->create([
-                'site_id' => $_SITE->get('id'),
+                'site_id' => $globalSite->get('id'),
                 'supplier_id' => $supplier->get('id'),
                 'publisher_id' => $this->get('id')
             ]);
@@ -112,12 +112,12 @@ class Publisher extends Entity
      */
     public function removeSupplier(Supplier $supplier)
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $lm = new LinkManager();
 
         $link = $lm->get([
-            'site_id' => $_SITE->get('id'),
+            'site_id' => $globalSite->get('id'),
             'supplier_id' => $supplier->get('id'),
             'publisher_id' => $this->get('id')
         ]);
@@ -194,9 +194,9 @@ class PublisherManager extends EntityManager
             return $where;
         }
 
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
-        $publisherFilter = $_SITE->getOpt('publisher_filter');
+        $publisherFilter = $globalSite->getOpt('publisher_filter');
         if ($publisherFilter && !array_key_exists('publisher_id', $where)) {
             $where['publisher_id'] = explode(',', $publisherFilter);
         }

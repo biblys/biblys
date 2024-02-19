@@ -107,7 +107,7 @@ class Order extends Entity
     public function createPaypalPaymentLink()
     {
         global $config, $urlgenerator;
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $sm = new StockManager();
 
@@ -161,8 +161,8 @@ class Order extends Entity
         if ($https) {
             $protocol = 'https';
         }
-        $returnUrl = $protocol.'://'.$_SITE->get('domain').$urlgenerator->generate('order_paypal_process', ['url' => $this->get('url')]);
-        $cancelUrl = $protocol.'://'.$_SITE->get('domain').'/payment/'.$this->get('url');
+        $returnUrl = $protocol.'://'.$globalSite->get('domain').$urlgenerator->generate('order_paypal_process', ['url' => $this->get('url')]);
+        $cancelUrl = $protocol.'://'.$globalSite->get('domain').'/payment/'.$this->get('url');
         $redirectUrls = new RedirectUrls();
         $redirectUrls->setReturnUrl($returnUrl)
             ->setCancelUrl($cancelUrl);
@@ -553,10 +553,10 @@ class OrderManager extends EntityManager
 
     public function getAllFromAnalytics($filters, $options)
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $req = [];
-        $params = ['site_id' => $_SITE->get('id')];
+        $params = ['site_id' => $globalSite->get('id')];
 
         if ($filters['source']) {
             $req[] = "AND `order_utmz` LIKE :source";
@@ -597,9 +597,9 @@ class OrderManager extends EntityManager
      */
     public function search($keywords, array $where = [], array $options = [], $withJoins = false)
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
-        $queries = ["site_id = ".$_SITE->get('id')];
+        $queries = ["site_id = ".$globalSite->get('id')];
         $i = 0;
         $keywords = explode(' ', $keywords);
         foreach ($keywords as $k) {
@@ -842,7 +842,7 @@ class OrderManager extends EntityManager
      */
     public function markAsPayed(Order $order)
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $mailer = $this->getMailer();
 
@@ -862,7 +862,7 @@ class OrderManager extends EntityManager
         }
 
         // Send mail
-        $subject = $_SITE->get('tag').' | Commande n° '.$order->get('id').' payée';
+        $subject = $globalSite->get('tag').' | Commande n° '.$order->get('id').' payée';
         $message = '
             <p>Bonjour '.$order->get('firstname').' !</p>
 
@@ -942,7 +942,7 @@ class OrderManager extends EntityManager
      */
     public function markAsShipped(Order $order, $trackingNumber = null)
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $mailer = $this->getMailer();
 
@@ -960,18 +960,18 @@ class OrderManager extends EntityManager
             $subjectSuffix = 'disponible en magasin';
             $message .= '
                 <p>Votre commande est disponible en magasin.</p>
-                <p>Retrouvez les coordonnées et horaires d\'ouverture du magasin sur <a href="http://'.$_SITE->get('domain').'">http://'.$_SITE->get('domain').'/</a></p>
+                <p>Retrouvez les coordonnées et horaires d\'ouverture du magasin sur <a href="http://'.$globalSite->get('domain').'">http://'.$globalSite->get('domain').'/</a></p>
             ';
         }
 
         // Shipping
         else {
-            $subjectSuffix = $_SITE->getOpt('shipped_mail_subject');
+            $subjectSuffix = $globalSite->getOpt('shipped_mail_subject');
             if (!$subjectSuffix) {
                 $subjectSuffix = 'expédiée';
             }
 
-            $shippedMessage = $_SITE->getOpt('shipped_mail_message');
+            $shippedMessage = $globalSite->getOpt('shipped_mail_message');
             if (!$shippedMessage) {
                 $shippedMessage = 'Votre commande a été expédiée.';
             }
@@ -988,21 +988,21 @@ class OrderManager extends EntityManager
             }
         }
 
-        $subject = $_SITE->get('tag')." | Commande n°".$order->get('id')." ".$subjectSuffix;
+        $subject = $globalSite->get('tag')." | Commande n°".$order->get('id')." ".$subjectSuffix;
         $content = '
             <p>Bonjour '.$order->get('firstname').' !</p>
 
             '.$message.'
 
             <p>
-                <a href="http://'.$_SITE->get('domain').'/order/'.$order->get('url').'">Suivi de la commande</a></a>
+                <a href="http://'.$globalSite->get('domain').'/order/'.$order->get('url').'">Suivi de la commande</a></a>
             </p>
 
             <p>
                 Merci pour votre confiance.
             </p>
 
-            <p><a href=""http://'.$_SITE->get('domain').'/>'.$_SITE->get('title').'</a></p>
+            <p><a href=""http://'.$globalSite->get('domain').'/>'.$globalSite->get('title').'</a></p>
         ';
         $mailer->send($order->get('email'), $subject, $content);
 
@@ -1012,7 +1012,7 @@ class OrderManager extends EntityManager
 
     public function followUp(Order $order)
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $mailer = $this->getMailer();
 
@@ -1020,18 +1020,18 @@ class OrderManager extends EntityManager
         $order->set('order_followup_date', date('Y-m-d H:i:s'));
 
         // Send mail
-        $subject = $_SITE->get('tag')." | Commande n°".$order->get('id')." : relance";
+        $subject = $globalSite->get('tag')." | Commande n°".$order->get('id')." : relance";
         $content = '
             <p>Bonjour '.$order->get('firstname').',</p>
 
             <p>
-                Vous avez passé une commande chez <a href="http://'.$_SITE->get('domain').'/">'.$_SITE->get('title').'</a> le '._date($order->get('created'), 'd/m/Y').' qui n\'a pas encore été payée.<br>
-                Peut-être avez vous rencontré une difficulté lors du paiement ? N\'hésitez pas à <a href="http://'.$_SITE->get('domain').'/contact/">nous contacter</a> pour obtenir de l\'aide.
+                Vous avez passé une commande chez <a href="http://'.$globalSite->get('domain').'/">'.$globalSite->get('title').'</a> le '._date($order->get('created'), 'd/m/Y').' qui n\'a pas encore été payée.<br>
+                Peut-être avez vous rencontré une difficulté lors du paiement ? N\'hésitez pas à <a href="http://'.$globalSite->get('domain').'/contact/">nous contacter</a> pour obtenir de l\'aide.
             </p>
 
             <p>
                 Vous pouvez voir le détail de votre commande et la régler ci-dessous :<br />
-                <a href="http://'.$_SITE->get('domain').'/order/'.$order->get('url').'">Suivi de la commande</a></a>
+                <a href="http://'.$globalSite->get('domain').'/order/'.$order->get('url').'">Suivi de la commande</a></a>
             </p>
 
             <p>
@@ -1039,7 +1039,7 @@ class OrderManager extends EntityManager
                 Faute de réponse de votre part, votre commande sera annulée automatiquement d\'ici 5 jours.
             </p>
 
-            <p><a href="http://'.$_SITE->get('domain').'/">'.$_SITE->get('title').'</a></p>
+            <p><a href="http://'.$globalSite->get('domain').'/">'.$globalSite->get('title').'</a></p>
         ';
         $mailer->send($order->get('email'), $subject, $content);
 

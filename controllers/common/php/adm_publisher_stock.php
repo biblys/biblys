@@ -14,7 +14,7 @@ $articles = $am->getAll([], [
 
 // Minimal virtual stock
 $minimum = 3;
-$site_minimum = $_SITE->getOpt('minimum_virtual_stock');
+$site_minimum = $globalSite->getOpt('minimum_virtual_stock');
 if ($site_minimum) {
     $minimum = $site_minimum;
 }

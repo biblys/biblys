@@ -3,7 +3,7 @@
 /** @noinspection PhpUnhandledExceptionInspection */
 
 global $urlgenerator;
-$_SITE = LegacyCodeHelper::getGlobalSite();
+$globalSite = LegacyCodeHelper::getGlobalSite();
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
@@ -115,7 +115,7 @@ $p["post_time"] = date("H:i");
 // Auteur
 if ($currentUser->isAdmin()) {
     if(!empty($currentUser->getAxysAccount()->getUsername())) $author = $currentUser->getAxysAccount()->getUsername();
-    else $author = $_SITE->get("id");
+    else $author = $globalSite->get("id");
 }
 elseif ($currentUser->hasPublisherRight()) {
     $pum = new PublisherManager();

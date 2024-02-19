@@ -132,11 +132,11 @@ class AxysAccountTest extends PHPUnit\Framework\TestCase
 
     public function testAddToLibrary()
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         // given
         $publisher = EntityFactory::createPublisher();
-        $_SITE->set("publisher_id", $publisher->get("id"));
+        $globalSite->set("publisher_id", $publisher->get("id"));
         $um = new AxysAccountManager();
         $axysAccount = ModelFactory::createAxysAccount(email: "customer@biblys.fr");
         $user = $um->getById($axysAccount->getId());

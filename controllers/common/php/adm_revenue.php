@@ -10,9 +10,9 @@ $request->attributes->set("page_title", "Chiffre d'affaires");
 // FILTRES
 
 // Raccourci 30 derniers jours
-$dates = _getDatesOptions($_SITE->get("id"), "%Y-%m-%d", "l j f", "d");
-$months = _getDatesOptions($_SITE->get("id"), "%Y-%m", "F Y", "m");
-$years = _getDatesOptions($_SITE->get("id"), "%Y", "Y", "y");
+$dates = _getDatesOptions($globalSite->get("id"), "%Y-%m-%d", "l j f", "d");
+$months = _getDatesOptions($globalSite->get("id"), "%Y-%m", "F Y", "m");
+$years = _getDatesOptions($globalSite->get("id"), "%Y", "Y", "y");
 
 // Affichage par défaut : ventes du jour courant
 if (empty($_GET["date1"]) && empty($_GET["d"]) && empty($_GET["m"]) && empty($_GET['y'])) $_GET["m"] = date("Y-m");
@@ -67,7 +67,7 @@ $query = EntityManager::prepareAndExecute('SELECT
     JOIN `articles` AS `a` ON `s`.`article_id` = `a`.`article_id`
     LEFT JOIN `customers` AS `c` ON `c`.`customer_id` = `o`.`customer_id`
     WHERE `s`.`site_id` = :site_id AND `o`.`site_id` = :site_id AND `o`.`order_payment_date` IS NOT NULL AND `stock_selling_date` IS NOT NULL '.$_QUERY.'
-    ', array_merge($params, ["site_id" => $_SITE->get("id")])
+    ', array_merge($params, ["site_id" => $globalSite->get("id")])
 );
 
 $sales = $query->fetchAll();
@@ -103,7 +103,7 @@ foreach ($types as $t) {
 
 // Rayons
 $rayons = $_SQL->query('SELECT `rayon_id`, `rayon_name` FROM `rayons` WHERE `site_id` = '
-    .$_SITE->get("id").' ORDER BY `rayon_order`');
+    .$globalSite->get("id").' ORDER BY `rayon_order`');
 $rayons = $rayons->fetchAll(PDO::FETCH_ASSOC);
 $ra = array();
 foreach ($rayons as $r) {
@@ -160,7 +160,7 @@ $ukc_sales = array();
 foreach ($sales as $s) {
 
     // Prix HT
-    if ($_SITE->get("tva")) {
+    if ($globalSite->get("tva")) {
         $rate = $s['stock_tva_rate'] * 10;
 
         if ($rate) {

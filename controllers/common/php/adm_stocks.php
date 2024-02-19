@@ -43,7 +43,7 @@ $stockDates = EntityManager::prepareAndExecute(
     WHERE `stock`.`site_id` = :site_id AND `stock_created` > SUBDATE(NOW(), INTERVAL 1 MONTH)
     GROUP BY `date`
     ORDER BY `date` DESC",
-    ['site_id' => $_SITE->get('id')]
+    ['site_id' => $globalSite->get('id')]
 );
 foreach ($stockDates as $stockDate) {
     if ($_GET['stock_created'] == $stockDate['date']) {
@@ -267,7 +267,7 @@ $sql_query = 'SELECT `article_id`, `article_title`, `article_title_alphabetic`, 
 
 $sql = EntityManager::prepareAndExecute(
     $sql_query,
-    ['site_id' => $_SITE->get('id')]
+    ['site_id' => $globalSite->get('id')]
 );
 $num = $sql->rowCount();
 
@@ -346,7 +346,7 @@ foreach ($sql as $x) {
             $x['status'] = 'Vendu le<br />'._date($x['stock_selling_date'], 'd/m/Y');
 
             // Sold in shop
-            if ($x['customer_id'] === $_SITE->getOpt('fake_shop_customer')) {
+            if ($x['customer_id'] === $globalSite->getOpt('fake_shop_customer')) {
                 $x['status'] .= '<span class="fa fa-shopping-bag fa-lg" alt="Vendu en magasin" title="Vendu en magasin" />';
             } else {
                 $x['status'] .= '<span class="fa fa- fa-lg" aria-label="Vendu en ligne" title="Vendu en ligne" />';

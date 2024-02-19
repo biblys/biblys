@@ -12,7 +12,7 @@ if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin() && !LegacyCodeHelper::getGl
 }
 
 $publisherId = LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get("publisher_id");
-if (!$_SITE->allowsPublisherWithId($publisherId)) {
+if (!$globalSite->allowsPublisherWithId($publisherId)) {
     $pm = new PublisherManager();
     throw new AccessDeniedHttpException("Votre maison d'édition n'est pas autorisée sur ce site.");
 }

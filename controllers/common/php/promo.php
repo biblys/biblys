@@ -1,7 +1,7 @@
 <?php
 
 $active_stock_query = null;
-$active_stock = $_SITE->getOpt("active_stock");
+$active_stock = $globalSite->getOpt("active_stock");
 if ($active_stock) {
     $active_stock = "'".implode("','",explode(",", $active_stock))."'";
     $active_stock_query = " AND `stock_stockage` IN (".$active_stock.")";
@@ -14,7 +14,7 @@ $articles = $_SQL->prepare("SELECT `article_id`, `article_title`, `article_url`,
     JOIN `stock` USING(`article_id`)
     WHERE `stock`.`site_id` = :site_id AND `stock_selling_price` < `stock_selling_price_saved` AND `stock_selling_date` IS NULL AND `stock_return_date` IS NULL AND `stock_lost_date` IS NULL AND `type_id` != 7 ".$active_stock_query."
     ORDER BY `stock_selling_price`");
-$articles->execute(['site_id' => $_SITE->get('id')]);
+$articles->execute(['site_id' => $globalSite->get('id')]);
 
 $num = 0;
 $table = null;

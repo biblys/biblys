@@ -58,19 +58,19 @@ class MainController extends Controller
         MetaTagsService $metaTagsService,
     ): Response
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
-        $opengraph = ['title' => $_SITE->get('title')];
-        $twitterCards = ['title' => $_SITE->get('title')];
+        $opengraph = ['title' => $globalSite->get('title')];
+        $twitterCards = ['title' => $globalSite->get('title')];
 
-        $preview_image = $_SITE->getOpt('home_preview_image');
+        $preview_image = $globalSite->getOpt('home_preview_image');
         if ($preview_image) {
             $opengraph['image'] = $preview_image;
             $twitterCards['image'] = $preview_image;
-            $twitterCards['image:alt'] = $_SITE->get('title');
+            $twitterCards['image:alt'] = $globalSite->get('title');
         }
 
-        $preview_text = $_SITE->getOpt('home_preview_text');
+        $preview_text = $globalSite->getOpt('home_preview_text');
         if ($preview_text) {
             $opengraph['description'] = $preview_text;
             $twitterCards['description'] = $preview_text;
@@ -179,7 +179,7 @@ class MainController extends Controller
         Mailer $mailer): Response
     {
         global $config;
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $name = $request->request->get('name');
         $email = $request->request->get('email');
@@ -239,10 +239,10 @@ class MainController extends Controller
                 }
 
                 $mailer->send(
-                    $_SITE->get('site_contact'),
+                    $globalSite->get('site_contact'),
                     $subject,
                     nl2br($message),
-                    [$_SITE->get('site_contact') => $name],
+                    [$globalSite->get('site_contact') => $name],
                     ['reply-to' => $email]
                 );
                 $success = true;
@@ -277,7 +277,7 @@ class MainController extends Controller
         CurrentSite $currentSite,
     ): Response
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         self::authAdmin($request);
         $request->attributes->set("page_title", "Administration Biblys");
@@ -327,7 +327,7 @@ class MainController extends Controller
             'site' => Entry::generateUrlsForEntries(Entry::findByCategory('site'), $urlGenerator),
             'biblys' => Entry::generateUrlsForEntries(Entry::findByCategory('biblys'), $urlGenerator),
             'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
-            'site_title' => $_SITE->get('title'),
+            'site_title' => $globalSite->get('title'),
             "hot_news" => $hotNewsBanner,
         ]);
     }
@@ -345,7 +345,7 @@ class MainController extends Controller
         CurrentUser $currentUserService,
     ): RedirectResponse|JsonResponse|Response
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         self::authAdmin($request);
 
@@ -398,7 +398,7 @@ class MainController extends Controller
                 Entry::findByCategory('custom'),
                 $urlGenerator
             ),
-            'site_title' => $_SITE->get('title'),
+            'site_title' => $globalSite->get('title'),
         ]);
     }
 

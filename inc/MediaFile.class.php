@@ -9,9 +9,9 @@ class MediaFile extends Entity
 
     public function getUrl()
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
-        return '/' . $_SITE->get('name') . '/media/' . $this->get('dir') . '/' . $this->get('file')
+        return '/' . $globalSite->get('name') . '/media/' . $this->get('dir') . '/' . $this->get('file')
             . '.' . $this->get('ext');
     }
 }

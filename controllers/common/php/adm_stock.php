@@ -51,7 +51,7 @@ if (isset($_GET['sold'])) {
     // All copies sold in shop are associated to a fake customer that needs
     // to be created and specified via the `fake_shop_customer` site option.
     // This allows to create only one order for shop sales per day.
-        $fakeCustomerId = $_SITE->getOpt('fake_shop_customer');
+        $fakeCustomerId = $globalSite->getOpt('fake_shop_customer');
     if (!$fakeCustomerId) {
         throw new Exception("L'option de site `fake_shop_customer` doit être définie.");
     }
@@ -258,7 +258,7 @@ if ($request->getMethod() === 'POST') {
         /** @var Mailer $mailer */
         $copyYear = $request->request->get("stock_pub_year");
         $copyPrice = $request->request->get("stock_selling_price");
-        $result = _sendAlertsForArticle($article, $copyYear, $copyPrice, $copyCondition, $mailer, $_SITE);
+        $result = _sendAlertsForArticle($article, $copyYear, $copyPrice, $copyCondition, $mailer, $globalSite);
         if ($result["sent"] > 0) {
             $session->getFlashBag()->add(
                 "info",
@@ -355,20 +355,20 @@ if (!empty($_GET['id'])) {
     $s['stock_insert'] = null;
     $s['stock_update'] = null;
 
-    $s['stock_invoice'] = $_SITE->getOpt('default_stock_invoice') ? $_SITE->getOpt('default_stock_invoice') : null;
-    $s['stock_stockage'] = $_SITE->getOpt('default_stock_stockage') ? $_SITE->getOpt('default_stock_stockage') : null;
-    $s['stock_shop'] = $_SITE->getOpt('default_stock_shop') ? $_SITE->getOpt('default_stock_shop') : null;
-    $s['stock_selling_price'] = $_SITE->getOpt('default_stock_selling_price') ? $_SITE->getOpt('default_stock_selling_price') : null;
-    $s['stock_purchase_price'] = $_SITE->getOpt('default_stock_purchase_price') ? $_SITE->getOpt('default_stock_purchase_price') : null;
-    $s['stock_condition'] = $_SITE->getOpt('default_stock_condition') ? $_SITE->getOpt('default_stock_condition') : null;
-    $s['stock_condition_details'] = $_SITE->getOpt('default_stock_condition_details') ? $_SITE->getOpt('default_stock_condition_details') : null;
+    $s['stock_invoice'] = $globalSite->getOpt('default_stock_invoice') ? $globalSite->getOpt('default_stock_invoice') : null;
+    $s['stock_stockage'] = $globalSite->getOpt('default_stock_stockage') ? $globalSite->getOpt('default_stock_stockage') : null;
+    $s['stock_shop'] = $globalSite->getOpt('default_stock_shop') ? $globalSite->getOpt('default_stock_shop') : null;
+    $s['stock_selling_price'] = $globalSite->getOpt('default_stock_selling_price') ? $globalSite->getOpt('default_stock_selling_price') : null;
+    $s['stock_purchase_price'] = $globalSite->getOpt('default_stock_purchase_price') ? $globalSite->getOpt('default_stock_purchase_price') : null;
+    $s['stock_condition'] = $globalSite->getOpt('default_stock_condition') ? $globalSite->getOpt('default_stock_condition') : null;
+    $s['stock_condition_details'] = $globalSite->getOpt('default_stock_condition_details') ? $globalSite->getOpt('default_stock_condition_details') : null;
 
-    if (!$_SITE->getOpt('default_stock_purchase_date')) {
+    if (!$globalSite->getOpt('default_stock_purchase_date')) {
         $s['stock_purchase_date'] = date('Y-m-d H:i:s');
         $s['stock_onsale_date'] = date('Y-m-d H:i:s');
     } else {
-        $s['stock_purchase_date'] = $_SITE->getOpt('default_stock_purchase_date');
-        $s['stock_onsale_date'] = $_SITE->getOpt('default_stock_purchase_date');
+        $s['stock_purchase_date'] = $globalSite->getOpt('default_stock_purchase_date');
+        $s['stock_onsale_date'] = $globalSite->getOpt('default_stock_purchase_date');
     }
     $_GET['id'] = 0;
 } elseif ($delId) {
@@ -450,7 +450,7 @@ if ($article) {
 
     // Pas de poids minimum si livre numérique
     $stock_weight_minimum = 0;
-    $weight_required = $_SITE->getOpt('weight_required');
+    $weight_required = $globalSite->getOpt('weight_required');
     if ($weight_required) {
         $stock_weight_minimum = $weight_required;
     }
@@ -574,13 +574,13 @@ if ($article) {
     $TVA = 1 + $s['stock_tva'] / 100;
 
     // Prix d'achat par defaut
-    if (empty($s['stock_selling_price']) && $_SITE->getOpt('default_stock_discount') && !empty($a['article_price']) and !empty($a['article_tva'])) {
-        $s['stock_purchase_price'] = round($a['article_price'] / $TVA * (100 - $_SITE->getOpt('default_stock_discount')) / 100);
-        if ($_SITE->getOpt('default_stock_super_discount')) {
-            $s['stock_purchase_price'] = round($s['stock_purchase_price'] * (1 - $_SITE->getOpt('default_stock_super_discount') / 100));
+    if (empty($s['stock_selling_price']) && $globalSite->getOpt('default_stock_discount') && !empty($a['article_price']) and !empty($a['article_tva'])) {
+        $s['stock_purchase_price'] = round($a['article_price'] / $TVA * (100 - $globalSite->getOpt('default_stock_discount')) / 100);
+        if ($globalSite->getOpt('default_stock_super_discount')) {
+            $s['stock_purchase_price'] = round($s['stock_purchase_price'] * (1 - $globalSite->getOpt('default_stock_super_discount') / 100));
         }
-        if ($_SITE->getOpt('default_stock_cascading_discount')) {
-            for ($ir = 0; $ir < $_SITE->getOpt('default_stock_cascading_discount'); ++$ir) {
+        if ($globalSite->getOpt('default_stock_cascading_discount')) {
+            for ($ir = 0; $ir < $globalSite->getOpt('default_stock_cascading_discount'); ++$ir) {
                 $s['stock_purchase_price'] = $s['stock_purchase_price'] - ($s['stock_purchase_price'] * 0.01);
             }
             $s['stock_purchase_price'] = round($s['stock_purchase_price']);
@@ -589,7 +589,7 @@ if ($article) {
 
     // Exemplaire vendu : afficher le prix HT et la TVA
     $tva_fields = null;
-    if ($_SITE->has('tva') && $stock->has('selling_date')) {
+    if ($globalSite->has('tva') && $stock->has('selling_date')) {
         $tva_fields = '
             <p>
                 <label>Prix de vente HT :</label>
@@ -608,7 +608,7 @@ if ($article) {
                 <input type="text" readonly value="' . $stock->getDiscountRate() . '" class="mini"> %
             </p>
         ';
-    } elseif ($_SITE->has('tva') && $stock->has('id')) {
+    } elseif ($globalSite->has('tva') && $stock->has('id')) {
         $tva_fields = '
             <p>
                 <label>Remise recalculée :</label>
@@ -637,7 +637,7 @@ if ($article) {
         $invoicesQuery = EntityManager::prepareAndExecute(
             'SELECT `stock_invoice` FROM `stock` WHERE `site_id` = :site_id
                         GROUP BY `stock_invoice`',
-            ['site_id' => $_SITE->get('id')]
+            ['site_id' => $globalSite->get('id')]
         );
         $invoices = $invoicesQuery->fetchAll(PDO::FETCH_ASSOC);
         $invoices_options = null;
@@ -660,24 +660,24 @@ if ($article) {
     }
 
     $remises = null;
-    if (!empty($_SITE->getOpt('default_stock_discount')) and $mode == 'insert') {
+    if (!empty($globalSite->getOpt('default_stock_discount')) and $mode == 'insert') {
         $remises .= '
                 <label for="Remise" class="disabled">Remise :</label>
-                <input type="text" name="Remise" id="Remise" value="' . $_SITE->getOpt('default_stock_discount') . ' %" class="court" disabled />
+                <input type="text" name="Remise" id="Remise" value="' . $globalSite->getOpt('default_stock_discount') . ' %" class="court" disabled />
                 <br />
         ';
     }
-    if (!empty($_SITE->getOpt('default_stock_super_discount')) and $mode == 'insert') {
+    if (!empty($globalSite->getOpt('default_stock_super_discount')) and $mode == 'insert') {
         $remises .= '
                 <label for="Remise2" class="disabled">Sur-remise :</label>
-                <input type="text" name="Remise2" id="Remise2" value="' . $_SITE->getOpt('default_stock_super_discount') . ' %" class="court" disabled />
+                <input type="text" name="Remise2" id="Remise2" value="' . $globalSite->getOpt('default_stock_super_discount') . ' %" class="court" disabled />
                 <br />
         ';
     }
-    if (!empty($_SITE->getOpt('default_stock_cascading_discount')) and $mode == 'insert') {
+    if (!empty($globalSite->getOpt('default_stock_cascading_discount')) and $mode == 'insert') {
         $remises .= '
                 <label for="Remise3" class="disabled">Remise en cascade :</label>
-                <input type="text" name="Remise3" id="Remise3" value="' . $_SITE->getOpt('default_stock_cascading_discount') . ' %" class="court" disabled />
+                <input type="text" name="Remise3" id="Remise3" value="' . $globalSite->getOpt('default_stock_cascading_discount') . ' %" class="court" disabled />
                 <br />
         ';
     }

@@ -13,7 +13,7 @@ $filters = null;
 /** @var $request */
 $input = $request->query->get('q', false);
 
-$useOldArticleController = $_SITE->getOpt("use_old_article_controller");
+$useOldArticleController = $globalSite->getOpt("use_old_article_controller");
 if (!$useOldArticleController) {
 //    return new RedirectResponse("/articles/search?q=$input");
 }

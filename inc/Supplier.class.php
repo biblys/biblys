@@ -29,11 +29,11 @@ class Supplier extends Entity
          */
         public function getPublishers()
         {
-            $_SITE = LegacyCodeHelper::getGlobalSite();
+            $globalSite = LegacyCodeHelper::getGlobalSite();
 
             // Get links for this suppliers
             $lm = new LinkManager();
-            $links = $lm->getAll(['site_id' => $_SITE->get('id'), 'publisher_id' => 'NOT NULL', 'supplier_id' => $this->get('id')], ['withJoins' => false]);
+            $links = $lm->getAll(['site_id' => $globalSite->get('id'), 'publisher_id' => 'NOT NULL', 'supplier_id' => $this->get('id')], ['withJoins' => false]);
 
             // Get publishers id from links
             $publisherIds = array_map(function($link) {

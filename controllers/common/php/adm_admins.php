@@ -31,7 +31,7 @@ $rights = $_SQL->prepare("
     WHERE `rights`.`site_id` = :site_id
     ORDER BY `axys_account_login_date` DESC
 ");
-$rights->execute(["site_id" => $_SITE->get("id")]);
+$rights->execute(["site_id" => $globalSite->get("id")]);
 
 $table = NULL;
 while ($p = $rights->fetch(PDO::FETCH_ASSOC)) {

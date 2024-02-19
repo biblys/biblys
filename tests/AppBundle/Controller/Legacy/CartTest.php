@@ -29,7 +29,7 @@ class CartTest extends TestCase
         $controller = require __DIR__ . "/../../../../controllers/common/php/cart.php";
 
         ModelFactory::createCountry();
-        /* @var Site $_SITE */
+        /* @var Site $globalSite */
         $flashBag = $this
             ->getMockBuilder("Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface")
             ->getMock();

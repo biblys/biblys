@@ -28,9 +28,9 @@ class Mailer
 
     public function __construct(Config $config)
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
-        $this->defaultSender = new Address($_SITE->get("site_contact"), $_SITE->get("site_title"));
+        $this->defaultSender = new Address($globalSite->get("site_contact"), $globalSite->get("site_title"));
         $this->transport = new SendmailTransport();
 
         // If an SMTP config is defined

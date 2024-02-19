@@ -21,11 +21,11 @@ class AxysAccount extends Entity
 
     public function getOpt($key)
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $om = new OptionManager();
 
-        $option = $om->get(['site_id' => $_SITE->get('id'), 'option_key' => $key, 'axys_account_id' => $this->get('id')]);
+        $option = $om->get(['site_id' => $globalSite->get('id'), 'option_key' => $key, 'axys_account_id' => $this->get('id')]);
 
         if ($option) {
             return $option->get('value');
@@ -36,11 +36,11 @@ class AxysAccount extends Entity
 
     public function setOpt($key, $value)
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $om = new OptionManager();
 
-        $option = $om->get(['site_id' => $_SITE->get('id'), 'option_key' => $key, 'axys_account_id' => $this->get('id')]);
+        $option = $om->get(['site_id' => $globalSite->get('id'), 'option_key' => $key, 'axys_account_id' => $this->get('id')]);
 
         // If option already exists, update it
         if ($option) {
@@ -52,7 +52,7 @@ class AxysAccount extends Entity
         }
 
         // Else, create a new one
-        $option = $om->create(['site_id' => $_SITE->get('id'), 'axys_account_id' => $this->get('id'), 'option_key' => $key, 'option_value' => $value]);
+        $option = $om->create(['site_id' => $globalSite->get('id'), 'axys_account_id' => $this->get('id'), 'option_key' => $key, 'option_value' => $value]);
 
         return $this;
     }
@@ -357,7 +357,7 @@ class AxysAccountManager extends EntityManager
 
     public function addToLibrary(AxysAccount $axysAccount, array $articles = [], array $stocks = [], $predownload = false, $options = [])
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $added = [];
         $errors = [];
@@ -370,9 +370,9 @@ class AxysAccountManager extends EntityManager
         if (!empty($articles)) {
             foreach ($articles as $article) {
                 // Check if article is owned by current site
-                $downloadablePublishers = explode(',', $_SITE->getOpt('downloadable_publishers'));
+                $downloadablePublishers = explode(',', $globalSite->getOpt('downloadable_publishers'));
                 if (
-                    $_SITE->get('publisher_id') !== $article->get('publisher_id') &&
+                    $globalSite->get('publisher_id') !== $article->get('publisher_id') &&
                     !in_array($article->get('publisher_id'), $downloadablePublishers)
                 ) {
                     throw new Exception('Ce site n\'est pas autorisé à distribué cet article.');

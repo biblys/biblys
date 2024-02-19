@@ -29,9 +29,9 @@ class PostCategoryController extends Controller
      */
     public function showAction(Request $request, $slug): RedirectResponse|Response
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
-        $use_old_controller = $_SITE->getOpt('use_old_post_controller');
+        $use_old_controller = $globalSite->getOpt('use_old_post_controller');
         if ($use_old_controller) {
             return new RedirectResponse("/o/blog/$slug/");
         }

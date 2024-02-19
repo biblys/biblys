@@ -163,7 +163,7 @@ class CronsController extends Controller
      */
     public function exportPdlAction(Request $request): JsonResponse
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
         global $config;
 
         $request->headers->set('Accept', 'application/json');
@@ -185,7 +185,7 @@ class CronsController extends Controller
         $password = $pdl['password'];
 
         $active_stock_query = null;
-        $active_stock = $_SITE->getOpt('active_stock');
+        $active_stock = $globalSite->getOpt('active_stock');
         if ($active_stock) {
             $active_stock = "'".implode("','", explode(',', $active_stock))."'";
             $active_stock_query = ' AND `stock_stockage` IN ('.$active_stock.')';
@@ -206,7 +206,7 @@ class CronsController extends Controller
             GROUP BY `article_ean`';
         $stock = EntityManager::prepareAndExecute(
             $query,
-            ['site_id' => $_SITE->get('id')]
+            ['site_id' => $globalSite->get('id')]
         );
 
         $title = 'EXTRACTION STOCK DU '.date('d/m/Y');

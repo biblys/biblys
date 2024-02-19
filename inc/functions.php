@@ -100,11 +100,11 @@ try {
 $config = Config::load();
 Biblys\Database\Connection::initPropel($config);
 
-$_SITE = LegacyCodeHelper::getGlobalSite();
+$globalSite = LegacyCodeHelper::getGlobalSite();
 
 // Define site_path (should be replaced with $site->get("path"))
 if (!defined('SITE_PATH')) {
-    $sitePath = __DIR__.'/../public/'.$_SITE->get('name');
+    $sitePath = __DIR__.'/../public/'.$globalSite->get('name');
     define('SITE_PATH', $sitePath);
 }
 
@@ -680,7 +680,7 @@ function share_buttons($url, $text = null, $options = []): string
 function get_controller_path($controller): bool|string
 {
     /** @noinspection PhpUnusedLocalVariableInspection */
-    $_SITE = LegacyCodeHelper::getGlobalSite();
+    $globalSite = LegacyCodeHelper::getGlobalSite();
 
     $default_path = __DIR__."/../controllers/common/php/".$controller.".php";
     $app_path = __DIR__."/../app/controllers/".$controller.".php";

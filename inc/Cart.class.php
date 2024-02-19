@@ -307,7 +307,7 @@ class CartManager extends EntityManager
      */
     public function addStock(Cart $cart, $stock, $wish_id = 'undefined', CFReward $reward = null)
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
         $sm = new StockManager();
 
         if (!is_object($stock)) {
@@ -335,7 +335,7 @@ class CartManager extends EntityManager
             throw new Exception('Exemplaire ' . $stock->get('id') . ' indisponible.');
         }
 
-        $weight_required = $_SITE->getOpt('weight_required');
+        $weight_required = $globalSite->getOpt('weight_required');
         if ($cart->get('type') == 'web' && $weight_required && (!$stock->get('weight') || $stock->get('weight') < $weight_required)) {
             throw new Exception('Cet exemplaire n\'a pas de poids et ne peut être ajouté au panier. Merci de nous contacter.');
         }

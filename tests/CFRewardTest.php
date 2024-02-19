@@ -18,14 +18,14 @@ class CFRewardTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $cm = new CFRewardManager();
 
         $reward = $cm->create();
 
         $this->assertInstanceOf('CFReward', $reward);
-        $this->assertEquals($reward->get('site_id'), $_SITE->get('id'));
+        $this->assertEquals($reward->get('site_id'), $globalSite->get('id'));
 
         return $reward;
     }

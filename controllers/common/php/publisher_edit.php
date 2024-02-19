@@ -1,7 +1,7 @@
 <?php
 
 global $request, $_SQL;
-$_SITE = LegacyCodeHelper::getGlobalSite();
+$globalSite = LegacyCodeHelper::getGlobalSite();
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -64,7 +64,7 @@ if ($request->getMethod() == "POST") {
     $_POST["publisher_url"] = makeurl($_POST["publisher_name"]);
 
     // Short description (L'Autre livre)
-    if ($_SITE->get("id") == 11) {
+    if ($globalSite->get("id") == 11) {
         $main_desc = $request->request->get("publisher_desc", false);
         $short_desc = $request->request->get("publisher_desc_short", false);
 
@@ -227,7 +227,7 @@ $content .= '
 if (
     LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id') == $p['publisher_id'] || // Utilisateur connecté avec les droits pour l'editeur
     $p["publisher_id"] == LegacyCodeHelper::getGlobalSite()["publisher_id"] || // Site de l'editeur
-    (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) && ($_SITE->get("id") == 11) // Admin de l'autre livre ou lvdi
+    (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) && ($globalSite->get("id") == 11) // Admin de l'autre livre ou lvdi
 )
 {
     $content .= '
@@ -444,14 +444,14 @@ if (LegacyCodeHelper::getGlobalSite()["site_shop"]) {
     if ($addSupplier) {
         $lm->create([
             'publisher_id' => $publisher->get('id'),
-            'site_id' => $_SITE->get('id'),
+            'site_id' => $globalSite->get('id'),
             'supplier_id' => $addSupplier
         ]);
         return new RedirectResponse("/pages/publisher_edit?id=".$publisher->get('id')."#suppliers");
     } elseif(isset($_GET["del_supplier"])) {
         $link = $lm->get([
             'publisher_id' => $publisher->get('id'),
-            'site_id' => $_SITE->get('id'),
+            'site_id' => $globalSite->get('id'),
             'supplier_id' => $delSupplier
         ]);
         $lm->delete($link);

@@ -224,10 +224,10 @@ class Article extends Entity
     public function getCFRewards(): array
     {
         global $_SQL;
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $result = array();
-        $rewards = $_SQL->query('SELECT * FROM `cf_rewards` WHERE `reward_articles` LIKE "%' . $this->get('id') . '%" AND `site_id` = "' . $_SITE->get('id') . '"');
+        $rewards = $_SQL->query('SELECT * FROM `cf_rewards` WHERE `reward_articles` LIKE "%' . $this->get('id') . '%" AND `site_id` = "' . $globalSite->get('id') . '"');
         while ($r = $rewards->fetch(PDO::FETCH_ASSOC)) {
             $result[] = new CFReward($r);
         }
@@ -955,14 +955,14 @@ class Article extends Entity
      */
     public function getTaxRate(): bool|int
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         // If site doesn't use TVA, no tax
-        if (!$_SITE->get('site_tva')) {
+        if (!$globalSite->get('site_tva')) {
             return 0;
         }
-        $sellerCountry = $_SITE->get('site_tva');
-        $customerCountry = $_SITE->get('site_tva');
+        $sellerCountry = $globalSite->get('site_tva');
+        $customerCountry = $globalSite->get('site_tva');
 
         // Set product type
         $tax_type = "STANDARD";
@@ -1370,18 +1370,18 @@ class ArticleManager extends EntityManager
      */
     public function addRayon($article, $rayon): Entity
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $lm = new LinkManager();
 
         // Check if article is already in rayon
-        $link = $lm->get(['site_id' => $_SITE->get('id'), 'rayon_id' => $rayon->get('id'), 'article_id' => $article->get('id')]);
+        $link = $lm->get(['site_id' => $globalSite->get('id'), 'rayon_id' => $rayon->get('id'), 'article_id' => $article->get('id')]);
         if ($link) {
             throw new ArticleAlreadyInRayonException($article->get("title"), $rayon->get("name"));
         }
 
         // Create link
-        $link = $lm->create(['site_id' => $_SITE->get('id'), 'rayon_id' => $rayon->get('id'), 'article_id' => $article->get('id')]);
+        $link = $lm->create(['site_id' => $globalSite->get('id'), 'rayon_id' => $rayon->get('id'), 'article_id' => $article->get('id')]);
 
         // Update article metadata
         $article_links = $article->get('links') . "[rayon:" . $rayon->get('id') . "]";

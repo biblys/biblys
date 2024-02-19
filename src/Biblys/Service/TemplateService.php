@@ -198,9 +198,9 @@ class TemplateService
         // return absolute url for a route
         $functions[] = new TwigFunction('url', function ($route, $vars = []) {
             global $urlgenerator;
-            $_SITE = LegacyCodeHelper::getGlobalSite();
+            $globalSite = LegacyCodeHelper::getGlobalSite();
 
-            return 'https://' . $_SITE->get('domain') . $urlgenerator->generate($route, $vars);
+            return 'https://' . $globalSite->get('domain') . $urlgenerator->generate($route, $vars);
         });
 
         // returns share buttons for url

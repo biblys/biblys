@@ -54,10 +54,10 @@ class TemplateController extends Controller
         $request->attributes->set("page_title", "Éditer ".$template->getName());
 
         if ($request->getMethod() === 'POST') {
-            $_SITE = LegacyCodeHelper::getGlobalSite();
+            $globalSite = LegacyCodeHelper::getGlobalSite();
             $body = $request->toArray();
             $filesystem = new Filesystem();
-            $template->updateContent($_SITE, $body["content"], $filesystem);
+            $template->updateContent($globalSite, $body["content"], $filesystem);
             return new JsonResponse();
         }
 

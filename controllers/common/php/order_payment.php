@@ -111,7 +111,7 @@ if ($request->getMethod() === "POST") {
                     Effectuez un virement SEPA d\'un montant de 
                     <strong>'.currency($order->getTotal() / 100).'</strong> 
                     en précisant le code IBAN <strong>
-                    '.$_SITE->getOpt('payment_iban').'.</strong>
+                    '.$globalSite->getOpt('payment_iban').'.</strong>
                 </li>
                 <li>
                     Précisez <strong>votre numéro de 
@@ -126,7 +126,7 @@ if ($request->getMethod() === "POST") {
         if($order->get('shipping_mode') == "magasin") {
             $content .= '
                 <p>Vous avez choisi de payer votre commande en magasin.</p>
-                <p>Pour payer par chèque, merci d\'établir un chèque à l\'ordre de <strong>'.$_SITE->getNameForCheckPayment().'.</strong></p>
+                <p>Pour payer par chèque, merci d\'établir un chèque à l\'ordre de <strong>'.$globalSite->getNameForCheckPayment().'.</strong></p>
                 <br />
                 <p class="noprint"><a href="/payment/'.$order->get('url').'"><span class="button">&laquo; Choisir un autre mode de paiement</span></a></p>
             ';
@@ -139,21 +139,21 @@ if ($request->getMethod() === "POST") {
             $content .= '
                 <p class="noprint">Pour régler votre commande par chèque&nbsp;:</p>
                 <ol class="noprint">
-                    <li>Établissez un chèque d\'un montant de <strong>'.currency($order->getTotal() / 100).'</strong> à l\'ordre de <strong>'.$_SITE->getNameForCheckPayment().'</strong>.</li>
+                    <li>Établissez un chèque d\'un montant de <strong>'.currency($order->getTotal() / 100).'</strong> à l\'ordre de <strong>'.$globalSite->getNameForCheckPayment().'</strong>.</li>
                     <li>Inscrivez au dos du chèque <strong>votre nom</strong> et <strong>votre numéro de commande</strong> ('.$order->get('id').') ou imprimez cette page et joignez-la 
                      votre envoi.</li>
                     <li>Envoyez votre chèque à l\'adresse :</li>
                 </ol>
                 <p class="noprint center">
-                    '.$_SITE->get('title').'<br />
-                    '.str_replace('|','<br />',$_SITE->get('address')).'
+                    '.$globalSite->get('title').'<br />
+                    '.str_replace('|','<br />',$globalSite->get('address')).'
                 </p>
                 <br />
                 <p class="noprint">
                     <a href="/payment/'.$order->get('url').'" class="btn btn-default">» Choisir un autre mode de paiement</a>
                 </p>
 
-                <h2>Bon de commande '.$_SITE->get('tag').' n° '.$order->get('id').'</h2>
+                <h2>Bon de commande '.$globalSite->get('tag').' n° '.$order->get('id').'</h2>
 
                 <p>
                     '.$order->get('firstname').' '.$order->get('lastname').'<br />
@@ -204,7 +204,7 @@ else // CHOIX DU MODE DE PAIMENT
     if ($order->get('shipping_mode') == "magasin") {
 
         // Check
-        if ($_SITE->getOpt('payment_check')) {
+        if ($globalSite->getOpt('payment_check')) {
             $payment_options .= '
                 <h4 class="radio">
                     <label for="payment_cheque" class="radio">
@@ -214,7 +214,7 @@ else // CHOIX DU MODE DE PAIMENT
                 </h4>
                 <p>
                     Payez directement en magasin, au moment du retrait de votre commande, par chèque à l\'ordre de 
-                    '.$_SITE->getNameForCheckPayment().' ou en espèces.
+                    '.$globalSite->getNameForCheckPayment().' ou en espèces.
                 </p>
             ';
         }
@@ -322,7 +322,7 @@ else // CHOIX DU MODE DE PAIMENT
 
         }
 
-        if ($_SITE->getOpt('payment_iban')) {
+        if ($globalSite->getOpt('payment_iban')) {
             $payment_options .= '
                 <h4 class="radio">
                     <label for="payment_transfer" class="radio">
@@ -336,7 +336,7 @@ else // CHOIX DU MODE DE PAIMENT
             ';
         }
 
-        if ($_SITE->getOpt('payment_check')) {
+        if ($globalSite->getOpt('payment_check')) {
             $payment_options .= '
                 <h4 class="radio">
                     <label for="payment_cheque" class="radio">
@@ -344,7 +344,7 @@ else // CHOIX DU MODE DE PAIMENT
                     </label>
                 </h4>
                 <p>
-                    Expédiez un chèque à l\'ordre de '.$_SITE->getNameForCheckPayment().'. Votre commande 
+                    Expédiez un chèque à l\'ordre de '.$globalSite->getNameForCheckPayment().'. Votre commande 
                     sera expédiée après encaissement du chèque.
                 </p>
             ';

@@ -30,7 +30,7 @@ class PublisherTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $pm = new PublisherManager();
 

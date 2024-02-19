@@ -15,7 +15,7 @@ class TagTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $tm = new TagManager();
 

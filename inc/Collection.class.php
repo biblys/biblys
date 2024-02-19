@@ -57,9 +57,9 @@ class Collection extends Entity
                 return $where;
             }
 
-            $_SITE = LegacyCodeHelper::getGlobalSite();
+            $globalSite = LegacyCodeHelper::getGlobalSite();
 
-            $publisher_filter = $_SITE->getOpt('publisher_filter');
+            $publisher_filter = $globalSite->getOpt('publisher_filter');
             if ($publisher_filter && !array_key_exists('publisher_id', $where)) {
                 $where['publisher_id'] = explode(',', $publisher_filter);
             }

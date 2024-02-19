@@ -150,8 +150,8 @@ class ArticleTest extends PHPUnit\Framework\TestCase
      */
     public function testOnOrder(Article $article)
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
-        $siteId = $_SITE->get("id");
+        $globalSite = LegacyCodeHelper::getGlobalSite();
+        $siteId = $globalSite->get("id");
 
         // Create a fake publisher for article
         $pm = new PublisherManager();

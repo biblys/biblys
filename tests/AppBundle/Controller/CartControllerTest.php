@@ -28,12 +28,12 @@ class CartControllerTest extends TestCase
      */
     public function testAddArticleWithJsonResponse()
     {
-        /** @var Site $_SITE */
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        /** @var Site $globalSite */
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         // given
         $cm = new CartManager();
-        $_SITE->setOpt("virtual_stock", 1);
+        $globalSite->setOpt("virtual_stock", 1);
         $controller = new CartController();
         $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
 
@@ -75,12 +75,12 @@ class CartControllerTest extends TestCase
      */
     public function testAddArticleWithRedirection()
     {
-        /** @var Site $_SITE */
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        /** @var Site $globalSite */
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         // given
         $cm = new CartManager();
-        $_SITE->setOpt("virtual_stock", 1);
+        $globalSite->setOpt("virtual_stock", 1);
         $controller = new CartController();
         $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
 
@@ -110,8 +110,8 @@ class CartControllerTest extends TestCase
      */
     public function testAddArticleNotYetAvailable()
     {
-        /** @var Site $_SITE */
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        /** @var Site $globalSite */
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $this->expectException("Symfony\Component\HttpKernel\Exception\ConflictHttpException");
         $this->expectExceptionMessage(
@@ -120,7 +120,7 @@ class CartControllerTest extends TestCase
 
         // given
         $cm = new CartManager();
-        $_SITE->setOpt("virtual_stock", 1);
+        $globalSite->setOpt("virtual_stock", 1);
         $controller = new CartController();
         $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $cm->vacuum($cart);
@@ -154,12 +154,12 @@ class CartControllerTest extends TestCase
      */
     public function testAddStockCopy()
     {
-        /** @var Site $_SITE */
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        /** @var Site $globalSite */
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         // given
         $cm = new CartManager();
-        $_SITE->setOpt("virtual_stock", 0);
+        $globalSite->setOpt("virtual_stock", 0);
         $controller = new CartController();
         $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $cm->vacuum($cart);

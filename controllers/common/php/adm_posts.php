@@ -31,7 +31,7 @@ if ($currentUser->isAdmin()) {
 elseif ($currentUser->hasPublisherRight()) $rank = 'pub_';
 
 $req = NULL;
-$params = ["site_id" => $_SITE->get("id")];
+$params = ["site_id" => $globalSite->get("id")];
 if (isset($_GET["category_id"])) {
     $req .= 'AND `category_id` = :category_id';
     $params["category_id"] = $_GET["category_id"];

@@ -15,14 +15,14 @@ class PaymentTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $lm = new PaymentManager();
 
         $payment = $lm->create();
 
         $this->assertInstanceOf('Payment', $payment);
-        $this->assertEquals($payment->get('site_id'), $_SITE->get('id'));
+        $this->assertEquals($payment->get('site_id'), $globalSite->get('id'));
 
         return $payment;
     }

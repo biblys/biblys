@@ -255,9 +255,9 @@ class Entry
      */
     public static function getCustomEntries(): array
     {
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
-        $entries = json_decode($_SITE->getOpt('admin_entries'));
+        $entries = json_decode($globalSite->getOpt('admin_entries'));
 
         // If JSON is malformatted
         if (json_last_error() !== JSON_ERROR_NONE) {

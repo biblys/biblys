@@ -43,7 +43,7 @@ class LegacyController extends Controller
     {
         global $_ECHO, $_SQL, $urlgenerator;
 
-        $_SITE = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $pageQueryParam = $request->get('page', 'home');
 

@@ -355,8 +355,8 @@ class EntityManager
     public function count(array $where = [])
     {
         if ($this->siteAgnostic === false) {
-            $_SITE = LegacyCodeHelper::getGlobalSite();
-            $where['site_id'] = $_SITE->get('id');
+            $globalSite = LegacyCodeHelper::getGlobalSite();
+            $where['site_id'] = $globalSite->get('id');
         }
 
         if (method_exists($this, 'addSiteFilters')) {
@@ -384,8 +384,8 @@ class EntityManager
     public function getAll(array $where = array(), array $options = array(), $withJoins = true)
     {
         if ($this->siteAgnostic === false && !isset($where['site_id'])) {
-            $_SITE = LegacyCodeHelper::getGlobalSite();
-            $where['site_id'] = $_SITE->get('id');
+            $globalSite = LegacyCodeHelper::getGlobalSite();
+            $where['site_id'] = $globalSite->get('id');
         }
 
         $q = EntityManager::buildSqlQuery($where);
@@ -477,8 +477,8 @@ class EntityManager
     {
         // If not site agnostic, add site id
         if ($this->siteAgnostic === false) {
-            $_SITE = LegacyCodeHelper::getGlobalSite();
-            $defaults['site_id'] = $_SITE->get('id');
+            $globalSite = LegacyCodeHelper::getGlobalSite();
+            $defaults['site_id'] = $globalSite->get('id');
         }
 
         $entity = new $this->object($defaults);
