@@ -27,6 +27,8 @@ class CurrentUser
     private ?AxysAccount $axysAccount;
     private ?string $token;
     private ?CurrentSite $currentSite = null;
+    private bool $cartWasFetched = false;
+    private ?Cart $fetchedCart = null;
 
     public function __construct(?AxysAccount $axysAccount, ?string $token)
     {
@@ -193,15 +195,20 @@ class CurrentUser
      */
     public function getCart(): ?Cart
     {
-        $cartQuery = CartQuery::create()->filterBySite($this->getCurrentSite()->getSite());
+        if (!$this->cartWasFetched) {
+            $cartQuery = CartQuery::create()->filterBySite($this->getCurrentSite()->getSite());
 
-        if ($this->isAuthentified()) {
-            $cartQuery = $cartQuery->filterByAxysAccount($this->axysAccount);
-        } else {
-            $cartQuery = $cartQuery->filterByUid($this->token);
+            if ($this->isAuthentified()) {
+                $cartQuery = $cartQuery->filterByAxysAccount($this->axysAccount);
+            } else {
+                $cartQuery = $cartQuery->filterByUid($this->token);
+            }
+
+            $this->fetchedCart = $cartQuery->findOne();
+            $this->cartWasFetched = true;
         }
 
-        return $cartQuery->findOne();
+        return $this->fetchedCart;
     }
 
     /**
