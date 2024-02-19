@@ -107,52 +107,6 @@ class Visitor extends AxysAccount
         return false;
     }
 
-    /**
-     * Get cart from visitor or user
-     *  TODO : What if user logs after filling his cart as visitor ? Carts should be merged
-     */
-    public function getCart($create = null, bool $bypassCache = false): ?Cart
-    {
-        if (isset($this->cart) && !$bypassCache) {
-            return $this->cart;
-        } else {
-            $cm = new CartManager();
-
-            // If visitor has a cart
-            if ($cart = $cm->get(array('cart_uid' => $this->visitor_uid))) {
-                if ($this->isLogged() && !$cart->has('axys_account_id')) {
-                    $cart->set('axys_account_id', $this->get('id'));
-                }
-                $this->cart = $cart;
-                return $cart;
-            }
-
-            // Else if logged user has a cart
-            elseif ($this->isLogged() && $cart = parent::getCart()) {
-                $this->cart = $cart;
-                return $cart;
-            }
-
-            // Else, if specified, create a new cart
-            elseif ($create == 'create') {
-                $defaults = array(
-                    'cart_uid' => $this->visitor_uid,
-                    'cart_ip' => $_SERVER["REMOTE_ADDR"],
-                    'cart_type' => 'web'
-                );
-                if ($this->isLogged()) {
-                    $defaults['axys_account_id'] = $this->get('id');
-                }
-                /** @var Cart $cart */
-                $cart = $cm->create($defaults);
-                $this->cart = $cart;
-                return $cart;
-            }
-        }
-
-        return null;
-    }
-
     // Get wishes from parent class only if logged in
     public function getWishes(): array
     {
