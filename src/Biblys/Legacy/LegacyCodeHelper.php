@@ -50,15 +50,20 @@ class LegacyCodeHelper
             $config = Config::load();
             $currentSiteId = $config->get("site");
             $currentSite = SiteQuery::create()->findPk($currentSiteId);
-            $GLOBALS["LEGACY_CURRENT_SITE"] = new Site([
-                "site_id" => $currentSite->getId(),
-                "site_title" => $currentSite->getTitle(),
-                "site_contact" => $currentSite->getContact(),
-                "site_tag" => $currentSite->getTag(),
-            ]);
+            self::setGlobalSite($currentSite);
         }
 
         return $GLOBALS["LEGACY_CURRENT_SITE"];
+    }
+
+    public static function setGlobalSite(\Model\Site $site): void
+    {
+        $GLOBALS["LEGACY_CURRENT_SITE"] = new Site([
+            "site_id" => $site->getId(),
+            "site_title" => $site->getTitle(),
+            "site_contact" => $site->getContact(),
+            "site_tag" => $site->getTag(),
+        ]);
     }
 
     /**
