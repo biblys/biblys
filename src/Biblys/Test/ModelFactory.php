@@ -72,6 +72,7 @@ class ModelFactory
         Publisher      $publisher = null,
         BookCollection $collection = null,
         bool           $isPriceEditable = false,
+        DateTime       $publicationDate = null,
     ): Article
     {
         $article = new Article();
@@ -83,6 +84,7 @@ class ModelFactory
         $article->setTypeId($typeId);
         $article->setLemonInkMasterId($lemoninkMasterId);
         $article->setPriceEditable($isPriceEditable);
+        $article->setPubdate($publicationDate);
 
         $publisher = $publisher ?? self::createPublisher();
         $article->setPublisherId($publisher->getId());
@@ -129,6 +131,7 @@ class ModelFactory
         AxysAccount $user = null,
         string      $uniqueId = null,
         int         $amount = 0,
+        int         $count = 0,
     ): Cart
     {
         $cart = new Cart();
@@ -136,6 +139,7 @@ class ModelFactory
         $cart->setSite($site ?? self::createSite());
         $cart->setAxysAccount($user);
         $cart->setAmount($amount);
+        $cart->setCount($count);
         $cart->save();
 
         return $cart;

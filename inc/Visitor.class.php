@@ -111,9 +111,9 @@ class Visitor extends AxysAccount
      * Get cart from visitor or user
      *  TODO : What if user logs after filling his cart as visitor ? Carts should be merged
      */
-    public function getCart($create = null): ?Cart
+    public function getCart($create = null, bool $bypassCache = false): ?Cart
     {
-        if (isset($this->cart)) {
+        if (isset($this->cart) && !$bypassCache) {
             return $this->cart;
         } else {
             $cm = new CartManager();

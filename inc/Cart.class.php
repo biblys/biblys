@@ -375,8 +375,9 @@ class CartManager extends EntityManager
      * Add an article to cart (create copy if needed)
      * @param Cart $cart
      * @param Article $article
+     * @param CFReward|null $reward
      * @return bool
-     * @throws Exception
+     * @throws CartException
      */
     public function addArticle(Cart $cart, $article, CFReward $reward = null): bool
     {

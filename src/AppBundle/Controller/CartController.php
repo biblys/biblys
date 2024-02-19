@@ -5,7 +5,7 @@ namespace AppBundle\Controller;
 
 use Article;
 use ArticleManager;
-use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentUser;
 use Cart;
 use CartManager;
 use CFReward;
@@ -13,6 +13,7 @@ use CFRewardManager;
 use Entity\Exception\CartException;
 use Exception;
 use Framework\Controller;
+use Propel\Runtime\Exception\PropelException;
 use Stock;
 use StockManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,7 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class CartController extends Controller
 {
@@ -30,6 +30,7 @@ class CartController extends Controller
      */
     public function addArticleAction(
         Request $request,
+        CurrentUser $currentUser,
         int $articleId
     ): JsonResponse|RedirectResponse
     {
@@ -44,9 +45,11 @@ class CartController extends Controller
 
         try {
             $cm = new CartManager();
-            $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
-            $cm->addArticle($cart, $article);
-            $cm->updateFromStock($cart);
+            $cart = $currentUser->getOrCreateCart();
+            /** @var Cart $cartEntity */
+            $cartEntity = $cm->getById($cart->getId());
+            $cm->addArticle($cartEntity, $article);
+            $cm->updateFromStock($cartEntity);
         } catch(CartException $exception) {
             throw new ConflictHttpException($exception->getMessage());
         }
@@ -61,7 +64,7 @@ class CartController extends Controller
     /**
      * @throws Exception
      */
-    public function addStockAction(int $stockId): Response
+    public function addStockAction(CurrentUser $currentUser, int $stockId): Response
     {
         $sm = new StockManager();
         $stock = $sm->getById($stockId);
@@ -72,14 +75,19 @@ class CartController extends Controller
         }
 
         $cm = new CartManager();
-        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
-        $cm->addStock($cart, $stock);
-        $cm->updateFromStock($cart);
+        $cart = $currentUser->getOrCreateCart();
+        /** @var Cart $cartEntity */
+        $cartEntity = $cm->getById($cart->getId());
+        $cm->addStock($cartEntity, $stock);
+        $cm->updateFromStock($cartEntity);
 
         return new JsonResponse();
     }
 
-    public function addCrowdfundingRewardAction(int $rewardId): Response
+    /**
+     * @throws PropelException
+     */
+    public function addCrowdfundingRewardAction(CurrentUser $currentUser, int $rewardId): Response
     {
         $cfrm = new CFRewardManager();
         /** @var CFReward $reward */
@@ -91,9 +99,11 @@ class CartController extends Controller
         }
 
         $cm = new CartManager();
-        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
-        $cm->addCFReward($cart, $reward);
-        $cm->updateFromStock($cart);
+        $cart = $currentUser->getOrCreateCart();
+        /** @var Cart $cartEntity */
+        $cartEntity = $cm->getById($cart->getId());
+        $cm->addCFReward($cartEntity, $reward);
+        $cm->updateFromStock($cartEntity);
 
         return new JsonResponse();
     }
@@ -101,7 +111,7 @@ class CartController extends Controller
     /**
      * @throws Exception
      */
-    public function removeStockAction(Request $request, int $stockId): Response
+    public function removeStockAction(Request $request, CurrentUser $currentUser, int $stockId): Response
     {
         $sm = new StockManager();
         /** @var Stock $stock */
@@ -113,9 +123,11 @@ class CartController extends Controller
         }
 
         $cm = new CartManager();
-        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
-        $cm->removeStock($cart, $stock);
-        $cm->updateFromStock($cart);
+        $cart = $currentUser->getOrCreateCart();
+        /** @var Cart $cartEntity */
+        $cartEntity = $cm->getById($cart->getId());
+        $cm->removeStock($cartEntity, $stock);
+        $cm->updateFromStock($cartEntity);
 
         if ($request->headers->get("Accept") === "application/json") {
             return new JsonResponse();
@@ -126,17 +138,20 @@ class CartController extends Controller
 
     /**
      * GET /cart/summary
-     * @return JsonResponse
+     * @throws PropelException
      */
-    public function summaryAction(): JsonResponse
+    public function summaryAction(CurrentUser $currentUser): JsonResponse
     {
-        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart();
+        $cm = new CartManager();
+        $cart = $currentUser->getCart();
         if (!$cart) {
             $cartSummary = Cart::getOneLineEmpty();
             return new JsonResponse($cartSummary);
         }
 
-        $cartSummary = $cart->getOneLine();
+        /** @var Cart $cartEntity */
+        $cartEntity = $cm->getById($cart->getId());
+        $cartSummary = $cartEntity->getOneLine();
         return new JsonResponse(["summary" => $cartSummary]);
     }
 }
