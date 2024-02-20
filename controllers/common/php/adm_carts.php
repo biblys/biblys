@@ -70,7 +70,7 @@ return function (Request $request, Session $session, CurrentSite $currentSite): 
     $emptied = 0;
     $carts = EntityManager::prepareAndExecute("
         SELECT
-            `cart_id`, `carts`.`site_id`, `carts`.`axys_account_id`, `cart_ip`, `cart_date`, `cart_count`,
+            `cart_id`, `carts`.`site_id`, `carts`.`axys_account_id`, `cart_uid`, `cart_date`, `cart_count`, 
             `cart_amount`, `axys_account_email`, COUNT(`stock_id`) AS `num`, SUM(`stock_selling_price`) AS `total`,
             MAX(`stock_cart_date`) AS `stock_cart_date`
         FROM `carts`
@@ -83,7 +83,7 @@ return function (Request $request, Session $session, CurrentSite $currentSite): 
     );
     while ($c = $carts->fetch(PDO::FETCH_ASSOC)) {
         if (isset($c["axys_account_email"])) $c["user"] = $c["axys_account_email"];
-        else $c["user"] = $c["cart_ip"];
+        else $c["user"] = "Anonyme (".substr($c["cart_uid"], 0, 7)."…)";
         $c["style"] = null;
 
         if ($refresh) {
