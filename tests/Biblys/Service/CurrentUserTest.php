@@ -146,6 +146,30 @@ class CurrentUserTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function testSetAxysAccount()
+    {
+        // given
+        $axysAccount = ModelFactory::createAxysAccount();
+        $currentUser = new CurrentUser(null, "token");
+
+        // when
+        $currentUser->setAxysAccount($axysAccount);
+
+        // then
+        $this->assertEquals(
+            $axysAccount,
+            $currentUser->getAxysAccount(),
+            "it sets the axys account"
+        );
+        $this->assertNull(
+            $currentUser->getToken(),
+            "it sets the token to null"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testIsAuthentifiedForUser()
     {
         // given

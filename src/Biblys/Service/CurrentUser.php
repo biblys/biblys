@@ -83,6 +83,12 @@ class CurrentUser
         return $currentUser;
     }
 
+    public function setAxysAccount(AxysAccount $axysAccount): void
+    {
+        $this->axysAccount = $axysAccount;
+        $this->token = null;
+    }
+
     public function isAuthentified(): bool
     {
         if ($this->axysAccount) {
