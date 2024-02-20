@@ -272,7 +272,7 @@ class CurrentUser
         return $stockItemInCart > 0;
     }
 
-    private function injectCurrentSite(CurrentSite $currentSite): void
+    public function injectCurrentSite(CurrentSite $currentSite): void
     {
         $this->currentSite = $currentSite;
     }
@@ -303,5 +303,34 @@ class CurrentUser
     public function getEmail(): ?string
     {
         return $this->getAxysAccount()->getEmail();
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function transfertVisitorCartToUser(string $visitorToken): void
+    {
+        $visitorCart = CartQuery::create()->findOneByUid($visitorToken);
+        if (!$visitorCart) {
+            return;
+        }
+
+        $userCart = $this->getOrCreateCart();
+        foreach ($visitorCart->getStocks() as $visitorCartItem) {
+            $visitorCartItem->setCart($userCart);
+            $visitorCartItem->save();
+        }
+
+        $amount = 0;
+        $count = 0;
+        foreach ($userCart->getStocks() as $userCartItem) {
+            $amount += $userCartItem->getSellingPrice();
+            $count++;
+        }
+        $userCart->setAmount($amount);
+        $userCart->setCount($count);
+        $userCart->save();
+
+        $visitorCart->delete();
     }
 }

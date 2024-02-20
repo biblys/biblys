@@ -6,6 +6,8 @@ use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use DateTime;
 use Exception;
+use Mockery;
+use Model\CartQuery;
 use Model\Option;
 use Model\Right;
 use Model\SiteQuery;
@@ -737,5 +739,63 @@ class CurrentUserTest extends TestCase
 
         // then
         $this->assertTrue($hasStockItemInCart);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testCartTransferWhenVisitorCartDoesNotExist()
+    {
+        // given
+        $axysAccount = ModelFactory::createAxysAccount();
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentUser = new CurrentUser($axysAccount, null);
+        $currentUser->injectCurrentSite($currentSite);
+
+        // when
+        $currentUser->transfertVisitorCartToUser("visitor-token");
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testCartTransferWhenVisitorCartExists()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $visitorCart = ModelFactory::createCart(site: $site, uniqueId: "visitor-token");
+        $stockItemInVisitorCart = ModelFactory::createStockItem(site: $site, cart: $visitorCart, sellingPrice: 999);
+        $axysAccount = ModelFactory::createAxysAccount();
+        $userCart = ModelFactory::createCart(site: $site, user: $axysAccount);
+        $stockItemInUserCart = ModelFactory::createStockItem(site: $site, cart: $userCart, sellingPrice: 2499);
+
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentUser = new CurrentUser($axysAccount, null);
+        $currentUser->injectCurrentSite($currentSite);
+
+        // when
+        $currentUser->transfertVisitorCartToUser("visitor-token");
+
+        // then
+        $this->assertEquals(
+            $userCart->getId(),
+            $stockItemInVisitorCart->getCartId(),
+            "it transfers item in visitor cart to user cart"
+        );
+        $this->assertEquals(
+            $userCart->getId(),
+            $stockItemInUserCart->getCartId(),
+            "it keeps item already in user cart"
+        );
+        $this->assertEquals(3498, $userCart->getAmount(), "it updates user cart amount");
+        $this->assertEquals(2, $userCart->getCount(), "it updates user cart count");
+        $deletedVisitorCart = CartQuery::create()->findPk($visitorCart->getId());
+        $this->assertNull($deletedVisitorCart, "it deletes visitor cart");
     }
 }
