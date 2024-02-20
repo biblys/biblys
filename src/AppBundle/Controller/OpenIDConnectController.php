@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\OpenIDConnectProviderService;
 use Biblys\Service\TemplateService;
 use Biblys\Service\TokenService;
@@ -47,6 +48,7 @@ class OpenIDConnectController extends Controller
     public function callback(
         Request $request,
         CurrentSite $currentSite,
+        CurrentUser $currentUser,
         Config $config,
         OpenIDConnectProviderService $openIDConnectProviderService,
         TemplateService $templateService,
@@ -64,6 +66,9 @@ class OpenIDConnectController extends Controller
         $axysAccount = AxysAccountQuery::create()->findPk($externalId);
 
         $sessionCookie = OpenIDConnectController::_createSession($axysAccount, $currentSite, $sessionExpiresAt);
+
+        $currentUser->setAxysAccount($axysAccount);
+        $currentUser->transfertVisitorCartToUser(visitorToken:  $request->cookies->get("visitor_uid"));
 
         $response = new RedirectResponse($returnUrl);
         $response->headers->setCookie($sessionCookie);

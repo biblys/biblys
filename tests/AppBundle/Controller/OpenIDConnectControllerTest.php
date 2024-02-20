@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\OpenIDConnectProviderService;
 use Biblys\Service\TemplateService;
 use Biblys\Service\TokenService;
@@ -14,6 +15,7 @@ use Exception;
 use Facile\OpenIDClient\Token\TokenSetInterface;
 use Firebase\JWT\JWT;
 use JsonException;
+use Mockery;
 use Model\AxysAccount;
 use Model\SessionQuery;
 use PHPUnit\Framework\TestCase;
@@ -67,10 +69,15 @@ class OpenIDConnectControllerTest extends TestCase
         $request = self::_buildCallbackRequest();
         $controller = new OpenIDConnectController();
 
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("setAxysAccount")->with($axysAccount);
+        $currentUser->expects("transfertVisitorCartToUser")->with("visitor_token");
+
         // when
         $response = $controller->callback(
             request: $request,
             currentSite: $currentSite,
+            currentUser: $currentUser,
             config: new Config(["axys" => ["client_secret" => "secret_key"]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             templateService: $this->createMock(TemplateService::class),
@@ -109,10 +116,15 @@ class OpenIDConnectControllerTest extends TestCase
         $request = self::_buildCallbackRequest(returnUrl: "/my-account");
         $controller = new OpenIDConnectController();
 
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("setAxysAccount")->with($axysAccount);
+        $currentUser->expects("transfertVisitorCartToUser")->with("visitor_token");
+
         // when
         $response = $controller->callback(
             request: $request,
             currentSite: $currentSite,
+            currentUser: $currentUser,
             config: new Config(["axys" => ["client_secret" => "secret_key"]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             templateService: $this->createMock(TemplateService::class),
@@ -146,10 +158,13 @@ class OpenIDConnectControllerTest extends TestCase
             ->willReturn($expectedResponse);
         $controller = new OpenIDConnectController();
 
+        $currentUser = Mockery::mock(CurrentUser::class);
+
         // when
         $returnedResponse = $controller->callback(
             request: $request,
             currentSite: $currentSite,
+            currentUser: $currentUser,
             config: new Config(["axys" => ["client_secret" => "secret_key"]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             templateService: $templateService
@@ -169,6 +184,7 @@ class OpenIDConnectControllerTest extends TestCase
         $stateToken = JWT::encode(["return_url" => $returnUrl], "secret_key", "HS256");
         $request->query->set("code", "authorization_code");
         $request->query->set("state", $stateToken);
+        $request->cookies->set("visitor_uid", "visitor_token");
         return $request;
     }
 
