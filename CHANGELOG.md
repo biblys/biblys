@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 2.77.1 (DEV)
+## 2.77.1 (21 février 2024)
 
 Corrections
 
