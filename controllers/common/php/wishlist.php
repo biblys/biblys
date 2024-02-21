@@ -1,11 +1,12 @@
 <?php
 
-global $request;
-$globalSite = LegacyCodeHelper::getGlobalSite();
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+
+global $request;
+$globalSite = LegacyCodeHelper::getGlobalSite();
 
 $um = new AxysAccountManager();
 $wlm = new WishlistManager();

@@ -64,6 +64,7 @@ class LegacyCodeHelper
         $GLOBALS["LEGACY_CURRENT_SITE"] = new Site([
             "site_id" => $site->getId(),
             "site_title" => $site->getTitle(),
+            "site_domain" => $site->getDomain(),
             "site_contact" => $site->getContact(),
             "site_tag" => $site->getTag(),
         ]);
