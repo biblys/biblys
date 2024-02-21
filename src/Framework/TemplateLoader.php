@@ -156,7 +156,8 @@ class TemplateLoader implements LoaderInterface
             return $defaultFile;
         }
 
-        $oldCustomFile = SITE_PATH."/templates/$path[1]/$path[2]";
+        $sitePath = __DIR__.'/../public/'.$this->currentSite->getSite()->getName();
+        $oldCustomFile = $sitePath."/templates/$path[1]/$path[2]";
         if (file_exists($oldCustomFile)) {
             trigger_deprecation(
                 "biblys/biblys",

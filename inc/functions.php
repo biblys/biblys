@@ -100,14 +100,6 @@ try {
 $config = Config::load();
 Biblys\Database\Connection::initPropel($config);
 
-$globalSite = LegacyCodeHelper::getGlobalSite();
-
-// Define site_path (should be replaced with $site->get("path"))
-if (!defined('SITE_PATH')) {
-    $sitePath = __DIR__.'/../public/'.$globalSite->get('name');
-    define('SITE_PATH', $sitePath);
-}
-
 function authors(?string $nameString, string $mode = null): ?string
 {
     global $urlgenerator;
