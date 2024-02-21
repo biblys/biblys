@@ -2,6 +2,7 @@
 
 namespace Biblys\Service;
 
+use Exception;
 use Model\Option;
 use Model\OptionQuery;
 use Model\Publisher;
@@ -39,12 +40,16 @@ class CurrentSite
     /**
      * @param Config $config
      * @return CurrentSite
+     * @throws Exception
      */
     public static function buildFromConfig(Config $config): CurrentSite
     {
         $siteId = $config->get("site");
 
         $site = SiteQuery::create()->findPk($siteId);
+        if (!$site) {
+            throw new Exception("Unable to find site with id $siteId");
+        }
 
         return new CurrentSite($site);
     }

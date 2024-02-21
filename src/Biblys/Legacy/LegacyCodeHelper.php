@@ -50,6 +50,9 @@ class LegacyCodeHelper
             $config = Config::load();
             $currentSiteId = $config->get("site");
             $currentSite = SiteQuery::create()->findPk($currentSiteId);
+            if (!$currentSite) {
+                throw new Exception("Unable to find site with id $currentSiteId");
+            }
             self::setGlobalSite($currentSite);
         }
 
