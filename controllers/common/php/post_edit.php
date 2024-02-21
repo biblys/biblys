@@ -2,9 +2,6 @@
 /** @noinspection PhpPossiblePolymorphicInvocationInspection */
 /** @noinspection PhpUnhandledExceptionInspection */
 
-global $urlgenerator;
-$globalSite = LegacyCodeHelper::getGlobalSite();
-
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
@@ -12,6 +9,9 @@ use Biblys\Service\Slug\SlugService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
+global $urlgenerator;
+$globalSite = LegacyCodeHelper::getGlobalSite();
 
 if (!isset($rank)) {
     throw new AccessDeniedHttpException("Accès réservé aux administrateurs.");
