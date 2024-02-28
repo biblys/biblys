@@ -8,14 +8,15 @@ Améliorations
   la connexion.
 - L'adresse e-mail du compte courant est désormais affiché sur la page "Mon
   compte"
-- La page "Catalogue" de l'administration est désormais paginée et affiche 100 
+- La page "Catalogue" de l'administration est désormais paginée et affiche 100
   articles par page.
+- Les boutons "Confirmer la réception" et "Signaler un incident" sur la page
+  de commande ont été remplacés par un lien vers la page de contact.
 
 Déploiement
 
 - Dans les controllers, remplacer `$_SITE`
   par `LegacyCodeHelper::getGlobalSite()`.
-
 
 ### 2.77.1 (21 février 2024)
 

@@ -27,6 +27,8 @@ $currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
 $orderUrl = LegacyCodeHelper::getRouteParam("url");
 $order = $om->get(["order_url" => $orderUrl]);
 
+global $urlgenerator;
+
 if (!$order) {
     throw new NotFoundException("Order $orderUrl not found.");
 }
@@ -290,6 +292,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
         ';
     }
 
+    $contactPageUrl = $urlgenerator->generate("main_contact");
     $content .= '
                 <tr>
                     <th colspan="3" class="right">Total T.T.C.&nbsp;:</th>
@@ -297,6 +300,13 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
                 </tr>
             </tfoot>
         </table>
+        
+        <p class="text-center">
+            <strong>
+                Un problème avez votre commande ? 
+                <a href="'.$contactPageUrl.'" class="btn btn-info">Contactez-nous</a>
+            </strong>
+        </p>
     ';
 
 } elseif (!$currentUserService->isAuthentified()) {
