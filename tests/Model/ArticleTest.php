@@ -2,6 +2,7 @@
 
 namespace Model;
 
+use Biblys\Exception\CannotDeleteArticleWithStock;
 use Biblys\Test\ModelFactory;
 use DateTime;
 use Exception;
@@ -84,5 +85,35 @@ class ArticleTest extends TestCase
 
         // then
         $this->assertFalse($isWatermarkable);
+    }
+
+    public function testDeleteSucceedsIfArticleHasNoStock(): void
+    {
+        // given
+        $article = ModelFactory::createArticle();
+
+        // when
+        $article->delete();
+
+        // then
+        $this->assertTrue($article->isDeleted());
+    }
+
+    public function testDeleteIsImposibleIfArticleHasStock(): void
+    {
+        // given
+        $article = ModelFactory::createArticle();
+        ModelFactory::createStockItem(article: $article);
+
+        // when
+        $thrownException = null;
+        try {
+            $article->delete();
+        } catch (CannotDeleteArticleWithStock $exception) {
+            $thrownException = $exception;
+        }
+
+        // then
+        $this->assertInstanceOf(CannotDeleteArticleWithStock::class, $thrownException);
     }
 }

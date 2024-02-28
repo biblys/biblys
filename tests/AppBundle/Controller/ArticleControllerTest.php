@@ -286,6 +286,38 @@ class ArticleControllerTest extends TestCase
     }
 
     /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function testDeleteActionIsImpossibleIfStock()
+    {
+        // given
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $article = ModelFactory::createArticle();
+        $controller = new ArticleController();
+        ModelFactory::createStockItem(article: $article);
+
+        // when
+        $response = $controller->deleteAction(
+            $request,
+            $urlGenerator,
+            $currentSite,
+            $article->getId()
+        );
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should return HTTP 200"
+        );
+    }
+
+    /**
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws LoaderError

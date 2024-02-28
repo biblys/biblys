@@ -3,10 +3,12 @@
 namespace Model;
 
 use Biblys\Article\Type;
+use Biblys\Exception\CannotDeleteArticleWithStock;
 use Exception;
 use Model\Base\Article as BaseArticle;
 use Model\StockQuery as ChildStockQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 class Article extends BaseArticle
@@ -66,5 +68,18 @@ class Article extends BaseArticle
     public function isWatermarkable(): bool
     {
         return $this->getLemoninkMasterId() !== null;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function preDelete(ConnectionInterface|null $con = null): bool
+    {
+        $stockItems = StockQuery::create()->filterByArticle($this)->count();
+        if ($stockItems > 0) {
+            throw new CannotDeleteArticleWithStock();
+        }
+
+        return true;
     }
 }
