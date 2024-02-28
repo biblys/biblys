@@ -6,6 +6,7 @@ use Article;
 use ArticleManager;
 use AxysAccount;
 use Biblys\Exception\ArticleAlreadyInRayonException;
+use Biblys\Exception\CannotDeleteArticleWithStock;
 use Biblys\Gleeph\GleephAPI;
 use Biblys\Isbn\Isbn;
 use Biblys\Isbn\IsbnParsingException;
@@ -363,15 +364,15 @@ class ArticleController extends Controller
         if ($request->getMethod() == 'POST') {
             try {
                 $article->delete();
-            } catch (Exception $e) {
-                $error = $e->getMessage();
-            }
-
-            if (!$error) {
-                return new RedirectResponse(
-                    $urlGenerator->generate("article_deleted", ["title" => $article->getTitle()])
+            } catch (CannotDeleteArticleWithStock $e) {
+                throw new BadRequestHttpException(
+                    "Impossible de supprimer l'article {$article->getTitle()} car il a des exemplaires associés."
                 );
             }
+
+            return new RedirectResponse(
+                $urlGenerator->generate("article_deleted", ["title" => $article->getTitle()])
+            );
         }
 
         $request->attributes->set("page_title", "Suppression de l'article {$article->getTitle()}");
