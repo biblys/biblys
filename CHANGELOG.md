@@ -28,6 +28,7 @@ Améliorations
 
 - Lors de la modification du prix d'un exemplaire vendu, le montant de la
   commande sera mis à jour si elle n'a pas encore été payée.
+- Le bouton de confirmation de réception d'une commande a été supprimé.
 
 ## 2.76.0 (10 janvier 2024)
 

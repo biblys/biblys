@@ -132,9 +132,6 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
     // Paiement de la commande
     if (isset($_GET["payed"])) $content .= '<p class="success">La commande a été payée.</p><br />';
 
-    // Signaler un incident
-    if (isset($_GET["flagged"])) $content .= '<p class="success">L\'incident a bien été enregistré.</p><br />';
-
     // Paiement
     if (!$o["order_payment_date"]) $buttons .= '<a href="/payment/' . $o["order_url"] . '" class="btn btn-primary"><i class="fa fa-money"></i>&nbsp; Payer la commande (' . currency($o["order_amount_tobepaid"] / 100) . ')</a> ';
     else $buttons .= '<a href="/invoice/' . $o["order_url"] . '" class="btn btn-default"><i class="fa fa-print"></i> Imprimer une facture</a> ';
@@ -149,59 +146,6 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
                         '.$o["order_track_number"].'
                     </a>
                 </p><br />
-            ';
-        }
-        if (!$o["order_confirmation_date"]) {
-            $buttons .= '
-                <a href="/order/' . $o["order_url"] . '?confirm=1" class="btn btn-success"><i class="fa fa-check-circle"></i> Confirmer la réception</a>
-                <button id="dialog_incident" class="dialogThis btn btn-warning"><i class="fa fa-warning"></i>&nbsp; Signaler un incident</button>
-            ';
-
-            // Incident
-            if (!empty($_POST["incident"])) {
-                // Envoi du mail
-                                $content = '
-                    <html lang="fr">
-                        <head>
-                            <title>' . LegacyCodeHelper::getGlobalSite()["site_tag"] . ' | Commande n° ' . $o["order_id"] . ' : incident</title>
-                        </head>
-                        <body>
-                            <p>Le client souhaite retourner la commande n°&nbsp;<a href="https://' . $_SERVER["HTTP_HOST"] . '/order/' . $o["order_url"] . '">' . $o["order_id"] . '</a></p>
-                            <p>---</p>
-                            <p>Commentaire du client :</p>
-                            <p>' . nl2br($_POST["incident"]) . '</p>
-                        </body>
-                    </html>
-                ';
-
-                $to = $currentSite->getContact();
-                $subject = $currentSite->getTag() . " | Commande n° " . $o["order_id"] . " : incident";
-                $body = stripslashes($content);
-                $from = [$currentSite->getContact() => $o["order_firstname"] . " " . $o["order_lastname"]];
-                $options = ["reply-to" => $o["order_email"]];
-                $mailer = new Mailer($config);
-                $mailer->send($to, $subject, $body, $from, $options);
-
-                $order->set('order_confirmation_date', date('Y-m-d H:i:s'));
-                $om->update($order);
-                return new RedirectResponse("/order/{$o["order_url"]}?flagged=1");
-            }
-
-            $content .= '
-                <form id="incident" method="post" class="hidden" data-title="Signaler un incident">
-                    <fieldset>
-                        <p>
-                            Nous voulons que vous soyez totalement satisfait·e de votre commande. En cas de
-                            problème, vous pouvez la renvoyer intégralement ou en partie à l\'adresse ci-dessous sous 7
-                            jours. Le montant des livres retournés vous sera remboursés intégralement.
-                        </p>
-                        <p class="center"><strong>' . $currentSite->getTitle() . '<br />' . str_replace("|", "<br />", $currentSite->getAddress()) . '</strong></p>
-                        <p>Merci d\'indiquer les raisons pour lesquelles vous souhaitez renvoyer votre commande :</p>
-                        <textarea name="incident"></textarea>
-                        <br />
-                        <p class="center"><input type="submit" value="Enregistrer l\'incident" /></p>
-                    </fieldset>
-                </form>
             ';
         }
     }
