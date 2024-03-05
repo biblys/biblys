@@ -629,7 +629,7 @@ CREATE TABLE `mailing`
     `mailing_updated` DATETIME,
     `mailing_deleted` DATETIME,
     PRIMARY KEY (`mailing_id`),
-    INDEX `site_id` (`site_id`, `mailing_email`)
+    INDEX `site_id` (`site_id`, `mailing_email`(50))
 ) ENGINE=MyISAM;
 
 CREATE TABLE `medias`
