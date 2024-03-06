@@ -2,8 +2,10 @@
 
 namespace Biblys\Legacy;
 
+use ArticleManager;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Images\ImagesService;
+use CollectionManager;
 use Model\Article;
 use Model\ArticleCategoryQuery;
 use Model\ArticleQuery;
@@ -149,5 +151,90 @@ class CartHelpers
             }
         }
         return false;
+    }
+
+    /**
+     * @param CurrentSite $currentSite
+     * @param Cart $cart
+     * @param ArticleManager $am
+     * @param CollectionManager $com
+     * @param int $physicalTotalPrice
+     * @return string
+     * @throws PropelException
+     */
+    public static function getSpecialOfferNotice(
+        CurrentSite       $currentSite,
+        Cart              $cart,
+    ): string
+    {
+        $special_offer_amount = $currentSite->getOption('special_offer_amount');
+        $special_offer_article = $currentSite->getOption('special_offer_article');
+        $special_offer_collection = $currentSite->getOption('special_offer_collection');
+
+        // Special offer: article for amount of articles in collection
+        if (!$special_offer_collection || !$special_offer_amount || !$special_offer_article) {
+            return "";
+        }
+
+        $am = new ArticleManager();
+        $com = new CollectionManager();
+
+        $copies = StockQuery::create()->filterByCartId($cart->getId())->find();
+
+        // Count copies in offer's collection
+        $copiesInCollection = array_reduce($copies->getArrayCopy(), function ($total, $copy) use ($special_offer_collection) {
+            /** @var Article $article */
+            $article = $copy->getArticle();
+            if ($article->getCollectionId() === (int) $special_offer_collection) {
+                $total++;
+            }
+            return $total;
+        }, 0);
+
+        $price = null;
+        $missing = $special_offer_amount - $copiesInCollection;
+        /** @var \Article $fa */
+        $fa = $am->getById($special_offer_article);
+        $sentence = 'Ajoutez encore ' . $missing . ' titre' . s($missing) . ' de la collection<br/>
+            à votre panier pour en profiter&nbsp;!';
+        $style = ' style="opacity: .5"';
+        $offerCollection = $com->getById($special_offer_collection);
+
+        if ($missing <= 0) {
+            $style = null;
+            $sentence = 'Si vous ne souhaitez pas bénéficier de l\'offre, vous pourrez
+                le préciser dans le champ Commentaires de la page suivante.';
+            $price = 'Offert';
+        }
+
+        $cover = null;
+        if ($fa->hasCover()) {
+            $cover = $fa->getCoverTag(['size' => 'h60', 'rel' => 'lightbox', 'class' => 'cover']);
+        }
+
+        return '
+            <tr' . $style . '>
+                <td>Offre<br>spéciale</td>
+                <td>' . $cover . '</td>
+                <td>
+                    <a href="/' . $fa->get('url') . '">' . $fa->get('title') . '</a><br />
+                    de ' . authors($fa->get('authors')) . '<br />
+                    coll. ' . $fa->get('collection')->get('name') . ' ' . numero($fa->get('number')) . '<br />
+                    <p>
+                        <strong>
+                            Offert pour ' . $special_offer_amount . ' titres de la
+                            collection ' . $offerCollection->get('name') . ' achetés&nbsp;!
+                            <small>(hors numérique)</small><br>
+                            <small>' . $sentence . '</small>
+                        </strong>
+                    </p>
+                </td>
+                <td class="right">
+                    ' . $price . '
+                </td>
+                <td class="center">
+                </td>
+            </tr>
+        ';
     }
 }

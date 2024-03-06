@@ -12,7 +12,6 @@ use Biblys\Service\CurrentUrlService;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
 use Model\CartQuery;
-use Model\StockQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,8 +33,6 @@ return function (
     UrlGenerator $urlGenerator,
 ): Response
 {
-    $am = new ArticleManager();
-    $com = new CollectionManager();
     $om = new OrderManager();
 
     $content = null;
@@ -73,7 +70,6 @@ return function (
     $pre_order = 0;
     $on_order = 0;
     $downloadable = 0;
-    $physical_total_price = 0;
 
     $sm = new StockManager();
     $stocks = $sm->getAll([
@@ -106,9 +102,7 @@ return function (
         }
 
         // Physical or downloadable types
-        if ($type->isPhysical()) {
-            $physical_total_price += $article->get('price');
-        } elseif ($type->isDownloadable()) {
+        if ($type->isDownloadable()) {
             $downloadable++;
         }
 
@@ -308,119 +302,15 @@ return function (
             }
         }
 
-        // Special offers
-        $special_offer_amount = $currentSite->getOption('special_offer_amount');
-        $special_offer_article = $currentSite->getOption('special_offer_article');
-        $special_offer_collection = $currentSite->getOption('special_offer_collection');
-
-        // Special offer: article for amount of articles in collection
-        if ($special_offer_collection && $special_offer_amount
-            && $special_offer_article) {
-            $copies = StockQuery::create()
-                ->filterByCartId($cart->getId())
-                ->find();
-
-            // Count copies in offer's collection
-            $copiesInCollection = array_reduce($copies, function ($total, $copy) use ($special_offer_collection) {
-                /** @var \Model\Article $article */
-                $article = $copy->getArticle();
-                if ($article->getCollectionId() === $special_offer_collection) {
-                    $total++;
-                }
-                return $total;
-            }, 0);
-
-            $price = null;
-            $missing = $special_offer_amount - $copiesInCollection;
-            /** @var Article $fa */
-            $fa = $am->getById($special_offer_article);
-            $sentence = 'Ajoutez encore '.$missing.' titre'.s($missing).' de la collection<br/>
-                à votre panier pour en profiter&nbsp;!';
-            $style = ' style="opacity: .5"';
-            $offerCollection = $com->getById($special_offer_collection);
-
-            if ($missing <= 0) {
-                $style = null;
-                $sentence = 'Si vous ne souhaitez pas bénéficier de l\'offre, vous pourrez
-                    le préciser dans le champ Commentaires de la page suivante.';
-                $price = 'Offert';
-            }
-
-            $cover = null;
-            if ($fa->hasCover()) {
-                $cover = $fa->getCoverTag(['size' => 'h60', 'rel' => 'lightbox', 'class' => 'cover']);
-            }
-
-            $content .= '
-                <tr'.$style.'>
-                    <td>Offre<br>spéciale</td>
-                    <td>'.$cover.'</td>
-                    <td>
-                        <a href="/'.$fa->get('url').'">'.$fa->get('title').'</a><br />
-                        de '.authors($fa->get('authors')).'<br />
-                        coll. '.$fa->get('collection')->get('name').' '.numero($fa->get('number')).'<br />
-                        <p>
-                            <strong>
-                                Offert pour '.$special_offer_amount.' titres de la
-                                collection '.$offerCollection->get('name').' achetés&nbsp;!
-                                <small>(hors numérique)</small><br>
-                                <small>'.$sentence.'</small>
-                            </strong>
-                        </p>
-                    </td>
-                    <td class="right">
-                        '.$price.'
-                    </td>
-                    <td class="center">
-                    </td>
-                </tr>
-            ';
-        } // Special offer: article for revenue amount
-        elseif ($special_offer_amount && $special_offer_article) {
-
-            /** @var Article $fa */
-            $fa = $am->getById($special_offer_article);
-
-            $missing = $special_offer_amount - $physical_total_price;
-            $sentence = 'Ajoutez encore '.price($missing, 'EUR').' à votre panier pour en profiter !';
-            $style = ' style="opacity: .5"';
-            $price = null;
-            if ($physical_total_price >= $special_offer_amount) {
-                $style = null;
-                $sentence = null;
-                $price = 'Offert';
-            }
-
-            $content .= '
-            <tr'.$style.'>
-                <td>Offre<br>spéciale</td>
-                <td>'.$fa->getCoverTag(['size' => 'h60', 'rel' => 'lightbox', 'class' => 'cover']).'</td>
-                <td>
-                    <a href="/'.$fa->get('url').'">'.$fa->get('title').'</a><br />
-                    de '.authors($fa->get('authors')).'<br />
-                    coll. '.$fa->get('collection')->get('name').' '.numero($fa->get('number')).'<br />
-                    <p>
-                        <strong>
-                            Offert pour '.price($special_offer_amount, 'EUR').' d\'achat ! <small>(hors numérique et abonnement)</small><br>
-                            '.$sentence.'
-                        </strong>
-                    </p>
-                </td>
-                <td class="right">
-                    '.$price.'
-                </td>
-                <td class="center">
-                </td>
-            </tr>
-        ';
-        }
+        $specialOfferNotice = CartHelpers::getSpecialOfferNotice($currentSite, $cart);
 
         $content .= '
+                '.$specialOfferNotice.'
             </tbody>
             <tfoot>
                 <tr class="bold">
                     <td colspan="3" class="right">Total :</td>
-    ';
+        ';
 
         if ($currentSite->getSite()->getShippingFee() == "fr") {
             $content .= '<td class="right">'.$Poids.'g <input type="hidden" id="stock_weight" value="'.$Poids.'"></td>';
