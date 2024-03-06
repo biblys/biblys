@@ -28,7 +28,7 @@ class ArticleControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
 
         $publisher = ModelFactory::createPublisher(name: "Un éditeur");
-        $collection = ModelFactory::createCollection(["publisher" => $publisher]);
+        $collection = ModelFactory::createCollection(publisher: $publisher);
         $author = ModelFactory::createPeople(["first_name" => "Albert", "last_name" => "Koalanstein"]);
         $article = ModelFactory::createArticle(
             title: "L'Animalie",

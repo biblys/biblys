@@ -148,12 +148,14 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createCollection(array $attributes = [], Publisher $publisher = null):
-    BookCollection
+    public static function createCollection(
+        Publisher $publisher = null,
+        string $name = "La Blanche",
+    ): BookCollection
     {
         $collection = new BookCollection();
-        $collection->setName($attributes["name"] ?? "La Blanche");
-        $collection->setUrl($attributes["url"] ?? "la-blanche");
+        $collection->setName($name);
+        $collection->setUrl("la-blanche");
         $publisher = $publisher ?? self::createPublisher();
         $collection->setPublisherId($publisher->getId());
         $collection->save();
