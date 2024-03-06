@@ -5,12 +5,13 @@ namespace Biblys\Legacy;
 use ArticleManager;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Images\ImagesService;
-use CollectionManager;
+use Exception;
 use Model\Article;
 use Model\ArticleCategoryQuery;
 use Model\ArticleQuery;
 use Model\Cart;
 use Model\LinkQuery;
+use Model\SpecialOfferQuery;
 use Model\Stock;
 use Model\StockQuery;
 use Propel\Runtime\Exception\PropelException;
@@ -156,49 +157,52 @@ class CartHelpers
     /**
      * @param CurrentSite $currentSite
      * @param Cart $cart
-     * @param ArticleManager $am
-     * @param CollectionManager $com
-     * @param int $physicalTotalPrice
      * @return string
      * @throws PropelException
+     * @throws Exception
      */
     public static function getSpecialOfferNotice(
         CurrentSite       $currentSite,
         Cart              $cart,
     ): string
     {
-        $special_offer_amount = $currentSite->getOption('special_offer_amount');
-        $special_offer_article = $currentSite->getOption('special_offer_article');
-        $special_offer_collection = $currentSite->getOption('special_offer_collection');
+        $specialOffer = SpecialOfferQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->findOne();
 
-        // Special offer: article for amount of articles in collection
-        if (!$special_offer_collection || !$special_offer_amount || !$special_offer_article) {
+        if (!$specialOffer) {
+            return "";
+        }
+
+        $targetQuantity = $specialOffer->getTargetQuantity();
+        $freeArticle = $specialOffer->getFreeArticle();
+        $targetCollection = $specialOffer->getTargetCollection();
+
+        if (!$targetCollection || !$freeArticle) {
             return "";
         }
 
         $am = new ArticleManager();
-        $com = new CollectionManager();
 
         $copies = StockQuery::create()->filterByCartId($cart->getId())->find();
 
         // Count copies in offer's collection
-        $copiesInCollection = array_reduce($copies->getArrayCopy(), function ($total, $copy) use ($special_offer_collection) {
+        $copiesInCollection = array_reduce($copies->getArrayCopy(), function ($total, $copy) use ($targetCollection) {
             /** @var Article $article */
             $article = $copy->getArticle();
-            if ($article->getCollectionId() === (int) $special_offer_collection) {
+            if ($article->getCollectionId() === $targetCollection->getId()) {
                 $total++;
             }
             return $total;
         }, 0);
 
         $price = null;
-        $missing = $special_offer_amount - $copiesInCollection;
-        /** @var \Article $fa */
-        $fa = $am->getById($special_offer_article);
+        $missing = $targetQuantity - $copiesInCollection;
+        /** @var \Article $freeArticleEntity */
+        $freeArticleEntity = $am->getById($freeArticle->getId());
         $sentence = 'Ajoutez encore ' . $missing . ' titre' . s($missing) . ' de la collection<br/>
             à votre panier pour en profiter&nbsp;!';
         $style = ' style="opacity: .5"';
-        $offerCollection = $com->getById($special_offer_collection);
 
         if ($missing <= 0) {
             $style = null;
@@ -208,8 +212,8 @@ class CartHelpers
         }
 
         $cover = null;
-        if ($fa->hasCover()) {
-            $cover = $fa->getCoverTag(['size' => 'h60', 'rel' => 'lightbox', 'class' => 'cover']);
+        if ($freeArticleEntity->hasCover()) {
+            $cover = $freeArticleEntity->getCoverTag(['size' => 'h60', 'rel' => 'lightbox', 'class' => 'cover']);
         }
 
         return '
@@ -217,13 +221,13 @@ class CartHelpers
                 <td>Offre<br>spéciale</td>
                 <td>' . $cover . '</td>
                 <td>
-                    <a href="/' . $fa->get('url') . '">' . $fa->get('title') . '</a><br />
-                    de ' . authors($fa->get('authors')) . '<br />
-                    coll. ' . $fa->get('collection')->get('name') . ' ' . numero($fa->get('number')) . '<br />
+                    <a href="/' . $freeArticleEntity->get('url') . '">' . $freeArticleEntity->get('title') . '</a><br />
+                    de ' . authors($freeArticleEntity->get('authors')) . '<br />
+                    coll. ' . $freeArticleEntity->get('collection')->get('name') . ' ' . numero($freeArticleEntity->get('number')) . '<br />
                     <p>
                         <strong>
-                            Offert pour ' . $special_offer_amount . ' titres de la
-                            collection ' . $offerCollection->get('name') . ' achetés&nbsp;!
+                            Offert pour ' . $targetQuantity . ' titres de la
+                            collection ' . $targetCollection->getName() . ' achetés&nbsp;!
                             <small>(hors numérique)</small><br>
                             <small>' . $sentence . '</small>
                         </strong>

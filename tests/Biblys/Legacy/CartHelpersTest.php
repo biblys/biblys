@@ -5,6 +5,7 @@ namespace Biblys\Legacy;
 use Biblys\Service\CurrentSite;
 use Biblys\Test\ModelFactory;
 use Mockery;
+use Model\SpecialOfferQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
@@ -16,21 +17,109 @@ class CartHelpersTest extends TestCase
     /**
      * @throws PropelException
      */
+    protected function tearDown(): void
+    {
+        SpecialOfferQuery::create()->deleteAll();
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetSpecialOfferNoticeWhenNoSpecialOffer()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+
+        // when
+        $notice = CartHelpers::getSpecialOfferNotice(
+            $currentSite,
+            ModelFactory::createCart(site: $site),
+        );
+
+        // then
+        $this->assertEquals("", $notice);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetSpecialOfferNoticeBeforeStartDate()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $freeArticle = ModelFactory::createArticle();
+
+        ModelFactory::createSpecialOffer(
+            site: $site,
+            targetCollection: $freeArticle->getBookCollection(),
+            freeArticle: $freeArticle,
+            startDate: new DateTime("+1 day"),
+        );
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+
+        // when
+        $notice = CartHelpers::getSpecialOfferNotice(
+            $currentSite,
+            ModelFactory::createCart(site: $site),
+        );
+
+        // then
+        $this->assertEquals("", $notice);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetSpecialOfferNoticeAfterEndDate()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $freeArticle = ModelFactory::createArticle();
+
+        ModelFactory::createSpecialOffer(
+            site: $site,
+            targetCollection: $freeArticle->getBookCollection(),
+            freeArticle: $freeArticle,
+            endDate: new DateTime("-1 day"),
+        );
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+
+        // when
+        $notice = CartHelpers::getSpecialOfferNotice(
+            $currentSite,
+            ModelFactory::createCart(site: $site),
+        );
+
+        // then
+        $this->assertEquals("", $notice);
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testGetSpecialOfferNotice()
     {
         // given
         $site = ModelFactory::createSite();
         $targetCollection = ModelFactory::createCollection(name: "Collection cible");
         $freeArticle = ModelFactory::createArticle(title: "Cékado", collection: $targetCollection);
+
+        ModelFactory::createSpecialOffer(
+            site: $site,
+            targetCollection: $targetCollection,
+            freeArticle: $freeArticle,
+        );
+
         $cart = ModelFactory::createCart(site:$site);
 
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getOption")
-            ->with("special_offer_amount")->andReturn(2);
-        $currentSite->shouldReceive("getOption")
-            ->with("special_offer_article")->andReturn($freeArticle->getId());
-        $currentSite->shouldReceive("getOption")
-            ->with("special_offer_collection")->andReturn($targetCollection->getId());
+        $currentSite->shouldReceive("getSite")->andReturn($site);
 
         // when
         $notice = CartHelpers::getSpecialOfferNotice(
@@ -54,6 +143,11 @@ class CartHelpersTest extends TestCase
         $site = ModelFactory::createSite();
         $targetCollection = ModelFactory::createCollection(name: "Collection cible");
         $freeArticle = ModelFactory::createArticle(title: "Cékado", collection: $targetCollection);
+        ModelFactory::createSpecialOffer(
+            site: $site,
+            targetCollection: $targetCollection,
+            freeArticle: $freeArticle,
+        );
 
         $cart = ModelFactory::createCart(site: $site);
         $article1 = ModelFactory::createArticle(collection: $targetCollection);
@@ -62,12 +156,8 @@ class CartHelpersTest extends TestCase
         ModelFactory::createStockItem(site: $site, article: $article2, cart: $cart);
 
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getOption")
-            ->with("special_offer_amount")->andReturn(2);
-        $currentSite->shouldReceive("getOption")
-            ->with("special_offer_article")->andReturn($freeArticle->getId());
-        $currentSite->shouldReceive("getOption")
-            ->with("special_offer_collection")->andReturn($targetCollection->getId());
+        $currentSite->shouldReceive('getSite')->andReturn($site);
+
 
         // when
         $notice = CartHelpers::getSpecialOfferNotice(
