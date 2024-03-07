@@ -3,6 +3,7 @@
 use Biblys\Exception\EntityAlreadyExistsException;
 use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 $getTerm = trim($request->query->get('term'));
@@ -17,7 +18,7 @@ if ($getTerm) {
     // Si on est sur un site editeur
     if (!empty(LegacyCodeHelper::getGlobalSite()["publisher_id"])) {
         $_REQ_SITE = "AND `publisher_id` = :publisher_id";
-        $publisherId = \Biblys\Legacy\LegacyCodeHelper::getGlobalSite()->get('publisher_id');
+        $publisherId = LegacyCodeHelper::getGlobalSite()->get('publisher_id');
         $params["publisher_id"] = $publisherId;
     }
 
@@ -51,7 +52,7 @@ if ($getTerm) {
         WHERE `collection_name` LIKE :query 
             ".$_REQ_SITE." 
         ORDER BY `collection_name`";
-    $collectionQuery = \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection()->prepare($qu1);
+    $collectionQuery = LegacyCodeHelper::getGlobalDatabaseConnection()->prepare($qu1);
     if ($publisherId) {
         $collectionQuery->bindParam('publisher_id', $params['publisher_id']);
     }
@@ -63,7 +64,7 @@ if ($getTerm) {
         FROM `collections` JOIN `publishers` USING(`publisher_id`) 
         WHERE ".$_REQ." ".$_REQ_SITE." 
         ORDER BY `collection_name`";
-    $collectionsQuery = \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection()->prepare($qu2);
+    $collectionsQuery = LegacyCodeHelper::getGlobalDatabaseConnection()->prepare($qu2);
     $collectionsQuery->execute(array_merge($params, $termsParams));
 
     while ($c = $collectionQuery->fetch() or $c = $collectionsQuery->fetch()) {
@@ -80,7 +81,7 @@ if ($getTerm) {
         $json[$i]["collection_id"] = $c["collection_id"];
         $json[$i]["publisher_id"] = $c["publisher_id"];
         $json[$i]["pricegrid_id"] = $c["pricegrid_id"];
-                $json[$i]["publisher_allowed_on_site"] = \Biblys\Legacy\LegacyCodeHelper::getGlobalSite()->allowsPublisherWithId
+                $json[$i]["publisher_allowed_on_site"] = LegacyCodeHelper::getGlobalSite()->allowsPublisherWithId
                 ($c["publisher_id"]) ? 1 : 0;
 
         $i++;
@@ -96,7 +97,7 @@ if ($getTerm) {
 // Create a new collection
 } elseif ($_POST) {
     if (empty($_POST["collection_publisher_id"])) {
-        json_error(0, "Éditeur non défini !");
+        throw new BadRequestHttpException("Éditeur non défini !");
     } else {
         $collectionName = $request->request->get('collection_name');
         $publisherId = $request->request->get('collection_publisher_id');

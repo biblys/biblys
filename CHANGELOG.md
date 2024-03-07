@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.78.1 (DEV)
+
+Corrections
+
+- Les erreurs lors de la création d'un nouvelle collection n'étaient pas
+  affichées. C'est corrigé.
+
 ## 2.78.0 (6 mars 2022)
 
 Améliorations

@@ -285,8 +285,8 @@ function reloadArticleAdminEvents(scope) {
         $('#article_number').focus();
       },
       error: function (data) {
-        var error = data.responseJSON.error.message;
-        _alert(error.message);
+        const { error } = data.responseJSON;
+        _alert(error);
       }
     });
   }).removeClass('event');
