@@ -7,6 +7,7 @@ namespace Biblys\Legacy;
 use Article;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Exception\OrderDetailsValidationException;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
 use CountryManager;
 use Egulias\EmailValidator\EmailValidator;
@@ -22,6 +23,7 @@ use Propel\Runtime\Exception\PropelException;
 use Shipping;
 use ShippingManager;
 use Site;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Visitor;
@@ -32,7 +34,10 @@ class OrderDeliveryHelpers
      * @throws OrderDetailsValidationException
      * @throws Exception
      */
-    public static function validateOrderDetails($request): void
+    public static function validateOrderDetails(
+        Request $request,
+        CurrentSite $currentSite,
+    ): void
     {
         if (empty($request->request->get('order_firstname'))) {
             throw new OrderDetailsValidationException(
@@ -67,6 +72,15 @@ class OrderDeliveryHelpers
         if (empty($request->request->get('order_email'))) {
             throw new OrderDetailsValidationException(
                 'Le champ &laquo;&nbsp;Adresse e-mail&nbsp;&raquo; est obligatoire !'
+            );
+        }
+
+        if (
+            $currentSite->getOption("order_phone_required") &&
+            empty($request->request->get("order_phone"))
+        ) {
+            throw new OrderDetailsValidationException(
+                "Le champ &laquo;&nbsp;Numéro de téléphone&nbsp;&raquo; est obligatoire."
             );
         }
 

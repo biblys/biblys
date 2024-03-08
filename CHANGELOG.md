@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.79.0 (DEV)
+
+Améliorations
+
+- Une option de site "order_phone_required" a été ajouté pour rendre
+  obligatoire le numéro de téléphone lors de la validation de commande.
+
 ### 2.78.4 (3 avril 2024)
 
 Corrections

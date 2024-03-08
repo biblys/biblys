@@ -120,7 +120,7 @@ return function (
 
         $error = null;
         try {
-            OrderDeliveryHelpers::validateOrderDetails($request);
+            OrderDeliveryHelpers::validateOrderDetails($request, $currentSite);
         } catch (Exception $exception) {
             $error = $exception->getMessage();
         }
@@ -454,6 +454,8 @@ return function (
         $order->set('comment', $request->request->get('order_comment'));
     }
 
+    $isPhoneRequired = $currentSite->getOption("order_phone_required");
+
     $content .= '
     <form id="orderForm" method="post" class="order-delivery-form fieldset check ' . $form_class . '">
         <fieldset class="order-delivery-form__fieldset">
@@ -527,8 +529,18 @@ return function (
             </div>
 
             <div class="order-delivery-form__field">
-                <label for="order_phone" class="order-delivery-form__label">Téléphone</label>
-                <input type="text" name="order_phone" id="order_phone" value="' . $order->get('phone') . '" class="order-delivery-form__input" />
+                <label for="order_phone" class="order-delivery-form__label">
+                    Téléphone
+                    '. ($isPhoneRequired ? '<span class="required-field-indicator">*</span>' : '') .'
+                </label>
+                <input 
+                    type="text" 
+                    name="order_phone" 
+                    id="order_phone" 
+                    value="' . $order->get('phone') . '" 
+                    class="order-delivery-form__input"
+                    ' . ($isPhoneRequired ? 'required' : '') . '
+                />
             </div>
          </fieldset>
          

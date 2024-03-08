@@ -4,20 +4,121 @@
 
 namespace Biblys\Legacy;
 
+use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Exception\OrderDetailsValidationException;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use CartManager;
 use Exception;
+use Mockery;
 use OrderManager;
 use PHPUnit\Framework\TestCase;
+use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 require_once(__DIR__."/../../setUp.php");
 
 class OrderDeliveryHelpersTest extends TestCase
 {
+    /**
+     * @throws OrderDetailsValidationException
+     * @throws Exception
+     */
+    public function testValidateOrderDetails()
+    {
+        // given
+        $request = new Request();
+        $request->request->set("order_firstname", "Victor");
+        $request->request->set("order_lastname", "Hugo");
+        $request->request->set("order_address1", "Place des Vosges");
+        $request->request->set("order_postalcode", "75004");
+        $request->request->set("order_city", "Paris");
+        $request->request->set("country_id", 1);
+        $request->request->set("order_email", "victor.hugo@biblys.fr");
+        $request->request->set("cgv_checkbox", 1);
+        $request->request->set("order_phone", "");
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")
+            ->with("order_phone_required")
+            ->andReturn(0);
+
+        // when
+        OrderDeliveryHelpers::validateOrderDetails($request, $currentSite);
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
 
     /**
+     * @throws OrderDetailsValidationException
+     * @throws Exception
+     */
+    public function testValidateOrderDetailsThrowsWhenPhoneIsRequiredAndMissing()
+    {
+        // given
+        $request = new Request();
+        $request->request->set("order_firstname", "Victor");
+        $request->request->set("order_lastname", "Hugo");
+        $request->request->set("order_address1", "Place des Vosges");
+        $request->request->set("order_postalcode", "75004");
+        $request->request->set("order_city", "Paris");
+        $request->request->set("country_id", 1);
+        $request->request->set("order_email", "victor.hugo@biblys.fr");
+        $request->request->set("cgv_checkbox", 1);
+        $request->request->set("order_phone", "");
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")
+            ->with("order_phone_required")
+            ->andReturn(1);
+
+        // then
+        $this->expectException(OrderDetailsValidationException::class);
+        $this->expectExceptionMessage("Le champ &laquo;&nbsp;Numéro de téléphone&nbsp;&raquo; est obligatoire.");
+
+        // when
+        OrderDeliveryHelpers::validateOrderDetails($request, $currentSite);
+    }
+
+    /**
+     * @throws OrderDetailsValidationException
+     * @throws Exception
+     */
+    public function testValidateOrderDetailsSucceedsWhenPhoneIsRequiredAndPresent()
+    {
+        // given
+        $request = new Request();
+        $request->request->set("order_firstname", "Victor");
+        $request->request->set("order_lastname", "Hugo");
+        $request->request->set("order_address1", "Place des Vosges");
+        $request->request->set("order_postalcode", "75004");
+        $request->request->set("order_city", "Paris");
+        $request->request->set("country_id", 1);
+        $request->request->set("order_email", "victor.hugo@biblys.fr");
+        $request->request->set("cgv_checkbox", 1);
+        $request->request->set("order_phone", "01234567890");
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")
+            ->with("order_phone_required")
+            ->andReturn(1);
+
+        // when
+        OrderDeliveryHelpers::validateOrderDetails($request, $currentSite);
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
+
+
+    /**
+     * @throws InvalidEmailAddressException
+     * @throws PropelException
+     * @throws TransportExceptionInterface
      * @throws Exception
      */
     public function testSendOrderConfirmationMail()
@@ -138,6 +239,9 @@ class OrderDeliveryHelpersTest extends TestCase
 
 
     /**
+     * @throws InvalidEmailAddressException
+     * @throws PropelException
+     * @throws TransportExceptionInterface
      * @throws Exception
      */
     public function testSendConfirmationMailOnOrderUpdate()
