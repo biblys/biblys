@@ -56,6 +56,9 @@ class ArticleControllerTest extends TestCase
         $loggerService = $this->createMock(LoggerService::class);
         $metaTagsService = $this->createMock(MetaTagsService::class);
         $controller = new ArticleController();
+        $GLOBALS["urlgenerator"] = Mockery::mock(UrlGenerator::class);
+        $GLOBALS["urlgenerator"]->shouldReceive("generate")
+            ->andReturn("");
 
         // when
         $response = $controller->showAction(
