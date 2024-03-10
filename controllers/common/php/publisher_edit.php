@@ -1,13 +1,13 @@
 <?php
 
-global $request, $_SQL;
-$globalSite = LegacyCodeHelper::getGlobalSite();
-
 use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+
+global $request, $_SQL;
+$globalSite = LegacyCodeHelper::getGlobalSite();
 
 $pm = new PublisherManager();
 $cm = new CollectionManager();
