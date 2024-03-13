@@ -10,7 +10,7 @@ services:
       - '8088:80'
   db:
     platform: linux/x86_64
-    image: mysql:5.7
+    image: mysql:8.0
     container_name: biblys-mysql
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: yes
@@ -19,14 +19,14 @@ services:
       - '3306:3306'
     volumes:
       - ./data/db:/var/lib/mysql
-  db8:
+  db_legacy:
     platform: linux/x86_64
-    image: mysql:8.0
-    container_name: biblys-mysql-8
+    image: mysql:5.7
+    container_name: biblys-mysql-legacy
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: yes
       MYSQL_DATABASE: biblys
     ports:
-      - '3308:3306'
+      - '3357:3306'
     volumes:
-      - ./data/db8:/var/lib/mysql
+      - ./data/db_legacy:/var/lib/mysql
