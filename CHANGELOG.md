@@ -1,13 +1,13 @@
 # Historique des modifications
 
-### 2.78.1 (DEV)
+### 2.78.1 (13 mars 2024)
 
 Corrections
 
 - Les erreurs lors de la création d'un nouvelle collection n'étaient pas
   affichées. C'est corrigé.
 
-## 2.78.0 (6 mars 2022)
+## 2.78.0 (6 mars 2024)
 
 Améliorations
 
