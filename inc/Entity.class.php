@@ -210,7 +210,7 @@ class EntityManager
         global $_SQL;
 
         $this->db = $_SQL;
-        $this->site = LegacyCodeHelper::getGlobalSite();
+        $this->site = LegacyCodeHelper::getGlobalSite(true);
         $this->idField = $this->prefix.'_id';
     }
 
