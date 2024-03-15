@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.78.2 (DEV)
+
+Corrections
+
+- L'état des livres d'occasion n'apparaissaient plus sur la facture. C'est 
+  corrigé.
+
 ### 2.78.1 (13 mars 2024)
 
 Corrections
