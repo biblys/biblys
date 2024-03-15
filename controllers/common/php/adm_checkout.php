@@ -1,10 +1,13 @@
 <?php
 
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentSite;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
+/** @var CurrentSite $currentSite */
 
 $cm = new CartManager();
 $um = new AxysAccountManager();
@@ -285,10 +288,10 @@ elseif (isset($_GET['error'])) $alert = '<p class="error">'.$_GET['error'].'</p>
 elseif (isset($_GET['order_created'])) $alert = '<p class="success">La vente a été enregistrée sous le numéro '.$_GET['order_created'].'.</p>';
 else $alert = NULL;
 
-\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Caisse');
+LegacyCodeHelper::setGlobalPageTitle('Caisse');
 $content = '';
 
-if (LegacyCodeHelper::getGlobalSite()['site_tva'] === 'fr') {
+if ($currentSite->getSite()->getTva() === 'fr') {
     $content .= '
         <p class="alert alert-warning">
             <span class="fa fa-warning"></span>
@@ -299,7 +302,7 @@ if (LegacyCodeHelper::getGlobalSite()['site_tva'] === 'fr') {
 }
 
 $content .= '
-    <h1><span class="fa fa-money"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
+    <h1><span class="fa fa-money"></span> '. LegacyCodeHelper::getGlobalPageTitle().'</h1>
 
     '.$alert.'
 
