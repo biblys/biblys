@@ -1,205 +1,194 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /** @var CurrentSite $currentSite */
+/** @var CurrentUser $currentUser */
+/** @var Request $request */
 
-$cm = new CartManager();
-$um = new AxysAccountManager();
+/**
+ * @throws PropelException
+ */
+return function (
+    Request     $request,
+    CurrentUser $currentUser,
+    CurrentSite $currentSite
+): Response|JsonResponse|RedirectResponse {
+    $_SQL = LegacyCodeHelper::getGlobalDatabaseConnection();
 
-/* SELECTION DU PANIER COURANT */
+    $cm = new CartManager();
+    $um = new AxysAccountManager();
 
-// Si aucun panier n'est specifié, on recherche un panier magasin pour ce vendeur avec 0 livre, sinon on en créera un
+    $cartId = $request->query->get("cart_id");
+    if (!$cartId) {
+        $cartForCurrentSeller = $cm->get([
+            "cart_type" => "shop",
+            "cart_seller_id" => $currentUser->getAxysAccount()->getId(),
+            "cart_count" => 0
+        ]);
 
-$where = array('cart_type' => 'shop', 'cart_seller_id' => LegacyCodeHelper::getGlobalVisitor()->get('id'), 'cart_count' => 0);
+        if ($cartForCurrentSeller) {
+            return new RedirectResponse("/pages/adm_checkout?cart_id={$cartForCurrentSeller->get('id')}");
+        }
 
-// Si un panier en particulier est demandé
-if (isset($_GET['cart_id']))
-{
-    if ($getcart = $cm->get(array('cart_id' => $_GET['cart_id'])))
-    {
-        /** @var Cart $cart */
-        $cart = $getcart;
+        $newCartForCurrentSeller = $cm->create();
+        $newCartForCurrentSeller->set("cart_type", "shop");
+        $newCartForCurrentSeller->set("cart_seller_id", $currentUser->getAxysAccount()->getId());
+        $newCartForCurrentSeller = $cm->update($newCartForCurrentSeller);
+        return new RedirectResponse("/pages/adm_checkout?cart_id={$newCartForCurrentSeller->get('id')}");
     }
-    else // s'il existe pas
-    {
-        trigger_error('Panier '.$_GET['cart_id'].' introuvable');
+
+    /** @var Cart $cart */
+    $cart = $cm->get(array('cart_id' => $cartId));
+    if ($cart === null) {
+        throw new NotFoundHttpException("Panier $cartId introuvable");
     }
-}
 
-// S'il existe déjà un panier en cours avec 0 livres pour ce vendeur
-elseif ($getcart = $cm->get($where))
-{
-    $cart = $getcart;
-    return new RedirectResponse(sprintf("/pages/adm_checkout?cart_id=%s", $cart->get('id')));
-}
-
-// Aucun panier en cours, on en cree un nouveau
-else
-{
-    $cart = $cm->create();
-    $cart->set('cart_type', 'shop');
-    $cart->set('cart_seller_id', LegacyCodeHelper::getGlobalVisitor()["id"]);
-    $cart = $cm->update($cart);
-    return new RedirectResponse(sprintf("/pages/adm_checkout?cart_id=%s", $cart->get('id')));
-}
-
-/* ACTIONS */
+    /* ACTIONS */
 
 // Enregistrer la vente
-if (isset($_POST['validate']))
-{
+    if (isset($_POST['validate'])) {
 
-    try
-    {
-        /** @var PDO $_SQL */
-        $_SQL->beginTransaction();
+        try {
+            $_SQL->beginTransaction();
 
-        // Create new order
-        $_O = new OrderManager();
-        /** @var Order $order */
-        $order = $_O->create();
+            // Create new order
+            $_O = new OrderManager();
+            $order = $_O->create();
 
-        // Update order info
-        if (!empty($_POST['seller_id'])) $order->set('seller_id', $_POST['seller_id']);
-        if (!empty($_POST['customer_id'])) $order->set('customer_id', $_POST['customer_id']);
+            // Update order info
+            if (!empty($_POST['seller_id'])) $order->set('seller_id', $_POST['seller_id']);
+            if (!empty($_POST['customer_id'])) $order->set('customer_id', $_POST['customer_id']);
 
-        $order->set('order_type', 'shop');
-        $order->set('order_payment_cash', $_POST['cart_cash']);
-        $order->set('order_payment_cheque', $_POST['cart_cheque']);
-        $order->set('order_payment_card', $_POST['cart_card']);
-        $order->set('order_amount_tobepaid', $_POST['cart_topay']);
-        $order->set('order_payment_left', $_POST['cart_togive']);
-        $order->set('order_payment_date', date('Y-m-d H:i:s'));
+            $order->set('order_type', 'shop');
+            $order->set('order_payment_cash', $_POST['cart_cash']);
+            $order->set('order_payment_cheque', $_POST['cart_cheque']);
+            $order->set('order_payment_card', $_POST['cart_card']);
+            $order->set('order_amount_tobepaid', $_POST['cart_topay']);
+            $order->set('order_payment_left', $_POST['cart_togive']);
+            $order->set('order_payment_date', date('Y-m-d H:i:s'));
 
-        // Hydrate order from cart
-        $_O->hydrateFromCart($order, $cart);
+            // Hydrate order from cart
+            $_O->hydrateFromCart($order, $cart);
 
-        // Update order
-        $order = $_O->update($order);
+            // Update order
+            $order = $_O->update($order);
 
-        // Reset cart
-        $cm->vacuum($cart);
-        $cm->delete($cart);
+            // Reset cart
+            $cm->vacuum($cart);
+            $cm->delete($cart);
 
-        $_SQL->commit();
-    }
-    catch (Exception $e)
-    {
-        $_SQL->rollBack();
-        throw $e;
-    }
+            $_SQL->commit();
+        } catch (Exception $e) {
+            $_SQL->rollBack();
+            throw $e;
+        }
 
-    $r = array('created_order' => $order->get('order_id'));
-
-    /** @var Request $request */
-    if ($request->isXmlHttpRequest()) {
-        return new JsonResponse($r);
-    }
-}
-
-// Changer le nom du panier
-if (isset($_POST['set_title']))
-{
-    $cart->set('cart_title', $_POST['set_title']);
-    $cart = $cm->update($cart);
-    if ($cart->get('cart_title') == $_POST['set_title']) $params['success'] = "Le nom du panier a bien été modifié.";
-    else $params['error'] = "Le nom du panier n'a pas pu être modifié.";
-    if ($request->isXmlHttpRequest()) {
-        return new JsonResponse($params);
-    }
-}
-
-// Changer le client du panier
-elseif (isset($_POST['set_customer'])) {
-    $params = [];
-    try {
-        $cart->set('customer_id', $_POST['set_customer']);
-        $cm->update($cart);
-    } catch (Exception $e) {
-        $error = $e;
-    }
-
-    if (isset($error)) {
-        $params['error'] = $error;
-    } elseif ($cart->get('customer_id') == $_POST['set_customer']) {
-        $params['success'] = "Le client du panier a bien été modifié.";
-    }
-
-    if ($request->isXmlHttpRequest()) {
-        return new JsonResponse($params);
-    } else {
-        return new RedirectResponse(sprintf("/pages/adm_checkout?%s", http_build_query($params)));
-    }
-}
-
-$copyToRemoveId = (int) $request->query->get('remove_stock', false);
-
-// Ajouter au panier
-if (isset($_GET['add']) && isset($_GET['id']))
-{
-    // Ajouter un exemplaire
-    if ($_GET['add'] == 'stock')
-    {
-        $cm->addStock($cart, $_GET['id']);
-        $params['success'] = 'L\'exemplaire n&deg; '.$_GET['id'].' a été ajouté au panier.';
-        $cm->updateFromStock($cart);
+        $r = array('created_order' => $order->get('order_id'));
 
         if ($request->isXmlHttpRequest()) {
-            $stocks = $cm->getStock($cart);
-            foreach ($stocks as $stock) {
-                if ($stock->get('id') == $_GET['id']) {
-                    $params['line'] = $cart->getLine($stock);
-                }
-            }
+            return new JsonResponse($r);
+        }
+    }
+
+// Changer le nom du panier
+    if (isset($_POST['set_title'])) {
+        $cart->set('cart_title', $_POST['set_title']);
+        $cart = $cm->update($cart);
+        if ($cart->get('cart_title') == $_POST['set_title']) $params['success'] = "Le nom du panier a bien été modifié.";
+        else $params['error'] = "Le nom du panier n'a pas pu être modifié.";
+        if ($request->isXmlHttpRequest()) {
+            return new JsonResponse($params);
+        }
+    } // Changer le client du panier
+    elseif (isset($_POST['set_customer'])) {
+        $params = [];
+        try {
+            $cart->set('customer_id', $_POST['set_customer']);
+            $cm->update($cart);
+        } catch (Exception $e) {
+            $error = $e;
+        }
+
+        if (isset($error)) {
+            $params['error'] = $error;
+        } elseif ($cart->get('customer_id') == $_POST['set_customer']) {
+            $params['success'] = "Le client du panier a bien été modifié.";
+        }
+
+        if ($request->isXmlHttpRequest()) {
             return new JsonResponse($params);
         } else {
             return new RedirectResponse(sprintf("/pages/adm_checkout?%s", http_build_query($params)));
         }
     }
-}
 
-// Retirer du panier
-elseif ($copyToRemoveId)
-{
-    $sm = new StockManager();
-    $copy_to_remove = $sm->getById($copyToRemoveId);
-    if ($copy_to_remove) {
-        if ($cm->removeStock($cart, $copy_to_remove)) {
-            $params['success'] = 'L\'exemplaire n&deg; '.$copy_to_remove->get('id').' a été retiré du panier et remis en stock.';
+    $copyToRemoveId = (int)$request->query->get('remove_stock', false);
+
+// Ajouter au panier
+    if (isset($_GET['add']) && isset($_GET['id'])) {
+        // Ajouter un exemplaire
+        if ($_GET['add'] == 'stock') {
+            $cm->addStock($cart, $_GET['id']);
+            $params['success'] = 'L\'exemplaire n&deg; ' . $_GET['id'] . ' a été ajouté au panier.';
             $cm->updateFromStock($cart);
+
+            if ($request->isXmlHttpRequest()) {
+                $stocks = $cm->getStock($cart);
+                foreach ($stocks as $stock) {
+                    if ($stock->get('id') == $_GET['id']) {
+                        $params['line'] = $cart->getLine($stock);
+                    }
+                }
+                return new JsonResponse($params);
+            } else {
+                return new RedirectResponse(sprintf("/pages/adm_checkout?%s", http_build_query($params)));
+            }
         }
-    }
-    else $params['error'] = 'L\'exemplaire n&deg; '.$_GET['id'].' n\'a pas pu être supprimé du panier.';
-    if ($request->isXmlHttpRequest()) {
-        return new JsonResponse($params);
-    } else {
+    } // Retirer du panier
+    elseif ($copyToRemoveId) {
+        $sm = new StockManager();
+        /** @var Stock $copyToRemove */
+        $copyToRemove = $sm->getById($copyToRemoveId);
+        $params = [];
+        if ($copyToRemove) {
+            if ($cm->removeStock($cart, $copyToRemove)) {
+                $params['success'] = 'L\'exemplaire n&deg; ' . $copyToRemove->get('id') . ' a été retiré du panier et remis en stock.';
+                $cm->updateFromStock($cart);
+            }
+        } else {
+            $params['error'] = 'L\'exemplaire n&deg; ' . $_GET['id'] . ' n\'a pas pu être supprimé du panier.';
+        }
+        if ($request->isXmlHttpRequest()) {
+            return new JsonResponse($params);
+        } else {
+            return new RedirectResponse(sprintf("/pages/adm_checkout?%s", http_build_query($params)));
+        }
+    } // Vider le panier
+    elseif (isset($_GET['vacuum_cart'])) {
+
+        if ($cm->vacuum($cart)) {
+            $params['success'] = 'Le panier n&deg; ' . $cart->get('cart_id') . ' a été vidé !';
+        } else {
+            $params['error'] = 'Le panier n&deg; ' . $cart->get('cart_id') . ' n\'a pas pu être vidé.';
+        }
+
         return new RedirectResponse(sprintf("/pages/adm_checkout?%s", http_build_query($params)));
     }
-}
-
-// Vider le panier
-elseif (isset($_GET['vacuum_cart'])) {
-
-    if ($cm->vacuum($cart)) {
-        $params['success'] = 'Le panier n&deg; '.$cart->get('cart_id').' a été vidé !';
-    } else {
-        $params['error'] = 'Le panier n&deg; '.$cart->get('cart_id').' n\'a pas pu être vidé.';
-    }
-
-    return new RedirectResponse(sprintf("/pages/adm_checkout?%s", http_build_query($params)));
-}
 
 
-/* AUTRES */
+    /* AUTRES */
 
 // Client du panier en cours
-$customer_field = '
+    $customer_field = '
     <input type="text" name="customer" id="customer" placeholder="Rechercher un client..." class="event verylong">
     <input type="hidden" name="customer_id" id="customer_id" required>
     <span id="newsletter2" class="hidden">
@@ -208,103 +197,95 @@ $customer_field = '
     </span>
 ';
 
-if ($cart->has('customer_id'))
-{
-    $_CUSTOMERS = new CustomerManager();
+    if ($cart->has('customer_id')) {
+        $_CUSTOMERS = new CustomerManager();
 
-    if ($customer = $_CUSTOMERS->get(array('customer_id' => $cart->get('customer_id'))))
-    {
+        if ($customer = $_CUSTOMERS->get(array('customer_id' => $cart->get('customer_id')))) {
 
-        if ($customer->get('customer_newsletter') == 1) $newsletter_checked = ' checked';
-        else $newsletter_checked = NULL;
+            if ($customer->get('customer_newsletter') == 1) $newsletter_checked = ' checked';
+            else $newsletter_checked = NULL;
 
-        $customer_field = '
-            <input type="text" name="customer" id="customer" placeholder="Rechercher un client..." value="'.$customer->get('customer_last_name').', '.$customer->get('customer_first_name').' ('.$customer->get('customer_email').')'.'" readonly class="pointer event verylong">
-            <input type="hidden" name="customer_id" id="customer_id" value="'.$customer->get('customer_id').'" required>
+            $customer_field = '
+            <input type="text" name="customer" id="customer" placeholder="Rechercher un client..." value="' . $customer->get('customer_last_name') . ', ' . $customer->get('customer_first_name') . ' (' . $customer->get('customer_email') . ')' . '" readonly class="pointer event verylong">
+            <input type="hidden" name="customer_id" id="customer_id" value="' . $customer->get('customer_id') . '" required>
             <span id="newsletter">
-                <input type="checkbox" name="customer_mailing" id="customer_mailing" value="1" disabled="disabled" '.$newsletter_checked.'>
+                <input type="checkbox" name="customer_mailing" id="customer_mailing" value="1" disabled="disabled" ' . $newsletter_checked . '>
                 <label for="customer_mailing" class="after">Abonné à la newsletter</label>
             </span>
         ';
+        }
     }
-}
 
 // Current cart's seller
-$seller_field = null;
-if ($cart->has('seller_id'))
-{
-    if ($seller = $um->get(array('axys_account_id' => $cart->get('seller_id'))))
-    {
-        $seller_field = '
-            <input type="text" name="seller" id="seller" value="'.$seller->getUserName().'" class="long" required readonly>
-            <input type="hidden" name="seller_id" id="seller_id" value="'.$seller->get('axys_account_id').'" required>
+    $seller_field = null;
+    if ($cart->has('seller_id')) {
+        if ($seller = $um->get(array('axys_account_id' => $cart->get('seller_id')))) {
+            $seller_field = '
+            <input type="text" name="seller" id="seller" value="' . $seller->getUserName() . '" class="long" required readonly>
+            <input type="hidden" name="seller_id" id="seller_id" value="' . $seller->get('axys_account_id') . '" required>
         ';
-    }
-} else trigger_error('No seller id.');
+        }
+    } else trigger_error('No seller id.');
 
 // Livres du panier en cours
-$cart_content = NULL;
-$cart_count = 0;
-$cart_total = 0;
-$stock = $cm->getStock($cart);
-foreach ($stock as $s)
-{
-    $cart_content .= $cart->getLine($s);
-    $cart_count++;
-    $cart_total += $s->get('selling_price');
-}
+    $cart_content = NULL;
+    $cart_count = 0;
+    $cart_total = 0;
+    $stock = $cm->getStock($cart);
+    foreach ($stock as $s) {
+        $cart_content .= $cart->getLine($s);
+        $cart_count++;
+        $cart_total += $s->get('selling_price');
+    }
 
-$cm->updateFromStock($cart);
+    $cm->updateFromStock($cart);
 
 // Paniers sauvegardés & VPC
-$s_carts = $cm->getAll(array());
+    $s_carts = $cm->getAll();
 
-$shop_carts = NULL; $web_carts = NULL;
-foreach ($s_carts as $s)
-{
-    $s_cart = '
+    $shop_carts = NULL;
+    foreach ($s_carts as $s) {
+        $s_cart = '
         <tr>
-            <td><a href="/pages/adm_checkout?cart_id='.$s->get('cart_id').'">'.$s->get('cart_title').'</a></td>
-            <td>'.($s->hasSeller() ? $s->getSeller()->getUserName() : null).'</td>
-            <td>'.($s->has('customer') ? $s->get('customer')->get('first_name').' '.$s->get('customer')->get('last_name') : null).'</td>
-            <td class="right">'.$s->get('cart_count').'</td>
-            <td class="right">'.currency($s->get('cart_amount') / 100).'</td>
+            <td><a href="/pages/adm_checkout?cart_id=' . $s->get('cart_id') . '">' . $s->get('cart_title') . '</a></td>
+            <td>' . ($s->hasSeller() ? $s->getSeller()->getUserName() : null) . '</td>
+            <td>' . ($s->has('customer') ? $s->get('customer')->get('first_name') . ' ' . $s->get('customer')->get('last_name') : null) . '</td>
+            <td class="right">' . $s->get('cart_count') . '</td>
+            <td class="right">' . currency($s->get('cart_amount') / 100) . '</td>
             <td class="center">
-                <a href="/pages/adm_checkout?cart_id='.$s->get('cart_id').'&vacuum_cart=1" data-confirm="Voulez-vous vraiment VIDER ce panier et remettre '.$s->get('cart_count').' exemplaire'.s($s->get('cart_count')).' en vente ?" title="Vider le panier et remettre '.$s->get('cart_count').' exemplaire'.s($s->get('cart_count')).' en vente." class="btn btn-danger btn-xs">
+                <a href="/pages/adm_checkout?cart_id=' . $s->get('cart_id') . '&vacuum_cart=1" data-confirm="Voulez-vous vraiment VIDER ce panier et remettre ' . $s->get('cart_count') . ' exemplaire' . s($s->get('cart_count')) . ' en vente ?" title="Vider le panier et remettre ' . $s->get('cart_count') . ' exemplaire' . s($s->get('cart_count')) . ' en vente." class="btn btn-danger btn-xs">
                     <i class="fa fa-trash-o"></i>
                 </a>
             </td>
         </tr>
     ';
-    if ($s->get('cart_count') > 0)
-    {
-        if ($s->get('cart_type') == 'shop') $shop_carts .= $s_cart;
-        elseif ($s->has('client_id')) $web_carts .= $s_cart;
+        if ($s->get('cart_count') > 0) {
+            if ($s->get('cart_type') == 'shop') $shop_carts .= $s_cart;
+        }
     }
-}
 
-if (isset($_GET['success'])) $alert = '<p class="success">'.$_GET['success'].'</p>';
-elseif (isset($_GET['error'])) $alert = '<p class="error">'.$_GET['error'].'</p>';
-elseif (isset($_GET['order_created'])) $alert = '<p class="success">La vente a été enregistrée sous le numéro '.$_GET['order_created'].'.</p>';
-else $alert = NULL;
+    if (isset($_GET['success'])) $alert = '<p class="success">' . $_GET['success'] . '</p>';
+    elseif (isset($_GET['error'])) $alert = '<p class="error">' . $_GET['error'] . '</p>';
+    elseif (isset($_GET['order_created'])) $alert = '<p class="success">La vente a été enregistrée sous le numéro ' . $_GET['order_created'] . '.</p>';
+    else $alert = NULL;
 
-LegacyCodeHelper::setGlobalPageTitle('Caisse');
-$content = '';
+    $request->attributes->set('page_title', 'Caisse');
+    $content = '';
 
-if ($currentSite->getSite()->getTva() === 'fr') {
-    $content .= '
+    if ($currentSite->getSite()->getTva() === 'fr') {
+        $content .= '
         <p class="alert alert-warning">
             <span class="fa fa-warning"></span>
-            La caisse Biblys n\'est pas un logiciel de caisse certifié.<br/>
+            ' . "La caisse Biblys n'est pas un logiciel de caisse certifié.<br/>
             En tant que professionnel asujetti à la TVA, vous risquez en
-            l\'utilisant une amende de 7500 €.
+            l'utilisant une amende de 7500 €." . '
         </p>';
-}
+    }
 
-$content .= '
-    <h1><span class="fa fa-money"></span> '. LegacyCodeHelper::getGlobalPageTitle().'</h1>
+    $content .= '
+    <h1><span class="fa fa-money"></span> Caisse</h1>
 
-    '.$alert.'
+    ' . $alert . '
 
     <form id="createCustomer" hidden>
         <fieldset>
@@ -333,22 +314,22 @@ $content .= '
     </form>
 
     <h3>
-        <span id="cart_title" class="event pointer" contenteditable>'.$cart->get('cart_title').'</span>
+        <span id="cart_title" class="event pointer" contenteditable>' . $cart->get('cart_title') . '</span>
     </h3>
 
     <form>
         <fieldset>
 
-            <input type="hidden" id="cart_id" name="cart_id" value='.$cart->get('cart_id').'>
+            <input type="hidden" id="cart_id" name="cart_id" value=' . $cart->get('cart_id') . '>
 
             <p>
                 <label for="seller">Libraire :</label>
-                '.$seller_field.'
+                ' . $seller_field . '
             <p>
 
             <p>
                 <label for="customer">Client :</label>
-                '.$customer_field.'
+                ' . $customer_field . '
             </p>
 
         </fieldset>
@@ -369,12 +350,12 @@ $content .= '
         </thead>
         <tbody>
             <tr>
-                <td class="right" id="cart_total" data-value="'.$cart_total.'">'.currency($cart_total / 100).'</td>
+                <td class="right" id="cart_total" data-value="' . $cart_total . '">' . currency($cart_total / 100) . '</td>
                 <td class="center"><input id="cart_cash" class="cart_payment" type="number" step="0.01" min=0 max=999 style="text-align: right;"></td>
                 <td class="center"><input id="cart_cheque" class="cart_payment" type="number" step="0.01" min=0 max=999 style="text-align: right;"></td>
                 <td class="center"><input id="cart_card" class="cart_payment" type="number" step="0.01" min=0 max=999 style="text-align: right;"></td>
-                <td id="cart_topay" data-value='.$cart_total.' class="right">'.currency($cart_total / 100).'</td>
-                <td id="cart_togive" data-value=0 class="right">'.currency(0 / 100).'</td>
+                <td id="cart_topay" data-value=' . $cart_total . ' class="right">' . currency($cart_total / 100) . '</td>
+                <td id="cart_togive" data-value=0 class="right">' . currency(0 / 100) . '</td>
             </tr>
         </tbody>
     </table>
@@ -386,7 +367,7 @@ $content .= '
         </fieldset>
     </form>
 
-    <h3>Panier en cours (<span id="cart_count">'.$cart_count.'</span> article<span id="cart_count_s">'.s($cart_count).'</span>)</h3>
+    <h3>Panier en cours (<span id="cart_count">' . $cart_count . '</span> article<span id="cart_count_s">' . s($cart_count) . '</span>)</h3>
 
     <form id="checkout_add" class="event">
         <fieldset>
@@ -413,7 +394,7 @@ $content .= '
             </tr>
         </thead>
         <tbody>
-            '.$cart_content.'
+            ' . $cart_content . '
         </tbody>
     </table>
 
@@ -433,10 +414,11 @@ $content .= '
             </tr>
         </thead>
         <tbody>
-            '.$shop_carts.'
+            ' . $shop_carts . '
         </tbody>
     </table>
 
 ';
 
-return new Response($content);
+    return new Response($content);
+};
