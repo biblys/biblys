@@ -1,5 +1,6 @@
-<?php /** @noinspection PhpUnhandledExceptionInspection */
+<?php
 
+use Biblys\Exception\CannotAddStockItemToCartException;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -8,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /** @var CurrentSite $currentSite */
@@ -133,15 +135,19 @@ return function (
 
     $copyToRemoveId = (int)$request->query->get('remove_stock', false);
 
-// Ajouter au panier
-    if (isset($_GET['add']) && isset($_GET['id'])) {
-        // Ajouter un exemplaire
-        if ($_GET['add'] == 'stock') {
-            $cm->addStock($cart, $_GET['id']);
-            $params['success'] = 'L\'exemplaire n&deg; ' . $_GET['id'] . ' a été ajouté au panier.';
-            $cm->updateFromStock($cart);
+    $add = $request->query->get("add");
+    $stockItemToAddId = (int)$request->query->get("id");
+    if ($add && $stockItemToAddId) {
+        if ($add === "stock") {
+            try {
+                $cm->addStock($cart, $_GET["id"]);
+                $params["success"] = "L'exemplaire n&deg; $stockItemToAddId a été ajouté au panier.";
+                $cm->updateFromStock($cart);
+            } catch (CannotAddStockItemToCartException $exception) {
+                throw new BadRequestHttpException($exception->getMessage(), $exception);
+            }
 
-            if ($request->isXmlHttpRequest()) {
+            if (in_array("application/json", $request->getAcceptableContentTypes())) {
                 $stocks = $cm->getStock($cart);
                 foreach ($stocks as $stock) {
                     if ($stock->get('id') == $_GET['id']) {

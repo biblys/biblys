@@ -417,24 +417,26 @@ function reloadAdminEvents() {
   });
 
   // Ajouter un exemplaire au panier
-  function add_to_cart(cart_id, stock_id) {
-    $.get(
-      '/pages/adm_checkout?cart_id=' + cart_id + '&add=stock&id=' + stock_id + '&_=' + Date.now(),
-      {},
-      function(r) {
-        $('#checkout_add_input').removeClass('loading');
-        if (r.error) _alert('Erreur : ' + r.error);
-        else {
-          $('#checkout_add_results').html('');
-          $('#checkout_add_input').val('');
-          $('#checkout_cart tbody').prepend(r.line);
-          notify(r.success);
-          reloadAdminEvents();
-          update_cart();
-        }
-      },
-      'json'
-    );
+  async function add_to_cart(cartId, stockId) {
+    const response = await fetch(`/pages/adm_checkout?cart_id=${cartId}&add=stock&id=${stockId}&_=${Date.now()}`, {
+      headers: {
+        'Accept': 'application/json',
+      }
+    });
+    const json = await response.json();
+
+    $('#checkout_add_input').removeClass('loading');
+
+    if (json.error) {
+      window._alert(json.error);
+    }
+
+    $('#checkout_add_results').html('');
+    $('#checkout_add_input').val('');
+    $('#checkout_cart tbody').prepend(json.line);
+    notify(json.success);
+    reloadAdminEvents();
+    update_cart();
   }
 
   // Supprimer un article
