@@ -5,6 +5,7 @@
  * @backupStaticAttributes disabled
  */
 
+use Biblys\Exception\CannotAddStockItemToCartException;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
 use Propel\Runtime\Exception\PropelException;
@@ -161,6 +162,56 @@ class CartTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($shopStock->has('cart_date'));
 
         return $shopStock;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testAddToWebCartWhenItemIsAlreadyInShopCart()
+    {
+        // given
+        $cm = new CartManager();
+        $shopCart = $cm->create(['cart_type' => 'shop']);
+        $stockItem = EntityFactory::createStock([
+            'stock_selling_price' => 500,
+            'stock_weight' => 100,
+            'cart_id' => $shopCart->get('id'),
+        ]);
+        /** @var Cart $targetCart */
+        $targetCart = $cm->create(['cart_type' => 'web']);
+
+        // then
+        $this->expectException(CannotAddStockItemToCartException::class);
+        $this->expectExceptionMessage("Cet article est réservé en magasin.");
+
+        // when
+        $cm->addStock($targetCart, $stockItem);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testAddToShopCartWhenItemIsAlreadyInShopCart()
+    {
+        // given
+        $cm = new CartManager();
+        $shopCart = $cm->create(["cart_type" => "shop"]);
+        $stockItem = EntityFactory::createStock([
+            "stock_selling_price" => 500,
+            "stock_weight" => 100,
+            "cart_id" => $shopCart->get("id"),
+        ]);
+        /** @var Cart $targetCart */
+        $targetCart = $cm->create(["cart_type" => "shop"]);
+
+        // then
+        $this->expectException(CannotAddStockItemToCartException::class);
+        $this->expectExceptionMessage(
+            "Impossible d'ajouter l'article car il est déjà dans le panier caisse 'Panier n&deg; {$shopCart->get("id")}'."
+        );
+
+        // when
+        $cm->addStock($targetCart, $stockItem);
     }
 
     /**

@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Exception\CannotAddStockItemToCartException;
 use Biblys\Legacy\LegacyCodeHelper;
 use Entity\Exception\CartException;
 use Propel\Runtime\Exception\PropelException;
@@ -188,7 +189,7 @@ class Cart extends Entity
 
     /**
      * Returns true if cart contains at least one physical product
-     * @return boolean
+     * @return bool
      */
     public function needsShipping()
     {
@@ -300,10 +301,7 @@ class CartManager extends EntityManager
 
     /**
      * Ajouter un exemplaire au panier
-     * @param object $cart L'objet Cart du panier
-     * @param int $stock_id L'id de l'exemplaire à ajouter
-     * @param int $wish_id L'id du wish si offert (sinon, undefined)
-     * @param object $reward If added as a crowdfunding reward, the reward object
+     * @throws CannotAddStockItemToCartException
      */
     public function addStock(Cart $cart, $stock, $wish_id = 'undefined', CFReward $reward = null)
     {
@@ -319,15 +317,21 @@ class CartManager extends EntityManager
         }
 
         // If stock is already in another cart, remove from it first
-        if ($other_cart = $stock->get('cart')) {
+        if ($otherCart = $stock->get("cart")) {
 
             // If the other cart is a shop cart, throw error
-            if ($other_cart->get('type') == 'shop') {
-                throw new Exception('Cet article est réservé en magasin.');
+            if ($otherCart->get("type") === "shop") {
+                $errorMessage = "Cet article est réservé en magasin.";
+                if ($cart->get('type') === "shop") {
+                    $otherCartTitle = $otherCart->get('cart_title');
+                    $errorMessage = "Impossible d'ajouter l'article car il est déjà dans le panier caisse '$otherCartTitle'.";
+                }
+
+                throw new CannotAddStockItemToCartException($errorMessage);
             }
 
             // Else, remove it from the cart
-            $this->removeStock($other_cart, $stock);
+            $this->removeStock($otherCart, $stock);
         }
 
         // If stock is not available
@@ -592,7 +596,7 @@ class CartManager extends EntityManager
     /**
      * Update stock_count and stock_amount from stock
      * @param Cart $cart
-     * @return boolean true on success
+     * @return bool true on success
      */
     public function updateFromStock(Cart $cart)
     {
