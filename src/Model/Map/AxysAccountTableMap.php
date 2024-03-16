@@ -63,7 +63,7 @@ class AxysAccountTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 14;
+    public const NUM_COLUMNS = 17;
 
     /**
      * The number of lazy-loaded columns
@@ -73,7 +73,7 @@ class AxysAccountTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 14;
+    public const NUM_HYDRATE_COLUMNS = 17;
 
     /**
      * the column name for the axys_account_id field
@@ -136,6 +136,21 @@ class AxysAccountTableMap extends TableMap
     public const COL_AXYS_ACCOUNT_UPDATE = 'axys_accounts.axys_account_update';
 
     /**
+     * the column name for the email_verified_at field
+     */
+    public const COL_EMAIL_VERIFIED_AT = 'axys_accounts.email_verified_at';
+
+    /**
+     * the column name for the marked_for_email_verification_at field
+     */
+    public const COL_MARKED_FOR_EMAIL_VERIFICATION_AT = 'axys_accounts.marked_for_email_verification_at';
+
+    /**
+     * the column name for the warned_before_deletion_at field
+     */
+    public const COL_WARNED_BEFORE_DELETION_AT = 'axys_accounts.warned_before_deletion_at';
+
+    /**
      * the column name for the axys_account_created field
      */
     public const COL_AXYS_ACCOUNT_CREATED = 'axys_accounts.axys_account_created';
@@ -159,11 +174,11 @@ class AxysAccountTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'Email', 'Password', 'Key', 'EmailKey', 'Username', 'Slug', 'SignupDate', 'LoginDate', 'FirstName', 'LastName', 'Update', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'email', 'password', 'key', 'emailKey', 'username', 'slug', 'signupDate', 'loginDate', 'firstName', 'lastName', 'update', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, AxysAccountTableMap::COL_AXYS_ACCOUNT_EMAIL, AxysAccountTableMap::COL_AXYS_ACCOUNT_PASSWORD, AxysAccountTableMap::COL_AXYS_ACCOUNT_KEY, AxysAccountTableMap::COL_AXYS_ACCOUNT_EMAIL_KEY, AxysAccountTableMap::COL_AXYS_ACCOUNT_SCREEN_NAME, AxysAccountTableMap::COL_AXYS_ACCOUNT_SLUG, AxysAccountTableMap::COL_AXYS_ACCOUNT_SIGNUP_DATE, AxysAccountTableMap::COL_AXYS_ACCOUNT_LOGIN_DATE, AxysAccountTableMap::COL_AXYS_ACCOUNT_FIRST_NAME, AxysAccountTableMap::COL_AXYS_ACCOUNT_LAST_NAME, AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATE, AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED, AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['axys_account_id', 'axys_account_email', 'axys_account_password', 'axys_account_key', 'axys_account_email_key', 'axys_account_screen_name', 'axys_account_slug', 'axys_account_signup_date', 'axys_account_login_date', 'axys_account_first_name', 'axys_account_last_name', 'axys_account_update', 'axys_account_created', 'axys_account_updated', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
+        self::TYPE_PHPNAME       => ['Id', 'Email', 'Password', 'Key', 'EmailKey', 'Username', 'Slug', 'SignupDate', 'LoginDate', 'FirstName', 'LastName', 'Update', 'EmailVerifiedAt', 'MarkedForEmailVerificationAt', 'WarnedBeforeDeletionAt', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'email', 'password', 'key', 'emailKey', 'username', 'slug', 'signupDate', 'loginDate', 'firstName', 'lastName', 'update', 'emailVerifiedAt', 'markedForEmailVerificationAt', 'warnedBeforeDeletionAt', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [AxysAccountTableMap::COL_AXYS_ACCOUNT_ID, AxysAccountTableMap::COL_AXYS_ACCOUNT_EMAIL, AxysAccountTableMap::COL_AXYS_ACCOUNT_PASSWORD, AxysAccountTableMap::COL_AXYS_ACCOUNT_KEY, AxysAccountTableMap::COL_AXYS_ACCOUNT_EMAIL_KEY, AxysAccountTableMap::COL_AXYS_ACCOUNT_SCREEN_NAME, AxysAccountTableMap::COL_AXYS_ACCOUNT_SLUG, AxysAccountTableMap::COL_AXYS_ACCOUNT_SIGNUP_DATE, AxysAccountTableMap::COL_AXYS_ACCOUNT_LOGIN_DATE, AxysAccountTableMap::COL_AXYS_ACCOUNT_FIRST_NAME, AxysAccountTableMap::COL_AXYS_ACCOUNT_LAST_NAME, AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATE, AxysAccountTableMap::COL_EMAIL_VERIFIED_AT, AxysAccountTableMap::COL_MARKED_FOR_EMAIL_VERIFICATION_AT, AxysAccountTableMap::COL_WARNED_BEFORE_DELETION_AT, AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED, AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['axys_account_id', 'axys_account_email', 'axys_account_password', 'axys_account_key', 'axys_account_email_key', 'axys_account_screen_name', 'axys_account_slug', 'axys_account_signup_date', 'axys_account_login_date', 'axys_account_first_name', 'axys_account_last_name', 'axys_account_update', 'email_verified_at', 'marked_for_email_verification_at', 'warned_before_deletion_at', 'axys_account_created', 'axys_account_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, ]
     ];
 
     /**
@@ -175,11 +190,11 @@ class AxysAccountTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'Email' => 1, 'Password' => 2, 'Key' => 3, 'EmailKey' => 4, 'Username' => 5, 'Slug' => 6, 'SignupDate' => 7, 'LoginDate' => 8, 'FirstName' => 9, 'LastName' => 10, 'Update' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'email' => 1, 'password' => 2, 'key' => 3, 'emailKey' => 4, 'username' => 5, 'slug' => 6, 'signupDate' => 7, 'loginDate' => 8, 'firstName' => 9, 'lastName' => 10, 'update' => 11, 'createdAt' => 12, 'updatedAt' => 13, ],
-        self::TYPE_COLNAME       => [AxysAccountTableMap::COL_AXYS_ACCOUNT_ID => 0, AxysAccountTableMap::COL_AXYS_ACCOUNT_EMAIL => 1, AxysAccountTableMap::COL_AXYS_ACCOUNT_PASSWORD => 2, AxysAccountTableMap::COL_AXYS_ACCOUNT_KEY => 3, AxysAccountTableMap::COL_AXYS_ACCOUNT_EMAIL_KEY => 4, AxysAccountTableMap::COL_AXYS_ACCOUNT_SCREEN_NAME => 5, AxysAccountTableMap::COL_AXYS_ACCOUNT_SLUG => 6, AxysAccountTableMap::COL_AXYS_ACCOUNT_SIGNUP_DATE => 7, AxysAccountTableMap::COL_AXYS_ACCOUNT_LOGIN_DATE => 8, AxysAccountTableMap::COL_AXYS_ACCOUNT_FIRST_NAME => 9, AxysAccountTableMap::COL_AXYS_ACCOUNT_LAST_NAME => 10, AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATE => 11, AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED => 12, AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED => 13, ],
-        self::TYPE_FIELDNAME     => ['axys_account_id' => 0, 'axys_account_email' => 1, 'axys_account_password' => 2, 'axys_account_key' => 3, 'axys_account_email_key' => 4, 'axys_account_screen_name' => 5, 'axys_account_slug' => 6, 'axys_account_signup_date' => 7, 'axys_account_login_date' => 8, 'axys_account_first_name' => 9, 'axys_account_last_name' => 10, 'axys_account_update' => 11, 'axys_account_created' => 12, 'axys_account_updated' => 13, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'Email' => 1, 'Password' => 2, 'Key' => 3, 'EmailKey' => 4, 'Username' => 5, 'Slug' => 6, 'SignupDate' => 7, 'LoginDate' => 8, 'FirstName' => 9, 'LastName' => 10, 'Update' => 11, 'EmailVerifiedAt' => 12, 'MarkedForEmailVerificationAt' => 13, 'WarnedBeforeDeletionAt' => 14, 'CreatedAt' => 15, 'UpdatedAt' => 16, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'email' => 1, 'password' => 2, 'key' => 3, 'emailKey' => 4, 'username' => 5, 'slug' => 6, 'signupDate' => 7, 'loginDate' => 8, 'firstName' => 9, 'lastName' => 10, 'update' => 11, 'emailVerifiedAt' => 12, 'markedForEmailVerificationAt' => 13, 'warnedBeforeDeletionAt' => 14, 'createdAt' => 15, 'updatedAt' => 16, ],
+        self::TYPE_COLNAME       => [AxysAccountTableMap::COL_AXYS_ACCOUNT_ID => 0, AxysAccountTableMap::COL_AXYS_ACCOUNT_EMAIL => 1, AxysAccountTableMap::COL_AXYS_ACCOUNT_PASSWORD => 2, AxysAccountTableMap::COL_AXYS_ACCOUNT_KEY => 3, AxysAccountTableMap::COL_AXYS_ACCOUNT_EMAIL_KEY => 4, AxysAccountTableMap::COL_AXYS_ACCOUNT_SCREEN_NAME => 5, AxysAccountTableMap::COL_AXYS_ACCOUNT_SLUG => 6, AxysAccountTableMap::COL_AXYS_ACCOUNT_SIGNUP_DATE => 7, AxysAccountTableMap::COL_AXYS_ACCOUNT_LOGIN_DATE => 8, AxysAccountTableMap::COL_AXYS_ACCOUNT_FIRST_NAME => 9, AxysAccountTableMap::COL_AXYS_ACCOUNT_LAST_NAME => 10, AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATE => 11, AxysAccountTableMap::COL_EMAIL_VERIFIED_AT => 12, AxysAccountTableMap::COL_MARKED_FOR_EMAIL_VERIFICATION_AT => 13, AxysAccountTableMap::COL_WARNED_BEFORE_DELETION_AT => 14, AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED => 15, AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED => 16, ],
+        self::TYPE_FIELDNAME     => ['axys_account_id' => 0, 'axys_account_email' => 1, 'axys_account_password' => 2, 'axys_account_key' => 3, 'axys_account_email_key' => 4, 'axys_account_screen_name' => 5, 'axys_account_slug' => 6, 'axys_account_signup_date' => 7, 'axys_account_login_date' => 8, 'axys_account_first_name' => 9, 'axys_account_last_name' => 10, 'axys_account_update' => 11, 'email_verified_at' => 12, 'marked_for_email_verification_at' => 13, 'warned_before_deletion_at' => 14, 'axys_account_created' => 15, 'axys_account_updated' => 16, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, ]
     ];
 
     /**
@@ -284,6 +299,30 @@ class AxysAccountTableMap extends TableMap
         'COL_AXYS_ACCOUNT_UPDATE' => 'AXYS_ACCOUNT_UPDATE',
         'axys_account_update' => 'AXYS_ACCOUNT_UPDATE',
         'axys_accounts.axys_account_update' => 'AXYS_ACCOUNT_UPDATE',
+        'EmailVerifiedAt' => 'EMAIL_VERIFIED_AT',
+        'AxysAccount.EmailVerifiedAt' => 'EMAIL_VERIFIED_AT',
+        'emailVerifiedAt' => 'EMAIL_VERIFIED_AT',
+        'axysAccount.emailVerifiedAt' => 'EMAIL_VERIFIED_AT',
+        'AxysAccountTableMap::COL_EMAIL_VERIFIED_AT' => 'EMAIL_VERIFIED_AT',
+        'COL_EMAIL_VERIFIED_AT' => 'EMAIL_VERIFIED_AT',
+        'email_verified_at' => 'EMAIL_VERIFIED_AT',
+        'axys_accounts.email_verified_at' => 'EMAIL_VERIFIED_AT',
+        'MarkedForEmailVerificationAt' => 'MARKED_FOR_EMAIL_VERIFICATION_AT',
+        'AxysAccount.MarkedForEmailVerificationAt' => 'MARKED_FOR_EMAIL_VERIFICATION_AT',
+        'markedForEmailVerificationAt' => 'MARKED_FOR_EMAIL_VERIFICATION_AT',
+        'axysAccount.markedForEmailVerificationAt' => 'MARKED_FOR_EMAIL_VERIFICATION_AT',
+        'AxysAccountTableMap::COL_MARKED_FOR_EMAIL_VERIFICATION_AT' => 'MARKED_FOR_EMAIL_VERIFICATION_AT',
+        'COL_MARKED_FOR_EMAIL_VERIFICATION_AT' => 'MARKED_FOR_EMAIL_VERIFICATION_AT',
+        'marked_for_email_verification_at' => 'MARKED_FOR_EMAIL_VERIFICATION_AT',
+        'axys_accounts.marked_for_email_verification_at' => 'MARKED_FOR_EMAIL_VERIFICATION_AT',
+        'WarnedBeforeDeletionAt' => 'WARNED_BEFORE_DELETION_AT',
+        'AxysAccount.WarnedBeforeDeletionAt' => 'WARNED_BEFORE_DELETION_AT',
+        'warnedBeforeDeletionAt' => 'WARNED_BEFORE_DELETION_AT',
+        'axysAccount.warnedBeforeDeletionAt' => 'WARNED_BEFORE_DELETION_AT',
+        'AxysAccountTableMap::COL_WARNED_BEFORE_DELETION_AT' => 'WARNED_BEFORE_DELETION_AT',
+        'COL_WARNED_BEFORE_DELETION_AT' => 'WARNED_BEFORE_DELETION_AT',
+        'warned_before_deletion_at' => 'WARNED_BEFORE_DELETION_AT',
+        'axys_accounts.warned_before_deletion_at' => 'WARNED_BEFORE_DELETION_AT',
         'CreatedAt' => 'AXYS_ACCOUNT_CREATED',
         'AxysAccount.CreatedAt' => 'AXYS_ACCOUNT_CREATED',
         'createdAt' => 'AXYS_ACCOUNT_CREATED',
@@ -331,6 +370,9 @@ class AxysAccountTableMap extends TableMap
         $this->addColumn('axys_account_first_name', 'FirstName', 'LONGVARCHAR', false, null, null);
         $this->addColumn('axys_account_last_name', 'LastName', 'LONGVARCHAR', false, null, null);
         $this->addColumn('axys_account_update', 'Update', 'TIMESTAMP', false, null, null);
+        $this->addColumn('email_verified_at', 'EmailVerifiedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('marked_for_email_verification_at', 'MarkedForEmailVerificationAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('warned_before_deletion_at', 'WarnedBeforeDeletionAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('axys_account_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('axys_account_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     }
@@ -568,6 +610,9 @@ class AxysAccountTableMap extends TableMap
             $criteria->addSelectColumn(AxysAccountTableMap::COL_AXYS_ACCOUNT_FIRST_NAME);
             $criteria->addSelectColumn(AxysAccountTableMap::COL_AXYS_ACCOUNT_LAST_NAME);
             $criteria->addSelectColumn(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATE);
+            $criteria->addSelectColumn(AxysAccountTableMap::COL_EMAIL_VERIFIED_AT);
+            $criteria->addSelectColumn(AxysAccountTableMap::COL_MARKED_FOR_EMAIL_VERIFICATION_AT);
+            $criteria->addSelectColumn(AxysAccountTableMap::COL_WARNED_BEFORE_DELETION_AT);
             $criteria->addSelectColumn(AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED);
             $criteria->addSelectColumn(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED);
         } else {
@@ -583,6 +628,9 @@ class AxysAccountTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.axys_account_first_name');
             $criteria->addSelectColumn($alias . '.axys_account_last_name');
             $criteria->addSelectColumn($alias . '.axys_account_update');
+            $criteria->addSelectColumn($alias . '.email_verified_at');
+            $criteria->addSelectColumn($alias . '.marked_for_email_verification_at');
+            $criteria->addSelectColumn($alias . '.warned_before_deletion_at');
             $criteria->addSelectColumn($alias . '.axys_account_created');
             $criteria->addSelectColumn($alias . '.axys_account_updated');
         }
@@ -615,6 +663,9 @@ class AxysAccountTableMap extends TableMap
             $criteria->removeSelectColumn(AxysAccountTableMap::COL_AXYS_ACCOUNT_FIRST_NAME);
             $criteria->removeSelectColumn(AxysAccountTableMap::COL_AXYS_ACCOUNT_LAST_NAME);
             $criteria->removeSelectColumn(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATE);
+            $criteria->removeSelectColumn(AxysAccountTableMap::COL_EMAIL_VERIFIED_AT);
+            $criteria->removeSelectColumn(AxysAccountTableMap::COL_MARKED_FOR_EMAIL_VERIFICATION_AT);
+            $criteria->removeSelectColumn(AxysAccountTableMap::COL_WARNED_BEFORE_DELETION_AT);
             $criteria->removeSelectColumn(AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED);
             $criteria->removeSelectColumn(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATED);
         } else {
@@ -630,6 +681,9 @@ class AxysAccountTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.axys_account_first_name');
             $criteria->removeSelectColumn($alias . '.axys_account_last_name');
             $criteria->removeSelectColumn($alias . '.axys_account_update');
+            $criteria->removeSelectColumn($alias . '.email_verified_at');
+            $criteria->removeSelectColumn($alias . '.marked_for_email_verification_at');
+            $criteria->removeSelectColumn($alias . '.warned_before_deletion_at');
             $criteria->removeSelectColumn($alias . '.axys_account_created');
             $criteria->removeSelectColumn($alias . '.axys_account_updated');
         }

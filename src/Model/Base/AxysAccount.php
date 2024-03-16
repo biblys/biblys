@@ -184,6 +184,27 @@ abstract class AxysAccount implements ActiveRecordInterface
     protected $axys_account_update;
 
     /**
+     * The value for the email_verified_at field.
+     *
+     * @var        DateTime|null
+     */
+    protected $email_verified_at;
+
+    /**
+     * The value for the marked_for_email_verification_at field.
+     *
+     * @var        DateTime|null
+     */
+    protected $marked_for_email_verification_at;
+
+    /**
+     * The value for the warned_before_deletion_at field.
+     *
+     * @var        DateTime|null
+     */
+    protected $warned_before_deletion_at;
+
+    /**
      * The value for the axys_account_created field.
      *
      * @var        DateTime|null
@@ -717,6 +738,72 @@ abstract class AxysAccount implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [email_verified_at] column value.
+     *
+     *
+     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
+     *   If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00.
+     *
+     * @throws \Propel\Runtime\Exception\PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
+     */
+    public function getEmailVerifiedAt($format = null)
+    {
+        if ($format === null) {
+            return $this->email_verified_at;
+        } else {
+            return $this->email_verified_at instanceof \DateTimeInterface ? $this->email_verified_at->format($format) : null;
+        }
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [marked_for_email_verification_at] column value.
+     *
+     *
+     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
+     *   If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00.
+     *
+     * @throws \Propel\Runtime\Exception\PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
+     */
+    public function getMarkedForEmailVerificationAt($format = null)
+    {
+        if ($format === null) {
+            return $this->marked_for_email_verification_at;
+        } else {
+            return $this->marked_for_email_verification_at instanceof \DateTimeInterface ? $this->marked_for_email_verification_at->format($format) : null;
+        }
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [warned_before_deletion_at] column value.
+     *
+     *
+     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
+     *   If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00.
+     *
+     * @throws \Propel\Runtime\Exception\PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
+     */
+    public function getWarnedBeforeDeletionAt($format = null)
+    {
+        if ($format === null) {
+            return $this->warned_before_deletion_at;
+        } else {
+            return $this->warned_before_deletion_at instanceof \DateTimeInterface ? $this->warned_before_deletion_at->format($format) : null;
+        }
+    }
+
+    /**
      * Get the [optionally formatted] temporal [axys_account_created] column value.
      *
      *
@@ -1001,6 +1088,66 @@ abstract class AxysAccount implements ActiveRecordInterface
     }
 
     /**
+     * Sets the value of [email_verified_at] column to a normalized version of the date/time value specified.
+     *
+     * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this The current object (for fluent API support)
+     */
+    public function setEmailVerifiedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->email_verified_at !== null || $dt !== null) {
+            if ($this->email_verified_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->email_verified_at->format("Y-m-d H:i:s.u")) {
+                $this->email_verified_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[AxysAccountTableMap::COL_EMAIL_VERIFIED_AT] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    }
+
+    /**
+     * Sets the value of [marked_for_email_verification_at] column to a normalized version of the date/time value specified.
+     *
+     * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this The current object (for fluent API support)
+     */
+    public function setMarkedForEmailVerificationAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->marked_for_email_verification_at !== null || $dt !== null) {
+            if ($this->marked_for_email_verification_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->marked_for_email_verification_at->format("Y-m-d H:i:s.u")) {
+                $this->marked_for_email_verification_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[AxysAccountTableMap::COL_MARKED_FOR_EMAIL_VERIFICATION_AT] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    }
+
+    /**
+     * Sets the value of [warned_before_deletion_at] column to a normalized version of the date/time value specified.
+     *
+     * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this The current object (for fluent API support)
+     */
+    public function setWarnedBeforeDeletionAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->warned_before_deletion_at !== null || $dt !== null) {
+            if ($this->warned_before_deletion_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->warned_before_deletion_at->format("Y-m-d H:i:s.u")) {
+                $this->warned_before_deletion_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[AxysAccountTableMap::COL_WARNED_BEFORE_DELETION_AT] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    }
+
+    /**
      * Sets the value of [axys_account_created] column to a normalized version of the date/time value specified.
      *
      * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
@@ -1121,13 +1268,31 @@ abstract class AxysAccount implements ActiveRecordInterface
             }
             $this->axys_account_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : AxysAccountTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : AxysAccountTableMap::translateFieldName('EmailVerifiedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->email_verified_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : AxysAccountTableMap::translateFieldName('MarkedForEmailVerificationAt', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->marked_for_email_verification_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : AxysAccountTableMap::translateFieldName('WarnedBeforeDeletionAt', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->warned_before_deletion_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : AxysAccountTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->axys_account_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : AxysAccountTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : AxysAccountTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -1140,7 +1305,7 @@ abstract class AxysAccount implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 14; // 14 = AxysAccountTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 17; // 17 = AxysAccountTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\AxysAccount'), 0, $e);
@@ -1550,6 +1715,15 @@ abstract class AxysAccount implements ActiveRecordInterface
         if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATE)) {
             $modifiedColumns[':p' . $index++]  = 'axys_account_update';
         }
+        if ($this->isColumnModified(AxysAccountTableMap::COL_EMAIL_VERIFIED_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'email_verified_at';
+        }
+        if ($this->isColumnModified(AxysAccountTableMap::COL_MARKED_FOR_EMAIL_VERIFICATION_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'marked_for_email_verification_at';
+        }
+        if ($this->isColumnModified(AxysAccountTableMap::COL_WARNED_BEFORE_DELETION_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'warned_before_deletion_at';
+        }
         if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED)) {
             $modifiedColumns[':p' . $index++]  = 'axys_account_created';
         }
@@ -1613,6 +1787,18 @@ abstract class AxysAccount implements ActiveRecordInterface
                         break;
                     case 'axys_account_update':
                         $stmt->bindValue($identifier, $this->axys_account_update ? $this->axys_account_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
+                        break;
+                    case 'email_verified_at':
+                        $stmt->bindValue($identifier, $this->email_verified_at ? $this->email_verified_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
+                        break;
+                    case 'marked_for_email_verification_at':
+                        $stmt->bindValue($identifier, $this->marked_for_email_verification_at ? $this->marked_for_email_verification_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
+                        break;
+                    case 'warned_before_deletion_at':
+                        $stmt->bindValue($identifier, $this->warned_before_deletion_at ? $this->warned_before_deletion_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
 
                         break;
                     case 'axys_account_created':
@@ -1722,9 +1908,18 @@ abstract class AxysAccount implements ActiveRecordInterface
                 return $this->getUpdate();
 
             case 12:
-                return $this->getCreatedAt();
+                return $this->getEmailVerifiedAt();
 
             case 13:
+                return $this->getMarkedForEmailVerificationAt();
+
+            case 14:
+                return $this->getWarnedBeforeDeletionAt();
+
+            case 15:
+                return $this->getCreatedAt();
+
+            case 16:
                 return $this->getUpdatedAt();
 
             default:
@@ -1767,8 +1962,11 @@ abstract class AxysAccount implements ActiveRecordInterface
             $keys[9] => $this->getFirstName(),
             $keys[10] => $this->getLastName(),
             $keys[11] => $this->getUpdate(),
-            $keys[12] => $this->getCreatedAt(),
-            $keys[13] => $this->getUpdatedAt(),
+            $keys[12] => $this->getEmailVerifiedAt(),
+            $keys[13] => $this->getMarkedForEmailVerificationAt(),
+            $keys[14] => $this->getWarnedBeforeDeletionAt(),
+            $keys[15] => $this->getCreatedAt(),
+            $keys[16] => $this->getUpdatedAt(),
         ];
         if ($result[$keys[7]] instanceof \DateTimeInterface) {
             $result[$keys[7]] = $result[$keys[7]]->format('Y-m-d H:i:s.u');
@@ -1788,6 +1986,18 @@ abstract class AxysAccount implements ActiveRecordInterface
 
         if ($result[$keys[13]] instanceof \DateTimeInterface) {
             $result[$keys[13]] = $result[$keys[13]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[14]] instanceof \DateTimeInterface) {
+            $result[$keys[14]] = $result[$keys[14]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[15]] instanceof \DateTimeInterface) {
+            $result[$keys[15]] = $result[$keys[15]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[16]] instanceof \DateTimeInterface) {
+            $result[$keys[16]] = $result[$keys[16]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1989,9 +2199,18 @@ abstract class AxysAccount implements ActiveRecordInterface
                 $this->setUpdate($value);
                 break;
             case 12:
-                $this->setCreatedAt($value);
+                $this->setEmailVerifiedAt($value);
                 break;
             case 13:
+                $this->setMarkedForEmailVerificationAt($value);
+                break;
+            case 14:
+                $this->setWarnedBeforeDeletionAt($value);
+                break;
+            case 15:
+                $this->setCreatedAt($value);
+                break;
+            case 16:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -2057,10 +2276,19 @@ abstract class AxysAccount implements ActiveRecordInterface
             $this->setUpdate($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setCreatedAt($arr[$keys[12]]);
+            $this->setEmailVerifiedAt($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
-            $this->setUpdatedAt($arr[$keys[13]]);
+            $this->setMarkedForEmailVerificationAt($arr[$keys[13]]);
+        }
+        if (array_key_exists($keys[14], $arr)) {
+            $this->setWarnedBeforeDeletionAt($arr[$keys[14]]);
+        }
+        if (array_key_exists($keys[15], $arr)) {
+            $this->setCreatedAt($arr[$keys[15]]);
+        }
+        if (array_key_exists($keys[16], $arr)) {
+            $this->setUpdatedAt($arr[$keys[16]]);
         }
 
         return $this;
@@ -2140,6 +2368,15 @@ abstract class AxysAccount implements ActiveRecordInterface
         }
         if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATE)) {
             $criteria->add(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATE, $this->axys_account_update);
+        }
+        if ($this->isColumnModified(AxysAccountTableMap::COL_EMAIL_VERIFIED_AT)) {
+            $criteria->add(AxysAccountTableMap::COL_EMAIL_VERIFIED_AT, $this->email_verified_at);
+        }
+        if ($this->isColumnModified(AxysAccountTableMap::COL_MARKED_FOR_EMAIL_VERIFICATION_AT)) {
+            $criteria->add(AxysAccountTableMap::COL_MARKED_FOR_EMAIL_VERIFICATION_AT, $this->marked_for_email_verification_at);
+        }
+        if ($this->isColumnModified(AxysAccountTableMap::COL_WARNED_BEFORE_DELETION_AT)) {
+            $criteria->add(AxysAccountTableMap::COL_WARNED_BEFORE_DELETION_AT, $this->warned_before_deletion_at);
         }
         if ($this->isColumnModified(AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED)) {
             $criteria->add(AxysAccountTableMap::COL_AXYS_ACCOUNT_CREATED, $this->axys_account_created);
@@ -2246,6 +2483,9 @@ abstract class AxysAccount implements ActiveRecordInterface
         $copyObj->setFirstName($this->getFirstName());
         $copyObj->setLastName($this->getLastName());
         $copyObj->setUpdate($this->getUpdate());
+        $copyObj->setEmailVerifiedAt($this->getEmailVerifiedAt());
+        $copyObj->setMarkedForEmailVerificationAt($this->getMarkedForEmailVerificationAt());
+        $copyObj->setWarnedBeforeDeletionAt($this->getWarnedBeforeDeletionAt());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
 
@@ -4544,6 +4784,9 @@ abstract class AxysAccount implements ActiveRecordInterface
         $this->axys_account_first_name = null;
         $this->axys_account_last_name = null;
         $this->axys_account_update = null;
+        $this->email_verified_at = null;
+        $this->marked_for_email_verification_at = null;
+        $this->warned_before_deletion_at = null;
         $this->axys_account_created = null;
         $this->axys_account_updated = null;
         $this->alreadyInSave = false;

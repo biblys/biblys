@@ -31,6 +31,9 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAxysAccountQuery orderByFirstName($order = Criteria::ASC) Order by the axys_account_first_name column
  * @method     ChildAxysAccountQuery orderByLastName($order = Criteria::ASC) Order by the axys_account_last_name column
  * @method     ChildAxysAccountQuery orderByUpdate($order = Criteria::ASC) Order by the axys_account_update column
+ * @method     ChildAxysAccountQuery orderByEmailVerifiedAt($order = Criteria::ASC) Order by the email_verified_at column
+ * @method     ChildAxysAccountQuery orderByMarkedForEmailVerificationAt($order = Criteria::ASC) Order by the marked_for_email_verification_at column
+ * @method     ChildAxysAccountQuery orderByWarnedBeforeDeletionAt($order = Criteria::ASC) Order by the warned_before_deletion_at column
  * @method     ChildAxysAccountQuery orderByCreatedAt($order = Criteria::ASC) Order by the axys_account_created column
  * @method     ChildAxysAccountQuery orderByUpdatedAt($order = Criteria::ASC) Order by the axys_account_updated column
  *
@@ -46,6 +49,9 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAxysAccountQuery groupByFirstName() Group by the axys_account_first_name column
  * @method     ChildAxysAccountQuery groupByLastName() Group by the axys_account_last_name column
  * @method     ChildAxysAccountQuery groupByUpdate() Group by the axys_account_update column
+ * @method     ChildAxysAccountQuery groupByEmailVerifiedAt() Group by the email_verified_at column
+ * @method     ChildAxysAccountQuery groupByMarkedForEmailVerificationAt() Group by the marked_for_email_verification_at column
+ * @method     ChildAxysAccountQuery groupByWarnedBeforeDeletionAt() Group by the warned_before_deletion_at column
  * @method     ChildAxysAccountQuery groupByCreatedAt() Group by the axys_account_created column
  * @method     ChildAxysAccountQuery groupByUpdatedAt() Group by the axys_account_updated column
  *
@@ -154,6 +160,9 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAxysAccount|null findOneByFirstName(string $axys_account_first_name) Return the first ChildAxysAccount filtered by the axys_account_first_name column
  * @method     ChildAxysAccount|null findOneByLastName(string $axys_account_last_name) Return the first ChildAxysAccount filtered by the axys_account_last_name column
  * @method     ChildAxysAccount|null findOneByUpdate(string $axys_account_update) Return the first ChildAxysAccount filtered by the axys_account_update column
+ * @method     ChildAxysAccount|null findOneByEmailVerifiedAt(string $email_verified_at) Return the first ChildAxysAccount filtered by the email_verified_at column
+ * @method     ChildAxysAccount|null findOneByMarkedForEmailVerificationAt(string $marked_for_email_verification_at) Return the first ChildAxysAccount filtered by the marked_for_email_verification_at column
+ * @method     ChildAxysAccount|null findOneByWarnedBeforeDeletionAt(string $warned_before_deletion_at) Return the first ChildAxysAccount filtered by the warned_before_deletion_at column
  * @method     ChildAxysAccount|null findOneByCreatedAt(string $axys_account_created) Return the first ChildAxysAccount filtered by the axys_account_created column
  * @method     ChildAxysAccount|null findOneByUpdatedAt(string $axys_account_updated) Return the first ChildAxysAccount filtered by the axys_account_updated column
  *
@@ -172,6 +181,9 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAxysAccount requireOneByFirstName(string $axys_account_first_name) Return the first ChildAxysAccount filtered by the axys_account_first_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysAccount requireOneByLastName(string $axys_account_last_name) Return the first ChildAxysAccount filtered by the axys_account_last_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysAccount requireOneByUpdate(string $axys_account_update) Return the first ChildAxysAccount filtered by the axys_account_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysAccount requireOneByEmailVerifiedAt(string $email_verified_at) Return the first ChildAxysAccount filtered by the email_verified_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysAccount requireOneByMarkedForEmailVerificationAt(string $marked_for_email_verification_at) Return the first ChildAxysAccount filtered by the marked_for_email_verification_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysAccount requireOneByWarnedBeforeDeletionAt(string $warned_before_deletion_at) Return the first ChildAxysAccount filtered by the warned_before_deletion_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysAccount requireOneByCreatedAt(string $axys_account_created) Return the first ChildAxysAccount filtered by the axys_account_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysAccount requireOneByUpdatedAt(string $axys_account_updated) Return the first ChildAxysAccount filtered by the axys_account_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -202,6 +214,12 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildAxysAccount> findByLastName(string|array<string> $axys_account_last_name) Return ChildAxysAccount objects filtered by the axys_account_last_name column
  * @method     ChildAxysAccount[]|Collection findByUpdate(string|array<string> $axys_account_update) Return ChildAxysAccount objects filtered by the axys_account_update column
  * @psalm-method Collection&\Traversable<ChildAxysAccount> findByUpdate(string|array<string> $axys_account_update) Return ChildAxysAccount objects filtered by the axys_account_update column
+ * @method     ChildAxysAccount[]|Collection findByEmailVerifiedAt(string|array<string> $email_verified_at) Return ChildAxysAccount objects filtered by the email_verified_at column
+ * @psalm-method Collection&\Traversable<ChildAxysAccount> findByEmailVerifiedAt(string|array<string> $email_verified_at) Return ChildAxysAccount objects filtered by the email_verified_at column
+ * @method     ChildAxysAccount[]|Collection findByMarkedForEmailVerificationAt(string|array<string> $marked_for_email_verification_at) Return ChildAxysAccount objects filtered by the marked_for_email_verification_at column
+ * @psalm-method Collection&\Traversable<ChildAxysAccount> findByMarkedForEmailVerificationAt(string|array<string> $marked_for_email_verification_at) Return ChildAxysAccount objects filtered by the marked_for_email_verification_at column
+ * @method     ChildAxysAccount[]|Collection findByWarnedBeforeDeletionAt(string|array<string> $warned_before_deletion_at) Return ChildAxysAccount objects filtered by the warned_before_deletion_at column
+ * @psalm-method Collection&\Traversable<ChildAxysAccount> findByWarnedBeforeDeletionAt(string|array<string> $warned_before_deletion_at) Return ChildAxysAccount objects filtered by the warned_before_deletion_at column
  * @method     ChildAxysAccount[]|Collection findByCreatedAt(string|array<string> $axys_account_created) Return ChildAxysAccount objects filtered by the axys_account_created column
  * @psalm-method Collection&\Traversable<ChildAxysAccount> findByCreatedAt(string|array<string> $axys_account_created) Return ChildAxysAccount objects filtered by the axys_account_created column
  * @method     ChildAxysAccount[]|Collection findByUpdatedAt(string|array<string> $axys_account_updated) Return ChildAxysAccount objects filtered by the axys_account_updated column
@@ -305,7 +323,7 @@ abstract class AxysAccountQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT axys_account_id, axys_account_email, axys_account_password, axys_account_key, axys_account_email_key, axys_account_screen_name, axys_account_slug, axys_account_signup_date, axys_account_login_date, axys_account_first_name, axys_account_last_name, axys_account_update, axys_account_created, axys_account_updated FROM axys_accounts WHERE axys_account_id = :p0';
+        $sql = 'SELECT axys_account_id, axys_account_email, axys_account_password, axys_account_key, axys_account_email_key, axys_account_screen_name, axys_account_slug, axys_account_signup_date, axys_account_login_date, axys_account_first_name, axys_account_last_name, axys_account_update, email_verified_at, marked_for_email_verification_at, warned_before_deletion_at, axys_account_created, axys_account_updated FROM axys_accounts WHERE axys_account_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -797,6 +815,141 @@ abstract class AxysAccountQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(AxysAccountTableMap::COL_AXYS_ACCOUNT_UPDATE, $update, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the email_verified_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByEmailVerifiedAt('2011-03-14'); // WHERE email_verified_at = '2011-03-14'
+     * $query->filterByEmailVerifiedAt('now'); // WHERE email_verified_at = '2011-03-14'
+     * $query->filterByEmailVerifiedAt(array('max' => 'yesterday')); // WHERE email_verified_at > '2011-03-13'
+     * </code>
+     *
+     * @param mixed $emailVerifiedAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByEmailVerifiedAt($emailVerifiedAt = null, ?string $comparison = null)
+    {
+        if (is_array($emailVerifiedAt)) {
+            $useMinMax = false;
+            if (isset($emailVerifiedAt['min'])) {
+                $this->addUsingAlias(AxysAccountTableMap::COL_EMAIL_VERIFIED_AT, $emailVerifiedAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($emailVerifiedAt['max'])) {
+                $this->addUsingAlias(AxysAccountTableMap::COL_EMAIL_VERIFIED_AT, $emailVerifiedAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(AxysAccountTableMap::COL_EMAIL_VERIFIED_AT, $emailVerifiedAt, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the marked_for_email_verification_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMarkedForEmailVerificationAt('2011-03-14'); // WHERE marked_for_email_verification_at = '2011-03-14'
+     * $query->filterByMarkedForEmailVerificationAt('now'); // WHERE marked_for_email_verification_at = '2011-03-14'
+     * $query->filterByMarkedForEmailVerificationAt(array('max' => 'yesterday')); // WHERE marked_for_email_verification_at > '2011-03-13'
+     * </code>
+     *
+     * @param mixed $markedForEmailVerificationAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByMarkedForEmailVerificationAt($markedForEmailVerificationAt = null, ?string $comparison = null)
+    {
+        if (is_array($markedForEmailVerificationAt)) {
+            $useMinMax = false;
+            if (isset($markedForEmailVerificationAt['min'])) {
+                $this->addUsingAlias(AxysAccountTableMap::COL_MARKED_FOR_EMAIL_VERIFICATION_AT, $markedForEmailVerificationAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($markedForEmailVerificationAt['max'])) {
+                $this->addUsingAlias(AxysAccountTableMap::COL_MARKED_FOR_EMAIL_VERIFICATION_AT, $markedForEmailVerificationAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(AxysAccountTableMap::COL_MARKED_FOR_EMAIL_VERIFICATION_AT, $markedForEmailVerificationAt, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the warned_before_deletion_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByWarnedBeforeDeletionAt('2011-03-14'); // WHERE warned_before_deletion_at = '2011-03-14'
+     * $query->filterByWarnedBeforeDeletionAt('now'); // WHERE warned_before_deletion_at = '2011-03-14'
+     * $query->filterByWarnedBeforeDeletionAt(array('max' => 'yesterday')); // WHERE warned_before_deletion_at > '2011-03-13'
+     * </code>
+     *
+     * @param mixed $warnedBeforeDeletionAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByWarnedBeforeDeletionAt($warnedBeforeDeletionAt = null, ?string $comparison = null)
+    {
+        if (is_array($warnedBeforeDeletionAt)) {
+            $useMinMax = false;
+            if (isset($warnedBeforeDeletionAt['min'])) {
+                $this->addUsingAlias(AxysAccountTableMap::COL_WARNED_BEFORE_DELETION_AT, $warnedBeforeDeletionAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($warnedBeforeDeletionAt['max'])) {
+                $this->addUsingAlias(AxysAccountTableMap::COL_WARNED_BEFORE_DELETION_AT, $warnedBeforeDeletionAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(AxysAccountTableMap::COL_WARNED_BEFORE_DELETION_AT, $warnedBeforeDeletionAt, $comparison);
 
         return $this;
     }

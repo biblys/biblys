@@ -171,6 +171,9 @@
     <column name="axys_account_first_name" phpName="FirstName" type="LONGVARCHAR"/>
     <column name="axys_account_last_name" phpName="LastName" type="LONGVARCHAR"/>
     <column name="axys_account_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="email_verified_at" phpName="EmailVerifiedAt" type="TIMESTAMP"/>
+    <column name="marked_for_email_verification_at" phpName="MarkedForEmailVerificationAt" type="TIMESTAMP"/>
+    <column name="warned_before_deletion_at" phpName="WarnedBeforeDeletionAt" type="TIMESTAMP"/>
     <column name="axys_account_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="axys_account_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
