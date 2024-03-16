@@ -50,7 +50,7 @@ return function (
 
     /** @var Cart $cart */
     $cart = $cm->get(array('cart_id' => $cartId));
-    if ($cart === null) {
+    if (!$cart) {
         throw new NotFoundHttpException("Panier $cartId introuvable");
     }
 
