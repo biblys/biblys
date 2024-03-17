@@ -280,12 +280,31 @@ return function (
 
     if ($currentSite->getSite()->getTva() === 'fr') {
         $content .= '
-        <p class="alert alert-warning">
-            <span class="fa fa-warning"></span>
-            ' . "La caisse Biblys n'est pas un logiciel de caisse certifié.<br/>
-            En tant que professionnel asujetti à la TVA, vous risquez en
-            l'utilisant une amende de 7500 €." . '
-        </p>';
+        <div class="alert alert-warning">
+            <p>
+            
+                <span class="fa fa-warning"></span>
+                ' . "<strong>La caisse Biblys n'est pas un logiciel de caisse certifié.</strong><br/>
+            </p>
+            <p>
+                <em><small>
+                    Le fait, pour une personne assujettie à la taxe sur la valeur ajoutée, de ne pas 
+                    justifier, par la production de l'attestation ou du certificat prévus au 3° bis 
+                    du I de l'article 286, que le ou les logiciels ou systèmes de caisse qu'elle 
+                    détient satisfont aux conditions d'inaltérabilité, de sécurisation, de conservation 
+                    et d'archivage des données prévues par ces mêmes dispositions 
+                    <strong>est sanctionné par une amende de 7 500 € par logiciel ou système de 
+                    caisse concerné</strong>.
+                    (<a href='https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037100434/2018-06-23'>Article 1770 du Code général des impôts</a>)
+                </small></em>
+            </p>
+            ".'
+            <p>
+                <a class="btn btn-warning" href="https://www.economie.gouv.fr/entreprises/professionnels-logiciels-caisse">
+                    En savoir plus
+                </a>
+            </p>
+        </div>';
     }
 
     $content .= '
