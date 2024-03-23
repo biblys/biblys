@@ -56,7 +56,7 @@
     "egulias/email-validator": "^4.0",
     "symfony/mime": "^6.0",
     "rollbar/rollbar": "~4.0",
-    "propel/propel": "2.0.0-beta3",
+    "propel/propel": "~2.0.0-beta4",
     "ircmaxell/random-lib": "^1.2",
     "symfony/filesystem": "^6.0",
     "league/csv": "^9.7",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3fb5fa4eaeae20dca2b3843ddd91499c",
+    "content-hash": "d8f12b8595b04d6c11baecd3162376ed",
     "packages": [
         {
             "name": "biblys/eurotax",
@@ -2501,28 +2501,28 @@
         },
         {
             "name": "propel/propel",
-            "version": "2.0.0-beta3",
+            "version": "2.0.0-beta4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/propelorm/Propel2.git",
-                "reference": "011aaa77d09fd5357f17b60fa3c5ba488c1690ae"
+                "reference": "f4889ff200d6f5c2c660eac7f0e20bd8b6966fb4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/propelorm/Propel2/zipball/011aaa77d09fd5357f17b60fa3c5ba488c1690ae",
-                "reference": "011aaa77d09fd5357f17b60fa3c5ba488c1690ae",
+                "url": "https://api.github.com/repos/propelorm/Propel2/zipball/f4889ff200d6f5c2c660eac7f0e20bd8b6966fb4",
+                "reference": "f4889ff200d6f5c2c660eac7f0e20bd8b6966fb4",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.4",
                 "psr/log": "^1.0 || ^2.0 || ^3.0",
-                "symfony/config": "^4.4.0 || ^5.0.0 || ^6.0.0",
-                "symfony/console": "^4.4.0 || ^5.0.0 || ^6.0.0",
-                "symfony/filesystem": "^4.4.0 || ^5.0.0 || ^6.0.0",
-                "symfony/finder": "^4.4.0 || ^5.0.0 || ^6.0.0",
-                "symfony/translation": "^4.4.0 || ^5.0.0 || ^6.0.0",
-                "symfony/validator": "^4.4.0 || ^5.0.0 || ^6.0.0",
-                "symfony/yaml": "^4.4.0 || ^5.0.0 || ^6.0.0"
+                "symfony/config": "^4.4.0 || ^5.0.0 || ^6.0.0 || ^7.0.0",
+                "symfony/console": "^4.4.0 || ^5.0.0 || ^6.0.0 || ^7.0.0",
+                "symfony/filesystem": "^4.4.0 || ^5.0.0 || ^6.0.0 || ^7.0.0",
+                "symfony/finder": "^4.4.0 || ^5.0.0 || ^6.0.0 || ^7.0.0",
+                "symfony/translation": "^4.4.0 || ^5.0.0 || ^6.0.0 || ^7.0.0",
+                "symfony/validator": "^4.4.0 || ^5.0.0 || ^6.0.0 || ^7.0.0",
+                "symfony/yaml": "^4.4.0 || ^5.0.0 || ^6.0.0 || ^7.0.0"
             },
             "require-dev": {
                 "ext-json": "*",
@@ -2571,9 +2571,9 @@
             ],
             "support": {
                 "issues": "https://github.com/propelorm/Propel2/issues",
-                "source": "https://github.com/propelorm/Propel2/tree/2.0.0-beta3"
+                "source": "https://github.com/propelorm/Propel2/tree/2.0.0-beta4"
             },
-            "time": "2023-01-25T14:47:29+00:00"
+            "time": "2024-03-23T13:31:50+00:00"
         },
         {
             "name": "psr/clock",
