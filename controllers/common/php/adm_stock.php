@@ -762,7 +762,6 @@ if ($article) {
                     value="'.$s["stock_stockage"].'" 
                     class="short"
                     maxlength="16" 
-                    required 
                 />
                 <br /><br />
 
@@ -804,7 +803,7 @@ if ($article) {
 
                 <br />
                 <label for="stock_purchase_price" class="required">Prix d\'achat :</label>
-                <input type="number" name="stock_purchase_price" id="stock_purchase_price" maxlength="5" value="' . $s['stock_purchase_price'] . '" class="mini required" required /> centimes
+                <input type="number" name="stock_purchase_price" id="stock_purchase_price" maxlength="5" value="' . $s['stock_purchase_price'] . '" class="mini" /> centimes
                 <br />
                 <label for="stock_selling_price_saved">Prix sauvegardé :</label>
                 <input type="number" name="stock_selling_price_saved" id="stock_selling_price_saved" maxlength="5" value="' . $s['stock_selling_price_saved'] . '" class="mini" /> centimes
