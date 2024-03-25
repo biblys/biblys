@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.78.3 (25 mars 2024)
+
+Corrections
+
+- Une erreur pouvait survenir sur la page d'ajout d'exemplaire si une alerte 
+  était associé à un utilisateur supprimé. C'est corrigé.
+
 ### 2.78.2 (20 mars 2024)
 
 Corrections

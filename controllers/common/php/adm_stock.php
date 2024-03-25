@@ -508,6 +508,10 @@ if ($article) {
         $alerts = array_map(function ($alert) use ($um) {
             $user = $um->getById($alert->get('axys_account_id'));
 
+            if (!$user) {
+                return "";
+            }
+
             return '
                 <tr>
                     <td>' . $user->get('email') . '</a></td>
