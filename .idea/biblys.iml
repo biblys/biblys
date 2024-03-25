@@ -134,6 +134,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/league/html-to-markdown" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/getbrevo/brevo-php" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/lemonink/lemonink-php" />
+      <excludeFolder url="file://$MODULE_DIR$/public/theme" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
