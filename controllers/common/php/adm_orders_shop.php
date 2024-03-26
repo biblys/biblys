@@ -351,7 +351,12 @@ return function (Request $request): Response
                 <em>' . $l["article_authors"] . '</em><br />
                 ' . $l["article_collection"] . ' ' . numero($l["article_number"]) . '<br />
             </td>
-            <td title="HT : ' . currency($l['stock_selling_price_ht'], true) . ' / TVA : ' . $l['stock_tva_rate'] . '%" class="nowrap right">' . price($l["stock_selling_price"], 'EUR') . '</td>
+            <td 
+                title="HT : ' . currency($l['stock_selling_price_ht'] ?? 0, true) . ' / TVA : ' . $l['stock_tva_rate'] . '%" 
+                class="nowrap right"
+            >
+                ' . price($l["stock_selling_price"], 'EUR') . '
+            </td>
         </tr>
     ';
     }
