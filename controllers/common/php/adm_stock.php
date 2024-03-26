@@ -521,6 +521,9 @@ if ($article) {
                 </tr>
             ';
         }, $alerts);
+        $alerts = array_filter($alerts, function ($alert) {
+            return $alert !== "";
+        });
         $alerts_num = count($alerts);
 
         if ($alerts_num > 0) {
