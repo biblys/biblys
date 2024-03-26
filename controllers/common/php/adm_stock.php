@@ -1029,6 +1029,10 @@ function _sendAlertsForArticle(
         ';
 
         $user = $um->getById($alert->get("axys_account_id"));
+        if (!$user) {
+            continue;
+        }
+
         try {
             $mailer->send($user->get("email"), $subject, $message);
             $sentAlerts++;
