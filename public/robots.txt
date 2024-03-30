@@ -5,6 +5,6 @@ Disallow: /pages/pub_*
 Disallow: /pages/adm_*
 Disallow: /pages/*?*=*
 Disallow: /pages/cart
+Disallow: /user/*
+Disallow: /openid/*
 Allow: /
-User-agent: VoilaBot
-Disallow: /
