@@ -18,6 +18,7 @@ use Biblys\Service\LoggerService;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\MetaTagsService;
 use Biblys\Service\Pagination;
+use Biblys\Service\QueryParamsService;
 use Biblys\Service\Slug\SlugService;
 use Biblys\Service\TemplateService;
 use Biblys\Service\Watermarking\WatermarkingService;
@@ -151,14 +152,25 @@ class ArticleController extends Controller
      * @throws PropelException
      * @throws Exception
      */
-    public function searchAction(Request $request, CurrentSite $currentSite): Response
+    public function searchAction(
+        Request $request,
+        CurrentSite $currentSite,
+        QueryParamsService $queryParamsService,
+    ): Response
     {
         $am = new ArticleManager();
 
-        $query = $request->query->get("q");
-        $inStockFilter = $request->query->get("in-stock");
+        $queryParamsService->parse([
+            "q" => ["type" => "string", "mb_min_length" => 3, "mb_max_length" => 255],
+            "in-stock" => ["type" => "string", "optional" => true,  "default" => "0"],
+            "sort" => ["type" => "string", "optional" => true, "default" => "pubdate|desc"],
+            "p" => ["type" => "string", "optional" => true, "default" => 0]
+        ]);
 
-        $sort = $request->query->get("sort", "pubdate|desc");
+        $query = $queryParamsService->get("q");
+        $inStockFilter = (bool) $queryParamsService->get("in-stock");
+        $sort = $queryParamsService->get("sort");
+
         $sortArray = explode("|", $sort);
         if(count($sortArray) < 2) {
             throw new BadRequestHttpException("Option de tri '$sort' invalide.");
@@ -204,7 +216,7 @@ class ArticleController extends Controller
 
         if ($query) {
             $request->attributes->set("page_title", "Recherche de ".$query);
-            $page = (int) $request->query->get("p", 0);
+            $page = (int) $queryParamsService->get("p");
             $queryParams = ["q" => $query, "in-stock" => $inStockFilter, "sort" => $sort];
 
             if ($inStockFilter) {

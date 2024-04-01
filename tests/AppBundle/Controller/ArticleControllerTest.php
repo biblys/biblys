@@ -335,11 +335,16 @@ class ArticleControllerTest extends TestCase
         );
         $controller = new ArticleController();
         $request = new Request();
-        $request->query->set("q", "Résultat de recherche");
         $currentSite = $this->createMock(CurrentSite::class);
+        $queryParams = Mockery::mock(QueryParamsService::class);
+        $queryParams->shouldReceive("parse")->andReturn();
+        $queryParams->shouldReceive("get")->with("q")->andReturn("Résultat de recherche");
+        $queryParams->shouldReceive("get")->with("in-stock")->andReturn("0");
+        $queryParams->shouldReceive("get")->with("sort")->andReturn("pubdate|desc");
+        $queryParams->shouldReceive("get")->with("p")->andReturn("0");
 
         // when
-        $response = $controller->searchAction($request, $currentSite);
+        $response = $controller->searchAction($request, $currentSite, $queryParams);
 
         // then
         $this->assertEquals(
@@ -374,12 +379,16 @@ class ArticleControllerTest extends TestCase
         );
         $controller = new ArticleController();
         $request = new Request();
-        $request->query->set("q", "Résultat de recherche trié");
-        $request->query->set("sort", "pubdate|desc");
         $currentSite = $this->createMock(CurrentSite::class);
+        $queryParams = Mockery::mock(QueryParamsService::class);
+        $queryParams->shouldReceive("parse")->andReturn();
+        $queryParams->shouldReceive("get")->with("q")->andReturn("Résultat de recherche trié");
+        $queryParams->shouldReceive("get")->with("in-stock")->andReturn("0");
+        $queryParams->shouldReceive("get")->with("sort")->andReturn("pubdate|desc");
+        $queryParams->shouldReceive("get")->with("p")->andReturn("0");
 
         // when
-        $response = $controller->searchAction($request, $currentSite);
+        $response = $controller->searchAction($request, $currentSite, $queryParams);
 
         // then
         $this->assertEquals(
@@ -418,12 +427,16 @@ class ArticleControllerTest extends TestCase
         );
         $controller = new ArticleController();
         $request = new Request();
-        $request->query->set("q", "Résultat de recherche trié");
-        $request->query->set("sort", "1AND+1%3D1+ORDERBY%281%2C2%2C3%2C4%2C5%29+--%3B|desc");
         $currentSite = $this->createMock(CurrentSite::class);
+        $queryParams = Mockery::mock(QueryParamsService::class);
+        $queryParams->shouldReceive("parse")->andReturn();
+        $queryParams->shouldReceive("get")->with("q")->andReturn("Résultat de recherche trié");
+        $queryParams->shouldReceive("get")->with("in-stock")->andReturn("0");
+        $queryParams->shouldReceive("get")->with("sort")->andReturn("1AND+1%3D1+ORDERBY%281%2C2%2C3%2C4%2C5%29+--%3B|desc");
+        $queryParams->shouldReceive("get")->with("p")->andReturn("0");
 
         // when
-        $controller->searchAction($request, $currentSite);
+        $controller->searchAction($request, $currentSite, $queryParams);
     }
 
     /**
@@ -444,11 +457,15 @@ class ArticleControllerTest extends TestCase
         ModelFactory::createStockItem(site: $site, article: $article);user:
         $controller = new ArticleController();
         $request = new Request();
-        $request->query->set("q", "Résultat de recherche avec stock");
-        $request->query->set("in-stock", "1");
+        $queryParams = Mockery::mock(QueryParamsService::class);
+        $queryParams->shouldReceive("parse")->andReturn();
+        $queryParams->shouldReceive("get")->with("q")->andReturn("Résultat de recherche avec stock");
+        $queryParams->shouldReceive("get")->with("in-stock")->andReturn("1");
+        $queryParams->shouldReceive("get")->with("sort")->andReturn("pubdate|desc");
+        $queryParams->shouldReceive("get")->with("p")->andReturn("0");
 
         // when
-        $response = $controller->searchAction($request, $currentSite);
+        $response = $controller->searchAction($request, $currentSite, $queryParams);
 
         // then
         $this->assertEquals(
@@ -486,12 +503,15 @@ class ArticleControllerTest extends TestCase
         ModelFactory::createStockItem(site: $site, article: $article);user:
         $controller = new ArticleController();
         $request = new Request();
-        $request->query->set("q", "Résultat de recherche trié avec stock");
-        $request->query->set("sort", "pubdate|asc");
-        $request->query->set("in-stock", "1");
+        $queryParams = Mockery::mock(QueryParamsService::class);
+        $queryParams->shouldReceive("parse")->andReturn();
+        $queryParams->shouldReceive("get")->with("q")->andReturn("Résultat de recherche trié avec stock");
+        $queryParams->shouldReceive("get")->with("in-stock")->andReturn("1");
+        $queryParams->shouldReceive("get")->with("sort")->andReturn("pubdate|asc");
+        $queryParams->shouldReceive("get")->with("p")->andReturn("0");
 
         // when
-        $response = $controller->searchAction($request, $currentSite);
+        $response = $controller->searchAction($request, $currentSite, $queryParams);
 
         // then
         $this->assertEquals(
