@@ -6,6 +6,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\OpenIDConnectProviderService;
+use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use Biblys\Service\TokenService;
 use DateTime;
@@ -31,12 +32,13 @@ class OpenIDConnectController extends Controller
      * @throws JsonException
      */
     public function axys(
-        Request $request,
+        QueryParamsService $queryParams,
         TokenService $tokenService,
         OpenIDConnectProviderService $openIDConnectProviderService,
     ): RedirectResponse
     {
-        $returnUrl = $request->query->get("return_url", "");
+        $queryParams->parse(["return_url" => ["type" => "string", "optional" => true, "default" => ""]]);
+        $returnUrl = $queryParams->get("return_url");
         $authorizationUri = $openIDConnectProviderService->getAuthorizationUri($tokenService, $returnUrl);
         return new RedirectResponse($authorizationUri);
     }

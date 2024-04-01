@@ -7,6 +7,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\OpenIDConnectProviderService;
+use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use Biblys\Service\TokenService;
 use Biblys\Test\ModelFactory;
@@ -33,8 +34,9 @@ class OpenIDConnectControllerTest extends TestCase
     public function testAxys()
     {
         // given
-        $request = new Request();
-        $request->query->add(["return_url" => "/my-account"]);
+        $queryParams = Mockery::mock(QueryParamsService::class);
+        $queryParams->expects("parse")->andReturn("");
+        $queryParams->expects("get")->with("return_url")->andReturn("/my-account");
         $tokenService = $this->createMock(TokenService::class);
         $tokenService->method("createOIDCStateToken")
             ->with("/my-account", "secret_key")
@@ -47,7 +49,7 @@ class OpenIDConnectControllerTest extends TestCase
             ->willReturn("https://axys.me/authorize");
 
         // when
-        $response = $controller->axys($request, $tokenService, $openIDConnectProviderService);
+        $response = $controller->axys($queryParams, $tokenService, $openIDConnectProviderService);
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
