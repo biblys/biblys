@@ -20,10 +20,10 @@ class QueryParamsServiceTest extends TestCase
                 "type" => "string",
             ],
         ];
-        $queryParamsService = new QueryParamsService();
+        $queryParamsService = new QueryParamsService($request);
 
         // when
-        $queryParamsService->parse($request, $specs);
+        $queryParamsService->parse($specs);
         $searchQuery = $queryParamsService->get("q");
 
         // then
@@ -34,7 +34,6 @@ class QueryParamsServiceTest extends TestCase
     {
         // given
         $request = new Request();
-        $arrayParam = "return_url%5B%24testing%5D=1";
         $request->query->set("q", [1]);
 
         $specs = [
@@ -42,13 +41,13 @@ class QueryParamsServiceTest extends TestCase
                 "type" => "string",
             ],
         ];
-        $queryParamsService = new QueryParamsService();
+        $queryParamsService = new QueryParamsService($request);
 
         // then
         $this->expectException(BadRequestHttpException::class);
         $this->expectExceptionMessage('Parameter "q" failed validation "types" for array value');
 
         // when
-        $queryParamsService->parse($request, $specs);
+        $queryParamsService->parse($specs);
     }
 }

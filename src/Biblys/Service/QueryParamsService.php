@@ -7,14 +7,13 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Validate\Exception\NamedValueException;
 use Validate\Validator;
 
-/**
- * @throws NamedValueException
- */
 class QueryParamsService
 {
     private array $queryParams = [];
 
-    public function parse(Request $request, $specs): void
+    public function __construct(private readonly Request $request) {}
+
+    public function parse($specs): void
     {
         $validator = new Validator([
             "trim" => true,
@@ -23,7 +22,7 @@ class QueryParamsService
         ]);
 
         try {
-            $this->queryParams = $validator->validate($request->query->all());
+            $this->queryParams = $validator->validate($this->request->query->all());
         } catch (NamedValueException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }

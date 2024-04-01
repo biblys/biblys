@@ -11,6 +11,7 @@ use Biblys\Service\LoggerService;
 use Biblys\Service\MailingList\MailingListInterface;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\MetaTagsService;
+use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use Biblys\Service\Watermarking\WatermarkedFile;
 use Biblys\Service\Watermarking\WatermarkingService;
