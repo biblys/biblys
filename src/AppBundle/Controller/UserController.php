@@ -3,11 +3,11 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentUser;
+use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use Framework\Controller;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
@@ -23,16 +23,17 @@ class UserController extends Controller
      * @throws PropelException
      */
     public function login(
-        Request $request,
+        QueryParamsService $queryParams,
         CurrentUser $currentUser,
-        UrlGenerator $urlGenerator
+        UrlGenerator $urlGenerator,
     ): Response
     {
         if ($currentUser->isAuthentified()) {
             return new RedirectResponse("/");
         }
 
-        $returnUrl = $request->query->get("return_url", "");
+        $queryParams->parse(["return_url" => ["type" => "string", "optional" => true, "default" => ""]]);
+        $returnUrl = $queryParams->get("return_url");
         if (str_contains($returnUrl, "logged-out")) {
             $returnUrl = null;
         }

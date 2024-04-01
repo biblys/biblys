@@ -3,12 +3,12 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentUser;
+use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use Biblys\Test\ModelFactory;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
@@ -36,10 +36,12 @@ class UserControllerTest extends TestCase
             ->method("generate")
             ->with("openid_axys")
             ->willReturn("/openid/axys");
-        $request = new Request();
+        $queryParams = Mockery::mock(QueryParamsService::class);
+        $queryParams->expects("parse")->andReturn("");
+        $queryParams->expects("get")->with("return_url")->andReturn("");
 
         // when
-        $response = $userController->login($request, $currentUser, $urlGenerator);
+        $response = $userController->login($queryParams, $currentUser, $urlGenerator);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -63,11 +65,12 @@ class UserControllerTest extends TestCase
             ->method("generate")
             ->with("openid_axys", ["return_url" => "url_to_return_to"])
             ->willReturn("/openid/axys?return_url=url_to_return_to");
-        $request = new Request();
-        $request->query->set("return_url", "url_to_return_to");
+        $queryParams = Mockery::mock(QueryParamsService::class);
+        $queryParams->expects("parse")->andReturn("");
+        $queryParams->expects("get")->with("return_url")->andReturn("url_to_return_to");
 
         // when
-        $response = $userController->login($request, $currentUser, $urlGenerator);
+        $response = $userController->login($queryParams, $currentUser, $urlGenerator);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -91,10 +94,12 @@ class UserControllerTest extends TestCase
             ->method("generate")
             ->with("main_home")
             ->willReturn("/");
-        $request = new Request();
+        $queryParams = Mockery::mock(QueryParamsService::class);
+        $queryParams->expects("parse")->andReturn("");
+        $queryParams->expects("get")->with("return_url")->andReturn("");
 
         // when
-        $response = $userController->login($request, $currentUser, $urlGenerator);
+        $response = $userController->login($queryParams, $currentUser, $urlGenerator);
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
