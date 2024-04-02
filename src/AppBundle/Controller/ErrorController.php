@@ -57,27 +57,27 @@ class ErrorController extends Controller
         }
 
         if (is_a($exception, UnauthorizedHttpException::class)) {
-            return self::_customTemplateHandler(401, $request, $exception);
+            return $this->_customTemplateHandler(401, $request, $exception);
         }
 
         if (is_a($exception, AccessDeniedHttpException::class)) {
-            return self::_customTemplateHandler(403, $request, $exception);
+            return $this->_customTemplateHandler(403, $request, $exception);
         }
 
         if (is_a($exception, "Framework\Exception\AuthException")) {
-            return self::_customTemplateHandler(401, $request, $exception);
+            return $this->_customTemplateHandler(401, $request, $exception);
         }
 
         if (is_a($exception, "Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException")) {
-            return self::_defaultHandler(405, $exception, $request);
+            return $this->_defaultHandler(405, $exception, $request);
         }
 
         if (is_a($exception, "Symfony\Component\HttpKernel\Exception\ConflictHttpException")) {
-            return self::_defaultHandler(409, $exception, $request);
+            return $this->_defaultHandler(409, $exception, $request);
         }
 
         if (is_a($exception, ServiceUnavailableHttpException::class)) {
-            return self::_customTemplateHandler(503, $request, $exception);
+            return $this->_customTemplateHandler(503, $request, $exception);
         }
 
         return $this->handleServerError($request, $exception);
@@ -100,7 +100,7 @@ class ErrorController extends Controller
             $request->isXmlHttpRequest()
             || $request->headers->get('Accept') == 'application/json'
         ) {
-            return self::_toJsonErrorResponse($exception, 400);
+            return $this->_toJsonErrorResponse($exception, 400);
         }
 
         $response = $this->render("AppBundle:Error:400.html.twig", [
@@ -114,7 +114,6 @@ class ErrorController extends Controller
     /**
      * HTTP 404
      *
-     * @param UrlGenerator $urlGenerator
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
@@ -150,7 +149,7 @@ class ErrorController extends Controller
         }
 
         if ($request->headers->get("Accept") === "application/json") {
-            return self::_toJsonErrorResponse($exception, 404);
+            return $this->_toJsonErrorResponse($exception, 404);
         }
 
         $request->attributes->set("page_title", "Erreur 404");
@@ -190,7 +189,7 @@ class ErrorController extends Controller
             $request->headers->get("Accept") === "application/json" ||
             $request->isXmlHttpRequest()
         ) {
-            return self::_toJsonErrorResponse($exception, 500);
+            return $this->_toJsonErrorResponse($exception, 500);
         }
 
         $currentException = $exception;
@@ -216,10 +215,10 @@ class ErrorController extends Controller
      * @param $request
      * @return Response
      */
-    private static function _defaultHandler(int $statusCode, Exception $exception, $request): Response
+    private function _defaultHandler(int $statusCode, Exception $exception, $request): Response
     {
         if ($request->isXmlHttpRequest() || $request->headers->get('Accept') == 'application/json') {
-            return self::_toJsonErrorResponse($exception, $statusCode);
+            return $this->_toJsonErrorResponse($exception, $statusCode);
         }
         $exceptionClass = new ReflectionClass($exception);
 
@@ -248,7 +247,7 @@ class ErrorController extends Controller
             $request->isXmlHttpRequest()
             || $request->headers->get('Accept') == 'application/json'
         ) {
-            return self::_toJsonErrorResponse($exception, $statusCode);
+            return $this->_toJsonErrorResponse($exception, $statusCode);
         }
 
         $currentUrlService = new CurrentUrlService($request);
@@ -265,7 +264,7 @@ class ErrorController extends Controller
         return $response;
     }
 
-    private static function _toJsonErrorResponse(Exception $exception, int $statusCode): JsonResponse
+    private function _toJsonErrorResponse(Exception $exception, int $statusCode): JsonResponse
     {
         return new JsonResponse([
             "error" => [
