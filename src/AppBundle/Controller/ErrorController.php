@@ -28,6 +28,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use function get_class;
 
 class ErrorController extends Controller
 {
@@ -228,15 +229,7 @@ class ErrorController extends Controller
     private static function _defaultHandler(int $statusCode, Exception $exception, $request): Response
     {
         if ($request->isXmlHttpRequest() || $request->headers->get('Accept') == 'application/json') {
-            return new JsonResponse([
-                "error" => [
-                    "exception" => get_class($exception),
-                    "message" => $exception->getMessage(),
-                    "file" => $exception->getFile(),
-                    "line" => $exception->getLine(),
-                    "trace" => $exception->getTrace(),
-                ]
-            ], $statusCode);
+            return self::_toJsonErrorResponse($exception, $statusCode);
         }
         $exceptionClass = new ReflectionClass($exception);
 
@@ -282,5 +275,23 @@ class ErrorController extends Controller
         }
 
         return $response;
+    }
+
+    /**
+     * @param Exception $exception
+     * @param int $statusCode
+     * @return JsonResponse
+     */
+    private static function _toJsonErrorResponse(Exception $exception, int $statusCode): JsonResponse
+    {
+        return new JsonResponse([
+            "error" => [
+                "exception" => get_class($exception),
+                "message" => $exception->getMessage(),
+                "file" => $exception->getFile(),
+                "line" => $exception->getLine(),
+                "trace" => $exception->getTrace(),
+            ]
+        ], $statusCode);
     }
 }
