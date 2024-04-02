@@ -4,6 +4,7 @@ use Biblys\Exception\EntityAlreadyExistsException;
 use Biblys\Isbn\Isbn;
 use Biblys\Noosfere\Noosfere;
 use Biblys\Service\Slug\SlugService;
+use Model\PublisherQuery;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
@@ -293,21 +294,17 @@ if ($_GET["mode"] == "search") { // Mode recherche
             $x['article_publisher'] = null;
         }
 
-        $publishers = EntityManager::prepareAndExecute(
-            "SELECT `publisher_id`, `publisher_name` FROM `publishers`
-                WHERE `publisher_noosfere_id` = :noosfere_IdEditeur OR `publisher_name` = :publisher_name
-                ORDER BY `publisher_noosfere_id` LIMIT 1",
-            [
-                'noosfere_IdEditeur' => $x["noosfere_IdEditeur"],
-                'publisher_name' => $x["article_publisher"],
-            ]
-        );
+        $existingPublisher = PublisherQuery::create()
+            ->filterByNoosfereId($x["noosfere_IdEditeur"])
+            ->_or()
+            ->filterByUrl($slugService->slugify($x["article_publisher"]))
+            ->findOne();
 
         // Si l'editeur existe deja en base, on recupere les infos
-        if ($p = $publishers->fetch(PDO::FETCH_ASSOC)) {
-            $publisher = $pm->getById($p['publisher_id']);
-            $x["publisher_id"] = $p["publisher_id"];
-            $x["article_publisher"] = $p["publisher_name"];
+        if ($existingPublisher) {
+            $publisher = $pm->getById($existingPublisher->getId());
+            $x["publisher_id"] = $publisher->get("id");
+            $x["article_publisher"] = $publisher->get("name");
             if (!empty($x["noosfere_IdEditeur"])) {
                 $publisher->set('publisher_noosfere_id', $x["noosfere_IdEditeur"]);
                 $pm->update($publisher);
