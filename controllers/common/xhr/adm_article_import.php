@@ -1,12 +1,9 @@
 <?php /** @noinspection PhpUnhandledExceptionInspection */
 
-use Biblys\Exception\EntityAlreadyExistsException;
 use Biblys\Isbn\Isbn;
 use Biblys\Noosfere\Noosfere;
 use Biblys\Service\Slug\SlugService;
-use Model\PublisherQuery;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 $pm = new PublisherManager();
 $cm = new CollectionManager();
@@ -285,103 +282,19 @@ if ($_GET["mode"] == "search") { // Mode recherche
         $x = $n;
     }
 
-    // Reconnaissance d'editeur
-    if (isset($x["article_collection"])) {
-        if (empty($x['noosfere_IdEditeur'])) {
-            $x['noosfere_IdEditeur'] = null;
-        }
-        if (empty($x['article_publisher'])) {
-            $x['article_publisher'] = null;
-        }
+    $publisher = Noosfere::getOrCreatePublisher($x["noosfere_IdEditeur"], $x["article_publisher"]);
+    $x["publisher_id"] = $publisher->get("id");
+    $x["article_publisher"] = $publisher->get("name");
 
-        $existingPublisher = PublisherQuery::create()
-            ->filterByNoosfereId($x["noosfere_IdEditeur"])
-            ->_or()
-            ->filterByUrl($slugService->slugify($x["article_publisher"]))
-            ->findOne();
-
-        // Si l'editeur existe deja en base, on recupere les infos
-        if ($existingPublisher) {
-            $publisher = $pm->getById($existingPublisher->getId());
-            $x["publisher_id"] = $publisher->get("id");
-            $x["article_publisher"] = $publisher->get("name");
-            if (!empty($x["noosfere_IdEditeur"])) {
-                $publisher->set('publisher_noosfere_id', $x["noosfere_IdEditeur"]);
-                $pm->update($publisher);
-            }
-        }
-
-        // Si l'editeur n'existe pas, mais qu'on a un id noosfere, on la cree
-        elseif (!empty($x["noosfere_IdEditeur"])) {
-            $publisher = $pm->create([
-                "publisher_name" => $x["article_publisher"],
-                "publisher_noosfere_id" => $x["noosfere_IdCollection"],
-            ]);
-            $x["publisher_id"] = $publisher->get('id');
-        } else {
-            $x["article_publisher"] = null;
-        }
-    }
-    if (empty($x["article_publisher"])) {
-        unset($x["article_publisher"]);
-    }
-
-    // Reconnaissance de collection
-    if (isset($x["article_collection"]) && isset($x["publisher_id"])) {
-
-        // Filtres de collections noosfere
-        $correctId = Noosfere::getCorrectIdFor($x["noosfere_IdCollection"]);
-        if ($correctId) {
-            $x["noosfere_IdCollection"] = $correctId;
-        }
-
-        $collection = false;
-
-        // Try to get collection by noosfere id
-        if (isset($x["noosfere_IdCollection"])) {
-            $collection = $cm->get(['collection_noosfere_id' => $x["noosfere_IdCollection"]]);
-        }
-
-        // Try to get collection by name and publisher
-        if (!$collection) {
-            $collection = $cm->get([
-                'collection_name' => $x["article_collection"],
-                'publisher_id' => $x["publisher_id"],
-            ]);
-        }
-
-        // If collection already exists in db, get info
-        if ($collection) {
-            $x["collection_id"] = $collection->get("id");
-            $x["article_collection"] = $collection->get("name");
-            $x["article_publisher"] = $collection->get("publisher");
-            $x["pricegrid_id"] = $collection->get("pricegrid_id");
-
-            // If noosfere is set, update collection
-            if (!$collection->has('collection_noosfere_id') && !empty($x["noosfere_IdCollection"])) {
-                $collection->set('collection_noosfere_id', $x["noosfere_IdCollection"]);
-                $cm->update($collection);
-            }
-        }
-
-        // If collection does not exist but has a noosfere id, let's create it
-        elseif (isset($publisher) && !empty($x["noosfere_IdCollection"])) {
-
-            // Si la collection n'existe pas, mais qu'on a un id noosfere, on la cree
-            $collectionParams = [
-                "publisher_id" => $publisher->get('id'),
-                "collection_name" => $x["article_collection"],
-                "collection_noosfere_id" => $x["noosfere_IdCollection"]
-            ];
-
-            try {
-                $collection = $cm->create($collectionParams);
-            } catch(EntityAlreadyExistsException $exception) {
-                throw new ConflictHttpException($exception->getMessage(), $exception);
-            }
-            $x["collection_id"] = $collection->get('id');
-        }
-    }
+    $collection = Noosfere::getOrCreateCollection(
+        $x["noosfere_IdCollection"],
+        $x["article_collection"],
+        $publisher
+    );
+    $x["collection_id"] = $collection->get('id');
+    $x["article_collection"] = $collection->get("name");
+    $x["article_publisher"] = $collection->get("publisher");
+    $x["pricegrid_id"] = $collection->get("pricegrid_id");
 
     // Reconnaissance de cycle
     if (!empty($x["article_cycle"])) {

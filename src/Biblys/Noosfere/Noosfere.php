@@ -4,9 +4,18 @@ namespace Biblys\Noosfere;
 
 use Biblys\Contributor\Job;
 use Biblys\Contributor\UnknownJobException;
+use Biblys\Exception\EntityAlreadyExistsException;
 use Biblys\Isbn\Isbn as Isbn;
+use Biblys\Service\Slug\SlugService;
+use Collection;
+use CollectionManager;
 use Exception;
+use Model\BookCollectionQuery;
+use Model\PublisherQuery;
+use Publisher;
+use PublisherManager;
 use SimpleXMLElement;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class Noosfere
 {
@@ -134,5 +143,96 @@ class Noosfere
         }
 
         return Job::getByName($name);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function getOrCreatePublisher(
+        int    $publisherNoosfereId,
+        string $publisherNoosfereName,
+    ): Publisher
+    {
+        $pm = new PublisherManager();
+        $slugService = new SlugService();
+
+        $publisher = null;
+
+        $existingPublisher = PublisherQuery::create()
+            ->filterByNoosfereId($publisherNoosfereId)
+            ->_or()
+            ->filterByUrl($slugService->slugify($publisherNoosfereName))
+            ->findOne();
+
+        if ($existingPublisher) {
+            /** @var Publisher $publisher */
+            $publisher = $pm->getById($existingPublisher->getId());
+            if (!empty($publisherNoosfereId)) {
+                $publisher->set('publisher_noosfere_id', $publisherNoosfereId);
+                $pm->update($publisher);
+            }
+        }
+
+        if (!$publisher) {
+            /** @var Publisher $publisher */
+            $publisher = $pm->create([
+                "publisher_name" => $publisherNoosfereName,
+                "publisher_noosfere_id" => $publisherNoosfereId
+            ]);
+        }
+
+        return $publisher;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function getOrCreateCollection(
+        int       $collectionNoosfereId,
+        string    $collectionNoosfereName,
+        Publisher $publisher
+    ): Collection
+    {
+        $slugService = new SlugService();
+        $cm = new CollectionManager();
+
+        $correctId = self::getCorrectIdFor($collectionNoosfereId);
+        if ($correctId) {
+            $collectionNoosfereId = $correctId;
+        }
+
+        $existingCollectionByNoosfereId = BookCollectionQuery::create()->findOneByNoosfereId($collectionNoosfereId);
+        $existingCollectionByNameAndPublisher = BookCollectionQuery::create()
+            ->filterByUrl($slugService->slugify($collectionNoosfereName))
+            ->filterByPublisherId($publisher->get('id'))
+            ->findOne();
+        $existingCollection = $existingCollectionByNoosfereId ?? $existingCollectionByNameAndPublisher;
+
+        if ($existingCollection) {
+            /** @var Collection $collection */
+            $collection = $cm->getById($existingCollection->getId());
+
+            if (!$collection->has('collection_noosfere_id') && !empty($collectionNoosfereId)) {
+                $collection->set('collection_noosfere_id', $collectionNoosfereId);
+                $cm->update($collection);
+            }
+        }
+
+        if (!$existingCollection) {
+            $collectionParams = [
+                "publisher_id" => $publisher->get('id'),
+                "collection_name" => $collectionNoosfereName,
+                "collection_noosfere_id" => $collectionNoosfereId
+            ];
+
+            try {
+                /** @var Collection $collection */
+                $collection = $cm->create($collectionParams);
+            } catch (EntityAlreadyExistsException $exception) {
+                throw new ConflictHttpException($exception->getMessage(), $exception);
+            }
+        }
+
+        return $collection;
     }
 }
