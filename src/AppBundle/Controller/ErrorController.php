@@ -17,7 +17,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -64,15 +66,15 @@ class ErrorController extends Controller
             return $this->_customTemplateHandler(403, $request, $exception);
         }
 
-        if (is_a($exception, "Framework\Exception\AuthException")) {
+        if (is_a($exception, AuthException::class)) {
             return $this->_customTemplateHandler(401, $request, $exception);
         }
 
-        if (is_a($exception, "Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException")) {
+        if (is_a($exception, MethodNotAllowedHttpException::class)) {
             return $this->_defaultHandler(405, $exception, $request);
         }
 
-        if (is_a($exception, "Symfony\Component\HttpKernel\Exception\ConflictHttpException")) {
+        if (is_a($exception, ConflictHttpException::class)) {
             return $this->_defaultHandler(409, $exception, $request);
         }
 
