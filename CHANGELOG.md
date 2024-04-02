@@ -1,5 +1,10 @@
 # Historique des modifications
 
+### 2.78.4 (DEV)
+
+- Les erreurs lors de l'import pouvaient ne pas être affichées correctement.
+  C'est réparé.
+
 ### 2.78.3 (25 mars 2024)
 
 Corrections

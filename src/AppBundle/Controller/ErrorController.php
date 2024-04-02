@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
 use Biblys\Service\Log;
@@ -34,6 +35,8 @@ use function get_class;
 
 class ErrorController extends Controller
 {
+    private readonly Config $config;
+
     /**
      * @throws LoaderError
      * @throws PropelException
@@ -42,11 +45,14 @@ class ErrorController extends Controller
      */
     public function exception(
         Request      $request,
+        Config       $config,
         CurrentSite  $currentSite,
         UrlGenerator $urlGenerator,
         Exception    $exception
     ): Response
     {
+        $this->config = $config;
+        
         if (
             is_a($exception, ResourceNotFoundException::class)
             || is_a($exception, InvalidParameterException::class)
@@ -268,14 +274,18 @@ class ErrorController extends Controller
 
     private function _toJsonErrorResponse(Exception $exception, int $statusCode): JsonResponse
     {
+        $error = [];
+        $error["message"] = $exception->getMessage();
+
+        if ($this->config->get("environment") === "dev") {
+            $error["exception"] = get_class($exception);
+            $error["file"] = $exception->getFile();
+            $error["line"] = $exception->getLine();
+            $error["trace"] = $exception->getTrace();
+        }
+
         return new JsonResponse([
-            "error" => [
-                "exception" => get_class($exception),
-                "message" => $exception->getMessage(),
-                "file" => $exception->getFile(),
-                "line" => $exception->getLine(),
-                "trace" => $exception->getTrace(),
-            ]
+            "error" => $error,
         ], $statusCode);
     }
 }

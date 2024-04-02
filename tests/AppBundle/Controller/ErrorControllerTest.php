@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Test\ModelFactory;
 use Exception;
@@ -41,9 +42,11 @@ class ErrorControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("publisher_filter")->andReturn(null);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $config = Mockery::mock(Config::class);
 
         // when
-        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
+        $response = $controller->exception($request, $config, $currentSite, $urlGenerator,
+            $exception);
 
         // then
         $this->assertEquals(
@@ -75,9 +78,11 @@ class ErrorControllerTest extends TestCase
         $urlGenerator->shouldReceive("generate")
             ->with("article_show", ["slug" => "author/article_404"])
             ->andReturn("/a/author/article_404");
+        $config = Mockery::mock(Config::class);
 
         // when
-        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
+        $response = $controller->exception($request, $config, $currentSite, $urlGenerator,
+            $exception);
 
         // then
         $this->assertEquals(
@@ -114,9 +119,10 @@ class ErrorControllerTest extends TestCase
         $urlGenerator->shouldReceive("generate")
             ->with("people_show", ["slug" => "great-author"])
             ->andReturn("/p/great-author/");
+        $config = Mockery::mock(Config::class);
 
         // when
-        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
+        $response = $controller->exception($request, $config, $currentSite, $urlGenerator, $exception);
 
         // then
         $this->assertEquals(
@@ -147,9 +153,12 @@ class ErrorControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("publisher_filter")->andReturn(null);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $config = Mockery::mock(Config::class);
+        $config->shouldReceive("get")->with("environment")->andReturn("prod");
 
         // when
-        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
+        $response = $controller->exception($request, $config, $currentSite, $urlGenerator,
+            $exception);
 
         // then
         $this->assertEquals(
@@ -178,9 +187,12 @@ class ErrorControllerTest extends TestCase
         $exception = new BadRequestHttpException("Bad request");
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $config = Mockery::mock(Config::class);
+        $config->shouldReceive("environment")->andReturn("prod");
 
         // when
-        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
+        $response = $controller->exception($request, $config, $currentSite, $urlGenerator,
+            $exception);
 
         // then
         $this->assertEquals(
@@ -209,9 +221,12 @@ class ErrorControllerTest extends TestCase
         $exception = new UnauthorizedHttpException("User should login.");
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $config = Mockery::mock(Config::class);
+        $config->shouldReceive("environment")->andReturn("prod");
 
         // when
-        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
+        $response = $controller->exception($request, $config, $currentSite, $urlGenerator,
+        $exception);
 
         // then
         $this->assertEquals(
@@ -240,9 +255,11 @@ class ErrorControllerTest extends TestCase
         $exception = new AccessDeniedHttpException("Access if forbidden for user.");
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $config = Mockery::mock(Config::class);
 
         // when
-        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
+        $response = $controller->exception($request, $config, $currentSite, $urlGenerator,
+        $exception);
 
         // then
         $this->assertEquals(
@@ -276,9 +293,11 @@ class ErrorControllerTest extends TestCase
         $exception = new AuthException("Unauthorized");
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $config = Mockery::mock(Config::class);
 
         // when
-        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
+        $response = $controller->exception($request, $config, $currentSite, $urlGenerator,
+        $exception);
 
         // then
         $this->assertEquals(
@@ -299,7 +318,7 @@ class ErrorControllerTest extends TestCase
      * @throws LoaderError
      * @throws PropelException
      */
-    public function testMethodNotAllowed()
+    public function testMethodNotAllowedAsJson()
     {
         // given
         $controller = new ErrorController();
@@ -308,9 +327,12 @@ class ErrorControllerTest extends TestCase
         $exception = new MethodNotAllowedHttpException(["GET"],"Method PUT is not allowed");
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $config = Mockery::mock(Config::class);
+        $config->shouldReceive("get")->with("environment")->andReturn("prod");
 
         // when
-        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
+        $response = $controller->exception($request, $config, $currentSite, $urlGenerator,
+        $exception);
 
         // then
         $this->assertEquals(
@@ -336,7 +358,7 @@ class ErrorControllerTest extends TestCase
      * @throws LoaderError
      * @throws PropelException
      */
-    public function testHandleConflict()
+    public function testHandleConflictAsJson()
     {
         // given
         $controller = new ErrorController();
@@ -345,9 +367,11 @@ class ErrorControllerTest extends TestCase
         $exception = new ConflictHttpException("Cannot add article to cart because it is unavailable.");
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $config = Mockery::mock(Config::class);
+        $config->shouldReceive("get")->with("environment")->andReturn("prod");
 
         // when
-        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
+        $response = $controller->exception($request, $config, $currentSite, $urlGenerator, $exception);
 
         // then
         $this->assertEquals(
@@ -381,9 +405,10 @@ class ErrorControllerTest extends TestCase
         $exception = new Exception("An error occurred");
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $config = Mockery::mock(Config::class);
 
         // when
-        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
+        $response = $controller->exception($request, $config, $currentSite, $urlGenerator, $exception);
 
         // then
         $this->assertEquals(
@@ -409,9 +434,12 @@ class ErrorControllerTest extends TestCase
         $exception = new Exception("An error occurred");
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $config = Mockery::mock(Config::class);
+        $config->shouldReceive("get")->with("environment")->andReturn("dev");
 
         // when
-        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
+        $response = $controller->exception($request, $config, $currentSite, $urlGenerator,
+        $exception);
 
         // then
         $this->assertEquals(
@@ -437,6 +465,44 @@ class ErrorControllerTest extends TestCase
      * @throws LoaderError
      * @throws PropelException
      */
+    public function testHandleServerErrorAsJsonInProductionEnvironment()
+    {
+        // given
+        $controller = new ErrorController();
+        $request = new Request();
+        $request->headers->set("Accept", "application/json");
+        $exception = new Exception("An error occurred");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $config = Mockery::mock(Config::class);
+        $config->shouldReceive("get")->with("environment")
+            ->andReturn("prod");
+
+        // when
+        $response = $controller->exception($request, $config, $currentSite,
+            $urlGenerator, $exception);
+
+        // then
+        $this->assertEquals(
+            500,
+            $response->getStatusCode(),
+            "it should response with HTTP status 500"
+        );
+        $this->assertEquals("application/json", $response->headers->get("Content-Type"));
+        $json = json_decode($response->getContent(), true);
+        $this->assertEquals("An error occurred", $json["error"]["message"]);
+        $this->assertArrayNotHasKey("exception", $json["error"]);
+        $this->assertArrayNotHasKey("file", $json["error"]);
+        $this->assertArrayNotHasKey("line", $json["error"]);
+        $this->assertArrayNotHasKey("trace", $json["error"]);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
     public function testHandleServiceUnavailable()
     {
         // given
@@ -445,9 +511,12 @@ class ErrorControllerTest extends TestCase
         $exception = new ServiceUnavailableHttpException(60);
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $config = Mockery::mock(Config::class);
+        $config->shouldReceive("environment")->andReturn("prod");
 
         // when
-        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
+        $response = $controller->exception($request, $config, $currentSite, $urlGenerator,
+        $exception);
 
         // then
         $this->assertEquals(
