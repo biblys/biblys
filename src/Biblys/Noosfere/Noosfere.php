@@ -10,7 +10,10 @@ use SimpleXMLElement;
 
 class Noosfere
 {
-    public function search($query, $mode = null)
+    /**
+     * @throws Exception
+     */
+    public function search($query, $mode = null): SimpleXMLElement|false
     {
 
         // Auto-select mode if not defined
@@ -25,13 +28,13 @@ class Noosfere
         }
 
         // Fetch raw response from nooSFere
-        $response = $this->fetch_data($query, $mode);
+        $response = $this->fetchData($query, $mode);
         if (!$response) {
             return false;
         }
 
         // Check if XML is valid
-        $xml = $this->parse_response($response);
+        $xml = $this->parseResponse($response);
         if ($xml) {
             return $xml;
         }
@@ -40,11 +43,9 @@ class Noosfere
     }
 
     /**
-     * Fetch data from noosfere
-     * @param  string $query
-     * @return string Raw response from noosfere
+     * @throws Exception
      */
-    private function fetch_data($query, $mode = "isbn")
+    private function fetchData($query, $mode = "isbn"): string
     {
         // Clean query
         $query = stripslashes(utf8_decode(trim($query)));
@@ -83,18 +84,19 @@ class Noosfere
         return $response;
     }
 
-    private function parse_response($response)
+    private function parseResponse($response): SimpleXMLElement|false
     {
         libxml_use_internal_errors(true);
         try {
             $xml = new SimpleXMLElement($response);
-        } catch (Exception $e) {
+        } catch (Exception) {
             return false;
         }
         return $xml;
     }
 
-    public static function getCorrectIdFor($id) {
+    public static function getCorrectIdFor($id): ?string
+    {
         $corrections = [
             '-10246456' => '1975550694',
             '-10246446' => '1975550694',

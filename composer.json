@@ -73,7 +73,9 @@
     "symfony/rate-limiter": "^6.3",
     "league/html-to-markdown": "^5.1",
     "getbrevo/brevo-php": "1.x.x",
-    "lemonink/lemonink-php": "^1.1"
+    "lemonink/lemonink-php": "^1.1",
+    "ext-simplexml": "*",
+    "ext-curl": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "9.*",

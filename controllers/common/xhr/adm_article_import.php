@@ -1,8 +1,9 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
 use Biblys\Exception\EntityAlreadyExistsException;
 use Biblys\Isbn\Isbn;
 use Biblys\Noosfere\Noosfere;
+use Biblys\Service\Slug\SlugService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
@@ -10,13 +11,15 @@ $pm = new PublisherManager();
 $cm = new CollectionManager();
 $pom = new PeopleManager();
 
+$slugService = new SlugService();
+
 // IMPORT NOOSFERE
-function noosfere($x, $mode = null): array
+function noosfere($query, $mode = null): array
 {
     $noosfere = new Noosfere();
     $articles = [];
 
-    $xml = $noosfere->search($x, $mode);
+    $xml = $noosfere->search($query, $mode);
     if (!$xml) {
         return [];
     }
@@ -42,7 +45,7 @@ function noosfere($x, $mode = null): array
         $a["article_noosfere_id"] = (string) $n['IdLivre'];
 
         $a["article_cycle"] = (string) $n->Serie->TitreSerie;
-        if (strstr($a["article_cycle"], "(")) {
+        if (str_contains($a["article_cycle"], "(")) {
             $ex_cycle = explode("(", $a["article_cycle"]);
             $cycle = $ex_cycle[1]."  ".$ex_cycle[0];
             $cycle = str_replace(")", "", $cycle);
@@ -53,7 +56,7 @@ function noosfere($x, $mode = null): array
         $a["noosfere_IdSerie"] = (string) $n->Serie["IdSerie"];
 
         $a["article_cover_import"] = (string) $n->Couverture['LienCouverture'];
-        $a["article_cover_import"] = str_replace('http://www.noosfere.org/images/', 'http://images.noosfere.org/', $a['article_cover_import']);
+        $a["article_cover_import"] = str_replace('https://www.noosfere.org/images/', 'https://images.noosfere.org/', $a['article_cover_import']);
 
         $a["article_pages"] = (string) $n->Page;
 
@@ -71,7 +74,8 @@ function noosfere($x, $mode = null): array
         $MoisDL = str_replace("2", "2Ã?me", $MoisDL);
         $MoisDL = str_replace("3", "3Ã?me", $MoisDL);
         $MoisDL = str_replace("4", "4Ã?me", $MoisDL);
-        $MoisDL = makeurl($MoisDL);
+        $slugService = new SlugService();
+        $MoisDL = $slugService->slugify($MoisDL);
         $MoisDLNum = '';
         if ($MoisDL == "janvier") {
             $MoisDLNum = '01';
@@ -103,9 +107,9 @@ function noosfere($x, $mode = null): array
 
         // Contributeurs
         $a['article_authors'] = null;
+        $people = [];
         if (!empty($n->Intervenants->Intervenant)) {
             $p = 0;
-            $people = [];
             foreach ($n->Intervenants->Intervenant as $Intervenant) {
                 if ($Intervenant->Nom != "ANTHOLOGIE" and $Intervenant->Nom != "REVUE") {
                     if (!empty($Intervenant->Prenom)) {
@@ -116,6 +120,7 @@ function noosfere($x, $mode = null): array
                     $people[$p]["people_last_name"] = (string) $Intervenant->Nom;
                     $people[$p]["people_name"] = trim($people[$p]["people_first_name"].' '.$people[$p]["people_last_name"]);
                     $people[$p]["people_role"] = (string) $Intervenant['TypeIntervention'];
+                    /** @noinspection DuplicatedCode */
                     $people[$p]["people_noosfere_id"] = (string) $Intervenant['NooId'];
                     if ($people[$p]["people_role"] == "Auteur") {
                         if (isset($a["article_authors"])) {
@@ -135,6 +140,7 @@ function noosfere($x, $mode = null): array
                 $a["article_contents"] .= '<li>'.$entree->TitreSommaire;
                 if (!empty($entree->Intervenants->Intervenant)) {
                     $entry_people = null;
+                    $p = 0;
                     foreach ($entree->Intervenants->Intervenant as $Intervenant) {
                         if (!isset($entry_people)) {
                             $entry_people .= ' de ';
@@ -149,7 +155,8 @@ function noosfere($x, $mode = null): array
                             }
                             $people[$p]["people_last_name"] = (string) $Intervenant->Nom;
                             $people[$p]["people_name"] = trim($people[$p]["people_first_name"].' '.$people[$p]["people_last_name"]);
-                            $people[$p]["people_role"] = (string) trim($Intervenant['TypeIntervention']);
+                            $people[$p]["people_role"] = trim($Intervenant['TypeIntervention']);
+                            /** @noinspection DuplicatedCode */
                             $people[$p]["people_noosfere_id"] = (string) $Intervenant['NooId'];
                             if ($people[$p]["people_role"] == "Auteur") {
                                 if (isset($a["article_authors"])) {
@@ -170,7 +177,7 @@ function noosfere($x, $mode = null): array
         // ISBN
         $a['article_ean'] = null;
         if (Isbn::isParsable($n->ISBN)) {
-            $a["article_ean"] = (string) Isbn::convertToEan13($n->ISBN);
+            $a["article_ean"] = Isbn::convertToEan13($n->ISBN);
         }
 
         // Prix
@@ -221,7 +228,7 @@ if ($_GET["mode"] == "search") { // Mode recherche
 
             $result = '
                 <div data-ean="'.$a["article_ean"].'" data-asin="'.(isset($a["article_asin"]) ? $a['article_asin'] : null).'" data-noosfere_id="'.$a["article_noosfere_id"].'" class="article-thumb article-import pointer">
-                    <img src="'.$a["article_cover_import"].'" height="85" class="article-thumb-cover" />
+                    <img src="'.$a["article_cover_import"].'" height="85" class="article-thumb-cover" alt="Image de couverture" />
                     <div class="article-thumb-data">
                         <h3>'.$a["article_title"]. '</h3>
                         <p>
@@ -251,6 +258,7 @@ if ($_GET["mode"] == "search") { // Mode recherche
     $response = new JsonResponse(['result' => $r]);
     $response->send();
 } elseif ($_GET["mode"] == "import") { // Mode import
+    $x = [];
     if (!empty($_GET["noosfere_id"])) { // Importation de fiche noosfere
         $n = noosfere($_GET["noosfere_id"], 'noosfere_id');
         $n = $n[0];
@@ -278,10 +286,10 @@ if ($_GET["mode"] == "search") { // Mode recherche
 
     // Reconnaissance d'editeur
     if (isset($x["article_collection"])) {
-        if (!isset($x['noosfere_IdEditeur']) || empty($x['noosfere_IdEditeur'])) {
+        if (empty($x['noosfere_IdEditeur'])) {
             $x['noosfere_IdEditeur'] = null;
         }
-        if (!isset($x['article_publisher']) || empty($x['article_publisher'])) {
+        if (empty($x['article_publisher'])) {
             $x['article_publisher'] = null;
         }
 
@@ -313,7 +321,6 @@ if ($_GET["mode"] == "search") { // Mode recherche
                 "publisher_noosfere_id" => $x["noosfere_IdCollection"],
             ]);
             $x["publisher_id"] = $publisher->get('id');
-        // Sinon, on ne met pas de editeur
         } else {
             $x["article_publisher"] = null;
         }
@@ -321,7 +328,6 @@ if ($_GET["mode"] == "search") { // Mode recherche
     if (empty($x["article_publisher"])) {
         unset($x["article_publisher"]);
     }
-
 
     // Reconnaissance de collection
     if (isset($x["article_collection"]) && isset($x["publisher_id"])) {
@@ -362,7 +368,7 @@ if ($_GET["mode"] == "search") { // Mode recherche
         }
 
         // If collection does not exist but has a noosfere id, let's create it
-        elseif (!empty($x["noosfere_IdCollection"])) {
+        elseif (isset($publisher) && !empty($x["noosfere_IdCollection"])) {
 
             // Si la collection n'existe pas, mais qu'on a un id noosfere, on la cree
             $collectionParams = [
@@ -387,10 +393,10 @@ if ($_GET["mode"] == "search") { // Mode recherche
         if (!$cycle) {
             $cycle = $cym->get(array('cycle_name' => $x["article_cycle"]));
             if (!$cycle) {
-                $x["cycle_url"] = makeurl($x["article_cycle"]);
+                $x["cycle_url"] = $slugService->slugify($x["article_cycle"]);
                 $cycle = $cym->create(array(
                     'cycle_name' => $x['article_cycle'],
-                    'cycle_url' => makeurl($x["article_cycle"]),
+                    'cycle_url' => $slugService->slugify($x["article_cycle"]),
                     'cycle_noosfere_id' => $x["noosfere_IdSerie"]
                 ));
             }
@@ -411,7 +417,7 @@ if ($_GET["mode"] == "search") { // Mode recherche
                 $x["article_people"][$k]["job_id"] = $job->getId();
             }
 
-            if (!isset($c['people_noosfere_id']) || empty($c['people_noosfere_id'])) {
+            if (empty($c['people_noosfere_id'])) {
                 $c['people_noosfere_id'] = null;
             }
 
@@ -425,11 +431,10 @@ if ($_GET["mode"] == "search") { // Mode recherche
                 [
                     'people_noosfere_id' => $c['people_noosfere_id'],
                     'people_name' => $c['people_name'],
-                    'people_url' => makeurl($c["people_name"]),
+                    'people_url' => $slugService->slugify($c["people_name"]),
                 ]
             );
 
-            // Si le contributeur existe deja en base, on recupere les infos
             if ($p = $people->fetch(PDO::FETCH_ASSOC)) {
                 $contributor = $pom->getById($p['people_id']);
                 $x["article_people"][$k]["people_name"] = $p["people_name"];
@@ -439,7 +444,8 @@ if ($_GET["mode"] == "search") { // Mode recherche
                     $pom->update($contributor);
                 }
             } elseif (!empty($c["people_noosfere_id"])) { // Si le contributeur n'existe pas, mais qu'on a un id noosfere, on la cree
-                $c["people_url"] = makeurl($c["people_name"]);
+                $c["people_url"] = $slugService->slugify($c["people_name"]);
+                /** @var People $contributor */
                 $contributor = $pom->create(
                     [
                         'people_first_name' => $c['people_first_name'],
