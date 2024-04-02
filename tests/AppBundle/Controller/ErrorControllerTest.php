@@ -400,6 +400,43 @@ class ErrorControllerTest extends TestCase
      * @throws LoaderError
      * @throws PropelException
      */
+    public function testHandleServerErrorAsJson()
+    {
+        // given
+        $controller = new ErrorController();
+        $request = new Request();
+        $request->headers->set("Accept", "application/json");
+        $exception = new Exception("An error occurred");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+
+        // when
+        $response = $controller->exception($request, $currentSite, $urlGenerator, $exception);
+
+        // then
+        $this->assertEquals(
+            500,
+            $response->getStatusCode(),
+            "it should response with HTTP status 500"
+        );
+        $this->assertEquals("application/json", $response->headers->get("Content-Type"));
+        $json = json_decode($response->getContent(), true);
+        $this->assertEquals("An error occurred", $json["error"]["message"]);
+        $this->assertEquals("Exception", $json["error"]["exception"]);
+        $this->assertStringContainsString(
+            "/tests/AppBundle/Controller/ErrorControllerTest.php",
+            $json["error"]["file"]
+        );
+        $this->assertArrayHasKey("line", $json["error"]);
+        $this->assertIsArray($json["error"]["trace"]);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
     public function testHandleServiceUnavailable()
     {
         // given

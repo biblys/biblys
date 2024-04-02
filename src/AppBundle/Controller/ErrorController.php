@@ -39,10 +39,10 @@ class ErrorController extends Controller
      * @throws SyntaxError
      */
     public function exception(
-        Request     $request,
-        CurrentSite $currentSite,
+        Request      $request,
+        CurrentSite  $currentSite,
         UrlGenerator $urlGenerator,
-        Exception   $exception
+        Exception    $exception
     ): Response
     {
         if (
@@ -100,9 +100,7 @@ class ErrorController extends Controller
             $request->isXmlHttpRequest()
             || $request->headers->get('Accept') == 'application/json'
         ) {
-            $response = new JsonResponse(['error' => $exception->getMessage()]);
-            $response->setStatusCode(400);
-            return $response;
+            return self::_toJsonErrorResponse($exception, 400);
         }
 
         $response = $this->render("AppBundle:Error:400.html.twig", [
@@ -152,9 +150,7 @@ class ErrorController extends Controller
         }
 
         if ($request->headers->get("Accept") === "application/json") {
-            $response = new JsonResponse(["error" => $exception->getMessage()]);
-            $response->setStatusCode(404);
-            return $response;
+            return self::_toJsonErrorResponse($exception, 404);
         }
 
         $request->attributes->set("page_title", "Erreur 404");
@@ -190,17 +186,11 @@ class ErrorController extends Controller
             "Trace" => $exception->getTrace(),
         ]);
 
-        // FIXME: Use ApiBundle for request excepting json
         if (
             $request->headers->get("Accept") === "application/json" ||
             $request->isXmlHttpRequest()
         ) {
-            return new JsonResponse([
-                "error" => $exception->getMessage(),
-                "file" => $exception->getFile(),
-                "line" => $exception->getLine(),
-                "trace" => $exception->getTrace(),
-            ], 500);
+            return self::_toJsonErrorResponse($exception, 500);
         }
 
         $currentException = $exception;
@@ -258,9 +248,7 @@ class ErrorController extends Controller
             $request->isXmlHttpRequest()
             || $request->headers->get('Accept') == 'application/json'
         ) {
-            $response = new JsonResponse(['error' => $exception->getMessage()]);
-            $response->setStatusCode($statusCode);
-            return $response;
+            return self::_toJsonErrorResponse($exception, $statusCode);
         }
 
         $currentUrlService = new CurrentUrlService($request);
@@ -277,11 +265,6 @@ class ErrorController extends Controller
         return $response;
     }
 
-    /**
-     * @param Exception $exception
-     * @param int $statusCode
-     * @return JsonResponse
-     */
     private static function _toJsonErrorResponse(Exception $exception, int $statusCode): JsonResponse
     {
         return new JsonResponse([
