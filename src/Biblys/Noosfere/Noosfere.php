@@ -2,6 +2,8 @@
 
 namespace Biblys\Noosfere;
 
+use Biblys\Contributor\Job;
+use Biblys\Contributor\UnknownJobException;
 use Biblys\Isbn\Isbn as Isbn;
 use Exception;
 use SimpleXMLElement;
@@ -106,5 +108,29 @@ class Noosfere
         }
 
         return null;
+    }
+
+    /**
+     * @throws UnknownJobException
+     */
+    public static function getJobFromNoosfereName(string $name): Job
+    {
+        if ($name === "Illustrateur") {
+            return Job::getByName("Illustrateur (couverture)");
+        }
+
+        if ($name === "Illustrateur intérieur") {
+            return Job::getByName("Illustrateur (intérieur)");
+        }
+
+        if (in_array($name, ["Adaptateur", "Ouvrages sur l'auteur", "Présenté par", "Prête-plume", "Rédacteur en chef"])) {
+            return Job::getByName("Autre auteur");
+        }
+
+        if ($name === "Révision de traduction") {
+            return Job::getByName("Traducteur");
+        }
+
+        return Job::getByName($name);
     }
 }

@@ -1,11 +1,9 @@
 <?php
 
-use Biblys\Contributor\Job;
-use Biblys\Contributor\UnknownJobException;
 use Biblys\Exception\EntityAlreadyExistsException;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Biblys\Isbn\Isbn;
 use Biblys\Noosfere\Noosfere;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 $pm = new PublisherManager();
@@ -409,7 +407,7 @@ if ($_GET["mode"] == "search") { // Mode recherche
         foreach ($x["article_people"] as $k => $c) {
 
             if (!empty($c["people_role"])) {
-                $job = _getJobFromNoosfereName($c["people_role"]);
+                $job = Noosfere::getJobFromNoosfereName($c["people_role"]);
                 $x["article_people"][$k]["job_id"] = $job->getId();
             }
 
@@ -481,32 +479,4 @@ if ($_GET["mode"] == "search") { // Mode recherche
 
     // Resultat en json
     echo str_replace("\u0092", "\u2019", json_encode($x));
-}
-
-
-
-/**
- * @param string $name
- * @return Job
- * @throws UnknownJobException
- */
-function _getJobFromNoosfereName(string $name): Job
-{
-    if ($name === "Illustrateur") {
-        return Job::getByName("Illustrateur (couverture)");
-    }
-
-    if ($name === "Illustrateur intérieur") {
-        return Job::getByName("Illustrateur (intérieur)");
-    }
-
-    if (in_array($name, ["Adaptateur", "Ouvrages sur l'auteur", "Présenté par", "Prête-plume", "Rédacteur en chef"])) {
-        return Job::getByName("Autre auteur");
-    }
-
-    if ($name === "Révision de traduction") {
-        return Job::getByName("Traducteur");
-    }
-
-    return Job::getByName($name);
 }
