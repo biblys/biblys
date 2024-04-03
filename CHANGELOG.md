@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 2.79.0 (DEV)
+## 2.79.0 (3 avril 2024)
 
 Offres spéciales
 
