@@ -193,6 +193,7 @@ class Entry
         $entries[] = new Entry('Termes de recherche', ['category' => 'articles', 'path' => 'article_search_terms', 'icon' => 'search', 'subscription' => 'search-terms']);
         $entries[] = new Entry('Codes ISBN', ['category' => 'articles', 'url' => '/pages/adm_isbn_codes', 'icon' => 'barcode']);
         $entries[] = new Entry('Catalogue', ['category' => 'articles', 'path' => 'article_admin_catalog', 'icon' => 'list-alt']);
+        $entries[] = new Entry('Offres spéciales', ['category' => 'articles', 'path' => 'special_offer_index', 'icon' => 'certificate']);
 
         $entries[] = new Entry('Ajouter au stock', ['category' => 'stock', 'url' => '#', 'icon' => 'plus', 'class' => 'stockQuickAdd']);
         $entries[] = new Entry('Stocks', ['category' => 'stock', 'url' => '/pages/adm_stocks', 'icon' => 'cubes']);

@@ -604,6 +604,12 @@ site_default_values:
   path: /admin/default-values
   controller: AppBundle\Controller\SiteController::defaultValuesAction
 
+# Special Offers
+
+special_offer_index:
+  path: /offres-speciales/
+  controller: AppBundle\Controller\SpecialOfferController::indexAction
+
 # Static pages
 
 static_page_show:

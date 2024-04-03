@@ -1,0 +1,36 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Offres spéciales
+{% endblock %}
+
+{% block main %}
+  <h1>Offres spéciales</h1>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Offre</th>
+      <th>Début</th>
+      <th>Fin</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for offer in offers %}
+      <tr>
+        <td>{{ offer.name }}</td>
+        <td>{{ offer.startDate|date('d/m/Y') }}</td>
+        <td>{{ offer.endDate|date('d/m/Y') }}</td>
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="4">
+          Aucune offre spéciale
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}
