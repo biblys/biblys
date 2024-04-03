@@ -2,10 +2,16 @@
 
 namespace Command;
 
+use Biblys\Contributor\Job;
+use Biblys\Test\ModelFactory;
+use Model\Article;
 use Model\AxysApp;
+use Model\BookCollection;
 use Model\Country;
+use Model\People;
 use Model\Publisher;
 use Model\Right;
+use Model\Role;
 use Model\ShippingFee;
 use Model\Site;
 use Model\AxysAccount;
@@ -67,16 +73,19 @@ class CreateSeedsCommand extends Command
         $user->save();
         $output->writeln(["Inserted user: user@librys.fr (password: password)"]);
 
+        // Publisher
+        $publisher = new Publisher();
+        $publisher->setName("Les Éditions Paronymie");
+        $publisher->setUrl("les-editions-paronymie");
+        $publisher->save();
+
         // User with publisher right
         $publisherUser = new AxysAccount();
         $publisherUser->setEmail("publisher@librys.fr");
         $publisherUser->setUsername("publisher");
         $publisherUser->setPassword("$2y$10\$uBSKxkPvkt8UQM8B98u61e.GGOEdLHzU470Nw4X17zq05i1wIYftm");
         $publisherUser->save();
-        $publisher = new Publisher();
-        $publisher->setName("Les Éditions Paronymie");
-        $publisher->setUrl("les-editions-paronymie");
-        $publisher->save();
+
         $right = new Right();
         $right->setAxysAccount($publisherUser);
         $right->setPublisher($publisher);
@@ -97,6 +106,26 @@ class CreateSeedsCommand extends Command
         $shippingFee->setFee(1);
         $shippingFee->save();
         $output->writeln(["Inserted shipping fee: Offerts"]);
+
+        // Collection
+        $collection = new BookCollection();
+        $collection->setName("La Blanche");
+        $collection->setPublisherId($publisher->getId());
+        $collection->save();
+
+        // Contributor
+        $contributor = ModelFactory::createContributor(
+            firstName: "Aymeric",
+            lastName: "Buvard",
+        );
+
+        // Article
+        $article = ModelFactory::createArticle(
+            title: "L'Ordure du jeu",
+            authors: [$contributor],
+            publisher: $publisher,
+            collection: $collection,
+        );
 
         $output->writeln(["Seeds generated!"]);
         return 0;
