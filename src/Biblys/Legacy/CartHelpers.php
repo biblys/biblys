@@ -5,6 +5,7 @@ namespace Biblys\Legacy;
 use ArticleManager;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Images\ImagesService;
+use DateTime;
 use Exception;
 use Model\Article;
 use Model\ArticleCategoryQuery;
@@ -179,6 +180,14 @@ class CartHelpers
         $targetCollection = $specialOffer->getTargetCollection();
 
         if (!$targetCollection || !$freeArticle) {
+            return "";
+        }
+
+        if ($specialOffer->getStartDate() > new DateTime()) {
+            return "";
+        }
+
+        if ($specialOffer->getEndDate() < new DateTime()) {
             return "";
         }
 

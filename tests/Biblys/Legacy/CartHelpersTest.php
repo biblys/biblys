@@ -1,9 +1,10 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace Biblys\Legacy;
 
 use Biblys\Service\CurrentSite;
 use Biblys\Test\ModelFactory;
+use DateTime;
 use Mockery;
 use Model\SpecialOfferQuery;
 use PHPUnit\Framework\TestCase;
