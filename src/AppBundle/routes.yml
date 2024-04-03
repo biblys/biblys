@@ -610,6 +610,12 @@ special_offer_index:
   path: /offres-speciales/
   controller: AppBundle\Controller\SpecialOfferController::indexAction
 
+special_offer_edit:
+  path: /admin/special-offers/{id}/edit
+  controller: AppBundle\Controller\SpecialOfferController::editAction
+  requirements:
+    id: \d+
+
 # Static pages
 
 static_page_show:

@@ -19,7 +19,11 @@
     <tbody>
     {% for offer in offers %}
       <tr>
-        <td>{{ offer.name }}</td>
+        <td>
+          <a href="{{ path('special_offer_edit', { id: offer.id }) }}">
+            {{ offer.name }}
+          </a>
+        </td>
         <td>{{ offer.startDate|date('d/m/Y') }}</td>
         <td>{{ offer.endDate|date('d/m/Y') }}</td>
       </tr>

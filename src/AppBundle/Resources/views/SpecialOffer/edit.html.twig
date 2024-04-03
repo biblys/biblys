@@ -1,0 +1,79 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Modifier {{ offer.name }}
+{% endblock %}
+
+{% block main %}
+  <p>
+    <a href="{{ path('special_offer_index') }}">Offres spéciales</a>
+  </p>
+
+  <h1>Modifier « {{ offer.name }} »</h1>
+
+  <form class="fieldset">
+    <div class="form-group">
+      <label for="name">Nom</label>
+      <input type="text" class="form-control" id="name" name="name" value="{{ offer.name }}" required>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea class="wysiwyg" id="description" name="description" required>{{ offer.description }}</textarea>
+    </div>
+
+    <fieldset class="form-inline">
+      <legend>Conditions</legend>
+
+      <p>
+        <span class="form-group">
+          <label for="start_date">Du</label>
+          <input type="date" id="start_date" name="start_date" value="{{ offer.startDate|date('Y-m-d') }}" required>
+        </span>
+
+        <span class="form-group">
+          <label for="end_date">au</label>
+          <input type="date" id="end_date" name="end_date" value="{{ offer.endDate|date('Y-m-d') }}" required>
+        </span>
+      </p>
+
+      <p>
+        <span class="form-group">
+          <label for="target_quantity">pour</label>
+          <input type="number" id="target_quantity" name="target_quantity" value="{{ offer.targetQuantity }}" required>
+          articles achetés
+        </span>
+      </p>
+
+      <p>
+        <span class="form-group">
+          <label for="target_collection_id">dans la collection</label>
+          <select id="target_collection_id" name="target_collection_id" required>
+            {% for collection in collections %}
+              <option value="{{ collection.id }}" {% if collection.id == offer.targetCollectionId %}selected{% endif %}>
+                {{ collection.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </span>
+      </p>
+
+      <p class="form-group">
+        <label for="free_article_id">l'article</label>
+        <select id="free_article_id" name="free_article_id" required>
+          {% for article in articles %}
+            <option value="{{ article.id }}" {% if article.id == offer.freeArticleId %}selected{% endif %}>
+              {{ article.titleAlphabetic }}
+            </option>
+          {% endfor %}
+        </select>
+        est offert
+      </p>
+    </fieldset>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
+  </form>
+
+{% endblock %}
