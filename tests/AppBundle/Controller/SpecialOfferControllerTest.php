@@ -11,7 +11,10 @@ use Model\ArticleQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -125,5 +128,80 @@ class SpecialOfferControllerTest extends TestCase
 
         // then
         $this->assertEquals($response, $givenResponse);
+    }
+
+    /* UPDATE ACTION */
+
+    /**
+     * @throws PropelException
+     */
+    public function testUpdateActionReturns404(): void
+    {
+        // given
+        $specialOfferController = new SpecialOfferController();
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $site = ModelFactory::createSite();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $session = Mockery::mock(Session::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+
+        // then
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage("Special offer not found");
+
+        // when
+        $specialOfferController->updateAction($request, $currentSite, $session, $urlGenerator, 999);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testUpdateActionUpdatesOffer(): void
+    {
+        // given
+        $specialOfferController = new SpecialOfferController();
+
+        $site = ModelFactory::createSite();
+        $offer = ModelFactory::createSpecialOffer(site: $site, name: "Super offre");
+
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->shouldReceive("add")
+            ->with("success", "Offre spéciale « Nouvelle offre » mise à jour avec succès")
+            ->andReturn();
+        $session = Mockery::mock(Session::class);
+        $session->shouldReceive("getFlashBag")
+            ->andReturn($flashBag);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("special_offer_edit", ["id" => $offer->getId()])
+            ->andReturn("/special_offer_edit");
+
+        // when
+        $request->request->set("name", "Nouvelle offre");
+        $request->request->set("description", "Description de la nouvelle offre");
+        $request->request->set("start_date", "2021-01-01");
+        $request->request->set("end_date", "2021-01-31");
+        $request->request->set("target_quantity", "3");
+        $request->request->set("target_collection_id", "999");
+        $request->request->set("free_article_id", "9999");
+        $response = $specialOfferController->updateAction(
+            $request, $currentSite, $session, $urlGenerator, id: $offer->getId()
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/special_offer_edit", $response->getTargetUrl());
+
+        $offer->reload();
+        $this->assertEquals("Nouvelle offre", $offer->getName());
+        $this->assertEquals("Description de la nouvelle offre", $offer->getDescription());
+        $this->assertEquals("2021-01-01", $offer->getStartDate()->format("Y-m-d"));
+        $this->assertEquals("2021-01-31", $offer->getEndDate()->format("Y-m-d"));
+        $this->assertEquals(999, $offer->getTargetCollectionId());
+        $this->assertEquals(9999, $offer->getFreeArticleId());
     }
 }

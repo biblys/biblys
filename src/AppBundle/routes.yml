@@ -616,6 +616,13 @@ special_offer_edit:
   requirements:
     id: \d+
 
+special_offer_update:
+  methods: POST
+  path: /admin/special-offers/{id}/update
+  controller: AppBundle\Controller\SpecialOfferController::updateAction
+  requirements:
+    id: \d+
+
 # Static pages
 
 static_page_show:
