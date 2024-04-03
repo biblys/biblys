@@ -1,6 +1,8 @@
 # Historique des modifications
 
-### 2.78.4 (DEV)
+### 2.78.4 (3 avril 2024)
+
+Corrections
 
 - Les erreurs lors de l'import pouvaient ne pas être affichées correctement.
   C'est réparé.
