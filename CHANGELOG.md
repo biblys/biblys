@@ -7,6 +7,8 @@ Améliorations
 - Une option de site "order_phone_required" a été ajouté pour rendre
   obligatoire le numéro de téléphone lors de la validation de commande.
 - La validation des paramètres de requête lors de la recherche a été améliorée.
+- Si renseigné, le numéro de téléphone du client apparaîtra désormais sur la 
+  page de la commande
 
 ### 2.78.4 (3 avril 2024)
 

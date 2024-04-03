@@ -100,6 +100,10 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
         <p><a href="mailto:' . $o["order_email"] . '">' . $o["order_email"] . '</a></p>
     ';
 
+    if ($order->has("phone")) {
+        $content .= '<p>Tel: ' . $order->get("phone") . '</p>';
+    }
+
     // Ref client
     if (!empty($o["axys_account_id"]) and $currentUserService->isAdmin()) {
         /** @var PDO $_SQL */
