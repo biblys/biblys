@@ -2,7 +2,13 @@
 
 ## 2.79.0 (DEV)
 
-Améliorations
+Offres spéciales
+
+- Il est désormais possible de créer une offre spéciale pour afficher une 
+  information dans le panier du type "Un article offert pour deux livres de 
+  la collection X achetés".
+
+Autres améliorations
 
 - Une option de site "order_phone_required" a été ajouté pour rendre
   obligatoire le numéro de téléphone lors de la validation de commande.
