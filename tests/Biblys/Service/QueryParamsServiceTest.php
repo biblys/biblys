@@ -30,6 +30,27 @@ class QueryParamsServiceTest extends TestCase
         $this->assertEquals("search terms", $searchQuery);
     }
 
+    public function testUnknownKey(): void
+    {
+        // given
+        $request = new Request();
+        $request->query->set("ref", [1]);
+
+        $specs = [
+            "q" => [
+                "type" => "string",
+            ],
+        ];
+        $queryParamsService = new QueryParamsService($request);
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("Unknown key 'ref'");
+
+        // when
+        $queryParamsService->parse($specs);
+    }
+
     public function testInvalidValueType()
     {
         // given

@@ -5,6 +5,7 @@ namespace Biblys\Service;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Validate\Exception\NamedValueException;
+use Validate\Exception\ValidationException;
 use Validate\Validator;
 
 class QueryParamsService
@@ -23,7 +24,7 @@ class QueryParamsService
 
         try {
             $this->queryParams = $validator->validate($this->request->query->all());
-        } catch (NamedValueException $e) {
+        } catch (ValidationException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
     }
