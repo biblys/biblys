@@ -13,6 +13,7 @@ use Biblys\Service\TokenService;
 use Biblys\Test\ModelFactory;
 use DateTime;
 use Exception;
+use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Token\TokenSetInterface;
 use Firebase\JWT\JWT;
 use JsonException;
@@ -23,6 +24,7 @@ use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 require_once __DIR__."/../../setUp.php";
 
@@ -66,7 +68,7 @@ class OpenIDConnectControllerTest extends TestCase
         $axysAccount = ModelFactory::createAxysAccount();
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $openIDConnectProviderService = $this->buildOIDCProviderService($axysAccount);
+        $openIDConnectProviderService = $this->_buildOIDCProviderService($axysAccount);
 
         $request = self::_buildCallbackRequest();
         $controller = new OpenIDConnectController();
@@ -113,7 +115,7 @@ class OpenIDConnectControllerTest extends TestCase
         $axysAccount = ModelFactory::createAxysAccount();
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $openIDConnectProviderService = $this->buildOIDCProviderService($axysAccount);
+        $openIDConnectProviderService = $this->_buildOIDCProviderService($axysAccount);
 
         $request = self::_buildCallbackRequest(returnUrl: "/my-account");
         $controller = new OpenIDConnectController();
@@ -176,6 +178,41 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals($expectedResponse, $returnedResponse);
     }
 
+
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testCallbackHandlesOAuth2Exception()
+    {
+        // given
+        $controller = new OpenIDConnectController();
+
+        $request = self::_buildCallbackRequest();
+        $site = ModelFactory::createSite();
+
+        $currentSite = new CurrentSite($site);
+        $openIDConnectProviderService = Mockery::mock(OpenIDConnectProviderService::class);
+        $openIDConnectProviderService->expects("getTokenSet")->andThrow(new OAuth2Exception("invalid_grant"));
+        $templateService = Mockery::mock(TemplateService::class);
+        $currentUser = Mockery::mock(CurrentUser::class);
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("invalid_grant");
+
+        // when
+        $controller->callback(
+            request: $request,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
+            openIDConnectProviderService: $openIDConnectProviderService,
+            templateService: $templateService
+        );
+    }
+
     /**
      * @param string $returnUrl
      * @return Request
@@ -194,7 +231,7 @@ class OpenIDConnectControllerTest extends TestCase
      * @param AxysAccount $axysAccount
      * @return OpenIDConnectProviderService
      */
-    private function buildOIDCProviderService(AxysAccount $axysAccount): OpenIDConnectProviderService
+    private function _buildOIDCProviderService(AxysAccount $axysAccount): OpenIDConnectProviderService
     {
         $tokenSet = $this->createMock(TokenSetInterface::class);
         $tokenSet->method("claims")->willReturn(["sub" => $axysAccount->getId(), "exp" => 1682278410]);

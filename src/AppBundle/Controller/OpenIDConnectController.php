@@ -11,6 +11,7 @@ use Biblys\Service\TemplateService;
 use Biblys\Service\TokenService;
 use DateTime;
 use Exception;
+use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Framework\Controller;
@@ -25,6 +26,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class OpenIDConnectController extends Controller
 {
@@ -32,8 +34,8 @@ class OpenIDConnectController extends Controller
      * @throws JsonException
      */
     public function axys(
-        QueryParamsService $queryParams,
-        TokenService $tokenService,
+        QueryParamsService           $queryParams,
+        TokenService                 $tokenService,
         OpenIDConnectProviderService $openIDConnectProviderService,
     ): RedirectResponse
     {
@@ -48,12 +50,12 @@ class OpenIDConnectController extends Controller
      * @throws Exception
      */
     public function callback(
-        Request $request,
-        CurrentSite $currentSite,
-        CurrentUser $currentUser,
-        Config $config,
+        Request                      $request,
+        CurrentSite                  $currentSite,
+        CurrentUser                  $currentUser,
+        Config                       $config,
         OpenIDConnectProviderService $openIDConnectProviderService,
-        TemplateService $templateService,
+        TemplateService              $templateService,
     ): Response|RedirectResponse
     {
         $error = $request->query->get("error");
@@ -63,18 +65,22 @@ class OpenIDConnectController extends Controller
             ]);
         }
 
-        [$externalId, $sessionExpiresAt] = OpenIDConnectController::_getClaimsFromOidcTokens($request, $openIDConnectProviderService);
-        $returnUrl = OpenIDConnectController::_getReturnUrlFromState($request, $config);
-        $axysAccount = AxysAccountQuery::create()->findPk($externalId);
+        try {
+            [$externalId, $sessionExpiresAt] = OpenIDConnectController::_getClaimsFromOidcTokens($request, $openIDConnectProviderService);
+            $returnUrl = OpenIDConnectController::_getReturnUrlFromState($request, $config);
+            $axysAccount = AxysAccountQuery::create()->findPk($externalId);
 
-        $sessionCookie = OpenIDConnectController::_createSession($axysAccount, $currentSite, $sessionExpiresAt);
+            $sessionCookie = OpenIDConnectController::_createSession($axysAccount, $currentSite, $sessionExpiresAt);
 
-        $currentUser->setAxysAccount($axysAccount);
-        $currentUser->transfertVisitorCartToUser(visitorToken:  $request->cookies->get("visitor_uid"));
+            $currentUser->setAxysAccount($axysAccount);
+            $currentUser->transfertVisitorCartToUser(visitorToken: $request->cookies->get("visitor_uid"));
 
-        $response = new RedirectResponse($returnUrl);
-        $response->headers->setCookie($sessionCookie);
-        return $response;
+            $response = new RedirectResponse($returnUrl);
+            $response->headers->setCookie($sessionCookie);
+            return $response;
+        } catch(OAuth2Exception $exception) {
+            throw new BadRequestHttpException($exception->getMessage());
+        }
     }
 
     /**
