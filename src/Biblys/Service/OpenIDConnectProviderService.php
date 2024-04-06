@@ -2,6 +2,7 @@
 
 namespace Biblys\Service;
 
+use Exception;
 use Facile\OpenIDClient\Client\ClientBuilder;
 use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
@@ -63,10 +64,16 @@ class OpenIDConnectProviderService
     }
 
     /**
-     * @throws ServiceUnavailableHttpException
+     * @throws Exception
      */
     public function getClient(): ClientInterface
     {
+        $clientId = $this->config->get("axys.client_id");
+        $clientSecret = $this->config->get("axys.client_secret");
+        if (!$clientId || !$clientSecret) {
+            throw new Exception("Invalid identity provider configuration");
+        }
+
         try {
             $issuer = (new IssuerBuilder())
                 ->build('https://axys.me/.well-known/openid-configuration');
@@ -75,8 +82,8 @@ class OpenIDConnectProviderService
         }
 
         $clientMetadata = ClientMetadata::fromArray([
-            'client_id' => $this->config->get("axys.client_id"),
-            'client_secret' => $this->config->get("axys.client_secret"),
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
             'token_endpoint_auth_method' => 'client_secret_basic',
             'redirect_uris' => [
                 $this->config->get("axys.redirect_uri"),
