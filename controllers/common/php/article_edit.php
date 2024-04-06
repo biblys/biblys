@@ -974,16 +974,16 @@ return function (
             <br /><br />
 
             <label class="floating" for="article_theme_bisac">BISAC :</label>
-            <input type="text" id="article_theme_bisac" name="article_theme_bisac" value="' . $a['article_theme_bisac'] . '" class="medium">
+            <input type="text" id="article_theme_bisac" name="article_theme_bisac" value="' . $a['article_theme_bisac'] . '" class="medium" maxlength="16">
             <br />
             <label class="floating" for="article_theme_clil">CLIL :</label>
-            <input type="text" id="article_theme_clil" name="article_theme_clil" value="' . $a['article_theme_clil'] . '" class="medium">
+            <input type="text" id="article_theme_clil" name="article_theme_clil" value="' . $a['article_theme_clil'] . '" class="medium" maxlength="16">
             <br />
             <label class="floating" for="article_theme_dewey">Dewey :</label>
-            <input type="text" id="article_theme_dewey" name="article_theme_dewey" value="' . $a['article_theme_dewey'] . '" class="medium">
+            <input type="text" id="article_theme_dewey" name="article_theme_dewey" value="' . $a['article_theme_dewey'] . '" class="medium" maxlength="16">
             <br />
             <label class="floating" for="article_theme_electre">Electre :</label>
-            <input type="text" id="article_theme_electre" name="article_theme_electre" value="' . $a['article_theme_electre'] . '" class="medium">
+            <input type="text" id="article_theme_electre" name="article_theme_electre" value="' . $a['article_theme_electre'] . '" class="medium" maxlength="16">
             <br />
         </fieldset>
 

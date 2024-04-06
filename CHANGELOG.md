@@ -1,5 +1,14 @@
 # Historique des modifications
 
+### 2.79.1 (DEV)
+
+Corrections
+
+- L'entrée de valeurs trop longues pour les codes BISAC, CLIC, Dewey et 
+  Electre pouvait déclencher une erreur. Une limite de 16 caratère a été 
+  ajoutée.
+- Le lien vers la documentation des options de site a été mis à jour.
+
 ## 2.79.0 (3 avril 2024)
 
 Offres spéciales
