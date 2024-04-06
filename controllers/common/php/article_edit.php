@@ -465,7 +465,7 @@ return function (
         $publisher_id = $currentUser->getCurrentRight()->getPublisherId();
     }
 
-    $bonus_fieldset_class = 'hidden';
+    $bonus_fieldset_class = null;
 
     $createCollectionPublisher = '
     <input type="text" id="collection_publisher" name="collection_publisher" class="long uncomplete" required>
@@ -475,12 +475,9 @@ return function (
         $pub = $pm->getById($publisher_id);
         if ($pub) {
             $createCollectionPublisher = '
-            <input type="text" id="collection_publisher" name="collection_publisher" value="' . $pub->get('name') . '" class="long uncomplete" required readonly>
-            <input type="hidden" id="collection_publisher_id" name="collection_publisher_id" value="' . $pub->get('id') . '" required readonly>
-        ';
-
-            // Display bonus field if on current publisher's site
-            $bonus_fieldset_class = null;
+                <input type="text" id="collection_publisher" name="collection_publisher" value="' . $pub->get('name') . '" class="long uncomplete" required readonly>
+                <input type="hidden" id="collection_publisher_id" name="collection_publisher_id" value="' . $pub->get('id') . '" required readonly>
+            ';
         }
     }
 
