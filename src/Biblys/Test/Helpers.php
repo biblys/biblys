@@ -2,6 +2,7 @@
 
 namespace Biblys\Test;
 
+use Exception;
 use ReflectionClass;
 use ReflectionException;
 
@@ -20,5 +21,19 @@ class Helpers
         $method = $class->getMethod($methodName);
         $method->setAccessible(true);
         $method->invokeArgs($object, $args);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function runAndCatchException(callable $function): ?Exception
+    {
+        try {
+            $function();
+        } catch (Exception $exception) {
+            return $exception;
+        }
+
+        throw new Exception("Excepted function to throw an exception, but none was.");
     }
 }
