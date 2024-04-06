@@ -46,7 +46,7 @@ return function (Request $request, CurrentSite $currentSite): Response
 
     $stock = EntityManager::prepareAndExecute(
         'SELECT
-        `article_title`, `article_authors`, `article_url`, `article_tva`,
+        `article_title`, `article_ean`, `article_authors`, `article_url`, `article_tva`,
         `stock_id`, `stock_purchase_price`, `stock_selling_price`, 
         `stock_condition`, `stock_purchase_date`
     FROM `stock` AS `s`
@@ -85,6 +85,9 @@ return function (Request $request, CurrentSite $currentSite): Response
                     <a href="/pages/adm_stock?id=' . $s['stock_id'] . '">
                         ' . $s['stock_id'] . '
                     </a>
+                </td>
+                <td>
+                    '.$s["article_ean"].'
                 </td>
                 <td title="' . $s['article_authors'] . '">
                     <a href="/a/' . $s['article_url'] . '">' . $s['article_title'] . '</a>
@@ -164,6 +167,7 @@ return function (Request $request, CurrentSite $currentSite): Response
             <thead>
                 <tr>
                     <th>Ref.</th>
+                    <th>EAN</th>
                     <th>Titre</th>
                     <th>État</th>
                     <th title="Prix d\'achat HT">PdA HT</th>
