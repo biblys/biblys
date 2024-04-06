@@ -9,7 +9,6 @@ use Exception;
 use Model\SiteQuery;
 use PDO;
 use Site;
-use SiteManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Visitor;
@@ -17,6 +16,8 @@ use function trigger_deprecation;
 
 class LegacyCodeHelper
 {
+    private static array $knownDeprecations = [];
+
     /**
      * @throws Exception
      * @deprecated Using getLegacyCurrentSite is deprecated. Use CurrentSite service instead.
@@ -171,6 +172,12 @@ class LegacyCodeHelper
             if ($level === E_USER_DEPRECATED) {
                 $caller = $trace[3];
             }
+
+            $deprecationKey = "{$caller["file"]}:{$caller["line"]}:";
+            if (array_key_exists($deprecationKey, self::$knownDeprecations)) {
+                return;
+            }
+            self::$knownDeprecations[$deprecationKey] = true;
 
             if ($config->get("logs.deprecations")) {
                 $loggerService = new LoggerService();
