@@ -245,10 +245,13 @@ class Article extends Entity
         global $_SQL;
         $pm = new PostManager();
 
-        $posts = array();
-        $links = $_SQL->query('SELECT `post_id` FROM `links` WHERE `article_id` = ' . $this->get('id') . ' AND `post_id` IS NOT NULL');
-        while ($l = $links->fetch(PDO::FETCH_ASSOC)) {
-            $posts[] = $pm->get(array('post_id' => $l['post_id']));
+        $posts = [];
+        $linksQuery = $_SQL->query('SELECT `post_id` FROM `links` WHERE `article_id` = ' . $this->get('id') . ' AND `post_id` IS NOT NULL');
+        while ($link = $linksQuery->fetch(PDO::FETCH_ASSOC)) {
+            $post = $pm->get(["post_id" => $link["post_id"]]);
+            if ($post) {
+                $posts[] = $post;
+            }
         }
 
         return $posts;
