@@ -21,7 +21,7 @@ return function (Request $request): Response
     WHERE
         `orders`.`site_id` = :site_id AND
         `order_payment_date` > SUBDATE(NOW(), INTERVAL 1 MONTH) AND
-        `order_payment_date` != '0000-00-00 00:00:00' AND
+        `order_payment_date` IS NOT NULL AND
         `order_cancel_date` IS null
     GROUP BY `date`
     ORDER BY `date` DESC",
@@ -37,7 +37,7 @@ return function (Request $request): Response
     FROM `orders`
     WHERE `orders`.`site_id` = :site_id 
       AND `order_cancel_date` IS NULL
-      AND `order_payment_date` != '0000-00-00 00:00:00'
+      AND `order_payment_date` IS NOT NULL
     GROUP BY `date`
     ORDER BY `date` DESC",
         ["site_id" => $GLOBALS["LEGACY_CURRENT_SITE"]->get("id")]

@@ -708,7 +708,7 @@ function _getDatesOptions(
     FROM `orders` 
     WHERE `orders`.`site_id` = :site_id 
         AND `order_cancel_date` IS null
-        AND `order_payment_date` != '0000-00-00 00:00:00'
+        AND `order_payment_date` IS NOT NULL
     GROUP BY `date`
     ORDER BY `date` DESC
     LIMIT 30
