@@ -19,6 +19,18 @@ class CloudSubscriptionTest extends TestCase
         $this->assertTrue($isActive);
     }
 
+    public function testIsActiveForFreeTrial()
+    {
+        // given
+        $subscription = new CloudSubscription(status: "trialing");
+
+        // when
+        $isActive = $subscription->isActive();
+
+        // then
+        $this->assertTrue($isActive);
+    }
+
     public function testIsActiveForUnpaidSubscription()
     {
         // given
