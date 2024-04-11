@@ -72,6 +72,7 @@ class CurrentUser
 
     /**
      * @throws PropelException
+     * @throws Exception
      */
     public static function buildFromRequestAndConfig(Request $request, Config $config): CurrentUser
     {
@@ -314,8 +315,12 @@ class CurrentUser
     /**
      * @throws PropelException
      */
-    public function transfertVisitorCartToUser(string $visitorToken): void
+    public function transfertVisitorCartToUser(?string $visitorToken): void
     {
+        if ($visitorToken === null) {
+            return;
+        }
+
         $visitorCart = CartQuery::create()->findOneByUid($visitorToken);
         if (!$visitorCart) {
             return;

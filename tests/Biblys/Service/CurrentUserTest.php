@@ -768,6 +768,25 @@ class CurrentUserTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function testCartTransferWhenVisitorHasNoCookie()
+    {
+        // given
+        $axysAccount = ModelFactory::createAxysAccount();
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentUser = new CurrentUser($axysAccount, null);
+        $currentUser->injectCurrentSite($currentSite);
+
+        // when
+        $currentUser->transfertVisitorCartToUser(null);
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testCartTransferWhenVisitorCartDoesNotExist()
     {
         // given
