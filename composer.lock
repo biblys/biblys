@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6dd11cc8f1a5e4222b1bc3a81101957d",
+    "content-hash": "395c942d3e2dce0b063ddab841700d8d",
     "packages": [
         {
             "name": "biblys/eurotax",
@@ -3612,16 +3612,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v13.18.0",
+            "version": "v14.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "02abb043b103766f4ed920642ae56ffdc58c7467"
+                "reference": "45841a49808a71dc9e6d385e18042b7c46a68280"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/02abb043b103766f4ed920642ae56ffdc58c7467",
-                "reference": "02abb043b103766f4ed920642ae56ffdc58c7467",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/45841a49808a71dc9e6d385e18042b7c46a68280",
+                "reference": "45841a49808a71dc9e6d385e18042b7c46a68280",
                 "shasum": ""
             },
             "require": {
@@ -3665,9 +3665,9 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v13.18.0"
+                "source": "https://github.com/stripe/stripe-php/tree/v14.0.0"
             },
-            "time": "2024-04-09T21:08:04+00:00"
+            "time": "2024-04-10T22:56:53+00:00"
         },
         {
             "name": "symfony/asset",
