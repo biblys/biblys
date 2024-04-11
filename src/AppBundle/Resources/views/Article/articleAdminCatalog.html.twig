@@ -53,7 +53,14 @@
           {% endif %}
         </td>
         <td class="text-right">
-          {{ article.countAvailableStockItemsForSite(site) }}
+          {% set itemCount = article.countAvailableStockItemsForSite(site) %}
+          {% if itemCount == 0 %}
+            <a href="/pages/adm_stock?add={{ article.id }}">0</a>
+          {% else %}
+            <a href="/pages/adm_stocks?article_id={{ article.id }}">
+              {{ itemCount }}
+            </a>
+          {% endif %}
         </td>
       </tr>
     {% endfor %}

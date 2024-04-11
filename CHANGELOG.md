@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 2.80.0 (DEV)
+
+Améliorations
+
+-  Un lien vers le stock des articles a été ajouté sur la page Catalogue.
+
 ### 2.79.3 (1er mai 2024)
 
 Corrections
