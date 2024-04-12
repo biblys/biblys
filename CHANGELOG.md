@@ -4,7 +4,9 @@
 
 Améliorations
 
--  Un lien vers le stock des articles a été ajouté sur la page Catalogue.
+- Des boutons pour ajouter ou supprimer des adresses dans une liste de 
+  contacts ont été ajoutés
+- Un lien vers le stock des articles a été ajouté sur la page Catalogue.
 
 ### 2.79.3 (1er mai 2024)
 
