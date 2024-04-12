@@ -32,7 +32,7 @@ class Template
         $global = new Template();
         $global->setName('Modèle principal');
         $global->setSlug('layout');
-        $global->setType('HTML');
+        $global->setType('Twig');
         $global->setFileName('base.html.twig');
         $templates[] = $global;
 
