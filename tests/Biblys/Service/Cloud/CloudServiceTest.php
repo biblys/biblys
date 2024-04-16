@@ -5,8 +5,12 @@ namespace Biblys\Service\Cloud;
 use Biblys\Service\Config;
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\ServerException;
 use Mockery;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 
 class CloudServiceTest extends TestCase
 {
@@ -44,5 +48,66 @@ class CloudServiceTest extends TestCase
 
         // then
         $this->assertTrue($isConfigured);
+    }
+
+    /** getSubscription */
+
+    /**
+     * @throws GuzzleException
+     * @throws Exception
+     */
+    public function testGetSubscription(): void
+    {
+        // given
+        $cloudConfig = ["public_key" => "PUBLIC", "secret_key" => "SECRET"];
+        $config = new Config(["cloud" => $cloudConfig]);
+        $httpClient = Mockery::mock(Client::class);
+        $body = Mockery::mock(StreamInterface::class);
+        $body->shouldReceive("__toString")->andReturn(json_encode([
+            "id" => 1,
+            "status" => "active",
+        ]));
+        $response = Mockery::mock(ResponseInterface::class);
+        $response->shouldReceive("getBody")
+            ->with()
+            ->andReturn($body);
+        $httpClient->shouldReceive("request")
+            ->with("GET", "https://biblys.cloud/api/stripe/subscription", [
+                "auth" => ["PUBLIC", "SECRET"],
+            ])->andReturn($response);
+
+        $cloud = new CloudService($config, $httpClient);
+
+        // when
+        $subscription = $cloud->getSubscription();
+
+        // then
+        $this->assertEquals(
+            new CloudSubscription(status: "active"),
+            $subscription
+        );
+    }
+
+    /**
+     * @throws GuzzleException
+     * @throws Exception
+     */
+    public function testGetSubscriptionSilentlyIgnoresServerError(): void
+    {
+        // given
+        $cloudConfig = ["public_key" => "PUBLIC", "secret_key" => "SECRET"];
+        $config = new Config(["cloud" => $cloudConfig]);
+        $exception = Mockery::mock(ServerException::class);
+        $httpClient = Mockery::mock(Client::class);
+        $httpClient->shouldReceive("request")
+            ->andThrow($exception);
+
+        $cloud = new CloudService($config, $httpClient);
+
+        // when
+        $subscription = $cloud->getSubscription();
+
+        // then
+        $this->assertNull($subscription);
     }
 }

@@ -6,6 +6,7 @@ use Biblys\Service\Config;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\ServerException;
 
 class CloudService
 {
@@ -37,13 +38,17 @@ class CloudService
     public function getSubscription(): ?CloudSubscription
     {
         if (!$this->subscriptionFetched) {
-            $subscription = $this->_query("/stripe/subscription");
-            $this->subscriptionFetched = true;
+            try {
+                $subscription = $this->_query("/stripe/subscription");
+                $this->subscriptionFetched = true;
 
-            if (isset($subscription["id"])) {
-                $this->subscription = new CloudSubscription(
-                    status: $subscription["status"],
-                );
+                if (isset($subscription["id"])) {
+                    $this->subscription = new CloudSubscription(
+                        status: $subscription["status"],
+                    );
+                }
+            } catch (ServerException) {
+
             }
         }
 
@@ -71,7 +76,9 @@ class CloudService
         }
 
         $baseUrl = $this->config->get("cloud.base_url") ?: "https://biblys.cloud";
-        $response = $this->httpClient->request("GET", "$baseUrl/api$endpointUrl", [
+        $requestUrl = "$baseUrl/api$endpointUrl";
+
+        $response = $this->httpClient->request("GET", $requestUrl, [
             "auth" => [
                 $this->config->get("cloud.public_key"),
                 $this->config->get("cloud.secret_key"),

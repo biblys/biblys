@@ -488,6 +488,41 @@ class MainControllerTest extends TestCase
      * @throws UpdaterException
      * @throws GuzzleException
      */
+    public function testAdminWithoutCloudSubscription()
+    {
+        // given
+        $controller = new MainController();
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $config = new Config();
+        $config->set("environment", "test");
+        $config->set("cloud", ["customer_id" => "12345"]);
+        $updater = $this->createMock(Updater::class);
+        $updater->method("isUpdateAvailable")->willReturn(false);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")->willReturn("/");
+        $cloudService = $this->createMock(CloudService::class);
+        $cloudService->method("isConfigured")->willReturn(true);
+        $cloudService->method("getSubscription")->willReturn(null);
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method("getOption")->willReturn("1");
+        $currentSite = $this->createMock(CurrentSite::class);
+
+        // when
+        $response = $controller->adminAction($request, $config, $urlGenerator, $cloudService, $currentUser, $currentSite);
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "returns HTTP 200"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws UpdaterException
+     * @throws GuzzleException
+     */
     public function testAdminWithUnpaidCloudSubscription()
     {
         // given
