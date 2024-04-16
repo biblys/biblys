@@ -12,10 +12,12 @@ class CloudService
     private Config $config;
     private bool $subscriptionFetched = false;
     private ?CloudSubscription $subscription = null;
+    private Client $httpClient;
 
-    public function __construct(Config $config)
+    public function __construct(Config $config, Client $httpClient)
     {
         $this->config = $config;
+        $this->httpClient = $httpClient;
     }
 
     /**
@@ -68,9 +70,8 @@ class CloudService
             throw new Exception("Biblys Cloud n'est pas configuré.");
         }
 
-        $client = new Client();
         $baseUrl = $this->config->get("cloud.base_url") ?: "https://biblys.cloud";
-        $response = $client->request("GET", "$baseUrl/api$endpointUrl", [
+        $response = $this->httpClient->request("GET", "$baseUrl/api$endpointUrl", [
             "auth" => [
                 $this->config->get("cloud.public_key"),
                 $this->config->get("cloud.secret_key"),

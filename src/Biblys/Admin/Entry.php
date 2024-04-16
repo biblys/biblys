@@ -7,6 +7,7 @@ use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Config;
 use Biblys\Service\Updater\UpdaterException;
 use Exception;
+use GuzzleHttp\Client;
 use OrderManager;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
@@ -240,7 +241,7 @@ class Entry
         $entries[] = new Entry('Tâches planifiées', ['category' => 'site', 'path' => 'crons_tasks', 'icon' => 'clock-o']);
 
         $entries[] = new Entry('Améliorer Biblys', ['category' => 'biblys', 'url' => 'https://ameliorer.biblys.cloud', 'icon' => 'lightbulb-o']);
-        $cloud = new CloudService($config);
+        $cloud = new CloudService($config, new Client());
         if ($cloud->isConfigured()) {
             $entries[] = new Entry('Abonnement Cloud', ['category' => 'biblys', 'path' => 'main_admin_cloud', 'icon' => 'cloud']);
         }

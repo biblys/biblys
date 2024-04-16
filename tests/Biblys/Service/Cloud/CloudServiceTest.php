@@ -1,9 +1,11 @@
 <?php
 
-namespace Biblys\Service;
+namespace Biblys\Service\Cloud;
 
-use Biblys\Service\Cloud\CloudService;
+use Biblys\Service\Config;
 use Exception;
+use GuzzleHttp\Client;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 
 class CloudServiceTest extends TestCase
@@ -16,13 +18,14 @@ class CloudServiceTest extends TestCase
         // given
         $cloudConfig = ["expires" => "2020-01-01"];
         $config = new Config(["cloud" => $cloudConfig]);
-        $cloud = new CloudService($config);
+        $httpClient = Mockery::mock(Client::class);
+        $cloud = new CloudService($config, $httpClient);
 
         // when
         $isConfigured = $cloud->isConfigured();
 
         // then
-        $this->assertEquals(false, $isConfigured);
+        $this->assertFalse($isConfigured);
     }
 
     /**
@@ -33,12 +36,13 @@ class CloudServiceTest extends TestCase
         // given
         $cloudConfig = ["public_key" => "cus_abcd1234"];
         $config = new Config(["cloud" => $cloudConfig]);
-        $cloud = new CloudService($config);
+        $httpClient = Mockery::mock(Client::class);
+        $cloud = new CloudService($config, $httpClient);
 
         // when
         $isConfigured = $cloud->isConfigured();
 
         // then
-        $this->assertEquals(true, $isConfigured);
+        $this->assertTrue($isConfigured);
     }
 }

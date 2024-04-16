@@ -21,6 +21,7 @@ use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Exception;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -387,7 +388,7 @@ class MainControllerTest extends TestCase
         $updater->method("isUpdateAvailable")->willReturn(false);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
-        $cloud = new CloudService($config);
+        $cloud = new CloudService($config, new Client());
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method("getOption")->willReturn("1");
         $currentSite = $this->createMock(CurrentSite::class);
@@ -431,7 +432,7 @@ class MainControllerTest extends TestCase
         $updater->method("isUpdateAvailable")->willReturn(false);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
-        $cloud = new CloudService($config);
+        $cloud = new CloudService($config, new Client());
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method("getOption")->willReturn(null);
         $currentSite = $this->createMock(CurrentSite::class);
@@ -465,7 +466,7 @@ class MainControllerTest extends TestCase
         $updater->method("isUpdateAvailable")->willReturn(false);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
-        $cloud = new CloudService($config);
+        $cloud = new CloudService($config, new Client());
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method("getOption")->willReturn("1");
         $currentSite = $this->createMock(CurrentSite::class);
@@ -672,7 +673,7 @@ class MainControllerTest extends TestCase
         $updater->method("isUpdateAvailable")->willReturn(false);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
-        $cloud = new CloudService($config);
+        $cloud = new CloudService($config, new Client());
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method("getOption")->willReturn(null);
         $currentSite = $this->createMock(CurrentSite::class);
