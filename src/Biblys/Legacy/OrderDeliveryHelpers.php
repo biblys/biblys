@@ -203,7 +203,7 @@ class OrderDeliveryHelpers
         ?Page $termsPage
     ): void
     {
-        $mailSubject = $site["site_tag"].' | Commande n° '.$order->get('id');
+        $mailSubject = "Commande n° {$order->get("id")}";
         if ($isUpdatingAnExistingOrder) {
             $mailSubject .= ' (mise à jour)';
         }

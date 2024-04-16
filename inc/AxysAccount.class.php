@@ -444,9 +444,7 @@ class AxysAccountManager extends EntityManager
                     ';
             }
 
-            $headers = null;
-            $headers .= 'From: ' . $this->site['site_title'] . ' <' . $this->site['site_contact'] . '>' . "\r\n";
-            $subject = $this->site['site_tag'] . ' | De nouveaux livres numériques disponibles dans votre bibliothèque.';
+            $subject = 'De nouveaux livres numériques disponibles dans votre bibliothèque.';
             $message = '
                     <p>Bonjour,</p>
                     <p>Les livres numériques suivants ont été ajoutés à <a href="http://' . $this->site['site_domain'] . '/pages/log_myebooks">votre bibliothèque numérique</a> :</p>

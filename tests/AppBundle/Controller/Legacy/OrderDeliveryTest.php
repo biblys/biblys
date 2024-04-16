@@ -279,12 +279,12 @@ class OrderDeliveryTest extends TestCase
             ->withConsecutive(
                 [
                     "customer@biblys.fr",
-                    $this->stringContains("PAR | Commande n° "),
+                    $this->stringContains("Commande n° "),
                     $this->stringContains("Livre commandé")
                 ],
                 [
                     "contact@paronymie.fr",
-                    $this->stringContains("PAR | Commande n° "),
+                    $this->stringContains("Commande n° "),
                     $this->stringContains("Livre commandé")
                 ]
             )

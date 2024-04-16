@@ -862,7 +862,7 @@ class OrderManager extends EntityManager
         }
 
         // Send mail
-        $subject = $globalSite->get('tag').' | Commande n° '.$order->get('id').' payée';
+        $subject = 'Commande n° '.$order->get('id').' payée';
         $message = '
             <p>Bonjour '.$order->get('firstname').' !</p>
 
@@ -988,7 +988,7 @@ class OrderManager extends EntityManager
             }
         }
 
-        $subject = $globalSite->get('tag')." | Commande n°".$order->get('id')." ".$subjectSuffix;
+        $subject = "Commande n°".$order->get('id')." ".$subjectSuffix;
         $content = '
             <p>Bonjour '.$order->get('firstname').' !</p>
 
@@ -1020,7 +1020,7 @@ class OrderManager extends EntityManager
         $order->set('order_followup_date', date('Y-m-d H:i:s'));
 
         // Send mail
-        $subject = $globalSite->get('tag')." | Commande n°".$order->get('id')." : relance";
+        $subject = "Commande n°".$order->get('id')." : relance";
         $content = '
             <p>Bonjour '.$order->get('firstname').',</p>
 
@@ -1126,7 +1126,7 @@ class OrderManager extends EntityManager
      */
     private function _sendCancellationMail(Order $order, int $removedCount, array $removed): void
     {
-        $subject = $this->site['site_tag'] . ' | Commande n° ' . $order->get('id') . ' annulée';
+        $subject = 'Commande n° ' . $order->get('id') . ' annulée';
         $message = '
             <html>
                 <head>

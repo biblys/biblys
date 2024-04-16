@@ -153,7 +153,7 @@ if ($request->getMethod() === "POST") {
                     <a href="/payment/'.$order->get('url').'" class="btn btn-default">» Choisir un autre mode de paiement</a>
                 </p>
 
-                <h2>Bon de commande '.$globalSite->get('tag').' n° '.$order->get('id').'</h2>
+                <h2>Bon de commande n° '.$order->get('id').'</h2>
 
                 <p>
                     '.$order->get('firstname').' '.$order->get('lastname').'<br />

@@ -145,7 +145,7 @@ class OrderDeliveryHelpersTest extends TestCase
             <html lang="fr">
                 <head>
                     <meta charset="UTF-8">
-                    <title>YS | Commande n° '.$order->get("id").'</title>
+                    <title>Commande n° '.$order->get("id").'</title>
                     <style>
                         p {
                             margin-bottom: 5px;
@@ -215,12 +215,12 @@ class OrderDeliveryHelpersTest extends TestCase
             ->withConsecutive(
                 [
                     "customer@example.net",
-                    "YS | Commande n° {$order->get("id")}",
+                    "Commande n° {$order->get("id")}",
                     $mailBody
                 ],
                 [
                     "contact@librys.fr",
-                    "YS | Commande n° {$order->get("id")}",
+                    "Commande n° {$order->get("id")}",
                     $mailBody
                 ]
             )
@@ -268,7 +268,7 @@ class OrderDeliveryHelpersTest extends TestCase
             <html lang="fr">
                 <head>
                     <meta charset="UTF-8">
-                    <title>YS | Commande n° '.$order->get("id").' (mise à jour)</title>
+                    <title>Commande n° '.$order->get("id").' (mise à jour)</title>
                     <style>
                         p {
                             margin-bottom: 5px;
@@ -338,12 +338,12 @@ class OrderDeliveryHelpersTest extends TestCase
             ->withConsecutive(
                 [
                     "customer@example.net",
-                    "YS | Commande n° {$order->get("id")} (mise à jour)",
+                    "Commande n° {$order->get("id")} (mise à jour)",
                     $mailBody
                 ],
                 [
                     "contact@librys.fr",
-                    "YS | Commande n° {$order->get("id")} (mise à jour)",
+                    "Commande n° {$order->get("id")} (mise à jour)",
                     $mailBody
                 ]
             )
