@@ -39,9 +39,12 @@ class UserController extends Controller
         }
 
         $loginWithAxysUrl = $urlGenerator->generate("openid_axys", ["return_url" => $returnUrl]);
-        return $this->render("AppBundle:User:login.html.twig", [
+        $response = $this->render("AppBundle:User:login.html.twig", [
             "loginWithAxysUrl" => $loginWithAxysUrl,
         ]);
+        $response->headers->set("X-Robots-Tag", "noindex, nofollow");
+
+        return $response;
     }
 
     /**
@@ -61,6 +64,7 @@ class UserController extends Controller
         $loggedOutUrl = $urlGenerator->generate("user_logged_out");
         $response = new RedirectResponse($loggedOutUrl, status: 302);
         $response->headers->clearCookie("user_uid");
+        $response->headers->set("X-Robots-Tag", "noindex, nofollow");
 
         return $response;
     }
@@ -73,11 +77,17 @@ class UserController extends Controller
      */
     public function loggedOut(): Response
     {
-        return $this->render("AppBundle:User:loggedOut.html.twig");
+        $response = $this->render("AppBundle:User:loggedOut.html.twig");
+        $response->headers->set("X-Robots-Tag", "noindex, nofollow");
+
+        return $response;
     }
 
     public function signup(): RedirectResponse
     {
-        return new RedirectResponse("https://axys.me");
+        $response = new RedirectResponse("https://axys.me");
+        $response->headers->set("X-Robots-Tag", "noindex, nofollow");
+
+        return $response;
     }
 }
