@@ -81,9 +81,10 @@ class CollectionController extends Controller
         // Pagination
         $page = (int) $request->query->get('p', 0);
         $totalCount = $am->count(['collection_id' => $collection->get('id')]);
+        $limit = $currentSite->getOption("articles_per_page");
 
         try {
-            $pagination = new Pagination($page, $totalCount);
+            $pagination = new Pagination($page, $totalCount, $limit);
         } catch (InvalidArgumentException $exception) {
             throw new BadRequestHttpException($exception->getMessage());
         }

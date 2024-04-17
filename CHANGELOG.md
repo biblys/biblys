@@ -1,5 +1,13 @@
 # Historique des modifications
 
+### 2.79.2 (17 avril 2024)
+
+Corrections
+
+- L'option `articles_per_page`, qui permet de spécifier le nombre d'articles 
+  à afficher sur une page, n'était pas pris en compte sur les pages de 
+  collection. C'est corrigé.
+
 ### 2.79.1 (10 avril 2024)
 
 Corrections
