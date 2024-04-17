@@ -42,7 +42,10 @@ class OpenIDConnectController extends Controller
         $queryParams->parse(["return_url" => ["type" => "string", "optional" => true, "default" => ""]]);
         $returnUrl = $queryParams->get("return_url");
         $authorizationUri = $openIDConnectProviderService->getAuthorizationUri($tokenService, $returnUrl);
-        return new RedirectResponse($authorizationUri);
+        $response = new RedirectResponse($authorizationUri);
+        $response->headers->set("X-Robots-Tag", "noindex, nofollow");
+
+        return $response;
     }
 
     /**
@@ -77,6 +80,8 @@ class OpenIDConnectController extends Controller
 
             $response = new RedirectResponse($returnUrl);
             $response->headers->setCookie($sessionCookie);
+            $response->headers->set("X-Robots-Tag", "noindex, nofollow");
+
             return $response;
         } catch(OAuth2Exception $exception) {
             throw new BadRequestHttpException($exception->getMessage());
