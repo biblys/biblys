@@ -290,7 +290,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     $x["authors"] = authors($x["article_authors"], 'url');
 
     // Lien collection
-    $x["collection_url"] = collection_url($x['article_publisher'], $x['article_collection']);
+    $x["collection_url"] = CollectionManager::createSlug($x['article_publisher'], $x['article_collection']);
 
     // Numero de collection
     $x["number"] = '<span class="nowrap">'.numero($x["article_number"]).'</span>';

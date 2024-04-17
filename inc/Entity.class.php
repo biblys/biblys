@@ -237,7 +237,7 @@ class EntityManager
     public function makeslug($entity)
     {
         if ($this->object == 'Collection') {
-            $slug = collection_url($entity->get('publisher')->get('name'), $entity->get('name'));
+            $slug = CollectionManager::createSlug($entity->get('publisher')->get('name'), $entity->get('name'));
         } elseif ($entity->has('title')) {
             $slug = makeurl($entity->get('title'));
         } elseif ($entity->has('name')) {

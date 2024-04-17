@@ -478,12 +478,6 @@ function makeurl($x): string
     return $slugService->slugify($x);
 }
 
-// Créer l'adresse de la page de la collection
-function collection_url($publisher, $collection): string
-{
-    return CollectionManager::createSlug($publisher, $collection);
-}
-
 // Retirer l'article déterminant avec un titre
 function alphabetize($text): array|string|null
 {
