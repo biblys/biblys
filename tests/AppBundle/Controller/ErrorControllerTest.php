@@ -12,6 +12,8 @@ use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
@@ -45,6 +47,7 @@ class ErrorControllerTest extends TestCase
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $config = Mockery::mock(Config::class);
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $session = Mockery::mock(Session::class);
 
         // when
         $response = $controller->exception(
@@ -53,6 +56,7 @@ class ErrorControllerTest extends TestCase
             $currentSite,
             $currentUrlService,
             $urlGenerator,
+            $session,
             $exception
         );
 
@@ -88,6 +92,7 @@ class ErrorControllerTest extends TestCase
             ->andReturn("/a/author/article_404");
         $config = Mockery::mock(Config::class);
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $session = Mockery::mock(Session::class);
 
         // when
         $response = $controller->exception(
@@ -96,6 +101,7 @@ class ErrorControllerTest extends TestCase
             $currentSite,
             $currentUrlService,
             $urlGenerator,
+            $session,
             $exception
         );
 
@@ -136,6 +142,7 @@ class ErrorControllerTest extends TestCase
             ->andReturn("/p/great-author/");
         $config = Mockery::mock(Config::class);
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $session = Mockery::mock(Session::class);
 
         // when
         $response = $controller->exception(
@@ -144,6 +151,7 @@ class ErrorControllerTest extends TestCase
             $currentSite,
             $currentUrlService,
             $urlGenerator,
+            $session,
             $exception
         );
 
@@ -179,6 +187,7 @@ class ErrorControllerTest extends TestCase
         $config = Mockery::mock(Config::class);
         $config->shouldReceive("get")->with("environment")->andReturn("prod");
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $session = Mockery::mock(Session::class);
 
         // when
         $response = $controller->exception(
@@ -187,6 +196,7 @@ class ErrorControllerTest extends TestCase
             $currentSite,
             $currentUrlService,
             $urlGenerator,
+            $session,
             $exception
         );
 
@@ -220,6 +230,7 @@ class ErrorControllerTest extends TestCase
         $config = Mockery::mock(Config::class);
         $config->shouldReceive("environment")->andReturn("prod");
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $session = Mockery::mock(Session::class);
 
         // when
         $response = $controller->exception(
@@ -228,6 +239,7 @@ class ErrorControllerTest extends TestCase
             $currentSite,
             $currentUrlService,
             $urlGenerator,
+            $session,
             $exception
         );
 
@@ -268,6 +280,11 @@ class ErrorControllerTest extends TestCase
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
         $currentUrlService->shouldReceive("getRelativeUrl")
             ->andReturn("/current");
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->shouldReceive("add")
+            ->with("info", "Vous devez vous connecter pour continuer.");
+        $session = Mockery::mock(Session::class);
+        $session->shouldReceive("getFlashBag")->andReturn($flashBag);
 
         // when
         $response = $controller->exception(
@@ -276,6 +293,7 @@ class ErrorControllerTest extends TestCase
             $currentSite,
             $currentUrlService,
             $urlGenerator,
+            $session,
             $exception
         );
 
@@ -307,6 +325,7 @@ class ErrorControllerTest extends TestCase
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $config = Mockery::mock(Config::class);
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $session = Mockery::mock(Session::class);
 
         // when
         $response = $controller->exception(
@@ -315,6 +334,7 @@ class ErrorControllerTest extends TestCase
             $currentSite,
             $currentUrlService,
             $urlGenerator,
+            $session,
             $exception
         );
 
@@ -360,6 +380,12 @@ class ErrorControllerTest extends TestCase
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
         $currentUrlService->shouldReceive("getRelativeUrl")
             ->andReturn("/current");
+        $session = Mockery::mock(Session::class);
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->shouldReceive("add")
+            ->with("info", "Vous devez vous connecter pour continuer.");
+        $session = Mockery::mock(Session::class);
+        $session->shouldReceive("getFlashBag")->andReturn($flashBag);
 
         // when
         $response = $controller->exception(
@@ -368,6 +394,7 @@ class ErrorControllerTest extends TestCase
             $currentSite,
             $currentUrlService,
             $urlGenerator,
+            $session,
             $exception
         );
 
@@ -401,6 +428,7 @@ class ErrorControllerTest extends TestCase
         $config = Mockery::mock(Config::class);
         $config->shouldReceive("get")->with("environment")->andReturn("prod");
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $session = Mockery::mock(Session::class);
 
         // when
         $response = $controller->exception(
@@ -409,6 +437,7 @@ class ErrorControllerTest extends TestCase
             $currentSite,
             $currentUrlService,
             $urlGenerator,
+            $session,
             $exception
         );
 
@@ -448,6 +477,7 @@ class ErrorControllerTest extends TestCase
         $config = Mockery::mock(Config::class);
         $config->shouldReceive("get")->with("environment")->andReturn("prod");
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $session = Mockery::mock(Session::class);
 
         // when
         $response = $controller->exception(
@@ -456,6 +486,7 @@ class ErrorControllerTest extends TestCase
             $currentSite,
             $currentUrlService,
             $urlGenerator,
+            $session,
             $exception
         );
 
@@ -493,6 +524,7 @@ class ErrorControllerTest extends TestCase
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $config = Mockery::mock(Config::class);
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $session = Mockery::mock(Session::class);
 
         // when
         $response = $controller->exception(
@@ -501,6 +533,7 @@ class ErrorControllerTest extends TestCase
             $currentSite,
             $currentUrlService,
             $urlGenerator,
+            $session,
             $exception
         );
 
@@ -531,6 +564,7 @@ class ErrorControllerTest extends TestCase
         $config = Mockery::mock(Config::class);
         $config->shouldReceive("get")->with("environment")->andReturn("dev");
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $session = Mockery::mock(Session::class);
 
         // when
         $response = $controller->exception(
@@ -539,6 +573,7 @@ class ErrorControllerTest extends TestCase
             $currentSite,
             $currentUrlService,
             $urlGenerator,
+            $session,
             $exception
         );
 
@@ -579,6 +614,7 @@ class ErrorControllerTest extends TestCase
         $config->shouldReceive("get")->with("environment")
             ->andReturn("prod");
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $session = Mockery::mock(Session::class);
 
         // when
         $response = $controller->exception(
@@ -587,6 +623,7 @@ class ErrorControllerTest extends TestCase
             $currentSite,
             $currentUrlService,
             $urlGenerator,
+            $session,
             $exception
         );
 
@@ -622,6 +659,7 @@ class ErrorControllerTest extends TestCase
         $config = Mockery::mock(Config::class);
         $config->shouldReceive("environment")->andReturn("prod");
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $session = Mockery::mock(Session::class);
 
         // when
         $response = $controller->exception(
@@ -630,6 +668,7 @@ class ErrorControllerTest extends TestCase
             $currentSite,
             $currentUrlService,
             $urlGenerator,
+            $session,
             $exception
         );
 

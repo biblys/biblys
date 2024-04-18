@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -49,6 +50,7 @@ class ErrorController extends Controller
         CurrentSite       $currentSite,
         CurrentUrlService $currentUrlService,
         UrlGenerator      $urlGenerator,
+        Session           $session,
         Exception         $exception
     ): Response
     {
@@ -69,6 +71,10 @@ class ErrorController extends Controller
             is_a($exception, UnauthorizedHttpException::class) ||
             is_a($exception, AuthException::class)
         ) {
+            $session->getFlashBag()->add(
+                "info",
+                "Vous devez vous connecter pour continuer."
+            );
             $currentUrl = $currentUrlService->getRelativeUrl();
             $loginUrl = $urlGenerator->generate("user_login", [
                 "return_url" => $currentUrl,
