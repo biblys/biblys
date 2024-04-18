@@ -44,15 +44,16 @@ class ErrorController extends Controller
      * @throws SyntaxError
      */
     public function exception(
-        Request      $request,
-        Config       $config,
-        CurrentSite  $currentSite,
-        UrlGenerator $urlGenerator,
-        Exception    $exception
+        Request           $request,
+        Config            $config,
+        CurrentSite       $currentSite,
+        CurrentUrlService $currentUrlService,
+        UrlGenerator      $urlGenerator,
+        Exception         $exception
     ): Response
     {
         $this->config = $config;
-        
+
         if (
             is_a($exception, ResourceNotFoundException::class)
             || is_a($exception, InvalidParameterException::class)
