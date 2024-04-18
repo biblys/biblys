@@ -4,6 +4,9 @@
 
 Améliorations
 
+- Lors de l'accès à une page nécessitant d'être authentifié, l'utilisateur 
+  est désormais redirigé vers la page de connexion plutôt que vers une page 
+  d'erreur.
 - Des boutons pour ajouter ou supprimer des adresses dans une liste de 
   contacts ont été ajoutés
 - Un lien vers le stock des articles a été ajouté sur la page Catalogue.

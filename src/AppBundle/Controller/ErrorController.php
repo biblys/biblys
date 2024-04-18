@@ -65,16 +65,19 @@ class ErrorController extends Controller
             return $this->handleBadRequest($request, $exception);
         }
 
-        if (is_a($exception, UnauthorizedHttpException::class)) {
-            return $this->_customTemplateHandler(401, $request, $exception);
+        if (
+            is_a($exception, UnauthorizedHttpException::class) ||
+            is_a($exception, AuthException::class)
+        ) {
+            $currentUrl = $currentUrlService->getRelativeUrl();
+            $loginUrl = $urlGenerator->generate("user_login", [
+                "return_url" => $currentUrl,
+            ]);
+            return new RedirectResponse($loginUrl);
         }
 
         if (is_a($exception, AccessDeniedHttpException::class)) {
             return $this->_customTemplateHandler(403, $request, $exception);
-        }
-
-        if (is_a($exception, AuthException::class)) {
-            return $this->_customTemplateHandler(401, $request, $exception);
         }
 
         if (is_a($exception, MethodNotAllowedHttpException::class)) {

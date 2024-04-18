@@ -258,9 +258,16 @@ class ErrorControllerTest extends TestCase
         $exception = new UnauthorizedHttpException("User should login.");
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("user_login", [
+                "return_url" => "/current",
+            ])
+            ->andReturn("/user/login?return_url=/current");
         $config = Mockery::mock(Config::class);
         $config->shouldReceive("environment")->andReturn("prod");
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $currentUrlService->shouldReceive("getRelativeUrl")
+            ->andReturn("/current");
 
         // when
         $response = $controller->exception(
@@ -274,14 +281,13 @@ class ErrorControllerTest extends TestCase
 
         // then
         $this->assertEquals(
-            401,
+            302,
             $response->getStatusCode(),
             "it should response with HTTP status 401"
         );
-        $this->assertStringContainsString(
-            "Erreur d'authentification",
-            $response->getContent(),
-            "it should return the error message"
+        $this->assertEquals(
+            "/user/login?return_url=/current",
+            $response->headers->get("Location"),
         );
     }
 
@@ -344,8 +350,16 @@ class ErrorControllerTest extends TestCase
         $exception = new AuthException("Unauthorized");
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("user_login", [
+                "return_url" => "/current",
+            ])
+            ->andReturn("/user/login?return_url=/current");
         $config = Mockery::mock(Config::class);
+        $config->shouldReceive("environment")->andReturn("prod");
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $currentUrlService->shouldReceive("getRelativeUrl")
+            ->andReturn("/current");
 
         // when
         $response = $controller->exception(
@@ -359,14 +373,13 @@ class ErrorControllerTest extends TestCase
 
         // then
         $this->assertEquals(
-            401,
+            302,
             $response->getStatusCode(),
-            "it should response with HTTP status 401"
+            "it should response with HTTP status 302"
         );
-        $this->assertStringContainsString(
-            "Erreur d'authentification",
-            $response->getContent(),
-            "it should return the error message"
+        $this->assertEquals(
+            "/user/login?return_url=/current",
+            $response->headers->get("Location"),
         );
     }
 
