@@ -2,6 +2,8 @@
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
+use Model\ArticleQuery;
+use Model\StockQuery;
 use Model\User;
 use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
@@ -12,8 +14,6 @@ class Visitor
     private bool $logged = false;
     private mixed $visitor_uid;
     private ?User $user = null;
-    private ?array $alerts = null;
-    private ?array $purchases = null;
 
     public function __construct(Request $request)
     {
@@ -109,6 +109,31 @@ class Visitor
             return true;
         }
         return false;
+    }
+
+    /**
+     * @deprecated Visitor->hasInCart is deprecated.
+     *             Use CurrentUser->hasArticleInCart or ->hasStockItemInCart
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function hasInCart(string $type, int $id): bool
+    {
+        $request = Request::createFromGlobals();
+        $config = Config::load();
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        if ($type === "stock") {
+            $stockItem = StockQuery::create()->findPk($id);
+            return $currentUser->hasStockItemInCart($stockItem);
+        }
+
+        if ($type === "article") {
+            $article = ArticleQuery::create()->findPk($id);
+            return $currentUser->hasArticleInCart($article);
+        }
+
+        return $currentUser->isAdmin();
     }
 
     /**
