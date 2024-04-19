@@ -7,7 +7,7 @@ use Model\Option;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
-require_once __DIR__."/../../setUp.php";
+require_once __DIR__ . "/../../setUp.php";
 
 class CurrentSiteTest extends TestCase
 {
@@ -80,20 +80,40 @@ class CurrentSiteTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function testGetOptionWithDefaultValue()
+    public function testGetOptionWithGivenDefaultValue()
     {
         // given
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
 
         // when
-        $option = $currentSite->getOption("shpping_notice", "Votre commande a été expédiée.");
+        $option = $currentSite->getOption("articles_per_page", "15");
 
         // then
         $this->assertEquals(
-            "Votre commande a été expédiée.",
+            "15",
             $option,
-            "returns the default value if option is unset but has a default value"
+            "returns the given default value if option is unset"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetOptionWithPresetDefaultValue()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+
+        // when
+        $option = $currentSite->getOption("articles_per_page");
+
+        // then
+        $this->assertEquals(
+            "10",
+            $option,
+            "returns the present default value if option is unset"
         );
     }
 
@@ -239,7 +259,7 @@ class CurrentSiteTest extends TestCase
         $otherPublisher = ModelFactory::createPublisher();
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $currentSite->setOption("publisher_filter", $publisher->getId().",".$otherPublisher->getId());
+        $currentSite->setOption("publisher_filter", $publisher->getId() . "," . $otherPublisher->getId());
 
         // when
         $allowsPublisher = $currentSite->allowsPublisher($publisher);

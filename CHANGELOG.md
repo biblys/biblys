@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.79.3 (DEV)
+
+Corrections
+
+- L'affichage d'une page de collection pouvait déclencher une erreur si 
+  l'option `articles_per_page` n'avait pas de valeur définie. C'est corrigé.
+
 ### 2.79.2 (17 avril 2024)
 
 Corrections

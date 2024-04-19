@@ -72,6 +72,14 @@ class CurrentSite
             return $defaultValue;
         }
 
+        return $this->_getDefaultValueFor($key);
+    }
+
+    private function _getDefaultValueFor(string $key): string|null {
+        if ($key === "articles_per_page") {
+            return "10";
+        }
+
         return null;
     }
 
