@@ -281,7 +281,7 @@ class ArticleCategoryTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('rayon_id', 'Id', 'BIGINT', true, 4, null);
-        $this->addForeignKey('site_id', 'SiteId', 'TINYINT', 'sites', 'site_id', false, 3, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
         $this->addColumn('rayon_name', 'Name', 'LONGVARCHAR', false, null, null);
         $this->addColumn('rayon_url', 'Url', 'VARCHAR', false, 256, null);
         $this->addColumn('rayon_desc', 'Desc', 'LONGVARCHAR', false, null, null);

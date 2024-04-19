@@ -15,16 +15,17 @@ class ArticleCategoryTest extends TestCase
     public function testAddingSlugOnSave()
     {
         // given
-        $user = new ArticleCategory();
-        $user->setName("Fruits & légumes");
+        $articleCategory = new ArticleCategory();
+        $articleCategory->setSiteId(1);
+        $articleCategory->setName("Fruits & légumes");
 
         // when
-        $user->save();
+        $articleCategory->save();
 
         // then
         $this->assertEquals(
             "fruits-legumes",
-            $user->getSlug(),
+            $articleCategory->getSlug(),
             "it should have added slug"
         );
     }

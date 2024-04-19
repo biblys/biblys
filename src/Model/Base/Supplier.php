@@ -73,8 +73,7 @@ abstract class Supplier implements ActiveRecordInterface
     /**
      * The value for the site_id field.
      *
-     * Note: this column has a database default value of: 1
-     * @var        int|null
+     * @var        int
      */
     protected $site_id;
 
@@ -150,23 +149,10 @@ abstract class Supplier implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * Applies default values to this object.
-     * This method should be called from the object's constructor (or
-     * equivalent initialization method).
-     * @see __construct()
-     */
-    public function applyDefaultValues(): void
-    {
-        $this->site_id = 1;
-    }
-
-    /**
      * Initializes internal state of Model\Base\Supplier object.
-     * @see applyDefaults()
      */
     public function __construct()
     {
-        $this->applyDefaultValues();
     }
 
     /**
@@ -401,7 +387,7 @@ abstract class Supplier implements ActiveRecordInterface
     /**
      * Get the [site_id] column value.
      *
-     * @return int|null
+     * @return int
      */
     public function getSiteId()
     {
@@ -589,7 +575,7 @@ abstract class Supplier implements ActiveRecordInterface
     /**
      * Set the value of [site_id] column.
      *
-     * @param int|null $v New value
+     * @param int $v New value
      * @return $this The current object (for fluent API support)
      */
     public function setSiteId($v)
@@ -812,10 +798,6 @@ abstract class Supplier implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues(): bool
     {
-            if ($this->site_id !== 1) {
-                return false;
-            }
-
         // otherwise, everything was equal, so return TRUE
         return true;
     }
@@ -1703,7 +1685,6 @@ abstract class Supplier implements ActiveRecordInterface
         $this->supplier_updated = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
-        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

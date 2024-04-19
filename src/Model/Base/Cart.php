@@ -2779,10 +2779,10 @@ abstract class Cart implements ActiveRecordInterface
      * @return ObjectCollection|ChildStock[] List of ChildStock objects
      * @phpstan-return ObjectCollection&\Traversable<ChildStock}> List of ChildStock objects
      */
-    public function getStocksJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getStocksJoinSite(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildStockQuery::create(null, $criteria);
-        $query->joinWith('User', $joinBehavior);
+        $query->joinWith('Site', $joinBehavior);
 
         return $this->getStocks($query, $con);
     }
@@ -2805,10 +2805,10 @@ abstract class Cart implements ActiveRecordInterface
      * @return ObjectCollection|ChildStock[] List of ChildStock objects
      * @phpstan-return ObjectCollection&\Traversable<ChildStock}> List of ChildStock objects
      */
-    public function getStocksJoinSite(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getStocksJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildStockQuery::create(null, $criteria);
-        $query->joinWith('Site', $joinBehavior);
+        $query->joinWith('User', $joinBehavior);
 
         return $this->getStocks($query, $con);
     }

@@ -1203,7 +1203,7 @@
   </table>
   <table name="rayons" idMethod="native" phpName="ArticleCategory">
     <column name="rayon_id" phpName="Id" type="BIGINT" size="4" sqlType="bigint(4) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="site_id" phpName="SiteId" type="TINYINT" size="3" sqlType="tinyint(3) unsigned"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="rayon_name" phpName="Name" type="LONGVARCHAR"/>
     <column name="rayon_url" phpName="Url" type="VARCHAR" size="256" />
     <column name="rayon_desc" phpName="Desc" type="LONGVARCHAR"/>
@@ -1494,7 +1494,10 @@
   </table>
   <table name="stock" idMethod="native" phpName="Stock">
     <column name="stock_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="site_id" phpName="SiteId" type="TINYINT" sqlType="tinyint(4) unsigned"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int(10) unsigned"/>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
     <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="campaign_id" phpName="CampaignId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="reward_id" phpName="RewardId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
@@ -1574,9 +1577,6 @@
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
-    <foreign-key foreignTable="sites" skipSql="true">
-      <reference local="site_id" foreign="site_id"/>
-    </foreign-key>
     <foreign-key foreignTable="articles" skipSql="true">
       <reference local="article_id" foreign="article_id"/>
     </foreign-key>
@@ -1619,7 +1619,7 @@
   </table>
   <table name="suppliers" idMethod="native" phpName="Supplier">
     <column name="supplier_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="site_id" phpName="SiteId" type="TINYINT" size="3" sqlType="tinyint(3) unsigned" defaultValue="1"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned" required="true"/>
     <column name="supplier_name" phpName="Name" type="VARCHAR" size="256"/>
     <column name="supplier_gln" phpName="Gln" type="BIGINT"/>
     <column name="supplier_remise" phpName="Remise" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
