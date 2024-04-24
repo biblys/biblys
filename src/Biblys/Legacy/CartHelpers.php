@@ -251,6 +251,9 @@ class CartHelpers
             $cover = $freeArticleEntity->getCoverTag(['size' => 'h60', 'rel' => 'lightbox', 'class' => 'cover']);
         }
 
+        $collectionUrl = $urlGenerator->generate(
+            "collection_show", ["slug" => $targetCollection->getUrl()]
+        );
 
         return '
             <tr' . $style . '>
@@ -265,8 +268,9 @@ class CartHelpers
                     </p>
                     <p>
                         <strong>
-                            Offert pour ' . $targetQuantity . ' titres de la
-                            collection ' . $targetCollection->getName() . ' achetés&nbsp;!<br />
+                            Offert pour ' . $targetQuantity . ' titres de la collection 
+                            <a href="'.$collectionUrl.'">' . $targetCollection->getName() . '</a> 
+                            achetés&nbsp;!<br />
                             <small>' . $sentence . '</small>
                         </strong>
                     </p>

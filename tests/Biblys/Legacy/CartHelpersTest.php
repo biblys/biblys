@@ -129,6 +129,7 @@ class CartHelpersTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate");
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
@@ -140,8 +141,8 @@ class CartHelpersTest extends TestCase
         // then
         $this->assertStringContainsString("Cékado", $notice);
         $this->assertStringContainsString("Offert pour 2 titres de la", $notice);
-        $this->assertStringContainsString("collection Collection cible achetés&nbsp;!", $notice);
-        $this->assertStringContainsString("Ajoutez encore 2 titres de la collection", $notice);
+        $this->assertStringContainsString("Collection cible", $notice);
+        $this->assertStringContainsString("Ajoutez encore 2 titres", $notice);
         $this->assertStringContainsString(
             '<button class="btn btn-default" disabled>J‘en profite !</button>',
             $notice
@@ -180,6 +181,7 @@ class CartHelpersTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate");
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
@@ -191,12 +193,8 @@ class CartHelpersTest extends TestCase
         // then
         $this->assertStringContainsString("Cékado 1", $notice);
         $this->assertStringContainsString("Cékado 2", $notice);
-        $this->assertStringContainsString(
-            "collection Collection cible 1 achetés&nbsp;!", $notice
-        );
-        $this->assertStringContainsString(
-            "collection Collection cible 2 achetés&nbsp;!", $notice
-        );
+        $this->assertStringContainsString("Collection cible 1", $notice);
+        $this->assertStringContainsString("Collection cible 2", $notice);
     }
 
     /**
@@ -224,6 +222,8 @@ class CartHelpersTest extends TestCase
         $currentSite->shouldReceive('getSite')->andReturn($site);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")
+            ->with("collection_show", ["slug" => $targetCollection->getUrl()]);
+        $urlGenerator->shouldReceive("generate")
             ->with("cart_add_article", ["articleId" => $freeArticle->getId()])
             ->andReturn("/cart_url");
 
@@ -237,7 +237,7 @@ class CartHelpersTest extends TestCase
         // then
         $this->assertStringContainsString("Cékado", $notice);
         $this->assertStringContainsString("Offert pour 2 titres de la", $notice);
-        $this->assertStringContainsString("collection Collection cible achetés&nbsp;!", $notice);
+        $this->assertStringContainsString("Collection cible", $notice);
         $this->assertStringContainsString("Si vous ne souhaitez pas bénéficier de l'offre, vous pourrez", $notice);
         $this->assertStringContainsString('<form method="post" action="/cart_url">', $notice);
         $this->assertStringContainsString(
