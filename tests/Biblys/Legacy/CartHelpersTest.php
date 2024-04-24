@@ -9,6 +9,7 @@ use Mockery;
 use Model\SpecialOfferQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 require_once __DIR__."/../../setUp.php";
 
@@ -32,10 +33,12 @@ class CartHelpersTest extends TestCase
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
             $currentSite,
+            $urlGenerator,
             ModelFactory::createCart(site: $site),
         );
 
@@ -61,10 +64,12 @@ class CartHelpersTest extends TestCase
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
             $currentSite,
+            $urlGenerator,
             ModelFactory::createCart(site: $site),
         );
 
@@ -90,10 +95,12 @@ class CartHelpersTest extends TestCase
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
             $currentSite,
+            $urlGenerator,
             ModelFactory::createCart(site: $site),
         );
 
@@ -121,10 +128,12 @@ class CartHelpersTest extends TestCase
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
             $currentSite,
+            $urlGenerator,
             $cart,
         );
 
@@ -133,6 +142,10 @@ class CartHelpersTest extends TestCase
         $this->assertStringContainsString("Offert pour 2 titres de la", $notice);
         $this->assertStringContainsString("collection Collection cible achetés&nbsp;!", $notice);
         $this->assertStringContainsString("Ajoutez encore 2 titres de la collection", $notice);
+        $this->assertStringContainsString(
+            '<button class="btn btn-default" disabled>J‘en profite !</button>',
+            $notice
+        );
     }
 
     /**
@@ -166,10 +179,12 @@ class CartHelpersTest extends TestCase
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
             $currentSite,
+            $urlGenerator,
             $cart,
         );
 
@@ -207,11 +222,15 @@ class CartHelpersTest extends TestCase
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive('getSite')->andReturn($site);
-
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("cart_add_article", ["articleId" => $freeArticle->getId()])
+            ->andReturn("/cart_url");
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
             $currentSite,
+            $urlGenerator,
             $cart,
         );
 
@@ -220,5 +239,9 @@ class CartHelpersTest extends TestCase
         $this->assertStringContainsString("Offert pour 2 titres de la", $notice);
         $this->assertStringContainsString("collection Collection cible achetés&nbsp;!", $notice);
         $this->assertStringContainsString("Si vous ne souhaitez pas bénéficier de l'offre, vous pourrez", $notice);
+        $this->assertStringContainsString('<form method="post" action="/cart_url">', $notice);
+        $this->assertStringContainsString(
+            '<button type="submit" class="btn btn-success">J‘en profite !</button>', $notice
+        );
     }
 }

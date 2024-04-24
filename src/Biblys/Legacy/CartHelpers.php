@@ -12,6 +12,7 @@ use Model\ArticleCategoryQuery;
 use Model\ArticleQuery;
 use Model\Cart;
 use Model\LinkQuery;
+use Model\SpecialOffer;
 use Model\SpecialOfferQuery;
 use Model\Stock;
 use Model\StockQuery;
@@ -78,7 +79,7 @@ class CartHelpers
                             <form class="form-inline" action="' . $cartUrl . '" method="post"> 
                                 <button type="submit"
                                     class="btn btn-primary btn-sm"
-                                    aria-label="Ajouter '.$article->getTitle().' au panier"
+                                    aria-label="Ajouter ' . $article->getTitle() . ' au panier"
                                 >
                                     <span class="fa fa-shopping-cart"></span>
                                 </button>
@@ -156,15 +157,13 @@ class CartHelpers
     }
 
     /**
-     * @param CurrentSite $currentSite
-     * @param Cart $cart
-     * @return string
      * @throws PropelException
      * @throws Exception
      */
     public static function getSpecialOffersNotice(
-        CurrentSite       $currentSite,
-        Cart              $cart,
+        CurrentSite  $currentSite,
+        UrlGenerator $urlGenerator,
+        Cart         $cart,
     ): string
     {
         $specialOffers = SpecialOfferQuery::create()
@@ -177,19 +176,24 @@ class CartHelpers
 
         $notice = "";
         foreach ($specialOffers as $specialOffer) {
-            $notice .= self::_buildSpecialOfferNotice($specialOffer, $cart);
+            $notice .= self::_buildSpecialOfferNotice(
+                $specialOffer,
+                $urlGenerator,
+                $cart
+            );
         }
 
         return $notice;
     }
 
     /**
-     * @param $specialOffer
-     * @param Cart $cart
-     * @return string
      * @throws Exception
      */
-    private static function _buildSpecialOfferNotice($specialOffer, Cart $cart): string
+    private static function _buildSpecialOfferNotice(
+        SpecialOffer $specialOffer,
+        UrlGenerator $urlGenerator,
+        Cart         $cart
+    ): string
     {
         $targetQuantity = $specialOffer->getTargetQuantity();
         $freeArticle = $specialOffer->getFreeArticle();
@@ -221,25 +225,32 @@ class CartHelpers
             return $total;
         }, 0);
 
-        $price = null;
         $missing = $targetQuantity - $copiesInCollection;
         /** @var \Article $freeArticleEntity */
         $freeArticleEntity = $am->getById($freeArticle->getId());
         $sentence = 'Ajoutez encore ' . $missing . ' titre' . s($missing) . ' de la collection
-            à votre panier pour en profiter&nbsp;!';
+            à votre panier pour en profiter.';
         $style = ' style="opacity: .5"';
+        $cartButton = '<button class="btn btn-success" disabled>J‘en profite !</button>';
 
         if ($missing <= 0) {
             $style = null;
             $sentence = 'Si vous ne souhaitez pas bénéficier de l\'offre, vous pourrez
                 le préciser dans le champ Commentaires de la page suivante.';
             $price = 'Offert';
+            $cartButtonUrl = $urlGenerator->generate(
+                "cart_add_article", ["articleId" => $freeArticle->getId()]
+            );
+            $cartButton = '<form method="post" action="'.$cartButtonUrl.'">';
+            $cartButton .= '<button type="submit" class="btn btn-success">J‘en profite !</button>';
+            $cartButton .= '</form>';
         }
 
         $cover = null;
         if ($freeArticleEntity->hasCover()) {
             $cover = $freeArticleEntity->getCoverTag(['size' => 'h60', 'rel' => 'lightbox', 'class' => 'cover']);
         }
+
 
         return '
             <tr' . $style . '>
@@ -261,9 +272,10 @@ class CartHelpers
                     </p>
                 </td>
                 <td class="right">
-                    ' . $price . '
+                    Offert
                 </td>
                 <td class="center">
+                    ' . $cartButton . '
                 </td>
             </tr>
         ';
