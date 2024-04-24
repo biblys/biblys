@@ -238,7 +238,7 @@ class CartHelpersTest extends TestCase
         $this->assertStringContainsString("Cékado", $notice);
         $this->assertStringContainsString("Offert pour 2 titres de la", $notice);
         $this->assertStringContainsString("Collection cible", $notice);
-        $this->assertStringContainsString("Si vous ne souhaitez pas bénéficier de l'offre, vous pourrez", $notice);
+        $this->assertStringContainsString("Vous pouvez bénéficier de l’offre.", $notice);
         $this->assertStringContainsString('<form method="post" action="/cart_url">', $notice);
         $this->assertStringContainsString(
             '<button type="submit" class="btn btn-success">J‘en profite !</button>', $notice

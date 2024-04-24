@@ -228,15 +228,15 @@ class CartHelpers
         $missing = $targetQuantity - $copiesInCollection;
         /** @var \Article $freeArticleEntity */
         $freeArticleEntity = $am->getById($freeArticle->getId());
-        $sentence = 'Ajoutez encore ' . $missing . ' titre' . s($missing) . ' de la collection
-            à votre panier pour en profiter.';
+        $sentence = '<span class="text-info"><span class="fa fa-plus-circle"></span> Ajoutez encore ' .
+            $missing . ' titre' . s($missing) . ' 
+            à votre panier pour en profiter.</span>';
         $style = ' style="opacity: .5"';
         $cartButton = '<button class="btn btn-success" disabled>J‘en profite !</button>';
 
         if ($missing <= 0) {
             $style = null;
-            $sentence = 'Si vous ne souhaitez pas bénéficier de l\'offre, vous pourrez
-                le préciser dans le champ Commentaires de la page suivante.';
+            $sentence = '<span class="text-success"><span class="fa fa-check-circle"></span> Vous pouvez bénéficier de l’offre.</span>';
             $price = 'Offert';
             $cartButtonUrl = $urlGenerator->generate(
                 "cart_add_article", ["articleId" => $freeArticle->getId()]
