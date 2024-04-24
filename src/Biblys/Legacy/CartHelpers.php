@@ -162,19 +162,35 @@ class CartHelpers
      * @throws PropelException
      * @throws Exception
      */
-    public static function getSpecialOfferNotice(
+    public static function getSpecialOffersNotice(
         CurrentSite       $currentSite,
         Cart              $cart,
     ): string
     {
-        $specialOffer = SpecialOfferQuery::create()
+        $specialOffers = SpecialOfferQuery::create()
             ->filterBySite($currentSite->getSite())
-            ->findOne();
+            ->find();
 
-        if (!$specialOffer) {
+        if (!$specialOffers) {
             return "";
         }
 
+        $notice = "";
+        foreach ($specialOffers as $specialOffer) {
+            $notice .= self::_buildSpecialOfferNotice($specialOffer, $cart);
+        }
+
+        return $notice;
+    }
+
+    /**
+     * @param $specialOffer
+     * @param Cart $cart
+     * @return string
+     * @throws Exception
+     */
+    private static function _buildSpecialOfferNotice($specialOffer, Cart $cart): string
+    {
         $targetQuantity = $specialOffer->getTargetQuantity();
         $freeArticle = $specialOffer->getFreeArticle();
         $targetCollection = $specialOffer->getTargetCollection();

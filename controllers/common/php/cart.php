@@ -302,7 +302,7 @@ return function (
             }
         }
 
-        $specialOfferNotice = CartHelpers::getSpecialOfferNotice($currentSite, $cart);
+        $specialOfferNotice = CartHelpers::getSpecialOffersNotice($currentSite, $cart);
 
         $content .= '
                 '.$specialOfferNotice.'

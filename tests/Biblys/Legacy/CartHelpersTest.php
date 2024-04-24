@@ -34,7 +34,7 @@ class CartHelpersTest extends TestCase
         $currentSite->shouldReceive("getSite")->andReturn($site);
 
         // when
-        $notice = CartHelpers::getSpecialOfferNotice(
+        $notice = CartHelpers::getSpecialOffersNotice(
             $currentSite,
             ModelFactory::createCart(site: $site),
         );
@@ -63,7 +63,7 @@ class CartHelpersTest extends TestCase
         $currentSite->shouldReceive("getSite")->andReturn($site);
 
         // when
-        $notice = CartHelpers::getSpecialOfferNotice(
+        $notice = CartHelpers::getSpecialOffersNotice(
             $currentSite,
             ModelFactory::createCart(site: $site),
         );
@@ -92,7 +92,7 @@ class CartHelpersTest extends TestCase
         $currentSite->shouldReceive("getSite")->andReturn($site);
 
         // when
-        $notice = CartHelpers::getSpecialOfferNotice(
+        $notice = CartHelpers::getSpecialOffersNotice(
             $currentSite,
             ModelFactory::createCart(site: $site),
         );
@@ -123,7 +123,7 @@ class CartHelpersTest extends TestCase
         $currentSite->shouldReceive("getSite")->andReturn($site);
 
         // when
-        $notice = CartHelpers::getSpecialOfferNotice(
+        $notice = CartHelpers::getSpecialOffersNotice(
             $currentSite,
             $cart,
         );
@@ -133,6 +133,55 @@ class CartHelpersTest extends TestCase
         $this->assertStringContainsString("Offert pour 2 titres de la", $notice);
         $this->assertStringContainsString("collection Collection cible achetés&nbsp;!", $notice);
         $this->assertStringContainsString("Ajoutez encore 2 titres de la collection", $notice);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetSpecialOfferNoticeForMultipleOffers()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $targetCollection1 = ModelFactory::createCollection(name: "Collection cible 1");
+        $targetCollection2 = ModelFactory::createCollection(name: "Collection cible 2");
+        $freeArticle1 = ModelFactory::createArticle(
+            title: "Cékado 1", collection: $targetCollection1
+        );
+        $freeArticle2 = ModelFactory::createArticle(
+            title: "Cékado 2", collection: $targetCollection2
+        );
+
+        ModelFactory::createSpecialOffer(
+            site: $site,
+            targetCollection: $targetCollection1,
+            freeArticle: $freeArticle1,
+        );
+        ModelFactory::createSpecialOffer(
+            site: $site,
+            targetCollection: $targetCollection2,
+            freeArticle: $freeArticle2,
+        );
+
+        $cart = ModelFactory::createCart(site:$site);
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+
+        // when
+        $notice = CartHelpers::getSpecialOffersNotice(
+            $currentSite,
+            $cart,
+        );
+
+        // then
+        $this->assertStringContainsString("Cékado 1", $notice);
+        $this->assertStringContainsString("Cékado 2", $notice);
+        $this->assertStringContainsString(
+            "collection Collection cible 1 achetés&nbsp;!", $notice
+        );
+        $this->assertStringContainsString(
+            "collection Collection cible 2 achetés&nbsp;!", $notice
+        );
     }
 
     /**
@@ -161,7 +210,7 @@ class CartHelpersTest extends TestCase
 
 
         // when
-        $notice = CartHelpers::getSpecialOfferNotice(
+        $notice = CartHelpers::getSpecialOffersNotice(
             $currentSite,
             $cart,
         );
