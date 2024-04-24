@@ -225,7 +225,7 @@ class CartHelpers
         $missing = $targetQuantity - $copiesInCollection;
         /** @var \Article $freeArticleEntity */
         $freeArticleEntity = $am->getById($freeArticle->getId());
-        $sentence = 'Ajoutez encore ' . $missing . ' titre' . s($missing) . ' de la collection<br/>
+        $sentence = 'Ajoutez encore ' . $missing . ' titre' . s($missing) . ' de la collection
             à votre panier pour en profiter&nbsp;!';
         $style = ' style="opacity: .5"';
 
@@ -246,14 +246,16 @@ class CartHelpers
                 <td>Offre<br>spéciale</td>
                 <td>' . $cover . '</td>
                 <td>
-                    <a href="/' . $freeArticleEntity->get('url') . '">' . $freeArticleEntity->get('title') . '</a><br />
-                    de ' . authors($freeArticleEntity->get('authors')) . '<br />
-                    coll. ' . $freeArticleEntity->get('collection')->get('name') . ' ' . numero($freeArticleEntity->get('number')) . '<br />
+                    <p>
+                    
+                        <a href="/' . $freeArticleEntity->get('url') . '">' . $freeArticleEntity->get('title') . '</a><br />
+                        de ' . authors($freeArticleEntity->get('authors')) . '<br />
+                        coll. ' . $freeArticleEntity->get('collection')->get('name') . ' ' . numero($freeArticleEntity->get('number')) . '<br />
+                    </p>
                     <p>
                         <strong>
                             Offert pour ' . $targetQuantity . ' titres de la
-                            collection ' . $targetCollection->getName() . ' achetés&nbsp;!
-                            <small>(hors numérique)</small><br>
+                            collection ' . $targetCollection->getName() . ' achetés&nbsp;!<br />
                             <small>' . $sentence . '</small>
                         </strong>
                     </p>
