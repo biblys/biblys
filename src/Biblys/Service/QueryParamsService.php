@@ -59,13 +59,27 @@ class QueryParamsService
                     continue;
                 }
 
-                if ($rule === "type" && $ruleValue === "string") {
-                    if (!is_string($value)) {
-                        throw new BadRequestHttpException(
-                            "Parameter '$param' must be of type string"
-                        );
+                if ($rule === "type") {
+                    if ($ruleValue === "string") {
+                        if (!is_string($value)) {
+                            throw new BadRequestHttpException(
+                                "Parameter '$param' must be of type string"
+                            );
+                        }
+                        continue;
                     }
-                    continue;
+
+                    if ($ruleValue === "numeric") {
+                        if (!is_numeric($value)) {
+                            throw new BadRequestHttpException(
+                                "Parameter '$param' must be of type numeric"
+                            );
+                        }
+
+                        continue;
+                    }
+
+                    throw new InvalidArgumentException("Invalid value '$ruleValue' for type rule");
                 }
 
                 if ($rule === "mb_min_length") {

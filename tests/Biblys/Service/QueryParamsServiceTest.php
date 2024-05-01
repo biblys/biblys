@@ -98,6 +98,29 @@ class QueryParamsServiceTest extends TestCase
 
     /** "type" rule */
 
+    public function testUnknownType(): void
+    {
+        // given
+        $request = new Request();
+        $request->query->set("q", "search terms");
+
+        $specs = [
+            "q" => [
+                "type" => "book",
+            ],
+        ];
+        $queryParamsService = new QueryParamsService($request);
+
+        // then
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Invalid value 'book' for type rule");
+
+        // when
+        $queryParamsService->parse($specs);
+    }
+
+    /** "type:string" rule */
+
     public function testInvalidValueTypeForString()
     {
         // given
@@ -114,6 +137,29 @@ class QueryParamsServiceTest extends TestCase
         // then
         $this->expectException(BadRequestHttpException::class);
         $this->expectExceptionMessage("Parameter 'q' must be of type string");
+
+        // when
+        $queryParamsService->parse($specs);
+    }
+
+    /** "type:numeric" rule */
+
+    public function testInvalidValueTypeForInt()
+    {
+        // given
+        $request = new Request();
+        $request->query->set("page", "abc");
+
+        $specs = [
+            "page" => [
+                "type" => "numeric",
+            ],
+        ];
+        $queryParamsService = new QueryParamsService($request);
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("Parameter 'page' must be of type numeric");
 
         // when
         $queryParamsService->parse($specs);
