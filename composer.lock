@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "395c942d3e2dce0b063ddab841700d8d",
+    "content-hash": "62ba5f6a6d3da15934cf5e9613ea7868",
     "packages": [
         {
             "name": "biblys/eurotax",
@@ -165,53 +165,6 @@
                 }
             ],
             "time": "2023-11-29T23:19:16+00:00"
-        },
-        {
-            "name": "cmanley/validate",
-            "version": "0.9.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/cmanley/PHP-Validate.git",
-                "reference": "6ba639785ca735fcce963fdc78db16b0ccaec748"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/cmanley/PHP-Validate/zipball/6ba639785ca735fcce963fdc78db16b0ccaec748",
-                "reference": "6ba639785ca735fcce963fdc78db16b0ccaec748",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Validate\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Craig Manley",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP validation library. You can use it to validate almost anything, e.g. form posts, function parameters, etc.",
-            "homepage": "https://github.com/cmanley/PHP-Validate",
-            "keywords": [
-                "parameters",
-                "validate",
-                "validation",
-                "validity"
-            ],
-            "support": {
-                "issues": "https://github.com/cmanley/PHP-Validate/issues",
-                "source": "https://github.com/cmanley/PHP-Validate/tree/0.9.8"
-            },
-            "time": "2023-11-03T16:43:50+00:00"
         },
         {
             "name": "composer/ca-bundle",
