@@ -355,7 +355,7 @@ class PublisherController extends Controller
 
         $um = new AxysAccountManager();
         $userEmail = $request->request->get('axys_account_email');
-        $user = $um->get(['Email' => $userEmail]);
+        $user = $um->get(["axys_account_email" => $userEmail]);
         if (!$user) {
             throw new Exception("Cannot find a user with e-mail $userEmail");
         }
