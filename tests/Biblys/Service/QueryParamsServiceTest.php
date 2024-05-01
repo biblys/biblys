@@ -302,5 +302,50 @@ class QueryParamsServiceTest extends TestCase
         $this->assertEquals("été", $q);
     }
 
+    /** getInt */
 
+    public function testGetIntConvertsNumericStringToInt(): void
+    {
+        // given
+        $request = new Request();
+        $request->query->set("page", "123");
+
+        $specs = [
+            "page" => [
+                "type" => "numeric",
+            ],
+        ];
+        $queryParamsService = new QueryParamsService($request);
+        $queryParamsService->parse($specs);
+
+        // when
+        $page = $queryParamsService->getInteger("page");
+
+        // then
+        $this->assertEquals(123, $page);
+    }
+
+
+
+    public function testGetIntThrowsForNonNumericValue(): void
+    {
+        // given
+        $request = new Request();
+        $request->query->set("alphabet", "abc");
+
+        $specs = [
+            "alphabet" => [
+                "type" => "string",
+            ],
+        ];
+        $queryParamsService = new QueryParamsService($request);
+        $queryParamsService->parse($specs);
+
+        // then
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Cannot get non numeric parameter 'alphabet' as an integer");
+
+        // when
+        $queryParamsService->getInteger("alphabet");
+    }
 }

@@ -28,6 +28,17 @@ class QueryParamsService
         return $this->queryParams[$key];
     }
 
+    public function getInteger(string $key): int
+    {
+        if (!is_numeric($this->get($key))) {
+            throw new InvalidArgumentException(
+                "Cannot get non numeric parameter '$key' as an integer"
+            );
+        }
+
+        return intval($this->get($key));
+    }
+
     private function _ensureNoUnexpectedParamIsPresent(array $params, array $specs): void
     {
         foreach ($params as $param => $value) {
