@@ -1,6 +1,6 @@
 # Historique des modifications
 
-### 2.79.3 (DEV)
+### 2.79.3 (1er mai 2024)
 
 Corrections
 
