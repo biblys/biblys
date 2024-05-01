@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Biblys\Database\Database;
 use Biblys\Service\Config;
 use Biblys\Service\Pagination;
+use Biblys\Service\QueryParamsService;
 use Biblys\Service\Updater\ReleaseNotFoundException;
 use Biblys\Service\Updater\Updater;
 use Biblys\Service\Updater\UpdaterException;
@@ -78,14 +79,20 @@ class MaintenanceController extends Controller
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function changelogIndexAction(Request $request, Updater $updater): Response
+    public function changelogIndexAction(
+        Request $request,
+        QueryParamsService $queryParamsService,
+        Updater $updater
+    ): Response
     {
         $request->attributes->set("page_title", "Historique des mises à jour");
 
         $releases = $updater->getReleases();
 
+        $queryParamsService->parse(["p" => ["type" => "numeric", "default" => 0]]);
+
         try {
-            $page = (int) $request->query->get('p', 0);
+            $page = $queryParamsService->get("p");
             $pagination = new Pagination($page, count($releases));
             $currentPageReleases = array_slice($releases, $pagination->getOffset(), $pagination->getLimit());
         } catch(InvalidArgumentException $exception) {
