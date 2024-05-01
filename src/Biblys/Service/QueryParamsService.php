@@ -2,35 +2,95 @@
 
 namespace Biblys\Service;
 
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Validate\Exception\NamedValueException;
-use Validate\Exception\ValidationException;
-use Validate\Validator;
 
 class QueryParamsService
 {
     private array $queryParams = [];
 
-    public function __construct(private readonly Request $request) {}
-
-    public function parse($specs): void
+    public function __construct(private readonly Request $request)
     {
-        $validator = new Validator([
-            "trim" => true,
-            "null_empty_strings" => true,
-            "specs" => $specs,
-        ]);
+    }
 
-        try {
-            $this->queryParams = $validator->validate($this->request->query->all());
-        } catch (ValidationException $e) {
-            throw new BadRequestHttpException($e->getMessage());
-        }
+    public function parse(array $specs): void
+    {
+        $params = $this->request->query->all();
+        $this->_ensureNoUnexpectedParamIsPresent($params, $specs);
+        $params = $this->_ensureSpecificationsAreEnforced($params, $specs);
+
+        $this->queryParams = $params;
     }
 
     public function get(string $key): mixed
     {
         return $this->queryParams[$key];
+    }
+
+    private function _ensureNoUnexpectedParamIsPresent(array $params, array $specs): void
+    {
+        foreach ($params as $param => $value) {
+            if (!array_key_exists($param, $specs)) {
+                throw new BadRequestHttpException("Unexpected parameter '$param'");
+            }
+        }
+    }
+
+    private function _ensureSpecificationsAreEnforced(array $params, array $specs): array
+    {
+        foreach ($specs as $param => $rules) {
+
+            if (!isset($params[$param])) {
+                $isRequired = !isset($rules["optional"]);
+                if ($isRequired) {
+                    throw new BadRequestHttpException("Parameter '$param' is required");
+                }
+
+                $defaultValue = $rules["default"] ?? null;
+                $params[$param] = $defaultValue;
+
+                continue;
+            }
+
+            $value = $params[$param];
+            foreach ($rules as $rule => $ruleValue) {
+
+                if (in_array($rule, ["optional", "default"], true)) {
+                    continue;
+                }
+
+                if ($rule === "type" && $ruleValue === "string") {
+                    if (!is_string($value)) {
+                        throw new BadRequestHttpException(
+                            "Parameter '$param' must be of type string"
+                        );
+                    }
+                    continue;
+                }
+
+                if ($rule === "mb_min_length") {
+                    if (mb_strlen($value) < $ruleValue) {
+                        throw new BadRequestHttpException(
+                            "Parameter '$param' must be at least $ruleValue characters long"
+                        );
+                    }
+                    continue;
+                }
+
+                if ($rule === "mb_max_length") {
+                    if (mb_strlen($value) > $ruleValue) {
+                        throw new BadRequestHttpException(
+                            "Parameter '$param' must be $ruleValue characters long or shorter"
+                        );
+                    }
+                    continue;
+                }
+
+                throw new InvalidArgumentException("Unknown validation rule '$rule'");
+            }
+        }
+
+        return $params;
     }
 }
