@@ -76,6 +76,26 @@ class QueryParamsServiceTest extends TestCase
         $queryParamsService->parse($specs);
     }
 
+    public function testMissingParameter()
+    {
+        // given
+        $request = new Request();
+
+        $specs = [
+            "q" => [
+                "type" => "string",
+            ],
+        ];
+        $queryParamsService = new QueryParamsService($request);
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("Parameter 'q' is required");
+
+        // when
+        $queryParamsService->parse($specs);
+    }
+
     /** "type" rule */
 
     public function testInvalidValueTypeForString()
@@ -99,52 +119,9 @@ class QueryParamsServiceTest extends TestCase
         $queryParamsService->parse($specs);
     }
 
-    /** "optional" rule */
-
-    public function testMissingRequiredParameter()
-    {
-        // given
-        $request = new Request();
-
-        $specs = [
-            "q" => [
-                "type" => "string",
-            ],
-        ];
-        $queryParamsService = new QueryParamsService($request);
-
-        // then
-        $this->expectException(BadRequestHttpException::class);
-        $this->expectExceptionMessage("Parameter 'q' is required");
-
-        // when
-        $queryParamsService->parse($specs);
-    }
-
-    public function testMissingOptionalParameter()
-    {
-        // given
-        $request = new Request();
-
-        $specs = [
-            "q" => [
-                "type" => "string",
-                "optional" => true,
-            ],
-        ];
-        $queryParamsService = new QueryParamsService($request);
-        $queryParamsService->parse($specs);
-
-        // when
-        $q = $queryParamsService->get("q");
-
-        // then
-        $this->assertNull($q);
-    }
-
     /** "default" rule */
 
-    public function testMissingOptionalParameterWithDefaultValue()
+    public function testMissingParameterWithDefaultValue()
     {
         // given
         $request = new Request();
@@ -152,7 +129,6 @@ class QueryParamsServiceTest extends TestCase
         $specs = [
             "page" => [
                 "type" => "string",
-                "optional" => true,
                 "default" => "0",
             ],
         ];
@@ -166,7 +142,7 @@ class QueryParamsServiceTest extends TestCase
         $this->assertEquals("0", $page);
     }
 
-    public function testProvidedOptionalParameterWithDefaultValue()
+    public function testProvidedParameterWithDefaultValue()
     {
         // given
         $request = new Request();
@@ -175,7 +151,6 @@ class QueryParamsServiceTest extends TestCase
         $specs = [
             "page" => [
                 "type" => "string",
-                "optional" => true,
                 "default" => "0",
             ],
         ];

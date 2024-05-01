@@ -32,7 +32,7 @@ class UserController extends Controller
             return new RedirectResponse("/");
         }
 
-        $queryParams->parse(["return_url" => ["type" => "string", "optional" => true, "default" => ""]]);
+        $queryParams->parse(["return_url" => ["type" => "string", "default" => ""]]);
         $returnUrl = $queryParams->get("return_url");
         if (str_contains($returnUrl, "logged-out")) {
             $returnUrl = null;

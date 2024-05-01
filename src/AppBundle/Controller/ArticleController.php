@@ -162,9 +162,9 @@ class ArticleController extends Controller
 
         $queryParamsService->parse([
             "q" => ["type" => "string", "mb_min_length" => 3, "mb_max_length" => 255],
-            "in-stock" => ["type" => "string", "optional" => true,  "default" => "0"],
-            "sort" => ["type" => "string", "optional" => true, "default" => "pubdate|desc"],
-            "p" => ["type" => "string", "optional" => true, "default" => 0]
+            "in-stock" => ["type" => "string", "default" => "0"],
+            "sort" => ["type" => "string", "default" => "pubdate|desc"],
+            "p" => ["type" => "string", "default" => 0]
         ]);
 
         $query = $queryParamsService->get("q");

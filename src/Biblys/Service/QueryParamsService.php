@@ -23,7 +23,7 @@ class QueryParamsService
         $this->queryParams = $params;
     }
 
-    public function get(string $key): mixed
+    public function get(string $key): string
     {
         return $this->queryParams[$key];
     }
@@ -42,13 +42,12 @@ class QueryParamsService
         foreach ($specs as $param => $rules) {
 
             if (!isset($params[$param])) {
-                $isRequired = !isset($rules["optional"]);
+                $isRequired = !isset($rules["default"]);
                 if ($isRequired) {
                     throw new BadRequestHttpException("Parameter '$param' is required");
                 }
 
-                $defaultValue = $rules["default"] ?? null;
-                $params[$param] = $defaultValue;
+                $params[$param] = $rules["default"];
 
                 continue;
             }
@@ -56,7 +55,7 @@ class QueryParamsService
             $value = $params[$param];
             foreach ($rules as $rule => $ruleValue) {
 
-                if (in_array($rule, ["optional", "default"], true)) {
+                if ($rule === "default") {
                     continue;
                 }
 

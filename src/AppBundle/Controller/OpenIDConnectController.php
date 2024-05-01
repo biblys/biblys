@@ -39,7 +39,7 @@ class OpenIDConnectController extends Controller
         OpenIDConnectProviderService $openIDConnectProviderService,
     ): RedirectResponse
     {
-        $queryParams->parse(["return_url" => ["type" => "string", "optional" => true, "default" => ""]]);
+        $queryParams->parse(["return_url" => ["type" => "string", "default" => ""]]);
         $returnUrl = $queryParams->get("return_url");
         $authorizationUri = $openIDConnectProviderService->getAuthorizationUri($tokenService, $returnUrl);
         $response = new RedirectResponse($authorizationUri);
