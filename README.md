@@ -2,8 +2,8 @@
 
 ## Requirements
 
-- PHP 8.0 or above
-- MySQL 5.7
+- PHP 8.1 or above
+- MySQL 8
 - Composer
 - Git
 - Yarn
