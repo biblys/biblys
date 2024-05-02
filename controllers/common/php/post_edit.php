@@ -108,16 +108,14 @@ $config = Config::load();
 $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
 // Valeurs par defaut pour un nouveau billet
-$p["axys_account_id"] = $currentUser->getUser()->getId();
+$p["user_id"] = $currentUser->getUser()->getId();
 $p["post_date"] = date("Y-m-d");
 $p["post_time"] = date("H:i");
 
 // Auteur
 if ($currentUser->isAdmin()) {
-    if(!empty($currentUser->getAxysAccount()->getUsername())) $author = $currentUser->getAxysAccount()->getUsername();
-    else $author = $globalSite->get("id");
-}
-elseif ($currentUser->hasPublisherRight()) {
+    $author = $currentUser->getUser()->getEmail();
+} elseif ($currentUser->hasPublisherRight()) {
     $pum = new PublisherManager();
     $publisherId = $currentUser->getCurrentRight()->getPublisherId();
     $publisher = $pum->getById($publisherId);
@@ -143,7 +141,7 @@ if ($post) {
             <p><a href="/pages/'.$rank.'posts">billets</a></p>
         </div>
     ';
-    $author = $p["axys_account_screen_name"];
+    $author = $currentUser->getUser()->getEmail();
     $date = explode(" ", $p["post_date"]);
     $p["post_date"] = $date[0];
     $p["post_time"] = substr($date[1],0,5);
@@ -184,7 +182,7 @@ $content .= '
             <p>
                 <label class="floating" for="post_author">Auteur :</label>
                 <input type="text" name="post_author" id="post_author" value="'.$author.'" class="long" disabled="disabled" />
-                <input type="hidden" name="axys_account_id" id="axys_account_id" value="'.$p["axys_account_id"].'" />
+                <input type="hidden" name="user_id" id="user_id" value="'.$p["user_id"].'" />
                 <input type="hidden" name="publisher_id" id="publisher_id" value="'.($p['publisher_id'] ?? null).'">
             </p>
 ';

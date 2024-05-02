@@ -5,7 +5,6 @@ namespace Command;
 use Model\AuthenticationMethod;
 use Biblys\Test\ModelFactory;
 use Model\AxysApp;
-use Model\BookCollection;
 use Model\Country;
 use Model\Publisher;
 use Model\Right;
@@ -89,7 +88,6 @@ class CreateSeedsCommand extends Command
         $publisherUser->setEmail("publisher@paronymie.fr");
         $publisherUser->save();
 
-
         $right = new Right();
         $right->setUser($publisherUser);
         $right->setPublisher($publisher);
@@ -142,6 +140,19 @@ class CreateSeedsCommand extends Command
             sellingPrice: 999,
         );
         $output->writeln(["Inserted stock item for L'Ordure du jeu"]);
+
+        // Order
+        $order = ModelFactory::createOrder(
+            site: $site,
+        );
+
+        // Stock Item
+        ModelFactory::createStockItem(
+            site: $site,
+            article: $article,
+            order: $order,
+            sellingPrice: 999,
+        );
 
         $output->writeln(["Seeds generated!"]);
         return 0;

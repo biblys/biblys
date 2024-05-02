@@ -9,6 +9,7 @@ use CollectionManager;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
+use Model\PublisherQuery;
 use Propel\Runtime\Exception\PropelException;
 use PublisherManager;
 use SupplierManager;
@@ -316,7 +317,7 @@ class PublisherController extends Controller
 
         $pm = new PublisherManager();
 
-        $publisher = $pm->get(['publisher_id' => $id]);
+        $publisher = PublisherQuery::create()->findPk($id);
         if (!$publisher) {
             throw new NotFoundException("Publisher $id not found.");
         }

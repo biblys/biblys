@@ -498,17 +498,4 @@ if (LegacyCodeHelper::getGlobalSite()["site_shop"]) {
 
 }
 
-// Authorized users
-$rm = new RightManager();
-$rights = $rm->getAll(array('publisher_id' => $p['publisher_id']));
-$managers = array();
-foreach ($rights as $r) {
-    if ($u = $um->get(array('axys_account_id' => $r->get('axys_account_id')))) {
-        $managers[] .= $u->getUserName();
-    }
-}
-if (!empty($managers)) {
-    $content .= '<h2>Utilisateurs autorisés'.'</h2>'.implode(', ', $managers);
-}
-
 return new Response($content);

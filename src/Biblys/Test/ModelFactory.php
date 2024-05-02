@@ -259,6 +259,7 @@ class ModelFactory
     {
         $order = new Order();
         $order->setSite($site ?? ModelFactory::createSite());
+        $order->setType("web");
         $order->setAxysAccountId($axysAccountId);
         $order->setSlug($slug ?? "order-slug");
         $order->save();
@@ -352,6 +353,7 @@ class ModelFactory
         ?Article     $article = null,
         ?User        $user = null,
         ?Cart        $cart = null,
+        Order        $order = null,
         int          $sellingPrice = 0,
         DateTime     $sellingDate = null,
         DateTime     $returnDate = null,
@@ -367,6 +369,7 @@ class ModelFactory
         $stock->setUser($user);
         $stock->setCart($cart);
         $stock->setCondition("Neuf");
+        $stock->setOrderId($order?->getId());
         $stock->setSellingPrice($sellingPrice);
         $stock->setSellingDate($sellingDate);
         $stock->setReturnDate($returnDate);
