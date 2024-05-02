@@ -280,7 +280,7 @@ class Stock extends Entity
         if ($cart_id) {
             $cm = new CartManager();
             $cart = $cm->getById($cart_id);
-            $cm->removeStock($cart, $this);
+            $cm->removeStock($this);
         }
 
         // Default date: now

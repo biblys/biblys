@@ -166,7 +166,7 @@ return function (
         $copyToRemove = $sm->getById($copyToRemoveId);
         $params = [];
         if ($copyToRemove) {
-            if ($cm->removeStock($cart, $copyToRemove)) {
+            if ($cm->removeStock($copyToRemove)) {
                 $params['success'] = 'L\'exemplaire n&deg; ' . $copyToRemove->get('id') . ' a été retiré du panier et remis en stock.';
                 $cm->updateFromStock($cart);
             }

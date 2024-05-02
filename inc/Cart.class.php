@@ -8,15 +8,11 @@ use Propel\Runtime\Exception\PropelException;
 class Cart extends Entity
 {
     protected $prefix = 'cart';
-    protected $stock = [];
-    private $seller = null;
+    protected array $stock = [];
+    private AxysAccount|null $seller = null;
 
     public function __construct($data)
     {
-        global $_SQL;
-
-        /* JOINS */
-
         // Customer (OneToMany)
         if (isset($data['customer_id'])) {
             $cm = new CustomerManager();
@@ -26,6 +22,7 @@ class Cart extends Entity
         // Seller (OneToMany)
         if (isset($data['cart_seller_id'])) {
             $um = new AxysAccountManager();
+            /** @var AxysAccount $seller */
             $seller = $um->getById($data['cart_seller_id']);
             if ($seller) {
                 $this->seller = $seller;
@@ -35,7 +32,7 @@ class Cart extends Entity
         parent::__construct($data);
     }
 
-    public function set($field, $value)
+    public function set($field, $value): void
     {
         if ($field == 'cart_title' && empty($value)) $value = 'Panier n&deg; ' . $this->get('id');
 
@@ -44,6 +41,8 @@ class Cart extends Entity
 
     /**
      * @throws PropelException
+     * @throws Exception
+     * @throws Exception
      */
     public function getLine($stock): string
     {
@@ -53,20 +52,20 @@ class Cart extends Entity
 
         // Image
         $article_cover = new Media('article', $article->get('id'));
-        $stock_cover   = new Media('stock',  $stock->get('id'));
+        $stock_cover = new Media('stock', $stock->get('id'));
 
-        if ($article_cover->exists())   $cover = '<a href="' . $article_cover->url() . '" rel="lightbox"><img src="' . $article_cover->url('h100') . '" height=55 alt="' . $article->get('title') . '"></a>';
-        elseif ($stock_cover->exists()) $cover = '<a href="' . $stock_cover->url() . '" rel="lightbox"><img src="' . $stock_cover->url('h100') . '" height=55 alt="' . $article->get('title') . '"></a>';
+        if ($article_cover->exists()) $cover = '<a href="' . $article_cover->getUrl() . '" rel="lightbox"><img src="' . $article_cover->getUrl(['size' => 'h100']) . '" height=55 alt="' . $article->get('title') . '"></a>';
+        elseif ($stock_cover->exists()) $cover = '<a href="' . $stock_cover->getUrl() . '" rel="lightbox"><img src="' . $stock_cover->getUrl(['size' => 'h100']) . '" height=55 alt="' . $article->get('title') . '"></a>';
         else $cover = NULL;
 
         $articleUrl = $urlgenerator->generate("article_show", ["slug" => $article->get("url")]);
 
-        $line = '
+        return '
                 <tr id="stock_' . $stock->get('id') . '">
                     <td class="va-middle right"><a href="/pages/adm_stock?id=' . $stock->get('id') . '">' . $stock->get('id') . '</a></td>
                     <td class="va-middle center">' . $cover . '</td>
                     <td class="va-middle">
-                        <a href="'.$articleUrl.'">' . $article->get('title') . '</a><br>
+                        <a href="' . $articleUrl . '">' . $article->get('title') . '</a><br>
                         de ' . authors($article->get('authors')) . '<br>
                         Ed. ' . $article->get('publisher')->get('name') . '
                     </td>
@@ -81,15 +80,13 @@ class Cart extends Entity
                     </td>
                 </tr>
             ';
-
-        return $line;
     }
 
     /**
      * Get cart content
-     * @return type
+     * @return array
      */
-    public function getStock()
+    public function getStock(): array
     {
         $cm = new CartManager();
         $this->stock = $cm->getStock($this);
@@ -98,14 +95,17 @@ class Cart extends Entity
 
     /**
      * Show cart in one line
-     * @return string
+     * @throws PropelException
      */
-    public function getOneLine($params = [])
+    public function getOneLine($params = []): string
     {
         return Cart::buildOneLine($this->get('count'), $this->get('amount'), $params);
     }
 
-    public static function buildOneLine($count = 0, $amount = 0, $params = [])
+    /**
+     * @throws PropelException
+     */
+    public static function buildOneLine($count = 0, $amount = 0, $params = []): string
     {
         $icon = '<span class="fa fa-shopping-cart"></span>';
         if (isset($params['image'])) {
@@ -128,7 +128,10 @@ class Cart extends Entity
             '</a>';
     }
 
-    public static function getOneLineEmpty()
+    /**
+     * @throws PropelException
+     */
+    public static function getOneLineEmpty(): string
     {
         return self::buildOneLine();
     }
@@ -156,6 +159,7 @@ class Cart extends Entity
      *
      * @param Article $article
      * @return bool
+     * @throws Exception
      */
     public function containsArticle(Article $article): bool
     {
@@ -191,7 +195,7 @@ class Cart extends Entity
      * Returns true if cart contains at least one physical product
      * @return bool
      */
-    public function needsShipping()
+    public function needsShipping(): bool
     {
         $copies = $this->getStock();
         foreach ($copies as $copy) {
@@ -235,9 +239,6 @@ class Cart extends Entity
         return true;
     }
 
-    /**
-     * @return AxysAccount|null
-     */
     public function getSeller(): AxysAccount
     {
         return $this->seller;
@@ -251,18 +252,17 @@ class CartManager extends EntityManager
         $object = 'Cart',
         $siteAgnostic = false;
 
-    public function create(array $defaults = array())
+    /**
+     * @throws Exception
+     */
+    public function create(array $defaults = array()): Entity
     {
         if (empty($defaults)) $defaults = array('site_id' => $this->site['site_id'], 'cart_uid' => md5(uniqid('', true)));
 
         if (!isset($defaults['site_id'])) $defaults['site_id'] = $this->site['site_id'];
         if (!isset($defaults['cart_uid'])) $defaults['cart_uid'] = md5(uniqid('', true));
 
-        try {
-            return parent::create($defaults);
-        } catch (Exception $e) {
-            trigger_error($e->getMessage());
-        }
+        return parent::create($defaults);
     }
 
     /**
@@ -275,7 +275,7 @@ class CartManager extends EntityManager
     {
         $copies = $this->getStock($cart);
         foreach ($copies as $copy) {
-            $this->removeStock($cart, $copy);
+            $this->removeStock($copy);
         }
 
         $cart->set('customer_id', '');
@@ -292,18 +292,23 @@ class CartManager extends EntityManager
     /**
      * Obtenir le contenu d'un panier
      */
-    public function getStock(Cart $cart, $stock_id = 'all'): array
+    public function getStock(Cart $cart): array
     {
         $sm = new StockManager();
-        $stock = $sm->getAll(array('cart_id' => $cart->get('id')));
-        return $stock;
+        return $sm->getAll(array('cart_id' => $cart->get('id')));
     }
 
     /**
      * Ajouter un exemplaire au panier
      * @throws CannotAddStockItemToCartException
+     * @throws PropelException
+     * @throws Exception
      */
-    public function addStock(Cart $cart, $stock, $wish_id = 'undefined', CFReward $reward = null)
+    public function addStock(
+        Cart      $cart,
+        Stock|int $stock,
+        CFReward  $reward = null
+    ): bool
     {
         $globalSite = LegacyCodeHelper::getGlobalSite();
         $sm = new StockManager();
@@ -331,7 +336,7 @@ class CartManager extends EntityManager
             }
 
             // Else, remove it from the cart
-            $this->removeStock($otherCart, $stock);
+            $this->removeStock($stock);
         }
 
         // If stock is not available
@@ -341,18 +346,15 @@ class CartManager extends EntityManager
 
         $weight_required = $globalSite->getOpt('weight_required');
         if ($cart->get('type') == 'web' && $weight_required && (!$stock->get('weight') || $stock->get('weight') < $weight_required)) {
-            throw new Exception('Cet exemplaire n\'a pas de poids et ne peut être ajouté au panier. Merci de nous contacter.');
+            throw new Exception('Cet exemplaire n’a pas de poids et ne peut être ajouté au panier. Merci de nous contacter.');
         }
 
-        // Is the article in the visitor's wishlist ?
-        else {
-            if (LegacyCodeHelper::getGlobalVisitor()->isLogged()) {
-                $wm = new WishManager();
-                if ($w = $wm->get(array('article_id' => $stock->get('article_id'), 'axys_account_id' => LegacyCodeHelper::getGlobalVisitor()->get('id')))) {
-                    $w->set('wish_bought', date('Y-m-d H:i:s'));
-                    $wm->update($w);
-                    $stock->set('wish_id', $w->get('id'));
-                }
+        if (LegacyCodeHelper::getGlobalVisitor()->isLogged()) {
+            $wm = new WishManager();
+            if ($w = $wm->get(array('article_id' => $stock->get('article_id'), 'axys_account_id' => LegacyCodeHelper::getGlobalVisitor()->get('id')))) {
+                $w->set('wish_bought', date('Y-m-d H:i:s'));
+                $wm->update($w);
+                $stock->set('wish_id', $w->get('id'));
             }
         }
 
@@ -367,23 +369,16 @@ class CartManager extends EntityManager
         $stock->set('stock_cart_date', date('Y-m-d H:i:s'));
         $sm->update($stock, 'Added Stock #' . $stock->get('id') . ' to Cart #' . $cart->get('id'));
 
-        // Add to cart's stock array
-        $this->stock[] = $stock;
-
         return true;
-
-        return false;
     }
 
     /**
      * Add an article to cart (create copy if needed)
-     * @param Cart $cart
-     * @param Article $article
-     * @param CFReward|null $reward
-     * @return bool
      * @throws CartException
+     * @throws PropelException
+     * @throws Exception
      */
-    public function addArticle(Cart $cart, $article, CFReward $reward = null): bool
+    public function addArticle(Cart $cart, Article|int $article, CFReward $reward = null): bool
     {
 
         $sm = new StockManager();
@@ -392,14 +387,14 @@ class CartManager extends EntityManager
         if (is_int($article)) {
             $article = $am->getById($article);
             if (!$article) {
-                throw new CartException('Article ' . $article_id . ' inexistant.');
+                throw new CartException('Article inexistant.');
             }
         }
         $a = $article;
 
         if (!$article instanceof Article) {
             throw new Exception(
-                'Cart->addArticle should receive an article, '.get_class($article).' received instead'
+                'Cart->addArticle should receive an article, ' . get_class($article) . ' received instead'
             );
         }
 
@@ -407,7 +402,6 @@ class CartManager extends EntityManager
             throw new CartException('Cet article est indisponible.');
         }
 
-        
 
         // Default : add an available copy to cart
         $stocks = $article->getAvailableItems('all', [
@@ -441,7 +435,7 @@ class CartManager extends EntityManager
                 }
 
                 // Else, add copy to cart
-                $this->addStock($cart, $stock->get('id'), null, $reward);
+                $this->addStock($cart, $stock->get('id'), $reward);
                 return true;
             }
         }
@@ -452,11 +446,13 @@ class CartManager extends EntityManager
         if ($this->site->getOpt('virtual_stock') || $reward && !$reward->isLimited()) {
 
             if (!$article->isPublished() && !$article->isPreorderable()) {
-                throw new CartException('L\'article <a href="/a/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'est pas encore disponible.');
+                throw new CartException('L\'article <a href="/a/' . $a["article_url"] . '">' .
+                    $a["article_title"] . '</a> n’a pas pu être ajouté au panier, car il n’est pas encore disponible.');
             }
 
             if ($article->isSoldOut()) {
-                throw new CartException('L\'article <a href="/a/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'est plus disponible.');
+                throw new CartException('L\'article <a href="/a/' . $a["article_url"] . '">' .
+                    $a["article_title"] . '</a> n’a pas pu être ajouté au panier, car il n’est plus disponible.');
             }
 
             if ($article->isPrivatelyPrinted()) {
@@ -474,15 +470,10 @@ class CartManager extends EntityManager
             }
 
             // Create a new copy
-            $this->db->beginTransaction();
-            $s = $sm->create(array('site_id' => $this->site['site_id']));
-            $s->set('article_id', $a->get('id'));
-            $s->set('site_id', $this->site['site_id']);
-            $s->set('stock_selling_price', $a->get('price'));
-            $s->set('stock_weight', $a->get('weight'));
+            $s = $this->_createANewCopy($sm, $a);
 
             $sm->update($s);
-            $this->addStock($cart, $s->get('id'), null, $reward);
+            $this->addStock($cart, $s->get('id'), $reward);
             $this->db->commit();
             return true;
         }
@@ -490,19 +481,14 @@ class CartManager extends EntityManager
         // Bookshop : on order
         if ($this->site['site_bookshop'] && strstr($a->get('links'), '[onorder:' . $this->site["site_id"] . ']')) {
             if (!$a->has('weight')) {
-                throw new Exception('Le livre <a href="/a/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'a pas de poids. Merci de <a href="/contact/">nous contacter</a>.');
+                throw new Exception('Le livre <a href="/a/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n’a pas pu être ajouté au panier car, il n’a pas de poids. Merci de <a href="/contact/">nous contacter</a>.');
             } elseif (!$a->has('price')) {
-                throw new Exception('Le livre <a href="/a/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'a pas de prix. Merci de <a href="/contact/">nous contacter</a>.');
+                throw new Exception('Le livre <a href="/a/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n’a pas pu être ajouté au panier car, il n’a pas de prix. Merci de <a href="/contact/">nous contacter</a>.');
             } elseif (!$a->has('availability')) {
-                throw new Exception('Le livre <a href="/a/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il est indisponible. Merci de <a href="/contact/">nous contacter</a>.');
+                throw new Exception('Le livre <a href="/a/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n’a pas pu être ajouté au panier car, il est indisponible. Merci de <a href="/contact/">nous contacter</a>.');
             } else {
                 // Create a new on-order copy
-                $this->db->beginTransaction();
-                $s = $sm->create(array('site_id' => $this->site['site_id']));
-                $s->set('article_id', $a->get('id'));
-                $s->set('site_id', $this->site['site_id']);
-                $s->set('stock_selling_price', $a->get('price'));
-                $s->set('stock_weight', $a->get('weight'));
+                $s = $this->_createANewCopy($sm, $a);
                 $s->set('stock_stockage', 'Sur commande');
                 $s->set('stock_condition', 'Neuf');
                 $sm->update($s);
@@ -518,11 +504,14 @@ class CartManager extends EntityManager
         );
     }
 
-    public function addCFReward(Cart $cart, CFReward $reward)
+    /**
+     * @throws PropelException
+     * @throws CartException
+     * @throws Exception
+     */
+    public function addCFReward(Cart $cart, CFReward $reward): bool
     {
         $am = new ArticleManager();
-        $sm = new StockManager();
-        $rm = new CFRewardManager();
 
         // If reward is limited and quantity is 0 or less
         if ($reward->get('limited') && $reward->get('quantity') <= 0) {
@@ -544,12 +533,10 @@ class CartManager extends EntityManager
     }
 
     /**
-     * Retirer un exemplaire du panier
-     * @param object $cart L'objet Cart du panier
-     * @param int|Stock $stock L'id de l'exemplaire à retirer
+     * @throws Exception
      */
 
-    public function removeStock(Cart $cart, &$stock)
+    public function removeStock(&$stock): bool
     {
         $sm = new StockManager();
 
@@ -580,12 +567,15 @@ class CartManager extends EntityManager
         return true;
     }
 
-    public function removeArticle(Cart $cart, $article_id)
+    /**
+     * @throws Exception
+     */
+    public function removeArticle(Cart $cart, $article_id): bool
     {
         $stock = $this->getStock($cart);
         foreach ($stock as $s) {
             if ($s['article_id'] == $article_id) {
-                $this->removeStock($cart, $s);
+                $this->removeStock($s);
                 return true;
             }
         }
@@ -595,10 +585,9 @@ class CartManager extends EntityManager
 
     /**
      * Update stock_count and stock_amount from stock
-     * @param Cart $cart
-     * @return bool true on success
+     * @throws Exception
      */
-    public function updateFromStock(Cart $cart)
+    public function updateFromStock(Cart $cart): bool
     {
         $amount = 0;
         $count = 0;
@@ -615,10 +604,27 @@ class CartManager extends EntityManager
         return true;
     }
 
-    public function delete($x, $reason = null)
+    /**
+     * @throws Exception
+     */
+    public function delete($entity, $reason = null): bool
     {
-        $x->set('cart_uid', '');
-        $this->update($x);
-        return parent::delete($x, $reason);
+        $entity->set('cart_uid', '');
+        $this->update($entity);
+        return parent::delete($entity, $reason);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function _createANewCopy(StockManager $sm, Article|false|int|Entity $a): Entity
+    {
+        $this->db->beginTransaction();
+        $s = $sm->create(array('site_id' => $this->site['site_id']));
+        $s->set('article_id', $a->get('id'));
+        $s->set('site_id', $this->site['site_id']);
+        $s->set('stock_selling_price', $a->get('price'));
+        $s->set('stock_weight', $a->get('weight'));
+        return $s;
     }
 }

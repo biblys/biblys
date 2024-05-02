@@ -126,7 +126,7 @@ class CartController extends Controller
         $cart = $currentUser->getOrCreateCart();
         /** @var Cart $cartEntity */
         $cartEntity = $cm->getById($cart->getId());
-        $cm->removeStock($cartEntity, $stock);
+        $cm->removeStock($stock);
         $cm->updateFromStock($cartEntity);
 
         if ($request->headers->get("Accept") === "application/json") {
