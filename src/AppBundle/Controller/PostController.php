@@ -75,29 +75,33 @@ class PostController extends Controller
      * @throws PropelException
      * @throws LoaderError
      */
-    public function showAction(Request $request, $slug)
+    public function showAction(
+        Request $request,
+        CurrentUser $currentUser,
+        TemplateService $templateService,
+        string $slug
+    ): Response
     {
         global $urlgenerator;
-
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $pm = new PostManager();
         $post = $pm->get(["post_url" => $slug]);
-
-        // Offline post
-        if ($post && $post->get('status') == 0 &&
-                $post->get('axys_account_id') !== LegacyCodeHelper::getGlobalVisitor()->get('id') && !LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
-            $post = false;
-        }
-
-        // Future post
-        if ($post && $post->get('date') > date("Y-m-d H:i:s") &&
-                $post->get('axys_account_id') !== LegacyCodeHelper::getGlobalVisitor()->get('id') && !LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
-            $post = false;
-        }
-
         if (!$post) {
             throw new NotFoundException("Post $slug not found.");
+        }
+
+        $userCanSeeUnpublishedPost = $post->get('user_id') === $currentUser->getUser()->getId() ||
+            $currentUser->isAdmin();
+
+        $postIsOffline = $post->get('status') == 0;
+        if ($postIsOffline && !$userCanSeeUnpublishedPost) {
+            throw new NotFoundException("Post $slug is currently offline.");
+        }
+
+        $postIsToBePublished = $post->get('date') > date("Y-m-d H:i:s");
+        if ($postIsToBePublished && !$userCanSeeUnpublishedPost) {
+            throw new NotFoundException("Post $slug is to be published.");
         }
 
         $request->attributes->set("page_title", $post->get("title"));
@@ -131,7 +135,7 @@ class PostController extends Controller
 
         $this->setOpengraphTags($opengraphTags);
 
-        return $this->render('AppBundle:Post:show.html.twig', [
+        return $templateService->renderResponse('AppBundle:Post:show.html.twig', [
             'post' => $post
         ]);
     }
@@ -164,7 +168,7 @@ class PostController extends Controller
             throw new NotFoundException("Post $id not found.");
         }
 
-        if (!$currentUser->isAdmin() && !$post->canBeDeletedBy(LegacyCodeHelper::getGlobalVisitor())) {
+        if (!$currentUser->isAdmin() && !$post->canBeDeletedBy($currentUser->getUser())) {
             throw new Exception("Vous n'avez pas le droit de supprimer ce billet.");
         }
 

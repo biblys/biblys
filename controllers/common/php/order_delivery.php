@@ -11,6 +11,7 @@ use Biblys\Service\Mailer;
 use Biblys\Service\MailingList\Exception\InvalidConfigurationException;
 use Biblys\Service\MailingList\Exception\InvalidEmailAddressException;
 use Biblys\Service\MailingList\MailingListService;
+use Model\CustomerQuery;
 use Model\PageQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -33,8 +34,7 @@ return function (
     CurrentSite  $currentSite,
     UrlGenerator $urlGenerator,
     CurrentUser  $currentUser,
-    Mailer       $mailer)
-: Response|RedirectResponse {
+    Mailer       $mailer): Response|RedirectResponse {
     global $_SQL;
 
     $request->attributes->set("page_title", "Commande » Validation");
@@ -55,7 +55,6 @@ return function (
         "site_id" => $currentSite->getSite()->getId(),
     ])[0];
 
-    $cm = new CustomerManager();
     $com = new CountryManager();
     $om = new OrderManager();
 
@@ -69,7 +68,7 @@ return function (
     $loginUrl = $urlGenerator->generate("user_login", ["return_url" => $currentUrl]);
     $signupUrl = $urlGenerator->generate("user_signup");
 
-    $orderInProgress = OrderDeliveryHelpers::getOrderInProgressForVisitor(LegacyCodeHelper::getGlobalVisitor());
+    $orderInProgress = OrderDeliveryHelpers::getOrderInProgressForVisitor($currentUser);
     if ($orderInProgress) {
         $copies = $orderInProgress->getCopies();
         foreach ($copies as $copy) {
@@ -130,9 +129,9 @@ return function (
 
             /* MAILING */
             $newsletter_checked = $request->request->get('newsletter', false);
-            $email = $request->request->get('order_email');
+            $orderEmail = $request->request->get('order_email');
             if ($newsletter_checked && $mailingListService->isConfigured()) {
-                $mailingList->addContact($email, true);
+                $mailingList->addContact($orderEmail, true);
             }
 
             /* GET ORDER */
@@ -147,22 +146,26 @@ return function (
 
             /* CUSTOMER */
 
-            // Get customer from User
+            $existingCustomer = CustomerQuery::create()->findOneByEmail($orderEmail);
             if ($currentUser->isAuthentified()) {
-                $order->set('axys_account_id', LegacyCodeHelper::getGlobalVisitor()->get('id'));
-                $customer = LegacyCodeHelper::getGlobalVisitor()->getCustomer('create');
-            } // Else get customer from email address
-            elseif ($getCustomer = $cm->get(array('customer_email' => $_POST['order_email']))) {
-                $customer = $getCustomer;
-            } // else Create a new customer with order info
-            else {
-                $customer = $cm->create();
-                $customer->set('customer_email', $_POST['order_email'])
-                    ->set('customer_first_name', $_POST['order_firstname'])
-                    ->set('customer_last_name', $_POST['order_lastname']);
-                $cm->update($customer);
+                $currentUserId = $currentUser->getUser()->getId();
+                $order->set('user_id', $currentUserId);
+                $existingCustomer = CustomerQuery::create()->findOneByUserId($currentUserId);
             }
-            $order->set('customer_id', $customer->get('id'));
+
+            if (!$existingCustomer) {
+                $firstName = $request->request->get("order_firstname");
+                $lastName = $request->request->get("order_lastname");
+
+                $newCustomer = new \Model\Customer();
+                $newCustomer->setEmail($orderEmail);
+                $newCustomer->setFirstName($firstName);
+                $newCustomer->setLastName($lastName);
+                $newCustomer->save();
+                $existingCustomer = $newCustomer;
+            }
+
+            $order->set('customer_id', $existingCustomer->getId());
 
             /* COUNTRY */
             $countryId = $request->request->get('country_id');
@@ -205,8 +208,8 @@ return function (
             $om->update($order);
 
             // Save customer country
-            $customer->set('country_id', $countryId);
-            $cm->update($customer);
+            $existingCustomer->setCountryId($countryId);
+            $existingCustomer->save();
 
             // Hydrate order from cart
             $updatedOrder = $om->hydrateFromCart($order, $cartEntity);
@@ -224,7 +227,7 @@ return function (
 
             // Delete alerts for purchased articles
             if ($currentSite->hasOptionEnabled("alerts")) {
-                $order->deleteRelatedAlerts();
+                $order->deleteRelatedAlerts($currentUser);
             }
 
             $_SQL->commit();
@@ -393,7 +396,7 @@ return function (
         $om = new OrderManager();
         $previousOrder = $om->get(
             [
-                'axys_account_id' => LegacyCodeHelper::getGlobalVisitor()->get('id'),
+                'user_id' => $currentUser->getUser()->getId(),
                 'order_cancel_date' => 'NULL',
             ],
             ['order' => 'order_created', 'sort' => 'desc']
@@ -531,7 +534,7 @@ return function (
             <div class="order-delivery-form__field">
                 <label for="order_phone" class="order-delivery-form__label">
                     Téléphone
-                    '. ($isPhoneRequired ? '<span class="required-field-indicator">*</span>' : '') .'
+                    ' . ($isPhoneRequired ? '<span class="required-field-indicator">*</span>' : '') . '
                 </label>
                 <input 
                     type="text" 

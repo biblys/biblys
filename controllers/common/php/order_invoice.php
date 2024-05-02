@@ -18,8 +18,6 @@ return function (
     CurrentSite $currentSite
 ): Response
 {
-    global $_SQL;
-
     $om = new OrderManager();
     $sm = new StockManager();
 
@@ -33,24 +31,9 @@ return function (
         $pageTitle = "Facture n° {$order->get('id')}";
         $request->attributes->set("page_title", $pageTitle);
 
-        // Get customer
-        $customer_ref = null;
-        if ($order->has('customer')) {
-            $customer = $order->get('customer');
-
-            // Check access right
-
-            if ($customer->get('axys_account_id') != $currentUser->getAxysAccount()->getId() &&
-                !$currentUser->isAdmin()) {
-                throw new AccessDeniedHttpException();
-            }
-
-            // Calculate customer reference
-            /** @var PDO $_SQL */
-            $stock = $_SQL->query("SELECT COUNT(`order_id`) AS `orders`, SUM(`order_amount`) AS `revenue` FROM `orders` WHERE `customer_id` = '" . $customer->get('id') . "' AND `site_id` = " . $currentSite->getId() . " AND `order_payment_date` IS NOT NULL AND `order_cancel_date` IS NULL GROUP BY `axys_account_id`");
-            if ($s = $stock->fetch(PDO::FETCH_ASSOC)) {
-                $customer_ref = '<p>Ref. client ' . $customer->get('id') . '-' . $s["orders"] . '-' . round($s["revenue"] / 100) . '</p>';
-            }
+        if (!_isAnonymousOrder($order) && !_orderBelongsToVisitor($order, $currentUser) &&
+            !$currentUser->isAdmin()) {
+            throw new AccessDeniedHttpException();
         }
 
         // Condition column for bookshops
@@ -130,7 +113,6 @@ return function (
         $content .= '
 
         <div class="pull-right">
-            ' . $customer_ref . '
             <h3>' . $order->get('title') . ' ' . $order->get('firstname') . ' ' . $order->get('lastname') . '</h3>
             <p>
                 ' . $order->get('address1') . '<br>

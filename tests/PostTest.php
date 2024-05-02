@@ -6,6 +6,8 @@
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
+use Propel\Runtime\Exception\PropelException;
 
 require_once "setUp.php";
 
@@ -235,22 +237,24 @@ class PostTest extends PHPUnit\Framework\TestCase
     public function testPostCantBeDeletedByAnyone()
     {
         // given
-        $axysAccount = new AxysAccount(["axys_account_id" => 111]);
-        $post = new Post(["axys_account_id" => 222]);
+        $user = ModelFactory::createUser();
+        $post = new Post(["user_id" => 222]);
 
         // when
-        $canBeDeleted = $post->canBeDeletedBy($axysAccount);
+        $canBeDeleted = $post->canBeDeletedBy($user);
 
         // then
         $this->assertFalse($canBeDeleted, "User should not be able to delete any post");
     }
 
+    /**
+     * @throws PropelException
+     */
     public function testPostCanBeDeletedByItsAuthor()
     {
         // given
-        $postAuthor = new AxysAccount(["axys_account_id" => 111]);
-        $post = new Post(["axys_account_id" => 111]);
-        $post->set('axys_account_id', $postAuthor->get('id'));
+        $postAuthor = ModelFactory::createUser();
+        $post = new Post(["user_id" => $postAuthor->getId()]);
 
         // when
         $canBeDeleted = $post->canBeDeletedBy($postAuthor);

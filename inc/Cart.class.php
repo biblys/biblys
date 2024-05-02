@@ -2,8 +2,12 @@
 
 use Biblys\Exception\CannotAddStockItemToCartException;
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\Config;
+use Biblys\Service\CurrentUser;
 use Entity\Exception\CartException;
+use Model\WishQuery;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\Request;
 
 class Cart extends Entity
 {
@@ -291,6 +295,9 @@ class CartManager extends EntityManager
     ): bool
     {
         $globalSite = LegacyCodeHelper::getGlobalSite();
+        $request = Request::createFromGlobals();
+        $config = Config::load();
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
         $sm = new StockManager();
 
         if (!is_object($stock)) {
@@ -329,12 +336,15 @@ class CartManager extends EntityManager
             throw new Exception('Cet exemplaire n’a pas de poids et ne peut être ajouté au panier. Merci de nous contacter.');
         }
 
-        if (LegacyCodeHelper::getGlobalVisitor()->isLogged()) {
-            $wm = new WishManager();
-            if ($w = $wm->get(array('article_id' => $stock->get('article_id'), 'axys_account_id' => LegacyCodeHelper::getGlobalVisitor()->get('id')))) {
-                $w->set('wish_bought', date('Y-m-d H:i:s'));
-                $wm->update($w);
-                $stock->set('wish_id', $w->get('id'));
+        if ($currentUser->isAuthentified()) {
+            $wishForArticle = WishQuery::create()
+                ->filterByArticleId($stock->get('article_id'))
+                ->filterByUserId($currentUser->getUser()->getId())
+                ->findOne();
+            if ($wishForArticle) {
+                $wishForArticle->setBought(new DateTime());
+                $wishForArticle->save();
+                $stock->set('wish_id', $wishForArticle->getId());
             }
         }
 

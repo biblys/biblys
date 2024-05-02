@@ -8,6 +8,7 @@ use Article;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Exception\OrderDetailsValidationException;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use CountryManager;
 use Egulias\EmailValidator\EmailValidator;
@@ -109,19 +110,19 @@ class OrderDeliveryHelpers
     }
 
     /**
-     * @param Visitor $visitor
+     * @param Visitor $currentUser
      * @return false|mixed|null
      */
-    public static function getOrderInProgressForVisitor(Visitor $visitor): mixed
+    public static function getOrderInProgressForVisitor(CurrentUser $currentUser): mixed
     {
-        if (!$visitor->isLogged()) {
+        if (!$currentUser->isAuthentified()) {
             return null;
         }
 
         $om = new OrderManager();
         return $om->get([
             'order_type' => 'web',
-            'axys_account_id' => $visitor->get('id'),
+            'user_id' => $currentUser->getUser()->getId(),
             'order_payment_date' => 'NULL',
             'order_shipping_date' => 'NULL',
             'order_cancel_date' => 'NULL'

@@ -52,7 +52,7 @@ class FileController extends Controller
             // Find related copy
             $copy = $sm->get([
                 'article_id' => $file->get('article_id'),
-                'axys_account_id' => $currentUser->getAxysAccount()->getId(),
+                'user_id' => $currentUser->getUser()->getId(),
             ]);
             if (!$copy) {
                 throw new Exception('Related copy not found');

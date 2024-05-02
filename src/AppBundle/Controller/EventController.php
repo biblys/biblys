@@ -3,11 +3,17 @@
 namespace AppBundle\Controller;
 
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentUser;
+use Biblys\Service\TemplateService;
 use EventManager;
 use Framework\Controller;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class EventController extends Controller
 {
@@ -48,7 +54,18 @@ class EventController extends Controller
         ]);
     }
 
-    public function showAction(Request $request, $slug)
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function showAction(
+        Request $request,
+        CurrentUser $currentUser,
+        TemplateService $templateService,
+        string $slug
+    ): Response
     {
         global $urlgenerator;
 
@@ -56,23 +73,16 @@ class EventController extends Controller
 
         $em = new EventManager();
         $event = $em->get(["event_url" => $slug]);
-
-        // Offline event
-        if ($event && $event->get('status') == 0
-            && $event->get('axys_account_id') !== \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->get('id')
-            && !\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
-            $event = false;
-        }
-
-        // Future event
-        if ($event && $event->get('date') > date("Y-m-d H:i:s")
-            && $event->get('axys_account_id') !== \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->get('id')
-            && !\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
-            $event = false;
-        }
-
         if (!$event) {
             throw new NotFoundException("Event $slug not found.");
+        }
+
+        // Offline event
+        $eventIsOffline = $event && $event->get('status') == 0;
+        $userCanSeeOfflineEvent = $event->get('user_id') !== $currentUser->getUser()->getId() ||
+            $currentUser->isAdmin();
+        if ($eventIsOffline && !$userCanSeeOfflineEvent) {
+            throw new NotFoundException("Event $slug not published.");
         }
 
         $request->attributes->set("page_title", $event->get("title"));
@@ -96,7 +106,7 @@ class EventController extends Controller
 
         $this->setOpengraphTags($opengraphTags);
 
-        return $this->render('AppBundle:Event:show.html.twig', [
+        return $templateService->renderResponse('AppBundle:Event:show.html.twig', [
             'event' => $event
         ]);
     }

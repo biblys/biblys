@@ -70,6 +70,7 @@ class OrderDeliveryTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getCart")->andReturn($cart);
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+        $currentUser->shouldReceive("getUser")->andReturn(null);
 
         // when
         $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer);

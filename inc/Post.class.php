@@ -1,6 +1,8 @@
 <?php
 
-    class Post extends Entity
+use Model\User;
+
+class Post extends Entity
     {
         protected $prefix = 'post';
 
@@ -150,9 +152,9 @@
          * @param AxysAccount $user
          * @return bool true if user is admin or post's author
          */
-        public function canBeDeletedBy(AxysAccount $user): bool
+        public function canBeDeletedBy(User $user): bool
         {
-            if ($user->get('id') === $this->get('axys_account_id')) {
+            if ($user->getId() === $this->get('user_id')) {
                 return true;
             }
 

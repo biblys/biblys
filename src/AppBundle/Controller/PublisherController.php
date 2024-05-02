@@ -4,12 +4,16 @@ namespace AppBundle\Controller;
 
 use ArticleManager;
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Pagination;
 use CollectionManager;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use Model\PublisherQuery;
+use Model\Right;
+use Model\RightQuery;
+use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
 use PublisherManager;
 use SupplierManager;
@@ -22,6 +26,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -342,74 +347,84 @@ class PublisherController extends Controller
     public function rightsAddAction(
         Request $request,
         UrlGenerator $urlGenerator,
+        Session $session,
+        CurrentSite $currentSite,
         $id
     ): RedirectResponse
     {
         Controller::authAdmin($request);
 
-        $pm = new PublisherManager();
-
-        $publisher = $pm->get(['publisher_id' => $id]);
+        $publisher = PublisherQuery::create()->findPk($id);
         if (!$publisher) {
             throw new NotFoundException("Publisher $id not found.");
         }
 
-        $um = new AxysAccountManager();
-        $userEmail = $request->request->get('axys_account_email');
-        $user = $um->get(["axys_account_email" => $userEmail]);
-        if (!$user) {
-            throw new Exception("Cannot find a user with e-mail $userEmail");
-        }
-
-        if (!$user->hasRight('publisher', $id)) {
-            $user->giveRight('publisher', $id);
-        }
-
-        $publisherRightsUrl = $urlGenerator->generate(
-            'publisher_rights',
-            ['id' => $publisher->get('id')]
+        $publisherRightsUrl = $urlGenerator->generate('publisher_rights',
+            ['id' => $publisher->getId()]
         );
+
+        $userEmail = $request->request->get('user_email');
+        $user = UserQuery::create()->findOneByEmail($userEmail);
+        if (!$user) {
+            $session->getFlashBag()->add("error", "Impossible de trouver un utilisateur avec l'adresse $userEmail.");
+            return new RedirectResponse($publisherRightsUrl);
+        }
+
+        $existingRight = RightQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByUser($user)
+            ->filterByPublisher($publisher)
+            ->findOne();
+        if ($existingRight) {
+            $session->getFlashBag()->add("warning", "L'utilisateur $userEmail était déjà autorisé.");
+            return new RedirectResponse($publisherRightsUrl);
+        }
+
+        $right = new Right();
+        $right->setPublisher($publisher);
+        $right->setUser($user);
+        $right->setSite($currentSite->getSite());
+        $right->save();
+
+        $session->getFlashBag()->add("success", "L'utilisateur $userEmail a été autorisé.");
         return new RedirectResponse($publisherRightsUrl);
     }
 
     /**
-     * Remove rights from a user to manager a publisher.
-     *
-     *
-     * @param Request $request
-     * @param UrlGenerator $urlGenerator
-     * @param $publisherId
-     * @param $userId
-     * @return RedirectResponse
-     * @throws AuthException
      * @throws PropelException
      */
     public function rightsRemoveAction(
         Request $request,
         UrlGenerator $urlGenerator,
+        CurrentSite $currentSite,
+        Session $session,
         $publisherId,
         $userId
     ): RedirectResponse
     {
         Controller::authAdmin($request);
 
-        $pm = new PublisherManager();
-        $publisher = $pm->get(['publisher_id' => $publisherId]);
+        $publisher = PublisherQuery::create()->findPk($publisherId);
         if (!$publisher) {
             throw new NotFoundException("Publisher $publisherId not found.");
         }
 
-        $um = new AxysAccountManager();
-        $user = $um->getById($userId);
+        $user = UserQuery::create()->findPk($userId);
         if (!$user) {
             throw new NotFoundException("User $userId not found.");
         }
 
-        $user->removeRight('publisher', $publisher->get('id'));
+        $existingRight = RightQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByUser($user)
+            ->filterByPublisher($publisher)
+            ->findOne();
+        $existingRight?->delete();
 
+        $session->getFlashBag()->add("success", "L'utilisateur {$user->getEmail()} n'est plus autorisé.");
         $publisherRightsUrl = $urlGenerator->generate(
             'publisher_rights',
-            ['id' => $publisher->get('id')]
+            ['id' => $publisher->getId()]
         );
         return new RedirectResponse($publisherRightsUrl);
     }

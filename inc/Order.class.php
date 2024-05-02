@@ -1,6 +1,7 @@
 <?php
 
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Log;
 use Biblys\Service\Mailer;
 use PayPal\Api\Amount;
@@ -478,13 +479,11 @@ class Order extends Entity
 
     /**
      * Delete alerts for articles in a order
+     * @throws Exception
      */
-    public function deleteRelatedAlerts()
+    public function deleteRelatedAlerts(CurrentUser $currentUser)
     {
-        
-
-        // Ignore if user is not logged in
-        if (!LegacyCodeHelper::getGlobalVisitor()->isLogged()) {
+        if (!$currentUser->isAuthentified()) {
             return;
         }
 
@@ -495,7 +494,7 @@ class Order extends Entity
             // Get alert for this user and article
             $alert = $alm->get(
                 [
-                    "axys_account_id" => LegacyCodeHelper::getGlobalVisitor()->get("id"),
+                    "user_id" => $currentUser->getUser()->getId(),
                     "article_id" => $copy->get("article_id")
                 ]
             );
@@ -709,19 +708,16 @@ class OrderManager extends EntityManager
     }
 
     /**
-     * Remove a copy from an order
-     * @param Order $order the order to remove from
-     * @param Stock $stock the copy to remove
      * @return bool
      * @throws Exception
      */
-    public function removeStock(Order $order, Stock $stock)
+    public function removeStock(Order $order, Stock $stock): bool
     {
         // If the copy is in the order
         if ($stock->get('order_id') == $order->get('order_id')) {
             $sm = new StockManager();
             $stock->set('order_id', null);
-            $stock->set('axys_account_id', null);
+            $stock->set('user_id', null);
             $stock->set('customer_id', null);
             $stock->set('stock_selling_date', null);
             $sm->update($stock);
@@ -903,7 +899,7 @@ class OrderManager extends EntityManager
                 $ebooks[] = $stock;
             } else {
                 $books[] = $stock;
-                $stock->set('axys_account_id', $order->get('axys_account_id'));
+                $stock->set('user_id', $order->get('user_id'));
                 $sm->update($stock);
             }
 

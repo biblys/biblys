@@ -104,20 +104,6 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
         $content .= '<p>Tel: ' . $order->get("phone") . '</p>';
     }
 
-    // Ref client
-    if (!empty($o["axys_account_id"]) and $currentUserService->isAdmin()) {
-        /** @var PDO $_SQL */
-        $stock = $_SQL->prepare("SELECT COUNT(`order_id`) AS `num`, SUM(`order_amount`) AS `CA` FROM `orders` WHERE `axys_account_id` = :axys_account_id AND `site_id` = :site_id AND `order_payment_date` IS NOT NULL AND `order_cancel_date` IS NULL GROUP BY `axys_account_id`");
-        $stock->execute([
-            'axys_account_id' => $o['axys_account_id'],
-            'site_id' => $currentSiteService->getId(),
-        ]);
-        $s = $stock->fetch(PDO::FETCH_ASSOC);
-        if ($s) {
-            $content .= '<p>Ref. Client : ' . $o["axys_account_id"] . '-' . round($s["num"]) . '-' . round($s["CA"] / 100) . '</p>';
-        }
-    }
-
     if ($order->has('comment') && $currentUserService->isAdmin()) {
         $content .= '
         <h4>Commentaire du client</h4>
@@ -323,7 +309,7 @@ return new Response($content);
 
 function _isAnonymousOrder(Order $order): bool
 {
-    return !$order->has("axys_account_id");
+    return !$order->has("user_id");
 }
 
 function _orderBelongsToVisitor(Order $order, CurrentUser $currentUser): bool
@@ -332,5 +318,5 @@ function _orderBelongsToVisitor(Order $order, CurrentUser $currentUser): bool
         return false;
     }
 
-    return $order->get("axys_account_id") === $currentUser->getUser()->getId();
+    return $order->get("user_id") === $currentUser->getUser()->getId();
 }
