@@ -31,11 +31,6 @@ class PostCategoryController extends Controller
     {
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
-        $use_old_controller = $globalSite->getOpt('use_old_post_controller');
-        if ($use_old_controller) {
-            return new RedirectResponse("/o/blog/$slug/");
-        }
-
         $cm = new CategoryManager();
 
         $category = $cm->get(["category_url" => $slug]);

@@ -38,11 +38,6 @@ class PostController extends Controller
     {
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
-        $use_old_controller = $globalSite->getOpt('use_old_post_controller');
-        if ($use_old_controller) {
-            return new RedirectResponse("/o/blog/");
-        }
-
         $queryParams = [
             "post_status" => 1,
             "post_date" => "< ".date("Y-m-d H:i:s")
@@ -85,11 +80,6 @@ class PostController extends Controller
 
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
-        $use_old_controller = $globalSite->getOpt('use_old_post_controller');
-        if ($use_old_controller) {
-            return new RedirectResponse('/o/blog/'.$slug);
-        }
-
         $pm = new PostManager();
         $post = $pm->get(["post_url" => $slug]);
 
@@ -107,11 +97,6 @@ class PostController extends Controller
 
         if (!$post) {
             throw new NotFoundException("Post $slug not found.");
-        }
-
-        $use_old_controller = $globalSite->getOpt('use_old_post_controller');
-        if ($use_old_controller) {
-            return new RedirectResponse('/o/blog/'.$slug, 301);
         }
 
         $request->attributes->set("page_title", $post->get("title"));
