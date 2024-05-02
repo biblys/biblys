@@ -208,26 +208,6 @@ class Cart extends Entity
     }
 
     /**
-     * Returns user email if known, else user's IP address
-     * @return [type] [description]
-     */
-    public function getUserInfo()
-    {
-        $axys_account_id = $this->get('axys_account_id');
-        if (!$axys_account_id) {
-            return $this->get('cart_ip');
-        }
-
-        $um = new AxysAccountManager();
-        $user = $um->getById($axys_account_id);
-        if (!$user) {
-            return $this->get('cart_ip');
-        }
-
-        return $user->get('axys_account_email');
-    }
-
-    /**
      * @return bool
      */
     public function hasSeller(): bool

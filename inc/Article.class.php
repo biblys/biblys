@@ -703,24 +703,6 @@ class Article extends Entity
     }
 
     /**
-     * @throws Exception
-     */
-    public function getDeletionUser(): ?AxysAccount
-    {
-        $deletion_axys_account_id = $this->get('article_deletion_by');
-        if ($deletion_axys_account_id) {
-            $um = new AxysAccountManager();
-            /** @var AxysAccount $user */
-            $user = $um->getById($deletion_axys_account_id);
-            if ($user) {
-                return $user;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Returns true if article has a physical type
      * @return bool
      * @throws Exception

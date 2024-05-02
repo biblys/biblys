@@ -465,16 +465,6 @@ class CartTest extends PHPUnit\Framework\TestCase
         $cm->addArticle($cart, $article);
     }
 
-    /**
-     * Test getting user info from cart
-     */
-    public function testGetUserInfo()
-    {
-        $cart = new Cart(['cart_ip' => '127.0.0.1']);
-
-        $this->assertEquals($cart->getUserInfo(), '127.0.0.1');
-    }
-
     public function testContainsStock()
     {
         // given
