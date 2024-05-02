@@ -18,10 +18,6 @@
         {
             /* JOINS */
 
-            // Author (OneToMany)
-            $um = new AxysAccountManager();
-            if (isset($data['axys_account_id'])) $data['author'] = $um->get(array('axys_account_id' => $data['axys_account_id']));
-
             // Category (OneToMany)
             $cm = new CategoryManager();
             if (isset($data['category_id'])) $data['category'] = $cm->get(array('category_id' => $data['category_id']));

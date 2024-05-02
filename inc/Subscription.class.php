@@ -10,10 +10,6 @@
 
             /* JOINS */
             
-            // User (OneToMany)
-            $um = new AxysAccountManager();
-            if (isset($data['axys_account_id'])) $data['user'] = $um->get(array('axys_account_id' => $data['axys_account_id']));
-
             // Publisher (OneToMany)
             $pm = new PublisherManager();
             if (isset($data['publisher_id'])) $data['publisher'] = $pm->get(array('publisher_id' => $data['publisher_id']));
