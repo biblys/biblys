@@ -453,7 +453,7 @@ foreach ($sql as $x) {
         ';
 
         if (!empty($x['customer_id'])) {
-            $line .= '<tr><td colspan="10"><img src="/common/icons/return.png" height=16> Client : <a href="/pages/adm_customer?id='.$x['customer_id'].'">'.user_name($x).'</a></td></tr>';
+            $line .= '<tr><td colspan="10"><img src="/common/icons/return.png" height=16> Client : <a href="/pages/adm_customer?id='.$x['customer_id'].'">'.$x["customer_email"].'</a></td></tr>';
         }
 
         $list .= $line;

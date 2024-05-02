@@ -492,32 +492,6 @@ function alphabetize($text): array|string|null
     return preg_replace("#^(L'|l'|Le |le |LE |La |la |LA |Les |les |LES )(.*)#", '$2, $1', $text);
 }
 
-// Afficher nom d'utilisateur
-function user_name($x)
-{
-    if (!empty($x['axys_account_screen_name'])) {
-        $name = $x['axys_account_screen_name'];
-    } elseif (!empty($x['axys_account_last_name'])) {
-        $name = trim($x['axys_account_first_name'] . ' ' . $x['axys_account_last_name']);
-    } elseif (!empty($x['order_last_name'])) {
-        $name = trim($x['order_first_name'] . ' ' . $x['order_last_name']);
-    } elseif (!empty($x['customer_last_name'])) {
-        $name = trim($x['customer_first_name'] . ' ' . $x['customer_last_name']);
-    } elseif (!empty($x['axys_account_email'])) {
-        $name = $x['axys_account_email'];
-    } elseif (!empty($x['customer_email'])) {
-        $name = $x['customer_email'];
-    } elseif (!empty($x['axys_account_id'])) {
-        $name = $x['axys_account_id'];
-    } elseif (!empty($x['customer_id'])) {
-        $name = 'Client n° ' . $x['customer_id'];
-    } else {
-        $name = 'Inconnu';
-    }
-
-    return $name;
-}
-
 // Unité de taille
 function file_size($s): string
 {
