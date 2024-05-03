@@ -61,15 +61,25 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinWithAlert() Adds a RIGHT JOIN clause and with to the query using the Alert relation
  * @method     ChildUserQuery innerJoinWithAlert() Adds a INNER JOIN clause and with to the query using the Alert relation
  *
- * @method     ChildUserQuery leftJoinCart($relationAlias = null) Adds a LEFT JOIN clause to the query using the Cart relation
- * @method     ChildUserQuery rightJoinCart($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Cart relation
- * @method     ChildUserQuery innerJoinCart($relationAlias = null) Adds a INNER JOIN clause to the query using the Cart relation
+ * @method     ChildUserQuery leftJoinCartRelatedByUserId($relationAlias = null) Adds a LEFT JOIN clause to the query using the CartRelatedByUserId relation
+ * @method     ChildUserQuery rightJoinCartRelatedByUserId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CartRelatedByUserId relation
+ * @method     ChildUserQuery innerJoinCartRelatedByUserId($relationAlias = null) Adds a INNER JOIN clause to the query using the CartRelatedByUserId relation
  *
- * @method     ChildUserQuery joinWithCart($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Cart relation
+ * @method     ChildUserQuery joinWithCartRelatedByUserId($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the CartRelatedByUserId relation
  *
- * @method     ChildUserQuery leftJoinWithCart() Adds a LEFT JOIN clause and with to the query using the Cart relation
- * @method     ChildUserQuery rightJoinWithCart() Adds a RIGHT JOIN clause and with to the query using the Cart relation
- * @method     ChildUserQuery innerJoinWithCart() Adds a INNER JOIN clause and with to the query using the Cart relation
+ * @method     ChildUserQuery leftJoinWithCartRelatedByUserId() Adds a LEFT JOIN clause and with to the query using the CartRelatedByUserId relation
+ * @method     ChildUserQuery rightJoinWithCartRelatedByUserId() Adds a RIGHT JOIN clause and with to the query using the CartRelatedByUserId relation
+ * @method     ChildUserQuery innerJoinWithCartRelatedByUserId() Adds a INNER JOIN clause and with to the query using the CartRelatedByUserId relation
+ *
+ * @method     ChildUserQuery leftJoinCartRelatedBySellerUserId($relationAlias = null) Adds a LEFT JOIN clause to the query using the CartRelatedBySellerUserId relation
+ * @method     ChildUserQuery rightJoinCartRelatedBySellerUserId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CartRelatedBySellerUserId relation
+ * @method     ChildUserQuery innerJoinCartRelatedBySellerUserId($relationAlias = null) Adds a INNER JOIN clause to the query using the CartRelatedBySellerUserId relation
+ *
+ * @method     ChildUserQuery joinWithCartRelatedBySellerUserId($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the CartRelatedBySellerUserId relation
+ *
+ * @method     ChildUserQuery leftJoinWithCartRelatedBySellerUserId() Adds a LEFT JOIN clause and with to the query using the CartRelatedBySellerUserId relation
+ * @method     ChildUserQuery rightJoinWithCartRelatedBySellerUserId() Adds a RIGHT JOIN clause and with to the query using the CartRelatedBySellerUserId relation
+ * @method     ChildUserQuery innerJoinWithCartRelatedBySellerUserId() Adds a INNER JOIN clause and with to the query using the CartRelatedBySellerUserId relation
  *
  * @method     ChildUserQuery leftJoinCoupon($relationAlias = null) Adds a LEFT JOIN clause to the query using the Coupon relation
  * @method     ChildUserQuery rightJoinCoupon($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Coupon relation
@@ -261,7 +271,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinWithWishlist() Adds a RIGHT JOIN clause and with to the query using the Wishlist relation
  * @method     ChildUserQuery innerJoinWithWishlist() Adds a INNER JOIN clause and with to the query using the Wishlist relation
  *
- * @method     \Model\SiteQuery|\Model\AlertQuery|\Model\CartQuery|\Model\CouponQuery|\Model\CustomerQuery|\Model\DownloadQuery|\Model\FileQuery|\Model\LinkQuery|\Model\StockItemListQuery|\Model\OptionQuery|\Model\OrderQuery|\Model\PermissionQuery|\Model\PostQuery|\Model\RightQuery|\Model\RoleQuery|\Model\SessionQuery|\Model\StockQuery|\Model\SubscriptionQuery|\Model\AuthenticationMethodQuery|\Model\VoteQuery|\Model\WishQuery|\Model\WishlistQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\SiteQuery|\Model\AlertQuery|\Model\CartQuery|\Model\CartQuery|\Model\CouponQuery|\Model\CustomerQuery|\Model\DownloadQuery|\Model\FileQuery|\Model\LinkQuery|\Model\StockItemListQuery|\Model\OptionQuery|\Model\OrderQuery|\Model\PermissionQuery|\Model\PostQuery|\Model\RightQuery|\Model\RoleQuery|\Model\SessionQuery|\Model\StockQuery|\Model\SubscriptionQuery|\Model\AuthenticationMethodQuery|\Model\VoteQuery|\Model\WishQuery|\Model\WishlistQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildUser|null findOne(?ConnectionInterface $con = null) Return the first ChildUser matching the query
  * @method     ChildUser findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildUser matching the query, or a new ChildUser object populated from the query conditions when no match is found
@@ -1098,7 +1108,7 @@ abstract class UserQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByCart($cart, ?string $comparison = null)
+    public function filterByCartRelatedByUserId($cart, ?string $comparison = null)
     {
         if ($cart instanceof \Model\Cart) {
             $this
@@ -1107,28 +1117,28 @@ abstract class UserQuery extends ModelCriteria
             return $this;
         } elseif ($cart instanceof ObjectCollection) {
             $this
-                ->useCartQuery()
+                ->useCartRelatedByUserIdQuery()
                 ->filterByPrimaryKeys($cart->getPrimaryKeys())
                 ->endUse();
 
             return $this;
         } else {
-            throw new PropelException('filterByCart() only accepts arguments of type \Model\Cart or Collection');
+            throw new PropelException('filterByCartRelatedByUserId() only accepts arguments of type \Model\Cart or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the Cart relation
+     * Adds a JOIN clause to the query using the CartRelatedByUserId relation
      *
      * @param string|null $relationAlias Optional alias for the relation
      * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this The current query, for fluid interface
      */
-    public function joinCart(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    public function joinCartRelatedByUserId(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Cart');
+        $relationMap = $tableMap->getRelation('CartRelatedByUserId');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -1143,14 +1153,14 @@ abstract class UserQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'Cart');
+            $this->addJoinObject($join, 'CartRelatedByUserId');
         }
 
         return $this;
     }
 
     /**
-     * Use the Cart relation Cart object
+     * Use the CartRelatedByUserId relation Cart object
      *
      * @see useQuery()
      *
@@ -1160,15 +1170,15 @@ abstract class UserQuery extends ModelCriteria
      *
      * @return \Model\CartQuery A secondary query class using the current class as primary query
      */
-    public function useCartQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useCartRelatedByUserIdQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
-            ->joinCart($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Cart', '\Model\CartQuery');
+            ->joinCartRelatedByUserId($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CartRelatedByUserId', '\Model\CartQuery');
     }
 
     /**
-     * Use the Cart relation Cart object
+     * Use the CartRelatedByUserId relation Cart object
      *
      * @param callable(\Model\CartQuery):\Model\CartQuery $callable A function working on the related query
      *
@@ -1178,12 +1188,12 @@ abstract class UserQuery extends ModelCriteria
      *
      * @return $this
      */
-    public function withCartQuery(
+    public function withCartRelatedByUserIdQuery(
         callable $callable,
         string $relationAlias = null,
         ?string $joinType = Criteria::LEFT_JOIN
     ) {
-        $relatedQuery = $this->useCartQuery(
+        $relatedQuery = $this->useCartRelatedByUserIdQuery(
             $relationAlias,
             $joinType
         );
@@ -1194,7 +1204,7 @@ abstract class UserQuery extends ModelCriteria
     }
 
     /**
-     * Use the relation to Cart table for an EXISTS query.
+     * Use the CartRelatedByUserId relation to the Cart table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
@@ -1204,32 +1214,32 @@ abstract class UserQuery extends ModelCriteria
      *
      * @return \Model\CartQuery The inner query object of the EXISTS statement
      */
-    public function useCartExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    public function useCartRelatedByUserIdExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
         /** @var $q \Model\CartQuery */
-        $q = $this->useExistsQuery('Cart', $modelAlias, $queryClass, $typeOfExists);
+        $q = $this->useExistsQuery('CartRelatedByUserId', $modelAlias, $queryClass, $typeOfExists);
         return $q;
     }
 
     /**
-     * Use the relation to Cart table for a NOT EXISTS query.
+     * Use the CartRelatedByUserId relation to the Cart table for a NOT EXISTS query.
      *
-     * @see useCartExistsQuery()
+     * @see useCartRelatedByUserIdExistsQuery()
      *
      * @param string|null $modelAlias sets an alias for the nested query
      * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      *
      * @return \Model\CartQuery The inner query object of the NOT EXISTS statement
      */
-    public function useCartNotExistsQuery($modelAlias = null, $queryClass = null)
+    public function useCartRelatedByUserIdNotExistsQuery($modelAlias = null, $queryClass = null)
     {
         /** @var $q \Model\CartQuery */
-        $q = $this->useExistsQuery('Cart', $modelAlias, $queryClass, 'NOT EXISTS');
+        $q = $this->useExistsQuery('CartRelatedByUserId', $modelAlias, $queryClass, 'NOT EXISTS');
         return $q;
     }
 
     /**
-     * Use the relation to Cart table for an IN query.
+     * Use the CartRelatedByUserId relation to the Cart table for an IN query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
      *
@@ -1239,27 +1249,200 @@ abstract class UserQuery extends ModelCriteria
      *
      * @return \Model\CartQuery The inner query object of the IN statement
      */
-    public function useInCartQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    public function useInCartRelatedByUserIdQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
     {
         /** @var $q \Model\CartQuery */
-        $q = $this->useInQuery('Cart', $modelAlias, $queryClass, $typeOfIn);
+        $q = $this->useInQuery('CartRelatedByUserId', $modelAlias, $queryClass, $typeOfIn);
         return $q;
     }
 
     /**
-     * Use the relation to Cart table for a NOT IN query.
+     * Use the CartRelatedByUserId relation to the Cart table for a NOT IN query.
      *
-     * @see useCartInQuery()
+     * @see useCartRelatedByUserIdInQuery()
      *
      * @param string|null $modelAlias sets an alias for the nested query
      * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
      *
      * @return \Model\CartQuery The inner query object of the NOT IN statement
      */
-    public function useNotInCartQuery($modelAlias = null, $queryClass = null)
+    public function useNotInCartRelatedByUserIdQuery($modelAlias = null, $queryClass = null)
     {
         /** @var $q \Model\CartQuery */
-        $q = $this->useInQuery('Cart', $modelAlias, $queryClass, 'NOT IN');
+        $q = $this->useInQuery('CartRelatedByUserId', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\Cart object
+     *
+     * @param \Model\Cart|ObjectCollection $cart the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByCartRelatedBySellerUserId($cart, ?string $comparison = null)
+    {
+        if ($cart instanceof \Model\Cart) {
+            $this
+                ->addUsingAlias(UserTableMap::COL_ID, $cart->getSellerUserId(), $comparison);
+
+            return $this;
+        } elseif ($cart instanceof ObjectCollection) {
+            $this
+                ->useCartRelatedBySellerUserIdQuery()
+                ->filterByPrimaryKeys($cart->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByCartRelatedBySellerUserId() only accepts arguments of type \Model\Cart or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CartRelatedBySellerUserId relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinCartRelatedBySellerUserId(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CartRelatedBySellerUserId');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CartRelatedBySellerUserId');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CartRelatedBySellerUserId relation Cart object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\CartQuery A secondary query class using the current class as primary query
+     */
+    public function useCartRelatedBySellerUserIdQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCartRelatedBySellerUserId($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CartRelatedBySellerUserId', '\Model\CartQuery');
+    }
+
+    /**
+     * Use the CartRelatedBySellerUserId relation Cart object
+     *
+     * @param callable(\Model\CartQuery):\Model\CartQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withCartRelatedBySellerUserIdQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useCartRelatedBySellerUserIdQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the CartRelatedBySellerUserId relation to the Cart table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\CartQuery The inner query object of the EXISTS statement
+     */
+    public function useCartRelatedBySellerUserIdExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\CartQuery */
+        $q = $this->useExistsQuery('CartRelatedBySellerUserId', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the CartRelatedBySellerUserId relation to the Cart table for a NOT EXISTS query.
+     *
+     * @see useCartRelatedBySellerUserIdExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\CartQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useCartRelatedBySellerUserIdNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\CartQuery */
+        $q = $this->useExistsQuery('CartRelatedBySellerUserId', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the CartRelatedBySellerUserId relation to the Cart table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\CartQuery The inner query object of the IN statement
+     */
+    public function useInCartRelatedBySellerUserIdQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\CartQuery */
+        $q = $this->useInQuery('CartRelatedBySellerUserId', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the CartRelatedBySellerUserId relation to the Cart table for a NOT IN query.
+     *
+     * @see useCartRelatedBySellerUserIdInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\CartQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInCartRelatedBySellerUserIdQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\CartQuery */
+        $q = $this->useInQuery('CartRelatedBySellerUserId', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 

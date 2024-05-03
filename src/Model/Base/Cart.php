@@ -110,6 +110,13 @@ abstract class Cart implements ActiveRecordInterface
     protected $user_id;
 
     /**
+     * The value for the seller_user_id field.
+     *
+     * @var        int|null
+     */
+    protected $seller_user_id;
+
+    /**
      * The value for the cart_seller_id field.
      *
      * @var        int|null
@@ -215,6 +222,11 @@ abstract class Cart implements ActiveRecordInterface
      * @var        ChildUser
      */
     protected $aUser;
+
+    /**
+     * @var        ChildUser
+     */
+    protected $aSellerUser;
 
     /**
      * @var        ChildSite
@@ -540,6 +552,16 @@ abstract class Cart implements ActiveRecordInterface
     }
 
     /**
+     * Get the [seller_user_id] column value.
+     *
+     * @return int|null
+     */
+    public function getSellerUserId()
+    {
+        return $this->seller_user_id;
+    }
+
+    /**
      * Get the [cart_seller_id] column value.
      *
      * @return int|null
@@ -846,6 +868,30 @@ abstract class Cart implements ActiveRecordInterface
 
         if ($this->aUser !== null && $this->aUser->getId() !== $v) {
             $this->aUser = null;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [seller_user_id] column.
+     *
+     * @param int|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setSellerUserId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->seller_user_id !== $v) {
+            $this->seller_user_id = $v;
+            $this->modifiedColumns[CartTableMap::COL_SELLER_USER_ID] = true;
+        }
+
+        if ($this->aSellerUser !== null && $this->aSellerUser->getId() !== $v) {
+            $this->aSellerUser = null;
         }
 
         return $this;
@@ -1194,58 +1240,61 @@ abstract class Cart implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : CartTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : CartTableMap::translateFieldName('SellerId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : CartTableMap::translateFieldName('SellerUserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->seller_user_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : CartTableMap::translateFieldName('SellerId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->cart_seller_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : CartTableMap::translateFieldName('CustomerId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : CartTableMap::translateFieldName('CustomerId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->customer_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : CartTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : CartTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
             $this->cart_title = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : CartTableMap::translateFieldName('Type', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : CartTableMap::translateFieldName('Type', TableMap::TYPE_PHPNAME, $indexType)];
             $this->cart_type = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : CartTableMap::translateFieldName('Ip', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : CartTableMap::translateFieldName('Ip', TableMap::TYPE_PHPNAME, $indexType)];
             $this->cart_ip = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : CartTableMap::translateFieldName('Count', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : CartTableMap::translateFieldName('Count', TableMap::TYPE_PHPNAME, $indexType)];
             $this->cart_count = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : CartTableMap::translateFieldName('Amount', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : CartTableMap::translateFieldName('Amount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->cart_amount = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : CartTableMap::translateFieldName('AsAGift', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : CartTableMap::translateFieldName('AsAGift', TableMap::TYPE_PHPNAME, $indexType)];
             $this->cart_as_a_gift = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : CartTableMap::translateFieldName('GiftRecipient', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : CartTableMap::translateFieldName('GiftRecipient', TableMap::TYPE_PHPNAME, $indexType)];
             $this->cart_gift_recipient = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : CartTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : CartTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->cart_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : CartTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : CartTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->cart_insert = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : CartTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : CartTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->cart_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : CartTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 18 + $startcol : CartTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->cart_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 18 + $startcol : CartTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 19 + $startcol : CartTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -1258,7 +1307,7 @@ abstract class Cart implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 19; // 19 = CartTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 20; // 20 = CartTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Cart'), 0, $e);
@@ -1289,6 +1338,9 @@ abstract class Cart implements ActiveRecordInterface
         }
         if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
             $this->aUser = null;
+        }
+        if ($this->aSellerUser !== null && $this->seller_user_id !== $this->aSellerUser->getId()) {
+            $this->aSellerUser = null;
         }
     }
 
@@ -1330,6 +1382,7 @@ abstract class Cart implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aUser = null;
+            $this->aSellerUser = null;
             $this->aSite = null;
             $this->aAxysAccount = null;
             $this->collStocks = null;
@@ -1462,6 +1515,13 @@ abstract class Cart implements ActiveRecordInterface
                 $this->setUser($this->aUser);
             }
 
+            if ($this->aSellerUser !== null) {
+                if ($this->aSellerUser->isModified() || $this->aSellerUser->isNew()) {
+                    $affectedRows += $this->aSellerUser->save($con);
+                }
+                $this->setSellerUser($this->aSellerUser);
+            }
+
             if ($this->aSite !== null) {
                 if ($this->aSite->isModified() || $this->aSite->isNew()) {
                     $affectedRows += $this->aSite->save($con);
@@ -1546,6 +1606,9 @@ abstract class Cart implements ActiveRecordInterface
         if ($this->isColumnModified(CartTableMap::COL_USER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'user_id';
         }
+        if ($this->isColumnModified(CartTableMap::COL_SELLER_USER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'seller_user_id';
+        }
         if ($this->isColumnModified(CartTableMap::COL_CART_SELLER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'cart_seller_id';
         }
@@ -1617,6 +1680,10 @@ abstract class Cart implements ActiveRecordInterface
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
+                        break;
+                    case 'seller_user_id':
+                        $stmt->bindValue($identifier, $this->seller_user_id, PDO::PARAM_INT);
 
                         break;
                     case 'cart_seller_id':
@@ -1753,45 +1820,48 @@ abstract class Cart implements ActiveRecordInterface
                 return $this->getUserId();
 
             case 5:
-                return $this->getSellerId();
+                return $this->getSellerUserId();
 
             case 6:
-                return $this->getCustomerId();
+                return $this->getSellerId();
 
             case 7:
-                return $this->getTitle();
+                return $this->getCustomerId();
 
             case 8:
-                return $this->getType();
+                return $this->getTitle();
 
             case 9:
-                return $this->getIp();
+                return $this->getType();
 
             case 10:
-                return $this->getCount();
+                return $this->getIp();
 
             case 11:
-                return $this->getAmount();
+                return $this->getCount();
 
             case 12:
-                return $this->getAsAGift();
+                return $this->getAmount();
 
             case 13:
-                return $this->getGiftRecipient();
+                return $this->getAsAGift();
 
             case 14:
-                return $this->getDate();
+                return $this->getGiftRecipient();
 
             case 15:
-                return $this->getInsert();
+                return $this->getDate();
 
             case 16:
-                return $this->getUpdate();
+                return $this->getInsert();
 
             case 17:
-                return $this->getCreatedAt();
+                return $this->getUpdate();
 
             case 18:
+                return $this->getCreatedAt();
+
+            case 19:
                 return $this->getUpdatedAt();
 
             default:
@@ -1827,25 +1897,22 @@ abstract class Cart implements ActiveRecordInterface
             $keys[2] => $this->getSiteId(),
             $keys[3] => $this->getAxysAccountId(),
             $keys[4] => $this->getUserId(),
-            $keys[5] => $this->getSellerId(),
-            $keys[6] => $this->getCustomerId(),
-            $keys[7] => $this->getTitle(),
-            $keys[8] => $this->getType(),
-            $keys[9] => $this->getIp(),
-            $keys[10] => $this->getCount(),
-            $keys[11] => $this->getAmount(),
-            $keys[12] => $this->getAsAGift(),
-            $keys[13] => $this->getGiftRecipient(),
-            $keys[14] => $this->getDate(),
-            $keys[15] => $this->getInsert(),
-            $keys[16] => $this->getUpdate(),
-            $keys[17] => $this->getCreatedAt(),
-            $keys[18] => $this->getUpdatedAt(),
+            $keys[5] => $this->getSellerUserId(),
+            $keys[6] => $this->getSellerId(),
+            $keys[7] => $this->getCustomerId(),
+            $keys[8] => $this->getTitle(),
+            $keys[9] => $this->getType(),
+            $keys[10] => $this->getIp(),
+            $keys[11] => $this->getCount(),
+            $keys[12] => $this->getAmount(),
+            $keys[13] => $this->getAsAGift(),
+            $keys[14] => $this->getGiftRecipient(),
+            $keys[15] => $this->getDate(),
+            $keys[16] => $this->getInsert(),
+            $keys[17] => $this->getUpdate(),
+            $keys[18] => $this->getCreatedAt(),
+            $keys[19] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[14]] instanceof \DateTimeInterface) {
-            $result[$keys[14]] = $result[$keys[14]]->format('Y-m-d H:i:s.u');
-        }
-
         if ($result[$keys[15]] instanceof \DateTimeInterface) {
             $result[$keys[15]] = $result[$keys[15]]->format('Y-m-d H:i:s.u');
         }
@@ -1860,6 +1927,10 @@ abstract class Cart implements ActiveRecordInterface
 
         if ($result[$keys[18]] instanceof \DateTimeInterface) {
             $result[$keys[18]] = $result[$keys[18]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[19]] instanceof \DateTimeInterface) {
+            $result[$keys[19]] = $result[$keys[19]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1882,6 +1953,21 @@ abstract class Cart implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aSellerUser) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'user';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'users';
+                        break;
+                    default:
+                        $key = 'SellerUser';
+                }
+
+                $result[$key] = $this->aSellerUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aSite) {
 
@@ -1980,45 +2066,48 @@ abstract class Cart implements ActiveRecordInterface
                 $this->setUserId($value);
                 break;
             case 5:
-                $this->setSellerId($value);
+                $this->setSellerUserId($value);
                 break;
             case 6:
-                $this->setCustomerId($value);
+                $this->setSellerId($value);
                 break;
             case 7:
-                $this->setTitle($value);
+                $this->setCustomerId($value);
                 break;
             case 8:
-                $this->setType($value);
+                $this->setTitle($value);
                 break;
             case 9:
-                $this->setIp($value);
+                $this->setType($value);
                 break;
             case 10:
-                $this->setCount($value);
+                $this->setIp($value);
                 break;
             case 11:
-                $this->setAmount($value);
+                $this->setCount($value);
                 break;
             case 12:
-                $this->setAsAGift($value);
+                $this->setAmount($value);
                 break;
             case 13:
-                $this->setGiftRecipient($value);
+                $this->setAsAGift($value);
                 break;
             case 14:
-                $this->setDate($value);
+                $this->setGiftRecipient($value);
                 break;
             case 15:
-                $this->setInsert($value);
+                $this->setDate($value);
                 break;
             case 16:
-                $this->setUpdate($value);
+                $this->setInsert($value);
                 break;
             case 17:
-                $this->setCreatedAt($value);
+                $this->setUpdate($value);
                 break;
             case 18:
+                $this->setCreatedAt($value);
+                break;
+            case 19:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -2063,46 +2152,49 @@ abstract class Cart implements ActiveRecordInterface
             $this->setUserId($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setSellerId($arr[$keys[5]]);
+            $this->setSellerUserId($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setCustomerId($arr[$keys[6]]);
+            $this->setSellerId($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setTitle($arr[$keys[7]]);
+            $this->setCustomerId($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setType($arr[$keys[8]]);
+            $this->setTitle($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setIp($arr[$keys[9]]);
+            $this->setType($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setCount($arr[$keys[10]]);
+            $this->setIp($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setAmount($arr[$keys[11]]);
+            $this->setCount($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setAsAGift($arr[$keys[12]]);
+            $this->setAmount($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
-            $this->setGiftRecipient($arr[$keys[13]]);
+            $this->setAsAGift($arr[$keys[13]]);
         }
         if (array_key_exists($keys[14], $arr)) {
-            $this->setDate($arr[$keys[14]]);
+            $this->setGiftRecipient($arr[$keys[14]]);
         }
         if (array_key_exists($keys[15], $arr)) {
-            $this->setInsert($arr[$keys[15]]);
+            $this->setDate($arr[$keys[15]]);
         }
         if (array_key_exists($keys[16], $arr)) {
-            $this->setUpdate($arr[$keys[16]]);
+            $this->setInsert($arr[$keys[16]]);
         }
         if (array_key_exists($keys[17], $arr)) {
-            $this->setCreatedAt($arr[$keys[17]]);
+            $this->setUpdate($arr[$keys[17]]);
         }
         if (array_key_exists($keys[18], $arr)) {
-            $this->setUpdatedAt($arr[$keys[18]]);
+            $this->setCreatedAt($arr[$keys[18]]);
+        }
+        if (array_key_exists($keys[19], $arr)) {
+            $this->setUpdatedAt($arr[$keys[19]]);
         }
 
         return $this;
@@ -2161,6 +2253,9 @@ abstract class Cart implements ActiveRecordInterface
         }
         if ($this->isColumnModified(CartTableMap::COL_USER_ID)) {
             $criteria->add(CartTableMap::COL_USER_ID, $this->user_id);
+        }
+        if ($this->isColumnModified(CartTableMap::COL_SELLER_USER_ID)) {
+            $criteria->add(CartTableMap::COL_SELLER_USER_ID, $this->seller_user_id);
         }
         if ($this->isColumnModified(CartTableMap::COL_CART_SELLER_ID)) {
             $criteria->add(CartTableMap::COL_CART_SELLER_ID, $this->cart_seller_id);
@@ -2296,6 +2391,7 @@ abstract class Cart implements ActiveRecordInterface
         $copyObj->setSiteId($this->getSiteId());
         $copyObj->setAxysAccountId($this->getAxysAccountId());
         $copyObj->setUserId($this->getUserId());
+        $copyObj->setSellerUserId($this->getSellerUserId());
         $copyObj->setSellerId($this->getSellerId());
         $copyObj->setCustomerId($this->getCustomerId());
         $copyObj->setTitle($this->getTitle());
@@ -2372,7 +2468,7 @@ abstract class Cart implements ActiveRecordInterface
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the ChildUser object, it will not be re-added.
         if ($v !== null) {
-            $v->addCart($this);
+            $v->addCartRelatedByUserId($this);
         }
 
 
@@ -2396,11 +2492,62 @@ abstract class Cart implements ActiveRecordInterface
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aUser->addCarts($this);
+                $this->aUser->addCartsRelatedByUserId($this);
              */
         }
 
         return $this->aUser;
+    }
+
+    /**
+     * Declares an association between this object and a ChildUser object.
+     *
+     * @param ChildUser|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setSellerUser(ChildUser $v = null)
+    {
+        if ($v === null) {
+            $this->setSellerUserId(NULL);
+        } else {
+            $this->setSellerUserId($v->getId());
+        }
+
+        $this->aSellerUser = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildUser object, it will not be re-added.
+        if ($v !== null) {
+            $v->addCartRelatedBySellerUserId($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildUser object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildUser|null The associated ChildUser object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getSellerUser(?ConnectionInterface $con = null)
+    {
+        if ($this->aSellerUser === null && ($this->seller_user_id != 0)) {
+            $this->aSellerUser = ChildUserQuery::create()->findPk($this->seller_user_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSellerUser->addCartsRelatedBySellerUserId($this);
+             */
+        }
+
+        return $this->aSellerUser;
     }
 
     /**
@@ -2875,7 +3022,10 @@ abstract class Cart implements ActiveRecordInterface
     public function clear()
     {
         if (null !== $this->aUser) {
-            $this->aUser->removeCart($this);
+            $this->aUser->removeCartRelatedByUserId($this);
+        }
+        if (null !== $this->aSellerUser) {
+            $this->aSellerUser->removeCartRelatedBySellerUserId($this);
         }
         if (null !== $this->aSite) {
             $this->aSite->removeCart($this);
@@ -2888,6 +3038,7 @@ abstract class Cart implements ActiveRecordInterface
         $this->site_id = null;
         $this->axys_account_id = null;
         $this->user_id = null;
+        $this->seller_user_id = null;
         $this->cart_seller_id = null;
         $this->customer_id = null;
         $this->cart_title = null;
@@ -2933,6 +3084,7 @@ abstract class Cart implements ActiveRecordInterface
 
         $this->collStocks = null;
         $this->aUser = null;
+        $this->aSellerUser = null;
         $this->aSite = null;
         $this->aAxysAccount = null;
         return $this;

@@ -241,13 +241,20 @@ class UserTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'Alerts', false);
-        $this->addRelation('Cart', '\\Model\\Cart', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('CartRelatedByUserId', '\\Model\\Cart', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':user_id',
     1 => ':id',
   ),
-), null, null, 'Carts', false);
+), null, null, 'CartsRelatedByUserId', false);
+        $this->addRelation('CartRelatedBySellerUserId', '\\Model\\Cart', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':seller_user_id',
+    1 => ':id',
+  ),
+), null, null, 'CartsRelatedBySellerUserId', false);
         $this->addRelation('Coupon', '\\Model\\Coupon', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

@@ -188,8 +188,15 @@ abstract class User implements ActiveRecordInterface
      * @var        ObjectCollection|ChildCart[] Collection to store aggregation of ChildCart objects.
      * @phpstan-var ObjectCollection&\Traversable<ChildCart> Collection to store aggregation of ChildCart objects.
      */
-    protected $collCarts;
-    protected $collCartsPartial;
+    protected $collCartsRelatedByUserId;
+    protected $collCartsRelatedByUserIdPartial;
+
+    /**
+     * @var        ObjectCollection|ChildCart[] Collection to store aggregation of ChildCart objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildCart> Collection to store aggregation of ChildCart objects.
+     */
+    protected $collCartsRelatedBySellerUserId;
+    protected $collCartsRelatedBySellerUserIdPartial;
 
     /**
      * @var        ObjectCollection|ChildCoupon[] Collection to store aggregation of ChildCoupon objects.
@@ -344,7 +351,14 @@ abstract class User implements ActiveRecordInterface
      * @var ObjectCollection|ChildCart[]
      * @phpstan-var ObjectCollection&\Traversable<ChildCart>
      */
-    protected $cartsScheduledForDeletion = null;
+    protected $cartsRelatedByUserIdScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildCart[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildCart>
+     */
+    protected $cartsRelatedBySellerUserIdScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -1063,7 +1077,9 @@ abstract class User implements ActiveRecordInterface
             $this->aSite = null;
             $this->collAlerts = null;
 
-            $this->collCarts = null;
+            $this->collCartsRelatedByUserId = null;
+
+            $this->collCartsRelatedBySellerUserId = null;
 
             $this->collCoupons = null;
 
@@ -1260,18 +1276,36 @@ abstract class User implements ActiveRecordInterface
                 }
             }
 
-            if ($this->cartsScheduledForDeletion !== null) {
-                if (!$this->cartsScheduledForDeletion->isEmpty()) {
-                    foreach ($this->cartsScheduledForDeletion as $cart) {
+            if ($this->cartsRelatedByUserIdScheduledForDeletion !== null) {
+                if (!$this->cartsRelatedByUserIdScheduledForDeletion->isEmpty()) {
+                    foreach ($this->cartsRelatedByUserIdScheduledForDeletion as $cartRelatedByUserId) {
                         // need to save related object because we set the relation to null
-                        $cart->save($con);
+                        $cartRelatedByUserId->save($con);
                     }
-                    $this->cartsScheduledForDeletion = null;
+                    $this->cartsRelatedByUserIdScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collCarts !== null) {
-                foreach ($this->collCarts as $referrerFK) {
+            if ($this->collCartsRelatedByUserId !== null) {
+                foreach ($this->collCartsRelatedByUserId as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->cartsRelatedBySellerUserIdScheduledForDeletion !== null) {
+                if (!$this->cartsRelatedBySellerUserIdScheduledForDeletion->isEmpty()) {
+                    foreach ($this->cartsRelatedBySellerUserIdScheduledForDeletion as $cartRelatedBySellerUserId) {
+                        // need to save related object because we set the relation to null
+                        $cartRelatedBySellerUserId->save($con);
+                    }
+                    $this->cartsRelatedBySellerUserIdScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCartsRelatedBySellerUserId !== null) {
+                foreach ($this->collCartsRelatedBySellerUserId as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1861,7 +1895,7 @@ abstract class User implements ActiveRecordInterface
 
                 $result[$key] = $this->collAlerts->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collCarts) {
+            if (null !== $this->collCartsRelatedByUserId) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
@@ -1874,7 +1908,22 @@ abstract class User implements ActiveRecordInterface
                         $key = 'Carts';
                 }
 
-                $result[$key] = $this->collCarts->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collCartsRelatedByUserId->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collCartsRelatedBySellerUserId) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'carts';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'cartss';
+                        break;
+                    default:
+                        $key = 'Carts';
+                }
+
+                $result[$key] = $this->collCartsRelatedBySellerUserId->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collCoupons) {
 
@@ -2425,9 +2474,15 @@ abstract class User implements ActiveRecordInterface
                 }
             }
 
-            foreach ($this->getCarts() as $relObj) {
+            foreach ($this->getCartsRelatedByUserId() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addCart($relObj->copy($deepCopy));
+                    $copyObj->addCartRelatedByUserId($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getCartsRelatedBySellerUserId() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCartRelatedBySellerUserId($relObj->copy($deepCopy));
                 }
             }
 
@@ -2641,8 +2696,12 @@ abstract class User implements ActiveRecordInterface
             $this->initAlerts();
             return;
         }
-        if ('Cart' === $relationName) {
-            $this->initCarts();
+        if ('CartRelatedByUserId' === $relationName) {
+            $this->initCartsRelatedByUserId();
+            return;
+        }
+        if ('CartRelatedBySellerUserId' === $relationName) {
+            $this->initCartsRelatedBySellerUserId();
             return;
         }
         if ('Coupon' === $relationName) {
@@ -2989,35 +3048,35 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collCarts collection
+     * Clears out the collCartsRelatedByUserId collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return $this
-     * @see addCarts()
+     * @see addCartsRelatedByUserId()
      */
-    public function clearCarts()
+    public function clearCartsRelatedByUserId()
     {
-        $this->collCarts = null; // important to set this to NULL since that means it is uninitialized
+        $this->collCartsRelatedByUserId = null; // important to set this to NULL since that means it is uninitialized
 
         return $this;
     }
 
     /**
-     * Reset is the collCarts collection loaded partially.
+     * Reset is the collCartsRelatedByUserId collection loaded partially.
      *
      * @return void
      */
-    public function resetPartialCarts($v = true): void
+    public function resetPartialCartsRelatedByUserId($v = true): void
     {
-        $this->collCartsPartial = $v;
+        $this->collCartsRelatedByUserIdPartial = $v;
     }
 
     /**
-     * Initializes the collCarts collection.
+     * Initializes the collCartsRelatedByUserId collection.
      *
-     * By default this just sets the collCarts collection to an empty array (like clearcollCarts());
+     * By default this just sets the collCartsRelatedByUserId collection to an empty array (like clearcollCartsRelatedByUserId());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -3026,16 +3085,16 @@ abstract class User implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initCarts(bool $overrideExisting = true): void
+    public function initCartsRelatedByUserId(bool $overrideExisting = true): void
     {
-        if (null !== $this->collCarts && !$overrideExisting) {
+        if (null !== $this->collCartsRelatedByUserId && !$overrideExisting) {
             return;
         }
 
         $collectionClassName = CartTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collCarts = new $collectionClassName;
-        $this->collCarts->setModel('\Model\Cart');
+        $this->collCartsRelatedByUserId = new $collectionClassName;
+        $this->collCartsRelatedByUserId->setModel('\Model\Cart');
     }
 
     /**
@@ -3053,57 +3112,57 @@ abstract class User implements ActiveRecordInterface
      * @phpstan-return ObjectCollection&\Traversable<ChildCart> List of ChildCart objects
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function getCarts(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    public function getCartsRelatedByUserId(?Criteria $criteria = null, ?ConnectionInterface $con = null)
     {
-        $partial = $this->collCartsPartial && !$this->isNew();
-        if (null === $this->collCarts || null !== $criteria || $partial) {
+        $partial = $this->collCartsRelatedByUserIdPartial && !$this->isNew();
+        if (null === $this->collCartsRelatedByUserId || null !== $criteria || $partial) {
             if ($this->isNew()) {
                 // return empty collection
-                if (null === $this->collCarts) {
-                    $this->initCarts();
+                if (null === $this->collCartsRelatedByUserId) {
+                    $this->initCartsRelatedByUserId();
                 } else {
                     $collectionClassName = CartTableMap::getTableMap()->getCollectionClassName();
 
-                    $collCarts = new $collectionClassName;
-                    $collCarts->setModel('\Model\Cart');
+                    $collCartsRelatedByUserId = new $collectionClassName;
+                    $collCartsRelatedByUserId->setModel('\Model\Cart');
 
-                    return $collCarts;
+                    return $collCartsRelatedByUserId;
                 }
             } else {
-                $collCarts = ChildCartQuery::create(null, $criteria)
+                $collCartsRelatedByUserId = ChildCartQuery::create(null, $criteria)
                     ->filterByUser($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collCartsPartial && count($collCarts)) {
-                        $this->initCarts(false);
+                    if (false !== $this->collCartsRelatedByUserIdPartial && count($collCartsRelatedByUserId)) {
+                        $this->initCartsRelatedByUserId(false);
 
-                        foreach ($collCarts as $obj) {
-                            if (false == $this->collCarts->contains($obj)) {
-                                $this->collCarts->append($obj);
+                        foreach ($collCartsRelatedByUserId as $obj) {
+                            if (false == $this->collCartsRelatedByUserId->contains($obj)) {
+                                $this->collCartsRelatedByUserId->append($obj);
                             }
                         }
 
-                        $this->collCartsPartial = true;
+                        $this->collCartsRelatedByUserIdPartial = true;
                     }
 
-                    return $collCarts;
+                    return $collCartsRelatedByUserId;
                 }
 
-                if ($partial && $this->collCarts) {
-                    foreach ($this->collCarts as $obj) {
+                if ($partial && $this->collCartsRelatedByUserId) {
+                    foreach ($this->collCartsRelatedByUserId as $obj) {
                         if ($obj->isNew()) {
-                            $collCarts[] = $obj;
+                            $collCartsRelatedByUserId[] = $obj;
                         }
                     }
                 }
 
-                $this->collCarts = $collCarts;
-                $this->collCartsPartial = false;
+                $this->collCartsRelatedByUserId = $collCartsRelatedByUserId;
+                $this->collCartsRelatedByUserIdPartial = false;
             }
         }
 
-        return $this->collCarts;
+        return $this->collCartsRelatedByUserId;
     }
 
     /**
@@ -3112,29 +3171,29 @@ abstract class User implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param Collection $carts A Propel collection.
+     * @param Collection $cartsRelatedByUserId A Propel collection.
      * @param ConnectionInterface $con Optional connection object
      * @return $this The current object (for fluent API support)
      */
-    public function setCarts(Collection $carts, ?ConnectionInterface $con = null)
+    public function setCartsRelatedByUserId(Collection $cartsRelatedByUserId, ?ConnectionInterface $con = null)
     {
-        /** @var ChildCart[] $cartsToDelete */
-        $cartsToDelete = $this->getCarts(new Criteria(), $con)->diff($carts);
+        /** @var ChildCart[] $cartsRelatedByUserIdToDelete */
+        $cartsRelatedByUserIdToDelete = $this->getCartsRelatedByUserId(new Criteria(), $con)->diff($cartsRelatedByUserId);
 
 
-        $this->cartsScheduledForDeletion = $cartsToDelete;
+        $this->cartsRelatedByUserIdScheduledForDeletion = $cartsRelatedByUserIdToDelete;
 
-        foreach ($cartsToDelete as $cartRemoved) {
-            $cartRemoved->setUser(null);
+        foreach ($cartsRelatedByUserIdToDelete as $cartRelatedByUserIdRemoved) {
+            $cartRelatedByUserIdRemoved->setUser(null);
         }
 
-        $this->collCarts = null;
-        foreach ($carts as $cart) {
-            $this->addCart($cart);
+        $this->collCartsRelatedByUserId = null;
+        foreach ($cartsRelatedByUserId as $cartRelatedByUserId) {
+            $this->addCartRelatedByUserId($cartRelatedByUserId);
         }
 
-        $this->collCarts = $carts;
-        $this->collCartsPartial = false;
+        $this->collCartsRelatedByUserId = $cartsRelatedByUserId;
+        $this->collCartsRelatedByUserIdPartial = false;
 
         return $this;
     }
@@ -3148,16 +3207,16 @@ abstract class User implements ActiveRecordInterface
      * @return int Count of related Cart objects.
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function countCarts(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    public function countCartsRelatedByUserId(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
     {
-        $partial = $this->collCartsPartial && !$this->isNew();
-        if (null === $this->collCarts || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collCarts) {
+        $partial = $this->collCartsRelatedByUserIdPartial && !$this->isNew();
+        if (null === $this->collCartsRelatedByUserId || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCartsRelatedByUserId) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getCarts());
+                return count($this->getCartsRelatedByUserId());
             }
 
             $query = ChildCartQuery::create(null, $criteria);
@@ -3170,7 +3229,7 @@ abstract class User implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collCarts);
+        return count($this->collCartsRelatedByUserId);
     }
 
     /**
@@ -3180,18 +3239,18 @@ abstract class User implements ActiveRecordInterface
      * @param ChildCart $l ChildCart
      * @return $this The current object (for fluent API support)
      */
-    public function addCart(ChildCart $l)
+    public function addCartRelatedByUserId(ChildCart $l)
     {
-        if ($this->collCarts === null) {
-            $this->initCarts();
-            $this->collCartsPartial = true;
+        if ($this->collCartsRelatedByUserId === null) {
+            $this->initCartsRelatedByUserId();
+            $this->collCartsRelatedByUserIdPartial = true;
         }
 
-        if (!$this->collCarts->contains($l)) {
-            $this->doAddCart($l);
+        if (!$this->collCartsRelatedByUserId->contains($l)) {
+            $this->doAddCartRelatedByUserId($l);
 
-            if ($this->cartsScheduledForDeletion and $this->cartsScheduledForDeletion->contains($l)) {
-                $this->cartsScheduledForDeletion->remove($this->cartsScheduledForDeletion->search($l));
+            if ($this->cartsRelatedByUserIdScheduledForDeletion and $this->cartsRelatedByUserIdScheduledForDeletion->contains($l)) {
+                $this->cartsRelatedByUserIdScheduledForDeletion->remove($this->cartsRelatedByUserIdScheduledForDeletion->search($l));
             }
         }
 
@@ -3199,29 +3258,29 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
-     * @param ChildCart $cart The ChildCart object to add.
+     * @param ChildCart $cartRelatedByUserId The ChildCart object to add.
      */
-    protected function doAddCart(ChildCart $cart): void
+    protected function doAddCartRelatedByUserId(ChildCart $cartRelatedByUserId): void
     {
-        $this->collCarts[]= $cart;
-        $cart->setUser($this);
+        $this->collCartsRelatedByUserId[]= $cartRelatedByUserId;
+        $cartRelatedByUserId->setUser($this);
     }
 
     /**
-     * @param ChildCart $cart The ChildCart object to remove.
+     * @param ChildCart $cartRelatedByUserId The ChildCart object to remove.
      * @return $this The current object (for fluent API support)
      */
-    public function removeCart(ChildCart $cart)
+    public function removeCartRelatedByUserId(ChildCart $cartRelatedByUserId)
     {
-        if ($this->getCarts()->contains($cart)) {
-            $pos = $this->collCarts->search($cart);
-            $this->collCarts->remove($pos);
-            if (null === $this->cartsScheduledForDeletion) {
-                $this->cartsScheduledForDeletion = clone $this->collCarts;
-                $this->cartsScheduledForDeletion->clear();
+        if ($this->getCartsRelatedByUserId()->contains($cartRelatedByUserId)) {
+            $pos = $this->collCartsRelatedByUserId->search($cartRelatedByUserId);
+            $this->collCartsRelatedByUserId->remove($pos);
+            if (null === $this->cartsRelatedByUserIdScheduledForDeletion) {
+                $this->cartsRelatedByUserIdScheduledForDeletion = clone $this->collCartsRelatedByUserId;
+                $this->cartsRelatedByUserIdScheduledForDeletion->clear();
             }
-            $this->cartsScheduledForDeletion[]= $cart;
-            $cart->setUser(null);
+            $this->cartsRelatedByUserIdScheduledForDeletion[]= $cartRelatedByUserId;
+            $cartRelatedByUserId->setUser(null);
         }
 
         return $this;
@@ -3233,7 +3292,7 @@ abstract class User implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this User is new, it will return
      * an empty collection; or if this User has previously
-     * been saved, it will retrieve related Carts from storage.
+     * been saved, it will retrieve related CartsRelatedByUserId from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -3245,12 +3304,12 @@ abstract class User implements ActiveRecordInterface
      * @return ObjectCollection|ChildCart[] List of ChildCart objects
      * @phpstan-return ObjectCollection&\Traversable<ChildCart}> List of ChildCart objects
      */
-    public function getCartsJoinSite(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getCartsRelatedByUserIdJoinSite(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildCartQuery::create(null, $criteria);
         $query->joinWith('Site', $joinBehavior);
 
-        return $this->getCarts($query, $con);
+        return $this->getCartsRelatedByUserId($query, $con);
     }
 
 
@@ -3259,7 +3318,7 @@ abstract class User implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this User is new, it will return
      * an empty collection; or if this User has previously
-     * been saved, it will retrieve related Carts from storage.
+     * been saved, it will retrieve related CartsRelatedByUserId from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -3271,12 +3330,303 @@ abstract class User implements ActiveRecordInterface
      * @return ObjectCollection|ChildCart[] List of ChildCart objects
      * @phpstan-return ObjectCollection&\Traversable<ChildCart}> List of ChildCart objects
      */
-    public function getCartsJoinAxysAccount(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getCartsRelatedByUserIdJoinAxysAccount(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildCartQuery::create(null, $criteria);
         $query->joinWith('AxysAccount', $joinBehavior);
 
-        return $this->getCarts($query, $con);
+        return $this->getCartsRelatedByUserId($query, $con);
+    }
+
+    /**
+     * Clears out the collCartsRelatedBySellerUserId collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addCartsRelatedBySellerUserId()
+     */
+    public function clearCartsRelatedBySellerUserId()
+    {
+        $this->collCartsRelatedBySellerUserId = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collCartsRelatedBySellerUserId collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialCartsRelatedBySellerUserId($v = true): void
+    {
+        $this->collCartsRelatedBySellerUserIdPartial = $v;
+    }
+
+    /**
+     * Initializes the collCartsRelatedBySellerUserId collection.
+     *
+     * By default this just sets the collCartsRelatedBySellerUserId collection to an empty array (like clearcollCartsRelatedBySellerUserId());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCartsRelatedBySellerUserId(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collCartsRelatedBySellerUserId && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = CartTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collCartsRelatedBySellerUserId = new $collectionClassName;
+        $this->collCartsRelatedBySellerUserId->setModel('\Model\Cart');
+    }
+
+    /**
+     * Gets an array of ChildCart objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildUser is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildCart[] List of ChildCart objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildCart> List of ChildCart objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getCartsRelatedBySellerUserId(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collCartsRelatedBySellerUserIdPartial && !$this->isNew();
+        if (null === $this->collCartsRelatedBySellerUserId || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collCartsRelatedBySellerUserId) {
+                    $this->initCartsRelatedBySellerUserId();
+                } else {
+                    $collectionClassName = CartTableMap::getTableMap()->getCollectionClassName();
+
+                    $collCartsRelatedBySellerUserId = new $collectionClassName;
+                    $collCartsRelatedBySellerUserId->setModel('\Model\Cart');
+
+                    return $collCartsRelatedBySellerUserId;
+                }
+            } else {
+                $collCartsRelatedBySellerUserId = ChildCartQuery::create(null, $criteria)
+                    ->filterBySellerUser($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collCartsRelatedBySellerUserIdPartial && count($collCartsRelatedBySellerUserId)) {
+                        $this->initCartsRelatedBySellerUserId(false);
+
+                        foreach ($collCartsRelatedBySellerUserId as $obj) {
+                            if (false == $this->collCartsRelatedBySellerUserId->contains($obj)) {
+                                $this->collCartsRelatedBySellerUserId->append($obj);
+                            }
+                        }
+
+                        $this->collCartsRelatedBySellerUserIdPartial = true;
+                    }
+
+                    return $collCartsRelatedBySellerUserId;
+                }
+
+                if ($partial && $this->collCartsRelatedBySellerUserId) {
+                    foreach ($this->collCartsRelatedBySellerUserId as $obj) {
+                        if ($obj->isNew()) {
+                            $collCartsRelatedBySellerUserId[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCartsRelatedBySellerUserId = $collCartsRelatedBySellerUserId;
+                $this->collCartsRelatedBySellerUserIdPartial = false;
+            }
+        }
+
+        return $this->collCartsRelatedBySellerUserId;
+    }
+
+    /**
+     * Sets a collection of ChildCart objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $cartsRelatedBySellerUserId A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setCartsRelatedBySellerUserId(Collection $cartsRelatedBySellerUserId, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildCart[] $cartsRelatedBySellerUserIdToDelete */
+        $cartsRelatedBySellerUserIdToDelete = $this->getCartsRelatedBySellerUserId(new Criteria(), $con)->diff($cartsRelatedBySellerUserId);
+
+
+        $this->cartsRelatedBySellerUserIdScheduledForDeletion = $cartsRelatedBySellerUserIdToDelete;
+
+        foreach ($cartsRelatedBySellerUserIdToDelete as $cartRelatedBySellerUserIdRemoved) {
+            $cartRelatedBySellerUserIdRemoved->setSellerUser(null);
+        }
+
+        $this->collCartsRelatedBySellerUserId = null;
+        foreach ($cartsRelatedBySellerUserId as $cartRelatedBySellerUserId) {
+            $this->addCartRelatedBySellerUserId($cartRelatedBySellerUserId);
+        }
+
+        $this->collCartsRelatedBySellerUserId = $cartsRelatedBySellerUserId;
+        $this->collCartsRelatedBySellerUserIdPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Cart objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related Cart objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countCartsRelatedBySellerUserId(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collCartsRelatedBySellerUserIdPartial && !$this->isNew();
+        if (null === $this->collCartsRelatedBySellerUserId || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCartsRelatedBySellerUserId) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCartsRelatedBySellerUserId());
+            }
+
+            $query = ChildCartQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySellerUser($this)
+                ->count($con);
+        }
+
+        return count($this->collCartsRelatedBySellerUserId);
+    }
+
+    /**
+     * Method called to associate a ChildCart object to this object
+     * through the ChildCart foreign key attribute.
+     *
+     * @param ChildCart $l ChildCart
+     * @return $this The current object (for fluent API support)
+     */
+    public function addCartRelatedBySellerUserId(ChildCart $l)
+    {
+        if ($this->collCartsRelatedBySellerUserId === null) {
+            $this->initCartsRelatedBySellerUserId();
+            $this->collCartsRelatedBySellerUserIdPartial = true;
+        }
+
+        if (!$this->collCartsRelatedBySellerUserId->contains($l)) {
+            $this->doAddCartRelatedBySellerUserId($l);
+
+            if ($this->cartsRelatedBySellerUserIdScheduledForDeletion and $this->cartsRelatedBySellerUserIdScheduledForDeletion->contains($l)) {
+                $this->cartsRelatedBySellerUserIdScheduledForDeletion->remove($this->cartsRelatedBySellerUserIdScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildCart $cartRelatedBySellerUserId The ChildCart object to add.
+     */
+    protected function doAddCartRelatedBySellerUserId(ChildCart $cartRelatedBySellerUserId): void
+    {
+        $this->collCartsRelatedBySellerUserId[]= $cartRelatedBySellerUserId;
+        $cartRelatedBySellerUserId->setSellerUser($this);
+    }
+
+    /**
+     * @param ChildCart $cartRelatedBySellerUserId The ChildCart object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeCartRelatedBySellerUserId(ChildCart $cartRelatedBySellerUserId)
+    {
+        if ($this->getCartsRelatedBySellerUserId()->contains($cartRelatedBySellerUserId)) {
+            $pos = $this->collCartsRelatedBySellerUserId->search($cartRelatedBySellerUserId);
+            $this->collCartsRelatedBySellerUserId->remove($pos);
+            if (null === $this->cartsRelatedBySellerUserIdScheduledForDeletion) {
+                $this->cartsRelatedBySellerUserIdScheduledForDeletion = clone $this->collCartsRelatedBySellerUserId;
+                $this->cartsRelatedBySellerUserIdScheduledForDeletion->clear();
+            }
+            $this->cartsRelatedBySellerUserIdScheduledForDeletion[]= $cartRelatedBySellerUserId;
+            $cartRelatedBySellerUserId->setSellerUser(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related CartsRelatedBySellerUserId from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildCart[] List of ChildCart objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildCart}> List of ChildCart objects
+     */
+    public function getCartsRelatedBySellerUserIdJoinSite(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildCartQuery::create(null, $criteria);
+        $query->joinWith('Site', $joinBehavior);
+
+        return $this->getCartsRelatedBySellerUserId($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related CartsRelatedBySellerUserId from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildCart[] List of ChildCart objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildCart}> List of ChildCart objects
+     */
+    public function getCartsRelatedBySellerUserIdJoinAxysAccount(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildCartQuery::create(null, $criteria);
+        $query->joinWith('AxysAccount', $joinBehavior);
+
+        return $this->getCartsRelatedBySellerUserId($query, $con);
     }
 
     /**
@@ -8540,8 +8890,13 @@ abstract class User implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collCarts) {
-                foreach ($this->collCarts as $o) {
+            if ($this->collCartsRelatedByUserId) {
+                foreach ($this->collCartsRelatedByUserId as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collCartsRelatedBySellerUserId) {
+                foreach ($this->collCartsRelatedBySellerUserId as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -8643,7 +8998,8 @@ abstract class User implements ActiveRecordInterface
         } // if ($deep)
 
         $this->collAlerts = null;
-        $this->collCarts = null;
+        $this->collCartsRelatedByUserId = null;
+        $this->collCartsRelatedBySellerUserId = null;
         $this->collCoupons = null;
         $this->collCustomers = null;
         $this->collDownloads = null;

@@ -5507,6 +5507,32 @@ abstract class Site implements ActiveRecordInterface
      * @return ObjectCollection|ChildCart[] List of ChildCart objects
      * @phpstan-return ObjectCollection&\Traversable<ChildCart}> List of ChildCart objects
      */
+    public function getCartsJoinSellerUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildCartQuery::create(null, $criteria);
+        $query->joinWith('SellerUser', $joinBehavior);
+
+        return $this->getCarts($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Carts from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildCart[] List of ChildCart objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildCart}> List of ChildCart objects
+     */
     public function getCartsJoinAxysAccount(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildCartQuery::create(null, $criteria);

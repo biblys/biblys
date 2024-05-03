@@ -261,8 +261,12 @@
     <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="axys_account_id" phpName="AxysAccountId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
-    <foreign-key foreignTable="users" skipSql="true">
+    <foreign-key foreignTable="users" phpName="User" skipSql="true">
       <reference local="user_id" foreign="id"/>
+    </foreign-key>
+    <column name="seller_user_id" phpName="SellerUserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <foreign-key foreignTable="users" name="cart_sellers_fk" phpName="SellerUser" skipSql="true">
+      <reference local="seller_user_id" foreign="id"/>
     </foreign-key>
     <column name="cart_seller_id" phpName="SellerId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="customer_id" phpName="CustomerId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
