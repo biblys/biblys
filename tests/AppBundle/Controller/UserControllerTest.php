@@ -177,7 +177,7 @@ class UserControllerTest extends TestCase
         // then
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString(
-            "Vous avez été déconnecté·e du site Librairie Ys.",
+            "Vous avez été déconnecté·e du site Éditions Paronymie.",
             $response->getContent(),
         );
     }

@@ -38,24 +38,24 @@ class CreateSeedsCommand extends Command
 
         // Site
         $site = new Site();
-        $site->setName("librys");
-        $site->setTitle("Librairie Ys");
-        $site->setDomain("www.librys.fr");
-        $site->setContact("contact@librys.fr");
+        $site->setName("paronymie");
+        $site->setTitle("Éditions Paronymie");
+        $site->setDomain("paronymie.fr");
+        $site->setContact("contact@paronymie.fr");
         $site->save();
-        $output->writeln(["Inserted site: Librairie Ys"]);
+        $output->writeln(["Inserted site: Éditions Paronymie"]);
 
         $axysApp = new AxysApp();
-        $axysApp->setName("Librairie Ys");
-        $axysApp->setClientId("librys");
-        $axysApp->setClientSecret("librys-secret");
+        $axysApp->setName("Éditions Paronymie");
+        $axysApp->setClientId("paronymie");
+        $axysApp->setClientSecret("paronymie-secret");
         $axysApp->setRedirectUri("http://localhost:8088/oauth/callback");
         $axysApp->save();
-        $output->writeln(["Inserted Axys app: librys"]);
+        $output->writeln(["Inserted Axys app: paronymie"]);
 
         // Admin
         $admin = new AxysAccount();
-        $admin->setEmail("admin@librys.fr");
+        $admin->setEmail("admin@paronymie.fr");
         $admin->setUsername("admin");
         $admin->setPassword("$2y$10\$uBSKxkPvkt8UQM8B98u61e.GGOEdLHzU470Nw4X17zq05i1wIYftm");
         $admin->save();
@@ -63,15 +63,15 @@ class CreateSeedsCommand extends Command
         $right->setSite($site);
         $right->setAxysAccount($admin);
         $right->save();
-        $output->writeln(["Inserted user: admin@librys.fr (password: password)"]);
+        $output->writeln(["Inserted user: admin@paronymie.fr (password: password)"]);
 
         // Simple user
         $user = new AxysAccount();
-        $user->setEmail("user@librys.fr");
+        $user->setEmail("user@paronymie.fr");
         $user->setUsername("user");
         $user->setPassword("$2y$10\$uBSKxkPvkt8UQM8B98u61e.GGOEdLHzU470Nw4X17zq05i1wIYftm");
         $user->save();
-        $output->writeln(["Inserted user: user@librys.fr (password: password)"]);
+        $output->writeln(["Inserted user: user@paronymie.fr (password: password)"]);
 
         // Publisher
         $publisher = new Publisher();
@@ -81,7 +81,7 @@ class CreateSeedsCommand extends Command
 
         // User with publisher right
         $publisherUser = new AxysAccount();
-        $publisherUser->setEmail("publisher@librys.fr");
+        $publisherUser->setEmail("publisher@paronymie.fr");
         $publisherUser->setUsername("publisher");
         $publisherUser->setPassword("$2y$10\$uBSKxkPvkt8UQM8B98u61e.GGOEdLHzU470Nw4X17zq05i1wIYftm");
         $publisherUser->save();
@@ -90,7 +90,7 @@ class CreateSeedsCommand extends Command
         $right->setAxysAccount($publisherUser);
         $right->setPublisher($publisher);
         $right->save();
-        $output->writeln(["Inserted user: publisher@librys.fr (password: password)"]);
+        $output->writeln(["Inserted user: publisher@paronymie.fr (password: password)"]);
 
         $country = new Country();
         $country->setName("France");

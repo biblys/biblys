@@ -29,7 +29,7 @@ function createFixtures(): void
 {
     $site = new \Model\Site();
     $site->setTva("FR");
-    $site->setTitle("Librairie Ys");
+    $site->setTitle("Éditions Paronymie");
     $site->setContact("contact@biblys.fr");
     $site->setTag("YS");
     $site->save();

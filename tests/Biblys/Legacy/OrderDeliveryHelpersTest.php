@@ -219,7 +219,7 @@ class OrderDeliveryHelpersTest extends TestCase
                     $mailBody
                 ],
                 [
-                    "contact@librys.fr",
+                    "contact@paronymie.fr",
                     "Commande n° {$order->get("id")}",
                     $mailBody
                 ]
@@ -342,7 +342,7 @@ class OrderDeliveryHelpersTest extends TestCase
                     $mailBody
                 ],
                 [
-                    "contact@librys.fr",
+                    "contact@paronymie.fr",
                     "Commande n° {$order->get("id")} (mise à jour)",
                     $mailBody
                 ]

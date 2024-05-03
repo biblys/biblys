@@ -607,7 +607,7 @@ class MainControllerTest extends TestCase
         $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
         $config->set("cloud", [
-            "domains" => ["librys.fr", "librairieys.fr"],
+            "domains" => ["paronymie.fr"],
         ]);
         $cloud = $this->createMock(CloudService::class);
         $cloud->method("getSubscription")->willReturn(null);
@@ -643,7 +643,7 @@ class MainControllerTest extends TestCase
         $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
         $config->set("cloud", [
-            "domains" => ["librys.fr", "librairieys.fr"],
+            "domains" => ["paronymie.fr"],
         ]);
         $cloud = $this->createMock(CloudService::class);
         $cloud->method("getSubscription")->willReturn(new CloudSubscription(
@@ -665,7 +665,7 @@ class MainControllerTest extends TestCase
             "it should display the title"
         );
         $this->assertStringContainsString(
-            "Domaines inclus : librys.fr, librairieys.fr",
+            "Domaines inclus : paronymie.fr",
             $response->getContent(),
             "it should display expiration date"
         );
