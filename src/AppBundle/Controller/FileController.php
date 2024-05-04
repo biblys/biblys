@@ -2,14 +2,14 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentUser;
 use Exception;
 use File;
 use FileManager;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use StockManager;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
 class FileController extends Controller
@@ -17,7 +17,7 @@ class FileController extends Controller
     /**
      * @throws Exception
      */
-    public function downloadAction($id)
+    public function downloadAction(CurrentUser $currentUser, $id)
     {
         $fm = new FileManager();
         $sm = new StockManager();
@@ -30,8 +30,8 @@ class FileController extends Controller
 
         // Check download right
         try {
-            $file->canBeDownloadedBy(LegacyCodeHelper::getGlobalVisitor());
-        } catch (AuthException $exception) {
+            $file->canBeDownloadedBy($currentUser);
+        } catch (AccessDeniedHttpException $exception) {
             throw $exception;
         } catch (Exception $exception) {
             return new Response(
@@ -52,7 +52,7 @@ class FileController extends Controller
             // Find related copy
             $copy = $sm->get([
                 'article_id' => $file->get('article_id'),
-                'axys_account_id' => LegacyCodeHelper::getGlobalVisitor()->get('id'),
+                'axys_account_id' => $currentUser->getAxysAccount()->getId(),
             ]);
             if (!$copy) {
                 throw new Exception('Related copy not found');
@@ -60,7 +60,7 @@ class FileController extends Controller
         }
 
         // Increment download count
-        $file->addDownloadBy(LegacyCodeHelper::getGlobalVisitor());
+        $file->addDownloadBy($currentUser);
 
         // Remove updated marker on copy if necessary
         if ($copy && $copy->get('file_updated')) {
@@ -77,7 +77,6 @@ class FileController extends Controller
 
         $response->headers->set('Content-Type', $file->get('type'));
         $response->headers->set('Content-Transfer-Encoding', $file->get('type'));
-        // $response->headers->set("Content-Length", $file->get('size')); <= causing problem on iOS Safari
         $response->headers->set('Pragma', 'no-cache');
         $response->headers->set('Cache-Control', 'must-revalidate, post-check=0, pre-check=0, public');
         $response->headers->set('Expires', '0');

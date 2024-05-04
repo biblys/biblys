@@ -1,18 +1,17 @@
 <?php
 
 use Biblys\Exception\InvalidEntityException;
-use Framework\Exception\AuthException;
+use Biblys\Service\CurrentUser;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class File extends Entity
 {
     protected $prefix = 'file';
 
     /**
-     * Check if user has right to download this file.
-     *
-     * @return bool
+     * @throws Exception
      */
-    public function canBeDownloadedBy(AxysAccount $user)
+    public function canBeDownloadedBy(CurrentUser $currentUser): bool
     {
         // Public file
         if ($this->get('access') == 0) {
@@ -22,22 +21,24 @@ class File extends Entity
         // Private file
 
         // Visitor must be logged
-        if (!$user->isLogged()) {
-            throw new AuthException("Vous n'êtes pas identifié.");
+        if (!$currentUser->isAuthentified()) {
+            throw new AccessDeniedHttpException("Vous n'êtes pas identifié.");
         }
 
         // Article must be in user's library
         $sm = new StockManager();
-        $right = $sm->get(['article_id' => $this->get('article_id'), 'axys_account_id' => $user->get('id')]);
+        $right = $sm->get(['article_id' => $this->get('article_id'), 'axys_account_id' =>
+            $currentUser->getAxysAccount()->getId()]);
         if (!$right) {
-            throw new Exception("Le fichier est en accès restreint et l'article lié n'est pas dans votre bibliothèque.");
+            throw new AccessDeniedHttpException("Le fichier est en accès restreint et l'article lié n'est pas dans votre bibliothèque.");
         }
 
         // Linked article must exist
         $am = new ArticleManager();
+        /** @var Article $article */
         $article = $am->getById($this->get('article_id'));
         if (!$article) {
-            throw new Exception("L'article lié à cet exemplaire n'existe pas.");
+            throw new AccessDeniedHttpException("L'article lié à cet exemplaire n'existe pas.");
         }
 
         // Article must be published (or predownload allowed)
@@ -51,8 +52,9 @@ class File extends Entity
 
     /**
      * Increment download count.
+     * @throws Exception
      */
-    public function addDownloadBy(AxysAccount $user)
+    public function addDownloadBy(CurrentUser $currentUser): void
     {
         global $request;
 
@@ -66,15 +68,15 @@ class File extends Entity
         $download->set('download_version', $this->get('version'));
         $download->set('download_ip', $request->getClientIp());
 
-        if ($user->isLogged()) {
-            $download->set('axys_account_id', $user->get('id'));
+        if ($currentUser->isAuthentified()) {
+            $download->set('axys_account_id', $currentUser->getAxysAccount()->getId());
         }
 
         $dm->update($download);
     }
 
     /* Get file dir and create it if needed */
-    public function getDir()
+    public function getDir(): string
     {
         global $config;
         $dir = $config->get('downloadable_path').str_pad(substr($this->get('file_id'), -2, 2), 2, '0', STR_PAD_LEFT).'/'.$this->get('file_id').'/';
@@ -89,7 +91,7 @@ class File extends Entity
         Get human-readable name
         return String
     */
-    public function getName()
+    public function getName(): string
     {
         $am = new ArticleManager();
 
@@ -106,7 +108,7 @@ class File extends Entity
         Get file path
         return string
     */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->getDir().$this->get('file_hash');
     }
@@ -115,7 +117,7 @@ class File extends Entity
         Get file type
         return String
     */
-    public function getType($data)
+    public function getType($data): string
     {
         // Get current file mime-type
         if ($this->has('file_type')) {
@@ -241,13 +243,13 @@ class File extends Entity
     }
 
     /* Create table line */
-    public function getLine()
+    public function getLine(): string
     {
         $sel[0] = null;
         $sel[1] = null;
         $sel[$this->get('file_access')] = ' selected';
 
-        $line = '
+        return '
             <tr id="dlfile_'.$this->get('id').'" class="dlfile">
                 <td class="file_title" title="'.$this->get('title').'" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" contenteditable>'.$this->get('title').'</td>
                 <td class="center nopadding va-middle">
@@ -271,24 +273,21 @@ class File extends Entity
                 </td>
             </tr>
         ';
-
-        return $line;
     }
 
     /* Get download count */
-    public function getDownloads()
+    public function getDownloads(): int
     {
         global $_SQL;
         $downloads = $_SQL->query('SELECT `download_id` FROM `downloads` WHERE `file_id` = '.$this->get('file_id'));
-        $count = count($downloads->fetchAll(PDO::FETCH_ASSOC));
-
-        return $count;
+        return count($downloads->fetchAll(PDO::FETCH_ASSOC));
     }
 
     /**
-     * Set all related bought stock to updated.
+     * Set all related bought stock as updated.
+     * @throws Exception
      */
-    public function markAsUpdated()
+    public function markAsUpdated(): void
     {
         $sm = new StockManager();
 
