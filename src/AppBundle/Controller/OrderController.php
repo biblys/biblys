@@ -152,6 +152,10 @@ class OrderController extends Controller
 
         if ($action == 'shipped') {
             $tracking_number = $request->request->get('tracking_number');
+            if (strlen($tracking_number) > 16) {
+                throw new BadRequestHttpException("Le numéro de suivi ne peut pas dépasser 16 caractères.");
+            }
+
             $om->markAsShipped($order, $tracking_number);
             $notice = 'La commande n°&nbsp;'.$order->get('id').' de '.$order->get('firstname').' '.$order->get('lastname').' a été marquée comme expédiée.';
         }
