@@ -108,16 +108,18 @@ class CreateSeedsCommand extends Command
         $output->writeln(["Inserted shipping fee: Offerts"]);
 
         // Collection
-        $collection = new BookCollection();
-        $collection->setName("La Blanche");
-        $collection->setPublisherId($publisher->getId());
-        $collection->save();
+        $collection = ModelFactory::createCollection(
+            publisher: $publisher,
+            name: "Lis tes ratures",
+        );
+        $output->writeln(["Inserted book collection: Lis tes ratures"]);
 
         // Contributor
         $contributor = ModelFactory::createContributor(
             firstName: "Aymeric",
             lastName: "Buvard",
         );
+        $output->writeln(["Inserted book collection: Aymeric Buvard"]);
 
         // Article
         $article = ModelFactory::createArticle(
@@ -126,6 +128,15 @@ class CreateSeedsCommand extends Command
             publisher: $publisher,
             collection: $collection,
         );
+        $output->writeln(["Inserted book collection: L'Ordure du jeu"]);
+
+        // Stock item
+        ModelFactory::createStockItem(
+            site: $site,
+            article: $article,
+            sellingPrice: 999,
+        );
+        $output->writeln(["Inserted stock item for L'Ordure du jeu"]);
 
         $output->writeln(["Seeds generated!"]);
         return 0;

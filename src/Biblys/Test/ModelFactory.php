@@ -4,6 +4,7 @@ namespace Biblys\Test;
 
 use Biblys\Article\Type;
 use Biblys\Service\Config;
+use Biblys\Service\Slug\SlugService;
 use DateTime;
 use Exception;
 use Model\Article;
@@ -154,9 +155,11 @@ class ModelFactory
         string $name = "La Blanche",
     ): BookCollection
     {
+        $slugService = new SlugService();
+
         $collection = new BookCollection();
         $collection->setName($name);
-        $collection->setUrl("la-blanche");
+        $collection->setUrl($slugService->slugify($name));
         $publisher = $publisher ?? self::createPublisher();
         $collection->setPublisherId($publisher->getId());
         $collection->save();
@@ -319,6 +322,8 @@ class ModelFactory
         $contributor = new People();
         $contributor->setFirstName($firstName);
         $contributor->setLastName($lastName);
+        $fullName = trim($contributor->getFirstName() . " " . $contributor->getLastName());
+        $contributor->setName($fullName);
         $contributor->setGender($gender);
         $contributor->setUrl($url);
         $contributor->save();
@@ -347,6 +352,7 @@ class ModelFactory
         $stock->setArticle($article ?? self::createArticle());
         $stock->setAxysAccount($axysAccount);
         $stock->setCart($cart);
+        $stock->setCondition("Neuf");
         $stock->setSellingPrice($sellingPrice);
         $stock->setSellingDate($sellingDate);
         $stock->setReturnDate($returnDate);
