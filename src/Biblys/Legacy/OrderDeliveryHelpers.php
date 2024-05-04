@@ -339,9 +339,10 @@ class OrderDeliveryHelpers
         // Send email to customer from site
         $mailer->send($order->get('email'), $mailSubject, $mailBody);
 
-        // Send email to seller & log from customer
+        // Send email to site contact adress
         $from = [$site->getContact() => trim($order->get('firstname').' '.$order->get('lastname'))];
         $replyTo = $order->get('email');
+        $mailSubject = trim($currentSite->getOption("order_mail_subject_prefix")." ".$mailSubject);
         $mailer->send($site->getContact(), $mailSubject, $mailBody, $from, ['reply-to' => $replyTo]);
     }
 }

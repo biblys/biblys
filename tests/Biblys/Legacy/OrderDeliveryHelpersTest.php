@@ -126,6 +126,7 @@ class OrderDeliveryHelpersTest extends TestCase
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("getOption")->andReturn(null);
         $cm = new CartManager();
         $om = new OrderManager();
         $cart = EntityFactory::createCart();
@@ -246,12 +247,71 @@ class OrderDeliveryHelpersTest extends TestCase
      * @throws TransportExceptionInterface
      * @throws Exception
      */
+    public function testSendOrderConfirmationMailWithSubjectPrefix()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("getOption")
+            ->with("order_mail_subject_prefix")
+            ->andReturn("PARONYMIE ·");
+        $cm = new CartManager();
+        $om = new OrderManager();
+        $cart = EntityFactory::createCart();
+        $article = EntityFactory::createArticle();
+        $copy = EntityFactory::createStock(["article_id" => $article->get("id")]);
+        $cm->addStock($cart, $copy);
+        $order = EntityFactory::createOrder();
+        $om->hydrateFromCart($order, $cart);
+        $shipping = EntityFactory::createShipping();
+        $termsPage = ModelFactory::createPage();
+
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->shouldReceive("send")
+            ->with(
+                "customer@example.net",
+                "Commande n° {$order->get("id")}",
+                Mockery::any()
+            )
+            ->andReturn(true);
+        $mailer->shouldReceive("send")
+            ->with(
+                "contact@paronymie.fr",
+                "PARONYMIE · Commande n° {$order->get("id")}",
+                Mockery::any(),
+                ['contact@paronymie.fr' => 'Alec'],
+                ['reply-to' => 'customer@example.net'],
+            )
+            ->andReturn(true);
+
+        // when
+        OrderDeliveryHelpers::sendOrderConfirmationMail(
+            $order,
+            $shipping,
+            $mailer,
+            $currentSite,
+            false,
+            $termsPage,
+        );
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
+
+    /**
+     * @throws InvalidEmailAddressException
+     * @throws PropelException
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     */
     public function testSendConfirmationMailOnOrderUpdate()
     {
         // given
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("getOption")->andReturn(null);
         $cm = new CartManager();
         $om = new OrderManager();
         $cart = EntityFactory::createCart();

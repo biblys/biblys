@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.81.0 (DEV)
+
+- Une option de site `order_mail_subject_prefix` a été ajoutée. Elle permet
+  d'ajouter un préfixe au sujet des courriels de confirmation de commande.
+  Par exemple, si le préfixe est "YS |", le sujet du courriel sera "YS |
+  Commande n°".
+
 ### 2.80.1 (8 mai 2024)
 
 Corrections
