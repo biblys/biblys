@@ -2,19 +2,27 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Legacy\LegacyCodeHelper;
+use Exception;
+use File;
+use FileManager;
 use Framework\Controller;
 use Framework\Exception\AuthException;
+use StockManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
 class FileController extends Controller
 {
-    public function downloadAction($id, $format)
+    /**
+     * @throws Exception
+     */
+    public function downloadAction($id)
     {
-        $fm = new \FileManager();
-        $sm = new \StockManager();
+        $fm = new FileManager();
+        $sm = new StockManager();
 
-        // Check if file exists
+        /** @var File $file */
         $file = $fm->getById($id);
         if (!$file) {
             throw new NotFoundException("File $id not found.");
@@ -22,10 +30,10 @@ class FileController extends Controller
 
         // Check download right
         try {
-            $file->canBeDownloadedBy(\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor());
+            $file->canBeDownloadedBy(LegacyCodeHelper::getGlobalVisitor());
         } catch (AuthException $exception) {
             throw $exception;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return new Response(
                 '
                     <h1>Téléchargement impossible</h1>
@@ -44,15 +52,15 @@ class FileController extends Controller
             // Find related copy
             $copy = $sm->get([
                 'article_id' => $file->get('article_id'),
-                'axys_account_id' => \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->get('id'),
+                'axys_account_id' => LegacyCodeHelper::getGlobalVisitor()->get('id'),
             ]);
             if (!$copy) {
-                throw new \Exception('Related copy not found');
+                throw new Exception('Related copy not found');
             }
         }
 
         // Increment download count
-        $file->addDownloadBy(\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor());
+        $file->addDownloadBy(LegacyCodeHelper::getGlobalVisitor());
 
         // Remove updated marker on copy if necessary
         if ($copy && $copy->get('file_updated')) {
