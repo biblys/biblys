@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.80.1 (DEV)
+
+Corrections
+
+- Les erreurs survenant lors de la gestion d'une commande dans 
+  l'administration pouvaient ne pas s'afficher correctement. C'est corrigé.
+
 ## 2.80.0 (1er mai 2024)
 
 Améliorations
