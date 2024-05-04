@@ -100,10 +100,10 @@ class CreateSeedsCommand extends Command
         // Site
         $shippingFee = new ShippingFee();
         $shippingFee->setSiteId($site->getId());
-        $shippingFee->setMode("Offerts");
+        $shippingFee->setMode("Expédition France et Monde");
         $shippingFee->setType("normal");
         $shippingFee->setZone("ALL");
-        $shippingFee->setFee(1);
+        $shippingFee->setFee(300);
         $shippingFee->save();
         $output->writeln(["Inserted shipping fee: Offerts"]);
 
