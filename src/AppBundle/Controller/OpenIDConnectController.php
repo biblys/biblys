@@ -58,6 +58,7 @@ class OpenIDConnectController extends Controller
         CurrentUser                  $currentUser,
         Config                       $config,
         OpenIDConnectProviderService $openIDConnectProviderService,
+        QueryParamsService           $queryParams,
         TemplateService              $templateService,
     ): Response|RedirectResponse
     {
@@ -67,6 +68,12 @@ class OpenIDConnectController extends Controller
                 "siteTitle" => $currentSite->getTitle(),
             ]);
         }
+
+        $queryParams->parse([
+            "code" => ["type" => "string"],
+            "state" => ["type" => "string"],
+            "error" => ["type" => "string", "default" => ""],
+        ]);
 
         try {
             [$externalId, $sessionExpiresAt] = OpenIDConnectController::_getClaimsFromOidcTokens($request, $openIDConnectProviderService);
@@ -83,7 +90,7 @@ class OpenIDConnectController extends Controller
             $response->headers->set("X-Robots-Tag", "noindex, nofollow");
 
             return $response;
-        } catch(OAuth2Exception $exception) {
+        } catch (OAuth2Exception $exception) {
             throw new BadRequestHttpException($exception->getMessage());
         }
     }
