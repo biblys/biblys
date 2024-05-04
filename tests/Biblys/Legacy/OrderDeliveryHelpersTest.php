@@ -114,7 +114,6 @@ class OrderDeliveryHelpersTest extends TestCase
         $this->expectNotToPerformAssertions();
     }
 
-
     /**
      * @throws InvalidEmailAddressException
      * @throws PropelException
@@ -124,9 +123,9 @@ class OrderDeliveryHelpersTest extends TestCase
     public function testSendOrderConfirmationMail()
     {
         // given
-        $site = EntityFactory::createSite();
-        $site->setOpt("virtual_stock", 1);
-        $GLOBALS["LEGACY_CURRENT_SITE"] = $site;
+        $site = ModelFactory::createSite();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
         $cm = new CartManager();
         $om = new OrderManager();
         $cart = EntityFactory::createCart();
@@ -180,7 +179,7 @@ class OrderDeliveryHelpersTest extends TestCase
 
                     
 
-                    <p><strong>Adresse d\'expédition :</strong></p>
+                    <p><strong>Adresse d’expédition :</strong></p>
 
                     <p>
                          Alec <br />
@@ -193,7 +192,7 @@ class OrderDeliveryHelpersTest extends TestCase
                     
 
                     <p>
-                        Si ce n\'est pas déjà fait, vous pouvez payer votre commande à l\'adresse ci-dessous :<br />
+                        Si ce n’est pas déjà fait, vous pouvez payer votre commande à l’adresse ci-dessous :<br />
                         http://www.biblys.fr/order/'.$order->get("url").'
                     </p>
                     
@@ -231,12 +230,11 @@ class OrderDeliveryHelpersTest extends TestCase
             $order,
             $shipping,
             $mailer,
-            $site,
+            $currentSite,
             false,
             $termsPage,
         );
     }
-
 
     /**
      * @throws InvalidEmailAddressException
@@ -247,9 +245,9 @@ class OrderDeliveryHelpersTest extends TestCase
     public function testSendConfirmationMailOnOrderUpdate()
     {
         // given
-        $site = EntityFactory::createSite();
-        $site->setOpt("virtual_stock", 1);
-        $GLOBALS["site"] = $site;
+        $site = ModelFactory::createSite();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
         $cm = new CartManager();
         $om = new OrderManager();
         $cart = EntityFactory::createCart();
@@ -303,7 +301,7 @@ class OrderDeliveryHelpersTest extends TestCase
 
                     
 
-                    <p><strong>Adresse d\'expédition :</strong></p>
+                    <p><strong>Adresse d’expédition :</strong></p>
 
                     <p>
                          Alec <br />
@@ -316,7 +314,7 @@ class OrderDeliveryHelpersTest extends TestCase
                     
 
                     <p>
-                        Si ce n\'est pas déjà fait, vous pouvez payer votre commande à l\'adresse ci-dessous :<br />
+                        Si ce n’est pas déjà fait, vous pouvez payer votre commande à l’adresse ci-dessous :<br />
                         http://www.biblys.fr/order/'.$order->get("url").'
                     </p>
                     
@@ -354,7 +352,7 @@ class OrderDeliveryHelpersTest extends TestCase
             $order,
             $shipping,
             $mailer,
-            $site,
+            $currentSite,
             true,
             $termsPage,
         );

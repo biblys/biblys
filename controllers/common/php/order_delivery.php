@@ -217,7 +217,7 @@ return function (
                 $updatedOrder,
                 $shipping,
                 $mailer,
-                LegacyCodeHelper::getGlobalSite(),
+                $currentSite,
                 $isUpdatingAnExistingOrder,
                 $termsPage
             );

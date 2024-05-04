@@ -22,7 +22,6 @@ use OrderManager;
 use Propel\Runtime\Exception\PropelException;
 use Shipping;
 use ShippingManager;
-use Site;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -198,11 +197,12 @@ class OrderDeliveryHelpers
         Order $order,
         ?Shipping $shipping,
         Mailer $mailer,
-        Site $site,
+        CurrentSite $currentSite,
         bool $isUpdatingAnExistingOrder,
         ?Page $termsPage
     ): void
     {
+        $site = $currentSite->getSite();
         $mailSubject = "Commande n° {$order->get("id")}";
         if ($isUpdatingAnExistingOrder) {
             $mailSubject .= ' (mise à jour)';
@@ -262,7 +262,7 @@ class OrderDeliveryHelpers
             ';
         }
 
-        $mailAddressType = '<p><strong>Adresse d\'expédition :</strong></p>';
+        $mailAddressType = '<p><strong>Adresse d’expédition :</strong></p>';
         if ($shipping && $shipping->get("type") === "magasin") {
             $mailAddressType = '<p>Vous avez choisi le retrait en magasin. Vous serez averti par courriel lorsque votre commande sera disponible.</p><p><strong>Adresse de facturation :</strong></p>';
         }
@@ -325,7 +325,7 @@ class OrderDeliveryHelpers
                     '.$mailComment.'
 
                     <p>
-                        Si ce '."n'est".' pas déjà fait, vous pouvez payer votre commande à l\'adresse ci-dessous :<br />
+                        Si ce n’est pas déjà fait, vous pouvez payer votre commande à l’adresse ci-dessous :<br />
                         http://'.$_SERVER['HTTP_HOST'].'/order/'.$order->get('url').'
                     </p>
                     
@@ -340,8 +340,8 @@ class OrderDeliveryHelpers
         $mailer->send($order->get('email'), $mailSubject, $mailBody);
 
         // Send email to seller & log from customer
-        $from = [$site['site_contact'] => trim($order->get('firstname').' '.$order->get('lastname'))];
+        $from = [$site->getContact() => trim($order->get('firstname').' '.$order->get('lastname'))];
         $replyTo = $order->get('email');
-        $mailer->send($site['site_contact'], $mailSubject, $mailBody, $from, ['reply-to' => $replyTo]);
+        $mailer->send($site->getContact(), $mailSubject, $mailBody, $from, ['reply-to' => $replyTo]);
     }
 }
