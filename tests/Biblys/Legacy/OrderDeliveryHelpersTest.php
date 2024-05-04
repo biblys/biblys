@@ -208,22 +208,23 @@ class OrderDeliveryHelpersTest extends TestCase
             </html>
         ';
         
-        $mailer = $this->createMock(Mailer::class);
-        $mailer->expects($this->exactly(2))
-            ->method("send")
-            ->withConsecutive(
-                [
-                    "customer@example.net",
-                    "Commande n° {$order->get("id")}",
-                    $mailBody
-                ],
-                [
-                    "contact@paronymie.fr",
-                    "Commande n° {$order->get("id")}",
-                    $mailBody
-                ]
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->shouldReceive("send")
+            ->with(
+                "customer@example.net",
+                "Commande n° {$order->get("id")}",
+                $mailBody
             )
-            ->willReturn(true);
+            ->andReturn(true);
+        $mailer->shouldReceive("send")
+            ->with(
+                "contact@paronymie.fr",
+                "Commande n° {$order->get("id")}",
+                $mailBody,
+                ['contact@paronymie.fr' => 'Alec'],
+                ['reply-to' => 'customer@example.net'],
+            )
+            ->andReturn(true);
 
         // when
         OrderDeliveryHelpers::sendOrderConfirmationMail(
@@ -234,6 +235,9 @@ class OrderDeliveryHelpersTest extends TestCase
             false,
             $termsPage,
         );
+
+        // then
+        $this->expectNotToPerformAssertions();
     }
 
     /**
@@ -330,22 +334,24 @@ class OrderDeliveryHelpersTest extends TestCase
             </html>
         ';
 
-        $mailer = $this->createMock(Mailer::class);
-        $mailer->expects($this->exactly(2))
-            ->method("send")
-            ->withConsecutive(
-                [
-                    "customer@example.net",
-                    "Commande n° {$order->get("id")} (mise à jour)",
-                    $mailBody
-                ],
-                [
-                    "contact@paronymie.fr",
-                    "Commande n° {$order->get("id")} (mise à jour)",
-                    $mailBody
-                ]
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->shouldReceive("send")
+            ->with(
+                "customer@example.net",
+                "Commande n° {$order->get("id")} (mise à jour)",
+                $mailBody,
             )
-            ->willReturn(true);
+            ->andReturn(true);
+        $mailer->shouldReceive("send")
+            ->with(
+                "contact@paronymie.fr",
+                "Commande n° {$order->get("id")} (mise à jour)",
+                $mailBody,
+                ['contact@paronymie.fr' => 'Alec'],
+                ['reply-to' => 'customer@example.net'],
+            )
+            ->andReturn(true);
+
 
         // when
         OrderDeliveryHelpers::sendOrderConfirmationMail(
@@ -356,5 +362,8 @@ class OrderDeliveryHelpersTest extends TestCase
             true,
             $termsPage,
         );
+
+        // then
+        $this->expectNotToPerformAssertions();
     }
 }
