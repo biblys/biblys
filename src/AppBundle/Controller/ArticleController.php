@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use Article;
 use ArticleManager;
-use AxysAccount;
 use Biblys\Exception\ArticleAlreadyInRayonException;
 use Biblys\Exception\CannotDeleteArticleWithStock;
 use Biblys\Gleeph\GleephAPI;
@@ -51,7 +50,6 @@ use TagManager;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-use AxysAccountManager;
 use Usecase\AddArticleToUserLibraryUsecase;
 use Usecase\BusinessRuleException;
 

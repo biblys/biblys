@@ -12,7 +12,6 @@ $globalSite = LegacyCodeHelper::getGlobalSite();
 $pm = new PublisherManager();
 $cm = new CollectionManager();
 $am = new ArticleManager();
-$um = new AxysAccountManager();
 $sm = new SupplierManager();
 $lm = new LinkManager();
 

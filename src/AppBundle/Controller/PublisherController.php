@@ -33,7 +33,6 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-use AxysAccountManager;
 
 class PublisherController extends Controller
 {
