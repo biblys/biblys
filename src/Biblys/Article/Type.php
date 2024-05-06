@@ -15,6 +15,7 @@ class Type
 
     public const BOOK = 1;
     public const EBOOK = 2;
+    public const EAUDIOBOOK = 11;
 
     public function setId($id): void
     {
@@ -168,7 +169,7 @@ class Type
         $types[] = $type;
 
         $type = new Type();
-        $type->setId(11);
+        $type->setId(self::EAUDIOBOOK);
         $type->setName('Livre audio');
         $type->setTax('EAUDIOBOOK');
         $type->setPhysical(false);
