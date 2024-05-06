@@ -163,7 +163,7 @@ class CurrentUserTest extends TestCase
         // then
         $this->assertEquals(
             $user,
-            $currentUser->getAxysAccount(),
+            $currentUser->getUser(),
             "it sets the user"
         );
         $this->assertNull(

@@ -55,7 +55,7 @@ class UserController extends Controller
     public function account(CurrentUser $currentUser, TemplateService $templateService): Response
     {
         return $templateService->renderResponse("AppBundle:User:account.html.twig", [
-            "user_email" => $currentUser->getAxysAccount()->getEmail(),
+            "user_email" => $currentUser->getUser()->getEmail(),
         ]);
     }
 

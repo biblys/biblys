@@ -122,7 +122,7 @@ class UserControllerTest extends TestCase
 
         $user = ModelFactory::createUser(email: "logged-user@biblys.fr");
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("getAxysAccount")->andReturn($user);
+        $currentUser->expects("getUser")->andReturn($user);
 
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("renderResponse")->with("AppBundle:User:account.html.twig", [

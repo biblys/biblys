@@ -136,17 +136,6 @@ class CurrentUser
         return $this->user;
     }
 
-    public function getAxysAccount(): User
-    {
-        trigger_deprecation(
-            "biblys/biblys",
-            "2.75.0",
-            "CurrentUser->getAxysAccount() is deprecated. Use CurrentUser->getUser() instead.",
-        );
-
-        return $this->getUser();
-    }
-
     /**
      * @throws PropelException
      */

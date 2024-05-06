@@ -33,7 +33,7 @@ $cm = new CartManager();
     if (!$cartId) {
         $cartForCurrentSeller = $cm->get([
             "cart_type" => "shop",
-            "cart_seller_id" => $currentUser->getAxysAccount()->getId(),
+            "cart_seller_id" => $currentUser->getUser()->getId(),
             "cart_count" => 0
         ]);
 
@@ -43,7 +43,7 @@ $cm = new CartManager();
 
         $newCartForCurrentSeller = $cm->create();
         $newCartForCurrentSeller->set("cart_type", "shop");
-        $newCartForCurrentSeller->set("cart_seller_id", $currentUser->getAxysAccount()->getId());
+        $newCartForCurrentSeller->set("cart_seller_id", $currentUser->getUser()->getId());
         $newCartForCurrentSeller = $cm->update($newCartForCurrentSeller);
         return new RedirectResponse("/pages/adm_checkout?cart_id={$newCartForCurrentSeller->get('id')}");
     }
