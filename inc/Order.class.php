@@ -1,9 +1,13 @@
 <?php
 
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Log;
 use Biblys\Service\Mailer;
+use Model\StockQuery;
+use Model\UserQuery;
 use PayPal\Api\Amount;
 use PayPal\Api\Details;
 use PayPal\Api\Item;
@@ -19,6 +23,7 @@ use Payplug\Exception\HttpException;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Product;
 use Stripe\Stripe;
+use Usecase\AddArticleToUserLibraryUsecase;
 
 class Order extends Entity
 {
@@ -829,11 +834,11 @@ class OrderManager extends EntityManager
      * Mark Order as payed (and send ebooks)
      * @param object $order The order to mark as payed
      * @param string $mode Payment mode
+     * @throws Exception
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
     public function markAsPayed(Order $order)
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
-
         $mailer = $this->getMailer();
 
         // Save payment date
@@ -910,10 +915,22 @@ class OrderManager extends EntityManager
         }
 
         // Books & e-books
-        $user = $order->get('user');
-        if ($order->has('user') && !empty($ebooks)) {
-            $um = new AxysAccountManager();
-            $um->addToLibrary($user, array(), $ebooks);
+        if ($order->has('user_id') && !empty($ebooks)) {
+            $config = Config::load();
+            $currentSite = CurrentSite::buildFromConfig($config);
+            $user = UserQuery::create()->findPk($order->get('user_id'));
+
+            $items = array_map(function (Stock $ebook) {
+                return StockQuery::create()->findPk($ebook->get('id'));
+            }, $ebooks);
+
+            $usecase = new AddArticleToUserLibraryUsecase($mailer);
+            $usecase->execute(
+                currentSite: $currentSite,
+                user: $user,
+                items: $items,
+                sendEmail: true,
+            );
         }
 
         // If no physical products, mark order as shipped without warning the user

@@ -15,6 +15,7 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\GleephService;
 use Biblys\Service\LoggerService;
+use Biblys\Service\Mailer;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\MetaTagsService;
 use Biblys\Service\Pagination;
@@ -39,9 +40,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use TagManager;
@@ -49,6 +52,8 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use AxysAccountManager;
+use Usecase\AddArticleToUserLibraryUsecase;
+use Usecase\BusinessRuleException;
 
 class ArticleController extends Controller
 {
@@ -267,6 +272,7 @@ class ArticleController extends Controller
      * @throws RuntimeError
      * @throws LoaderError
      * @throws Exception
+     * @throws TransportExceptionInterface
      */
     public function freeDownloadAction(
         Request $request,
@@ -274,42 +280,44 @@ class ArticleController extends Controller
         CurrentUser $currentUserService,
         MailingListService $mailingListService,
         TemplateService $templateService,
+        Mailer $mailer,
+        Session $session,
         $id,
     ): RedirectResponse|Response
     {
         Controller::authUser($request);
 
         $am = new ArticleManager();
-        /** @var Article $article */
-        $article = $am->getById($id);
+        /** @var Article $articleEntity */
+        $articleEntity = $am->getById($id);
 
-        if (!$article) {
+        if (!$articleEntity) {
             throw new NotFoundException("L'article $id n'existe pas.");
         }
 
-        if (!$article->isDownloadable()) {
-            throw new NotFoundException($article->get('title')." n'est pas téléchargeable.");
+        if (!$articleEntity->isDownloadable()) {
+            throw new NotFoundException($articleEntity->get('title')." n'est pas téléchargeable.");
         }
 
-        if (!$article->isFree()) {
-            throw new NotFoundException($article->get('title')." n'est pas gratuit.");
+        if (!$articleEntity->isFree()) {
+            throw new NotFoundException($articleEntity->get('title')." n'est pas gratuit.");
         }
 
-        if (!$article->isAvailable()) {
-            throw new NotFoundException($article->get('title')." n'est pas disponible.");
+        if (!$articleEntity->isAvailable()) {
+            throw new NotFoundException($articleEntity->get('title')." n'est pas disponible.");
         }
 
         $currentUser = $currentUserService->getUser();
         $currentUserPurchasesForArticle = StockQuery::create()
             ->filterBySite($currentSiteService->getSite())
             ->filterByUser($currentUser)
-            ->filterByArticleId($article->get("id"))
+            ->filterByArticleId($articleEntity->get("id"))
             ->count();
         if ($currentUserPurchasesForArticle > 0) {
             return new RedirectResponse("/pages/log_myebooks");
         }
 
-        $request->attributes->set("page_title", "Téléchargement gratuit de {$article->get('title')}");
+        $request->attributes->set("page_title", "Téléchargement gratuit de {$articleEntity->get('title')}");
 
         $newsletter = false;
         $newsletter_checked = false;
@@ -336,17 +344,24 @@ class ArticleController extends Controller
                 }
             }
 
-            // Add book to library
-            $um = new AxysAccountManager();
-            /** @var AxysAccount $current_user */
-            $current_user = $um->getById($currentUser->getId());
-            $um->addToLibrary($current_user, [$article], [], false, ['send_email' => false]);
+            $article = ArticleQuery::create()->findPk($articleEntity->get("id"));
+            try {
+                $usecase = new AddArticleToUserLibraryUsecase($mailer);
+                $usecase->execute(
+                    currentSite: $currentSiteService,
+                    user: $currentUser,
+                    article: $article,
+                );
+            } catch (BusinessRuleException $exception) {
+                $errorMessage = "Ajout à la bibliothèque impossible : {$exception->getMessage()}";
+                $session->getFlashBag()->add("error", $errorMessage);
+            }
 
             return new RedirectResponse("/pages/log_myebooks");
         }
 
         return $templateService->renderResponse('AppBundle:Article:freeDownload.html.twig', [
-            'article' => $article,
+            'article' => $articleEntity,
             'newsletter' => $newsletter,
             'newsletter_checked' => $newsletter_checked,
         ]);

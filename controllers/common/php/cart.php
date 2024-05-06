@@ -96,9 +96,6 @@ return function (
         $purchased = null;
         if ($type->getId() == 2) {
             $article_type = ' (numérique)';
-            if (LegacyCodeHelper::getGlobalVisitor()->hasPurchased($article)) {
-                $purchased = '<p class="warning left" title="Vous avez déjà acheté ce titre. Juste pour info.">Déjà acheté !</p>';
-            }
         }
 
         // Physical or downloadable types

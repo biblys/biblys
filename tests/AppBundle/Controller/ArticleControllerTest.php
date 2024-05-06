@@ -8,6 +8,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\LoggerService;
+use Biblys\Service\Mailer;
 use Biblys\Service\MailingList\MailingListInterface;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\MetaTagsService;
@@ -26,10 +27,12 @@ use Propel\Runtime\Exception\PropelException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -634,6 +637,7 @@ class ArticleControllerTest extends TestCase
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
+     * @throws TransportExceptionInterface
      */
     public function testFreeDownloadAction()
     {
@@ -648,6 +652,8 @@ class ArticleControllerTest extends TestCase
         $templateService
             ->shouldReceive("renderResponse")
             ->andReturn(new Response(""));
+        $mailer = Mockery::mock(Mailer::class);
+        $session = Mockery::mock(Session::class);
 
         // when
         $response = $controller->freeDownloadAction(
@@ -656,6 +662,8 @@ class ArticleControllerTest extends TestCase
             $currentUserService,
             $mailingListService,
             $templateService,
+            $mailer,
+            $session,
             $article->getId(),
         );
 
@@ -672,6 +680,7 @@ class ArticleControllerTest extends TestCase
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
+     * @throws TransportExceptionInterface
      */
     public function testFreeDownloadActionWithNewsletterPrompt()
     {
@@ -701,6 +710,8 @@ class ArticleControllerTest extends TestCase
         $templateService
             ->shouldReceive("renderResponse")
             ->andReturn(new Response("Je souhaite recevoir la newsletter pour être tenu·e"));
+        $mailer = Mockery::mock(Mailer::class);
+        $session = Mockery::mock(Session::class);
 
         // when
         $response = $controller->freeDownloadAction(
@@ -709,6 +720,8 @@ class ArticleControllerTest extends TestCase
             $currentUserService,
             $mailingListService,
             $templateService,
+            $mailer,
+            $session,
             $article->getId(),
         );
 
@@ -726,6 +739,7 @@ class ArticleControllerTest extends TestCase
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
+     * @throws TransportExceptionInterface
      */
     public function testFreeDownloadActionWhileAlreadyInLibrary()
     {
@@ -744,6 +758,8 @@ class ArticleControllerTest extends TestCase
         $mailingListService = $this->createMock(MailingListService::class);
         $mailingListService->method("getMailingList")->willReturn($mailingList);
         $templateService = Mockery::mock(TemplateService::class);
+        $mailer = Mockery::mock(Mailer::class);
+        $session = Mockery::mock(Session::class);
 
         // when
         $response = $controller->freeDownloadAction(
@@ -752,6 +768,8 @@ class ArticleControllerTest extends TestCase
             $currentUserService,
             $mailingListService,
             $templateService,
+            $mailer,
+            $session,
             $article->getId(),
         );
 
@@ -765,6 +783,7 @@ class ArticleControllerTest extends TestCase
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
+     * @throws TransportExceptionInterface
      */
     public function testFreeDownloadActionForAnonymousUser()
     {
@@ -780,6 +799,8 @@ class ArticleControllerTest extends TestCase
         $currentUserService = $this->createMock(CurrentUser::class);
         $mailingListService = $this->createMock(MailingListService::class);
         $templateService = Mockery::mock(TemplateService::class);
+        $mailer = Mockery::mock(Mailer::class);
+        $session = Mockery::mock(Session::class);
 
         // when
         $controller->freeDownloadAction(
@@ -788,6 +809,8 @@ class ArticleControllerTest extends TestCase
             $currentUserService,
             $mailingListService,
             $templateService,
+            $mailer,
+            $session,
             $article->getId(),
         );
     }
