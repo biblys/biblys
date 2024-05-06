@@ -233,6 +233,16 @@ class OpenIDConnectController extends Controller
                 $cart->save($con);
             }
 
+            $sellerCarts = CartQuery::create()
+                ->filterBySite($currentSite->getSite())
+                ->filterBySellerId($externalId)
+                ->find();
+            foreach ($sellerCarts as $cart) {
+                $cart->setSellerUser($user);
+                $cart->setAxysAccountId(null);
+                $cart->save($con);
+            }
+
             $customers = CustomerQuery::create()
                 ->filterBySite($currentSite->getSite())
                 ->filterByAxysAccountId($externalId)

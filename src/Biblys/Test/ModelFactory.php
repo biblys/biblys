@@ -141,6 +141,7 @@ class ModelFactory
         Site        $site = null,
         User        $user = null,
         int         $axysAccountId = null,
+        int         $sellerId = null,
         string      $uniqueId = null,
         int         $amount = 0,
         int         $count = 0,
@@ -151,6 +152,7 @@ class ModelFactory
         $cart->setSite($site ?? self::createSite());
         $cart->setUser($user);
         $cart->setAxysAccountId($axysAccountId);
+        $cart->setSellerId($sellerId); // axys_account_id
         $cart->setAmount($amount);
         $cart->setCount($count);
         $cart->save();

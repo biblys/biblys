@@ -194,6 +194,7 @@ class OpenIDConnectControllerTest extends TestCase
         );
 
         $cart = ModelFactory::createCart(site: $site, axysAccountId: $externalId);
+        $sellerCart = ModelFactory::createCart(site: $site, sellerId: $externalId);
         $customer = ModelFactory::createCustomer(site: $site, axysAccountId: $externalId);
         $list = ModelFactory::createStockItemList(site: $site, axysAccountId: $externalId);
         $option = ModelFactory::createUserOption(site: $site, axysAccountId: $externalId);
@@ -245,6 +246,10 @@ class OpenIDConnectControllerTest extends TestCase
         $cart->reload();
         $this->assertEquals($user->getId(), $cart->getUserId());
         $this->assertNull($cart->getAxysAccountId());
+
+        $sellerCart->reload();
+        $this->assertEquals($user->getId(), $sellerCart->getSellerUserId());
+        $this->assertNull($sellerCart->getAxysAccountId());
 
         $customer->reload();
         $this->assertEquals($user->getId(), $customer->getUserId());
