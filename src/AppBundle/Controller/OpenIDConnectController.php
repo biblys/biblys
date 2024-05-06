@@ -113,6 +113,7 @@ class OpenIDConnectController extends Controller
 
             // Save user last login date
             $user = $authenticationMethod->getUser();
+            $user->setEmail($email);
             $user->setLastLoggedAt(new DateTime());
             $user->save();
 

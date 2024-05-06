@@ -180,6 +180,52 @@ class OpenIDConnectControllerTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
+    public function testCallbackWithUpdatedEmail()
+    {
+        // given
+        $identityProvider = "axys";
+        $externalId = "AXYS5678";
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $openIDConnectProviderService = $this->_buildOIDCProviderService(
+            $externalId,
+            email: "new-email@example.net",
+        );
+
+        $user = ModelFactory::createUser(site: $site, email: "old-email@example.net");
+        ModelFactory::createAuthenticationMethod(
+            site: $site,
+            user: $user,
+            identityProvider: $identityProvider,
+            externalId: $externalId,
+        );
+
+        $request = self::_buildCallbackRequest(returnUrl: "/my-account");
+        $controller = new OpenIDConnectController();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("setUser")->with($user);
+        $currentUser->expects("transfertVisitorCartToUser")->with("visitor_token");
+
+        // when
+        $controller->callback(
+            request: $request,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
+            openIDConnectProviderService: $openIDConnectProviderService,
+            templateService: $this->createMock(TemplateService::class),
+        );
+
+        // then
+        $user->reload();
+        $this->assertEquals("new-email@example.net", $user->getEmail());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
     public function testCallbackWithUserImport()
     {
         // given
