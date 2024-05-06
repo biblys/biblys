@@ -3,16 +3,12 @@
 namespace Biblys\Test;
 
 use Biblys\Article\Type;
-use Biblys\Service\Config;
 use Biblys\Service\Slug\SlugService;
 use DateTime;
-use Exception;
 use Model\Alert;
 use Model\Article;
 use Model\ArticleCategory;
 use Model\AuthenticationMethod;
-use Model\AxysAccount;
-use Model\AxysAccountQuery;
 use Model\Customer;
 use Model\Invitation;
 use Model\BookCollection;
@@ -33,7 +29,6 @@ use Model\Role;
 use Model\Session;
 use Model\ShippingFee;
 use Model\Site;
-use Model\SiteQuery;
 use Model\SpecialOffer;
 use Model\Stock;
 use Model\StockItemList;
@@ -46,29 +41,6 @@ use Propel\Runtime\Exception\PropelException;
 
 class ModelFactory
 {
-    /**
-     * @throws PropelException
-     * @throws Exception
-     */
-    public static function createAdminAxysAccount(Site $site = null): AxysAccount
-    {
-        $user = new AxysAccount();
-        $user->save();
-
-        $config = Config::load();
-        if ($site === null) {
-            $site = SiteQuery::create()->findOneById($config->get("site"));
-        }
-
-        $right = new Right();
-        $right->setAxysAccount($user);
-        $right->setSite($site);
-        $right->setCurrent(true);
-        $right->save();
-
-        return $user;
-    }
-
     /**
      * @throws PropelException
      */
@@ -387,31 +359,6 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createAxysAccount(
-        string $email = "user@biblys.fr",
-        string $username = null,
-        string $password = "password",
-        string $emailKey = null
-    ): AxysAccount
-    {
-        $userByEmail = AxysAccountQuery::create()->findOneByEmail($email);
-        if ($userByEmail) {
-            return $userByEmail;
-        }
-
-        $user = new AxysAccount();
-        $user->setEmail($email);
-        $user->setUsername($username);
-        $user->setPassword(password_hash($password, PASSWORD_DEFAULT));
-        $user->setEmailKey($emailKey);
-        $user->save();
-
-        return $user;
-    }
-
-    /**
-     * @throws PropelException
-     */
     public static function createUserSession(User $user = null): Session
     {
         if (!$user) {
@@ -437,23 +384,6 @@ class ModelFactory
         $option->setKey($key);
         $option->setValue($value);
         $option->save();
-    }
-
-    /**
-     * @throws PropelException
-     */
-    public static function createPublisherAxysAccount(Publisher $publisher): AxysAccount
-    {
-        $user = new AxysAccount();
-        $user->save();
-
-        $right = new Right();
-        $right->setAxysAccount($user);
-        $right->setPublisherId($publisher->getId());
-        $right->setCurrent(true);
-        $right->save();
-
-        return $user;
     }
 
     /**

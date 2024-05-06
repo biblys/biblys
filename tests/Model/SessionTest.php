@@ -12,32 +12,6 @@ require_once __DIR__."/../setUp.php";
 
 class SessionTest extends TestCase
 {
-    /**
-     * @throws PropelException
-     */
-    public function testBuildForUserAndCurrentSite()
-    {
-        // given
-        $user = ModelFactory::createAxysAccount();
-        $site = ModelFactory::createSite();
-        $currentSite = new CurrentSite($site);
-        $expiresAt = new DateTime("+1 day");
-
-        // when
-        $session1 = new Session();
-        $session1->setAxysAccount($user);
-        $session1->setSite($currentSite->getSite());
-        $session1->setToken(Session::generateToken());
-        $session1->setExpiresAt($expiresAt);
-        $session = $session1;
-
-        // then
-        $this->assertNotNull($session->getToken(), "it creates a token");
-        $this->assertEquals($user, $session->getAxysAccount(), "it associates given user");
-        $this->assertEquals($site, $session->getSite(), "it associates current site");
-        $this->assertEquals($expiresAt, $session->getExpiresAt(), "it sets an expire date in the future");
-    }
-
     public function testGenerateToken()
     {
         // when
