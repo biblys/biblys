@@ -5,8 +5,6 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
-use Model\AxysAccount as ChildAxysAccount;
-use Model\AxysAccountQuery as ChildAxysAccountQuery;
 use Model\Cart as ChildCart;
 use Model\CartQuery as ChildCartQuery;
 use Model\Site as ChildSite;
@@ -232,11 +230,6 @@ abstract class Cart implements ActiveRecordInterface
      * @var        ChildSite
      */
     protected $aSite;
-
-    /**
-     * @var        ChildAxysAccount
-     */
-    protected $aAxysAccount;
 
     /**
      * @var        ObjectCollection|ChildStock[] Collection to store aggregation of ChildStock objects.
@@ -842,10 +835,6 @@ abstract class Cart implements ActiveRecordInterface
             $this->modifiedColumns[CartTableMap::COL_AXYS_ACCOUNT_ID] = true;
         }
 
-        if ($this->aAxysAccount !== null && $this->aAxysAccount->getId() !== $v) {
-            $this->aAxysAccount = null;
-        }
-
         return $this;
     }
 
@@ -1333,9 +1322,6 @@ abstract class Cart implements ActiveRecordInterface
         if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
             $this->aSite = null;
         }
-        if ($this->aAxysAccount !== null && $this->axys_account_id !== $this->aAxysAccount->getId()) {
-            $this->aAxysAccount = null;
-        }
         if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
             $this->aUser = null;
         }
@@ -1384,7 +1370,6 @@ abstract class Cart implements ActiveRecordInterface
             $this->aUser = null;
             $this->aSellerUser = null;
             $this->aSite = null;
-            $this->aAxysAccount = null;
             $this->collStocks = null;
 
         } // if (deep)
@@ -1527,13 +1512,6 @@ abstract class Cart implements ActiveRecordInterface
                     $affectedRows += $this->aSite->save($con);
                 }
                 $this->setSite($this->aSite);
-            }
-
-            if ($this->aAxysAccount !== null) {
-                if ($this->aAxysAccount->isModified() || $this->aAxysAccount->isNew()) {
-                    $affectedRows += $this->aAxysAccount->save($con);
-                }
-                $this->setAxysAccount($this->aAxysAccount);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -1983,21 +1961,6 @@ abstract class Cart implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aSite->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->aAxysAccount) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'axysAccount';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'axys_accounts';
-                        break;
-                    default:
-                        $key = 'AxysAccount';
-                }
-
-                $result[$key] = $this->aAxysAccount->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collStocks) {
 
@@ -2601,57 +2564,6 @@ abstract class Cart implements ActiveRecordInterface
         return $this->aSite;
     }
 
-    /**
-     * Declares an association between this object and a ChildAxysAccount object.
-     *
-     * @param ChildAxysAccount|null $v
-     * @return $this The current object (for fluent API support)
-     * @throws \Propel\Runtime\Exception\PropelException
-     */
-    public function setAxysAccount(ChildAxysAccount $v = null)
-    {
-        if ($v === null) {
-            $this->setAxysAccountId(NULL);
-        } else {
-            $this->setAxysAccountId($v->getId());
-        }
-
-        $this->aAxysAccount = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildAxysAccount object, it will not be re-added.
-        if ($v !== null) {
-            $v->addCart($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildAxysAccount object
-     *
-     * @param ConnectionInterface $con Optional Connection object.
-     * @return ChildAxysAccount|null The associated ChildAxysAccount object.
-     * @throws \Propel\Runtime\Exception\PropelException
-     */
-    public function getAxysAccount(?ConnectionInterface $con = null)
-    {
-        if ($this->aAxysAccount === null && ($this->axys_account_id != 0)) {
-            $this->aAxysAccount = ChildAxysAccountQuery::create()->findPk($this->axys_account_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aAxysAccount->addCarts($this);
-             */
-        }
-
-        return $this->aAxysAccount;
-    }
-
 
     /**
      * Initializes a collection based on the name of a relation.
@@ -2986,32 +2898,6 @@ abstract class Cart implements ActiveRecordInterface
         return $this->getStocks($query, $con);
     }
 
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Cart is new, it will return
-     * an empty collection; or if this Cart has previously
-     * been saved, it will retrieve related Stocks from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Cart.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param ConnectionInterface $con optional connection object
-     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildStock[] List of ChildStock objects
-     * @phpstan-return ObjectCollection&\Traversable<ChildStock}> List of ChildStock objects
-     */
-    public function getStocksJoinAxysAccount(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildStockQuery::create(null, $criteria);
-        $query->joinWith('AxysAccount', $joinBehavior);
-
-        return $this->getStocks($query, $con);
-    }
-
     /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
@@ -3029,9 +2915,6 @@ abstract class Cart implements ActiveRecordInterface
         }
         if (null !== $this->aSite) {
             $this->aSite->removeCart($this);
-        }
-        if (null !== $this->aAxysAccount) {
-            $this->aAxysAccount->removeCart($this);
         }
         $this->cart_id = null;
         $this->cart_uid = null;
@@ -3086,7 +2969,6 @@ abstract class Cart implements ActiveRecordInterface
         $this->aUser = null;
         $this->aSellerUser = null;
         $this->aSite = null;
-        $this->aAxysAccount = null;
         return $this;
     }
 

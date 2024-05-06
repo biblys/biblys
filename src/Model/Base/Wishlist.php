@@ -5,8 +5,6 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
-use Model\AxysAccount as ChildAxysAccount;
-use Model\AxysAccountQuery as ChildAxysAccountQuery;
 use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
 use Model\User as ChildUser;
@@ -141,11 +139,6 @@ abstract class Wishlist implements ActiveRecordInterface
      * @var        ChildUser
      */
     protected $aUser;
-
-    /**
-     * @var        ChildAxysAccount
-     */
-    protected $aAxysAccount;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -576,10 +569,6 @@ abstract class Wishlist implements ActiveRecordInterface
             $this->modifiedColumns[WishlistTableMap::COL_AXYS_ACCOUNT_ID] = true;
         }
 
-        if ($this->aAxysAccount !== null && $this->aAxysAccount->getId() !== $v) {
-            $this->aAxysAccount = null;
-        }
-
         return $this;
     }
 
@@ -825,9 +814,6 @@ abstract class Wishlist implements ActiveRecordInterface
         if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
             $this->aSite = null;
         }
-        if ($this->aAxysAccount !== null && $this->axys_account_id !== $this->aAxysAccount->getId()) {
-            $this->aAxysAccount = null;
-        }
         if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
             $this->aUser = null;
         }
@@ -872,7 +858,6 @@ abstract class Wishlist implements ActiveRecordInterface
 
             $this->aSite = null;
             $this->aUser = null;
-            $this->aAxysAccount = null;
         } // if (deep)
     }
 
@@ -1006,13 +991,6 @@ abstract class Wishlist implements ActiveRecordInterface
                     $affectedRows += $this->aUser->save($con);
                 }
                 $this->setUser($this->aUser);
-            }
-
-            if ($this->aAxysAccount !== null) {
-                if ($this->aAxysAccount->isModified() || $this->aAxysAccount->isNew()) {
-                    $affectedRows += $this->aAxysAccount->save($con);
-                }
-                $this->setAxysAccount($this->aAxysAccount);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -1296,21 +1274,6 @@ abstract class Wishlist implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->aAxysAccount) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'axysAccount';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'axys_accounts';
-                        break;
-                    default:
-                        $key = 'AxysAccount';
-                }
-
-                $result[$key] = $this->aAxysAccount->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1725,57 +1688,6 @@ abstract class Wishlist implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildAxysAccount object.
-     *
-     * @param ChildAxysAccount|null $v
-     * @return $this The current object (for fluent API support)
-     * @throws \Propel\Runtime\Exception\PropelException
-     */
-    public function setAxysAccount(ChildAxysAccount $v = null)
-    {
-        if ($v === null) {
-            $this->setAxysAccountId(NULL);
-        } else {
-            $this->setAxysAccountId($v->getId());
-        }
-
-        $this->aAxysAccount = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildAxysAccount object, it will not be re-added.
-        if ($v !== null) {
-            $v->addWishlist($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildAxysAccount object
-     *
-     * @param ConnectionInterface $con Optional Connection object.
-     * @return ChildAxysAccount|null The associated ChildAxysAccount object.
-     * @throws \Propel\Runtime\Exception\PropelException
-     */
-    public function getAxysAccount(?ConnectionInterface $con = null)
-    {
-        if ($this->aAxysAccount === null && ($this->axys_account_id != 0)) {
-            $this->aAxysAccount = ChildAxysAccountQuery::create()->findPk($this->axys_account_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aAxysAccount->addWishlists($this);
-             */
-        }
-
-        return $this->aAxysAccount;
-    }
-
-    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -1789,9 +1701,6 @@ abstract class Wishlist implements ActiveRecordInterface
         }
         if (null !== $this->aUser) {
             $this->aUser->removeWishlist($this);
-        }
-        if (null !== $this->aAxysAccount) {
-            $this->aAxysAccount->removeWishlist($this);
         }
         $this->wishlist_id = null;
         $this->site_id = null;
@@ -1827,7 +1736,6 @@ abstract class Wishlist implements ActiveRecordInterface
 
         $this->aSite = null;
         $this->aUser = null;
-        $this->aAxysAccount = null;
         return $this;
     }
 

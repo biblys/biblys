@@ -215,7 +215,7 @@ class AxysConsentTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('app_id', 'AppId', 'INTEGER', 'axys_apps', 'id', true, null, null);
-        $this->addForeignKey('axys_account_id', 'AxysAccountId', 'INTEGER', 'axys_accounts', 'axys_account_id', true, null, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', true, null, null);
         $this->addColumn('scopes', 'Scopes', 'VARCHAR', true, 256, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
@@ -233,13 +233,6 @@ class AxysConsentTableMap extends TableMap
   array (
     0 => ':app_id',
     1 => ':id',
-  ),
-), null, null, null, false);
-        $this->addRelation('AxysAccount', '\\Model\\AxysAccount', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':axys_account_id',
-    1 => ':axys_account_id',
   ),
 ), null, null, null, false);
     }

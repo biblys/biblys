@@ -256,7 +256,7 @@ class WishTableMap extends TableMap
         // columns
         $this->addPrimaryKey('wish_id', 'Id', 'INTEGER', true, 10, null);
         $this->addColumn('wishlist_id', 'WishlistId', 'INTEGER', false, null, null);
-        $this->addForeignKey('axys_account_id', 'AxysAccountId', 'INTEGER', 'axys_accounts', 'axys_account_id', false, 10, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
         $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
         $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
         $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, 10, null);
@@ -277,13 +277,6 @@ class WishTableMap extends TableMap
   array (
     0 => ':user_id',
     1 => ':id',
-  ),
-), null, null, null, false);
-        $this->addRelation('AxysAccount', '\\Model\\AxysAccount', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':axys_account_id',
-    1 => ':axys_account_id',
   ),
 ), null, null, null, false);
     }

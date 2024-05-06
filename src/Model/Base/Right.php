@@ -5,8 +5,6 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
-use Model\AxysAccount as ChildAxysAccount;
-use Model\AxysAccountQuery as ChildAxysAccountQuery;
 use Model\Publisher as ChildPublisher;
 use Model\PublisherQuery as ChildPublisherQuery;
 use Model\RightQuery as ChildRightQuery;
@@ -156,11 +154,6 @@ abstract class Right implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $right_updated;
-
-    /**
-     * @var        ChildAxysAccount
-     */
-    protected $aAxysAccount;
 
     /**
      * @var        ChildUser
@@ -646,10 +639,6 @@ abstract class Right implements ActiveRecordInterface
             $this->modifiedColumns[RightTableMap::COL_AXYS_ACCOUNT_ID] = true;
         }
 
-        if ($this->aAxysAccount !== null && $this->aAxysAccount->getId() !== $v) {
-            $this->aAxysAccount = null;
-        }
-
         return $this;
     }
 
@@ -977,9 +966,6 @@ abstract class Right implements ActiveRecordInterface
      */
     public function ensureConsistency(): void
     {
-        if ($this->aAxysAccount !== null && $this->axys_account_id !== $this->aAxysAccount->getId()) {
-            $this->aAxysAccount = null;
-        }
         if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
             $this->aUser = null;
         }
@@ -1028,7 +1014,6 @@ abstract class Right implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aAxysAccount = null;
             $this->aUser = null;
             $this->aSite = null;
             $this->aPublisher = null;
@@ -1152,13 +1137,6 @@ abstract class Right implements ActiveRecordInterface
             // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
-
-            if ($this->aAxysAccount !== null) {
-                if ($this->aAxysAccount->isModified() || $this->aAxysAccount->isNew()) {
-                    $affectedRows += $this->aAxysAccount->save($con);
-                }
-                $this->setAxysAccount($this->aAxysAccount);
-            }
 
             if ($this->aUser !== null) {
                 if ($this->aUser->isModified() || $this->aUser->isNew()) {
@@ -1466,21 +1444,6 @@ abstract class Right implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aAxysAccount) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'axysAccount';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'axys_accounts';
-                        break;
-                    default:
-                        $key = 'AxysAccount';
-                }
-
-                $result[$key] = $this->aAxysAccount->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
             if (null !== $this->aUser) {
 
                 switch ($keyType) {
@@ -1867,57 +1830,6 @@ abstract class Right implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildAxysAccount object.
-     *
-     * @param ChildAxysAccount|null $v
-     * @return $this The current object (for fluent API support)
-     * @throws \Propel\Runtime\Exception\PropelException
-     */
-    public function setAxysAccount(ChildAxysAccount $v = null)
-    {
-        if ($v === null) {
-            $this->setAxysAccountId(NULL);
-        } else {
-            $this->setAxysAccountId($v->getId());
-        }
-
-        $this->aAxysAccount = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildAxysAccount object, it will not be re-added.
-        if ($v !== null) {
-            $v->addRight($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildAxysAccount object
-     *
-     * @param ConnectionInterface $con Optional Connection object.
-     * @return ChildAxysAccount|null The associated ChildAxysAccount object.
-     * @throws \Propel\Runtime\Exception\PropelException
-     */
-    public function getAxysAccount(?ConnectionInterface $con = null)
-    {
-        if ($this->aAxysAccount === null && ($this->axys_account_id != 0)) {
-            $this->aAxysAccount = ChildAxysAccountQuery::create()->findPk($this->axys_account_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aAxysAccount->addRights($this);
-             */
-        }
-
-        return $this->aAxysAccount;
-    }
-
-    /**
      * Declares an association between this object and a ChildUser object.
      *
      * @param ChildUser|null $v
@@ -2079,9 +1991,6 @@ abstract class Right implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aAxysAccount) {
-            $this->aAxysAccount->removeRight($this);
-        }
         if (null !== $this->aUser) {
             $this->aUser->removeRight($this);
         }
@@ -2127,7 +2036,6 @@ abstract class Right implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aAxysAccount = null;
         $this->aUser = null;
         $this->aSite = null;
         $this->aPublisher = null;

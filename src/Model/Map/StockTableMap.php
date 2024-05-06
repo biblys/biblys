@@ -714,7 +714,7 @@ class StockTableMap extends TableMap
         $this->addForeignKey('article_id', 'ArticleId', 'INTEGER', 'articles', 'article_id', false, 10, null);
         $this->addColumn('campaign_id', 'CampaignId', 'INTEGER', false, 10, null);
         $this->addColumn('reward_id', 'RewardId', 'INTEGER', false, 10, null);
-        $this->addForeignKey('axys_account_id', 'AxysAccountId', 'INTEGER', 'axys_accounts', 'axys_account_id', false, 10, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
         $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
         $this->addColumn('customer_id', 'CustomerId', 'INTEGER', false, 10, null);
         $this->addColumn('wish_id', 'WishId', 'INTEGER', false, 10, null);
@@ -788,13 +788,6 @@ class StockTableMap extends TableMap
   array (
     0 => ':article_id',
     1 => ':article_id',
-  ),
-), null, null, null, false);
-        $this->addRelation('AxysAccount', '\\Model\\AxysAccount', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':axys_account_id',
-    1 => ':axys_account_id',
   ),
 ), null, null, null, false);
     }

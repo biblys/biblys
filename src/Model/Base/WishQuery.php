@@ -57,17 +57,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildWishQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
  * @method     ChildWishQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
  *
- * @method     ChildWishQuery leftJoinAxysAccount($relationAlias = null) Adds a LEFT JOIN clause to the query using the AxysAccount relation
- * @method     ChildWishQuery rightJoinAxysAccount($relationAlias = null) Adds a RIGHT JOIN clause to the query using the AxysAccount relation
- * @method     ChildWishQuery innerJoinAxysAccount($relationAlias = null) Adds a INNER JOIN clause to the query using the AxysAccount relation
- *
- * @method     ChildWishQuery joinWithAxysAccount($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the AxysAccount relation
- *
- * @method     ChildWishQuery leftJoinWithAxysAccount() Adds a LEFT JOIN clause and with to the query using the AxysAccount relation
- * @method     ChildWishQuery rightJoinWithAxysAccount() Adds a RIGHT JOIN clause and with to the query using the AxysAccount relation
- * @method     ChildWishQuery innerJoinWithAxysAccount() Adds a INNER JOIN clause and with to the query using the AxysAccount relation
- *
- * @method     \Model\UserQuery|\Model\AxysAccountQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildWish|null findOne(?ConnectionInterface $con = null) Return the first ChildWish matching the query
  * @method     ChildWish findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildWish matching the query, or a new ChildWish object populated from the query conditions when no match is found
@@ -404,8 +394,6 @@ abstract class WishQuery extends ModelCriteria
      * $query->filterByAxysAccountId(array(12, 34)); // WHERE axys_account_id IN (12, 34)
      * $query->filterByAxysAccountId(array('min' => 12)); // WHERE axys_account_id > 12
      * </code>
-     *
-     * @see       filterByAxysAccount()
      *
      * @param mixed $axysAccountId The value to use as filter.
      *              Use scalar values for equality.
@@ -878,181 +866,6 @@ abstract class WishQuery extends ModelCriteria
     {
         /** @var $q \Model\UserQuery */
         $q = $this->useInQuery('User', $modelAlias, $queryClass, 'NOT IN');
-        return $q;
-    }
-
-    /**
-     * Filter the query by a related \Model\AxysAccount object
-     *
-     * @param \Model\AxysAccount|ObjectCollection $axysAccount The related object(s) to use as filter
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByAxysAccount($axysAccount, ?string $comparison = null)
-    {
-        if ($axysAccount instanceof \Model\AxysAccount) {
-            return $this
-                ->addUsingAlias(WishTableMap::COL_AXYS_ACCOUNT_ID, $axysAccount->getId(), $comparison);
-        } elseif ($axysAccount instanceof ObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            $this
-                ->addUsingAlias(WishTableMap::COL_AXYS_ACCOUNT_ID, $axysAccount->toKeyValue('PrimaryKey', 'Id'), $comparison);
-
-            return $this;
-        } else {
-            throw new PropelException('filterByAxysAccount() only accepts arguments of type \Model\AxysAccount or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the AxysAccount relation
-     *
-     * @param string|null $relationAlias Optional alias for the relation
-     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function joinAxysAccount(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('AxysAccount');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'AxysAccount');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the AxysAccount relation AxysAccount object
-     *
-     * @see useQuery()
-     *
-     * @param string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \Model\AxysAccountQuery A secondary query class using the current class as primary query
-     */
-    public function useAxysAccountQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        return $this
-            ->joinAxysAccount($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'AxysAccount', '\Model\AxysAccountQuery');
-    }
-
-    /**
-     * Use the AxysAccount relation AxysAccount object
-     *
-     * @param callable(\Model\AxysAccountQuery):\Model\AxysAccountQuery $callable A function working on the related query
-     *
-     * @param string|null $relationAlias optional alias for the relation
-     *
-     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this
-     */
-    public function withAxysAccountQuery(
-        callable $callable,
-        string $relationAlias = null,
-        ?string $joinType = Criteria::LEFT_JOIN
-    ) {
-        $relatedQuery = $this->useAxysAccountQuery(
-            $relationAlias,
-            $joinType
-        );
-        $callable($relatedQuery);
-        $relatedQuery->endUse();
-
-        return $this;
-    }
-
-    /**
-     * Use the relation to AxysAccount table for an EXISTS query.
-     *
-     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
-     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
-     *
-     * @return \Model\AxysAccountQuery The inner query object of the EXISTS statement
-     */
-    public function useAxysAccountExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
-    {
-        /** @var $q \Model\AxysAccountQuery */
-        $q = $this->useExistsQuery('AxysAccount', $modelAlias, $queryClass, $typeOfExists);
-        return $q;
-    }
-
-    /**
-     * Use the relation to AxysAccount table for a NOT EXISTS query.
-     *
-     * @see useAxysAccountExistsQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
-     *
-     * @return \Model\AxysAccountQuery The inner query object of the NOT EXISTS statement
-     */
-    public function useAxysAccountNotExistsQuery($modelAlias = null, $queryClass = null)
-    {
-        /** @var $q \Model\AxysAccountQuery */
-        $q = $this->useExistsQuery('AxysAccount', $modelAlias, $queryClass, 'NOT EXISTS');
-        return $q;
-    }
-
-    /**
-     * Use the relation to AxysAccount table for an IN query.
-     *
-     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
-     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
-     *
-     * @return \Model\AxysAccountQuery The inner query object of the IN statement
-     */
-    public function useInAxysAccountQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
-    {
-        /** @var $q \Model\AxysAccountQuery */
-        $q = $this->useInQuery('AxysAccount', $modelAlias, $queryClass, $typeOfIn);
-        return $q;
-    }
-
-    /**
-     * Use the relation to AxysAccount table for a NOT IN query.
-     *
-     * @see useAxysAccountInQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
-     *
-     * @return \Model\AxysAccountQuery The inner query object of the NOT IN statement
-     */
-    public function useNotInAxysAccountQuery($modelAlias = null, $queryClass = null)
-    {
-        /** @var $q \Model\AxysAccountQuery */
-        $q = $this->useInQuery('AxysAccount', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 

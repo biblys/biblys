@@ -400,7 +400,7 @@ class CartTableMap extends TableMap
         $this->addPrimaryKey('cart_id', 'Id', 'INTEGER', true, 10, null);
         $this->addColumn('cart_uid', 'Uid', 'VARCHAR', false, 32, null);
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
-        $this->addForeignKey('axys_account_id', 'AxysAccountId', 'INTEGER', 'axys_accounts', 'axys_account_id', false, 10, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
         $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
         $this->addForeignKey('seller_user_id', 'SellerUserId', 'INTEGER', 'users', 'id', false, 10, null);
         $this->addColumn('cart_seller_id', 'SellerId', 'INTEGER', false, 10, null);
@@ -445,13 +445,6 @@ class CartTableMap extends TableMap
   array (
     0 => ':site_id',
     1 => ':site_id',
-  ),
-), null, null, null, false);
-        $this->addRelation('AxysAccount', '\\Model\\AxysAccount', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':axys_account_id',
-    1 => ':axys_account_id',
   ),
 ), null, null, null, false);
         $this->addRelation('Stock', '\\Model\\Stock', RelationMap::ONE_TO_MANY, array (

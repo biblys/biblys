@@ -256,7 +256,7 @@ class WishlistTableMap extends TableMap
         // columns
         $this->addPrimaryKey('wishlist_id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
-        $this->addForeignKey('axys_account_id', 'AxysAccountId', 'INTEGER', 'axys_accounts', 'axys_account_id', false, null, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
         $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
         $this->addColumn('wishlist_name', 'Name', 'VARCHAR', false, 128, null);
         $this->addColumn('wishlist_current', 'Current', 'BOOLEAN', false, 1, null);
@@ -284,13 +284,6 @@ class WishlistTableMap extends TableMap
   array (
     0 => ':user_id',
     1 => ':id',
-  ),
-), null, null, null, false);
-        $this->addRelation('AxysAccount', '\\Model\\AxysAccount', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':axys_account_id',
-    1 => ':axys_account_id',
   ),
 ), null, null, null, false);
     }
