@@ -148,8 +148,6 @@ class Post extends Entity
         }
 
         /**
-         * Test if user can delete post
-         * @param AxysAccount $user
          * @return bool true if user is admin or post's author
          */
         public function canBeDeletedBy(User $user): bool

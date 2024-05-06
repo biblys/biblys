@@ -13,7 +13,6 @@ class Cart extends Entity
 {
     protected $prefix = 'cart';
     protected array $stock = [];
-    private AxysAccount|null $seller = null;
 
     public function __construct($data)
     {
@@ -21,16 +20,6 @@ class Cart extends Entity
         if (isset($data['customer_id'])) {
             $cm = new CustomerManager();
             $data['customer'] = $cm->get(array('customer_id' => $data['customer_id']));
-        }
-
-        // Seller (OneToMany)
-        if (isset($data['cart_seller_id'])) {
-            $um = new AxysAccountManager();
-            /** @var AxysAccount $seller */
-            $seller = $um->getById($data['cart_seller_id']);
-            if ($seller) {
-                $this->seller = $seller;
-            }
         }
 
         parent::__construct($data);
@@ -209,23 +198,6 @@ class Cart extends Entity
             }
         }
         return false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasSeller(): bool
-    {
-        if ($this->seller === null) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function getSeller(): AxysAccount
-    {
-        return $this->seller;
     }
 }
 
