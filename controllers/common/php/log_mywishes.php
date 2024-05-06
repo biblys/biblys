@@ -37,6 +37,7 @@ return function (
         // Create a current wishlist for current user
         $wishlist = $wlm->create([
             'user_id' => $currentUserService->getUser()->getId(),
+            'site_id' => $currentSiteService->getSite()->getId(),
             'wishlist_current' => 1
         ]);
 
@@ -44,6 +45,7 @@ return function (
         $wishes = $wm->getAll(['user_id' => $currentUserService->getUser()->getId(), 'wishlist_id' => 'NULL']);
         foreach ($wishes as $wish) {
             $wish->set('wishlist', $wishlist);
+            $wish->set("site_id", $currentSiteService->getSite()->getId());
             $wm->update($wish);
         }
     }
@@ -72,6 +74,7 @@ return function (
             $wish->set('user_id', $currentUserService->getUser()->getId());
             $wish->set('article', $article);
             $wish->set('wishlist', $wishlist);
+            $wish->set("site_id", $currentSiteService->getSite()->getId());
             $wm->update($wish);
             $p['created'] = 1;
             $p['message'] = "&laquo;&nbsp;" . $article->get('title') . "&nbsp;&raquo a bien été ajouté à votre <a href='/pages/log_mywishes'>liste d'envies</a>.";
