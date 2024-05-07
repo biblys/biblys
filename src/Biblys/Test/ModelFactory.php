@@ -690,10 +690,16 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createWishlist(string $axysAccountId): Wishlist
+    public static function createWishlist(
+        Site $site = null,
+        User $user = null,
+        string $axysAccountId = null,
+    ): Wishlist
     {
         $wishlist = new Wishlist();
 
+        $wishlist->setSite($site);
+        $wishlist->setUser($user);
         $wishlist->setAxysAccountId($axysAccountId);
         $wishlist->save();
 
@@ -703,11 +709,20 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createWish(Wishlist $wishlist, string $axysAccountId): Wish
+    public static function createWish(
+        Wishlist $wishlist = null,
+        Article $article = null,
+        string $axysAccountId = null,
+    ): Wish
     {
         $wish = new Wish();
 
+        $article = $article ?? ModelFactory::createArticle();
+
+        $wish->setSiteId($wishlist->getSiteId());
+        $wish->setUser($wishlist->getUser());
         $wish->setWishlistId($wishlist->getId());
+        $wish->setArticleId($article->getId());
         $wish->setAxysAccountId($axysAccountId);
         $wish->save();
 

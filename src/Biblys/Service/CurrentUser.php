@@ -16,6 +16,7 @@ use Model\SessionQuery;
 use Model\Stock;
 use Model\StockQuery;
 use Model\User;
+use Model\WishQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -430,5 +431,28 @@ class CurrentUser
         $userCart->save();
 
         $visitorCart->delete();
+    }
+
+    /**
+     * Wishlist
+     */
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function hasArticleInWishlist(Article $article): bool
+    {
+        if (!$this->isAuthentified()) {
+            return false;
+        }
+
+        $articleInWishlistCount = WishQuery::create()
+            ->filterBySiteId($this->getCurrentSite()->getId())
+            ->filterByArticleId($article->getId())
+            ->filterByUser($this->user)
+            ->count();
+
+        return $articleInWishlistCount > 0;
     }
 }

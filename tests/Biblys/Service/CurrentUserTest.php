@@ -1185,4 +1185,93 @@ class CurrentUserTest extends TestCase
         $deletedVisitorCart = CartQuery::create()->findPk($visitorCart->getId());
         $this->assertNull($deletedVisitorCart, "it deletes visitor cart");
     }
+
+    /**
+     * hasArticleInWishlist
+     */
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasArticleInWishlistForAnonymousUser()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $article = ModelFactory::createArticle();
+        $currentUser = new CurrentUser(null, null);
+
+        // when
+        $hasArticleInWishlist = $currentUser->hasArticleInWishlist($article);
+
+        // then
+        $this->assertFalse($hasArticleInWishlist);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasArticleInWishlistWithoutCart()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $article = ModelFactory::createArticle();
+        $user = ModelFactory::createUser();
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // when
+        $hasArticleInWishlist = $currentUser->hasArticleInWishlist($article);
+
+        // then
+        $this->assertFalse($hasArticleInWishlist);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasArticleInWishlistWithoutArticleInWishlist()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $article = ModelFactory::createArticle();
+        $user = ModelFactory::createUser();
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        ModelFactory::createWishlist(site: $site, user: $user);
+
+        // when
+        $hasArticleInWishlist = $currentUser->hasArticleInWishlist($article);
+
+        // then
+        $this->assertFalse($hasArticleInWishlist);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasArticleInWishlistWithArticleInWishlist()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $article = ModelFactory::createArticle();
+        $user = ModelFactory::createUser();
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $wishlist = ModelFactory::createWishlist(site: $site, user: $user);
+        ModelFactory::createWish($wishlist, $article);
+
+        // when
+        $hasArticleInWishlist = $currentUser->hasArticleInWishlist($article);
+
+        // then
+        $this->assertTrue($hasArticleInWishlist);
+    }
 }
