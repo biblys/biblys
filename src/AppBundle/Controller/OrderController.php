@@ -38,10 +38,11 @@ class OrderController extends Controller
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
+     * @throws Exception
      */
-    public function indexAction(Request $request): JsonResponse|Response
+    public function indexAction(Request $request, CurrentUser $currentUser): JsonResponse|Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         // JSON Raw data
         if ($request->isXmlHttpRequest()) {

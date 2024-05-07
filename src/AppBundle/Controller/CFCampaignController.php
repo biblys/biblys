@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentUser;
 use CFCampaign;
 use CFCampaignManager;
 use CFRewardManager;
@@ -21,9 +22,10 @@ use Twig\Error\SyntaxError;
 class CFCampaignController extends Controller
 {
     /**
+     * @throws LoaderError
+     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws LoaderError
      */
     public function showAction(Request $request, $slug): Response
     {
@@ -66,10 +68,11 @@ class CFCampaignController extends Controller
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
+     * @throws Exception
      */
-    public function listAction(Request $request): Response
+    public function listAction(Request $request, CurrentUser $currentUser): Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $cfcm = new CFCampaignManager();
         $campaigns = $cfcm->getAll();
@@ -89,11 +92,11 @@ class CFCampaignController extends Controller
      * @throws LoaderError
      * @throws Exception
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request, CurrentUser $currentUser): RedirectResponse|Response
     {
         global $request;
 
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $cfcm = new CFCampaignManager();
         $campaign = new CFCampaign([]);
@@ -130,11 +133,11 @@ class CFCampaignController extends Controller
      * @throws LoaderError
      * @throws Exception
      */
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request, CurrentUser $currentUser, $id): RedirectResponse|Response
     {
         global $request;
 
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $cfcm = new CFCampaignManager();
 
@@ -168,12 +171,11 @@ class CFCampaignController extends Controller
 
     /**
      * @throws AuthException
-     * @throws PropelException
      * @throws Exception
      */
-    public function refreshAction(Request $request, $id): RedirectResponse
+    public function refreshAction(CurrentUser $currentUser, $id): RedirectResponse
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $cfcm = new CFCampaignManager();
         $cfrm = new CFRewardManager();

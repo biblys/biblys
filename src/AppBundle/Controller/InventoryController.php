@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use ArticleManager;
+use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentUser;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
@@ -27,10 +29,11 @@ class InventoryController extends Controller
      * @throws LoaderError
      * @throws PropelException
      * @throws AuthException
+     * @throws Exception
      */
-    public function indexAction(Request $request): Response
+    public function indexAction(CurrentUser $currentUser): Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $im = new InventoryManager();
         $inventories = $im->getAll();
@@ -48,9 +51,15 @@ class InventoryController extends Controller
      * @throws AuthException
      * @throws Exception
      */
-    public function showAction(Request $request, UrlGenerator $urlGenerator, $id, $mode): RedirectResponse|Response
+    public function showAction(
+        Request $request,
+        CurrentUser $currentUser,
+        UrlGenerator $urlGenerator,
+        $id,
+        $mode,
+    ): RedirectResponse|Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $im = new InventoryManager();
         $inventory = $im->getById($id);
@@ -162,7 +171,7 @@ class InventoryController extends Controller
             GROUP BY `article_ean`, `stock_purchase_date`
             ORDER BY stock_purchase_date DESC
         ");
-        $stocks->execute(['site_id' => \AppBundle\Controller\getLegacyCurrentSite()["site_id"], 'date' => $date." ".$time]);
+        $stocks->execute(['site_id' => LegacyCodeHelper::getGlobalSite()["site_id"], 'date' => $date." ".$time]);
         $total = count($stocks->fetchAll(PDO::FETCH_ASSOC));
 
         // Process 100 more copies
@@ -177,7 +186,7 @@ class InventoryController extends Controller
             GROUP BY article_ean
             LIMIT $offset, $limit
         ");
-        $stocks->execute(['site_id' => \AppBundle\Controller\getLegacyCurrentSite()["site_id"], 'date' => $date." ".$time]);
+        $stocks->execute(['site_id' => LegacyCodeHelper::getGlobalSite()["site_id"], 'date' => $date." ".$time]);
         $stocks = $stocks->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($stocks as $stock) {
@@ -221,13 +230,13 @@ class InventoryController extends Controller
      * @throws Exception
      */
     public function itemDeleteAction(
-        Request $request,
+        CurrentUser $currentUser,
         UrlGenerator $urlGenerator,
         $inventory_id,
         $id
     ): RedirectResponse|Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         list($inventory, $item) = $this->_getInventoryAndItem($inventory_id, $id);
 
@@ -242,13 +251,13 @@ class InventoryController extends Controller
      * @throws Exception
      */
     public function itemRemoveAction(
-        Request $request,
+        CurrentUser $currentUser,
         UrlGenerator $urlGenerator,
         $inventory_id,
         $id
     ): RedirectResponse|Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         list($inventory, $item) = $this->_getInventoryAndItem($inventory_id, $id);
 

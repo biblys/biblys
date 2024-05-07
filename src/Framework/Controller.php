@@ -9,7 +9,6 @@ use Biblys\Service\CurrentUser;
 use Biblys\Service\MetaTagsService;
 use Biblys\Service\TemplateService;
 use Exception;
-use Model\Publisher;
 use Opengraph\Writer;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
@@ -18,8 +17,6 @@ use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -75,6 +72,9 @@ class Controller
         return new RedirectResponse($url, $status);
     }
 
+    /**
+     * @throws Exception
+     */
     public function setOpengraphTags($tags = []): void
     {
         global $request;
@@ -134,82 +134,5 @@ class Controller
         return Forms::createFormFactoryBuilder()
             ->addExtension(new HttpFoundationExtension())
             ->getFormFactory();
-    }
-
-    /**
-     * @param Request $request
-     * @return CurrentUser
-     * @throws PropelException
-     * @throws Exception
-     * @deprecated Controller::authUser is deprecated. Use CurrentService->authUser instead.
-     */
-    protected static function authUser(Request $request): CurrentUser
-    {
-        $config = Config::load();
-        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-
-        if (!$currentUser->isAuthentified()) {
-            throw new UnauthorizedHttpException("","Identification requise.");
-        }
-
-        return $currentUser;
-    }
-
-    /**
-     * @param Request $request
-     * @param string $errorMessage
-     * @return CurrentUser
-     * @throws PropelException
-     * @throws Exception
-     * @deprecated Controller::authAdmin is deprecated. Use CurrentService->authAdmin instead.
-     */
-    protected static function authAdmin(
-        Request $request,
-        string $errorMessage = "Accès réservé aux administrateurs.",
-    ): CurrentUser
-    {
-        $currentUser = self::authUser($request);
-        $currentSite = CurrentSite::buildFromConfig(Config::load());
-
-        if (!$currentUser->isAdminForSite($currentSite->getSite())) {
-            throw new AccessDeniedHttpException($errorMessage);
-        }
-
-        return $currentUser;
-    }
-
-    /**
-     * @param Request $request
-     * @param Publisher|null $publisher
-     * @return CurrentUser
-     * @throws PropelException
-     * @throws Exception
-     * @deprecated Controller::authPublisher is deprecated. Use CurrentService->authPublisher instead.
-     */
-    protected static function authPublisher(Request $request, ?Publisher $publisher): CurrentUser
-    {
-        $currentUser = self::authUser($request);
-
-        $currentSite = CurrentSite::buildFromConfig(Config::load());
-        if ($currentUser->isAdminForSite($currentSite->getSite())) {
-            return $currentUser;
-        }
-
-        if ($publisher === null) {
-            if ($currentUser->hasPublisherRight()) {
-                return $currentUser;
-            }
-
-            throw new AccessDeniedHttpException("Vous n'avez pas l'autorisation de modifier un éditeur.");
-        }
-
-        if ($currentUser->hasRightForPublisher($publisher)) {
-            return $currentUser;
-        }
-
-        // TODO: throw unauthorized exception (403)
-        throw new AccessDeniedHttpException(
-            sprintf("Vous n'avez pas l'autorisation de modifier l'éditeur %s", $publisher->getName())
-        );
     }
 }

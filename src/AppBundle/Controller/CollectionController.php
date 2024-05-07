@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use ArticleManager;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Pagination;
 use CollectionManager;
 use Exception;
@@ -42,7 +43,7 @@ class CollectionController extends Controller
             return [
                 'id' => $collection->get('id'),
                 'name' => $collection->get('name'),
-                'label' => $collection->get('name').' ('.$collection->get('publisher')->get('name').')',
+                'label' => $collection->get('name') . ' (' . $collection->get('publisher')->get('name') . ')',
             ];
         }, $collections);
 
@@ -57,11 +58,12 @@ class CollectionController extends Controller
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
     public function showAction(
-        Request $request,
+        Request     $request,
         CurrentSite $currentSite,
-        string $slug
+        string      $slug
     ):
     RedirectResponse|Response
     {
@@ -75,11 +77,11 @@ class CollectionController extends Controller
 
         $use_old_controller = $currentSite->getOption("use_old_collection_controller");
         if ($use_old_controller) {
-            return new RedirectResponse('/o/collection/'.$slug);
+            return new RedirectResponse('/o/collection/' . $slug);
         }
 
         // Pagination
-        $page = (int) $request->query->get('p', 0);
+        $page = (int)$request->query->get('p', 0);
         $totalCount = $am->count(['collection_id' => $collection->get('id')]);
         $limit = $currentSite->getOption("articles_per_page");
 
@@ -107,18 +109,20 @@ class CollectionController extends Controller
      * Edit a collection
      *
      * @route GET /admin/collection/{id}/edit.
-     * @param Request $request
-     * @param UrlGenerator $urlGenerator
-     * @param int $id
-     * @return Response
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
-    public function editAction(Request $request, UrlGenerator $urlGenerator, int $id): Response
+    public function editAction(
+        Request      $request,
+        CurrentUser  $currentUser,
+        UrlGenerator $urlGenerator,
+        int          $id
+    ): Response
     {
-        Controller::authAdmin($request);
+        $currentUser->authAdmin();
 
         $cm = new CollectionManager();
 
@@ -175,10 +179,16 @@ class CollectionController extends Controller
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
-    public function deleteAction(Request $request, UrlGenerator $urlGenerator, int $id): RedirectResponse|Response
+    public function deleteAction(
+        Request      $request,
+        CurrentUser  $currentUser,
+        UrlGenerator $urlGenerator,
+        int          $id
+    ): RedirectResponse|Response
     {
-        Controller::authAdmin($request);
+        $currentUser->authAdmin();
 
         $cm = new CollectionManager();
 

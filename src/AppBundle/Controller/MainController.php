@@ -174,7 +174,6 @@ class MainController extends Controller
      * @throws SyntaxError
      * @throws LoaderError
      * @throws TransportExceptionInterface
-     * @throws PropelException
      */
     public function contactAction(
         Request $request,
@@ -410,11 +409,14 @@ class MainController extends Controller
     /**
      * Returns notifications for asked subscriptions.
      *
-     * @throws PropelException
+     * @throws Exception
      */
-    public function adminNotificationsAction(Request $request): JsonResponse
+    public function adminNotificationsAction(
+        Request $request,
+        CurrentUser $currentUser,
+    ): JsonResponse
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $subscriptions = explode(',', $request->query->get('subscriptions'));
 

@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\CurrentUser;
+use Exception;
 use Framework\Controller;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,16 +16,19 @@ class ShippingController extends Controller
 {
     /**
      * GET /admin/shipping.
-     * @param Request $request
-     * @return Response
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws PropelException
+     * @throws Exception
      */
-    public function adminAction(Request $request): Response
+    public function adminAction(
+        Request     $request,
+        CurrentUser $currentUser,
+    ): Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
+
         $request->attributes->set("page_title", "Frais de port");
 
         return $this->render("AppBundle:Shipping:admin.html.twig");

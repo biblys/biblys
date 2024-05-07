@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentUser;
 use Biblys\Template\Template;
 use Exception;
 use Framework\Controller;
@@ -22,17 +23,16 @@ class TemplateController extends Controller
 {
     /**
      * GET /admin/templates.
-     * @param Request $request
-     * @return Response
      * @throws AuthException
      * @throws PropelException
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
-    public function indexAction(Request $request): Response
+    public function indexAction(Request $request, CurrentUser $currentUser): Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $request->attributes->set("page_title", "Éditeur de thème");
 
@@ -46,9 +46,9 @@ class TemplateController extends Controller
      * @throws AuthException
      * @throws Exception
      */
-    public function editAction(Request $request, $slug): Response
+    public function editAction(Request $request, CurrentUser $currentUser, $slug): Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $template = Template::get($slug);
         $request->attributes->set("page_title", "Éditer ".$template->getName());
@@ -71,9 +71,13 @@ class TemplateController extends Controller
      * @throws AuthException
      * @throws Exception
      */
-    public function deleteAction(Request $request, UrlGenerator $urlGenerator, $slug): RedirectResponse
+    public function deleteAction(
+        CurrentUser $currentUser,
+        UrlGenerator $urlGenerator,
+        $slug
+    ): RedirectResponse
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $template = Template::get($slug);
 

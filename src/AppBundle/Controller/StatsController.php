@@ -2,14 +2,14 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Admin\Entry;
 use Biblys\Service\Config;
+use Biblys\Service\CurrentUser;
+use Exception;
 use Framework\Controller;
 use Propel\Runtime\Exception\PropelException;
 use StockManager;
 use SupplierManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig\Error\LoaderError;
@@ -24,10 +24,14 @@ class StatsController extends Controller
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
+     * @throws Exception
      */
-    public function suppliersAction(Request $request, $year): Response
+    public function suppliersAction(
+        CurrentUser $currentUser,
+        $year,
+    ): Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $sum = new SupplierManager();
         $suppliers = $sum->getAll([], [
@@ -46,10 +50,11 @@ class StatsController extends Controller
      * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
+     * @throws Exception
      */
-    public function lostAction(Request $request, $year): Response
+    public function lostAction(CurrentUser $currentUser, $year): Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $year_filter = 'NOT NULL';
         if ($year != 'all') {

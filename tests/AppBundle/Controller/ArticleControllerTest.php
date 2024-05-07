@@ -31,7 +31,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
@@ -73,7 +72,7 @@ class ArticleControllerTest extends TestCase
             request: $request,
             config: $config,
             currentSiteService: $currentSiteService,
-            urlGenerator:  $urlGenerator,
+            urlGenerator: $urlGenerator,
             loggerService: $loggerService,
             metaTags: $metaTagsService,
             templateService: $templateService,
@@ -183,23 +182,6 @@ class ArticleControllerTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
-    public function testAddTagsActionForUser()
-    {
-        // given
-        $controller = new ArticleController();
-        $request = new Request();
-
-        // then
-        $this->expectException(UnauthorizedHttpException::class);
-
-        // when
-        $controller->addTagsAction($request, 1);
-    }
-
-    /**
-     * @throws PropelException
-     * @throws Exception
-     */
     public function testAddTagsActionForPublisher()
     {
         // given
@@ -208,8 +190,11 @@ class ArticleControllerTest extends TestCase
         $request = RequestFactory::createAuthRequestForPublisherUser($publisher);
         $article = ModelFactory::createArticle(publisher: $publisher);
 
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authPublisher");
+
         // when
-        $response = $controller->addTagsAction($request, $article->getId());
+        $response = $controller->addTagsAction($request, $currentUser, $article->getId());
 
         // then
         $this->assertEquals(
@@ -217,25 +202,6 @@ class ArticleControllerTest extends TestCase
             $response->getStatusCode(),
             "it should return HTTP 200"
         );
-    }
-
-    /**
-     * @throws PropelException
-     */
-    public function testAddRayonActionForUser()
-    {
-        // given
-        $controller = new ArticleController();
-        $request = new Request();
-        $currentSite = ModelFactory::createSite();
-        $currentSiteService = $this->createMock(CurrentSite::class);
-        $currentSiteService->method("getSite")->willReturn($currentSite);
-
-        // then
-        $this->expectException(UnauthorizedHttpException::class);
-
-        // when
-        $controller->addRayonsAction($request, $currentSiteService, 1);
     }
 
     /**
@@ -254,9 +220,16 @@ class ArticleControllerTest extends TestCase
         $currentSiteService = $this->createMock(CurrentSite::class);
         $currentSiteService->method("getSite")->willReturn($currentSite);
         $request->request->set("rayon_id", $category->getId());
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authPublisher");
 
         // when
-        $response = $controller->addRayonsAction($request, $currentSiteService, $article->getId());
+        $response = $controller->addRayonsAction(
+            $request,
+            $currentSiteService,
+            $currentUser,
+            $article->getId()
+        );
 
         // then
         $this->assertEquals(
@@ -275,7 +248,7 @@ class ArticleControllerTest extends TestCase
     public function testDeleteAction()
     {
         // given
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentSite = $this->createMock(CurrentSite::class);
         $article = ModelFactory::createArticle();
@@ -317,7 +290,7 @@ class ArticleControllerTest extends TestCase
     public function testDeleteActionIsImpossibleIfStock()
     {
         // given
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentSite = $this->createMock(CurrentSite::class);
         $article = ModelFactory::createArticle();
@@ -363,7 +336,7 @@ class ArticleControllerTest extends TestCase
         // given
         ModelFactory::createArticle(
             title: "Résultat de recherche",
-            authors : [ModelFactory::createPeople()],
+            authors: [ModelFactory::createPeople()],
         );
         $controller = new ArticleController();
         $request = new Request();
@@ -462,8 +435,7 @@ class ArticleControllerTest extends TestCase
 
         // given
         ModelFactory::createArticle(
-            title: "Résultat de recherche trié",authors:
-            [ModelFactory::createPeople()]
+            title: "Résultat de recherche trié", authors: [ModelFactory::createPeople()]
         );
         $controller = new ArticleController();
         $request = new Request();
@@ -503,7 +475,8 @@ class ArticleControllerTest extends TestCase
             title: "Résultat de recherche avec stock",
             authors: [ModelFactory::createPeople()]
         );
-        ModelFactory::createStockItem(site: $site, article: $article);user:
+        ModelFactory::createStockItem(site: $site, article: $article);
+        user:
         $controller = new ArticleController();
         $request = new Request();
         $request->query->set("q", "Résultat de recherche avec stock");
@@ -555,7 +528,8 @@ class ArticleControllerTest extends TestCase
             title: "Résultat de recherche trié avec stock",
             authors: [ModelFactory::createPeople()]
         );
-        ModelFactory::createStockItem(site: $site, article: $article);user:
+        ModelFactory::createStockItem(site: $site, article: $article);
+        user:
         $controller = new ArticleController();
         $request = new Request();
         $queryParams = Mockery::mock(QueryParamsService::class);
@@ -617,7 +591,7 @@ class ArticleControllerTest extends TestCase
     {
         // given
         $article = ModelFactory::createArticle(ean: "9781234567880", keywords: "9781234567880");
-        $requestBody = json_encode(["article_id" => (string) $article->getId(), "article_ean" => "9781234567880"]);
+        $requestBody = json_encode(["article_id" => (string)$article->getId(), "article_ean" => "9781234567880"]);
         $request = new Request([], [], [], [], [], [], $requestBody);
         $controller = new ArticleController();
 
@@ -779,43 +753,6 @@ class ArticleControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws PropelException
-     * @throws LoaderError
-     * @throws TransportExceptionInterface
-     */
-    public function testFreeDownloadActionForAnonymousUser()
-    {
-        // then
-        $this->expectException(UnauthorizedHttpException::class);
-        $this->expectExceptionMessage("Identification requise");
-
-        // given
-        $request = new Request();
-        $article = ModelFactory::createArticle(price: 0, typeId: Type::EBOOK);
-        $controller = new ArticleController();
-        $currentSiteService = $this->createMock(CurrentSite::class);
-        $currentUserService = $this->createMock(CurrentUser::class);
-        $mailingListService = $this->createMock(MailingListService::class);
-        $templateService = Mockery::mock(TemplateService::class);
-        $mailer = Mockery::mock(Mailer::class);
-        $session = Mockery::mock(Session::class);
-
-        // when
-        $controller->freeDownloadAction(
-            $request,
-            $currentSiteService,
-            $currentUserService,
-            $mailingListService,
-            $templateService,
-            $mailer,
-            $session,
-            $article->getId(),
-        );
-    }
-
-    /**
      * @throws PropelException
      * @throws LoaderError
      * @throws RuntimeError
@@ -846,6 +783,7 @@ class ArticleControllerTest extends TestCase
             ->with("publisher_filter")->andReturn($article->getPublisherId());
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authUser");
         $currentUser->shouldReceive("getUser")->andReturn($user);
         $watermarkingFile = Mockery::mock(WatermarkedFile::class);
         $watermarkingService = Mockery::mock(WatermarkingService::class);
@@ -867,7 +805,6 @@ class ArticleControllerTest extends TestCase
 
         // when
         $response = $controller->downloadWithWatermarkAction(
-            request: $request,
             currentSite: $currentSite,
             currentUser: $currentUser,
             watermarkingService: $watermarkingService,
@@ -912,6 +849,7 @@ class ArticleControllerTest extends TestCase
             ->with("publisher_filter")->andReturn($article->getPublisherId());
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authUser");
         $currentUser->shouldReceive("getUser")->andReturn($user);
         $watermarkingService = Mockery::mock(WatermarkingService::class);
         $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
@@ -930,7 +868,6 @@ class ArticleControllerTest extends TestCase
 
         // when
         $response = $controller->downloadWithWatermarkAction(
-            request: $request,
             currentSite: $currentSite,
             currentUser: $currentUser,
             watermarkingService: $watermarkingService,
@@ -964,6 +901,7 @@ class ArticleControllerTest extends TestCase
         $watermarkingService->shouldReceive("isConfigured")->andReturn(false);
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authUser");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")
             ->with("article_download_with_watermark", ["id" => $article->getId()])
@@ -1003,6 +941,7 @@ class ArticleControllerTest extends TestCase
             ->with("publisher_filter")
             ->andReturn($otherPublisher->getId());
         $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authUser");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")
             ->with("article_download_with_watermark", ["id" => $article->getId()])
@@ -1041,6 +980,7 @@ class ArticleControllerTest extends TestCase
             ->with("publisher_filter")
             ->andReturn($article->getPublisherId());
         $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authUser");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")
             ->with("article_download_with_watermark", ["id" => $article->getId()])
@@ -1083,6 +1023,7 @@ class ArticleControllerTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getUser")
             ->andReturn(ModelFactory::createUser());
+        $currentUser->shouldReceive("authUser");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")
             ->with("article_download_with_watermark", ["id" => $article->getId()])
@@ -1135,6 +1076,7 @@ class ArticleControllerTest extends TestCase
         $currentSite->shouldReceive("getSite")
             ->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authUser");
         $currentUser->shouldReceive("getUser")
             ->andReturn($user);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
@@ -1186,6 +1128,7 @@ class ArticleControllerTest extends TestCase
         $currentSite->shouldReceive("getSite")
             ->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authUser");
         $currentUser->shouldReceive("getUser")
             ->andReturn($user);
         $watermarkingService = Mockery::mock(WatermarkingService::class);
@@ -1239,6 +1182,7 @@ class ArticleControllerTest extends TestCase
         $currentSite->shouldReceive("getSite")
             ->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authUser");
         $currentUser->shouldReceive("getUser")
             ->andReturn($user);
         $watermarkingService = Mockery::mock(WatermarkingService::class);

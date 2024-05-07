@@ -128,15 +128,17 @@ class LegacyControllerTest extends TestCase
     {
         // then
         $this->expectException(AccessDeniedHttpException::class);
-        $this->expectExceptionMessage("Vous n'avez pas l'autorisation de modifier un éditeur.");
+        $this->expectExceptionMessage("Vous n'avez pas le droit de gérer une maison d'édition.");
 
         // given
-        $request = RequestFactory::createAuthRequest();
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createUser(site: $site);
+        $request = RequestFactory::createAuthRequest(user: $user);
         $request->query->set("page", "pub_page");
         $session = new Session();
         $mailer = Mockery::mock(Mailer::class);
         $legacyController = new LegacyController();
-        $config = new Config();
+        $config = new Config(["site" => $site->getId()]);
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
@@ -174,12 +176,14 @@ class LegacyControllerTest extends TestCase
         $this->expectExceptionMessage("Accès réservé aux administrateurs.");
 
         // given
-        $request = RequestFactory::createAuthRequestForPublisherUser();
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createPublisherUser(site: $site);
+        $request = RequestFactory::createAuthRequest(user: $user);
         $request->query->set("page", "adm_page");
         $session = new Session();
         $mailer = Mockery::mock(Mailer::class);
         $legacyController = new LegacyController();
-        $config = new Config();
+        $config = new Config(["site" => $site->getId()]);
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);

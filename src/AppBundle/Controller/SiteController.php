@@ -4,22 +4,26 @@ namespace AppBundle\Controller;
 
 use Biblys\Article\Type;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
+use Exception;
 use Framework\Controller;
 
 use Framework\Exception\AuthException;
 use Model\OptionQuery;
-use OptionManager;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
 class SiteController extends Controller
 {
+
+    private UrlGenerator $url;
 
     public function __construct()
     {
@@ -28,18 +32,20 @@ class SiteController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Session $session
-     * @param CurrentSite $currentSite
-     * @return RedirectResponse|Response
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
-    public function optionsAction(Request $request, Session $session, CurrentSite $currentSite): RedirectResponse|Response
+    public function optionsAction(
+        Request     $request,
+        Session     $session,
+        CurrentSite $currentSite,
+        CurrentUser $currentUser,
+    ): RedirectResponse|Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
         $request->attributes->set("page_title", "Options du site");
 
         if ($request->getMethod() == "POST") {
@@ -80,10 +86,15 @@ class SiteController extends Controller
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
+     * @throws Exception
      */
-    public function defaultValuesAction(Request $request, CurrentSite $currentSite)
+    public function defaultValuesAction(
+        Request     $request,
+        CurrentSite $currentSite,
+        CurrentUser $currentUser,
+    ): RedirectResponse|Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
         $request->attributes->set("page_title", "Valeurs par défaut");
 
         if ($request->getMethod() == "POST") {

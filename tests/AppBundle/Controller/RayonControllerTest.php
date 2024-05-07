@@ -94,7 +94,7 @@ class RayonControllerTest extends TestCase
         $currentUser->shouldReceive("authAdmin")->once()->andReturn();
 
         // when
-        $response = $controller->rayonArticlesAction($request, $currentUser, $rayon->get("id"));
+        $response = $controller->rayonArticlesAction($currentUser, $rayon->get("id"));
 
         // then
         $this->assertEquals(

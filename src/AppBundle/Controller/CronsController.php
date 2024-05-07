@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
+use Biblys\Service\CurrentUser;
 use CronJobManager;
 use EntityManager;
 use Exception;
@@ -49,17 +50,15 @@ class CronsController extends Controller
 
     /**
      * GET /crons/.
-     * @param Request $request
-     * @return Response
-     * @throws AuthException
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
-    public function tasksAction(Request $request): Response
+    public function tasksAction(CurrentUser $currentUser): Response
     {
-        Controller::authAdmin($request);
+        $currentUser->authAdmin();
 
         $cjm = new CronJobManager();
         $jobs = $cjm->getAll(
@@ -78,23 +77,23 @@ class CronsController extends Controller
     /**
      * GET /crons/{slug}/jobs
      * Generic controller to display job logs of a cron task.
-     * @param Request $request
-     * @param string $slug
-     * @return Response
      * @throws AuthException
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
-    public function jobsAction(Request $request, string $slug): Response
+    public function jobsAction(
+        CurrentUser $currentUser, string $slug,
+    ): Response
     {
-        Controller::authAdmin($request);
+        $currentUser->authAdmin();
 
         global $config;
 
         if (!in_array($slug, ['test', 'export-pdl'])) {
-            throw new ResourceNotFoundException('Unknown cron task '.htmlentities($slug));
+            throw new ResourceNotFoundException('Unknown cron task ' . htmlentities($slug));
         }
 
         $cjm = new CronJobManager();
@@ -187,8 +186,8 @@ class CronsController extends Controller
         $active_stock_query = null;
         $active_stock = $globalSite->getOpt('active_stock');
         if ($active_stock) {
-            $active_stock = "'".implode("','", explode(',', $active_stock))."'";
-            $active_stock_query = ' AND `stock_stockage` IN ('.$active_stock.')';
+            $active_stock = "'" . implode("','", explode(',', $active_stock)) . "'";
+            $active_stock_query = ' AND `stock_stockage` IN (' . $active_stock . ')';
         }
 
         $query = "
@@ -202,14 +201,14 @@ class CronsController extends Controller
                 AND `article_ean` IS NOT NULL
                 AND `stock_selling_date` IS NULL AND `stock_return_date` IS NULL
                 AND `stock_lost_date` IS NULL AND `stock_condition` = 'Neuf'
-                ".$active_stock_query.'
+                " . $active_stock_query . '
             GROUP BY `article_ean`';
         $stock = EntityManager::prepareAndExecute(
             $query,
             ['site_id' => $globalSite->get('id')]
         );
 
-        $title = 'EXTRACTION STOCK DU '.date('d/m/Y');
+        $title = 'EXTRACTION STOCK DU ' . date('d/m/Y');
         $stockCount = 0;
         $articleCount = 0;
 
@@ -219,7 +218,7 @@ class CronsController extends Controller
             $qty = str_pad($item['qty'], 4, '0', STR_PAD_LEFT);
             $price = str_pad($item['price'], 10, '0', STR_PAD_LEFT);
 
-            $line = $shopId.$ean.$qty.$price;
+            $line = $shopId . $ean . $qty . $price;
 
             if (strlen($line) !== 31) {
                 throw new Exception("Line for $ean is not 31 chars long: $line");
@@ -231,10 +230,10 @@ class CronsController extends Controller
             $lines[] = $line;
         }
 
-        $file = $title."\r\n".join("\r\n", $lines);
+        $file = $title . "\r\n" . join("\r\n", $lines);
 
         $stream = stream_context_create(['ftp' => ['overwrite' => true]]);
-        $ftp = "ftp://$login:$password@$ftpServer/".$shopId.'_ART.asc';
+        $ftp = "ftp://$login:$password@$ftpServer/" . $shopId . '_ART.asc';
 
         if (getenv("PHP_ENV") !== "test") {
             file_put_contents($ftp, $file, 0, $stream);

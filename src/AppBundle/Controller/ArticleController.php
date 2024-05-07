@@ -153,6 +153,10 @@ class ArticleController extends Controller
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
      */
     public function searchAction(
         Request $request,
@@ -283,7 +287,7 @@ class ArticleController extends Controller
         $id,
     ): RedirectResponse|Response
     {
-        Controller::authUser($request);
+        $currentUserService->authUser();
 
         $am = new ArticleManager();
         /** @var Article $articleEntity */
@@ -393,7 +397,7 @@ class ArticleController extends Controller
         if ($request->getMethod() == 'POST') {
             try {
                 $article->delete();
-            } catch (CannotDeleteArticleWithStock $e) {
+            } catch (CannotDeleteArticleWithStock) {
                 throw new BadRequestHttpException(
                     "Impossible de supprimer l'article {$article->getTitle()} car il a des exemplaires associés."
                 );
@@ -432,9 +436,9 @@ class ArticleController extends Controller
      * @throws PropelException
      * @throws Exception
      */
-    public function addTagsAction(Request $request, $id): Response
+    public function addTagsAction(Request $request, CurrentUser $currentUser, $id): Response
     {
-        self::authPublisher($request, null);
+        $currentUser->authPublisher();
 
         $am = new ArticleManager();
         $tm = new TagManager();
@@ -449,7 +453,7 @@ class ArticleController extends Controller
 
         if ($article->has('publisher_id')) {
             $publisher = PublisherQuery::create()->findPk($article->get("publisher_id"));
-            self::authPublisher($request, $publisher);
+            $currentUser->authPublisher($publisher);
         }
 
         $links = [];
@@ -496,21 +500,18 @@ class ArticleController extends Controller
      * Add rayon to an article via an XHR request
      * /articles/{id}/rayons/add.
      *
-     * @param Request $request
-     * @param CurrentSite $currentSite
-     * @param $id
-     * @return JsonResponse
      * @throws PropelException
      * @throws Exception
      */
     public function addRayonsAction(
         Request $request,
         CurrentSite $currentSite,
+        CurrentUser $currentUser,
         $id
     ):
     JsonResponse
     {
-        self::authPublisher($request, null);
+        $currentUser->authPublisher();
 
         $article = ArticleQuery::create()->findPk($id);
         if (!$article) {
@@ -519,7 +520,7 @@ class ArticleController extends Controller
 
         if ($article->getPublisher() !== null) {
             $publisher = PublisherQuery::create()->findPk($article->getPublisherId());
-            self::authPublisher($request, $publisher);
+            $currentUser->authPublisher($publisher);
         }
 
         $articleCategoryId = $request->request->get("rayon_id");
@@ -563,9 +564,13 @@ class ArticleController extends Controller
      * @throws SyntaxError
      * @throws Exception
      */
-    public function searchTermsAction(Request $request, UrlGenerator $urlGenerator): Response
+    public function searchTermsAction(
+        Request $request,
+        CurrentUser $currentUser,
+        UrlGenerator $urlGenerator,
+    ): Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
         $request->attributes->set("page_title", "Termes de recherche");
 
         $am = new ArticleManager();
@@ -615,12 +620,11 @@ class ArticleController extends Controller
 
     /**
      * @route /admin/articles/{id}/refresh-search-terms.
-     * @throws PropelException
      * @throws Exception
      */
-    public function refreshSearchTermsAction(Request $request, $id): JsonResponse
+    public function refreshSearchTermsAction(CurrentUser $currentUser, $id): JsonResponse
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $am = new ArticleManager();
         /** @var Article $article */
@@ -667,10 +671,15 @@ class ArticleController extends Controller
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
-    public function adminCatalog(Request $request, CurrentSite $currentSite): Response
+    public function adminCatalog(
+        Request $request,
+        CurrentSite $currentSite,
+        CurrentUser $currentUser,
+    ): Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $request->attributes->set("page_title", "Catalogue");
 
@@ -747,7 +756,6 @@ class ArticleController extends Controller
      * @throws PropelException
      */
     public function downloadWithWatermarkAction(
-        Request             $request,
         CurrentSite         $currentSite,
         CurrentUser         $currentUser,
         WatermarkingService $watermarkingService,
@@ -755,7 +763,7 @@ class ArticleController extends Controller
         int                 $id
     ): Response
     {
-        self::authUser($request);
+        $currentUser->authUser();
 
         $files = [];
         $libraryItem = $this->_getLibraryItem($watermarkingService, $currentSite, $id, $currentUser);
@@ -789,7 +797,7 @@ class ArticleController extends Controller
         int $id
     ): RedirectResponse
     {
-        self::authUser($request);
+        $currentUser->authUser();
 
         $libraryItem = $this->_getLibraryItem($watermarkingService, $currentSite, $id, $currentUser);
         if ($libraryItem->isWatermarked()) {

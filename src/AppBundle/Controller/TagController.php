@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use ArticleManager;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
@@ -36,6 +37,7 @@ class TagController extends Controller
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
     public function showAction(Request $request, $slug): Response
     {
@@ -48,7 +50,7 @@ class TagController extends Controller
         }
 
         // Pagination
-        $page = (int) $request->query->get('p', 0);
+        $page = (int)$request->query->get('p', 0);
         $totalCount = $am->countAllFromTag($tag);
         $pagination = new Pagination($page, $totalCount);
 
@@ -71,22 +73,20 @@ class TagController extends Controller
     /**
      * Edit a tag
      * /admin/tag/{id}/edit
-     * @param Request $request
-     * @param UrlGenerator $urlGenerator
-     * @param Int $id the tag's id
-     * @return RedirectResponse|Response
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
     public function editAction(
-        Request $request,
+        Request      $request,
+        CurrentUser  $currentUser,
         UrlGenerator $urlGenerator,
-        int $id
+        int          $id
     ): RedirectResponse|Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $tm = new TagManager();
 

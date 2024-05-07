@@ -523,25 +523,6 @@ class InvitationControllerTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function testConsumeActionForUnauthentifiedUser()
-    {
-        // then
-        $this->expectException(UnauthorizedHttpException::class);
-
-        // given
-        $controller = new InvitationController();
-        $request = new Request();
-        $currenSite = $this->createMock(CurrentSite::class);
-        $currentUser = $this->createMock(CurrentUser::class);
-        $session = $this->createMock(Session::class);
-
-        // when
-        $controller->consumeAction($request, $currenSite, $currentUser, $session);
-    }
-
-    /**
-     * @throws PropelException
-     */
     public function testConsumeActionForNonexistingInvitation()
     {
         // then

@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use ArticleManager;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Pagination;
 use CollectionManager;
 use Exception;
@@ -48,15 +49,15 @@ class PublisherController extends Controller
     public function indexAction(Request $request): Response
     {
         $globalSite = LegacyCodeHelper::getGlobalSite();
-        
+
         $pm = new PublisherManager();
 
-        $pageNumber = (int) $request->query->get("p", 0);
+        $pageNumber = (int)$request->query->get("p", 0);
         if ($pageNumber < 0) {
             throw new BadRequestHttpException("Page number must be a positive integer");
         }
 
-        $totalCount = $pm->count([]);
+        $totalCount = $pm->count();
         $limit = $globalSite->getOpt('publisher_per_page') ? $globalSite->getOpt('publisher_per_page') : 100;
         $pagination = new Pagination($pageNumber, $totalCount, $limit);
 
@@ -82,6 +83,7 @@ class PublisherController extends Controller
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
     public function showAction(Request $request, $slug): Response
     {
@@ -97,7 +99,7 @@ class PublisherController extends Controller
 
         $use_old_controller = $globalSite->getOpt('use_old_publisher_controller');
         if ($use_old_controller) {
-            return new RedirectResponse('/o/editeur/'.$slug);
+            return new RedirectResponse('/o/editeur/' . $slug);
         }
 
         $publisher_filter = $globalSite->getOpt('publisher_filter');
@@ -112,7 +114,7 @@ class PublisherController extends Controller
         $collections = $cm->getAll(['publisher_id' => $publisher->get('id')], ['order' => 'collection_name']);
 
         // Pagination
-        $page = (int) $request->query->get('p', 0);
+        $page = (int)$request->query->get('p', 0);
         $totalCount = $am->count(['publisher_id' => $publisher->get('id')]);
 
         try {
@@ -140,24 +142,20 @@ class PublisherController extends Controller
      * Edit a publisher
      * /admin/publisher/{id}/edit.
      *
-     * @param Request $request
-     * @param UrlGenerator $urlGenerator
-     * @param int $id
-     *
-     * @return Response
-     * @throws AuthException
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
     public function editAction(
-        Request $request,
+        Request      $request,
+        CurrentUser  $currentUser,
         UrlGenerator $urlGenerator,
-        int $id
+        int          $id
     ): Response
     {
-        Controller::authAdmin($request);
+        $currentUser->authAdmin();
 
         $pm = new PublisherManager();
 
@@ -218,10 +216,6 @@ class PublisherController extends Controller
      * Delete a publisher.
      *
      * @route GET /admin/publisher/{id}/delete
-     * @param int $id
-     * @param Request $request
-     * @param UrlGenerator $urlGenerator
-     * @return Response
      * @throws AuthException
      * @throws LoaderError
      * @throws PropelException
@@ -230,12 +224,13 @@ class PublisherController extends Controller
      * @throws Exception
      */
     public function deleteAction(
-        int $id,
-        Request $request,
-        UrlGenerator $urlGenerator
+        Request      $request,
+        CurrentUser  $currentUser,
+        UrlGenerator $urlGenerator,
+        int          $id,
     ): Response
     {
-        Controller::authAdmin($request);
+        $currentUser->authAdmin();
 
         $pm = new PublisherManager();
         $publisher = $pm->getById($id);
@@ -303,23 +298,17 @@ class PublisherController extends Controller
 
     /**
      * Manager a publisher's rights
-     * /admin/publisher/{id}/rights.
-     *
-     * @param Request $request
-     * @param int $id
-     *
-     * @return Response
+     * @route /admin/publisher/{id}/rights.
      * @throws AuthException
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
-    public function rightsAction(Request $request, int $id): Response
+    public function rightsAction(CurrentUser $currentUser, int $id): Response
     {
-        Controller::authAdmin($request);
-
-        $pm = new PublisherManager();
+        $currentUser->authAdmin();
 
         $publisher = PublisherQuery::create()->findPk($id);
         if (!$publisher) {
@@ -334,24 +323,20 @@ class PublisherController extends Controller
     /**
      * Give a user the right to manage a publisher.
      *
-     * @param Request $request
-     * @param UrlGenerator $urlGenerator
-     * @param $id publisher's id
-     *
-     * @return RedirectResponse
      * @throws AuthException
      * @throws PropelException
      * @throws Exception
      */
     public function rightsAddAction(
-        Request $request,
+        Request      $request,
+        CurrentUser  $currentUser,
         UrlGenerator $urlGenerator,
-        Session $session,
-        CurrentSite $currentSite,
-        $id
+        Session      $session,
+        CurrentSite  $currentSite,
+                     $id
     ): RedirectResponse
     {
-        Controller::authAdmin($request);
+        $currentUser->authAdmin();
 
         $publisher = PublisherQuery::create()->findPk($id);
         if (!$publisher) {
@@ -391,17 +376,18 @@ class PublisherController extends Controller
 
     /**
      * @throws PropelException
+     * @throws Exception
      */
     public function rightsRemoveAction(
-        Request $request,
         UrlGenerator $urlGenerator,
-        CurrentSite $currentSite,
-        Session $session,
-        $publisherId,
-        $userId
+        CurrentSite  $currentSite,
+        CurrentUser  $currentUser,
+        Session      $session,
+                     $publisherId,
+                     $userId
     ): RedirectResponse
     {
-        Controller::authAdmin($request);
+        $currentUser->authAdmin();
 
         $publisher = PublisherQuery::create()->findPk($publisherId);
         if (!$publisher) {
@@ -430,21 +416,17 @@ class PublisherController extends Controller
 
     /**
      * Manager a publisher's suppliers
-     * /admin/publisher/{id}/suppliers.
-     *
-     * @param Request $request
-     * @param int $id
-     *
-     * @return Response
+     * @route /admin/publisher/{id}/suppliers.
      * @throws AuthException
      * @throws PropelException
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
-    public function suppliersAction(Request $request, int $id): Response
+    public function suppliersAction(CurrentUser $currentUser, int $id): Response
     {
-        Controller::authAdmin($request);
+        $currentUser->authAdmin();
 
         $pm = new PublisherManager();
 
@@ -465,18 +447,18 @@ class PublisherController extends Controller
 
     /**
      * Add a publisher's supplier.
-     *
-     * @param Request $request
-     * @param UrlGenerator $urlGenerator
-     * @param  $id supplier's id
-     *
-     * @return RedirectResponse
      * @throws AuthException
      * @throws PropelException
+     * @throws Exception
      */
-    public function suppliersAddAction(Request $request, UrlGenerator $urlGenerator, $id): RedirectResponse
+    public function suppliersAddAction(
+        Request      $request,
+        CurrentUser  $currentUser,
+        UrlGenerator $urlGenerator,
+                     $id
+    ): RedirectResponse
     {
-        Controller::authAdmin($request);
+        $currentUser->authAdmin();
 
         $pm = new PublisherManager();
 
@@ -500,23 +482,18 @@ class PublisherController extends Controller
 
     /**
      * Add a publisher's supplier.
-     *
-     * @param Request $request
-     * @param UrlGenerator $urlGenerator
-     * @param  $id supplier's id
-     * @param $supplier_id
-     * @return RedirectResponse
      * @throws AuthException
      * @throws PropelException
+     * @throws Exception
      */
     public function suppliersRemoveAction(
-        Request $request,
+        CurrentUser  $currentUser,
         UrlGenerator $urlGenerator,
-        $id,
-        $supplier_id
+                     $id,
+                     $supplier_id
     ): RedirectResponse
     {
-        Controller::authAdmin($request);
+        $currentUser->authAdmin();
 
         $pm = new PublisherManager();
 

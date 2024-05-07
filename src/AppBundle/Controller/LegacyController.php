@@ -6,7 +6,6 @@ namespace AppBundle\Controller;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
-use Biblys\Service\CurrentUrlService;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Service\MetaTagsService;
@@ -15,7 +14,6 @@ use Closure;
 use Exception;
 use Framework\Controller;
 use Model\PageQuery;
-use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,13 +47,13 @@ class LegacyController extends Controller
 
         $pagePrefix = substr($pageQueryParam, 0, 4);
         if ($pagePrefix == 'adm_') {
-            self::authAdmin($request);
+            $currentUser->authAdmin();
         }
         if ($pagePrefix == 'pub_') {
-            self::authPublisher($request, null);
+            $currentUser->authPublisher();
         }
         if ($pagePrefix == 'log_') {
-            self::authUser($request);
+            $currentUser->authUser();
         }
 
         $routeParams = $request->attributes->get("_route_params", []);

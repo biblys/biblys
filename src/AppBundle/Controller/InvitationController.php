@@ -46,14 +46,15 @@ class InvitationController extends Controller
      * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
+     * @throws Exception
      */
     public function newAction(
-        Request         $request,
         CurrentSite     $currentSite,
+        CurrentUser     $currentUser,
         TemplateService $templateService,
     ): Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $downloadableTypes = Type::getAllDownloadableTypes();
         $downloadbleTypeIds = array_map(function ($type) {
@@ -84,7 +85,7 @@ class InvitationController extends Controller
         TemplateService $templateService,
         Session         $session,
         UrlGenerator    $urlGenerator,
-        CurrentUser $currentUser
+        CurrentUser     $currentUser
     ): Response|RedirectResponse
     {
         $currentUser->authAdmin();
@@ -161,9 +162,9 @@ class InvitationController extends Controller
      * @throws Exception
      */
     public function listAction(
-        Request     $request,
-        CurrentSite $currentSite,
-        CurrentUser $currentUser,
+        Request         $request,
+        CurrentSite     $currentSite,
+        CurrentUser     $currentUser,
         TemplateService $templateService,
     ): Response
     {
@@ -174,7 +175,7 @@ class InvitationController extends Controller
             ->orderByUpdatedAt(Criteria::DESC);
 
         try {
-            $pageNumber = (int) $request->query->get("p", 0);
+            $pageNumber = (int)$request->query->get("p", 0);
             $invitationTotalCount = $invitationsQuery->count();
             $invitationsPerPage = 100;
             $pagination = new Pagination($pageNumber, $invitationTotalCount, $invitationsPerPage);
@@ -239,7 +240,7 @@ class InvitationController extends Controller
         Session     $session,
     ): RedirectResponse
     {
-        self::authUser($request);
+        $currentUser->authUser();
 
         $code = $request->request->get("code");
         $invitation = self::_getInvitationFromCode($currentSite, $code);
@@ -279,9 +280,9 @@ class InvitationController extends Controller
      * @throws Exception
      */
     public function deleteAction(
-        Session $session,
+        Session     $session,
         CurrentUser $currentUser,
-        int     $id,
+        int         $id,
     ): RedirectResponse
     {
         $currentUser->authAdmin();
@@ -380,8 +381,8 @@ class InvitationController extends Controller
     }
 
     /**
-     * @throws PropelException
      * @return Article[]
+     * @throws PropelException
      */
     private static function _getArticlesNotAlreadyInLibrary(
         CurrentSite $currentSite,
@@ -390,8 +391,7 @@ class InvitationController extends Controller
         Session     $session,
     ): array
     {
-        return array_filter($invitation->getArticles()->getData(), function ($article) use
-        ($currentSite, $currentUser, $session) {
+        return array_filter($invitation->getArticles()->getData(), function ($article) use ($currentSite, $currentUser, $session) {
             $stock = StockQuery::create()
                 ->filterBySite($currentSite->getSite())
                 ->filterByArticle($article)
@@ -446,7 +446,7 @@ class InvitationController extends Controller
         $invitationRelativeUrl = $urlGenerator->generate("invitation_show", [
             "code" => $invitation->getCode()
         ]);
-        $invitationUrl = $request->getSchemeAndHttpHost().$invitationRelativeUrl;
+        $invitationUrl = $request->getSchemeAndHttpHost() . $invitationRelativeUrl;
         $mailContent = $templateService->renderResponse(
             "AppBundle:Invitation:email.html.twig",
             [

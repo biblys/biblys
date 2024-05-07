@@ -5,11 +5,13 @@ namespace AppBundle\Controller;
 use ArticleManager;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Cart;
 use CartManager;
 use Exception;
 use Framework\Controller;
 use Model\StockQuery;
 use Propel\Runtime\Exception\PropelException;
+use Stock;
 use StockManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -21,7 +23,10 @@ use Usecase\UpdateStockItemPriceUsecase;
 
 class StockController extends Controller
 {
-
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
     public function searchAction($query): JsonResponse
     {
         $am = new ArticleManager();
@@ -64,23 +69,31 @@ class StockController extends Controller
 
     /**
      * Adding a stock item to cart
-     * /stock/{stock_id}/add-to-cart
+     * @route /stock/{stock_id}/add-to-cart
      * @throws PropelException
+     * @throws Exception
      */
-    public function addToCartAction(Request $request, Session $session, $stock_id): RedirectResponse
+    public function addToCartAction(
+        Request $request,
+        CurrentUser $currentUser,
+        Session $session,
+        $stock_id
+    ): RedirectResponse
     {
         // to be implemented: non-admin users adding stockitems to their own carts
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $sm = new StockManager();
         $cm = new CartManager();
 
+        /** @var Stock $stock */
         $stock = $sm->getById($stock_id);
         if (!$stock) {
             throw new NotFoundException("Stock $stock_id not found");
         }
 
         $cart_id = $request->request->get('cart_id'); // An admin can POST the cart_id
+        /** @var Cart $cart */
         $cart = $cm->getById($cart_id);
         if (!$cart) {
             throw new NotFoundException("Cart $cart_id not found");
@@ -106,14 +119,19 @@ class StockController extends Controller
     /**
      * Canceling return for a copy
      * GET /stock/{stockId}/cancel-return
-     * @throws PropelException
+     * @throws Exception
      */
-    public function cancelReturnAction(Request $request, Session $session, $stockId): RedirectResponse
+    public function cancelReturnAction(
+        CurrentUser $currentUser,
+        Session $session,
+        $stockId
+    ): RedirectResponse
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $sm = new StockManager();
 
+        /** @var Stock $stock */
         $stock = $sm->getById($stockId);
         if (!$stock) {
             throw new NotFoundException("Stock $stockId not found");
@@ -133,9 +151,6 @@ class StockController extends Controller
 
     /**
      * POST /stock/{stockId}/edit-free-price
-     * @param Request $request
-     * @param int $stockId
-     * @return Response
      * @throws Exception
      */
     public function editFreePriceAction(

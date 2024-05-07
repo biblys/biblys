@@ -33,10 +33,11 @@ class RayonController extends Controller
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
+     * @throws Exception
      */
-    public function indexAction(Request $request): Response
+    public function indexAction(Request $request, CurrentUser $currentUser): Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $rm = new RayonManager();
 
@@ -50,9 +51,11 @@ class RayonController extends Controller
     }
 
     /**
+     * @throws LoaderError
+     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws LoaderError
+     * @throws Exception
      */
     public function showAction(Request $request, $url): Response
     {
@@ -66,7 +69,7 @@ class RayonController extends Controller
 
         $request->attributes->set("page_title", $rayon->get('name'));
 
-        $pageNumber = (int) $request->query->get("p", 0);
+        $pageNumber = (int)$request->query->get("p", 0);
         if ($pageNumber < 0) {
             throw new BadRequestHttpException("Page number must be a positive integer");
         }
@@ -97,11 +100,16 @@ class RayonController extends Controller
      * @throws PropelException
      * @throws Exception
      */
-    public function editAction(Request $request, UrlGenerator $urlGenerator, $id)
+    public function editAction(
+        Request      $request,
+        CurrentUser  $currentUser,
+        UrlGenerator $urlGenerator,
+                     $id
+    ): RedirectResponse|Response
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        $currentUser->authAdmin();
 
-        self::authAdmin($request);
+        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $rm = new RayonManager();
 
@@ -110,7 +118,7 @@ class RayonController extends Controller
             throw new NotFoundException("Rayon $id not found.");
         }
 
-        $request->attributes->set("page_title", 'Modifier le rayon '.$rayon->get('name'));
+        $request->attributes->set("page_title", 'Modifier le rayon ' . $rayon->get('name'));
 
         if ($request->getMethod() == 'POST') {
             $rayon->set('rayon_name', $request->request->get('name'))
@@ -136,10 +144,15 @@ class RayonController extends Controller
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
+     * @throws Exception
      */
-    public function newAction(Request $request, UrlGenerator $urlGenerator)
+    public function newAction(
+        Request      $request,
+        CurrentUser  $currentUser,
+        UrlGenerator $urlGenerator,
+    ): RedirectResponse|Response
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $rm = new RayonManager();
 
@@ -179,16 +192,15 @@ class RayonController extends Controller
 
     /**
      * @throws AuthException
-     * @throws PropelException
      * @throws Exception
      */
     public function deleteAction(
-        Request $request,
+        CurrentUser  $currentUser,
         UrlGenerator $urlGenerator,
-        $id
+                     $id
     ): RedirectResponse
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $rm = new RayonManager();
 
@@ -211,13 +223,14 @@ class RayonController extends Controller
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
     public function addArticleAction(
-        Request $request,
-        Session $session,
+        Request      $request,
+        Session      $session,
         UrlGenerator $urlGenerator,
-        CurrentUser $currentUser,
-        $id
+        CurrentUser  $currentUser,
+                     $id
     ): RedirectResponse|Response
     {
         $globalSite = LegacyCodeHelper::getGlobalSite();
@@ -279,7 +292,7 @@ class RayonController extends Controller
             );
         }
 
-        $request->attributes->set("page_title", 'Ajouter au rayon '.$rayon->get('name'));
+        $request->attributes->set("page_title", 'Ajouter au rayon ' . $rayon->get('name'));
 
         $types = Type::getAll();
 
@@ -301,7 +314,7 @@ class RayonController extends Controller
      * @throws SyntaxError
      * @throws Exception
      */
-    public function rayonArticlesAction(Request $request, CurrentUser $currentUser, $id): Response
+    public function rayonArticlesAction(CurrentUser $currentUser, $id): Response
     {
         $currentUser->authAdmin();
 
@@ -327,14 +340,15 @@ class RayonController extends Controller
      * Remove an article from a Rayon.
      * @throws AuthException
      * @throws PropelException
+     * @throws Exception
      */
     public function removeArticleAction(
-        Request $request,
+        CurrentUser $currentUser,
         UrlGenerator $urlGenerator,
-        $rayon_id
+                     $rayon_id,
     ): RedirectResponse
     {
-        self::authAdmin($request);
+        $currentUser->authAdmin();
 
         $rm = new RayonManager();
         $rayon = $rm->get(['rayon_id' => $rayon_id]);

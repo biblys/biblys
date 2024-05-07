@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use ArticleManager;
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
@@ -52,6 +53,7 @@ class PeopleController extends Controller
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
+     * @throws Exception
      */
     public function showAction(Request $request, $slug): RedirectResponse|Response
     {
@@ -73,7 +75,7 @@ class PeopleController extends Controller
         $request->attributes->set("page_title", $people->getName());
 
         // Pagination
-        $page = (int) $request->query->get('p', 0);
+        $page = (int)$request->query->get('p', 0);
         $totalCount = $am->countAllFromPeople($people);
         $pagination = new Pagination($page, $totalCount);
 
@@ -100,18 +102,20 @@ class PeopleController extends Controller
 
     /**
      * @route /admin/people/{id}/edit.
-     * @param Request $request
-     * @param int $id
-     * @param UrlGenerator $urlGenerator
-     * @return RedirectResponse|Response
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
-    public function editAction(Request $request, int $id, UrlGenerator $urlGenerator): RedirectResponse|Response
+    public function editAction(
+        Request      $request,
+        UrlGenerator $urlGenerator,
+        CurrentUser  $currentUser,
+        int          $id,
+    ): RedirectResponse|Response
     {
-        Controller::authAdmin($request);
+        $currentUser->authAdmin();
 
         $pm = new PeopleManager();
         $people = $pm->get(['people_id' => $id]);
@@ -119,7 +123,7 @@ class PeopleController extends Controller
             throw new NotFoundException("People $id not found.");
         }
 
-        $request->attributes->set("page_title", "Modifier le contributeur ".$people->get('name'));
+        $request->attributes->set("page_title", "Modifier le contributeur " . $people->get('name'));
 
         $formFactory = $this->getFormFactory();
 

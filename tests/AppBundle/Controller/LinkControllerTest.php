@@ -2,9 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\CurrentUser;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Exception;
+use Mockery;
 use Model\LinkQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -16,22 +18,6 @@ require_once __DIR__."/../../setUp.php";
 class LinkControllerTest extends TestCase
 {
     /**
-     * @throws Exception
-     */
-    public function testDeleteActionByUser()
-    {
-        // given
-        $controller = new LinkController();
-        $request = new Request();
-
-        // then
-        $this->expectException(UnauthorizedHttpException::class);
-
-        // when
-        $controller->deleteAction($request, 1);
-    }
-
-    /**
      * @throws PropelException
      * @throws Exception
      */
@@ -39,11 +25,15 @@ class LinkControllerTest extends TestCase
     {
         // given
         $controller = new LinkController();
-        $request = RequestFactory::createAuthRequestForPublisherUser();
         $link = ModelFactory::createLink();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive('authPublisher');
 
         // when
-        $response = $controller->deleteAction($request, $link->getId());
+        $response = $controller->deleteAction(
+            $currentUser,
+            $link->getId()
+        );
 
         // then
         $this->assertEquals(
