@@ -41,11 +41,12 @@ class CurrentUser
     }
 
     /**
-     * @param Request $request
-     * @return CurrentUser
      * @throws PropelException
      */
-    private static function buildFromRequest(Request $request): CurrentUser
+    private static function buildFromRequest(
+        Request $request,
+        CurrentSite $currentSite,
+    ): CurrentUser
     {
         $cookieToken = $request->cookies->get("user_uid");
         $headerToken = $request->headers->get("AuthToken");
@@ -57,7 +58,10 @@ class CurrentUser
             return new CurrentUser(null, $visitorUid);
         }
 
-        $session = SessionQuery::create()->filterByToken($token)->findOne();
+        $session = SessionQuery::create()
+            ->filterByToken($token)
+            ->filterBySite($currentSite->getSite())
+            ->findOne();
         if (!$session) {
             return new CurrentUser(null, $token);
         }
@@ -80,9 +84,10 @@ class CurrentUser
      */
     public static function buildFromRequestAndConfig(Request $request, Config $config): CurrentUser
     {
-        $currentUser = self::buildFromRequest($request);
-
         $currentSite = CurrentSite::buildFromConfig($config);
+
+        $currentUser = self::buildFromRequest($request, $currentSite);
+
         $currentUser->injectCurrentSite($currentSite);
 
         return $currentUser;

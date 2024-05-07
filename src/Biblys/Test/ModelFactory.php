@@ -361,12 +361,11 @@ class ModelFactory
      */
     public static function createUserSession(User $user = null): Session
     {
-        if (!$user) {
-            $user = ModelFactory::createUser();
-        }
+        $user = $user ?? ModelFactory::createUser();
 
         $session = new Session();
         $session->setUser($user);
+        $session->setSite($user->getSite());
         $session->setToken(Session::generateToken());
         $session->setExpiresAt(new DateTime('tomorrow'));
         $session->save();
