@@ -1,10 +1,22 @@
 <?php
 
+/** @noinspection PhpUnhandledExceptionInspection */
+
 global $urlgenerator, $request;
 
-use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
+use Biblys\Service\Slug\SlugService;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+
+$request = Request::createFromGlobals();
+$config = Config::load();
+$currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+$currentSite = CurrentSite::buildFromConfig($config);
+$slugService = new SlugService();
 
 $sm = new StockManager();
 
@@ -13,7 +25,7 @@ $pqp = array(); // PDO search query params
 
 $json = null; // JSON response
 $filters = null;
-$covers_lane = null;
+$coverLane = null;
 
 $sel_etat = null;
 $_og_image = null;
@@ -21,6 +33,9 @@ $_og_description = null;
 if (!isset($_GET['q'])) {
     $_GET['q'] = null;
 }
+
+$_REQ = $_REQ ?? "";
+$terms = $terms ?? "";
 
 if (!isset($defaultOrderBy)) {
     $defaultOrderBy = null;
@@ -49,15 +64,15 @@ if (!empty($_GET["q"])) {
     foreach ($queries as $q) {
         $q = str_replace('+', ' ', $q);
 
-        if (strstr($q, 'titre:')) { // Recherche par titre
+        if (str_contains($q, 'titre:')) { // Recherche par titre
             $title = str_replace("titre:", "", $q);
             $sql[] = "`article_title` LIKE '%".$title."%'";
             $filters .= ' du titre '.$title;
-        } elseif (strstr($q, 'auteur:')) { // Recherche par auteur
+        } elseif (str_contains($q, 'auteur:')) { // Recherche par auteur
             $author = str_replace("auteur:", "", $q);
             $sql[] = "`article_authors` LIKE '%".$author."%'";
             $filters .= ' de l\'auteur '.$author;
-        } elseif (strstr($q, 'collection:')) { // Recherche par collection
+        } elseif (str_contains($q, 'collection:')) { // Recherche par collection
             $collection = str_replace("collection:", "", $q);
             $sql[] = "`article_collection` LIKE '%".$collection."%'";
             $filters .= ' de la collection '.$collection;
@@ -65,15 +80,15 @@ if (!empty($_GET["q"])) {
             $editeur = str_replace(array("editeur:","éditeur:"), "", $q);
             $sql[] = "`article_publisher` LIKE '%".$editeur."%'";
             $filters .= ' de l\'éditeur '.$editeur;
-        } elseif (strstr($q, 'date:')) { // Ajoute au stock le
+        } elseif (str_contains($q, 'date:')) { // Ajoute au stock le
             $date = str_replace("date:", "", $q);
             $sql[] = "`stock_purchase_date` LIKE '".$date."%' ";
             $filters .= ' ajoutés le '._date($date, 'j f Y');
-        } elseif (strstr($q, 'date<')) { // Ajoute au stock avant le
+        } elseif (str_contains($q, 'date<')) { // Ajoute au stock avant le
             $date = str_replace("date<", "", $q);
             $sql[] = "`stock_purchase_date` < '".$date." 00:00:00' ";
             $filters .= ' ajoutés avant le '._date($date, 'j f Y');
-        } elseif (strstr($q, 'date>')) { // Ajoute au stock avant le
+        } elseif (str_contains($q, 'date>')) { // Ajoute au stock avant le
             $date = str_replace("date>", "", $q);
             $sql[] = "`stock_purchase_date` > '".$date." 00:00:00' ";
             $filters .= ' ajoutés après le '._date($date, 'j f Y');
@@ -87,13 +102,15 @@ if (!empty($_GET["q"])) {
                 $sql[] = "`stock_condition` != 'Neuf'";
                 $filters .= ' d\'occasion';
             } elseif ($q == "commande") {
-                $sql[] = "`stock_id` IS NULL AND `article_links` LIKE '%[onorder:". LegacyCodeHelper::getGlobalSite()['site_id']."]%' AND `article_availability` = 1";
+                $sql[] = "`stock_id` IS NULL AND `article_links` LIKE '%[onorder:".
+                    $currentSite->getSite()->getId()
+                    ."]%' AND `article_availability` = 1";
                 $filters .= ' sur commande';
             } elseif ($q == "indisp") {
                 $sql[] = "`stock_id` IS NULL";
                 $filters .= ' pas en stock';
             }
-        } elseif (strstr($q, 'type:')) {
+        } elseif (str_contains($q, 'type:')) {
             $type = str_replace("type:", "", $q);
 
             switch ($type) {
@@ -114,6 +131,8 @@ if (!empty($_GET["q"])) {
         } elseif (!empty($q)) {
             if (isset($terms)) {
                 $terms .= ' ';
+            } else {
+                $terms = "";
             }
             $terms .= $q;
             $sql[] .= "`article_keywords` LIKE '%".addslashes($q)."%'";
@@ -123,6 +142,8 @@ if (!empty($_GET["q"])) {
     foreach ($sql as $offset) {
         if (isset($_REQ)) {
             $_REQ .= ' AND ';
+        } else {
+            $_REQ = '';
         }
         $_REQ .= $offset;
     }
@@ -160,18 +181,14 @@ if (isset($listOrderBy)) {
 }
 
 // Pagination
-$npp = 10; // nombre par page
-$articles_per_page = LegacyCodeHelper::getGlobalSite()->getOpt('articles_per_page');
-if ($articles_per_page) {
-    $npp = $articles_per_page;
-}
+$articlesPerPage = $currentSite->getOption('articles_per_page', 10);
 
 $offset = (int) $request->query->get("s", 0);
-$_REQ_LIMIT = ' LIMIT '.$npp.' OFFSET '.$offset;
-$nextPageNum = $offset + $npp;
+$_REQ_LIMIT = ' LIMIT '.$articlesPerPage.' OFFSET '.$offset;
+$nextPageNum = $offset + $articlesPerPage;
 
 $active_stock_query = null;
-$active_stock = LegacyCodeHelper::getGlobalSite()->getOpt("active_stock");
+$active_stock = $currentSite->getOption("active_stock");
 if ($active_stock) {
     $active_stock = "'".implode("','", explode(",", $active_stock))."'";
     $active_stock_query = " AND `stock_stockage` IN (".$active_stock.")";
@@ -190,7 +207,7 @@ $sql_query = "
 
 // Compter le nombre de résultats
 $numQ = EntityManager::prepareAndExecute("SELECT `articles`.`article_id` ".$sql_query, [
-    "site_id" => LegacyCodeHelper::getGlobalSite()->get("id"),
+    "site_id" => $currentSite->getSite()->getId(),
 ]);
 $num = count($numQ->fetchAll());
 
@@ -227,7 +244,7 @@ $sql = EntityManager::prepareAndExecute("
     ".$sql_query." 
     ".$_REQ_ORDER." 
     ".$_REQ_LIMIT,
-    ["site_id" => LegacyCodeHelper::getGlobalSite()->get("id")]
+    ["site_id" => $currentSite->getSite()->getId()]
 );
 
 $ix = $offset;
@@ -238,8 +255,10 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     $x['used'] = 0;
     $x['availability'] = null;
 
-    $article = new Article($x, false);
-    $copy = $article->getCheapestAvailableItem();
+    $articleEntity = new Article($x, false);
+    $article = new \Model\Article();
+    $article->setId($articleEntity->get("id"));
+    $copy = $articleEntity->getCheapestAvailableItem();
 
     // Exemplaire en stock
     if ($copy) {
@@ -264,7 +283,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
 
 
         // Sur commande
-    } elseif (strstr($x["article_links"], '[onorder:'. LegacyCodeHelper::getGlobalSite()["site_id"].']') && $x["article_availability"] == 1) {
+    } elseif (strstr($x["article_links"], '[onorder:'. $currentSite->getSite()->getId() .']') && $x["article_availability"] == 1) {
         $x["availability"] = '<img src="/common/img/square_blue.png" alt="Sur commande" title="Sur commande" />';
         $x["price"] = price($x["article_price"], 'EUR');
         $x["condition"] = ' onorder';
@@ -280,7 +299,8 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     }
 
     // Couverture
-    if (media_exists('article', $x['article_id']) && count($covers) < 12) {
+    $media = new Media("article", $x["article_id"]);
+    if ($media->exists() && count($covers) < 12) {
         $covers[] = $x;
     }
 
@@ -298,14 +318,16 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     // Cycle et Tome
     $x['cycle'] = '';
     if (!empty($x['article_cycle'])) {
-        $x['cycle'] = '<br><span class="article_cycle">(<a href="/serie/'.makeurl($x['article_cycle']).'">'.$x['article_cycle'].'</a>'.numero($x['article_tome'], ' - ').')</span>';
+        $x['cycle'] = '<br><span class="article_cycle">(<a href="/serie/'.
+            $slugService->slugify($x['article_cycle'])
+            .'">'.$x['article_cycle'].'</a>'.numero($x['article_tome'], ' - ').')</span>';
     }
 
     // Bouton panier
     $x['cart'] = '<td></td>';
     if (!empty($x['stock_id']) && $copy) {
         $cart_class = 'black';
-        if (LegacyCodeHelper::getGlobalVisitor()->hasInCart('article', $x['article_id'])) {
+        if ($currentUser->hasArticleInCart($article)) {
             $cart_class = 'green';
         }
         $x['cart'] = '
@@ -318,7 +340,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     // Wishlist button
     $wish_icon = 'fa-heart-o';
     $wish_text = 'Ajouter <em>'.$x['article_title'].'</em> à vos envies';
-    if (LegacyCodeHelper::getGlobalVisitor()->hasAWish($x['article_id'])) {
+    if ($currentUser->hasArticleInWishlist($article)) {
         $wish_icon = 'fa-heart red';
         $wish_text = 'Retirer <em>'.$x['article_title'].'</em> de vos envies';
     }
@@ -333,7 +355,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     // Alert button
     $alert_icon = 'fa-bell-o';
     $alert_text = 'Créer une alerte pour <em>'.$x['article_title'].'</em>';
-    if (LegacyCodeHelper::getGlobalVisitor()->hasAlert($x['article_id'])) {
+    if ($currentUser->hasAlertForArticle($article)) {
         $alert_icon = 'fa-bell orange';
         $alert_text = 'Retirer <em>'.$x['article_title'].'</em> de vos alertes';
     }
@@ -378,19 +400,20 @@ if ($ix < $num) {
 
 // Couvertures (6 au hasard)
 if (count($covers) >= 12) {
-    $cover_lane = null;
+    $coverLane = "";
+    $coverImages = [];
     for ($ic = 0; $ic < 7; $ic++) {
         $c = $covers[rand(0, count($covers)-1)];
-        $cover_lane .= ' <a href="/a/'.$c['article_url'].'"><img src="'.media_url('article', $c['article_id'], 'h125').'" style="max-width: 90px;" alt="'.$c['article_title'].' de '.authors($c['article_authors']).'" title="'.$c['article_title'].' de '.authors($c['article_authors']).'"></a> ';
+        $cover = new Media("article", $c["article_id"]);
+        $coverImages[] = ' <a href="/a/'.$c['article_url'].'"><img src="'.
+            $cover->getUrl(["size" => "h125"]).
+            '" style="max-width: 90px;" alt="'.$c['article_title'].' de '.authors($c['article_authors']).'" title="'.$c['article_title'].' de '.authors($c['article_authors']).'"></a> ';
     }
-    if (isset($cover_lane)) {
-        $covers_lane = '<div id="coverLane" class="right">'.$cover_lane.'</div>';
+    if (count($coverImages) > 0) {
+        $coverLane = '<div id="coverLane" class="right">'.join($coverImages).'</div>';
     }
 } else {
     $covers = [];
-}
-if (count($covers) >= 1) {
-    $_og_image = '<meta property="og:image" content="'.media_url('article', $c['article_id']).'">';
 }
 
 if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
@@ -420,7 +443,7 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
     $sel[$listOrderBy.$listSortOrder] = ' data-selected="true"';
     $sel[$sel_etat] = ' data-selected="true"';
 
-    $listContent = $covers_lane.'
+    $listContent = $coverLane.'
 
         <div id="listOptions">
             <span>
@@ -430,7 +453,7 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
             Afficher :
 
             <div id="listFilter" class="btn-group">
-                <button class="btn btn-default btn-sm" dropdown-toggle" data-toggle="dropdown">
+                <button class="btn btn-default btn-sm" data-toggle="dropdown">
                     <i class="fa fa-square"></i>&nbsp; tous les livres <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
@@ -447,7 +470,7 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
             Trier par :
 
             <div id="listSort" class="btn-group">
-                <button class="btn btn-default btn-sm" dropdown-toggle" data-toggle="dropdown">
+                <button class="btn btn-default btn-sm" data-toggle="dropdown">
                     date d\'ajout au stock <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
@@ -480,13 +503,6 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
         '.$nextPage.'
 
     ';
-
-    $_OPENGRAPH = '
-        <meta property="og:type" content="website"/>
-        <meta property="og:title" content="'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'" <meta property="og:url" content="http://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"].'"/>
-        <meta property="og:description" content="'.strip_tags(truncate(strip_tags($_og_description), '500', '...', true)).'"/>
-        <meta property="og:site_name" content="'. LegacyCodeHelper::getGlobalSite()["site_name"].'"/>
-    '.$_og_image;
 }
 
 if (!empty($_ECHO)) {
