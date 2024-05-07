@@ -8,6 +8,8 @@ use Model\AlertQuery;
 use Model\Article;
 use Model\Cart;
 use Model\CartQuery;
+use Model\Customer;
+use Model\CustomerQuery;
 use Model\Option;
 use Model\OptionQuery;
 use Model\Publisher;
@@ -459,5 +461,27 @@ class CurrentUser
             ->count();
 
         return $alertsForArticle > 0;
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function getOrCreateCustomer(): ?Customer
+    {
+        $customer = CustomerQuery::create()
+            ->filterBySite($this->getCurrentSite()->getSite())
+            ->filterByUser($this->getUser())
+            ->findOne();
+
+        if ($customer === null) {
+            $customer = new Customer();
+            $customer->setSite($this->getCurrentSite()->getSite());
+            $customer->setUser($this->getUser());
+            $customer->save();
+        }
+
+        return $customer;
+
     }
 }

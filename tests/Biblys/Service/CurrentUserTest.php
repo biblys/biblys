@@ -8,6 +8,7 @@ use DateTime;
 use Exception;
 use Mockery;
 use Model\CartQuery;
+use Model\Customer;
 use Model\Option;
 use Model\User;
 use PHPUnit\Framework\TestCase;
@@ -1339,5 +1340,54 @@ class CurrentUserTest extends TestCase
 
         // then
         $this->assertTrue($hasAlertForArticle);
+    }
+
+    /**
+     * getOrCreateCustomer
+     */
+
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetOrCreateCustomerWhenCustomerDoesNotExist()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $article = ModelFactory::createArticle();
+        $user = ModelFactory::createUser();
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // when
+        $customer = $currentUser->getOrCreateCustomer($article);
+
+        // then
+        $this->assertInstanceOf(Customer::class, $customer);
+        $this->assertEquals($site, $customer->getSite());
+        $this->assertEquals($user, $customer->getUser());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetOrCreateCustomerWhenCustomerExists()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $user = ModelFactory::createUser();
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $givenCustomer = ModelFactory::createCustomer($site, $user);
+
+        // when
+        $returnedCustomer = $currentUser->getOrCreateCustomer();
+
+        // then
+        $this->assertEquals($givenCustomer, $returnedCustomer);
     }
 }

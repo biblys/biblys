@@ -5,7 +5,6 @@
 global $urlgenerator;
 
 use Biblys\Legacy\CartHelpers;
-use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
@@ -348,8 +347,9 @@ return function (
             }, $countries);
             $default_destination = $com->get(["country_name" => "France"]);
 
-            if ($currentUser->isAuthentified() && $customer = LegacyCodeHelper::getGlobalVisitor()->getCustomer()) {
-                $country_id = $customer->get('country_id');
+            if ($currentUser->isAuthentified()) {
+                $customer = $currentUser->getOrCreateCustomer();
+                $country_id = $customer->getCountryId();
                 $country = $com->getById($country_id);
                 if ($country) {
                     $default_destination = $country;

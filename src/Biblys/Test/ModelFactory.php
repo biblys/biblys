@@ -578,12 +578,14 @@ class ModelFactory
      */
     public static function createCustomer(
         Site $site,
+        User $user = null,
         string $axysAccountId = null,
     ): Customer
     {
         $customer = new Customer();
 
         $customer->setSite($site);
+        $customer->setUser($user);
         $customer->setAxysAccountId($axysAccountId);
         $customer->save();
 
