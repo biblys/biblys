@@ -16,7 +16,9 @@ site: 1
 #
 #maintenance:
 #  enabled: true
-#  message: Une opération de maintenance est en cours. Merci de réessayer d'ici quelques instants.
+#  title: Une opération de maintenance est en cours.
+#  message: Merci de réessayer d'ici quelques instants.
+#  link: https://status.biblys.cloud
 
 #cloud:
 #  cdn: false

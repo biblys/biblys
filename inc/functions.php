@@ -3,7 +3,6 @@
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
-use Biblys\Service\CurrentUser;
 use Biblys\Service\Slug\SlugService;
 use JetBrains\PhpStorm\NoReturn;
 use Propel\Runtime\Exception\PropelException;
@@ -84,7 +83,16 @@ $request = Request::createFromGlobals();
 
 $maintenanceMode = $config->get("maintenance");
 if (is_array($maintenanceMode) && $maintenanceMode["enabled"] === true) {
-    $response = new Response($maintenanceMode["message"], 503);
+    $content = "";
+    if (isset($maintenanceMode["title"])) {
+        $content .= "<h1>".$maintenanceMode["title"]."</h1>";
+    }
+    $content .= "<p>".$maintenanceMode["message"]."</p>";
+    if (isset($maintenanceMode["link"])) {
+        $content .= "<p><a href='".$maintenanceMode["link"]."'>Plus d'informations</a></p>";
+    }
+
+    $response = new Response($content, 503);
     $response->send();
     die();
 }
