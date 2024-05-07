@@ -484,4 +484,18 @@ class CurrentUser
         return $customer;
 
     }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function hasPurchasedArticle(Article $article): bool
+    {
+        $purchases = StockQuery::create()
+            ->filterBySite($this->getCurrentSite()->getSite())
+            ->filterByArticle($article)
+            ->count();
+
+        return $purchases > 0;
+    }
 }

@@ -1343,14 +1343,33 @@ class CurrentUserTest extends TestCase
     }
 
     /**
-     * getOrCreateCustomer
+     * hasPurchasedArticle
      */
-
 
     /**
      * @throws PropelException
      */
-    public function testGetOrCreateCustomerWhenCustomerDoesNotExist()
+    public function testHasPurchasedArticleForAnonymousUser()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $article = ModelFactory::createArticle();
+        $request = new Request();
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // when
+        $hasPurchasedArticle = $currentUser->hasPurchasedArticle($article);
+
+        // then
+        $this->assertFalse($hasPurchasedArticle);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasPurchasedArticleWhenUserDidNot()
     {
         // given
         $site = ModelFactory::createSite();
@@ -1362,7 +1381,53 @@ class CurrentUserTest extends TestCase
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
-        $customer = $currentUser->getOrCreateCustomer($article);
+        $hasPurchasedArticle = $currentUser->hasPurchasedArticle($article);
+
+        // then
+        $this->assertFalse($hasPurchasedArticle);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasPurchasedArticleWhenUserDidPurchasedIt()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $article = ModelFactory::createArticle();
+        $user = ModelFactory::createUser();
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        ModelFactory::createStockItem(site: $site, article: $article, user: $user);
+
+        // when
+        $hasPurchasedArticle = $currentUser->hasPurchasedArticle($article);
+
+        // then
+        $this->assertTrue($hasPurchasedArticle);
+    }
+
+    /**
+     * getOrCreateCustomer
+     */
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetOrCreateCustomerWhenCustomerDoesNotExist()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $user = ModelFactory::createUser();
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // when
+        $customer = $currentUser->getOrCreateCustomer();
 
         // then
         $this->assertInstanceOf(Customer::class, $customer);

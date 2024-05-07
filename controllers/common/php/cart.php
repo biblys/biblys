@@ -95,6 +95,9 @@ return function (
         $purchased = null;
         if ($type->getId() == 2) {
             $article_type = ' (numérique)';
+            if ($currentUser->hasPurchasedArticle($article)) {
+                $purchased = '<p class="warning left"><a href="/pages/log_mybooks" title="Vous avez déjà acheté ce titre. Juste pour info.">Déjà acheté !</a></p>';
+            }
         }
 
         // Physical or downloadable types
