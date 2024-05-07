@@ -1274,4 +1274,70 @@ class CurrentUserTest extends TestCase
         // then
         $this->assertTrue($hasArticleInWishlist);
     }
+
+    /**
+     * hasAlertForArticle
+     */
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasAlertForArticleForAnonymousUser()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $article = ModelFactory::createArticle();
+        $currentUser = new CurrentUser(null, null);
+
+        // when
+        $hasAlertForArticle = $currentUser->hasAlertForArticle($article);
+
+        // then
+        $this->assertFalse($hasAlertForArticle);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasAlertForArticleWithoutAlertForArticle()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $article = ModelFactory::createArticle();
+        $user = ModelFactory::createUser();
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // when
+        $hasAlertForArticle = $currentUser->hasAlertForArticle($article);
+
+        // then
+        $this->assertFalse($hasAlertForArticle);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasArticleInWishlistWithAlertForArticle()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $article = ModelFactory::createArticle();
+        $user = ModelFactory::createUser();
+        $request = RequestFactory::createAuthRequest(user: $user);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        ModelFactory::createAlert(site: $site, user: $user, article: $article);
+
+        // when
+        $hasAlertForArticle = $currentUser->hasAlertForArticle($article);
+
+        // then
+        $this->assertTrue($hasAlertForArticle);
+    }
 }

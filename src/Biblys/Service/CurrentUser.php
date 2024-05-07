@@ -4,6 +4,7 @@ namespace Biblys\Service;
 
 use DateTime;
 use Exception;
+use Model\AlertQuery;
 use Model\Article;
 use Model\Cart;
 use Model\CartQuery;
@@ -454,5 +455,24 @@ class CurrentUser
             ->count();
 
         return $articleInWishlistCount > 0;
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function hasAlertForArticle(Article $article): bool
+    {
+        if (!$this->isAuthentified()) {
+            return false;
+        }
+
+        $alertsForArticle = AlertQuery::create()
+            ->filterBySite($this->getCurrentSite()->getSite())
+            ->filterByUser($this->user)
+            ->filterByArticleId($article->getId())
+            ->count();
+
+        return $alertsForArticle > 0;
     }
 }

@@ -663,11 +663,15 @@ class ModelFactory
      */
     public static function createAlert(
         Site $site = null,
+        User $user = null,
+        Article $article = null,
         string $axysAccountId = null): Alert
     {
         $alert = new Alert();
 
         $alert->setSite($site);
+        $alert->setUser($user);
+        $alert->setArticleId($article?->getId());
         $alert->setAxysAccountId($axysAccountId);
         $alert->save();
 
