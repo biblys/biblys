@@ -1,6 +1,6 @@
 # Historique des modifications
 
-### 2.80.1 (DEV)
+### 2.80.1 (8 mai 2024)
 
 Corrections
 
