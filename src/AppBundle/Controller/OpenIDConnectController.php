@@ -24,6 +24,7 @@ use Model\AuthenticationMethodQuery;
 use Model\CartQuery;
 use Model\CustomerQuery;
 use Model\Map\UserTableMap;
+use Model\Option;
 use Model\OptionQuery;
 use Model\OrderQuery;
 use Model\PostQuery;
@@ -393,6 +394,13 @@ class OpenIDConnectController extends Controller
                     }
                 }
             }
+
+            $importDateOption = new Option();
+            $importDateOption->setSite($currentSite->getSite());
+            $importDateOption->setUser($user);
+            $importDateOption->setKey("imported_from_axys");
+            $importDateOption->setValue(date("Y-m-d"));
+            $importDateOption->save($con);
 
             $con->commit();
 

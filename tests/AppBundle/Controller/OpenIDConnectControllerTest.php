@@ -19,6 +19,7 @@ use Firebase\JWT\JWT;
 use JsonException;
 use Model\AuthenticationMethodQuery;
 use Mockery;
+use Model\OptionQuery;
 use Model\SessionQuery;
 use Model\UserQuery;
 use PHPUnit\Framework\TestCase;
@@ -336,6 +337,13 @@ class OpenIDConnectControllerTest extends TestCase
             ->filterByExternalId($externalId)
             ->findOneByExternalId($externalId);
         $this->assertNotNull($authenticationMethod);
+
+        $importDateOption = OptionQuery::create()
+            ->filterByUser($user)
+            ->filterBySite($site)
+            ->findOneByKey("imported_from_axys");
+        $this->assertNotNull($importDateOption);
+        $this->assertEquals(date("Y-m-d"), $importDateOption->getValue());
 
         $cart->reload();
         $this->assertEquals($user->getId(), $cart->getUserId());
