@@ -425,11 +425,13 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createSite(array $attributes = []): Site
+    public static function createSite(
+        string $title = "Éditions Paronymie"
+    ): Site
     {
         $site = new Site();
-        $site->setName($attributes["name"] ?? "paronymie");
-        $site->setTitle($attributes["title"] ?? "Éditions Paronymie");
+        $site->setName("paronymie");
+        $site->setTitle($title);
         $site->setContact("contact@paronymie.fr");
         $site->setTag("PAR");
         $site->save();

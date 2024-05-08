@@ -33,6 +33,7 @@ use Model\StockItemListQuery;
 use Model\StockQuery;
 use Model\SubscriptionQuery;
 use Model\User;
+use Model\UserQuery;
 use Model\VoteQuery;
 use Model\WishlistQuery;
 use Model\WishQuery;
@@ -44,6 +45,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class OpenIDConnectController extends Controller
@@ -206,6 +208,13 @@ class OpenIDConnectController extends Controller
     ): AuthenticationMethod
     {
         $con = Propel::getWriteConnection(UserTableMap::DATABASE_NAME);
+
+        $userWithEmail = UserQuery::create()->findOneByEmail($email);
+        if ($userWithEmail) {
+            throw new AccessDeniedHttpException(
+                "Il existe déjà un compte {$currentSite->getTitle()} pour l'adresse $email"
+            );
+        }
 
         try {
             $con->beginTransaction();

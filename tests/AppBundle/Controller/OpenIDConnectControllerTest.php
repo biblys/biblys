@@ -25,6 +25,7 @@ use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 require_once __DIR__."/../../setUp.php";
@@ -226,6 +227,53 @@ class OpenIDConnectControllerTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
+    public function testCallbackWithAlreadyExistingEmail()
+    {
+        // given
+        $identityProvider = "axys";
+        $externalId = "AXYS5678";
+        $site = ModelFactory::createSite(title: "NOPE");
+        $currentSite = new CurrentSite($site);
+        $openIDConnectProviderService = $this->_buildOIDCProviderService(
+            $externalId,
+            email: "existing-email@example.net",
+        );
+
+        $otherUser = ModelFactory::createUser(site: $site, email: "existing-email@example.net");
+        ModelFactory::createAuthenticationMethod(
+            site: $site,
+            user: $otherUser,
+            identityProvider: $identityProvider,
+            externalId: 999,
+        );
+
+        $request = self::_buildCallbackRequest(returnUrl: "/my-account");
+        $controller = new OpenIDConnectController();
+        $currentUser = Mockery::mock(CurrentUser::class);
+
+        // then
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->expectExceptionMessage("Il existe déjà un compte NOPE pour l'adresse existing-email@example.net");
+
+        // when
+        $controller->callback(
+            request: $request,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
+            openIDConnectProviderService: $openIDConnectProviderService,
+            templateService: $this->createMock(TemplateService::class),
+        );
+
+        // then
+        $otherUser->reload();
+        $this->assertEquals("new-email@example.net", $otherUser->getEmail());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
     public function testCallbackWithUserImport()
     {
         // given
@@ -364,7 +412,7 @@ class OpenIDConnectControllerTest extends TestCase
     {
         // given
         $externalId = "AXYS9876";
-        $userEmail = "user-to-import@biblys.fr";
+        $userEmail = "user-with-alerts@biblys.fr";
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $currentSite->setOption("alerts", true);
@@ -412,7 +460,7 @@ class OpenIDConnectControllerTest extends TestCase
     {
         // given
         $externalId = "AXYS9876";
-        $userEmail = "user-to-import@biblys.fr";
+        $userEmail = "user-with-publisher-rights@biblys.fr";
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $currentSite->setOption("publisher_rights_managment", true);
@@ -471,7 +519,7 @@ class OpenIDConnectControllerTest extends TestCase
     {
         // given
         $externalId = "AXYS5432";
-        $userEmail = "user-to-import@biblys.fr";
+        $userEmail = "user-with-votes@biblys.fr";
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $currentSite->setOption("voting", true);
@@ -518,7 +566,7 @@ class OpenIDConnectControllerTest extends TestCase
     {
         // given
         $externalId = "AXYS2345";
-        $userEmail = "user-to-import@biblys.fr";
+        $userEmail = "user-with-wishes@biblys.fr";
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $currentSite->setOption("wishlist", true);
