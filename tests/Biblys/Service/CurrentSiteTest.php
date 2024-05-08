@@ -218,14 +218,14 @@ class CurrentSiteTest extends TestCase
     public function testGetTitle()
     {
         // given
-        $site = ModelFactory::createSite(["title" => "Éditions Paronymie"]);
+        $site = ModelFactory::createSite(title: "Éditions Titre");
         $currentSite = new CurrentSite($site);
 
         // when
         $title = $currentSite->getTitle();
 
         // then
-        $this->assertEquals("Éditions Paronymie", $title);
+        $this->assertEquals("Éditions Titre", $title);
     }
 
     /**
