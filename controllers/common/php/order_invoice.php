@@ -182,3 +182,17 @@ return function (
 
     return new Response($content);
 };
+
+function _isAnonymousOrder(Order $order): bool
+{
+    return !$order->has("user_id");
+}
+
+function _orderBelongsToVisitor(Order $order, CurrentUser $currentUser): bool
+{
+    if (!$currentUser->isAuthentified()) {
+        return false;
+    }
+
+    return $order->get("user_id") === $currentUser->getUser()->getId();
+}
