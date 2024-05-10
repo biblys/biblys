@@ -139,6 +139,37 @@ class Visitor
     /**
      * @throws PropelException
      * @throws Exception
+     * @deprecated Visitor->hasAlert is deprecated.
+     *              Use CurrentUser->hasAlertForArticle instead.
+     */
+    public function hasAlert(int $articleId): bool
+    {
+        $request = Request::createFromGlobals();
+        $config = Config::load();
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $article = ArticleQuery::create()->findPk($articleId);
+        return $currentUser->hasAlertForArticle($article);
+    }
+
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     * @deprecated Visitor->hasAWish is deprecated.
+     *              Use CurrentUser->hasArticleInWishlist
+     */
+    public function hasAWish(int $articleId): bool
+    {
+        $request = Request::createFromGlobals();
+        $config = Config::load();
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $article = ArticleQuery::create()->findPk($articleId);
+        return $currentUser->hasArticleInWishlist($article);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
      */
     public function isAdmin(): bool
     {

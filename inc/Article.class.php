@@ -12,9 +12,12 @@ use Biblys\Exception\InvalidEntityException;
 use Biblys\Exception\InvalidEntityFetchedException;
 use Biblys\Isbn\Isbn;
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Slug\SlugService;
 use Model\PeopleQuery;
+use Symfony\Component\HttpFoundation\Request;
 
 class Article extends Entity
 {
@@ -531,7 +534,7 @@ class Article extends Entity
      */
     public function isInCart(): bool
     {
-        
+
         return LegacyCodeHelper::getGlobalVisitor()->hasInCart('article', $this->get('id'));
     }
 
@@ -540,7 +543,7 @@ class Article extends Entity
      */
     public function isInWishlist(): bool
     {
-        
+
         return LegacyCodeHelper::getGlobalVisitor()->hasAWish($this->get('id'));
     }
 
@@ -549,7 +552,7 @@ class Article extends Entity
      */
     public function isinAlerts(): bool
     {
-        
+
         return LegacyCodeHelper::getGlobalVisitor()->hasAlert($this->get('id'));
     }
 
