@@ -376,6 +376,25 @@ class CurrentUserTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function testHasRightForPublisherWithAnonymousUser()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $currentUser = new CurrentUser(null, "token");
+
+        // when
+        $hasRightforPublisher = $currentUser->hasRightForPublisher($publisher);
+
+        // then
+        $this->assertFalse(
+            $hasRightforPublisher,
+            "returns false for anonymous user"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testHasRightForPublisherWithPublisherUser()
     {
         // given
