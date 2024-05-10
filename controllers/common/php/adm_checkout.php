@@ -247,27 +247,36 @@ if ($cart->has('seller_id')) {
 
     $cm->updateFromStock($cart);
 
-// Paniers sauvegardés & VPC
+    // Paniers sauvegardés & VPC
     $s_carts = $cm->getAll();
 
     $shop_carts = NULL;
-    foreach ($s_carts as $s) {
+    foreach ($s_carts as $shopCart) {
+        $seller = "Vendeur inconnu";
+        if ($shopCart->has('seller_id')) {
+            $seller = "Utilisateur Axys n°{$shopCart->get('seller_id')}";
+        }
+        if ($shopCart->has('seller_user_id')) {
+            $sellerUser = UserQuery::create()->findPk($shopCart->get('seller_user_id'));
+            $seller = $sellerUser->getEmail();
+        }
+
         $s_cart = '
         <tr>
-            <td><a href="/pages/adm_checkout?cart_id=' . $s->get('cart_id') . '">' . $s->get('cart_title') . '</a></td>
-            <td>' . ($s->hasSeller() ? $s->getSeller()->getUserName() : null) . '</td>
-            <td>' . ($s->has('customer') ? $s->get('customer')->get('first_name') . ' ' . $s->get('customer')->get('last_name') : null) . '</td>
-            <td class="right">' . $s->get('cart_count') . '</td>
-            <td class="right">' . currency($s->get('cart_amount') / 100) . '</td>
+            <td><a href="/pages/adm_checkout?cart_id=' . $shopCart->get('cart_id') . '">' . $shopCart->get('cart_title') . '</a></td>
+            <td>' . ($seller) . '</td>
+            <td>' . ($shopCart->has('customer') ? $shopCart->get('customer')->get('first_name') . ' ' . $shopCart->get('customer')->get('last_name') : null) . '</td>
+            <td class="right">' . $shopCart->get('cart_count') . '</td>
+            <td class="right">' . currency($shopCart->get('cart_amount') / 100) . '</td>
             <td class="center">
-                <a href="/pages/adm_checkout?cart_id=' . $s->get('cart_id') . '&vacuum_cart=1" data-confirm="Voulez-vous vraiment VIDER ce panier et remettre ' . $s->get('cart_count') . ' exemplaire' . s($s->get('cart_count')) . ' en vente ?" title="Vider le panier et remettre ' . $s->get('cart_count') . ' exemplaire' . s($s->get('cart_count')) . ' en vente." class="btn btn-danger btn-xs">
+                <a href="/pages/adm_checkout?cart_id=' . $shopCart->get('cart_id') . '&vacuum_cart=1" data-confirm="Voulez-vous vraiment VIDER ce panier et remettre ' . $shopCart->get('cart_count') . ' exemplaire' . s($shopCart->get('cart_count')) . ' en vente ?" title="Vider le panier et remettre ' . $shopCart->get('cart_count') . ' exemplaire' . s($shopCart->get('cart_count')) . ' en vente." class="btn btn-danger btn-xs">
                     <i class="fa fa-trash-o"></i>
                 </a>
             </td>
         </tr>
     ';
-        if ($s->get('cart_count') > 0) {
-            if ($s->get('cart_type') == 'shop') $shop_carts .= $s_cart;
+        if ($shopCart->get('cart_count') > 0) {
+            if ($shopCart->get('cart_type') == 'shop') $shop_carts .= $s_cart;
         }
     }
 
