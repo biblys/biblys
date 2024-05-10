@@ -85,8 +85,8 @@ return function (Request $request, Session $session, CurrentSite $currentSite): 
     );
     while ($c = $carts->fetch(PDO::FETCH_ASSOC)) {
         $userIdentity = "Anonyme (".substr($c["cart_uid"], 0, 7)."…)";;
-        $cartBelongsToAnUser = $c["user_id"] || $c["axys_account_id"];
-        if ($cartBelongsToAnUser) {
+        $cartBelongsToAUser = $c["user_id"] || $c["axys_account_id"];
+        if ($cartBelongsToAUser) {
             $userIdentity = $c["email"] ?: "Utilisateur Axys n°" . $c["axys_account_id"];
         }
 
@@ -97,7 +97,9 @@ return function (Request $request, Session $session, CurrentSite $currentSite): 
 
         $c["style"] = null;
         $cartHasExpired = $c["stock_cart_date"] < $datelimite;
-        if ($cartHasExpired && !$cartBelongsToAnUser) {
+        $cartIsEmpty = $c["cart_count"] === 0;
+        $cartCanBeEmptied = $cartIsEmpty || ($cartHasExpired && !$cartBelongsToAUser);
+        if ($cartCanBeEmptied) {
             $c["style"] = ' style="text-decoration:line-through;"';
 
             if (isset($_GET["go"])) {
