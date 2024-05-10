@@ -6,6 +6,7 @@ use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
+use Model\CartQuery;
 use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -933,11 +934,24 @@ if ($article) {
 
     // Add to cart
     if ($mode == 'update' && $stock->isAvailable()) {
-        $cm = new CartManager();
-        $carts = $cm->getAll(['cart_type' => 'web'], ['order' => 'cart_updated', 'sort' => 'desc', 'limit' => 100]);
-        $carts_options = array_map(function ($cart) {
-            return '<option value="' . $cart->get('id') . '">' . $cart->get('id') . ' — ' . $cart->getUserInfo() . '</option>';
-        }, $carts);
+        $carts = CartQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByType("web")
+            ->orderByUpdatedAt()
+            ->limit(100)
+            ->find();
+        $cartOptions = array_map(/**
+         * @throws PropelException
+         */ function (\Model\Cart $cart) {
+            $identity = "Utilisateur inconnu";
+            if ($cart->getUser() !== null) {
+                $identity = $cart->getUser()->getEmail();
+            } elseif ($cart->getAxysAccountId()) {
+                $identity = "Utilisateur Axys n° {$cart->getAxysAccountId()}";
+            }
+
+            return "<option value=\"{$cart->getId()}\">Panier {$cart->getId()} de $identity</option>";
+        }, $carts->getArrayCopy());
 
         $content .= '
         <form method="post" action="' . $urlgenerator->generate('stock_add_to_cart', ['stock_id' => $stock->get('id')]) . '" class="fieldset form-inline">
@@ -946,7 +960,7 @@ if ($article) {
                     <p class="text-center">
                         Ajouter l\'exemplaire au panier :
                         <select class="form-control" name="cart_id">
-                            ' . join($carts_options) . '
+                            ' . join($cartOptions) . '
                         </select>
                         <button class="btn btn-primary" type="submit">OK</button>
                     </p>
