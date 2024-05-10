@@ -210,7 +210,9 @@ class OpenIDConnectController extends Controller
     {
         $con = Propel::getWriteConnection(UserTableMap::DATABASE_NAME);
 
-        $userWithEmail = UserQuery::create()->findOneByEmail($email);
+        $userWithEmail = UserQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->findOneByEmail($email);
         if ($userWithEmail) {
             throw new AccessDeniedHttpException(
                 "Il existe déjà un compte {$currentSite->getTitle()} pour l'adresse $email"
