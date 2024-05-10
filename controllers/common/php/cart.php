@@ -79,6 +79,7 @@ return function (
     $cart_content = array();
 
     foreach ($stocks as $stock) {
+        /** @var Article $article */
         $article = $stock->get('article');
         $type = $article->getType();
 
@@ -95,7 +96,8 @@ return function (
         $purchased = null;
         if ($type->getId() == 2) {
             $article_type = ' (numérique)';
-            if ($currentUser->hasPurchasedArticle($article)) {
+            $articleModel = \Model\ArticleQuery::create()->findPk($article->get("id"));
+            if ($currentUser->hasPurchasedArticle($articleModel)) {
                 $purchased = '<p class="warning left"><a href="/pages/log_mybooks" title="Vous avez déjà acheté ce titre. Juste pour info.">Déjà acheté !</a></p>';
             }
         }
