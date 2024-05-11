@@ -1,6 +1,7 @@
 <?php
 
 use Model\User;
+use Propel\Runtime\Exception\PropelException;
 
 class Post extends Entity
     {
@@ -15,6 +16,21 @@ class Post extends Entity
          * @var Publisher
          */
         private $publisher = null;
+
+    /**
+     * @throws PropelException
+     */
+    public static function buildFromModel(\Model\Post $post): Post
+        {
+            return new Post([
+                "post_id" => $post->getId(),
+                "post_title" => $post->getTitle(),
+                "post_url" => $post->getUrl(),
+                "post_content" => $post->getContent(),
+                "post_date" => $post->getDate()->format("Y-m-d H:i:s"),
+                "post_illustration_legend" => $post->getIllustrationLegend(),
+            ]);
+        }
 
         public function __construct($data)
         {

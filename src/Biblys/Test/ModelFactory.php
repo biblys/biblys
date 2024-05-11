@@ -631,13 +631,24 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createPost(
-        Site $site,
+        Site $site = null,
+        string $title = "Une actualité",
+        bool $status = Post::STATUS_ONLINE,
+        DateTime $date = new DateTime(),
         string $axysAccountId = null,
     ): Post
     {
+        $slugService = new SlugService();
+
         $post = new Post();
 
-        $post->setSite($site);
+        $post->setSite($site ?? self::createSite());
+        $post->setTitle($title);
+        $post->setUrl($slugService->slugify($title));
+        $post->setStatus($status);
+        $post->setDate($date);
+        $post->setCreatedAt(new DateTime());
+        $post->setUpdatedAt(new DateTime());
         $post->setAxysAccountId($axysAccountId);
         $post->save();
 

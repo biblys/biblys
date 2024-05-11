@@ -15,5 +15,6 @@ use Model\Base\Post as BasePost;
  */
 class Post extends BasePost
 {
-
+    public const STATUS_OFFLINE = false;
+    public const STATUS_ONLINE = true;
 }

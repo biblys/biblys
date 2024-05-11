@@ -8,6 +8,7 @@ use Biblys\Service\CurrentUser;
 use Biblys\Service\Pagination;
 use Biblys\Service\Slug\SlugService;
 use Biblys\Service\TemplateService;
+use DateTime;
 use Exception;
 use Framework\Controller;
 use League\HTMLToMarkdown\HtmlConverter;
@@ -41,12 +42,12 @@ class PostController extends Controller
 
         $queryParams = [
             "post_status" => 1,
-            "post_date" => "< ".date("Y-m-d H:i:s")
+            "post_date" => "< " . date("Y-m-d H:i:s")
         ];
 
         $pm = new PostManager();
 
-        $pageNumber = (int) $request->query->get("p", 0);
+        $pageNumber = (int)$request->query->get("p", 0);
         if ($pageNumber < 0) {
             throw new BadRequestHttpException("Page number must be a positive integer");
         }
@@ -76,59 +77,62 @@ class PostController extends Controller
      * @throws LoaderError
      */
     public function showAction(
-        Request $request,
-        CurrentUser $currentUser,
+        Request         $request,
+        CurrentSite     $currentSite,
+        CurrentUser     $currentUser,
         TemplateService $templateService,
-        string $slug
+        UrlGenerator    $urlGenerator,
+        string          $slug
     ): Response
     {
-        global $urlgenerator;
-        $globalSite = LegacyCodeHelper::getGlobalSite();
-
-        $pm = new PostManager();
-        $post = $pm->get(["post_url" => $slug]);
+        $post = PostQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->findOneByUrl($slug);
         if (!$post) {
             throw new NotFoundException("Post $slug not found.");
         }
 
-        $userCanSeeUnpublishedPost = $post->get('user_id') === $currentUser->getUser()->getId() ||
-            $currentUser->isAdmin();
+        $userCanSeeUnpublishedPost = false;
+        if ($currentUser->isAuthentified()) {
+            $userIsPostAuthor = $post->getUser() === $currentUser->getUser();
+            $userCanSeeUnpublishedPost = $userIsPostAuthor || $currentUser->isAdmin();
+        }
 
-        $postIsOffline = $post->get('status') == 0;
+        $postIsOffline = $post->getStatus() === Post::STATUS_OFFLINE;
         if ($postIsOffline && !$userCanSeeUnpublishedPost) {
             throw new NotFoundException("Post $slug is currently offline.");
         }
 
-        $postIsToBePublished = $post->get('date') > date("Y-m-d H:i:s");
+        $postIsToBePublished = $post->getDate() > new DateTime();
         if ($postIsToBePublished && !$userCanSeeUnpublishedPost) {
             throw new NotFoundException("Post $slug is to be published.");
         }
 
-        $request->attributes->set("page_title", $post->get("title"));
+        $request->attributes->set("page_title", $post->getTitle());
 
         $description = "";
-        if ($post->has("content")) {
-            $description = truncate(strip_tags($post->get('content')), '500', '...', true);
+        if ($post->getContent()) {
+            $description = truncate(strip_tags($post->getContent()), '500', '...', true);
         }
 
         $opengraphTags = [
             "type" => "article",
-            "title" => $post->get("title"),
-            "url" => "https://" .$request->getHost().
-                $urlgenerator->generate("post_show", ["slug" => $post->get("url")]),
+            "title" => $post->getTitle(),
+            "url" => "https://" . $request->getHost() .
+                $urlGenerator->generate("post_show", ["slug" => $post->getUrl()]),
             "description" => $description,
-            "site_name" => $globalSite->get("title"),
+            "site_name" => $currentSite->getTitle(),
             "locale" => "fr_FR",
-            "article:published_time" => $post->get('date'),
-            "article:modified_time" => $post->get('updated')
+            "article:published_time" => $post->getDate()->getTimestamp(),
+            "article:modified_time" => $post->getDate()->getTimestamp(),
         ];
 
         // Get post illustration for opengraph
-        $image = $post->getFirstImageUrl();
-        if ($post->hasIllustration()) {
-            $opengraphTags["image"] = $post->getIllustration()->getUrl();
-        }
-        // Else get first image from post
+        $postEntity = \Post::buildFromModel($post);
+        $image = $postEntity->getFirstImageUrl();
+        if ($postEntity->hasIllustration()) {
+            $opengraphTags["image"] = $postEntity->getIllustration()->getUrl();
+        } // Else get first image from post
         elseif ($image) {
             $opengraphTags["image"] = $image;
         }
@@ -136,12 +140,13 @@ class PostController extends Controller
         $this->setOpengraphTags($opengraphTags);
 
         return $templateService->renderResponse('AppBundle:Post:show.html.twig', [
-            'post' => $post
+            'post' => $postEntity
         ]);
     }
 
-    // GET /admin/posts/
-    public function adminAction(): RedirectResponse
+// GET /admin/posts/
+    public
+    function adminAction(): RedirectResponse
     {
         if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
             return new RedirectResponse('/pages/adm_posts');
@@ -150,15 +155,16 @@ class PostController extends Controller
         return new RedirectResponse('/pages/pub_posts');
     }
 
-    // GET /post/:id/delete
+// GET /post/:id/delete
 
     /**
      * @throws Exception
      */
-    public function deleteAction(
+    public
+    function deleteAction(
         UrlGenerator $urlGenerator,
-        CurrentUser $currentUser,
-        $id
+        CurrentUser  $currentUser,
+                     $id
     ): RedirectResponse
     {
         $pm = new PostManager();
@@ -177,10 +183,11 @@ class PostController extends Controller
         return new RedirectResponse($urlGenerator->generate('posts_admin'));
     }
 
-    // GET /post/:slug
-    public function oldUrlAction($slug): RedirectResponse
+// GET /post/:slug
+    public
+    function oldUrlAction($slug): RedirectResponse
     {
-        return new RedirectResponse('/blog/'.$slug);
+        return new RedirectResponse('/blog/' . $slug);
     }
 
     /**
@@ -189,7 +196,8 @@ class PostController extends Controller
      * @throws LoaderError
      * @throws Exception
      */
-    public function exportAction(CurrentSite $currentSite, TemplateService $templateService): Response
+    public
+    function exportAction(CurrentSite $currentSite, TemplateService $templateService): Response
     {
         $posts = PostQuery::create()->findBySiteId($currentSite->getId());
         foreach ($posts as $post) {
@@ -204,7 +212,8 @@ class PostController extends Controller
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    private function _writePostToFile(Post $post, TemplateService $templateService): void
+    private
+    function _writePostToFile(Post $post, TemplateService $templateService): void
     {
         $cover = new Media("post", $post->getId());
 
