@@ -430,13 +430,14 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createSite(
-        string $title = "Éditions Paronymie"
+        string $title = "Éditions Paronymie",
+        string $contact = "contact@paronymie.fr",
     ): Site
     {
         $site = new Site();
         $site->setName("paronymie");
         $site->setTitle($title);
-        $site->setContact("contact@paronymie.fr");
+        $site->setContact($contact);
         $site->setTag("PAR");
         $site->save();
 

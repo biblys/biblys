@@ -15,9 +15,16 @@
       </a>
     </p>
     <p>ou</p>
-    <form class="form-inline" method="post">
+    <form class="form-inline" method="post" action="{{ path("user_send_login_email") }}">
       <input type="hidden" name="return_url" value="{{ returnUrl }}" />
-      <input class="form-control" type="email" name="email" aria-label="Votre adresse e-mail" placeholder="Votre adresse e-mail…" />
+      <input
+        class="form-control"
+        type="email"
+        name="email"
+        aria-label="Votre adresse e-mail"
+        placeholder="Votre adresse e-mail…"
+        required
+      />
       <button class="btn btn-primary" type="submit">
         <span class="fa fa-envelope"></span>
         S'identifier par e-mail

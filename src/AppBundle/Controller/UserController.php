@@ -11,6 +11,7 @@ use Framework\Controller;
 use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
@@ -74,6 +75,37 @@ class UserController extends Controller
         $response->headers->set("X-Robots-Tag", "noindex, nofollow");
 
         return $response;
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function sendLoginEmailAction(
+        Request $request,
+        CurrentSite $currentSite,
+        TemplateService $templateService
+    ): Response
+    {
+        $recipientEmail = $request->request->get("email");
+        $returnUrl = $request->request->get("return_url");
+        $senderEmail = $currentSite->getSite()->getContact();
+
+        $emailExists = UserQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->findOneByEmail($recipientEmail);
+
+        return $templateService->renderResponse(
+            "AppBundle:User:send-login-email.html.twig",
+            [
+                "emailExists" => $emailExists,
+                "recipientEmail" => $recipientEmail,
+                "returnUrl" => $returnUrl,
+                "senderEmail" => $senderEmail,
+            ],
+        );
     }
 
     /**

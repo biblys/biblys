@@ -10,6 +10,7 @@ use Biblys\Test\ModelFactory;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
@@ -50,6 +51,10 @@ class UserControllerTest extends TestCase
         // then
         $this->assertEquals("200", $response->getStatusCode());
     }
+
+    /**
+     * login
+     */
 
     /**
      * @throws SyntaxError
@@ -139,6 +144,79 @@ class UserControllerTest extends TestCase
             "/",
             $response->headers->get("Location"),
         );
+    }
+
+    /**
+     * sendLoginEmail
+     */
+
+    /**
+     * @return void
+     * @throws PropelException
+     */
+    public function testSendLoginEmailWhenEmailDoesNotExist()
+    {
+        // given
+        $controller = new UserController();
+        $expectedResponse = new Response();
+        $site = ModelFactory::createSite(contact: "editions@paronymie.fr");
+        $currentSite = new CurrentSite($site);
+        $request = new Request();
+        $request->request->set("email", "user@example.net");
+        $request->request->set("return_url", "/continue");
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->shouldReceive("renderResponse")
+            ->andReturn($expectedResponse);
+
+        // when
+        $returnedResponse = $controller->sendLoginEmailAction(
+            $request, $currentSite, $templateService
+        );
+
+        // then
+        $templateService->shouldHaveReceived("renderResponse")
+            ->with("AppBundle:User:send-login-email.html.twig", [
+                "emailExists" => false,
+                "recipientEmail" => "user@example.net",
+                "returnUrl" => "/continue",
+                "senderEmail" => "editions@paronymie.fr",
+            ]);
+        $this->assertEquals($expectedResponse, $returnedResponse);
+    }
+
+    /**
+     * @return void
+     * @throws PropelException
+     */
+    public function testSendLoginEmailWhenEmailExists()
+    {
+        // given
+        $controller = new UserController();
+        $expectedResponse = new Response();
+        $site = ModelFactory::createSite(contact: "editions@paronymie.fr");
+        $currentSite = new CurrentSite($site);
+        ModelFactory::createUser(site: $site, email: "user@example.net");
+        $request = new Request();
+        $request->request->set("email", "user@example.net");
+        $request->request->set("return_url", "/continue");
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->shouldReceive("renderResponse")
+            ->andReturn($expectedResponse);
+
+        // when
+        $returnedResponse = $controller->sendLoginEmailAction(
+            $request, $currentSite, $templateService
+        );
+
+        // then
+        $templateService->shouldHaveReceived("renderResponse")
+            ->with("AppBundle:User:send-login-email.html.twig", [
+                "emailExists" => true,
+                "recipientEmail" => "user@example.net",
+                "returnUrl" => "/continue",
+                "senderEmail" => "editions@paronymie.fr",
+            ]);
+        $this->assertEquals($expectedResponse, $returnedResponse);
     }
 
     /**

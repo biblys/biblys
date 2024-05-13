@@ -1,0 +1,58 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  S'identifier par e-mail
+{% endblock %}
+
+{% block main %}
+  <h1>S'identifier par e-mail</h1>
+
+  {% if emailExists %}
+    <h2>Vérifiez votre boîte de réception</h2>
+
+    <p>
+      Avec la connexion par e-mail, plus besoin de vous souvenir de votre mot de passe !
+    </p>
+    <p>
+      Nous venons d'envoyer un courriel à <strong>{{ recipientEmail }}</strong> contenant un lien de connexion,
+      cliquez simplement sur ce lien pour vous connecter.
+    </p>
+
+    <h3>Que faire si je ne trouve pas le courriel dans ma boîte de réception&nbsp;?</h3>
+
+    <ul>
+      <li>Vérifiez que l'adresse <strong>{{ recipientEmail }}</strong> est correcte.</li>
+      <li>Vérifiez dans votre dossier SPAM / Courrier indésirable.</li>
+      <li>
+        Ajoutez <strong>{{ senderEmail }}</strong> à votre carnet d'adresses pour éduquer le filtre anti-spam.
+      </li>
+      <li>Attendez quelques minutes…</li>
+      <li>
+        <a href="{{ path('user_login', { return_url: returnUrl }) }}">Réessayez</a>
+      </li>
+    </ul>
+  {% else %}
+    <p class="alert alert-danger">
+      <span class="fa fa-times-circle"></span>
+      Aucun compte utilisateur trouvé pour <strong>{{ recipientEmail }}</strong>.
+    </p>
+
+    <h2>Aide</h2>
+
+    <h3>Vous essayez de vous connecter avec un compte Axys ?</h3>
+    <p>
+      Si l'adresse e-mail <strong>{{ recipientEmail }}</strong> correspond à un compte Axys, vous devez d'abord vous
+      connecter au moins une fois avec Axys en cliquant sur
+      <a href="{{ path('user_login', { return_url: returnUrl }) }}" class="btn btn-primary btn sm">
+        Se connecter avec Axys
+      </a>.
+      Votre compte sera alors importé sur le site et vous pourrez par la suite vous connecter directement sur le site
+      avec votre adresse e-mail.
+    </p>
+
+    <h3>Vous n'avez pas encore de compte ?</h3>
+    <p>
+      <a href="https://axys.me" class="btn btn-info">Créer un compte Axys</a>
+    </p>
+  {% endif %}
+{% endblock %}
