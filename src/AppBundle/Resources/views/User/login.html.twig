@@ -7,10 +7,23 @@
 {% block main %}
   <h1>Connexion</h1>
 
-  <a href="{{ loginWithAxysUrl }}" rel="nofollow" class="btn btn-primary">
-    <img src="/assets/images/axys.svg" alt="" role="presentation" width="16" height="16" />
-    Se connecter avec Axys
-  </a>
+  <div class="text-center">
+    <p>
+      <a href="{{ loginWithAxysUrl }}" rel="nofollow" class="btn btn-primary">
+        <img src="/assets/images/axys.svg" alt="" role="presentation" width="16" height="16"/>
+        Se connecter avec Axys
+      </a>
+    </p>
+    <p>ou</p>
+    <form class="form-inline" method="post">
+      <input type="hidden" name="return_url" value="{{ returnUrl }}" />
+      <input class="form-control" type="email" name="email" aria-label="Votre adresse e-mail" placeholder="Votre adresse e-mail…" />
+      <button class="btn btn-primary" type="submit">
+        <span class="fa fa-envelope"></span>
+        S'identifier par e-mail
+      </button>
+    </form>
+  </div>
 
   <h2>Pas encore de compte Axys ?</h2>
 

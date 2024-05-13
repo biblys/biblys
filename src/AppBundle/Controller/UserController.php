@@ -69,6 +69,7 @@ class UserController extends Controller
         $loginWithAxysUrl = $urlGenerator->generate("openid_axys", ["return_url" => $returnUrl]);
         $response = $this->render("AppBundle:User:login.html.twig", [
             "loginWithAxysUrl" => $loginWithAxysUrl,
+            "returnUrl" => $returnUrl,
         ]);
         $response->headers->set("X-Robots-Tag", "noindex, nofollow");
 
