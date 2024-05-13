@@ -632,7 +632,7 @@ class PublisherTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('publisher_id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
+        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
         $this->addColumn('publisher_name', 'Name', 'VARCHAR', false, 255, null);
         $this->addColumn('publisher_name_alphabetic', 'NameAlphabetic', 'VARCHAR', false, 256, null);
         $this->addColumn('publisher_url', 'Url', 'VARCHAR', false, 256, null);
@@ -660,7 +660,7 @@ class PublisherTableMap extends TableMap
         $this->addColumn('publisher_vpc', 'Vpc', 'BOOLEAN', false, 1, false);
         $this->addColumn('publisher_paypal', 'Paypal', 'VARCHAR', false, 128, null);
         $this->addColumn('publisher_shipping_mode', 'ShippingMode', 'VARCHAR', false, 9, 'offerts');
-        $this->addColumn('publisher_shipping_fee', 'ShippingFee', 'INTEGER', false, 10, null);
+        $this->addColumn('publisher_shipping_fee', 'ShippingFee', 'INTEGER', false, null, null);
         $this->addColumn('publisher_gln', 'Gln', 'BIGINT', false, 13, null);
         $this->addColumn('publisher_desc', 'Desc', 'LONGVARCHAR', false, null, null);
         $this->addColumn('publisher_desc_short', 'DescShort', 'VARCHAR', false, 512, null);

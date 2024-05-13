@@ -244,7 +244,7 @@ class SessionTableMap extends TableMap
         $this->addPrimaryKey('session_id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
         $this->addColumn('session_token', 'Token', 'VARCHAR', false, 32, null);
         $this->addColumn('session_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('session_expires', 'ExpiresAt', 'TIMESTAMP', false, null, null);

@@ -228,12 +228,12 @@ class VoteTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('vote_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
-        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
-        $this->addColumn('vote_F', 'F', 'INTEGER', false, 10, null);
-        $this->addColumn('vote_E', 'E', 'INTEGER', false, 10, null);
+        $this->addPrimaryKey('vote_id', 'Id', 'INTEGER', true, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
+        $this->addColumn('vote_F', 'F', 'INTEGER', false, null, null);
+        $this->addColumn('vote_E', 'E', 'INTEGER', false, null, null);
         $this->addColumn('vote_date', 'Date', 'TIMESTAMP', false, null, null);
     }
 

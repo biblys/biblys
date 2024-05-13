@@ -241,7 +241,7 @@ class LangTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('lang_id', 'Id', 'INTEGER', true, 10, null);
+        $this->addPrimaryKey('lang_id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('lang_iso_639-1', 'Iso639-1', 'VARCHAR', false, 2, null);
         $this->addColumn('lang_iso_639-2', 'Iso639-2', 'VARCHAR', false, 7, null);
         $this->addColumn('lang_iso_639-3', 'Iso639-3', 'VARCHAR', false, 7, null);

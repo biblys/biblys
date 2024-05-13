@@ -253,9 +253,9 @@ class AuthenticationMethodTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, 10, null);
-        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', true, 10, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', true, 10, null);
+        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', true, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', true, null, null);
         $this->addColumn('identity_provider', 'IdentityProvider', 'VARCHAR', false, 16, null);
         $this->addColumn('external_id', 'ExternalId', 'VARCHAR', false, 128, null);
         $this->addColumn('access_token', 'AccessToken', 'VARCHAR', false, 1024, null);

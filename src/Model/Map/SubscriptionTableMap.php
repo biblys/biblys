@@ -333,15 +333,15 @@ class SubscriptionTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('subscription_id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
-        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
-        $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, 10, null);
-        $this->addColumn('bookshop_id', 'BookshopId', 'INTEGER', false, 10, null);
-        $this->addColumn('library_id', 'LibraryId', 'INTEGER', false, 10, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
+        $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, null, null);
+        $this->addColumn('bookshop_id', 'BookshopId', 'INTEGER', false, null, null);
+        $this->addColumn('library_id', 'LibraryId', 'INTEGER', false, null, null);
         $this->addColumn('subscription_type', 'Type', 'VARCHAR', false, 16, null);
         $this->addColumn('subscription_email', 'Email', 'VARCHAR', false, 256, null);
-        $this->addColumn('subscription_ends', 'Ends', 'SMALLINT', false, 16, null);
+        $this->addColumn('subscription_ends', 'Ends', 'SMALLINT', false, null, null);
         $this->addColumn('subscription_option', 'Option', 'BOOLEAN', false, 1, false);
         $this->addColumn('subscription_insert', 'Insert', 'TIMESTAMP', false, null, null);
         $this->addColumn('subscription_update', 'Update', 'TIMESTAMP', false, null, null);

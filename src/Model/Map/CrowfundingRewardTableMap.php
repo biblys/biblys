@@ -306,17 +306,17 @@ class CrowfundingRewardTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('reward_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
-        $this->addForeignKey('campaign_id', 'CampaignId', 'INTEGER', 'cf_campaigns', 'campaign_id', false, 10, null);
+        $this->addPrimaryKey('reward_id', 'Id', 'INTEGER', true, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
+        $this->addForeignKey('campaign_id', 'CampaignId', 'INTEGER', 'cf_campaigns', 'campaign_id', false, null, null);
         $this->addColumn('reward_content', 'Content', 'VARCHAR', false, 1025, null);
         $this->addColumn('reward_articles', 'Articles', 'VARCHAR', false, 255, null);
-        $this->addColumn('reward_price', 'Price', 'INTEGER', false, 10, null);
+        $this->addColumn('reward_price', 'Price', 'INTEGER', false, null, null);
         $this->addColumn('reward_limited', 'Limited', 'BOOLEAN', false, 1, null);
         $this->addColumn('reward_highlighted', 'Highlighted', 'BOOLEAN', false, 1, false);
         $this->addColumn('reward_image', 'Image', 'VARCHAR', false, 256, null);
-        $this->addColumn('reward_quantity', 'Quantity', 'INTEGER', false, 10, null);
-        $this->addColumn('reward_backers', 'Backers', 'INTEGER', false, 10, 0);
+        $this->addColumn('reward_quantity', 'Quantity', 'INTEGER', false, null, null);
+        $this->addColumn('reward_backers', 'Backers', 'INTEGER', false, null, 0);
         $this->addColumn('reward_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('reward_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     }

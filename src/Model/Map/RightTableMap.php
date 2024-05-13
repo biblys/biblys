@@ -292,15 +292,15 @@ class RightTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('right_id', 'Id', 'INTEGER', true, 10, null);
+        $this->addPrimaryKey('right_id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('right_uid', 'Uid', 'VARCHAR', false, 32, null);
-        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
-        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addColumn('is_admin', 'isAdmin', 'BOOLEAN', false, 1, false);
-        $this->addForeignKey('publisher_id', 'PublisherId', 'INTEGER', 'publishers', 'publisher_id', false, 10, null);
-        $this->addColumn('bookshop_id', 'BookshopId', 'INTEGER', false, 10, null);
-        $this->addColumn('library_id', 'LibraryId', 'INTEGER', false, 10, null);
+        $this->addForeignKey('publisher_id', 'PublisherId', 'INTEGER', 'publishers', 'publisher_id', false, null, null);
+        $this->addColumn('bookshop_id', 'BookshopId', 'INTEGER', false, null, null);
+        $this->addColumn('library_id', 'LibraryId', 'INTEGER', false, null, null);
         $this->addColumn('right_current', 'Current', 'BOOLEAN', false, 1, false);
         $this->addColumn('right_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('right_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);

@@ -214,10 +214,10 @@ class PriceTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('price_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('pricegrid_id', 'gridId', 'INTEGER', false, 10, null);
+        $this->addPrimaryKey('price_id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('pricegrid_id', 'gridId', 'INTEGER', false, null, null);
         $this->addColumn('price_cat', 'Cat', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('price_amount', 'Amount', 'INTEGER', false, 10, null);
+        $this->addColumn('price_amount', 'Amount', 'INTEGER', false, null, null);
         $this->addColumn('price_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('price_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     }

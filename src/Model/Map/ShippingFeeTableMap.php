@@ -332,15 +332,15 @@ class ShippingFeeTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('shipping_id', 'Id', 'INTEGER', true, 10, null);
+        $this->addPrimaryKey('shipping_id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
-        $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, 10, null);
+        $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, null, null);
         $this->addColumn('shipping_mode', 'Mode', 'VARCHAR', false, 64, null);
         $this->addColumn('shipping_type', 'Type', 'VARCHAR', false, 16, null);
         $this->addColumn('shipping_zone', 'Zone', 'VARCHAR', false, 4, null);
         $this->addColumn('shipping_min_weight', 'MinWeight', 'INTEGER', false, null, null);
         $this->addColumn('shipping_max_weight', 'MaxWeight', 'INTEGER', false, null, null);
-        $this->addColumn('shipping_max_articles', 'MaxArticles', 'INTEGER', false, 10, null);
+        $this->addColumn('shipping_max_articles', 'MaxArticles', 'INTEGER', false, null, null);
         $this->addColumn('shipping_min_amount', 'MinAmount', 'INTEGER', false, null, null);
         $this->addColumn('shipping_max_amount', 'MaxAmount', 'INTEGER', false, null, null);
         $this->addColumn('shipping_fee', 'Fee', 'INTEGER', false, null, null);

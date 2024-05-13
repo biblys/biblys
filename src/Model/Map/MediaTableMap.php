@@ -319,9 +319,9 @@ class MediaTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('media_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
-        $this->addColumn('category_id', 'CategoryId', 'INTEGER', false, 10, null);
+        $this->addPrimaryKey('media_id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
+        $this->addColumn('category_id', 'CategoryId', 'INTEGER', false, null, null);
         $this->addColumn('media_dir', 'Dir', 'LONGVARCHAR', false, null, null);
         $this->addColumn('media_file', 'File', 'LONGVARCHAR', false, null, null);
         $this->addColumn('media_ext', 'Ext', 'LONGVARCHAR', false, null, null);

@@ -306,15 +306,15 @@ class CrowdfundingCampaignTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('campaign_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
+        $this->addPrimaryKey('campaign_id', 'Id', 'INTEGER', true, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addColumn('campaign_title', 'Title', 'VARCHAR', false, 255, null);
         $this->addColumn('campaign_url', 'Url', 'VARCHAR', false, 128, null);
         $this->addColumn('campaign_description', 'Description', 'LONGVARCHAR', false, null, null);
         $this->addColumn('campaign_image', 'Image', 'VARCHAR', false, 256, null);
-        $this->addColumn('campaign_goal', 'Goal', 'INTEGER', false, 10, null);
-        $this->addColumn('campaign_pledged', 'Pledged', 'INTEGER', false, 10, null);
-        $this->addColumn('campaign_backers', 'Backers', 'INTEGER', false, 10, null);
+        $this->addColumn('campaign_goal', 'Goal', 'INTEGER', false, null, null);
+        $this->addColumn('campaign_pledged', 'Pledged', 'INTEGER', false, null, null);
+        $this->addColumn('campaign_backers', 'Backers', 'INTEGER', false, null, null);
         $this->addColumn('campaign_starts', 'Starts', 'DATE', false, null, null);
         $this->addColumn('campaign_ends', 'Ends', 'DATE', false, null, null);
         $this->addColumn('campaign_created', 'CreatedAt', 'TIMESTAMP', false, null, null);

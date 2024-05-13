@@ -306,17 +306,17 @@ class CouponTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('coupon_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
-        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
+        $this->addPrimaryKey('coupon_id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
         $this->addColumn('coupon_code', 'Code', 'VARCHAR', false, 6, null);
-        $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, 10, null);
-        $this->addColumn('stock_id', 'StockId', 'INTEGER', false, 10, null);
-        $this->addColumn('coupon_amount', 'Amount', 'INTEGER', false, 10, null);
+        $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, null, null);
+        $this->addColumn('stock_id', 'StockId', 'INTEGER', false, null, null);
+        $this->addColumn('coupon_amount', 'Amount', 'INTEGER', false, null, null);
         $this->addColumn('coupon_note', 'Note', 'VARCHAR', false, 256, null);
         $this->addColumn('coupon_used', 'Used', 'TIMESTAMP', false, null, null);
-        $this->addColumn('coupon_creator', 'Creator', 'INTEGER', false, 10, null);
+        $this->addColumn('coupon_creator', 'Creator', 'INTEGER', false, null, null);
         $this->addColumn('coupon_insert', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('coupon_update', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     }

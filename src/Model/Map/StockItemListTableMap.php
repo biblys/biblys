@@ -241,10 +241,10 @@ class StockItemListTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('list_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
-        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
+        $this->addPrimaryKey('list_id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addColumn('list_title', 'Title', 'VARCHAR', false, 256, null);
         $this->addColumn('list_url', 'Url', 'VARCHAR', false, 256, null);
         $this->addColumn('list_created', 'CreatedAt', 'TIMESTAMP', false, null, null);

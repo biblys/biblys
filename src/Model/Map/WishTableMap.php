@@ -254,12 +254,12 @@ class WishTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('wish_id', 'Id', 'INTEGER', true, 10, null);
+        $this->addPrimaryKey('wish_id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('wishlist_id', 'WishlistId', 'INTEGER', false, null, null);
-        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
-        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
-        $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, 10, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
+        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
+        $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, null, null);
         $this->addColumn('wish_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('wish_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('wish_bought', 'Bought', 'TIMESTAMP', false, null, null);

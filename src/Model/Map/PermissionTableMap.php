@@ -228,9 +228,9 @@ class PermissionTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('permission_id', 'Id', 'INTEGER', true, 10, null);
+        $this->addPrimaryKey('permission_id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
         $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
         $this->addColumn('permission_rank', 'Rank', 'VARCHAR', false, 8, null);
         $this->addColumn('permission_last', 'Last', 'TIMESTAMP', false, null, null);

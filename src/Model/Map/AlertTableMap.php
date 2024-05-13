@@ -293,13 +293,13 @@ class AlertTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('alert_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
-        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
-        $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, 10, null);
-        $this->addColumn('alert_max_price', 'MaxPrice', 'INTEGER', false, 10, null);
-        $this->addColumn('alert_pub_year', 'PubYear', 'INTEGER', false, 4, null);
+        $this->addPrimaryKey('alert_id', 'Id', 'INTEGER', true, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
+        $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, null, null);
+        $this->addColumn('alert_max_price', 'MaxPrice', 'INTEGER', false, null, null);
+        $this->addColumn('alert_pub_year', 'PubYear', 'INTEGER', false, null, null);
         $this->addColumn('alert_condition', 'Condition', 'VARCHAR', false, 4, null);
         $this->addColumn('alert_insert', 'Insert', 'TIMESTAMP', false, null, null);
         $this->addColumn('alert_update', 'Update', 'TIMESTAMP', false, null, null);

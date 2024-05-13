@@ -451,14 +451,14 @@ class PostTableMap extends TableMap
         // columns
         $this->addPrimaryKey('post_id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
-        $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, 10, null);
-        $this->addColumn('category_id', 'CategoryId', 'INTEGER', false, 10, null);
+        $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, null, null);
+        $this->addColumn('category_id', 'CategoryId', 'INTEGER', false, null, null);
         $this->addColumn('post_url', 'Url', 'LONGVARCHAR', false, null, null);
         $this->addColumn('post_title', 'Title', 'LONGVARCHAR', false, null, null);
         $this->addColumn('post_content', 'Content', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('post_illustration_version', 'IllustrationVersion', 'INTEGER', false, 3, 0);
+        $this->addColumn('post_illustration_version', 'IllustrationVersion', 'INTEGER', false, null, 0);
         $this->addColumn('post_illustration_legend', 'IllustrationLegend', 'VARCHAR', false, 64, null);
         $this->addColumn('post_selected', 'Selected', 'BOOLEAN', false, 1, null);
         $this->addColumn('post_link', 'Link', 'LONGVARCHAR', false, null, null);
@@ -468,7 +468,7 @@ class PostTableMap extends TableMap
         $this->addColumn('post_keywords_generated', 'KeywordsGenerated', 'TIMESTAMP', false, null, null);
         $this->addColumn('post_fb_id', 'FbId', 'BIGINT', false, null, null);
         $this->addColumn('post_date', 'Date', 'TIMESTAMP', false, null, null);
-        $this->addColumn('post_hits', 'Hits', 'INTEGER', false, 10, null);
+        $this->addColumn('post_hits', 'Hits', 'INTEGER', false, null, null);
         $this->addColumn('post_insert', 'Insert', 'TIMESTAMP', false, null, null);
         $this->addColumn('post_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('post_created', 'CreatedAt', 'TIMESTAMP', false, null, null);

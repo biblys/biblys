@@ -269,7 +269,7 @@ class SigningTableMap extends TableMap
         // columns
         $this->addPrimaryKey('signing_id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
-        $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, 10, null);
+        $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, null, null);
         $this->addColumn('people_id', 'PeopleId', 'INTEGER', false, null, null);
         $this->addColumn('signing_date', 'Date', 'DATE', false, null, null);
         $this->addColumn('signing_starts', 'Starts', 'TIME', false, null, null);

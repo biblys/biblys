@@ -294,11 +294,11 @@ class DownloadTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('download_id', 'Id', 'BIGINT', true, null, null);
-        $this->addColumn('file_id', 'FileId', 'INTEGER', false, 10, null);
-        $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, 10, null);
-        $this->addColumn('book_id', 'BookId', 'INTEGER', false, 10, null);
-        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
+        $this->addColumn('file_id', 'FileId', 'INTEGER', false, null, null);
+        $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, null, null);
+        $this->addColumn('book_id', 'BookId', 'INTEGER', false, null, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
         $this->addColumn('download_filetype', 'Filetype', 'LONGVARCHAR', false, null, null);
         $this->addColumn('download_version', 'Version', 'VARCHAR', false, 8, null);
         $this->addColumn('download_ip', 'Ip', 'LONGVARCHAR', false, null, null);

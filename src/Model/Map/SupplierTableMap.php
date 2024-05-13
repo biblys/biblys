@@ -280,11 +280,11 @@ class SupplierTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('supplier_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('site_id', 'SiteId', 'INTEGER', true, 10, null);
+        $this->addPrimaryKey('supplier_id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('site_id', 'SiteId', 'INTEGER', true, null, null);
         $this->addColumn('supplier_name', 'Name', 'VARCHAR', false, 256, null);
         $this->addColumn('supplier_gln', 'Gln', 'BIGINT', false, null, null);
-        $this->addColumn('supplier_remise', 'Remise', 'INTEGER', false, 10, null);
+        $this->addColumn('supplier_remise', 'Remise', 'INTEGER', false, null, null);
         $this->addColumn('supplier_notva', 'Notva', 'BOOLEAN', false, 1, null);
         $this->addColumn('supplier_on_order', 'OnOrder', 'BOOLEAN', false, 1, null);
         $this->addColumn('supplier_insert', 'Insert', 'TIMESTAMP', false, null, null);

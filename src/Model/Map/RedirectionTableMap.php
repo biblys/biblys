@@ -241,8 +241,8 @@ class RedirectionTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('redirection_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
+        $this->addPrimaryKey('redirection_id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
         $this->addColumn('redirection_old', 'Old', 'VARCHAR', false, 256, null);
         $this->addColumn('redirection_new', 'New', 'VARCHAR', false, 256, null);
         $this->addColumn('redirection_hits', 'Hits', 'INTEGER', false, null, 0);

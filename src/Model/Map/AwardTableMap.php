@@ -267,8 +267,8 @@ class AwardTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('award_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, 10, null);
+        $this->addPrimaryKey('award_id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, null, null);
         $this->addColumn('book_id', 'BookId', 'INTEGER', false, null, null);
         $this->addColumn('award_name', 'Name', 'LONGVARCHAR', false, null, null);
         $this->addColumn('award_year', 'Year', 'LONGVARCHAR', false, null, null);

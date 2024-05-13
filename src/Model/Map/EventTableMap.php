@@ -397,11 +397,11 @@ class EventTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('event_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
+        $this->addPrimaryKey('event_id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
         $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, null, null);
-        $this->addColumn('bookshop_id', 'BookshopId', 'INTEGER', false, 10, null);
-        $this->addColumn('library_id', 'LibraryId', 'INTEGER', false, 10, null);
+        $this->addColumn('bookshop_id', 'BookshopId', 'INTEGER', false, null, null);
+        $this->addColumn('library_id', 'LibraryId', 'INTEGER', false, null, null);
         $this->addColumn('event_url', 'Url', 'VARCHAR', false, 128, null);
         $this->addColumn('event_title', 'Title', 'LONGVARCHAR', false, null, null);
         $this->addColumn('event_subtitle', 'Subtitle', 'LONGVARCHAR', false, null, null);

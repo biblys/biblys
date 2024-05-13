@@ -372,9 +372,9 @@ class BookCollectionTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('collection_id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
-        $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, 10, null);
-        $this->addColumn('pricegrid_id', 'PricegridId', 'INTEGER', false, 10, null);
+        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
+        $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, null, null);
+        $this->addColumn('pricegrid_id', 'PricegridId', 'INTEGER', false, null, null);
         $this->addColumn('collection_name', 'Name', 'VARCHAR', false, 255, null);
         $this->addColumn('collection_url', 'Url', 'VARCHAR', false, 255, null);
         $this->addColumn('collection_publisher', 'Publisher', 'VARCHAR', false, 255, null);

@@ -293,11 +293,11 @@ class ImageTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('image_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
+        $this->addPrimaryKey('image_id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
         $this->addColumn('bookshop_id', 'BookshopId', 'INTEGER', false, null, null);
-        $this->addColumn('event_id', 'EventId', 'INTEGER', false, 10, null);
-        $this->addColumn('library_id', 'LibraryId', 'INTEGER', false, 10, null);
+        $this->addColumn('event_id', 'EventId', 'INTEGER', false, null, null);
+        $this->addColumn('library_id', 'LibraryId', 'INTEGER', false, null, null);
         $this->addColumn('image_nature', 'Nature', 'VARCHAR', false, 16, null);
         $this->addColumn('image_legend', 'Legend', 'VARCHAR', false, 32, null);
         $this->addColumn('image_type', 'Type', 'VARCHAR', false, 32, null);

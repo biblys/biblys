@@ -244,7 +244,7 @@ class OptionTableMap extends TableMap
         $this->addPrimaryKey('option_id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
         $this->addColumn('option_key', 'Key', 'VARCHAR', false, 32, null);
         $this->addColumn('option_value', 'Value', 'VARCHAR', false, 2048, null);
         $this->addColumn('option_created', 'CreatedAt', 'TIMESTAMP', false, null, null);

@@ -332,16 +332,16 @@ class CustomerTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('customer_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
-        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
+        $this->addPrimaryKey('customer_id', 'Id', 'INTEGER', true, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
         $this->addColumn('customer_type', 'Type', 'VARCHAR', false, 16, 'Particulier');
         $this->addColumn('customer_first_name', 'FirstName', 'VARCHAR', false, 64, null);
         $this->addColumn('customer_last_name', 'LastName', 'VARCHAR', false, 64, null);
         $this->addColumn('customer_email', 'Email', 'VARCHAR', false, 128, null);
         $this->addColumn('customer_phone', 'Phone', 'VARCHAR', false, 16, null);
-        $this->addColumn('country_id', 'CountryId', 'INTEGER', false, 10, null);
+        $this->addColumn('country_id', 'CountryId', 'INTEGER', false, null, null);
         $this->addColumn('customer_privatization', 'Privatization', 'DATE', false, null, null);
         $this->addColumn('customer_insert', 'Insert', 'TIMESTAMP', false, null, null);
         $this->addColumn('customer_update', 'Update', 'TIMESTAMP', false, null, null);

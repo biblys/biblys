@@ -277,13 +277,13 @@ class SpecialOfferTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, 10, null);
-        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', true, 10, null);
+        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 128, null);
         $this->addColumn('description', 'Description', 'LONGVARCHAR', false, null, null);
-        $this->addForeignKey('target_collection_id', 'TargetCollectionId', 'INTEGER', 'collections', 'collection_id', true, 10, null);
-        $this->addColumn('target_quantity', 'TargetQuantity', 'INTEGER', true, 10, null);
-        $this->addForeignKey('free_article_id', 'FreeArticleId', 'INTEGER', 'articles', 'article_id', true, 10, null);
+        $this->addForeignKey('target_collection_id', 'TargetCollectionId', 'INTEGER', 'collections', 'collection_id', true, null, null);
+        $this->addColumn('target_quantity', 'TargetQuantity', 'INTEGER', true, null, null);
+        $this->addForeignKey('free_article_id', 'FreeArticleId', 'INTEGER', 'articles', 'article_id', true, null, null);
         $this->addColumn('start_date', 'StartDate', 'TIMESTAMP', true, null, null);
         $this->addColumn('end_date', 'EndDate', 'TIMESTAMP', true, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', true, null, null);

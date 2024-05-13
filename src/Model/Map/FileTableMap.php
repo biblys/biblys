@@ -332,10 +332,10 @@ class FileTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('file_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, 10, null);
-        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
+        $this->addPrimaryKey('file_id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, null, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
         $this->addColumn('file_title', 'Title', 'VARCHAR', false, 32, null);
         $this->addColumn('file_type', 'Type', 'VARCHAR', false, 32, null);
         $this->addColumn('file_access', 'Access', 'BOOLEAN', false, 1, true);

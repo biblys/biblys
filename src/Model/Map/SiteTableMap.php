@@ -631,7 +631,7 @@ class SiteTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('site_id', 'Id', 'INTEGER', true, 10, null);
+        $this->addPrimaryKey('site_id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('site_name', 'Name', 'VARCHAR', false, 16, '');
         $this->addColumn('site_pass', 'Pass', 'VARCHAR', false, 8, '');
         $this->addColumn('site_title', 'Title', 'VARCHAR', false, 32, '');
@@ -646,7 +646,7 @@ class SiteTableMap extends TableMap
         $this->addColumn('site_axys', 'Axys', 'BOOLEAN', false, 1, true);
         $this->addColumn('site_noosfere', 'Noosfere', 'BOOLEAN', false, 1, null);
         $this->addColumn('site_amazon', 'Amazon', 'BOOLEAN', false, 1, null);
-        $this->addColumn('site_event_id', 'EventId', 'INTEGER', false, 10, null);
+        $this->addColumn('site_event_id', 'EventId', 'INTEGER', false, null, null);
         $this->addColumn('site_event_date', 'EventDate', 'INTEGER', false, null, null);
         $this->addColumn('site_shop', 'Shop', 'BOOLEAN', false, 1, null);
         $this->addColumn('site_vpc', 'Vpc', 'BOOLEAN', false, 1, null);
@@ -656,10 +656,10 @@ class SiteTableMap extends TableMap
         $this->addColumn('site_payment_payplug', 'PaymentPayplug', 'BOOLEAN', false, 1, false);
         $this->addColumn('site_payment_transfer', 'PaymentTransfer', 'BOOLEAN', false, 1, null);
         $this->addColumn('site_bookshop', 'Bookshop', 'BOOLEAN', false, 1, false);
-        $this->addColumn('site_bookshop_id', 'BookshopId', 'INTEGER', false, 10, null);
+        $this->addColumn('site_bookshop_id', 'BookshopId', 'INTEGER', false, null, null);
         $this->addColumn('site_publisher', 'Publisher', 'BOOLEAN', false, 1, null);
         $this->addColumn('site_publisher_stock', 'PublisherStock', 'BOOLEAN', false, 1, false);
-        $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, 10, null);
+        $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, null, null);
         $this->addColumn('site_ebook_bundle', 'EbookBundle', 'INTEGER', false, null, null);
         $this->addColumn('site_fb_page_id', 'FbPageId', 'BIGINT', false, null, null);
         $this->addColumn('site_fb_page_token', 'FbPageToken', 'LONGVARCHAR', false, null, null);

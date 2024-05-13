@@ -272,7 +272,7 @@ class TagTableMap extends TableMap
         $this->addColumn('tag_url', 'Url', 'LONGVARCHAR', false, null, null);
         $this->addColumn('tag_description', 'Description', 'LONGVARCHAR', false, null, null);
         $this->addColumn('tag_date', 'Date', 'TIMESTAMP', false, null, null);
-        $this->addColumn('tag_num', 'Num', 'INTEGER', false, 10, null);
+        $this->addColumn('tag_num', 'Num', 'INTEGER', false, null, null);
         $this->addColumn('tag_insert', 'Insert', 'TIMESTAMP', false, null, null);
         $this->addColumn('tag_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('tag_created', 'CreatedAt', 'TIMESTAMP', false, null, null);

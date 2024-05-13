@@ -267,7 +267,7 @@ class JobTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('job_id', 'Id', 'INTEGER', true, 10, null);
+        $this->addPrimaryKey('job_id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('job_name', 'Name', 'VARCHAR', false, 64, null);
         $this->addColumn('job_name_f', 'NameF', 'VARCHAR', false, 64, null);
         $this->addColumn('job_other_names', 'OtherNames', 'VARCHAR', false, 256, null);

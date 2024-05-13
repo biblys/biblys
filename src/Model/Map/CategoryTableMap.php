@@ -280,8 +280,8 @@ class CategoryTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('category_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
+        $this->addPrimaryKey('category_id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
         $this->addColumn('category_name', 'Name', 'VARCHAR', false, 64, null);
         $this->addColumn('category_url', 'Url', 'VARCHAR', false, 256, null);
         $this->addColumn('category_desc', 'Desc', 'LONGVARCHAR', false, null, null);

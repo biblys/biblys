@@ -305,14 +305,14 @@ class RoleTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, 10, null);
-        $this->addForeignKey('article_id', 'ArticleId', 'INTEGER', 'articles', 'article_id', false, 10, null);
-        $this->addColumn('book_id', 'BookId', 'INTEGER', false, 10, null);
-        $this->addColumn('event_id', 'EventId', 'INTEGER', false, 10, null);
-        $this->addForeignKey('people_id', 'PeopleId', 'INTEGER', 'people', 'people_id', false, 10, null);
-        $this->addColumn('job_id', 'JobId', 'INTEGER', false, 10, null);
-        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, 10, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
+        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addForeignKey('article_id', 'ArticleId', 'INTEGER', 'articles', 'article_id', false, null, null);
+        $this->addColumn('book_id', 'BookId', 'INTEGER', false, null, null);
+        $this->addColumn('event_id', 'EventId', 'INTEGER', false, null, null);
+        $this->addForeignKey('people_id', 'PeopleId', 'INTEGER', 'people', 'people_id', false, null, null);
+        $this->addColumn('job_id', 'JobId', 'INTEGER', false, null, null);
+        $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
         $this->addColumn('role_hide', 'Hide', 'BOOLEAN', false, 1, null);
         $this->addColumn('role_presence', 'Presence', 'VARCHAR', false, 256, null);
         $this->addColumn('role_date', 'Date', 'TIMESTAMP', false, null, null);
