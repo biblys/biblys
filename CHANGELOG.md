@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 2.82.0 (DEV)
+
+Améliorations
+
+- Une page listant les utilisateur·trice·s a été ajouté à l'administration.
+
 ### 2.81.2 (22 mai 2024)
 
 Corrections
@@ -15,7 +21,7 @@ Corrections
 
 Corrections
 
-De multiples problèmes liés à l'import des comptes utilisateurs Axys vers 
+De multiples problèmes liés à l'import des comptes utilisateurs Axys vers
 des comptes utilisateurs locaux ont été corrigés.
 
 ## 2.81.0 (10 mai 2024)

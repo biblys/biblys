@@ -110,7 +110,6 @@ class CurrentUser
 
     /**
      * @throws PropelException
-     * @throws Exception
      */
     public function isAdmin(): bool
     {
@@ -353,7 +352,6 @@ class CurrentUser
 
     /**
      * @throws AccessDeniedHttpException
-     * @throws Exception
      */
     public function authAdmin(
         $errorMessage = "Accès réservé aux administrateurs.",

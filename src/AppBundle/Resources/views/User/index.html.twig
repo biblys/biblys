@@ -1,0 +1,33 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Utilisateur·trice·s
+{% endblock %}
+
+{% block main %}
+  <h1>
+    <span class="fa fa-user"></span>
+    Utilisateur·trice·s
+  </h1>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>E-mail</th>
+        <th>Première connexion</th>
+        <th>Dernière connexion</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+      <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.createdAt|date }}</td>
+        <td>{{ user.lastLoggedAt|date('d/m/Y H:i') }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

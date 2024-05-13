@@ -2,10 +2,13 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
+use Exception;
 use Framework\Controller;
+use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +19,31 @@ use Twig\Error\SyntaxError;
 
 class UserController extends Controller
 {
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function indexAction(
+        CurrentSite $currentSite,
+        CurrentUser $currentUser,
+        TemplateService $templateService,
+    ): Response
+    {
+        $currentUser->authAdmin();
+
+        $users = UserQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->orderByLastLoggedAt()
+            ->find();
+
+        return $templateService->renderResponse("AppBundle:User:index.html.twig", [
+            "users" => $users->getData(),
+        ]);
+    }
+
+
     /**
      * @throws SyntaxError
      * @throws RuntimeError

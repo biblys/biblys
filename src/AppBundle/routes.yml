@@ -702,6 +702,10 @@ template_delete:
 
 # User
 
+user_index:
+  path: /admin/users/
+  controller: AppBundle\Controller\UserController::indexAction
+
 user_login:
   path: /user/login
   controller: AppBundle\Controller\UserController::login

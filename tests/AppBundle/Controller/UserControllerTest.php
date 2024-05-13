@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
@@ -15,10 +16,41 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-require_once __DIR__."/../../setUp.php";
+require_once __DIR__ . "/../../setUp.php";
 
 class UserControllerTest extends TestCase
 {
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function testIndexAction()
+    {
+        // given
+        $controller = new UserController();
+        $site = ModelFactory::createSite();
+        $users = [
+            ModelFactory::createUser(site: $site),
+            ModelFactory::createUser(site: $site),
+        ];
+        $currentSite = new CurrentSite($site);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive('authAdmin')->andReturns();
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->shouldReceive("renderResponse")
+            ->with("AppBundle:User:index.html.twig", [
+                "users" => $users
+            ])->andReturn(new Response());
+
+        // when
+        $response = $controller->indexAction($currentSite, $currentUser, $templateService);
+
+        // then
+        $this->assertEquals("200", $response->getStatusCode());
+    }
+
     /**
      * @throws SyntaxError
      * @throws RuntimeError
