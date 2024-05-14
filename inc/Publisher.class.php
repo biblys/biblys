@@ -9,6 +9,15 @@ class Publisher extends Entity
 {
     protected $prefix = 'publisher';
 
+    public static function buildFromModel(\Model\Publisher $publisher): self
+    {
+        return new Publisher([
+            "publisher_id" => $publisher->getId(),
+            "publisher_name" => $publisher->getName(),
+            "publisher_url" => $publisher->getUrl(),
+        ]);
+    }
+
     public function hasLogo(): bool
     {
         $media = new Media("publisher", $this->get("id"));

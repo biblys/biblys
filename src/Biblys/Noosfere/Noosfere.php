@@ -201,12 +201,14 @@ class Noosfere
             $collectionNoosfereId = $correctId;
         }
 
-        $existingCollectionByNoosfereId = BookCollectionQuery::create()->findOneByNoosfereId($collectionNoosfereId);
-        $existingCollectionByNameAndPublisher = BookCollectionQuery::create()
-            ->filterByUrl($slugService->slugify($collectionNoosfereName))
-            ->filterByPublisherId($publisher->get('id'))
+        $collectionSlug = $slugService->createForBookCollection(
+            $collectionNoosfereName, $publisher->get("name")
+        );
+        $existingCollection = BookCollectionQuery::create()
+            ->filterByNoosfereId($collectionNoosfereId)
+            ->_or()
+            ->filterByUrl($collectionSlug)
             ->findOne();
-        $existingCollection = $existingCollectionByNoosfereId ?? $existingCollectionByNameAndPublisher;
 
         if ($existingCollection) {
             /** @var Collection $collection */

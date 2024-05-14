@@ -144,9 +144,13 @@ class ModelFactory
 
         $collection = new BookCollection();
         $collection->setName($name);
-        $collection->setUrl($slugService->slugify($name));
         $publisher = $publisher ?? self::createPublisher();
         $collection->setPublisherId($publisher->getId());
+        $slug = $slugService->createForBookCollection(
+            $collection->getName(),
+            $publisher->getName()
+        );
+        $collection->setUrl($slug);
         $collection->save();
 
         return $collection;
