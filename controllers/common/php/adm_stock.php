@@ -525,10 +525,6 @@ if ($article) {
                 $userIdentity = $user->getEmail();
             }
 
-            if (!$user) {
-                return "";
-            }
-
             return '
                 <tr>
                     <td>' . $userIdentity . '</a></td>
