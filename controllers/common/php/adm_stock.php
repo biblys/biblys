@@ -1,6 +1,4 @@
-<?php
-
-/** @var CurrentSite $currentSite */
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Legacy\LegacyCodeHelper;
@@ -14,6 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+
+/** @var CurrentSite $currentSite */
+/** @var Symfony\Component\HttpFoundation\Session\Session $session */
+/** @var Site $globalSite */
 
 $sm = new StockManager();
 $am = new ArticleManager();
@@ -29,6 +31,7 @@ $div_admin = null;
 /** @var Request $request */
 $returnedStockId = $request->query->get('return');
 if ($returnedStockId) {
+    /** @var Stock $stock */
     $stock = $sm->getById($returnedStockId);
     $stock->setReturned();
     $sm->update($stock);
@@ -53,7 +56,7 @@ if (isset($_GET['sold'])) {
     // All copies sold in shop are associated to a fake customer that needs
     // to be created and specified via the `fake_shop_customer` site option.
     // This allows to create only one order for shop sales per day.
-        $fakeCustomerId = $globalSite->getOpt('fake_shop_customer');
+    $fakeCustomerId = $globalSite->getOpt('fake_shop_customer');
     if (!$fakeCustomerId) {
         throw new Exception("L'option de site `fake_shop_customer` doit être définie.");
     }
@@ -96,6 +99,7 @@ if (isset($_GET['sold'])) {
     }
 }
 
+$mode = "";
 if ($request->getMethod() === 'POST') {
     // AddSlashes
     foreach ($_POST as $key => $value) {
@@ -104,6 +108,7 @@ if ($request->getMethod() === 'POST') {
 
     // Get related article
     $article_id = $request->request->get('article_id');
+    /** @var Article $article */
     $article = $am->getById($article_id);
     if (!$article) {
         throw new Exception("Cannot find article with id $article_id");
@@ -112,6 +117,7 @@ if ($request->getMethod() === 'POST') {
     // Add to rayon
     $rayon_id = $request->request->get('add_to_rayon');
     if ($rayon_id) {
+        /** @var Rayon $rayon */
         $rayon = $rm->getById($rayon_id);
         if (!$rayon) {
             throw new Exception("Cannot find rayon with id $rayon_id");
@@ -224,6 +230,7 @@ if ($request->getMethod() === 'POST') {
 
     // Flash messages
     if ($mode == 'update') {
+        /** @var Stock $stock */
         $session->getFlashBag()->add('success', "L'exemplaire n° " . $stock->get('id') . ' a été mis à jour.');
     } elseif ($_POST['stock_num'] == 1) {
         $session->getFlashBag()->add('success', 'Un exemplaire de <strong>' . $article->get('title') . '</strong> a été ajouté au stock.');
@@ -260,7 +267,7 @@ if ($request->getMethod() === 'POST') {
         /** @var Mailer $mailer */
         $copyYear = $request->request->get("stock_pub_year");
         $copyPrice = $request->request->get("stock_selling_price");
-        $result = _sendAlertsForArticle($article, $copyYear, $copyPrice, $copyCondition, $mailer, $_SITE, $currentSite);
+        $result = _sendAlertsForArticle($article, $copyYear, $copyPrice, $copyCondition, $mailer, $currentSite);
         if ($result["sent"] > 0) {
             $session->getFlashBag()->add(
                 "info",
@@ -320,6 +327,7 @@ if (!empty($_GET['id'])) {
     }
 
     // Photo
+    /** @var Stock $stock */
     if ($stock->hasPhoto()) {
         $photo_field = '
             <div class="floatR center">
@@ -337,7 +345,7 @@ if (!empty($_GET['id'])) {
         <p><a href="/pages/adm_stock?del=' . $s['stock_id'] . '" data-confirm="Voulez-vous vraiment SUPPRIMER cet exemplaire ?">supprimer</a></p>
     ';
 } elseif (!empty($copyId)) {
-    \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Dupliquer l\'exemplaire n&deg; ' . $copyId);
+    $request->attributes->set("page_title", "Dupliquer l'exemplaire n&deg; $copyId");
     $content .= '<h1><span class="fa fa-copy"></span> Dupliquer l\'exemplaire n<sup>o</sup> ' . $_GET['copy'] . '</h1>';
     $stock = $sm->getById($copyId);
     if (!$stock) {
@@ -418,6 +426,7 @@ if ($article) {
         ]
     );
     $articleCover = null;
+    /** @var Article $article */
     if ($article->hasCover()) {
         $articleCover = $article->getCoverTag(
             [
@@ -536,7 +545,6 @@ if ($article) {
 
         if ($alerts_num > 0) {
             $disabledAlertsWarning = null;
-            /** @var CurrentSite $currentSite */
             if (!$currentSite->hasOptionEnabled("alerts")) {
                 $disabledAlertsWarning = '
                     <span class="fa fa-exclamation-triangle" title="Les envois d\'alertes sont désactivés."></span>
@@ -697,7 +705,7 @@ if ($article) {
         ';
     }
 
-    $stock_shop = '<input type="hidden" name="stock_shop" value="' . LegacyCodeHelper::getGlobalSite()['site_id'] . '" />';
+    $stock_shop = '<input type="hidden" name="stock_shop" value="' . $currentSite->getId() . '" />';
 
     // Add article to rayons
     $rayons = $rm->getAll();
@@ -739,6 +747,7 @@ if ($article) {
         ';
     }
 
+    $nextYear = (new DateTime("next year"))->format("Y");
     $content .= '
 
         <div class="buttons">
@@ -797,7 +806,7 @@ if ($article) {
                 ' . $photo_field . '
 
                 <label for="stock_pub_year">Dép&ocirc;t légal :</label>
-                <input type="number" id="stock_pub_year" name="stock_pub_year" maxlength="4" min="1900" max="' . (date('Y') + 1) . '" class="mini" placeholder="AAAA" value="' . $s['stock_pub_year'] . '" />
+                <input type="number" id="stock_pub_year" name="stock_pub_year" maxlength="4" min="1900" max="' . $nextYear . '" class="mini" placeholder="AAAA" value="' . $s['stock_pub_year'] . '" />
                 </span>
                 <br /><br />
 
@@ -995,7 +1004,6 @@ function _sendAlertsForArticle(
     string $copyPrice,
     string $copyCondition,
     Mailer  $mailer,
-    Site $_SITE,
     CurrentSite $currentSite,
 ): array
 {
@@ -1013,12 +1021,12 @@ function _sendAlertsForArticle(
 
         $subject = "{$article->get("title")} est disponible !";
 
-        $customMessage = null;
-        if ($_SITE->getOpt("alerts_custom_message")) {
-            $customMessage = '<p><strong>'.$_SITE->getOpt('alerts_custom_message').'</strong></p>';
+        $customMessage = $currentSite->getOption("alerts_custom_message");
+        if ($customMessage) {
+            $customMessage = '<p><strong>'.$customMessage.'</strong></p>';
         }
 
-        $articleUrl = "https://{$_SITE->get("domain")}/a/{$article->get("url")}";
+        $articleUrl = "https://{$currentSite->getSite()->getDomain()}/a/{$article->get("url")}";
 
         $message = '
             <p>Bonjour,</p>
@@ -1030,12 +1038,12 @@ function _sendAlertsForArticle(
             </p>
             <p>
                 Un exemplaire de ce livre vient d\'être mis en vente chez 
-                <a href="https://'.$_SITE->get("domain").'/a/'.$article->get("url").'">'.$_SITE['site_title'].'</a>&nbsp;!
+                <a href="https://'.$currentSite->getSite()->getDomain().'/a/'.$article->get("url") .'">' .$currentSite->getTitle().'</a>&nbsp;!
             </p>
             <p>
                 Édition de '.$copyYear.'<br />
                 État : '.$copyCondition.'<br />
-                Prix : '.currency($copyPrice / 100, ).'
+                Prix : '.currency($copyPrice / 100).'
             </p>
             
             '.$customMessage.'
@@ -1050,7 +1058,7 @@ function _sendAlertsForArticle(
                 premier servi. Il se peut donc que le livre ne soit déjà plus disponible lors de votre visite. Ne 
                 perdez pas de temps !
             </p>
-            <p><a href="https://'.$currentSite->get("domain").'/pages/log_myalerts">Modifier ou annuler mes alertes</a></p>
+            <p><a href="https://'.$currentSite->getSite()->getDomain().'/pages/log_myalerts">Modifier ou annuler mes alertes</a></p>
             <p>À très bientôt dans les librairies Biblys !</p>
         ';
 
