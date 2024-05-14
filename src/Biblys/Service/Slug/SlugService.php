@@ -20,7 +20,8 @@ class SlugService
 
     public function createForBookCollection($collectionName, $publisherName): string
     {
-        if ($collectionName == $publisherName) {
+        $collectionNameIncludesPublisher = mb_stripos($collectionName, $publisherName) !== false;
+        if ($collectionNameIncludesPublisher) {
             return $this->slugify($collectionName);
         }
 

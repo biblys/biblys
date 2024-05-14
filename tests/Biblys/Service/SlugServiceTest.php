@@ -109,13 +109,13 @@ class SlugServiceTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function testCreateCollectionSlugForMainCollection()
+    public function testCreateCollectionSlugForCollectionEqualingPublisher()
     {
         // given
         $publisher = ModelFactory::createPublisher(name: "SLUG");
         $collection = ModelFactory::createCollection(
             publisher: $publisher,
-            name: "SLUG"
+            name: "Slug"
         );
         $slugService = new SlugService();
 
@@ -127,5 +127,28 @@ class SlugServiceTest extends TestCase
 
         // then
         $this->assertEquals("slug", $slug);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testCreateCollectionSlugForCollectionIncludingPublisher()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher(name: "POLIO");
+        $collection = ModelFactory::createCollection(
+            publisher: $publisher,
+            name: "Polio Folicier"
+        );
+        $slugService = new SlugService();
+
+        // when
+        $slug = $slugService->createForBookCollection(
+            $collection->getName(),
+            $publisher->getName(),
+        );
+
+        // then
+        $this->assertEquals("polio-folicier", $slug);
     }
 }
