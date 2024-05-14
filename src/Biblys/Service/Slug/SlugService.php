@@ -18,12 +18,22 @@ class SlugService
         return $slugger->slug($lowercaseString);
     }
 
+    public function createForBookCollection($collectionName, $publisherName): string
+    {
+        if ($collectionName == $publisherName) {
+            return $this->slugify($collectionName);
+        }
+
+        return $this->slugify("$publisherName-$collectionName");
+    }
+
     /**
      * @throws InvalidSlugException
      */
-    public function validateArticleSlug(string $string): void
+    public
+    function validateArticleSlug(string $string): void
     {
-        $pattern = "/^[a-z0-9\-]+\/[a-z0-9\-\_]+$/";
+        $pattern = "/^[a-z0-9\-]+\/[a-z0-9\-_]+$/";
         if (!preg_match($pattern, $string)) {
             throw new InvalidSlugException("Invalid article slug");
         }

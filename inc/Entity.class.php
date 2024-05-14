@@ -5,6 +5,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\Mailer;
 use Biblys\Service\Log;
+use Biblys\Service\Slug\SlugService;
 
 class Entity implements ArrayAccess, Iterator, Countable
 {
@@ -236,12 +237,13 @@ class EntityManager
      */
     public function makeslug($entity)
     {
+        $slugService = new SlugService();
         if ($this->object == 'Collection') {
-            $slug = CollectionManager::createSlug($entity->get('publisher')->get('name'), $entity->get('name'));
+            $slug = $slugService->createForBookCollection($entity->get('name'), $entity->get('publisher')->get('name'));
         } elseif ($entity->has('title')) {
-            $slug = makeurl($entity->get('title'));
+            $slug = $slugService->slugify($entity->get('title'));
         } elseif ($entity->has('name')) {
-            $slug = makeurl($entity->get('name'));
+            $slug = $slugService->slugify($entity->get('name'));
         } else {
             $slug = $this->prefix . '_' . $entity->get('id');
         }

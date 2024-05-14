@@ -115,28 +115,11 @@ class Collection extends Entity
 
             $collection->set('collection_publisher', $publisher->get('name'));
 
-            $slug = CollectionManager::createSlug(
-                $publisher->get('name'), $collection->get('name')
-            );
+            $slugService = new SlugService();
+            $slug = $slugService->createForBookCollection($collection->get('name'), $publisher->get('name'));
             $collection->set('collection_url', $slug);
 
             return $collection;
-        }
-
-        public static function createSlug($publisherName, $collectionName)
-        {
-            $slugService = new SlugService();
-            $publisherSlug = $slugService->slugify($publisherName);
-            $collectionSlug = $slugService->slugify($collectionName);
-            if ($publisherSlug == $collectionSlug
-                || strstr($collectionSlug, $publisherSlug)
-            ) {
-                $slug = $collectionName;
-            } else {
-                $slug = $publisherName.' '.$collectionName;
-            }
-
-            return $slugService->slugify($slug);
         }
 
         public function validate($collection)

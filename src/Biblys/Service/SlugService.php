@@ -2,6 +2,9 @@
 
 namespace Biblys\Service;
 
+use Model\BookCollection;
+use Model\Publisher;
+
 /**
  * @deprecated
  */

@@ -4,10 +4,18 @@ namespace Biblys\Service;
 
 use Biblys\Service\Slug\InvalidSlugException;
 use Biblys\Service\Slug\SlugService;
+use Biblys\Test\ModelFactory;
 use PHPUnit\Framework\TestCase;
+use Propel\Runtime\Exception\PropelException;
+
+require_once __DIR__ . "/../../setUp.php";
 
 class SlugServiceTest extends TestCase
 {
+    /**
+     * #slugify
+     */
+
     public function testWithAsciiString()
     {
         // given
@@ -69,5 +77,55 @@ class SlugServiceTest extends TestCase
 
         // when
         $slugService->validateArticleSlug("articles/搭建六合源码论坛【联系TG:bc3979】n搭建六合源码论坛【联系TG:bc3979】nj");
+    }
+
+    /**
+     * #createCollectionSlug
+     */
+
+    /**
+     * @throws PropelException
+     */
+    public function testCreateCollectionSlug()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher(name: "SLUG");
+        $collection = ModelFactory::createCollection(
+            publisher: $publisher,
+            name: "Tales"
+        );
+        $slugService = new SlugService();
+
+        // when
+        $slug = $slugService->createForBookCollection(
+            $collection->getName(),
+            $publisher->getName(),
+        );
+
+        // then
+        $this->assertEquals("slug-tales", $slug);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testCreateCollectionSlugForMainCollection()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher(name: "SLUG");
+        $collection = ModelFactory::createCollection(
+            publisher: $publisher,
+            name: "SLUG"
+        );
+        $slugService = new SlugService();
+
+        // when
+        $slug = $slugService->createForBookCollection(
+            $collection->getName(),
+            $publisher->getName(),
+        );
+
+        // then
+        $this->assertEquals("slug", $slug);
     }
 }
