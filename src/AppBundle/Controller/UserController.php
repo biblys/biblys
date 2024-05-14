@@ -2,10 +2,13 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\Mailer;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
+use DateTime;
 use Exception;
 use Framework\Controller;
 use Model\UserQuery;
@@ -13,6 +16,7 @@ use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -27,8 +31,8 @@ class UserController extends Controller
      * @throws Exception
      */
     public function indexAction(
-        CurrentSite $currentSite,
-        CurrentUser $currentUser,
+        CurrentSite     $currentSite,
+        CurrentUser     $currentUser,
         TemplateService $templateService,
     ): Response
     {
@@ -53,8 +57,8 @@ class UserController extends Controller
      */
     public function login(
         QueryParamsService $queryParams,
-        CurrentUser $currentUser,
-        UrlGenerator $urlGenerator,
+        CurrentUser        $currentUser,
+        UrlGenerator       $urlGenerator,
     ): Response
     {
         if ($currentUser->isAuthentified()) {
@@ -82,25 +86,47 @@ class UserController extends Controller
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws InvalidEmailAddressException
+     * @throws TransportExceptionInterface
      */
     public function sendLoginEmailAction(
-        Request $request,
-        CurrentSite $currentSite,
-        TemplateService $templateService
+        Request         $request,
+        CurrentSite     $currentSite,
+        TemplateService $templateService,
+        Mailer          $mailer,
     ): Response
     {
         $recipientEmail = $request->request->get("email");
         $returnUrl = $request->request->get("return_url");
         $senderEmail = $currentSite->getSite()->getContact();
 
-        $emailExists = UserQuery::create()
+        $userAccountExists = UserQuery::create()
             ->filterBySite($currentSite->getSite())
             ->findOneByEmail($recipientEmail);
+
+        if ($userAccountExists) {
+            $expirationDate = new DateTime("+24 hours");
+            $body = $templateService->render(
+                "AppBundle:User:login-with-email-email.html.twig",
+                [
+                    "recipientEmail" => $recipientEmail,
+                    "loginUrl" => "https://localhost:8088",
+                    "siteName" => $currentSite->getSite()->getName(),
+                    "domain" => $currentSite->getSite()->getDomain(),
+                    "expirationDate" => $expirationDate->format("d/m/Y à H\hi"),
+                ]
+            );
+            $mailer->send(
+                to: $recipientEmail,
+                subject: "Connectez-vous en un clic sur {$currentSite->getSite()->getDomain()}",
+                body: $body,
+            );
+        }
 
         return $templateService->renderResponse(
             "AppBundle:User:send-login-email.html.twig",
             [
-                "emailExists" => $emailExists,
+                "emailExists" => $userAccountExists,
                 "recipientEmail" => $recipientEmail,
                 "returnUrl" => $returnUrl,
                 "senderEmail" => $senderEmail,

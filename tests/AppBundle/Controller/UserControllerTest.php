@@ -2,8 +2,10 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\Mailer;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use Biblys\Test\ModelFactory;
@@ -12,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -151,8 +154,12 @@ class UserControllerTest extends TestCase
      */
 
     /**
-     * @return void
+     * @throws LoaderError
      * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws InvalidEmailAddressException
+     * @throws TransportExceptionInterface
      */
     public function testSendLoginEmailWhenEmailDoesNotExist()
     {
@@ -167,13 +174,15 @@ class UserControllerTest extends TestCase
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->shouldReceive("renderResponse")
             ->andReturn($expectedResponse);
+        $mailer = Mockery::mock(Mailer::class);
 
         // when
         $returnedResponse = $controller->sendLoginEmailAction(
-            $request, $currentSite, $templateService
+            $request, $currentSite, $templateService, $mailer
         );
 
         // then
+        $mailer->shouldNotHaveReceived("send");
         $templateService->shouldHaveReceived("renderResponse")
             ->with("AppBundle:User:send-login-email.html.twig", [
                 "emailExists" => false,
@@ -185,14 +194,19 @@ class UserControllerTest extends TestCase
     }
 
     /**
-     * @return void
+     * @throws InvalidEmailAddressException
+     * @throws LoaderError
      * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
      */
     public function testSendLoginEmailWhenEmailExists()
     {
         // given
         $controller = new UserController();
         $expectedResponse = new Response();
+        $expectedMailBody = new Response();
         $site = ModelFactory::createSite(contact: "editions@paronymie.fr");
         $currentSite = new CurrentSite($site);
         ModelFactory::createUser(site: $site, email: "user@example.net");
@@ -202,13 +216,18 @@ class UserControllerTest extends TestCase
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->shouldReceive("renderResponse")
             ->andReturn($expectedResponse);
+        $templateService->shouldReceive("render")
+            ->andReturn($expectedMailBody);
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send");
 
         // when
         $returnedResponse = $controller->sendLoginEmailAction(
-            $request, $currentSite, $templateService
+            $request, $currentSite, $templateService, $mailer
         );
 
         // then
+        $mailer->shouldHaveReceived("send");
         $templateService->shouldHaveReceived("renderResponse")
             ->with("AppBundle:User:send-login-email.html.twig", [
                 "emailExists" => true,

@@ -712,7 +712,7 @@ user_login:
 
 user_send_login_email:
   methods: POST
-  path: /user/send-login_email
+  path: /user/send-login-email
   controller: AppBundle\Controller\UserController::sendLoginEmailAction
 
 user_account:

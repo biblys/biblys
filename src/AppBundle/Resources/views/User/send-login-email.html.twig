@@ -20,7 +20,7 @@
 
     <h3>Que faire si je ne trouve pas le courriel dans ma boîte de réception&nbsp;?</h3>
 
-    <ul>
+    <ol>
       <li>Vérifiez que l'adresse <strong>{{ recipientEmail }}</strong> est correcte.</li>
       <li>Vérifiez dans votre dossier SPAM / Courrier indésirable.</li>
       <li>
@@ -30,7 +30,7 @@
       <li>
         <a href="{{ path('user_login', { return_url: returnUrl }) }}">Réessayez</a>
       </li>
-    </ul>
+    </ol>
   {% else %}
     <p class="alert alert-danger">
       <span class="fa fa-times-circle"></span>
