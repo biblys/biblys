@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.81.1 (15 mai 2024)
+
+Corrections
+
+De multiples problèmes liés à l'import des comptes utilisateurs Axys vers 
+des comptes utilisateurs locaux ont été corrigés.
+
 ## 2.81.0 (10 mai 2024)
 
 ### Utilisateurs locaux
