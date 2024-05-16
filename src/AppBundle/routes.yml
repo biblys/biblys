@@ -715,6 +715,11 @@ user_send_login_email:
   path: /user/send-login-email
   controller: AppBundle\Controller\UserController::sendLoginEmailAction
 
+user_login_by_email:
+  methods: GET
+  path: /user/login-by-email
+  controller: AppBundle\Controller\UserController::loginByEmailAction
+
 user_account:
   path: /user/account
   controller: AppBundle\Controller\UserController::account

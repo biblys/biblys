@@ -6,6 +6,7 @@ use Biblys\Exception\InvalidConfigurationException;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\InvalidTokenException;
 use Biblys\Service\Mailer;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
@@ -13,11 +14,15 @@ use Biblys\Service\TokenService;
 use DateTime;
 use Exception;
 use Framework\Controller;
+use Model\Session;
+use Model\User;
 use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
@@ -142,6 +147,74 @@ class UserController extends Controller
                 "senderEmail" => $senderEmail,
             ],
         );
+    }
+
+    /**
+     * @throws InvalidConfigurationException
+     * @throws PropelException
+     */
+    public function loginByEmailAction(
+        Request            $request,
+        QueryParamsService $queryParams,
+        TokenService       $tokenService,
+        CurrentSite        $currentSite,
+        CurrentUser        $currentUser,
+    ): RedirectResponse
+    {
+        $queryParams->parse(["token" => ["type" => "string"]]);
+        $token = $queryParams->get("token");
+
+        try {
+            $userEmail = $tokenService->decodeLoginToken($token);
+            $user = UserQuery::create()
+                ->filterBySite($currentSite->getSite())
+                ->findOneByEmail($userEmail);
+            if (!$user) {
+                throw new BadRequestHttpException("Ce lien de connexion est invalide.");
+            }
+
+            $user->setLastLoggedAt(new DateTime());
+            $user->save();
+
+            $sessionExpiresAt = new DateTime("+ 7 days");
+            $sessionCookie = self::_createSession(
+                $currentSite,
+                $sessionExpiresAt,
+                $user
+            );
+
+            $currentUser->setUser($user);
+            $currentUser->transfertVisitorCartToUser(visitorToken: $request->cookies->get("visitor_uid"));
+
+            $response = new RedirectResponse("/");
+            $response->headers->setCookie($sessionCookie);
+            $response->headers->set("X-Robots-Tag", "noindex, nofollow");
+
+            return $response;
+        } catch (InvalidTokenException) {
+            throw new BadRequestHttpException("Ce lien de connexion est invalide.");
+        }
+    }
+
+    /**
+     * @throws PropelException
+     */
+    private static function _createSession(
+        CurrentSite $currentSite,
+        DateTime    $sessionExpiresAt,
+        User        $user,
+    ): Cookie
+    {
+        $session = new Session();
+        $session->setUser($user);
+        $session->setSite($currentSite->getSite());
+        $session->setToken(Session::generateToken());
+        $session->setExpiresAt($sessionExpiresAt);
+        $session->save();
+
+        return Cookie::create("user_uid")
+            ->withValue($session->getToken())
+            ->withExpires($sessionExpiresAt);
     }
 
     /**

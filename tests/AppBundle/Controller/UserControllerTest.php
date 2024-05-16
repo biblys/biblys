@@ -6,17 +6,22 @@ use Biblys\Exception\InvalidConfigurationException;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\InvalidTokenException;
 use Biblys\Service\Mailer;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use Biblys\Service\TokenService;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use DateTime;
+use Exception;
 use Mockery;
+use Model\SessionQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
@@ -59,7 +64,7 @@ class UserControllerTest extends TestCase
     }
 
     /**
-     * login
+     * #login
      */
 
     /**
@@ -153,7 +158,7 @@ class UserControllerTest extends TestCase
     }
 
     /**
-     * sendLoginEmail
+     * #sendLoginEmail
      */
 
     /**
@@ -256,6 +261,124 @@ class UserControllerTest extends TestCase
             ]);
         $this->assertEquals($expectedResponse, $returnedResponse);
     }
+
+    /**
+     * #loginByEmail
+     */
+
+    /**
+     * @throws Exception
+     */
+    public function testLoginByEmailWithInvalidToken()
+    {
+        // given
+        $controller = new UserController();
+        $request = new Request();
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->expects("parse")->with(["token" => ["type" => "string"]]);
+        $queryParamsService->expects("get")->with("token")->andReturn("login_token");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("decodeLoginToken")->andThrows(new InvalidTokenException());
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentUser = Mockery::mock(CurrentUser::class);
+
+        // when
+        $exception = Helpers::runAndCatchException(function () use (
+            $controller, $request, $queryParamsService, $tokenService, $currentSite, $currentUser
+        ) {
+            $controller->loginByEmailAction(
+                $request,
+                $queryParamsService,
+                $tokenService,
+                $currentSite,
+                $currentUser,
+            );
+        });
+
+        // then
+        $this->assertInstanceOf(BadRequestHttpException::class, $exception);
+        $this->assertEquals("Ce lien de connexion est invalide.", $exception->getMessage());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testLoginByEmailWithForUnknownEmail()
+    {
+        // given
+        $controller = new UserController();
+        $request = new Request();
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->expects("parse")->with(["token" => ["type" => "string"]]);
+        $queryParamsService->expects("get")->with("token")->andReturn("login_token");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("decodeLoginToken")->andReturn("unknown@paronymie.fr");
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $currentUser = Mockery::mock(CurrentUser::class);
+
+        // when
+        $exception = Helpers::runAndCatchException(function () use (
+            $controller, $request, $queryParamsService, $tokenService, $currentSite, $currentUser
+        ) {
+            $controller->loginByEmailAction(
+                $request, $queryParamsService, $tokenService, $currentSite, $currentUser
+            );
+        });
+
+        // then
+        $this->assertInstanceOf(BadRequestHttpException::class, $exception);
+        $this->assertEquals("Ce lien de connexion est invalide.", $exception->getMessage());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws InvalidConfigurationException
+     */
+    public function testLoginByEmail()
+    {
+        // given
+        $controller = new UserController();
+        $request = new Request();
+        $request->cookies->set("visitor_uid", "visitor_token");
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->expects("parse")->with(["token" => ["type" => "string"]]);
+        $queryParamsService->expects("get")->with("token")->andReturn("login_token");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("decodeLoginToken")->andReturn("user@paronymie.fr");
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $user = ModelFactory::createUser(site: $site, email: "user@paronymie.fr");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("setUser")->with($user);
+        $currentUser->expects("transfertVisitorCartToUser")->with("visitor_token");
+
+        // when
+        $response = $controller->loginByEmailAction(
+            $request,
+            $queryParamsService,
+            $tokenService,
+            $currentSite,
+            $currentUser
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/", $response->getTargetUrl());
+
+        $cookies = $response->headers->getCookies();
+        $this->assertCount(1, $cookies);
+
+        $userUidCookie = $cookies[0];
+        $this->assertEquals("user_uid", $userUidCookie->getName());
+        $session = SessionQuery::create()
+            ->filterBySite($site)
+            ->filterByUser($user)
+            ->findOneByToken($userUidCookie->getValue());
+        $this->assertNotNull($session);
+    }
+
+    /** Others */
 
     /**
      * @throws SyntaxError
