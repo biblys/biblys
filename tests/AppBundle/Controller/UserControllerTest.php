@@ -2,13 +2,16 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Exception\InvalidConfigurationException;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
+use Biblys\Service\TokenService;
 use Biblys\Test\ModelFactory;
+use DateTime;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -175,10 +178,12 @@ class UserControllerTest extends TestCase
         $templateService->shouldReceive("renderResponse")
             ->andReturn($expectedResponse);
         $mailer = Mockery::mock(Mailer::class);
+        $tokenService = Mockery::mock(TokenService::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
 
         // when
         $returnedResponse = $controller->sendLoginEmailAction(
-            $request, $currentSite, $templateService, $mailer
+            $request, $currentSite, $tokenService, $templateService, $urlGenerator, $mailer,
         );
 
         // then
@@ -200,6 +205,7 @@ class UserControllerTest extends TestCase
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws TransportExceptionInterface
+     * @throws InvalidConfigurationException
      */
     public function testSendLoginEmailWhenEmailExists()
     {
@@ -207,7 +213,11 @@ class UserControllerTest extends TestCase
         $controller = new UserController();
         $expectedResponse = new Response();
         $expectedMailBody = new Response();
-        $site = ModelFactory::createSite(contact: "editions@paronymie.fr");
+        $site = ModelFactory::createSite(
+            title: "Paronymie Login",
+            domain: "login.paronymie.fr",
+            contact: "editions@paronymie.fr",
+        );
         $currentSite = new CurrentSite($site);
         ModelFactory::createUser(site: $site, email: "user@example.net");
         $request = new Request();
@@ -220,14 +230,23 @@ class UserControllerTest extends TestCase
             ->andReturn($expectedMailBody);
         $mailer = Mockery::mock(Mailer::class);
         $mailer->expects("send");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("createLoginToken")->andReturn("token");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("login_url");
 
         // when
         $returnedResponse = $controller->sendLoginEmailAction(
-            $request, $currentSite, $templateService, $mailer
+            $request, $currentSite, $tokenService, $templateService, $urlGenerator, $mailer
         );
 
         // then
         $mailer->shouldHaveReceived("send");
+        $urlGenerator->shouldHaveReceived("generate")->with(
+            "user_login_by_email", ["token" => "token"],
+        );
+        $templateService->shouldHaveReceived("render")
+            ->with("AppBundle:User:login-with-email-email.html.twig", Mockery::any());
         $templateService->shouldHaveReceived("renderResponse")
             ->with("AppBundle:User:send-login-email.html.twig", [
                 "emailExists" => true,

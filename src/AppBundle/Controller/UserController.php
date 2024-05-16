@@ -2,12 +2,14 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Exception\InvalidConfigurationException;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
+use Biblys\Service\TokenService;
 use DateTime;
 use Exception;
 use Framework\Controller;
@@ -88,11 +90,14 @@ class UserController extends Controller
      * @throws SyntaxError
      * @throws InvalidEmailAddressException
      * @throws TransportExceptionInterface
+     * @throws InvalidConfigurationException
      */
     public function sendLoginEmailAction(
         Request         $request,
         CurrentSite     $currentSite,
+        TokenService    $tokenService,
         TemplateService $templateService,
+        UrlGenerator    $urlGenerator,
         Mailer          $mailer,
     ): Response
     {
@@ -106,12 +111,17 @@ class UserController extends Controller
 
         if ($userAccountExists) {
             $expirationDate = new DateTime("+24 hours");
+            $loginToken = $tokenService->createLoginToken($recipientEmail);
+            $loginRelativeUrl = $urlGenerator->generate("user_login_by_email", [
+                "token" => $loginToken
+            ]);
+            $loginUrl = $request->getSchemeAndHttpHost() . $loginRelativeUrl;
             $body = $templateService->render(
                 "AppBundle:User:login-with-email-email.html.twig",
                 [
                     "recipientEmail" => $recipientEmail,
-                    "loginUrl" => "https://localhost:8088",
-                    "siteName" => $currentSite->getSite()->getName(),
+                    "loginUrl" => $loginUrl,
+                    "siteTitle" => $currentSite->getSite()->getTitle(),
                     "domain" => $currentSite->getSite()->getDomain(),
                     "expirationDate" => $expirationDate->format("d/m/Y à H\hi"),
                 ]
