@@ -312,7 +312,7 @@ class UserControllerTest extends TestCase
         $queryParamsService->expects("parse")->with(["token" => ["type" => "string"]]);
         $queryParamsService->expects("get")->with("token")->andReturn("login_token");
         $tokenService = Mockery::mock(TokenService::class);
-        $tokenService->expects("decodeLoginToken")->andReturn("unknown@paronymie.fr");
+        $tokenService->expects("decodeLoginToken")->andReturn(["email" => "unknown@paronymie.fr"]);
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $currentUser = Mockery::mock(CurrentUser::class);
@@ -340,12 +340,16 @@ class UserControllerTest extends TestCase
         // given
         $controller = new UserController();
         $request = new Request();
+        $request->query->set("token", "login_token");
         $request->cookies->set("visitor_uid", "visitor_token");
         $queryParamsService = Mockery::mock(QueryParamsService::class);
         $queryParamsService->expects("parse")->with(["token" => ["type" => "string"]]);
         $queryParamsService->expects("get")->with("token")->andReturn("login_token");
         $tokenService = Mockery::mock(TokenService::class);
-        $tokenService->expects("decodeLoginToken")->andReturn("user@paronymie.fr");
+        $tokenService->expects("decodeLoginToken")->andReturn([
+            "email" => "user@paronymie.fr",
+            "after_login_url" => "/after_login_url",
+        ]);
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $user = ModelFactory::createUser(site: $site, email: "user@paronymie.fr");
@@ -363,8 +367,10 @@ class UserControllerTest extends TestCase
         );
 
         // then
+        $tokenService->shouldHaveReceived("decodeLoginToken")->with("login_token");
+
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("/", $response->getTargetUrl());
+        $this->assertEquals("/after_login_url", $response->getTargetUrl());
 
         $cookies = $response->headers->getCookies();
         $this->assertCount(1, $cookies);

@@ -51,10 +51,14 @@ class TokenServiceTest extends TestCase
     }
 
     /**
+     * #createLoginToken
+     */
+
+    /**
      * @throws PropelException
      * @throws InvalidConfigurationException
      */
-    public function testCreateLoginToken()
+    public function testCreateLoginTokenWithAfterLoginUrl()
     {
         // given
         $config = Mockery::mock(Config::class);
@@ -65,7 +69,10 @@ class TokenServiceTest extends TestCase
         $tokenService = new TokenService($config, $currentSite);
 
         // when
-        $loginToken = $tokenService->createLoginToken("user@paronymie.fr");
+        $loginToken = $tokenService->createLoginToken(
+            email: "user@paronymie.fr",
+            afterLoginUrl: "/after_login_url",
+        );
 
         // then
         $decodedToken = JWT::decode($loginToken, new Key("secret_key", "HS256"));
@@ -76,6 +83,7 @@ class TokenServiceTest extends TestCase
         $this->assertIsInt($decodedToken->exp);
         $this->assertNotNull($decodedToken->jti);
         $this->assertEquals("login", $decodedToken->action);
+        $this->assertEquals("/after_login_url", $decodedToken->after_login_url);
     }
 
     /**
@@ -122,12 +130,16 @@ class TokenServiceTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->expects("getSite")->andReturn($site);
         $tokenService = new TokenService($config, $currentSite);
-        $token = $tokenService->createLoginToken("user@paronymie.fr");
+        $token = $tokenService->createLoginToken(
+            email: "user@paronymie.fr",
+            afterLoginUrl: "/after_login_url"
+        );
 
         // when
-        $email = $tokenService->decodeLoginToken($token);
+        $token = $tokenService->decodeLoginToken($token);
 
         // then
-        $this->assertEquals("user@paronymie.fr", $email);
+        $this->assertEquals("user@paronymie.fr", $token["email"]);
+        $this->assertEquals("/after_login_url", $token["after_login_url"]);
     }
 }

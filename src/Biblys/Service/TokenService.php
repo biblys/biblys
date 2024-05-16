@@ -21,7 +21,7 @@ class TokenService
      * @throws InvalidConfigurationException
      * @throws Exception
      */
-    public function createLoginToken(string $email): string
+    public function createLoginToken(string $email, string $afterLoginUrl): string
     {
         return JWT::encode(
             [
@@ -32,6 +32,7 @@ class TokenService
                 "exp" => (new DateTime("+ 24 hours"))->getTimestamp(),
                 "jti" => uniqid(),
                 "action" => "login",
+                "after_login_url" => $afterLoginUrl,
             ],
             $this->config->getAuthenticationSecret(),
             "HS256",
@@ -42,7 +43,7 @@ class TokenService
      * @throws InvalidConfigurationException
      * @throws InvalidTokenException
      */
-    public function decodeLoginToken(string $token): string
+    public function decodeLoginToken(string $token): array
     {
         $decodedToken = JWT::decode($token, new Key($this->config->getAuthenticationSecret(), "HS256"));
 
@@ -50,7 +51,10 @@ class TokenService
             throw new InvalidTokenException("Invalid action for login token");
         }
 
-        return $decodedToken->sub;
+        return [
+            "email" => $decodedToken->sub,
+            "after_login_url" => $decodedToken->after_login_url,
+        ];
     }
 
     public function createOIDCStateToken(string|null $returnUrl, string $key): string

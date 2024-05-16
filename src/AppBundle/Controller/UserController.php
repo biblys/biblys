@@ -107,7 +107,7 @@ class UserController extends Controller
     ): Response
     {
         $recipientEmail = $request->request->get("email");
-        $returnUrl = $request->request->get("return_url");
+        $returnUrl = $request->request->get("return_url", "/");
         $senderEmail = $currentSite->getSite()->getContact();
 
         $userAccountExists = UserQuery::create()
@@ -116,7 +116,7 @@ class UserController extends Controller
 
         if ($userAccountExists) {
             $expirationDate = new DateTime("+24 hours");
-            $loginToken = $tokenService->createLoginToken($recipientEmail);
+            $loginToken = $tokenService->createLoginToken(email: $recipientEmail, afterLoginUrl: $returnUrl);
             $loginRelativeUrl = $urlGenerator->generate("user_login_with_token", [
                 "token" => $loginToken
             ]);
@@ -165,10 +165,10 @@ class UserController extends Controller
         $token = $queryParams->get("token");
 
         try {
-            $userEmail = $tokenService->decodeLoginToken($token);
+            $token = $tokenService->decodeLoginToken($token);
             $user = UserQuery::create()
                 ->filterBySite($currentSite->getSite())
-                ->findOneByEmail($userEmail);
+                ->findOneByEmail($token["email"]);
             if (!$user) {
                 throw new BadRequestHttpException("Ce lien de connexion est invalide.");
             }
@@ -186,7 +186,8 @@ class UserController extends Controller
             $currentUser->setUser($user);
             $currentUser->transfertVisitorCartToUser(visitorToken: $request->cookies->get("visitor_uid"));
 
-            $response = new RedirectResponse("/");
+            $redirectUrl = !empty($token["after_login_url"]) ? $token["after_login_url"] : "/";
+            $response = new RedirectResponse($redirectUrl);
             $response->headers->setCookie($sessionCookie);
             $response->headers->set("X-Robots-Tag", "noindex, nofollow");
 
