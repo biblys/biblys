@@ -2,7 +2,10 @@
 
 namespace Framework\ArgumentResolver;
 
+use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\TokenService;
+use Exception;
 use Generator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
@@ -20,8 +23,13 @@ class TokenServiceValueResolver implements ArgumentValueResolverInterface
         return true;
     }
 
+    /**
+     * @throws Exception
+     */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
-        yield new TokenService();
+        $config = Config::load();
+        $currentSite = CurrentSite::buildFromConfig($config);
+        yield new TokenService($config, $currentSite);
     }
 }

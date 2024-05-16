@@ -2,6 +2,8 @@
 
 use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
+use Biblys\Service\TokenService;
 use Biblys\Service\Updater\Updater;
 use Framework\ArgumentResolver\BiblysCloudValueResolver;
 use Framework\ArgumentResolver\ConfigValueResolver;

@@ -4,6 +4,7 @@ namespace Biblys\Service;
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 
 class TokenServiceTest extends TestCase
@@ -12,7 +13,9 @@ class TokenServiceTest extends TestCase
     public function testCreateOIDCStateToken()
     {
         // given
-        $tokenService = new TokenService();
+        $config = new Config();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $tokenService = new TokenService($config, $currentSite);
 
         // when
         $token = $tokenService->createOIDCStateToken(null,"secret-key");
@@ -25,7 +28,9 @@ class TokenServiceTest extends TestCase
     public function testCreateOIDCStateTokenWithReturnUrl()
     {
         // given
-        $tokenService = new TokenService();
+        $config = new Config();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $tokenService = new TokenService($config, $currentSite);
 
         // when
         $token = $tokenService->createOIDCStateToken("return_url", "secret-key");
