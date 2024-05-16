@@ -3,14 +3,16 @@
 namespace Biblys\Service;
 
 use Biblys\Exception\InvalidConfigurationException;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
+use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
-require_once __DIR__."/../../setUp.php";
+require_once __DIR__ . "/../../setUp.php";
 
 class TokenServiceTest extends TestCase
 {
@@ -23,7 +25,7 @@ class TokenServiceTest extends TestCase
         $tokenService = new TokenService($config, $currentSite);
 
         // when
-        $token = $tokenService->createOIDCStateToken(null,"secret-key");
+        $token = $tokenService->createOIDCStateToken(null, "secret-key");
 
         // then
         $decodedToken = JWT::decode($token, new Key("secret-key", "HS256"));
@@ -52,7 +54,7 @@ class TokenServiceTest extends TestCase
      * @throws PropelException
      * @throws InvalidConfigurationException
      */
-    public function testLoginToken()
+    public function testCreateLoginToken()
     {
         // given
         $config = Mockery::mock(Config::class);
@@ -74,5 +76,58 @@ class TokenServiceTest extends TestCase
         $this->assertIsInt($decodedToken->exp);
         $this->assertNotNull($decodedToken->jti);
         $this->assertEquals("login", $decodedToken->action);
+    }
+
+    /**
+     * #decodeLoginToken
+     */
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testDecodeLoginTokenWithInvalidAction()
+    {
+        // given
+        $secretKey = "222fabebd31bdc2ec7f382404cff0418";
+        $config = new Config(["authentication" => ["secret" => $secretKey]]);
+        $site = ModelFactory::createSite();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->expects("getSite")->andReturn($site);
+        $tokenService = new TokenService($config, $currentSite);
+        $token = JWT::encode(["action" => "logout"], $secretKey, "HS256");
+
+        // when
+        $exception = Helpers::runAndCatchException(function () use ($tokenService, $token) {
+            $tokenService->decodeLoginToken($token);
+        });
+
+        // then
+        $this->assertInstanceOf(InvalidTokenException::class, $exception);
+        $this->assertEquals("Invalid action for login token", $exception->getMessage());
+    }
+
+    /**
+     * @throws InvalidConfigurationException
+     * @throws InvalidTokenException
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testDecodeLoginValidToken()
+    {
+        // given
+        $secretKey = "222fabebd31bdc2ec7f382404cff0417";
+        $config = new Config(["authentication" => ["secret" => $secretKey]]);
+        $site = ModelFactory::createSite();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->expects("getSite")->andReturn($site);
+        $tokenService = new TokenService($config, $currentSite);
+        $token = $tokenService->createLoginToken("user@paronymie.fr");
+
+        // when
+        $email = $tokenService->decodeLoginToken($token);
+
+        // then
+        $this->assertEquals("user@paronymie.fr", $email);
     }
 }

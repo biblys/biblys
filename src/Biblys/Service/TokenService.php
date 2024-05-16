@@ -6,7 +6,7 @@ use Biblys\Exception\InvalidConfigurationException;
 use DateTime;
 use Exception;
 use Firebase\JWT\JWT;
-use stdClass;
+use Firebase\JWT\Key;
 
 class TokenService
 {
@@ -25,9 +25,9 @@ class TokenService
     {
         return JWT::encode(
             [
-                "iss" => "https://{$this->currentSite->getSite()->getDomain()}",
+                "iss" => $this->_getIssuer(),
                 "sub" => $email,
-                "aud" => "https://{$this->currentSite->getSite()->getDomain()}",
+                "aud" => $this->_getIssuer(),
                 "iat" => (new DateTime())->getTimestamp(),
                 "exp" => (new DateTime("+ 24 hours"))->getTimestamp(),
                 "jti" => uniqid(),
@@ -36,6 +36,21 @@ class TokenService
             $this->config->getAuthenticationSecret(),
             "HS256",
         );
+    }
+
+    /**
+     * @throws InvalidConfigurationException
+     * @throws InvalidTokenException
+     */
+    public function decodeLoginToken(string $token): string
+    {
+        $decodedToken = JWT::decode($token, new Key($this->config->getAuthenticationSecret(), "HS256"));
+
+        if (!isset($decodedToken->action) || $decodedToken->action !== "login") {
+            throw new InvalidTokenException("Invalid action for login token");
+        }
+
+        return $decodedToken->sub;
     }
 
     public function createOIDCStateToken(string|null $returnUrl, string $key): string
@@ -49,4 +64,13 @@ class TokenService
             "HS256",
         );
     }
+
+    /**
+     * @return string
+     */
+    private function _getIssuer(): string
+    {
+        return "https://{$this->currentSite->getSite()->getDomain()}";
+    }
+
 }
