@@ -30,6 +30,9 @@ site: 1
 #    message: Hello world!
 #    link: https://www.biblys.fr/
 
+#authentication:
+#  secret: abcdefghijklmnopqrstuvxyz12345678
+
 #axys:
 #    client_id: abcd1234
 #  client_secret: efgh5678

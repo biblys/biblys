@@ -5,6 +5,7 @@
  * @backupStaticAttributes disabled
  */
 
+use Biblys\Exception\InvalidConfigurationException;
 use Biblys\Service\Config;
 
 require_once __DIR__."/../../setUp.php";
@@ -104,5 +105,31 @@ class ConfigTest extends PHPUnit\Framework\TestCase
 
         // then
         $this->assertEquals(false, $has, "returns false if config has no option for path");
+    }
+
+    public function testGetAuthenticationSecretIfTooShort(): void
+    {
+        // given
+        $config = new Config(["authentication" => ["secret" => "too short"]]);
+
+        // then
+        $this->expectException(InvalidConfigurationException::class);
+
+        // when
+        $config->getAuthenticationSecret();
+    }
+
+    public function testGetAuthenticationSecret(): void
+    {
+        // given
+        $config = new Config(["authentication" => [
+            "secret" => "5fc8ae2cb08b95804b4e3c57b90ee37fdadbb53f2b62826c42c7afd18d64f04b"
+        ]]);
+
+        // then
+        $this->expectException(InvalidConfigurationException::class);
+
+        // when
+        $config->getAuthenticationSecret();
     }
 }

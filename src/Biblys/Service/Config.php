@@ -2,6 +2,7 @@
 
 namespace Biblys\Service;
 
+use Biblys\Exception\InvalidConfigurationException;
 use Exception;
 use Symfony\Component\Yaml\Parser;
 
@@ -104,5 +105,21 @@ class Config
     {
         $options = self::_getOptionsFromConfigFile();
         return new Config($options);
+    }
+
+    /**
+     * @throws InvalidConfigurationException
+     */
+    public function getAuthenticationSecret(): string
+    {
+        $secret = $this->get('authentication.secret');
+
+        if (strlen($secret) !== 32) {
+            throw new InvalidConfigurationException(
+                "Authentication secret must be 32 characters long."
+            );
+        }
+
+        return $secret;
     }
 }
