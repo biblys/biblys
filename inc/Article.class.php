@@ -68,6 +68,11 @@ class Article extends Entity
             $com = new CollectionManager();
             if (isset($data['collection_id'])) {
                 $data['collection'] = $com->getById($data['collection_id']);
+                if ($data['collection'] === false) {
+                    throw new Exception(
+                        "Invalid collection ".$data["collection_id"]." for article ".$data["article_id"]
+                    );
+                }
             }
 
             // Publisher (OneToMany)
