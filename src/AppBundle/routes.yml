@@ -715,10 +715,10 @@ user_send_login_email:
   path: /user/send-login-email
   controller: AppBundle\Controller\UserController::sendLoginEmailAction
 
-user_login_by_email:
+user_login_with_token:
   methods: GET
-  path: /user/login-by-email
-  controller: AppBundle\Controller\UserController::loginByEmailAction
+  path: /user/login-with-token
+  controller: AppBundle\Controller\UserController::loginWithTokenAction
 
 user_account:
   path: /user/account

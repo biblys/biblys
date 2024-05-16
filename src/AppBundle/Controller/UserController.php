@@ -117,7 +117,7 @@ class UserController extends Controller
         if ($userAccountExists) {
             $expirationDate = new DateTime("+24 hours");
             $loginToken = $tokenService->createLoginToken($recipientEmail);
-            $loginRelativeUrl = $urlGenerator->generate("user_login_by_email", [
+            $loginRelativeUrl = $urlGenerator->generate("user_login_with_token", [
                 "token" => $loginToken
             ]);
             $loginUrl = $request->getSchemeAndHttpHost() . $loginRelativeUrl;
@@ -153,7 +153,7 @@ class UserController extends Controller
      * @throws InvalidConfigurationException
      * @throws PropelException
      */
-    public function loginByEmailAction(
+    public function loginWithTokenAction(
         Request            $request,
         QueryParamsService $queryParams,
         TokenService       $tokenService,

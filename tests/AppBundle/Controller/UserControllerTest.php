@@ -248,7 +248,7 @@ class UserControllerTest extends TestCase
         // then
         $mailer->shouldHaveReceived("send");
         $urlGenerator->shouldHaveReceived("generate")->with(
-            "user_login_by_email", ["token" => "token"],
+            "user_login_with_token", ["token" => "token"],
         );
         $templateService->shouldHaveReceived("render")
             ->with("AppBundle:User:login-with-email-email.html.twig", Mockery::any());
@@ -263,13 +263,13 @@ class UserControllerTest extends TestCase
     }
 
     /**
-     * #loginByEmail
+     * #loginWithToken
      */
 
     /**
      * @throws Exception
      */
-    public function testLoginByEmailWithInvalidToken()
+    public function testLoginWithTokenWithInvalidToken()
     {
         // given
         $controller = new UserController();
@@ -286,7 +286,7 @@ class UserControllerTest extends TestCase
         $exception = Helpers::runAndCatchException(function () use (
             $controller, $request, $queryParamsService, $tokenService, $currentSite, $currentUser
         ) {
-            $controller->loginByEmailAction(
+            $controller->loginWithTokenAction(
                 $request,
                 $queryParamsService,
                 $tokenService,
@@ -303,7 +303,7 @@ class UserControllerTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testLoginByEmailWithForUnknownEmail()
+    public function testLoginWithTokenWithForUnknownEmail()
     {
         // given
         $controller = new UserController();
@@ -321,7 +321,7 @@ class UserControllerTest extends TestCase
         $exception = Helpers::runAndCatchException(function () use (
             $controller, $request, $queryParamsService, $tokenService, $currentSite, $currentUser
         ) {
-            $controller->loginByEmailAction(
+            $controller->loginWithTokenAction(
                 $request, $queryParamsService, $tokenService, $currentSite, $currentUser
             );
         });
@@ -335,7 +335,7 @@ class UserControllerTest extends TestCase
      * @throws PropelException
      * @throws InvalidConfigurationException
      */
-    public function testLoginByEmail()
+    public function testLoginWithToken()
     {
         // given
         $controller = new UserController();
@@ -354,7 +354,7 @@ class UserControllerTest extends TestCase
         $currentUser->expects("transfertVisitorCartToUser")->with("visitor_token");
 
         // when
-        $response = $controller->loginByEmailAction(
+        $response = $controller->loginWithTokenAction(
             $request,
             $queryParamsService,
             $tokenService,
