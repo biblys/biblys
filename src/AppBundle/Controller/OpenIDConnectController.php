@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
-use Biblys\Service\CurrentUser;
 use Biblys\Service\OpenIDConnectProviderService;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
@@ -29,7 +28,6 @@ use Model\OptionQuery;
 use Model\OrderQuery;
 use Model\PostQuery;
 use Model\RightQuery;
-use Model\Session;
 use Model\StockItemListQuery;
 use Model\StockQuery;
 use Model\SubscriptionQuery;
@@ -42,12 +40,12 @@ use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Propel;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class OpenIDConnectController extends Controller
 {
@@ -76,11 +74,12 @@ class OpenIDConnectController extends Controller
     public function callback(
         Request                      $request,
         CurrentSite                  $currentSite,
-        CurrentUser                  $currentUser,
         Config                       $config,
         OpenIDConnectProviderService $openIDConnectProviderService,
         QueryParamsService           $queryParams,
         TemplateService              $templateService,
+        TokenService                 $tokenService,
+        UrlGenerator                 $urlGenerator,
     ): Response|RedirectResponse
     {
         $error = $request->query->get("error");
@@ -98,7 +97,7 @@ class OpenIDConnectController extends Controller
 
         try {
             $oidcTokens = OpenIDConnectController::_getOidcTokensFromIdentityProvider($request, $openIDConnectProviderService);
-            [$externalId, $email, $sessionExpiresAt] = OpenIDConnectController::_getClaimsFromOidcTokens($oidcTokens);
+            [$externalId, $email] = OpenIDConnectController::_getClaimsFromOidcTokens($oidcTokens);
             $returnUrl = OpenIDConnectController::_getReturnUrlFromState($request, $config);
 
             $authenticationMethod = AuthenticationMethodQuery::create()
@@ -114,23 +113,16 @@ class OpenIDConnectController extends Controller
                 );
             }
 
-            // Save user last login date
             $user = $authenticationMethod->getUser();
             $user->setEmail($email);
-            $user->setLastLoggedAt(new DateTime());
             $user->save();
 
-            $sessionCookie = OpenIDConnectController::_createSession(
-                $currentSite,
-                $sessionExpiresAt,
-                $user
-            );
+            $loginToken = $tokenService->createLoginToken($email, $returnUrl);
+            $loginUrl = $urlGenerator->generate("user_login_with_token", [
+                "token" => $loginToken
+            ]);
 
-            $currentUser->setUser($user);
-            $currentUser->transfertVisitorCartToUser(visitorToken: $request->cookies->get("visitor_uid"));
-
-            $response = new RedirectResponse($returnUrl);
-            $response->headers->setCookie($sessionCookie);
+            $response = new RedirectResponse($loginUrl);
             $response->headers->set("X-Robots-Tag", "noindex, nofollow");
 
             return $response;
@@ -138,6 +130,7 @@ class OpenIDConnectController extends Controller
             throw new BadRequestHttpException($exception->getMessage());
         }
     }
+
     /**
      * @param Request $request
      * @param OpenIDConnectProviderService $openIDConnectProviderService
@@ -175,27 +168,6 @@ class OpenIDConnectController extends Controller
         }
 
         return $returnUrl;
-    }
-
-    /**
-     * @throws PropelException
-     */
-    private static function _createSession(
-        CurrentSite $currentSite,
-        DateTime $sessionExpiresAt,
-        User $user,
-    ): Cookie
-    {
-        $session = new Session();
-        $session->setUser($user);
-        $session->setSite($currentSite->getSite());
-        $session->setToken(Session::generateToken());
-        $session->setExpiresAt($sessionExpiresAt);
-        $session->save();
-
-        return Cookie::create("user_uid")
-            ->withValue($session->getToken())
-            ->withExpires($sessionExpiresAt);
     }
 
     /**

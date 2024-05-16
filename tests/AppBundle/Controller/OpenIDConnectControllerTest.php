@@ -11,7 +11,6 @@ use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use Biblys\Service\TokenService;
 use Biblys\Test\ModelFactory;
-use DateTime;
 use Exception;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Token\TokenSetInterface;
@@ -20,7 +19,6 @@ use JsonException;
 use Model\AuthenticationMethodQuery;
 use Mockery;
 use Model\OptionQuery;
-use Model\SessionQuery;
 use Model\UserQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -28,6 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 require_once __DIR__."/../../setUp.php";
 
@@ -96,86 +95,26 @@ class OpenIDConnectControllerTest extends TestCase
         ]);
         $queryParamsService->shouldReceive("get")
             ->with("error")->andReturn("");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("createLoginToken")->andReturn("login_token");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("/login-with-token");
 
         // when
         $response = $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            currentUser: $currentUser,
             config: new Config(["axys" => ["client_secret" => "secret_key"]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $this->createMock(TemplateService::class),
+            tokenService: $tokenService,
+            urlGenerator: $urlGenerator,
         );
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("/", $response->getTargetUrl());
-
-        $cookies = $response->headers->getCookies();
-        $this->assertCount(1, $cookies);
-
-        $userUidCookie = $cookies[0];
-        $this->assertEquals("user_uid", $userUidCookie->getName());
-        $this->assertEquals(1682278410, $userUidCookie->getExpiresTime());
-        $session = SessionQuery::create()
-            ->filterBySite($site)
-            ->filterByUser($user)
-            ->findOneByToken($userUidCookie->getValue());
-        $this->assertNotNull($session);
-        $this->assertEquals(new DateTime("@1682278410"), $session->getExpiresAt());
-    }
-
-    /**
-     * @throws PropelException
-     * @throws Exception
-     */
-    public function testCallbackWithReturnUrl()
-    {
-        // given
-        $identityProvider = "axys";
-        $externalId = "AXYS5678";
-        $site = ModelFactory::createSite();
-        $currentSite = new CurrentSite($site);
-        $openIDConnectProviderService = $this->_buildOIDCProviderService($externalId);
-
-        $user = ModelFactory::createUser(site: $site);
-        ModelFactory::createAuthenticationMethod(
-            site: $site,
-            user: $user,
-            identityProvider: $identityProvider,
-            externalId: $externalId,
-        );
-
-        $request = self::_buildCallbackRequest(returnUrl: "/my-account");
-        $controller = new OpenIDConnectController();
-
-        $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("setUser")->with($user);
-        $currentUser->expects("transfertVisitorCartToUser")->with("visitor_token");
-        $queryParamsService = Mockery::mock(QueryParamsService::class);
-        $queryParamsService->shouldReceive("parse")->with([
-            "code" => ["type" => "string"],
-            "state" => ["type" => "string"],
-            "error" => ["type" => "string", "default" => null],
-        ]);
-        $queryParamsService->shouldReceive("get")
-            ->with("error")->andReturn("");
-
-        // when
-        $response = $controller->callback(
-            request: $request,
-            currentSite: $currentSite,
-            currentUser: $currentUser,
-            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
-            openIDConnectProviderService: $openIDConnectProviderService,
-            queryParams: $queryParamsService,
-            templateService: $this->createMock(TemplateService::class),
-        );
-
-        // then
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("/my-account", $response->getTargetUrl());
+        $this->assertEquals("/login-with-token", $response->getTargetUrl());
     }
 
     /**
@@ -216,16 +155,21 @@ class OpenIDConnectControllerTest extends TestCase
         ]);
         $queryParamsService->shouldReceive("get")
             ->with("error")->andReturn("");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("createLoginToken")->andReturn("login_token");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("/login_with_token");
 
         // when
         $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            currentUser: $currentUser,
             config: new Config(["axys" => ["client_secret" => "secret_key"]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $this->createMock(TemplateService::class),
+            tokenService: $tokenService,
+            urlGenerator: $urlGenerator,
         );
 
         // then
@@ -259,7 +203,6 @@ class OpenIDConnectControllerTest extends TestCase
 
         $request = self::_buildCallbackRequest(returnUrl: "/my-account");
         $controller = new OpenIDConnectController();
-        $currentUser = Mockery::mock(CurrentUser::class);
         $queryParamsService = Mockery::mock(QueryParamsService::class);
         $queryParamsService->shouldReceive("parse")->with([
             "code" => ["type" => "string"],
@@ -268,6 +211,8 @@ class OpenIDConnectControllerTest extends TestCase
         ]);
         $queryParamsService->shouldReceive("get")
             ->with("error")->andReturn("");
+        $tokenService = Mockery::mock(TokenService::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
 
         // then
         $this->expectException(AccessDeniedHttpException::class);
@@ -277,11 +222,12 @@ class OpenIDConnectControllerTest extends TestCase
         $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            currentUser: $currentUser,
             config: new Config(["axys" => ["client_secret" => "secret_key"]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $this->createMock(TemplateService::class),
+            tokenService: $tokenService,
+            urlGenerator: $urlGenerator,
         );
 
         // then
@@ -338,16 +284,21 @@ class OpenIDConnectControllerTest extends TestCase
         ]);
         $queryParamsService->shouldReceive("get")
             ->with("error")->andReturn("");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("createLoginToken")->andReturn("login_token");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("/login_with_token");
 
         // when
         $response = $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            currentUser: $currentUser,
             config: new Config(["axys" => ["client_secret" => "secret_key"]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $this->createMock(TemplateService::class),
+            tokenService: $tokenService,
+            urlGenerator: $urlGenerator,
         );
 
         // then
@@ -468,6 +419,10 @@ class OpenIDConnectControllerTest extends TestCase
         ]);
         $queryParamsService->shouldReceive("get")
             ->with("error")->andReturn("");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("createLoginToken")->andReturn("login_token");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("/login_with_token");
 
         $request = self::_buildCallbackRequest();
         $controller = new OpenIDConnectController();
@@ -476,11 +431,12 @@ class OpenIDConnectControllerTest extends TestCase
         $response = $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            currentUser: $currentUser,
             config: new Config(["axys" => ["client_secret" => "secret_key"]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $this->createMock(TemplateService::class),
+            tokenService: $tokenService,
+            urlGenerator: $urlGenerator,
         );
 
         // then
@@ -530,6 +486,10 @@ class OpenIDConnectControllerTest extends TestCase
         ]);
         $queryParamsService->shouldReceive("get")
             ->with("error")->andReturn("");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("createLoginToken")->andReturn("login_token");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("/login_with_token");
 
         $request = self::_buildCallbackRequest();
         $controller = new OpenIDConnectController();
@@ -538,11 +498,12 @@ class OpenIDConnectControllerTest extends TestCase
         $response = $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            currentUser: $currentUser,
             config: new Config(["axys" => ["client_secret" => "secret_key"]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $this->createMock(TemplateService::class),
+            tokenService: $tokenService,
+            urlGenerator: $urlGenerator,
         );
 
         // then
@@ -592,6 +553,10 @@ class OpenIDConnectControllerTest extends TestCase
         ]);
         $queryParamsService->shouldReceive("get")
             ->with("error")->andReturn("");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("createLoginToken")->andReturn("login_token");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("/login_with_token");
 
         $request = self::_buildCallbackRequest();
         $controller = new OpenIDConnectController();
@@ -600,11 +565,12 @@ class OpenIDConnectControllerTest extends TestCase
         $response = $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            currentUser: $currentUser,
             config: new Config(["axys" => ["client_secret" => "secret_key"]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $this->createMock(TemplateService::class),
+            tokenService: $tokenService,
+            urlGenerator: $urlGenerator,
         );
 
         // then
@@ -651,6 +617,10 @@ class OpenIDConnectControllerTest extends TestCase
         ]);
         $queryParamsService->shouldReceive("get")
             ->with("error")->andReturn("");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("createLoginToken")->andReturn("login_token");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("/login_with_token");
 
         $request = self::_buildCallbackRequest();
         $controller = new OpenIDConnectController();
@@ -659,11 +629,12 @@ class OpenIDConnectControllerTest extends TestCase
         $response = $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            currentUser: $currentUser,
             config: new Config(["axys" => ["client_secret" => "secret_key"]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $this->createMock(TemplateService::class),
+            tokenService: $tokenService,
+            urlGenerator: $urlGenerator,
         );
 
         // then
@@ -707,7 +678,6 @@ class OpenIDConnectControllerTest extends TestCase
             ->willReturn($expectedResponse);
         $controller = new OpenIDConnectController();
 
-        $currentUser = Mockery::mock(CurrentUser::class);
         $queryParamsService = Mockery::mock(QueryParamsService::class);
         $queryParamsService->shouldReceive("parse")->with([
             "code" => ["type" => "string"],
@@ -716,16 +686,19 @@ class OpenIDConnectControllerTest extends TestCase
         ]);
         $queryParamsService->shouldReceive("get")
             ->with("error")->andReturn("access_denied");
+        $tokenService = Mockery::mock(TokenService::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
 
         // when
         $returnedResponse = $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            currentUser: $currentUser,
             config: new Config(["axys" => ["client_secret" => "secret_key"]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
-            templateService: $templateService
+            templateService: $templateService,
+            tokenService: $tokenService,
+            urlGenerator: $urlGenerator,
         );
 
         // then
@@ -747,11 +720,6 @@ class OpenIDConnectControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         $openIDConnectProviderService = Mockery::mock(OpenIDConnectProviderService::class);
         $openIDConnectProviderService->expects("getTokenSet")->andThrow(new OAuth2Exception("invalid_grant"));
-        $currentUser = Mockery::mock(CurrentUser::class);
-
-        // then
-        $this->expectException(BadRequestHttpException::class);
-        $this->expectExceptionMessage("invalid_grant");
         $queryParamsService = Mockery::mock(QueryParamsService::class);
         $queryParamsService->shouldReceive("parse")->with([
             "code" => ["type" => "string"],
@@ -760,16 +728,23 @@ class OpenIDConnectControllerTest extends TestCase
         ]);
         $queryParamsService->shouldReceive("get")
             ->with("error")->andReturn("");
+        $tokenService = Mockery::mock(TokenService::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("invalid_grant");
 
         // when
         $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            currentUser: $currentUser,
             config: new Config(["axys" => ["client_secret" => "secret_key"]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $this->createMock(TemplateService::class),
+            tokenService: $tokenService,
+            urlGenerator: $urlGenerator,
         );
     }
 
