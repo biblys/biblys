@@ -431,12 +431,14 @@ class ModelFactory
      */
     public static function createSite(
         string $title = "Éditions Paronymie",
+        string $domain = "paronymie.fr",
         string $contact = "contact@paronymie.fr",
     ): Site
     {
         $site = new Site();
         $site->setName("paronymie");
         $site->setTitle($title);
+        $site->setDomain($domain);
         $site->setContact($contact);
         $site->setTag("PAR");
         $site->save();
