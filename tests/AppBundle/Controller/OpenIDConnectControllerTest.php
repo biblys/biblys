@@ -11,6 +11,7 @@ use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use Biblys\Service\TokenService;
 use Biblys\Test\ModelFactory;
+use DateTime;
 use Exception;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Token\TokenSetInterface;
@@ -131,6 +132,7 @@ class OpenIDConnectControllerTest extends TestCase
         $openIDConnectProviderService = $this->_buildOIDCProviderService(
             $externalId,
             email: "new-email@example.net",
+            emailVerifiedAt: new DateTime("2013-05-22 21:30:00"),
         );
 
         $user = ModelFactory::createUser(site: $site, email: "old-email@example.net");
@@ -175,6 +177,7 @@ class OpenIDConnectControllerTest extends TestCase
         // then
         $user->reload();
         $this->assertEquals("new-email@example.net", $user->getEmail());
+        $this->assertEquals(new DateTime("2013-05-22 21:30:00"), $user->getEmailValidatedAt());
     }
 
     /**
@@ -765,11 +768,18 @@ class OpenIDConnectControllerTest extends TestCase
     private function _buildOIDCProviderService(
         string $externalId,
         string $email = "oidc-user@biblys.fr",
+        ?DateTime $emailVerifiedAt = null,
     ): OpenIDConnectProviderService
     {
         $tokenSet = $this->createMock(TokenSetInterface::class);
         $tokenSet->method("claims")->willReturn(
-            ["sub" => $externalId, "email" => $email, "exp" => 1682278410]
+            [
+                "sub" => $externalId,
+                "email" => $email,
+                "exp" => 1682278410,
+                "email_verified" => $emailVerifiedAt !== null,
+                "email_verified_at" => $emailVerifiedAt?->getTimestamp(),
+            ]
     );
         $openIDConnectProviderService = $this->createMock(OpenIDConnectProviderService::class);
         $openIDConnectProviderService->method("getTokenSet")->willReturn($tokenSet);

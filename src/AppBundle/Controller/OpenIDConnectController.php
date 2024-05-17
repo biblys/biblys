@@ -97,7 +97,8 @@ class OpenIDConnectController extends Controller
 
         try {
             $oidcTokens = OpenIDConnectController::_getOidcTokensFromIdentityProvider($request, $openIDConnectProviderService);
-            [$externalId, $email] = OpenIDConnectController::_getClaimsFromOidcTokens($oidcTokens);
+            [$externalId, $email, $emailVerified, $emailVerifiedAt] =
+                OpenIDConnectController::_getClaimsFromOidcTokens($oidcTokens);
             $returnUrl = OpenIDConnectController::_getReturnUrlFromState($request, $config);
 
             $authenticationMethod = AuthenticationMethodQuery::create()
@@ -115,6 +116,11 @@ class OpenIDConnectController extends Controller
 
             $user = $authenticationMethod->getUser();
             $user->setEmail($email);
+
+            if ($emailVerified) {
+                $user->setEmailValidatedAt($emailVerifiedAt);
+            }
+
             $user->save();
 
             $loginToken = $tokenService->createLoginToken($email, "login-with-oidc", $returnUrl);
@@ -152,10 +158,11 @@ class OpenIDConnectController extends Controller
     {
         $claims = $oidcTokens->claims();
         $externalId = $claims["sub"];
-        $sessionExpiresAt = new DateTime("@" . $claims["exp"]);
+        $emailVerified = $claims["email_verified"];
+        $emailVerifiedAt = $emailVerified ? new DateTime("@" . $claims["email_verified_at"]) : null;
         $email = $claims["email"];
 
-        return [$externalId, $email, $sessionExpiresAt];
+        return [$externalId, $email, $emailVerified, $emailVerifiedAt];
     }
 
     private static function _getReturnUrlFromState(Request $request, Config $config): string
