@@ -63,7 +63,7 @@ class UserTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 6;
+    public const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
@@ -73,7 +73,7 @@ class UserTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 6;
+    public const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the id field
@@ -89,6 +89,11 @@ class UserTableMap extends TableMap
      * the column name for the email field
      */
     public const COL_EMAIL = 'users.email';
+
+    /**
+     * the column name for the emailValidatedAt field
+     */
+    public const COL_EMAILVALIDATEDAT = 'users.emailValidatedAt';
 
     /**
      * the column name for the lastLoggedAt field
@@ -119,11 +124,11 @@ class UserTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'Email', 'LastLoggedAt', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'email', 'lastLoggedAt', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [UserTableMap::COL_ID, UserTableMap::COL_SITE_ID, UserTableMap::COL_EMAIL, UserTableMap::COL_LASTLOGGEDAT, UserTableMap::COL_CREATED_AT, UserTableMap::COL_UPDATED_AT, ],
-        self::TYPE_FIELDNAME     => ['id', 'site_id', 'email', 'lastLoggedAt', 'created_at', 'updated_at', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, ]
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'Email', 'EmailValidatedAt', 'LastLoggedAt', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'email', 'emailValidatedAt', 'lastLoggedAt', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [UserTableMap::COL_ID, UserTableMap::COL_SITE_ID, UserTableMap::COL_EMAIL, UserTableMap::COL_EMAILVALIDATEDAT, UserTableMap::COL_LASTLOGGEDAT, UserTableMap::COL_CREATED_AT, UserTableMap::COL_UPDATED_AT, ],
+        self::TYPE_FIELDNAME     => ['id', 'site_id', 'email', 'emailValidatedAt', 'lastLoggedAt', 'created_at', 'updated_at', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
     ];
 
     /**
@@ -135,11 +140,11 @@ class UserTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'Email' => 2, 'LastLoggedAt' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'email' => 2, 'lastLoggedAt' => 3, 'createdAt' => 4, 'updatedAt' => 5, ],
-        self::TYPE_COLNAME       => [UserTableMap::COL_ID => 0, UserTableMap::COL_SITE_ID => 1, UserTableMap::COL_EMAIL => 2, UserTableMap::COL_LASTLOGGEDAT => 3, UserTableMap::COL_CREATED_AT => 4, UserTableMap::COL_UPDATED_AT => 5, ],
-        self::TYPE_FIELDNAME     => ['id' => 0, 'site_id' => 1, 'email' => 2, 'lastLoggedAt' => 3, 'created_at' => 4, 'updated_at' => 5, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'Email' => 2, 'EmailValidatedAt' => 3, 'LastLoggedAt' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'email' => 2, 'emailValidatedAt' => 3, 'lastLoggedAt' => 4, 'createdAt' => 5, 'updatedAt' => 6, ],
+        self::TYPE_COLNAME       => [UserTableMap::COL_ID => 0, UserTableMap::COL_SITE_ID => 1, UserTableMap::COL_EMAIL => 2, UserTableMap::COL_EMAILVALIDATEDAT => 3, UserTableMap::COL_LASTLOGGEDAT => 4, UserTableMap::COL_CREATED_AT => 5, UserTableMap::COL_UPDATED_AT => 6, ],
+        self::TYPE_FIELDNAME     => ['id' => 0, 'site_id' => 1, 'email' => 2, 'emailValidatedAt' => 3, 'lastLoggedAt' => 4, 'created_at' => 5, 'updated_at' => 6, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
     ];
 
     /**
@@ -170,6 +175,13 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_EMAIL' => 'EMAIL',
         'COL_EMAIL' => 'EMAIL',
         'users.email' => 'EMAIL',
+        'EmailValidatedAt' => 'EMAILVALIDATEDAT',
+        'User.EmailValidatedAt' => 'EMAILVALIDATEDAT',
+        'emailValidatedAt' => 'EMAILVALIDATEDAT',
+        'user.emailValidatedAt' => 'EMAILVALIDATEDAT',
+        'UserTableMap::COL_EMAILVALIDATEDAT' => 'EMAILVALIDATEDAT',
+        'COL_EMAILVALIDATEDAT' => 'EMAILVALIDATEDAT',
+        'users.emailValidatedAt' => 'EMAILVALIDATEDAT',
         'LastLoggedAt' => 'LASTLOGGEDAT',
         'User.LastLoggedAt' => 'LASTLOGGEDAT',
         'lastLoggedAt' => 'LASTLOGGEDAT',
@@ -215,6 +227,7 @@ class UserTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', true, null, null);
         $this->addColumn('email', 'Email', 'VARCHAR', false, 256, null);
+        $this->addColumn('emailValidatedAt', 'EmailValidatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('lastLoggedAt', 'LastLoggedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
@@ -548,6 +561,7 @@ class UserTableMap extends TableMap
             $criteria->addSelectColumn(UserTableMap::COL_ID);
             $criteria->addSelectColumn(UserTableMap::COL_SITE_ID);
             $criteria->addSelectColumn(UserTableMap::COL_EMAIL);
+            $criteria->addSelectColumn(UserTableMap::COL_EMAILVALIDATEDAT);
             $criteria->addSelectColumn(UserTableMap::COL_LASTLOGGEDAT);
             $criteria->addSelectColumn(UserTableMap::COL_CREATED_AT);
             $criteria->addSelectColumn(UserTableMap::COL_UPDATED_AT);
@@ -555,6 +569,7 @@ class UserTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.site_id');
             $criteria->addSelectColumn($alias . '.email');
+            $criteria->addSelectColumn($alias . '.emailValidatedAt');
             $criteria->addSelectColumn($alias . '.lastLoggedAt');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
@@ -579,6 +594,7 @@ class UserTableMap extends TableMap
             $criteria->removeSelectColumn(UserTableMap::COL_ID);
             $criteria->removeSelectColumn(UserTableMap::COL_SITE_ID);
             $criteria->removeSelectColumn(UserTableMap::COL_EMAIL);
+            $criteria->removeSelectColumn(UserTableMap::COL_EMAILVALIDATEDAT);
             $criteria->removeSelectColumn(UserTableMap::COL_LASTLOGGEDAT);
             $criteria->removeSelectColumn(UserTableMap::COL_CREATED_AT);
             $criteria->removeSelectColumn(UserTableMap::COL_UPDATED_AT);
@@ -586,6 +602,7 @@ class UserTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.id');
             $criteria->removeSelectColumn($alias . '.site_id');
             $criteria->removeSelectColumn($alias . '.email');
+            $criteria->removeSelectColumn($alias . '.emailValidatedAt');
             $criteria->removeSelectColumn($alias . '.lastLoggedAt');
             $criteria->removeSelectColumn($alias . '.created_at');
             $criteria->removeSelectColumn($alias . '.updated_at');

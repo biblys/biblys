@@ -1599,6 +1599,7 @@
       <reference local="site_id" foreign="site_id"/>
     </foreign-key>
     <column name="email" phpName="Email" type="VARCHAR" size="256"/>
+    <column name="emailValidatedAt" phpName="EmailValidatedAt" type="TIMESTAMP"/>
     <column name="lastLoggedAt" phpName="LastLoggedAt" type="TIMESTAMP"/>
     <behavior name="timestampable" />
   </table>

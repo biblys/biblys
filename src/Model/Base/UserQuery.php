@@ -22,6 +22,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildUserQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
  * @method     ChildUserQuery orderByEmail($order = Criteria::ASC) Order by the email column
+ * @method     ChildUserQuery orderByEmailValidatedAt($order = Criteria::ASC) Order by the emailValidatedAt column
  * @method     ChildUserQuery orderByLastLoggedAt($order = Criteria::ASC) Order by the lastLoggedAt column
  * @method     ChildUserQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildUserQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
@@ -29,6 +30,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery groupById() Group by the id column
  * @method     ChildUserQuery groupBySiteId() Group by the site_id column
  * @method     ChildUserQuery groupByEmail() Group by the email column
+ * @method     ChildUserQuery groupByEmailValidatedAt() Group by the emailValidatedAt column
  * @method     ChildUserQuery groupByLastLoggedAt() Group by the lastLoggedAt column
  * @method     ChildUserQuery groupByCreatedAt() Group by the created_at column
  * @method     ChildUserQuery groupByUpdatedAt() Group by the updated_at column
@@ -279,6 +281,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser|null findOneById(int $id) Return the first ChildUser filtered by the id column
  * @method     ChildUser|null findOneBySiteId(int $site_id) Return the first ChildUser filtered by the site_id column
  * @method     ChildUser|null findOneByEmail(string $email) Return the first ChildUser filtered by the email column
+ * @method     ChildUser|null findOneByEmailValidatedAt(string $emailValidatedAt) Return the first ChildUser filtered by the emailValidatedAt column
  * @method     ChildUser|null findOneByLastLoggedAt(string $lastLoggedAt) Return the first ChildUser filtered by the lastLoggedAt column
  * @method     ChildUser|null findOneByCreatedAt(string $created_at) Return the first ChildUser filtered by the created_at column
  * @method     ChildUser|null findOneByUpdatedAt(string $updated_at) Return the first ChildUser filtered by the updated_at column
@@ -289,6 +292,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser requireOneById(int $id) Return the first ChildUser filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneBySiteId(int $site_id) Return the first ChildUser filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByEmail(string $email) Return the first ChildUser filtered by the email column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildUser requireOneByEmailValidatedAt(string $emailValidatedAt) Return the first ChildUser filtered by the emailValidatedAt column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByLastLoggedAt(string $lastLoggedAt) Return the first ChildUser filtered by the lastLoggedAt column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByCreatedAt(string $created_at) Return the first ChildUser filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByUpdatedAt(string $updated_at) Return the first ChildUser filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -302,6 +306,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildUser> findBySiteId(int|array<int> $site_id) Return ChildUser objects filtered by the site_id column
  * @method     ChildUser[]|Collection findByEmail(string|array<string> $email) Return ChildUser objects filtered by the email column
  * @psalm-method Collection&\Traversable<ChildUser> findByEmail(string|array<string> $email) Return ChildUser objects filtered by the email column
+ * @method     ChildUser[]|Collection findByEmailValidatedAt(string|array<string> $emailValidatedAt) Return ChildUser objects filtered by the emailValidatedAt column
+ * @psalm-method Collection&\Traversable<ChildUser> findByEmailValidatedAt(string|array<string> $emailValidatedAt) Return ChildUser objects filtered by the emailValidatedAt column
  * @method     ChildUser[]|Collection findByLastLoggedAt(string|array<string> $lastLoggedAt) Return ChildUser objects filtered by the lastLoggedAt column
  * @psalm-method Collection&\Traversable<ChildUser> findByLastLoggedAt(string|array<string> $lastLoggedAt) Return ChildUser objects filtered by the lastLoggedAt column
  * @method     ChildUser[]|Collection findByCreatedAt(string|array<string> $created_at) Return ChildUser objects filtered by the created_at column
@@ -407,7 +413,7 @@ abstract class UserQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, site_id, email, lastLoggedAt, created_at, updated_at FROM users WHERE id = :p0';
+        $sql = 'SELECT id, site_id, email, emailValidatedAt, lastLoggedAt, created_at, updated_at FROM users WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -613,6 +619,51 @@ abstract class UserQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(UserTableMap::COL_EMAIL, $email, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the emailValidatedAt column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByEmailValidatedAt('2011-03-14'); // WHERE emailValidatedAt = '2011-03-14'
+     * $query->filterByEmailValidatedAt('now'); // WHERE emailValidatedAt = '2011-03-14'
+     * $query->filterByEmailValidatedAt(array('max' => 'yesterday')); // WHERE emailValidatedAt > '2011-03-13'
+     * </code>
+     *
+     * @param mixed $emailValidatedAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByEmailValidatedAt($emailValidatedAt = null, ?string $comparison = null)
+    {
+        if (is_array($emailValidatedAt)) {
+            $useMinMax = false;
+            if (isset($emailValidatedAt['min'])) {
+                $this->addUsingAlias(UserTableMap::COL_EMAILVALIDATEDAT, $emailValidatedAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($emailValidatedAt['max'])) {
+                $this->addUsingAlias(UserTableMap::COL_EMAILVALIDATEDAT, $emailValidatedAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(UserTableMap::COL_EMAILVALIDATEDAT, $emailValidatedAt, $comparison);
 
         return $this;
     }

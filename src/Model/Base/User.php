@@ -152,6 +152,13 @@ abstract class User implements ActiveRecordInterface
     protected $email;
 
     /**
+     * The value for the emailvalidatedat field.
+     *
+     * @var        DateTime|null
+     */
+    protected $emailvalidatedat;
+
+    /**
      * The value for the lastloggedat field.
      *
      * @var        DateTime|null
@@ -750,6 +757,28 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [emailvalidatedat] column value.
+     *
+     *
+     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
+     *   If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00.
+     *
+     * @throws \Propel\Runtime\Exception\PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
+     */
+    public function getEmailValidatedAt($format = null)
+    {
+        if ($format === null) {
+            return $this->emailvalidatedat;
+        } else {
+            return $this->emailvalidatedat instanceof \DateTimeInterface ? $this->emailvalidatedat->format($format) : null;
+        }
+    }
+
+    /**
      * Get the [optionally formatted] temporal [lastloggedat] column value.
      *
      *
@@ -880,6 +909,26 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
+     * Sets the value of [emailvalidatedat] column to a normalized version of the date/time value specified.
+     *
+     * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this The current object (for fluent API support)
+     */
+    public function setEmailValidatedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->emailvalidatedat !== null || $dt !== null) {
+            if ($this->emailvalidatedat === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->emailvalidatedat->format("Y-m-d H:i:s.u")) {
+                $this->emailvalidatedat = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[UserTableMap::COL_EMAILVALIDATEDAT] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    }
+
+    /**
      * Sets the value of [lastloggedat] column to a normalized version of the date/time value specified.
      *
      * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
@@ -984,19 +1033,25 @@ abstract class User implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : UserTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
             $this->email = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : UserTableMap::translateFieldName('LastLoggedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : UserTableMap::translateFieldName('EmailValidatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->emailvalidatedat = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : UserTableMap::translateFieldName('LastLoggedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->lastloggedat = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : UserTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : UserTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : UserTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : UserTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -1009,7 +1064,7 @@ abstract class User implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 6; // 6 = UserTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = UserTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\User'), 0, $e);
@@ -1688,6 +1743,9 @@ abstract class User implements ActiveRecordInterface
         if ($this->isColumnModified(UserTableMap::COL_EMAIL)) {
             $modifiedColumns[':p' . $index++]  = 'email';
         }
+        if ($this->isColumnModified(UserTableMap::COL_EMAILVALIDATEDAT)) {
+            $modifiedColumns[':p' . $index++]  = 'emailValidatedAt';
+        }
         if ($this->isColumnModified(UserTableMap::COL_LASTLOGGEDAT)) {
             $modifiedColumns[':p' . $index++]  = 'lastLoggedAt';
         }
@@ -1718,6 +1776,10 @@ abstract class User implements ActiveRecordInterface
                         break;
                     case 'email':
                         $stmt->bindValue($identifier, $this->email, PDO::PARAM_STR);
+
+                        break;
+                    case 'emailValidatedAt':
+                        $stmt->bindValue($identifier, $this->emailvalidatedat ? $this->emailvalidatedat->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
 
                         break;
                     case 'lastLoggedAt':
@@ -1804,12 +1866,15 @@ abstract class User implements ActiveRecordInterface
                 return $this->getEmail();
 
             case 3:
-                return $this->getLastLoggedAt();
+                return $this->getEmailValidatedAt();
 
             case 4:
-                return $this->getCreatedAt();
+                return $this->getLastLoggedAt();
 
             case 5:
+                return $this->getCreatedAt();
+
+            case 6:
                 return $this->getUpdatedAt();
 
             default:
@@ -1843,9 +1908,10 @@ abstract class User implements ActiveRecordInterface
             $keys[0] => $this->getId(),
             $keys[1] => $this->getSiteId(),
             $keys[2] => $this->getEmail(),
-            $keys[3] => $this->getLastLoggedAt(),
-            $keys[4] => $this->getCreatedAt(),
-            $keys[5] => $this->getUpdatedAt(),
+            $keys[3] => $this->getEmailValidatedAt(),
+            $keys[4] => $this->getLastLoggedAt(),
+            $keys[5] => $this->getCreatedAt(),
+            $keys[6] => $this->getUpdatedAt(),
         ];
         if ($result[$keys[3]] instanceof \DateTimeInterface) {
             $result[$keys[3]] = $result[$keys[3]]->format('Y-m-d H:i:s.u');
@@ -1857,6 +1923,10 @@ abstract class User implements ActiveRecordInterface
 
         if ($result[$keys[5]] instanceof \DateTimeInterface) {
             $result[$keys[5]] = $result[$keys[5]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[6]] instanceof \DateTimeInterface) {
+            $result[$keys[6]] = $result[$keys[6]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -2256,12 +2326,15 @@ abstract class User implements ActiveRecordInterface
                 $this->setEmail($value);
                 break;
             case 3:
-                $this->setLastLoggedAt($value);
+                $this->setEmailValidatedAt($value);
                 break;
             case 4:
-                $this->setCreatedAt($value);
+                $this->setLastLoggedAt($value);
                 break;
             case 5:
+                $this->setCreatedAt($value);
+                break;
+            case 6:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -2300,13 +2373,16 @@ abstract class User implements ActiveRecordInterface
             $this->setEmail($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setLastLoggedAt($arr[$keys[3]]);
+            $this->setEmailValidatedAt($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setCreatedAt($arr[$keys[4]]);
+            $this->setLastLoggedAt($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setUpdatedAt($arr[$keys[5]]);
+            $this->setCreatedAt($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setUpdatedAt($arr[$keys[6]]);
         }
 
         return $this;
@@ -2359,6 +2435,9 @@ abstract class User implements ActiveRecordInterface
         }
         if ($this->isColumnModified(UserTableMap::COL_EMAIL)) {
             $criteria->add(UserTableMap::COL_EMAIL, $this->email);
+        }
+        if ($this->isColumnModified(UserTableMap::COL_EMAILVALIDATEDAT)) {
+            $criteria->add(UserTableMap::COL_EMAILVALIDATEDAT, $this->emailvalidatedat);
         }
         if ($this->isColumnModified(UserTableMap::COL_LASTLOGGEDAT)) {
             $criteria->add(UserTableMap::COL_LASTLOGGEDAT, $this->lastloggedat);
@@ -2459,6 +2538,7 @@ abstract class User implements ActiveRecordInterface
     {
         $copyObj->setSiteId($this->getSiteId());
         $copyObj->setEmail($this->getEmail());
+        $copyObj->setEmailValidatedAt($this->getEmailValidatedAt());
         $copyObj->setLastLoggedAt($this->getLastLoggedAt());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
@@ -8653,6 +8733,7 @@ abstract class User implements ActiveRecordInterface
         $this->id = null;
         $this->site_id = null;
         $this->email = null;
+        $this->emailvalidatedat = null;
         $this->lastloggedat = null;
         $this->created_at = null;
         $this->updated_at = null;
