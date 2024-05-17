@@ -2,9 +2,7 @@
 
 namespace Command;
 
-use Model\AuthenticationMethod;
 use Biblys\Test\ModelFactory;
-use Model\AxysApp;
 use Model\Country;
 use Model\Publisher;
 use Model\Right;
@@ -41,26 +39,11 @@ class CreateSeedsCommand extends Command
         $site->save();
         $output->writeln(["Inserted site: Éditions Paronymie"]);
 
-        $axysApp = new AxysApp();
-        $axysApp->setName("Éditions Paronymie");
-        $axysApp->setClientId("paronymie");
-        $axysApp->setClientSecret("paronymie-secret");
-        $axysApp->setRedirectUri("http://localhost:8088/oauth/callback");
-        $axysApp->save();
-        $output->writeln(["Inserted Axys app: paronymie"]);
-
         // Admin
         $admin = new User();
         $admin->setEmail("admin@paronymie.fr");
         $admin->setSite($site);
         $admin->save();
-
-        $authMethod = new AuthenticationMethod();
-        $authMethod->setUser($admin);
-        $authMethod->setSite($site);
-        $authMethod->setExternalId(1);
-        $authMethod->setIdentityProvider("axys");
-        $authMethod->save();
 
         $right = new Right();
         $right->setSite($site);
@@ -122,7 +105,7 @@ class CreateSeedsCommand extends Command
             firstName: "Aymeric",
             lastName: "Buvard",
         );
-        $output->writeln(["Inserted book collection: Aymeric Buvard"]);
+        $output->writeln(["Inserted contributor: Aymeric Buvard"]);
 
         // Article
         $article = ModelFactory::createArticle(
@@ -131,7 +114,7 @@ class CreateSeedsCommand extends Command
             publisher: $publisher,
             collection: $collection,
         );
-        $output->writeln(["Inserted book collection: L'Ordure du jeu"]);
+        $output->writeln(["Inserted article: L'Ordure du jeu"]);
 
         // Stock item
         ModelFactory::createStockItem(
