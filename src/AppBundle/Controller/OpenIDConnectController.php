@@ -117,7 +117,7 @@ class OpenIDConnectController extends Controller
             $user->setEmail($email);
             $user->save();
 
-            $loginToken = $tokenService->createLoginToken($email, $returnUrl);
+            $loginToken = $tokenService->createLoginToken($email, "login-with-oidc", $returnUrl);
             $loginUrl = $urlGenerator->generate("user_login_with_token", [
                 "token" => $loginToken
             ]);

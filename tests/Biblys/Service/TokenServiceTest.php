@@ -58,7 +58,7 @@ class TokenServiceTest extends TestCase
      * @throws PropelException
      * @throws InvalidConfigurationException
      */
-    public function testCreateLoginTokenWithAfterLoginUrl()
+    public function testCreateLoginToken()
     {
         // given
         $config = Mockery::mock(Config::class);
@@ -71,6 +71,7 @@ class TokenServiceTest extends TestCase
         // when
         $loginToken = $tokenService->createLoginToken(
             email: "user@paronymie.fr",
+            action: "login-by-email",
             afterLoginUrl: "/after_login_url",
         );
 
@@ -82,7 +83,40 @@ class TokenServiceTest extends TestCase
         $this->assertIsInt($decodedToken->iat);
         $this->assertIsInt($decodedToken->exp);
         $this->assertNotNull($decodedToken->jti);
-        $this->assertEquals("login", $decodedToken->action);
+        $this->assertEquals("login-by-email", $decodedToken->action);
+        $this->assertEquals("/after_login_url", $decodedToken->after_login_url);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws InvalidConfigurationException
+     */
+    public function testCreateLoginTokenForOidc()
+    {
+        // given
+        $config = Mockery::mock(Config::class);
+        $config->expects("getAuthenticationSecret")->andReturn("secret_key");
+        $site = ModelFactory::createSite();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $tokenService = new TokenService($config, $currentSite);
+
+        // when
+        $loginToken = $tokenService->createLoginToken(
+            email: "user@paronymie.fr",
+            action: "login-with-oidc",
+            afterLoginUrl: "/after_login_url",
+        );
+
+        // then
+        $decodedToken = JWT::decode($loginToken, new Key("secret_key", "HS256"));
+        $this->assertEquals("https://paronymie.fr", $decodedToken->iss);
+        $this->assertEquals("user@paronymie.fr", $decodedToken->sub);
+        $this->assertEquals("https://paronymie.fr", $decodedToken->aud);
+        $this->assertIsInt($decodedToken->iat);
+        $this->assertIsInt($decodedToken->exp);
+        $this->assertNotNull($decodedToken->jti);
+        $this->assertEquals("login-with-oidc", $decodedToken->action);
         $this->assertEquals("/after_login_url", $decodedToken->after_login_url);
     }
 
@@ -132,6 +166,7 @@ class TokenServiceTest extends TestCase
         $tokenService = new TokenService($config, $currentSite);
         $token = $tokenService->createLoginToken(
             email: "user@paronymie.fr",
+            action: "login-by-email",
             afterLoginUrl: "/after_login_url"
         );
 
@@ -140,6 +175,7 @@ class TokenServiceTest extends TestCase
 
         // then
         $this->assertEquals("user@paronymie.fr", $token["email"]);
+        $this->assertEquals("login-by-email", $token["action"]);
         $this->assertEquals("/after_login_url", $token["after_login_url"]);
     }
 }

@@ -116,7 +116,11 @@ class UserController extends Controller
 
         if ($userAccountExists) {
             $expirationDate = new DateTime("+24 hours");
-            $loginToken = $tokenService->createLoginToken(email: $recipientEmail, afterLoginUrl: $returnUrl);
+            $loginToken = $tokenService->createLoginToken(
+                email: $recipientEmail,
+                action: "login-by-email",
+                afterLoginUrl: $returnUrl
+            );
             $loginRelativeUrl = $urlGenerator->generate("user_login_with_token", [
                 "token" => $loginToken
             ]);

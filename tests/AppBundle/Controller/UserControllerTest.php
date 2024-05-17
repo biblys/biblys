@@ -335,7 +335,7 @@ class UserControllerTest extends TestCase
      * @throws PropelException
      * @throws InvalidConfigurationException
      */
-    public function testLoginWithToken()
+    public function testLoginWithEmailToken()
     {
         // given
         $controller = new UserController();

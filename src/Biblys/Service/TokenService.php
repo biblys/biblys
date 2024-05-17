@@ -21,7 +21,11 @@ class TokenService
      * @throws InvalidConfigurationException
      * @throws Exception
      */
-    public function createLoginToken(string $email, string $afterLoginUrl): string
+    public function createLoginToken(
+        string $email,
+        string $action,
+        string $afterLoginUrl
+    ): string
     {
         return JWT::encode(
             [
@@ -31,7 +35,7 @@ class TokenService
                 "iat" => (new DateTime())->getTimestamp(),
                 "exp" => (new DateTime("+ 24 hours"))->getTimestamp(),
                 "jti" => uniqid(),
-                "action" => "login",
+                "action" => $action,
                 "after_login_url" => $afterLoginUrl,
             ],
             $this->config->getAuthenticationSecret(),
@@ -47,12 +51,17 @@ class TokenService
     {
         $decodedToken = JWT::decode($token, new Key($this->config->getAuthenticationSecret(), "HS256"));
 
-        if (!isset($decodedToken->action) || $decodedToken->action !== "login") {
+        if (!isset($decodedToken->action)) {
+            throw new InvalidTokenException("Invalid action for login token");
+        }
+
+        if (!in_array($decodedToken->action, ["login-by-email", "login-with-oidc"])) {
             throw new InvalidTokenException("Invalid action for login token");
         }
 
         return [
             "email" => $decodedToken->sub,
+            "action" => $decodedToken->action,
             "after_login_url" => $decodedToken->after_login_url,
         ];
     }
