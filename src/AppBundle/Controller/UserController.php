@@ -177,6 +177,10 @@ class UserController extends Controller
                 throw new BadRequestHttpException("Ce lien de connexion est invalide.");
             }
 
+            if ($token["action"] === "login-by-email") {
+                $user->setEmailValidatedAt(new DateTime());
+            }
+
             $user->setLastLoggedAt(new DateTime());
             $user->save();
 

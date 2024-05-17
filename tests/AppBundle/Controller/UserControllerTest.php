@@ -348,6 +348,7 @@ class UserControllerTest extends TestCase
         $tokenService = Mockery::mock(TokenService::class);
         $tokenService->expects("decodeLoginToken")->andReturn([
             "email" => "user@paronymie.fr",
+            "action" => "login-by-email",
             "after_login_url" => "/after_login_url",
         ]);
         $site = ModelFactory::createSite();
@@ -382,6 +383,52 @@ class UserControllerTest extends TestCase
             ->filterByUser($user)
             ->findOneByToken($userUidCookie->getValue());
         $this->assertNotNull($session);
+
+        $user->reload();
+        $this->assertInstanceOf(DateTime::class, $user->getLastLoggedAt());
+        $this->assertInstanceOf(DateTime::class, $user->getEmailValidatedAt());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws InvalidConfigurationException
+     */
+    public function testLoginWithOidcToken()
+    {
+        // given
+        $controller = new UserController();
+        $request = new Request();
+        $request->query->set("token", "login_token");
+        $request->cookies->set("visitor_uid", "visitor_token");
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->expects("parse")->with(["token" => ["type" => "string"]]);
+        $queryParamsService->expects("get")->with("token")->andReturn("login_token");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("decodeLoginToken")->andReturn([
+            "email" => "user@paronymie.fr",
+            "action" => "login-with-oidc",
+            "after_login_url" => "",
+        ]);
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $user = ModelFactory::createUser(site: $site, email: "user@paronymie.fr");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("setUser")->with($user);
+        $currentUser->expects("transfertVisitorCartToUser")->with("visitor_token");
+
+        // when
+        $response = $controller->loginWithTokenAction(
+            $request,
+            $queryParamsService,
+            $tokenService,
+            $currentSite,
+            $currentUser
+        );
+
+        // then
+        $user->reload();
+        $this->assertInstanceOf(DateTime::class, $user->getLastLoggedAt());
+        $this->assertNull($user->getEmailValidatedAt());
     }
 
     /** Others */
