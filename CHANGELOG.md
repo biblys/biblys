@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.82.2 (DEV)
+
+Corrections
+
+- Dans la liste des exemplaires, le client ayant acheté un exemplaire 
+  pouvait ne plus être affiché. C'est corrigé.
+
 ### 2.81.1 (15 mai 2024)
 
 Corrections

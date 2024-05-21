@@ -452,8 +452,24 @@ foreach ($sql as $x) {
             </tr>
         ';
 
-        if (!empty($x['customer_id'])) {
-            $line .= '<tr><td colspan="10"><img src="/common/icons/return.png" height=16> Client : <a href="/pages/adm_customer?id='.$x['customer_id'].'">'.$x["customer_email"].'</a></td></tr>';
+        if (!empty($x["customer_id"])) {
+
+            $customerIdentity = "Client n°{$x["customer_id"]}";
+            if (!empty($x["customer_email"])) {
+                $customerIdentity = $x["customer_email"];
+            }
+            if (!empty($x["customer_last_name"])) {
+                $customerIdentity = trim($x["customer_first_name"]." ".$x["customer_last_name"]);
+            }
+
+            $line .= '<tr>
+                <td colspan="10">
+                    <span class="fa fa-user"></span> 
+                    Client : <a href="/pages/adm_customer?id='.$x['customer_id'].'">
+                        '.$customerIdentity.'
+                    </a>
+                </td>
+            </tr>';
         }
 
         $list .= $line;
