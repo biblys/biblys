@@ -73,6 +73,7 @@ class SiteController extends Controller
         $options = OptionQuery::create()
             ->filterBySite($currentSite->getSite())
             ->filterByAxysAccountId()
+            ->filterByUserId()
             ->orderByKey();
         return $this->render("AppBundle:Site:options.html.twig", [
             "options" => $options

@@ -6,6 +6,8 @@ Corrections
 
 - Dans la liste des exemplaires, le client ayant acheté un exemplaire 
   pouvait ne plus être affiché. C'est corrigé.
+- La page des options pouvait laisser apparaître les options des 
+  utilisateurs. Ce n'est plus le cas.
 
 ### 2.81.1 (15 mai 2024)
 
