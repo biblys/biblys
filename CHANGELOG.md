@@ -2,7 +2,13 @@
 
 ## 2.82.0 (DEV)
 
-Améliorations
+Utilisateurs locaux
+
+- Une fois leur compte importé depuis Axys, les utilisateurs peuvent 
+  désormais se connecter localement à l'aide d'un lien sécurisé envoyé par 
+  email, sans passer par Axys.
+
+Autres améliorations
 
 - Une page listant les utilisateur·trice·s a été ajouté à l'administration.
 
@@ -16,6 +22,10 @@ Corrections
   utilisateurs. Ce n'est plus le cas.
 - La mention "Déjà acheté" pouvait apparaître sur le panier pour des livres 
   numérique n'ayant pas été acheté. C'est corrigé.
+
+Déploiement
+
+- Executer les migrations.
 
 ### 2.81.1 (15 mai 2024)
 
