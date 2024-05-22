@@ -12,6 +12,7 @@ use Biblys\Test\EntityFactory;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use CartManager;
+use DateTime;
 use Entity\Exception\CartException;
 use Exception;
 use Mockery;
@@ -508,7 +509,7 @@ class OrderDeliveryHelpersTest extends TestCase
             name: "Cado",
             targetCollection: $targetCollection,
             freeArticle: $freeArticle,
-            endDate: new \DateTime("yesterday")
+            endDate: new DateTime("yesterday")
         );
 
         // when
@@ -562,6 +563,51 @@ class OrderDeliveryHelpersTest extends TestCase
         $this->assertInstanceOf(CartException::class, $exception);
         $this->assertEquals(
             "Votre panier ne remplit pas les conditions pour bénéficier de l'offre spéciale Cado.",
+            $exception->getMessage()
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testValidateCartContentWhenSpecialOfferFreeArticleIsMoreThanOnceInCart()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $cart = ModelFactory::createCart(site: $site);
+
+        $targetCollection = ModelFactory::createCollection(name: "Collection cible");
+        $freeArticle = ModelFactory::createArticle(
+            title: "Cékado",
+            collection: $targetCollection,
+            availabilityDilicom: Article::$AVAILABILITY_PRIVATELY_PRINTED,
+        );
+        ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
+        ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
+
+        ModelFactory::createSpecialOffer(
+            site: $site,
+            name: "Cado",
+            targetCollection: $targetCollection,
+            freeArticle: $freeArticle,
+        );
+
+        $article1 = ModelFactory::createArticle(collection: $targetCollection);
+        ModelFactory::createStockItem(site: $site, article: $article1, cart: $cart);
+        $article2 = ModelFactory::createArticle(collection: $targetCollection);
+        ModelFactory::createStockItem(site: $site, article: $article2, cart: $cart);
+
+        // when
+        $exception = Helpers::runAndCatchException(function() use($currentSite, $cart) {
+            OrderDeliveryHelpers::validateCartContent($currentSite, $cart);
+        });
+
+        // then
+        $this->assertInstanceOf(CartException::class, $exception);
+        $this->assertEquals(
+            "Un panier ne peut pas contenir plusieurs articles offerts",
             $exception->getMessage()
         );
     }

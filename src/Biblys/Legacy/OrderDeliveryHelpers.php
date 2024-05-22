@@ -368,6 +368,8 @@ class OrderDeliveryHelpers
             ->filterByAvailabilityDilicom(\Model\Article::$AVAILABILITY_PRIVATELY_PRINTED)
             ->endUse()
             ->find();
+
+        $specialOffersApplied = 0;
         foreach ($privatelyPrintedItems as $item) {
             $specialOfferForArticle = SpecialOfferQuery::create()
                 ->filterBySite($currentSite->getSite())
@@ -378,6 +380,11 @@ class OrderDeliveryHelpers
                 throw new CartException(
                     "Le panier contient un article hors-commerce : {$item->getArticle()->getTitle()}."
                 );
+            }
+
+            $specialOffersApplied++;
+            if ($specialOffersApplied > 1) {
+                throw new CartException("Un panier ne peut pas contenir plusieurs articles offerts");
             }
 
             if (!self::_cartMeetsSpecialOfferConditions($cart, $specialOfferForArticle)) {
