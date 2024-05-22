@@ -13,6 +13,13 @@ use Propel\Runtime\Exception\PropelException;
 
 class Article extends BaseArticle
 {
+    public static int $AVAILABILITY_PRIVATELY_PRINTED = 10;
+
+    public function isPrivatelyPrinted(): bool
+    {
+        return $this->getAvailabilityDilicom() === self::$AVAILABILITY_PRIVATELY_PRINTED;
+    }
+
     /**
      * @throws Exception
      */
