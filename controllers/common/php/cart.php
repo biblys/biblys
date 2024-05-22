@@ -310,7 +310,6 @@ return function (
         );
 
         $content .= '
-                '.$specialOfferNotice.'
             </tbody>
             <tfoot>
                 <tr class="bold">
@@ -321,12 +320,19 @@ return function (
             $content .= '<td class="right">'.$Poids.'g <input type="hidden" id="stock_weight" value="'.$Poids.'"></td>';
         }
         $content .= '
-                    <td class="right">'.currency($Total / 100).' <input type="hidden" id="sub_total" value="'.$Total.'"></td>
-                    <td></td>
-                </tr>
-            </tfoot>
-        </table>
-    ';
+                        <td class="right">'.currency($Total / 100).' <input type="hidden" id="sub_total" value="'.$Total.'"></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        ';
+
+
+        $content .= CartHelpers::getSpecialOffersNotice(
+            $currentSite,
+            $urlGenerator,
+            $cart
+        );
 
         // Pre-order books
         if ($pre_order) {

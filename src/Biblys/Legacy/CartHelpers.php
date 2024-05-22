@@ -231,11 +231,9 @@ class CartHelpers
         $sentence = '<span class="text-info"><span class="fa fa-plus-circle"></span> Ajoutez encore ' .
             $missing . ' titre' . s($missing) . ' 
             à votre panier pour en profiter.</span>';
-        $style = ' style="opacity: .5"';
-        $cartButton = '<button class="btn btn-success" disabled>J‘en profite !</button>';
+        $cartButton = '<button class="btn btn-default" disabled>J‘en profite !</button>';
 
         if ($missing <= 0) {
-            $style = null;
             $sentence = '<span class="text-success"><span class="fa fa-check-circle"></span> Vous pouvez bénéficier de l’offre.</span>';
             $price = 'Offert';
             $cartButtonUrl = $urlGenerator->generate(
@@ -256,10 +254,12 @@ class CartHelpers
         );
 
         return '
-            <tr' . $style . '>
-                <td>Offre<br>spéciale</td>
-                <td>' . $cover . '</td>
-                <td>
+            <div class="SpecialOfferNotice">
+                <h3 class="SpecialOfferNotice-title">'.$specialOffer->getName().'</h3>
+                <div class="SpecialOfferNotice-cover">
+                    ' . $cover . '
+                </div>
+                <div class="SpecialOfferNotice-infos">
                     <p>
                     
                         <a href="/' . $freeArticleEntity->get('url') . '">' . $freeArticleEntity->get('title') . '</a><br />
@@ -274,14 +274,9 @@ class CartHelpers
                             <small>' . $sentence . '</small>
                         </strong>
                     </p>
-                </td>
-                <td class="right">
-                    Offert
-                </td>
-                <td class="center">
                     ' . $cartButton . '
-                </td>
-            </tr>
+                </div>
+            </div>
         ';
     }
 }

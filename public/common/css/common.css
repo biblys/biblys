@@ -1472,3 +1472,24 @@ table.unfold tbody {
   margin-top: 8px;
   gap: 8px;
 }
+
+/* Special offers */
+
+.SpecialOfferNotice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.SpecialOfferNotice-title {
+  width: 100%;
+}
+
+.SpecialOfferNotice-cover {
+  width: 128px;
+}
+
+.SpecialOfferNotice-cover img {
+  width: 100%;
+}
