@@ -692,13 +692,17 @@ class Article extends Entity
 
     /**
      * Returns true if pubdate is lower than today
-     * @return bool
      * @throws Exception
      */
     public function isPublished(): bool
     {
-        $today = new DateTime('tomorrow');
-        return ($this->get('pubdate') < $today->format('Y-m-d'));
+        if (!$this->has('article_pubdate')) {
+            return true;
+        }
+
+        $today = new DateTime('today');
+        $releaseDate = new DateTime($this->get('pubdate'));
+        return $releaseDate <= $today;
     }
 
     /**

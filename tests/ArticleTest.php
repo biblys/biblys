@@ -316,6 +316,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     /**
      * Test if article is purchasable
      * @depends testUpdate
+     * @throws Exception
      */
     public function testIsPurchasable(Article $article)
     {
@@ -323,7 +324,8 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $this->assertFalse($article->isPurchasable());
 
         $article->set('article_availability_dilicom', 1);
-        $article->set('article_pubdate', (new DateTime())->format('Y-m-d H:i:s'));
+        $yesterday = (new DateTime("yesterday"))->format('Y-m-d');
+        $article->set('article_pubdate', $yesterday);
         $this->assertTrue($article->isPurchasable());
     }
 
@@ -340,7 +342,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         );
 
         $article->set('article_availability_dilicom', 1);
-        $article->set('article_pubdate', (new DateTime())->format('Y-m-d H:i:s'));
+        $article->set('article_pubdate', (new DateTime())->format('Y-m-d'));
         $this->assertEquals(
             '<img src="/common/img/square_green.png" title="Disponible" alt="Disponible">',
             $article->getAvailabilityLed()
@@ -350,16 +352,21 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     /**
      * Test if article is published
      * @depends testUpdate
+     * @throws Exception
      */
     public function testIsPublished(Article $article)
     {
+        $today = new DateTime();
         $yesterday = new DateTime('yesterday');
         $tomorrow = new DateTime('tomorrow');
 
-        $article->set('article_pubdate', $yesterday->format('Y-m-d H:i:s'));
+        $article->set('article_pubdate', $today->format('Y-m-d'));
         $this->assertTrue($article->isPublished());
 
-        $article->set('article_pubdate', $tomorrow->format('Y-m-d H:i:s'));
+        $article->set('article_pubdate', $yesterday->format('Y-m-d'));
+        $this->assertTrue($article->isPublished());
+
+        $article->set('article_pubdate', $tomorrow->format('Y-m-d'));
         $this->assertFalse($article->isPublished());
     }
 
