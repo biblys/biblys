@@ -2,6 +2,13 @@
 
 ## 2.82.0 (DEV)
 
+Offres spéciales
+
+- Les articles offerts dans le cadre d'une offre spécial peuvent désormais 
+  être ajoutés ou retirés du panier par le client
+- Les paniers contenant des articles liés à une offre spéciale font 
+  maintenant l'objet d'une validation au moment de la validation de commande.
+
 Utilisateurs locaux
 
 - Une fois leur compte importé depuis Axys, les utilisateurs peuvent 
