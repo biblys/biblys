@@ -2,6 +2,7 @@
 
 namespace Model;
 
+use DateTime;
 use Model\Base\SpecialOfferQuery as BaseSpecialOfferQuery;
 
 /**
@@ -15,5 +16,11 @@ use Model\Base\SpecialOfferQuery as BaseSpecialOfferQuery;
  */
 class SpecialOfferQuery extends BaseSpecialOfferQuery
 {
-
+    public function filterByActive(): self
+    {
+        $now = new DateTime();
+        return $this
+            ->filterByStartDate($now, self::LESS_EQUAL)
+            ->filterByEndDate($now, self::GREATER_EQUAL);
+    }
 }
