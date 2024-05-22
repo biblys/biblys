@@ -16,6 +16,7 @@ use Model\SpecialOffer;
 use Model\SpecialOfferQuery;
 use Model\Stock;
 use Model\StockQuery;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
@@ -213,35 +214,48 @@ class CartHelpers
 
         $am = new ArticleManager();
 
-        $copies = StockQuery::create()->filterByCartId($cart->getId())->find();
+        $copies = StockQuery::create()
+            ->filterByCart($cart)
+            ->filterByArticle($freeArticle, Criteria::NOT_EQUAL)
+            ->find();
 
         // Count copies in offer's collection
         $copiesInCollection = array_reduce($copies->getArrayCopy(), function ($total, $copy) use ($targetCollection) {
             /** @var Article $article */
             $article = $copy->getArticle();
+
             if ($article->getCollectionId() === $targetCollection->getId()) {
                 $total++;
             }
+
             return $total;
         }, 0);
 
-        $missing = $targetQuantity - $copiesInCollection;
+        $missingItems = $targetQuantity - $copiesInCollection;
+
         /** @var \Article $freeArticleEntity */
         $freeArticleEntity = $am->getById($freeArticle->getId());
         $sentence = '<span class="text-info"><span class="fa fa-plus-circle"></span> Ajoutez encore ' .
-            $missing . ' titre' . s($missing) . ' 
+            $missingItems . ' titre' . s($missingItems) . ' 
             à votre panier pour en profiter.</span>';
         $cartButton = '<button class="btn btn-default" disabled>Ajouter au panier</button>';
 
-        if ($missing <= 0) {
+
+        if ($missingItems <= 0) {
             $sentence = '<span class="text-success"><span class="fa fa-check-circle"></span> Vous pouvez bénéficier de l’offre.</span>';
-            $price = 'Offert';
             $cartButtonUrl = $urlGenerator->generate(
                 "cart_add_article", ["articleId" => $freeArticle->getId()]
             );
             $cartButton = '<form method="post" action="'.$cartButtonUrl.'">';
             $cartButton .= '<button type="submit" class="btn btn-success">Ajouter au panier</button>';
             $cartButton .= '</form>';
+        }
+
+        $freeArticleIsInCart = StockQuery::create()
+            ->filterByCart($cart)->findOneByArticleId($freeArticle->getId());
+        if ($freeArticleIsInCart) {
+            $cartButton = "";
+            $sentence = '<span class="text-success"><span class="fa fa-check-circle"></span> Vous bénéficiez de l’offre.</span>';
         }
 
         $cover = null;

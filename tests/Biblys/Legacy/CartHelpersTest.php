@@ -244,4 +244,47 @@ class CartHelpersTest extends TestCase
             '<button type="submit" class="btn btn-success">Ajouter au panier</button>', $notice
         );
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetSpecialOfferNoticeWhenConditionsAreMetAndFreeArticleIsInCart()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $cart = ModelFactory::createCart(site: $site);
+        $targetCollection = ModelFactory::createCollection(name: "Collection cible");
+        $freeArticle = ModelFactory::createArticle(title: "Cékado", collection: $targetCollection);
+        ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
+        ModelFactory::createSpecialOffer(
+            site: $site,
+            targetCollection: $targetCollection,
+            freeArticle: $freeArticle,
+        );
+
+        $article1 = ModelFactory::createArticle(collection: $targetCollection);
+        ModelFactory::createStockItem(site: $site, article: $article1, cart: $cart);
+        $article2 = ModelFactory::createArticle(collection: $targetCollection);
+        ModelFactory::createStockItem(site: $site, article: $article2, cart: $cart);
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive('getSite')->andReturn($site);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("collection_show", ["slug" => $targetCollection->getUrl()]);
+        $urlGenerator->shouldReceive("generate")
+            ->with("cart_add_article", ["articleId" => $freeArticle->getId()])
+            ->andReturn("/cart_url");
+
+        // when
+        $notice = CartHelpers::getSpecialOffersNotice(
+            $currentSite,
+            $urlGenerator,
+            $cart,
+        );
+
+        // then
+        $this->assertStringNotContainsString('Ajouter au panier', $notice);
+        $this->assertStringContainsString('Vous bénéficiez de l’offre', $notice);
+    }
 }
