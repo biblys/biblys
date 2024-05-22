@@ -9,10 +9,13 @@ use Biblys\Exception\OrderDetailsValidationException;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
 use Biblys\Test\EntityFactory;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use CartManager;
+use Entity\Exception\CartException;
 use Exception;
 use Mockery;
+use Model\Article;
 use OrderManager;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -422,6 +425,198 @@ class OrderDeliveryHelpersTest extends TestCase
             true,
             $termsPage,
         );
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testValidateCartContentWhenCartIsEmpty()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $cart = ModelFactory::createCart(site: $site);
+        $currentSite = new CurrentSite($site);
+
+        // when
+        $exception = Helpers::runAndCatchException(function() use($currentSite, $cart) {
+            OrderDeliveryHelpers::validateCartContent($currentSite, $cart);
+        });
+
+        // then
+        $this->assertInstanceOf(CartException::class, $exception);
+        $this->assertEquals("Le panier est vide.", $exception->getMessage());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testValidateCartContentWhenCartContainsPrivatelyPrintedArticle()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $cart = ModelFactory::createCart(site: $site);
+        $article = ModelFactory::createArticle(
+            title: "HorsCo", availabilityDilicom: Article::$AVAILABILITY_PRIVATELY_PRINTED
+        );
+        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
+        $currentSite = new CurrentSite($site);
+
+        // when
+        $exception = Helpers::runAndCatchException(function() use($currentSite, $cart) {
+            OrderDeliveryHelpers::validateCartContent($currentSite, $cart);
+        });
+
+        // then
+        $this->assertInstanceOf(CartException::class, $exception);
+        $this->assertEquals(
+            "Le panier contient un article hors-commerce : HorsCo.",
+            $exception->getMessage()
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testValidateCartContentWhenSpecialOfferIsNotActive()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $cart = ModelFactory::createCart(site: $site);
+
+        $targetCollection = ModelFactory::createCollection(name: "Collection cible");
+        $freeArticle = ModelFactory::createArticle(
+            title: "Trotar",
+            collection: $targetCollection,
+            availabilityDilicom: Article::$AVAILABILITY_PRIVATELY_PRINTED,
+        );
+        ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
+
+        $article1 = ModelFactory::createArticle(collection: $targetCollection);
+        ModelFactory::createStockItem(site: $site, article: $article1, cart: $cart);
+        $article2 = ModelFactory::createArticle(collection: $targetCollection);
+        ModelFactory::createStockItem(site: $site, article: $article2, cart: $cart);
+
+        ModelFactory::createSpecialOffer(
+            site: $site,
+            name: "Cado",
+            targetCollection: $targetCollection,
+            freeArticle: $freeArticle,
+            endDate: new \DateTime("yesterday")
+        );
+
+        // when
+        $exception = Helpers::runAndCatchException(function() use($currentSite, $cart) {
+            OrderDeliveryHelpers::validateCartContent($currentSite, $cart);
+        });
+
+        // then
+        $this->assertInstanceOf(CartException::class, $exception);
+        $this->assertEquals(
+            "Le panier contient un article hors-commerce : Trotar.",
+            $exception->getMessage()
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testValidateCartContentWhenSpecialOfferConditionsAreNotMet()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $cart = ModelFactory::createCart(site: $site);
+
+        $targetCollection = ModelFactory::createCollection(name: "Collection cible");
+        $freeArticle = ModelFactory::createArticle(
+            title: "Cékado",
+            collection: $targetCollection,
+            availabilityDilicom: Article::$AVAILABILITY_PRIVATELY_PRINTED,
+        );
+        ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
+
+        ModelFactory::createSpecialOffer(
+            site: $site,
+            name: "Cado",
+            targetCollection: $targetCollection,
+            freeArticle: $freeArticle,
+        );
+
+        $article1 = ModelFactory::createArticle(collection: $targetCollection);
+        ModelFactory::createStockItem(site: $site, article: $article1, cart: $cart);
+
+        // when
+        $exception = Helpers::runAndCatchException(function() use($currentSite, $cart) {
+            OrderDeliveryHelpers::validateCartContent($currentSite, $cart);
+        });
+
+        // then
+        $this->assertInstanceOf(CartException::class, $exception);
+        $this->assertEquals(
+            "Votre panier ne remplit pas les conditions pour bénéficier de l'offre spéciale Cado.",
+            $exception->getMessage()
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testValidateCartContentWhenCartMeetsConditionsForSpecialOffer()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $cart = ModelFactory::createCart(site: $site);
+
+        $targetCollection = ModelFactory::createCollection(name: "Collection cible");
+        $freeArticle = ModelFactory::createArticle(
+            title: "Cékado",
+            collection: $targetCollection,
+            availabilityDilicom: Article::$AVAILABILITY_PRIVATELY_PRINTED,
+        );
+        ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
+
+        ModelFactory::createSpecialOffer(
+            site: $site,
+            targetCollection: $targetCollection,
+            freeArticle: $freeArticle,
+        );
+
+        $article1 = ModelFactory::createArticle(collection: $targetCollection);
+        ModelFactory::createStockItem(site: $site, article: $article1, cart: $cart);
+        $article2 = ModelFactory::createArticle(collection: $targetCollection);
+        ModelFactory::createStockItem(site: $site, article: $article2, cart: $cart);
+
+        // when
+        OrderDeliveryHelpers::validateCartContent($currentSite, $cart);
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testValidateCartContentWhenCartIsOk()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $cart = ModelFactory::createCart(site: $site);
+        ModelFactory::createStockItem(site: $site, cart: $cart);
+        $currentSite = new CurrentSite($site);
+
+        // when
+        OrderDeliveryHelpers::validateCartContent($currentSite, $cart);
 
         // then
         $this->expectNotToPerformAssertions();

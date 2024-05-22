@@ -15,9 +15,13 @@ use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\DNSCheckValidation;
 use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 use Egulias\EmailValidator\Validation\RFCValidation;
+use Entity\Exception\CartException;
 use Exception;
 use Model\Cart;
 use Model\Page;
+use Model\SpecialOffer;
+use Model\SpecialOfferQuery;
+use Model\Stock;
 use Order;
 use OrderManager;
 use Propel\Runtime\Exception\PropelException;
@@ -26,7 +30,6 @@ use ShippingManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Visitor;
 
 class OrderDeliveryHelpers
 {
@@ -109,10 +112,6 @@ class OrderDeliveryHelpers
         }
     }
 
-    /**
-     * @param Visitor $currentUser
-     * @return false|mixed|null
-     */
     public static function getOrderInProgressForVisitor(CurrentUser $currentUser): mixed
     {
         if (!$currentUser->isAuthentified()) {
@@ -345,5 +344,71 @@ class OrderDeliveryHelpers
         $replyTo = $order->get('email');
         $mailSubject = trim($currentSite->getOption("order_mail_subject_prefix")." ".$mailSubject);
         $mailer->send($site->getContact(), $mailSubject, $mailBody, $from, ['reply-to' => $replyTo]);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws CartException
+     */
+    public static function validateCartContent(
+        CurrentSite $currentSite,
+        Cart $cart,
+    ):
+    void
+    {
+        $items = $cart->getStocks()->getArrayCopy();
+
+        if (count($items) === 0) {
+            throw new CartException("Le panier est vide.");
+        }
+
+        /** @var Stock $item */
+        foreach ($items as $item) {
+            if ($item->getArticle()->isPrivatelyPrinted()) {
+                $specialOfferForArticle = SpecialOfferQuery::create()
+                    ->filterBySite($currentSite->getSite())
+                    ->filterByActive()
+                    ->findOneByFreeArticleId($item->getArticle()->getId());
+
+                if (!$specialOfferForArticle) {
+                    throw new CartException(
+                        "Le panier contient un article hors-commerce : {$item->getArticle()->getTitle()}."
+                    );
+                }
+
+                if (!self::_cartMeetsSpecialOfferConditions($cart, $specialOfferForArticle)) {
+                    throw new CartException(
+                        "Votre panier ne remplit pas les conditions pour bénéficier de l'offre spéciale {$specialOfferForArticle->getName()}."
+                    );
+                }
+            }
+        }
+    }
+
+    /**
+     * @throws PropelException
+     */
+    private static function _cartMeetsSpecialOfferConditions(
+        Cart $cart,
+        SpecialOffer $specialOffer
+    ): bool
+    {
+        $cartItems = $cart->getStocks()->getArrayCopy();
+        $itemsInTargetCollectionCount = array_reduce($cartItems, function ($total, $copy) use ($specialOffer) {
+            /** @var \Model\Article $article */
+            $article = $copy->getArticle();
+
+            if ($article === $specialOffer->getFreeArticle()) {
+                return $total;
+            }
+
+            if ($article->getCollectionId() === $specialOffer->getTargetCollectionId()) {
+                $total++;
+            }
+
+            return $total;
+        }, 0);
+
+        return $itemsInTargetCollectionCount >= $specialOffer->getTargetQuantity();
     }
 }

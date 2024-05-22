@@ -119,6 +119,7 @@ return function (
 
         $error = null;
         try {
+            OrderDeliveryHelpers::validateCartContent($currentSite ,$cart);
             OrderDeliveryHelpers::validateOrderDetails($request, $currentSite);
         } catch (Exception $exception) {
             $error = $exception->getMessage();

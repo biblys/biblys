@@ -57,6 +57,7 @@ class ModelFactory
         BookCollection $collection = null,
         bool           $isPriceEditable = false,
         DateTime       $publicationDate = null,
+        int            $availabilityDilicom = 1,
     ): Article
     {
         $article = new Article();
@@ -69,6 +70,7 @@ class ModelFactory
         $article->setLemonInkMasterId($lemoninkMasterId);
         $article->setPriceEditable($isPriceEditable);
         $article->setPubdate($publicationDate);
+        $article->setAvailabilityDilicom($availabilityDilicom);
 
         $publisher = $publisher ?? self::createPublisher();
         $article->setPublisherId($publisher->getId());
@@ -110,13 +112,13 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createCart(
-        Site        $site = null,
-        User        $user = null,
-        int         $axysAccountId = null,
-        int         $sellerId = null,
-        string      $uniqueId = null,
-        int         $amount = 0,
-        int         $count = 0,
+        Site   $site = null,
+        User   $user = null,
+        int    $axysAccountId = null,
+        int    $sellerId = null,
+        string $uniqueId = null,
+        int    $amount = 0,
+        int    $count = 0,
     ): Cart
     {
         $cart = new Cart();
@@ -137,7 +139,7 @@ class ModelFactory
      */
     public static function createCollection(
         Publisher $publisher = null,
-        string $name = "La Blanche",
+        string    $name = "La Blanche",
     ): BookCollection
     {
         $slugService = new SlugService();
@@ -327,18 +329,18 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createStockItem(
-        ?Site        $site = null,
-        ?Article     $article = null,
-        ?User        $user = null,
-        ?Cart        $cart = null,
-        Order        $order = null,
-        int          $sellingPrice = 0,
-        DateTime     $sellingDate = null,
-        DateTime     $returnDate = null,
-        DateTime     $lostDate = null,
-        string       $lemoninkTransactionId = null,
-        string       $lemoninkTransactionToken = null,
-        string       $axysAccountId = null,
+        ?Site    $site = null,
+        ?Article $article = null,
+        ?User    $user = null,
+        ?Cart    $cart = null,
+        Order    $order = null,
+        int      $sellingPrice = 0,
+        DateTime $sellingDate = null,
+        DateTime $returnDate = null,
+        DateTime $lostDate = null,
+        string   $lemoninkTransactionId = null,
+        string   $lemoninkTransactionToken = null,
+        string   $axysAccountId = null,
     ): Stock
     {
         $stock = new Stock();
@@ -497,7 +499,7 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createUser(
-        Site $site = null,
+        Site   $site = null,
         string $email = "user@biblys.fr",
     ): User
     {
@@ -513,8 +515,8 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createAuthenticationMethod(
-        Site $site = null,
-        User $user = null,
+        Site   $site = null,
+        User   $user = null,
         string $identityProvider = "axys",
         string $externalId = "AXYS1234",
     ): AuthenticationMethod
@@ -546,7 +548,7 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createPublisherUser(
-        Site $site = null,
+        Site      $site = null,
         Publisher $publisher = null,
     ): User
     {
@@ -563,11 +565,11 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createRight(
-        ?User $user,
-        ?Site $site,
+        ?User     $user,
+        ?Site     $site,
         Publisher $publisher = null,
-        bool $isAdmin = false,
-        string $axysAccountId = null,
+        bool      $isAdmin = false,
+        string    $axysAccountId = null,
     ): Right
     {
         $right = new Right();
@@ -585,8 +587,8 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createCustomer(
-        Site $site,
-        User $user = null,
+        Site   $site,
+        User   $user = null,
         string $axysAccountId = null,
     ): Customer
     {
@@ -638,11 +640,11 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createPost(
-        Site $site = null,
-        string $title = "Une actualité",
-        bool $status = Post::STATUS_ONLINE,
+        Site     $site = null,
+        string   $title = "Une actualité",
+        bool     $status = Post::STATUS_ONLINE,
         DateTime $date = new DateTime(),
-        string $axysAccountId = null,
+        string   $axysAccountId = null,
     ): Post
     {
         $slugService = new SlugService();
@@ -683,10 +685,10 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createAlert(
-        Site $site = null,
-        User $user = null,
+        Site    $site = null,
+        User    $user = null,
         Article $article = null,
-        string $axysAccountId = null): Alert
+        string  $axysAccountId = null): Alert
     {
         $alert = new Alert();
 
@@ -716,8 +718,8 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createWishlist(
-        Site $site = null,
-        User $user = null,
+        Site   $site = null,
+        User   $user = null,
         string $axysAccountId = null,
     ): Wishlist
     {
@@ -736,8 +738,8 @@ class ModelFactory
      */
     public static function createWish(
         Wishlist $wishlist = null,
-        Article $article = null,
-        string $axysAccountId = null,
+        Article  $article = null,
+        string   $axysAccountId = null,
     ): Wish
     {
         $wish = new Wish();
@@ -758,13 +760,13 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createSpecialOffer(
-        Site $site,
-        string $name = "Offre spéciale",
+        Site           $site,
+        string         $name = "Offre spéciale",
         BookCollection $targetCollection = null,
-        Article $freeArticle = null,
-        int $targetQuantity = 2,
-        DateTime $startDate = new DateTime("- 1 day"),
-        DateTime $endDate = new DateTime("+ 1 day"),
+        Article        $freeArticle = null,
+        int            $targetQuantity = 2,
+        DateTime       $startDate = new DateTime("- 1 day"),
+        DateTime       $endDate = new DateTime("+ 1 day"),
     ): SpecialOffer
     {
         $specialOffer = new SpecialOffer();
