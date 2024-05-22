@@ -231,7 +231,7 @@ class CartHelpers
         $sentence = '<span class="text-info"><span class="fa fa-plus-circle"></span> Ajoutez encore ' .
             $missing . ' titre' . s($missing) . ' 
             à votre panier pour en profiter.</span>';
-        $cartButton = '<button class="btn btn-default" disabled>J‘en profite !</button>';
+        $cartButton = '<button class="btn btn-default" disabled>Ajouter au panier</button>';
 
         if ($missing <= 0) {
             $sentence = '<span class="text-success"><span class="fa fa-check-circle"></span> Vous pouvez bénéficier de l’offre.</span>';
@@ -240,7 +240,7 @@ class CartHelpers
                 "cart_add_article", ["articleId" => $freeArticle->getId()]
             );
             $cartButton = '<form method="post" action="'.$cartButtonUrl.'">';
-            $cartButton .= '<button type="submit" class="btn btn-success">J‘en profite !</button>';
+            $cartButton .= '<button type="submit" class="btn btn-success">Ajouter au panier</button>';
             $cartButton .= '</form>';
         }
 

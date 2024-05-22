@@ -144,7 +144,7 @@ class CartHelpersTest extends TestCase
         $this->assertStringContainsString("Collection cible", $notice);
         $this->assertStringContainsString("Ajoutez encore 2 titres", $notice);
         $this->assertStringContainsString(
-            '<button class="btn btn-default" disabled>J‘en profite !</button>',
+            '<button class="btn btn-default" disabled>Ajouter au panier</button>',
             $notice
         );
     }
@@ -241,7 +241,7 @@ class CartHelpersTest extends TestCase
         $this->assertStringContainsString("Vous pouvez bénéficier de l’offre.", $notice);
         $this->assertStringContainsString('<form method="post" action="/cart_url">', $notice);
         $this->assertStringContainsString(
-            '<button type="submit" class="btn btn-success">J‘en profite !</button>', $notice
+            '<button type="submit" class="btn btn-success">Ajouter au panier</button>', $notice
         );
     }
 }
