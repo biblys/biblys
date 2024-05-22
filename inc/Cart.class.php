@@ -417,13 +417,6 @@ class CartManager extends EntityManager
                     $a["article_title"] . '</a> n’a pas pu être ajouté au panier, car il n’est plus disponible.');
             }
 
-            if ($article->isPrivatelyPrinted()) {
-                $title = $article->get("title");
-                throw new CartException(
-                    "L'article $title n'a pas pu être ajouté au panier car il est hors commerce."
-                );
-            }
-
             if ($article->isToBeReprinted()) {
                 $title = $article->get("title");
                 throw new CartException(

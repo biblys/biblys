@@ -411,38 +411,6 @@ class CartTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test not adding article from virtual stock
-     * when article is unavailable
-     */
-    public function testAddUnavailableArticle()
-    {
-        $this->expectException("Exception");
-        $this->expectExceptionMessage("L'article Plop n'a pas pu être ajouté au panier car il est hors commerce.");
-
-        $globalSite = LegacyCodeHelper::getGlobalSite();
-
-        $cm = new CartManager();
-        $am = new ArticleManager();
-
-        $not_virtual_stock = false;
-        if (!$globalSite->getOpt('virtual_stock')) {
-            $globalSite->setOpt('virtual_stock', 1);
-            $not_virtual_stock = true;
-        }
-
-        $cart = $cm->create();
-        $article = EntityFactory::createArticle(
-            ["article_title" => "Plop", "article_availability_dilicom" => 10]
-        );
-
-        $cm->addArticle($cart, $article);
-
-        if ($not_virtual_stock) {
-            $globalSite->setOpt('virtual_stock', 0);
-        }
-    }
-
-    /**
      * @throws Exception
      */
     public function testAddArticleToBeReprinted()
