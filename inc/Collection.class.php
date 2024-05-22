@@ -44,7 +44,12 @@ class Collection extends Entity
         protected $table = 'collections';
         protected $object = 'Collection';
         protected $search_fields = ['name', 'publisher'];
-        protected $ignoreSiteFilters = false;
+        protected bool $ignoreSiteFilters = false;
+
+        public function disableSiteFilters(): void
+        {
+            $this->ignoreSiteFilters = true;
+        }
 
         /**
          * Add site filters if any defined.

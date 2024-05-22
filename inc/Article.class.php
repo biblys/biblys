@@ -65,8 +65,9 @@ class Article extends Entity
         if ($withJoins) {
 
             // Collection (OneToMany)
-            $com = new CollectionManager();
             if (isset($data['collection_id'])) {
+                $com = new CollectionManager();
+                $com->disableSiteFilters();
                 $data['collection'] = $com->getById($data['collection_id']);
                 if ($data['collection'] === false) {
                     throw new Exception(
