@@ -22,6 +22,7 @@ use Model\Page;
 use Model\SpecialOffer;
 use Model\SpecialOfferQuery;
 use Model\Stock;
+use Model\StockQuery;
 use Order;
 use OrderManager;
 use Propel\Runtime\Exception\PropelException;
@@ -352,35 +353,37 @@ class OrderDeliveryHelpers
      */
     public static function validateCartContent(
         CurrentSite $currentSite,
-        Cart $cart,
+        Cart        $cart,
     ):
     void
     {
-        $items = $cart->getStocks()->getArrayCopy();
-
-        if (count($items) === 0) {
+        if ($cart->countStocks() === 0) {
             throw new CartException("Le panier est vide.");
         }
 
         /** @var Stock $item */
-        foreach ($items as $item) {
-            if ($item->getArticle()->isPrivatelyPrinted()) {
-                $specialOfferForArticle = SpecialOfferQuery::create()
-                    ->filterBySite($currentSite->getSite())
-                    ->filterByActive()
-                    ->findOneByFreeArticleId($item->getArticle()->getId());
+        $privatelyPrintedItems = StockQuery::create()
+            ->filterByCart($cart)
+            ->useArticleQuery()
+            ->filterByAvailabilityDilicom(\Model\Article::$AVAILABILITY_PRIVATELY_PRINTED)
+            ->endUse()
+            ->find();
+        foreach ($privatelyPrintedItems as $item) {
+            $specialOfferForArticle = SpecialOfferQuery::create()
+                ->filterBySite($currentSite->getSite())
+                ->filterByActive()
+                ->findOneByFreeArticleId($item->getArticle()->getId());
 
-                if (!$specialOfferForArticle) {
-                    throw new CartException(
-                        "Le panier contient un article hors-commerce : {$item->getArticle()->getTitle()}."
-                    );
-                }
+            if (!$specialOfferForArticle) {
+                throw new CartException(
+                    "Le panier contient un article hors-commerce : {$item->getArticle()->getTitle()}."
+                );
+            }
 
-                if (!self::_cartMeetsSpecialOfferConditions($cart, $specialOfferForArticle)) {
-                    throw new CartException(
-                        "Votre panier ne remplit pas les conditions pour bénéficier de l'offre spéciale {$specialOfferForArticle->getName()}."
-                    );
-                }
+            if (!self::_cartMeetsSpecialOfferConditions($cart, $specialOfferForArticle)) {
+                throw new CartException(
+                    "Votre panier ne remplit pas les conditions pour bénéficier de l'offre spéciale {$specialOfferForArticle->getName()}."
+                );
             }
         }
     }
