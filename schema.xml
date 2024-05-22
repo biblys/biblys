@@ -11,6 +11,7 @@
     <foreign-key foreignTable="users" skipSql="true">
       <reference local="user_id" foreign="id"/>
     </foreign-key>
+    <column name="recipient_email" phpName="RecipientEmail" type="VARCHAR" size="256"></column>
     <column name="article_id" phpName="ArticleId" type="INTEGER" sqlType="int unsigned"/>
     <column name="alert_max_price" phpName="MaxPrice" type="INTEGER" sqlType="int unsigned"/>
     <column name="alert_pub_year" phpName="PubYear" type="INTEGER" sqlType="int unsigned"/>

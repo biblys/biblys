@@ -96,6 +96,13 @@ abstract class Alert implements ActiveRecordInterface
     protected $user_id;
 
     /**
+     * The value for the recipient_email field.
+     *
+     * @var        string|null
+     */
+    protected $recipient_email;
+
+    /**
      * The value for the article_id field.
      *
      * @var        int|null
@@ -436,6 +443,16 @@ abstract class Alert implements ActiveRecordInterface
     }
 
     /**
+     * Get the [recipient_email] column value.
+     *
+     * @return string|null
+     */
+    public function getRecipientEmail()
+    {
+        return $this->recipient_email;
+    }
+
+    /**
      * Get the [article_id] column value.
      *
      * @return int|null
@@ -652,6 +669,26 @@ abstract class Alert implements ActiveRecordInterface
     }
 
     /**
+     * Set the value of [recipient_email] column.
+     *
+     * @param string|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setRecipientEmail($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->recipient_email !== $v) {
+            $this->recipient_email = $v;
+            $this->modifiedColumns[AlertTableMap::COL_RECIPIENT_EMAIL] = true;
+        }
+
+        return $this;
+    }
+
+    /**
      * Set the value of [article_id] column.
      *
      * @param int|null $v New value
@@ -859,37 +896,40 @@ abstract class Alert implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : AlertTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : AlertTableMap::translateFieldName('ArticleId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : AlertTableMap::translateFieldName('RecipientEmail', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->recipient_email = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : AlertTableMap::translateFieldName('ArticleId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->article_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : AlertTableMap::translateFieldName('MaxPrice', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : AlertTableMap::translateFieldName('MaxPrice', TableMap::TYPE_PHPNAME, $indexType)];
             $this->alert_max_price = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : AlertTableMap::translateFieldName('PubYear', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : AlertTableMap::translateFieldName('PubYear', TableMap::TYPE_PHPNAME, $indexType)];
             $this->alert_pub_year = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : AlertTableMap::translateFieldName('Condition', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : AlertTableMap::translateFieldName('Condition', TableMap::TYPE_PHPNAME, $indexType)];
             $this->alert_condition = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : AlertTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : AlertTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->alert_insert = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : AlertTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : AlertTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->alert_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : AlertTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : AlertTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->alert_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : AlertTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : AlertTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -902,7 +942,7 @@ abstract class Alert implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 12; // 12 = AlertTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 13; // 13 = AlertTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Alert'), 0, $e);
@@ -1156,6 +1196,9 @@ abstract class Alert implements ActiveRecordInterface
         if ($this->isColumnModified(AlertTableMap::COL_USER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'user_id';
         }
+        if ($this->isColumnModified(AlertTableMap::COL_RECIPIENT_EMAIL)) {
+            $modifiedColumns[':p' . $index++]  = 'recipient_email';
+        }
         if ($this->isColumnModified(AlertTableMap::COL_ARTICLE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'article_id';
         }
@@ -1205,6 +1248,10 @@ abstract class Alert implements ActiveRecordInterface
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
+                        break;
+                    case 'recipient_email':
+                        $stmt->bindValue($identifier, $this->recipient_email, PDO::PARAM_STR);
 
                         break;
                     case 'article_id':
@@ -1314,27 +1361,30 @@ abstract class Alert implements ActiveRecordInterface
                 return $this->getUserId();
 
             case 4:
-                return $this->getArticleId();
+                return $this->getRecipientEmail();
 
             case 5:
-                return $this->getMaxPrice();
+                return $this->getArticleId();
 
             case 6:
-                return $this->getPubYear();
+                return $this->getMaxPrice();
 
             case 7:
-                return $this->getCondition();
+                return $this->getPubYear();
 
             case 8:
-                return $this->getInsert();
+                return $this->getCondition();
 
             case 9:
-                return $this->getUpdate();
+                return $this->getInsert();
 
             case 10:
-                return $this->getCreatedAt();
+                return $this->getUpdate();
 
             case 11:
+                return $this->getCreatedAt();
+
+            case 12:
                 return $this->getUpdatedAt();
 
             default:
@@ -1369,19 +1419,16 @@ abstract class Alert implements ActiveRecordInterface
             $keys[1] => $this->getSiteId(),
             $keys[2] => $this->getAxysAccountId(),
             $keys[3] => $this->getUserId(),
-            $keys[4] => $this->getArticleId(),
-            $keys[5] => $this->getMaxPrice(),
-            $keys[6] => $this->getPubYear(),
-            $keys[7] => $this->getCondition(),
-            $keys[8] => $this->getInsert(),
-            $keys[9] => $this->getUpdate(),
-            $keys[10] => $this->getCreatedAt(),
-            $keys[11] => $this->getUpdatedAt(),
+            $keys[4] => $this->getRecipientEmail(),
+            $keys[5] => $this->getArticleId(),
+            $keys[6] => $this->getMaxPrice(),
+            $keys[7] => $this->getPubYear(),
+            $keys[8] => $this->getCondition(),
+            $keys[9] => $this->getInsert(),
+            $keys[10] => $this->getUpdate(),
+            $keys[11] => $this->getCreatedAt(),
+            $keys[12] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[8]] instanceof \DateTimeInterface) {
-            $result[$keys[8]] = $result[$keys[8]]->format('Y-m-d H:i:s.u');
-        }
-
         if ($result[$keys[9]] instanceof \DateTimeInterface) {
             $result[$keys[9]] = $result[$keys[9]]->format('Y-m-d H:i:s.u');
         }
@@ -1392,6 +1439,10 @@ abstract class Alert implements ActiveRecordInterface
 
         if ($result[$keys[11]] instanceof \DateTimeInterface) {
             $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[12]] instanceof \DateTimeInterface) {
+            $result[$keys[12]] = $result[$keys[12]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1479,27 +1530,30 @@ abstract class Alert implements ActiveRecordInterface
                 $this->setUserId($value);
                 break;
             case 4:
-                $this->setArticleId($value);
+                $this->setRecipientEmail($value);
                 break;
             case 5:
-                $this->setMaxPrice($value);
+                $this->setArticleId($value);
                 break;
             case 6:
-                $this->setPubYear($value);
+                $this->setMaxPrice($value);
                 break;
             case 7:
-                $this->setCondition($value);
+                $this->setPubYear($value);
                 break;
             case 8:
-                $this->setInsert($value);
+                $this->setCondition($value);
                 break;
             case 9:
-                $this->setUpdate($value);
+                $this->setInsert($value);
                 break;
             case 10:
-                $this->setCreatedAt($value);
+                $this->setUpdate($value);
                 break;
             case 11:
+                $this->setCreatedAt($value);
+                break;
+            case 12:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1541,28 +1595,31 @@ abstract class Alert implements ActiveRecordInterface
             $this->setUserId($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setArticleId($arr[$keys[4]]);
+            $this->setRecipientEmail($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setMaxPrice($arr[$keys[5]]);
+            $this->setArticleId($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setPubYear($arr[$keys[6]]);
+            $this->setMaxPrice($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setCondition($arr[$keys[7]]);
+            $this->setPubYear($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setInsert($arr[$keys[8]]);
+            $this->setCondition($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setUpdate($arr[$keys[9]]);
+            $this->setInsert($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setCreatedAt($arr[$keys[10]]);
+            $this->setUpdate($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setUpdatedAt($arr[$keys[11]]);
+            $this->setCreatedAt($arr[$keys[11]]);
+        }
+        if (array_key_exists($keys[12], $arr)) {
+            $this->setUpdatedAt($arr[$keys[12]]);
         }
 
         return $this;
@@ -1618,6 +1675,9 @@ abstract class Alert implements ActiveRecordInterface
         }
         if ($this->isColumnModified(AlertTableMap::COL_USER_ID)) {
             $criteria->add(AlertTableMap::COL_USER_ID, $this->user_id);
+        }
+        if ($this->isColumnModified(AlertTableMap::COL_RECIPIENT_EMAIL)) {
+            $criteria->add(AlertTableMap::COL_RECIPIENT_EMAIL, $this->recipient_email);
         }
         if ($this->isColumnModified(AlertTableMap::COL_ARTICLE_ID)) {
             $criteria->add(AlertTableMap::COL_ARTICLE_ID, $this->article_id);
@@ -1734,6 +1794,7 @@ abstract class Alert implements ActiveRecordInterface
         $copyObj->setSiteId($this->getSiteId());
         $copyObj->setAxysAccountId($this->getAxysAccountId());
         $copyObj->setUserId($this->getUserId());
+        $copyObj->setRecipientEmail($this->getRecipientEmail());
         $copyObj->setArticleId($this->getArticleId());
         $copyObj->setMaxPrice($this->getMaxPrice());
         $copyObj->setPubYear($this->getPubYear());
@@ -1891,6 +1952,7 @@ abstract class Alert implements ActiveRecordInterface
         $this->site_id = null;
         $this->axys_account_id = null;
         $this->user_id = null;
+        $this->recipient_email = null;
         $this->article_id = null;
         $this->alert_max_price = null;
         $this->alert_pub_year = null;

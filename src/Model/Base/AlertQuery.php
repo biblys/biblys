@@ -23,6 +23,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlertQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
  * @method     ChildAlertQuery orderByAxysAccountId($order = Criteria::ASC) Order by the axys_account_id column
  * @method     ChildAlertQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
+ * @method     ChildAlertQuery orderByRecipientEmail($order = Criteria::ASC) Order by the recipient_email column
  * @method     ChildAlertQuery orderByArticleId($order = Criteria::ASC) Order by the article_id column
  * @method     ChildAlertQuery orderByMaxPrice($order = Criteria::ASC) Order by the alert_max_price column
  * @method     ChildAlertQuery orderByPubYear($order = Criteria::ASC) Order by the alert_pub_year column
@@ -36,6 +37,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlertQuery groupBySiteId() Group by the site_id column
  * @method     ChildAlertQuery groupByAxysAccountId() Group by the axys_account_id column
  * @method     ChildAlertQuery groupByUserId() Group by the user_id column
+ * @method     ChildAlertQuery groupByRecipientEmail() Group by the recipient_email column
  * @method     ChildAlertQuery groupByArticleId() Group by the article_id column
  * @method     ChildAlertQuery groupByMaxPrice() Group by the alert_max_price column
  * @method     ChildAlertQuery groupByPubYear() Group by the alert_pub_year column
@@ -82,6 +84,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlert|null findOneBySiteId(int $site_id) Return the first ChildAlert filtered by the site_id column
  * @method     ChildAlert|null findOneByAxysAccountId(int $axys_account_id) Return the first ChildAlert filtered by the axys_account_id column
  * @method     ChildAlert|null findOneByUserId(int $user_id) Return the first ChildAlert filtered by the user_id column
+ * @method     ChildAlert|null findOneByRecipientEmail(string $recipient_email) Return the first ChildAlert filtered by the recipient_email column
  * @method     ChildAlert|null findOneByArticleId(int $article_id) Return the first ChildAlert filtered by the article_id column
  * @method     ChildAlert|null findOneByMaxPrice(int $alert_max_price) Return the first ChildAlert filtered by the alert_max_price column
  * @method     ChildAlert|null findOneByPubYear(int $alert_pub_year) Return the first ChildAlert filtered by the alert_pub_year column
@@ -98,6 +101,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlert requireOneBySiteId(int $site_id) Return the first ChildAlert filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAlert requireOneByAxysAccountId(int $axys_account_id) Return the first ChildAlert filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAlert requireOneByUserId(int $user_id) Return the first ChildAlert filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAlert requireOneByRecipientEmail(string $recipient_email) Return the first ChildAlert filtered by the recipient_email column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAlert requireOneByArticleId(int $article_id) Return the first ChildAlert filtered by the article_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAlert requireOneByMaxPrice(int $alert_max_price) Return the first ChildAlert filtered by the alert_max_price column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAlert requireOneByPubYear(int $alert_pub_year) Return the first ChildAlert filtered by the alert_pub_year column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -118,6 +122,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildAlert> findByAxysAccountId(int|array<int> $axys_account_id) Return ChildAlert objects filtered by the axys_account_id column
  * @method     ChildAlert[]|Collection findByUserId(int|array<int> $user_id) Return ChildAlert objects filtered by the user_id column
  * @psalm-method Collection&\Traversable<ChildAlert> findByUserId(int|array<int> $user_id) Return ChildAlert objects filtered by the user_id column
+ * @method     ChildAlert[]|Collection findByRecipientEmail(string|array<string> $recipient_email) Return ChildAlert objects filtered by the recipient_email column
+ * @psalm-method Collection&\Traversable<ChildAlert> findByRecipientEmail(string|array<string> $recipient_email) Return ChildAlert objects filtered by the recipient_email column
  * @method     ChildAlert[]|Collection findByArticleId(int|array<int> $article_id) Return ChildAlert objects filtered by the article_id column
  * @psalm-method Collection&\Traversable<ChildAlert> findByArticleId(int|array<int> $article_id) Return ChildAlert objects filtered by the article_id column
  * @method     ChildAlert[]|Collection findByMaxPrice(int|array<int> $alert_max_price) Return ChildAlert objects filtered by the alert_max_price column
@@ -233,7 +239,7 @@ abstract class AlertQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT alert_id, site_id, axys_account_id, user_id, article_id, alert_max_price, alert_pub_year, alert_condition, alert_insert, alert_update, alert_created, alert_updated FROM alerts WHERE alert_id = :p0';
+        $sql = 'SELECT alert_id, site_id, axys_account_id, user_id, recipient_email, article_id, alert_max_price, alert_pub_year, alert_condition, alert_insert, alert_update, alert_created, alert_updated FROM alerts WHERE alert_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -499,6 +505,34 @@ abstract class AlertQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(AlertTableMap::COL_USER_ID, $userId, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the recipient_email column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByRecipientEmail('fooValue');   // WHERE recipient_email = 'fooValue'
+     * $query->filterByRecipientEmail('%fooValue%', Criteria::LIKE); // WHERE recipient_email LIKE '%fooValue%'
+     * $query->filterByRecipientEmail(['foo', 'bar']); // WHERE recipient_email IN ('foo', 'bar')
+     * </code>
+     *
+     * @param string|string[] $recipientEmail The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByRecipientEmail($recipientEmail = null, ?string $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($recipientEmail)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(AlertTableMap::COL_RECIPIENT_EMAIL, $recipientEmail, $comparison);
 
         return $this;
     }
