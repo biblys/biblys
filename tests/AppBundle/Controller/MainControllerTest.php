@@ -410,7 +410,7 @@ class MainControllerTest extends TestCase
             "it should display the title"
         );
         $this->assertStringNotContainsString(
-            "Numérique",
+            "Invitations de téléchargement",
             $response->getContent(),
             "hides ebooks section",
         );
@@ -735,7 +735,7 @@ class MainControllerTest extends TestCase
         // then
         $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
         $this->assertStringContainsString(
-            "Numérique",
+            "Invitations de téléchargement",
             $response->getContent(),
             "displays the ebooks section"
         );
