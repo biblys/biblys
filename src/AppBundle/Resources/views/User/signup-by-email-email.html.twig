@@ -1,0 +1,52 @@
+{% extends "layout:email-layout.html.twig" %}
+
+{% block subject %}
+  Créez votre compte {{ siteTitle}} en un clic
+{% endblock %}
+
+{% block preview %}
+  Ce lien sécurisé expirera le {{ expirationDate }}.
+{% endblock %}
+
+{% block content %}
+  <h1>
+    Créez votre compte {{ siteTitle}} en un clic
+  </h1>
+  <p>
+    Vous avez demandé à vous authentifier par courriel
+    avec l'adresse <strong>{{ recipientEmail }}</strong>
+    sur le site <strong>{{ siteTitle }}</strong>.
+  <p>Nous n'avons pas trouvé de compte utilisateur existant pour cette adresse e-mail.</p>
+  <p>
+    Cliquez sur le bouton ci-dessous pour vous inscrire sur {{ domain }} !
+  </p>
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-success">
+    <tbody>
+    <tr>
+      <td align="center">
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+          <tbody>
+          <tr>
+            <td><a href="{{ loginUrl }}" target="_blank">Créer un nouveau compte</a></td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <p>
+    <strong>Si vous avez déjà un compte sur le site {{ siteTitle }}</strong>, ne cliquez pas sur le bouton
+    ci-dessus, car cela aurait pour effet d'en créer un nouveau. Vérifiez plutôt que vous l'adresse {{ recipientEmail }}
+    correspond bien à votre compte utilisateur.
+  </p>
+  <p>
+    <strong>Si vous essayez de vous connecter avec un compte Axys</strong> correspondant à l'adresse
+    {{ recipientEmail }}, il semble que celui-ci n'ait pas encore été importé. Cliquez d'abord sur "Se connecter avec
+    Axys" depuis la page de connexion pour importer votre compte. Vous pourrez ensuite vous connecter par e-mail sans
+    passer par Axys.
+  </p>
+  <p>
+    NB : ce lien sécurisé expirera le {{ expirationDate }}.
+  </p>
+{% endblock %}
