@@ -98,7 +98,7 @@ return function (
             $article_type = ' (numérique)';
             $articleModel = \Model\ArticleQuery::create()->findPk($article->get("id"));
             if ($currentUser->hasPurchasedArticle($articleModel)) {
-                $purchased = '<p class="warning left"><a href="/pages/log_mybooks" title="Vous avez déjà acheté ce titre. Juste pour info.">Déjà acheté !</a></p>';
+//                $purchased = '<p class="warning left"><a href="/pages/log_mybooks" title="Vous avez déjà acheté ce titre. Juste pour info.">Déjà acheté !</a></p>';
             }
         }
 
