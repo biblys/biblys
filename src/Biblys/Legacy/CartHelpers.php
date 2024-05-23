@@ -260,7 +260,7 @@ class CartHelpers
 
         $cover = null;
         if ($freeArticleEntity->hasCover()) {
-            $cover = $freeArticleEntity->getCoverTag(['size' => 'h60', 'rel' => 'lightbox', 'class' => 'cover']);
+            $cover = $freeArticleEntity->getCoverTag(['size' => 'w256', 'rel' => 'lightbox', 'class' => 'cover']);
         }
 
         $collectionUrl = $urlGenerator->generate(
