@@ -1425,8 +1425,10 @@ class CurrentUserTest extends TestCase
         $config->set("site", $site->getId());
         $article = ModelFactory::createArticle();
         $user = ModelFactory::createUser();
+        $anotherUser = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest(user: $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        ModelFactory::createStockItem(site: $site, article: $article, user: $anotherUser);
 
         // when
         $hasPurchasedArticle = $currentUser->hasPurchasedArticle($article);
@@ -1445,7 +1447,7 @@ class CurrentUserTest extends TestCase
         $config = new Config();
         $config->set("site", $site->getId());
         $article = ModelFactory::createArticle();
-        $user = ModelFactory::createUser();
+        $user = ModelFactory::createUser(site: $site);
         $request = RequestFactory::createAuthRequest(user: $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
         ModelFactory::createStockItem(site: $site, article: $article, user: $user);

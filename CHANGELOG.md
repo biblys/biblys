@@ -8,6 +8,8 @@ Corrections
   pouvait ne plus être affiché. C'est corrigé.
 - La page des options pouvait laisser apparaître les options des 
   utilisateurs. Ce n'est plus le cas.
+- La mention "Déjà acheté" pouvait apparaître sur le panier pour des livres 
+  numérique n'ayant pas été acheté. C'est corrigé.
 
 ### 2.81.1 (15 mai 2024)
 

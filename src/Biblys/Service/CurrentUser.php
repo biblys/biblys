@@ -500,8 +500,14 @@ class CurrentUser
      */
     public function hasPurchasedArticle(Article $article): bool
     {
+        if (!$this->isAuthentified()) {
+            return false;
+        }
+
+
         $purchases = StockQuery::create()
             ->filterBySite($this->getCurrentSite()->getSite())
+            ->filterByUser($this->getUser())
             ->filterByArticle($article)
             ->count();
 
