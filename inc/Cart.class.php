@@ -360,10 +360,10 @@ class CartManager extends EntityManager
             );
         }
 
-        if ($article->isDownloadable() && !$article->isPurchasable()) {
+        if ($article->isDownloadable()) {
+            if (!$article->isPurchasable() && !$article->isPrivatelyPrinted())
             throw new CartException('Cet article est indisponible.');
         }
-
 
         // Default : add an available copy to cart
         $stocks = $article->getAvailableItems('all', [
