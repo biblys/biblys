@@ -74,7 +74,12 @@ class UserController extends Controller
 
         $queryParams->parse(["return_url" => ["type" => "string", "default" => ""]]);
         $returnUrl = $queryParams->get("return_url");
-        if (str_contains($returnUrl, "logged-out")) {
+
+        $returnUrlsToIgnore = [
+            "/user/logged-out",
+            "/user/send-login_email",
+        ];
+        if (in_array($returnUrl, $returnUrlsToIgnore)) {
             $returnUrl = null;
         }
 
@@ -114,38 +119,45 @@ class UserController extends Controller
             ->filterBySite($currentSite->getSite())
             ->findOneByEmail($recipientEmail);
 
-        if ($userAccountExists) {
-            $expirationDate = new DateTime("+24 hours");
-            $loginToken = $tokenService->createLoginToken(
-                email: $recipientEmail,
-                action: "login-by-email",
-                afterLoginUrl: $returnUrl
-            );
-            $loginRelativeUrl = $urlGenerator->generate("user_login_with_token", [
-                "token" => $loginToken
-            ]);
-            $loginUrl = $request->getSchemeAndHttpHost() . $loginRelativeUrl;
-            $body = $templateService->render(
-                "AppBundle:User:login-with-email-email.html.twig",
-                [
-                    "recipientEmail" => $recipientEmail,
-                    "loginUrl" => $loginUrl,
-                    "siteTitle" => $currentSite->getSite()->getTitle(),
-                    "domain" => $currentSite->getSite()->getDomain(),
-                    "expirationDate" => $expirationDate->format("d/m/Y à H\hi"),
-                ]
-            );
-            $mailer->send(
-                to: $recipientEmail,
-                subject: "Connectez-vous en un clic sur {$currentSite->getSite()->getDomain()}",
-                body: $body,
-            );
+        $tokenAction = "login-by-email";
+        $targetPath = "user_login_with_token";
+        $emailTemplate = "login-with-email-email";
+        $emailSubject = "Connectez-vous en un clic sur {$currentSite->getSite()->getDomain()}";
+        if (!$userAccountExists) {
+            $tokenAction = "signup-by-email";
+            $emailTemplate = "signup-by-email-email";
+            $emailSubject = "Créez votre compte {$currentSite->getTitle()} en un clic";
         }
+
+        $expirationDate = new DateTime("+24 hours");
+        $loginToken = $tokenService->createLoginToken(
+            email: $recipientEmail,
+            action: $tokenAction,
+            afterLoginUrl: $returnUrl
+        );
+        $targetUrl = $urlGenerator->generate($targetPath, [
+            "token" => $loginToken
+        ]);
+
+        $body = $templateService->render(
+            "AppBundle:User:$emailTemplate.html.twig",
+            [
+                "recipientEmail" => $recipientEmail,
+                "loginUrl" => $request->getSchemeAndHttpHost() . $targetUrl,
+                "siteTitle" => $currentSite->getSite()->getTitle(),
+                "domain" => $currentSite->getSite()->getDomain(),
+                "expirationDate" => $expirationDate->format("d/m/Y à H\hi"),
+            ]
+        );
+        $mailer->send(
+            to: $recipientEmail,
+            subject: "$emailSubject",
+            body: $body,
+        );
 
         return $templateService->renderResponse(
             "AppBundle:User:send-login-email.html.twig",
             [
-                "emailExists" => $userAccountExists,
                 "recipientEmail" => $recipientEmail,
                 "returnUrl" => $returnUrl,
                 "senderEmail" => $senderEmail,

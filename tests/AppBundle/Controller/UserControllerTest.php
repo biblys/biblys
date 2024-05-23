@@ -182,9 +182,13 @@ class UserControllerTest extends TestCase
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->shouldReceive("renderResponse")
             ->andReturn($expectedResponse);
-        $mailer = Mockery::mock(Mailer::class);
+        $templateService->shouldReceive("render")->andReturn("mail body");
         $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("createLoginToken")->andReturn("token");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("login_url");
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send");
 
         // when
         $returnedResponse = $controller->sendLoginEmailAction(
@@ -192,10 +196,13 @@ class UserControllerTest extends TestCase
         );
 
         // then
-        $mailer->shouldNotHaveReceived("send");
+        $tokenService->shouldReceive("createLoginToken")
+            ->with("user@example.net", "signup-by-email", "/continue");
+        $mailer->shouldHaveReceived("send");
+        $templateService->shouldHaveReceived("render")
+            ->with("AppBundle:User:signup-by-email-email.html.twig", Mockery::any());
         $templateService->shouldHaveReceived("renderResponse")
             ->with("AppBundle:User:send-login-email.html.twig", [
-                "emailExists" => false,
                 "recipientEmail" => "user@example.net",
                 "returnUrl" => "/continue",
                 "senderEmail" => "editions@paronymie.fr",
@@ -254,7 +261,6 @@ class UserControllerTest extends TestCase
             ->with("AppBundle:User:login-with-email-email.html.twig", Mockery::any());
         $templateService->shouldHaveReceived("renderResponse")
             ->with("AppBundle:User:send-login-email.html.twig", [
-                "emailExists" => true,
                 "recipientEmail" => "user@example.net",
                 "returnUrl" => "/continue",
                 "senderEmail" => "editions@paronymie.fr",
