@@ -55,7 +55,9 @@ class TokenService
             throw new InvalidTokenException("Invalid action for login token");
         }
 
-        if (!in_array($decodedToken->action, ["login-by-email", "login-with-oidc"])) {
+        if (!in_array($decodedToken->action,
+            ["signup-by-email", "login-by-email", "login-with-oidc"]
+        )) {
             throw new InvalidTokenException("Invalid action for login token");
         }
 

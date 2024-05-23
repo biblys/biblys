@@ -720,6 +720,11 @@ user_login_with_token:
   path: /user/login-with-token
   controller: AppBundle\Controller\UserController::loginWithTokenAction
 
+user_signup_with_token:
+  methods: GET
+  path: /user/signup-with-token
+  controller: AppBundle\Controller\UserController::signupWithTokenAction
+
 user_account:
   path: /user/account
   controller: AppBundle\Controller\UserController::account

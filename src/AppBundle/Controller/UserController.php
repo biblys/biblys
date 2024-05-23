@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session as CurrentSession;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -125,6 +126,7 @@ class UserController extends Controller
         $emailSubject = "Connectez-vous en un clic sur {$currentSite->getSite()->getDomain()}";
         if (!$userAccountExists) {
             $tokenAction = "signup-by-email";
+            $targetPath = "user_signup_with_token";
             $emailTemplate = "signup-by-email-email";
             $emailSubject = "Créez votre compte {$currentSite->getTitle()} en un clic";
         }
@@ -163,6 +165,59 @@ class UserController extends Controller
                 "senderEmail" => $senderEmail,
             ],
         );
+    }
+
+    /**
+     * @throws InvalidConfigurationException
+     * @throws PropelException
+     */
+    public function signupWithTokenAction(
+        QueryParamsService $queryParams,
+        TokenService       $tokenService,
+        CurrentSite        $currentSite,
+        UrlGenerator       $urlGenerator,
+        CurrentSession     $session,
+    ): RedirectResponse
+    {
+        $queryParams->parse(["token" => ["type" => "string"]]);
+        $rawToken = $queryParams->get("token");
+
+        try {
+            $signupToken = $tokenService->decodeLoginToken($rawToken);
+            if ($signupToken["action"] !== "signup-by-email") {
+                throw new InvalidTokenException("Invalid token action");
+            }
+
+        } catch (InvalidTokenException) {
+            throw new BadRequestHttpException("Ce lien d'inscription est invalide.");
+        }
+
+        $existingUser = UserQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->findOneByEmail($signupToken["email"]);
+        if ($existingUser) {
+            throw new BadRequestHttpException("Ce lien d'inscription est invalide.");
+        }
+
+        $user = new User();
+        $user->setSite($currentSite->getSite());
+        $user->setEmail($signupToken["email"]);
+        $user->save();
+
+        $session->getFlashBag()
+            ->add("success", "Votre compte {$user->getEmail()} a bien été créé.");
+
+        $loginToken = $tokenService->createLoginToken(
+            email: $signupToken["email"],
+            action: "login-by-email",
+            afterLoginUrl: $signupToken["after_login_url"],
+        );
+        $loginUrl = $urlGenerator->generate("user_login_with_token", ["token" => $loginToken]);
+
+        $response = new RedirectResponse($loginUrl);
+        $response->headers->set("X-Robots-Tag", "noindex, nofollow");
+
+        return $response;
     }
 
     /**

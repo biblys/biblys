@@ -17,10 +17,13 @@ use DateTime;
 use Exception;
 use Mockery;
 use Model\SessionQuery;
+use Model\UserQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -162,11 +165,12 @@ class UserControllerTest extends TestCase
      */
 
     /**
+     * @throws InvalidConfigurationException
+     * @throws InvalidEmailAddressException
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws InvalidEmailAddressException
      * @throws TransportExceptionInterface
      */
     public function testSendLoginEmailWhenEmailDoesNotExist()
@@ -268,9 +272,129 @@ class UserControllerTest extends TestCase
         $this->assertEquals($expectedResponse, $returnedResponse);
     }
 
+    /** #signupWithToken */
+
     /**
-     * #loginWithToken
+     * @throws Exception
      */
+    public function testSignupWithTokenWithInvalidTokenAction()
+    {
+        // given
+        $controller = new UserController();
+        $site = ModelFactory::createSite();
+        ModelFactory::createUser(site: $site, email: "new-@paronymie.fr");
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->expects("parse")->with(["token" => ["type" => "string"]]);
+        $queryParamsService->expects("get")->with("token")->andReturn("signup_token");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("decodeLoginToken")->andReturn([
+            "email" => "existing-user@paronymie.fr",
+            "action" => "login-by-email",
+            "after_login_url" => "/continue",
+        ]);
+        $currentSite = new CurrentSite($site);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $session = Mockery::mock(Session::class);
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("Ce lien d'inscription est invalide.");
+
+        // when
+        $controller->signupWithTokenAction(
+            queryParams: $queryParamsService,
+            tokenService: $tokenService,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            session: $session,
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSignupWithTokenForExistingUser()
+    {
+        // given
+        $controller = new UserController();
+        $site = ModelFactory::createSite();
+        ModelFactory::createUser(site: $site, email: "existing-user@paronymie.fr");
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->expects("parse")->with(["token" => ["type" => "string"]]);
+        $queryParamsService->expects("get")->with("token")->andReturn("signup_token");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("decodeLoginToken")->andReturn([
+            "email" => "existing-user@paronymie.fr",
+            "action" => "signup-by-email",
+            "after_login_url" => "/continue",
+        ]);
+        $currentSite = new CurrentSite($site);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $session = Mockery::mock(Session::class);
+
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("Ce lien d'inscription est invalide.");
+
+        // when
+        $controller->signupWithTokenAction(
+            queryParams: $queryParamsService,
+            tokenService: $tokenService,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            session: $session,
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSignupWithToken()
+    {
+        // given
+        $controller = new UserController();
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->expects("parse")->with(["token" => ["type" => "string"]]);
+        $queryParamsService->expects("get")->with("token")->andReturn("signup_token");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("decodeLoginToken")->andReturn([
+            "email" => "new-user@paronymie.fr",
+            "action" => "signup-by-email",
+            "after_login_url" => "/continue",
+        ]);
+        $tokenService->expects("createLoginToken")->andReturn("token");
+        $site = ModelFactory::createSite(title: "Paronymie ltd");
+        $currentSite = new CurrentSite($site);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("/login_url");
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->expects("add");
+        $session = Mockery::mock(Session::class);
+        $session->expects("getFlashBag")->andReturn($flashBag);
+
+        // when
+        $response = $controller->signupWithTokenAction(
+            queryParams: $queryParamsService,
+            tokenService: $tokenService,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            session: $session,
+        );
+
+        // then
+        $tokenService->shouldHaveReceived("createLoginToken");
+        $flashBag->shouldHaveReceived("add")
+            ->with("success", "Votre compte new-user@paronymie.fr a bien été créé.");
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/login_url", $response->getTargetUrl());
+        $newUser = UserQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->findOneByEmail("new-user@paronymie.fr");
+        $this->assertNotNull($newUser);
+    }
+
+    /** #loginWithToken */
 
     /**
      * @throws Exception
@@ -423,7 +547,7 @@ class UserControllerTest extends TestCase
         $currentUser->expects("transfertVisitorCartToUser")->with("visitor_token");
 
         // when
-        $response = $controller->loginWithTokenAction(
+        $controller->loginWithTokenAction(
             $request,
             $queryParamsService,
             $tokenService,
