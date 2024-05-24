@@ -116,6 +116,12 @@ class UserController extends Controller
         $returnUrl = $request->request->get("return_url", "/");
         $senderEmail = $currentSite->getSite()->getContact();
 
+        try {
+            $mailer->validateEmail($recipientEmail);
+        } catch (InvalidEmailAddressException $exception) {
+            throw new BadRequestHttpException($exception->getMessage(), $exception);
+        }
+
         $userAccountExists = UserQuery::create()
             ->filterBySite($currentSite->getSite())
             ->findOneByEmail($recipientEmail);

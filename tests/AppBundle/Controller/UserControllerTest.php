@@ -173,6 +173,48 @@ class UserControllerTest extends TestCase
      * @throws SyntaxError
      * @throws TransportExceptionInterface
      */
+    public function testSendLoginEmailWhenEmailIsInvalid()
+    {
+        // given
+        $controller = new UserController();
+        $expectedResponse = new Response();
+        $site = ModelFactory::createSite(contact: "editions@paronymie.fr");
+        $currentSite = new CurrentSite($site);
+        $request = new Request();
+        $request->request->set("email", "invalid-email");
+        $request->request->set("return_url", "/continue");
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->shouldReceive("renderResponse")
+            ->andReturn($expectedResponse);
+        $templateService->shouldReceive("render")->andReturn("mail body");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("createLoginToken")->andReturn("token");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("login_url");
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("validateEmail")->andThrow(
+            new InvalidEmailAddressException("L'adresse invalid-email est invalide.")
+        );
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("L'adresse invalid-email est invalide.");
+
+        // when
+        $controller->sendLoginEmailAction(
+            $request, $currentSite, $tokenService, $templateService, $urlGenerator, $mailer,
+        );
+    }
+
+    /**
+     * @throws InvalidConfigurationException
+     * @throws InvalidEmailAddressException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     */
     public function testSendLoginEmailWhenEmailDoesNotExist()
     {
         // given
@@ -192,6 +234,7 @@ class UserControllerTest extends TestCase
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->expects("generate")->andReturn("login_url");
         $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("validateEmail");
         $mailer->expects("send");
 
         // when
@@ -245,6 +288,7 @@ class UserControllerTest extends TestCase
         $templateService->shouldReceive("render")
             ->andReturn($expectedMailBody);
         $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("validateEmail");
         $mailer->expects("send");
         $tokenService = Mockery::mock(TokenService::class);
         $tokenService->expects("createLoginToken")->andReturn("token");
@@ -257,6 +301,7 @@ class UserControllerTest extends TestCase
         );
 
         // then
+        $mailer->shouldHaveReceived("validateEmail")->with("user@example.net");
         $mailer->shouldHaveReceived("send");
         $urlGenerator->shouldHaveReceived("generate")->with(
             "user_login_with_token", ["token" => "token"],
