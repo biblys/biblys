@@ -4,8 +4,10 @@ use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
+use Model\AlertQuery;
 use Model\CartQuery;
 use Model\UserQuery;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -271,9 +273,7 @@ if ($request->getMethod() === 'POST') {
         if ($result["sent"] > 0) {
             $session->getFlashBag()->add(
                 "info",
-                "<strong>".$result["sent"].' alerte'.s($result["sent"]).'</strong> '.s
-                ($result["sent"], 'a', 'ont')
-                .' été envoyée'.s($result["sent"]).'.');
+                $result["sent"].' alerte'.s($result["sent"])." ".s($result["sent"], 'a', 'ont').' été envoyée'.s($result["sent"]).'.');
         }
         if (count($result["errors"]) > 0) {
             foreach($result["errors"] as $error) {
@@ -515,22 +515,23 @@ if ($article) {
     if ($mode == 'insert') {
         $ex = null;
         $als = null;
-        $alerts = $alm->getAll(['article_id' => $article->get('id')]);
+        $alerts = AlertQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->_or()
+            ->filterByUserId(null, Criteria::ISNULL)
+            ->findByArticleId($article->get("id"))
+            ->getArrayCopy();
         $alerts = array_map(/**
          * @throws PropelException
-         */ function ($alert) use($currentSite) {
-            $userIdentity = "Utilisateur Axys n°" . $alert->get("axys_account_id");
-            $user = UserQuery::create()->filterBySite($currentSite->getSite())->findPk($alert->get("user_id"));
-            if ($user) {
-                $userIdentity = $user->getEmail();
-            }
+         */ function (\Model\Alert $alert) use($currentSite) {
+             $recipientEmail = $alert->getUser()?->getEmail() ?? $alert->getRecipientEmail();
+             if (!$recipientEmail) {
+                 return "";
+             }
 
             return '
                 <tr>
-                    <td>' . $userIdentity . '</a></td>
-                    <td>' . $alert->get('condition') . '</td>
-                    <td>' . $alert->get('pub_year') . '</td>
-                    <td>' . ($alert->get('max_price') ? currency($alert->get('max_price'), true) : "" ). '</td>
+                    <td>' . $recipientEmail . '</a></td>
                 </tr>
             ';
         }, $alerts);
@@ -1003,15 +1004,17 @@ function _sendAlertsForArticle(
     CurrentSite $currentSite,
 ): array
 {
-    $am = new AlertManager();
-
-    $alerts = $am->getAll(["article_id" => $article->get("id")]);
-
+    $alerts = AlertQuery::create()
+        ->filterBySite($currentSite->getSite())
+        ->_or()
+        ->filterByUserId(null, Criteria::ISNULL)
+        ->findByArticleId($article->get("id"))
+        ->getArrayCopy();
     $sentAlerts = 0;
     $errors = [];
     foreach ($alerts as $alert) {
-        $user = UserQuery::create()->filterBySite($currentSite->getSite())->findPk($alert->get("user_id"));
-        if (!$user) {
+        $recipientEmail = $alert->getUser()?->getEmail() ?? $alert->getRecipientEmail();
+        if (!$recipientEmail) {
             continue;
         }
 
@@ -1059,7 +1062,7 @@ function _sendAlertsForArticle(
         ';
 
         try {
-            $mailer->send($user->getEmail(), $subject, $message);
+            $mailer->send($recipientEmail, $subject, $message);
             $sentAlerts++;
         } catch(InvalidEmailAddressException $exception) {
             $errors[] = [
