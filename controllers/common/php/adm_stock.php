@@ -1066,7 +1066,7 @@ function _sendAlertsForArticle(
             $sentAlerts++;
         } catch(InvalidEmailAddressException $exception) {
             $errors[] = [
-                "email" => $user->get("email"),
+                "email" => $recipientEmail,
                 "reason" => $exception->getMessage(),
             ];
         }
