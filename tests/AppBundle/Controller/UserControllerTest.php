@@ -643,42 +643,21 @@ class UserControllerTest extends TestCase
     {
         // given
         $userController = new UserController();
-        $urlGenerator = $this->createMock(UrlGenerator::class);
-        $urlGenerator->method("generate")
-            ->with("user_logged_out")
-            ->willReturn("logged_out_url");
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->expects("add");
+        $session = Mockery::mock(Session::class);
+        $session->expects("getFlashBag")->andReturn($flashBag);
 
         // when
-        $response = $userController->logout($urlGenerator);
+        $response = $userController->logout($session);
 
         // then
+        $flashBag->shouldHaveReceived("add")->with("success", "Vous avez été déconnecté·e. À bientôt !");
         $cookie = $response->headers->getCookies()[0];
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("logged_out_url", $response->headers->get("Location"));
+        $this->assertEquals("/", $response->headers->get("Location"));
         $this->assertEquals("user_uid", $cookie->getName(), "clears user_uid cookie");
         $this->assertEquals(null, $cookie->getValue(), "clears user_uid cookie");
-    }
-
-    /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws LoaderError
-     * @throws PropelException
-     */
-    public function testLoggedOut()
-    {
-        // given
-        $userController = new UserController();
-
-        // when
-        $response = $userController->loggedOut();
-
-        // then
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringContainsString(
-            "Vous avez été déconnecté·e du site Éditions Paronymie.",
-            $response->getContent(),
-        );
     }
 
     public function testSignup()

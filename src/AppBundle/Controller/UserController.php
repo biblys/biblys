@@ -77,7 +77,6 @@ class UserController extends Controller
         $returnUrl = $queryParams->get("return_url");
 
         $returnUrlsToIgnore = [
-            "/user/logged-out",
             "/user/send-login_email",
         ];
         if (in_array($returnUrl, $returnUrlsToIgnore)) {
@@ -311,25 +310,12 @@ class UserController extends Controller
         ]);
     }
 
-    public function logout(UrlGenerator $urlGenerator): Response
+    public function logout(CurrentSession $session): Response
     {
-        $loggedOutUrl = $urlGenerator->generate("user_logged_out");
-        $response = new RedirectResponse($loggedOutUrl, status: 302);
+        $session->getFlashBag()->add("success", "Vous avez été déconnecté·e. À bientôt !");
+
+        $response = new RedirectResponse("/");
         $response->headers->clearCookie("user_uid");
-        $response->headers->set("X-Robots-Tag", "noindex, nofollow");
-
-        return $response;
-    }
-
-    /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws LoaderError
-     * @throws PropelException
-     */
-    public function loggedOut(): Response
-    {
-        $response = $this->render("AppBundle:User:loggedOut.html.twig");
         $response->headers->set("X-Robots-Tag", "noindex, nofollow");
 
         return $response;

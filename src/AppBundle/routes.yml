@@ -729,10 +729,6 @@ user_account:
   path: /user/account
   controller: AppBundle\Controller\UserController::account
 
-user_logged_out:
-  path: /user/logged-out
-  controller: AppBundle\Controller\UserController::loggedOut
-
 user_logout:
   path: /user/logout
   controller: AppBundle\Controller\UserController::logout
