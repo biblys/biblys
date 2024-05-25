@@ -1,6 +1,4 @@
-<?php
-
-/** @noinspection PhpUnhandledExceptionInspection */
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
 global $urlgenerator, $request;
 
@@ -12,20 +10,22 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-$request = Request::createFromGlobals();
-$config = Config::load();
-$currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-$currentSite = CurrentSite::buildFromConfig($config);
-$slugService = new SlugService();
-
 $sm = new StockManager();
 
 $pdo = array(); // PDO search query
 $pqp = array(); // PDO search query params
 
+$slugService = new SlugService();
+
+$config = Config::load();
+$request = Request::createFromGlobals();
+$currentSite = CurrentSite::buildFromConfig($config);
+$currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+
 $json = null; // JSON response
 $filters = null;
-$coverLane = null;
+$covers_lane = null;
 
 $sel_etat = null;
 $_og_image = null;
@@ -33,9 +33,6 @@ $_og_description = null;
 if (!isset($_GET['q'])) {
     $_GET['q'] = null;
 }
-
-$_REQ = $_REQ ?? "";
-$terms = $terms ?? "";
 
 if (!isset($defaultOrderBy)) {
     $defaultOrderBy = null;
@@ -102,9 +99,7 @@ if (!empty($_GET["q"])) {
                 $sql[] = "`stock_condition` != 'Neuf'";
                 $filters .= ' d\'occasion';
             } elseif ($q == "commande") {
-                $sql[] = "`stock_id` IS NULL AND `article_links` LIKE '%[onorder:".
-                    $currentSite->getSite()->getId()
-                    ."]%' AND `article_availability` = 1";
+                $sql[] = "`stock_id` IS NULL AND `article_links` LIKE '%[onorder:" .$currentSite->getId() ."]%' AND `article_availability` = 1";
                 $filters .= ' sur commande';
             } elseif ($q == "indisp") {
                 $sql[] = "`stock_id` IS NULL";
@@ -131,8 +126,6 @@ if (!empty($_GET["q"])) {
         } elseif (!empty($q)) {
             if (isset($terms)) {
                 $terms .= ' ';
-            } else {
-                $terms = "";
             }
             $terms .= $q;
             $sql[] .= "`article_keywords` LIKE '%".addslashes($q)."%'";
@@ -142,8 +135,6 @@ if (!empty($_GET["q"])) {
     foreach ($sql as $offset) {
         if (isset($_REQ)) {
             $_REQ .= ' AND ';
-        } else {
-            $_REQ = '';
         }
         $_REQ .= $offset;
     }
@@ -181,11 +172,15 @@ if (isset($listOrderBy)) {
 }
 
 // Pagination
-$articlesPerPage = $currentSite->getOption('articles_per_page', 10);
+$npp = 10; // nombre par page
+$articles_per_page = $currentSite->getOption('articles_per_page');
+if ($articles_per_page) {
+    $npp = $articles_per_page;
+}
 
 $offset = (int) $request->query->get("s", 0);
-$_REQ_LIMIT = ' LIMIT '.$articlesPerPage.' OFFSET '.$offset;
-$nextPageNum = $offset + $articlesPerPage;
+$_REQ_LIMIT = ' LIMIT '.$npp.' OFFSET '.$offset;
+$nextPageNum = $offset + $npp;
 
 $active_stock_query = null;
 $active_stock = $currentSite->getOption("active_stock");
@@ -207,7 +202,7 @@ $sql_query = "
 
 // Compter le nombre de résultats
 $numQ = EntityManager::prepareAndExecute("SELECT `articles`.`article_id` ".$sql_query, [
-    "site_id" => $currentSite->getSite()->getId(),
+    "site_id" => $currentSite->getId(),
 ]);
 $num = count($numQ->fetchAll());
 
@@ -244,7 +239,7 @@ $sql = EntityManager::prepareAndExecute("
     ".$sql_query." 
     ".$_REQ_ORDER." 
     ".$_REQ_LIMIT,
-    ["site_id" => $currentSite->getSite()->getId()]
+    ["site_id" => $currentSite->getId()]
 );
 
 $ix = $offset;
@@ -255,10 +250,10 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     $x['used'] = 0;
     $x['availability'] = null;
 
-    $articleEntity = new Article($x, false);
-    $article = new \Model\Article();
-    $article->setId($articleEntity->get("id"));
-    $copy = $articleEntity->getCheapestAvailableItem();
+    $article = new Article($x, false);
+    $articleModel = new \Model\Article();
+    $articleModel->setId($article->get("id"));
+    $copy = $article->getCheapestAvailableItem();
 
     // Exemplaire en stock
     if ($copy) {
@@ -283,7 +278,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
 
 
         // Sur commande
-    } elseif (strstr($x["article_links"], '[onorder:'. $currentSite->getSite()->getId() .']') && $x["article_availability"] == 1) {
+    } elseif (strstr($x["article_links"], '[onorder:'. $currentSite->getId().']') && $x["article_availability"] == 1) {
         $x["availability"] = '<img src="/common/img/square_blue.png" alt="Sur commande" title="Sur commande" />';
         $x["price"] = price($x["article_price"], 'EUR');
         $x["condition"] = ' onorder';
@@ -299,7 +294,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     }
 
     // Couverture
-    $media = new Media("article", $x["article_id"]);
+    $media = new Media("article", $article->get("id"));
     if ($media->exists() && count($covers) < 12) {
         $covers[] = $x;
     }
@@ -318,16 +313,14 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     // Cycle et Tome
     $x['cycle'] = '';
     if (!empty($x['article_cycle'])) {
-        $x['cycle'] = '<br><span class="article_cycle">(<a href="/serie/'.
-            $slugService->slugify($x['article_cycle'])
-            .'">'.$x['article_cycle'].'</a>'.numero($x['article_tome'], ' - ').')</span>';
+        $x['cycle'] = '<br><span class="article_cycle">(<a href="/serie/'.$slugService->slugify($x['article_cycle']) .'">'.$x['article_cycle'].'</a>'.numero($x['article_tome'], ' - ').')</span>';
     }
 
     // Bouton panier
     $x['cart'] = '<td></td>';
     if (!empty($x['stock_id']) && $copy) {
         $cart_class = 'black';
-        if ($currentUser->hasArticleInCart($article)) {
+        if ($currentUser->hasArticleInCart($articleModel)) {
             $cart_class = 'green';
         }
         $x['cart'] = '
@@ -340,7 +333,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     // Wishlist button
     $wish_icon = 'fa-heart-o';
     $wish_text = 'Ajouter <em>'.$x['article_title'].'</em> à vos envies';
-    if ($currentUser->hasArticleInWishlist($article)) {
+    if ($currentUser->hasArticleInWishlist($articleModel)) {
         $wish_icon = 'fa-heart red';
         $wish_text = 'Retirer <em>'.$x['article_title'].'</em> de vos envies';
     }
@@ -355,7 +348,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     // Alert button
     $alert_icon = 'fa-bell-o';
     $alert_text = 'Créer une alerte pour <em>'.$x['article_title'].'</em>';
-    if ($currentUser->hasAlertForArticle($article)) {
+    if ($currentUser->hasAlertForArticle($articleModel)) {
         $alert_icon = 'fa-bell orange';
         $alert_text = 'Retirer <em>'.$x['article_title'].'</em> de vos alertes';
     }
@@ -400,20 +393,21 @@ if ($ix < $num) {
 
 // Couvertures (6 au hasard)
 if (count($covers) >= 12) {
-    $coverLane = "";
-    $coverImages = [];
+    $cover_lane = "";
     for ($ic = 0; $ic < 7; $ic++) {
         $c = $covers[rand(0, count($covers)-1)];
-        $cover = new Media("article", $c["article_id"]);
-        $coverImages[] = ' <a href="/a/'.$c['article_url'].'"><img src="'.
-            $cover->getUrl(["size" => "h125"]).
-            '" style="max-width: 90px;" alt="'.$c['article_title'].' de '.authors($c['article_authors']).'" title="'.$c['article_title'].' de '.authors($c['article_authors']).'"></a> ';
+        $media = new Media("article", $c["article_id"]);
+        $cover_lane .= ' <a href="/a/'.$c['article_url'].'"><img src="'.$media->getUrl(["size" => "h125"]) .'" style="max-width: 90px;" alt="'.$c['article_title'].' de '.authors($c['article_authors']).'" title="'.$c['article_title'].' de '.authors($c['article_authors']).'"></a> ';
     }
-    if (count($coverImages) > 0) {
-        $coverLane = '<div id="coverLane" class="right">'.join($coverImages).'</div>';
+    if (!empty($cover_lane)) {
+        $covers_lane = '<div id="coverLane" class="right">'.$cover_lane.'</div>';
     }
 } else {
     $covers = [];
+}
+if (isset($c) && count($covers) >= 1) {
+    $media = new Media("article", $c["article_id"]);
+    $_og_image = '<meta property="og:image" content="'.$media->getUrl().'">';
 }
 
 if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
@@ -443,11 +437,11 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
     $sel[$listOrderBy.$listSortOrder] = ' data-selected="true"';
     $sel[$sel_etat] = ' data-selected="true"';
 
-    $listContent = $coverLane.'
+    $listContent = $covers_lane.'
 
         <div id="listOptions">
             <span>
-                <span id="listCount">'.$num.'</span> '.$_ITEM_NAME.s($num).'
+                <span id="listCount">'.$num.'</span> '.$_ITEM_NAME.s($num). '
             </span>
 
             Afficher :
@@ -457,7 +451,7 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
                     <i class="fa fa-square"></i>&nbsp; tous les livres <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li class="pointer" data-filter="all'.$sel['all'].'"><a><i class="fa fa-square black"></i>&nbsp; tous les livres</a></li>
+                    <li class="pointer" data-filter="all' .$sel['all'].'"><a><i class="fa fa-square black"></i>&nbsp; tous les livres</a></li>
                     <li class="pointer" data-filter="neuf"'.$sel['neuf'].'><a><i class="fa fa-square green"></i>&nbsp; livres neufs</a></li>
                     <li class="pointer" data-filter="occasion"'.$sel['occasion'].'><a><i class="fa fa-square orange"></i>&nbsp; livres d\'occasion</a></li>
                     <li class="pointer" data-filter="commande"'.$sel['command'].'><a><i class="fa fa-square blue"></i>&nbsp; dispo. sur commande</a></li>
