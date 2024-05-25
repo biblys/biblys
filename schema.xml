@@ -1616,8 +1616,8 @@
     </foreign-key>
     <column name="identity_provider" phpName="IdentityProvider" type="VARCHAR" size="16"/>
     <column name="external_id" phpName="ExternalId" type="VARCHAR" size="128"/>
-    <column name="access_token" phpName="AccessToken" type="VARCHAR" size="1024"/>
-    <column name="id_token" phpName="IdToken" type="VARCHAR" size="1024"/>
+    <column name="access_token" phpName="AccessToken" type="VARCHAR" size="2048"/>
+    <column name="id_token" phpName="IdToken" type="VARCHAR" size="2048"/>
     <behavior name="timestampable" />
   </table>
   <table name="votes" idMethod="native" phpName="Vote">
