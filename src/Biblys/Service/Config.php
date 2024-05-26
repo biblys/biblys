@@ -122,4 +122,15 @@ class Config
 
         return $secret;
     }
+
+    public function isAxysEnabled(): bool
+    {
+        $clientId = $this->get("axys.client_id");
+        $clientSecret = $this->get("axys.client_secret");
+        if ($clientId && $clientSecret) {
+            return true;
+        }
+
+        return false;
+    }
 }

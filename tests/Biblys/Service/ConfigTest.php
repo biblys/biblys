@@ -132,4 +132,31 @@ class ConfigTest extends PHPUnit\Framework\TestCase
         // when
         $config->getAuthenticationSecret();
     }
+
+    public function testIsAxysEnabledWhenDisabled(): void
+    {
+        // given
+        $config = new Config([]);
+
+        // then
+        $isEnabled = $config->isAxysEnabled();
+
+        // then
+        $this->assertFalse($isEnabled);
+    }
+
+    public function testIsAxysEnabledWhenEnabled(): void
+    {
+        // given
+        $config = new Config(["axys"  => [
+            "client_id" => "client_id",
+            "client_secret" => "client_secret",
+        ]]);
+
+        // then
+        $isEnabled = $config->isAxysEnabled();
+
+        // then
+        $this->assertTrue($isEnabled);
+    }
 }
