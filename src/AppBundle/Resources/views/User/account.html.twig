@@ -7,11 +7,7 @@
 {% block main %}
   <h1>Mon compte {{ app.currentSite.site.title }}</h1>
 
-  <p class="alert alert-info">
-    <span class="fa fa-info-circle"></span>
-    Vous êtes connecté·e à l'aide du compte Axys <strong>{{ user_email }}</strong>. <br />
-    Rendez-vous sur <a href="https://axys.me/"><strong>axys.me</strong></a> pour gérer vos identifiants.
-  </p>
+  <h2>{{ user_email }}</h2>
 
   <ul>
 

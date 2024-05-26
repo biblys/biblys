@@ -646,7 +646,7 @@ class UserControllerTest extends TestCase
         $this->assertNull($user->getEmailValidatedAt());
     }
 
-    /** Others */
+    /** Account */
 
     /**
      * @throws SyntaxError
@@ -674,10 +674,12 @@ class UserControllerTest extends TestCase
         // then
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString(
-            "Vous êtes connecté·e à l'aide d'un compte Axys.",
+            "logged-user@biblys.fr",
             $response->getContent(),
         );
     }
+
+    /** Others */
 
     public function testLogout()
     {
