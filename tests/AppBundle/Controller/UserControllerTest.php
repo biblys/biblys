@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Exception\InvalidConfigurationException;
 use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\InvalidTokenException;
@@ -90,12 +91,47 @@ class UserControllerTest extends TestCase
         $queryParams = Mockery::mock(QueryParamsService::class);
         $queryParams->expects("parse")->andReturn("");
         $queryParams->expects("get")->with("return_url")->andReturn("");
+        $config = Mockery::mock(Config::class);
+        $config->expects("isAxysEnabled")->andReturns(false);
 
         // when
-        $response = $userController->login($queryParams, $currentUser, $urlGenerator);
+        $response = $userController->login($queryParams, $currentUser, $urlGenerator, $config);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("S'identifier par e-mail", $response->getContent());
+        $this->assertStringNotContainsString("Se connecter avec Axys", $response->getContent());
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function testLoginWhenAxysIsEnabled()
+    {
+        // given
+        $userController = new UserController();
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method("isAuthentified")->willReturn(false);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator
+            ->method("generate")
+            ->with("openid_axys")
+            ->willReturn("/openid/axys");
+        $queryParams = Mockery::mock(QueryParamsService::class);
+        $queryParams->expects("parse")->andReturn("");
+        $queryParams->expects("get")->with("return_url")->andReturn("");
+        $config = Mockery::mock(Config::class);
+        $config->expects("isAxysEnabled")->andReturns(true);
+
+        // when
+        $response = $userController->login($queryParams, $currentUser, $urlGenerator, $config);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("S'identifier par e-mail", $response->getContent());
         $this->assertStringContainsString("Se connecter avec Axys", $response->getContent());
     }
 
@@ -119,9 +155,11 @@ class UserControllerTest extends TestCase
         $queryParams = Mockery::mock(QueryParamsService::class);
         $queryParams->expects("parse")->andReturn("");
         $queryParams->expects("get")->with("return_url")->andReturn("url_to_return_to");
+        $config = Mockery::mock(Config::class);
+        $config->expects("isAxysEnabled")->andReturns(false);
 
         // when
-        $response = $userController->login($queryParams, $currentUser, $urlGenerator);
+        $response = $userController->login($queryParams, $currentUser, $urlGenerator, $config);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -148,9 +186,11 @@ class UserControllerTest extends TestCase
         $queryParams = Mockery::mock(QueryParamsService::class);
         $queryParams->expects("parse")->andReturn("");
         $queryParams->expects("get")->with("return_url")->andReturn("");
+        $config = Mockery::mock(Config::class);
+        $config->expects("isAxysEnabled")->andReturns(false);
 
         // when
-        $response = $userController->login($queryParams, $currentUser, $urlGenerator);
+        $response = $userController->login($queryParams, $currentUser, $urlGenerator, $config);
 
         // then
         $this->assertEquals(302, $response->getStatusCode());

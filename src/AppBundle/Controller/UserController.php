@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Exception\InvalidConfigurationException;
 use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\InvalidTokenException;
@@ -67,6 +68,7 @@ class UserController extends Controller
         QueryParamsService $queryParams,
         CurrentUser        $currentUser,
         UrlGenerator       $urlGenerator,
+        Config             $config
     ): Response
     {
         if ($currentUser->isAuthentified()) {
@@ -83,7 +85,10 @@ class UserController extends Controller
             $returnUrl = null;
         }
 
-        $loginWithAxysUrl = $urlGenerator->generate("openid_axys", ["return_url" => $returnUrl]);
+        $loginWithAxysUrl = null;
+        if ($config->isAxysEnabled()) {
+            $loginWithAxysUrl = $urlGenerator->generate("openid_axys", ["return_url" => $returnUrl]);
+        }
         $response = $this->render("AppBundle:User:login.html.twig", [
             "loginWithAxysUrl" => $loginWithAxysUrl,
             "returnUrl" => $returnUrl,

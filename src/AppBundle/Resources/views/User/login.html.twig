@@ -8,15 +8,8 @@
   <h1>Connexion</h1>
 
   <div class="text-center">
-    <p>
-      <a href="{{ loginWithAxysUrl }}" rel="nofollow" class="btn btn-primary">
-        <img src="/assets/images/axys.svg" alt="" role="presentation" width="16" height="16"/>
-        Se connecter avec Axys
-      </a>
-    </p>
-    <p>ou</p>
     <form class="form-inline" method="post" action="{{ path("user_send_login_email") }}">
-      <input type="hidden" name="return_url" value="{{ returnUrl }}" />
+      <input type="hidden" name="return_url" value="{{ returnUrl }}"/>
       <input
         class="form-control"
         type="email"
@@ -30,6 +23,17 @@
         S'identifier par e-mail
       </button>
     </form>
+
+    {% if loginWithAxysUrl %}
+      <p>ou</p>
+
+      <p>
+        <a href="{{ loginWithAxysUrl }}" rel="nofollow" class="btn btn-primary">
+          <img src="/assets/images/axys.svg" alt="" role="presentation" width="16" height="16"/>
+          Se connecter avec Axys
+        </a>
+      </p>
+    {% endif %}
   </div>
 
   <p><strong>Pas encore de compte ?</strong></p>
