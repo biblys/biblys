@@ -178,4 +178,42 @@ class TokenServiceTest extends TestCase
         $this->assertEquals("login-by-email", $token["action"]);
         $this->assertEquals("/after_login_url", $token["after_login_url"]);
     }
+
+    /**
+     * #createLoginToken
+     */
+
+    /**
+     * @throws PropelException
+     * @throws InvalidConfigurationException
+     */
+    public function testCreateEmailUpdateToken()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createUser(site: $site);
+
+        $config = Mockery::mock(Config::class);
+        $config->expects("getAuthenticationSecret")->andReturn("secret_key");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $tokenService = new TokenService($config, $currentSite);
+
+        // when
+        $loginToken = $tokenService->createEmailUpdateToken(
+            user: $user,
+            newEmail: "new-email@paronymie.fr",
+        );
+
+        // then
+        $decodedToken = JWT::decode($loginToken, new Key("secret_key", "HS256"));
+        $this->assertEquals("https://paronymie.fr", $decodedToken->iss);
+        $this->assertEquals($user->getId(), $decodedToken->sub);
+        $this->assertEquals("https://paronymie.fr", $decodedToken->aud);
+        $this->assertIsInt($decodedToken->iat);
+        $this->assertIsInt($decodedToken->exp);
+        $this->assertNotNull($decodedToken->jti);
+        $this->assertEquals("update-email", $decodedToken->action);
+        $this->assertEquals("new-email@paronymie.fr", $decodedToken->new_email);
+    }
 }

@@ -7,6 +7,7 @@ use DateTime;
 use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Model\User;
 
 class TokenService
 {
@@ -53,6 +54,18 @@ class TokenService
             "action" => $decodedToken->action,
             "after_login_url" => $decodedToken->after_login_url,
         ];
+    }
+
+    /**
+     * @throws InvalidConfigurationException
+     */
+    public function createEmailUpdateToken(User $user, string $newEmail): string
+    {
+        return $this->_createJsonWebToken(
+            sub: $user->getId(),
+            action: "update-email",
+            extraClaims: ["new_email" => $newEmail],
+        );
     }
 
     public function createOIDCStateToken(string|null $returnUrl, string $key): string
