@@ -27,20 +27,7 @@ class TokenService
         string $afterLoginUrl
     ): string
     {
-        return JWT::encode(
-            [
-                "iss" => $this->_getIssuer(),
-                "sub" => $email,
-                "aud" => $this->_getIssuer(),
-                "iat" => (new DateTime())->getTimestamp(),
-                "exp" => (new DateTime("+ 24 hours"))->getTimestamp(),
-                "jti" => uniqid(),
-                "action" => $action,
-                "after_login_url" => $afterLoginUrl,
-            ],
-            $this->config->getAuthenticationSecret(),
-            "HS256",
-        );
+        return $this->_createJsonWebToken($email, $action, ["after_login_url" => $afterLoginUrl]);
     }
 
     /**
@@ -76,6 +63,28 @@ class TokenService
                 "iat" => time(),
             ],
             $key,
+            "HS256",
+        );
+    }
+
+    /**
+     * @throws InvalidConfigurationException
+     */
+    private function _createJsonWebToken(string $sub, string $action, array $extraClaims): string
+    {
+        $baseClaims = [
+            "iss" => $this->_getIssuer(),
+            "sub" => $sub,
+            "aud" => $this->_getIssuer(),
+            "iat" => (new DateTime())->getTimestamp(),
+            "exp" => (new DateTime("+ 24 hours"))->getTimestamp(),
+            "jti" => uniqid(),
+            "action" => $action,
+        ];
+        $claims = array_merge($baseClaims, $extraClaims);
+        return JWT::encode(
+            $claims,
+            $this->config->getAuthenticationSecret(),
             "HS256",
         );
     }
