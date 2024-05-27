@@ -24,7 +24,6 @@ class FlashMessagesServiceValueResolver implements ArgumentValueResolverInterfac
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
         $session = new Session();
-        $session->start();
         yield new FlashMessagesService($session);
     }
 }
