@@ -15,6 +15,8 @@ use Biblys\Service\TokenService;
 use DateTime;
 use Exception;
 use Framework\Controller;
+use Model\AuthenticationMethod;
+use Model\AuthenticationMethodQuery;
 use Model\Session;
 use Model\User;
 use Model\UserQuery;
@@ -307,11 +309,23 @@ class UserController extends Controller
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
+     * @throws PropelException
      */
-    public function account(CurrentUser $currentUser, TemplateService $templateService): Response
+    public function account(
+        CurrentSite $currentSite,
+        CurrentUser $currentUser,
+        TemplateService $templateService
+    ): Response
     {
+        $hasAxysMethod = AuthenticationMethodQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByIdentityProvider("axys")
+            ->filterByUser($currentUser->getUser())
+            ->exists();
+
         return $templateService->renderResponse("AppBundle:User:account.html.twig", [
             "user_email" => $currentUser->getUser()->getEmail(),
+            "has_axys_method" => $hasAxysMethod,
         ]);
     }
 

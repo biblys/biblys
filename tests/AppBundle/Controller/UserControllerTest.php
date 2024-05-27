@@ -286,8 +286,10 @@ class UserControllerTest extends TestCase
         $tokenService->shouldReceive("createLoginToken")
             ->with("user@example.net", "signup-by-email", "/continue");
         $mailer->shouldHaveReceived("send");
+        /** @noinspection PhpUndefinedMethodInspection */
         $templateService->shouldHaveReceived("render")
             ->with("AppBundle:User:signup-by-email-email.html.twig", Mockery::any());
+        /** @noinspection PhpUndefinedMethodInspection */
         $templateService->shouldHaveReceived("renderResponse")
             ->with("AppBundle:User:send-login-email.html.twig", [
                 "recipientEmail" => "user@example.net",
@@ -341,13 +343,17 @@ class UserControllerTest extends TestCase
         );
 
         // then
+        /** @noinspection PhpUndefinedMethodInspection */
         $mailer->shouldHaveReceived("validateEmail")->with("user@example.net");
         $mailer->shouldHaveReceived("send");
+        /** @noinspection PhpUndefinedMethodInspection */
         $urlGenerator->shouldHaveReceived("generate")->with(
             "user_login_with_token", ["token" => "token"],
         );
+        /** @noinspection PhpUndefinedMethodInspection */
         $templateService->shouldHaveReceived("render")
             ->with("AppBundle:User:login-with-email-email.html.twig", Mockery::any());
+        /** @noinspection PhpUndefinedMethodInspection */
         $templateService->shouldHaveReceived("renderResponse")
             ->with("AppBundle:User:send-login-email.html.twig", [
                 "recipientEmail" => "user@example.net",
@@ -469,6 +475,7 @@ class UserControllerTest extends TestCase
 
         // then
         $tokenService->shouldHaveReceived("createLoginToken");
+        /** @noinspection PhpUndefinedMethodInspection */
         $flashBag->shouldHaveReceived("add")
             ->with("success", "Votre compte new-user@paronymie.fr a bien été créé.");
         $this->assertEquals(302, $response->getStatusCode());
@@ -583,6 +590,7 @@ class UserControllerTest extends TestCase
         );
 
         // then
+        /** @noinspection PhpUndefinedMethodInspection */
         $tokenService->shouldHaveReceived("decodeLoginToken")->with("login_token");
 
         $this->assertEquals(302, $response->getStatusCode());
@@ -659,24 +667,62 @@ class UserControllerTest extends TestCase
         // given
         $userController = new UserController();
 
-        $user = ModelFactory::createUser(email: "logged-user@biblys.fr");
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createUser(site: $site, email: "logged-user@biblys.fr");
+
+        $currentSite = new CurrentSite($site);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("getUser")->andReturn($user);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("renderResponse")
+            ->andReturn(new Response("Vous êtes connecté·e à l'aide d'un compte Axys."));
+
+        // when
+        $response = $userController->account($currentSite, $currentUser, $templateService);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        /** @noinspection PhpUndefinedMethodInspection */
+        $templateService->shouldHaveReceived("renderResponse")
+            ->with("AppBundle:User:account.html.twig", [
+                "user_email" => "logged-user@biblys.fr",
+                "has_axys_method" => false
+            ]);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function testAccountWithAuthMethod()
+    {
+        // given
+        $userController = new UserController();
+
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createUser(site: $site, email: "logged-user@biblys.fr");
+
+        $currentSite = new CurrentSite($site);
+        ModelFactory::createAuthenticationMethod(site: $site, user: $user);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("getUser")->andReturn($user);
 
         $templateService = Mockery::mock(TemplateService::class);
-        $templateService->expects("renderResponse")->with("AppBundle:User:account.html.twig", [
-            "user_email" => "logged-user@biblys.fr",
-        ])->andReturn(new Response("Vous êtes connecté·e à l'aide d'un compte Axys."));
+        $templateService->expects("renderResponse")->andReturn(new Response("Vous êtes connecté·e à l'aide d'un compte Axys."));
 
         // when
-        $response = $userController->account($currentUser, $templateService);
+        $response = $userController->account($currentSite, $currentUser, $templateService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringContainsString(
-            "logged-user@biblys.fr",
-            $response->getContent(),
-        );
+        /** @noinspection PhpUndefinedMethodInspection */
+        $templateService->shouldHaveReceived("renderResponse")
+            ->with("AppBundle:User:account.html.twig", [
+                "user_email" => "logged-user@biblys.fr",
+                "has_axys_method" => true,
+            ]);
     }
 
     /** Others */
@@ -694,6 +740,7 @@ class UserControllerTest extends TestCase
         $response = $userController->logout($session);
 
         // then
+        /** @noinspection PhpUndefinedMethodInspection */
         $flashBag->shouldHaveReceived("add")->with("success", "Vous avez été déconnecté·e. À bientôt !");
         $cookie = $response->headers->getCookies()[0];
         $this->assertEquals(302, $response->getStatusCode());
