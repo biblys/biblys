@@ -2,14 +2,14 @@
 
 use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Config;
-use Biblys\Service\CurrentSite;
-use Biblys\Service\TokenService;
+use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Updater\Updater;
 use Framework\ArgumentResolver\BiblysCloudValueResolver;
 use Framework\ArgumentResolver\ConfigValueResolver;
 use Framework\ArgumentResolver\CurrentSiteValueResolver;
 use Framework\ArgumentResolver\CurrentUrlServiceValueResolver;
 use Framework\ArgumentResolver\CurrentUserValueResolver;
+use Framework\ArgumentResolver\FlashMessagesServiceValueResolver;
 use Framework\ArgumentResolver\LoggerServiceValueResolver;
 use Framework\ArgumentResolver\MailerValueResolver;
 use Framework\ArgumentResolver\MailingListServiceValueResolver;
@@ -53,6 +53,7 @@ $argumentResolvers[] = new CurrentSiteValueResolver();
 $argumentResolvers[] = new CurrentUrlServiceValueResolver();
 $argumentResolvers[] = new CurrentUserValueResolver();
 $argumentResolvers[] = new LoggerServiceValueResolver();
+$argumentResolvers[] = new FlashMessagesServiceValueResolver();
 $argumentResolvers[] = new MailerValueResolver();
 $argumentResolvers[] = new MailingListServiceValueResolver();
 $argumentResolvers[] = new MetaTagsServiceValueResolver();
