@@ -65,9 +65,7 @@ class AddArticleToUserLibraryUsecase
                 ->filterByUser($user)
                 ->findOne();
             if ($articleInLibrary) {
-                throw new BusinessRuleException(
-                    "L'article {$article->getTitle()} est déjà dans votre bibliothèque."
-                );
+                continue;
             }
 
             if ($item->getUser() !== null) {

@@ -6,8 +6,10 @@ use Biblys\Article\Type;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use DateTime;
+use Exception;
 use Mockery;
 use Model\StockQuery;
 use PHPUnit\Framework\TestCase;
@@ -78,7 +80,7 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
      * @throws PropelException
      * @throws TransportExceptionInterface
      */
-    public function testArticleAlreadyInLibrary()
+    public function testArticleAlreadyInLibraryAreIgnored()
     {
         // given
         $site = ModelFactory::createSite();
@@ -93,12 +95,16 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $mailer = Mockery::mock(Mailer::class);
         $usecase = new AddArticleToUserLibraryUsecase($mailer);
 
-        // then
-        $this->expectException(BusinessRuleException::class);
-        $this->expectExceptionMessage("L'article Already est déjà dans votre bibliothèque.");
-
         // when
         $usecase->execute(currentSite: $currentSite, user: $user, article: $article);
+
+        // then
+        $libraryItemsForArticle = StockQuery::create()
+            ->filterBySite($site)
+            ->filterByUser($user)
+            ->filterByArticle($article)
+            ->count();
+        $this->assertEquals(1, $libraryItemsForArticle);
     }
 
     /**
