@@ -10,6 +10,7 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
+use Model\ArticleQuery;
 use Model\CartQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -96,9 +97,9 @@ return function (
         $purchased = null;
         if ($type->getId() == 2) {
             $article_type = ' (numérique)';
-            $articleModel = \Model\ArticleQuery::create()->findPk($article->get("id"));
+            $articleModel = ArticleQuery::create()->findPk($article->get("id"));
             if ($currentUser->hasPurchasedArticle($articleModel)) {
-//                $purchased = '<p class="warning left"><a href="/pages/log_mybooks" title="Vous avez déjà acheté ce titre. Juste pour info.">Déjà acheté !</a></p>';
+                $purchased = '<p class="warning left"><a href="/pages/log_mybooks" title="Vous avez déjà acheté ce titre. Juste pour info.">Déjà acheté !</a></p>';
             }
         }
 
