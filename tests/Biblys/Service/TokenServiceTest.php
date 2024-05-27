@@ -184,6 +184,61 @@ class TokenServiceTest extends TestCase
      */
 
     /**
+     * #decodeEmailUpdateToken
+     */
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testDecodeEmailUpdateTokenWithInvalidAction()
+    {
+        // given
+        $secretKey = "222fabebd31bdc2ec7f382404cff0418";
+        $config = new Config(["authentication" => ["secret" => $secretKey]]);
+        $site = ModelFactory::createSite();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->expects("getSite")->andReturn($site);
+        $tokenService = new TokenService($config, $currentSite);
+        $token = JWT::encode(["action" => "update-username"], $secretKey, "HS256");
+
+        // when
+        $exception = Helpers::runAndCatchException(function () use ($tokenService, $token) {
+            $tokenService->decodeEmailUpdateToken($token);
+        });
+
+        // then
+        $this->assertInstanceOf(InvalidTokenException::class, $exception);
+        $this->assertEquals("Invalid action for email update token", $exception->getMessage());
+    }
+
+    /**
+     * @throws InvalidConfigurationException
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testDecodeValidEmailUpdateToken()
+    {
+        // given
+        $secretKey = "222fabebd31bdc2ec7f382404cff0417";
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createUser(site: $site);
+
+        $config = new Config(["authentication" => ["secret" => $secretKey]]);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->expects("getSite")->andReturn($site);
+        $tokenService = new TokenService($config, $currentSite);
+        $token = $tokenService->createEmailUpdateToken($user, "new-email@paronymie.fr");
+
+        // when
+        $token = $tokenService->decodeEmailUpdateToken($token);
+
+        // then
+        $this->assertEquals($user->getId(), $token["user_id"]);
+        $this->assertEquals("new-email@paronymie.fr", $token["new_email"]);
+    }
+
+    /**
      * @throws PropelException
      * @throws InvalidConfigurationException
      */

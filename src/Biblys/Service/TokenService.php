@@ -68,6 +68,25 @@ class TokenService
         );
     }
 
+    /**
+     * @throws InvalidConfigurationException
+     * @throws InvalidTokenException
+     */
+    public function decodeEmailUpdateToken(string $token): array
+    {
+        $decodedToken = JWT::decode($token, new Key($this->config->getAuthenticationSecret(), "HS256"));
+
+        if (!isset($decodedToken->action) || $decodedToken->action !== "update-email") {
+            throw new InvalidTokenException("Invalid action for email update token");
+        }
+
+        return [
+            "user_id" => $decodedToken->sub,
+            "action" => $decodedToken->action,
+            "new_email" => $decodedToken->new_email,
+        ];
+    }
+
     public function createOIDCStateToken(string|null $returnUrl, string $key): string
     {
         return JWT::encode(
