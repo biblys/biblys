@@ -1,0 +1,37 @@
+{% extends "layout:email-layout.html.twig" %}
+
+{% block subject %}
+  Validez votre nouvelle adresse e-mail
+{% endblock %}
+
+{% block preview %}
+  Ce lien sécurisé expirera le {{ expirationDate }}.
+{% endblock %}
+
+{% block content %}
+  <h1>
+    Validez votre nouvelle adresse e-mail
+  </h1>
+  <p>
+    Vous avez demandé modifier votre adresse e-email.
+    Pour continuer, cliquez sur le bouton ci-dessous.
+  </p>
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+    <tbody>
+    <tr>
+      <td align="center">
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+          <tbody>
+          <tr>
+            <td><a href="{{ validationUrl }}" target="_blank">Valider l'adresse {{ recipientEmail }}</a></td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <p>
+    NB : ce lien sécurisé expirera le {{ expirationDate }}.
+  </p>
+{% endblock %}

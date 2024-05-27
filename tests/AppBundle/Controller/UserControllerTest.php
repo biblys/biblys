@@ -7,6 +7,7 @@ use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\FlashMessagesService;
 use Biblys\Service\InvalidTokenException;
 use Biblys\Service\Mailer;
 use Biblys\Service\QueryParamsService;
@@ -760,5 +761,112 @@ class UserControllerTest extends TestCase
         // then
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals("https://axys.me", $response->getTargetUrl());
+    }
+
+    /**
+     * #requestEmailUpdate
+     */
+
+    /**
+     * @throws InvalidConfigurationException
+     * @throws InvalidEmailAddressException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     */
+    public function testRequestEmailUpdateWhenEmailIsInvalid(): void
+    {
+        // given
+        $userController = new UserController();
+
+        $request = new Request();
+        $request->request->set("new_email", "new-email");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authUser");
+        $tokenService = Mockery::mock(TokenService::class);
+        $templateService = Mockery::mock(TemplateService::class);
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("validateEmail")->andThrow(InvalidEmailAddressException::class);
+        $flashMessages = Mockery::mock(FlashMessagesService::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("L'adresse new-email est invalide.");
+
+        // when
+        $userController->requestEmailUpdateAction(
+            $request,
+            $currentUser,
+            $tokenService,
+            $templateService,
+            $mailer,
+            $flashMessages,
+            $urlGenerator
+        );
+    }
+
+    /**
+     * @throws InvalidConfigurationException
+     * @throws InvalidEmailAddressException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     */
+    public function testRequestEmailUpdate(): void
+    {
+        // given
+        $userController = new UserController();
+
+        $user = ModelFactory::createUser();
+
+        $request = new Request();
+        $request->request->set("new_email", "new-email@paronymie.fr");
+        $currentUser = new CurrentUser($user, "token");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("createEmailUpdateToken");
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("render")->andReturn("email body");
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("validateEmail");
+        $mailer->expects("send");
+        $flashMessages = Mockery::mock(FlashMessagesService::class);
+        $flashMessages->expects("add");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("/user/account");
+
+        // when
+        $response = $userController->requestEmailUpdateAction(
+            $request,
+            $currentUser,
+            $tokenService,
+            $templateService,
+            $mailer,
+            $flashMessages,
+            $urlGenerator
+        );
+
+        // then
+        /** @noinspection PhpUndefinedMethodInspection */
+        $mailer->shouldHaveReceived("validateEmail")->with("new-email@paronymie.fr");
+        /** @noinspection PhpUndefinedMethodInspection */
+        $tokenService->shouldHaveReceived("createEmailUpdateToken")
+            ->with($user, "new-email@paronymie.fr");
+        /** @noinspection PhpUndefinedMethodInspection */
+        $templateService->shouldHaveReceived("render");
+        /** @noinspection PhpUndefinedMethodInspection */
+        $mailer->shouldHaveReceived("send")
+            ->with("new-email@paronymie.fr", "Validez votre nouvelle adresse e-mail", "email body");
+        /** @noinspection PhpUndefinedMethodInspection */
+        $flashMessages->shouldHaveReceived("add")
+            ->with("info", "Cliquez sur le lien envoyé à new-email@paronymie.fr pour valider votre changement d'adresse email.");
+        /** @noinspection PhpUndefinedMethodInspection */
+        $urlGenerator->shouldHaveReceived("generate")->with("user_account");
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/user/account", $response->getTargetUrl());
     }
 }

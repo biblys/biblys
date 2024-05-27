@@ -737,6 +737,11 @@ user_signup:
   path: /user/signup
   controller: AppBundle\Controller\UserController::signup
 
+user_request_email_update:
+  methods: POST
+  path: /user/request-email-update
+  controller: AppBundle\Controller\UserController::requestEmailUpdateAction
+
 # Legacy controllers
 
 legacy_article:

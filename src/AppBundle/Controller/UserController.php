@@ -7,6 +7,7 @@ use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\FlashMessagesService;
 use Biblys\Service\InvalidTokenException;
 use Biblys\Service\Mailer;
 use Biblys\Service\QueryParamsService;
@@ -15,7 +16,6 @@ use Biblys\Service\TokenService;
 use DateTime;
 use Exception;
 use Framework\Controller;
-use Model\AuthenticationMethod;
 use Model\AuthenticationMethodQuery;
 use Model\Session;
 use Model\User;
@@ -312,8 +312,8 @@ class UserController extends Controller
      * @throws PropelException
      */
     public function account(
-        CurrentSite $currentSite,
-        CurrentUser $currentUser,
+        CurrentSite     $currentSite,
+        CurrentUser     $currentUser,
         TemplateService $templateService
     ): Response
     {
@@ -346,5 +346,52 @@ class UserController extends Controller
         $response->headers->set("X-Robots-Tag", "noindex, nofollow");
 
         return $response;
+    }
+
+    /**
+     * @throws InvalidConfigurationException
+     * @throws InvalidEmailAddressException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     */
+    public function requestEmailUpdateAction(
+        Request              $request,
+        CurrentUser          $currentUser,
+        TokenService         $tokenService,
+        TemplateService      $templateService,
+        Mailer               $mailer,
+        FlashMessagesService $flashMessages,
+        UrlGenerator         $urlGenerator,
+    ): RedirectResponse
+    {
+        $currentUser->authUser();
+
+        $newEmail = $request->request->get("new_email");
+
+        try {
+            $mailer->validateEmail($newEmail);
+        } catch (InvalidEmailAddressException $exception) {
+            throw new BadRequestHttpException("L'adresse $newEmail est invalide.", $exception);
+        }
+
+        $token = $tokenService->createEmailUpdateToken($currentUser->getUser(), $newEmail);
+        $validationUrl = $urlGenerator->generate("user_update_email", ["token" => $token]);
+        $expirationDate = new DateTime("+24 hours");
+        $emailBody = $templateService->render("AppBundle:User:email-update-email.html.twig", [
+            "recipientEmail" => $newEmail,
+            "validationUrl" => $request->getSchemeAndHttpHost() . $validationUrl,
+            "expirationDate" => $expirationDate->format("d/m/Y à H:i"),
+        ]);
+        $mailer->send($newEmail, "Validez votre nouvelle adresse e-mail", $emailBody);
+
+        $flashMessages->add(
+            "info",
+            "Cliquez sur le lien envoyé à $newEmail pour valider votre changement d'adresse email."
+        );
+
+        $userAccountUrl = $urlGenerator->generate("user_account");
+        return new RedirectResponse($userAccountUrl);
     }
 }
