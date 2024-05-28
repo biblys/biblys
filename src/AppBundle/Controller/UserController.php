@@ -369,6 +369,9 @@ class UserController extends Controller
         $currentUser->authUser();
 
         $newEmail = $request->request->get("new_email");
+        if ($newEmail === $currentUser->getUser()->getEmail()) {
+            throw new BadRequestHttpException("La nouvelle adresse doit être différente de l'ancienne.");
+        }
 
         try {
             $mailer->validateEmail($newEmail);

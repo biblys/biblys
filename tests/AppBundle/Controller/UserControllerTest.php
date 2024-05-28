@@ -655,7 +655,7 @@ class UserControllerTest extends TestCase
         $this->assertNull($user->getEmailValidatedAt());
     }
 
-    /** Account */
+    /** #account */
 
     /**
      * @throws SyntaxError
@@ -763,9 +763,7 @@ class UserControllerTest extends TestCase
         $this->assertEquals("https://axys.me", $response->getTargetUrl());
     }
 
-    /**
-     * #requestEmailUpdate
-     */
+    /** #requestEmailUpdate */
 
     /**
      * @throws InvalidConfigurationException
@@ -774,6 +772,49 @@ class UserControllerTest extends TestCase
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws TransportExceptionInterface
+     * @throws PropelException
+     */
+    public function testRequestEmailUpdateWhenNewEmailIsOldEmail(): void
+    {
+        // given
+        $userController = new UserController();
+        $user = ModelFactory::createUser(email: "old-email@paronymie.fr");
+
+        $request = new Request();
+        $request->request->set("new_email", "old-email@paronymie.fr");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authUser");
+        $currentUser->expects("getUser")->andReturn($user);
+        $tokenService = Mockery::mock(TokenService::class);
+        $templateService = Mockery::mock(TemplateService::class);
+        $mailer = Mockery::mock(Mailer::class);
+        $flashMessages = Mockery::mock(FlashMessagesService::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("La nouvelle adresse doit être différente de l'ancienne.");
+
+        // when
+        $userController->requestEmailUpdateAction(
+            $request,
+            $currentUser,
+            $tokenService,
+            $templateService,
+            $mailer,
+            $flashMessages,
+            $urlGenerator
+        );
+    }
+
+    /**
+     * @throws InvalidConfigurationException
+     * @throws InvalidEmailAddressException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     * @throws PropelException
      */
     public function testRequestEmailUpdateWhenEmailIsInvalid(): void
     {
@@ -784,6 +825,7 @@ class UserControllerTest extends TestCase
         $request->request->set("new_email", "new-email");
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authUser");
+        $currentUser->expects("getUser")->andReturn(ModelFactory::createUser());
         $tokenService = Mockery::mock(TokenService::class);
         $templateService = Mockery::mock(TemplateService::class);
         $mailer = Mockery::mock(Mailer::class);
@@ -869,8 +911,9 @@ class UserControllerTest extends TestCase
         $this->assertEquals("/user/account", $response->getTargetUrl());
     }
 
+    /** #emailUpdate */
+
     /**
-     * @throws InvalidTokenException
      * @throws InvalidConfigurationException
      * @throws PropelException
      */
@@ -880,7 +923,6 @@ class UserControllerTest extends TestCase
         $userController = new UserController();
 
         $loggedInUser = ModelFactory::createUser();
-        $tokenUser = ModelFactory::createUser();
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authUser");
@@ -909,7 +951,6 @@ class UserControllerTest extends TestCase
     }
 
     /**
-     * @throws InvalidTokenException
      * @throws InvalidConfigurationException
      * @throws PropelException
      */
