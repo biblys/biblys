@@ -3,7 +3,6 @@
 namespace Biblys\Service;
 
 use Biblys\Exception\InvalidEmailAddressException;
-use Biblys\Legacy\LegacyCodeHelper;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\DNSCheckValidation;
 use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
@@ -26,11 +25,14 @@ class Mailer
     private Address $defaultSender;
     private string $method = "sendmail";
 
+    /**
+     * @throws Exception
+     */
     public function __construct(Config $config)
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        $currentSite = CurrentSite::buildFromConfig($config);
 
-        $this->defaultSender = new Address($globalSite->get("site_contact"), $globalSite->get("site_title"));
+        $this->defaultSender = new Address($currentSite->getSite()->getContact(), $currentSite->getTitle());
         $this->transport = new SendmailTransport();
 
         // If an SMTP config is defined
@@ -48,13 +50,7 @@ class Mailer
     /**
      * Send an email using Mailer
      *
-     * @param string $to
-     * @param string $subject
-     * @param string $body
      * @param array $from ["email" => "name"]
-     * @param array $options
-     * @param array $headers
-     * @return bool [bool]          true if mail was sent
      * @throws TransportExceptionInterface
      * @throws InvalidEmailAddressException
      */
@@ -114,9 +110,11 @@ class Mailer
         $this->mailer->send($message);
 
         // Log
-        Log::mail(
-            "INFO",
-            "Sent mail \"$subject\" to \"$to\" through " . $this->method
+        $loggerService = new LoggerService();
+        $loggerService->log(
+            logger: "mails",
+            level: "INFO",
+            message: "Sent mail $subject to $to through $this->method",
         );
 
         return true;
@@ -125,7 +123,7 @@ class Mailer
     /**
      * @throws InvalidEmailAddressException
      */
-    public function validateEmail($email)
+    public function validateEmail($email): void
     {
         $validator = new EmailValidator();
         $multipleValidations = new MultipleValidationWithAnd([
