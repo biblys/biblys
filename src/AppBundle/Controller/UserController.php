@@ -343,14 +343,6 @@ class UserController extends Controller
         return $response;
     }
 
-    public function signup(): RedirectResponse
-    {
-        $response = new RedirectResponse("https://axys.me");
-        $response->headers->set("X-Robots-Tag", "noindex, nofollow");
-
-        return $response;
-    }
-
     /**
      * @throws InvalidConfigurationException
      * @throws InvalidEmailAddressException

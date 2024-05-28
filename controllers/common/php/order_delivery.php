@@ -66,7 +66,6 @@ return function (
     $currentUrlService = new CurrentUrlService($request);
     $currentUrl = $currentUrlService->getRelativeUrl();
     $loginUrl = $urlGenerator->generate("user_login", ["return_url" => $currentUrl]);
-    $signupUrl = $urlGenerator->generate("user_signup");
 
     $orderInProgress = OrderDeliveryHelpers::getOrderInProgressForVisitor($currentUser);
     if ($orderInProgress) {
@@ -305,13 +304,13 @@ return function (
     }
 
     $form_class = null;
+    $siteTitle = $currentSite->getTitle();
     if (!$currentUser->isAuthentified()) {
         $content .= "
         <h3>Vos coordonnées</h3>
-        <h4>Vous avez un compte Axys ?</h4> <p><a href=\"$loginUrl\" class=\"btn btn-primary\">Connectez-vous</a> pour remplir automatiquement vos coordonnées.</p>
-        <h4>Vous n'avez pas de compte Axys ?</h4> <p><a href=\"$signupUrl\" class=\"btn btn-primary\">Inscrivez-vous</a> pour sauvegarder vos coordonnées pour une prochaine commande.</p>
+        <p><a href=\"$loginUrl\" class=\"btn btn-primary\">Connectez-vous</a> ou <a href=\"$loginUrl\" class=\"btn btn-success\">inscrivez-vous</a> pour enregistrer vos coordonnées et commander plus rapidement.</p>
         <br />
-        <button id=\"show_orderForm\" class=\"showThis btn btn-warning\">Je souhaite commander sans utiliser un compte Axys</button>
+        <button id=\"show_orderForm\" class=\"showThis btn btn-warning\">Je souhaite commander sans utiliser de compte</button>
         <br /><br />
     ";
         $form_class = 'hidden';
@@ -321,7 +320,7 @@ return function (
         $content .= '<p class="error">' . $error . '</p>';
     }
 
-// Newsletter checkbox
+    // Newsletter checkbox
     $newsletter_checkbox = null;
     if ($currentSite->getOption("newsletter") == 1) {
         $checked = null;

@@ -768,7 +768,7 @@ class UserControllerTest extends TestCase
             ]);
     }
 
-    /** Others */
+    /** #logout */
 
     public function testLogout()
     {
@@ -790,19 +790,6 @@ class UserControllerTest extends TestCase
         $this->assertEquals("/", $response->headers->get("Location"));
         $this->assertEquals("user_uid", $cookie->getName(), "clears user_uid cookie");
         $this->assertEquals(null, $cookie->getValue(), "clears user_uid cookie");
-    }
-
-    public function testSignup()
-    {
-        // given
-        $userController = new UserController();
-
-        // when
-        $response = $userController->signup();
-
-        // then
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("https://axys.me", $response->getTargetUrl());
     }
 
     /** #requestEmailUpdate */
