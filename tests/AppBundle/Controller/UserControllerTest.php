@@ -771,7 +771,6 @@ class UserControllerTest extends TestCase
      * @throws InvalidConfigurationException
      * @throws InvalidEmailAddressException
      * @throws LoaderError
-     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws TransportExceptionInterface
@@ -866,6 +865,140 @@ class UserControllerTest extends TestCase
             ->with("info", "Cliquez sur le lien envoyé à new-email@paronymie.fr pour valider votre changement d'adresse email.");
         /** @noinspection PhpUndefinedMethodInspection */
         $urlGenerator->shouldHaveReceived("generate")->with("user_account");
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/user/account", $response->getTargetUrl());
+    }
+
+    /**
+     * @throws InvalidTokenException
+     * @throws InvalidConfigurationException
+     * @throws PropelException
+     */
+    public function testUpdateEmailWithInvalidToken(): void
+    {
+        // given
+        $userController = new UserController();
+
+        $loggedInUser = ModelFactory::createUser();
+        $tokenUser = ModelFactory::createUser();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authUser");
+        $currentUser->expects("getUser")->andReturn($loggedInUser);
+        $queryParams = Mockery::mock(QueryParamsService::class);
+        $queryParams->expects("parse");
+        $queryParams->expects("get")->andReturn("token");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("decodeEmailUpdateToken")
+            ->andThrow(InvalidTokenException::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $flashMessages = Mockery::mock(FlashMessagesService::class);
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("Ce lien est invalide.");
+
+        // when
+        $userController->updateEmailAction(
+            $currentUser,
+            $queryParams,
+            $tokenService,
+            $flashMessages,
+            $urlGenerator,
+        );
+    }
+
+    /**
+     * @throws InvalidTokenException
+     * @throws InvalidConfigurationException
+     * @throws PropelException
+     */
+    public function testUpdateEmailForWrongAccount(): void
+    {
+        // given
+        $userController = new UserController();
+
+        $loggedInUser = ModelFactory::createUser();
+        $tokenUser = ModelFactory::createUser();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authUser");
+        $currentUser->expects("getUser")->andReturn($loggedInUser);
+        $queryParams = Mockery::mock(QueryParamsService::class);
+        $queryParams->expects("parse");
+        $queryParams->expects("get")->andReturn("token");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("decodeEmailUpdateToken")
+            ->andReturn(["user_id" => $tokenUser->getId(), "new_email" => "new-email@paronymie.fr"]);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $flashMessages = Mockery::mock(FlashMessagesService::class);
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("Ce lien n'est pas utilisable avec ce compte utilisateur.");
+
+        // when
+        $userController->updateEmailAction(
+            $currentUser,
+            $queryParams,
+            $tokenService,
+            $flashMessages,
+            $urlGenerator,
+        );
+    }
+
+    /**
+     * @throws InvalidTokenException
+     * @throws InvalidConfigurationException
+     * @throws PropelException
+     */
+    public function testUpdateEmail(): void
+    {
+        // given
+        $userController = new UserController();
+
+        $user = ModelFactory::createUser(email: "old-email@paronymie.fr");
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authUser");
+        $currentUser->expects("getUser")->andReturn($user);
+        $queryParams = Mockery::mock(QueryParamsService::class);
+        $queryParams->expects("parse");
+        $queryParams->expects("get")->andReturn("token");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("decodeEmailUpdateToken")
+            ->andReturn(["user_id" => $user->getId(), "new_email" => "new-email@paronymie.fr"]);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("/user/account");
+        $flashMessages = Mockery::mock(FlashMessagesService::class);
+        $flashMessages->expects("add");
+
+        // when
+        $response = $userController->updateEmailAction(
+            $currentUser,
+            $queryParams,
+            $tokenService,
+            $flashMessages,
+            $urlGenerator,
+        );
+
+        // then
+        /** @noinspection PhpUndefinedMethodInspection */
+        $flashMessages->shouldHaveReceived("add")
+            ->with(
+                "success",
+                "Votre nouvelle adresse e-mail new-email@paronymie.fr a bien été enregistrée."
+            );
+        /** @noinspection PhpUndefinedMethodInspection */
+        $urlGenerator->shouldHaveReceived("generate")->with("user_account");
+        /** @noinspection PhpUndefinedMethodInspection */
+        $queryParams->shouldHaveReceived("parse")->with(["token" => ["type" => "string"]]);
+        /** @noinspection PhpUndefinedMethodInspection */
+        $tokenService->shouldHaveReceived("decodeEmailUpdateToken")->with("token");
+
+        $user->reload();
+        $this->assertEquals("new-email@paronymie.fr", $user->getEmail());
+
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals("/user/account", $response->getTargetUrl());
     }

@@ -394,4 +394,43 @@ class UserController extends Controller
         $userAccountUrl = $urlGenerator->generate("user_account");
         return new RedirectResponse($userAccountUrl);
     }
+
+    /**
+     * @throws InvalidConfigurationException
+     * @throws PropelException
+     */
+    public function updateEmailAction(
+        CurrentUser          $currentUser,
+        QueryParamsService   $queryParams,
+        TokenService         $tokenService,
+        FlashMessagesService $flashMessages,
+        UrlGenerator         $urlGenerator,
+    ): RedirectResponse
+    {
+        $currentUser->authUser();
+
+        $queryParams->parse(["token" => ["type" => "string"]]);
+        $token = $queryParams->get("token");
+
+        try {
+        $decodedToken = $tokenService->decodeEmailUpdateToken($token);
+        } catch (InvalidTokenException) {
+            throw new BadRequestHttpException("Ce lien est invalide.");
+        }
+
+        if ($decodedToken["user_id"] != $currentUser->getUser()->getId()) {
+            throw new BadRequestHttpException("Ce lien n'est pas utilisable avec ce compte utilisateur.");
+        }
+
+        $currentUser->getUser()->setEmail($decodedToken["new_email"]);
+        $currentUser->getUser()->save();
+
+        $flashMessages->add(
+            "success",
+            "Votre nouvelle adresse e-mail {$decodedToken["new_email"]} a bien été enregistrée."
+        );
+
+        $userAccountUrl = $urlGenerator->generate("user_account");
+        return new RedirectResponse($userAccountUrl);
+    }
 }

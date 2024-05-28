@@ -742,6 +742,11 @@ user_request_email_update:
   path: /user/request-email-update
   controller: AppBundle\Controller\UserController::requestEmailUpdateAction
 
+user_update_email:
+  methods: GET
+  path: /user/update-email
+  controller: AppBundle\Controller\UserController::updateEmailAction
+
 # Legacy controllers
 
 legacy_article:
