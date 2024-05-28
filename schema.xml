@@ -574,6 +574,43 @@
       <parameter name="Engine" value="MyISAM"/>
     </vendor>
   </table>
+  <table name="images" idMethod="native" phpName="Image">
+    <column name="id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="type" type="VARCHAR" size="16" />
+    <column name="filePath" type="VARCHAR" size="256" />
+    <column name="fileName" type="VARCHAR" size="256" />
+    <column name="version" type="INTEGER"/>
+    <column name="mediaType" type="VARCHAR" size="256" />
+    <column name="fileSize" type="BIGINT" />
+    <column name="height" type="INTEGER"/>
+    <column name="width" type="INTEGER"/>
+    <column name="article_id" type="INTEGER"/>
+    <foreign-key foreignTable="articles" skipSql="true">
+      <reference local="article_id" foreign="article_id"/>
+    </foreign-key>
+    <column name="stock_item_id" type="INTEGER"/>
+    <foreign-key foreignTable="stock" phpName="StockItem" skipSql="true">
+      <reference local="stock_item_id" foreign="stock_id"/>
+    </foreign-key>
+    <column name="contributor_id" type="INTEGER"/>
+    <foreign-key foreignTable="people" phpName="Contributor" skipSql="true">
+      <reference local="contributor_id" foreign="people_id"/>
+    </foreign-key>
+    <column name="post_id" type="INTEGER"/>
+    <foreign-key foreignTable="posts" skipSql="true">
+      <reference local="post_id" foreign="post_id"/>
+    </foreign-key>
+    <column name="event_id" type="INTEGER"/>
+    <foreign-key foreignTable="events" skipSql="true">
+      <reference local="event_id" foreign="event_id"/>
+    </foreign-key>
+    <column name="publisher_id" type="INTEGER"/>
+    <foreign-key foreignTable="publishers" skipSql="true">
+      <reference local="publisher_id" foreign="publisher_id"/>
+    </foreign-key>
+    <column name="uploaded_at" phpName="uploaded_at" type="TIMESTAMP"/>
+    <behavior name="timestampable" />
+  </table>
   <table name="inventory" idMethod="native" phpName="Inventory">
     <column name="inventory_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int unsigned"/>
