@@ -468,6 +468,13 @@ class PeopleTableMap extends TableMap
      */
     public function buildRelations(): void
     {
+        $this->addRelation('Image', '\\Model\\Image', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':contributor_id',
+    1 => ':people_id',
+  ),
+), null, null, 'Images', false);
         $this->addRelation('Role', '\\Model\\Role', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

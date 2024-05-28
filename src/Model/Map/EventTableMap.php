@@ -426,6 +426,13 @@ class EventTableMap extends TableMap
      */
     public function buildRelations(): void
     {
+        $this->addRelation('Image', '\\Model\\Image', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':event_id',
+    1 => ':event_id',
+  ),
+), null, null, 'Images', false);
     }
 
     /**
