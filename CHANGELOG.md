@@ -2,17 +2,18 @@
 
 ## 2.82.0 (DEV)
 
+Utilisateurs locaux
+
+- Les utilisateurs peuvent désormais s'inscrire et se connecter directement
+  depuis le site, sans utiliser Axys, et mettre à jour leur adresse e-mail.
+- Le fournisseur d'identité Axys est désormais facultatif.
+
 Offres spéciales
 
 - Les articles offerts dans le cadre d'une offre spéciale peuvent désormais 
   être ajoutés ou retirés du panier par le client
 - Les paniers contenant des articles liés à une offre spéciale font 
   maintenant l'objet d'une validation au moment de la validation de commande.
-
-Utilisateurs locaux
-
-- Les utilisateurs peuvent désormais s'inscrire et se connecter directement 
-  depuis le site, sans utiliser Axys.
 
 Autres améliorations
 
