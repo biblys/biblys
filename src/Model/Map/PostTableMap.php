@@ -496,6 +496,13 @@ class PostTableMap extends TableMap
     1 => ':site_id',
   ),
 ), null, null, null, false);
+        $this->addRelation('Image', '\\Model\\Image', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':post_id',
+    1 => ':post_id',
+  ),
+), null, null, 'Images', false);
     }
 
     /**

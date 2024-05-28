@@ -790,6 +790,13 @@ class StockTableMap extends TableMap
     1 => ':article_id',
   ),
 ), null, null, null, false);
+        $this->addRelation('Image', '\\Model\\Image', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':stock_item_id',
+    1 => ':stock_id',
+  ),
+), null, null, 'Images', false);
     }
 
     /**

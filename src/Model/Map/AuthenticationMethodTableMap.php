@@ -258,8 +258,8 @@ class AuthenticationMethodTableMap extends TableMap
         $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', true, null, null);
         $this->addColumn('identity_provider', 'IdentityProvider', 'VARCHAR', false, 16, null);
         $this->addColumn('external_id', 'ExternalId', 'VARCHAR', false, 128, null);
-        $this->addColumn('access_token', 'AccessToken', 'VARCHAR', false, 1024, null);
-        $this->addColumn('id_token', 'IdToken', 'VARCHAR', false, 1024, null);
+        $this->addColumn('access_token', 'AccessToken', 'VARCHAR', false, 2048, null);
+        $this->addColumn('id_token', 'IdToken', 'VARCHAR', false, 2048, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     }
