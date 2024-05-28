@@ -13,6 +13,8 @@ $buttons = '<button type="submit" form="event" class="btn btn-primary"><i class=
 
 $em = new EventManager();
 
+$globalSite = LegacyCodeHelper::getGlobalSite();
+
 $where = array('events`.`site_id' => $globalSite->get("id"));
 
 if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin())
@@ -109,11 +111,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 else
 {
 
-    // Images
-    require_once biblysPath().'/inc/Image.class.php';
-    /** @var PDO $_SQL */
-    $im = new ImagesManager($_SQL);
-
     $content = '
         <h1><i class="fa fa-calendar"></i> '.$pageTitle.'</h1>
         <p>'.$buttons.'</p>
@@ -169,11 +166,6 @@ else
                     <label for="event_highlighted">Mise en avant :</label>
                     <input type="checkbox" name="event_highlighted" id="event_highlighted" value="1" '.($e->get('highlighted') == 1 ? ' checked' : null).' >
                 </p>
-            </fieldset>
-            
-            <fieldset>
-                <legend>Images</legend>
-                '.(isset($e) ? $im->manager('event', $e->get('id')) : '<p class="text-muted text-center">Vous devez créer l\'évènement puis la modifier avant de pouvoir ajouter des images.</p>').'
             </fieldset>
             
             <fieldset>
