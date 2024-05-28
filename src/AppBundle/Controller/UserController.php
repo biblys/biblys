@@ -120,6 +120,7 @@ class UserController extends Controller
     {
         $recipientEmail = $request->request->get("email");
         $returnUrl = $request->request->get("return_url", "/");
+        $honeyPot = $request->request->get("username");
         $senderEmail = $currentSite->getSite()->getContact();
 
         try {
@@ -163,11 +164,13 @@ class UserController extends Controller
                 "expirationDate" => $expirationDate->format("d/m/Y à H\hi"),
             ]
         );
-        $mailer->send(
-            to: $recipientEmail,
-            subject: "$emailSubject",
-            body: $body,
-        );
+        if ($honeyPot === "") {
+            $mailer->send(
+                to: $recipientEmail,
+                subject: "$emailSubject",
+                body: $body,
+            );
+        }
 
         return $templateService->renderResponse(
             "AppBundle:User:send-login-email.html.twig",

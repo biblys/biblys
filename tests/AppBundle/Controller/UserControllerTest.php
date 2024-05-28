@@ -201,9 +201,7 @@ class UserControllerTest extends TestCase
         );
     }
 
-    /**
-     * #sendLoginEmail
-     */
+    /** #sendLoginEmail */
 
     /**
      * @throws InvalidConfigurationException
@@ -266,6 +264,7 @@ class UserControllerTest extends TestCase
         $request = new Request();
         $request->request->set("email", "user@example.net");
         $request->request->set("return_url", "/continue");
+        $request->request->set("username", "");
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->shouldReceive("renderResponse")
             ->andReturn($expectedResponse);
@@ -301,6 +300,48 @@ class UserControllerTest extends TestCase
     }
 
     /**
+     * @throws InvalidConfigurationException
+     * @throws InvalidEmailAddressException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     */
+    public function testSendLoginEmailWhenHoneyPotIsFilled()
+    {
+        // given
+        $controller = new UserController();
+        $expectedResponse = new Response();
+        $site = ModelFactory::createSite(contact: "editions@paronymie.fr");
+        $currentSite = new CurrentSite($site);
+        $request = new Request();
+        $request->request->set("email", "user@example.net");
+        $request->request->set("return_url", "/continue");
+        $request->request->set("username", "honeypot");
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->shouldReceive("renderResponse")
+            ->andReturn($expectedResponse);
+        $templateService->shouldReceive("render")->andReturn("mail body");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("createLoginToken")->andReturn("token");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("login_url");
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("validateEmail");
+        $mailer->expects("send");
+
+        // when
+        $response = $controller->sendLoginEmailAction(
+            $request, $currentSite, $tokenService, $templateService, $urlGenerator, $mailer,
+        );
+
+        // then
+        $mailer->shouldNotHaveReceived("send");
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    /**
      * @throws InvalidEmailAddressException
      * @throws LoaderError
      * @throws PropelException
@@ -325,6 +366,7 @@ class UserControllerTest extends TestCase
         $request = new Request();
         $request->request->set("email", "user@example.net");
         $request->request->set("return_url", "/continue");
+        $request->request->set("username", "");
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->shouldReceive("renderResponse")
             ->andReturn($expectedResponse);

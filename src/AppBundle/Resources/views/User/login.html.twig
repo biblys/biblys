@@ -10,6 +10,7 @@
   <div class="text-center">
     <form class="form-inline" method="post" action="{{ path("user_send_login_email") }}">
       <input type="hidden" name="return_url" value="{{ returnUrl }}"/>
+      <input type="text" name="username" class="login-username-field" aria-label="Ne pas remplir" />
       <input
         class="form-control"
         type="email"

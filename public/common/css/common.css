@@ -1493,3 +1493,9 @@ table.unfold tbody {
 .SpecialOfferNotice-cover img {
   width: 100%;
 }
+
+/* Login */
+
+.login-username-field {
+  display: none;
+}
