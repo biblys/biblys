@@ -574,27 +574,6 @@
       <parameter name="Engine" value="MyISAM"/>
     </vendor>
   </table>
-  <table name="images" idMethod="native" phpName="Image">
-    <column name="image_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int unsigned"/>
-    <column name="bookshop_id" phpName="BookshopId" type="INTEGER"/>
-    <column name="event_id" phpName="EventId" type="INTEGER" sqlType="int unsigned"/>
-    <column name="library_id" phpName="LibraryId" type="INTEGER" sqlType="int unsigned"/>
-    <column name="image_nature" phpName="Nature" type="VARCHAR" size="16"/>
-    <column name="image_legend" phpName="Legend" type="VARCHAR" size="32"/>
-    <column name="image_type" phpName="Type" type="VARCHAR" size="32"/>
-    <column name="image_size" phpName="Size" type="BIGINT" sqlType="bigint unsigned" defaultValue="0"/>
-    <column name="image_inserted" phpName="Inserted" type="TIMESTAMP"/>
-    <column name="image_uploaded" phpName="Uploaded" type="TIMESTAMP"/>
-    <column name="image_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <behavior name="timestampable">
-      <parameter name="create_column" value="image_inserted" />
-      <parameter name="update_column" value="image_updated" />
-    </behavior>
-    <vendor type="mysql">
-      <parameter name="Engine" value="MyISAM"/>
-    </vendor>
-  </table>
   <table name="inventory" idMethod="native" phpName="Inventory">
     <column name="inventory_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int unsigned"/>
