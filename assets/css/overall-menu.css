@@ -1,4 +1,4 @@
-.overall-menu {
+.OverallMenu {
   background: rgba(15,15,15);
   display: flex;
   font-size: 16px;
@@ -6,12 +6,16 @@
   justify-content: flex-end;
 }
 
-.overall-menu a {
+.OverallMenu a {
   color: white;
   margin-left: 8px;
 }
 
-.overall-menu a:hover {
+.OverallMenu a:hover {
   color: #ff6600;
   text-decoration: none;
+}
+
+.OverallMenu__entry {
+  padding: 0 8px;
 }
