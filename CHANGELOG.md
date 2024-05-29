@@ -17,6 +17,8 @@ Offres spéciales
 
 Autres améliorations
 
+- Un lien vers le panier apparaît désormais dans le menu supérieur, à côté 
+  du lien "Mon compte"
 - Une page listant les utilisateur·trice·s a été ajouté à l'administration.
 
 Déploiement

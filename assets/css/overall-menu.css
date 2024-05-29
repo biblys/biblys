@@ -15,13 +15,3 @@
   color: #ff6600;
   text-decoration: none;
 }
-
-.overall-menu__site-title {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .overall-menu__site-title {
-    display: inline;
-  }
-}
