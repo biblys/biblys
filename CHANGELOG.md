@@ -19,6 +19,11 @@ Autres améliorations
 
 - Une page listant les utilisateur·trice·s a été ajouté à l'administration.
 
+Déploiement
+
+- Ajouter une chaine de 32 caractères aléatoire pour la valeur de l'optiond 
+  configuration `authentication.secret`.
+
 ### 2.81.2 (22 mai 2024)
 
 Corrections
