@@ -178,24 +178,15 @@ table.checkable tbody tr {
 /* ADMIN-BAR */
 
 .admin-bar {
-  background: #23282d;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  box-shadow: 0 0 5px 2px rgba(15, 15, 15, 0.5);
   height: 32px;
   left: 10px;
   max-width: 275px;
   overflow: hidden;
   position: fixed;
   top: 0;
-  opacity: 0.75;
   padding: 0 5px;
   transition: all 125ms;
   z-index: 100;
-}
-
-.admin-bar:hover {
-  opacity: 1;
 }
 
 .admin-bar-logo {
