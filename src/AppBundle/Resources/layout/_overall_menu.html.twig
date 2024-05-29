@@ -2,13 +2,13 @@
   {% if app.currentUser.isAuthentified and app.currentUser.isAdmin %}
     <a class="OverallMenu__entry" href="{{ path("main_admin") }}">
       <span class="fa fa-cogs"></span>
-      Administration
+      <span class="OverallMenu__entry__label">Administration</span>
     </a>
   {% endif %}
 
   <a href="/pages/cart">
     <span class="fa fa-shopping-basket"></span>
-    Mon panier
+    <span class="OverallMenu__entry__label">Mon panier</span>
   </a>
 
   {% if not app.currentUser.isAuthentified %}

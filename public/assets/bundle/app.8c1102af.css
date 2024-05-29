@@ -1,0 +1,1 @@
+body{background-color:#d3d3d3}.OverallMenu{background:#0f0f0f;display:flex;font-size:16px;padding:8px 16px;justify-content:flex-end}.OverallMenu a{color:#fff;margin-left:8px}.OverallMenu a:hover{color:#f60;text-decoration:none}.OverallMenu__entry{padding:0 8px}.OverallMenu__entry__label{display:none}@media(min-width:768px){.OverallMenu__entry__label{display:inline}}
