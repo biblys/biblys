@@ -700,18 +700,11 @@ Biblys.AdminBar = function() {
 
 Biblys.AdminBar.prototype = {
   init: function() {
-    this.adminBar = document.createElement('div');
-    this.adminBar.classList.add('admin-bar');
-    this.adminBar.innerHTML =
-      '<a href="/admin/">' +
-        '<img src="/assets/images/admin-bar-logo.png" alt="Administration" class="admin-bar-logo">' +
-      '</a>';
-
     this.shortcutsElement = document.createElement('span');
     this.shortcutsElement.classList.add('admin-bar-shortcuts');
-    this.adminBar.appendChild(this.shortcutsElement);
 
-    document.body.appendChild(this.adminBar);
+    const overallMenuAdminSection = document.querySelector(".OverallMenu__admin-section");
+    overallMenuAdminSection.appendChild(this.shortcutsElement);
 
     this.loadShortcutsFromCache();
   },
@@ -808,7 +801,7 @@ Biblys.AdminBar.prototype = {
       function(shortcut) {
         var element = document.createElement('a');
 
-        element.classList.add('admin-bar-shortcut');
+        element.classList.add('OverallMenu__entry');
         if (shortcut.class) {
           element.classList.add(shortcut.class);
         }
@@ -827,7 +820,7 @@ Biblys.AdminBar.prototype = {
 
   displayShortcutsEmptyMessage: function() {
     var element = document.createElement('a');
-    element.classList.add('admin-bar-shortcut');
+    element.classList.add('OverallMenu__entry');
     element.href = '/admin/shortcuts';
     element.innerHTML = '<span class="fa fa-share"></span> Ajouter des raccourcis';
     this.shortcutsElement.appendChild(element);

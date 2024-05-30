@@ -1,14 +1,15 @@
 .OverallMenu {
+  align-items: center;
   background: rgba(15,15,15);
   display: flex;
   font-size: 16px;
-  padding: 8px 16px;
-  justify-content: flex-end;
+  height: 48px;
+  padding: 8px;
+  justify-content: space-between;
 }
 
 .OverallMenu a {
   color: white;
-  margin-left: 8px;
 }
 
 .OverallMenu a:hover {
@@ -17,7 +18,15 @@
 }
 
 .OverallMenu__entry {
-  padding: 0 8px;
+  align-items: center;
+  display: inline-flex;
+  gap: 4px;
+  padding: 0 4px;
+  flex-direction: row;
+}
+
+.OverallMenu__entry .fa {
+  font-size: 20px;
 }
 
 .OverallMenu__entry__label {
@@ -27,5 +36,6 @@
 @media(min-width: 768px) {
   .OverallMenu__entry__label {
     display: inline;
+    margin-right: 4px;
   }
 }
