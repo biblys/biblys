@@ -128,6 +128,31 @@ class TokenServiceTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
+    public function testDecodeLoginTokenWithInvalidToken()
+    {
+        // given
+        $secretKey = "222fabebd31bdc2ec7f382404cff0418";
+        $config = new Config(["authentication" => ["secret" => $secretKey]]);
+        $site = ModelFactory::createSite();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->expects("getSite")->andReturn($site);
+        $tokenService = new TokenService($config, $currentSite);
+        $token = "nope";
+
+        // when
+        $exception = Helpers::runAndCatchException(function () use ($tokenService, $token) {
+            $tokenService->decodeLoginToken($token);
+        });
+
+        // then
+        $this->assertInstanceOf(InvalidTokenException::class, $exception);
+        $this->assertEquals("Invalid token", $exception->getMessage());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
     public function testDecodeLoginTokenWithInvalidAction()
     {
         // given

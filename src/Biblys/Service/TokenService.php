@@ -8,11 +8,12 @@ use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Model\User;
+use UnexpectedValueException;
 
 class TokenService
 {
     public function __construct(
-        private readonly Config $config,
+        private readonly Config      $config,
         private readonly CurrentSite $currentSite
     )
     {
@@ -37,7 +38,11 @@ class TokenService
      */
     public function decodeLoginToken(string $token): array
     {
-        $decodedToken = JWT::decode($token, new Key($this->config->getAuthenticationSecret(), "HS256"));
+        try {
+            $decodedToken = JWT::decode($token, new Key($this->config->getAuthenticationSecret(), "HS256"));
+        } catch (UnexpectedValueException) {
+            throw new InvalidTokenException("Invalid token");
+        }
 
         if (!isset($decodedToken->action)) {
             throw new InvalidTokenException("Invalid action for login token");
