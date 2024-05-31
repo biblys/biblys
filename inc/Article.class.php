@@ -836,7 +836,11 @@ class Article extends Entity
 
         if ($this->get('price') == 0) {
             return '
-                <a href="' . $urlgenerator->generate('article_free_download', ['id' => $this->get('id')]) . '" class="btn btn-primary cart-button' . ($text ? '' : ' btn-sm') . '">
+                <a 
+                    href="' . $urlgenerator->generate('article_free_download', ['id' => $this->get('id')]) . '" 
+                    class="btn btn-primary cart-button' . ($text ? '' : ' btn-sm') . '"
+                    rel="nofollow"
+                >
                     <span class="fa fa-cloud-download"></span>' . ($text ? ' <span class="cart-button-text">' . $text . '</span>' : '') . '
                 </a>
             ';
