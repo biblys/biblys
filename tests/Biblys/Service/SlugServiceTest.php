@@ -132,6 +132,29 @@ class SlugServiceTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function testCreateCollectionSlugForCollectionWithAccentEqualingPublisherWithout()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher(name: "PHENOMENE");
+        $collection = ModelFactory::createCollection(
+            publisher: $publisher,
+            name: "Phénomène"
+        );
+        $slugService = new SlugService();
+
+        // when
+        $slug = $slugService->createForBookCollection(
+            $collection->getName(),
+            $publisher->getName(),
+        );
+
+        // then
+        $this->assertEquals("phenomene", $slug);
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testCreateCollectionSlugForCollectionIncludingPublisher()
     {
         // given
