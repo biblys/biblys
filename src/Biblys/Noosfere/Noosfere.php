@@ -288,7 +288,7 @@ class Noosfere
             }
 
             // Retrait des liens dans la quatrième
-            $a["article_summary"] = preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', "\\2", $a["article_summary"]);
+            $a["article_summary"] = $a["article_summary"] ? preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', "\\2", $a["article_summary"]) : "";
 
             // Date parution
             $MoisDL = $n->Parution->MoisParution;
@@ -394,6 +394,17 @@ class Noosfere
                     $a["article_contents"] .= '</li>';
                 }
                 $a["article_contents"] .= '</ul>';
+            }
+
+            if ($a["article_authors"] === null) {
+                $people = [[
+                    "people_first_name" => null,
+                    "people_last_name" => "ANONYME",
+                    "people_name" => "ANONYME",
+                    "people_role" => "Auteur",
+                    "people_noosfere_id" => null,
+                ]];
+                $a["article_authors"] = "ANONYME";
             }
 
             // ISBN
