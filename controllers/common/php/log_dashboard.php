@@ -58,7 +58,8 @@ return function(
     }
 
     // Biblys
-    $items["Assistance"][] = array('Documentation', 'https://docs.biblys.fr/');
+    $items["Assistance"][] = array("Documentation", 'https://documentation.lautrelivre.fr/');
+    $items["Assistance"][] = array('Documentation Biblys', 'https://docs.biblys.fr/');
     $items["Assistance"][] = array('Besoin d\'aide ?', 'https://www.biblys.fr/contact/');
 
     // Sections
