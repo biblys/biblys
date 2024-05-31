@@ -15,15 +15,19 @@
 
   <ul>
     {% for right in publisher.rights %}
-      <li>
-        {{ right.user.email }}
-        <a href="{{ path('publisher_rights_remove', {
-          publisherId: publisher.id,
-          userId: right.user.id
-        }) }}">
-          <span class="fa fa-trash-o"></span>
-        </a>
-      </li>
+      {% if right.user %}
+        <li>
+          {{ right.user.email }}
+          <a href="{{ path('publisher_rights_remove', {
+            publisherId: publisher.id,
+            userId: right.user.id
+          }) }}">
+            <span class="fa fa-trash-o"></span>
+          </a>
+        </li>
+      {% else %}
+        <li>Utilisateur Axys n° {{ right.axysAccountId }}</li>
+      {% endif %}
     {% endfor %}
   </ul>
 
