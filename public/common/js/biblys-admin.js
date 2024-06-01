@@ -862,7 +862,7 @@ Biblys.Subscription.prototype = {
 
     // Cap notification at 99
     if (notification >= 100) {
-      notification = '99+';
+      notification = '99';
     }
 
     badge.textContent = notification;

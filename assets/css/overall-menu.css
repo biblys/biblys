@@ -20,9 +20,14 @@
 .OverallMenu__entry {
   align-items: center;
   display: inline-flex;
+  flex-direction: row;
   gap: 4px;
   padding: 0 4px;
-  flex-direction: row;
+  position: relative;
+}
+
+.OverallMenu__entry.with-badge {
+  margin-right: 12px;
 }
 
 .OverallMenu__entry .fa {
@@ -31,6 +36,21 @@
 
 .OverallMenu__entry__label {
   display: none;
+}
+
+.OverallMenu .icon-badge {
+  background: red;
+  border-radius: 20px;
+  color: white;
+  display: inline-block;
+  font-size: 10px;
+  padding: 0 6px 0 6px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  transition: opacity 400ms;
+  z-index: 10;
+  bottom: -11px;
+  right: -12px;
 }
 
 @media(min-width: 768px) {
