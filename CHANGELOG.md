@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 2.82.0 (DEV)
+## 2.82.0 (5 juin 2024)
 
 Utilisateurs locaux
 
