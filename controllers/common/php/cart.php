@@ -147,7 +147,6 @@ return function (
 
         $cartLine = '
             <tr id="cart_tr_' . $stock->get('id') . '">
-                <td class="center">' . $stock->get('id') . '</td>
                 <td class="center">' . $cover . '</td>
                 <td>
                     <a href="' . $articleUrl . '">' . $article->get('title') . '</a>' . $articleType . '<br>
@@ -194,10 +193,10 @@ return function (
 
     if ($currentUser->isAdmin()) {
         $content .= '
-        <div class="admin">
-            <p>Panier n&deg; '.$cart->getId().'</p>
-        </div>
-    ';
+            <div class="admin">
+                <p>Panier n&deg; '.$cart->getId().'</p>
+            </div>
+        ';
     }
 
     $content .= '
@@ -324,18 +323,11 @@ return function (
         }
 
         $content .= '
-            </tbody>
-            <tfoot>
-                <tr class="bold">
-                    <td colspan="3">Total</td>
-        ';
-
-        if ($currentSite->getSite()->getShippingFee() == "fr") {
-            $content .= '<td class="right">'.$Poids.'g <input type="hidden" id="stock_weight" value="'.$Poids.'"></td>';
-        }
-        $content .= '
-                        <td class="right">'.currency($Total / 100).' <input type="hidden" id="sub_total" value="'.$Total.'"></td>
-                        <td></td>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">Total</td>
+                        <td class="text-right">'.currency($Total / 100).' <input type="hidden" id="sub_total" value="'.$Total.'"></td>
                     </tr>
                 </tfoot>
             </table>
