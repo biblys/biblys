@@ -52,7 +52,7 @@ class CartHelpers
         }
 
         $cartSuggestions .= '
-                <h3>' . $articleCategory->getName() . '</h3>
+                <h2>' . $articleCategory->getName() . '</h3>
                 <div class="cart-suggestions">
             ';
         /** @var Article $article */
@@ -128,10 +128,10 @@ class CartHelpers
             );
             return '
                     <div class="alert alert-info">
-                        <h3>
+                        <h2>
                             <span class="fa fa-gift"></span> 
                             ' . $freeShippingInviteText . '
-                        </h3>
+                        </h2>
                         <progress value="' . $cartTotal . '" max="' . $freeShippingTargetAmount . '"></progress>
                         <p>
                             Ajoutez encore <strong>' . currency($missingAmount / 100) . '</strong> à votre panier pour en bénéficier !
@@ -269,7 +269,7 @@ class CartHelpers
 
         return '
             <div class="SpecialOfferNotice">
-                <h3 class="SpecialOfferNotice-title">'.$specialOffer->getName().'</h3>
+                <h2 class="SpecialOfferNotice-title">'.$specialOffer->getName().'</h2>
                 <div class="SpecialOfferNotice-cover">
                     ' . $cover . '
                 </div>

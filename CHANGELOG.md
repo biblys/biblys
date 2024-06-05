@@ -6,6 +6,9 @@ Améliorations
 
 - La validation d'une commande contenant des articles téléchargeables
   requiert maintenant l'acceptation des conditions spécifiques au numérique.
+- Pour prévenir toute confusion, les articles physiques à expédier et les 
+  articles numériques à télécharger sont désormais clairement distingués 
+  dans le panier.
 
 ### 2.82.1 (26 juin 2024)
 
