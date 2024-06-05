@@ -118,8 +118,8 @@ return function (
 
         $error = null;
         try {
-            OrderDeliveryHelpers::validateCartContent($currentSite ,$cart);
-            OrderDeliveryHelpers::validateOrderDetails($request, $currentSite);
+            OrderDeliveryHelpers::validateCartContent($currentSite, $cart);
+            OrderDeliveryHelpers::validateOrderDetails($request, $currentSite, $cart);
         } catch (Exception $exception) {
             $error = $exception->getMessage();
         }
@@ -304,7 +304,6 @@ return function (
     }
 
     $form_class = null;
-    $siteTitle = $currentSite->getTitle();
     if (!$currentUser->isAuthentified()) {
         $content .= "
         <h3>Vos coordonnées</h3>
@@ -350,7 +349,7 @@ return function (
         }
     }
 
-// CGV checkbox
+    // CGV checkbox
     $cgv_page = $currentSite->getOption("cgv_page");
     $cgv_checkbox = '<input type="hidden" name="cgv_checkbox" value=1>';
     if ($cgv_page) {
@@ -375,6 +374,24 @@ return function (
             </p>
         ';
         }
+    }
+
+    $downloadableArticlesCheckbox = "";
+    if ($cart->containsDownloadableArticles()) {
+        $downloadableArticlesCheckbox = '
+            <p class="checkbox order-delivery-form__checkbox">
+                <label class="after">
+                    <input type="checkbox" name="downloadable_article_checkbox" value=1 required>
+                    J’accepte les conditions spécifiques au numérique
+                    <small class="required-field-indicator">(obligatoire)</small><br />
+                    <small>
+                        En cochant cette case, vous déclarez comprendre que votre commande contient
+                        des articles numériques téléchargeables et que vous renoncez à votre droit
+                        de rétraction sur ces articles dès le premier téléchargement.
+                    </small>
+                </label>
+            </p>
+        ';
     }
 
     $card_warning = null;
@@ -558,6 +575,7 @@ return function (
          <fieldset class="order-delivery-form__fieldset">
             ' . $newsletter_checkbox . '
             ' . $cgv_checkbox . '
+            ' . $downloadableArticlesCheckbox . '
         </fieldset>
 
         <fieldset class="order-delivery-form__fieldset order-delivery-form__buttons">
