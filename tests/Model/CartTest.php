@@ -7,7 +7,7 @@ use Biblys\Test\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
-require_once __DIR__."/../setup.php";
+require_once __DIR__."/../setUp.php";
 
 class CartTest extends TestCase
 {
