@@ -61,7 +61,6 @@ return function (
 
     $request->attributes->set("page_title", "Panier");
 
-    $alert = null;
     $OneArticle = 0;
     $crowdfunding = 0;
     $Poids = 0;
@@ -77,7 +76,8 @@ return function (
         'site_id' => $currentSite->getSite()->getId(),
     ], ['order' => 'stock_cart_date']);
 
-    $cart_content = array();
+    $cartPhysicalItems = [];
+    $cartDownloadableItems = [];
 
     foreach ($stocks as $stock) {
         /** @var Article $article */
@@ -145,32 +145,40 @@ return function (
 
         $articleUrl = $urlGenerator->generate("article_show", ["slug" => $article->get("url")]);
 
-        $cart_content[] = '
-        <tr id="cart_tr_'.$stock->get('id').'">
-            <td class="center">'.$stock->get('id').'</td>
-            <td class="center">'.$cover.'</td>
-            <td>
-                <a href="'.$articleUrl.'">'.$article->get('title').'</a>'.$articleType.'<br>
-                de '.authors($article->get('authors')).'<br>
-                coll. '.$article->get('collection')->get('name').' '.numero($article->get('number')).'<br>
-                '.$purchased.$preorder.'
-                '.($stock->has('condition') ? 'État : '.$stock->get('condition').'<br>' : null).'
-                '.$editable_price_form.'
-            </td>
-            '.($currentSite->getSite()->getShippingFee() == "fr" ? '<td class="right">'.$stock->get('weight').'g</td>' : null).'
-            <td class="right">
-                '.$availability.'
-                '.currency($stock->get('selling_price') / 100).'<br />
-            </td>
-            <td class="center">
-                <form method="POST" action="/cart/remove-stock/'.$stock->get("id").'">
-                    <button type="submit" class="btn btn-danger btn-sm">
-                        <span class="fa fa-close"></span> Retirer
-                    </button>
-                </form>
-            </td>
-        </tr>
-    ';
+        $cartLine = '
+            <tr id="cart_tr_' . $stock->get('id') . '">
+                <td class="center">' . $stock->get('id') . '</td>
+                <td class="center">' . $cover . '</td>
+                <td>
+                    <a href="' . $articleUrl . '">' . $article->get('title') . '</a>' . $articleType . '<br>
+                    de ' . authors($article->get('authors')) . '<br>
+                    coll. ' . $article->get('collection')->get('name') . ' ' . numero($article->get('number')) . '<br>
+                    ' . $purchased . $preorder . '
+                    ' . ($stock->has('condition') ? 'État : ' . $stock->get('condition') . '<br>' : null) . '
+                    ' . $editable_price_form . '
+                </td>
+                ' . ($currentSite->getSite()->getShippingFee() == "fr" ? '<td class="right">' . $stock->get('weight') . 'g</td>' : null) . '
+                <td class="right">
+                    ' . $availability . '
+                    ' . currency($stock->get('selling_price') / 100) . '<br />
+                </td>
+                <td class="center">
+                    <form method="POST" action="/cart/remove-stock/' . $stock->get("id") . '">
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <span class="fa fa-close"></span> Retirer
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        ';
+
+        if ($article->isPhysical()) {
+            $cartPhysicalItems[] = $cartLine;
+        }
+
+        if ($article->isDownloadable()) {
+            $cartDownloadableItems[] = $cartLine;
+        }
 
         if ($OneArticle == 0) {
             $OneArticle = $article->get('id');
@@ -193,27 +201,38 @@ return function (
     }
 
     $content .= '
-    <h1><i class="fa fa-shopping-basket"></i> Mon panier</h1>
+        <h1><i class="fa fa-shopping-basket"></i> Mon panier</h1>
+    
+        <table class="table cart-table">
+    ';
 
-    '.$alert.'
-
-    <table class="table cart-table">
-        <thead>
-            <tr>
-                <th>Ref.</th>
-                <th></th>
-                <th>Article</th>
-';
-    if ($currentSite->getSite()->getShippingFee() == "fr") {
-        $content .= '<th class="center">Poids</th>';
+    if ($cart->containsPhysicalArticles()) {
+        $content .= '
+            <thead>
+                <tr>
+                  <th colspan="100">Articles qui seront expédiés</th>
+                </tr>
+            </thead>
+            <tbody>
+                '.implode($cartPhysicalItems).'
+            </tbody>
+        ';
     }
-    $content .= '
-                <th class="center">Prix</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-    '.implode($cart_content);
+
+    if ($cart->containsDownloadableArticles()) {
+        $content .= '
+            <thead>
+                <tr>
+                  <th colspan="100">Articles numériques à télécharger</th>
+                </tr>
+            </thead>
+            <tbody>
+                '.implode($cartDownloadableItems).'
+            </tbody>
+        ';
+    }
+
+
 
     if (isset($Articles) && $Articles > 0) {
         if (!$currentUser->isAuthentified()) {
@@ -243,7 +262,7 @@ return function (
                 $content .= '
                 </table>
 
-                <h3>Commande en cours (n&deg; <a href="/order/'.$o["order_url"].'">'.$o["order_id"].'</a>)</h3>
+                <h2>Commande en cours (n&deg; <a href="/order/'.$o["order_url"].'">'.$o["order_id"].'</a>)</h2>
 
                 <p>Vous avez déj&agrave; une commande en attente de paiement. Les livres de votre panier seront ajoutés aux livres de la commande ci-dessous et les frais de port recalculés en conséquence. Si vous ne souhaitez plus commander les livres de la commande n&deg; '.$o["order_id"].', <a href="/contact/">contactez-nous</a> pour faire annuler la commande.</p>
 
@@ -304,17 +323,11 @@ return function (
             }
         }
 
-        $specialOfferNotice = CartHelpers::getSpecialOffersNotice(
-            $currentSite,
-            $urlGenerator,
-            $cart
-        );
-
         $content .= '
             </tbody>
             <tfoot>
                 <tr class="bold">
-                    <td colspan="3" class="right">Total :</td>
+                    <td colspan="3">Total</td>
         ';
 
         if ($currentSite->getSite()->getShippingFee() == "fr") {
@@ -382,7 +395,7 @@ return function (
             $freeShippingNotice = CartHelpers::getFreeShippingNotice($currentSite, $cart, $Total);
 
             $content .= '
-                <h3>Mode d\'expédition</h3>
+                <h2>Mode d\'expédition</h2>
                 
                 '.$freeShippingNotice.'
 

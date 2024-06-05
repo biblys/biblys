@@ -627,6 +627,13 @@ table.cart td {
   vertical-align: middle !important;
 }
 
+.cart-table>thead>tr>th,
+.cart-table>tfoot>tr>td {
+  font-size: 1.25rem;
+  font-weight: normal;
+  padding-top: 16px;
+}
+
 .cart-table .cover {
   max-height: 100px;
   max-width: 100px;
