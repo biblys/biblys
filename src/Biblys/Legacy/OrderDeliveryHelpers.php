@@ -41,6 +41,7 @@ class OrderDeliveryHelpers
     public static function validateOrderDetails(
         Request     $request,
         CurrentSite $currentSite,
+        Cart $cart,
     ): void
     {
         if (empty($request->request->get('order_firstname'))) {
@@ -97,6 +98,14 @@ class OrderDeliveryHelpers
         if (empty($request->request->get('cgv_checkbox'))) {
             throw new OrderDetailsValidationException(
                 'Vous devez accepter les Conditions Générales de Vente.'
+            );
+        }
+
+        $downloadableCheckbox = $request->request->get('downloadable_articles_checkbox');
+        if ($cart->containsDownloadableArticles() && $downloadableCheckbox !== "1") {
+            throw new OrderDetailsValidationException(
+                "Vous devez accepter les conditions spécifiques au numérique, " .
+                "car votre panier contient des articles téléchargeables."
             );
         }
 
