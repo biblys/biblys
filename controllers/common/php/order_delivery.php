@@ -244,9 +244,9 @@ return function (
     }
 
     $content .= '
-    <h2>Commande » Validation</h2>
+    <h1>Votre commande</h1>
 
-    <h3>Récapitulatif</h3>
+    <h2>Récapitulatif</h2>
 ';
 
     if (isset($o["order_id"])) {
@@ -255,11 +255,6 @@ return function (
 
     $content .= '
         <table class="table" style="max-width: 468px; margin: auto;">
-            <thead>
-                <tr>
-                    <th class="center" colspan="2">Votre commande</th>
-                </tr>
-            </thead>
             <tbody>
     ';
 
@@ -313,7 +308,7 @@ return function (
     $shipping_date = $currentSite->getOption('shipping_date');
     if ($shipping_date) {
         $content .= '
-        <h3>Date d\'expédition</h3>
+        <h2>Date d\'expédition</h2>
         <p>' . $currentSite->getOption('shipping_date') . '</p>
     ';
     }
@@ -321,7 +316,7 @@ return function (
     $form_class = null;
     if (!$currentUser->isAuthentified()) {
         $content .= "
-        <h3>Vos coordonnées</h3>
+        <h2>Vos coordonnées</h2>
         <p><a href=\"$loginUrl\" class=\"btn btn-primary\">Connectez-vous</a> ou <a href=\"$loginUrl\" class=\"btn btn-success\">inscrivez-vous</a> pour enregistrer vos coordonnées et commander plus rapidement.</p>
         <br />
         <button id=\"show_orderForm\" class=\"showThis btn btn-warning\">Je souhaite commander sans utiliser de compte</button>
