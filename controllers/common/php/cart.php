@@ -93,10 +93,10 @@ return function (
         }
 
         // Books & ebooks
-        $article_type = null;
+        $articleType = null;
         $purchased = null;
         if ($type->getId() == 2) {
-            $article_type = ' (numérique)';
+            $articleType = ' <strong>(numérique)</strong>';
             $articleModel = ArticleQuery::create()->findPk($article->get("id"));
             if ($currentUser->hasPurchasedArticle($articleModel)) {
                 $purchased = '<p class="warning left"><a href="/pages/log_mybooks" title="Vous avez déjà acheté ce titre. Juste pour info.">Déjà acheté !</a></p>';
@@ -150,7 +150,7 @@ return function (
             <td class="center">'.$stock->get('id').'</td>
             <td class="center">'.$cover.'</td>
             <td>
-                <a href="'.$articleUrl.'">'.$article->get('title').'</a>'.$article_type.'<br>
+                <a href="'.$articleUrl.'">'.$article->get('title').'</a>'.$articleType.'<br>
                 de '.authors($article->get('authors')).'<br>
                 coll. '.$article->get('collection')->get('name').' '.numero($article->get('number')).'<br>
                 '.$purchased.$preorder.'
@@ -193,7 +193,7 @@ return function (
     }
 
     $content .= '
-    <h1><i class="fa fa-shopping-cart"></i> Mon panier</h1>
+    <h1><i class="fa fa-shopping-basket"></i> Mon panier</h1>
 
     '.$alert.'
 
@@ -213,7 +213,7 @@ return function (
             </tr>
         </thead>
         <tbody>
-'.implode($cart_content);
+    '.implode($cart_content);
 
     if (isset($Articles) && $Articles > 0) {
         if (!$currentUser->isAuthentified()) {
