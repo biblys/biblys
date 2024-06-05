@@ -17,21 +17,47 @@ use Propel\Runtime\Exception\PropelException;
  */
 class Cart extends BaseCart
 {
+
     /**
      * @throws PropelException
      */
-    public function containsDownloadableArticles(): bool
+    public function getPhysicalArtileCount(): int
+    {
+        $physicalTypes = Type::getAllPhysicalTypes();
+        $physicalTypeIds = array_map(function ($type) {
+            return $type->getId();
+        }, $physicalTypes);
+        return StockQuery::create()
+            ->filterByCart($this)
+            ->useArticleQuery()
+            ->filterByTypeId($physicalTypeIds)
+            ->endUse()
+            ->count();
+    }
+
+    /**
+     * @return int
+     * @throws PropelException
+     */
+    public function getDownloadableArticleCount(): int
     {
         $downloadableTypes = Type::getAllDownloadableTypes();
         $downloadableTypeIds = array_map(function ($type) {
             return $type->getId();
         }, $downloadableTypes);
-        $items = StockQuery::create()
+        return StockQuery::create()
             ->filterByCart($this)
             ->useArticleQuery()
             ->filterByTypeId($downloadableTypeIds)
+            ->endUse()
             ->count();
+    }
 
-        return $items > 0;
+    /**
+     * @throws PropelException
+     */
+    public function containsDownloadableArticles(): bool
+    {
+        return $this->getDownloadableArticleCount() > 0;
     }
 }
