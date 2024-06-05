@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.83.0 (DEV)
+
+Améliorations
+
+- La validation d'une commande contenant des articles téléchargeables 
+  requiert maintenant l'acceptation des conditions spécifiques au numérique.
+
 ## 2.82.0 (5 juin 2024)
 
 Utilisateurs locaux
