@@ -391,7 +391,7 @@ return function (
         $downloadableArticlesCheckbox = '
             <p class="checkbox order-delivery-form__checkbox">
                 <label class="after">
-                    <input type="checkbox" name="downloadable_article_checkbox" value=1 required>
+                    <input type="checkbox" name="downloadable_articles_checkbox" value=1 required>
                     J’accepte les conditions spécifiques au numérique
                     <small class="required-field-indicator">(obligatoire)</small><br />
                     <small>
