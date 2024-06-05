@@ -631,7 +631,7 @@ table.cart td {
 .cart-table>tfoot>tr>td {
   font-size: 1.25rem;
   font-weight: normal;
-  padding-top: 16px;
+  padding-top: 24px;
 }
 
 .cart-table .cover {
