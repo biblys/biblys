@@ -22,14 +22,16 @@ class Cart extends BaseCart
      */
     public function containsDownloadableArticles(): bool
     {
-        $items = StockQuery::create()->filterByCart($this)->find();
-        foreach ($items as $item) {
-            $type = Type::getById($item->getArticle()->getTypeId());
-            if ($type->isDownloadable()) {
-                return true;
-            }
-        }
+        $downloadableTypes = Type::getAllDownloadableTypes();
+        $downloadableTypeIds = array_map(function ($type) {
+            return $type->getId();
+        }, $downloadableTypes);
+        $items = StockQuery::create()
+            ->filterByCart($this)
+            ->useArticleQuery()
+            ->filterByTypeId($downloadableTypeIds)
+            ->count();
 
-        return false;
+        return $items > 0;
     }
 }
