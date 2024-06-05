@@ -37,7 +37,7 @@ return function (
     Mailer       $mailer): Response|RedirectResponse {
     global $_SQL;
 
-    $request->attributes->set("page_title", "Commande » Validation");
+    $request->attributes->set("page_title", "Votre commande");
 
     $salesDisabled = $currentSite->getOption("sales_disabled");
     if ($salesDisabled) {
