@@ -254,18 +254,33 @@ return function (
     }
 
     $content .= '
-    <table class="table" style="width: 300px; margin: auto;">
-        <thead>
+        <table class="table" style="max-width: 468px; margin: auto;">
+            <thead>
+                <tr>
+                    <th class="center" colspan="2">Votre commande</th>
+                </tr>
+            </thead>
+            <tbody>
+    ';
+
+    if ($cart->containsPhysicalArticles()) {
+        $content .= '
             <tr>
-                <th class="center" colspan="2">Votre commande</th>
+                <td class="right">Articles à expédier : </td>
+                <td>' . $cart->getPhysicalArticleCount() . '</td>
             </tr>
-        </thead>
-        <tbody>
+        ';
+    }
+
+    if ($cart->containsDownloadableArticles()) {
+        $content .= '
             <tr>
-                <td class="right">Articles : </td>
-                <td>' . $numberOfCopiesInCart . '</td>
+                <td class="right">Articles à télécharger : </td>
+                <td>' . $cart->getDownloadableArticleCount() . '</td>
             </tr>
-';
+        ';
+    }
+
     if (LegacyCodeHelper::getGlobalSite()["site_shipping_fee"] == 'fr') {
         $content .= '
                 <tr>
