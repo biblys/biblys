@@ -21,7 +21,7 @@ class Cart extends BaseCart
     /**
      * @throws PropelException
      */
-    public function getPhysicalArtileCount(): int
+    public function getPhysicalArticleCount(): int
     {
         $physicalTypes = Type::getAllPhysicalTypes();
         $physicalTypeIds = array_map(function ($type) {
@@ -59,5 +59,13 @@ class Cart extends BaseCart
     public function containsDownloadableArticles(): bool
     {
         return $this->getDownloadableArticleCount() > 0;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function containsPhysicalArticles(): bool
+    {
+        return $this->getPhysicalArticleCount();
     }
 }

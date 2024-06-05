@@ -24,7 +24,7 @@ class CartTest extends TestCase
         ModelFactory::createStockItem(article: $downloadableArticle, cart: $cart);
 
         // when
-        $count = $cart->getPhysicalArtileCount();
+        $count = $cart->getPhysicalArticleCount();
 
         // then
         $this->assertEquals(1, $count);
@@ -47,6 +47,42 @@ class CartTest extends TestCase
 
         // then
         $this->assertEquals(1, $count);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testContainsPhysicalArticlesReturnsFalse()
+    {
+        // given
+        $cart = ModelFactory::createCart();
+        $downloadableArticle = ModelFactory::createArticle(typeId: Type::EBOOK);
+        ModelFactory::createStockItem(article: $downloadableArticle, cart: $cart);
+
+        // when
+        $contains = $cart->containsPhysicalArticles();
+
+        // then
+        $this->assertFalse($contains);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testContainsPhysicalArticlesReturnsTrue()
+    {
+        // given
+        $cart = ModelFactory::createCart();
+        $physicalArticle = ModelFactory::createArticle();
+        ModelFactory::createStockItem(article: $physicalArticle, cart: $cart);
+        $downloadableArticle = ModelFactory::createArticle(typeId: Type::EBOOK);
+        ModelFactory::createStockItem(article: $downloadableArticle, cart: $cart);
+
+        // when
+        $contains = $cart->containsPhysicalArticles();
+
+        // then
+        $this->assertTrue($contains);
     }
 
     /**
