@@ -11,6 +11,43 @@ require_once __DIR__."/../setup.php";
 
 class CartTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     */
+    public function testCountPhysicalArticles()
+    {
+        // given
+        $cart = ModelFactory::createCart();
+        $physicalArticle = ModelFactory::createArticle();
+        ModelFactory::createStockItem(article: $physicalArticle, cart: $cart);
+        $downloadableArticle = ModelFactory::createArticle(typeId: Type::EBOOK);
+        ModelFactory::createStockItem(article: $downloadableArticle, cart: $cart);
+
+        // when
+        $count = $cart->getPhysicalArtileCount();
+
+        // then
+        $this->assertEquals(1, $count);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testCountDownloadableArticles()
+    {
+        // given
+        $cart = ModelFactory::createCart();
+        $physicalArticle = ModelFactory::createArticle();
+        ModelFactory::createStockItem(article: $physicalArticle, cart: $cart);
+        $downloadableArticle = ModelFactory::createArticle(typeId: Type::EBOOK);
+        ModelFactory::createStockItem(article: $downloadableArticle, cart: $cart);
+
+        // when
+        $count = $cart->getDownloadableArticleCount();
+
+        // then
+        $this->assertEquals(1, $count);
+    }
 
     /**
      * @throws PropelException
