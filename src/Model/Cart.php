@@ -2,7 +2,9 @@
 
 namespace Model;
 
+use Biblys\Article\Type;
 use Model\Base\Cart as BaseCart;
+use Propel\Runtime\Exception\PropelException;
 
 /**
  * Skeleton subclass for representing a row from the 'carts' table.
@@ -15,5 +17,19 @@ use Model\Base\Cart as BaseCart;
  */
 class Cart extends BaseCart
 {
+    /**
+     * @throws PropelException
+     */
+    public function containsDownloadableArticles(): bool
+    {
+        $items = StockQuery::create()->filterByCart($this)->find();
+        foreach ($items as $item) {
+            $type = Type::getById($item->getArticle()->getTypeId());
+            if ($type->isDownloadable()) {
+                return true;
+            }
+        }
 
+        return false;
+    }
 }
