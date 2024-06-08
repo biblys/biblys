@@ -19,14 +19,3 @@ services:
       - '3306:3306'
     volumes:
       - ./data/db:/var/lib/mysql
-  db_legacy:
-    platform: linux/x86_64
-    image: mysql:5.7
-    container_name: biblys-mysql-legacy
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: yes
-      MYSQL_DATABASE: biblys
-    ports:
-      - '3357:3306'
-    volumes:
-      - ./data/db_legacy:/var/lib/mysql
