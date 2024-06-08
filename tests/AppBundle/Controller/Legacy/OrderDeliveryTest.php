@@ -128,6 +128,7 @@ class OrderDeliveryTest extends TestCase
         $request->request->set("order_email", "e-customer@biblys.fr");
         $request->request->set("country_id", $country->getId());
         $request->request->set("cgv_checkbox", 1);
+        $request->request->set("downloadable_articles_checkbox", "1");
 
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldReceive("send")->andReturn(true);
