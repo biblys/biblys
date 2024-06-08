@@ -4,6 +4,8 @@ namespace Biblys\Service\Images;
 
 use Biblys\Service\Config;
 use Model\Article;
+use Model\Image;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Filesystem\Filesystem;
 
 class ImagesService
@@ -15,6 +17,34 @@ class ImagesService
     {
         $this->_config = $config;
         $this->_filesystem = $filesystem;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function addArticleCoverImage(Article $article, string $imagePath): void
+    {
+        $imageDirectory = str_pad(
+            string: substr(string: $article->getId(), offset: -2, length: 2),
+            length: 2,
+            pad_string: '0',
+            pad_type: STR_PAD_LEFT
+        );
+
+        $imageDimensions = getimagesize($imagePath);
+        list($width, $height) = $imageDimensions;
+
+        $image = new Image();
+        $image->setType("cover");
+        $image->setArticleId($article->getId());
+        $image->setFilepath("/book/$imageDirectory/");
+        $image->setFilename("{$article->getId()}.jpg");
+        $image->setVersion(1);
+        $image->setMediatype(mime_content_type($imagePath));
+        $image->setFilesize(filesize($imagePath));
+        $image->setWidth($width);
+        $image->setHeight($height);
+        $image->save();
     }
 
     public function articleHasCoverImage(Article $article): bool
