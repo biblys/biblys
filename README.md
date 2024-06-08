@@ -10,21 +10,7 @@
 
 ## Install
 
-```console
-git clone git@github.com:/biblys/biblys.git
-cd biblys
-composer install
-mkdir app
-cp config.example.yml app/config.yml
-vim app/config.yml
-```
-
-In dev mode:
-
-```console
-yarn
-composer build
-```
+See [INSTALL.MD]()
 
 ## Dev env with docker
 
