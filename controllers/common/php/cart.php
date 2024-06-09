@@ -13,7 +13,6 @@ use Biblys\Service\Images\ImagesService;
 use Model\ArticleQuery;
 use Model\CartQuery;
 use Propel\Runtime\Exception\PropelException;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -37,7 +36,7 @@ return function (
 
     $content = null;
 
-    $imagesService = new ImagesService(config: $config, filesystem: new Filesystem());
+    $imagesService = new ImagesService(config: $config);
 
     $currentUrlService = new CurrentUrlService($request);
     $currentUrl = $currentUrlService->getRelativeUrl();
