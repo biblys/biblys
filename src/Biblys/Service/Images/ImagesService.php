@@ -11,11 +11,17 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class ImagesService
 {
+    private string $basePath;
+    private string|array|bool $baseUrl;
+
     public function __construct(
         private readonly Config $config,
         private readonly Filesystem $filesystem,
     )
     {
+        $basePathFromRoot = $this->config->get("media_path") ?: "public/images";
+        $this->basePath = __DIR__ . "/../../../../$basePathFromRoot";
+        $this->baseUrl = $this->config->get("media_url") ?: "/images/";
     }
 
     /**
@@ -33,15 +39,13 @@ class ImagesService
         $imageDimensions = getimagesize($imagePath);
         list($width, $height) = $imageDimensions;
 
-        $image = new Image();
-        $image->setVersion(1);
-
-        if ($this->articleHasCoverImage($article)) {
-            $image = ImageQuery::create()->findOneByArticleId($article->getId());
+        $image = ImageQuery::create()->findOneByArticleId($article->getId());
+        if ($image) {
             $image->setVersion($image->getVersion() + 1);
-
-            $articleCoverImage = $this->getCoverImageForArticle($article);
-            $this->filesystem->remove($articleCoverImage->getFilePath());
+            $this->filesystem->remove($this->_buildArticleCoverImagePath($image));
+        } else {
+            $image = new Image();
+            $image->setVersion(1);
         }
 
         $image->setType("cover");
@@ -54,22 +58,29 @@ class ImagesService
         $image->setHeight($height);
         $image->save();
 
-        $articleCoverImage = $this->getCoverImageForArticle($article);
-        $this->filesystem->copy($imagePath, $articleCoverImage->getFilePath());
+        $this->filesystem->copy($imagePath, $this->_buildArticleCoverImagePath($image));
     }
 
+    /**
+     * @throws PropelException
+     */
     public function articleHasCoverImage(Article $article): bool
     {
-        return ImageQuery::create()->filterByArticleId($article->getId())->exists();
+        return ImageQuery::create()->filterByArticle($article)->exists();
     }
 
-    public function getCoverImageForArticle(Article $article): ArticleCoverImage
+    public function getCoverUrlForArticle(Article $article): ?string
     {
         $image = ImageQuery::create()->findOneByArticleId($article->getId());
-        $basePathFromRoot = $this->config->get("media_path") ?: "public/images";
-        $basePath = __DIR__ . "/../../../../$basePathFromRoot";
-        $baseUrl = $this->config->get("media_url") ?: "/images/";
+        if (!$image) {
+            return null;
+        }
 
-        return new ArticleCoverImage($image, $basePath, $baseUrl);
+        return "$this->baseUrl/{$image->getFilepath()}/{$image->getFilename()}";
+    }
+
+    private function _buildArticleCoverImagePath(Image $image): ?string
+    {
+        return "$this->basePath/{$image->getFilepath()}/{$image->getFilename()}";
     }
 }
