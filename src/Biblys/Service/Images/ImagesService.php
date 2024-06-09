@@ -3,10 +3,13 @@
 namespace Biblys\Service\Images;
 
 use Biblys\Service\Config;
+use Exception;
 use Model\Article;
 use Model\Image;
 use Model\ImageQuery;
+use Model\Map\ImageTableMap;
 use Propel\Runtime\Exception\PropelException;
+use Propel\Runtime\Propel;
 use Symfony\Component\Filesystem\Filesystem;
 
 class ImagesService
@@ -56,9 +59,18 @@ class ImagesService
         $image->setFilesize(filesize($imagePath));
         $image->setWidth($width);
         $image->setHeight($height);
-        $image->save();
 
-        $this->filesystem->copy($imagePath, $this->_buildArticleCoverImagePath($image));
+        $db = Propel::getWriteConnection(ImageTableMap::DATABASE_NAME);
+        $db->beginTransaction();
+
+        try {
+            $image->save($db);
+            $this->filesystem->copy($imagePath, $this->_buildArticleCoverImagePath($image));
+            $db->commit();
+        } catch (Exception $exception) {
+            $db->rollBack();
+            throw $exception;
+        }
     }
 
     /**

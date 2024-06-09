@@ -3,13 +3,16 @@
 namespace Biblys\Service\Images;
 
 use Biblys\Service\Config;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
+use Exception;
 use Mockery;
 use Model\Article;
 use Model\Image;
 use Model\ImageQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Filesystem;
 
 require_once __DIR__ . "/../../../setUp.php";
@@ -170,31 +173,6 @@ class ImagesServiceTest extends TestCase
         // when
         $coverUrl = $service->getCoverUrlForArticle($article);
 
-        // then
-        $this->assertEquals("images/book/covers/book-cover.jpeg", $coverUrl);
-    }
-
-    /**
-     * @throws PropelException
-     * @throws Exception
-     */
-    public function testGetCoverUrlForArticleIfItDoesNotExist(): void
-    {
-        // given
-        $config = new Config(["media_url" => "images"]);
-        $filesystem = Mockery::mock(Filesystem::class);
-        $service = new ImagesService($config, $filesystem);
-
-        $article = ModelFactory::createArticle();
-
-        // when
-        $coverUrl = $service->getCoverUrlForArticle($article);
-
-        // then
-        $this->assertNull($coverUrl);
-    }
-
-}
         // then
         $this->assertEquals("images/book/covers/book-cover.jpeg", $coverUrl);
     }
