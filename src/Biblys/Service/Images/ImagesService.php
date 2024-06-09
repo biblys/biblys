@@ -7,14 +7,15 @@ use Model\Article;
 use Model\Image;
 use Model\ImageQuery;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ImagesService
 {
-    private Config $_config;
-
-    public function __construct(Config $config)
+    public function __construct(
+        private readonly Config $config,
+        private readonly Filesystem $filesystem,
+    )
     {
-        $this->_config = $config;
     }
 
     /**
@@ -43,6 +44,9 @@ class ImagesService
         $image->setWidth($width);
         $image->setHeight($height);
         $image->save();
+
+        $articleCoverImage = $this->getCoverImageForArticle($article);
+        $this->filesystem->copy($imagePath, $articleCoverImage->getFilePath());
     }
 
     public function articleHasCoverImage(Article $article): bool
@@ -53,9 +57,9 @@ class ImagesService
     public function getCoverImageForArticle(Article $article): ArticleCoverImage
     {
         $image = ImageQuery::create()->findOneByArticleId($article->getId());
-        $basePathFromRoot = $this->_config->get("media_path") ?: "public/images";
-        $basePath =  __DIR__."/../../../../$basePathFromRoot";
-        $baseUrl = $this->_config->get("media_url") ?: "/images/";
+        $basePathFromRoot = $this->config->get("media_path") ?: "public/images";
+        $basePath = __DIR__ . "/../../../../$basePathFromRoot";
+        $baseUrl = $this->config->get("media_url") ?: "/images/";
 
         return new ArticleCoverImage($image, $basePath, $baseUrl);
     }
