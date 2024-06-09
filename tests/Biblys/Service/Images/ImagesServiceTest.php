@@ -42,7 +42,7 @@ class ImagesServiceTest extends TestCase
         $image = ImageQuery::create()->findOneByArticleId($article->getId());
         $this->assertInstanceOf(Image::class, $image);
         $this->assertEquals("cover", $image->getType());
-        $this->assertEquals("/book/84/", $image->getFilepath());
+        $this->assertEquals("book/84/", $image->getFilepath());
         $this->assertEquals("1984.jpg", $image->getFilename());
         $this->assertEquals(1, $image->getVersion());
         $this->assertEquals("image/jpeg", $image->getMediatype());
@@ -76,7 +76,7 @@ class ImagesServiceTest extends TestCase
         $updatedImage = ImageQuery::create()->findOneByArticleId($article->getId());
         $this->assertInstanceOf(Image::class, $updatedImage);
         $this->assertEquals($createdImage->getId(), $updatedImage->getId());
-        $this->assertEquals("/book/85/", $updatedImage->getFilepath());
+        $this->assertEquals("book/85/", $updatedImage->getFilepath());
         $this->assertEquals("1985.jpg", $updatedImage->getFilename());
         $this->assertEquals(2, $updatedImage->getVersion());
         $this->assertEquals("image/jpeg", $updatedImage->getMediatype());
@@ -159,7 +159,7 @@ class ImagesServiceTest extends TestCase
     public function testGetCoverUrlForArticleIfItDoesNotExist(): void
     {
         // given
-        $config = new Config(["media_url" => "images"]);
+        $config = new Config(["media_url" => "/images/"]);
         $filesystem = Mockery::mock(Filesystem::class);
         $service = new ImagesService($config, $filesystem);
 
@@ -179,14 +179,14 @@ class ImagesServiceTest extends TestCase
     public function testGetCoverUrlForArticleIfItExists(): void
     {
         // given
-        $config = new Config(["media_url" => "images"]);
+        $config = new Config(["media_url" => "/images/"]);
         $filesystem = Mockery::mock(Filesystem::class);
         $service = new ImagesService($config, $filesystem);
 
         $article = ModelFactory::createArticle();
         ModelFactory::createImage(
             article: $article,
-            filePath: "book/covers",
+            filePath: "book/covers/",
             fileName: "book-cover.jpeg",
         );
 
@@ -194,7 +194,7 @@ class ImagesServiceTest extends TestCase
         $coverUrl = $service->getCoverUrlForArticle($article);
 
         // then
-        $this->assertEquals("images/book/covers/book-cover.jpeg", $coverUrl);
+        $this->assertEquals("/images/book/covers/book-cover.jpeg", $coverUrl);
     }
 
 
@@ -229,7 +229,7 @@ class ImagesServiceTest extends TestCase
     public function testGetCoverUrlForArticleWithVersion(): void
     {
         // given
-        $config = new Config(["media_url" => "images"]);
+        $config = new Config(["media_url" => "images/"]);
         $filesystem = Mockery::mock(Filesystem::class);
         $service = new ImagesService($config, $filesystem);
 

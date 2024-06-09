@@ -53,7 +53,7 @@ class ImagesService
 
         $image->setType("cover");
         $image->setArticleId($article->getId());
-        $image->setFilepath("/book/$imageDirectory/");
+        $image->setFilepath("book/$imageDirectory/");
         $image->setFilename("{$article->getId()}.jpg");
         $image->setMediatype(mime_content_type($imagePath));
         $image->setFilesize(filesize($imagePath));
@@ -88,8 +88,12 @@ class ImagesService
             return null;
         }
 
+        $baseUrl = rtrim($this->baseUrl, "/");
+        $filePath = trim($image->getFilepath(), "/");
+        $filename = trim($image->getFilename(), "/");
         $version = $image->getVersion() > 1 ? "?v={$image->getVersion()}" : "";
-        return "$this->baseUrl/{$image->getFilepath()}/{$image->getFilename()}$version";
+
+        return "$baseUrl/$filePath/$filename$version";
     }
 
     private function _buildArticleCoverImagePath(Image $image): ?string
