@@ -5,10 +5,10 @@ namespace Biblys\Service;
 use Biblys\Isbn\Isbn;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Legacy\TemplateGlobal\Site;
+use Biblys\Service\Images\ImagesService;
 use Cart;
 use Exception;
 use Framework\TemplateLoader;
-use Media;
 use Model\Article;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Bridge\Twig\Extension\FormExtension;
@@ -54,10 +54,8 @@ class TemplateService
     }
 
     /**
-     * @param string $templatePath
-     * @param array $vars
-     * @return string
      * @throws LoaderError
+     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      */
@@ -81,8 +79,9 @@ class TemplateService
     }
 
     /**
-     * @throws SyntaxError
      * @throws LoaderError
+     * @throws PropelException
+     * @throws SyntaxError
      */
     public function renderResponseFromString(string $templateString, array $vars = []): Response
     {
@@ -110,7 +109,7 @@ class TemplateService
             $currentUserService,
             $request,
         );
-        $filters = $this->_getCustomFilters();
+        $filters = $this->_getCustomFilters($config);
 
         $loader = new TemplateLoader($currentSite, new Filesystem());
         if ($config->get("environment") === "dev") {
@@ -253,7 +252,7 @@ class TemplateService
         return $trackers;
     }
 
-    public function _getCustomFilters(): array
+    public function _getCustomFilters(Config $config): array
     {
         $filters = [];
 
@@ -272,9 +271,14 @@ class TemplateService
             return $authors[0];
         });
 
-        $filters[] = new TwigFilter('coverUrl', function (Article $article) {
-            $media = new Media("article", $article->getId());
-            return $media->getUrl();
+        $imagesService = new ImagesService($config, new Filesystem());
+
+        $filters[] = new TwigFilter('hasCover', function (Article $article) use($imagesService) {
+            return $imagesService->articleHasCoverImage($article);
+        });
+
+        $filters[] = new TwigFilter('coverUrl', function (Article $article) use($imagesService) {
+            return $imagesService->getCoverUrlForArticle($article);
         });
 
         $filters[] = new TwigFilter('currency', function ($amount, $cents = false) {
