@@ -6,6 +6,7 @@
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Isbn\IsbnParsingException;
 use Biblys\Service\Config;
+use Biblys\Service\Images\ImagesService;
 use Model\ArticleCategory;
 use Model\ArticleCategoryQuery;
 use Model\ArticleQuery;
@@ -41,6 +42,8 @@ return function (
 
     $currentUser->authPublisher();
 
+    $imagesService = new ImagesService($config, new Symfony\Component\Filesystem\Filesystem());
+
     $publisherId = $currentUser->getCurrentRight()?->getPublisherId();
     $publisher = PublisherQuery::create()->findPk($publisherId);
     if ($publisherId && !$currentSite->allowsPublisher($publisher)) {
@@ -53,8 +56,10 @@ return function (
     $content = "";
 
     if ($request->getMethod() === "POST") {
+        $articleId = $request->request->get("article_id");
+        $article = ArticleQuery::create()->findPk($articleId);
         /** @var Article $articleEntity */
-        $articleEntity = $am->getById($_POST['article_id']);
+        $articleEntity = $am->getById($articleId);
 
         $params = array();
 
@@ -153,15 +158,20 @@ return function (
         // FICHIERS //
 
         // Couverture
-        $cover = new Media('article', $_POST['article_id']);
-        if (!empty($_FILES['article_cover_upload']['tmp_name'])) {
-            $cover->upload($_FILES['article_cover_upload']['tmp_name']);
+        $uploadedCoverImageFile = $request->files->get("article_cover_upload");
+        $coverImageFileToDownload = $request->request->get("article_cover_import");
+        $shouldDeleteArticleCover = $request->request->get("article_cover_delete");
+        if (!empty($uploadedCoverImageFile)) {
+            $imagesService->addArticleCoverImage($article, $uploadedCoverImageFile);
             $articleEntity->bumpCoverVersion();
-        } elseif (!empty($_POST['article_cover_import'])) {
-            $cover->upload($_POST['article_cover_import']);
+        } elseif (!empty($coverImageFileToDownload)) {
+            $filesystem = new Symfony\Component\Filesystem\Filesystem();
+            $temporaryFile = $filesystem->tempnam(sys_get_temp_dir(), 'article_cover_upload');
+            $filesystem->copy($coverImageFileToDownload, $temporaryFile);
+            $imagesService->addArticleCoverImage($article, $temporaryFile);
             $articleEntity->bumpCoverVersion();
-        } elseif (isset($_POST['article_cover_delete']) && $_POST['article_cover_delete']) {
-            $cover->delete();
+        } elseif ($shouldDeleteArticleCover) {
+            $imagesService->deleteArticleCoverImage($article);
             $articleEntity->bumpCoverVersion();
         }
         unset($_POST['article_cover_upload']);
@@ -228,7 +238,7 @@ return function (
 
             // Redirection
             if (isset($redirect_to_stock)) {
-                return new RedirectResponse('/pages/adm_stock?add=' . $_POST['article_id'] . '#add');
+                return new RedirectResponse('/pages/adm_stock?add=' . $articleId . '#add');
             } elseif (isset($redirect_to_new)) {
                 return new RedirectResponse('/pages/article_edit');
             } else {
@@ -304,13 +314,15 @@ return function (
                 ]
             );
 
-            $articleCover = null;
-            if ($articleEntity->hasCover()) {
+            $articleCoverUrl = $imagesService->getCoverUrlForArticle($article);
+            $articleCover = "";
+            if ($articleCoverUrl) {
                 $articleCover = '<img 
-                src="' . $articleEntity->getCoverUrl(["height" => 85]) . '" 
-                class="article-thumb-cover" 
-                alt="' . $articleEntity->get("title") . '"
-                height=85>';
+                    src="' . $articleCoverUrl . '" 
+                    class="article-thumb-cover" 
+                    alt="' . $articleEntity->get("title") . '"
+                    height=85>
+                ';
             }
 
             $content .= '
@@ -743,7 +755,7 @@ return function (
                 <input type="number" step="1" id="article_price" name="article_price" value="' . $a['article_price'] . '" class="mini" required ' . $article_price_readonly . ' data-html="true" data-toggle="popover" data-trigger="focus" data-content="Entrez le prix de l\'article en centimes. Par exemple, pour article à 14,00 €, entrez <strong>1400</strong> ; pour un article à 8,50 €, entrez <strong>850</strong>."> centimes
             </p>
             <p>
-                <label class="floating" for="article_price_editable">Prix libre:</label>
+                <label class="floating" for="article_price_editable">Prix libre :</label>
                 <input type="checkbox" name="article_price_editable" id="article_price_editable" value="1"' . ($articleEntity->has('price_editable') ? ' checked' : null) . '>
             </p>
             <br />

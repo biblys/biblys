@@ -2,26 +2,16 @@
 
 namespace AppBundle\Controller\Legacy;
 
-use AppBundle\Controller\LegacyController;
 use Biblys\Article\Type;
-use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
-use Biblys\Service\Mailer;
-use Biblys\Service\MetaTagsService;
-use Biblys\Service\TemplateService;
 use Biblys\Test\ModelFactory;
-use Biblys\Test\RequestFactory;
 use Exception;
 use Mockery;
-use Model\Right;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 require_once __DIR__ . "/../../../setUp.php";
@@ -31,6 +21,7 @@ class ArticleEditTest extends TestCase
 {
     /**
      * @throws PropelException
+     * @throws Exception
      */
     public function testLemoninkFieldIsDisplayed()
     {
@@ -55,8 +46,7 @@ class ArticleEditTest extends TestCase
 
         $urlgenerator = Mockery::mock(UrlGenerator::class);
         $urlgenerator->shouldReceive("generate")->andReturn("url");
-        $config = Mockery::mock(Config::class);
-        $config->shouldReceive("get")->with("lemonink.api_key")->andReturn("abcd1234");
+        $config = new Config(["lemonink" => ["api_key" => "abcd1234"]]);
 
         // when
         $response = $controller($request, $currentUser, $currentSite, $urlgenerator, $config);
