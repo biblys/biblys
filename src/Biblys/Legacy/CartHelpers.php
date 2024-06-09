@@ -59,13 +59,13 @@ class CartHelpers
         foreach ($articles as $article) {
             $cartUrl = $urlGenerator->generate("cart_add_article", ["articleId" => $article->getId()]);
             $coverHtml = "";
-            if ($imagesService->articleHasCoverImage($article)) {
-                $articleCover = $imagesService->getCoverImageForArticle($article);
+            $articleCoverImageUrl = $imagesService->getCoverUrlForArticle($article);
+            if ($articleCoverImageUrl) {
                 $coverHtml = '
                         <div class="cart-suggestions_article_cover">
                             <a href="' . $urlGenerator->generate("article_show", ["slug" => $article->getUrl()]) . '">
                                 <img 
-                                    src="' . $articleCover->getUrl() . '" 
+                                    src="' . $articleCoverImageUrl . '" 
                                     alt="' . $article->getTitle() . '"
                                     title="' . $article->getTitle() . '" 
                                 />

@@ -118,7 +118,7 @@ class ImagesServiceTest extends TestCase
         // given
         $article = ModelFactory::createArticle();
         ModelFactory::createImage(article: $article);
-        $config = Mockery::mock(Config::class);
+        $config = new Config();
         $filesystem = Mockery::mock(Filesystem::class);
         $service = new ImagesService($config, $filesystem);
 
@@ -136,7 +136,7 @@ class ImagesServiceTest extends TestCase
     {
         // given
         $article = ModelFactory::createArticle();
-        $config = Mockery::mock(Config::class);
+        $config = new Config();
         $filesystem = Mockery::mock(Filesystem::class);
         $service = new ImagesService($config, $filesystem);
 
@@ -147,27 +147,53 @@ class ImagesServiceTest extends TestCase
         $this->assertFalse($hasCover);
     }
 
-    /**
-     * ImagesServices->getCoverImageForArticle
-     */
+    /** ImagesService->getCoverUrlForArticle */
 
-    public function testGetCoverImageForArticle()
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetCoverUrlForArticleIfItExists(): void
     {
         // given
-        $article = new Article();
-        $article->setId(1984);
-        $config = Mockery::mock(Config::class);
-        $config->shouldReceive("get")->with("media_path")->andReturn(null);
-        $config->shouldReceive("get")->with("media_url")->andReturn(null);
+        $config = new Config(["media_url" => "images"]);
         $filesystem = Mockery::mock(Filesystem::class);
         $service = new ImagesService($config, $filesystem);
 
+        $article = ModelFactory::createArticle();
+        ModelFactory::createImage(
+            article: $article,
+            filePath: "book/covers",
+            fileName: "book-cover.jpeg",
+        );
+
         // when
-        $cover = $service->getCoverImageForArticle($article);
+        $coverUrl = $service->getCoverUrlForArticle($article);
 
         // then
-        $this->assertInstanceOf(ArticleCoverImage::class, $cover);
+        $this->assertEquals("images/book/covers/book-cover.jpeg", $coverUrl);
     }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetCoverUrlForArticleIfItDoesNotExist(): void
+    {
+        // given
+        $config = new Config(["media_url" => "images"]);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $filesystem);
+
+        $article = ModelFactory::createArticle();
+
+        // when
+        $coverUrl = $service->getCoverUrlForArticle($article);
+
+        // then
+        $this->assertNull($coverUrl);
+    }
+
 }
         // then
         $this->assertEquals("images/book/covers/book-cover.jpeg", $coverUrl);

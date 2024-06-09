@@ -123,7 +123,7 @@ class CartTest extends TestCase
         $currentUser->shouldReceive("isAdmin")->andReturn(false);
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
         $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
-        $config = Mockery::mock(Config::class);
+        $config = new Config();
 
         // when
         $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator);
@@ -187,7 +187,7 @@ class CartTest extends TestCase
         $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
         $currentUser->shouldReceive("isAdmin")->andReturn(false);
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
-        $config = Mockery::mock(Config::class);
+        $config = new Config();
 
         // when
         $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator);
