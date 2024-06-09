@@ -34,11 +34,20 @@ class ImagesService
         list($width, $height) = $imageDimensions;
 
         $image = new Image();
+        $image->setVersion(1);
+
+        if ($this->articleHasCoverImage($article)) {
+            $image = ImageQuery::create()->findOneByArticleId($article->getId());
+            $image->setVersion($image->getVersion() + 1);
+
+            $articleCoverImage = $this->getCoverImageForArticle($article);
+            $this->filesystem->remove($articleCoverImage->getFilePath());
+        }
+
         $image->setType("cover");
         $image->setArticleId($article->getId());
         $image->setFilepath("/book/$imageDirectory/");
         $image->setFilename("{$article->getId()}.jpg");
-        $image->setVersion(1);
         $image->setMediatype(mime_content_type($imagePath));
         $image->setFilesize(filesize($imagePath));
         $image->setWidth($width);
