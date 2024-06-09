@@ -49,6 +49,65 @@ class ImagesServiceTest extends TestCase
         $filesystem->shouldHaveReceived("copy");
     }
 
+    /**
+     * @throws PropelException
+     */
+    public function testAddArticleCoverImageCreatesUpdatesImage(): void
+    {
+        // given
+        $config = new Config();
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects("copy");
+        $filesystem->expects("remove");
+        $service = new ImagesService($config, $filesystem);
+
+        $article = ModelFactory::createArticle();
+        $article->setId(1985);
+        $service->addArticleCoverImage($article, __DIR__ . "/image.jpeg");
+        $createdImage = ImageQuery::create()->findOneByArticleId($article->getId());
+
+        // when
+        $service->addArticleCoverImage($article, __DIR__ . "/image2.jpeg");
+
+        // then
+        $updatedImage = ImageQuery::create()->findOneByArticleId($article->getId());
+        $this->assertInstanceOf(Image::class, $updatedImage);
+        $this->assertEquals($createdImage->getId(), $updatedImage->getId());
+        $this->assertEquals("/book/85/", $updatedImage->getFilepath());
+        $this->assertEquals("1985.jpg", $updatedImage->getFilename());
+        $this->assertEquals(2, $updatedImage->getVersion());
+        $this->assertEquals("image/jpeg", $updatedImage->getMediatype());
+        $this->assertEquals(4410, $updatedImage->getFilesize());
+        $this->assertEquals(100, $updatedImage->getWidth());
+        $this->assertEquals(150, $updatedImage->getHeight());
+        $filesystem->shouldHaveReceived("remove");
+        $filesystem->shouldHaveReceived("copy");
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testAddArticleCoverImageIfFileCopyFails(): void
+    {
+        // given
+        $config = new Config();
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects("copy")->andThrow(new FileNotFoundException());
+        $service = new ImagesService($config, $filesystem);
+
+        $article = ModelFactory::createArticle();
+
+        // when
+        $exception = Helpers::runAndCatchException(function () use ($service, $article) {
+            $service->addArticleCoverImage($article, __DIR__ . "/image.jpeg");
+        });
+
+        // then
+        $this->assertInstanceOf(FileNotFoundException::class, $exception);
+        $image = ImageQuery::create()->findOneByArticleId($article->getId());
+        $this->assertNull($image);
+    }
+
     /** ImagesServices->articleHasCoverImage */
 
     /**
@@ -108,5 +167,54 @@ class ImagesServiceTest extends TestCase
 
         // then
         $this->assertInstanceOf(ArticleCoverImage::class, $cover);
+    }
+}
+        // then
+        $this->assertEquals("images/book/covers/book-cover.jpeg", $coverUrl);
+    }
+
+
+    /** ImagesService->deleteArticleCoverImage */
+
+    /**
+     * @throws PropelException
+     */
+    public function testDeleteArticleCoverImageDeletesImage(): void
+    {
+        // given
+        $config = new Config();
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects("remove");
+        $service = new ImagesService($config, $filesystem);
+
+        $article = ModelFactory::createArticle();
+        ModelFactory::createImage(article: $article);
+
+        // when
+        $service->deleteArticleCoverImage($article);
+
+        // then
+        $deletedImage = ImageQuery::create()->findOneByArticleId($article->getId());
+        $this->assertNull($deletedImage);
+        $filesystem->shouldHaveReceived("remove");
+    }
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetCoverUrlForArticleIfItDoesNotExist(): void
+    {
+        // given
+        $config = new Config(["media_url" => "images"]);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $filesystem);
+
+        $article = ModelFactory::createArticle();
+
+        // when
+        $coverUrl = $service->getCoverUrlForArticle($article);
+
+        // then
+        $this->assertNull($coverUrl);
     }
 }
