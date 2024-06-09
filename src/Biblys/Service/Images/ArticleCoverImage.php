@@ -2,46 +2,37 @@
 
 namespace Biblys\Service\Images;
 
-use Model\Article;
+use InvalidArgumentException;
+use Model\Image;
 
 class ArticleCoverImage implements ImageInterface
 {
-    private Article $_article;
+    private Image $_image;
     private string $_basePath;
     private string $_baseUrl;
 
     public function __construct(
-        Article $article,
+        Image $image,
         string $basePath,
         string $baseUrl,
     )
     {
-        $this->_article = $article;
+        if ($image->getType() !== "cover") {
+            throw new InvalidArgumentException('Image must be of type "cover"');
+        }
+
+        $this->_image = $image;
         $this->_basePath = $basePath;
         $this->_baseUrl = $baseUrl;
     }
 
     public function getFilePath(): string
     {
-        $articleId = $this->_article->getId();
-        $imageDirectory = str_pad(
-            string: substr(string: $articleId, offset: -2, length: 2),
-            length: 2,
-            pad_string: '0',
-            pad_type: STR_PAD_LEFT
-        );
-        return "$this->_basePath/book/$imageDirectory/$articleId.jpg";
+        return "$this->_basePath/{$this->_image->getFilepath()}/{$this->_image->getFilename()}";
     }
 
     public function getUrl(): string
     {
-        $articleId = $this->_article->getId();
-        $imageDirectory = str_pad(
-            string: substr(string: $articleId, offset: -2, length: 2),
-            length: 2,
-            pad_string: '0',
-            pad_type: STR_PAD_LEFT
-        );
-        return "{$this->_baseUrl}book/$imageDirectory/$articleId.jpg";
+        return "$this->_baseUrl/{$this->_image->getFilepath()}/{$this->_image->getFilename()}";
     }
 }

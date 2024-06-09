@@ -10,6 +10,7 @@ use Model\Article;
 use Model\ArticleCategory;
 use Model\AuthenticationMethod;
 use Model\Customer;
+use Model\Image;
 use Model\Invitation;
 use Model\BookCollection;
 use Model\Cart;
@@ -780,6 +781,26 @@ class ModelFactory
         $specialOffer->save();
 
         return $specialOffer;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createImage(
+        Article $article = null,
+        string $type = null,
+        string $filePath = "/images/",
+        string $fileName = "image.jpg",
+    ): Image
+    {
+        $image = new Image();
+        $image->setType($type);
+        $image->setArticle($article);
+        $image->setFilePath($filePath);
+        $image->setFileName($fileName);
+        $image->save();
+
+        return $image;
     }
 
 }

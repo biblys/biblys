@@ -5,18 +5,16 @@ namespace Biblys\Service\Images;
 use Biblys\Service\Config;
 use Model\Article;
 use Model\Image;
+use Model\ImageQuery;
 use Propel\Runtime\Exception\PropelException;
-use Symfony\Component\Filesystem\Filesystem;
 
 class ImagesService
 {
     private Config $_config;
-    private Filesystem $_filesystem;
 
-    public function __construct(Config $config, Filesystem $filesystem)
+    public function __construct(Config $config)
     {
         $this->_config = $config;
-        $this->_filesystem = $filesystem;
     }
 
     /**
@@ -49,17 +47,16 @@ class ImagesService
 
     public function articleHasCoverImage(Article $article): bool
     {
-        $coverImage = $this->getCoverImageForArticle($article);
-        $coverImageFilePath = $coverImage->getFilePath();
-
-        return $this->_filesystem->exists($coverImageFilePath);
+        return ImageQuery::create()->filterByArticleId($article->getId())->exists();
     }
 
     public function getCoverImageForArticle(Article $article): ArticleCoverImage
     {
+        $image = ImageQuery::create()->findOneByArticleId($article->getId());
         $basePathFromRoot = $this->_config->get("media_path") ?: "public/images";
         $basePath =  __DIR__."/../../../../$basePathFromRoot";
         $baseUrl = $this->_config->get("media_url") ?: "/images/";
-        return new ArticleCoverImage($article, $basePath, $baseUrl);
+
+        return new ArticleCoverImage($image, $basePath, $baseUrl);
     }
 }
