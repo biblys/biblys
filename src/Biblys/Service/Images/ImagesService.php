@@ -88,7 +88,8 @@ class ImagesService
             return null;
         }
 
-        return "$this->baseUrl/{$image->getFilepath()}/{$image->getFilename()}";
+        $version = $image->getVersion() > 1 ? "?v={$image->getVersion()}" : "";
+        return "$this->baseUrl/{$image->getFilepath()}/{$image->getFilename()}$version";
     }
 
     private function _buildArticleCoverImagePath(Image $image): ?string
