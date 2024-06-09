@@ -791,6 +791,7 @@ class ModelFactory
         string $type = null,
         string $filePath = "/images/",
         string $fileName = "image.jpg",
+        int $version = 1,
     ): Image
     {
         $image = new Image();
@@ -798,6 +799,7 @@ class ModelFactory
         $image->setArticle($article);
         $image->setFilePath($filePath);
         $image->setFileName($fileName);
+        $image->setVersion($version);
         $image->save();
 
         return $image;
