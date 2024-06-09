@@ -10,6 +10,7 @@ use Model\Image;
 use Model\ImageQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\Filesystem\Filesystem;
 
 require_once __DIR__ . "/../../../setUp.php";
 
@@ -24,14 +25,15 @@ class ImagesServiceTest extends TestCase
     {
         // given
         $config = new Config();
-        $service = new ImagesService($config);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects('copy');
+        $service = new ImagesService($config, $filesystem);
 
         $article = new Article();
         $article->setId(1984);
-        $imagePath = __DIR__ . "/image.jpeg";
 
         // when
-        $service->addArticleCoverImage($article, $imagePath);
+        $service->addArticleCoverImage($article, __DIR__ . "/image.jpeg");
 
         // then
         $image = ImageQuery::create()->findOneByArticleId($article->getId());
@@ -44,6 +46,7 @@ class ImagesServiceTest extends TestCase
         $this->assertEquals(14788, $image->getFilesize());
         $this->assertEquals(200, $image->getWidth());
         $this->assertEquals(300, $image->getHeight());
+        $filesystem->shouldHaveReceived("copy");
     }
 
     /** ImagesServices->articleHasCoverImage */
@@ -57,7 +60,8 @@ class ImagesServiceTest extends TestCase
         $article = ModelFactory::createArticle();
         ModelFactory::createImage(article: $article);
         $config = Mockery::mock(Config::class);
-        $service = new ImagesService($config);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $filesystem);
 
         // when
         $hasCover = $service->articleHasCoverImage($article);
@@ -74,7 +78,8 @@ class ImagesServiceTest extends TestCase
         // given
         $article = ModelFactory::createArticle();
         $config = Mockery::mock(Config::class);
-        $service = new ImagesService($config);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $filesystem);
 
         // when
         $hasCover = $service->articleHasCoverImage($article);
@@ -95,7 +100,8 @@ class ImagesServiceTest extends TestCase
         $config = Mockery::mock(Config::class);
         $config->shouldReceive("get")->with("media_path")->andReturn(null);
         $config->shouldReceive("get")->with("media_url")->andReturn(null);
-        $service = new ImagesService($config);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $filesystem);
 
         // when
         $cover = $service->getCoverImageForArticle($article);

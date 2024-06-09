@@ -36,7 +36,10 @@ return function (
 
     $content = null;
 
-    $imagesService = new ImagesService(config: $config);
+    $imagesService = new ImagesService(
+        config: $config,
+        filesystem: new Symfony\Component\Filesystem\Filesystem()
+    );
 
     $currentUrlService = new CurrentUrlService($request);
     $currentUrl = $currentUrlService->getRelativeUrl();
