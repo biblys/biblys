@@ -79,6 +79,7 @@ class Article extends BaseArticle
 
     /**
      * @throws PropelException
+     * @throws CannotDeleteArticleWithStock
      */
     public function preDelete(ConnectionInterface|null $con = null): bool
     {
