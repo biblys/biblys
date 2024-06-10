@@ -111,7 +111,7 @@ class ImagesServiceTest extends TestCase
         $this->assertNull($image);
     }
 
-    /** ImagesServices->articleHasCoverImage */
+    /** ImagesService->articleHasCoverImage */
 
     /**
      * @throws PropelException
@@ -197,6 +197,31 @@ class ImagesServiceTest extends TestCase
         $this->assertEquals("/images/book/covers/book-cover.jpeg", $coverUrl);
     }
 
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetCoverUrlForArticleWithVersion(): void
+    {
+        // given
+        $config = new Config(["media_url" => "images/"]);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $filesystem);
+
+        $article = ModelFactory::createArticle();
+        ModelFactory::createImage(
+            article: $article,
+            filePath: "book/covers",
+            fileName: "book-cover-updated.jpeg",
+            version: 2,
+        );
+
+        // when
+        $coverUrl = $service->getCoverUrlForArticle($article);
+
+        // then
+        $this->assertEquals("images/book/covers/book-cover-updated.jpeg?v=2", $coverUrl);
+    }
 
     /** ImagesService->deleteArticleCoverImage */
 
@@ -222,29 +247,32 @@ class ImagesServiceTest extends TestCase
         $this->assertNull($deletedImage);
         $filesystem->shouldHaveReceived("remove");
     }
+
+    /** ImagesService->deleteArticleCoverImage */
+
     /**
      * @throws PropelException
      * @throws Exception
      */
-    public function testGetCoverUrlForArticleWithVersion(): void
+    public function testDeleteArticleCoverImageIfFileDeletionFails(): void
     {
         // given
-        $config = new Config(["media_url" => "images/"]);
+        $config = new Config();
         $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->shouldReceive("remove")->andThrow(new FileNotFoundException());
         $service = new ImagesService($config, $filesystem);
 
         $article = ModelFactory::createArticle();
-        ModelFactory::createImage(
-            article: $article,
-            filePath: "book/covers",
-            fileName: "book-cover-updated.jpeg",
-            version: 2,
-        );
+        ModelFactory::createImage(article: $article);
 
         // when
-        $coverUrl = $service->getCoverUrlForArticle($article);
+        $exception = Helpers::runAndCatchException(function() use($service, $article) {
+            $service->deleteArticleCoverImage($article);
+        });
 
         // then
-        $this->assertEquals("images/book/covers/book-cover-updated.jpeg?v=2", $coverUrl);
+        $this->assertInstanceOf(FileNotFoundException::class, $exception);
+        $image = ImageQuery::create()->findOneByArticleId($article->getId());
+        $this->assertNotNull($image);
     }
 }
