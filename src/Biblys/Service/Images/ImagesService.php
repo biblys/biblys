@@ -18,7 +18,7 @@ class ImagesService
     private string|array|bool $baseUrl;
 
     public function __construct(
-        private readonly Config $config,
+        private readonly Config     $config,
         private readonly Filesystem $filesystem,
     )
     {
@@ -42,7 +42,7 @@ class ImagesService
         $imageDimensions = getimagesize($imagePath);
         list($width, $height) = $imageDimensions;
 
-        $image = ImageQuery::create()->findOneByArticleId($article->getId());
+        $image = $this->_getCoverImageForArticle($article);
         if ($image) {
             $image->setVersion($image->getVersion() + 1);
             $this->filesystem->remove($this->_buildArticleCoverImagePath($image));
@@ -76,6 +76,25 @@ class ImagesService
     /**
      * @throws PropelException
      */
+    public function deleteArticleCoverImage(Article $article): void
+    {
+        $db = Propel::getWriteConnection(ImageTableMap::DATABASE_NAME);
+        $db->beginTransaction();
+
+        try {
+            $image = $this->_getCoverImageForArticle($article);
+            $image->delete($db);
+            $this->filesystem->remove($this->_buildArticleCoverImagePath($image));
+            $db->commit();
+        } catch (Exception $exception) {
+            $db->rollBack();
+            throw $exception;
+        }
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function articleHasCoverImage(Article $article): bool
     {
         return ImageQuery::create()->filterByArticle($article)->exists();
@@ -83,7 +102,7 @@ class ImagesService
 
     public function getCoverUrlForArticle(Article $article): ?string
     {
-        $image = ImageQuery::create()->findOneByArticleId($article->getId());
+        $image = $this->_getCoverImageForArticle($article);
         if (!$image) {
             return null;
         }
@@ -99,5 +118,14 @@ class ImagesService
     private function _buildArticleCoverImagePath(Image $image): ?string
     {
         return "$this->basePath/{$image->getFilepath()}/{$image->getFilename()}";
+    }
+
+    /**
+     * @param Article $article
+     * @return Image|null
+     */
+    private function _getCoverImageForArticle(Article $article): ?Image
+    {
+        return ImageQuery::create()->findOneByArticleId($article->getId());
     }
 }
