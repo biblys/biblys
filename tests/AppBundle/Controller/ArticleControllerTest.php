@@ -7,6 +7,7 @@ use Biblys\Article\Type;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\Images\ImagesService;
 use Biblys\Service\LoggerService;
 use Biblys\Service\Mailer;
 use Biblys\Service\MailingList\MailingListInterface;
@@ -23,9 +24,11 @@ use Biblys\Test\RequestFactory;
 use Exception;
 use LemonInk\Models\Transaction;
 use Mockery;
+use Model\ArticleQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Psr\Http\Client\ClientExceptionInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -266,6 +269,8 @@ class ArticleControllerTest extends TestCase
         $templateService
             ->shouldReceive("renderResponse")
             ->andReturn(new Response(""));
+        $imagesService = Mockery::mock(ImagesService::class);
+        $imagesService->expects("deleteArticleCoverImage");
 
         // when
         $response = $controller->deleteAction(
@@ -273,16 +278,13 @@ class ArticleControllerTest extends TestCase
             $urlGenerator,
             $currentSite,
             $currentUser,
+            $imagesService,
             $templateService,
             $article->getId()
         );
 
         // then
-        $this->assertEquals(
-            200,
-            $response->getStatusCode(),
-            "it should return HTTP 200"
-        );
+        $this->assertEquals(200, $response->getStatusCode());
     }
 
     /**
@@ -310,6 +312,8 @@ class ArticleControllerTest extends TestCase
         $templateService
             ->shouldReceive("renderResponse")
             ->andReturn(new Response(""));
+        $imagesService = Mockery::mock(ImagesService::class);
+        $imagesService->expects("articleHasCoverImage")->andReturn(false);
 
         // when
         $response = $controller->deleteAction(
@@ -317,6 +321,54 @@ class ArticleControllerTest extends TestCase
             $urlGenerator,
             $currentSite,
             $currentUser,
+            $imagesService,
+            $templateService,
+            $article->getId()
+        );
+
+        // then
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertEquals("/url", $response->getTargetUrl());
+        $imagesService->shouldNotHaveReceived("deleteArticleCoverImage");
+        $this->assertTrue($article->isDeleted());
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function testDeleteActionDeletesArticleWithCover()
+    {
+        // given
+        $request = new Request();
+        $request->setMethod(Request::METHOD_POST);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/url");
+        $currentSite = $this->createMock(CurrentSite::class);
+        $article = ModelFactory::createArticle();
+        $controller = new ArticleController();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser
+            ->shouldReceive("authPublisher")
+            ->with($article->getPublisher())
+            ->andReturn();
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->andReturn(new Response(""));
+        $imagesService = Mockery::mock(ImagesService::class);
+        $imagesService->expects("articleHasCoverImage")->andReturn(true);
+        $imagesService->expects("deleteArticleCoverImage");
+
+        // when
+        $response = $controller->deleteAction(
+            $request,
+            $urlGenerator,
+            $currentSite,
+            $currentUser,
+            $imagesService,
             $templateService,
             $article->getId()
         );
@@ -325,6 +377,57 @@ class ArticleControllerTest extends TestCase
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertEquals("/url", $response->getTargetUrl());
         $this->assertTrue($article->isDeleted());
+        /** @noinspection PhpUndefinedMethodInspection */
+        $imagesService->shouldHaveReceived("deleteArticleCoverImage")->with($article);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testDeleteActionDeletesArticleWhenCoverFileDeletionFails()
+    {
+        // given
+        $request = new Request();
+        $request->setMethod(Request::METHOD_POST);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/url");
+        $currentSite = $this->createMock(CurrentSite::class);
+        $article = ModelFactory::createArticle();
+        $controller = new ArticleController();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser
+            ->shouldReceive("authPublisher")
+            ->with($article->getPublisher())
+            ->andReturn();
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->andReturn(new Response(""));
+        $imagesService = Mockery::mock(ImagesService::class);
+        $imagesService->expects("articleHasCoverImage")->andReturn(true);
+        $imagesService->expects("deleteArticleCoverImage")->andThrow(FileNotFoundException::class);
+
+        // when
+        $exception = Helpers::runAndCatchException(function () use (
+            $controller, $request, $urlGenerator, $currentSite, $article, $currentUser,
+            $templateService, $imagesService
+        ) {
+            $controller->deleteAction(
+                $request,
+                $urlGenerator,
+                $currentSite,
+                $currentUser,
+                $imagesService,
+                $templateService,
+                $article->getId()
+            );
+        });
+
+        // then
+        $this->assertInstanceOf(FileNotFoundException::class, $exception);
+        $article = ArticleQuery::create()->findPk($article->getId());
+        $this->assertNotNull($article);
     }
 
     /**
@@ -350,16 +453,20 @@ class ArticleControllerTest extends TestCase
         $templateService
             ->shouldReceive("renderResponse")
             ->andReturn(new Response(""));
+        $imagesService = Mockery::mock(ImagesService::class);
+        $imagesService->expects("deleteArticleCoverImage");
 
         // when
         $exception = Helpers::runAndCatchException(function () use (
-            $controller, $request, $urlGenerator, $currentSite, $article, $currentUser, $templateService
+            $controller, $request, $urlGenerator, $currentSite, $article, $currentUser,
+            $templateService, $imagesService
         ) {
             $controller->deleteAction(
                 $request,
                 $urlGenerator,
                 $currentSite,
                 $currentUser,
+                $imagesService,
                 $templateService,
                 $article->getId()
             );
@@ -372,6 +479,7 @@ class ArticleControllerTest extends TestCase
             $exception->getMessage()
         );
         $this->assertFalse($article->isDeleted());
+        $imagesService->shouldNotHaveReceived("deleteArticleCoverImage");
     }
 
     /** ArticleController->searchAction */
