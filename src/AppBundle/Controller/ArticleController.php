@@ -13,6 +13,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\GleephService;
+use Biblys\Service\Images\ImagesService;
 use Biblys\Service\LoggerService;
 use Biblys\Service\Mailer;
 use Biblys\Service\MailingList\MailingListService;
@@ -61,6 +62,7 @@ class ArticleController extends Controller
      * @throws LoaderError
      * @throws PropelException
      * @throws ClientExceptionInterface
+     * @throws Exception
      */
     public function showAction(
         Request         $request,
@@ -382,6 +384,7 @@ class ArticleController extends Controller
         UrlGenerator $urlGenerator,
         CurrentSite $currentSite,
         CurrentUser $currentUser,
+        ImagesService $imagesService,
         TemplateService $templateService,
         int $id
     ): Response
@@ -396,6 +399,12 @@ class ArticleController extends Controller
         $error = null;
         if ($request->getMethod() == 'POST') {
             try {
+                $article->preDelete();
+
+                if ($imagesService->articleHasCoverImage($article)) {
+                    $imagesService->deleteArticleCoverImage($article);
+                }
+
                 $article->delete();
             } catch (CannotDeleteArticleWithStock) {
                 throw new BadRequestHttpException(
