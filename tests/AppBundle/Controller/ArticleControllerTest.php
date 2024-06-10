@@ -17,6 +17,7 @@ use Biblys\Service\TemplateService;
 use Biblys\Service\Watermarking\WatermarkedFile;
 use Biblys\Service\Watermarking\WatermarkingService;
 use Biblys\Test\EntityFactory;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Exception;
@@ -25,6 +26,7 @@ use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Psr\Http\Client\ClientExceptionInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -239,6 +241,8 @@ class ArticleControllerTest extends TestCase
         );
     }
 
+    /** ArticleController->deleteAction */
+
     /**
      * @throws LoaderError
      * @throws PropelException
@@ -287,15 +291,16 @@ class ArticleControllerTest extends TestCase
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function testDeleteActionIsImpossibleIfStock()
+    public function testDeleteActionDeletesArticle()
     {
         // given
         $request = new Request();
-        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $request->setMethod(Request::METHOD_POST);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/url");
         $currentSite = $this->createMock(CurrentSite::class);
         $article = ModelFactory::createArticle();
         $controller = new ArticleController();
-        ModelFactory::createStockItem(article: $article);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser
             ->shouldReceive("authPublisher")
@@ -305,7 +310,6 @@ class ArticleControllerTest extends TestCase
         $templateService
             ->shouldReceive("renderResponse")
             ->andReturn(new Response(""));
-
 
         // when
         $response = $controller->deleteAction(
@@ -318,12 +322,59 @@ class ArticleControllerTest extends TestCase
         );
 
         // then
-        $this->assertEquals(
-            200,
-            $response->getStatusCode(),
-            "it should return HTTP 200"
-        );
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertEquals("/url", $response->getTargetUrl());
+        $this->assertTrue($article->isDeleted());
     }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testDeleteActionIsImpossibleIfArticleHasStock()
+    {
+        // given
+        $request = new Request();
+        $request->setMethod(Request::METHOD_POST);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $article = ModelFactory::createArticle(title: "En stock");
+        $controller = new ArticleController();
+        ModelFactory::createStockItem(article: $article);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser
+            ->shouldReceive("authPublisher")
+            ->with($article->getPublisher())
+            ->andReturn();
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->andReturn(new Response(""));
+
+        // when
+        $exception = Helpers::runAndCatchException(function () use (
+            $controller, $request, $urlGenerator, $currentSite, $article, $currentUser, $templateService
+        ) {
+            $controller->deleteAction(
+                $request,
+                $urlGenerator,
+                $currentSite,
+                $currentUser,
+                $templateService,
+                $article->getId()
+            );
+        });
+
+        // then
+        $this->assertInstanceOf(BadRequestHttpException::class, $exception);
+        $this->assertEquals(
+            "Impossible de supprimer l'article En stock car il a des exemplaires associés.",
+            $exception->getMessage()
+        );
+        $this->assertFalse($article->isDeleted());
+    }
+
+    /** ArticleController->searchAction */
 
     /**
      * @throws RuntimeError
@@ -336,7 +387,7 @@ class ArticleControllerTest extends TestCase
         // given
         ModelFactory::createArticle(
             title: "Résultat de recherche",
-            authors: [ModelFactory::createPeople()],
+            authors: [ModelFactory::createContributor()],
         );
         $controller = new ArticleController();
         $request = new Request();
@@ -384,7 +435,7 @@ class ArticleControllerTest extends TestCase
         // given
         ModelFactory::createArticle(
             title: "Résultat de recherche trié",
-            authors: [ModelFactory::createPeople()]
+            authors: [ModelFactory::createContributor()]
         );
         $controller = new ArticleController();
         $request = new Request();
@@ -430,12 +481,9 @@ class ArticleControllerTest extends TestCase
      */
     public function testSearchActionWithIllegalSortOption()
     {
-        // then
-        $this->expectException(BadRequestHttpException::class);
-
         // given
         ModelFactory::createArticle(
-            title: "Résultat de recherche trié", authors: [ModelFactory::createPeople()]
+            title: "Résultat de recherche trié", authors: [ModelFactory::createContributor()]
         );
         $controller = new ArticleController();
         $request = new Request();
@@ -451,8 +499,11 @@ class ArticleControllerTest extends TestCase
         $queryParams->shouldReceive("get")->with("sort")->andReturn("1AND+1%3D1+ORDERBY%281%2C2%2C3%2C4%2C5%29+--%3B|desc");
         $queryParams->shouldReceive("get")->with("p")->andReturn("0");
 
+        // then
+        $this->expectException(BadRequestHttpException::class);
+
         // when
-        $response = $controller->searchAction(
+        $controller->searchAction(
             $request,
             $currentSite,
             $queryParams,
@@ -473,7 +524,7 @@ class ArticleControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         $article = ModelFactory::createArticle(
             title: "Résultat de recherche avec stock",
-            authors: [ModelFactory::createPeople()]
+            authors: [ModelFactory::createContributor()]
         );
         ModelFactory::createStockItem(site: $site, article: $article);
         user:
@@ -526,7 +577,7 @@ class ArticleControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         $article = ModelFactory::createArticle(
             title: "Résultat de recherche trié avec stock",
-            authors: [ModelFactory::createPeople()]
+            authors: [ModelFactory::createContributor()]
         );
         ModelFactory::createStockItem(site: $site, article: $article);
         user:
@@ -777,7 +828,6 @@ class ArticleControllerTest extends TestCase
             lemoninkTransactionToken: "abcdefgh",
         );
 
-        $request = RequestFactory::createAuthRequest();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")
             ->with("publisher_filter")->andReturn($article->getPublisherId());
@@ -843,7 +893,6 @@ class ArticleControllerTest extends TestCase
             user: $user,
         );
 
-        $request = RequestFactory::createAuthRequest();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")
             ->with("publisher_filter")->andReturn($article->getPublisherId());
