@@ -1,20 +1,14 @@
 <?php
 
-
-use Symfony\Component\HttpFoundation\Request;
+use Framework\Exception\AuthException;
 
 class Visitor extends User
 {
-    /** @var bool */
-    private $logged = false;
-
-    /** @var mixed|string */
+    private $logged = null;
     private $visitor_uid = null;
-
-    /** @var User */
     private $user = null;
 
-    public function __construct(Request $request)
+    public function __construct($request)
     {
         global $_SQL;
         $this->db = $_SQL;
@@ -25,11 +19,6 @@ class Visitor extends User
             $this->visitor_uid = md5(uniqid('', true));
             setcookie('visitor_uid', $this->visitor_uid, 0, '/');
             $_COOKIE['visitor_uid'] = $this->visitor_uid;
-        }
-
-        $userUidCookie = $request->cookies->get("user_uid");
-        if ($userUidCookie) {
-            $this->_setUserFromToken($userUidCookie);
         }
     }
 
@@ -53,11 +42,45 @@ class Visitor extends User
 
     /**
      * Is the visitor authentificated ?
-     * @return bool
+     * @return boolean
      */
-    public function isLogged(): bool
+    public function isLogged()
     {
-        return $this->logged;
+        global $request;
+
+        if (isset($this->logged)) {
+            return $this->logged;
+        } else {
+            $um = new UserManager();
+            $sm = new SessionManager();
+
+            // If user_uid cookie is set
+            // not working on tys without HttpFoundation : $user_uid = $request->cookies->get('user_uid', false);
+
+            if (isset($_COOKIE["user_uid"])) {
+                $user_uid = $_COOKIE["user_uid"];
+                // If there is a not expired session for this token
+                $session = $sm->get(['session_token' => $user_uid]);
+                if ($session) {
+
+                    // If session has expired
+                    if (($session->get('expires') < date('Y-m-d H:i:s'))) {
+                        return false;
+                    }
+
+                    // Get user
+                    $user = $um->getById($session->get('user_id'));
+                    if ($user) {
+                        $this->logged = true;
+                        $this->user = $user;
+                        $this->set('user_uid', $_COOKIE['user_uid']);
+                        return true;
+                    }
+                }
+            }
+            $this->logged = false;
+            return false;
+        }
     }
 
     /*
@@ -97,8 +120,8 @@ class Visitor extends User
 
     /**
      * Is the visitor currently a bookshop ?
-     * @param int $id
-     * @return bool
+     * @param type $id
+     * @return boolean
      */
     public function isBookshop($id = null)
     {
@@ -111,7 +134,7 @@ class Visitor extends User
 
     /**
      * Is the visitor currently a library ?
-     * @param int $id
+     * @param type $id
      * @return boolean
      */
     public function isLibrary($id = null)
@@ -181,8 +204,9 @@ class Visitor extends User
 
     /**
      * Allow the visitor to choose from his different rights
+     * @param type $uid
      */
-    public function setCurrentRight(Right $right): bool
+    public function setCurrentRight($right)
     {
         $rm = new RightManager();
 
@@ -196,7 +220,7 @@ class Visitor extends User
         }
 
         // Set current right
-        if ($right->get('user_id') === $this->get('id')) {
+        if ($right->get('user_id') == $this->get('id')) {
             $right->set('right_current', 1);
             $rm->update($right);
             return true;
@@ -205,7 +229,7 @@ class Visitor extends User
         return false;
     }
 
-    public function getCurrentRight(): Right
+    public function getCurrentRight()
     {
         global $_SITE;
 
@@ -219,18 +243,22 @@ class Visitor extends User
             }
         }
 
-        // If no right & user is admin, return admin right
-        if ($right = $rm->get(['user_id' => $this->get('id'), 'site_id' => $_SITE['site_id']])) {
-            return $right;
+        // If no right & user is admin, set admin right
+        if ($right = $rm->get(array('user_id' => $this->get('id'), 'site_id' => $_SITE['site_id']))) {
+            if ($this->setCurrentRight($right)) {
+                return $right;
+            }
         }
 
         // Else if other right available, set that one
-        if ($right = $rm->get(['user_id' => $this->get('id')])) {
-            return $right;
+        if ($right = $rm->get(array('user_id' => $this->get('id')))) {
+            if ($this->setCurrentRight($right)) {
+                return $right;
+            }
         }
 
         // If no right at all, return empty right
-        return new Right([]);
+        return new Right(array());
     }
 
     /**
@@ -244,33 +272,5 @@ class Visitor extends User
         }
 
         return [];
-    }
-
-    /**
-     * @param string $token
-     * @return bool
-     */
-    private function _setUserFromToken(string $token): bool
-    {
-        $sm = new SessionManager();
-        $session = $sm->get(['session_token' => $token]);
-        if (!$session) {
-            return false;
-        }
-
-        if (($session->get('expires') < date('Y-m-d H:i:s'))) {
-            return false;
-        }
-
-        $um = new UserManager();
-        $user = $um->getById($session->get('user_id'));
-        if (!$user) {
-            return false;
-        }
-
-        $this->logged = true;
-        $this->user = $user;
-        $this->set('user_uid', $token);
-        return true;
     }
 }

@@ -321,7 +321,7 @@ class CartManager extends EntityManager
     /**
      * Obtenir le contenu d'un panier
      */
-    public function getStock(Cart $cart, $stock_id = 'all'): array
+    public function getStock(Cart $cart, $stock_id = 'all')
     {
         $sm = new StockManager();
         $stock = $sm->getAll(array('cart_id' => $cart->get('id')));
@@ -486,13 +486,6 @@ class CartManager extends EntityManager
                 $title = $article->get("title");
                 throw new CartException(
                     "L'article $title n'a pas pu être ajouté au panier car il est hors commerce."
-                );
-            }
-
-            if ($article->isToBeReprinted()) {
-                $title = $article->get("title");
-                throw new CartException(
-                    "L'article $title n'a pas pu être ajouté au panier car il est en cours de réimpression."
                 );
             }
 

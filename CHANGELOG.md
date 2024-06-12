@@ -1,27 +1,5 @@
 # Historique des modifications
 
-### 2.56.3 (24 décembre 2021)
-
-Correction : l'information selon laquelle une commande avait été validée avec
-le mode d'expédition "retrait en magasin" était mal enregitrée. C'est rétabli.
-
-### 2.56.2 (19 décembre 2021)
-
-Corrections
-
-- Une commande pouvait être enregistrée avec des frais de port à 0 € si le 
-  client double-cliquait sur le bouton de validation. C'est corrigé.
-
-
-### 2.56.1 (19 novembre 2021)
-
-Corrections
-
-- L'accès en tant qu'éditeur à la page de gestion des billets ne fonctionnait
-  plus. C'est rétabli.
-- Il était possible d'ajouter au panier un livre en cours de réimpression. Ce
-  n'est plus le cas.
-
 ## 2.56.0 (5 novembre 2021)
 
 Améliorations

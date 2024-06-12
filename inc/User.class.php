@@ -2,6 +2,7 @@
 
 use Biblys\Axys\Client as AxysClient;
 use Biblys\Service\Config;
+use Biblys\Service\Log;
 use Biblys\Service\Mailer;
 
 class InvalidCredentialsException extends Exception
@@ -14,6 +15,7 @@ class User extends Entity
     protected $cart = null;
     protected $alerts = null;
     protected $wishes = null;
+    protected $rights = null;
     protected $purchases = null;
     protected $options = null;
     public $trackChange = false;
@@ -189,7 +191,7 @@ class User extends Entity
     /**
      * Check if user has alert.
      *
-     * @param int $article_id
+     * @param type $article_id
      *
      * @return bool
      */
@@ -264,9 +266,9 @@ class User extends Entity
     /**
      * Is the user root ?
      *
-     * @global Site $_SITE
+     * @global type $_SITE
      *
-     * @return bool
+     * @return type
      */
     public function isRoot()
     {
@@ -276,9 +278,9 @@ class User extends Entity
     /**
      * Is the user an admin ?
      *
-     * @global Site $_SITE
+     * @global type $_SITE
      *
-     * @return bool
+     * @return type
      */
     public function isAdmin()
     {
@@ -288,23 +290,30 @@ class User extends Entity
         } else {
             return $this->hasRight('site', $_SITE['id']);
         }
+
+        return false;
     }
 
     public function getRights()
     {
         global $_SITE;
 
-        $rm = new RightManager();
-        $rights = $rm->getAll(['user_id' => $this->get('id')], [], false);
+        if (isset($this->rights)) {
+            return $this->rights;
+        } else {
+            $rm = new RightManager();
+            $rights = $rm->getAll(['user_id' => $this->get('id')], [], false);
 
-        // Keep only admin rights for current site
-        foreach ($rights as $key => $right) {
-            if ($right->has('site_id') && $right->get('site_id') != $_SITE['site_id']) {
-                unset($rights[$key]);
+            // Keep only admin rights for current site
+            foreach ($rights as $key => $right) {
+                if ($right->has('site_id') && $right->get('site_id') != $_SITE['site_id']) {
+                    unset($rights[$key]);
+                }
             }
-        }
 
-        return $rights;
+            $this->rights = $rights;
+            return $rights;
+        }
     }
 
     public function hasRight($type, $id = null)
