@@ -1257,7 +1257,6 @@
     <column name="site_shop" phpName="Shop" type="BOOLEAN" size="1"/>
     <column name="site_vpc" phpName="Vpc" type="BOOLEAN" size="1"/>
     <column name="site_shipping_fee" phpName="ShippingFee" type="VARCHAR" size="8"/>
-    <column name="site_alerts" phpName="Alerts" type="BOOLEAN" size="1"/>
     <column name="site_wishlist" phpName="Wishlist" type="BOOLEAN" size="1" defaultValue="false"/>
     <column name="site_payment_cheque" phpName="PaymentCheque" type="BOOLEAN" size="1" defaultValue="true"/>
     <column name="site_payment_paypal" phpName="PaymentPaypal" type="VARCHAR" size="32"/>

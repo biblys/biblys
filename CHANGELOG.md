@@ -1,36 +1,13 @@
 # Historique des modifications
 
-### 2.58.4 (20 février 2022)
+### 2.59.0 (DEV)
 
-Correction : l'enregistrement d'un modèle de thème pouvait échouer sans 
-erreur dans certain cas. C'est corrigé.
+Améliorations
 
-### 2.58.3 (11 février 2022)
+- Une option de site "alerts" a été ajoutée pour activer l'envoi d'alertes 
+  par courriel lors de l'ajout d'exemplaires au stock.
 
-Corrections
-
-- Plusieurs dates identiques pouvaient apparaître dans les raccourcis de la page
-  "Ventes par article". C'est corrigé.
-- L'erreur affichée lors de l'enregistrement d'un modèle était laconique.
-  C'est amélioré.
-- L'enregistrement du fichier de styles CSS pouvait déclencher une erreur 
-  500. Ce n'est plus le cas.
-
-### 2.58.2 (4 février 2022)
-
-<<<<<<< HEAD
-=======
-Corrections
-
->>>>>>> 8df03306f (build: bump version to 2.58.2 & update changelog)
-- Le sélecteur de pays de la page de confirmation de commande ne s'affichait pas
-  correctement. C'est mieux.
-- L'affichage de la page d'accueil pouvait déclencher une erreur si aucune 
-  option n'était configuré. Ce n'est plus le cas.
-- L'enregistrement d'une commande sans frais de port pouvait déclencher une 
-  erreur. Ça fonctionne à présent.
-
-### 2.58.1 (4 février 2022)
+### 2.58.1 (4 février 2021)
 
 Corrections
 
@@ -39,7 +16,7 @@ Corrections
 - Le formattage d'une date pouvait déclencher une erreur sous certaines 
   conditions. Les pendules ont été remises à l'heure.
 
-## 2.58.0 (28 janvier 2022
+## 2.58.0 (28 janvier 2021)
 
 Améliorations
 
@@ -49,27 +26,27 @@ Améliorations
 - Un lien vers la page des conditions générales de vente a été ajouté au
   courriel de confirmation de commande.
 
-### 2.57.4 (28 janvier 2022)
+### 2.57.4 (28 janvier 2021)
 
 Cette mise à jour purement technique ajoute une option de configuration 
 nécessaire pour préparer une migration de la base de données.
 
-### 2.57.3 (21 janvier 2022)
+### 2.57.3 (21 janvier 2021)
 
 Correction : une erreur empêchait l'afffichage de la page de gestion d'un rayon
 dans l'administration. C'est corrigé.
 
-### 2.57.2 (16 janvier 2022)
+### 2.57.2 (16 janvier 2021)
 
 Correction : un utilisateur pouvait accéder à la page d'édition d'un billet de
 blog sans être identifié. C'est corrigé.
 
-### 2.57.1 (16 janvier 2022)
+### 2.57.1 (16 janvier 2021)
 
 Correction : l'accès à la page de rédaction d'un billet de blog en tant
 qu'éditeur provoquait une erreur. C'est corrigé.
 
-## 2.57.0 (7 janvier 2022)
+## 2.57.0 (7 janvier 2021)
 
 Améliorations
 

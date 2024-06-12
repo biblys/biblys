@@ -40,7 +40,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery orderByShop($order = Criteria::ASC) Order by the site_shop column
  * @method     ChildSiteQuery orderByVpc($order = Criteria::ASC) Order by the site_vpc column
  * @method     ChildSiteQuery orderByShippingFee($order = Criteria::ASC) Order by the site_shipping_fee column
- * @method     ChildSiteQuery orderByAlerts($order = Criteria::ASC) Order by the site_alerts column
  * @method     ChildSiteQuery orderByWishlist($order = Criteria::ASC) Order by the site_wishlist column
  * @method     ChildSiteQuery orderByPaymentCheque($order = Criteria::ASC) Order by the site_payment_cheque column
  * @method     ChildSiteQuery orderByPaymentPaypal($order = Criteria::ASC) Order by the site_payment_paypal column
@@ -81,7 +80,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery groupByShop() Group by the site_shop column
  * @method     ChildSiteQuery groupByVpc() Group by the site_vpc column
  * @method     ChildSiteQuery groupByShippingFee() Group by the site_shipping_fee column
- * @method     ChildSiteQuery groupByAlerts() Group by the site_alerts column
  * @method     ChildSiteQuery groupByWishlist() Group by the site_wishlist column
  * @method     ChildSiteQuery groupByPaymentCheque() Group by the site_payment_cheque column
  * @method     ChildSiteQuery groupByPaymentPaypal() Group by the site_payment_paypal column
@@ -155,7 +153,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSite|null findOneByShop(boolean $site_shop) Return the first ChildSite filtered by the site_shop column
  * @method     ChildSite|null findOneByVpc(boolean $site_vpc) Return the first ChildSite filtered by the site_vpc column
  * @method     ChildSite|null findOneByShippingFee(string $site_shipping_fee) Return the first ChildSite filtered by the site_shipping_fee column
- * @method     ChildSite|null findOneByAlerts(boolean $site_alerts) Return the first ChildSite filtered by the site_alerts column
  * @method     ChildSite|null findOneByWishlist(boolean $site_wishlist) Return the first ChildSite filtered by the site_wishlist column
  * @method     ChildSite|null findOneByPaymentCheque(boolean $site_payment_cheque) Return the first ChildSite filtered by the site_payment_cheque column
  * @method     ChildSite|null findOneByPaymentPaypal(string $site_payment_paypal) Return the first ChildSite filtered by the site_payment_paypal column
@@ -199,7 +196,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSite requireOneByShop(boolean $site_shop) Return the first ChildSite filtered by the site_shop column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByVpc(boolean $site_vpc) Return the first ChildSite filtered by the site_vpc column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByShippingFee(string $site_shipping_fee) Return the first ChildSite filtered by the site_shipping_fee column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildSite requireOneByAlerts(boolean $site_alerts) Return the first ChildSite filtered by the site_alerts column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByWishlist(boolean $site_wishlist) Return the first ChildSite filtered by the site_wishlist column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByPaymentCheque(boolean $site_payment_cheque) Return the first ChildSite filtered by the site_payment_cheque column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByPaymentPaypal(string $site_payment_paypal) Return the first ChildSite filtered by the site_payment_paypal column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -262,8 +258,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildSite> findByVpc(boolean $site_vpc) Return ChildSite objects filtered by the site_vpc column
  * @method     ChildSite[]|ObjectCollection findByShippingFee(string $site_shipping_fee) Return ChildSite objects filtered by the site_shipping_fee column
  * @psalm-method ObjectCollection&\Traversable<ChildSite> findByShippingFee(string $site_shipping_fee) Return ChildSite objects filtered by the site_shipping_fee column
- * @method     ChildSite[]|ObjectCollection findByAlerts(boolean $site_alerts) Return ChildSite objects filtered by the site_alerts column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByAlerts(boolean $site_alerts) Return ChildSite objects filtered by the site_alerts column
  * @method     ChildSite[]|ObjectCollection findByWishlist(boolean $site_wishlist) Return ChildSite objects filtered by the site_wishlist column
  * @psalm-method ObjectCollection&\Traversable<ChildSite> findByWishlist(boolean $site_wishlist) Return ChildSite objects filtered by the site_wishlist column
  * @method     ChildSite[]|ObjectCollection findByPaymentCheque(boolean $site_payment_cheque) Return ChildSite objects filtered by the site_payment_cheque column
@@ -401,7 +395,7 @@ abstract class SiteQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT site_id, site_name, site_pass, site_title, site_domain, site_version, site_tag, site_flag, site_contact, site_address, site_tva, site_html_renderer, site_axys, site_noosfere, site_amazon, site_event_id, site_event_date, site_shop, site_vpc, site_shipping_fee, site_alerts, site_wishlist, site_payment_cheque, site_payment_paypal, site_payment_payplug, site_payment_transfer, site_bookshop, site_bookshop_id, site_publisher, site_publisher_stock, publisher_id, site_ebook_bundle, site_fb_page_id, site_fb_page_token, site_analytics_id, site_piwik_id, site_sitemap_updated, site_monitoring, site_created, site_updated FROM sites WHERE site_id = :p0';
+        $sql = 'SELECT site_id, site_name, site_pass, site_title, site_domain, site_version, site_tag, site_flag, site_contact, site_address, site_tva, site_html_renderer, site_axys, site_noosfere, site_amazon, site_event_id, site_event_date, site_shop, site_vpc, site_shipping_fee, site_wishlist, site_payment_cheque, site_payment_paypal, site_payment_payplug, site_payment_transfer, site_bookshop, site_bookshop_id, site_publisher, site_publisher_stock, publisher_id, site_ebook_bundle, site_fb_page_id, site_fb_page_token, site_analytics_id, site_piwik_id, site_sitemap_updated, site_monitoring, site_created, site_updated FROM sites WHERE site_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1049,33 +1043,6 @@ abstract class SiteQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(SiteTableMap::COL_SITE_SHIPPING_FEE, $shippingFee, $comparison);
-    }
-
-    /**
-     * Filter the query on the site_alerts column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByAlerts(true); // WHERE site_alerts = true
-     * $query->filterByAlerts('yes'); // WHERE site_alerts = true
-     * </code>
-     *
-     * @param     boolean|string $alerts The value to use as filter.
-     *              Non-boolean arguments are converted using the following rules:
-     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
-     */
-    public function filterByAlerts($alerts = null, $comparison = null)
-    {
-        if (is_string($alerts)) {
-            $alerts = in_array(strtolower($alerts), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-        }
-
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_ALERTS, $alerts, $comparison);
     }
 
     /**

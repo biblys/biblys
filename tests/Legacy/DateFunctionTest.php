@@ -66,32 +66,14 @@ class DateFunctionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testDateFunctionWithoutMonth()
-    {
-        // given
-        $mysqlDate = "2019";
-
-        // when
-        $formattedDate = _date($mysqlDate, "Y");
-
-        // then
-        $this->assertEquals(
-            "2019",
-            $formattedDate
-        );
-    }
-
-    /**
-     * @throws Exception
-     */
     public function testDateFunctionWithInvalidFormat()
     {
         // then
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Cannot format date in unknown format: 201");
+        $this->expectExceptionMessage("Cannot format date in unknown format: 1987");
 
         // given
-        $mysqlDate = 201;
+        $mysqlDate = 2019-04-28;
 
         // when
         _date($mysqlDate, "j f Y à H:i");

@@ -6,8 +6,6 @@ use Biblys\Template\Template;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,14 +38,16 @@ class TemplateController extends Controller
         $this->auth('admin');
 
         $template = Template::get($slug);
+        if (!$template) {
+            throw new NotFoundException("Cannot find template $slug");
+        }
+
         $request->attributes->set("page_title", "Éditer ".$template->getName());
 
         if ($request->getMethod() === 'POST') {
             global $site;
-            $body = $request->toArray();
-            $filesystem = new Filesystem();
-            $template->updateContent($site, $body["content"], $filesystem);
-            return new JsonResponse();
+            $content = $request->request->get('content');
+            $template->updateContent($site, $content);
         }
 
         return $this->render('AppBundle:Template:edit.html.twig', [
