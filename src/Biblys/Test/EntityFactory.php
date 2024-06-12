@@ -6,6 +6,7 @@ use Article;
 use ArticleManager;
 use Cart;
 use CartManager;
+use CFCampaignManager;
 use CFReward;
 use CFRewardManager;
 use Collection;
@@ -17,8 +18,6 @@ use Model\ArticleQuery;
 use Model\PeopleQuery;
 use Order;
 use OrderManager;
-use Page;
-use PageManager;
 use People;
 use PeopleManager;
 use Propel\Runtime\Exception\PropelException;
@@ -81,10 +80,12 @@ class EntityFactory
     }
 
 
-    public static function createCart(): Cart
+    public static function createCart(array $attributes = []): Cart
     {
         $cm = new CartManager();
-        return $cm->create();
+        return $cm->create([
+            "site_id" => $attributes["site_id"] ?? 1,
+        ]);
     }
 
     /**
@@ -238,17 +239,25 @@ class EntityFactory
     }
 
     /**
-     * @return CFReward
-     * @throws Exception
+     * @throws PropelException
      */
-    public static function createCrowdfundingReward(): CFReward
+    public static function createCrowdfundingCampaign($attributes = [])
     {
-        $cfrm = new CFRewardManager();
+        $modelCampaign = ModelFactory::createCrowdfundingCampaign($attributes);
+        $cm = new CFCampaignManager();
+        return $cm->getById($modelCampaign->getId());
+    }
 
-        $article = self::createArticle();
-        return $cfrm->create([
-            "reward_articles"=> "[".$article->get("id")."]",
-        ]);
+    /**
+     * @param array $attributes
+     * @return CFReward
+     * @throws PropelException
+     */
+    public static function createCrowdfundingReward(array $attributes = []): CFReward
+    {
+        $modelReward = ModelFactory::createCrowdfundingReward($attributes);
+        $rm = new CFRewardManager();
+        return $rm->getById($modelReward->getId());
     }
 
     /**

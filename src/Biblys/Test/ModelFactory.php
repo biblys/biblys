@@ -4,6 +4,7 @@ namespace Biblys\Test;
 
 use Biblys\Service\Config;
 use Model\Article;
+use Model\Cart;
 use Model\Country;
 use Model\CrowdfundingCampaign;
 use Model\CrowfundingReward;
@@ -75,17 +76,22 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createCrowdfundingReward(): CrowfundingReward
+    public static function createCrowdfundingReward($attributes = []): CrowfundingReward
     {
         $article = ModelFactory::createArticle();
 
         $reward = new CrowfundingReward();
         $reward->setContent("A beautiful reward");
         $reward->setArticles("[{$article->getId()}]");
-        $reward->setSiteId(1);
+        $reward->setQuantity($attributes["quantity"] ?? 1);
+        $reward->setSiteId($attributes["site_id"] ?? 1);
+        $reward->setLimited($attributes["limited"] ?? 1);
 
-        $campaign = ModelFactory::createCrowdfundingCampaign();
-        $reward->setCampaignId($campaign->getId());
+        if (!isset($attributes["campaign_id"])) {
+            $campaign = ModelFactory::createCrowdfundingCampaign(["site_id" => $attributes["site_id"]]);
+            $attributes["campaign_id"] = $campaign->getId();
+        }
+        $reward->setCampaignId($attributes["campaign_id"]);
 
         $reward->save();
 
@@ -95,11 +101,12 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createCrowdfundingCampaign(): CrowdfundingCampaign
+    public static function createCrowdfundingCampaign($attributes = []): CrowdfundingCampaign
     {
         $campaign = new CrowdfundingCampaign();
         $campaign->setTitle("A beautiful campaign");
-        $campaign->setSiteId(1);
+        $campaign->setSiteId($attributes["site_id"] ?? 1);
+        $campaign->setEnds($attributes["ends"] ?? "2030-01-01");
         $campaign->save();
 
         return $campaign;
@@ -120,6 +127,9 @@ class ModelFactory
         return $page;
     }
 
+    /**
+     * @throws PropelException
+     */
     public static function createPeople(array $attributes = []): People
     {
         $people = new People();

@@ -11,6 +11,36 @@ Améliorations
 - Une vérification a été ajoutée à la création de contreparties de
   financement pour empêcher l'association d'articles inexistant.
 
+<<<<<<< HEAD
+=======
+Corrections
+
+- Les quantités de contreparties d'une campagne de financement participatif 
+  terminée pouvait être mises à jour. C'est corrigé.
+
+### 2.58.3 (11 février 2021)
+
+Corrections
+
+- Plusieurs dates identiques pouvaient apparaître dans les raccourcis de la page
+  "Ventes par article". C'est corrigé.
+- L'erreur affichée lors de l'enregistrement d'un modèle était laconique.
+  C'est amélioré.
+- L'enregistrement du fichier de styles CSS pouvait déclencher une erreur 
+  500. Ce n'est plus le cas.
+
+### 2.58.2 (4 février 2021)
+
+Corrections
+
+- Le sélecteur de pays de la page de confirmation de commande ne s'affichait pas
+  correctement. C'est mieux.
+- L'affichage de la page d'accueil pouvait déclencher une erreur si aucune 
+  option n'était configuré. Ce n'est plus le cas.
+- L'enregistrement d'une commande sans frais de port pouvait déclencher une 
+  erreur. Ça fonctionne à présent.
+
+>>>>>>> 31f72f9b0 (fix(entity): ignore reward quantity update for ended campaign)
 ### 2.58.1 (4 février 2021)
 
 Corrections

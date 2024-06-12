@@ -20,7 +20,7 @@ class CFReward extends Entity
             return ($this->get('quantity') > 0 || !$this->isLimited());
         }
 
-        public function getCampaign()
+        public function getCampaign(): CFCampaign
         {
             if (!isset($this->campaign)) {
                 $cm = new CFCampaignManager();
@@ -102,6 +102,11 @@ class CFReward extends Entity
         public function updateQuantity(Entity $reward): Entity
         {
             if (!$reward->isLimited()) {
+                return $reward;
+            }
+
+            $campaign = $reward->getCampaign();
+            if ($campaign->hasEnded()) {
                 return $reward;
             }
 

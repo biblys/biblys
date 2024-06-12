@@ -6,6 +6,7 @@
  */
 
 use Biblys\Test\EntityFactory;
+use Propel\Runtime\Exception\PropelException;
 
 require_once "setUp.php";
 
@@ -452,12 +453,20 @@ class CartTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
     public function testContainsReward()
     {
         // given
+        $GLOBALS["site"] = EntityFactory::createSite();
+        $reward = EntityFactory::createCrowdfundingReward([
+            "site_id" => $GLOBALS["site"]->get("id"),
+            "limited" => 0,
+        ]);
+        $cart = EntityFactory::createCart();
         $cm = new CartManager();
-        $cart = $cm->create([]);
-        $reward = EntityFactory::createCrowdfundingReward();
         $cm->addCFReward($cart, $reward);
 
         // when / then
@@ -469,19 +478,23 @@ class CartTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test delete a cart
-     * @depends testCreateWebCart
-     * @depends testCreateShopCart
+     * @throws Exception
      */
-    public function testDelete(Cart $webCart, Cart $shopCart)
+    public function testDelete()
     {
+        // given
+        $GLOBALS["site"] = EntityFactory::createSite();
         $cm = new CartManager();
+        $webCart = EntityFactory::createCart(["cart_type" => "web"]);
+        $shopCart = EntityFactory::createCart(["cart_type" => "shop"]);
 
-        $cm->delete($webCart, 'Test entity');
-        $cm->delete($shopCart, 'Test entity');
+        // when
+        $cm->delete($webCart);
+        $cm->delete($shopCart);
 
+        // then
         $isWebCart = $cm->getById($webCart->get('id'));
         $isShopCart = $cm->getById($shopCart->get('id'));
-
         $this->assertFalse($isWebCart);
         $this->assertFalse($isShopCart);
     }

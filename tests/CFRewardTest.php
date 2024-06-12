@@ -1,6 +1,5 @@
 <?php
 
-use AppBundle\Controller\CFRewardController;
 use Biblys\Test\EntityFactory;
 
 /**
@@ -14,6 +13,7 @@ class CFRewardTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a post
+     * @throws Exception
      */
     public function testCreate()
     {
@@ -33,7 +33,7 @@ class CFRewardTest extends PHPUnit\Framework\TestCase
      * Test getting a post
      * @depends testCreate
      */
-    public function testGet(CFReward $reward)
+    public function testGet(CFReward $reward): CFReward
     {
         $cm = new CFRewardManager();
 
@@ -48,6 +48,7 @@ class CFRewardTest extends PHPUnit\Framework\TestCase
     /**
      * Test updating a post
      * @depends testGet
+     * @throws Exception
      */
     public function testUpdate(CFReward $reward)
     {
@@ -59,7 +60,7 @@ class CFRewardTest extends PHPUnit\Framework\TestCase
         $updatedCFReward = $cm->getById($reward->get('id'));
 
         $this->assertTrue($updatedCFReward->has('updated'));
-        $this->assertEquals($updatedCFReward->get('content'), 'Un truc vachement intéressant');
+        $this->assertEquals('Un truc vachement intéressant', $updatedCFReward->get('content'));
 
         return $updatedCFReward;
     }
@@ -98,10 +99,13 @@ class CFRewardTest extends PHPUnit\Framework\TestCase
     public function testUpdateQuantity()
     {
         // given
+        $GLOBALS["site"] = EntityFactory::createSite();
         $article = EntityFactory::createArticle();
         EntityFactory::createStock(["article_id" => $article->get('id')]);
         EntityFactory::createStock(["article_id" => $article->get('id')]);
-        $reward = EntityFactory::createCrowdfundingReward();
+        $reward = EntityFactory::createCrowdfundingReward([
+            "site_id" => $GLOBALS["site"]->get('id')
+        ]);
         $reward->set("reward_quantity", 0);
         $reward->set("reward_limited", 1);
         $reward->set("reward_articles", "[{$article->get("id")}]");
@@ -120,7 +124,10 @@ class CFRewardTest extends PHPUnit\Framework\TestCase
     public function testUpdateQuantityWithUnexistingArticle()
     {
         // given
-        $reward = EntityFactory::createCrowdfundingReward();
+        $GLOBALS["site"] = EntityFactory::createSite();
+        $reward = EntityFactory::createCrowdfundingReward([
+            "site_id" => $GLOBALS["site"]->get('id')
+        ]);
         $reward->set("reward_quantity", 0);
         $reward->set("reward_limited", 1);
         $reward->set("reward_articles", "[99999]");
@@ -132,12 +139,37 @@ class CFRewardTest extends PHPUnit\Framework\TestCase
 
         // when
         $rm->updateQuantity($reward);
+    }
 
+    /**
+     * @throws Exception
+     */
+    public function testUpdateQuantityForRewardInEndedCampaign()
+    {
+        // given
+        $GLOBALS["site"] = EntityFactory::createSite();
+        $campaign = EntityFactory::createCrowdfundingCampaign([
+            "site_id" => $GLOBALS["site"]->get('id'),
+            "ends" => "2019-04-28 02:42:00"
+        ]);
+        $reward = EntityFactory::createCrowdfundingReward([
+            "site_id" => $GLOBALS["site"]->get('id'),
+            "campaign_id" => $campaign->get("id"),
+            "quantity" => 10,
+        ]);
+        $rm = new CFRewardManager();
+
+        // when
+        $rm->updateQuantity($reward);
+
+        // then
+        $this->assertEquals(10, $reward->get("quantity"));
     }
 
     /**
      * Test deleting a post
      * @depends testGet
+     * @throws Exception
      */
     public function testDelete(CFReward $reward)
     {
