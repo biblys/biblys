@@ -165,8 +165,8 @@ CREATE TABLE `carts` (
   `cart_ip` text DEFAULT NULL,
   `cart_count` int(10) unsigned DEFAULT NULL DEFAULT '0',
   `cart_amount` int(10) unsigned DEFAULT NULL DEFAULT '0',
-  `cart_as-a-gift` varchar(16) DEFAULT NULL,
-  `cart_gift-recipient` int(10) unsigned DEFAULT NULL,
+  `cart_as-a-gift` varchar(16) DEFAULT NULL, -- not used anymore
+  `cart_gift-recipient` int(10) unsigned DEFAULT NULL, -- not used anymore
   `cart_date` datetime DEFAULT NULL,
   `cart_insert` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `cart_update` datetime DEFAULT NULL,
@@ -629,8 +629,8 @@ CREATE TABLE `orders` (
   `customer_id` int(10) unsigned DEFAULT NULL,
   `seller_id` int(10) unsigned DEFAULT NULL,
   `order_type` varchar(8) CHARACTER SET latin1 DEFAULT '',
-  `order_as-a-gift` varchar(16) CHARACTER SET latin1 DEFAULT NULL,
-  `order_gift-recipient` int(10) unsigned DEFAULT NULL,
+  `order_as-a-gift` varchar(16) CHARACTER SET latin1 DEFAULT NULL, -- not used anymore
+  `order_gift-recipient` int(10) unsigned DEFAULT NULL, -- not used anymore
   `order_amount` int(10) unsigned DEFAULT NULL DEFAULT '0',
   `order_discount` int(10) unsigned DEFAULT NULL,
   `order_amount_tobepaid` int(11) DEFAULT NULL DEFAULT '0',

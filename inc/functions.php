@@ -224,10 +224,7 @@ if ($rollbarConfig) {
 require_once BIBLYS_PATH . '/inc/autoload-entity.php';
 
 // Media path
-$media_path = BIBLYS_PATH . '/public/media';
-if ($config->get('media_path')) {
-    $media_path = BIBLYS_PATH . $config->get('media_path');
-}
+$media_path = BIBLYS_PATH . $config->get("media_path");
 define('MEDIA_PATH', $media_path);
 
 // Media url
@@ -243,11 +240,9 @@ $request = Request::createFromGlobals();
 /* ENVIRONNEMENT */
 
 if ('dev' == $config->get('environment')) {
-    define('DEV', true);
     error_reporting(E_ALL);
     set_error_handler('biblys_error', E_ALL ^ E_DEPRECATED);
 } else {
-    define('DEV', false);
     error_reporting(E_ALL ^ E_DEPRECATED ^ E_NOTICE);
     set_error_handler('biblys_error', E_ALL ^ E_DEPRECATED ^ E_NOTICE);
 }

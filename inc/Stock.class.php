@@ -389,23 +389,27 @@ class Stock extends Entity
                 '.$letter.'
             </span>
         ';
+    }
 
-        // if (!empty($a['stock_return_date'])) {
-        //     $a['led'] = 'square_orange';
-        //     $a['led_title'] = 'Retourné';
-        // } elseif (!empty($a['stock_selling_date'])) {
-        //     $a['led'] = 'square_blue';
-        //     $a['led_title'] = 'Vendu';
-        // } elseif (!empty($a['stock_lost_date'])) {
-        //     $a['led'] = 'square_purple';
-        //     $a['led_title'] = 'Perdu';
-        // } elseif (!empty($a['stock_cart_date'])) {
-        //     $a['led'] = 'square_gray';
-        //     $a['led_title'] = 'En panier';
-        // } else {
-        //     $a['led'] = 'square_green';
-        //     $a['led_title'] = 'En stock';
-        // }
+    /**
+     * @param int $newPrice
+     * @throws Exception
+     */
+    public function editFreePrice(int $newPrice): void
+    {
+        $article = $this->getArticle();
+
+        if (!$article->has('price_editable')) {
+            throw new Exception("Le prix de cet article n'est pas libre.");
+        }
+
+        if ($newPrice < $article->get('price')) {
+            throw new Exception("Le prix doit être supérieur à ".currency($article->get('price') / 100));
+        }
+
+        // TODO: Check that stock item is in cart
+
+        $this->set("stock_selling_price", $newPrice);
     }
 }
 

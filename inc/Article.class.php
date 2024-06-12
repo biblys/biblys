@@ -243,7 +243,7 @@ class Article extends Entity
             $this->cover = new Media('article', $this->get('id'));
         }
 
-        if ($this->cover->exists() || 'DEV') {
+        if ($this->cover->exists()) {
             if ($size === 'object') {
                 return $this->cover;
             } elseif ($size === 'url') {

@@ -1,6 +1,10 @@
 
 # Historique des modifications
 
+## 2.53.0-dev.1 (8 avril 2021)
+
+- Refonte technique des actions du panier
+
 ### 2.52.4 (21 mai 2021)
 
 Corrections
@@ -21,7 +25,6 @@ Corrections
   résultats de recherche ne renvoie plus une erreur serveur.
 - Le message d'erreur lors de l'ajout d'un article dans un rayon dans lequel
   cet article est déjà s'affiche désormais correctement
-
 
 ### 2.52.2 (16 avril 2021)
 

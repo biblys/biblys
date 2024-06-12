@@ -158,6 +158,40 @@ awards_index:
   path: /recompenses/
   controller: AppBundle\Controller\AwardsController::indexAction
 
+# Cart
+
+cart_add_article:
+  path: /cart/add-article/{articleId}
+  controller: AppBundle\Controller\CartController::addArticleAction
+  methods: POST
+  requirements:
+    articleId: \d+
+
+cart_add_stock:
+  path: /cart/add-stock/{stockId}
+  controller: AppBundle\Controller\CartController::addStockAction
+  methods: POST
+  requirements:
+    stockId: \d+
+
+cart_add_reward:
+  path: /cart/add-reward/{rewardId}
+  controller: AppBundle\Controller\CartController::addCrowdfundingRewardAction
+  methods: POST
+  requirements:
+    rewardId: \d+
+
+cart_remove_stock:
+  path: /cart/remove-stock/{stockId}
+  controller: AppBundle\Controller\CartController::removeStockAction
+  methods: POST
+  requirements:
+    stockId: \d+
+
+cart_summary:
+  path: /cart/summary
+  controller: AppBundle\Controller\CartController::summaryAction
+
 # Crons
 
 crons_tasks:
@@ -554,6 +588,13 @@ stock_cancel_return:
   path: /admin/stock/{stockId}/cancel-return
   controller: AppBundle\Controller\StockController::cancelReturnAction
 
+stock_edit_free_price:
+  path: /stock/{stockId}/edit-free-price
+  controller: AppBundle\Controller\StockController::editFreePriceAction
+  methods: POST
+  requirements:
+    stockId: \d+
+
 # Tag
 
 tag_show:
@@ -620,4 +661,4 @@ ticket_comment_new:
 
 contact:
   path: /pages/contact
-  controller: AppBundle\Controller\MainController::defaultAction
+  controller: AppBundle\Controller\LegacyController::defaultAction

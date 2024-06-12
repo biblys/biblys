@@ -317,32 +317,6 @@ function reloadAdminEvents() {
     })
     .removeClass('event');
 
-  // Transformer un fichier en fichier téléchargeable
-  $('.dlfile_associate').click(function() {
-    var article_id = prompt('Identifiant de l\'article à associer à ce fichier :'),
-      file = $(this).data('file'),
-      name = $(this).data('name');
-
-    $.ajax({
-      type: 'POST',
-      url: '/x/adm_article_files',
-      data: {
-        action: 'associate',
-        file: '' + file + '',
-        name: '' + name + '',
-        article_id: '' + article_id + ''
-      },
-      dataType: 'json',
-      success: function(r) {
-        if (r.error) {
-          _alert('Erreur : ' + r.error);
-        } else if (r.success) {
-          notify(r.success);
-        }
-      }
-    });
-  });
-
   /* CHECKOUT */
 
   // Enregistrer la vente
