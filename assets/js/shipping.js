@@ -30,7 +30,7 @@ export default class Shipping {
 
   getAll() {
     this.setLoadingState(true);
-    return fetch('/api/shipping', { headers: { Accept: 'application/json' } })
+    return fetch('/api/admin/shipping', { headers: { Accept: 'application/json' } })
       .then(response => response.json())
       .then(data => {
         this.setLoadingState(false);
@@ -41,7 +41,7 @@ export default class Shipping {
   }
 
   send(form) {
-    const url = form.id.value ? `/api/shipping/${form.id.value}` : '/api/shipping';
+    const url = form.id.value ? `/api/admin/shipping/${form.id.value}` : '/api/admin/shipping';
     const method = form.id.value ? 'PUT' : 'POST';
 
     return fetch(url, {
@@ -269,7 +269,7 @@ export default class Shipping {
     }
 
     const loader = new Biblys.Notification('Suppression en cours…', { loader: true, sticky: true });
-    fetch(`/api/shipping/${range.id}`, {
+    fetch(`/api/admin/shipping/${range.id}`, {
       method: 'DELETE',
       credentials: 'same-origin',
       headers: { Accept: 'application/json' }

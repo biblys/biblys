@@ -13,22 +13,22 @@ api_me:
 # Shipping
 
 api_shipping:
-  path: /api/shipping
+  path: /api/admin/shipping
   methods: GET
   controller: ApiBundle\Controller\ShippingController::indexAction
 
 api_shipping_create:
-  path: /api/shipping
+  path: /api/admin/shipping
   methods: POST
   controller: ApiBundle\Controller\ShippingController::createAction
 
 api_shipping_update:
-  path: /api/shipping/{id}
+  path: /api/admin/shipping/{id}
   methods: PUT
   controller: ApiBundle\Controller\ShippingController::updateAction
 
 api_shipping_delete:
-  path: /api/shipping/{id}
+  path: /api/admin/shipping/{id}
   methods: DELETE
   controller: ApiBundle\Controller\ShippingController::deleteAction
 

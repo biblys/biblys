@@ -19,7 +19,7 @@ class ShippingController extends Controller
     /**
      * Returns shipping fees.
      *
-     * @route GET /api/shipping
+     * @route GET /api/admin/shipping
      *
      * @throws AuthException
      * @throws PropelException
@@ -42,7 +42,7 @@ class ShippingController extends Controller
     /**
      * Create a new shipping fee.
      *
-     * @route POST /api/shipping
+     * @route POST /api/admin/shipping
      *
      * @throws AuthException
      * @throws PropelException
@@ -65,7 +65,7 @@ class ShippingController extends Controller
     /**
      * Update a shipping range.
      *
-     * @route PUT /api/shipping/{id}
+     * @route PUT /api/admin/shipping/{id}
      *
      * @throws AuthException
      * @throws PropelException
@@ -83,7 +83,7 @@ class ShippingController extends Controller
     }
 
     /**
-     * @route DELETE /api/shipping/{id}
+     * @route DELETE /api/admin/shipping/{id}
      *
      * @throws AuthException
      * @throws PropelException
