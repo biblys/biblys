@@ -1,49 +1,12 @@
 # Changelog
 
-### 2.49.4 (30 septembre 2020)
-
-Corrections
-
-- L'écriture des journaux d'erreurs fonctionne à nouveau pour l'authentification
-  les paiements par Paypal
-
-### 2.49.3 (23 septembre 2020)
-
-Correction d'un problème qui pouvait conduire, dans certains cas, à l'apparition
-des rayons associés à un article depuis un autre site à apparaître sur les
-fiches articles.
-
-### 2.49.2 (15 septembre 2020)
-
-Corrections
-
-- L'import d'un article associé à une collection déjà existante fonctionne à
-  nouveau
-- Le retrait d'un rayon associé à un article fonctionne à nouveau
-- L'import d'un article dont le champ auteurs dépasse 256 caractères ne provoque
-  plus d'erreur
-- La mise à jour d'un contributeur existant ne provoque plus d'erreur
-- Le tronquage d'une chaîne de caractères utf-8 est calculé au nombre de bits et
-  plus au nombre de caractères
-
-### 2.49.1 (7 septembre 2020)
-
-Corrections
-
-- La case à cocher "À la une" du formulaire d'édition d'un billet peut à nouveau
-  être décochée.
-- Le numéro de version d'une image de couverture est correctement inclus dans
-  les urls du CDN WeServ
-- L'ajout d'une valeur dépassant 256 caractères dans le champ auteurs ne
-  provoque plus d'erreur
-
 ### 2.49.0 (2 septembre 2020)
 
 Améliorations
 
 - Biblys supporte désormais le prestataire de paiement Stripe
 - Ajout d'une page listant tous les éditeurs
-- Un exemplaire neuf ajouté à un panier ne peut plus être ajouté à un autre
+- Un exemplaire neuf ajouté à un panier ne peut plus être ajouté à un autre 
   panier pendant une heure après l'ajout, afin d'éviter le "vol" involontaire
   d'exemplaire lorsque de nombreuses commandes sont validées au même moment.
 - Ajout d'une option de configuration pour utiliser le CDN Weserv

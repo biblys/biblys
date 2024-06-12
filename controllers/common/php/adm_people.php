@@ -19,14 +19,20 @@ if ($request->getMethod() == "POST") {
     // Slug
     $_POST["people_url"] = makeurl($_POST["people_name"]);
 
+    // Check if there is already a people with this slug
+    $people = $pm->get(['people_url' => $_POST['people_url']]);
+
     if (empty($_POST["people_id"])) {
-        $people = $pm->create(
-            ['people_last_name' => $request->request->get('people_last_name')]
-        );
+        if ($people) {
+            throw new Exception('Il existe déjà un auteur avec le nom '.$_POST['people_name'].'.');
+        }
+        $people = $pm->create(['people_last_name' => $request->request->get('people_last_name')]);
         $_POST["people_id"] = $people->get('id');
         $params['created'] = 1;
     } else {
-        $people = $pm->getById($_POST["people_id"]);
+        if ($people && $people->get('id') != $_POST['people_id']) {
+            throw new Exception('Il existe déjà un auteur avec le nom '.$_POST['people_name'].'.');
+        }
         $params['updated'] = 1;
     }
 

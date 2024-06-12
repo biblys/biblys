@@ -127,7 +127,7 @@ class OrderController extends Controller
         // Check if order exists
         $order = $om->get(['order_url' => $url]);
         if (!$order) {
-            $log->error("Order $url not found.");
+            $log->addError("Order $url not found.");
             throw new NotFoundException("Order $url not found.");
         }
         $log->info('Initiating paypal process for order '.$order->get('id').' from '.$request->headers->get('referer'));
@@ -136,7 +136,7 @@ class OrderController extends Controller
         $paymentId = $request->query->get('paymentId');
         $payerId = $request->query->get('PayerID');
         if (!$paymentId || !$payerId) {
-            $log->error('Missing parameters.', ['order_id' => $order->get('id')]);
+            $log->addError('Missing parameters.', ['order_id' => $order->get('id')]);
             throw new \Exception('Missing parameters.');
         }
         $log->info("Got paymentId ($paymentId) and payerId ($payerId) for order ".$order->get('id'));
@@ -145,7 +145,7 @@ class OrderController extends Controller
         try {
             $payment = $order->executePaypalPayment($paymentId, $payerId);
         } catch (\Exception $e) {
-            $log->error($e->getMessage(), ['order_id' => $order->get('id'), 'paymentId' => $paymentId]);
+            $log->addError($e->getMessage(), ['order_id' => $order->get('id'), 'paymentId' => $paymentId]);
             throw new \Exception('Une erreur est survenue pendant l\'execution du paiement PayPal. Merci de nous contacter.');
         }
         $log->info("Got paymentId ($paymentId) and payerId ($payerId) for order ".$order->get('id'));
@@ -153,7 +153,7 @@ class OrderController extends Controller
         // Check that payment was approved
         $state = $payment->getState();
         if ($state !== 'approved') {
-            $log->error("Payment state is invalid ($state).", ['order_id' => $order->get('id'), 'paymentId' => $paymentId]);
+            $log->addError("Payment state is invalid ($state).", ['order_id' => $order->get('id'), 'paymentId' => $paymentId]);
             throw new \Exception("Payment state is invalid ($state).");
         }
         $log->info("Payment ($paymentId) state is $state for order ".$order->get('id'));
@@ -162,7 +162,7 @@ class OrderController extends Controller
         $transaction = $payment->getTransactions()[0];
         $invoice = $transaction->getInvoiceNumber();
         if ($invoice != $order->get('id')) {
-            $log->error("Invoice number ($invoice) does not match order ID (".$order->get('id').').', ['order_id' => $order->get('id'), 'paymentId' => $paymentId]);
+            $log->addError("Invoice number ($invoice) does not match order ID (".$order->get('id').').', ['order_id' => $order->get('id'), 'paymentId' => $paymentId]);
             throw new \Exception('Invoice number does not match order ID.');
         }
         $log->info("Invoice number ($invoice) matches order id (".$order->get('id').')');
@@ -185,12 +185,12 @@ class OrderController extends Controller
 
         $payplug_config = $config->get('payplug');
         if (!$payplug_config) {
-            $log->error('Payplug configuration not found.');
+            $log->addError('Payplug configuration not found.');
             throw new \Exception('Payplug configuration not found.');
         }
 
         if (!isset($payplug_config['secret'])) {
-            $log->error('Missing payplug private key.');
+            $log->addError('Missing payplug private key.');
             throw new \Exception('Missing payplug private key.');
         }
 
@@ -202,7 +202,7 @@ class OrderController extends Controller
         // Check if order exists
         $order = $om->get(['order_url' => $url]);
         if (!$order) {
-            $log->error("Order $url not found.");
+            $log->addError("Order $url not found.");
             throw new \Exception("Order $url not found.");
         }
         $log->info('Receiving Payplug notification for order '.$order->get('id').' from '.$request->headers->get('referer'));
@@ -213,26 +213,26 @@ class OrderController extends Controller
             $resource = \Payplug\Notification::treat($input);
 
             if (!$resource instanceof \Payplug\Resource\Payment) {
-                $log->error('Resource '.$resource->id.'  is not a Payment.');
+                $log->addError('Resource '.$resource->id.'  is not a Payment.');
                 throw new \Exception('Resource '.$resource->id.'  is not a Payment.');
             }
 
             if (!$resource->is_paid) {
-                $log->error('Payment '.$resource->id.'  is not paid.');
+                $log->addError('Payment '.$resource->id.'  is not paid.');
                 throw new \Exception('Payment '.$resource->id.'  is not paid.');
             }
 
             // Check if payment exists
             $payment = $pm->get(['payment_provider_id' => $resource->id]);
             if (!$payment) {
-                $log->error('Payment '.$resource->id.' not found.');
+                $log->addError('Payment '.$resource->id.' not found.');
                 throw new \Exception('Payment '.$resource->id.' not found.');
             }
             $log->info('Found payment '.$payment->get('id').' in database.');
 
             // Get order id from metadata and compare to database order id
             if ($resource->metadata['order_id'] != $order->get('id')) {
-                $log->error('Order id from Payplug ('.$resource->metadata['order_id'].') does not match order ID ('.$order->get('id').').');
+                $log->addError('Order id from Payplug ('.$resource->metadata['order_id'].') does not match order ID ('.$order->get('id').').');
                 throw new \Exception('Invoice number does not match order ID.');
             }
             $log->info('Received order id ('.$resource->metadata['order_id'].' matches order id in database.');
@@ -243,7 +243,7 @@ class OrderController extends Controller
 
             return new Response('');
         } catch (\Payplug\Exception\PayplugException $exception) {
-            $log->error('Exception: '.$exception->getMessage());
+            $log->addError('Exception: '.$exception->getMessage());
             throw new \Exception('Exception: '.$exception->getMessage());
         }
     }
