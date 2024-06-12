@@ -634,6 +634,7 @@ function validateOrderDetails($request) {
             $order = new Order([]);
 
             $previousOrder = null;
+
             if ($_V->isLogged()) {
                 $om = new OrderManager();
                 $previousOrder = $om->get(
@@ -643,7 +644,11 @@ function validateOrderDetails($request) {
                     ],
                     ['order' => 'order_created', 'sort' => 'desc']
                 );
+
+                // Prefill order email with user email
+                $order->set('order_email', $_V->get('email'));
             }
+
             if ($previousOrder) {
                 $url = '/pages/order_delivery?country_id='.$country_id.'&shipping_id='.$shipping_id.'&reuse=1';
                 $_ECHO .= '

@@ -9,20 +9,31 @@
   d'erreur affiché est désormais plus explicite.
 - Commande : l'adresse e-mail indiquée par le client est désormais validée
   avant l'enregistrement de la commande
+- Commande : si l'utilisateur est identifié, le champ Adresse e-mail sera
+  pré-remplie avec l'adresse e-mail de son compte utilisateur lors de
+  l'enregistrement d'une nouvelle commande
+
+### 2.50.3 (26 janvier 2020)
+
+- Correction : cliquer sur annuler dans la boîte de dialogue du numéro de suivi
+  d'une commande ne marque plus la commande comme expédiée.
 
 ### 2.50.2 (15 décembre 2020)
 
+Corrections
+
 - La création ou la modification d'une tranche de frais de port avec un montant
   de 0,00 € fonctionne à nouveau.
-- L'outil de gestion des frais de port affiche désormais correctement les 
+- L'outil de gestion des frais de port affiche désormais correctement les
   tranches sans commentaires.
+
 ### 2.50.1 (14 octobre 2020)
 
 Corrections
 
 - L'échec d'un paiement via PayPlug ne cause plus d'erreur
-- La modification des options "Exempté de TVA" et "Livres vendables sur 
-  commande" des fournisseurs fonctionne à nouveau 
+- La modification des options "Exempté de TVA" et "Livres vendables sur
+  commande" des fournisseurs fonctionne à nouveau
 
 ### 2.50.0 (7 octobre 2020)
 

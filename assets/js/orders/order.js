@@ -138,6 +138,15 @@ export default class Order {
         // Ask for tracking number
         if (self.data.shipping_mode == 'suivi' && action == 'shipped') {
           tracking_number = prompt('Numéro de suivi ?');
+          console.log(tracking_number);
+          if (tracking_number === null) {
+            new Notification(
+              'La commande n\'a pas été marquée comme expédiée.', { type: 'warning' });
+            
+            // Reset button state
+            icon.attr('class', icon_class);
+            return;
+          }
         }
 
         // Ask for payment mode
