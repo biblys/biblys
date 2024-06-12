@@ -11,11 +11,31 @@ require_once __DIR__."/../../setUp.php";
 
 class TemplateTest extends TestCase
 {
-
     /**
      * @throws Exception
      */
-    public function testUpdateContent()
+    public function testUpdateContentForHomeTemplate()
+    {
+        // given
+        $template = Template::get("home");
+        $siteStub = $this->createMock(Site::class);
+        $fileSystemStub = $this->createMock(Filesystem::class);
+
+        // then
+        $fileSystemStub->expects($this->exactly(1))
+            ->method("dumpFile")
+            ->with(
+                $this->stringEndsWith("app/Resources/AppBundle/views/Main/home.html.twig"),
+                "body { background-color: black; }"
+            );
+
+        // when
+        $template->updateContent($siteStub, "body { background-color: black; }", $fileSystemStub);
+    }
+    /**
+     * @throws Exception
+     */
+    public function testUpdateContentForStylesheet()
     {
         // given
         $template = Template::get("css");

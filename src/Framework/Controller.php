@@ -6,13 +6,14 @@ use Biblys\Isbn\Isbn as Isbn;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use EntityManager;
 use Framework\Exception\AuthException;
 use Model\Publisher;
 use Propel\Runtime\Exception\PropelException;
-use ReflectionClass;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -24,8 +25,6 @@ use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-use Twig\Error_Runtime;
-use Twig\Error_Syntax;
 use Twig\Extension\DebugExtension;
 use Twig\RuntimeLoader\FactoryRuntimeLoader;
 use Twig\TwigFilter;
@@ -86,7 +85,7 @@ class Controller
      * @return EntityManager child class
      * @deprecated
      */
-    public function entityManager($entity)
+    public function entityManager(string $entity): EntityManager
     {
         $class = $entity.'Manager';
 
@@ -106,7 +105,7 @@ class Controller
      */
     public function render(string $template, array $vars = []): Response
     {
-        global $site, $request, $config, $axys;
+        global $site, $request, $axys;
 
         //** Twig custom functions **//
 
@@ -123,7 +122,7 @@ class Controller
         $functions[] = new TwigFunction('url', function ($route, $vars = []) {
             global $urlgenerator, $site;
 
-            return 'http://'.$site->get('domain').$urlgenerator->generate($route, $vars);
+            return 'https://' .$site->get('domain').$urlgenerator->generate($route, $vars);
         });
 
         // returns share buttons for url
@@ -190,10 +189,6 @@ class Controller
 
         // Forms
         $defaultFormTheme = 'AppBundle:Main:_form_bootstrap_layout.html.twig';
-        $vendorDir = realpath(__DIR__.'/../vendor');
-        $appVariableReflection = new ReflectionClass('\Symfony\Bridge\Twig\AppVariable');
-        $vendorTwigBridgeDir = dirname($appVariableReflection->getFileName());
-        $viewsDir = realpath(__DIR__.'/../views');
 
         // Custom template loader
         $loader = new TemplateLoader($site);
@@ -246,15 +241,7 @@ class Controller
         $template = $twig->load($template);
 
         // Render template
-        try {
-            $rendered = $template->render($vars);
-        } catch (Error_Syntax $e) {
-            $error = nl2br(htmlspecialchars($e->getMessage()));
-            trigger_error($error);
-        } catch (Error_Runtime $e) {
-            $error = nl2br(htmlspecialchars($e->getMessage()));
-            trigger_error($error);
-        }
+        $rendered = $template->render($vars);
 
         return new Response($rendered);
     }
@@ -350,13 +337,11 @@ class Controller
         return $urlgenerator->generate($route, $params);
     }
 
-    public function getFormFactory()
+    public function getFormFactory(): FormFactoryInterface
     {
-        $formFactory = Forms::createFormFactoryBuilder()
+        return Forms::createFormFactoryBuilder()
             ->addExtension(new HttpFoundationExtension())
             ->getFormFactory();
-
-        return $formFactory;
     }
 
     /**

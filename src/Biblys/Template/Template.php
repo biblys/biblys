@@ -183,7 +183,7 @@ class Template
             return BIBLYS_PATH.'/app/Resources/views/';
         }
 
-        return BIBLYS_PATH.'/app/Resources/AppBundle/views/'.$this->getDirPath();
+        return BIBLYS_PATH.'/app/Resources/AppBundle/views/'.$this->getDirPath().'/';
     }
 
     /**
@@ -195,7 +195,7 @@ class Template
             return BIBLYS_PATH.'/src/AppBundle/Resources/views/';
         }
 
-        return BIBLYS_PATH.'src/AppBundle/Resources/views/'.$this->getDirPath();
+        return BIBLYS_PATH.'src/AppBundle/Resources/views/'.$this->getDirPath().'/';
     }
 
     /**

@@ -16,7 +16,12 @@ Corrections
 - Les quantités de contreparties d'une campagne de financement participatif 
   terminée pouvait être mises à jour. C'est corrigé.
 
-### 2.58.3 (11 février 2021)
+### 2.58.4 (20 février 2022)
+
+Correction : l'enregistrement d'un modèle de thème pouvait échouer sans 
+erreur dans certain cas. C'est corrigé.
+
+### 2.58.3 (11 février 2022)
 
 Corrections
 
@@ -27,7 +32,7 @@ Corrections
 - L'enregistrement du fichier de styles CSS pouvait déclencher une erreur 
   500. Ce n'est plus le cas.
 
-### 2.58.2 (4 février 2021)
+### 2.58.2 (4 février 2022)
 
 Corrections
 
@@ -38,7 +43,7 @@ Corrections
 - L'enregistrement d'une commande sans frais de port pouvait déclencher une 
   erreur. Ça fonctionne à présent.
 
-### 2.58.1 (4 février 2021)
+### 2.58.1 (4 février 2022)
 
 Corrections
 
@@ -47,7 +52,7 @@ Corrections
 - Le formattage d'une date pouvait déclencher une erreur sous certaines 
   conditions. Les pendules ont été remises à l'heure.
 
-## 2.58.0 (28 janvier 2021)
+## 2.58.0 (28 janvier 2022
 
 Améliorations
 
@@ -57,27 +62,27 @@ Améliorations
 - Un lien vers la page des conditions générales de vente a été ajouté au
   courriel de confirmation de commande.
 
-### 2.57.4 (28 janvier 2021)
+### 2.57.4 (28 janvier 2022)
 
 Cette mise à jour purement technique ajoute une option de configuration 
 nécessaire pour préparer une migration de la base de données.
 
-### 2.57.3 (21 janvier 2021)
+### 2.57.3 (21 janvier 2022)
 
 Correction : une erreur empêchait l'afffichage de la page de gestion d'un rayon
 dans l'administration. C'est corrigé.
 
-### 2.57.2 (16 janvier 2021)
+### 2.57.2 (16 janvier 2022)
 
 Correction : un utilisateur pouvait accéder à la page d'édition d'un billet de
 blog sans être identifié. C'est corrigé.
 
-### 2.57.1 (16 janvier 2021)
+### 2.57.1 (16 janvier 2022)
 
 Correction : l'accès à la page de rédaction d'un billet de blog en tant
 qu'éditeur provoquait une erreur. C'est corrigé.
 
-## 2.57.0 (7 janvier 2021)
+## 2.57.0 (7 janvier 2022)
 
 Améliorations
 
