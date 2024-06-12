@@ -460,7 +460,7 @@ class User extends Entity
                 $user = $this->get(['user_slug' => slugify($login)]);
                 if (!$user) {
                     // Still nothing : user unknown
-                    $log->addError('Login error: user unknown for login '.$login);
+                    $log->error('Login error: user unknown for login '.$login);
 
                     return false;
                 }
@@ -482,7 +482,7 @@ class User extends Entity
             }
 
             // Wrong password
-            $log->addError('Login error: Wrong password for login '.$login);
+            $log->error('Login error: Wrong password for login '.$login);
 
             return false;
         }
