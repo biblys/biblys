@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[4],{ng4s:function(e,t,o){"use strict";o.r(t);var n=o("ntx8");o("sZ/o");document.addEventListener("DOMContentLoaded",(function(){Object(n.default)("carousel",".biblys-carousel"),Object(n.default)("lightbox","[rel=lightbox]"),Object(n.default)("readmore","[data-readmore]")}))},"sZ/o":function(e,t,o){}}]);

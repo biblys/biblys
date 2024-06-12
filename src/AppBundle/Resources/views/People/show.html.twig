@@ -1,0 +1,14 @@
+<h1>{{ people.name }}</h1>
+
+{% if people.has('bio') %}
+    {{ people.bio|raw }}
+{% endif %}
+
+{% include 'AppBundle:Article:_list.html.twig' %}
+
+{% if app.user.isAdmin() %}
+    <div class="admin">
+        <p>Contributeur n° {{ people.id }}</p>
+        <p><a href="{{ path('people_edit', { id: people.id }) }}">modifier</a></p>
+    </div>
+{% endif %}

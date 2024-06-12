@@ -1,0 +1,86 @@
+environment: prod # dev|prod|test
+
+db:
+    host:
+    port: 3306
+    user:
+    pass:
+    base:
+
+site: 1
+
+logs:
+    sql: false
+
+# axys:
+#     protocol: https
+#     host: axys.me
+#     port: 80
+
+# smtp:
+#     host: smtp.example.com
+#     user: sender@example.com
+#     pass: password123
+#     port: 587
+#     encryption: tls
+
+# Force HTTPS
+# https: true
+
+# Set HTTP Strict Transport Security to 6 months
+# hsts: true
+
+# Path to composer home folder must be defined
+# to allow auto-updates
+# composer_home: /Users/biblys/.composer
+
+# axys:
+#     protocol: https
+#     host: axys.me
+
+# Cron key to allow external web cron service
+# cron:
+#     key: plo
+
+# media_path: /public/media
+# media_url: /media
+# downloadable_path: ../dlfiles/
+
+# cloud:
+#     cdn: false
+
+# paypal:
+#     client_id: paypal_id
+#     client_secret: paypal_secret_key
+
+# payplug:
+#     secret: sk_test_38b04992dec25ea3728585520f9cc011
+
+# stripe:
+#     public_key: pk_test_eZmHmQJGthg1u4SaD70tj9JL
+#     secret_key: sk_test_4kveWtXiWclDNqqiSZrgekdC
+#     endpoint_secret: whsec_ZPyZqxI7GaUyGplp1LP3lyveOCRPngjg
+
+# data:
+#     server: http://data.biblys.fr
+#     api_key: biblys-key
+
+# recaptcha:
+#     sitekey: recaptcha_sitekey
+#     secret: recaptcha_secret
+
+# images_cdn:
+#   service: cloudimage|weserv
+#   options:
+#     token: abcdef12345 # cloudimage only
+
+# Place des libraires stock export
+# placedeslibraires:
+#     shop_id: 12345
+#     login: SHOP-PDL
+#     password: 1234-Pdl
+
+# Also add {MATOMO} to your main layout
+# matomo:
+#     domain: analytics.biblys.cloud
+#     site_id: 1

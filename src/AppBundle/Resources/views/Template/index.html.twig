@@ -1,0 +1,39 @@
+<h1>
+  <span class="fa fa-code"></span> Éditeur de thème
+</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <td>Modèle</th>
+      <td>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for template in templates %}
+      <tr>
+        <td>
+          <a href="{{ path('template_edit', { slug: template.slug }) }}">
+            {{ template.name }}
+          </a>
+        </td>
+        <td>{{ template.type }}</td>
+        <td class="text-right">
+          <a class="btn btn-sm btn-primary" href="{{ path('template_edit', { slug: template.slug }) }}">
+            <span class="fa fa-edit"></span> Éditer
+          </a>
+          <a class="btn btn-sm btn-danger" title="Supprimer"
+            {% if template.customFileExists() %}
+              href="{{ path('template_delete', { slug: template.slug }) }}"
+              data-confirm="Voulez-vous vraiment SUPPRIMER votre modèle personnalisé pour {{ template.name }} et revenir au modèle par défaut ?"
+            {% else %}
+              disabled
+            {% endif %}
+          >
+            <span class="fa fa-trash-o"></span>
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

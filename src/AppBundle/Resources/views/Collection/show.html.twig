@@ -1,0 +1,15 @@
+<h1>{{ collection.name }}</h1>
+
+{% if collection.has('desc') %}
+    {{ collection.desc|raw }}
+{% endif %}
+
+{% include 'AppBundle:Article:_list.html.twig' %}
+
+{% if app.user.isAdmin() %}
+    <div class="admin">
+        <p>Collection n° {{ collection.id }}</p>
+        <p><a href="{{ path('collection_edit', { id: collection.id }) }}">modifier</a></p>
+        <p><a href="{{ path('collection_delete', { id: collection.id }) }}">supprimer</a></p>
+    </div>
+{% endif %}

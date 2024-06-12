@@ -1,0 +1,65 @@
+<a href="https://ga-dev-tools.appspot.com/campaign-url-builder/" class="floatR btn btn-info">Créer un lien de suivi</a>
+<h1><span class="fa fa-handshake-o"></span> Suivi des conversions</h1>
+
+<form class="form-horizontal fieldset">
+    <fieldset>
+        <legend>Filtres</legend>
+
+        <div class="form-group">
+            <label for="source">Source :</label>
+            <input class="form-control" type="text" name="source" id="source" value="{% if order_utm_source is defined %}{{ order_utm_source }}{% endif %}">
+        </div>
+
+        <div class="form-group">
+            <label for="campaign">Campagne :</label>
+            <input class="form-control" type="text" name="campaign" id="campaign" value="{% if order_utm_campaign is defined %}{{ order_utm_campaign }}{% endif %}">
+        </div>
+
+        <div class="form-group">
+            <label for="medium">Medium :</label>
+            <input class="form-control" type="text" name="medium" id="medium" value="{% if order_utm_medium is defined %}{{ order_utm_medium }}{% endif %}">
+        </div>
+
+        <div class="text-center">
+            <button class="btn btn-primary">Filter les conversions</button>
+            <a href="?" class="btn btn-info">Réinitialiser</a>
+        </div>
+
+    </fieldset>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Commande</th>
+            <th>Source</th>
+            <th>Campagne</th>
+            <th>Medium</th>
+            <th>CA</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% set total = 0 %}
+        {% for order in orders %}
+            <tr>
+                <td class="center" title="{{ order.payment_date }}">{{ order.payment_date|date('d/m') }}</td>
+                <td class="center"><a href="/order/{{ order.url }}">{{ order.id }}</a></td>
+                <td>{% if order.has('utm_source') %}<a href="?source={{ order.utm_source }}">{{ order.utm_source }}</a>{% endif %}</td>
+                <td>{% if order.has('utm_campaign') %}<a href="?campaign={{ order.utm_campaign }}">{{ order.utm_campaign }}{% endif %}</a></td>
+                <td>{% if order.has('utm_medium') %}<a href="?medium={{ order.utm_medium }}">{{ order.utm_medium }}</a>{% endif %}</td>
+                <td class="right">{% if order.has('amount') %}{{ order.amount|currency(true)|raw }}{% endif %}</td>
+            </tr>
+            {% if order.has('amount') %}
+              {% set total = total + order.amount %}
+            {% endif %}
+        {% endfor %}
+        {% if order_utm_source is defined or order_utm_campaign is defined or order_utm_medium is defined %}
+            <tr>
+                <td colspan="6" class="right">Total : {{ total|currency(true)|raw }}</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+{% include 'AppBundle:Main:_pagination.html.twig' %}

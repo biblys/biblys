@@ -1,0 +1,9 @@
+<h1 class="posts-title">Actualités</h1>
+
+<div class="posts">
+	{% for post in posts %}
+		{% include 'AppBundle:Post:show.html.twig' %}
+	{% endfor %}
+</div>
+
+{% include 'AppBundle:Post:_pagination.html.twig' %}

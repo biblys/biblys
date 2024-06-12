@@ -1,0 +1,39 @@
+<h1>
+	<span class="fa fa-search"></span>
+	Termes de recherche
+</h1>
+
+<p>
+	<span class="fa fa-info-circle"></span>
+	Les termes de recherches sont les termes qui feront apparaître les articles
+				  dans les résultats du moteur de recherche lorsqu'ils sont sont recherchés par les
+				  utilisateurs. Ils sont générés automatiquement à chaque modification d'une fiche
+				  article. La modification de certains autres éléments comme les contributeurs,
+				  les collections ou les cycles peuvent nécessiter de regénérer manuellement les
+				  mots-clés. Il vous suffit pour cela de rester sur cette page jusqu'à ce que le
+				  décompte soit terminé.</p>
+
+<form class="text-center" method="post">
+	<button type="submit" class="btn btn-danger">
+		<span class="fa fa-refresh"></span>
+		&nbsp; Réinitialiser tous les termes de recherche
+	</button>
+</form>
+
+<h2>
+	<span id="article-count">{{ total }}</span>
+	articles à actualiser
+</h2>
+
+<progress id="progress-bar">
+</progress>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Titre</th>
+      <th style="width: 50%">Termes de recherche</th>
+    </tr>
+  </thead>
+  <tbody id="searchable-articles-table"></tbody>
+</table>

@@ -1,0 +1,24 @@
+.biblys-carousel .swiper-slide {
+  height: auto;
+}
+
+.biblys-carousel .carousel-image {
+  left: 0;
+  max-height: initial;
+  max-width: 100%;
+  position: static;
+  top: 0;
+  transform: none;
+}
+
+.biblys-carousel .swiper-pagination-bullet {
+  background: transparent;
+  border: 1px solid white;
+  height: 10px;
+  opacity: 1;
+  width: 10px;
+}
+
+.biblys-carousel .swiper-pagination-bullet-active {
+  background: white;
+}

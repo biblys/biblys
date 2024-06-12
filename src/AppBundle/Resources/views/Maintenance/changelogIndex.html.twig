@@ -1,0 +1,14 @@
+<h1>Historique des mises à jour</h1>
+
+{% for release in releases %}
+
+    <h3 id="v{{release.version}}">
+      <a href="{{ path('maintenance_changelog_show', { version: release.version }) }}">
+        {{ release.version }}
+      </a>
+      ({{ release.date|date }})
+    </h3>
+
+    <p>{{ release.notes|nl2br }}</p>
+
+{% endfor %}

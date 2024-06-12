@@ -1,0 +1,80 @@
+html {
+	font-family: sans-serif, serif;
+	background: none;
+}
+
+header {
+	text-align: center;
+	margin: 1cm 0 2cm 0;
+}
+
+footer {
+	text-align: center;
+	margin: 3cm 0 0 0;
+}
+
+.noprint {
+	display: none;
+}
+
+.center { text-align: center; }
+.right { text-align: right; }
+
+h2 { font-weight: bold; font-size: 25px; }
+h3 { font-weight: bold; font-size: 17px; }
+
+table { width: 95%; margin: auto; }
+
+.tr { border-bottom: 1px solid black; }
+
+.invoice-table tfoot {
+	display: table-row-group;
+}
+
+#axys, nav, aside, .hidden, .button, header h1, header h2 { display: none; }
+
+table.order {
+	width: 100%;
+}
+
+table.order td, table.order th {
+	border-bottom: 1px solid gray;
+	border-collapse: collapse;
+	border-spacing: 0;
+	padding: 5px 15px;
+}
+
+/* For order_invoice */
+.table>tbody>tr>td,
+.table>tfoot>tr>td {
+	padding: 3px;
+	font-size: 0.9em;
+}
+
+a { text-decoration: none; color: #000 }
+
+.invoiceLogo {
+	margin-right: 15px;
+}
+
+/* Overriding bootstrap displaying links url */
+a[href]:after {
+	content: none;
+}
+
+/* admin-table */
+.admin-table {
+	border: 1px solid lightgray;
+}
+
+.admin-table td,
+.admin-table th {
+	border: 1px solid lightgray;
+	padding: 5px 10px;
+}
+
+/* admin-bar */
+
+.admin-bar {
+	display: none;
+}

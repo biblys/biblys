@@ -1,0 +1,74 @@
+<div class="row">
+  <div class="col-md-8">
+
+    {% if article.has('cycle') %}
+      <p class="article-cycle">
+        <a href="{{ path('cycle_show', { slug: article.cycle.url }) }}">
+          {{ article.cycle.name }}
+        </a>
+        {% if article.has('tome') %}
+          -
+          {{ article.tome }}
+        {% endif %}
+      </p>
+    {% endif %}
+
+    <h1 class="article-title">{{ article.title }}</h1>
+
+    <div class="authors-and-contributors">
+      <h2 class="article-authors">
+        <span class="de">de</span>
+        {% for author in article.getAuthors() %}
+          <a href="{{ path('people_show', { slug: author.url }) }}">
+            {{ author.name }}</a>{% if not loop.last %},
+          {% endif %}
+        {% endfor %}
+      </h2>
+      <p class="article-contributors">
+        {% if article.hasOtherContributors() %}
+          et
+          {% for people in article.getOtherContributors %}
+            <a href="{{ path('people_show', { slug: people.url }) }}">{{ people.name }}</a>
+            ({{ people.job_name}})
+            {% if not loop.last %},
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </p>
+    </div>
+
+    {% if article.has('ean') %}
+      <p>
+        EAN : {{ article.ean }}<br>
+        ISBN : {{ article.isbn }}
+      </p>
+    {% endif %}
+
+    {% for item in article.getAvailableItems() %}
+      {{ item.getCartButton('Ajouter au panier')|raw }}
+      {{ item.selling_price|currency(true)|raw }}
+    {% endfor %}
+  </div>
+  <div class="col-md-4 text-center">
+    {% if article.hasCover() %}
+      {{ article.getCoverTag({ class:"cover", size:"w300",rel: "lightbox" })|raw }}
+    {% endif %}
+  </div>
+</div>
+
+{% if article.has('summary') %}
+
+  <div class="article-summary">
+    {{ article.summary|raw }}
+  </div>
+
+{% endif %}
+
+{% if app.user.isAdmin() %}
+  <div class="admin">
+    <p>Article n° {{ article.id }}</p>
+    <p><a href="/pages/adm_article?id={{ article.id }}">modifier</a></p>
+    <p><a href="/pages/adm_stocks?article_id={{ article.id }}">stock</a></p>
+    <p><a href="/pages/adm_stock?add={{ article.id }}">ajouter</a></p>
+  </div>
+{% endif %}

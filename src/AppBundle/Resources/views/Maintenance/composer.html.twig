@@ -1,0 +1,26 @@
+<h1>
+  <span class="fa fa-puzzle-piece"></span>
+  Composants
+</h1>
+
+{% if error is defined %}
+
+  <p class="alert alert-danger">
+    {{ error }} Avant de continuer, la mise à jour devra être effectuée manuellement à l'aide de <em>composer</em>.
+  </p>
+
+  <a href="{{ path('main_admin') }}" class="btn btn-primary">Continuer</a>
+
+{% else %}
+
+  <p class="alert alert-info">
+    <i class="fa fa-cog fa-spin"></i> Mise à jour des composants en cours...
+  </p>
+
+  <script type="text/javascript">
+    setTimeout(function() {
+      window.location.href = {{ path('main_admin') }};
+    }, 5000)
+  </script>
+
+{% endif %}

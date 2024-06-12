@@ -1,0 +1,38 @@
+
+<form class="form-horizontal fieldset" method="post">
+    <fieldset>
+        <p>
+            <label for="name" class="after">Nom :</label>
+            <input type="text" value="{{ (rayon.has('name')) ? rayon.name }}" id="name" name="name" class="form-control" maxlength=128 required>
+        </p>
+        <p>
+            <label for="sort_by" class="after">Trier les articles par :</label>
+            <select name="sort_by" id="sort_by" class="form-control">
+                <option value="id"{{ (rayon.has('sort_by') and rayon.sort_by == "id") ? ' selected' }}>Date de création</option>
+                <option value="pubdate"{{ (rayon.has('sort_by') and rayon.sort_by == "pubdate") ? ' selected' }}>Date de publication</option>
+            </select>
+        </p>
+        <p>
+            <label for="sort_order" class="after">Sens du tri :</label>
+            <select name="sort_order" id="sort_order" class="form-control">
+                <option value="0"{{ (not rayon.has('sort_order')) ? ' selected' }}>Ascendant</option>
+                <option value="1"{{ (rayon.has('sort_order')) ? ' selected' }}>Descendant</option>
+            </select>
+        </p>
+        <p>
+            <label for="show_upcoming" class="after">Filtrer par date de parution :</label>
+            <select name="show_upcoming" id="show_upcoming" class="form-control">
+                <option value="0"{{ (not rayon.has('show_upcoming')) ? ' selected' }}>Afficher tous les livres</option>
+                <option value="1"{{ (rayon.has('show_upcoming')) ? ' selected' }}>Afficher uniquement les livres parus</option>
+            </select>
+        </p>
+    </fieldset>
+
+    <fieldset>
+        <textarea id="desc" name="desc" class="wysiwyg">{{ (rayon.has('desc')) ? rayon.desc }}</textarea>
+    </fieldset>
+
+    <fieldset class="text-center">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </fieldset>
+</form>

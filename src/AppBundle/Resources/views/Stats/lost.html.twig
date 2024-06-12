@@ -1,0 +1,76 @@
+<h1>
+  <span class="fa fa-compass"></span>
+  Exemplaires perdus
+</h1>
+
+<form class="form-inline">
+  <div>
+    <label for="year">Année :</label>
+    <select id="year" name="year" class="goto">
+      <option value="all">Cumul</option>
+      {% for year_option in years %}
+        <option value={{ path('stats_lost', { year: year_option }) }}{% if year == year_option %} selected{% endif %}>
+          {{ year_option }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+</form>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Ref.</th>
+      <th>Titre</th>
+      <th title="Prix d'achat TTC">PdA&nbsp;TTC</th>
+      <th title="Prix de vente HT">PdV&nbsp;HT</th>
+      <th title="Prix de vente TTC">PdV&nbsp;TTC</th>
+      <th>Perdu le</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for copy in copies %}
+      <tr>
+        <td>
+          <a href="/pages/adm_stock?id={{ copy.id }}">
+            {{ copy.id }}
+          </a>
+        </td>
+        <td>
+          <a href="/{{ copy.article.url }}">
+            {{ copy.article.title }}
+          </a>
+        </td>
+        <td class="text-right">
+          {% if copy.has('purchase_price') %}
+            {{ copy.purchase_price|price('EUR')|raw }}
+          {% endif %}
+        </td>
+        <td class="text-right">
+          {% if copy.has('selling_price_ht') %}
+            {{ copy.stock_selling_price_ht|price('EUR')|raw }}
+          {% endif %}
+        </td>
+        <td class="text-right">
+          {% if copy.has('selling_price') %}
+            {{ copy.stock_selling_price|price('EUR')|raw }}
+          {% endif %}
+        </td>
+        <td>
+          {{ copy.stock_lost_date|date('d/m/Y') }}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <th colspan="2" class="text-right">
+        {{ total.count }} exemplaires
+      </th>
+      <th class="text-right">{{ total.purchase|price('EUR')|raw }}</th>
+      <th class="text-right">{{ total.selling_ht|price('EUR')|raw }}</th>
+      <th class="text-right">{{ total.selling_ttc|price('EUR')|raw }}</th>
+      <th></th>
+    </tr>
+  </tfoot>
+</table>

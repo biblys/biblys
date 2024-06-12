@@ -1,0 +1,13 @@
+<h1>{{ cycle.name }}</h1>
+
+{% if cycle.has('desc') %}
+    {{ cycle.desc|raw }}
+{% endif %}
+
+{% include 'AppBundle:Article:_list.html.twig' %}
+
+{% if app.user.isAdmin() %}
+    <div class="admin">
+        <p>Cycle n° {{ cycle.id }}</p>
+    </div>
+{% endif %}

@@ -1,0 +1,19 @@
+<h1>Supprimer la collection {{ collection.name }}</h1>
+
+{% if error %}
+  <p class="alert alert-danger">
+    {{ error }}
+  </p>
+{% endif %}
+
+<p class="alert alert-warning">
+  <span class="fa fa-warning"></span>
+  Voulez-vous vraiment SUPPRIMER la collection
+    <a href="{{ path('collection_show', { slug: collection.url }) }}">{{ collection.name }}</a>
+  ?
+</p>
+
+<form method="POST">
+  <button type="submit" class="btn btn-danger">Supprimer la collection</button>
+  <a class="btn btn-info" href="{{ path('collection_show', { slug: collection.url }) }}">Annuler</a>
+</form>

@@ -1,0 +1,27 @@
+<h1>
+  Gestion des fournisseurs pour <a href="{{ path('publisher_edit', { id: publisher.id }) }}">{{ publisher.name }}</a>
+</h1>
+
+<ul>
+  {% for supplier in publisher.suppliers %}
+    <li>
+      {{ supplier.name }}
+      <a href="{{ path('publisher_suppliers_remove', { id: publisher.id, supplier_id: supplier.id }) }}">
+        <span class="fa fa-trash-o"></span>
+      </a>
+    </il>
+  {% endfor %}
+</ul>
+
+<form action="{{ path('publisher_suppliers_add', { id: publisher.id }) }}" method="post">
+  <fieldset>
+    <label for="supplier_id">Ajouter :</label>
+      <select id="supplier_id" name="supplier_id">
+        <option />
+        {% for supplier in suppliers %}
+          <option value="{{ supplier.id }}">{{ supplier.name }}</option>
+        {% endfor %}
+     </select>
+     <button class="btn btn-primary btn-sm" type="submit">OK</button>
+  </fieldset>
+</form>

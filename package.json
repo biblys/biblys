@@ -1,0 +1,19 @@
+{
+  "devDependencies": {
+    "@symfony/webpack-encore": "^0.28.3",
+    "eslint": "^7.4.0",
+    "husky": "^4.2.3",
+    "webpack-notifier": "^1.6.0"
+  },
+  "dependencies": {
+    "ace-builds": "^1.4.8",
+    "jquery": "~1",
+    "jquery-ui": "~1",
+    "swiper": "^5.3.6"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "composer build:prod"
+    }
+  }
+}

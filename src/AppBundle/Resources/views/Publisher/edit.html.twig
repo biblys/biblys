@@ -1,0 +1,36 @@
+<h1>Modifier l'éditeur <a href="{{ path("publisher_show", { slug: publisher.url }) }}">{{ publisher.name }}</a></h1>
+
+{% if error %}
+  <p class="alert alert-danger">{{ error }}</p>
+{% endif %}
+
+{% include 'AppBundle:Publisher:_form.html.twig' %}
+
+<div class="admin">
+  <p>Éditeur n° {{ publisher.id }}</p>
+  <a href="{{ path('publisher_suppliers', { id: publisher.id }) }}">fournisseurs</a>
+</div>
+
+<p>
+    <a class="btn btn-default" data-toggle="collapse" data-target="#viewdetails">Informations supplémentaires &raquo;</a>
+</p>
+<form id="viewdetails" class="collapse fieldset">
+    <fieldset>
+        <p>
+            <label class="after">Identifiant :</label>
+            <input value="{{ publisher.id }}" class="form-control" readonly>
+        </p>
+        <p>
+            <label class="after">Slug :</label>
+            <input value="{{ publisher.url }}" class="form-control" readonly>
+        </p>
+        <p>
+            <label class="after">Date de création :</label>
+            <input value="{{ publisher.has('created') ? publisher.created }}" class="form-control" readonly>
+        </p>
+        <p>
+            <label class="after">Date de modification :</label>
+            <input value="{{ publisher.has('updated') ? publisher.updated }}" class="form-control" readonly>
+        </p>
+    </fieldset>
+</form>

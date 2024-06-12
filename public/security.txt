@@ -1,0 +1,4 @@
+# If would like to report a security issue, please contact Clement Bourgoin,
+# creator of Biblys, using the link above or OpenBugBounty
+Contact: https://www.biblys.fr/contact/
+OpenBugBounty: https://openbugbounty.org/bugbounty/ClementBourgoin/

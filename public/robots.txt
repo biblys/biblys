@@ -1,0 +1,10 @@
+User-Agent: *
+Disallow: /admin/*
+Disallow: /pages/log_*
+Disallow: /pages/pub_*
+Disallow: /pages/adm_*
+Disallow: /pages/*?*=*
+Disallow: /pages/cart
+Allow: /
+User-agent: VoilaBot
+Disallow: /

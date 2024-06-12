@@ -1,0 +1,5 @@
+<h1>Éditer le ticket #{{ ticket.id }}</h1>
+
+{% include 'AppBundle:Ticket:_form.html.twig' %}
+
+<a href="{{ path('ticket_index') }}">Retour</a>

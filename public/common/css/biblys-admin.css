@@ -1,0 +1,241 @@
+/* ADMIN DASHBOARD */
+
+.manage-shortcut-link {
+  margin: 0;
+}
+
+.admin-dashboard {
+  margin-bottom: 50px;
+}
+
+.admin-dashboard h3 {
+  color: #369;
+  font-size: 1.2em;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  padding: 0.5em 0;
+  border-bottom: 1px solid lightgray;
+}
+
+.admin-dashboard a {
+  color: #369;
+}
+
+.admin-dashboard a:hover {
+  color: #f60;
+  text-decoration: none;
+}
+
+ul.admin-entries {
+  list-style-type: none;
+  margin: 0;
+}
+
+ul.admin-entries li {
+  line-height: 1.5;
+  margin: 5px 0;
+}
+
+.admin-entries .icon-badge {
+  background: red;
+  border-radius: 20px;
+  color: white;
+  font-size: 10px;
+  margin-left: 5px;
+  padding: 2px 8px 2px 8px;
+  position: absolute;
+}
+
+/* ADMIN SHORTCUTS */
+
+.admin-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.admin-shortcuts .shortcut {
+  text-align: center;
+  margin: 10px;
+  position: relative;
+  width: 80px;
+}
+
+.admin-shortcuts .shortcut p {
+  margin: 0;
+}
+
+.admin-shortcuts .icon {
+  background: #111111;
+  background: #777777;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#777777), to(#111111));
+  background-image: -moz-linear-gradient(top center, #777777, #111111);
+  background-image: -o-linear-gradient(top, #777777, #111111);
+  border-radius: 8px;
+  box-shadow: 1px 1px 3px gray;
+  color: #fff;
+  font-size: 30px;
+  margin-bottom: 5px;
+  padding: 8px;
+}
+
+.admin-shortcuts .icon-badge {
+  background: red;
+  border-radius: 20px;
+  color: white;
+  font-size: 10px;
+  margin-left: 5px;
+  padding: 2px 8px 2px 8px;
+  left: 50px;
+  top: -10px;
+  position: absolute;
+}
+
+/* ADMIN TABLE */
+
+.admin-table {
+  background: white;
+  color: black;
+  border-collapse: collapse;
+  font-family: 'Lucida Console', Monaco, monospace;
+}
+
+.admin-table th {
+  background-color: rgb(54, 58, 64);
+  border-bottom: 1px solid gray;
+  color: white;
+  font-size: 15px;
+  padding: 10px;
+}
+
+.admin-table td {
+  border-left: 1px solid rgb(225, 225, 225);
+  border-right: 1px solid rgb(225, 225, 225);
+  border-bottom: 1px solid rgb(225, 225, 225);
+  padding: 10px;
+  font-size: 12px;
+  outline: 0;
+  vertical-align: middle;
+}
+
+td.nopadding {
+  padding: 0;
+}
+
+.admin-table tr:hover {
+  background-color: #c4def8;
+}
+
+.admin-table tr.checked td {
+  background-color: #cfc;
+}
+
+table.checkable tbody tr {
+  cursor: pointer;
+}
+
+.admin-table a {
+  color: #369;
+}
+
+.admin-table a:hover {
+  color: #f60;
+  text-decoration: none;
+}
+
+.admin-table a.btn,
+.admin-table a.btn:hover {
+  color: white;
+}
+.admin-table a.btn-default,
+.admin-table a.btn-default:hover {
+  color: black;
+}
+
+/* CHECKOUT */
+
+#checkout_add_results {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.99);
+  max-width: 768px;
+  width: auto;
+  border: 1px solid lightgray;
+  box-shadow: 5px 5px 10px 0px #656565;
+  margin-left: 155px;
+  margin-top: -11px;
+}
+
+#checkout_add_results .selected {
+  background-color: blue;
+  color: white;
+}
+
+/* THEME EDITOR */
+#editor {
+  display: none;
+  position: absolute;
+}
+
+/* ADMIN-BAR */
+
+.admin-bar {
+  background: #23282d;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0 0 5px 2px rgba(15, 15, 15, 0.5);
+  height: 32px;
+  left: 10px;
+  max-width: 275px;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  opacity: 0.75;
+  padding: 0 5px;
+  transition: all 125ms;
+  z-index: 100;
+}
+
+.admin-bar:hover {
+  opacity: 1;
+}
+
+.admin-bar-logo {
+  height: 32px;
+}
+
+.admin-bar-shortcut {
+  color: white;
+  display: inline-block;
+  margin: 0 3px;
+}
+
+.admin-bar-shortcut.with-badge {
+  margin-right: 12px;
+}
+
+.admin-bar-shortcut .fa {
+  font-size: 1.5em;
+  transform: translateY(3px);
+}
+
+.admin-bar-shortcut:hover {
+  color: #369;
+}
+
+.admin-bar .icon-badge {
+  background: red;
+  border-radius: 20px;
+  color: white;
+  display: inline-block;
+  font-size: 10px;
+  padding: 0 6px 0 6px;
+  position: absolute;
+  transform: translate(-7px, 10px);
+  transition: opacity 400ms;
+  z-index: 10;
+}
+
+@media (min-width: 768px) {
+  .admin-bar {
+    max-width: none;
+  }
+}

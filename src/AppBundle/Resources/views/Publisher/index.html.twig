@@ -1,0 +1,13 @@
+<h1>Éditeurs</h1>
+
+<ul>
+  {% for publisher in publishers %}
+    <li>
+      <a href="{{ path('publisher_show', { slug: publisher.url }) }}">
+        {{ publisher.name }}
+      </a>
+    </li>
+  {% endfor %}
+</ul>
+
+{% include 'AppBundle:Publisher:_pagination.html.twig' %}

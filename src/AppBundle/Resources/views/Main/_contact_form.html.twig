@@ -1,0 +1,51 @@
+{% if error %}
+  <p class="alert alert-danger">
+    {{ error }}
+  </p>
+{% endif %}
+
+{% if success %}
+
+  <p class="alert alert-success">
+    Votre message a bien été envoyé.
+  </p>
+
+{% else %}
+
+  <form action="/contact/" method="post" class="fieldset contact-form">
+    <fieldset>
+
+      <div class="form-group">
+        <label for="name">Votre nom</label>
+        <input type="text" name="name" id="name" value="{{ name }}" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Votre adresse e-mail</label>
+        <input type="email" name="email" id="email" value="{{ email }}" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="subject">Sujet du message</label>
+        <input type="text" name="subject" id="subject" value="{{ subject }}" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Votre message</label>
+        <textarea name="message" id="message" rows=10 class="form-control" required>{{ message }}</textarea>
+      </div>
+
+      {% if recaptcha_key %}
+        <div class="g-recaptcha" data-sitekey="{{ recaptcha_key }}"></div>
+        <script src="https://www.google.com/recaptcha/api.js"></script>
+      {% endif %}
+
+      <br>
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Envoyer le message</button>
+      </div>
+    </fieldset>
+  </form>
+
+{% endif %}

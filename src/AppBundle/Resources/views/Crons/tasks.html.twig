@@ -1,0 +1,35 @@
+<h1>
+  <span class="fa fa-clock-o"></span>
+  Journal des tâches planifées
+</h1>
+
+<table class="table jobs-table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Tâche</th>
+      <th>Message</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for job in jobs %}
+      <tr>
+        <td>
+          {% if job.result == "success" %}
+            <span class="fa fa-check-circle green"></span>
+          {% else %}
+            <span class="fa fa-exclamation-triangle red"></span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{{ path('crons_task', { slug: job.task }) }}">
+            {{ job.task }}
+          </a>
+        </td>
+        <td>{{ job.message }}</td>
+        <td>{{ job.created|date('Y-m-d H:i:s') }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

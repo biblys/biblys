@@ -1,0 +1,36 @@
+<h1>Ticket #{{ ticket.id }} : {{ ticket.title }}</h1>
+<p>
+    <a href="{{ path('ticket_index') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i> Retour</a>
+    <a href="{{ path('ticket_edit', { 'id': ticket.id }) }}" class="btn btn-primary"><i class="fa fa-edit"></i> Éditer</a>
+    {% if app.user.isRoot() and not ticket.isResolved() and not ticket.isClosed() %}
+        <a href="{{ path('ticket_resolve', { 'id': ticket.id }) }}" class="btn btn-success" data-confirm="Voulez-vous vraiment marquer ce ticket comme résolu ?"><i class="fa fa-check"></i> Résolu</a>
+    {% endif %}
+    {% if not ticket.isClosed() %}
+        <a href="{{ path('ticket_close', { 'id': ticket.id }) }}" class="btn btn-warning" data-confirm="Voulez-vous vraiment CLORE ce ticket ?"><i class="fa fa-close"></i> Clore</a>
+    {% endif %}
+</p>
+
+{% if not ticket.has('resolved') %}
+    <p class="alert alert-info">Position dans la liste d'attente : {{ position }}</p>
+{% endif %}
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <p>{{ ticket.content|nl2br }}</p>
+    </div>
+</div>
+
+<br>
+<h2>Discussion</h2>
+{{ comments|join|raw }}
+
+<form action="{{ path('ticket_comment_new', { 'ticket_id': ticket.id }) }}" method="post" class="fieldset">
+    <fieldset>
+        <p>
+            <textarea id="ticket_comment_content" name="ticket_comment_content" class="form-control" rows=5 required></textarea>
+        </p>
+        <p class="text-right">
+            <button type="submit" class="btn btn-primary">Ajouter un commentaire</button>
+        </p>
+    </fieldset>
+</form>

@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# Immediatly exit if a command fails
+set -e
+
+# Ask for site
+printf "Site: "
+read site
+
+# Ask for version
+printf "Version: "
+read version
+
+echo "> Deploying version $version on site $site..."
+
+echo "> Changing directory to ~/cloud/$site..."
+ssh biblys "cd ~/cloud/$site"
+
+echo "> Changing to tag $version..."
+ssh biblys "cd ~/cloud/$site && git checkout $version"
+
+echo "> Fetching latest changes from git remote..."
+ssh biblys "cd ~/cloud/$site && git pull"
+
+echo "> Installing dependencies..."
+ssh biblys "cd ~/cloud/$site && composer install"

@@ -1,0 +1,30 @@
+<h1>{{ publisher.name }}</h1>
+
+{% if publisher.has('desc') %}
+	{{ publisher.desc|raw }}
+{% endif %}
+
+<ul>
+	{% for collection in collections %}
+		<li>
+			<a href="{{ path('collection_show', { slug: collection.url }) }}">
+				{{ collection.name }}
+			</a>
+		</li>
+	{% endfor %}
+</ul>
+
+{% include 'AppBundle:Article:_list.html.twig' %}
+
+{% if app.user.isAdmin() %}
+	<div class="admin">
+		<p>Éditeur n°
+			{{ publisher.id }}</p>
+		<p>
+			<a href="{{ path('publisher_edit', { id: publisher.id }) }}">modifier</a>
+		</p>
+		<p>
+			<a href="{{ path('publisher_delete', { id: publisher.id }) }}">supprimer</a>
+		</p>
+	</div>
+{% endif %}

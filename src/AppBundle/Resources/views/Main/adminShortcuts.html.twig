@@ -1,0 +1,64 @@
+<h1><span class="fa fa-share"></span> Raccourcis Administration</h1>
+
+<p class="text-center">
+  <select id="add-shortcut">
+    <option disabled selected value>Ajouter un raccourci...</option>
+    <optgroup label="Articles">
+      {% for entry in articles %}
+        <option data-url="{{ entry.url }}" data-icon="{{ entry.icon }}" {% if entry.hasClass %} data-class="{{ entry.class}}" {% endif %} {% if entry.hasSubscription %} data-subscription="{{ entry.subscription }}" {% endif %}>{{ entry.name }}</option>
+      {% endfor %}
+    </optgroup>
+    <optgroup label="Stock">
+      {% for entry in stock %}
+        <option data-url="{{ entry.url }}" data-icon="{{ entry.icon }}" {% if entry.hasClass %} data-class="{{ entry.class}}" {% endif %} {% if entry.hasSubscription %} data-subscription="{{ entry.subscription }}" {% endif %}>{{ entry.name }}</option>
+      {% endfor %}
+    </optgroup>
+    <optgroup label="Ventes">
+      {% for entry in sales %}
+        <option data-url="{{ entry.url }}" data-icon="{{ entry.icon }}" {% if entry.hasClass %} data-class="{{ entry.class}}" {% endif %} {% if entry.hasSubscription %} data-subscription="{{ entry.subscription }}" {% endif %}>{{ entry.name }}</option>
+      {% endfor %}
+    </optgroup>
+    <optgroup label="Numérique">
+      {% for entry in ebooks %}
+        <option data-url="{{ entry.url }}" data-icon="{{ entry.icon }}" {% if entry.hasClass %} data-class="{{ entry.class}}" {% endif %} {% if entry.hasSubscription %} data-subscription="{{ entry.subscription }}" {% endif %}>{{ entry.name }}</option>
+      {% endfor %}
+    </optgroup>
+    <optgroup label="Contenu">
+      {% for entry in content %}
+        <option data-url="{{ entry.url }}" data-icon="{{ entry.icon }}" {% if entry.hasClass %} data-class="{{ entry.class}}" {% endif %} {% if entry.hasSubscription %} data-subscription="{{ entry.subscription }}" {% endif %}>{{ entry.name }}</option>
+      {% endfor %}
+    </optgroup>
+    <optgroup label="Statistiques">
+      {% for entry in stats %}
+        <option data-url="{{ entry.url }}" data-icon="{{ entry.icon }}" {% if entry.hasClass %} data-class="{{ entry.class}}" {% endif %} {% if entry.hasSubscription %} data-subscription="{{ entry.subscription }}" {% endif %}>{{ entry.name }}</option>
+      {% endfor %}
+    </optgroup>
+    <optgroup label="Site">
+      {% for entry in site %}
+        <option data-url="{{ entry.url }}" data-icon="{{ entry.icon }}" {% if entry.hasClass %} data-class="{{ entry.class}}" {% endif %} {% if entry.hasSubscription %} data-subscription="{{ entry.subscription }}" {% endif %}>{{ entry.name }}</option>
+      {% endfor %}
+    </optgroup>
+    <optgroup label="Biblys">
+      {% for entry in biblys %}
+        <option data-url="{{ entry.url }}" data-icon="{{ entry.icon }}" {% if entry.hasClass %} data-class="{{ entry.class}}" {% endif %} {% if entry.hasSubscription %} data-subscription="{{ entry.subscription }}" {% endif %}>{{ entry.name }}</option>
+      {% endfor %}
+    </optgroup>
+    {% if custom|length > 0 %}
+      <optgroup label="{{ site_title }}">
+        {% for entry in custom %}
+          <option data-url="{{ entry.url }}" data-icon="{{ entry.icon }}" {% if entry.hasClass %} data-class="{{ entry.class}}" {% endif %} {% if entry.hasSubscription %} data-subscription="{{ entry.subscription }}" {% endif %}>{{ entry.name }}</option>
+        {% endfor %}
+      </optgroup>
+    {% endif %}
+  </select>
+</p>
+
+<div id="shortcut-list" class="admin-shortcuts">
+</div>
+
+<form id="shortcuts-form" method="post">
+  <div class="text-center">
+    <input type="hidden" id="shortcuts-input" name="shortcuts" value="{{ shortcuts }}">
+    <button class="btn btn-primary" type="submit">Enregistrer les raccourcis</button>
+  </div>
+</form>

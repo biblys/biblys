@@ -1,0 +1,30 @@
+<h1><span class="fa fa-money"></span> Financement participatif</h1>
+
+<p class="buttonset">
+  <a class="btn btn-success" href="{{ path('cf_campaign_new') }}">Créer une campagne</a>
+</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Campagne</th>
+      <th>Objectif</th>
+      <th>Récoltés</th>
+      <th>Participants</th>
+      <th style="min-width: 100px;"></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for campaign in campaigns %}
+    <tr>
+      <td><a href="{{ path('cf_campaign_show', { slug: campaign.url }) }}">{{ campaign.title }}</a></td>
+      <td class="text-right">{{ campaign.goal|price('EUR')|raw }}</td>
+      <td class="text-right">{{ campaign.has('pledged') ? campaign.pledged|price('EUR')|raw }}</td>
+      <td class="text-right">{{ campaign.has('backers') ? campaign.backers }}</td>
+      <td class="text-right">
+        <a href="{{ path('cf_campaign_edit', { id: campaign.id }) }}" class="btn btn-info btn-sm">modifier</a>
+        <a href="{{ path('cf_reward_list', { campaign_id: campaign.id }) }}" class="btn btn-info btn-sm">contreparties</a>
+      </td>
+    </tr>
+  {% endfor %}
+</table>

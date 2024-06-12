@@ -1,0 +1,33 @@
+<h1>
+	Supprimer l'éditeur
+	{{publisher.name}}
+</h1>
+
+{% if error %}
+	<p class="error">{{error}}</p>
+{% endif %}
+
+<p>Voulez-vous supprimer cet éditeur ?</p>
+
+<h2>Ces collections seront également supprimées</h2>
+
+<ul>
+	{% for collection in collections %}
+		<li>{{collection.name}}</li>
+	{% endfor %}
+</ul>
+
+<h2>Ces articles seront également supprimés</h2>
+
+<ul>
+	{% for article in articles %}
+		<li>{{article.title}}</li>
+	{% endfor %}
+</ul>
+
+<form method="POST" class="text-center">
+	<button type="submit" class="btn btn-danger">
+		Supprimer l'éditeur
+		{{publisher.name}}
+	</button>
+</form>

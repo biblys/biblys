@@ -1,0 +1,10 @@
+version: '3.7'
+services:
+  biblys:
+    container_name: biblys-dev-env
+    image: biblys/php-dev-env:7.2
+    restart: on-failure
+    volumes:
+      - './:/usr/src/:cached'
+    ports:
+      - '8088:80'

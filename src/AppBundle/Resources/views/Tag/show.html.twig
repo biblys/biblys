@@ -1,0 +1,14 @@
+<h1>{{ tag.name }}</h1>
+
+{% if tag.has('description') %}
+    {{ tag.description|raw }}
+{% endif %}
+
+{% include 'AppBundle:Article:_list.html.twig' %}
+
+{% if app.user.isAdmin() %}
+    <div class="admin">
+        <p>Mot-clé n° {{ tag.id }}</p>
+        <p><a href="{{ path('tag_edit', { id: tag.id }) }}">modifier</a></p>
+    </div>
+{% endif %}

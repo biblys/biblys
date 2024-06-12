@@ -1,0 +1,9 @@
+<h1 class="events-title">Évènements</h1>
+
+<div class="events">
+    {% for event in events %}
+        {% include 'AppBundle:Event:show.html.twig' %}
+    {% endfor %}
+</div>
+
+{% include 'AppBundle:Event:_pagination.html.twig' %}

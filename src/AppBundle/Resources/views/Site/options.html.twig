@@ -1,0 +1,47 @@
+<h1>
+  <span class="fa fa-cogs"></span>
+  Options du site
+</h1>
+
+<p>
+    Les options de site permettent de modifier le comportement par défaut
+    de Biblys.<br />
+    <a href="https://github.com/biblys/wiki/wiki/Options-du-site">
+        Documentation
+    </a>
+</p>
+
+<form method="post" class="fieldset">
+    <fieldset>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Clé</th>
+                    <th>Valeur</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for option in options %}
+
+                    {% if option.has("value") %}
+                        <tr>
+                            <td style="line-height: 45px">{{ option.key }}</td>
+                            <td><input type="text" name="options[{{ option.key }}]" id="{{ option.key }}" value="{{ option.value }}" class="form-control"></td>
+                        </tr>
+                    {% endif %}
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </fieldset>
+    <fieldset>
+        <p>
+            <label for="new_option" class="after">Ajouter une option :</label>
+            <input type="text" name="new_key" id="new_key" placeholder="Clé" class="form-control">
+            <input type="text" name="new_value" id="new_value" placeholder="Valeur" class="form-control">
+        </p>
+    </fieldset>
+    <fieldset class="text-center">
+        <button type="submit" class="btn btn-primary">Valider</button>
+    </fieldset>
+</form>

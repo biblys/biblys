@@ -1,0 +1,82 @@
+<h1>Ajouter au rayon
+    <a href="{{ path('rayon_show', { url: rayon.url }) }}">{{ rayon.name }}</a>
+</h1>
+
+{% for articles in app.session.flashbag.get('articlesAdded') %}
+    {% for article in articles %}
+        <p class="alert alert-success">&laquo;
+            {{ article }}
+            &raquo; a bien été ajouté au rayon.</p>
+    {% endfor %}
+{% endfor %}
+
+{% for errors in app.session.flashbag.get('errors') %}
+    {% for error in errors %}
+        <p class="alert alert-warning">{{ error }}</p>
+    {% endfor %}
+{% endfor %}
+
+<form method="post" class="fieldset">
+    <fieldset>
+
+        <legend>Ajouter un article au rayon</legend>
+
+        <div class="form-group">
+            <label for="article_ean">Code EAN/ISBN :</label>
+            <input type="text" class="form-control" id="article_ean" name="article_ean" placeholder="Code EAN/ISBN de l'article..." required="required">
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Ajouter au rayon</button>
+        </div>
+
+    </fieldset>
+</form>
+
+<form method="post" class="fieldset">
+    <fieldset>
+
+        <legend>Ajouter une collection au rayon</legend>
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <label for="article_ean">Collection :</label>
+            </div>
+            <div class="col-md-9">
+                <input data-entity_search="Collection" type="text" class="form-control verylong" id="article_ean" name="article_ean" placeholder="Nom de la collection ou de l'éditeur..." required="required">
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary" disabled="disabled">Ajouter tous les articles au rayon</button>
+        </div>
+
+    </fieldset>
+</form>
+
+<form method="post" class="fieldset">
+    <fieldset>
+
+        <legend>Ajouter tous les articles d'un type à un rayon</legend>
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <label for="article_type">Type :</label>
+            </div>
+            <div class="col-md-9">
+                <select name="article_type">
+                    {% for type in types %}
+                        <option value="{{ type.id }}">{{ type.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">
+                Ajouter tous les articles au rayon
+            </button>
+        </div>
+
+    </fieldset>
+</form>

@@ -1,0 +1,85 @@
+<h1><span class="fa fa-dropbox"></span> Commandes web</h1>
+
+<form id="showOrders" class="fieldset form-horizontal">
+    <fieldset>
+        <legend>Filtres</legend>
+
+        <div class="form-group">
+            <label for="order_status" class="col-sm-2 control-label">Statut</label>
+            <div class="col-sm-10">
+                <select id="order_status" class="form-control">
+                    <option value="">Tout</option>
+                    <option value="1"{{ app.request.get('status') == 1 ? ' selected' }}>&Agrave; payer</option>
+                    <option value="2"{{ app.request.get('status') == 2 ? ' selected' }}>&Agrave; exp&eacute;dier</option>
+                    <option value="3"{{ app.request.get('status') == 3 ? ' selected' }}>&Agrave; mettre à dispo.</option>
+                    <option value="4"{{ app.request.get('status') == 4 ? ' selected' }}>Annul&eacute;es</option>
+                </select>
+            </div>
+            <label for="order_payment_mode" class="col-sm-2 control-label">Paiement</label>
+            <div class="col-sm-10">
+                <select id="order_payment_mode" class="form-control">
+                    <option value="">Tout</option>
+                    <option value="card">Carte bancaire</option>
+                    <option value="cheque">Ch&egrave;que</option>
+                    <option value="cash">Esp&egrave;ces</option>
+                    <option value="paypal">Paypal</option>
+                    <option value="payplug">PayPlug</option>
+                    <option value="transfer">Virement</option>
+                </select>
+            </div>
+            <label for="order_shipping_mode" class="col-sm-2 control-label">Exp&eacute;dition</label>
+            <div class="col-sm-10">
+                <select id="order_shipping_mode" class="form-control">
+                    <option value="">Tout</option>
+                    <option value="suivi">Suivi</option>
+                    <option value="normal">Normal</option>
+                    <option value="magasin">Magasin</option>
+                </select>
+            </div>
+            <label for="query" class="col-sm-2 control-label">Filtre</label>
+            <div class="col-sm-10">
+                <input type="text" id="query" value="{{ app.request.get('q') }}" class="form-control" placeholder="Nom du client, adresse-email, n&deg; de commande..." />
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">Afficher les commandes</button>
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+
+<table class="table table-bordered orders-table">
+    <thead>
+        <tr>
+            <th></th>
+            <th class="right">Ref.</th>
+            <th class="center">Date</th>
+            <th>Client</th>
+            <th>Montant</th>
+            <th></th>
+            <th colspan="2">Paiement</th>
+            <th>Exp&eacute;dition</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="orders">
+    </tbody>
+    <tbody id="ordersLoading" class="hidden">
+    <tr>
+        <td colspan="9" class="center">
+        <h3><img src="/common/img/loading.gif">
+            Chargement...</h3>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="text-center">
+    <button id="load-more-orders-button" class="btn btn-primary load-more-orders-button">
+        Afficher plus de commandes (<span id="orders-count"></span>)
+    </button>
+</div>

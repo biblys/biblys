@@ -1,0 +1,12 @@
+[*.php]
+indent_style = space
+indent_size = 4
+quote_type = double
+
+[*.{html,js,css}]
+indent_style = space
+indent_size = 2
+quote_type = double
+
+[*.js]
+quote_type = single

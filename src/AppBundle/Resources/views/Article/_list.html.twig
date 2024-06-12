@@ -1,0 +1,46 @@
+<table class="table">
+	<thead>
+		<tr>
+			<th>Titre</th>
+			<th>Auteur</th>
+			<th>Collection</th>
+			<th>Prix</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for article in articles|filter(article => article.has('url')) %}
+			<tr>
+				<td>
+					<a href="{{ path('article_show', { slug: article.url }) }}">{{ article.title }}</a>
+				</td>
+				<td>
+					{% if article.has('authors') %}
+						{{ article.authors|authors('url') }}
+					{% endif %}
+				</td>
+				<td>
+					{% if article.collection %}
+						<a href="{{ path('collection_show', { slug: article.collection.url }) }}">
+							{{ article.collection.name }}
+						</a>
+					{% endif %}
+				</td>
+				{% set item = article.getCheapestAvailableItem() %}
+				{% if item %}
+					<td>
+						{% if item.has('selling_price') %}
+							{{ item.selling_price|currency(true)|raw }}
+						{% endif %}
+					</td>
+					<td>{{ item.getCartButton()|raw }}</td>
+				{% else %}
+					<td>indisp.</td>
+					<td></td>
+				{% endif %}
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% include 'AppBundle:Article:_list_pagination.html.twig' %}

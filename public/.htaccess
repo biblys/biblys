@@ -1,0 +1,111 @@
+Options +FollowSymlinks
+RewriteEngine on
+
+ErrorDocument 404 /pages/404
+
+# Redirections /mobile & /m
+RewriteRule ^mobile/(.*)$  /$1 [R=301,L]
+RewriteRule ^m/(.*)$  /$1 [R=301,L]
+
+# Redirections symfony/routing
+RewriteRule ^tickets/$  /index.php [QSA,L]
+RewriteRule ^ticket/1$  /index.php [QSA,L]
+RewriteRule ^editeur/1$  /index.php [QSA,L]
+
+# Redirection /x
+RewriteRule ^x/(.*)$  /x.php?page=$1 [QSA,L]
+
+# Redirection /pages
+RewriteRule ^pages/(.*)$  /index.php?page=$1 [QSA,L]
+
+# Redirections /blog /post
+RewriteRule ^o/blog/$  /index.php?page=posts [QSA,L]
+RewriteRule ^o/blog/author/(.*)/$  /index.php?page=posts&author=$1 [QSA,L]
+RewriteRule ^o/blog/(.*)/$  /index.php?page=posts&category=$1 [QSA,L]
+RewriteRule ^o/blog/(.*)$  /index.php?page=post&url=$1 [QSA,L]
+# RewriteRule ^post/(.*)$  /blog/$1 [R=301,L] # was messing with /posts/x/delete route
+
+# Redirection /programme/ & Rewrite /evenement/
+RewriteRule ^programme/(.*)$  /evenement/$1 [R=301,NC,L]
+RewriteRule ^evenement/(.*)$  /index.php?page=event&url=$1 [QSA,L]
+
+# Redirection /order/
+RewriteRule ^order/(.*)$  /index.php?page=order&url=$1 [QSA,L]
+
+# Redirection /payment/
+RewriteRule ^payment/(.*)$  /index.php?page=order_payment&url=$1 [QSA,L]
+
+# Redirection /invoice/
+RewriteRule ^invoice/(.*)$  /index.php?page=order_invoice&url=$1 [QSA,L]
+
+# Redirection /confirmer/
+RewriteRule ^confirmer/(.*)$  /index.php?page=order_confirm&id=$1 [QSA,L]
+
+# Redirection /rayon/
+RewriteRule ^rayon/(.*)  /index.php?page=rayon&url=$1 [QSA,L]
+
+# Redirection /editeur/
+RewriteRule ^o/editeur/(.*)  /index.php?page=publisher&url=$1 [QSA,L]
+
+# Redirection /collection/
+RewriteRule ^o/collection/(.*)  /index.php?page=collection&url=$1 [QSA,L]
+
+# Redirection /collection/*/*
+RewriteRule ^collection/(.*)/(.*)$ /index.php?page=collection&url=$1/$2 [QSA,L]
+
+# Redirection /librairie/
+RewriteRule ^librairie/(.*)  /index.php?page=bookshop&url=$1 [QSA,L]
+
+# Redirection /bibliotheque/
+RewriteRule ^bibliotheque/(.*)  /index.php?page=library&url=$1 [QSA,L]
+
+# Redirection /serie/
+RewriteRule ^serie/(.*)  /index.php?page=serie&url=$1 [QSA,L]
+
+# Redirection /feed/
+RewriteRule ^feed/(.*) /feed.php/$1 [QSA,L]
+
+# Redirection /list/
+RewriteRule ^list/(.*)  /index.php?page=list&url=$1 [QSA,L]
+
+# Redirection /wishlist/
+RewriteRule ^wishlist/(.*)  /index.php?page=wishlist&slug=$1 [QSA,L]
+
+# Redirection /photos/
+RewriteRule ^photos/(.*)/$  /index.php?page=photos&url=$1 [QSA,L]
+RewriteRule ^photos/(.*)/(.*)$  /index.php?page=photos&url=$1&image=$2 [QSA,L]
+
+# Redirection /ys/ /catalogue/
+RewriteRule ^ys/(.*)$  /$1 [R=301,L]
+RewriteRule ^catalogue/(.*)/(.*)$  /$1/$2 [R=301,L]
+RewriteRule ^catalogue/(.*)$  /$1/ [R=301,L]
+
+# Redirection people
+RewriteCond %{REQUEST_URI} !/common/
+RewriteRule ^(.*)/$  /index.php?page=people&url=$1 [QSA,L]
+
+# Redirection article
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)/(.*)$  /index.php?page=article&url=$1/$2 [QSA,L]
+
+<IfModule mod_expires.c>
+ ExpiresActive On
+ ExpiresByType application/javascript "access plus 2592000 seconds"
+</IfModule>
+
+# Compression
+SetOutputFilter DEFLATE
+AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/x-javascript
+
+# HTML 5 Video
+AddType video/ogg  .ogv
+AddType video/mp4  .mp4
+AddType video/webm .webm
+
+# Cache
+
+<FilesMatch "\.(gif|jpg|png|js|css)$">
+  ExpiresActive On
+  ExpiresDefault "access plus 1 months"
+</FilesMatch>

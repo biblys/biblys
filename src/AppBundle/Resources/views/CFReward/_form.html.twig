@@ -1,0 +1,32 @@
+<p>Campagne : <a href="{{ path("cf_campaign_show", { slug: reward.campaign.url }) }}">{{ reward.campaign.title }}</a></p>
+
+<form class="form-horizontal fieldset" method="post">
+    <fieldset>
+        <p>
+            <label for="content" class="after">Intitulé :</label>
+            <input type="text" value="{{ (reward.has('content')) ? reward.content }}" id="content" name="content" class="form-control" maxlength=256 required>
+        </p>
+        <p>
+            <label for="articles" class="after">Articles :</label>
+            <input type="text" value="{{ (reward.has('articles')) ? reward.articles }}" id="articles" name="articles" class="form-control" maxlength=256 required>
+        </p>
+        <p>
+            <label for="image" class="after">URL de l'image :</label>
+            <input type="url" value="{{ (reward.has('image')) ? reward.image }}" id="image" name="image" class="form-control">
+        </p>
+        <div for="content" class="checkbox">
+           <label for="limited">
+             <input name="limited" id="limited" type="checkbox"{{ reward.has('limited') ? ' checked' }} value="1"> Quantité limité
+           </label>
+         </div>
+         <div for="content" class="checkbox">
+            <label for="highlighted">
+              <input name="highlighted" id="highlighted" type="checkbox"{{ reward.has('highlighted') ? ' checked' }} value="1"> Mis en avant
+            </label>
+          </div>
+    </fieldset>
+
+    <fieldset class="text-center">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </fieldset>
+</form>

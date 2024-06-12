@@ -1,0 +1,31 @@
+<h1>Inscription à la newsletter</h1>
+
+{% if success %}
+    <p class="alert alert-success">L'adresse a bien été inscrite à la newsletter.</p>
+{% elseif error %}
+    <p class="alert alert-danger">{{ error }}</p>
+{% endif %}
+
+<p>
+    Devenez le {{subscribers}}ème abonné de notre newsletter pour ne rien rater de 
+    notre actualité !
+<p>
+
+<p>
+    En validant le formulaire ci-dessous, j'accepte de recevoir par courriel la 
+    newsletter de {{app.site.title}}. Je comprends que je peux me désabonner de ces
+    communications en cliquant sur le lien de désabonnement inséré à la fin de ces
+    courriels.
+</p>
+
+<form method="post" action="{{ path('mailing_subscribe') }}">
+	<fieldset>
+        {% if recaptcha_key %}
+            <div class="g-recaptcha" data-sitekey="{{ recaptcha_key }}"></div>
+            <script src="https://www.google.com/recaptcha/api.js"></script>
+        {% endif %}
+		<input class="long" type="email" placeholder="Votre adresse e-mail" 
+            name="email" id="email" value="{{ field_value }}" required>
+		<button class="btn btn-primary btn-sm">S'abonner</button>
+    </fieldset>
+</form>

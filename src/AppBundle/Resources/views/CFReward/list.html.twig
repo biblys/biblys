@@ -1,0 +1,51 @@
+<h1>Contreparties de <a href="{{ path('cf_campaign_show', { slug: campaign.url }) }}">{{ campaign.title }}</a></h1>
+
+<p class="buttonset">
+  <a class="btn btn-success" href="{{ path('cf_reward_new', { campaign_id: campaign.id }) }}">Ajouter une contrepartie</a>
+</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Intitulé</th>
+      <th>Prix</th>
+      <th>Dispo.</th>
+      <th>Vendues</th>
+      <th style="min-width: 100px;"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for reward in rewards %}
+      <tr>
+        <td>{{ reward.content|striptags }}</a></td>
+        <td class="text-right">
+          {% if reward.has('price') %}
+            {{ reward.price|price('EUR')|raw }}
+          {% endif %}
+        </td>
+        <td class="text-right">
+          {% if reward.isLimited() %}
+            {% if reward.has('quantity') %}
+              {{ reward.quantity }}
+            {% else %}
+              0
+            {% endif %}
+          {% else %}
+            &infin;
+          {% endif %}
+        </td>
+        <td class="text-right">
+          {% if reward.has('backers') %}
+            {{ reward.backers }}
+          {% else %}
+            0
+          {% endif %}
+        </td>
+        <td class="text-center">
+          <a href="{{ path('cf_reward_edit', { id: reward.id }) }}" class="btn btn-info btn-sm" title="modifier"><i class="fa fa-edit"></i></a>
+          <a href="{{ path('cf_reward_delete', { id: reward.id }) }}" class="btn btn-danger btn-sm" title="supprimer" data-confirm="Êtes-vous sûr de vouloir supprimer cette contrepartie ?"><i class="fa fa-trash"></i></a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

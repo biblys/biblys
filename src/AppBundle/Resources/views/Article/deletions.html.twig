@@ -1,0 +1,17 @@
+<h1>
+    Articles marqués pour suppression
+</h1>
+
+<div class="list-group">
+
+    {% for article in articles %}
+
+        <article class="list-group-item">
+            <h2><a href="/{{ article.url }}">{{ article.title }}</a></h2>
+            <p>Suppression demandée par {{ article.deletionUser.userName }} le {{ article.deletion_date|date('d f Y') }}.</p>
+            <p>{{ article.deletion_reason }}</p>
+        </article>
+
+    {% endfor %}
+
+</div>

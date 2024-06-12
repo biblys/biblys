@@ -1,0 +1,9 @@
+<h1>Créer un nouveau rayon</h1>
+
+{% if error %}
+  <p class="alert alert-danger">
+    {{ error }}
+  </p>
+{% endif %}
+
+{% include 'AppBundle:Rayon:_form.html.twig' %}
