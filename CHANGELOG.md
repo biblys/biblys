@@ -5,6 +5,20 @@
 
 - Refonte technique des actions du panier
 
+### 2.52.1 (9 avril 2021)
+
+Corrections
+
+- L'erreur affichée lors de l'accès à un article via son ISBN en utilisant un ISBN invalid a été améliorée
+- L'affichage d'une erreur lorsqu'un éditeur est créé avec un nom déjà utilisé a été améliorée
+- L'affichage d'une erreur lors de l'export du stock vers Place des Libraires fonctionne à nouveau
+- L'ajout d'un exemplaire à une liste est à nouveau possible
+- La page d'ajout au stock s'affiche à nouveau correctement
+- L'ajout d'un livre au panier depuis la caisse fonctionne à nouveau
+- Les erreurs de validation lors la modification d'un cycle s'affichent correctement
+- L'erreur 404 s'affiche à nouveau correctement lorsqu'un visiteur accède à la page d'une série inexistante
+- L'export du stock vers Place des Libraires fonctionne à nouveau
+
 ## 2.52.0 (2 avril 2021)
 
 Améliorations

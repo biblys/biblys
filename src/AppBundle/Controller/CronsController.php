@@ -2,23 +2,57 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\Config;
+use CronJobManager;
+use EntityManager;
+use Exception;
 use Framework\Controller;
+use Framework\Exception\AuthException;
+use PDO;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class CronsController extends Controller
 {
     /**
-     * GET /crons/.
+     * @param Config $config
+     * @param Request $request
+     * @throws AuthException
+     * @throws Exception
      */
-    public function tasksAction()
+    private static function _authenticateCronRequest(Config $config, Request $request): void
+    {
+        $siteCron = $config->get('cron');
+        if (!$siteCron) {
+            throw new Exception('Cron is not configured for this site');
+        }
+        if (!isset($siteCron['key'])) {
+            throw new Exception('Key is missing in cron configuration');
+        }
+
+        $requestCronKey = $request->headers->get('X-CRON-KEY');
+        if (!$requestCronKey) {
+            throw new AuthException('Request lacks X-CRON-KEY header');
+        }
+
+        if ($requestCronKey !== $siteCron['key']) {
+            throw new AuthException('Wrong cron key');
+        }
+    }
+
+    /**
+     * GET /crons/.
+     * @throws AuthException
+     */
+    public function tasksAction(): Response
     {
         $this->auth('admin');
 
         $this->setPageTitle('Journal des tâches planifiées');
 
-        $cjm = new \CronJobManager();
+        $cjm = new CronJobManager();
         $jobs = $cjm->getAll(
             [],
             ['order' => 'cron_job_created', 'sort' => 'desc']
@@ -35,8 +69,11 @@ class CronsController extends Controller
     /**
      * GET /crons/{slug}/jobs
      * Generic controller to display job logs of a cron task.
+     * @param $slug
+     * @return Response
+     * @throws AuthException
      */
-    public function jobsAction($slug)
+    public function jobsAction(string $slug): Response
     {
         $this->auth('admin');
 
@@ -48,7 +85,7 @@ class CronsController extends Controller
 
         $this->setPageTitle("Journal de la tâche planifiée $slug");
 
-        $cjm = new \CronJobManager();
+        $cjm = new CronJobManager();
         $jobs = $cjm->getAll(
             ['cron_job_task' => $slug],
             ['order' => 'cron_job_created', 'sort' => 'desc']
@@ -72,14 +109,20 @@ class CronsController extends Controller
     /**
      * GET /crons/test
      * A test cron task.
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthException
+     * @throws Exception
      */
-    public function testAction(Request $request)
+    public function testAction(Request $request): JsonResponse
     {
+        global $config;
+
         $request->headers->set('Accept', 'application/json');
 
-        $this->auth('cron');
+        self::_authenticateCronRequest($config, $request);
 
-        $cjm = new \CronJobManager();
+        $cjm = new CronJobManager();
         $job = $cjm->create(
             [
                 'cron_job_task' => 'test',
@@ -101,23 +144,28 @@ class CronsController extends Controller
     /**
      * GET /crons/export-pdl
      * Export to Place des Libraires cron task.
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthException
+     * @throws Exception
      */
-    public function exportPdlAction(Request $request)
+    public function exportPdlAction(Request $request): JsonResponse
     {
         global $site;
-        global $_SQL;
         global $config;
 
         $request->headers->set('Accept', 'application/json');
 
-        $this->auth('cron');
+        $response = new JsonResponse();
+
+        self::_authenticateCronRequest($config, $request);
 
         $pdl = $config->get('placedeslibraires');
         if (!$pdl) {
-            throw new \Exception('Place des libraires credentials are missing in config file');
+            throw new Exception('Place des libraires credentials are missing in config file');
         }
 
-        $cjm = new \CronJobManager();
+        $cjm = new CronJobManager();
 
         try {
             $ftpServer = 'ftp.titelive.com';
@@ -132,32 +180,39 @@ class CronsController extends Controller
                 $active_stock_query = ' AND `stock_stockage` IN ('.$active_stock.')';
             }
 
-            $query = "SELECT `article_ean`, COUNT(`stock_id`) AS `qty`, `stock_selling_price`
-                FROM `stock` JOIN articles USING(`article_id`)
+            $query = "
+                SELECT 
+                    MAX(`article_ean`) AS `ean`, 
+                    COUNT(`stock_id`) AS `qty`,
+                    MAX(`stock_selling_price`) `price`
+                FROM `stock` 
+                JOIN articles USING(`article_id`)
                 WHERE `site_id` = :site_id
                     AND `article_ean` IS NOT NULL
                     AND `stock_selling_date` IS NULL AND `stock_return_date` IS NULL
-                        AND `stock_lost_date` IS NULL AND `stock_condition` = 'Neuf'
+                    AND `stock_lost_date` IS NULL AND `stock_condition` = 'Neuf'
                     AND `stock_deleted` IS NULL AND `article_deleted` IS NULL
                     ".$active_stock_query.'
                 GROUP BY `article_ean`';
-            $stock = $_SQL->prepare($query);
-            $stock->execute(['site_id' => $site->get('id')]);
+            $stock = EntityManager::prepareAndExecute(
+                $query,
+                ['site_id' => $site->get('id')]
+            );
 
             $title = 'EXTRACTION STOCK DU '.date('d/m/Y');
             $stockCount = 0;
             $articleCount = 0;
 
             $lines = [];
-            while ($item = $stock->fetch(\PDO::FETCH_ASSOC)) {
-                $ean = $item['article_ean'];
+            while ($item = $stock->fetch(PDO::FETCH_ASSOC)) {
+                $ean = $item['ean'];
                 $qty = str_pad($item['qty'], 4, '0', STR_PAD_LEFT);
-                $price = str_pad($item['stock_selling_price'], 10, '0', STR_PAD_LEFT);
+                $price = str_pad($item['price'], 10, '0', STR_PAD_LEFT);
 
                 $line = $shopId.$ean.$qty.$price;
 
                 if (strlen($line) !== 31) {
-                    throw new \Exception("Line for $ean is not 31 chars long: $line");
+                    throw new Exception("Line for $ean is not 31 chars long: $line");
                 }
 
                 $stockCount += $item['qty'];
@@ -170,34 +225,35 @@ class CronsController extends Controller
 
             $stream = stream_context_create(['ftp' => ['overwrite' => true]]);
             $ftp = "ftp://$login:$password@$ftpServer/".$shopId.'_ART.asc';
-            file_put_contents($ftp, $file, 0, $stream);
+
+            if (getenv("PHP_ENV") !== "test") {
+                file_put_contents($ftp, $file, 0, $stream);
+            }
 
             $message = "Export Place des Libraires réussi ($articleCount articles, $stockCount exemplaires).";
+            $result = "success";
 
-            $job = $cjm->create(
-                [
-                    'cron_job_task' => 'export-pdl',
-                    'cron_job_result' => 'success',
-                    'cron_job_message' => $message,
-                ]
-            );
-        } catch (\Exception $exception) {
-            $job = $cjm->create(
-                [
-                    'cron_job_task' => 'export-pdl',
-                    'cron_job_result' => 'error',
-                    'cron_job_message' => $exception->getMessage(),
-                ]
-            );
+        } catch (Exception $exception) {
+            $response->setStatusCode(500);
+            $message = $exception->getMessage();
+            $result = "error";
         }
 
-        return new JsonResponse(
-            [
+        $job = $cjm->create([
+            'cron_job_task' => 'export-pdl',
+            'cron_job_result' => $result,
+            'cron_job_message' => $message,
+        ]);
+
+        $response->setContent(
+            json_encode([
                 'id' => $job->get('id'),
                 'result' => $job->get('result'),
                 'message' => $job->get('message'),
                 'date' => $job->get('created'),
-            ]
+            ])
         );
+
+        return $response;
     }
 }

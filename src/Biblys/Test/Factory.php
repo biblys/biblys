@@ -94,7 +94,7 @@ class Factory
 
         $article = self::createArticle();
         return $cfrm->create([
-             "reward_articles"=> "[".$article->get("id")."]",
+            "reward_articles"=> "[".$article->get("id")."]",
         ]);
     }
 }

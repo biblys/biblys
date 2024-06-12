@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        new RedirectResponse("gi/serie/".$cycle->get('url'));
+        new RedirectResponse("/serie/".$cycle->get('url'));
     } catch (EntityAlreadyExistsException | InvalidEntityException $exception) {
         $error = '<p class="alert alert-danger">'.$exception->getMessage().'</p>';
     }
