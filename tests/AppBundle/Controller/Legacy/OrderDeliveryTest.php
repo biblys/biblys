@@ -11,7 +11,7 @@ use StockManager;
 use Symfony\Component\HttpFoundation\Request;
 use Visitor;
 
-require_once __DIR__."/../setUp.php";
+require_once __DIR__ . "/../../../setUp.php";
 
 
 class OrderDeliveryTest extends TestCase
@@ -35,6 +35,7 @@ class OrderDeliveryTest extends TestCase
         $site = new Site(["site_contact" => "merchant@biblys.fr"]);
         $_POST = ["order_email" => "customer@biblys.fr"];
         $_SITE = $site;
+
 
         $request = new Request();
         $request->setMethod("POST");
@@ -60,7 +61,7 @@ class OrderDeliveryTest extends TestCase
         $_POST["cgv_checkbox"] = 1;
 
         // when
-        $response = require_once __DIR__."/../../controllers/common/php/order_delivery.php";
+        $response = require_once __DIR__ . "/../../../../controllers/common/php/order_delivery.php";
 
         // then
         $this->assertInstanceOf(

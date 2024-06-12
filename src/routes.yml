@@ -620,4 +620,4 @@ ticket_comment_new:
 
 contact:
   path: /pages/contact
-  controller: AppBundle\Controller\MainController::defaultAction
+  controller: AppBundle\Controller\LegacyController::defaultAction

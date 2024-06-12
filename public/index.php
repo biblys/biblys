@@ -133,8 +133,8 @@ try {
     // controller. We try to handle the route below. If not, default action
     // will throw a resourceNotFoundException that will be catched below.
     catch (NotFoundHttpException $e) {
-        $mainController = new \AppBundle\Controller\MainController();
-        $response = $mainController->defaultAction($request);
+        $legacyController = new \AppBundle\Controller\LegacyController();
+        $response = $legacyController->defaultAction($request);
     }
 
     if (!$response instanceof Response) {
