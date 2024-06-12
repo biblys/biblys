@@ -714,7 +714,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
      */
     public function testValidateArticleAuthorsLength()
     {
-        $this->expectException("Exception");
+        $this->expectException("Biblys\Exception\InvalidEntityException");
         $this->expectExceptionMessage("Le champ Auteurs ne peut pas dépasser 256 caractères.");
 
         $am = new ArticleManager();
@@ -739,12 +739,57 @@ class ArticleTest extends PHPUnit\Framework\TestCase
      */
     public function testUpdatingArticleWithoutUrl()
     {
-        $this->expectException("Exception");
+        $this->expectException("Biblys\Exception\InvalidEntityException");
         $this->expectExceptionMessage("L'article doit avoir une url");
 
         $am = new ArticleManager();
         $article = $am->create(["publisher_id" => 1]);
 
+        $am->update($article);
+    }
+
+    /**
+     * Test that updating an article without an url throws
+     */
+    public function testUpdatingArticleExistingUrl()
+    {
+        // then
+        $this->expectException("Biblys\Exception\InvalidEntityException");
+        $this->expectExceptionMessage("Il existe déjà un article avec l'url anne-onyme/hous");
+
+        // given
+        $am = new ArticleManager();
+        Factory::createArticle(["article_url" => "anne-onyme/hous"]);
+        $article = $am->create(["article_url" => "anne-onyme/hous"]);
+
+        // when
+        $am->update($article);
+    }
+
+    /**
+     * Test that updating an article without an url throws
+     */
+    public function testUpdatingArticleWithFilteredPublisher()
+    {
+        // then
+        $this->expectException("Biblys\Exception\InvalidEntityException");
+        $this->expectExceptionMessage("Cet éditeur ne fait pas partie des éditeurs autorisés.");
+
+        // given
+        $pm = new PublisherManager();
+        $publisherFiltered = $pm->create(["publisher_name" => "Éditeur filtré"]);
+        $publisherAllowed = $pm->create(["publisher_name" => "Éditeur autorisé"]);
+        $sm = new SiteManager();
+        $site = $sm->create([]);
+        $site->setOpt("publisher_filter", $publisherAllowed->get("id"));
+        $am = new ArticleManager($site);
+
+        $article = $am->create([
+            "article_url" => "jean-bon/de-bayonne",
+            "publisher_id" => $publisherFiltered->get("id")
+        ]);
+
+        // when
         $am->update($article);
     }
 

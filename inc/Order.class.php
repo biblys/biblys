@@ -561,6 +561,17 @@ class Order extends Entity
             }
         }
     }
+
+    public function getCountryName(): string
+    {
+        if ($this->has("country_id")) {
+            $cm = new CountryManager();
+            $country = $cm->getById($this->get("country_id"));
+            return $country->get("name");
+        }
+
+        return $this->get("country");
+    }
 }
 
 class OrderManager extends EntityManager

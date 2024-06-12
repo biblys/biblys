@@ -753,7 +753,13 @@ Biblys.AdminBar.prototype = {
       return;
     }
 
-    this.shortcuts = JSON.parse(window.localStorage.shortcuts);
+    const shortcutsFromCache = JSON.parse(window.localStorage.shortcuts);
+    if (!Array.isArray(shortcutsFromCache)) {
+      this.loadShortcutsFromServer();
+      return;
+    }
+
+    this.shortcuts = shortcutsFromCache;
     this.displayShortcuts();
   },
 

@@ -63,6 +63,21 @@ class Site extends Entity
         return $this->get('title');
     }
 
+    public function allowsPublisherWithId($publisherId): bool
+    {
+        $publisherFilter = $this->getOpt('publisher_filter');
+        if (!$publisherFilter) {
+            return true;
+        }
+
+        $allowedPublisherIds = explode(",", $publisherFilter);
+        if (in_array($publisherId, $allowedPublisherIds)) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
 
 class SiteManager extends EntityManager

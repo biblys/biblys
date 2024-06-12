@@ -472,6 +472,40 @@ class OrderTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    public function testGetCountryWithCountryName()
+    {
+        // given
+        $order = new Order(["order_country" => "Togo"]);
+
+        // when
+        $country = $order->getCountryName();
+
+        // then
+        $this->assertEquals(
+            "Togo",
+            $country,
+            "should return country when entered as a string"
+        );
+    }
+
+    public function testGetCountryWithCountryId()
+    {
+        // given
+        $cm = new CountryManager();
+        $country = $cm->create(["country_name" => "Bénin"]);
+        $order = new Order(["country_id" => $country->get("id")]);
+
+        // when
+        $country = $order->getCountryName();
+
+        // then
+        $this->assertEquals(
+            "Bénin",
+            $country,
+            "should return country when entered as an id"
+        );
+    }
+
     /**
      * Test deleting an order
      * @depends testGet

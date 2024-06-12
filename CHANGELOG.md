@@ -1,6 +1,29 @@
 
 # Historique des modifications
 
+### 2.53.3 (25 juin 2021)
+
+Corrections
+
+- L'ajout d'un exemplaire dans une liste n'envoie plus plusieurs requêtes
+- Le message affiché lors d'une demande de remboursement ne mentionne plus la
+  gratuité des frais de port
+- Il est à nouveau possible de retirer un exemplaire d'une liste immédiatement
+  après l'y avoir ajouté
+- Les éditeurs filtrés n'apparaissent plus dans les propositions lors de
+  l'association d'une collection à une fiche article
+
+### 2.53.2 (18 juin 2021)
+
+Corrections
+
+- Les utilisateurs avec des droits sur un éditeur ne peuvent plus gérer cet
+  éditeur sur un site où l'éditeur n'est pas autorisé
+- Le message d'erreur affiché lorsqu'un nouvel article est soumis avec un code
+  ISBN invalide a été amélioré
+- Le message d'erreur affiché lorsqu'un nouvel article est soumis avec une url
+  déjà existante a été amélioré
+
 ### 2.53.1 (11 juin 2021)
 
 Corrections

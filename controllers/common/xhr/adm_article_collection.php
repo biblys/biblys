@@ -78,7 +78,7 @@ if ($getTerm) {
         }
 
         // If collection is not from an allowed publisher, skip
-        if (count($allowedPublisherIds) > 1 && !in_array($c["publisher_id"], $allowedPublisherIds)) {
+        if (count($allowedPublisherIds) >= 1 && !in_array($c["publisher_id"], $allowedPublisherIds)) {
             continue;
         }
 

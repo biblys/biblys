@@ -198,12 +198,12 @@ class MainController extends Controller
         ]);
     }
 
-    public function adminAction(Config $config): Response
+    public function adminAction(Request $request, Config $config): Response
     {
         global $_V, $site;
 
-        $this->setPageTitle('Administration Biblys');
         $this->auth('admin');
+        $request->attributes->set("page_title", "Administration Biblys");
 
         // Display alert if Biblys has been updated since last visit
         $update_alert = false;
@@ -245,7 +245,6 @@ class MainController extends Controller
         global $_V, $site;
 
         $this->auth('admin');
-        $this->setPageTitle('Gestion des raccourcis');
 
         // If XHR request, return the shortcuts as an JSON array
         if ($request->isXmlHttpRequest()) {
@@ -269,6 +268,7 @@ class MainController extends Controller
         }
 
         // Default home page
+        $request->attributes->set("page_title", "Gestion des raccourcis");
         return $this->render('AppBundle:Main:adminShortcuts.html.twig', [
             'shortcuts' => $_V->getOpt('shortcuts'),
             'articles' => Entry::findByCategory('articles'),

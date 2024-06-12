@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 $query = null;
 $terms = null;
-$sql = null;
+$sql = [];
 $_REQ = null;
 $filters = null;
 
@@ -166,8 +166,8 @@ if (!$input) {
 	$_SEARCH_TERMS = $_GET['q'];
 
 	$path = get_controller_path('_list');
-	include($path);
-
+	$listContent = require_once $path;
+	$content .= $listContent;
 }
 
 return new Response($content);
