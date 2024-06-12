@@ -9,6 +9,16 @@ Améliorations
 - Pour prévenir toute confusion, les articles physiques à expédier et les 
   articles numériques à télécharger sont désormais clairement distingués 
   dans le panier.
+- Une entrée est désormais créé en base de données pour chaque couverture 
+  d'articles, ce qui permet d'en faciliter la gestion.
+
+Déploiement
+
+Jouer les migrations
+
+```shell
+composer db:migrate
+```
 
 ### 2.82.1 (26 juin 2024)
 
