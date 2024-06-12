@@ -5,7 +5,9 @@ namespace Model;
 use Biblys\Service\Validator\Validator;
 use Exception;
 use Model\Base\User as BaseUser;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Connection\ConnectionInterface;
+use Propel\Runtime\Exception\PropelException;
 
 /**
  * Skeleton subclass for representing a row from the 'users' table.
@@ -33,11 +35,45 @@ class User extends BaseUser
     }
 
     /**
+     * @throws PropelException
+     */
+    public function hasRightForPublisher(Publisher $publisher): bool
+    {
+        $publisherRight = RightQuery::create()
+            ->filterByUser($this)
+            ->filterByPublisherId($publisher->getId())
+            ->findOne();
+
+        if ($publisherRight) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function hasPublisherRight(): bool
+    {
+        $publisherRight = RightQuery::create()
+            ->filterByUser($this)
+            ->filterByPublisherId(null, Criteria::NOT_EQUAL)
+            ->findOne();
+
+        if ($publisherRight) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @param ConnectionInterface|null $con
      * @return bool
      * @throws Exception
      */
-    public function preSave(ConnectionInterface $con = null)
+    public function preSave(ConnectionInterface $con = null): bool
     {
         Validator::validate($this);
 

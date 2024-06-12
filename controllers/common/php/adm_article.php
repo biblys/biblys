@@ -178,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $article = $am->refreshMetadata($article);
         $am->update($article);
 
-        // Mise a jour des pages contributeurs concernes
+        // Update related contributors pages
         $peopleToUpdate = $_SQL->prepare('SELECT `people_id` FROM `people` JOIN `roles` USING(`people_id`) WHERE `article_id` = :article_id');
         $peopleToUpdate->execute(['article_id' => $request->request->get('article_id')]);
         while ($up = $peopleToUpdate->fetch(PDO::FETCH_ASSOC)) {
@@ -209,9 +209,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Redirection
         if (isset($redirect_to_stock)) {
-            redirect('/pages/adm_stock?add=' . $_POST['article_id'] . '#add');
+            return new RedirectResponse('/pages/adm_stock?add=' . $_POST['article_id'] . '#add');
         } elseif (isset($redirect_to_new)) {
-            redirect('/pages/adm_article');
+            return new RedirectResponse('/pages/adm_article');
         } else {
             $articleUrl = $urlgenerator->generate('article_show', [
                 'slug' => $article->get('url'),
@@ -679,8 +679,8 @@ $content .= '
             <input type="text" id="article_title" name="article_title" value="'.htmlspecialchars($a['article_title']).'" class="long article_duplicate_check event'.$article_title_class.'" required />
             <br />
 
-            <label for="article_authors">Auteur(s) :</label>
-            <input type="text" id="article_authors" value="'.$a['article_authors'].'" class="long" tabindex="-1" readonly required maxlength=256 data-toggle="popover" data-trigger="focus" title="Ajouter un auteur" data-content="Champ rempli automatiquement. Utilisez la section Contributeurs (ci-dessous) pour ajouter ou supprimer un auteur.">
+            <label for="article_authors">Auteur·trice·s :</label>
+            <input type="text" id="article_authors" value="'.$a['article_authors'].'" class="long" tabindex="-1" readonly required maxlength=256 data-toggle="popover" data-trigger="focus" title="Liste des auteurs et autrices" data-content="Champ rempli automatiquement. Utilisez la section Contributions (ci-dessous) pour ajouter ou supprimer un auteur ou une autrice.">
             <br />
 
             <label for="article_collection">Collection :</label>
@@ -736,12 +736,12 @@ $content .= '
 
         <fieldset id="Contributeurs">
             <a href="http://www.biblys.fr/pages/doc_article#Contributeurs" target="_blank" class="pull-right">Besoin d\'aide ?</a>
-            <legend>Contributeurs</legend>
+            <legend>Contributions</legend>
             <div id="people_list"></div>
             <br /><br />
 
             <label for="article_people">Ajouter :</label>
-            <input type="text" id="article_people" placeholder="Nom et/ou prénom du contributeur..." class="long" />
+            <input type="text" id="article_people" placeholder="Rechercher par nom ou prénom…" class="long" />
         </fieldset>
 
         <fieldset>

@@ -2,7 +2,6 @@
 
 namespace Biblys\Service;
 
-use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use DateTime;
@@ -16,7 +15,6 @@ require_once __DIR__."/../../setUp.php";
 
 class CurrentUserTest extends TestCase
 {
-
     /**
      * @throws AuthException
      * @throws PropelException
@@ -173,6 +171,9 @@ class CurrentUserTest extends TestCase
         );
     }
 
+    /**
+     * @throws PropelException
+     */
     public function testIsAdminForSite()
     {
         // given
@@ -207,6 +208,106 @@ class CurrentUserTest extends TestCase
         $this->assertFalse(
             $currentUser->isAdminForSite($site),
             "it returns false for non-admin user"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasPublisher()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $user = ModelFactory::createPublisherUser($publisher);
+        $currentUser = new CurrentUser($user);
+
+        // when
+        $hasRightforPublisher = $currentUser->hasRightForPublisher($publisher);
+
+        // then
+        $this->assertTrue(
+            $hasRightforPublisher,
+            "it returns true for user with rights for given publisher"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasPublisherRightForNonPublisher()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $user = ModelFactory::createUser();
+        $currentUser = new CurrentUser($user);
+
+        // when
+        $hasRightForPublisher = $currentUser->hasRightForPublisher($publisher);
+
+        // then
+        $this->assertFalse(
+            $hasRightForPublisher,
+            "it returns false for user without publisher rights"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasPublisherRightForOtherPublisher()
+    {
+        // given
+        $userPublisher = ModelFactory::createPublisher();
+        $otherPublisher = ModelFactory::createPublisher();
+        $user = ModelFactory::createPublisherUser($userPublisher);
+        $currentUser = new CurrentUser($user);
+
+        // when
+        $hasRightForPublisher = $currentUser->hasRightForPublisher($otherPublisher);
+
+        // then
+        $this->assertFalse(
+            $hasRightForPublisher,
+            "it returns false for user without publisher rights"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasPublisherRight()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $user = ModelFactory::createPublisherUser($publisher);
+        $currentUser = new CurrentUser($user);
+
+        // when
+        $hasRightforPublisher = $currentUser->hasPublisherRight();
+
+        // then
+        $this->assertTrue(
+            $hasRightforPublisher,
+            "it returns true for user with rights for at least one publisher"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasPublisherRightWithNonPublisher()
+    {
+        // given
+        $user = ModelFactory::createUser();
+        $currentUser = new CurrentUser($user);
+
+        // when
+        $hasRightForPublisher = $currentUser->hasPublisherRight();
+
+        // then
+        $this->assertFalse(
+            $hasRightForPublisher,
+            "it returns false for user with no publisher rights"
         );
     }
 }

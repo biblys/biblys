@@ -936,7 +936,9 @@ function _addContributorLine({
     `);
   });
   $(`${contributionLineSelector} select`).append(jobOptionsElements).focus();
-  $(`${contributionLineSelector} option[value=${contributorJobId}]`).attr('selected', 'selected');
+
+  const optionForSelectedJob = document.querySelector(`${contributionLineSelector} option[value="${contributorJobId}"]`);
+  optionForSelectedJob.selected = true;
 
   const roleSelector = document.querySelector(`${contributionLineSelector} .contribution-role-selector`);
   const deleteButton = document.querySelector(`${contributionLineSelector} .contribution-delete-button`);

@@ -6,6 +6,8 @@ namespace Biblys\Service;
 
 use DateTime;
 use Framework\Exception\AuthException;
+use Model\Publisher;
+use Model\RightQuery;
 use Model\SessionQuery;
 use Model\Site;
 use Model\User;
@@ -84,5 +86,23 @@ class CurrentUser
         }
 
         return $this->user;
+    }
+
+    public function hasRightForPublisher(Publisher $publisher): bool
+    {
+        if ($this->user) {
+            return $this->user->hasRightForPublisher($publisher);
+        }
+
+        return false;
+    }
+
+    public function hasPublisherRight(): bool
+    {
+        if ($this->user) {
+            return $this->user->hasPublisherRight();
+        }
+
+        return false;
     }
 }

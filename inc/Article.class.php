@@ -1540,7 +1540,7 @@ class ArticleManager extends EntityManager
             throw new InvalidEntityException('Il existe déjà un article avec l\'url ' . $article->get('url'));
         }
 
-        if (!$this->site->allowsPublisherWithId($article->get("publisher_id"))) {
+        if ($article->has("publisher_id") && !$this->site->allowsPublisherWithId($article->get("publisher_id"))) {
             throw new InvalidEntityException("Cet éditeur ne fait pas partie des éditeurs autorisés.");
         }
     }

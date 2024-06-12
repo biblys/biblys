@@ -92,7 +92,7 @@ if (isset($_POST['validate']))
     catch (Exception $e)
     {
         $_SQL->rollBack();
-        trigger_error($e->getMessage());
+        throw $e;
     }
 
     $r = array('created_order' => $order->get('order_id'));
@@ -146,16 +146,9 @@ if (isset($_GET['add']) && isset($_GET['id']))
     // Ajouter un exemplaire
     if ($_GET['add'] == 'stock')
     {
-        try
-        {
-            $cm->addStock($cart, $_GET['id']);
-            $params['success'] = 'L\'exemplaire n&deg; '.$_GET['id'].' a été ajouté au panier.';
-            $cm->updateFromStock($cart);
-        }
-        catch (Exception $e)
-        {
-            trigger_error($e->getMessage());
-        }
+        $cm->addStock($cart, $_GET['id']);
+        $params['success'] = 'L\'exemplaire n&deg; '.$_GET['id'].' a été ajouté au panier.';
+        $cm->updateFromStock($cart);
 
         if ($request->isXmlHttpRequest()) {
             $stocks = $cm->getStock($cart);

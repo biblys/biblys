@@ -20,8 +20,7 @@ class ArticleControllerTest extends PHPUnit\Framework\TestCase
         $am = new ArticleManager();
         $article = EntityFactory::createArticle();
         $controller = new ArticleController();
-        $request = new Request();
-        $request->request->set("article_publisher_stock", "     1   ");
+        $request = new Request([], [], [], [], [], [], "     1   ");
 
         // when
         $response = $controller->updatePublisherStock($request, $article->get("id"));

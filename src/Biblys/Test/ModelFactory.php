@@ -5,6 +5,7 @@ namespace Biblys\Test;
 use Biblys\Service\Config;
 use Model\Article;
 use Model\People;
+use Model\Publisher;
 use Model\Right;
 use Model\Role;
 use Model\Session;
@@ -17,6 +18,36 @@ use Propel\Runtime\Exception\PropelException;
 
 class ModelFactory
 {
+    /**
+     * @throws PropelException
+     */
+    public static function createAdminUser(Site $site = null): User
+    {
+        $user = new User();
+        $user->save();
+
+        $config = new Config();
+        if ($site === null) {
+            $site = SiteQuery::create()->findOneById($config->get("site"));
+        }
+
+        $right = new Right();
+        $right->setUser($user);
+        $right->setSite($site);
+        $right->save();
+
+        return $user;
+    }
+
+    public static function createPeople(array $attributes = [])
+    {
+        $people = new People();
+        $people->setGender($attributes["gender"] ?? "N");
+        $people->save();
+
+        return $people;
+    }
+
     /**
      * @throws PropelException
      */
@@ -67,6 +98,22 @@ class ModelFactory
     /**
      * @throws PropelException
      */
+    public static function createPublisherUser(Publisher $publisher): User
+    {
+        $user = new User();
+        $user->save();
+
+        $right = new Right();
+        $right->setUser($user);
+        $right->setPublisherId($publisher->getId());
+        $right->save();
+
+        return $user;
+    }
+
+    /**
+     * @throws PropelException
+     */
     public static function createShippingFee(): ShippingFee
     {
         $shippingFee = new ShippingFee();
@@ -79,22 +126,13 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createAdminUser(Site $site = null): User
+    public static function createPublisher($attributes = []): Publisher
     {
-        $user = new User();
-        $user->save();
+        $publisher = new Publisher();
+        $publisher->setName($attributes["name"] ?? "Les Éditions Paronymie");
+        $publisher->save();
 
-        $config = new Config();
-        if ($site === null) {
-            $site = SiteQuery::create()->findOneById($config->get("site"));
-        }
-
-        $right = new Right();
-        $right->setUser($user);
-        $right->setSite($site);
-        $right->save();
-
-        return $user;
+        return $publisher;
     }
 
     /**

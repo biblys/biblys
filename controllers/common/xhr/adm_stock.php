@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 $sm = new StockManager();
 $am = new ArticleManager();
@@ -12,7 +13,7 @@ $stockId = $request->request->get("stock_id");
 if ($action === "delete") {
     $item = $sm->getById($stockId);
     if (!$item) {
-        throw new Exception("Exemplaire $stockId introuvable.");
+        throw new BadRequestHttpException("Exemplaire $stockId introuvable.");
     }
 
     $sm->delete($item);

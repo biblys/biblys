@@ -766,7 +766,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test that updating an article without an url throws
+     * Test that updating an article for an unauthorized publisher throws
      */
     public function testUpdatingArticleWithFilteredPublisher()
     {
@@ -786,6 +786,33 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $article = $am->create([
             "article_url" => "jean-bon/de-bayonne",
             "publisher_id" => $publisherFiltered->get("id")
+        ]);
+
+        // when
+        $am->update($article);
+    }
+
+    /**
+     * Test that updating an article without a publisher does not throw
+     * @throws Exception
+     */
+    public function testUpdatingArticleWithNoPublisher()
+    {
+        // then
+        $this->expectNotToPerformAssertions();
+
+        // given
+        $pm = new PublisherManager();
+        $publisherAllowed = $pm->create(["publisher_name" => "Éditeur inexistant"]);
+        $sm = new SiteManager();
+        $site = $sm->create([]);
+        $site->setOpt("publisher_filter", $publisherAllowed->get("id"));
+        $am = new ArticleManager($site);
+
+        $article = $am->create([
+            "article_url" => "jean-bon/de-bayonne",
+            "publisher_id" => null,
+            "article_editing_user" => 1,
         ]);
 
         // when
