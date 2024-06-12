@@ -1,6 +1,27 @@
 
 # Historique des modifications
 
+## 2.54.0 (DEV)
+
+Cette mise à jour apporte un certain nombre de modifications purement
+techniques visant à améliorer la stabilité et la maintenabilité de Biblys,
+tout en préparant la refonte prochaine du panier.
+
+### 2.53.5 (10 juillet 2021)
+
+Corrections
+
+- L'appel d'une page paginée avec un numéro de page inférieur à zéro ne
+  provoque plus une erreur serveur
+
+### 2.53.4 (2 juillet 2021)
+
+Corrections
+
+- L'association d'un article à un éditeur filtré ou à une collection appartenant
+  à un éditeur filtré est à nouveau possible mais affiche une erreur claire
+- La recherche d'un client par nom ne provoque plus d'erreur
+
 ### 2.53.3 (25 juin 2021)
 
 Corrections

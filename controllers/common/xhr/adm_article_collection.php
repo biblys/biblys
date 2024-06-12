@@ -63,21 +63,10 @@ if ($getTerm) {
     $collectionsQuery = $_SQL->prepare($qu2);
     $collectionsQuery->execute(array_merge($params, $termsParams));
 
-    $allowedPublisherIds = [];
-    $publisherFilter = $site->getOpt("publisher_filter");
-    if ($publisherFilter) {
-        $allowedPublisherIds = explode(",", $publisherFilter);
-    }
-
     while ($c = $collectionQuery->fetch() or $c = $collectionsQuery->fetch()) {
         
         // If collection is already in array, skip (deduplication)
         if (in_array($c["collection_id"], $j_colls)) {
-            continue;
-        }
-
-        // If collection is not from an allowed publisher, skip
-        if (count($allowedPublisherIds) >= 1 && !in_array($c["publisher_id"], $allowedPublisherIds)) {
             continue;
         }
 
@@ -88,6 +77,9 @@ if ($getTerm) {
         $json[$i]["collection_id"] = $c["collection_id"];
         $json[$i]["publisher_id"] = $c["publisher_id"];
         $json[$i]["pricegrid_id"] = $c["pricegrid_id"];
+        /** @var Site $site */
+        $json[$i]["publisher_allowed_on_site"] = $site->allowsPublisherWithId($c["publisher_id"]) ? 1 : 0;
+
         $i++;
         $j_colls[] = $c["collection_id"];
     }

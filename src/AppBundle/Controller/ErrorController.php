@@ -8,6 +8,7 @@ use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use PDO;
+use ReflectionClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -25,18 +26,14 @@ class ErrorController extends Controller
      * @param Client|null $axys
      * @return Response
      */
-    public function exception(
-        Request $request,
-        Exception $exception,
-        Client $axys = null
-    ): Response
+    public function exception(Request $request, Exception $exception, Client $axys = null): Response
     {
         if (is_a($exception, "Symfony\Component\Routing\Exception\ResourceNotFoundException")) {
             return $this->handlePageNotFound($request, $exception);
         }
 
         if (is_a($exception, "Symfony\Component\HttpKernel\Exception\BadRequestHttpException")) {
-            return $this->handleBadRequest($request, $exception);
+            return self::_defaultHandler(400, $exception, $request);
         }
 
         if (is_a($exception, "Framework\Exception\AuthException")) {
@@ -47,8 +44,16 @@ class ErrorController extends Controller
             return $this->handleUnauthorizedAccess($request, $exception, $axys);
         }
 
+        if (is_a($exception, "Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException")) {
+            return self::_defaultHandler(405, $exception, $request);
+        }
+
+        if (is_a($exception, "Symfony\Component\HttpKernel\Exception\ConflictHttpException")) {
+            return self::_defaultHandler(409, $exception, $request);
+        }
+
         if (is_a($exception, "Framework\Exception\ServiceUnavailableException")) {
-            return $this->handleServiceUnavailable();
+            return $this->handleServiceUnavailable($request);
         }
 
         // If route is not found in route.yml, we might be dealing with a legacy
@@ -73,36 +78,6 @@ class ErrorController extends Controller
         return $this->handleServerError($request, $exception);
     }
 
-
-    /**
-     * HTTP 400
-     *
-     * @param Request $request
-     * @param BadRequestHttpException $exception
-     * @return Response
-     */
-    private function handleBadRequest(Request $request, BadRequestHttpException $exception): Response
-    {
-        if (
-            $request->isXmlHttpRequest()
-            || $request->headers->get('Accept') == 'application/json'
-        ) {
-            $response = new JsonResponse([
-                "error" => sprintf("Bad request: %s", $exception->getMessage())
-            ]);
-        } else {
-            $response = new Response('
-            <div>
-                <h1>Error: Bad request</h1>
-                <p>' . $exception->getMessage() . '</p>
-            </div>
-        ');
-        }
-
-        $response->setStatusCode(400);
-        return $response;
-    }
-
     /**
      * HTTP 401/403
      * TODO: Distinguish between 401 (not logged in) and 403 (not authorized)
@@ -112,11 +87,7 @@ class ErrorController extends Controller
      * @param Client $axys
      * @return Response
      */
-    private function handleUnauthorizedAccess(
-        Request $request,
-        AuthException $exception,
-        Client $axys
-    ): Response
+    private function handleUnauthorizedAccess(Request $request, AuthException $exception, Client $axys): Response
     {
         if (
             $request->isXmlHttpRequest()
@@ -250,20 +221,41 @@ class ErrorController extends Controller
     /**
      * HTTP 503
      *
+     * @param Request $request
      * @return Response
      */
-    private function handleServiceUnavailable(): Response
+    private function handleServiceUnavailable(Request $request): Response
     {
-        $response = new Response();
-        $response->setStatusCode(503);
+        $response = self::_defaultHandler(
+            503,
+            new Exception("Maintenance en cours. Merci de réessayer dans quelques instants…"),
+            $request
+        );
         $response->headers->set('Retry-After', 3600);
-        $response->setContent('
-            <div class="text-center">
-                <h1>Maintenance en cours</h1>
-                <p>Merci de réessayer dans quelques instants…</p>
-            </div>
-        ');
 
         return $response;
+    }
+
+    /**
+     * @param int $statusCode
+     * @param Exception $exception
+     * @param $request
+     * @return Response
+     */
+    private static function _defaultHandler(int $statusCode, Exception $exception, $request): Response
+    {
+        if ($request->isXmlHttpRequest() || $request->headers->get('Accept') == 'application/json') {
+            return new JsonResponse([
+                "error" => $exception->getMessage(),
+            ], $statusCode);
+        }
+        $exceptionClass = new ReflectionClass($exception);
+
+        return new Response('
+            <div>
+                <h1>Une erreur '.$exceptionClass->getShortName().' est survenue.</h1>
+                <p>' . $exception->getMessage() . '</p>
+            </div>
+        ', $statusCode);
     }
 }
