@@ -38,6 +38,7 @@ return function (
 
     $imagesService = new ImagesService(
         config: $config,
+        currentSite: $currentSite,
         filesystem: new Symfony\Component\Filesystem\Filesystem()
     );
 

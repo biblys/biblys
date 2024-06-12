@@ -3,6 +3,7 @@
 namespace Biblys\Service\Images;
 
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Exception;
@@ -27,13 +28,15 @@ class ImagesServiceTest extends TestCase
     public function testAddArticleCoverImageCreatesImage(): void
     {
         // given
-        $config = new Config();
-        $filesystem = Mockery::mock(Filesystem::class);
-        $filesystem->expects('copy');
-        $service = new ImagesService($config, $filesystem);
-
         $article = new Article();
         $article->setId(1984);
+        $site = ModelFactory::createSite();
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects('copy');
+        $service = new ImagesService($config, $currentSite, $filesystem);
 
         // when
         $service->addArticleCoverImage($article, __DIR__ . "/image.jpeg");
@@ -41,6 +44,7 @@ class ImagesServiceTest extends TestCase
         // then
         $image = ImageQuery::create()->findOneByArticleId($article->getId());
         $this->assertInstanceOf(Image::class, $image);
+        $this->assertEquals($site, $image->getSite());
         $this->assertEquals("cover", $image->getType());
         $this->assertEquals("book/84/", $image->getFilepath());
         $this->assertEquals("1984.jpg", $image->getFilename());
@@ -58,14 +62,17 @@ class ImagesServiceTest extends TestCase
     public function testAddArticleCoverImageCreatesUpdatesImage(): void
     {
         // given
+        $site = ModelFactory::createSite();
+        $article = ModelFactory::createArticle();
+        $article->setId(1985);
+
         $config = new Config();
+        $currentSite = new CurrentSite($site);
         $filesystem = Mockery::mock(Filesystem::class);
         $filesystem->expects("copy");
         $filesystem->expects("remove");
-        $service = new ImagesService($config, $filesystem);
+        $service = new ImagesService($config, $currentSite, $filesystem);
 
-        $article = ModelFactory::createArticle();
-        $article->setId(1985);
         $service->addArticleCoverImage($article, __DIR__ . "/image.jpeg");
         $createdImage = ImageQuery::create()->findOneByArticleId($article->getId());
 
@@ -93,12 +100,14 @@ class ImagesServiceTest extends TestCase
     public function testAddArticleCoverImageIfFileCopyFails(): void
     {
         // given
+        $site = ModelFactory::createSite();
+        $article = ModelFactory::createArticle();
+
         $config = new Config();
+        $currentSite = new CurrentSite($site);
         $filesystem = Mockery::mock(Filesystem::class);
         $filesystem->expects("copy")->andThrow(new FileNotFoundException());
-        $service = new ImagesService($config, $filesystem);
-
-        $article = ModelFactory::createArticle();
+        $service = new ImagesService($config, $currentSite, $filesystem);
 
         // when
         $exception = Helpers::runAndCatchException(function () use ($service, $article) {
@@ -119,11 +128,14 @@ class ImagesServiceTest extends TestCase
     public function testArticleHasCoverImageReturnsTrue()
     {
         // given
+        $site = ModelFactory::createSite();
         $article = ModelFactory::createArticle();
         ModelFactory::createImage(article: $article);
+
         $config = new Config();
+        $currentSite = new CurrentSite($site);
         $filesystem = Mockery::mock(Filesystem::class);
-        $service = new ImagesService($config, $filesystem);
+        $service = new ImagesService($config, $currentSite, $filesystem);
 
         // when
         $hasCover = $service->articleHasCoverImage($article);
@@ -138,10 +150,13 @@ class ImagesServiceTest extends TestCase
     public function testArticleHasCoverImageReturnsFalse()
     {
         // given
+        $site = ModelFactory::createSite();
         $article = ModelFactory::createArticle();
+
+        $currentSite = new CurrentSite($site);
         $config = new Config();
         $filesystem = Mockery::mock(Filesystem::class);
-        $service = new ImagesService($config, $filesystem);
+        $service = new ImagesService($config, $currentSite ,$filesystem);
 
         // when
         $hasCover = $service->articleHasCoverImage($article);
@@ -159,11 +174,14 @@ class ImagesServiceTest extends TestCase
     public function testGetCoverUrlForArticleIfItDoesNotExist(): void
     {
         // given
-        $config = new Config(["media_url" => "/images/"]);
-        $filesystem = Mockery::mock(Filesystem::class);
-        $service = new ImagesService($config, $filesystem);
-
+        $site = ModelFactory::createSite();
         $article = ModelFactory::createArticle();
+
+        $config = new Config(["media_url" => "/images/"]);
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
 
         // when
         $coverUrl = $service->getCoverUrlForArticle($article);
@@ -179,9 +197,12 @@ class ImagesServiceTest extends TestCase
     public function testGetCoverUrlForArticleIfItExists(): void
     {
         // given
+        $site = ModelFactory::createSite();
+
         $config = new Config(["media_url" => "/images/"]);
+        $currentSite = new CurrentSite($site);
         $filesystem = Mockery::mock(Filesystem::class);
-        $service = new ImagesService($config, $filesystem);
+        $service = new ImagesService($config, $currentSite, $filesystem);
 
         $article = ModelFactory::createArticle();
         ModelFactory::createImage(
@@ -204,10 +225,7 @@ class ImagesServiceTest extends TestCase
     public function testGetCoverUrlForArticleWithVersion(): void
     {
         // given
-        $config = new Config(["media_url" => "images/"]);
-        $filesystem = Mockery::mock(Filesystem::class);
-        $service = new ImagesService($config, $filesystem);
-
+        $site = ModelFactory::createSite();
         $article = ModelFactory::createArticle();
         ModelFactory::createImage(
             article: $article,
@@ -215,6 +233,12 @@ class ImagesServiceTest extends TestCase
             fileName: "book-cover-updated.jpeg",
             version: 2,
         );
+
+        $config = new Config(["media_url" => "images/"]);
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
 
         // when
         $coverUrl = $service->getCoverUrlForArticle($article);
@@ -231,13 +255,15 @@ class ImagesServiceTest extends TestCase
     public function testDeleteArticleCoverImageDeletesImage(): void
     {
         // given
-        $config = new Config();
-        $filesystem = Mockery::mock(Filesystem::class);
-        $filesystem->expects("remove");
-        $service = new ImagesService($config, $filesystem);
-
         $article = ModelFactory::createArticle();
         ModelFactory::createImage(article: $article);
+        $site = ModelFactory::createSite();
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects("remove");
+        $service = new ImagesService($config, $currentSite, $filesystem);
 
         // when
         $service->deleteArticleCoverImage($article);
@@ -257,13 +283,15 @@ class ImagesServiceTest extends TestCase
     public function testDeleteArticleCoverImageIfFileDeletionFails(): void
     {
         // given
-        $config = new Config();
-        $filesystem = Mockery::mock(Filesystem::class);
-        $filesystem->shouldReceive("remove")->andThrow(new FileNotFoundException());
-        $service = new ImagesService($config, $filesystem);
-
         $article = ModelFactory::createArticle();
         ModelFactory::createImage(article: $article);
+        $site = ModelFactory::createSite();
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->shouldReceive("remove")->andThrow(new FileNotFoundException());
+        $service = new ImagesService($config, $currentSite, $filesystem);
 
         // when
         $exception = Helpers::runAndCatchException(function() use($service, $article) {

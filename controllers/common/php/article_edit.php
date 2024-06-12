@@ -42,7 +42,7 @@ return function (
 
     $currentUser->authPublisher();
 
-    $imagesService = new ImagesService($config, new Symfony\Component\Filesystem\Filesystem());
+    $imagesService = new ImagesService($config, $currentSite, new Symfony\Component\Filesystem\Filesystem());
 
     $publisherId = $currentUser->getCurrentRight()?->getPublisherId();
     $publisher = PublisherQuery::create()->findPk($publisherId);
