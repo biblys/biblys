@@ -2,9 +2,11 @@
 
 use Biblys\Contributor\Job;
 use Biblys\Contributor\UnknownJobException;
+use Biblys\Exception\EntityAlreadyExistsException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Biblys\Isbn\Isbn;
 use Biblys\Noosfere\Noosfere;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 $pm = new PublisherManager();
 $cm = new CollectionManager();
@@ -373,7 +375,11 @@ if ($_GET["mode"] == "search") { // Mode recherche
                 "collection_noosfere_id" => $x["noosfere_IdCollection"]
             ];
 
-            $collection = $cm->create($collectionParams);
+            try {
+                $collection = $cm->create($collectionParams);
+            } catch(EntityAlreadyExistsException $exception) {
+                throw new ConflictHttpException($exception->getMessage(), $exception);
+            }
             $x["collection_id"] = $collection->get('id');
         }
     }

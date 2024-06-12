@@ -5,6 +5,9 @@
 */
 
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
+use Model\PeopleQuery;
+use Propel\Runtime\Exception\PropelException;
 
 require_once "setUp.php";
 
@@ -430,6 +433,38 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
         $pm->delete($people1);
         $pm->delete($people2);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetContributorsWithDeletedPeople()
+    {
+        // given
+        $author = EntityFactory::createPeople([
+            "people_first_name" => "Auteur",
+            "people_last_name" => "Disparu",
+        ]);
+        $article = EntityFactory::createArticle(
+            ["article_title" => "La disparition (de l'auteur)"],
+            [$author]
+        );
+        $peopleModel = PeopleQuery::create()->findPk($author->get("id"));
+        $peopleModel->delete();
+
+        // then
+        $this->expectException("Biblys\Exception\InvalidEntityException");
+        $this->expectExceptionMessage(
+            sprintf(
+                "Cannot load article %s with invalid contribution: contributor %s does not exist",
+                $article->get("id"),
+                $author->get("id"),
+            )
+        );
+
+        // when
+        $article->getContributors();
     }
 
     /** Test getting article contributors
