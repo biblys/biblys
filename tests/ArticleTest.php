@@ -5,6 +5,9 @@
 */
 
 use Biblys\Test\Factory;
+use Biblys\Test\ModelFactory;
+use Model\PeopleQuery;
+use Propel\Runtime\Exception\PropelException;
 
 require_once "setUp.php";
 
@@ -432,6 +435,38 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $pm->delete($people2);
     }
 
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetContributorsWithDeletedPeople()
+    {
+        // given
+        $author = Factory::createPeople([
+            "people_first_name" => "Auteur",
+            "people_last_name" => "Disparu",
+        ]);
+        $article = Factory::createArticle(
+            ["article_title" => "La disparition (de l'auteur)"],
+            [$author]
+        );
+        $peopleModel = PeopleQuery::create()->findPk($author->get("id"));
+        $peopleModel->delete();
+
+        // then
+        $this->expectException("Biblys\Exception\InvalidEntityException");
+        $this->expectExceptionMessage(
+            sprintf(
+                "Cannot load article %s with invalid contribution: contributor %s does not exist",
+                $article->get("id"),
+                $author->get("id"),
+            )
+        );
+
+        // when
+        $article->getContributors();
+    }
+
     /** Test getting article contributors
     * @depends testUpdate
     */
@@ -697,6 +732,22 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     }
 
     /**
+     * @throws Exception
+     */
+    public function testUpdatingArticleWithoutUrlAndBeingEdited()
+    {
+        // given
+        $am = new ArticleManager();
+        $article = $am->create(["publisher_id" => 1, "article_editing_user" => 1]);
+
+        // when
+        $am->update($article);
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
+
+    /**
      * Test that updating an article without an url throws
      */
     public function testUpdatingArticleExistingUrl()
@@ -803,10 +854,13 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($link);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testAddArticleAlreadyInRayon()
     {
         // then
-        $this->expectException("Exception");
+        $this->expectException("Biblys\Exception\ArticleAlreadyInRayonException");
         $this->expectExceptionMessage("L'article « C'est mon rayon » est déjà dans le rayon « Mon rayon ».");
 
         // given
@@ -867,5 +921,24 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $articleExists = $am->getById($article->get('id'));
 
         $this->assertFalse($articleExists);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testIsBeingCreated()
+    {
+        // given
+        $article = Factory::createArticle();
+        $article->set("article_editing_user", 1);
+
+        // when
+        $isBeingCreated = $article->isBeingCreated();
+
+        // then
+        $this->assertTrue(
+            $isBeingCreated,
+            "should be true when there is an editing user"
+        );
     }
 }

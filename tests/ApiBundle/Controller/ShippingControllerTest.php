@@ -2,10 +2,11 @@
 
 namespace ApiBundle\Controller;
 
+use Biblys\Service\Config;
 use Biblys\Test\Factory;
-use Framework\Controller;
 use Framework\Exception\AuthException;
 use Model\ShippingFee;
+use Model\ShippingFeeQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
@@ -16,18 +17,26 @@ class ShippingControllerTest extends TestCase
 
     /**
      * @throws PropelException
+     * @throws AuthException
      */
     public function testIndexAction()
     {
         // given
-        $shipping1 = new ShippingFee();
-        $shipping1->save();
-        $shipping2 = new ShippingFee();
-        $shipping2->save();
+        $shippingFee1 = new ShippingFee();
+        $shippingFee1->setSiteId(1);
+        $shippingFee1->save();
+        $shippingFee2 = new ShippingFee();
+        $shippingFee2->setSiteId(1);
+        $shippingFee2->save();
+        $otherSiteShippingFee = new ShippingFee();
+        $otherSiteShippingFee->setSiteId(2);
+        $otherSiteShippingFee->save();
         $controller = new ShippingController();
+        $request = Factory::createAuthRequestForAdminUser();
+        $config = new Config();
 
         // when
-        $response = $controller->indexAction();
+        $response = $controller->indexAction($request, $config);
 
         // then
         $this->assertEquals(
@@ -38,7 +47,7 @@ class ShippingControllerTest extends TestCase
         $this->assertEquals(
             '[{"id":1,"mode":null,"type":null,"zone":null,"max_weight":null,"min_amount":null,"max_amount":null,"max_articles":null,"fee":null,"info":null},{"id":2,"mode":null,"type":null,"zone":null,"max_weight":null,"min_amount":null,"max_amount":null,"max_articles":null,"fee":null,"info":null}]',
             $response->getContent(),
-            "it should return all fees"
+            "it should return all fees for current site"
         );
     }
 
@@ -52,9 +61,10 @@ class ShippingControllerTest extends TestCase
         $controller = new ShippingController();
         $content = '{"id":"","mode":"Colissimo","type":"suivi","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
         $request = Factory::createAuthRequestForAdminUser($content);
+        $config = new Config();
 
         // when
-        $response = $controller->createAction($request);
+        $response = $controller->createAction($request, $config);
 
         // then
         $this->assertEquals(
@@ -72,6 +82,12 @@ class ShippingControllerTest extends TestCase
         $this->assertEquals(76, $fee["max_amount"]);
         $this->assertEquals(90, $fee["max_articles"]);
         $this->assertEquals("Expedition sous 72h", $fee["info"]);
+        $createdFee = ShippingFeeQuery::create()->findPk($fee["id"]);
+        $this->assertEquals(
+            1,
+            $createdFee->getSiteId(),
+            "should have created ShippingFee with site id"
+        );
     }
 
     /**
@@ -85,9 +101,10 @@ class ShippingControllerTest extends TestCase
         $content = '{"id":"","mode":"Colissimo","type":"suivi","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
         $request = Factory::createAuthRequestForAdminUser($content);
         $shippingFee = Factory::createShippingFee();
+        $config = new Config();
 
         // when
-        $response = $controller->updateAction($request, $shippingFee->getId());
+        $response = $controller->updateAction($request, $config, $shippingFee->getId());
 
         // then
         $this->assertEquals(
@@ -112,15 +129,41 @@ class ShippingControllerTest extends TestCase
      * @throws AuthException
      * @throws PropelException
      */
+    public function testUpdateFeeFromOtherSite()
+    {
+        // given
+        $controller = new ShippingController();
+        $content = '{"id":"","mode":"Colissimo","type":"suivi","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
+        $request = Factory::createAuthRequestForAdminUser($content);
+        $shippingFee = Factory::createShippingFee();
+        $shippingFee->setSiteId(2);
+        $shippingFee->save();
+        $config = new Config();
+
+        // then
+        $this->expectException("Symfony\Component\Routing\Exception\ResourceNotFoundException");
+        $this->expectExceptionMessage(
+            sprintf("Cannot find shipping fee with id %s", $shippingFee->getId())
+        );
+
+        // when
+        $controller->updateAction($request, $config, $shippingFee->getId());
+    }
+
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     */
     public function testDeleteAction()
     {
         // given
         $controller = new ShippingController();
         $request = Factory::createAuthRequestForAdminUser();
         $shippingFee = Factory::createShippingFee();
+        $config = new Config();
 
         // when
-        $response = $controller->deleteAction($request, $shippingFee->getId());
+        $response = $controller->deleteAction($request, $config, $shippingFee->getId());
 
         // then
         $this->assertEquals(
@@ -128,5 +171,30 @@ class ShippingControllerTest extends TestCase
             $response->getStatusCode(),
             "it should respond with http 204"
         );
+    }
+
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     */
+    public function testDeleteFeeFromOtherSite()
+    {
+        // given
+        $controller = new ShippingController();
+        $content = '{"id":"","mode":"Colissimo","type":"suivi","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
+        $request = Factory::createAuthRequestForAdminUser($content);
+        $shippingFee = Factory::createShippingFee();
+        $shippingFee->setSiteId(2);
+        $shippingFee->save();
+        $config = new Config();
+
+        // then
+        $this->expectException("Symfony\Component\Routing\Exception\ResourceNotFoundException");
+        $this->expectExceptionMessage(
+            sprintf("Cannot find shipping fee with id %s", $shippingFee->getId())
+        );
+
+        // when
+        $controller->deleteAction($request, $config, $shippingFee->getId());
     }
 }

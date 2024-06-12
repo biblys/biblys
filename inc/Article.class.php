@@ -1,6 +1,9 @@
 <?php
 
 use Biblys\Contributor\Contributor;
+use Biblys\Contributor\Job;
+use Biblys\Contributor\UnknownJobException;
+use Biblys\Exception\ArticleAlreadyInRayonException;
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Exception\InvalidEntityFetchedException;
 use Biblys\Isbn\Isbn;
@@ -81,8 +84,7 @@ class Article extends Entity
      */
     public function validateOnFetch(): void
     {
-        // An article with an editing user has not been yet fully created
-        if ($this->has("article_editing_user")) {
+        if ($this->isBeingCreated()) {
             return;
         }
 
@@ -110,6 +112,8 @@ class Article extends Entity
     /**
      * Get all article contributors
      * @return Contributor[]
+     * @throws InvalidEntityException
+     * @throws UnknownJobException
      */
     public function getContributors(): array
     {
@@ -120,12 +124,21 @@ class Article extends Entity
         $this->contributors = [];
 
         $rm = new RoleManager();
-        $pm = new PeopleManager();
-
         $roles = $rm->getAll(["article_id" => $this->get("id")]);
         foreach ($roles as $role) {
             $people = PeopleQuery::create()->findPk($role->get("people_id"));
-            $job = \Biblys\Contributor\Job::getById($role->get("job_id"));
+
+            if ($people === null) {
+                throw new InvalidEntityException(
+                    sprintf(
+                        "Cannot load article %s with invalid contribution: contributor %s does not exist",
+                        $this->get("id"),
+                        $role->get("people_id"),
+                    )
+                );
+            }
+
+            $job = Job::getById($role->get("job_id"));
             $this->contributors[] = new Contributor($people, $job, $role->get("id"));
         }
 
@@ -942,6 +955,12 @@ class Article extends Entity
             "inCart" => $inCart,
         ];
     }
+
+    public function isBeingCreated(): bool
+    {
+        return $this->has("article_editing_user");
+    }
+
 }
 
 class ArticleManager extends EntityManager
@@ -1220,6 +1239,7 @@ class ArticleManager extends EntityManager
      * Add rayon to article (and update article links)
      * @param $article {Article}
      * @param $rayon {Rayon}
+     * @throws ArticleAlreadyInRayonException
      */
     public function addRayon($article, $rayon)
     {
@@ -1230,7 +1250,7 @@ class ArticleManager extends EntityManager
         // Check if article is already in rayon
         $link = $lm->get(['site_id' => $site->get('id'), 'rayon_id' => $rayon->get('id'), 'article_id' => $article->get('id')]);
         if ($link) {
-            throw new Exception("L'article « " . $article->get('title') . " » est déjà dans le rayon « " . $rayon->get('name') . " ».");
+            throw new ArticleAlreadyInRayonException($article->get("title"), $rayon->get("name"));
         }
 
         // Create link
@@ -1533,6 +1553,10 @@ class ArticleManager extends EntityManager
     public function validateBeforeUpdate($article): void
     {
         parent::validateBeforeUpdate($article);
+
+        if ($article->isBeingCreated()) {
+            return;
+        }
 
         if (!$article->has("url")) {
             throw new InvalidEntityException("L'article doit avoir une url.");

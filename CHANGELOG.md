@@ -1,6 +1,13 @@
 
 # Historique des modifications
 
+### 2.55.1 (DEV)
+
+Corrections
+
+- L'erreur affichée lorsqu'on tentait d'afficher un article associé à un 
+  contributeur supprimé était peu claire. Maintenant, c'est mieux.
+
 ### 2.55.0 (1er octobre 2021)
 
 Améliorations
@@ -8,6 +15,17 @@ Améliorations
 - Il est désormais possible de préciser le genre à utiliser pour les 
   contributeurs ("féminin", "masculin" ou "neutre")
 - Le genre par défaut est désormais "neutre" et plus "masculin"
+
+### 2.54.2 (17 septembre 2021)
+
+Corrections
+
+- Les erreurs provoquées lors de l'association d'un article et d'un rayon
+  s'affichent désormais correctement
+- L'ajout d'un rayon à un article en cours de création ne provoque plus
+  d'erreurs
+- La page frais de port de l'administration affiche uniquement les frais
+  de port du site en cours
 
 ### 2.54.1 (10 septembre 2021)
 

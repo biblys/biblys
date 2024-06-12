@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Exception\ArticleAlreadyInRayonException;
 use Biblys\Isbn\Isbn;
 use Biblys\Isbn\IsbnParsingException;
 use Exception;
@@ -378,8 +379,8 @@ class ArticleController extends Controller
      */
     public function addRayonsAction(Request $request, $id)
     {
-        $am = $this->entityManager('Article');
-        $rm = $this->entityManager('Rayon');
+        $am = new \ArticleManager();
+        $rm = new \RayonManager();
 
         $am->setIgnoreSiteFilters(true);
 
@@ -400,7 +401,7 @@ class ArticleController extends Controller
 
         try {
             $link = $am->addRayon($article, $rayon);
-        } catch (Exception $e) {
+        } catch (ArticleAlreadyInRayonException $e) {
             return new JsonResponse([], 409);
         }
 

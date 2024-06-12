@@ -2,6 +2,8 @@
 
 namespace ApiBundle\Controller;
 
+use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use Model\ShippingFee;
@@ -17,11 +19,17 @@ class ShippingController extends Controller
     /**
      * Returns shipping fees.
      *
-     * GET /api/shipping
+     * @route GET /api/admin/shipping
+     *
+     * @throws AuthException
+     * @throws PropelException
      */
-    public function indexAction(): JsonResponse
+    public function indexAction(Request $request, Config $config): JsonResponse
     {
-        $allFees = ShippingFeeQuery::create()->find();
+        self::authAdmin($request);
+
+        $currentSite = CurrentSite::buildFromConfig($config);
+        $allFees = ShippingFeeQuery::createForSite($currentSite)->find();
 
         $fees = array_map(function ($fee) {
                 return self::_feeToJson($fee);
@@ -34,18 +42,21 @@ class ShippingController extends Controller
     /**
      * Create a new shipping fee.
      *
-     * POST /api/shipping
+     * @route POST /api/admin/shipping
+     *
      * @throws AuthException
      * @throws PropelException
      */
-    public function createAction(Request $request): JsonResponse
+    public function createAction(Request $request, Config $config): JsonResponse
     {
         self::authAdmin($request);
+        $currentSite = CurrentSite::buildFromConfig($config);
 
         $data = self::_getDataFromRequest($request);
 
         $fee = new ShippingFee();
         self::_hydrateFee($fee, $data);
+        $fee->setSiteId($currentSite->getSite()->getId());
         $fee->save();
 
         return new JsonResponse($this->_feeToJson($fee), 201);
@@ -54,21 +65,16 @@ class ShippingController extends Controller
     /**
      * Update a shipping range.
      *
-     * @route PUT /api/shipping/{id}
+     * @route PUT /api/admin/shipping/{id}
+     *
      * @throws AuthException
      * @throws PropelException
      */
-    public function updateAction(Request $request, int $id): JsonResponse
+    public function updateAction(Request $request, Config $config, int $id): JsonResponse
     {
         self::authAdmin($request);
 
-        $fee = ShippingFeeQuery::create()->findPk($id);
-        if (!$fee) {
-            throw new ResourceNotFoundException(
-                sprintf("Cannot find shipping fee with id %s", $id)
-            );
-        }
-
+        $fee = self::_getFeeFromId($config, $id);
         $data = self::_getDataFromRequest($request);
         $fee = self::_hydrateFee($fee, $data);
         $fee->save();
@@ -77,20 +83,16 @@ class ShippingController extends Controller
     }
 
     /**
+     * @route DELETE /api/admin/shipping/{id}
+     *
      * @throws AuthException
      * @throws PropelException
      */
-    public function deleteAction(Request $request, int $id): JsonResponse
+    public function deleteAction(Request $request, Config $config, int $id): JsonResponse
     {
         self::authAdmin($request);
 
-        $fee = ShippingFeeQuery::create()->findPk($id);
-        if (!$fee) {
-            throw new ResourceNotFoundException(
-                sprintf("Cannot find shipping fee with id %s", $id)
-            );
-        }
-
+        $fee = self::_getFeeFromId($config, $id);
         $fee->delete();
 
         return new JsonResponse(null, 204);
@@ -163,6 +165,23 @@ class ShippingController extends Controller
         $fee->setFee($data["fee"]);
         $fee->setInfo($data["info"]);
 
+        return $fee;
+    }
+
+    /**
+     * @param Config $config
+     * @param int $id
+     * @return ShippingFee
+     */
+    private static function _getFeeFromId(Config $config, int $id): ShippingFee
+    {
+        $currentSite = CurrentSite::buildFromConfig($config);
+        $fee = ShippingFeeQuery::createForSite($currentSite)->findPk($id);
+        if (!$fee) {
+            throw new ResourceNotFoundException(
+                sprintf("Cannot find shipping fee with id %s", $id)
+            );
+        }
         return $fee;
     }
 }
