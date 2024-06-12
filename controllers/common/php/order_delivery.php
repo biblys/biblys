@@ -4,6 +4,7 @@ use Biblys\Axys\Client;
 use Biblys\Legacy\OrderDeliveryHelpers;
 use Biblys\Service\Config;
 use Biblys\Service\Mailer;
+use Model\PageQuery;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -178,9 +179,18 @@ if ($request->getMethod() === "POST") {
         // Hydrate order from cart
         $om->hydrateFromCart($order, $cart);
 
-        /** @var Site $_SITE */
         /** @var Mailer $mailer */
-        OrderDeliveryHelpers::sendOrderConfirmationMail($order, $shipping, $mailer, $_SITE, $isUpdatingAnExistingOrder);
+        /** @var Site $site */
+        $termsPageId = $site->getOpt('cgv_page');
+        $termsPage = PageQuery::create()->findPk($termsPageId);
+        OrderDeliveryHelpers::sendOrderConfirmationMail(
+            $order,
+            $shipping,
+            $mailer,
+            $site,
+            $isUpdatingAnExistingOrder,
+            $termsPage
+        );
 
         // Delete alerts for purchased articles
         $order->deleteRelatedAlerts();

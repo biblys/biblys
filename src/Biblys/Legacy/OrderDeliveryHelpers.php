@@ -12,6 +12,7 @@ use Egulias\EmailValidator\Validation\DNSCheckValidation;
 use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use Exception;
+use Model\Page;
 use Order;
 use OrderManager;
 use Shipping;
@@ -183,10 +184,18 @@ class OrderDeliveryHelpers
      * @param Mailer $mailer
      * @param Site $site
      * @param bool $isUpdatingAnExistingOrder
+     * @param Page|null $termsPage
      * @return void
      * @throws Exception
      */
-    public static function sendOrderConfirmationMail(Order $order, ?Shipping $shipping, Mailer $mailer, Site $site, bool $isUpdatingAnExistingOrder): void
+    public static function sendOrderConfirmationMail(
+        Order $order,
+        ?Shipping $shipping,
+        Mailer $mailer,
+        Site $site,
+        bool $isUpdatingAnExistingOrder,
+        ?Page $termsPage
+    ): void
     {
         $mailSubject = $site["site_tag"].' | Commande n° '.$order->get('id');
         if ($isUpdatingAnExistingOrder) {
@@ -258,6 +267,16 @@ class OrderDeliveryHelpers
             $mailComment = '<p><strong>Commentaire du client :</strong></p><p>'.nl2br($order->get('comment')).'</p>';
         }
 
+        $termsLink = null;
+        if ($termsPage) {
+            $termsLink = '
+                    <p>
+                        Consultez nos conditions générales de vente :<br />
+                        http://www.biblys.fr/page/'.$termsPage->getUrl().'
+                    </p>
+                ';
+        }
+
         $mailBody = '
             <html lang="fr">
                 <head>
@@ -304,6 +323,8 @@ class OrderDeliveryHelpers
                         Si ce n\'est pas déjà fait, vous pouvez payer votre commande à l\'adresse ci-dessous :<br />
                         http://'.$_SERVER['HTTP_HOST'].'/order/'.$order->get('url').'
                     </p>
+                    
+                    '.$termsLink.'
 
                     <p>Merci pour votre commande !</p>
                 </body>

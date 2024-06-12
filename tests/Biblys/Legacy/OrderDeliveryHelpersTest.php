@@ -4,6 +4,7 @@ namespace Biblys\Legacy;
 
 use Biblys\Service\Mailer;
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
 use CartManager;
 use Exception;
 use OrderManager;
@@ -35,7 +36,8 @@ class OrderDeliveryHelpersTest extends TestCase
         $order = EntityFactory::createOrder();
         $om->hydrateFromCart($order, $cart);
         $shipping = EntityFactory::createShipping();
-        
+        $termsPage = ModelFactory::createPage();
+
         $mailBody = '
             <html lang="fr">
                 <head>
@@ -91,6 +93,13 @@ class OrderDeliveryHelpersTest extends TestCase
                         Si ce n\'est pas déjà fait, vous pouvez payer votre commande à l\'adresse ci-dessous :<br />
                         http://www.biblys.fr/order/'.$order->get("url").'
                     </p>
+                    
+                    
+                    <p>
+                        Consultez nos conditions générales de vente :<br />
+                        http://www.biblys.fr/page/'.$termsPage->getUrl().'
+                    </p>
+                
 
                     <p>Merci pour votre commande !</p>
                 </body>
@@ -121,6 +130,7 @@ class OrderDeliveryHelpersTest extends TestCase
             $mailer,
             $site,
             false,
+            $termsPage,
         );
     }
 }

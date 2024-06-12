@@ -1,12 +1,19 @@
 # Historique des modifications
 
-## 2.57.0 (DEV)
+## 2.58.0 (DEV)
 
 Améliorations
 
-Le formulaire d'enregistrement de l'adresse d'expédition lors de 
-l'enregistrement d'une commande a été amélioré, notamment pour mieux distinguer
-les champs obligatoires des champs facultatifs.
+- Le formulaire d'enregistrement de l'adresse d'expédition lors de
+  l'enregistrement d'une commande a été amélioré, notamment pour mieux 
+  distinguer les champs obligatoires des champs facultatifs.
+- Un lien vers la page des conditions générales de vente a été ajouté au
+  courriel de confirmation de commande.
+
+### 2.57.4 (28 janvier 2021)
+
+Cette mise à jour purement technique ajoute une option de configuration 
+nécessaire pour préparer une migration de la base de données.
 
 ### 2.57.3 (21 janvier 2021)
 

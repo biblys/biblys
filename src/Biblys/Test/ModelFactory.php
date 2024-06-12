@@ -4,6 +4,7 @@ namespace Biblys\Test;
 
 use Biblys\Service\Config;
 use Model\Article;
+use Model\Page;
 use Model\People;
 use Model\Publisher;
 use Model\Right;
@@ -39,7 +40,20 @@ class ModelFactory
         return $user;
     }
 
-    public static function createPeople(array $attributes = [])
+    /**
+     * @throws PropelException
+     */
+    public static function createPage(array $attributes = []): Page
+    {
+        $page = new Page();
+        $page->setTitle($attributes["page_title"] ?? "Conditions Générales de Vente");
+        $page->setUrl($attributes["page_url"] ?? "cgv");
+        $page->save();
+
+        return $page;
+    }
+
+    public static function createPeople(array $attributes = []): People
     {
         $people = new People();
         $people->setGender($attributes["gender"] ?? "N");

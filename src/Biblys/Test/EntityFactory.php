@@ -17,6 +17,8 @@ use Model\ArticleQuery;
 use Model\PeopleQuery;
 use Order;
 use OrderManager;
+use Page;
+use PageManager;
 use People;
 use PeopleManager;
 use Propel\Runtime\Exception\PropelException;
