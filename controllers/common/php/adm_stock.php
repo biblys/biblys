@@ -123,7 +123,7 @@ if ($request->getMethod() === 'POST') {
         if (empty($_POST['stock_id']) or $_POST['stock_num'] > 1) {
             $stock = $sm->create();
             $_POST['stock_id'] = $stock->get('id');
-            $content .= '<p class="success">L\'exemplaire n&deg; <a href="/pages/adm_stock?id=' . $_POST['stock_id'] . '">' . $_POST['stock_id'] . '</a> a bien &eacute;t&eacute; ajout&eacute; au stock !</p>';
+            $_ECHO .= '<p class="success">L\'exemplaire n&deg; <a href="/pages/adm_stock?id=' . $_POST['stock_id'] . '">' . $_POST['stock_id'] . '</a> a bien &eacute;t&eacute; ajout&eacute; au stock !</p>';
             $mode = 'insert';
             $update_date = 'NULL';
         } else {
@@ -320,10 +320,10 @@ $delId = $request->query->get('del');
 // Modifier un exemplaire existant
 if (!empty($_GET['id'])) {
     $_PAGE_TITLE = 'Modifier l\'exemplaire n&deg; ' . $_GET['id'];
-    $content .= '<h1><span class="fa fa-cubes"></span> Modifier l\'exemplaire n&deg; ' . $_GET['id'] . '</h1>';
+    $_ECHO .= '<h1><span class="fa fa-cubes"></span> Modifier l\'exemplaire n&deg; ' . $_GET['id'] . '</h1>';
 
     if (isset($_GET['created'])) {
-        $content .= '<p class="success">' . $_GET['created'] . ' exemplaire' . s($_GET['created']) . ' ajout&eacute;' . s($_GET['created']) . ' au stock !</p>';
+        $_ECHO .= '<p class="success">' . $_GET['created'] . ' exemplaire' . s($_GET['created']) . ' ajout&eacute;' . s($_GET['created']) . ' au stock !</p>';
     } elseif (isset($_GET['returned'])) {
         $content .= '<p class="success">L\'exemplaire a &eacute;t&eacute; retourn&eacute;.</p>';
     } elseif (isset($_GET['losted'])) {
@@ -333,7 +333,7 @@ if (!empty($_GET['id'])) {
     }
 
     if (isset($_GET['alerts'])) {
-        $content .= '<p class="success">' . $_GET['alerts'] . ' alerte' . s($_GET['alerts']) . ' ' . s($_GET['alerts'], 'a', 'ont') . ' été envoyée' . s($_GET['alerts']) . '</p>';
+        $_ECHO .= '<p class="success">' . $_GET['alerts'] . ' alerte' . s($_GET['alerts']) . ' ' . s($_GET['alerts'], 'a', 'ont') . ' été envoyée' . s($_GET['alerts']) . '</p>';
     }
 
     $stockId = $request->query->get('id');
@@ -368,7 +368,7 @@ if (!empty($_GET['id'])) {
     ';
 } elseif (!empty($copyId)) {
     $_PAGE_TITLE = 'Dupliquer l\'exemplaire n&deg; ' . $copyId;
-    $content .= '<h1><span class="fa fa-copy"></span> Dupliquer l\'exemplaire n<sup>o</sup> ' . $_GET['copy'] . '</h1>';
+    $_ECHO .= '<h1><span class="fa fa-copy"></span> Dupliquer l\'exemplaire n<sup>o</sup> ' . $_GET['copy'] . '</h1>';
     $stock = $sm->getById($copyId);
     if (!$stock) {
         throw new Exception('Cet exemplaire n\'existe pas');
@@ -377,7 +377,7 @@ if (!empty($_GET['id'])) {
     $_GET['id'] = null;
 } elseif (!empty($_GET['add'])) { // Ajouter un exemplaire
     $_PAGE_TITLE = 'Ajouter au stock un nouvel exemplaire de...';
-    $content .= '<h1 id="add"><span class="fa fa-plus"></span> ' . $_PAGE_TITLE . '</h1>';
+    $_ECHO .= '<h1 id="add"><span class="fa fa-plus"></span> ' . $_PAGE_TITLE . '</h1>';
     $s['article_id'] = $_GET['add'];
     $mode = 'insert';
 
@@ -457,7 +457,7 @@ if ($article) {
         );
     }
 
-    $content .= '
+    $_ECHO .= '
         <a href="' . $articleUrl . '">
             <div class="article-thumb">
                 ' . $articleCover . '
@@ -850,7 +850,7 @@ if ($article) {
             <br>
         ';
     } else {
-        $content .= '
+        $_ECHO .= '
             <input type="hidden" name="campaign_id" value="' . $stock->get('campaign_id') . '">
             <input type="hidden" name="reward_id" value="' . $stock->get('reward_id') . '">
         ';
@@ -940,7 +940,7 @@ if ($article) {
             return '<option value="' . $cart->get('id') . '">' . $cart->get('id') . ' — ' . $cart->getUserInfo() . '</option>';
         }, $carts);
 
-        $content .= '
+        $_ECHO .= '
         <form method="post" action="' . $urlgenerator->generate('stock_add_to_cart', ['stock_id' => $stock->get('id')]) . '" class="fieldset form-inline">
             <fieldset>
                 <legend>Ajouter à un panier</legend>

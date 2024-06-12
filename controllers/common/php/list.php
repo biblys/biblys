@@ -1,7 +1,5 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Response;
-
 if (!$_V->isAdmin()) {
     trigger_error("Vous n'avez pas le droit d'accéder à cette page.");
 }
@@ -12,9 +10,9 @@ $linm = new LinkManager();
 
 $_PAGE_TITLE = 'Listes';
 
-$content = '
-    <h1><span class="fa fa-list"></span> '.$_PAGE_TITLE.'</h1>
-';
+$_ECHO .= '
+        <h1><span class="fa fa-list"></span> '.$_PAGE_TITLE.'</h1>
+    ';
 
 $newList = $request->request->get('new_list');
 if ($newList) {
@@ -40,7 +38,7 @@ if ($newList) {
     redirect('/list/'.$listUrl);
 }
 
-$content .= '
+$_ECHO .= '
         <p>
         <label>Mes listes :</label>
         <select class="goto">
@@ -51,10 +49,10 @@ $lm = new ListeManager();
 $lists = $lm->getAll([], ['order' => 'list_title']);
 
 foreach ($lists as $list) {
-    $content .= '<option value="/list/'.$list->get('url').'">'.$list->get('title').'</option>';
+    $_ECHO .= '<option value="/list/'.$list->get('url').'">'.$list->get('title').'</option>';
 }
 
-$content .= '
+$_ECHO .= '
         </select>
         </p>
 
@@ -69,13 +67,13 @@ $content .= '
     ';
 
 if (isset($_GET['emptied'])) {
-    $content .= '<p class="success">La liste a bien été vidée</p>';
+    $_ECHO .= '<p class="success">La liste a bien été vidée</p>';
 }
 if (isset($_GET['deleted'])) {
-    $content .= '<p class="success">La liste a bien été supprimée</p>';
+    $_ECHO .= '<p class="success">La liste a bien été supprimée</p>';
 }
 if (isset($_GET['returned'])) {
-    $content .= '<p class="success">Les exemplaires de la liste ont bien été retournés</p>';
+    $_ECHO .= '<p class="success">Les exemplaires de la liste ont bien été retournés</p>';
 }
 
 $url = $request->query->get('url');
@@ -84,7 +82,7 @@ if ($list) {
     $l = $list;
 
     if ($_V->isAdmin()) {
-        $content .= '
+        $_ECHO .= '
                     <div class="admin">
                         Liste n° '.$list->get('id').'
                     </div>
@@ -101,23 +99,26 @@ if ($list) {
         redirect('/pages/list?deleted=1');
     }
 
+    $group_by = 'GROUP BY `stock_id`';
+    if ($request->query->get('regroup', false)) {
+        $group_by = 'GROUP BY `article_id`';
+    }
+
     $Total = 0;
     $TotalPrice = 0;
     $export = [];
     $articles_in_list = null;
-    $articles = EntityManager::prepareAndExecute('
-        SELECT 
-           `link_id`, `stock_id`, 
-            "1" AS `count`, "0" AS `total`,
-           `stock`.`article_id`, `article_title`, `article_ean`, `article_url`, `article_collection`, `article_publisher`, 
-            `stock_selling_price`, `stock_return_date`, `stock_selling_date`, `stock_cart_date`, `stock_lost_date`, `stock_stockage`
-        FROM `links`
-        JOIN `stock` USING(`stock_id`)
-        JOIN `articles` ON `stock`.`article_id` = `articles`.`article_id`
-        WHERE `list_id` = :list_id AND `link_deleted` IS NULL
-        ORDER BY `link_id` DESC',
-        ["list_id" => $list->get('id')]
-    );
+    $articles = $_SQL->query('
+                SELECT `link_id`, `stock_id`, COUNT(`stock_id`) AS `count`, COUNT(`stock_id`) * `stock_selling_price` AS `total`, 
+                        `stock`.`article_id`, `article_title`, `article_ean`, `article_url`, `article_collection`, `article_publisher`, 
+                        `stock_selling_price`, `stock_return_date`, `stock_selling_date`, `stock_cart_date`, `stock_lost_date`, `stock_stockage`
+                    FROM `links`
+                    JOIN `stock` USING(`stock_id`)
+                    JOIN `articles` ON `stock`.`article_id` = `articles`.`article_id`
+                    WHERE `list_id` = '.$list->get('id').' AND `link_deleted` IS NULL
+                    '.$group_by.'
+                    ORDER BY `link_id` DESC
+                ');
 
     while ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
         if (isset($_GET['action']) && $_GET['action'] == 'return' && $_V->isAdmin()) {
@@ -157,7 +158,7 @@ if ($list) {
     }
 
     $_PAGE_TITLE = $list->get('title');
-    $content .= '
+    $_ECHO .= '
                 <h2><a href="/list/'.$l['list_url'].'">'.$_PAGE_TITLE.'</a></h2>
 
                 <label for="list">Ajouter &agrave; la liste :</label>
@@ -218,5 +219,3 @@ if ($list) {
                 </form>
             ';
 }
-
-return new Response($content);

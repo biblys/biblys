@@ -2,9 +2,8 @@
 
 class Cart extends Entity
 {
-    protected $prefix = 'cart';
-    protected $stock = [];
-    private $seller = null;
+    protected $prefix = 'cart',
+        $stock = [];
 
     public function __construct($data)
     {
@@ -21,10 +20,7 @@ class Cart extends Entity
         // Seller (OneToMany)
         if (isset($data['cart_seller_id'])) {
             $um = new UserManager();
-            $seller = $um->getById($data['cart_seller_id']);
-            if ($seller) {
-                $this->seller = $seller;
-            }
+            $data['seller'] = $um->get(array('user_id' => $data['cart_seller_id']));
         }
 
         parent::__construct($data);
@@ -174,26 +170,6 @@ class Cart extends Entity
         }
 
         return $user->get('Email');
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasSeller(): bool
-    {
-        if ($this->seller === null) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @return User|null
-     */
-    public function getSeller(): User
-    {
-        return $this->seller;
     }
 }
 

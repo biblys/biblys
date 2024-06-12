@@ -1,27 +1,15 @@
 <?php
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
-
 $query = null;
 $terms = null;
 $sql = null;
 $_REQ = null;
 $filters = null;
 
-/** @var $request */
 $input = $request->query->get('q', false);
 
-/** @var Site $site */
-$useOldArticleController = $site->getOpt("use_old_article_controller");
-if (!$useOldArticleController) {
-    return new RedirectResponse("/articles/search?q=$input");
-}
-
-$content = '';
-
 if (!$input) {
-    $content .= '
+    $_ECHO .= '
         <h1><i class="fa fa-search"></i> Rechercher</h1>
         <form action="/pages/search">
             <div class="form-group">
@@ -33,7 +21,7 @@ if (!$input) {
         </form>
     ';
 } elseif (strlen($input) < 3) {
-    $content .= '<p class="error">Vous devez entrer un mot-clé d\'au moins trois caractères.</p>';
+    $_ECHO .= '<p class="error">Vous devez entrer un mot-clé d\'au moins trois caractères.</p>';
 } else {
 	$queries = explode(" ",$input);
 
@@ -106,8 +94,7 @@ if (!$input) {
 			}
 			elseif ($q == "commande")
 			{
-                /** @var $site */
-                $sql[] = "`stock_id` IS NULL AND `article_links` LIKE '%[onorder:".$site->get("id")."]%' AND `article_availability` = 1";
+				$sql[] = "`stock_id` IS NULL AND `article_links` LIKE '%[onorder:".$_SITE['site_id']."]%' AND `article_availability` = 1";
 				$filters .= ' sur commande';
 			}
 			elseif ($q == "indisp")
@@ -158,8 +145,8 @@ if (!$input) {
 		$_PAGE_TITLE = $type.' '.$filters;
 	}
 
-	$content .= '
-		<p class="floatR"><a href="https://www.biblys.fr/pages/doc_mots-cles-magiques">Recherche avancée</a></p>
+	$_ECHO .= '
+		<p class="floatR"><a href="http://www.biblys.fr/pages/doc_mots-cles-magiques">Recherche avancée</a></p>
 		<h2>'.$_PAGE_TITLE.'</h2>
 	';
 
@@ -169,5 +156,3 @@ if (!$input) {
 	include($path);
 
 }
-
-return new Response($content);

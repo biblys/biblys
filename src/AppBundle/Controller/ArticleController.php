@@ -3,15 +3,12 @@
 namespace AppBundle\Controller;
 
 use Biblys\Isbn\Isbn;
-use Biblys\Isbn\IsbnParsingException;
-use Exception;
 use Framework\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
-use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class ArticleController extends Controller
 {
@@ -169,7 +166,7 @@ class ArticleController extends Controller
             if ($newsletter_checked) {
                 try {
                     $result = $mm->addSubscriber($email, true);
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     // Ignore errors
                 }
             }
@@ -219,7 +216,7 @@ class ArticleController extends Controller
 
             try {
                 $am->delete($article);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $error = $e->getMessage();
             }
 
@@ -319,7 +316,7 @@ class ArticleController extends Controller
 
         $article = $am->getById($id);
         if (!$article) {
-            throw new Exception("Article $id not found");
+            throw new \Exception("Article $id not found");
         }
 
         if ($article->has('publisher_id')) {
@@ -380,7 +377,7 @@ class ArticleController extends Controller
 
         $article = $am->getById($id);
         if (!$article) {
-            throw new Exception("Article $id not found");
+            throw new \Exception("Article $id not found");
         }
 
         if ($article->has('publisher_id')) {
@@ -390,12 +387,12 @@ class ArticleController extends Controller
         $rayon_id = $request->request->get('rayon_id');
         $rayon = $rm->getById($rayon_id);
         if (!$rayon) {
-            throw new Exception("Rayon $id not found");
+            throw new \Exception("Rayon $id not found");
         }
 
         try {
             $link = $am->addRayon($article, $rayon);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return new JsonResponse([], 409);
         }
 
@@ -487,35 +484,24 @@ class ArticleController extends Controller
      * Find article by ISBN
      * /isbn/{ean}.
      *
-     * @param string $ean An article's ISBN in EAN format
-     * @param UrlGenerator|null $urlGenerator
+     * @param int $ean An article's ISBN in EAN format
+     *
      * @return Response
      */
-    public function byIsbn(string $ean, UrlGenerator $urlGenerator = null)
+    public function byIsbn($ean)
     {
-        try {
-            $ean = Isbn::convertToEan13($ean);
-        } catch (IsbnParsingException $exception) {
-            throw new BadRequestHttpException($exception->getMessage());
-        }
+        $ean = Isbn::convertToEan13($ean);
 
         $am = $this->entityManager('Article');
         $article = $am->get(['article_ean' => $ean]);
+
         if (!$article) {
             throw new NotFoundException("Article with ISBN $ean not found.");
         }
 
-        // TODO: use dependency injection instead
-        if ($urlGenerator === null) {
-            $urlGenerator = $this->url;
-        }
+        $article_url = $this->generateUrl('article_show', ['slug' => $article->get('url')]);
 
-        $articleUrl = $urlGenerator->generate(
-            'article_show',
-            ['slug' => $article->get('url')]
-        );
-
-        return $this->redirect($articleUrl, 301);
+        return $this->redirect($article_url, 301);
     }
 
     /**
@@ -550,7 +536,7 @@ class ArticleController extends Controller
         try {
             $ean = Isbn::convertToEan13($params['article_ean']);
             $am->checkIsbn($params['article_id'], $ean);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
 

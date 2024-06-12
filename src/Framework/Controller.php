@@ -49,6 +49,14 @@ class Controller
             throw new AuthException('Accès réservé aux éditeurs.');
         }
 
+        if ($rank == 'cron') {
+            try {
+                $this->user->isCron();
+            } catch (Exception $exception) {
+                throw new AuthException('Accès réservés aux tâches cron.');
+            }
+        }
+
         if ($rank == 'user' && !$this->user->isLogged()) {
             throw new AuthException('Identification requise.');
         }

@@ -1,8 +1,5 @@
 <?php
 
-use Biblys\Exception\EntityAlreadyExistsException;
-use Biblys\Exception\InvalidEntityException;
-
 class Publisher extends Entity
 {
     protected $prefix = 'publisher';
@@ -221,16 +218,14 @@ class PublisherManager extends EntityManager
 
     public function validate($publisher)
     {
-        if (!$publisher->has("name")) {
-            throw new InvalidEntityException("L'éditeur doit avoir un nom.");
+        if (!$publisher->has('name')) {
+            throw new Exception('L\'éditeur doit avoir un nom.');
         }
 
         // Check that there is not another publisher with that name
-        $other = $this->get(["publisher_url" => $publisher->get("url"), "publisher_id" => "!= " . $publisher->get('id')]);
+        $other = $this->get(['publisher_url' => $publisher->get('url'), 'publisher_id' => '!= ' . $publisher->get('id')]);
         if ($other) {
-            throw new EntityAlreadyExistsException(
-                "Il existe déjà un éditeur avec le nom " . $publisher->get("name") . "."
-            );
+            throw new Exception('Il existe déjà un éditeur avec le nom ' . $publisher->get('name') . '.');
         }
 
         return true;

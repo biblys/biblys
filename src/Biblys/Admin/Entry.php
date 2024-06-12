@@ -2,10 +2,6 @@
 
 namespace Biblys\Admin;
 
-use Biblys\Service\Updater\Updater;
-use Biblys\Service\Updater\UpdaterException;
-use OrderManager;
-
 class Entry
 {
     private $_name;
@@ -102,7 +98,7 @@ class Entry
         return $this->_icon;
     }
 
-    public function hasClass(): bool
+    public function hasClass()
     {
         return $this->_hasClass;
     }
@@ -137,7 +133,7 @@ class Entry
         return $this->_subscription;
     }
 
-    public function hasSubscription(): bool
+    public function hasSubscription()
     {
         return $this->_hasSubscription;
     }
@@ -152,28 +148,24 @@ class Entry
         return $this->_category;
     }
 
-    /**
-     * @return Entry[]
-     * @throws UpdaterException
-     */
-    public static function findAll(): array
+    public static function findAll()
     {
         global $site, $config;
 
         // Biblys update available
         $updates = 0;
-        $updater = new Updater(BIBLYS_PATH, BIBLYS_VERSION);
+        $updater = new \PhpGitAutoupdate(BIBLYS_PATH, BIBLYS_VERSION);
         $diff = time() - $site->getOpt('updates_last_checked');
         if ($diff > 60 * 60 * 24) {
             $updater->downloadUpdates();
             $site->setOpt('updates_last_checked', time());
         }
-        if ($updater->isUpdateAvailable()) {
+        if ($updater->updateAvailable()) {
             $updates = 1;
         }
 
         // Orders to be shipped
-        $om = new OrderManager();
+        $om = new \OrderManager();
         $orders = $om->count(['order_type' => 'web', 'order_payment_date' => 'NOT NULL', 'order_shipping_date' => 'NULL', 'order_cancel_date' => 'NULL']);
 
         $entries = [];
@@ -251,11 +243,7 @@ class Entry
         return $entries;
     }
 
-
-    /**
-     * @return Entry[]
-     */
-    public static function getCustomEntries(): array
+    public static function getCustomEntries()
     {
         global $site;
 
@@ -283,12 +271,7 @@ class Entry
         return $custom;
     }
 
-    /**
-     * @param string $category
-     * @return Entry[]
-     * @throws UpdaterException
-     */
-    public static function findByCategory(string $category): array
+    public static function findByCategory($category)
     {
         if ($category === 'custom') {
             return self::getCustomEntries();

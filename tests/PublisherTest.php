@@ -114,7 +114,7 @@ class PublisherTest extends PHPUnit\Framework\TestCase
      */
     public function testCreateTagWithoutAName()
     {
-        $this->expectException("\Biblys\Exception\InvalidEntityException");
+        $this->expectException("Exception");
         $this->expectExceptionMessage("L'éditeur doit avoir un nom.");
 
         $pm = new PublisherManager();
@@ -127,7 +127,7 @@ class PublisherTest extends PHPUnit\Framework\TestCase
      */
     public function testDuplicateNameCheck()
     {
-        $this->expectException("\Biblys\Exception\EntityAlreadyExistsException");
+        $this->expectException("Exception");
         $this->expectExceptionMessage("Il existe déjà un éditeur avec le nom LES ÉDITIONS PUBLITOU.");
 
         $pm = new PublisherManager();

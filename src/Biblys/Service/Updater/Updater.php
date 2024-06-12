@@ -1,11 +1,9 @@
 <?php
 
-namespace Biblys\Service\Updater;
-
 use Gitonomy\Git\Repository;
 use Gitonomy\Git\Exception\ProcessException;
 
-class Updater
+class PhpGitAutoupdate
 {
     private $repository_path,
         $current_version,
@@ -21,35 +19,32 @@ class Updater
 
     /**
      * Download available updates from repo
-     * @return bool true if repository was successfuly reached
-     * @throws UpdaterException
+     * @return boolean true if repository was successfuly reached
      */
-    public function downloadUpdates(): bool
+    public function downloadUpdates()
     {
+        $repository = $this->getRepository();
+
         try {
-            $repository = $this->getRepository();
             $repository->run('fetch', ['origin', '--tags']);
-            return true;
-        } catch (ProcessException $exception) {
-            throw new UpdaterException(
-                "Une erreur est survenue pendant la récupération des mises à jour.",
-                $exception->getCode(),
-                $exception
-            );
+        } catch(ProcessException $e) {
+            return false;
         }
+
+        return true;
     }
 
     /**
      * Compare git tags to get the latest update
-     * @return Release latest update
+     * @return string latest update
      */
-    public function getLatestRelease(): ?Release
+    public function getLatestRelease()
     {
         if (isset($this->latest)) {
             return $this->latest;
         }
 
-        // Get latest version & check if up-to-date
+        // Get latest version & check if uptodate
         $releases = $this->getReleases();
 
         if (count($releases) === 0) {
@@ -60,10 +55,7 @@ class Updater
         return $this->latest;
     }
 
-    /**
-     * @return Release[]
-     */
-    public function getReleases(): array
+    public function getReleases()
     {
         if (isset($this->releases)) {
             return $this->releases;
@@ -76,68 +68,95 @@ class Updater
         $tags = $repository->getReferences()->getTags();
         foreach ($tags as $tag) {
             if (preg_match("/^\\d/", $tag->getName())) {
-                $release = new Release($tag, $repository);
+                $release["tag"] = $tag;
+                $release["version"] = $tag->getName();
                 $releases[] = $release;
             }
         }
 
         // Sort releases by version number
         usort($releases, function($a, $b) {
-            return version_compare($a->version, $b->version);
+            return version_compare($a["version"], $b["version"]);
         });
         $this->releases = array_reverse($releases);
         return $this->releases;
     }
 
-    /**
-     * @throws ReleaseNotFoundException
-     */
-    public function getRelease(string $version): Release
+    public function getRelease($version)
     {
         $releases = $this->getReleases();
-        foreach($releases as $release) {
-            if ($release->version === $version) {
+
+        foreach ($releases as $release) {
+            if ($release["version"] == $version) {
                 return $release;
             }
         }
-
-        throw new ReleaseNotFoundException(sprintf("Cannot find release for version %s", $version));
     }
 
     /**
      * Filters releases to return only those newer than a version
-     * @param string $version: the version to compare
-     * @return Release[] the releases that are newer
+     * @param String $version: the version to compare
+     * @return Array: the releases that are newer
      */
-    public function getReleasesNewerThan(string $version): array
+    public function getReleasesNewerThan($version)
     {
         $releases = $this->getReleases();
 
         // Filter release by version number
-        return array_filter($releases, function($release) use($version) {
-            return version_compare($release->version, $version, ">");
+        $releases = array_filter($releases, function($release) use($version) {
+            return version_compare($release["version"], $version, ">");
         });
+
+        // Get details for filtered releases
+        return $this->getReleasesDetails($releases);
+    }
+
+    /**
+     * Get details for provided releases
+     * @param Array $releases: the releases for which we want details
+     * @return Array: the provided releases with details
+     */
+    public function getReleasesDetails($releases)
+    {
+        return array_map(function($release) {
+            $release["date"] = $release["tag"]->getLastModification()->getAuthorDate();
+            $release["notes"] = $this->getReleaseNotes($release["tag"]->getName());
+            return $release;
+        }, $releases);
     }
 
     /**
      * Checks if latest update is higher than current version
-     * @return bool
+     * @return boolean
      */
-    public function isUpdateAvailable(): bool
+    public function updateAvailable()
     {
         $latest = $this->getLatestRelease();
-        return version_compare($latest->version, $this->current_version, ">");
+        return version_compare($latest["version"], $this->current_version, ">");
+    }
+
+    public function getReleaseNotes($version)
+    {
+        $repository = $this->getRepository();
+        $notes = $repository->run('tag', ['-l', '-n99', $version]);
+        return str_replace($version, '', $notes);
     }
 
     /**
      * Apply update with a git checkout
-     * @param  Release  $release the git tag to use
+     * @param  string  $version the git tag to use
+     * @return boolean          returns true if success
      */
-    public function applyRelease(Release $release): void
+    public function applyRelease($release)
     {
         $repository = $this->getRepository();
-        $wc = $repository->getWorkingCopy();
-        $wc->checkout($release->version);
+        try {
+            $wc = $repository->getWorkingCopy();
+            $wc->checkout($release["version"]);
+        } catch (Exception $e) {
+            trigger_error($e->getMessage());
+        }
+        return true;
     }
 
     /**

@@ -11,9 +11,3 @@ users_table_name: users
 
 axys:
   host: axys.local
-
-cron:
-  key: CRONKEY
-
-placedeslibraires:
-  shop_id: xxx

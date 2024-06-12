@@ -1,16 +1,12 @@
 <?php
 
-use Biblys\Service\Config;
 use Biblys\Service\Mailer;
-use Symfony\Component\HttpFoundation\Response;
 
-$config = new Config();
 $smtp = $config->get('smtp');
 if (!$smtp) {
     throw new Exception('SMTP doit être configuré pour envoyer la newsletter.');
 }
 
-/** @var $request */
 $offset = $request->query->get('offset', 0);
 
 $sent = 0;
@@ -18,20 +14,19 @@ $sendAll = false;
 
 $mm = new MailingManager();
 
-/** @var Site $site */
 $bulkEmailBatch = $site->getOpt('bulk_email_batch');
 if (!$bulkEmailBatch) {
     $bulkEmailBatch = 10;
 }
 
-$defaultCampaignName = 'newsletter-'.$site->get("name").'-'.date('Y-m-d');
+$defaultCampaignName = 'newsletter-'.$_SITE["site_name"].'-'.date('Y-m-d');
 $campaignName = $request->request->get('campaignName', $defaultCampaignName);
 
 $_PAGE_TITLE = 'Envoyer la newsletter';
 
-$content = '<h1><span class="fa fa-send"></span> Envoyer la newsletter</h1>';
+$_ECHO .= '<h1><span class="fa fa-send"></span> Envoyer la newsletter</h1>';
     
-$content .= '<p class="alert alert-warning">
+$_ECHO .= '<p class="alert alert-warning">
         L\'outil intégré à Biblys ne permet 
         pas de prouver le consentement des utilisateurs inscrits à la
         newsletter. Pour être en confirmité avec le Règlement Général sur la
@@ -43,7 +38,7 @@ $content .= '<p class="alert alert-warning">
 // Destinataires
 $req = null;
 if (empty($_POST["envoi"])) {
-    $req = " AND `mailing_email` = '".$this->user->get("email")."' ";
+    $req = " AND `mailing_email` = '".$_LOG["user_email"]."' ";
 }
 
 $mailingQuery = [
@@ -53,8 +48,6 @@ $mailingQuery = [
 
 $emails = $mm->getAll($mailingQuery);
 $emailsCount = count($emails);
-$errorsCount = $request->request->get('errors_count', 0);
-$sentSuccess = $request->request->get('sent_success', 0);
 
 // Envoi
 if (!empty($_POST)) {
@@ -69,25 +62,23 @@ if (!empty($_POST)) {
     $message = stripslashes($_POST["message"]); // Retiré utf8_encode de $_POST[message] le 29/10/2013 pour Lettre d'Ys
 
     // Ajout des liens utm au message;
+    function process_link_matches($matches)
+    {
+        global $_SITE, $campaignName;
+        $vars = 'utm_source=newsletter-'.$_SITE["site_name"].'&utm_medium=e-mail&utm_campaign='.slugify($campaignName);
+        if (preg_match('/\\?[^"]/', $matches[2])) {
+            $matches[2] .= '&'.$vars;
+        } // link already contains $_GET parameters
+        else {
+            $matches[2] .= '?'.$vars;
+        } // starting a new list of parameters
+        return '<a href="'.$matches[2].'">'.$matches[3].'</a>';
+    }
     $regexp = "<a\s[^>]*href=(\"??)([^\" >]*?)\\1[^>]*>(.*)<\/a>";
-    $message = preg_replace_callback(
-        "/$regexp/siU",
-        function (array $matches) use($site, $campaignName)
-        {
-            $vars = 'utm_source=newsletter-'.$site->get("name").'&utm_medium=e-mail&utm_campaign='.slugify($campaignName);
-            if (preg_match('/\\?[^"]/', $matches[2])) {
-                $matches[2] .= '&'.$vars;
-            } // link already contains $_GET parameters
-            else {
-                $matches[2] .= '?'.$vars;
-            } // starting a new list of parameters
-            return '<a href="'.$matches[2].'">'.$matches[3].'</a>';
-        },
-        $message
-    );
+    $message = preg_replace_callback("/$regexp/siU", 'process_link_matches', $message);
 
     // By default, send only to current user
-    $users = [["mailing_email" => $this->user->get('email')]];
+    $users = [["mailing_email" => $_V->get('email')]];
     
     // If checked, 
     if ($sendAll) {
@@ -98,12 +89,11 @@ if (!empty($_POST)) {
     }
 
     $mails = array();
-    $protocol = $request->isSecure() ? 'https' : 'http';
     foreach ($users as $u) {
         $m = [];
         $m["to"] = $u["mailing_email"];
         $m["subject"] = $subject;
-        $m["unsubscribeLink"] = $protocol.'://'.$site->get("domain").'/mailing/unsubscribe?email='.$m["to"];
+        $m["unsubscribeLink"] = 'http://'.$_SITE["site_domain"].'/mailing/unsubscribe?email='.$m["to"];
         $m["footer"] = '
             <div id="footer">
                 <p style="text-align: center;">
@@ -111,7 +101,7 @@ if (!empty($_POST)) {
                     <a href="'.$m["unsubscribeLink"].'">'.$m["unsubscribeLink"].'</a>
                 </p>
                 <p style="text-align: center;">
-                    Ce courriel a été transmis via <a href="'.$protocol.'://www.biblys.fr/">Biblys</a>.<br />
+                    Ce courriel a été transmis via <a href="http://www.biblys.fr/">Biblys</a>.<br />
                     Si vous pensez qu\'il s\'agit d\'un spam, merci de le faire suivre &agrave; <a href="mailto:abuse@biblys.fr">abuse@biblys.fr</a>
                 </p>
             </div>
@@ -131,27 +121,21 @@ if (!empty($_POST)) {
         $baseHeaders["X-Mailjet-DeduplicateCampaign"] = "true";
     }
 
-    $errors = [];
     foreach ($mails as $m) {
-        $m["message"] = '<html lang="fr"><head><title>'.$m["subject"].'</title><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><style>'.$_POST['css'].'</style></head><body>'.$message.stripslashes($m["footer"]).'</body></html>';
-
+        $m["message"] = '<html><head><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><style>'.$_POST['css'].'</style></head><body>'.$message.stripslashes($m["footer"]).'</body></html>';
+       
         $headers = $baseHeaders;
         $headers["List-Unsubscribe"] = "<".$m["unsubscribeLink"].">";
-
+        
         $mailer = new Mailer();
-        try {
-            $mailer->send(
-                $m["to"], // to
-                $m["subject"], // subject
-                $m["message"], // body
-                [$site->get('site_contact') => $site->get('site_title')], // from
-                [], // options
-                $headers // headers
-            );
-            $sentSuccess++;
-        } catch (InvalidArgumentException $exception) {
-            $errors[] = $exception->getMessage();
-        }
+        $mailer->send(
+            $m["to"], // to
+            $m["subject"], // subject
+            $m["message"], // body
+            [$site->get('site_contact') => $site->get('site_title')], // from
+            [], // options
+            $headers // headers
+        );
 
         $sent++;
     }
@@ -159,14 +143,11 @@ if (!empty($_POST)) {
     if ($sendAll) {
         $totalSent = $offset + $sent;
         $offset = $totalSent;
-        $errorsCount += count($errors);
-        $errorsDisplay = array_map(function($error) {
-            return '<p class="alert alert-warning">'.$error.'</p>';
-        }, $errors);
+        
 
         if ($totalSent < $emailsCount) {
             $percent = round(($totalSent / $emailsCount) * 100);
-            $content .= '
+            $_ECHO .= '
                 <p class="alert alert-warning">
                     <span class="fa fa-spinner fa-spin"></span>
                     Envois toujours en cours, ne quittez pas la page...
@@ -177,32 +158,29 @@ if (!empty($_POST)) {
                         <span style="display: inline-block; width:50px;">'.$percent.'&nbsp;%</span>
                     </div>
                 </div>
-                '.join($errorsDisplay).'
                 <script>
                     setTimeout(function() { $("#newsletter").submit(); }, 100);
                 </script>
             ';
         } else {
-            $content .='<p class="success">La newsletter a été envoyée à '.$sentSuccess.' inscrit'.s($sentSuccess).' sur '.$emailsCount.' (avec '.$errorsCount.' erreur'.s($errorsCount).').</p>';
+            $_ECHO .='<p class="success">La newsletter a été envoyée à '.$totalSent.' inscrit'.s($totalSent).'.</p>';
         }
 
     } else {
-        $content .= '<p class="success">Une newsletter de test a été envoyée à '.$this->user->get('email').'</p>';
+        $_ECHO .= '<p class="success">Une newsletter de test a été envoyée à '.$_V->get('email').'</p>';
     }
 }
 
-$content .= '
+$_ECHO .= '
 
 <form method="post" action="/pages/adm_newsletter_send" id="newsletter" class="fieldset">
     <fieldset>
 
         <legend>En-tête</legend>
         <input type="hidden" name="offset" value="'.$offset.'" />
-        <input type="hidden" name="errors_count" value="'.$errorsCount.'" />
-        <input type="hidden" name="sent_success" value="'.$sentSuccess.'" />
 
         <label for="from">De :</label>
-        <input type="text" id="from" name="from" value="'.$site->get("title").' &lt;'.$site->get("contact").'&gt;" class="long" readonly />
+        <input type="text" id="from" name="from" value="'.$_SITE["site_title"].' &lt;'.$_SITE["site_contact"].'&gt;" class="long" readonly />
         <br />
 
         <label for="to">&Agrave; :</label>
@@ -228,11 +206,11 @@ $content .= '
     <fieldset>
         <legend>Envoi</legend>
 
-        <input type="radio" id="sendAll-0" name="sendAll" value="0" '.($sendAll ? '' : ' checked').'>
-        <label for="sendAll-0" class="after">Envoyer un e-mail de test à '.$this->user->get('email').'</label>
+        <input type="radio" id="sendAll-0" name="sendAll" value="0"'.($sendAll ? '' : ' checked').'>
+        <label for="sendAll-0" class="after">Envoyer un e-mail de test à '.$_V->get('email').'</label>
         <br/>
 
-        <input type="radio" id="sendAll-1" name="sendAll" value="1" '.($sendAll ? ' checked' : '').'>
+        <input type="radio" id="sendAll-1" name="sendAll" value="1"'.($sendAll ? ' checked' : '').'>
         <label for="sendAll-1" class="after">Envoyer pour de bon à '.$emailsCount.' abonnés</label>
         <br/>
 
@@ -241,5 +219,3 @@ $content .= '
 </form>
 
 ';
-
-return new Response($content);

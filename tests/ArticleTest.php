@@ -4,8 +4,6 @@
 * @backupStaticAttributes disabled
 */
 
-use Biblys\Test\Factory;
-
 require_once "setUp.php";
 
 class ArticleTest extends PHPUnit\Framework\TestCase
@@ -734,42 +732,6 @@ class ArticleTest extends PHPUnit\Framework\TestCase
             $article->get('url'),
             "it should generate correct slug for several authors"
         );
-    }
-
-    public function testAddRayon()
-    {
-        // given
-        $am = new ArticleManager();
-        $article = Factory::createArticle();
-        $rayon = Factory::createRayon();
-        $lm = new LinkManager();
-
-        // when
-        $am->addRayon($article, $rayon);
-
-        // then
-        $link = $lm->exists([
-            "article_id" => $article->get("id"),
-            "rayon_id" => $rayon->get("id"),
-        ]);
-        $this->assertTrue($link);
-    }
-
-    public function testAddArticleAlreadyInRayon()
-    {
-        // then
-        $this->expectException("Exception");
-        $this->expectExceptionMessage("L'article « C'est mon rayon » est déjà dans le rayon « Mon rayon ».");
-
-        // given
-        $am = new ArticleManager();
-        $article = Factory::createArticle(["article_title" => "C'est mon rayon"]);
-        $rayon = Factory::createRayon(["rayon_name" => "Mon rayon"]);
-        $lm = new LinkManager();
-
-        // when
-        $am->addRayon($article, $rayon);
-        $am->addRayon($article, $rayon);
     }
 
 

@@ -1,53 +1,6 @@
 
 # Historique des modifications
 
-### 2.52.4 (21 mai 2021)
-
-Corrections
-
-- Le calcul des frais de port ne provoque plus d'erreurs serveur lorsqu'appelé
-  avec de mauvais paramètres
-- L'affichage d'une version de Biblys inexistante provoque une erreur 404 
-  plutôt qu'une erreur serveur
-- Les performances de la page « Historique des mises à jour » ont été améliorées
-- La réception d'une notification d'un remboursement PayPlug ne provoque plus
-  une erreur serveur
-
-### 2.52.3 (14 mai 2021)
-
-Corrections
-
-- L'utilisation d'un mauvais paramètre de tri dans une liste de
-  résultats de recherche ne renvoie plus une erreur serveur.
-- Le message d'erreur lors de l'ajout d'un article dans un rayon dans lequel
-  cet article est déjà s'affiche désormais correctement
-
-
-### 2.52.2 (16 avril 2021)
-
-Corrections
-
-- La présence d'une adresse e-mail invalide dans les abonnés ne bloque plus 
-  l'envoi de la newsletter
-- L'envoi d'une newsletter avec un nom de campagne fonctionne à nouveau
-- L'utilisation de l'ancienne page de recherche renvoie vers la nouvelle plutôt
-  que d'afficher une erreur
-- La création d'un client depuis la caisse fonctionne à nouveau
-
-### 2.52.1 (9 avril 2021)
-
-Corrections
-
-- L'erreur affichée lors de l'accès à un article via son ISBN en utilisant un ISBN invalid a été améliorée
-- L'affichage d'une erreur lorsqu'un éditeur est créé avec un nom déjà utilisé a été améliorée
-- L'affichage d'une erreur lors de l'export du stock vers Place des Libraires fonctionne à nouveau
-- L'ajout d'un exemplaire à une liste est à nouveau possible
-- La page d'ajout au stock s'affiche à nouveau correctement
-- L'ajout d'un livre au panier depuis la caisse fonctionne à nouveau
-- Les erreurs de validation lors la modification d'un cycle s'affichent correctement
-- L'erreur 404 s'affiche à nouveau correctement lorsqu'un visiteur accède à la page d'une série inexistante
-- L'export du stock vers Place des Libraires fonctionne à nouveau
-
 ## 2.52.0 (2 avril 2021)
 
 Améliorations

@@ -18,7 +18,6 @@
     $om = new OrderManager();
 
     $order_url = $request->query->get("url");
-    /** @var Order $order */
     $order = $om->get(["order_url" => $order_url]);
 
     if (!$order) {

@@ -589,7 +589,8 @@ function reloadAdminEvents() {
         {
           set_title: '' + $(this).text() + ''
         },
-        function(res) {
+        function(data) {
+          var res = $.parseJSON(data);
           if (res.error) _alert(res.error);
           else notify(res.success);
         }
@@ -629,7 +630,8 @@ function reloadAdminEvents() {
         {
           set_customer: ''
         },
-        function(res) {
+        function(data) {
+          var res = $.parseJSON(data);
           if (res.error) _alert(res.error);
           else {
             $('#customer')
@@ -654,7 +656,8 @@ function reloadAdminEvents() {
       {
         set_customer: '' + id + ''
       },
-      function(res) {
+      function(data) {
+        var res = $.parseJSON(data);
         if (res.error) _alert(res.error);
         else {
           $('#customer')
@@ -682,7 +685,8 @@ function reloadAdminEvents() {
         customer_phone: '' + $('#customer_phone').val() + '',
         customer_newsletter: '' + $('#new_customer_newsletter:checked').val() + ''
       },
-      function(res) {
+      function(data) {
+        var res = $.parseJSON(data);
         if (res.error) _alert(res.error);
         else {
           $('#createCustomer').dialog('close');
