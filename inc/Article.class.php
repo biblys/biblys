@@ -1360,8 +1360,8 @@ class ArticleManager extends EntityManager
 
         $article->set('article_keywords', $keywords)
             ->set('article_links', $links)
-            ->set('article_authors', truncate(implode(', ', $authors), 256))
-            ->set('article_authors_alphabetic', truncate(implode(', ', $authors_alpha), 256))
+            ->set('article_authors', implode(', ', $authors))
+            ->set('article_authors_alphabetic', implode(', ', $authors_alpha))
             ->set('article_keywords_generated', date('Y-m-d H:i:s'));
 
         return $article;
@@ -1450,10 +1450,6 @@ class ArticleManager extends EntityManager
     {
         if (!$article->has('url')) {
             throw new Exception("L'article doit avoir une url.");
-        }
-
-        if (strlen($article->get('authors')) > 256) {
-            throw new Exception("Le champ Auteurs ne peut pas dépasser 256 caractères.");
         }
 
         // If slug is already used

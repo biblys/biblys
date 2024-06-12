@@ -585,29 +585,6 @@ class ArticleTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that adding a too long string as article_authors does not validate
-     * 
-     * @expectedException Exception
-     * @expectedExceptionMessage Le champ Auteurs ne peut pas dépasser 256 caractères.
-     */
-    public function testValidateArticleAuthorsLength()
-    {
-        $am = new ArticleManager();
-        $article = new Article(['url' => 'article/url']);
-        $article->set(
-            'article_authors',
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam 
-            aliquet arcu at libero maximus, euismod vehicula justo suscipit. 
-            Praesent faucibus porta porta. Integer id congue lorem. Nulla 
-            convallis sagittis ultricies. Fusce molestie nibh quis tellus 
-            iaculis dapibus. Aenean vitae velit sed nulla."
-        );
-
-        $am->validate($article);
-    }
-
-
-    /**
      * Test deleting a copy
      * @depends testGet
      */

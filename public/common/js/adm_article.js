@@ -683,7 +683,7 @@ document.addEventListener('DOMContentLoaded', function () {
     element.style.opacity = '.5';
 
     var req = new XMLHttpRequest();
-    req.open('POST', '/admin/links/' + linkId + '/delete');
+    req.open('POST', '/links/' + linkId + '/delete');
 
     req.onload = function () {
 
