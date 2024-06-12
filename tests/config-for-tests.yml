@@ -19,5 +19,3 @@ cron:
 
 placedeslibraires:
   shop_id: xxx
-
-composer_home: ~/.composer

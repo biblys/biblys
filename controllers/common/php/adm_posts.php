@@ -23,8 +23,6 @@ if ($_V->isAdmin()) {
 elseif ($_V->isPublisher()) $rank = 'pub_';
 
 $req = NULL;
-/** @var Site $site */
-$params = ["site_id" => $site->get("id")];
 if (isset($_GET["category_id"])) {
     $req .= 'AND `category_id` = :category_id';
     $params["category_id"] = $_GET["category_id"];
@@ -48,7 +46,7 @@ $posts = EntityManager::prepareAndExecute(
     LEFT JOIN `publishers` ON `posts`.`publisher_id` = `publishers`.`publisher_id`
     WHERE `posts`.`site_id` = :site_id $req AND `post_deleted` IS NULL
     ORDER BY `post_date` DESC, `post_id` DESC",
-    $params
+    ["site_id" => $site->get('id')]
 );
 
 if(isset($_BIBLYS_TYS)) $post_url = 'post';

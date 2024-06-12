@@ -71,7 +71,7 @@ class LegacyController extends Controller
             $_ECHO = null;
             $response = require $_INCLUDE;
 
-            if (!$response instanceof Response && isset($_ECHO)) {
+            if (isset($_ECHO)) {
                 trigger_error("Using \$_ECHO in $_INCLUDE. Legacy controllers should return a Response.", E_USER_DEPRECATED);
                 return new Response($_ECHO);
             }

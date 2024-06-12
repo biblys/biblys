@@ -28,7 +28,7 @@ class SiteController extends Controller
         global $site;
 
         $this->auth('admin');
-        $request->attributes->set("page_title", "Options du site");
+        $this->setPageTitle('Options du site');
 
         if ($request->getMethod() == "POST") {
 

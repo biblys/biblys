@@ -1,7 +1,6 @@
 <?php
 
 use Biblys\Service\Config;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 $sm = new StockManager();
@@ -31,7 +30,7 @@ if ($returnedStockId) {
     $stock = $sm->getById($returnedStockId);
     $stock->setReturned();
     $sm->update($stock);
-    return new RedirectResponse('/pages/adm_stock?id=' . $_GET['return'] . '&returned=1');
+    redirect('/pages/adm_stock?id=' . $_GET['return'] . '&returned=1');
 }
 
 // Exemplaire perdu
@@ -44,7 +43,7 @@ if ($lostCopyId) {
         ->set('stock_selling_date', null);
     $sm->update($lostCopy);
     $session->getFlashBag()->add('success', 'L\'exemplaire n° ' . $lostCopyId . ' a été marqué comme perdu.');
-    return new RedirectResponse('/pages/adm_stock?id=' . $lostCopyId);
+    redirect('/pages/adm_stock?id=' . $lostCopyId);
 }
 
 // Copies sold in shop
@@ -88,7 +87,7 @@ if (isset($_GET['sold'])) {
                 trigger_error($e->getMessage());
             }
 
-            return new RedirectResponse('/pages/adm_stock?id=' . $stock->get('id') . '&solded=1');
+            redirect('/pages/adm_stock?id=' . $stock->get('id') . '&solded=1');
         }
     } else {
         trigger_error('Exemplaire introuvable');
@@ -310,7 +309,7 @@ if ($request->getMethod() === 'POST') {
         }
     }
 
-    return new RedirectResponse('/pages/adm_stock?id=' . $_POST['stock_id']);
+    redirect('/pages/adm_stock?id=' . $_POST['stock_id']);
 }
 
 $photo_field = null;
@@ -408,7 +407,7 @@ if (!empty($_GET['id'])) {
     $copyToDelete = $sm->getById($delId);
     $sm->delete($copyToDelete);
     $session->getFlashBag()->add('success', 'L\'exemplaire ' . $delId . ' a bien été supprimé.');
-    return new RedirectResponse('/pages/adm_stock');
+    redirect('/pages/adm_stock');
 }
 
 $stock = new Stock([]);

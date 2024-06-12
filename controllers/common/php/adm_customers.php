@@ -13,8 +13,7 @@ for ($y = date('Y'); $y >= 2010; $y--) {
     $years .= '<option value="?year='.$y.'" '.$sel.'>'.$y.'</option>';
 }
 
-/** @var Site $site */
-$params = ["site_id" => $site->get("id")];
+$params = array();
 $query = NULL;
 if (!empty($_GET['year'])) {
     $query = " AND `stock_selling_date` LIKE :year ";
@@ -27,7 +26,7 @@ if (!empty($_GET['year'])) {
 }
 
 /** @var Site $site */
-$query = '
+$customers = EntityManager::prepareAndExecute('
     SELECT
            `customers`.`customer_id`,
            `customer_last_name`,
@@ -40,8 +39,9 @@ $query = '
     WHERE `customers`.`site_id` = :site_id '.$query.'
     GROUP BY `customers`.`customer_id`
     ORDER BY `CA` DESC
-';
-$customers = EntityManager::prepareAndExecute($query, $params);
+',
+    ["site_id" => $site->get("id")]
+);
 
 
 $content = '

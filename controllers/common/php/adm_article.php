@@ -1,11 +1,8 @@
 <?php
 
-use Biblys\Exception\InvalidEntityException;
-use Biblys\Isbn\IsbnParsingException;
 use Symfony\Component\HttpFoundation\Response;
 use Biblys\Service\Browser;
 use Biblys\Isbn\Isbn;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 $am = new ArticleManager();
 $sm = new SiteManager();
@@ -14,8 +11,6 @@ $cm = new CollectionManager();
 
 $am->setIgnoreSiteFilters(true);
 
-$content = "";
-
 // Check browser version
 $browser = new Browser();
 if (!$browser->isUpToDate()) {
@@ -23,6 +18,8 @@ if (!$browser->isUpToDate()) {
 }
 
 $_JS_CALLS[] = '/common/js/adm_article.js';
+
+$content = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $article = $am->getById($_POST['article_id']);
@@ -167,69 +164,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $article->set('article_editing_user', 0);
 
     // Persist & refresh article
-    try {
-        $am->update($article);
-        $article = $am->getById($article->get('id'));
+    $am->update($article);
+    $article = $am->getById($article->get('id'));
 
-        // Update keywords & links
-        $article = $am->refreshMetadata($article);
-        $am->update($article);
+    // Update keywords & links
+    $article = $am->refreshMetadata($article);
+    $am->update($article);
 
-        // Mise a jour des pages contributeurs concernes
-        $peopleToUpdate = $_SQL->prepare('SELECT `people_id` FROM `people` JOIN `roles` USING(`people_id`) WHERE `article_id` = :article_id');
-        $peopleToUpdate->execute(['article_id' => $request->request->get('article_id')]);
-        while ($up = $peopleToUpdate->fetch(PDO::FETCH_ASSOC)) {
-            $update = $_SQL->prepare('UPDATE `people` SET `people_update` = NOW() WHERE `people_id` = :people_id LIMIT 1');
-            $update->execute(['people_id' => $up['people_id']]);
-        }
+    // Mise a jour des pages contributeurs concernes
+    $peopleToUpdate = $_SQL->prepare('SELECT `people_id` FROM `people` JOIN `roles` USING(`people_id`) WHERE `article_id` = :article_id');
+    $peopleToUpdate->execute(['article_id' => $request->request->get('article_id')]);
+    while ($up = $peopleToUpdate->fetch(PDO::FETCH_ASSOC)) {
+        $update = $_SQL->prepare('UPDATE `people` SET `people_update` = NOW() WHERE `people_id` = :people_id LIMIT 1');
+        $update->execute(['people_id' => $up['people_id']]);
+    }
 
-        // Virtual stock: update available copies if necessary
-        if ($site->getOpt('virtual_stock')) {
-            $stm = new StockManager();
-            $stock = $stm->getAll(['article_id' => $article->get('id')]);
-            $params['stock_updated'] = 0;
-            foreach ($stock as $copy) {
-                if ($copy->isAvailable()) {
-                    // Update copies price
-                    if ($copy->get('selling_price') != $article->get('price')) {
-                        $copy->set('stock_selling_price', $article->get('price'));
-                        ++$params['stock_updated'];
-                    }
-                    // Return copies if article is sold out
-                    if ($article->isSoldOut()) {
-                        $copy->setReturned();
-                    }
-                    $stm->update($copy);
+    // Virtual stock: update available copies if necessary
+    if ($site->getOpt('virtual_stock')) {
+        $stm = new StockManager();
+        $stock = $stm->getAll(['article_id' => $article->get('id')]);
+        $params['stock_updated'] = 0;
+        foreach ($stock as $copy) {
+            if ($copy->isAvailable()) {
+                // Update copies price
+                if ($copy->get('selling_price') != $article->get('price')) {
+                    $copy->set('stock_selling_price', $article->get('price'));
+                    ++$params['stock_updated'];
                 }
+                // Return copies if article is sold out
+                if ($article->isSoldOut()) {
+                    $copy->setReturned();
+                }
+                $stm->update($copy);
             }
         }
+    }
 
-        // Redirection
-        if (isset($redirect_to_stock)) {
-            redirect('/pages/adm_stock?add=' . $_POST['article_id'] . '#add');
-        } elseif (isset($redirect_to_new)) {
-            redirect('/pages/adm_article');
-        } else {
-            $articleUrl = $urlgenerator->generate('article_show', [
-                'slug' => $article->get('url'),
-            ]);
-            redirect($articleUrl);
-        }
-    } catch (IsbnParsingException $exception) {
-        throw new BadRequestHttpException(
-            sprintf(
-                "Le code EAN %s est invalide. Le validateur a renvoyé l'erreur : \"%s\".",
-                $request->request->get("article_ean"),
-                $exception->getMessage()
-            )
-        );
-    } catch (InvalidEntityException $exception) {
-        throw new BadRequestHttpException(
-            sprintf(
-                "L'enregistrement de l'article a échoué. Le validateur a renvoyé l'erreur : \"%s\".",
-                $exception->getMessage()
-            )
-        );
+    // Redirection
+    if (isset($redirect_to_stock)) {
+        redirect('/pages/adm_stock?add='.$_POST['article_id'].'#add');
+    } elseif (isset($redirect_to_new)) {
+        redirect('/pages/adm_article');
+    } else {
+        $articleUrl = $urlgenerator->generate('article_show', [
+            'slug' => $article->get('url'),
+        ]);
+        redirect($articleUrl);
     }
 }
 

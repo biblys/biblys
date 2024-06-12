@@ -6,15 +6,8 @@
 
 use Biblys\Service\Pagination;
 
-require_once __DIR__ . "/../../setUp.php";
-
 class PaginationTest extends PHPUnit\Framework\TestCase
 {
-
-    /**
-     * @var Pagination
-     */
-    private $pagination;
 
     public function setUp(): void
     {
@@ -24,16 +17,6 @@ class PaginationTest extends PHPUnit\Framework\TestCase
     public function testCreate()
     {
         $this->assertInstanceOf('Biblys\Service\Pagination', $this->pagination);
-    }
-
-    public function testCreateWithInvalidPageNumber()
-    {
-        // then
-        $this->expectException("InvalidArgumentException");
-        $this->expectExceptionMessage("Page number cannot be less than 0");
-
-        // when
-        new Pagination(-1, 25, 10);
     }
 
     public function testGetCurrent()

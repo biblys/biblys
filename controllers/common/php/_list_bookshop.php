@@ -119,16 +119,16 @@ if (!empty($_GET["q"])) {
         }
     }
 
-    foreach ($sql as $offset) {
+    foreach ($sql as $s) {
         if (isset($_REQ)) {
             $_REQ .= ' AND ';
         }
-        $_REQ .= $offset;
+        $_REQ .= $s;
     }
 }
 
-if (!empty($_REQ)) {
-    $_REQ .= " AND ";
+if (empty($_REQ)) {
+    $_REQ = "article_id = 0";
 }
 
 // Tri
@@ -165,9 +165,11 @@ if ($articles_per_page) {
     $npp = $articles_per_page;
 }
 
-$offset = (int) $request->query->get("s", 0);
-$_REQ_LIMIT = ' LIMIT '.$npp.' OFFSET '.$offset;
-$nextPageNum = $offset + $npp;
+if (empty($_GET['s'])) {
+    $_GET['s'] = 0;
+}
+$_REQ_LIMIT = ' LIMIT '.$npp.' OFFSET '.$_GET['s'];
+$nextPageNum = $_GET['s'] + $npp;
 
 $active_stock_query = null;
 $active_stock = $site->getOpt("active_stock");
@@ -185,13 +187,12 @@ $sql_query = "
         `stock_return_date` IS NULL AND 
         `stock_lost_date` IS NULL AND 
         `stock_deleted` IS NULL".$active_stock_query."
-    WHERE $_REQ `type_id` != 2 AND `article_deleted` IS NULL
+    WHERE $_REQ AND `type_id` != 2 AND `article_deleted` IS NULL
     GROUP BY `articles`.`article_id`";
 
 // Compter le nombre de résultats
-$numQ = EntityManager::prepareAndExecute("SELECT `articles`.`article_id` ".$sql_query, [
-    "site_id" => $site->get("id"),
-]);
+$numQ = $_SQL->prepare("SELECT `articles`.`article_id` ".$sql_query) or error($_SQL->errorInfo());
+$numQ->execute(["site_id" => $site->get("id")]);
 $num = count($numQ->fetchAll());
 
 // Requête de résultat
@@ -230,7 +231,7 @@ $sql = EntityManager::prepareAndExecute("
     ["site_id" => $site->get("id")]
 );
 
-$ix = $offset;$covers = [];$table = null;
+$ix = $_GET['s']; $covers = array(); $table = null;
 while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     $x['new'] = 0;
     $x['used'] = 0;
@@ -416,7 +417,7 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
     $sel[$listOrderBy.$listSortOrder] = ' data-selected="true"';
     $sel[$sel_etat] = ' data-selected="true"';
 
-    $listContent = $covers_lane.'
+    $_ECHO .= $covers_lane.'
 
         <div id="listOptions">
             <span>
@@ -485,6 +486,3 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
         <meta property="og:site_name" content="'.$_SITE["site_name"].'"/>
     '.$_og_image;
 }
-
-$_ECHO .= $listContent;
-return $listContent;

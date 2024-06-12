@@ -6,7 +6,6 @@ use Framework\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
 use \Exception;
@@ -29,13 +28,10 @@ class PostController extends Controller
 
         $pm = $this->entityManager("Post");
 
-        $pageNumber = (int) $request->query->get("p", 0);
-        if ($pageNumber < 0) {
-            throw new BadRequestHttpException("Page number must be a positive integer");
-        }
-
+        // Pagination
+        $page = (int) $request->query->get('p', 0);
         $totalPostCount = $pm->count($queryParams);
-        $pagination = new \Biblys\Service\Pagination($pageNumber, $totalPostCount);
+        $pagination = new \Biblys\Service\Pagination($page, $totalPostCount);
 
         $posts = $pm->getAll($queryParams, [
             "order" => "post_date",
@@ -44,7 +40,7 @@ class PostController extends Controller
             'offset' => $pagination->getOffset(),
         ]);
 
-        $request->attributes->set("page_title", "Actualités");
+        $this->setPageTitle("Actualités");
 
         return $this->render('AppBundle:Post:index.html.twig', [
             'posts' => $posts,

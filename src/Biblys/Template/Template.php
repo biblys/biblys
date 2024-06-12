@@ -3,8 +3,7 @@
 namespace Biblys\Template;
 
 use Exception;
-use Framework\Composer\ScriptRunner;
-use Site;
+use Framework\ScriptRunner;
 
 class Template
 {
@@ -125,8 +124,10 @@ class Template
      * Update the custom template file content.
      * @throws Exception
      */
-    public function updateContent(Site $site, $content): void
+    public function updateContent($content): void
     {
+        global $site;
+
         if (!$this->customFileExists()) {
             $this->createCustomFile();
         }
@@ -180,7 +181,7 @@ class Template
     public function getCustomDirPath(): string
     {
         if ($this->getSlug() === 'css') {
-            return __DIR__.'/../../../app/public/theme/';
+            return BIBLYS_PATH.'/app/public/theme/';
         }
         if ($this->getSlug() === 'layout') {
             return BIBLYS_PATH.'/app/Resources/views/';

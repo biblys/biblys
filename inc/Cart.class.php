@@ -1,7 +1,5 @@
 <?php
 
-use Entity\Exception\CartException;
-
 class Cart extends Entity
 {
     protected $prefix = 'cart';
@@ -125,6 +123,33 @@ class Cart extends Entity
     public static function getOneLineEmpty()
     {
         return self::buildOneLine();
+    }
+
+    public function contains($type, $id)
+    {
+        if ($type === "stock") {
+            trigger_deprecation(
+                "biblys/biblys",
+                "2.53.0",
+                "Use Cart->containsStock instead."
+            );
+            $sm = new StockManager();
+            $stock = $sm->getById($id);
+            return $this->containsStock($stock);
+        }
+
+        if ($type === "article") {
+            trigger_deprecation(
+                "biblys/biblys",
+                "2.53.0",
+                "Use Cart->containsArticle instead."
+            );
+            $am = new ArticleManager();
+            $article = $am->getById($id);
+            return $this->containsArticle($article);
+        }
+
+        throw new InvalidArgumentException("Unknown type $type");
     }
 
     /**
@@ -405,10 +430,10 @@ class CartManager extends EntityManager
      * Add an article to cart (create copy if needed)
      * @param Cart $cart
      * @param Article $article
-     * @return bool
+     * @return boolean
      * @throws Exception
      */
-    public function addArticle(Cart $cart, $article, CFReward $reward = null): bool
+    public function addArticle(Cart $cart, $article, CFReward $reward = null)
     {
 
         $sm = new StockManager();
@@ -417,7 +442,7 @@ class CartManager extends EntityManager
         if (is_int($article)) {
             $article = $am->getById($article);
             if (!$article) {
-                throw new CartException('Article ' . $article_id . ' inexistant.');
+                throw new Exception('Article ' . $article_id . ' inexistant.');
             }
         }
         $a = $article;
@@ -429,7 +454,7 @@ class CartManager extends EntityManager
         }
 
         if ($article->isDownloadable() && !$article->isPurchasable()) {
-            throw new CartException('Cet article est indisponible.');
+            throw new Exception('Cet article est indisponible.');
         }
 
         global $_V;
@@ -475,16 +500,16 @@ class CartManager extends EntityManager
         if ($this->site->getOpt('virtual_stock') || $reward && !$reward->isLimited()) {
 
             if (!$article->isPublished() && !$article->isPreorderable()) {
-                throw new CartException('L\'article <a href="/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'est pas encore disponible.');
+                throw new Exception('L\'article <a href="/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'est pas encore disponible.');
             }
 
             if ($article->isSoldOut()) {
-                throw new CartException('L\'article <a href="/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'est plus disponible.');
+                throw new Exception('L\'article <a href="/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'est plus disponible.');
             }
 
             if ($article->isPrivatelyPrinted()) {
                 $title = $article->get("title");
-                throw new CartException(
+                throw new Exception(
                     "L'article $title n'a pas pu être ajouté au panier car il est hors commerce."
                 );
             }
@@ -529,9 +554,9 @@ class CartManager extends EntityManager
         }
 
         $articleTitle = $article->get('title');
-        throw new CartException(
-            "L'article $articleTitle n'a pas pu être ajouté au panier car il n'y a aucun exemplaire disponible."
-        );
+        throw new Exception("Aucun exemplaire disponible pour $articleTitle.");
+
+        return false;
     }
 
     public function addCFReward(Cart $cart, CFReward $reward)

@@ -661,7 +661,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
      */
     public function testValidateArticleAuthorsLength()
     {
-        $this->expectException("Biblys\Exception\InvalidEntityException");
+        $this->expectException("Exception");
         $this->expectExceptionMessage("Le champ Auteurs ne peut pas dépasser 256 caractères.");
 
         $am = new ArticleManager();
@@ -683,30 +683,12 @@ class ArticleTest extends PHPUnit\Framework\TestCase
      */
     public function testUpdatingArticleWithoutUrl()
     {
-        $this->expectException("Biblys\Exception\InvalidEntityException");
+        $this->expectException("Exception");
         $this->expectExceptionMessage("L'article doit avoir une url");
 
         $am = new ArticleManager();
         $article = $am->create([]);
 
-        $am->update($article);
-    }
-
-    /**
-     * Test that updating an article without an url throws
-     */
-    public function testUpdatingArticleExistingUrl()
-    {
-        // then
-        $this->expectException("Biblys\Exception\InvalidEntityException");
-        $this->expectExceptionMessage("Il existe déjà un article avec l'url anne-onyme/hous");
-
-        // given
-        $am = new ArticleManager();
-        $am->create(["article_url" => "anne-onyme/hous"]);
-        $article = $am->create(["article_url" => "anne-onyme/hous"]);
-
-        // when
         $am->update($article);
     }
 

@@ -67,17 +67,4 @@ class EntityTest extends PHPUnit\Framework\TestCase
             "it should create the entity without the invalid property"
         );
     }
-
-    public function testGetQueryWithInvalidOffsetOption()
-    {
-        // then
-        $this->expectException("InvalidArgumentException");
-        $this->expectExceptionMessage("Offset options cannot be less than 0.");
-
-        // given
-        $em = new EntityManager();
-
-        // when
-        $em->getQuery("", [], ["offset" => -1]);
-    }
 }

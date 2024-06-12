@@ -1,16 +1,12 @@
 <?php
 
 use Framework\Exception\AuthException;
-use Symfony\Component\HttpFoundation\Response;
 
 $om = new OrderManager();
 $sm = new StockManager();
 
 $colspan = 2;
 
-$content = "";
-
-/** @var Order $order */
 if ($order = $om->get(array('order_url' => $_GET['url']))) {
     $_PAGE_TITLE = 'Facture n&deg; '.$order->get('id');
 
@@ -20,14 +16,11 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
         $customer = $order->get('customer');
 
         // Check access right
-        /** @var Visitor $_V */
         if ($customer->get('user_id') != $_V->get('id') && !$_V->isAdmin()) {
             throw new AuthException('Accès non autorisé.');
         }
 
         // Calculate customer reference
-        /** @var PDO $_SQL */
-        /** @var Site $_SITE */
         $stock = $_SQL->query("SELECT COUNT(`order_id`) AS `orders`, SUM(`order_amount`) AS `revenue` FROM `orders` WHERE `customer_id` = '".$customer->get('id')."' AND `site_id` = ".$_SITE["site_id"]." AND `order_payment_date` IS NOT NULL AND `order_cancel_date` IS NULL GROUP BY `user_id`");
         if ($s = $stock->fetch(PDO::FETCH_ASSOC)) {
             $customer_ref = '<p>Ref. client '.$customer->get('id').'-'.$s["orders"].'-'.round($s["revenue"]/100).'</p>';
@@ -42,7 +35,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
     }
 
     // Get order content
-    $orderContent = array();
+    $content = array();
     $total_tva = 0;
     $total_ht = 0;
     $total_weight = 0;
@@ -65,7 +58,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
         }
 
         // Build content table
-        $orderContent[] = '
+        $content[] = '
             <tr>
                 <td class="center">'.$stock->get('id').'</td>
                 <td>
@@ -108,7 +101,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
         $payment = '<p class="center">R&egrave;glement effectu&eacute; le '._date($order->get('payment_date'), 'd/m/Y').' par '.ucwords($order->get('payment_mode')).'.</p><br>';
     }
 
-    $content .= '
+    $_ECHO .= '
 
         <div class="pull-right">
             '.$customer_ref.'
@@ -117,7 +110,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
                 '.$order->get('address1').'<br>
                 '.($order->has('address2') ? $order->get('address2').'<br>' : null).'
                 '.$order->get('postalcode').' '.$order->get('city').'<br>
-                '.($order->getCountryName()).'
+                '.($order->has('country') ? $order->get('country')->get('name') : null).'
             </p>
             <p>'.$order->get('order_email').'</p>
         </div>
@@ -137,7 +130,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
                 </tr>
             </thead>
             <tbody>
-            '.implode($orderContent).'
+            '.implode($content).'
             </tbody>
             </tbody>
             <tfoot>
@@ -147,14 +140,14 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
                 </tr>
             ';
             if ($total_weight > 0) {
-                $content .= '
+                $_ECHO .= '
                     <tr>
                         <th colspan="'.$colspan.'" class="right">Poids :</th>
                         <th class="right">'.round($total_weight / 1000, 2).'&nbsp;kg</th>
                     </tr>
                 ';
             }
-            $content .= '
+            $_ECHO .= '
                 <tr>
                     <th colspan="'.$colspan.'" class="right">Frais de port ('.$order->get('shipping_mode').') :</th>
                     <th class="right">'.currency($order->get('shipping') / 100).'</th>
@@ -176,15 +169,12 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
 
     ';
 
-    /** @var Site $site */
     $notice = $site->getOpt('invoice_notice');
     if ($notice) {
-        $content .= '<p class="text-center">'.str_replace('\n', '<br/>', $notice).'</p>';
+        $_ECHO .= '<p class="text-center">'.str_replace('\n', '<br/>', $notice).'</p>';
     }
 
 
 } else {
-    $content .= '<p class="error">Facture inexistante</p>';
+    $_ECHO .= '<p class="error">Facture inexistante</p>';
 }
-
-return new Response($content);

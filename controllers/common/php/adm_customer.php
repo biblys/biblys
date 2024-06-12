@@ -84,6 +84,8 @@ $content = '
     <form method="post" class="fieldset">
         <fieldset>
 
+            <input type="hidden" name="action" value="update">
+
             <p>
                 <label for="customer_type">Type :</label>
                 <select name="customer_type" id="customer_type">

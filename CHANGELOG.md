@@ -1,65 +1,6 @@
 
 # Historique des modifications
 
-### 2.53.8 (27 août 2021)
-
-Corrections
-
-- La mise à jour du fichier CSS via l'éditeur de thème fonctionne à nouveau
-- Le filtrage des billets par catégorie fonctionne à nouveau
-
-### 2.53.7 (30 juillet 2021)
-
-Corrections
-
-- L'erreur affichée lors de l'ajout au panier d'un livre pour lequel aucun
-  exemplaire n'est disponible a été améliorée.
-
-### 2.53.6 (22 juillet 2021)
-
-Corrections
-
-- L'appel d'une page paginée avec un numéro de page ne provoque plus d'erreur
-  serveur
-
-### 2.53.5 (10 juillet 2021)
-
-Corrections
-
-- L'appel d'une page paginée avec un numéro de page inférieur à zéro ne
-  provoque plus une erreur serveur
-
-### 2.53.4 (2 juillet 2021)
-
-Corrections
-
-- L'association d'un article à un éditeur filtré ou à une collection appartenant
-  à un éditeur filtré est à nouveau possible mais affiche une erreur claire
-- La recherche d'un client par nom ne provoque plus d'erreur
-
-### 2.53.3 (25 juin 2021)
-
-Corrections
-
-- L'ajout d'un exemplaire dans une liste n'envoie plus plusieurs requêtes
-- Le message affiché lors d'une demande de remboursement ne mentionne plus la
-  gratuité des frais de port
-- Il est à nouveau possible de retirer un exemplaire d'une liste immédiatement
-  après l'y avoir ajouté
-- Les éditeurs filtrés n'apparaissent plus dans les propositions lors de
-  l'association d'une collection à une fiche article
-
-### 2.53.2 (18 juin 2021)
-
-Corrections
-
-- Les utilisateurs avec des droits sur un éditeur ne peuvent plus gérer cet
-  éditeur sur un site où l'éditeur n'est pas autorisé
-- Le message d'erreur affiché lorsqu'un nouvel article est soumis avec un code
-  ISBN invalide a été amélioré
-- Le message d'erreur affiché lorsqu'un nouvel article est soumis avec une url
-  déjà existante a été amélioré
-
 ### 2.53.1 (11 juin 2021)
 
 Corrections

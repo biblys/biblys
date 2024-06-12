@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Service\Pagination;
 use Framework\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +28,7 @@ class PostCategoryController extends Controller
             throw new NotFoundException("Category $slug not found.");
         }
 
-        $request->attributes->set("page_title", $category->get("name"));
+        $this->setPageTitle($category->get("name"));
 
         $queryParams = [
             "category_id" => $category->get('id'),
@@ -42,22 +41,27 @@ class PostCategoryController extends Controller
         // Pagination
         $page = (int) $request->query->get('p', 0);
         $totalPostCount = $pm->count($queryParams);
-        $pagination = new Pagination($page, $totalPostCount, 10);
+        $postPerPage = 10;
+        $totalPages = ceil($totalPostCount / $postPerPage);
+        $offset = $page * $postPerPage;
+        $currentPage = $page + 1;
+        $prevPage = $page > 0 ? $page - 1 : false;
+        $nextPage = $page < $totalPages-1 ? $page + 1 : false;
 
         $posts = $pm->getAll($queryParams, [
             "order" => "post_date",
             "sort" => "desc",
             "limit" => 10,
-            "offset" => $pagination->getOffset(),
+            "offset" => $offset
         ]);
 
         return $this->render('AppBundle:PostCategory:show.html.twig', [
             'category' => $category,
             'posts' => $posts,
-            'current_page' => $pagination->getCurrent(),
-            'prev_page' => $pagination->getPrevious(),
-            'next_page' => $pagination->getNext(),
-            'total_pages' => $pagination->getTotal()
+            'current_page' => $currentPage,
+            'prev_page' => $prevPage,
+            'next_page' => $nextPage,
+            'total_pages' => $totalPages
         ]);
     }
 

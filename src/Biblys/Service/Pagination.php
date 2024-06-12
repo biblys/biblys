@@ -2,8 +2,6 @@
 
 namespace Biblys\Service;
 
-use InvalidArgumentException;
-
 class Pagination
 {
     private $_page,
@@ -16,10 +14,6 @@ class Pagination
     public function __construct($page, $articleCount, $limit = null)
     {
         global $site;
-
-        if ($page < 0) {
-            throw new InvalidArgumentException("Page number cannot be less than 0");
-        }
 
         $this->_page = $page;
         $this->_currentPage = $page + 1;

@@ -108,8 +108,11 @@ function biblys_error($level, $message, $file, $line, $trace = null, Throwable $
         }
         // XHR mode
     } elseif ($request->isXmlHttpRequest() || 'application/json' == $request->headers->get('Accept')) {
-        // TODO: find some way to add deprecated notices to JSON response
-        return;
+        $response = new JsonResponse();
+        $response->setStatusCode(500);
+        $response->setData(['error' => $message, 'file' => $file, 'line' => $line]);
+        $response->send();
+        die();
 
         // Web mode
     } else {

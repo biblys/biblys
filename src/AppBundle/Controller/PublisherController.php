@@ -10,7 +10,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
 class PublisherController extends Controller
@@ -22,18 +21,15 @@ class PublisherController extends Controller
     {
         global $site;
         
-        $request->attributes->set("page_title", "Éditeurs");
+        $this->setPageTitle('Éditeurs');
 
         $pm = new \PublisherManager();
 
-        $pageNumber = (int) $request->query->get("p", 0);
-        if ($pageNumber < 0) {
-            throw new BadRequestHttpException("Page number must be a positive integer");
-        }
-
+        // Pagination
+        $page = (int) $request->query->get('p', 0);
         $totalCount = $pm->count([]);
         $limit = $site->getOpt('publisher_per_page') ? $site->getOpt('publisher_per_page') : 100;
-        $pagination = new \Biblys\Service\Pagination($pageNumber, $totalCount, $limit);
+        $pagination = new \Biblys\Service\Pagination($page, $totalCount, $limit);
 
         $publishers = $pm->getAll([], [
             'order' => 'publisher_name_alphabetic',

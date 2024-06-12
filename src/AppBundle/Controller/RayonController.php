@@ -6,18 +6,17 @@ use Biblys\Isbn\Isbn as Isbn;
 use Framework\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
 class RayonController extends Controller
 {
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         $this->auth('admin');
 
         $rm = $this->entityManager('Rayon');
 
-        $request->attributes->set("page_title", "Rayons");
+        $this->setPageTitle('Rayons');
 
         $rayons = $rm->getAll([], ['order' => 'rayon_name']);
 
@@ -38,16 +37,12 @@ class RayonController extends Controller
             throw new NotFoundException("Rayon $url not found.");
         }
 
-        $request->attributes->set("page_title", $rayon->get('name'));
-
-        $pageNumber = (int) $request->query->get("p", 0);
-        if ($pageNumber < 0) {
-            throw new BadRequestHttpException("Page number must be a positive integer");
-        }
+        $this->setPageTitle($rayon->get('name'));
 
         // Pagination
+        $page = (int) $request->query->get('p', 0);
         $totalCount = $am->countAllFromRayon($rayon);
-        $pagination = new \Biblys\Service\Pagination($pageNumber, $totalCount);
+        $pagination = new \Biblys\Service\Pagination($page, $totalCount);
 
         $articles = $am->getAllFromRayon($rayon, [
             'order' => 'article_pubdate',
@@ -76,7 +71,7 @@ class RayonController extends Controller
             throw new NotFoundException("Rayon $id not found.");
         }
 
-        $request->attributes->set("page_title", 'Modifier le rayon '.$rayon->get('name'));
+        $this->setPageTitle('Modifier le rayon '.$rayon->get('name'));
 
         if ($request->getMethod() == 'POST') {
             $rayon->set('rayon_name', $request->request->get('name'))
@@ -104,7 +99,7 @@ class RayonController extends Controller
 
         $rayon = new \Rayon([]);
 
-        $request->attributes->set("page_title", 'Créer un nouveau rayon ');
+        $this->setPageTitle('Créer un nouveau rayon ');
 
         $error = null;
         if ($request->getMethod() == 'POST') {
@@ -216,14 +211,14 @@ class RayonController extends Controller
             ]));
         }
 
-        $request->attributes->set("page_title", 'Ajouter au rayon '.$rayon->get('name'));
+        $this->setPageTitle('Ajouter au rayon '.$rayon->get('name'));
 
         $types = \Biblys\Article\Type::getAll();
 
         return $this->render('AppBundle:Rayon:addArticle.html.twig', [
             'rayon' => $rayon,
-            'added' => $request->query->get('added', null),
-            'not_added' => $request->query->get('not_added', null),
+            'added' => $request->query->get('added', []),
+            'not_added' => $request->query->get('not_added', []),
             'types' => $types,
         ]);
     }
