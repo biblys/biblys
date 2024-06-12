@@ -5,7 +5,6 @@ namespace Biblys\Test;
 use Article;
 use ArticleManager;
 use Biblys\Service\Config;
-use Biblys\Service\CurrentSite;
 use CFReward;
 use CFRewardManager;
 use Collection;
@@ -253,7 +252,6 @@ class Factory
     public static function createShippingFee(): ShippingFee
     {
         $shippingFee = new ShippingFee();
-        $shippingFee->setSiteId(1);
         $shippingFee->save();
 
         return $shippingFee;

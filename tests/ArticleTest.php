@@ -749,22 +749,6 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws Exception
-     */
-    public function testUpdatingArticleWithoutUrlAndBeingEdited()
-    {
-        // given
-        $am = new ArticleManager();
-        $article = $am->create(["publisher_id" => 1, "article_editing_user" => 1]);
-
-        // when
-        $am->update($article);
-
-        // then
-        $this->expectNotToPerformAssertions();
-    }
-
-    /**
      * Test that updating an article without an url throws
      */
     public function testUpdatingArticleExistingUrl()
@@ -871,13 +855,10 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($link);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testAddArticleAlreadyInRayon()
     {
         // then
-        $this->expectException("Biblys\Exception\ArticleAlreadyInRayonException");
+        $this->expectException("Exception");
         $this->expectExceptionMessage("L'article « C'est mon rayon » est déjà dans le rayon « Mon rayon ».");
 
         // given
@@ -938,24 +919,5 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $articleExists = $am->getById($article->get('id'));
 
         $this->assertFalse($articleExists);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testIsBeingCreated()
-    {
-        // given
-        $article = Factory::createArticle();
-        $article->set("article_editing_user", 1);
-
-        // when
-        $isBeingCreated = $article->isBeingCreated();
-
-        // then
-        $this->assertTrue(
-            $isBeingCreated,
-            "should be true when there is an editing user"
-        );
     }
 }
