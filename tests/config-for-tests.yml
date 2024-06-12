@@ -9,8 +9,6 @@ site: 1
 
 users_table_name: users
 
-https: true
-
 axys:
   host: axys.local
 

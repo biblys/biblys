@@ -2,10 +2,8 @@
 
 namespace Legacy;
 
-use AppBundle\Controller\LegacyController;
 use ArticleManager;
 use CartManager;
-use OrderManager;
 use PHPUnit\Framework\TestCase;
 use ShippingManager;
 use Site;
@@ -13,22 +11,24 @@ use StockManager;
 use Symfony\Component\HttpFoundation\Request;
 use Visitor;
 
-require_once __DIR__ . "/../../../setUp.php";
+require_once __DIR__."/../setUp.php";
 
 
 class OrderDeliveryTest extends TestCase
 {
     public function testValidatingAnOrder()
     {
-        global $_SQL, $_V;
+        global $_SQL;
 
         // given
-        $cart = $_V->getCart("create");
+        $_COOKIE['visitor_uid'] = "abcd1234";
+        $_V = new Visitor(["email" => "customer@biblys.fr"]);
+        $cm = new CartManager();
+        $cart = $cm->create(["cart_uid" => "abcd1234"]);
         $am  = new ArticleManager();
         $article = $am->create(["type_id" => 1]);
         $sm = new StockManager();
         $sm->create(["article_id" => $article->get("id")]);
-        $cm = new CartManager();
         $cm->addArticle($cart, $article);
         $shm = new ShippingManager();
         $shipping = $shm->create([]);
@@ -39,7 +39,6 @@ class OrderDeliveryTest extends TestCase
         $request = new Request();
         $request->setMethod("POST");
         $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
-        $request->query->set("page", "order_delivery");
         $request->query->set("country_id", 67);
         $request->query->set("shipping_id", $shipping->get("id"));
         $request->request->set("order_firstname", "Barnabé");
@@ -61,12 +60,9 @@ class OrderDeliveryTest extends TestCase
         $_POST["cgv_checkbox"] = 1;
 
         // when
-        $legacyController = new LegacyController();
-        $response = $legacyController->defaultAction($request);
+        $response = require_once __DIR__."/../../controllers/common/php/order_delivery.php";
 
         // then
-        $om = new OrderManager();
-        $order = $om->get(["order_email" => "customer@biblys.fr"]);
         $this->assertInstanceOf(
             "Symfony\Component\HttpFoundation\RedirectResponse",
             $response,

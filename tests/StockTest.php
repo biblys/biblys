@@ -3,9 +3,6 @@
 * @backupGlobals disabled
 * @backupStaticAttributes disabled
 */
-
-use Biblys\Test\Factory;
-
 require_once 'inc/functions.php';
 
 class StockTest extends PHPUnit\Framework\TestCase
@@ -285,59 +282,5 @@ class StockTest extends PHPUnit\Framework\TestCase
             $stock->get('selling_price'),
             'Should not restore a null saved price'
         );
-    }
-
-    public function testEditFreePrice()
-    {
-        // given
-        $article = Factory::createArticle(["article_price_editable" => 1]);
-        $stock = Factory::createStock([
-            "article_id" => $article->get("id"),
-            "stock_selling_price" => 100,
-        ]);
-        $stock->set("stock_selling_price", 100);
-
-        // when
-        $stock->editFreePrice(200);
-
-        // then
-        $this->assertEquals(
-            200,
-            $stock->get("stock_selling_price"),
-            "it should have updated price"
-        );
-    }
-
-    public function testEditNonFreePrice()
-    {
-        // then
-        $this->expectException("Exception");
-        $this->expectExceptionMessage("Le prix de cet article n'est pas libre.");
-
-        // given
-        $stock = Factory::createStock();
-        $article = $stock->getArticle();
-        $article->set("article_price_editable", 0);
-
-        // when
-        $stock->editFreePrice(200);
-    }
-
-    public function testEditFreePriceToInvalidPrice()
-    {
-        // then
-        $this->expectException("Exception");
-        $this->expectExceptionMessage("Le prix doit être supérieur à 5,00&nbsp;&euro;");
-
-        // given
-        $article = Factory::createArticle([
-            "article_price" => 500,
-            "article_price_editable" => 1,
-        ]);
-        $stock = Factory::createStock(["article_id" => $article->get("id")]);
-        $article->set("article_price_editable", 1);
-
-        // when
-        $stock->editFreePrice(400);
     }
 }

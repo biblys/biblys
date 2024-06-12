@@ -2,7 +2,6 @@
 
 namespace Biblys\Service;
 
-use Exception;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Exception\ParseException;
 
@@ -10,16 +9,13 @@ class Config
 {
     private $config;
 
-    /**
-     * @throws Exception
-     */
     public function __construct()
     {
         $configFilePath = self::_getConfigFilePath();
 
         // If config file does not exists, throw Exception
         if (!file_exists($configFilePath)) {
-            throw new Exception("Cannot find config file at $configFilePath.");
+            throw new \Exception("Cannot find config file at $configFilePath.");
         }
 
         // Get global config
@@ -54,9 +50,9 @@ class Config
         $this->config[$key] = $value;
     }
 
-    static private function _getConfigFilePath(): string
+    static private function _getConfigFilePath()
     {
-        if (getenv("PHP_ENV") === "test") {
+        if (getenv("PHP_ENV")) {
             return __DIR__ . "/../../../tests/config-for-tests.yml";
         }
 
@@ -71,10 +67,6 @@ class Config
 
         if ($key === "users_table_name") {
             return "Users";
-        }
-
-        if ($key === "media_path") {
-            return "/public/media";
         }
 
         return null;

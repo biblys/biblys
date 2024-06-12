@@ -1,35 +1,36 @@
 <?php
 
-use AppBundle\Controller\ErrorController;
 use Biblys\Axys\Client as AxysClient;
-use Biblys\Service\Config;
+use Framework\Exception\AuthException;
 use Framework\Exception\ServiceUnavailableException;
+use Framework\ExceptionController;
+
+// INCLUDES
+include '../inc/functions.php';
+
 use Framework\Framework;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpKernel\EventListener\ErrorListener;
-use Symfony\Component\Routing\Generator\UrlGenerator;
-use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-// INCLUDES
-include __DIR__."/../inc/functions.php";
+// Create request from globals
+$request = Request::createFromGlobals();
 
 // Create session
 $session = new Session();
 $session->start();
 
 // Identification utilisateur
-/** @var $_V */
 if ($_V->isLogged()) {
     $_LOG = $_V;
 }
 
 // Load Encore assets
-$config = new Config();
 $_JS_CALLS = loadEncoreAssets($config->get('environment'), 'js');
 $_CSS_CALLS = loadEncoreAssets($config->get('environment'), 'css');
 
@@ -71,7 +72,11 @@ $_JS_CALLS[] = '/libs/ckeditor/adapters/jquery.js?4.5.7';
 $axysConfig = $config->get('axys') ?: [];
 $axys = new AxysClient($axysConfig);
 
-/** @var Site $site */
+if (!$request->isSecure() && $config->get('https') === true) {
+    header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+    exit();
+}
+
 if ($site->get('axys') || $_V->isAdmin()) {
     if ($_V->isLogged()) {
         $_JS_CALLS[] = $axys->getWidgetUrl($_COOKIE['user_uid']);
@@ -96,39 +101,72 @@ if ($_V->isAdmin() || $_V->isPublisher() || $_V->isBookshop() || $_V->isLibrary(
 
 $opengraph = [];
 
-$exceptionController = new ErrorController();
+$exceptionController = new ExceptionController();
 
-// Site closed
-$closed = $site->getOpt('closed');
-if ($closed) {
-    if (!$_V->isAdmin()) {
-        throw new ServiceUnavailableException($closed);
+try {
+    // Site closed
+    $closed = $site->getOpt('closed');
+    if ($closed) {
+        if (!$_V->isAdmin()) {
+            throw new ServiceUnavailableException($closed);
+        }
+
+        trigger_error(
+            "
+                Biblys est en mode maintenance (raison : $closed).<br />
+                Durant la période de maintenance, le site est accessible uniquement<br />
+                aux administrateurs mais son utilisation est déconseillée<br />
+                et peut conduire à la perte de données.
+            ",
+            E_USER_WARNING
+        );
     }
 
-    trigger_error(
-        "
-            Biblys est en mode maintenance (raison : $closed).<br />
-            Durant la période de maintenance, le site est accessible uniquement<br />
-            aux administrateurs mais son utilisation est déconseillée<br />
-            et peut conduire à la perte de données.
-        ",
-        E_USER_WARNING
-    );
+    $framework = new Framework($request);
+    $urlgenerator = $framework->getUrlGenerator();
+
+    try {
+        $response = $framework->handle($request);
+    }
+
+    // If route is not found in route.yml, we might be dealing with a legacy
+    // controller. We try to handle the route below. If not, default action
+    // will throw a resourceNotFoundException that will be catched below.
+    catch (NotFoundHttpException $e) {
+        $mainController = new \AppBundle\Controller\MainController();
+        $response = $mainController->defaultAction($request);
+    }
+
+    if (!$response instanceof Response) {
+        throw new Exception('Controller should return a Response object.');
+    }
 }
 
-$routes = require __DIR__ . "/../src/routes.php";
-$urlgenerator = new UrlGenerator($routes, new RequestContext());
+// HTTP 503 (maintenance mode)
+catch (ServiceUnavailableException $e) {
+    $response = $exceptionController->handleServiceUnavailable();
+}
 
-$container = include __DIR__."/../src/container.php";
-$container->setParameter("routes", $routes);
-$container->register("listener.error", ErrorListener::class)
-    ->setArguments(["AppBundle\Controller\ErrorController::exception"]);
-$container->getDefinition("dispatcher")
-    ->addMethodCall("addSubscriber", [new Reference("listener.error")]);
+// HTTP 400
+catch (BadRequestHttpException $e) {
+    $response = $exceptionController->handleBadRequest($request, $e->getMessage());
+}
 
-$framework = $container->get("framework");
-$request = Request::createFromGlobals();
-$response = $framework->handle($request);
+// HTTP 401
+// TODO: distinguish between 401 (unauthenticated) and 403 (unauthorized)
+catch (AuthException $e) {
+    $response = $exceptionController->handleUnauthorizedAccess($request, $axys, $e->getMessage());
+}
+
+// HTTP 404
+catch (ResourceNotFoundException $e) {
+    $response = $exceptionController->handlePageNotFound($e->getMessage());
+}
+
+// HTTP 500
+catch (Exception $e) {
+    biblys_error(E_ERROR, $e->getMessage(), $e->getFile(), $e->getLine(), null, $e);
+}
 
 // Set security headers
 $response->headers->set('X-XSS-Protection', '1; mode=block');
@@ -413,4 +451,4 @@ if ($config->get('environment') == 'dev') {
 }
 
 $response->send();
-$framework->terminate($request, $response);
+$framework->terminateKernel($request, $response);

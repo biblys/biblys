@@ -2,35 +2,50 @@
 
 namespace AppBundle\Controller;
 
-use Framework\Composer;
+use Biblys\Service\Updater\ReleaseNotFoundException;
+use Biblys\Service\Updater\Updater;
+use Biblys\Service\Updater\UpdaterException;
+use Exception;
 use Framework\Controller;
+use Framework\Exception\AuthException;
 use Framework\Framework;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MaintenanceController extends Controller
 {
-    public function infosAction()
+    public function infosAction(): JsonResponse
     {
         return new JsonResponse([
             'version' => BIBLYS_VERSION,
         ]);
     }
 
-    public function updateAction(Request $request)
+    /**
+     * @throws AuthException
+     */
+    public function updateAction(Request $request): Response
     {
         global $urlgenerator;
 
-        $updater = new \PhpGitAutoupdate(BIBLYS_PATH, BIBLYS_VERSION);
+        $updater = new Updater(BIBLYS_PATH, BIBLYS_VERSION);
 
         $this->setPageTitle('Mise à jour de Biblys');
         $this->auth('admin');
 
         // Download available updates
-        $offline = false;
-        $download = $updater->downloadUpdates();
-        if (!$download) {
-            $offline = true;
+        $error = null;
+        try {
+            $updater->downloadUpdates();
+        } catch (UpdaterException $exception) {
+            $error = "";
+            while($exception instanceof Exception) {
+                $error .= $exception->getMessage()."\n";
+                $exception = $exception->getPrevious();
+            }
         }
 
         // Get releases newer than current version
@@ -42,7 +57,7 @@ class MaintenanceController extends Controller
             $latest = $updater->getLatestRelease();
             $updater->applyRelease($latest);
 
-            redirect($urlgenerator->generate('maintenance_updating', [
+            return new RedirectResponse($urlgenerator->generate('maintenance_updating', [
                 'version' => $latest['version'],
             ]));
         }
@@ -50,10 +65,13 @@ class MaintenanceController extends Controller
         return $this->render('AppBundle:Maintenance:update.html.twig', [
             'releases' => $releases,
             'version' => BIBLYS_VERSION,
-            'offline' => $offline,
+            'error' => $error,
         ]);
     }
 
+    /**
+     * @throws AuthException
+     */
     public function updatingAction($version)
     {
         global $urlgenerator;
@@ -71,14 +89,15 @@ class MaintenanceController extends Controller
         ]);
     }
 
-    public function composerAction()
+    /**
+     * @throws AuthException
+     */
+    public function composerAction(): Response
     {
-        global $config;
-
         $this->auth('admin');
 
         try {
-            Composer::runScript('install');
+            Framework::runComposerCommand('install');
         } catch (Exception $exception) {
             return $this->render('AppBundle:Maintenance:composer.html.twig', [
                 'error' => $exception->getMessage(),
@@ -88,29 +107,30 @@ class MaintenanceController extends Controller
         return $this->render('AppBundle:Maintenance:composer.html.twig');
     }
 
-    public function changelogIndexAction()
+    public function changelogIndexAction(): Response
     {
         $this->setPageTitle('Historique des mises à jour');
 
-        $updater = new \PhpGitAutoupdate(BIBLYS_PATH, BIBLYS_VERSION);
+        $updater = new Updater(BIBLYS_PATH, BIBLYS_VERSION);
 
         $releases = $updater->getReleases();
-        $releases = $updater->getReleasesDetails($releases);
 
         return $this->render('AppBundle:Maintenance:changelogIndex.html.twig', ['releases' => $releases]);
     }
 
-    public function changelogShowAction($version)
+    public function changelogShowAction($version): Response
     {
+
+        try {
+            $updater = new Updater(BIBLYS_PATH, BIBLYS_VERSION);
+            $release = $updater->getRelease($version);
+        } catch(ReleaseNotFoundException $exception) {
+            throw new NotFoundHttpException($exception->getMessage(), $exception->getPrevious());
+        }
+
         $this->setPageTitle("Mise à jour $version");
-
-        $updater = new \PhpGitAutoupdate(BIBLYS_PATH, BIBLYS_VERSION);
-
-        $release = $updater->getRelease($version);
-        $release = $updater->getReleasesDetails([$release]);
-
         return $this->render('AppBundle:Maintenance:changelogShow.html.twig', [
-            'release' => $release[0],
+            'release' => $release,
         ]);
     }
 }

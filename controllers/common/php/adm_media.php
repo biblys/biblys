@@ -6,6 +6,7 @@ $mediaFolderPath = $mm->getMediaFolderPath();
 $_PAGE_TITLE = 'Gestion des médias';
 
 $_ECHO .= '
+    <a class="floatR" href="/pages/adm_files">Nouvelle version</a>
     <h1><span class="fa fa-image"></span> Gestion des médias</h1>
 ';
 

@@ -127,82 +127,16 @@ class Cart extends Entity
 
     public function contains($type, $id)
     {
-        if ($type === "stock") {
-            trigger_deprecation(
-                "biblys/biblys",
-                "2.53.0",
-                "Use Cart->containsStock instead."
-            );
-            $sm = new StockManager();
-            $stock = $sm->getById($id);
-            return $this->containsStock($stock);
-        }
 
-        if ($type === "article") {
-            trigger_deprecation(
-                "biblys/biblys",
-                "2.53.0",
-                "Use Cart->containsArticle instead."
-            );
-            $am = new ArticleManager();
-            $article = $am->getById($id);
-            return $this->containsArticle($article);
-        }
-
-        throw new InvalidArgumentException("Unknown type $type");
-    }
-
-    /**
-     * Returns true if the cart contains stock
-     *
-     * @param Stock $stock
-     * @return bool
-     */
-    public function containsStock(Stock $stock): bool
-    {
-        $copies = $this->getStock();
-        foreach ($copies as $copy) {
-            if ($copy->get("id") === $stock->get("id")) {
+        $stock = $this->getStock();
+        foreach ($stock as $s) {
+            if ($type == 'stock' && $s['stock_id'] == $id) {
+                return true;
+            }
+            if ($type == 'article' && $s['article_id'] == $id) {
                 return true;
             }
         }
-
-        return false;
-    }
-
-    /**
-     * Returns true if the cart contains article
-     *
-     * @param Article $article
-     * @return bool
-     */
-    public function containsArticle(Article $article): bool
-    {
-        $copies = $this->getStock();
-        foreach ($copies as $copy) {
-            if ($copy->get("article_id") === $article->get("id")) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns true if the cart contains reward
-     *
-     * @param CFReward $reward
-     * @return bool
-     */
-    public function containsReward(CFReward $reward): bool
-    {
-        $copies = $this->getStock();
-        foreach ($copies as $copy) {
-            if ($copy->get("reward_id") === $reward->get("id")) {
-                return true;
-            }
-        }
-
         return false;
     }
 
@@ -332,6 +266,8 @@ class CartManager extends EntityManager
         $cart->set('customer_id', '');
         $cart->set('cart_title', '');
         $cart->set('cart_date', '');
+        $cart->set('cart_as-a-gift', '');
+        $cart->set('cart_gift-recipient', '');
         $cart->set('cart_count', '');
         $cart->set('cart_amount', '');
 
@@ -393,6 +329,16 @@ class CartManager extends EntityManager
         $weight_required = $site->getOpt('weight_required');
         if ($cart->get('type') == 'web' && $weight_required && (!$stock->get('weight') || $stock->get('weight') < $weight_required)) {
             throw new Exception('Cet exemplaire n\'a pas de poids et ne peut être ajouté au panier. Merci de nous contacter.');
+        }
+
+        // Is it bought as a gift ?
+        if ($wish_id != 'undefined') {
+            $wm = new WishManager();
+            if ($w = $wm->get(array('wish_id' => $wish_id))) {
+                $w->set('wish_bought', date('Y-m-d H:i:s'));
+                $wm->update($w);
+                $stock->set('wish_id', $w->get('id'));
+            }
         }
 
         // Is the article in the visitor's wishlist ?
@@ -575,7 +521,7 @@ class CartManager extends EntityManager
         $articles = json_decode($reward->get('articles'));
         foreach ($articles as $article_id) {
             if ($article = $am->get(array('article_id' => $article_id))) {
-                $this->addArticle($cart, $article, $reward);
+                $this->addArticle($cart, $article->get('id'), $reward);
             } else {
                 trigger_error('Article ' . $article_id . ' inconnu.');
             }

@@ -5,8 +5,6 @@
  * @backupStaticAttributes disabled
  */
 
-use Biblys\Test\Factory;
-
 require_once "setUp.php";
 
 class CartTest extends PHPUnit\Framework\TestCase
@@ -270,7 +268,7 @@ class CartTest extends PHPUnit\Framework\TestCase
 
         $cm->addArticle($cart, $article);
 
-        $this->assertTrue($cart->containsArticle($article));
+        $this->assertTrue($cart->contains("article", $article->get("id")));
 
         if ($not_virtual_stock) {
             $site->setOpt('virtual_stock', 0);
@@ -309,13 +307,13 @@ class CartTest extends PHPUnit\Framework\TestCase
 
         $cm->addStock($firstCart, $stock);
         $this->assertTrue(
-            $firstCart->containsStock($stock),
+            $firstCart->contains("stock", $stock->get("id")),
             "Available copy should be added to cart"
         );
 
         $cm->addArticle($secondCart, $article);
         $this->assertFalse(
-            $secondCart->containsStock($stock),
+            $secondCart->contains("stock", $stock->get("id")),
             "In-cart copy should not be added to another cart during cooldown period"
         );
 
@@ -324,7 +322,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         $sm->update($stock);
         $cm->addArticle($secondCart, $article);
         $this->assertTrue(
-            $secondCart->containsStock($stock),
+            $secondCart->contains("stock", $stock->get("id")),
             "In-cart copy should be added to another cart after cooldown period"
         );
 
@@ -377,51 +375,6 @@ class CartTest extends PHPUnit\Framework\TestCase
         $cart = new Cart(['cart_ip' => '127.0.0.1']);
 
         $this->assertEquals($cart->getUserInfo(), '127.0.0.1');
-    }
-
-    public function testContainsStock()
-    {
-        // given
-        $cm = new CartManager();
-        $cart = $cm->create([]);
-        $stock = Factory::createStock();
-        $cm->addStock($cart, $stock);
-
-        // when / then
-        $this->assertTrue(
-            $cart->containsStock($stock),
-            "it should return true if stock is in cart"
-        );
-    }
-
-    public function testContainsArticle()
-    {
-        // given
-        $cm = new CartManager();
-        $cart = $cm->create([]);
-        $article = Factory::createArticle();
-        $cm->addArticle($cart, $article);
-
-        // when / then
-        $this->assertTrue(
-            $cart->containsArticle($article),
-            "it should return true if article is in cart"
-        );
-    }
-
-    public function testContainsReward()
-    {
-        // given
-        $cm = new CartManager();
-        $cart = $cm->create([]);
-        $reward = Factory::createCrowfundingReward();
-        $cm->addCFReward($cart, $reward);
-
-        // when / then
-        $this->assertTrue(
-            $cart->containsReward($reward),
-            "it should return true if reward is in cart"
-        );
     }
 
     /**

@@ -9,13 +9,64 @@ use CFRewardManager;
 use Collection;
 use CollectionManager;
 use Exception;
+use People;
+use PeopleManager;
 use Publisher;
 use PublisherManager;
+use Rayon;
+use RayonManager;
 use Stock;
 use StockManager;
 
 class Factory
 {
+
+    /**
+     * @param array $attributes
+     * @return Article
+     * @throws Exception
+     */
+    public static function createArticle(array $attributes = []): Article
+    {
+        if (!isset($attributes["article_title"])) {
+            $attributes["article_title"] = "L'Animalie";
+        }
+
+        if (!isset($attributes["collection_id"])) {
+            $collection = self::createCollection();
+            $attributes["collection_id"] = $collection->get("id");
+        }
+
+        $am = new ArticleManager();
+        $article = $am->create($attributes);
+        $author = self::createPeople();
+        $article->addContributor($author, 1);
+
+        return $article;
+    }
+
+    /**
+     *
+     * @return People
+     * @throws Exception
+     */
+    public static function createPeople(): People
+    {
+        $pm = new PeopleManager();
+
+        $attributes = [
+            "people_first_name" => "Hervé",
+            "people_last_name" => "LE TERRIER",
+        ];
+
+        $people = $pm->get($attributes);
+        if ($people) {
+            return $people;
+        }
+
+        return $pm->create($attributes);
+    }
+
     /**
      * @param array $attributes
      * @return Stock
@@ -27,24 +78,9 @@ class Factory
             $article = self::createArticle();
             $attributes["article_id"] = $article->get("id");
         }
-        $sm = new StockManager();
-        $article = Factory::createArticle();
-        return $sm->create($attributes);
-    }
 
-    /**
-     * @param array $attributes
-     * @return Article
-     * @throws Exception
-     */
-    public static function createArticle(array $attributes = []): Article
-    {
-        if (!isset($attributes["collection_id"])) {
-            $collection = self::createCollection();
-            $attributes["collection_id"] = $collection->get("id");
-        }
-        $am = new ArticleManager();
-        return $am->create($attributes);
+        $sm = new StockManager();
+        return $sm->create($attributes);
     }
 
     /**
@@ -84,7 +120,26 @@ class Factory
     }
 
     /**
-     * @param Article $article
+     * @param array $attributes
+     * @return Rayon
+     */
+    public static function createRayon(array $attributes = []): Rayon
+    {
+        $rm = new RayonManager();
+
+        if (!isset($attributes["rayon_name"])) {
+            $attributes["rayon_name"] = "Science Fiction";
+        }
+
+        $rayon = $rm->get($attributes);
+        if ($rayon) {
+            return $rayon;
+        }
+
+        return $rm->create($attributes);
+    }
+
+    /**
      * @return CFReward
      * @throws Exception
      */

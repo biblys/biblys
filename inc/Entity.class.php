@@ -206,9 +206,14 @@ class EntityManager
     /**
      * Entity exists ?
      */
-    public function exists($where)
+    public function exists($where): bool
     {
-        return $this->get($where);
+        $entity = $this->get($where);
+        if ($entity) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

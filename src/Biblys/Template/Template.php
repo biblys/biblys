@@ -2,8 +2,7 @@
 
 namespace Biblys\Template;
 
-use Exception;
-use Framework\Composer;
+use Framework\Framework;
 
 class Template
 {
@@ -11,14 +10,15 @@ class Template
     private $_type = 'Twig';
     private $_slug;
     private $_dirPath;
-    private $_fileName;
+    private $_filename;
 
     /**
      * Static: return the template list as an array of templates.
-     * @return Template[]
      */
-    public static function getAll(): array
+    public static function getAll()
     {
+        global $site;
+
         $templates = [];
 
         $css = new Template();
@@ -89,18 +89,15 @@ class Template
 
     /**
      * Static: return the template list as an array of templates.
-     * @throws Exception
      */
-    public static function get($slug): Template
+    public static function get($slug)
     {
         $templates = self::getAll();
         foreach ($templates as $template) {
-            if ($template->getSlug() === $slug) {
+            if ($template->getSlug('slug') == $slug) {
                 return $template;
             }
         }
-
-        throw new Exception(sprintf("No template found for slug %s", $slug));
     }
 
     /**
@@ -122,7 +119,6 @@ class Template
 
     /**
      * Update the custom template file content.
-     * @throws Exception
      */
     public function updateContent($content): void
     {
@@ -136,7 +132,7 @@ class Template
 
         // If css was modified, refresh theme and bump assets version
         if ($this->getSlug() === 'css') {
-            Composer::runScript("theme:refresh");
+            Framework::runComposerCommand('theme:refresh');
 
             $assetsVersion = (int) $site->getOpt('assets_version') ?? '0';
             $site->setOpt('assets_version', $assetsVersion + 1);
@@ -146,9 +142,9 @@ class Template
     /**
      * Test if a custom version of the template exists.
      *
-     * @return bool
+     * @return {boolean}
      */
-    public function customFileExists(): bool
+    public function customFileExists()
     {
         $path = $this->getCustomDirPath().'/'.$this->getFileName();
         if (file_exists($path)) {
@@ -160,8 +156,10 @@ class Template
 
     /**
      * Create the custom file and directories.
+     *
+     * @return {boolean}
      */
-    public function createCustomFile(): void
+    public function createCustomFile()
     {
         $path = $this->getCustomDirPath();
         if (!is_dir($path)) {
@@ -171,14 +169,16 @@ class Template
         $file = $path.'/'.$this->getFileName();
         $content = $this->getContent();
         file_put_contents($file, $content);
+
+        return false;
     }
 
     /**
      * Returns the template custom file path.
      *
-     * @return string
+     * @return {string}
      */
-    public function getCustomDirPath(): string
+    public function getCustomDirPath()
     {
         if ($this->getSlug() === 'css') {
             return BIBLYS_PATH.'/app/public/theme/';
@@ -192,8 +192,10 @@ class Template
 
     /**
      * Returns the template default file path.
+     *
+     * @return {string}
      */
-    public function getDefaultDirPath(): string
+    public function getDefaultDirPath()
     {
         if ($this->getSlug() === 'global') {
             return BIBLYS_PATH.'/src/AppBundle/Resources/views/';
@@ -204,8 +206,10 @@ class Template
 
     /**
      * Delete the custom template file (by renaming it).
+     *
+     * @return null
      */
-    public function deleteCustomFile(): void
+    public function deleteCustomFile()
     {
         if ($this->customFileExists()) {
             $file = $this->getCustomDirPath().'/'.$this->getFileName();
@@ -235,12 +239,12 @@ class Template
         return $this->_slug;
     }
 
-    public function setType(string $type)
+    public function setType($type)
     {
         $this->_type = $type;
     }
 
-    public function getType(): string
+    public function getType()
     {
         return $this->_type;
     }
@@ -265,7 +269,7 @@ class Template
         return $this->_fileName;
     }
 
-    public function getAceMode(): string
+    public function getAceMode()
     {
         return strtolower($this->getType());
     }

@@ -3,6 +3,7 @@
 use Biblys\Axys\Client;
 use Biblys\Service\Config;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Framework\Exception\AuthException;
 
@@ -39,9 +40,182 @@ if ($cart_id) {
     }
 }
 
+// Show the cart in one line
+if (isset($_GET['oneline'])) {
+    $line = $cart->getOneLine();
+    die($line);
+}
+
+// Type of entity to add (article|stock)
+$add = filter_input(INPUT_POST, 'add', FILTER_SANITIZE_SPECIAL_CHARS);
+
+// Id of entity to add
+$addId = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+
+// Is this a gift ?
+$gift = filter_input(INPUT_POST, 'gift', FILTER_SANITIZE_SPECIAL_CHARS);
+
+// If article is gifted, corresponding wish id
+$wishId = filter_input(INPUT_POST, 'wish', FILTER_VALIDATE_INT);
+
+// Add to cart
+if ($add) {
+    if (isset($gift)) {
+        $wm = new WishManager();
+        if ($w = $wm->get(array('wish_id' => $wishId))) {
+            if ($gift == "party") {
+                $cart->set('cart_as-a-gift', 'party');
+                $cart->set('cart_gift-recipient', $w->get('user_id'));
+                $cm->update($cart);
+            }
+        }
+    }
+
+    // Stock
+    if ($add == 'stock') {
+        try {
+            if (!$cart->contains('stock', $addId)) {
+                $p['added'] = 1;
+                if ($cm->addStock($cart, $addId, $wishId)) {
+                    $p['success'] = 'L\'article a bien été ajouté au panier.';
+                    $cm->updateFromStock($cart);
+                } else {
+                    $p['error'] = 'L\'article n&deg; '.$_GET['id'].' n\'a pas pu être ajouté au panier.';
+                }
+            } else {
+                $p['removed'] = 1;
+                $copy_to_remove = $sm->getById($addId);
+                if ($copy_to_remove && $cm->removeStock($cart, $copy_to_remove, $wishId)) {
+                    $p['success'] = 'L\'article a bien été retiré du panier.';
+                    $cm->updateFromStock($cart);
+                } else {
+                    $p['error'] = 'L\'article n&deg; '.$_GET['id'].' n\'a pas pu être ajouté au panier.';
+                }
+            }
+        } catch (Exception $ex) {
+            trigger_error($ex->getMessage());
+        }
+
+        // Article
+    } elseif ($add == 'article') {
+        try {
+            $p['added'] = 1;
+            if ($cm->addArticle($cart, $addId)) {
+                $p['success'] = 'L\'article a bien été ajouté au panier.';
+                $cm->updateFromStock($cart);
+            } else {
+                $p['error'] = 'L\'article n\'a pas pu être ajouté au panier.';
+            }
+        } catch (Exception $ex) {
+            trigger_error($ex->getMessage());
+        }
+    }
+
+    // Reward
+    elseif ($add == 'reward') {
+        try {
+            if ($reward = $cfrm->get(array('reward_id' => $addId))) {
+                if ($cm->addCFReward($cart, $reward)) {
+                    $p['success'] = 'La contrepartie a bien été ajoutée <a href="/pages/cart">au panier</a>.';
+                } else {
+                    trigger_error('Impossible d\'ajouter la contrepartie au panier : erreur inconnue.');
+                }
+            } else {
+                trigger_error('Impossible d\'ajouter au panier : Contrepartie "'.$addId.'" inconnue.');
+            }
+        } catch (Exception $ex) {
+            trigger_error($ex->getMessage());
+        }
+    } else {
+        trigger_error('Impossible d\'ajouter au panier : type "'.$add.'" inconnu.');
+    }
+
+    if ($request->isXmlHttpRequest()) {
+        return new JsonResponse($p);
+    } else {
+        redirect('/pages/cart', $p);
+    }
+}
+
+// Edit stock price
+if (isset($_POST["stock_price"])) {
+    $new_price = round($_POST['stock_price'] * 100);
+
+    $stock = $sm->getById($_POST['stock_id']);
+    if ($stock) {
+        $article = $stock->get('article');
+
+        if (!$article->has('price_editable')) {
+            trigger_error("Le prix de cet article n'est pas libre.");
+        }
+
+        if ($new_price < $article->get('price')) {
+            trigger_error("Le prix doit être supérieur à ".currency($article->get('price') / 100));
+        }
+
+        // Update stock
+        $stock->set('stock_selling_price', $new_price);
+        $sm->update($stock);
+
+        // Update cart
+        $cm->updateFromStock($cart);
+
+        redirect('/pages/cart', array('stock_price_updated' => $_POST['stock_id']));
+    }
+}
+
+// Remove from cart
+$copy_to_remove_id = $request->query->get('del');
+if ($copy_to_remove_id) {
+    $copy_to_remove = $sm->getById($copy_to_remove_id);
+    if ($copy_to_remove) {
+        $cm->removeStock($cart, $copy_to_remove);
+        $cm->updateFromStock($cart);
+        redirect('/pages/cart', array('removed' => 1));
+    }
+}
+
 $_PAGE_TITLE = 'Panier';
 
+// Gift
+$gift = null;
+$gift_shipping = null;
+if ($cart->get('cart_as-a-gift') == 'party') {
+    // Get user
+    if ($u = $um->get(array('user_id' => $cart->get('gift-recipient')))) {
+        // Get customer
+        $cm = new CustomerManager();
+        if ($c = $cm->get(array('user_id' => $u->get('id'), 'site_id' => $_SITE['site_id']))) {
+            // Get shipping for shop
+            if ($sh = $shm->get(array('site_id' => $_SITE['site_id'], 'shipping_type' => 'magasin'))) {
+                $gift = ''
+                . '<p class="warning">Votre panier est en mode cadeau.</p>'
+                . '<p>Tous les articles que vous y ajouterez seront considérés comme des cadeau pour '.$u->getUserName().'.</p>'
+                . '<p>Pour revenir à un panier normal, finalisez votre commande ou cliquez sur :</p><p class="center"><a href="/pages/cart?vacuum" data-confirm="Voulez-vous vraiment vider votre panier ?" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> Vider mon panier</a></p>';
+
+                $gift_shipping = '<h2><i class="fa fa-gift"></i> Mode cadeau</h2>'
+                . '<p>Après validation et paiement, les articles de votre panier seront emballés et mis à disposition de '.$u->getUserName().' pour son anniversaire le '._date($c->get('privatization'), 'j f Y').'.</p>'
+                . '<input type="hidden" name="shipping_id" value="'.$sh->get('id').'">'
+                . '<div class="center"><input type="submit" id="continue" value="Finaliser votre commande cadeau" class="btn btn-primary"></div>';
+            }
+        }
+    }
+}
+
 $alert = null;
+if (isset($_GET['added'])) {
+    $alert = '<p class="success">L\'article a bien été ajouté au panier.</p>';
+}
+if (isset($_GET['vacuumed'])) {
+    $alert = '<p class="success">Votre panier a été vidé.</p>';
+}
+if (isset($_GET['removed'])) {
+    $alert = '<p class="success">L\'article a bien été retiré du panier.</p>';
+}
+if (isset($_GET['stock_price_updated'])) {
+    $alert = '<p class="success">Le prix de l\'article a été mis à jour.</p>';
+}
+
 $OneArticle = 0;
 $books = 0;
 $ebooks = 0;
@@ -117,16 +291,17 @@ foreach ($stocks as $stock) {
     $editable_price_form = null;
     if ($article->has('price_editable')) {
         $editable_price_form = '
-            <form action="/stock/'.$stock->get("id").'/edit-free-price" method="post">
+            <form method="post">
                 <fieldset>
                     <input type="hidden" name="stock_id" value="'.$stock->get('id').'">
                     Modifier le montant :
-                        <input type="number" name="new_price" min="'.($article->get('price') / 100).'" value="'.($stock->get('selling_price') / 100).'" step=10 class="nano" required> &euro;
+                        <input type="number" name="stock_price" min="'.($article->get('price') / 100).'" value="'.($stock->get('selling_price') / 100).'" step=10 class="nano" required> &euro;
                     <button type="submit" class="btn btn-info btn-xs">OK</button>
                 </fieldset>
             </form>
         ';
     }
+
 
     $cart_content[] = '
         <tr id="cart_tr_'.$stock->get('id').'">
@@ -146,11 +321,7 @@ foreach ($stocks as $stock) {
                 '.currency($stock->get('selling_price') / 100).'<br />
             </td>
             <td class="center">
-                <form method="POST" action="/cart/remove-stock/'.$stock->get("id").'">
-                    <button type="submit" class="btn btn-danger btn-sm">
-                        <span class="fa fa-close"></span> Retirer
-                    </button>
-                </form>
+                <a href="?del='.$stock->get('id').'"><button class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Retirer</button></a>
             </td>
         </tr>
     ';
@@ -189,6 +360,8 @@ $content .= '
     '.join($flashs).'
 
     '.$alert.'
+
+    '.$gift.'
 
     <table class="table cart-table">
         <thead>
@@ -433,105 +606,113 @@ if (isset($Articles) && $Articles > 0) {
             <fieldset>
     ';
 
-    // If cart contains physical articles that needs to be shipped
-    if ($cart->needsShipping()) {
-        $com = new CountryManager();
+    // Special case : gift shipping
+    if (isset($gift_shipping)) {
+        $content .= $gift_shipping;
 
-        // Countries
-        $destinations = null;
-        $countries = $com->getAll();
-        $destinations = array_map(function ($country) use ($_V) {
-            $selected = null;
-            if ($country->get('name') === $_V->get('country')) {
-                $selected = " selected";
-            }
-            return '<option value="'.$country->get('id').'"'.$selected.'>'.$country->get('name').'</option>';
-        }, $countries);
-        $default_destination = $com->getById(67);
-
-        if ($_V->isLogged() && $customer = $_V->getCustomer()) {
-            $country_id = $customer->get('country_id');
-            $country = $com->getById($country_id);
-            if ($country) {
-                $default_destination = $country;
-            }
-        }
-
-        // Poids > 30 kg
-        if ($Poids >= 29950) {
-            $plus30 = '<br><p class="warning"> Attention ! Votre commande excède le poids maximum autorisé par La Poste pour un colis (30 kg). Votre commande sera expédiée en plusieurs colis.</p>';
-        } else {
-            $plus30 = null;
-        }
-
-        $content .= '
-                <h3>Mode d\'exp&eacute;dition</h3>
-
-                '.$plus30.'
-
-                <input type="hidden" id="order_weight" value="'.$Poids.'">
-                <input type="hidden" id="order_amount" value="'.$Total.'">
-                <input type="hidden" id="articles_num" value="'.$Articles.'">
-
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th style="width: 200px;">Pays de destination</th>
-                            <th>Mode d\'exp&eacute;dition</th>
-                            <th style="width: 75px;">Frais</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <select id="country_id" name="country_id" class="form-control" required>
-                                    <option value="'.$default_destination->get('id').'">'.$default_destination->get('name').'</option>
-                                    '.implode($destinations).'
-                                </select>
-                            </td>
-                            <td>
-                                <select id="shipping_id" name="shipping_id" class="form-control" disabled required>
-                                    <option>Choisir un pays de destination...</option>
-                                </select>
-                            </td>
-                            <td id="shipping_amount" class="right" style="vertical-align: middle;">0,00&nbsp;&euro;</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">
-                                <p id="shipping_info">Choisissez un mode d\'expédition ci-dessus pour continuer.</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="bold right">Montant &agrave; r&eacute;gler :</td>
-                            <td id="total" class="right bold">'.currency($Total / 100).'</td>
-                        </tr>
-                    </tbody>
-                </table>
-        ';
-    }
-
-    // If cart contains downloadable and user not logged
-    if ($downloadable && !$_V->isLogged()) {
-        $content .= '<br />'
-        . '<div class="center">'
-        . '<p class="warning">Votre panier contient au moins un livre num&eacute;rique. Vous devez vous <a href="'.$axys->getLoginUrl().'">identifier</a> pour continuer.</p>'
-        . '<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
-        . '</div>';
-
-    // If cart contains crowdfunding rewards and user not logged
-    } elseif (!empty($crowdfunding) && !$_V->isLogged()) {
-        $content .= '<br>'
-        . '<div class="center">'
-        . '<p class="warning">Votre panier contient au moins une contrepartie de financement participatif.<br>Vous devez vous <a href="'.$axys->getLoginUrl().'">identifier</a> pour continuer.</p>'
-        . '<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
-        . '</div>';
+    // If not special case
     } else {
-        if (isset($o["order_id"])) {
-            $content .= '<div class="center"><button type="submit" class="btn btn-primary" id="continue">Ajouter à la commande en cours</button></div>';
+
+    // If cart contains physical articles that needs to be shipped
+        if ($cart->needsShipping()) {
+            $com = new CountryManager();
+
+            // Countries
+            $destinations = null;
+            $countries = $com->getAll();
+            $destinations = array_map(function ($country) use ($_V) {
+                $selected = null;
+                if ($country->get('name') === $_V->get('country')) {
+                    $selected = " selected";
+                }
+                return '<option value="'.$country->get('id').'"'.$selected.'>'.$country->get('name').'</option>';
+            }, $countries);
+            $default_destination = $com->getById(67);
+
+            if ($_V->isLogged() && $customer = $_V->getCustomer()) {
+                $country_id = $customer->get('country_id');
+                $country = $com->getById($country_id);
+                if ($country) {
+                    $default_destination = $country;
+                }
+            }
+
+            // Poids > 30 kg
+            if ($Poids >= 29950) {
+                $plus30 = '<br><p class="warning"> Attention ! Votre commande excède le poids maximum autorisé par La Poste pour un colis (30 kg). Votre commande sera expédiée en plusieurs colis.</p>';
+            } else {
+                $plus30 = null;
+            }
+
+            $content .= '
+                    <h3>Mode d\'exp&eacute;dition</h3>
+
+                    '.$plus30.'
+
+                    <input type="hidden" id="order_weight" value="'.$Poids.'">
+                    <input type="hidden" id="order_amount" value="'.$Total.'">
+                    <input type="hidden" id="articles_num" value="'.$Articles.'">
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="width: 200px;">Pays de destination</th>
+                                <th>Mode d\'exp&eacute;dition</th>
+                                <th style="width: 75px;">Frais</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <select id="country_id" name="country_id" class="form-control" required>
+                                        <option value="'.$default_destination->get('id').'">'.$default_destination->get('name').'</option>
+                                        '.implode($destinations).'
+                                    </select>
+                                </td>
+                                <td>
+                                    <select id="shipping_id" name="shipping_id" class="form-control" disabled required>
+                                        <option>Choisir un pays de destination...</option>
+                                    </select>
+                                </td>
+                                <td id="shipping_amount" class="right" style="vertical-align: middle;">0,00&nbsp;&euro;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <p id="shipping_info">Choisissez un mode d\'expédition ci-dessus pour continuer.</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="bold right">Montant &agrave; r&eacute;gler :</td>
+                                <td id="total" class="right bold">'.currency($Total / 100).'</td>
+                            </tr>
+                        </tbody>
+                    </table>
+            ';
+        }
+
+        // If cart contains downloadable and user not logged
+        if ($downloadable && !$_V->isLogged()) {
+            $content .= '<br />'
+            . '<div class="center">'
+            . '<p class="warning">Votre panier contient au moins un livre num&eacute;rique. Vous devez vous <a href="'.$axys->getLoginUrl().'">identifier</a> pour continuer.</p>'
+            . '<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
+            . '</div>';
+
+        // If cart contains crowdfunding rewards and user not logged
+        } elseif (!empty($crowdfunding) && !$_V->isLogged()) {
+            $content .= '<br>'
+            . '<div class="center">'
+            . '<p class="warning">Votre panier contient au moins une contrepartie de financement participatif.<br>Vous devez vous <a href="'.$axys->getLoginUrl().'">identifier</a> pour continuer.</p>'
+            . '<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
+            . '</div>';
         } else {
-            $content .= '<div class="center"><button type="submit" class="btn btn-primary" id="continue">Finaliser votre commande</button></div>';
+            if (isset($o["order_id"])) {
+                $content .= '<div class="center"><button type="submit" class="btn btn-primary" id="continue">Ajouter à la commande en cours</button></div>';
+            } else {
+                $content .= '<div class="center"><button type="submit" class="btn btn-primary" id="continue">Finaliser votre commande</button></div>';
+            }
         }
     }
 
