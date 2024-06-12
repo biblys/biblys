@@ -7,6 +7,22 @@ Améliorations
 - Des liens vers les pages Facebook et comptes Twitter apparaissaient désormais
   sur les pages contributeurs lorsque leurs adresses sont précisées.
 
+Corrections
+
+- Un e-mail était envoyé lors de l'annulation d'une vente magasin. C'est 
+  corrigé.
+
+### 2.55.4 (29 octobre 2021)
+
+Corrections
+
+- La création d'un contributeur déjà existant échouait sans afficher d'erreur.
+  C'est corrigé.
+- La raison pour laquelle une page 404 était affichée n'était plus visible par
+  les administrateurs. C'est maintenant le cas.
+- L'import noosfere pouvait échouer lorsque les contributeurs étaient associés
+  à certains rôles inconnus de Biblys. Maintenant, ça marche.
+
 ### 2.55.3 (22 octobre 2021)
 
 Corrections

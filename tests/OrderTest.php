@@ -472,6 +472,24 @@ class OrderTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    public function testCancelShopOrder()
+    {
+        // given
+        $om = new OrderManager();
+        $order = $om->create([
+            "order_type" => "shop",
+        ]);
+
+        // when
+        $om->cancel($order);
+
+        // then
+        $this->assertTrue(
+            $order->has("order_cancel_date"),
+            "it should have a cancel date"
+        );
+    }
+
     public function testGetCountryWithCountryName()
     {
         // given

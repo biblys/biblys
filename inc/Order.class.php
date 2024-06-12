@@ -1134,6 +1134,7 @@ class OrderManager extends EntityManager
     /**
      * Cancel an order
      * @param Order $order the order entity to cancel
+     * @throws Exception
      */
     public function cancel(Order $order)
     {
@@ -1152,36 +1153,8 @@ class OrderManager extends EntityManager
         $this->updateFromStock($order);
 
         // Send mail
-        $subject = $this->site['site_tag'].' | Commande n° '.$order->get('id').' annulée';
-        $message = '
-            <html>
-                <head>
-                    <title>'.$subject.'</title>
-                </head>
-                <body>
-                    <p>Bonjour,</p>
-
-                        <p>La commande n&deg; '.$order->get('id').' a &eacute;t&eacute; annul&eacute;e.</p>
-
-                        <p>
-                            Pour m&eacute;moire, cette commande concernait le'.s($removedCount).' article'.s($removedCount).' suivant'.s($removedCount).'&nbsp;:
-                        </p>
-                        <ul><li>'.implode('</li><li>', $removed).'</li></ul>
-
-                        <p>
-                            A tr&egrave;s bient&ocirc;t !
-                        </p>
-
-                        <p><a href="">http://'.$this->site["site_domain"].'/</a></p>
-                </body>
-            </html>
-        ';
-        $mailer = new Mailer();
-        $sent = $mailer->send($order->get('email'), $subject, $message);
-
-        if (!$sent) {
-            throw new Exception("Une erreur est survenue lors de l'envoi du courriel
-                d'annulation de la commande. La commande n'a pas été annulée.");
+        if ($order->get("type") === "web") {
+            $this->_sendCancellationMail($order, $removedCount, $removed);
         }
 
         // Set cancelation date
@@ -1189,5 +1162,41 @@ class OrderManager extends EntityManager
 
         // Persist order
         $this->update($order);
+    }
+
+    /**
+     * @param Order $order
+     * @param int $removedCount
+     * @param array $removed
+     * @throws Exception
+     */
+    private function _sendCancellationMail(Order $order, int $removedCount, array $removed): void
+    {
+        $subject = $this->site['site_tag'] . ' | Commande n° ' . $order->get('id') . ' annulée';
+        $message = '
+            <html>
+                <head>
+                    <title>' . $subject . '</title>
+                </head>
+                <body>
+                    <p>Bonjour,</p>
+
+                    <p>La commande n° ' . $order->get('id') . ' a été annulée.</p>
+
+                    <p>
+                        Pour mémoire, cette commande concernait le' . s($removedCount) . ' article' . s($removedCount) . ' suivant' . s($removedCount) . '&nbsp;:
+                    </p>
+                    <ul><li>' . implode('</li><li>', $removed) . '</li></ul>
+
+                    <p>
+                        A très bientôt !
+                    </p>
+
+                    <p><a href="">http://' . $this->site["site_domain"] . '/</a></p>
+                </body>
+            </html>
+        ';
+        $mailer = new Mailer();
+        $mailer->send($order->get('email'), $subject, $message);
     }
 }

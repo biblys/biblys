@@ -41,7 +41,7 @@ class SiteController extends Controller
             }
 
             // Update existing options
-            $options = $request->request->get('options', []);
+            $options = $request->request->all('options', []);
             foreach ($options as $key => $val) {
                 $this->site->setOpt($key, $val);
             }

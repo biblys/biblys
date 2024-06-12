@@ -506,5 +506,13 @@ function _getJobFromNoosfereName(string $name): Job
         return Job::getByName("Illustrateur (intérieur)");
     }
 
+    if (in_array($name, ["Adaptateur", "Ouvrages sur l'auteur", "Présenté par", "Prête-plume", "Rédacteur en chef"])) {
+        return Job::getByName("Autre auteur");
+    }
+
+    if ($name === "Révision de traduction") {
+        return Job::getByName("Traducteur");
+    }
+
     return Job::getByName($name);
 }
