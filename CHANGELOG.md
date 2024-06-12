@@ -2,6 +2,11 @@
 
 ### 2.58.2 (4 février 2021)
 
+<<<<<<< HEAD
+=======
+Corrections
+
+>>>>>>> 8df03306f (build: bump version to 2.58.2 & update changelog)
 - Le sélecteur de pays de la page de confirmation de commande ne s'affichait pas
   correctement. C'est mieux.
 - L'affichage de la page d'accueil pouvait déclencher une erreur si aucune 
