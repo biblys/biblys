@@ -5,15 +5,21 @@
  * @backupStaticAttributes disabled
  */
 
-use AppBundle\Controller\MainController;
+namespace AppBundle\Controller;
+
 use Biblys\Service\Config;
+use Biblys\Service\Updater\UpdaterException;
 use Biblys\Test\RequestFactory;
+use Framework\Exception\AuthException;
+use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 require_once __DIR__."/../../../tests/setUp.php";
 
-class MainControllerTest extends PHPUnit\Framework\TestCase
+class MainControllerTest extends TestCase
 {
     public function testContact()
     {
@@ -45,6 +51,8 @@ class MainControllerTest extends PHPUnit\Framework\TestCase
 
     /**
      * @throws PropelException
+     * @throws UpdaterException
+     * @throws AuthException
      */
     public function testAdmin()
     {
@@ -52,6 +60,7 @@ class MainControllerTest extends PHPUnit\Framework\TestCase
         $controller = new MainController();
         $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
+        $this->_mockContainerWithUrlGenerator();
 
         // when
         $response = $controller->adminAction($request, $config);
@@ -70,7 +79,9 @@ class MainControllerTest extends PHPUnit\Framework\TestCase
     }
 
     /**
+     * @throws AuthException
      * @throws PropelException
+     * @throws UpdaterException
      */
     public function testAdminWithCloudWarning()
     {
@@ -79,6 +90,7 @@ class MainControllerTest extends PHPUnit\Framework\TestCase
         $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
         $config->set("cloud", ["expires" => "2018-01-01"]);
+        $this->_mockContainerWithUrlGenerator();
 
         // when
         $response = $controller->adminAction($request, $config);
@@ -94,5 +106,15 @@ class MainControllerTest extends PHPUnit\Framework\TestCase
             $response->getContent(),
             "it should display the warning"
         );
+    }
+
+    /**
+     * @return void
+     */
+    public function _mockContainerWithUrlGenerator(): void
+    {
+        $urlgenerator = $this->createMock(UrlGeneratorInterface::class);
+        $GLOBALS["container"] = $this->createMock(ContainerInterface::class);
+        $GLOBALS["container"]->method("get")->willReturn($urlgenerator);
     }
 }

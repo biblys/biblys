@@ -419,9 +419,8 @@ class ArticleController extends Controller
      */
     public function searchTermsAction(Request $request)
     {
-        $this->auth('admin');
-
-        $this->setPageTitle('Termes de recherche');
+        self::authAdmin($request);
+        $request->attributes->set("page_title", "Termes de recherche");
 
         $am = $this->entityManager('Article');
         $total = $am->count([
