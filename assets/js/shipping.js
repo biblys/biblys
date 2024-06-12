@@ -1,3 +1,5 @@
+/* global Biblys */
+
 import createElementFromHTML from './helpers/createElementFromHTML';
 
 export default class Shipping {
@@ -112,8 +114,9 @@ export default class Shipping {
 
   renderConditions(range) {
     // Parse string as numbers
-    const [maxWeight, maxAmount, maxArticles] = [
+    const [maxWeight, minAmount, maxAmount, maxArticles] = [
       range.max_weight,
+      range.min_amount,
       range.max_amount,
       range.max_articles
     ].map(string => {
@@ -128,6 +131,10 @@ export default class Shipping {
 
     if (maxWeight !== null) {
       conditions.push(`≤ ${maxWeight} g`);
+    }
+
+    if (minAmount !== null) {
+      conditions.push(`≥ ${window.currency(minAmount / 100)}`);
     }
 
     if (maxAmount !== null) {
@@ -156,6 +163,7 @@ export default class Shipping {
       type = '',
       zone = '',
       max_weight = '',
+      min_amount = '',
       max_amount = '',
       max_articles = '',
       fee = '',
@@ -176,9 +184,7 @@ export default class Shipping {
         <select id="type" name="type" class="form-control" required>
           <option value="normal" ${type === 'normal' ? 'selected' : ''}>Normal</option>
           <option value="suivi" ${type === 'suivi' ? 'selected' : ''}>Suivi avec numéro</option>
-          <option value="magasin" ${
-            type === 'magasin' ? 'selected' : ''
-          }>Retrait en magasin</option>
+          <option value="magasin" ${type === 'magasin' ? 'selected' : ''}>Retrait en magasin</option>
         </select>
       </div>
 
@@ -215,6 +221,11 @@ export default class Shipping {
         <div class="form-group">
           <label class="control-label label-inline" for="max_weight">… a un poids (en grammes) inférieur ou égal à :</label>
           <input type="number" min="1" step="1" id="max_weight" name="max_weight" class="form-control" value="${max_weight}">
+        </div>
+
+        <div class="form-group">
+          <label class="control-label label-inline" for="min_amount">… a un montant (en centimes) supérieur ou égal à :</label>
+          <input type="number" min="1" step="1" id="min_amount" name="min_amount" class="form-control" value="${min_amount}">
         </div>
 
         <div class="form-group">

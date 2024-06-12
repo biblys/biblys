@@ -1,19 +1,16 @@
 # Changelog
+### DEV
 
-### 2.50.3 (26 janvier 2020)
-
-- Correction : cliquer sur annuler dans la boîte de dialogue du numéro de suivi 
-  d'une commande ne marque plus la commande comme expédiée.
+- Frais de port : il est désormais possible de préciser un montant minimum
+  pour les conditions d'une tranche de frais de port (utile par exemple pour
+  offrir les frais de port à partir d'un certain montant de commande).
 
 ### 2.50.2 (15 décembre 2020)
-
-Corrections
 
 - La création ou la modification d'une tranche de frais de port avec un montant
   de 0,00 € fonctionne à nouveau.
 - L'outil de gestion des frais de port affiche désormais correctement les 
   tranches sans commentaires.
-
 ### 2.50.1 (14 octobre 2020)
 
 Corrections

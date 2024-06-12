@@ -50,6 +50,9 @@ class ShippingController extends Controller
         $maxWeight = $postData->max_weight;
         $maxWeight = $maxWeight === '' ? null : $maxWeight;
 
+        $minAmount = $postData->min_amount;
+        $minAmount = $minAmount === '' ? null : $minAmount;
+
         $maxAmount = $postData->max_amount;
         $maxAmount = $maxAmount === '' ? null : $maxAmount;
 
@@ -60,6 +63,7 @@ class ShippingController extends Controller
         $fee->set('shipping_type', $postData->type);
         $fee->set('shipping_zone', $postData->zone);
         $fee->set('shipping_max_weight', $maxWeight);
+        $fee->set('shipping_min_amount', $minAmount);
         $fee->set('shipping_max_amount', $maxAmount);
         $fee->set('shipping_max_articles', $maxArticles);
         $fee->set('shipping_fee', (int) $postData->fee);
@@ -91,6 +95,9 @@ class ShippingController extends Controller
         $maxWeight = $putData->max_weight;
         $maxWeight = $maxWeight === '' ? null : $maxWeight;
 
+        $minAmount = $putData->min_amount;
+        $minAmount = $minAmount === '' ? null : $minAmount;
+
         $maxAmount = $putData->max_amount;
         $maxAmount = $maxAmount === '' ? null : $maxAmount;
 
@@ -101,6 +108,7 @@ class ShippingController extends Controller
         $fee->set('shipping_type', $putData->type);
         $fee->set('shipping_zone', $putData->zone);
         $fee->set('shipping_max_weight', $maxWeight);
+        $fee->set('shipping_min_amount', $minAmount);
         $fee->set('shipping_max_amount', $maxAmount);
         $fee->set('shipping_max_articles', $maxArticles);
         $fee->set('shipping_fee', (int) $putData->fee);
@@ -135,6 +143,7 @@ class ShippingController extends Controller
             'type' => $fee->get('type'),
             'zone' => $fee->get('zone'),
             'max_weight' => $fee->get('max_weight'),
+            'min_amount' => $fee->get('min_amount'),
             'max_amount' => $fee->get('max_amount'),
             'max_articles' => $fee->get('max_articles'),
             'fee' => $fee->get('fee'),
