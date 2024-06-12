@@ -473,6 +473,25 @@ publisher_deleted:
     controller: AppBundle\Controller\PublisherController::deletedAction
     methods: GET
 
+publisher_rights:
+    path: /admin/publisher/{id}/rights
+    controller: AppBundle\Controller\PublisherController::rightsAction
+    requirements:
+        id: \d+
+        
+publisher_rights_add:
+    path: /admin/publisher/{id}/rights/add
+    controller: AppBundle\Controller\PublisherController::rightsAddAction
+    requirements:
+        id: \d+
+
+publisher_rights_remove:
+    path: /admin/publisher/{publisherId}/rights/remove/{userId}
+    controller: AppBundle\Controller\PublisherController::rightsRemoveAction
+    requirements:
+        publisherId: \d+
+        userId: \d+
+
 publisher_suppliers:
     path: /admin/publisher/{id}/suppliers
     defaults:

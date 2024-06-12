@@ -9,9 +9,13 @@ class Right extends Entity
     
      public function __construct($data)
     {
-        global $_SQL, $_SITE;
-
         /* JOINS */
+
+        // User (OneToMany)
+        $um = new UserManager();
+        if (isset($data['user_id'])) {
+            $data['user'] = $um->get(['id' => $data['user_id']]);
+        }
 
         // Publisher (OneToMany)
         $pm = new PublisherManager();

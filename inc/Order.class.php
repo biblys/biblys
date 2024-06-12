@@ -976,7 +976,7 @@ class OrderManager extends EntityManager
 
         $mailer = $this->getMailer();
 
-        // Save payment date
+        // Save shipping date
         $order->set('order_shipping_date', date('Y-m-d H:i:s'));
 
         if ($trackingNumber) {
@@ -987,6 +987,7 @@ class OrderManager extends EntityManager
 
         // In-shop pickup
         if ($order->get('shipping_mode') == "magasin") {
+            $subjectSuffix = 'disponible en magasin';
             $message .= '
                 <p>Votre commande est disponible en magasin.</p>
                 <p>Retrouvez les coordonnées et horaires d\'ouverture du magasin sur <a href="http://'.$site->get('domain').'">http://'.$site->get('domain').'/</a></p>
@@ -995,7 +996,17 @@ class OrderManager extends EntityManager
 
         // Shipping
         else {
-            $message .= '<p>Votre commande a bien été expédiée.</p>';
+            $subjectSuffix = $site->getOpt('shipped_mail_subject');
+            if (!$subjectSuffix) {
+                $subjectSuffix = 'expédiée';
+            }
+
+            $shippedMessage = $site->getOpt('shipped_mail_message');
+            if (!$shippedMessage) {
+                $shippedMessage = 'Votre commande a été expédiée.';
+            }
+
+            $message .= '<p>'.$shippedMessage.'</p>';
             if ($trackingNumber) {
                 $message .= '
                     <p>N° de suivi : '.$trackingNumber.'</p>
@@ -1007,7 +1018,7 @@ class OrderManager extends EntityManager
             }
         }
 
-        $subject = $site->get('tag')." | Commande n°".$order->get('id')." expédiée";
+        $subject = $site->get('tag')." | Commande n°".$order->get('id')." ".$subjectSuffix;
         $content = '
             <p>Bonjour '.$order->get('firstname').' !</p>
 

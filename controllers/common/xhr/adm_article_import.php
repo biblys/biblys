@@ -443,36 +443,37 @@ if ($_GET["mode"] == "search") { // Mode recherche
             $x["noosfere_IdCollection"] = $correctId;
         }
 
-        $collections = $_SQL->prepare(
-            "SELECT `collection_id`, `collection_name`, `collection_publisher`, `pricegrid_id` 
-            FROM `collections` 
-            WHERE (`collection_noosfere_id` = :collection_noosfere_id OR 
-                (`collection_name` = :collection_name AND 
-                `publisher_id` = :publisher_id)) AND
-                `collection_deleted` IS NULL
-            ORDER BY `collection_noosfere_id` LIMIT 1"
-        );
-        $collections->execute(
-            [
-                'collection_noosfere_id' => $x["noosfere_IdCollection"],
+        $collection = false;
+
+        // Try to get collection by noosfere id
+        if (isset($x["noosfere_IdCollection"])) {
+            $collection = $cm->get(['collection_noosfere_id' => $x["noosfere_IdCollection"]]);
+        }
+
+        // Try to get collection by name and publisher
+        if (!$collection) {
+            $collection = $cm->get([
                 'collection_name' => $x["article_collection"],
                 'publisher_id' => $x["publisher_id"],
-            ]
-        );
+            ]);
+        }
 
-        if ($c = $collections->fetch(PDO::FETCH_ASSOC)) {
+        // If collection already exists in db, get info
+        if ($collection) {
+            $x["collection_id"] = $collection->get("id");
+            $x["article_collection"] = $collection->get("name");
+            $x["article_publisher"] = $collection->get("publisher");
+            $x["pricegrid_id"] = $collection->get("pricegrid_id");
 
-            // Si la collection existe deja en base, on recupere les infos
-            $collection = $cm->getById($c['collection_id']);
-            $x["collection_id"] = $c["collection_id"];
-            $x["article_collection"] = $c["collection_name"];
-            $x["article_publisher"] = $c["collection_publisher"];
-            $x["pricegrid_id"] = $c["pricegrid_id"];
-            if (!empty($x["noosfere_IdCollection"])) {
+            // If noosfere is set, update collection
+            if (!$collection->has('collection_noosfere_id') && !empty($x["noosfere_IdCollection"])) {
                 $collection->set('collection_noosfere_id', $x["noosfere_IdCollection"]);
                 $cm->update($collection);
             }
-        } elseif (!empty($x["noosfere_IdCollection"])) {
+        } 
+        
+        // If collection does not exist but has a noosfere id, let's create it
+        elseif (!empty($x["noosfere_IdCollection"])) {
            
             // Si la collection n'existe pas, mais qu'on a un id noosfere, on la cree
             $collectionParams = [

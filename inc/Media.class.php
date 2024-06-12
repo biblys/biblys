@@ -302,6 +302,11 @@ class Media
     {
         global $config;
 
+        $version = '';
+        if (isset($options['version']) && $options['version'] > 1) {
+            $version = '?v='.$options['version'];
+        }
+
         $orientation = null;
         if (isset($options["size"])) {
             $orientation = substr($options["size"], 0, 1);
@@ -311,7 +316,11 @@ class Media
             unset($options["size"]);
         }
 
-        $baseUrl = '/'.$this->type().'/'.$this->dir().'/'.$this->id().'.'.$this->ext();
+        $baseUrl = '/'.$this->type().
+            '/'.$this->dir().
+            '/'.$this->id().
+            '.'.$this->ext().
+            $version;
 
         $cloud = $config->get("cloud");
         if ($cloud && $cloud["cdn"]) {
@@ -344,6 +353,7 @@ class Media
             if ($imagesCdn['service'] === 'weserv') {
                 $url = MEDIA_URL.$baseUrl;
                 $weservOptions = ["url" => $url];
+                
                 if ($orientation) {
                     $weservOptions[$orientation] = $size;
                 }
@@ -353,13 +363,7 @@ class Media
             }
         }
 
-        $transformer = null;
-        if ($orientation) {
-            $transformer = '-'.$orientation.$size;
-        }
-
-        return MEDIA_URL.'/'.$this->type().'/'.$this->dir().'/'.$this->id().'.'.$this->ext();
-
+        return MEDIA_URL.$baseUrl;
     }
 
     public function exists()

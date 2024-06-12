@@ -240,6 +240,99 @@ class PublisherController extends Controller
     }
 
     /**
+     * Manager a publisher's rights
+     * /admin/publisher/{id}/rights.
+     *
+     * @param Request $request
+     * @param int     $id
+     *
+     * @return Response
+     */
+    public function rightsAction($id)
+    {
+        $this->auth('admin');
+
+        $pm = $this->entityManager('Publisher');
+
+        $publisher = $pm->get(['publisher_id' => $id]);
+        if (!$publisher) {
+            throw new NotFoundException("Publisher $id not found.");
+        }
+
+        $this->setPageTitle(("Permissions pour l'éditeur ".$publisher->get('name')));
+
+        return $this->render('AppBundle:Publisher:rights.html.twig', [
+            'publisher' => $publisher,
+        ]);
+    }
+
+    /**
+     * Give a user the right to manage a publisher.
+     *
+     * @param $id publisher's id
+     *
+     * @return RedirectResponse
+     */
+    public function rightsAddAction(Request $request, $id)
+    {
+        $this->auth('admin');
+
+        $pm = $this->entityManager('Publisher');
+
+        $publisher = $pm->get(['publisher_id' => $id]);
+        if (!$publisher) {
+            throw new NotFoundException("Publisher $id not found.");
+        }
+
+        $um = $this->entityManager('User');
+        $userEmail = $request->request->get('user_email');
+        $user = $um->get(['Email' => $userEmail]);
+        if (!$user) {
+            throw new \Exception("Cannot find a user with e-mail $userEmail");
+        }
+
+        if (!$user->hasRight('publisher', $id)) {
+            $user->giveRight('publisher', $id);
+        }
+
+        return $this->redirect($this->generateUrl(
+            'publisher_rights', 
+            ['id' => $publisher->get('id')])
+        );
+    }
+
+    /**
+     * Remove rights from a user to manager a publisher.
+     *
+     * @param  $rightId      id of right to delete
+     * @param  $publisherId  id of publisher to remove right from
+     *
+     * @return RedirectResponse
+     */
+    public function rightsRemoveAction($publisherId, $userId)
+    {
+        $this->auth('admin');
+
+        $pm = $this->entityManager('Publisher');
+        $publisher = $pm->get(['publisher_id' => $publisherId]);
+        if (!$publisher) {
+            throw new NotFoundException("Publisher $publisherId not found.");
+        }
+
+        $um = $this->entityManager('User');
+        $user = $um->getById($userId);
+        if (!$user) {
+            throw new NotFoundException("User $userId not found.");
+        }
+
+        $user->removeRight('publisher', $publisher->get('id'));
+
+        return $this->redirect(
+            $this->generateUrl('publisher_rights', ['id' => $publisher->get('id')])
+        );
+    }
+
+    /**
      * Manager a publisher's suppliers
      * /admin/publisher/{id}/suppliers.
      *

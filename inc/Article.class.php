@@ -1443,6 +1443,12 @@ class ArticleManager extends EntityManager
             $article->set('article_url', $url);
         }
 
+        // Truncate authors fields
+        $authors = mb_strcut($article->get('authors'), 0, 256);
+        $article->set('article_authors', $authors);
+        $authorsAlpha = mb_strcut($article->get('authors_alphabetic'), 0, 256);
+        $article->set('article_authors_alphabetic', $authorsAlpha);
+
         return $article;
     }
 
@@ -1450,6 +1456,10 @@ class ArticleManager extends EntityManager
     {
         if (!$article->has('url')) {
             throw new Exception("L'article doit avoir une url.");
+        }
+
+        if (strlen($article->get('authors')) > 256) {
+            throw new Exception("Le champ Auteurs ne peut pas dépasser 256 caractères.");
         }
 
         // If slug is already used

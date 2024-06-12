@@ -321,6 +321,19 @@ class User extends Entity
         $rm->update($right);
     }
 
+    public function removeRight($type, $id)
+    {
+        $rm = new RightManager();
+        $right = $rm->get([
+            'user_id' => $this->get('id'),
+            $type.'_id' => $id,
+        ]);
+        
+        if ($right) {
+            $rm->delete($right);
+        }
+    }
+
     /**
      * Get the user's current wishlist (or create one).
      *

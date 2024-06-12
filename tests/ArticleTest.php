@@ -110,10 +110,22 @@ class ArticleTest extends PHPUnit_Framework_TestCase
         $tagWithHeight = $article->getCoverTag(["class" => "aClass", "rel" => "aRel", "height" => 85]);
         $tagWithoutLink = $article->getCoverTag(['link' => false]);
 
-        $this->assertRegExp("/<a href=\"\/media\/book\/\d+\/\d+\.jpg\" rel=\"aRel\"><img src=\"\/media\/book\/\d+\/\d+.jpg\" class=\"aClass\" alt=\"Bara Yogoi\"><\/a>/", $tag);
-        $this->assertRegExp("/<a href=\"\/media\/book\/\d+\/\d+\.jpg\" rel=\"aRel\"><img src=\"\/media\/book\/\d+\/\d+.jpg\" class=\"aClass\" alt=\"Bara Yogoi\" width=\"250\"><\/a>/", $tagWithWidth);
-        $this->assertRegExp("/<a href=\"\/media\/book\/\d+\/\d+\.jpg\" rel=\"aRel\"><img src=\"\/media\/book\/\d+\/\d+.jpg\" class=\"aClass\" alt=\"Bara Yogoi\" height=\"85\"><\/a>/", $tagWithHeight);
-        $this->assertRegExp("/<img src=\"\/media\/book\/\d+\/\d+\.jpg\" alt=\"Bara Yogoi\">/", $tagWithoutLink);
+        $this->assertRegExp(
+            "/<a href=\"\/media\/book\/\d+\/\d+\.jpg\" rel=\"aRel\"><img src=\"\/media\/book\/\d+\/\d+.jpg\" class=\"aClass\" alt=\"Bara Yogoi\"><\/a>/",
+            $tag
+        );
+        $this->assertRegExp(
+            "/<a href=\"\/media\/book\/\d+\/\d+\.jpg\" rel=\"aRel\"><img src=\"\/media\/book\/\d+\/\d+.jpg\" class=\"aClass\" alt=\"Bara Yogoi\" width=\"250\"><\/a>/",
+            $tagWithWidth
+        );
+        $this->assertRegExp(
+            "/<a href=\"\/media\/book\/\d+\/\d+\.jpg\" rel=\"aRel\"><img src=\"\/media\/book\/\d+\/\d+.jpg\" class=\"aClass\" alt=\"Bara Yogoi\" height=\"85\"><\/a>/",
+            $tagWithHeight
+        );
+        $this->assertRegExp(
+            "/<img src=\"\/media\/book\/\d+\/\d+\.jpg\" alt=\"Bara Yogoi\">/",
+            $tagWithoutLink
+        );
     }
 
     /**
@@ -583,6 +595,29 @@ class ArticleTest extends PHPUnit_Framework_TestCase
         $rm->delete($rayon5);
         $rm->delete($rayon6);
     }
+
+    /**
+     * Test that adding a too long string as article_authors does not validate
+     * 
+     * @expectedException Exception
+     * @expectedExceptionMessage Le champ Auteurs ne peut pas dépasser 256 caractères.
+     */
+    public function testValidateArticleAuthorsLength()
+    {
+        $am = new ArticleManager();
+        $article = new Article(['url' => 'article/url']);
+        $article->set(
+            'article_authors',
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam 
+            aliquet arcu at libero maximus, euismod vehicula justo suscipit. 
+            Praesent faucibus porta porta. Integer id congue lorem. Nulla 
+            convallis sagittis ultricies. Fusce molestie nibh quis tellus 
+            iaculis dapibus. Aenean vitae velit sed nulla."
+        );
+
+        $am->validate($article);
+    }
+
 
     /**
      * Test deleting a copy

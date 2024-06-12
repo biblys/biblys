@@ -126,6 +126,12 @@
 
             return $revenue;
         }
+
+        public function getRights()
+        {
+            $rm = new RightManager();
+            return $rm->getAll(["publisher_id" => $this->get('id')]);
+        }
     }
 
     class PublisherManager extends EntityManager

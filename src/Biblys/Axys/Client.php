@@ -16,7 +16,7 @@ class Client
         }
 
         if (!isset($this->options['protocol'])) {
-            $this->options['protocol'] = 'http';
+            $this->options['protocol'] = 'https';
         }
 
         if (!isset($this->options['port'])) {
