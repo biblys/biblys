@@ -1,6 +1,6 @@
 # Changelog
 
-## DEV
+### DEV: 2.52.0
 
 Améliorations
 
@@ -8,10 +8,22 @@ Améliorations
 - Le bouton "Vider tous les paniers" a été supprimé
 - Les redirections de pages causées par un changement d'url utilisent désormais
   le statut HTTP 301 plutôt que 302
+- L'erreur affichée sur la page de contact a été améliorée
 
 Corrections
 
 - Le statut HTTP des pages d'erreur 404 est bien 404
+
+### 2.51.4 (19 mars 2021)
+
+Corrections
+
+- L'url d'un article contient bien le nom de l'auteur et plus "anonyme"/ si
+  l'article a un ou plusieurs auteurs associés.
+- Le compte du nombre d'éditeur est désormais correct si le site utilise un
+  filtre éditeurs
+- Le formulaire d'édition d'un article fonctionne à nouveau si le site n'a aucun
+  rayon
 
 ### 2.51.3 (5 mars 2021)
 

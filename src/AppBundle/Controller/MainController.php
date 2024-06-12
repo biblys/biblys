@@ -4,7 +4,9 @@ namespace AppBundle\Controller;
 
 use Biblys\Admin\Entry;
 use Biblys\Service\Mailer;
+use Exception;
 use Framework\Controller;
+use InvalidArgumentException;
 use ReCaptcha\ReCaptcha as ReCaptcha;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -12,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+
+class ContactPageException extends Exception {}
 
 class MainController extends Controller
 {
@@ -184,7 +188,7 @@ class MainController extends Controller
                 $page = $pm->getById($page_id);
 
                 if (!$page) {
-                    throw new \Exception('Unable to find page '.$page_id);
+                    throw new Exception('Unable to find page '.$page_id);
                 }
 
                 $request->attributes->set('page', $page->get('url'));
@@ -226,21 +230,24 @@ class MainController extends Controller
         }
 
         if ($request->getMethod() == 'POST') {
-            // Check captcha
-            if ($recaptcha) {
-                $answer = $request->request->get('g-recaptcha-response');
-                $check = $recaptcha->verify($answer, $request->getClientIp());
+            try {
+                if ($recaptcha) {
+                    $answer = $request->request->get('g-recaptcha-response');
+                    $check = $recaptcha->verify($answer, $request->getClientIp());
 
-                if (!$check->isSuccess()) {
-                    $error = "Vous n'avez pas correctement complété le test anti-spam.";
+                    if (!$check->isSuccess()) {
+                        throw new ContactPageException(
+                            "Vous n'avez pas correctement complété le test anti-spam."
+                        );
+                    }
                 }
-            }
 
-            if (empty($name) || empty($email) || empty($subject) || empty($message)) {
-                $error = 'Tous les champs sont obligatoires.';
-            }
+                if (empty($name) || empty($email) || empty($subject) || empty($message)) {
+                    throw new ContactPageException(
+                        "Tous les champs sont obligatoires."
+                    );
+                }
 
-            if (!$error) {
                 $mailer = new Mailer();
                 $mailer->send(
                     $site->get('site_contact'),
@@ -250,6 +257,8 @@ class MainController extends Controller
                     ['reply-to' => $email]
                 );
                 $success = true;
+            } catch(ContactPageException | InvalidArgumentException $exception) {
+                $error = $exception->getMessage();
             }
         }
 
