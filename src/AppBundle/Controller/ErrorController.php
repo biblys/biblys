@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 // TODO: use twig template for exceptions
@@ -117,11 +118,9 @@ class ErrorController extends Controller
      */
     private function handlePageNotFound(Request $request, ResourceNotFoundException $exception): Response
     {
-        global $_SQL, $site;
+        global $_SQL, $_V, $site;
 
-        $protocol = $request->isSecure() ? 'https' : 'http';
-
-        $currentUrl = "$protocol://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        $currentUrl = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
         $parsedUrl = parse_url($currentUrl);
         $redirectionOld = $parsedUrl["path"];
         if (!empty($parsedUrl["query"])) {
@@ -141,23 +140,33 @@ class ErrorController extends Controller
             ]
         );
         if ($r = $redirections->fetch(PDO::FETCH_ASSOC)) {
-            return new RedirectResponse($r['redirection_new'], 301);
-        }
+            $response = new RedirectResponse($r['redirection_new'], 301);
+        } else {
+            if ($request->headers->get("Accept") === "application/json") {
+                $response = new JsonResponse(["error" => $exception->getMessage()]);
+                $response->setStatusCode(404);
+                return $response;
+            }
 
-        if ($request->headers->get("Accept") === "application/json") {
-            $response = new JsonResponse(["error" => $exception->getMessage()]);
+            $response = new Response();
             $response->setStatusCode(404);
-            return $response;
+
+            $request->attributes->set("page_title", "Erreur 404");
+            $content = '
+              <h2>Erreur 404</h2>
+              <p>Cette page  n\'existe pas !</p>
+          ';
+
+            if ($_V->isAdmin()) {
+                $content .= '
+
+                  ' . (isset($errorMessage) ? '<p>Debug info: ' . $errorMessage . '</p>' : null) . '
+                  <p>Page : ' . $redirectionOld . '</p>
+              ';
+            }
+
+            $response->setContent($content);
         }
-
-        $request->attributes->set("page_title", "Erreur 404");
-
-        $response = $this->render("AppBundle:Error:404.html.twig", [
-            "exception" => $exception,
-            "exceptionClass" => get_class($exception),
-        ]);
-        $response->setStatusCode(404);
-
         return $response;
     }
 

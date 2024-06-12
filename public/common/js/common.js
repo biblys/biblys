@@ -8,7 +8,7 @@ var Biblys = {};
  * Displays a notification
  *
  * @param {string} text the notification's message
- * @param {object} options a object containing options
+ * @param {options} options a object containing options
  *                          - type: a bootstrap alert class (default info)
  *                          - timeout: time in ms before notification disappears (default 2500)
  *                          - sticky: if true, notification won't disappear (default false)

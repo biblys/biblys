@@ -4,9 +4,6 @@ namespace Framework;
 
 use Biblys\Test\Factory;
 use Biblys\Test\Helpers;
-use Biblys\Test\ModelFactory;
-use Biblys\Test\RequestFactory;
-use Exception;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use ReflectionException;
@@ -100,117 +97,5 @@ class ControllerTest extends TestCase
 
         // when
         Helpers::callPrivateMethod($controller, "authAdmin", [$request]);
-    }
-
-    /**
-     * @throws ReflectionException
-     * @throws PropelException
-     */
-    public function testAuthPublisherForUserAuthorizedForGivenPublisher()
-    {
-        // then
-        $this->expectNotToPerformAssertions();
-
-        // given
-        $publisher = ModelFactory::createPublisher();
-        $controller = new Controller();
-        $request = RequestFactory::createAuthRequestForPublisherUser($publisher);
-
-        // when
-        Helpers::callPrivateMethod($controller, "authPublisher", [$request, $publisher]);
-    }
-
-    /**
-     * @throws ReflectionException
-     * @throws PropelException
-     */
-    public function testAuthPublisherForAdminUser()
-    {
-        // then
-        $this->expectNotToPerformAssertions();
-
-        // given
-        $publisher = ModelFactory::createPublisher();
-        $controller = new Controller();
-        $request = RequestFactory::createAuthRequestForAdminUser();
-
-        // when
-        Helpers::callPrivateMethod($controller, "authPublisher", [$request, $publisher]);
-    }
-
-    /**
-     * @throws ReflectionException
-     * @throws PropelException
-     */
-    public function testAuthPublisherForUserAuthorizedForOtherPublisher()
-    {
-        // then
-        $this->expectException("Framework\Exception\AuthException");
-        $this->expectExceptionMessage("Vous n'avez pas l'autorisation de modifier l'éditeur Éditeur interdit");
-
-        // given
-        $userPublisher = ModelFactory::createPublisher();
-        $otherPublisher = ModelFactory::createPublisher(["name" => "Éditeur interdit"]);
-        $controller = new Controller();
-        $request = RequestFactory::createAuthRequestForPublisherUser($userPublisher);
-
-        // when
-        Helpers::callPrivateMethod($controller, "authPublisher", [$request, $otherPublisher]);
-    }
-
-    /**
-     * @throws ReflectionException
-     * @throws PropelException
-     */
-    public function testAuthPublisherForUserWithNoPublisherRight()
-    {
-        // then
-        $this->expectException("Framework\Exception\AuthException");
-        $this->expectExceptionMessage("Vous n'avez pas l'autorisation de modifier l'éditeur Éditeur interdit");
-
-        // given
-        $publisher = ModelFactory::createPublisher(["name" => "Éditeur interdit"]);
-        $controller = new Controller();
-        $request = RequestFactory::createAuthRequest();
-
-        // when
-        Helpers::callPrivateMethod($controller, "authPublisher", [$request, $publisher]);
-    }
-
-    /**
-     * @throws ReflectionException
-     * @throws PropelException
-     */
-    public function testAuthPublisherWhenPublisherIsNull()
-    {
-        // then
-        $this->expectNotToPerformAssertions();
-
-        // given
-        $publisher = ModelFactory::createPublisher();
-        $controller = new Controller();
-        $request = RequestFactory::createAuthRequestForPublisherUser($publisher);
-
-        // when
-        Helpers::callPrivateMethod($controller, "authPublisher", [$request, null]);
-    }
-
-    /**
-     * @throws ReflectionException
-     * @throws PropelException
-     */
-    public function testAuthPublisherWhenPublisherIsNullForUserWithNoPublisherRight()
-    {
-        // then
-        $this->expectException("Framework\Exception\AuthException");
-        $this->expectExceptionMessage("Vous n'avez pas l'autorisation de modifier un éditeur");
-
-        // given
-        $publisher = ModelFactory::createPublisher();
-        $controller = new Controller();
-        $request = RequestFactory::createAuthRequest();
-
-        // when
-        Helpers::callPrivateMethod($controller, "authPublisher", [$request, null]);
     }
 }

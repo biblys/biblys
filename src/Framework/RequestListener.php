@@ -36,7 +36,9 @@ class RequestListener
         $url = $request->getRequestUri();
         $url = preg_replace('/([?&]UID=[^&]*)/', '', $url);
         $axysUid = $request->query->get("UID");
-        $cookie = Cookie::create("user_uid")->withValue($axysUid);
+        $cookie = Cookie::create("user_uid")
+            ->withValue($axysUid)
+            ->withSecure(true);
         $response = new RedirectResponse($url, 302);
         $response->headers->setCookie($cookie);
         $event->setResponse($response);

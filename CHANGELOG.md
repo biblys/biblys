@@ -1,50 +1,7 @@
 
 # Historique des modifications
 
-### 2.55.4 (29 octobre 2021)
-
-Corrections
-
-- La création d'un contributeur déjà existant échouait sans afficher d'erreur.
-  C'est corrigé.
-- La raison pour laquelle une page 404 était affichée n'était plus visible par
-  les administrateurs. C'est maintenant le cas.
-- L'import noosfere pouvait échouer lorsque les contributeurs étaient associés
-  à certains rôles inconnus de Biblys. Maintenant, ça marche.
-
-### 2.55.3 (22 octobre 2021)
-
-Corrections
-
-- L'ajout d'un contributeur à un article pouvait parfois échouer sans message 
-  d'erreur. Ça n'arrivera plus.
-- L'ajout d'un rayon à un article pouvait parfois provoquer l'apparition du
-  message d'erreur "Cet éditeur ne fait pas partie des éditeurs autorisés".
-  C'est corrigé.
-- Sur Safari, le rôle choisi pour un contributeur ne s'affichait pas
-  correctement lors de l'édition d'un article. C'est maintenant le cas.
-
-### 2.55.2 (17 octobre 2021)
-
-Corrections
-
-- Un bug empêchait les utilisateurs avec les droits de gestion pour un éditeur
-  de gérer les contributions associé à cet éditeur. C'est corrigé.
-- Les liens vers les pages évènements déclenchaient une erreur 404. Ce n'est
-  plus le cas.
-
-### 2.55.1 (9 octobre 2021)
-
-Corrections
-
-- L'erreur affichée lorsqu'on tentait d'afficher un article associé à un 
-  contributeur supprimé était peu claire. Maintenant, c'est mieux.
-- La page Rayons de l'administration ne s'affichait plus du tout. C'est 
-  corrigé.
-- L'erreur affichée lorsqu'une collection était créée avec un nom déjà utilisé
-  était sybilline. Elle est désormais plus bavarde.
-
-## 2.55.0 (1er octobre 2021)
+### 2.55.0 (1er octobre 2021)
 
 Améliorations
 

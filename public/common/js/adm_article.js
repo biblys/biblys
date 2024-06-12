@@ -383,6 +383,7 @@ $(document).ready(function () {
       },
       success: function (data) {
         $('#submitPeopleForm').removeClass('loading');
+        console.log(data);
         if (data.error) {
           _alert(data.error);
         } else {
@@ -394,7 +395,8 @@ $(document).ready(function () {
         }
       },
       error: function(jqXHR) {
-        window._alert(`Erreur: ${jqXHR.responseJSON.error}`);
+        var error = jqXHR.responseJSON.error;
+        window._alert(error);
       },
     });
   }).removeClass('e');
@@ -934,9 +936,7 @@ function _addContributorLine({
     `);
   });
   $(`${contributionLineSelector} select`).append(jobOptionsElements).focus();
-
-  const optionForSelectedJob = document.querySelector(`${contributionLineSelector} option[value="${contributorJobId}"]`);
-  optionForSelectedJob.selected = true;
+  $(`${contributionLineSelector} option[value=${contributorJobId}]`).attr('selected', 'selected');
 
   const roleSelector = document.querySelector(`${contributionLineSelector} .contribution-role-selector`);
   const deleteButton = document.querySelector(`${contributionLineSelector} .contribution-delete-button`);

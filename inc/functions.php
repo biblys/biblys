@@ -104,18 +104,12 @@ function biblys_error($level, $message, $file, $line, $trace = null, Throwable $
         if ($level === "DEPRECATED") {
             trigger_error($message, E_USER_DEPRECATED);
             return;
+        } else {
+            throw new Exception("$level: $message\nin $file on line $line");
         }
-
-        throw new Exception("$level: $message\nin $file on line $line");
-
         // XHR mode
     } elseif ($request->isXmlHttpRequest() || 'application/json' == $request->headers->get('Accept')) {
         // TODO: find some way to add deprecated notices to JSON response
-        if ($level === "DEPRECATED") {
-            trigger_error($message, E_USER_DEPRECATED);
-            return;
-        }
-
         $errorController = new ErrorController();
         $response = $errorController->exception($request, $exception);
         $response->send();

@@ -121,14 +121,6 @@ class Job
         $jobs[] = $job;
 
         $job = new Job();
-        $job->setId(22);
-        $job->setNeutralName("Bibliographe");
-        $job->setFeminineName("Bibliographe");
-        $job->setMasculineName("Bibliographe");
-        $job->setOnixCode("A40");
-        $jobs[] = $job;
-
-        $job = new Job();
         $job->setId(6);
         $job->setNeutralName("Coloriste");
         $job->setFeminineName("Coloriste");

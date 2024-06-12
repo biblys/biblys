@@ -2,11 +2,9 @@
 
 use Biblys\Contributor\Job;
 use Biblys\Contributor\UnknownJobException;
-use Biblys\Exception\EntityAlreadyExistsException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Biblys\Isbn\Isbn;
 use Biblys\Noosfere\Noosfere;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 $pm = new PublisherManager();
 $cm = new CollectionManager();
@@ -375,11 +373,7 @@ if ($_GET["mode"] == "search") { // Mode recherche
                 "collection_noosfere_id" => $x["noosfere_IdCollection"]
             ];
 
-            try {
-                $collection = $cm->create($collectionParams);
-            } catch(EntityAlreadyExistsException $exception) {
-                throw new ConflictHttpException($exception->getMessage(), $exception);
-            }
+            $collection = $cm->create($collectionParams);
             $x["collection_id"] = $collection->get('id');
         }
     }
@@ -504,14 +498,6 @@ function _getJobFromNoosfereName(string $name): Job
 
     if ($name === "Illustrateur intérieur") {
         return Job::getByName("Illustrateur (intérieur)");
-    }
-
-    if (in_array($name, ["Adaptateur", "Ouvrages sur l'auteur", "Présenté par", "Prête-plume", "Rédacteur en chef"])) {
-        return Job::getByName("Autre auteur");
-    }
-
-    if ($name === "Révision de traduction") {
-        return Job::getByName("Traducteur");
     }
 
     return Job::getByName($name);

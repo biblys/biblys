@@ -125,7 +125,7 @@ class PeopleTest extends PHPUnit\Framework\TestCase
      */
     public function testDuplicateNameCheck()
     {
-        $this->expectException("\Symfony\Component\HttpKernel\Exception\ConflictHttpException");
+        $this->expectException("Exception");
         $this->expectExceptionMessage("Il existe déjà un contributeur avec le nom Edgar Allan POE.");
 
         $pm = new PeopleManager();

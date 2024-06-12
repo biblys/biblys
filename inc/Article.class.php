@@ -1,8 +1,6 @@
 <?php
 
 use Biblys\Contributor\Contributor;
-use Biblys\Contributor\Job;
-use Biblys\Contributor\UnknownJobException;
 use Biblys\Exception\ArticleAlreadyInRayonException;
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Exception\InvalidEntityFetchedException;
@@ -112,8 +110,6 @@ class Article extends Entity
     /**
      * Get all article contributors
      * @return Contributor[]
-     * @throws InvalidEntityException
-     * @throws UnknownJobException
      */
     public function getContributors(): array
     {
@@ -124,21 +120,12 @@ class Article extends Entity
         $this->contributors = [];
 
         $rm = new RoleManager();
+        $pm = new PeopleManager();
+
         $roles = $rm->getAll(["article_id" => $this->get("id")]);
         foreach ($roles as $role) {
             $people = PeopleQuery::create()->findPk($role->get("people_id"));
-
-            if ($people === null) {
-                throw new InvalidEntityException(
-                    sprintf(
-                        "Cannot load article %s with invalid contribution: contributor %s does not exist",
-                        $this->get("id"),
-                        $role->get("people_id"),
-                    )
-                );
-            }
-
-            $job = Job::getById($role->get("job_id"));
+            $job = \Biblys\Contributor\Job::getById($role->get("job_id"));
             $this->contributors[] = new Contributor($people, $job, $role->get("id"));
         }
 
@@ -1540,7 +1527,7 @@ class ArticleManager extends EntityManager
             throw new InvalidEntityException('Il existe déjà un article avec l\'url ' . $article->get('url'));
         }
 
-        if ($article->has("publisher_id") && !$this->site->allowsPublisherWithId($article->get("publisher_id"))) {
+        if (!$this->site->allowsPublisherWithId($article->get("publisher_id"))) {
             throw new InvalidEntityException("Cet éditeur ne fait pas partie des éditeurs autorisés.");
         }
     }

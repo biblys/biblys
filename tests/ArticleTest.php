@@ -5,9 +5,6 @@
 */
 
 use Biblys\Test\Factory;
-use Biblys\Test\ModelFactory;
-use Model\PeopleQuery;
-use Propel\Runtime\Exception\PropelException;
 
 require_once "setUp.php";
 
@@ -435,38 +432,6 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $pm->delete($people2);
     }
 
-    /**
-     * @throws PropelException
-     * @throws Exception
-     */
-    public function testGetContributorsWithDeletedPeople()
-    {
-        // given
-        $author = Factory::createPeople([
-            "people_first_name" => "Auteur",
-            "people_last_name" => "Disparu",
-        ]);
-        $article = Factory::createArticle(
-            ["article_title" => "La disparition (de l'auteur)"],
-            [$author]
-        );
-        $peopleModel = PeopleQuery::create()->findPk($author->get("id"));
-        $peopleModel->delete();
-
-        // then
-        $this->expectException("Biblys\Exception\InvalidEntityException");
-        $this->expectExceptionMessage(
-            sprintf(
-                "Cannot load article %s with invalid contribution: contributor %s does not exist",
-                $article->get("id"),
-                $author->get("id"),
-            )
-        );
-
-        // when
-        $article->getContributors();
-    }
-
     /** Test getting article contributors
     * @depends testUpdate
     */
@@ -766,7 +731,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test that updating an article for an unauthorized publisher throws
+     * Test that updating an article without an url throws
      */
     public function testUpdatingArticleWithFilteredPublisher()
     {
@@ -786,33 +751,6 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $article = $am->create([
             "article_url" => "jean-bon/de-bayonne",
             "publisher_id" => $publisherFiltered->get("id")
-        ]);
-
-        // when
-        $am->update($article);
-    }
-
-    /**
-     * Test that updating an article without a publisher does not throw
-     * @throws Exception
-     */
-    public function testUpdatingArticleWithNoPublisher()
-    {
-        // then
-        $this->expectNotToPerformAssertions();
-
-        // given
-        $pm = new PublisherManager();
-        $publisherAllowed = $pm->create(["publisher_name" => "Éditeur inexistant"]);
-        $sm = new SiteManager();
-        $site = $sm->create([]);
-        $site->setOpt("publisher_filter", $publisherAllowed->get("id"));
-        $am = new ArticleManager($site);
-
-        $article = $am->create([
-            "article_url" => "jean-bon/de-bayonne",
-            "publisher_id" => null,
-            "article_editing_user" => 1,
         ]);
 
         // when

@@ -2,8 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use ArticleManager;
-use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
@@ -12,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+// Forms
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,15 +22,16 @@ class PeopleController extends Controller
     /**
      * List all authors.
      *
-     * @param Request $request
      * @return Response
      */
-    public function authorsAction(Request $request): Response
+    public function authorsAction()
     {
-        $request->attributes->set("page_title", 'Auteurs');
+        global $site;
 
-        $pm = new PeopleManager();
-        $authors = $pm->getAllFromCatalog();
+        $this->setPageTitle('Auteurs');
+
+        $pm = $this->entityManager('People');
+        $authors = $pm->getAllFromCatalog($site->getOpt('publisher_filter'));
 
         return $this->render('AppBundle:People:authors.html.twig', [
             'authors' => $authors,
@@ -42,8 +42,8 @@ class PeopleController extends Controller
     {
         global $site;
 
-        $pm = new PeopleManager();
-        $am = new ArticleManager();
+        $pm = $this->entityManager('People');
+        $am = $this->entityManager('Article');
         $people = $pm->get(['people_url' => $slug]);
 
         if (!$people) {
@@ -55,12 +55,12 @@ class PeopleController extends Controller
             return new RedirectResponse("/$slug/");
         }
 
-        $request->attributes->set("page_title", $people->getName());
+        $this->setPageTitle($people->getName());
 
         // Pagination
         $page = (int) $request->query->get('p', 0);
         $totalCount = $am->countAllFromPeople($people);
-        $pagination = new Pagination($page, $totalCount);
+        $pagination = new \Biblys\Service\Pagination($page, $totalCount);
 
         $articles = $am->getAllFromPeople($people, [
             'order' => 'article_pubdate',
@@ -85,7 +85,6 @@ class PeopleController extends Controller
 
     /**
      * @route /admin/people/{id}/edit.
-     * @param Request $request
      * @param int $id
      * @return RedirectResponse|Response
      * @throws AuthException

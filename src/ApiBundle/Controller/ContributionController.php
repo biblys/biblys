@@ -8,7 +8,6 @@ use Biblys\Contributor\UnknownJobException;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use Model\ArticleQuery;
-use Model\PublisherQuery;
 use Model\Role;
 use Model\RoleQuery;
 use Propel\Runtime\Exception\PropelException;
@@ -18,18 +17,17 @@ use Symfony\Component\HttpFoundation\Request;
 class ContributionController extends Controller
 {
     /**
-     * @route GET /api/admin/articles/{articleId}/contributions
+     * @route /api/admin/articles/{articleId}/contributions
      * @throws AuthException
      * @throws PropelException
      * @throws UnknownJobException
      */
     public function index(Request $request, $articleId): JsonResponse
     {
-        $article = ArticleQuery::create()->findPk($articleId);
-        $articlePublisher = PublisherQuery::create()->findPk($article->getPublisherId());
-        $contributions = $article->getRolesJoinPeople();
+        self::authAdmin($request);
 
-        self::authPublisher($request, $articlePublisher);
+        $article = ArticleQuery::create()->findPk($articleId);
+        $contributions = $article->getRolesJoinPeople();
 
         $contributors = array_map(function(Role $contribution) {
             $contributor = new Contributor(
@@ -39,7 +37,7 @@ class ContributionController extends Controller
             );
 
             $gender = $contribution->getPeople()->getGender();
-            $jobsForGender = $this->_getJobsForGender($gender);
+            $jobsForGender = $this->getJobsForGender($gender);
 
             return [
                 "contribution_id" => $contributor->getContributionId(),
@@ -57,16 +55,13 @@ class ContributionController extends Controller
     }
 
     /**
-     * @route POST /api/admin/articles/{articleId}/contributions
      * @throws AuthException
      * @throws PropelException
      * @throws UnknownJobException
      */
     public function create(Request $request, int $articleId): JsonResponse
     {
-        $article = ArticleQuery::create()->findPk($articleId);
-        $articlePublisher = PublisherQuery::create()->findPk($article->getPublisherId());
-        self::authPublisher($request, $articlePublisher);
+        self::authAdmin($request);
 
         $encodedContent = $request->getContent();
         $params = json_decode($encodedContent, true);
@@ -84,7 +79,7 @@ class ContributionController extends Controller
         );
 
         $gender = $contribution->getPeople()->getGender();
-        $jobsForGender = $this->_getJobsForGender($gender);
+        $jobsForGender = $this->getJobsForGender($gender);
 
         $authorNamesAsString = $this->_getAuthorNamesAsString($contribution);
         return new JsonResponse([
@@ -100,21 +95,18 @@ class ContributionController extends Controller
     }
 
     /**
-     * @route PUT /api/admin/articles/{articleId}/contributions/{id}
      * @throws PropelException
      * @throws AuthException
      */
     public function update(Request $request, int $id): JsonResponse
     {
+        self::authAdmin($request);
+
         $encodedContent = $request->getContent();
         $params = json_decode($encodedContent, true);
         $jobId = $params["job_id"];
 
         $contribution = RoleQuery::create()->findPk($id);
-
-        $articlePublisher = PublisherQuery::create()->findPk($contribution->getArticle()->getPublisherId());
-        self::authPublisher($request, $articlePublisher);
-
         $contribution->setJobId($jobId);
         $contribution->save();
 
@@ -123,17 +115,14 @@ class ContributionController extends Controller
     }
 
     /**
-     * @route DELETE /api/admin/articles/{articleId}/contributions/{id}
-     * @throws PropelException
      * @throws AuthException
+     * @throws PropelException
      */
     public function delete(Request $request, int $id): JsonResponse
     {
+        self::authAdmin($request);
+
         $contribution = RoleQuery::create()->findPk($id);
-
-        $articlePublisher = PublisherQuery::create()->findPk($contribution->getArticle()->getPublisherId());
-        self::authPublisher($request, $articlePublisher);
-
         $contribution->delete();
 
         $authorNamesAsString = $this->_getAuthorNamesAsString($contribution);
@@ -163,7 +152,7 @@ class ContributionController extends Controller
      * @param string|null $gender
      * @return array|array[]
      */
-    private function _getJobsForGender(?string $gender): array
+    private function getJobsForGender(?string $gender): array
     {
         $jobs = Job::getAll();
         return array_map(function (Job $job) use ($gender) {

@@ -63,13 +63,22 @@ if (isset($term)) {
     /** @var Request $request */
     $peopleFirstName = $request->request->get('people_first_name');
     $peopleLastName = $request->request->get('people_last_name');
-    $people = $pm->create(
-        [
-            'people_first_name' => $peopleFirstName,
-            'people_last_name' => $peopleLastName,
-        ]
-    );
-
+    
+    try {
+        $people = $pm->create(
+            [
+                'people_first_name' => $peopleFirstName,
+                'people_last_name' => $peopleLastName,
+            ]
+        );
+    } catch (Exception $e) {
+        trigger_error(
+            'Impossible de créer le contributeur 
+                '.$peopleFirstName.' '.$peopleLastName.' : 
+                '.$e->getMessage()
+        );
+    }
+    
     $json = [
         'people_id' => $people->get('id'),
         'people_name' => $people->get('name'),

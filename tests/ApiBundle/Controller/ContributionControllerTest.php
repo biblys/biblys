@@ -3,8 +3,6 @@
 namespace ApiBundle\Controller;
 
 use Biblys\Test\Factory;
-use Biblys\Test\ModelFactory;
-use Biblys\Test\RequestFactory;
 use Exception;
 use Framework\Exception\AuthException;
 use Model\Role;
@@ -68,30 +66,6 @@ class ContributionControllerTest extends TestCase
             ["job_id" => 1, "job_name" => "Autrice"],
             $contributor1["job_options"][2],
             "it should include jobs with correct gender"
-        );
-    }
-
-
-    /**
-     * @throws PropelException
-     * @throws Exception
-     */
-    public function testIndexActionAsAPublisher()
-    {
-        // given
-        $publisher = ModelFactory::createPublisher();
-        $article = Factory::createArticle(["publisher_id" => $publisher->getId()]);
-        $request = RequestFactory::createAuthRequestForPublisherUser($publisher);
-        $controller = new ContributionController();
-
-        // when
-        $response = $controller->index($request, $article->get("id"));
-
-        // then
-        $this->assertEquals(
-            200,
-            $response->getStatusCode(),
-            "it should allow authorized publisher to read contributions"
         );
     }
 
@@ -165,35 +139,6 @@ class ContributionControllerTest extends TestCase
      * @throws AuthException
      * @throws Exception
      */
-    public function testCreateActionAsPublisher()
-    {
-        // given
-        $publisher = ModelFactory::createPublisher();
-        $article = Factory::createArticle(["publisher_id" => $publisher->getId()]);
-        $person = Factory::createPeople(["people_first_name" => "Lili", "people_last_name" => "Raton"]);
-        $content = json_encode([
-            "people_id" => $person->get("id"),
-            "job_id" => 14,
-        ]);
-        $request = RequestFactory::createAuthRequestForPublisherUser($publisher, $content);
-        $controller = new ContributionController();
-
-        // when
-        $response = $controller->create($request, $article->get("id"));
-
-        // then
-        $this->assertEquals(
-            200,
-            $response->getStatusCode(),
-            "it should respond with http 200"
-        );
-    }
-
-    /**
-     * @throws PropelException
-     * @throws AuthException
-     * @throws Exception
-     */
     public function testUpdateAction()
     {
         // given
@@ -233,35 +178,6 @@ class ContributionControllerTest extends TestCase
      * @throws AuthException
      * @throws Exception
      */
-    public function testUpdateActionAsPublisher()
-    {
-        // given
-        $publisher = ModelFactory::createPublisher();
-        $article = Factory::createArticle(["publisher_id" => $publisher->getId()]);
-        $content = '{"job_id":"2"}';
-        $request = RequestFactory::createAuthRequestForPublisherUser($publisher, $content);
-        $contribution = new Role();
-        $contribution->setArticleId($article->get("id"));
-        $contribution->setJobId(1);
-        $contribution->save();
-        $controller = new ContributionController();
-
-        // when
-        $response = $controller->update($request, $contribution->getId());
-
-        // then
-        $this->assertEquals(
-            200,
-            $response->getStatusCode(),
-            "it should respond with http 200"
-        );
-    }
-
-    /**
-     * @throws PropelException
-     * @throws AuthException
-     * @throws Exception
-     */
     public function testDeleteAction()
     {
         // given
@@ -291,34 +207,6 @@ class ContributionControllerTest extends TestCase
             "{\"authors\":\"Herv\u00e9 LE TERRIER\"}",
             $response->getContent(),
             "it should response with authors"
-        );
-    }
-
-    /**
-     * @throws PropelException
-     * @throws AuthException
-     * @throws Exception
-     */
-    public function testDeleteActionAsPublisher()
-    {
-        // given
-        $publisher = ModelFactory::createPublisher();
-        $article = Factory::createArticle(["publisher_id" => $publisher->getId()]);
-        $request = RequestFactory::createAuthRequestForPublisherUser($publisher);
-        $contribution = new Role();
-        $contribution->setArticleId($article->get("id"));
-        $contribution->setJobId(1);
-        $contribution->save();
-        $controller = new ContributionController();
-
-        // when
-        $response = $controller->delete($request, $contribution->getId());
-
-        // then
-        $this->assertEquals(
-            200,
-            $response->getStatusCode(),
-            "it should respond with http 200"
         );
     }
 }

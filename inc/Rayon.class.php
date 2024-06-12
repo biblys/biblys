@@ -14,14 +14,14 @@ class Rayon extends Entity
         return $am->getAllFromRayon($this, false);
     }
 
-    public function countArticles(): int
+    public function countArticles()
     {
         if (isset($this->articles)) {
             return count($this->articles);
         }
 
         $am = new ArticleManager();
-        return $am->countAllFromRayon($this);
+        return count($am->getAllFromRayon($this, ['fields' => 'article_id'], false));
     }
 
     public function addArticle($article)

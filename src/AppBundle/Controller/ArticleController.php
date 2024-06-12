@@ -263,10 +263,10 @@ class ArticleController extends Controller
      *
      * @return Response
      */
-    public function deletionsAction(Request $request)
+    public function deletionsAction()
     {
         $this->auth('root');
-        $request->attributes->set("page_title", "Articles à supprimer");
+        $this->setPageTitle('Articles à supprimer');
 
         $am = $this->entityManager('Article');
 
@@ -529,12 +529,12 @@ class ArticleController extends Controller
      *
      * @return Response
      */
-    public function adminCatalog(Request $request)
+    public function adminCatalog()
     {
         $am = $this->entityManager('Article');
         $articles = $am->getAll();
 
-        $request->attributes->set("page_title", "Catalogue");
+        $this->setPageTitle('Catalogue');
 
         return $this->render('AppBundle:Article:articleAdminCatalog.html.twig', [
             'articles' => $articles,
@@ -572,10 +572,9 @@ class ArticleController extends Controller
     {
         $am = new \ArticleManager();
 
-        $requestBody = $request->getContent();
-        $publisherStock = (int) $requestBody;
-        if (!is_int($publisherStock) || $requestBody === "NaN") {
-            throw new BadRequestHttpException("article_publisher_stock $requestBody is not an integer.");
+        $publisherStock = (int) $request->request->get("article_publisher_stock");
+        if (!is_int($publisherStock)) {
+            throw new BadRequestHttpException("article_publisher_stock $publisherStock is not an integer.");
         }
 
         $article = $am->getById($articleId);

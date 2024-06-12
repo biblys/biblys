@@ -26,7 +26,7 @@ if (isset($_GET['id']))
 {
     if ($e = $em->get(array('event_id' => $_GET['id'], 'site_id' => $site->get("id"))))
     {
-        $_PAGE_TITLE = 'Modifier <a href="/evenements/'.$e['event_url'].'">'.$e['event_title'].'</a>';
+        $_PAGE_TITLE = 'Modifier <a href="/evenement/'.$e['event_url'].'">'.$e['event_title'].'</a>';
         $buttons .= ' <button type="submit" form="event" formaction="?delete" class="btn btn-danger" formnovalidate data-confirm="Voulez-vous vraiment supprimer cet évènement ?"><i class="fa fa-trash-o"></i> Supprimer</button>';
     }
     else trigger_error('Cet évènement n\'existe pas.', E_USER_ERROR);
@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             $e = $em->update($e);
 
             $success = $e->get('title').' a bien été mise à jour.';
-            return new RedirectResponse("/evenements/".$e->get('url')."?success=$success");
+            return new RedirectResponse("/evenement/".$e->get('url')."?success=$success");
         }
         else trigger_error('Cet évènement n\'existe pas.', E_USER_ERROR);
     }
