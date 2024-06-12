@@ -23,9 +23,10 @@ class CartTest extends TestCase
 {
     public function testCartDisplay()
     {
-        global $_V;
+        global $_V, $site;
 
         // given
+        $site->setOpt("virtual_stock", 1);
         $flashBag = $this
             ->getMockBuilder("Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface")
             ->getMock();

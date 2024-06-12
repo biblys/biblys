@@ -48,6 +48,10 @@ class EntityFactory
             $attributes["publisher_id"] = $collection->get("publisher_id");
         }
 
+        if (!isset($attributes["type_id"])) {
+            $attributes["type_id"] = 1;
+        }
+
         $am = new ArticleManager();
         $article = $am->create($attributes);
 

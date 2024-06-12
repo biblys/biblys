@@ -114,10 +114,11 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createShippingFee(): ShippingFee
+    public static function createShippingFee(array $attributes = []): ShippingFee
     {
         $shippingFee = new ShippingFee();
         $shippingFee->setSiteId(1);
+        $shippingFee->setType($attributes["type"] ?? "normal");
         $shippingFee->save();
 
         return $shippingFee;

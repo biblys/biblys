@@ -29,7 +29,11 @@ class ShippingController extends Controller
         self::authAdmin($request);
 
         $currentSite = CurrentSite::buildFromConfig($config);
-        $allFees = ShippingFeeQuery::createForSite($currentSite)->find();
+        $allFees = ShippingFeeQuery::createForSite($currentSite)
+            ->orderByType()
+            ->orderByZone()
+            ->orderByFee()
+            ->find();
 
         $fees = array_map(function ($fee) {
                 return self::_feeToJson($fee);

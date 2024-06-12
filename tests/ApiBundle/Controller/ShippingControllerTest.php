@@ -26,10 +26,34 @@ class ShippingControllerTest extends TestCase
         // given
         $shippingFee1 = new ShippingFee();
         $shippingFee1->setSiteId(1);
+        $shippingFee1->setType("Type C");
+        $shippingFee1->setZone("Z2");
+        $shippingFee1->setFee(100);
         $shippingFee1->save();
         $shippingFee2 = new ShippingFee();
         $shippingFee2->setSiteId(1);
+        $shippingFee2->setType("Type B");
+        $shippingFee2->setZone("Z2");
+        $shippingFee2->setFee(100);
         $shippingFee2->save();
+        $shippingFee3 = new ShippingFee();
+        $shippingFee3->setSiteId(1);
+        $shippingFee3->setType("Type A");
+        $shippingFee3->setZone("Z2");
+        $shippingFee3->setFee(100);
+        $shippingFee3->save();
+        $shippingFee4 = new ShippingFee();
+        $shippingFee4->setSiteId(1);
+        $shippingFee4->setType("Type A");
+        $shippingFee4->setZone("Z1");
+        $shippingFee4->setFee(100);
+        $shippingFee4->save();
+        $shippingFee5 = new ShippingFee();
+        $shippingFee5->setSiteId(1);
+        $shippingFee5->setType("Type A");
+        $shippingFee5->setZone("Z1");
+        $shippingFee5->setFee(90);
+        $shippingFee5->save();
         $otherSiteShippingFee = new ShippingFee();
         $otherSiteShippingFee->setSiteId(2);
         $otherSiteShippingFee->save();
@@ -41,13 +65,75 @@ class ShippingControllerTest extends TestCase
         $response = $controller->indexAction($request, $config);
 
         // then
+        $expectedResponse = [
+            [
+                'id' => 5,
+                'mode' => NULL,
+                'type' => 'Type A',
+                'zone' => 'Z1',
+                'max_weight' => NULL,
+                'min_amount' => NULL,
+                'max_amount' => NULL,
+                'max_articles' => NULL,
+                'fee' => 90,
+                'info' => NULL,
+            ],
+            [
+                'id' => 4,
+                'mode' => NULL,
+                'type' => 'Type A',
+                'zone' => 'Z1',
+                'max_weight' => NULL,
+                'min_amount' => NULL,
+                'max_amount' => NULL,
+                'max_articles' => NULL,
+                'fee' => 100,
+                'info' => NULL,
+            ],
+            [
+                'id' => 3,
+                'mode' => NULL,
+                'type' => 'Type A',
+                'zone' => 'Z2',
+                'max_weight' => NULL,
+                'min_amount' => NULL,
+                'max_amount' => NULL,
+                'max_articles' => NULL,
+                'fee' => 100,
+                'info' => NULL,
+            ],
+            [
+                'id' => 2,
+                'mode' => NULL,
+                'type' => 'Type B',
+                'zone' => 'Z2',
+                'max_weight' => NULL,
+                'min_amount' => NULL,
+                'max_amount' => NULL,
+                'max_articles' => NULL,
+                'fee' => 100,
+                'info' => NULL,
+            ],
+            [
+                'id' => 1,
+                'mode' => NULL,
+                'type' => 'Type C',
+                'zone' => 'Z2',
+                'max_weight' => NULL,
+                'min_amount' => NULL,
+                'max_amount' => NULL,
+                'max_articles' => NULL,
+                'fee' => 100,
+                'info' => NULL,
+            ],
+        ];
         $this->assertEquals(
             200,
             $response->getStatusCode(),
             "it should respond with http 200"
         );
         $this->assertEquals(
-            '[{"id":1,"mode":null,"type":null,"zone":null,"max_weight":null,"min_amount":null,"max_amount":null,"max_articles":null,"fee":null,"info":null},{"id":2,"mode":null,"type":null,"zone":null,"max_weight":null,"min_amount":null,"max_amount":null,"max_articles":null,"fee":null,"info":null}]',
+            json_encode($expectedResponse),
             $response->getContent(),
             "it should return all fees for current site"
         );

@@ -390,6 +390,29 @@ class CartTest extends PHPUnit\Framework\TestCase
     }
 
     /**
+     * @throws Exception
+     */
+    public function testAddArticleToBeReprinted()
+    {
+        // then
+        $this->expectException("Entity\Exception\CartException");
+        $this->expectExceptionMessage("L'article À réimprimer n'a pas pu être ajouté au panier car il est en cours de réimpression.");
+
+        // given
+        global $site;
+        $site->setOpt('virtual_stock', 1);
+        $cm = new CartManager();
+        $cart = $cm->create();
+        $article = EntityFactory::createArticle([
+            "article_title" => "À réimprimer",
+            "article_availability_dilicom" => 03
+        ]);
+
+        // when
+        $cm->addArticle($cart, $article);
+    }
+
+    /**
      * Test getting user info from cart
      */
     public function testGetUserInfo()
