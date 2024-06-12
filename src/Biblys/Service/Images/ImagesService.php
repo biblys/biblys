@@ -3,6 +3,7 @@
 namespace Biblys\Service\Images;
 
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Exception;
 use Model\Article;
 use Model\Image;
@@ -18,8 +19,9 @@ class ImagesService
     private string|array|bool $baseUrl;
 
     public function __construct(
-        private readonly Config     $config,
-        private readonly Filesystem $filesystem,
+        private readonly Config      $config,
+        private readonly CurrentSite $currentSite,
+        private readonly Filesystem  $filesystem,
     )
     {
         $basePathFromRoot = $this->config->get("media_path") ?: "public/images";
@@ -51,6 +53,7 @@ class ImagesService
             $image->setVersion(1);
         }
 
+        $image->setSite($this->currentSite->getSite());
         $image->setType("cover");
         $image->setArticleId($article->getId());
         $image->setFilepath("book/$imageDirectory/");
