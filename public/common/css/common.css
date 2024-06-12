@@ -376,6 +376,16 @@ label.radio {
   text-align: left;
 }
 
+.required-fields-notice {
+  font-size: .75em;
+  color: #a31515;
+  text-align: center;
+}
+
+.required-field-indicator {
+  color: #a31515;
+}
+
 label.button {
   width: auto;
   padding: 3px;
@@ -475,12 +485,18 @@ form.fieldset fieldset {
 form.fieldset fieldset legend {
   font-size: 16px;
   font-weight: bold;
-  margin-left: 155px;
+  margin-left: 25px;
   margin-bottom: 0;
   background: white;
   padding: 5px 10px;
   border: 3px solid whiteSmoke;
   width: auto;
+}
+
+@media (min-width: 768px) {
+  form.fieldset fieldset legend {
+    margin-left: 155px;
+  }
 }
 
 textarea {
@@ -640,24 +656,84 @@ table.cart td {
   width: 100%;
 }
 
-.order-delivery-form p {
-  margin-top: 1em;
+.order-delivery-form .required-fields-notice {
+  margin-bottom: 16px;
+  text-align: right;
+  width: 100%;
 }
 
-.order-delivery-form textarea {
+.order-delivery-form__field {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.order-delivery-form__field:last-child {
+  margin-bottom: 0;
+}
+
+.order-delivery-form__label {
+  color: rgba(0, 0, 0, .6);
+  float: initial;
+  font-weight: normal;
+  font-size: 12px;
+  text-align: left;
+  padding: 6px 8px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.order-delivery-form__input,
+.order-delivery-form__textarea {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   margin: 0;
+  padding: 24px 8px 4px;
+  width: 100%;
 }
 
-@media (min-width: 768px) {
-  .order-delivery-form label:not(.after) {
-    float: left;
-    text-align: right;
-    padding: 5px 10px;
-    width: 25%;
+.order-delivery-form__textarea {
+  padding: 8px;
+}
+
+.order-delivery-form__field--country .btn {
+  position: absolute;
+  right: 12px;
+  top: 8px;
+}
+
+.order-delivery-form__checkbox {
+  margin-bottom: 24px;
+}
+.order-delivery-form__checkbox:last-child {
+  margin-bottom: 0;
+}
+
+.order-delivery-form__buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 600px) {
+  .order-delivery-form__fieldset {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 532px;
+    margin: 24px auto !important;
   }
 
-  .order-delivery-form .form-control {
-    width: 50%;
+  .order-delivery-form__field {
+    width: 100%;
+  }
+
+  .order-delivery-form__field--half {
+    width: calc(50% - 8px);
+  }
+  .order-delivery-form__buttons {
+    justify-content: space-between;
   }
 }
 

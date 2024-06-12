@@ -17,7 +17,7 @@ class Config
     {
         $configFilePath = self::_getConfigFilePath();
 
-        // If config file does not exist, throw Exception
+        // If config file does not exists, throw Exception
         if (!file_exists($configFilePath)) {
             throw new Exception("Cannot find config file at $configFilePath.");
         }
@@ -54,7 +54,7 @@ class Config
         $this->config[$key] = $value;
     }
 
-    private static function _getConfigFilePath(): string
+    static private function _getConfigFilePath(): string
     {
         if (getenv("PHP_ENV") === "test") {
             return __DIR__ . "/../../../tests/config-for-tests.yml";
@@ -63,7 +63,7 @@ class Config
         return __DIR__ . "/../../../app/config.yml";
     }
 
-    private static function _getDefaultValueForKey($key): ?string
+    static private function _getDefaultValueForKey($key): ?string
     {
         if ($key === "site") {
             return 1;
@@ -71,10 +71,6 @@ class Config
 
         if ($key === "users_table_name") {
             return "Users";
-        }
-
-        if ($key === "options_table_name") {
-            return "options";
         }
 
         if ($key === "media_path") {

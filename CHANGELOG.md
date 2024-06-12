@@ -1,14 +1,12 @@
 # Historique des modifications
 
-### 2.57.4 (28 janvier 2021)
+## 2.57.0 (DEV)
 
-Cette mise à jour purement technique ajoute une option de configuration 
-nécessaire pour préparer une migration de la base de données.
+Améliorations
 
-### 2.57.3 (21 janvier 2021)
-
-Correction : une erreur empêchait l'afffichage de la page de gestion d'un rayon
-dans l'administration. C'est corrigé.
+Le formulaire d'enregistrement de l'adresse d'expédition lors de 
+l'enregistrement d'une commande a été amélioré, notamment pour mieux distinguer
+les champs obligatoires des champs facultatifs.
 
 ### 2.57.2 (16 janvier 2021)
 

@@ -411,8 +411,6 @@ if (isset($error)) {
     $content .= '<p class="error">' . $error . '</p>';
 }
 
-$save_data_checkbox = null;
-
 // Newsletter checkbox
 $newsletter_checkbox = null;
 if ($site->getOpt('newsletter') == 1) {
@@ -431,10 +429,10 @@ if ($site->getOpt('newsletter') == 1) {
 
     if ($showCheckbox) {
         $newsletter_checkbox = '
-            <p class="checkbox">
+            <p class="checkbox order-delivery-form__checkbox">
                 <label class="after">
                     <input type="checkbox" name="newsletter" value="1" ' . $checked . ' >
-                    Je souhaite recevoir la newsletter pour être tenu-e
+                    Je souhaite recevoir la newsletter pour être tenu·e
                     au courant de l\'actualité du site.<br>
                     <small>
                         En cochant cette case, j\'accepte de recevoir par
@@ -457,7 +455,7 @@ if ($cgv_page) {
     $page = $pm->getById($cgv_page);
     if ($page) {
         $cgv_checkbox = '
-            <p class="checkbox">
+            <p class="checkbox order-delivery-form__checkbox">
                 <label class="after">
                     <input type="checkbox" name="cgv_checkbox" value=1 required>
                     En cochant cette case, je reconnais avoir pris
@@ -553,63 +551,99 @@ if ($request->getMethod() === "POST") {
 
 $content .= '
     <form id="orderForm" method="post" class="order-delivery-form fieldset check ' . $form_class . '">
-        <fieldset>
+        <fieldset class="order-delivery-form__fieldset">
             <legend>Vos coordonnées</legend>
-            <p>
-                <label for="order_firstname">Prénom :</label>
-                <input type="text" name="order_firstname" id="order_firstname" class="form-control" value="' . $order->get('firstname') . '" required />
-            </p>
-            <p>
-                <label for="order_lastname">Nom :</label>
-                <input type="text" name="order_lastname" id="order_lastname" class="form-control" value="' . $order->get('lastname') . '" style="text-transform : uppercase;" required />
-            </p>
-            <br>
-
-            <p>
-                <label for="order_address1">Adresse (ligne 1) :</label>
-                <input type="text" name="order_address1" id="order_address1" class="form-control" value="' . $order->get('address1') . '" class="long" required />
-            </p>
-            <p>
-                <label for="order_address2">Adresse (ligne 2) :</label>
-                <input type="text" name="order_address2" id="order_address2" class="form-control" value="' . $order->get('address2') . '" class="long" />
-            </p>
-            <p>
-                <label for="order_postalcode">Code postal :</label>
-                <input type="text" name="order_postalcode" id="order_postalcode" class="form-control" value="' . $order->get('postalcode') . '" required />
-            </p>
-            <p>
-                <label for="order_city">Ville :</label>
-                <input type="text" name="order_city" id="order_city"  class="form-control" value="' . $order->get('city') . '" required />
-            </p>
-            <p>
-                <label for="country_id">Pays :</label>
+            <div class="required-fields-notice">
+                Les champs suivis d\'une étoile (<span class="required-field-indicator">*</span>) sont obligatoires.    
+            </div>
+            
+            <div class="order-delivery-form__field order-delivery-form__field--country">
+                <label for="country_id" class="order-delivery-form__label">
+                    Pays
+                    <span class="required-field-indicator">*</span>
+                </label>
                 ' . $countryInput . '
-            </p>
-            <br>
+            </div>
+            
+            <div class="order-delivery-form__field order-delivery-form__field--half">
+                <label for="order_firstname" class="order-delivery-form__label">
+                    Prénom
+                    <span class="required-field-indicator">*</span>
+                </label>
+                <input type="text" name="order_firstname" id="order_firstname" value="' . $order->get('firstname') . '" class="order-delivery-form__input" required />
+            </div>
 
-            <p>
-                <label for="order_email">Adresse e-mail :</label>
-                <input type="email" name="order_email" class="form-control" id="order_email" value="' . $order->get('email') . '" required />
-            </p>
-            <p>
-                <label for="order_phone">Téléphone :</label>
-                <input type="text" name="order_phone" class="form-control" id="order_phone" value="' . $order->get('phone') . '" />
-            </p>
-            <br>
+            <div class="order-delivery-form__field order-delivery-form__field--half">
+                <label for="order_lastname" class="order-delivery-form__label">
+                    Nom de famille
+                    <span class="required-field-indicator">*</span>
+                </label>
+                <input type="text" name="order_lastname" id="order_lastname" value="' . $order->get('lastname') . '" class="order-delivery-form__input" style="text-transform : uppercase;" required />
+            </div>
 
-            <p>
-                <label for="order_comment">Commentaires :<br><small>à l\'intention du préparateur de la commande</small></label>
-                <textarea name="order_comment" maxlength="1024" class="form-control" id="order_comment" rows=5>' . $order->get('comment') . '</textarea>
-            </p>
+            <div class="order-delivery-form__field">
+                <label for="order_address1" class="order-delivery-form__label">
+                    Numéro et nom de rue
+                    <span class="required-field-indicator">*</span>
+                </label>
+                <input type="text" name="order_address1" id="order_address1" value="' . $order->get('address1') . '" class="order-delivery-form__input" required />
+            </div>
 
-            <br>
-            ' . $save_data_checkbox . '
+            <div class="order-delivery-form__field">
+                <label for="order_address2" class="order-delivery-form__label">
+                    Complément d\'adresse
+                    <small>(bât., BP, lieu-dit, etc.)</small>
+                </label>
+                <input type="text" name="order_address2" id="order_address2" value="' . $order->get('address2') . '" class="order-delivery-form__input" />
+            </div>
+
+            <div class="order-delivery-form__field order-delivery-form__field--half">
+                <label for="order_postalcode" class="order-delivery-form__label">
+                    Code postal
+                    <span class="required-field-indicator">*</span>
+                </label>
+                <input type="text" name="order_postalcode" id="order_postalcode" value="' . $order->get('postalcode') . '" class="order-delivery-form__input" required />
+            </div>
+
+            <div class="order-delivery-form__field order-delivery-form__field--half">
+                <label for="order_city" class="order-delivery-form__label">
+                    Ville
+                     <span class="required-field-indicator">*</span>
+                </label>
+                <input type="text" name="order_city" id="order_city" value="' . $order->get('city') . '" class="order-delivery-form__input" required />
+            </div>
+
+            <div class="order-delivery-form__field">
+                <label for="order_email" class="order-delivery-form__label">
+                    Adresse e-mail
+                     <span class="required-field-indicator">*</span>
+                </label>
+                <input type="email" name="order_email" id="order_email" value="' . $order->get('email') . '" class="order-delivery-form__input" required />
+            </div>
+
+            <div class="order-delivery-form__field">
+                <label for="order_phone" class="order-delivery-form__label">Téléphone</label>
+                <input type="text" name="order_phone" id="order_phone" value="' . $order->get('phone') . '" class="order-delivery-form__input" />
+            </div>
+         </fieldset>
+         
+         <fieldset class="order-delivery-form__fieldset">
+            <legend>Commentaires</legend>
+            <p><small>À l\'intention du préparateur de la commande</small></p>
+            <div class="order-delivery-form__field">
+                <textarea name="order_comment" maxlength="1024" class="order-delivery-form__textarea" id="order_comment" rows=5>' . $order->get('comment') . '</textarea>
+            </div>
+         </fieldset>
+         
+         <fieldset class="order-delivery-form__fieldset">
             ' . $newsletter_checkbox . '
             ' . $cgv_checkbox . '
         </fieldset>
-        <fieldset class="text-center">
+
+        <fieldset class="order-delivery-form__fieldset order-delivery-form__buttons">
             ' . $card_warning . '
-            <input class="btn btn-primary" type="submit" value="Enregistrer la commande" />
+            <a href="/pages/cart" class="btn btn-light">Revenir au panier</a>
+            <button class="btn btn-primary" type="submit">Enregistrer la commande</button>
         </fieldset>
     </form>
 

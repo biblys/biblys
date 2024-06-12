@@ -124,9 +124,9 @@ class OrderDeliveryHelpers
                 trigger_error('Pays incorrect');
             }
             $countryInput = '
-            <input type="text" value="' . $country->get('name') . '" readonly>
+            <input type="text" class="order-delivery-form__input" value="' . $country->get('name') . '" readonly>
             <input type="hidden" name="country_id" value="' . $country->get('id') . '">
-            <a class="btn btn-info btn-xs" href="/pages/cart">modifier</a>
+            <a class="btn btn-light" href="/pages/cart">modifier</a>
         ';
         } else {
 

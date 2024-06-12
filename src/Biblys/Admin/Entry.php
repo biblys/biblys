@@ -39,7 +39,7 @@ class Entry
         }
 
         if (isset($options['path'])) {
-            $container = require(__DIR__."/../../container.php");
+            global $container;
             $urlGenerator = $container->get("url_generator");
             $this->setUrl($urlGenerator->generate($options['path']));
         }
@@ -159,11 +159,10 @@ class Entry
      */
     public static function findAll(): array
     {
-        global $site, $config;
+        global $site, $config, $container;
 
         // Biblys update available
         $updates = 0;
-        $container = include __DIR__."/../../container.php";
         $updater = $container->get("updater");
         $diff = time() - $site->getOpt('updates_last_checked');
         if ($diff > 60 * 60 * 24) {
