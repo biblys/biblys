@@ -16,6 +16,8 @@ use Model\Post as ChildPost;
 use Model\PostQuery as ChildPostQuery;
 use Model\Publisher as ChildPublisher;
 use Model\PublisherQuery as ChildPublisherQuery;
+use Model\Site as ChildSite;
+use Model\SiteQuery as ChildSiteQuery;
 use Model\Stock as ChildStock;
 use Model\StockQuery as ChildStockQuery;
 use Model\Map\ImageTableMap;
@@ -81,6 +83,13 @@ abstract class Image implements ActiveRecordInterface
      * @var        int
      */
     protected $id;
+
+    /**
+     * The value for the site_id field.
+     *
+     * @var        int|null
+     */
+    protected $site_id;
 
     /**
      * The value for the type field.
@@ -200,6 +209,11 @@ abstract class Image implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $updated_at;
+
+    /**
+     * @var        ChildSite
+     */
+    protected $aSite;
 
     /**
      * @var        ChildArticle
@@ -476,6 +490,16 @@ abstract class Image implements ActiveRecordInterface
     }
 
     /**
+     * Get the [site_id] column value.
+     *
+     * @return int|null
+     */
+    public function getSiteId()
+    {
+        return $this->site_id;
+    }
+
+    /**
      * Get the [type] column value.
      *
      * @return string|null
@@ -696,6 +720,30 @@ abstract class Image implements ActiveRecordInterface
         if ($this->id !== $v) {
             $this->id = $v;
             $this->modifiedColumns[ImageTableMap::COL_ID] = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [site_id] column.
+     *
+     * @param int|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setSiteId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->site_id !== $v) {
+            $this->site_id = $v;
+            $this->modifiedColumns[ImageTableMap::COL_SITE_ID] = true;
+        }
+
+        if ($this->aSite !== null && $this->aSite->getId() !== $v) {
+            $this->aSite = null;
         }
 
         return $this;
@@ -1104,61 +1152,64 @@ abstract class Image implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : ImageTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : ImageTableMap::translateFieldName('Type', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : ImageTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->site_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : ImageTableMap::translateFieldName('Type', TableMap::TYPE_PHPNAME, $indexType)];
             $this->type = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : ImageTableMap::translateFieldName('Filepath', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : ImageTableMap::translateFieldName('Filepath', TableMap::TYPE_PHPNAME, $indexType)];
             $this->filepath = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : ImageTableMap::translateFieldName('Filename', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : ImageTableMap::translateFieldName('Filename', TableMap::TYPE_PHPNAME, $indexType)];
             $this->filename = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : ImageTableMap::translateFieldName('Version', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : ImageTableMap::translateFieldName('Version', TableMap::TYPE_PHPNAME, $indexType)];
             $this->version = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : ImageTableMap::translateFieldName('Mediatype', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : ImageTableMap::translateFieldName('Mediatype', TableMap::TYPE_PHPNAME, $indexType)];
             $this->mediatype = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : ImageTableMap::translateFieldName('Filesize', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : ImageTableMap::translateFieldName('Filesize', TableMap::TYPE_PHPNAME, $indexType)];
             $this->filesize = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : ImageTableMap::translateFieldName('Height', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : ImageTableMap::translateFieldName('Height', TableMap::TYPE_PHPNAME, $indexType)];
             $this->height = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : ImageTableMap::translateFieldName('Width', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : ImageTableMap::translateFieldName('Width', TableMap::TYPE_PHPNAME, $indexType)];
             $this->width = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : ImageTableMap::translateFieldName('ArticleId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : ImageTableMap::translateFieldName('ArticleId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->article_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : ImageTableMap::translateFieldName('StockItemId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : ImageTableMap::translateFieldName('StockItemId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->stock_item_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : ImageTableMap::translateFieldName('ContributorId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : ImageTableMap::translateFieldName('ContributorId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->contributor_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : ImageTableMap::translateFieldName('PostId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : ImageTableMap::translateFieldName('PostId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->post_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : ImageTableMap::translateFieldName('EventId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : ImageTableMap::translateFieldName('EventId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->event_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : ImageTableMap::translateFieldName('PublisherId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : ImageTableMap::translateFieldName('PublisherId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->publisher_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : ImageTableMap::translateFieldName('uploaded_at', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : ImageTableMap::translateFieldName('uploaded_at', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->uploaded_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : ImageTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : ImageTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : ImageTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 18 + $startcol : ImageTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -1171,7 +1222,7 @@ abstract class Image implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 18; // 18 = ImageTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 19; // 19 = ImageTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Image'), 0, $e);
@@ -1194,6 +1245,9 @@ abstract class Image implements ActiveRecordInterface
      */
     public function ensureConsistency(): void
     {
+        if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
+            $this->aSite = null;
+        }
         if ($this->aArticle !== null && $this->article_id !== $this->aArticle->getId()) {
             $this->aArticle = null;
         }
@@ -1251,6 +1305,7 @@ abstract class Image implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aSite = null;
             $this->aArticle = null;
             $this->aStockItem = null;
             $this->aContributor = null;
@@ -1378,6 +1433,13 @@ abstract class Image implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aSite !== null) {
+                if ($this->aSite->isModified() || $this->aSite->isNew()) {
+                    $affectedRows += $this->aSite->save($con);
+                }
+                $this->setSite($this->aSite);
+            }
+
             if ($this->aArticle !== null) {
                 if ($this->aArticle->isModified() || $this->aArticle->isNew()) {
                     $affectedRows += $this->aArticle->save($con);
@@ -1460,6 +1522,9 @@ abstract class Image implements ActiveRecordInterface
         if ($this->isColumnModified(ImageTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
         }
+        if ($this->isColumnModified(ImageTableMap::COL_SITE_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'site_id';
+        }
         if ($this->isColumnModified(ImageTableMap::COL_TYPE)) {
             $modifiedColumns[':p' . $index++]  = 'type';
         }
@@ -1524,6 +1589,10 @@ abstract class Image implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'id':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+
+                        break;
+                    case 'site_id':
+                        $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
 
                         break;
                     case 'type':
@@ -1660,54 +1729,57 @@ abstract class Image implements ActiveRecordInterface
                 return $this->getId();
 
             case 1:
-                return $this->getType();
+                return $this->getSiteId();
 
             case 2:
-                return $this->getFilepath();
+                return $this->getType();
 
             case 3:
-                return $this->getFilename();
+                return $this->getFilepath();
 
             case 4:
-                return $this->getVersion();
+                return $this->getFilename();
 
             case 5:
-                return $this->getMediatype();
+                return $this->getVersion();
 
             case 6:
-                return $this->getFilesize();
+                return $this->getMediatype();
 
             case 7:
-                return $this->getHeight();
+                return $this->getFilesize();
 
             case 8:
-                return $this->getWidth();
+                return $this->getHeight();
 
             case 9:
-                return $this->getArticleId();
+                return $this->getWidth();
 
             case 10:
-                return $this->getStockItemId();
+                return $this->getArticleId();
 
             case 11:
-                return $this->getContributorId();
+                return $this->getStockItemId();
 
             case 12:
-                return $this->getPostId();
+                return $this->getContributorId();
 
             case 13:
-                return $this->getEventId();
+                return $this->getPostId();
 
             case 14:
-                return $this->getPublisherId();
+                return $this->getEventId();
 
             case 15:
-                return $this->getuploaded_at();
+                return $this->getPublisherId();
 
             case 16:
-                return $this->getCreatedAt();
+                return $this->getuploaded_at();
 
             case 17:
+                return $this->getCreatedAt();
+
+            case 18:
                 return $this->getUpdatedAt();
 
             default:
@@ -1739,28 +1811,25 @@ abstract class Image implements ActiveRecordInterface
         $keys = ImageTableMap::getFieldNames($keyType);
         $result = [
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getType(),
-            $keys[2] => $this->getFilepath(),
-            $keys[3] => $this->getFilename(),
-            $keys[4] => $this->getVersion(),
-            $keys[5] => $this->getMediatype(),
-            $keys[6] => $this->getFilesize(),
-            $keys[7] => $this->getHeight(),
-            $keys[8] => $this->getWidth(),
-            $keys[9] => $this->getArticleId(),
-            $keys[10] => $this->getStockItemId(),
-            $keys[11] => $this->getContributorId(),
-            $keys[12] => $this->getPostId(),
-            $keys[13] => $this->getEventId(),
-            $keys[14] => $this->getPublisherId(),
-            $keys[15] => $this->getuploaded_at(),
-            $keys[16] => $this->getCreatedAt(),
-            $keys[17] => $this->getUpdatedAt(),
+            $keys[1] => $this->getSiteId(),
+            $keys[2] => $this->getType(),
+            $keys[3] => $this->getFilepath(),
+            $keys[4] => $this->getFilename(),
+            $keys[5] => $this->getVersion(),
+            $keys[6] => $this->getMediatype(),
+            $keys[7] => $this->getFilesize(),
+            $keys[8] => $this->getHeight(),
+            $keys[9] => $this->getWidth(),
+            $keys[10] => $this->getArticleId(),
+            $keys[11] => $this->getStockItemId(),
+            $keys[12] => $this->getContributorId(),
+            $keys[13] => $this->getPostId(),
+            $keys[14] => $this->getEventId(),
+            $keys[15] => $this->getPublisherId(),
+            $keys[16] => $this->getuploaded_at(),
+            $keys[17] => $this->getCreatedAt(),
+            $keys[18] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[15]] instanceof \DateTimeInterface) {
-            $result[$keys[15]] = $result[$keys[15]]->format('Y-m-d H:i:s.u');
-        }
-
         if ($result[$keys[16]] instanceof \DateTimeInterface) {
             $result[$keys[16]] = $result[$keys[16]]->format('Y-m-d H:i:s.u');
         }
@@ -1769,12 +1838,31 @@ abstract class Image implements ActiveRecordInterface
             $result[$keys[17]] = $result[$keys[17]]->format('Y-m-d H:i:s.u');
         }
 
+        if ($result[$keys[18]] instanceof \DateTimeInterface) {
+            $result[$keys[18]] = $result[$keys[18]]->format('Y-m-d H:i:s.u');
+        }
+
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aSite) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'site';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'sites';
+                        break;
+                    default:
+                        $key = 'Site';
+                }
+
+                $result[$key] = $this->aSite->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aArticle) {
 
                 switch ($keyType) {
@@ -1905,54 +1993,57 @@ abstract class Image implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setType($value);
+                $this->setSiteId($value);
                 break;
             case 2:
-                $this->setFilepath($value);
+                $this->setType($value);
                 break;
             case 3:
-                $this->setFilename($value);
+                $this->setFilepath($value);
                 break;
             case 4:
-                $this->setVersion($value);
+                $this->setFilename($value);
                 break;
             case 5:
-                $this->setMediatype($value);
+                $this->setVersion($value);
                 break;
             case 6:
-                $this->setFilesize($value);
+                $this->setMediatype($value);
                 break;
             case 7:
-                $this->setHeight($value);
+                $this->setFilesize($value);
                 break;
             case 8:
-                $this->setWidth($value);
+                $this->setHeight($value);
                 break;
             case 9:
-                $this->setArticleId($value);
+                $this->setWidth($value);
                 break;
             case 10:
-                $this->setStockItemId($value);
+                $this->setArticleId($value);
                 break;
             case 11:
-                $this->setContributorId($value);
+                $this->setStockItemId($value);
                 break;
             case 12:
-                $this->setPostId($value);
+                $this->setContributorId($value);
                 break;
             case 13:
-                $this->setEventId($value);
+                $this->setPostId($value);
                 break;
             case 14:
-                $this->setPublisherId($value);
+                $this->setEventId($value);
                 break;
             case 15:
-                $this->setuploaded_at($value);
+                $this->setPublisherId($value);
                 break;
             case 16:
-                $this->setCreatedAt($value);
+                $this->setuploaded_at($value);
                 break;
             case 17:
+                $this->setCreatedAt($value);
+                break;
+            case 18:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1985,55 +2076,58 @@ abstract class Image implements ActiveRecordInterface
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setType($arr[$keys[1]]);
+            $this->setSiteId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setFilepath($arr[$keys[2]]);
+            $this->setType($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setFilename($arr[$keys[3]]);
+            $this->setFilepath($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setVersion($arr[$keys[4]]);
+            $this->setFilename($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setMediatype($arr[$keys[5]]);
+            $this->setVersion($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setFilesize($arr[$keys[6]]);
+            $this->setMediatype($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setHeight($arr[$keys[7]]);
+            $this->setFilesize($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setWidth($arr[$keys[8]]);
+            $this->setHeight($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setArticleId($arr[$keys[9]]);
+            $this->setWidth($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setStockItemId($arr[$keys[10]]);
+            $this->setArticleId($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setContributorId($arr[$keys[11]]);
+            $this->setStockItemId($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setPostId($arr[$keys[12]]);
+            $this->setContributorId($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
-            $this->setEventId($arr[$keys[13]]);
+            $this->setPostId($arr[$keys[13]]);
         }
         if (array_key_exists($keys[14], $arr)) {
-            $this->setPublisherId($arr[$keys[14]]);
+            $this->setEventId($arr[$keys[14]]);
         }
         if (array_key_exists($keys[15], $arr)) {
-            $this->setuploaded_at($arr[$keys[15]]);
+            $this->setPublisherId($arr[$keys[15]]);
         }
         if (array_key_exists($keys[16], $arr)) {
-            $this->setCreatedAt($arr[$keys[16]]);
+            $this->setuploaded_at($arr[$keys[16]]);
         }
         if (array_key_exists($keys[17], $arr)) {
-            $this->setUpdatedAt($arr[$keys[17]]);
+            $this->setCreatedAt($arr[$keys[17]]);
+        }
+        if (array_key_exists($keys[18], $arr)) {
+            $this->setUpdatedAt($arr[$keys[18]]);
         }
 
         return $this;
@@ -2080,6 +2174,9 @@ abstract class Image implements ActiveRecordInterface
 
         if ($this->isColumnModified(ImageTableMap::COL_ID)) {
             $criteria->add(ImageTableMap::COL_ID, $this->id);
+        }
+        if ($this->isColumnModified(ImageTableMap::COL_SITE_ID)) {
+            $criteria->add(ImageTableMap::COL_SITE_ID, $this->site_id);
         }
         if ($this->isColumnModified(ImageTableMap::COL_TYPE)) {
             $criteria->add(ImageTableMap::COL_TYPE, $this->type);
@@ -2220,6 +2317,7 @@ abstract class Image implements ActiveRecordInterface
      */
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
+        $copyObj->setSiteId($this->getSiteId());
         $copyObj->setType($this->getType());
         $copyObj->setFilepath($this->getFilepath());
         $copyObj->setFilename($this->getFilename());
@@ -2263,6 +2361,57 @@ abstract class Image implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
+    }
+
+    /**
+     * Declares an association between this object and a ChildSite object.
+     *
+     * @param ChildSite|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setSite(ChildSite $v = null)
+    {
+        if ($v === null) {
+            $this->setSiteId(NULL);
+        } else {
+            $this->setSiteId($v->getId());
+        }
+
+        $this->aSite = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildSite object, it will not be re-added.
+        if ($v !== null) {
+            $v->addImage($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildSite object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildSite|null The associated ChildSite object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getSite(?ConnectionInterface $con = null)
+    {
+        if ($this->aSite === null && ($this->site_id != 0)) {
+            $this->aSite = ChildSiteQuery::create()->findPk($this->site_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSite->addImages($this);
+             */
+        }
+
+        return $this->aSite;
     }
 
     /**
@@ -2580,6 +2729,9 @@ abstract class Image implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aSite) {
+            $this->aSite->removeImage($this);
+        }
         if (null !== $this->aArticle) {
             $this->aArticle->removeImage($this);
         }
@@ -2599,6 +2751,7 @@ abstract class Image implements ActiveRecordInterface
             $this->aPublisher->removeImage($this);
         }
         $this->id = null;
+        $this->site_id = null;
         $this->type = null;
         $this->filepath = null;
         $this->filename = null;
@@ -2639,6 +2792,7 @@ abstract class Image implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
+        $this->aSite = null;
         $this->aArticle = null;
         $this->aStockItem = null;
         $this->aContributor = null;

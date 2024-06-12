@@ -19,6 +19,8 @@ use Model\CrowfundingReward as ChildCrowfundingReward;
 use Model\CrowfundingRewardQuery as ChildCrowfundingRewardQuery;
 use Model\Customer as ChildCustomer;
 use Model\CustomerQuery as ChildCustomerQuery;
+use Model\Image as ChildImage;
+use Model\ImageQuery as ChildImageQuery;
 use Model\Invitation as ChildInvitation;
 use Model\InvitationQuery as ChildInvitationQuery;
 use Model\Option as ChildOption;
@@ -58,6 +60,7 @@ use Model\Map\CartTableMap;
 use Model\Map\CrowdfundingCampaignTableMap;
 use Model\Map\CrowfundingRewardTableMap;
 use Model\Map\CustomerTableMap;
+use Model\Map\ImageTableMap;
 use Model\Map\InvitationTableMap;
 use Model\Map\OptionTableMap;
 use Model\Map\OrderTableMap;
@@ -445,6 +448,13 @@ abstract class Site implements ActiveRecordInterface
     protected $collCustomersPartial;
 
     /**
+     * @var        ObjectCollection|ChildImage[] Collection to store aggregation of ChildImage objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildImage> Collection to store aggregation of ChildImage objects.
+     */
+    protected $collImages;
+    protected $collImagesPartial;
+
+    /**
      * @var        ObjectCollection|ChildInvitation[] Collection to store aggregation of ChildInvitation objects.
      * @phpstan-var ObjectCollection&\Traversable<ChildInvitation> Collection to store aggregation of ChildInvitation objects.
      */
@@ -605,6 +615,13 @@ abstract class Site implements ActiveRecordInterface
      * @phpstan-var ObjectCollection&\Traversable<ChildCustomer>
      */
     protected $customersScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildImage[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildImage>
+     */
+    protected $imagesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -2671,6 +2688,8 @@ abstract class Site implements ActiveRecordInterface
 
             $this->collCustomers = null;
 
+            $this->collImages = null;
+
             $this->collInvitations = null;
 
             $this->collStockItemLists = null;
@@ -2916,6 +2935,24 @@ abstract class Site implements ActiveRecordInterface
 
             if ($this->collCustomers !== null) {
                 foreach ($this->collCustomers as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->imagesScheduledForDeletion !== null) {
+                if (!$this->imagesScheduledForDeletion->isEmpty()) {
+                    foreach ($this->imagesScheduledForDeletion as $image) {
+                        // need to save related object because we set the relation to null
+                        $image->save($con);
+                    }
+                    $this->imagesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collImages !== null) {
+                foreach ($this->collImages as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -3863,6 +3900,21 @@ abstract class Site implements ActiveRecordInterface
 
                 $result[$key] = $this->collCustomers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collImages) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'images';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'imagess';
+                        break;
+                    default:
+                        $key = 'Images';
+                }
+
+                $result[$key] = $this->collImages->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collInvitations) {
 
                 switch ($keyType) {
@@ -4726,6 +4778,12 @@ abstract class Site implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getImages() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addImage($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getInvitations() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addInvitation($relObj->copy($deepCopy));
@@ -4887,6 +4945,10 @@ abstract class Site implements ActiveRecordInterface
         }
         if ('Customer' === $relationName) {
             $this->initCustomers();
+            return;
+        }
+        if ('Image' === $relationName) {
+            $this->initImages();
             return;
         }
         if ('Invitation' === $relationName) {
@@ -6282,6 +6344,401 @@ abstract class Site implements ActiveRecordInterface
         $query->joinWith('User', $joinBehavior);
 
         return $this->getCustomers($query, $con);
+    }
+
+    /**
+     * Clears out the collImages collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addImages()
+     */
+    public function clearImages()
+    {
+        $this->collImages = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collImages collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialImages($v = true): void
+    {
+        $this->collImagesPartial = $v;
+    }
+
+    /**
+     * Initializes the collImages collection.
+     *
+     * By default this just sets the collImages collection to an empty array (like clearcollImages());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initImages(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collImages && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = ImageTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collImages = new $collectionClassName;
+        $this->collImages->setModel('\Model\Image');
+    }
+
+    /**
+     * Gets an array of ChildImage objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildSite is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildImage[] List of ChildImage objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildImage> List of ChildImage objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getImages(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collImagesPartial && !$this->isNew();
+        if (null === $this->collImages || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collImages) {
+                    $this->initImages();
+                } else {
+                    $collectionClassName = ImageTableMap::getTableMap()->getCollectionClassName();
+
+                    $collImages = new $collectionClassName;
+                    $collImages->setModel('\Model\Image');
+
+                    return $collImages;
+                }
+            } else {
+                $collImages = ChildImageQuery::create(null, $criteria)
+                    ->filterBySite($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collImagesPartial && count($collImages)) {
+                        $this->initImages(false);
+
+                        foreach ($collImages as $obj) {
+                            if (false == $this->collImages->contains($obj)) {
+                                $this->collImages->append($obj);
+                            }
+                        }
+
+                        $this->collImagesPartial = true;
+                    }
+
+                    return $collImages;
+                }
+
+                if ($partial && $this->collImages) {
+                    foreach ($this->collImages as $obj) {
+                        if ($obj->isNew()) {
+                            $collImages[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collImages = $collImages;
+                $this->collImagesPartial = false;
+            }
+        }
+
+        return $this->collImages;
+    }
+
+    /**
+     * Sets a collection of ChildImage objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $images A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setImages(Collection $images, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildImage[] $imagesToDelete */
+        $imagesToDelete = $this->getImages(new Criteria(), $con)->diff($images);
+
+
+        $this->imagesScheduledForDeletion = $imagesToDelete;
+
+        foreach ($imagesToDelete as $imageRemoved) {
+            $imageRemoved->setSite(null);
+        }
+
+        $this->collImages = null;
+        foreach ($images as $image) {
+            $this->addImage($image);
+        }
+
+        $this->collImages = $images;
+        $this->collImagesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Image objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related Image objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countImages(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collImagesPartial && !$this->isNew();
+        if (null === $this->collImages || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collImages) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getImages());
+            }
+
+            $query = ChildImageQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySite($this)
+                ->count($con);
+        }
+
+        return count($this->collImages);
+    }
+
+    /**
+     * Method called to associate a ChildImage object to this object
+     * through the ChildImage foreign key attribute.
+     *
+     * @param ChildImage $l ChildImage
+     * @return $this The current object (for fluent API support)
+     */
+    public function addImage(ChildImage $l)
+    {
+        if ($this->collImages === null) {
+            $this->initImages();
+            $this->collImagesPartial = true;
+        }
+
+        if (!$this->collImages->contains($l)) {
+            $this->doAddImage($l);
+
+            if ($this->imagesScheduledForDeletion and $this->imagesScheduledForDeletion->contains($l)) {
+                $this->imagesScheduledForDeletion->remove($this->imagesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildImage $image The ChildImage object to add.
+     */
+    protected function doAddImage(ChildImage $image): void
+    {
+        $this->collImages[]= $image;
+        $image->setSite($this);
+    }
+
+    /**
+     * @param ChildImage $image The ChildImage object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeImage(ChildImage $image)
+    {
+        if ($this->getImages()->contains($image)) {
+            $pos = $this->collImages->search($image);
+            $this->collImages->remove($pos);
+            if (null === $this->imagesScheduledForDeletion) {
+                $this->imagesScheduledForDeletion = clone $this->collImages;
+                $this->imagesScheduledForDeletion->clear();
+            }
+            $this->imagesScheduledForDeletion[]= $image;
+            $image->setSite(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Images from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildImage[] List of ChildImage objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildImage}> List of ChildImage objects
+     */
+    public function getImagesJoinArticle(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildImageQuery::create(null, $criteria);
+        $query->joinWith('Article', $joinBehavior);
+
+        return $this->getImages($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Images from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildImage[] List of ChildImage objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildImage}> List of ChildImage objects
+     */
+    public function getImagesJoinStockItem(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildImageQuery::create(null, $criteria);
+        $query->joinWith('StockItem', $joinBehavior);
+
+        return $this->getImages($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Images from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildImage[] List of ChildImage objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildImage}> List of ChildImage objects
+     */
+    public function getImagesJoinContributor(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildImageQuery::create(null, $criteria);
+        $query->joinWith('Contributor', $joinBehavior);
+
+        return $this->getImages($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Images from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildImage[] List of ChildImage objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildImage}> List of ChildImage objects
+     */
+    public function getImagesJoinPost(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildImageQuery::create(null, $criteria);
+        $query->joinWith('Post', $joinBehavior);
+
+        return $this->getImages($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Images from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildImage[] List of ChildImage objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildImage}> List of ChildImage objects
+     */
+    public function getImagesJoinEvent(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildImageQuery::create(null, $criteria);
+        $query->joinWith('Event', $joinBehavior);
+
+        return $this->getImages($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Images from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildImage[] List of ChildImage objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildImage}> List of ChildImage objects
+     */
+    public function getImagesJoinPublisher(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildImageQuery::create(null, $criteria);
+        $query->joinWith('Publisher', $joinBehavior);
+
+        return $this->getImages($query, $con);
     }
 
     /**
@@ -10883,6 +11340,11 @@ abstract class Site implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collImages) {
+                foreach ($this->collImages as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collInvitations) {
                 foreach ($this->collInvitations as $o) {
                     $o->clearAllReferences($deep);
@@ -10975,6 +11437,7 @@ abstract class Site implements ActiveRecordInterface
         $this->collCrowdfundingCampaigns = null;
         $this->collCrowfundingRewards = null;
         $this->collCustomers = null;
+        $this->collImages = null;
         $this->collInvitations = null;
         $this->collStockItemLists = null;
         $this->collOptions = null;
