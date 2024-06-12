@@ -663,6 +663,7 @@ table.cart td {
 }
 
 .order-delivery-form__field {
+  background: white;
   position: relative;
   margin-bottom: 16px;
 }
@@ -681,16 +682,20 @@ table.cart td {
   position: absolute;
   top: 0;
   width: 100%;
+  z-index: 1;
 }
 
 .order-delivery-form__input,
+.order-delivery-form__select,
 .order-delivery-form__textarea {
-  background: #fff;
+  background: transparent;
   border: 1px solid #ccc;
   border-radius: 4px;
   margin: 0;
   padding: 24px 8px 4px;
+  position: relative;
   width: 100%;
+  z-index: 2;
 }
 
 .order-delivery-form__textarea {

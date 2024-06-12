@@ -430,6 +430,11 @@ function _date($dateToFormat, $format = 'd-m-Y')
         $dateToFormat = $dateToFormat->format("Y-m-d H:i:s");
     }
 
+    $stringMatchesDateWithoutMonth = preg_match("/^[0-9]{4}\$/", $dateToFormat);
+    if ($stringMatchesDateWithoutMonth) {
+        $dateToFormat .= '-01-01 00:00:00';
+    }
+
     $stringMatchesDateWithoutDay = preg_match("/^[0-9]{4}-[0-9]{2}\$/", $dateToFormat);
     if ($stringMatchesDateWithoutDay) {
         $dateToFormat .= '-01 00:00:00';

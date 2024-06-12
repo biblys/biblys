@@ -1,6 +1,6 @@
 # Historique des modifications
 
-### 2.59.0 (DEV)
+## 2.59.0 (DEV)
 
 Améliorations
 
@@ -11,8 +11,6 @@ Améliorations
 - Une vérification a été ajoutée à la création de contreparties de
   financement pour empêcher l'association d'articles inexistant.
 
-<<<<<<< HEAD
-=======
 Corrections
 
 - Les quantités de contreparties d'une campagne de financement participatif 
@@ -40,7 +38,6 @@ Corrections
 - L'enregistrement d'une commande sans frais de port pouvait déclencher une 
   erreur. Ça fonctionne à présent.
 
->>>>>>> 31f72f9b0 (fix(entity): ignore reward quantity update for ended campaign)
 ### 2.58.1 (4 février 2021)
 
 Corrections

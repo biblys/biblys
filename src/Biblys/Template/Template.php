@@ -3,8 +3,8 @@
 namespace Biblys\Template;
 
 use Exception;
-use Framework\Composer\ScriptRunner;
 use Site;
+use Symfony\Component\Filesystem\Filesystem;
 
 class Template
 {
@@ -125,20 +125,17 @@ class Template
      * Update the custom template file content.
      * @throws Exception
      */
-    public function updateContent(Site $site, $content): void
+    public function updateContent(Site $site, string $content, Filesystem $filesystem): void
     {
         if (!$this->customFileExists()) {
             $this->createCustomFile();
         }
-        $path = $this->getCustomDirPath().'/'.$this->getFileName();
-        file_put_contents($path, $content);
+        $path = $this->getCustomDirPath().$this->getFileName();
+        $filesystem->dumpFile($path, $content);
 
         // If css was modified, refresh theme and bump assets version
         if ($this->getSlug() === 'css') {
-            ScriptRunner::run("theme:refresh");
-
-            $assetsVersion = (int) $site->getOpt('assets_version') ?? '0';
-            $site->setOpt('assets_version', $assetsVersion + 1);
+            $this->_refreshCSSPublicFile($path, $site, $filesystem);
         }
     }
 
@@ -267,5 +264,20 @@ class Template
     public function getAceMode(): string
     {
         return strtolower($this->getType());
+    }
+
+    /**
+     * @param string $path
+     * @param Site $site
+     * @param Filesystem $filesystem
+     * @return void
+     */
+    private function _refreshCSSPublicFile(string $path, Site $site, Filesystem $filesystem): void
+    {
+        $biblysPublicPath = __DIR__ . "/../../../public/theme/styles.css";
+        $filesystem->copy($path, $biblysPublicPath);
+
+        $assetsVersion = (int) $site->getOpt('assets_version') ?? '0';
+        $site->setOpt('assets_version', $assetsVersion + 1);
     }
 }

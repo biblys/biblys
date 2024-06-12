@@ -6,20 +6,31 @@ use Biblys\Template\Template;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
+use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class TemplateController extends Controller
 {
     /**
      * GET /admin/templates.
+     * @param Request $request
+     * @return Response
      * @throws AuthException
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function indexAction(Request $request): Response
     {
-        $this->auth('admin');
+        self::authAdmin($request);
 
         $request->attributes->set("page_title", "Éditeur de thème");
 
@@ -35,19 +46,17 @@ class TemplateController extends Controller
      */
     public function editAction(Request $request, $slug): Response
     {
-        $this->auth('admin');
+        self::authAdmin($request);
 
         $template = Template::get($slug);
-        if (!$template) {
-            throw new NotFoundException("Cannot find template $slug");
-        }
-
         $request->attributes->set("page_title", "Éditer ".$template->getName());
 
         if ($request->getMethod() === 'POST') {
             global $site;
-            $content = $request->request->get('content');
-            $template->updateContent($site, $content);
+            $body = $request->toArray();
+            $filesystem = new Filesystem();
+            $template->updateContent($site, $body["content"], $filesystem);
+            return new JsonResponse();
         }
 
         return $this->render('AppBundle:Template:edit.html.twig', [
@@ -60,14 +69,11 @@ class TemplateController extends Controller
      * @throws AuthException
      * @throws Exception
      */
-    public function deleteAction($slug): RedirectResponse
+    public function deleteAction(Request $request, $slug): RedirectResponse
     {
-        $this->auth('admin');
+        self::authAdmin($request);
 
         $template = Template::get($slug);
-        if (!$template) {
-            throw new NotFoundException("Cannot find template $slug");
-        }
 
         $template->deleteCustomFile();
 

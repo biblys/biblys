@@ -145,7 +145,7 @@ class OrderDeliveryHelpers
             }, $countries);
 
             $countryInput = '
-            <select name="country_id">
+            <select id="country_id" name="country_id" class="order-delivery-form__select">
                 <option></option>
                 <option value="67">France</option>
                 '.implode($countriesOptions).'
@@ -258,7 +258,7 @@ class OrderDeliveryHelpers
         }
 
         $mailAddressType = '<p><strong>Adresse d\'expédition :</strong></p>';
-        if ($shipping->get("type") === "magasin") {
+        if ($shipping && $shipping->get("type") === "magasin") {
             $mailAddressType = '<p>Vous avez choisi le retrait en magasin. Vous serez averti par courriel lorsque votre commande sera disponible.</p><p><strong>Adresse de facturation :</strong></p>';
         }
 

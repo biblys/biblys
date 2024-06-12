@@ -89,6 +89,69 @@ class OrderDeliveryTest extends TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
+    public function testValidatingAnOrderWithoutShipping()
+    {
+        global $_SQL, $_V;
+
+        // given
+        $cart = $_V->getCart("create");
+        $article = EntityFactory::createArticle([
+            "article_title" => "Livre numérique téléchargeable",
+            "type_id" => 2
+        ]);
+        $sm = new StockManager();
+        $sm->create(["article_id" => $article->get("id")]);
+        $cm = new CartManager();
+        $cm->addArticle($cart, $article);
+        $site = new Site(["site_contact" => "merchant@biblys.fr"]);
+        $_POST = ["order_email" => "e-customer@biblys.fr"];
+        $_SITE = $site;
+
+        $request = new Request();
+        $request->setMethod("POST");
+        $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
+        $request->query->set("page", "order_delivery");
+        $request->query->set("country_id", 1);
+        $request->request->set("order_firstname", "Barnabé");
+        $request->request->set("order_lastname", "Famagouste");
+        $request->request->set("order_address1", "123 rue des Peupliers");
+        $request->request->set("order_postalcode", "69009");
+        $request->request->set("order_city", "Lyon");
+        $request->request->set("order_email", "e-customer@biblys.fr");
+        $request->request->set("country_id", 1);
+        $request->request->set("cgv_checkbox", 1);
+        $session = new Session();
+        $mailer = new Mailer();
+        $legacyController = new LegacyController();
+        $config = new Config();
+        $currentSite = CurrentSite::buildFromConfig($config);
+
+        // when
+        $response = $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
+
+        // then
+        $om = new OrderManager();
+        $order = $om->get(["order_email" => "e-customer@biblys.fr"]);
+        $this->assertInstanceOf(
+            "Symfony\Component\HttpFoundation\RedirectResponse",
+            $response,
+            "it should redirect after order validation"
+        );
+        $this->assertEquals(
+            "/order/".$order->get("url")."?created=1",
+            $response->headers->get("Location"),
+            "it should redirect to the correct url"
+        );
+        $this->assertEquals(
+            null,
+            $order->get("shipping_mode"),
+            "it should set order's shipping mode"
+        );
+    }
+
 
     /**
      * @throws Exception
