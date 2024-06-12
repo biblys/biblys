@@ -1,11 +1,32 @@
 
 # Historique des modifications
 
-## 2.54.0 (DEV)
+## 2.54.0 (3 septembre 2021)
 
 Cette mise à jour apporte un certain nombre de modifications purement
 techniques visant à améliorer la stabilité et la maintenabilité de Biblys,
 tout en préparant la refonte prochaine du panier.
+
+### 2.53.8 (27 août 2021)
+
+Corrections
+
+- La mise à jour du fichier CSS via l'éditeur de thème fonctionne à nouveau
+- Le filtrage des billets par catégorie fonctionne à nouveau
+
+### 2.53.7 (30 juillet 2021)
+
+Corrections
+
+- L'erreur affichée lors de l'ajout au panier d'un livre pour lequel aucun
+  exemplaire n'est disponible a été améliorée.
+
+### 2.53.6 (22 juillet 2021)
+
+Corrections
+
+- L'appel d'une page paginée avec un numéro de page ne provoque plus d'erreur
+  serveur
 
 ### 2.53.5 (10 juillet 2021)
 

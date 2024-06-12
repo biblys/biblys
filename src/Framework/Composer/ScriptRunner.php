@@ -35,7 +35,7 @@ class ScriptRunner
 
         if ($code !== 0) {
             throw new ComposerException(
-                "Une erreur est survenue lors de la mise à jour automatique des composants.",
+                "Une erreur est survenue lors de l'execution du script `$command`.",
                 $output->getOutput()
             );
         }

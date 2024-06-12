@@ -529,9 +529,9 @@ class CartManager extends EntityManager
         }
 
         $articleTitle = $article->get('title');
-        throw new Exception("Aucun exemplaire disponible pour $articleTitle.");
-
-        return false;
+        throw new CartException(
+            "L'article $articleTitle n'a pas pu être ajouté au panier car il n'y a aucun exemplaire disponible."
+        );
     }
 
     public function addCFReward(Cart $cart, CFReward $reward)

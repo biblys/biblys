@@ -19,7 +19,7 @@ class RayonControllerTest extends PHPUnit\Framework\TestCase
         $rayon = Factory::createRayon();
         $controller = new RayonController();
         $request = new Request();
-        $request->query->set("p", 3);
+        $request->query->set("p", "3");
 
         // when
         $response = $controller->showAction($request, $rayon->get("url"));
@@ -47,7 +47,7 @@ class RayonControllerTest extends PHPUnit\Framework\TestCase
         $rayon = Factory::createRayon();
         $controller = new RayonController();
         $request = new Request();
-        $request->query->set("p", -1690);
+        $request->query->set("p", "-1690");
 
         // when
         $controller->showAction($request, $rayon->get("url"));
