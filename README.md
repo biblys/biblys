@@ -1,5 +1,21 @@
 # Biblys
 
+Biblys is an open-source web application designed to build online bookshops,
+primarily used by French independent book publishers.
+
+## Project Status
+
+The open-source version is an ongoing project, and I currently do not recommend
+using it in production due to potential significant changes. The goal is to
+release a stable, well-documented version 3.0 by the end of 2024.
+
+It's important to note that Biblys' user interface is only available in French
+at the moment. Making it translatable will require substantial work. If you're
+interested in using Biblys in another language, please open an issue.
+
+Feel free to start a discussion if you need more information about the project
+status or any other topic.
+
 ## Requirements
 
 - PHP 8.1 or above
