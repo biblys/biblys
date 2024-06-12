@@ -138,7 +138,7 @@ article_rayons_add:
     path: /admin/articles/{id}/rayons/add
     defaults:
       _controller: AppBundle\Controller\ArticleController::addRayonsAction
-      id: \d+
+      id: \d+
 
 article_search_terms:
     path: /admin/articles/search-terms/

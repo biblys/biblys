@@ -117,18 +117,17 @@ class Article extends Entity
     public function getContributors()
     {
         if (!isset($this->contributors)) {
+            global $_SQL;
+
             $result = [];
             $query = 'SELECT
                     `people_id`, `people_first_name`, `people_last_name`, `people_url`, `job_id`, `job_name`
                 FROM `people` JOIN `roles` USING(`people_id`) JOIN `jobs` USING(`job_id`)
-                WHERE
-                    `roles`.`article_id` = :article_id AND
+                WHERE 
+                    `roles`.`article_id` = ' . $this->get('id') . ' AND
                     `people_deleted` IS NULL
                 ORDER BY `id`';
-            $contributors = EntityManager::prepareAndExecute(
-                $query,
-                ["article_id" => $this->get("id")]
-            );
+            $contributors = $_SQL->query($query);
             while ($c = $contributors->fetch(PDO::FETCH_ASSOC)) {
                 $result[] = new People($c);
             }
@@ -140,9 +139,9 @@ class Article extends Entity
 
     /**
      * Get all article contributors except authors
-     * @return People[]
+     * @return array of People
      */
-    public function getAuthors(): array
+    public function getAuthors()
     {
         if (!isset($this->authors)) {
             $contributors = $this->getContributors();
@@ -155,15 +154,6 @@ class Article extends Entity
         }
 
         return $this->authors;
-    }
-
-    /**
-     * Returns true if article has other (than authors) contributors
-     * @return boolean
-     */
-    public function hasAuthors()
-    {
-        return !empty($this->getAuthors());
     }
 
     /**
@@ -665,9 +655,9 @@ class Article extends Entity
         global $_SQL, $_SITE;
 
         $sql = $_SQL->prepare("
-            SELECT `rayon_id`, `rayon_name`, `rayon_url`
-            FROM `links`
-            JOIN `rayons` USING(`rayon_id`)
+            SELECT `rayon_id`, `rayon_name`, `rayon_url` 
+            FROM `links` 
+            JOIN `rayons` USING(`rayon_id`) 
             WHERE `article_id` = :article_id
                 AND `links`.`site_id` = :site_id
                 AND `link_deleted` IS NULL
@@ -1436,9 +1426,33 @@ class ArticleManager extends EntityManager
         }
 
         // Create article slug
-        if ($article->hasAuthors()) {
-            $slug = $this->_createArticleSlug($article);
-            $article->set('article_url', $slug);
+        if (!$article->has('url')) {
+            $authors = explode(", ", $article->get('authors'));
+            $num_authors = count($authors);
+            if ($num_authors == 0) {
+                $authors_url = "Anonyme";
+            } elseif ($num_authors == 1) {
+                $authors_url = $authors[0];
+            } else {
+                $authors_url = "Collectif";
+            }
+            if (empty($authors_url)) {
+                $authors_url = 'anonyme';
+            }
+            $url = makeurl($authors_url) . '/' . makeurl($article->get('title'));
+
+            // If slug is already used, add article id at the end
+            $other = $this->get(
+                [
+                    'article_url' => $url,
+                    'article_id' => '!= ' . $article->get('id')
+                ]
+            );
+            if ($other) {
+                $url .= '_' . $article->get('id');
+            }
+
+            $article->set('article_url', $url);
         }
 
         // Truncate authors fields
@@ -1450,51 +1464,11 @@ class ArticleManager extends EntityManager
         return $article;
     }
 
-    /**
-     * Create an article slug from authors and title
-     */
-    private function _createArticleSlug(Article $article): string
-    {
-        if ($article->has('url')) {
-            return $article->get('url');
-        }
-
-        $authors = $article->getAuthors();
-
-
-        $slug = makeurl(self::_getAuthorsSegmentForSlug($authors)) .
-            '/' . makeurl($article->get('title'));
-
-        // If slug is already used, add article id at the end
-        $other = $this->get([
-            'article_url' => $slug,
-            'article_id' => '!= ' . $article->get('id')
-        ]);
-        if ($other) {
-            $slug .= '_' . $article->get('id');
-        }
-
-        return $slug;
-    }
-
-    public static function _getAuthorsSegmentForSlug($authors)
-    {
-        if (count($authors) === 0) {
-            throw new Exception("Cannot create url for an article without authors");
-        }
-
-        if (count($authors) === 1) {
-            $firstAuthor = $authors[0];
-            return $firstAuthor->getName();
-        }
-
-        if (count($authors) > 1) {
-            return "collectif";
-        }
-    }
-
     public function validate($article)
     {
+        if (!$article->has('url')) {
+            throw new Exception("L'article doit avoir une url.");
+        }
 
         if (strlen($article->get('authors')) > 256) {
             throw new Exception("Le champ Auteurs ne peut pas dépasser 256 caractères.");
@@ -1509,15 +1483,6 @@ class ArticleManager extends EntityManager
         );
         if ($other) {
             throw new Exception('Il existe déjà un article avec cette l\'url ' . $article->get('url'));
-        }
-    }
-
-    public function validateBeforeUpdate($article): void
-    {
-        parent::validateBeforeUpdate($article);
-
-        if (!$article->has("url")) {
-            throw new Exception("L'article doit avoir une url.");
         }
     }
 }

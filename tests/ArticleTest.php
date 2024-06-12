@@ -344,7 +344,6 @@ class ArticleTest extends PHPUnit_Framework_TestCase
     */
     public function testGetContributors(Article $article)
     {
-        $article = $this->m->create([]);
         $this->assertEmpty($article->getContributors());
         $this->assertFalse($article->hasOtherContributors());
 
@@ -585,7 +584,7 @@ class ArticleTest extends PHPUnit_Framework_TestCase
         $this->m->addRayon($article, $rayon6);
 
         $this->assertEquals(
-            $article->getRayonsAsJsArray(),
+            $article->getRayonsAsJsArray(), 
             '["Rayon 1","Rayon 2","Rayon 3","Rayon 4","Rayon 5"]'
         );
 
@@ -599,7 +598,7 @@ class ArticleTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test that adding a too long string as article_authors does not validate
-     *
+     * 
      * @expectedException Exception
      * @expectedExceptionMessage Le champ Auteurs ne peut pas dépasser 256 caractères.
      */
@@ -609,75 +608,14 @@ class ArticleTest extends PHPUnit_Framework_TestCase
         $article = new Article(['url' => 'article/url']);
         $article->set(
             'article_authors',
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-            aliquet arcu at libero maximus, euismod vehicula justo suscipit.
-            Praesent faucibus porta porta. Integer id congue lorem. Nulla
-            convallis sagittis ultricies. Fusce molestie nibh quis tellus
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam 
+            aliquet arcu at libero maximus, euismod vehicula justo suscipit. 
+            Praesent faucibus porta porta. Integer id congue lorem. Nulla 
+            convallis sagittis ultricies. Fusce molestie nibh quis tellus 
             iaculis dapibus. Aenean vitae velit sed nulla."
         );
 
         $am->validate($article);
-    }
-
-    /**
-     * Test that updating an article without an url throws
-     *
-     * @expectedException Exception
-     * @expectedExceptionMessage L'article doit avoir une url
-     */
-    public function testUpdatingArticleWithoutUrl()
-    {
-        $am = new ArticleManager();
-        $article = $am->create([]);
-
-        $am->update($article);
-    }
-
-    public function testPreprocessSlugWithOneAuthor()
-    {
-        // given
-        $am = new ArticleManager();
-        $article = $am->create(["article_title" => "Légumes du jour"]);
-        $pm = new PeopleManager();
-        $people = $pm->create([
-            "people_first_name" => "Jean-Sol",
-            "people_last_name" => "Partre"
-        ]);
-        $article->addContributor($people, 1);
-
-        // when
-        $article = $am->preprocess($article);
-
-        // then
-        $this->assertEquals(
-            "jean-sol-partre/legumes-du-jour",
-            $article->get('url'),
-            "it should generate correct slug for one author"
-        );
-    }
-
-    public function testPreprocessSlugWithSeveralAuthors()
-    {
-        // given
-        $am = new ArticleManager();
-        $article = $am->create(["article_title" => "La Bande à Picsou"]);
-        $pm = new PeopleManager();
-        $riri = $pm->create(["people_last_name" => "Riri"]);
-        $fifi = $pm->create(["people_last_name" => "Fifi"]);
-        $loulou = $pm->create(["people_last_name" => "Loulou"]);
-        $article->addContributor($riri, 1);
-        $article->addContributor($fifi, 1);
-        $article->addContributor($loulou, 1);
-
-        // when
-        $article = $am->preprocess($article);
-
-        // then
-        $this->assertEquals(
-            "collectif/la-bande-a-picsou",
-            $article->get('url'),
-            "it should generate correct slug for several authors"
-        );
     }
 
 

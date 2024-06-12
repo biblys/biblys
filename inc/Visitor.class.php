@@ -5,13 +5,26 @@ use Framework\Exception\AuthException;
 class Visitor extends User
 {
     private $logged = null;
+    private $root = null;
+    private $admin = null;
     private $visitor_uid = null;
+    private $user_uid = null;
     private $user = null;
 
     public function __construct($request)
     {
+        global $_GET;
         global $_SQL;
         $this->db = $_SQL;
+
+        // Returning from axys
+        $axysUid = $request->query->get('UID');
+        if (!empty($axysUid)) {
+            setcookie("user_uid", $_GET["UID"], 0, '/');
+            $url = $request->getUri();
+            $url = preg_replace('/([?&]UID=[^&]*)/', '', $url);
+            redirect($url);
+        }
 
         if (isset($_COOKIE['visitor_uid'])) {
             $this->visitor_uid = $_COOKIE['visitor_uid'];
