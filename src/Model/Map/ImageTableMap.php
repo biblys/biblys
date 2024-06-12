@@ -63,7 +63,7 @@ class ImageTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 18;
+    public const NUM_COLUMNS = 19;
 
     /**
      * The number of lazy-loaded columns
@@ -73,12 +73,17 @@ class ImageTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 18;
+    public const NUM_HYDRATE_COLUMNS = 19;
 
     /**
      * the column name for the id field
      */
     public const COL_ID = 'images.id';
+
+    /**
+     * the column name for the site_id field
+     */
+    public const COL_SITE_ID = 'images.site_id';
 
     /**
      * the column name for the type field
@@ -179,11 +184,11 @@ class ImageTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'Type', 'Filepath', 'Filename', 'Version', 'Mediatype', 'Filesize', 'Height', 'Width', 'ArticleId', 'StockItemId', 'ContributorId', 'PostId', 'EventId', 'PublisherId', 'uploaded_at', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'type', 'filepath', 'filename', 'version', 'mediatype', 'filesize', 'height', 'width', 'articleId', 'stockItemId', 'contributorId', 'postId', 'eventId', 'publisherId', 'uploaded_at', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [ImageTableMap::COL_ID, ImageTableMap::COL_TYPE, ImageTableMap::COL_FILEPATH, ImageTableMap::COL_FILENAME, ImageTableMap::COL_VERSION, ImageTableMap::COL_MEDIATYPE, ImageTableMap::COL_FILESIZE, ImageTableMap::COL_HEIGHT, ImageTableMap::COL_WIDTH, ImageTableMap::COL_ARTICLE_ID, ImageTableMap::COL_STOCK_ITEM_ID, ImageTableMap::COL_CONTRIBUTOR_ID, ImageTableMap::COL_POST_ID, ImageTableMap::COL_EVENT_ID, ImageTableMap::COL_PUBLISHER_ID, ImageTableMap::COL_UPLOADED_AT, ImageTableMap::COL_CREATED_AT, ImageTableMap::COL_UPDATED_AT, ],
-        self::TYPE_FIELDNAME     => ['id', 'type', 'filePath', 'fileName', 'version', 'mediaType', 'fileSize', 'height', 'width', 'article_id', 'stock_item_id', 'contributor_id', 'post_id', 'event_id', 'publisher_id', 'uploaded_at', 'created_at', 'updated_at', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, ]
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'Type', 'Filepath', 'Filename', 'Version', 'Mediatype', 'Filesize', 'Height', 'Width', 'ArticleId', 'StockItemId', 'ContributorId', 'PostId', 'EventId', 'PublisherId', 'uploaded_at', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'type', 'filepath', 'filename', 'version', 'mediatype', 'filesize', 'height', 'width', 'articleId', 'stockItemId', 'contributorId', 'postId', 'eventId', 'publisherId', 'uploaded_at', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [ImageTableMap::COL_ID, ImageTableMap::COL_SITE_ID, ImageTableMap::COL_TYPE, ImageTableMap::COL_FILEPATH, ImageTableMap::COL_FILENAME, ImageTableMap::COL_VERSION, ImageTableMap::COL_MEDIATYPE, ImageTableMap::COL_FILESIZE, ImageTableMap::COL_HEIGHT, ImageTableMap::COL_WIDTH, ImageTableMap::COL_ARTICLE_ID, ImageTableMap::COL_STOCK_ITEM_ID, ImageTableMap::COL_CONTRIBUTOR_ID, ImageTableMap::COL_POST_ID, ImageTableMap::COL_EVENT_ID, ImageTableMap::COL_PUBLISHER_ID, ImageTableMap::COL_UPLOADED_AT, ImageTableMap::COL_CREATED_AT, ImageTableMap::COL_UPDATED_AT, ],
+        self::TYPE_FIELDNAME     => ['id', 'site_id', 'type', 'filePath', 'fileName', 'version', 'mediaType', 'fileSize', 'height', 'width', 'article_id', 'stock_item_id', 'contributor_id', 'post_id', 'event_id', 'publisher_id', 'uploaded_at', 'created_at', 'updated_at', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, ]
     ];
 
     /**
@@ -195,11 +200,11 @@ class ImageTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'Type' => 1, 'Filepath' => 2, 'Filename' => 3, 'Version' => 4, 'Mediatype' => 5, 'Filesize' => 6, 'Height' => 7, 'Width' => 8, 'ArticleId' => 9, 'StockItemId' => 10, 'ContributorId' => 11, 'PostId' => 12, 'EventId' => 13, 'PublisherId' => 14, 'uploaded_at' => 15, 'CreatedAt' => 16, 'UpdatedAt' => 17, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'type' => 1, 'filepath' => 2, 'filename' => 3, 'version' => 4, 'mediatype' => 5, 'filesize' => 6, 'height' => 7, 'width' => 8, 'articleId' => 9, 'stockItemId' => 10, 'contributorId' => 11, 'postId' => 12, 'eventId' => 13, 'publisherId' => 14, 'uploaded_at' => 15, 'createdAt' => 16, 'updatedAt' => 17, ],
-        self::TYPE_COLNAME       => [ImageTableMap::COL_ID => 0, ImageTableMap::COL_TYPE => 1, ImageTableMap::COL_FILEPATH => 2, ImageTableMap::COL_FILENAME => 3, ImageTableMap::COL_VERSION => 4, ImageTableMap::COL_MEDIATYPE => 5, ImageTableMap::COL_FILESIZE => 6, ImageTableMap::COL_HEIGHT => 7, ImageTableMap::COL_WIDTH => 8, ImageTableMap::COL_ARTICLE_ID => 9, ImageTableMap::COL_STOCK_ITEM_ID => 10, ImageTableMap::COL_CONTRIBUTOR_ID => 11, ImageTableMap::COL_POST_ID => 12, ImageTableMap::COL_EVENT_ID => 13, ImageTableMap::COL_PUBLISHER_ID => 14, ImageTableMap::COL_UPLOADED_AT => 15, ImageTableMap::COL_CREATED_AT => 16, ImageTableMap::COL_UPDATED_AT => 17, ],
-        self::TYPE_FIELDNAME     => ['id' => 0, 'type' => 1, 'filePath' => 2, 'fileName' => 3, 'version' => 4, 'mediaType' => 5, 'fileSize' => 6, 'height' => 7, 'width' => 8, 'article_id' => 9, 'stock_item_id' => 10, 'contributor_id' => 11, 'post_id' => 12, 'event_id' => 13, 'publisher_id' => 14, 'uploaded_at' => 15, 'created_at' => 16, 'updated_at' => 17, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'Type' => 2, 'Filepath' => 3, 'Filename' => 4, 'Version' => 5, 'Mediatype' => 6, 'Filesize' => 7, 'Height' => 8, 'Width' => 9, 'ArticleId' => 10, 'StockItemId' => 11, 'ContributorId' => 12, 'PostId' => 13, 'EventId' => 14, 'PublisherId' => 15, 'uploaded_at' => 16, 'CreatedAt' => 17, 'UpdatedAt' => 18, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'type' => 2, 'filepath' => 3, 'filename' => 4, 'version' => 5, 'mediatype' => 6, 'filesize' => 7, 'height' => 8, 'width' => 9, 'articleId' => 10, 'stockItemId' => 11, 'contributorId' => 12, 'postId' => 13, 'eventId' => 14, 'publisherId' => 15, 'uploaded_at' => 16, 'createdAt' => 17, 'updatedAt' => 18, ],
+        self::TYPE_COLNAME       => [ImageTableMap::COL_ID => 0, ImageTableMap::COL_SITE_ID => 1, ImageTableMap::COL_TYPE => 2, ImageTableMap::COL_FILEPATH => 3, ImageTableMap::COL_FILENAME => 4, ImageTableMap::COL_VERSION => 5, ImageTableMap::COL_MEDIATYPE => 6, ImageTableMap::COL_FILESIZE => 7, ImageTableMap::COL_HEIGHT => 8, ImageTableMap::COL_WIDTH => 9, ImageTableMap::COL_ARTICLE_ID => 10, ImageTableMap::COL_STOCK_ITEM_ID => 11, ImageTableMap::COL_CONTRIBUTOR_ID => 12, ImageTableMap::COL_POST_ID => 13, ImageTableMap::COL_EVENT_ID => 14, ImageTableMap::COL_PUBLISHER_ID => 15, ImageTableMap::COL_UPLOADED_AT => 16, ImageTableMap::COL_CREATED_AT => 17, ImageTableMap::COL_UPDATED_AT => 18, ],
+        self::TYPE_FIELDNAME     => ['id' => 0, 'site_id' => 1, 'type' => 2, 'filePath' => 3, 'fileName' => 4, 'version' => 5, 'mediaType' => 6, 'fileSize' => 7, 'height' => 8, 'width' => 9, 'article_id' => 10, 'stock_item_id' => 11, 'contributor_id' => 12, 'post_id' => 13, 'event_id' => 14, 'publisher_id' => 15, 'uploaded_at' => 16, 'created_at' => 17, 'updated_at' => 18, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, ]
     ];
 
     /**
@@ -215,6 +220,14 @@ class ImageTableMap extends TableMap
         'ImageTableMap::COL_ID' => 'ID',
         'COL_ID' => 'ID',
         'images.id' => 'ID',
+        'SiteId' => 'SITE_ID',
+        'Image.SiteId' => 'SITE_ID',
+        'siteId' => 'SITE_ID',
+        'image.siteId' => 'SITE_ID',
+        'ImageTableMap::COL_SITE_ID' => 'SITE_ID',
+        'COL_SITE_ID' => 'SITE_ID',
+        'site_id' => 'SITE_ID',
+        'images.site_id' => 'SITE_ID',
         'Type' => 'TYPE',
         'Image.Type' => 'TYPE',
         'type' => 'TYPE',
@@ -365,6 +378,7 @@ class ImageTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addColumn('type', 'Type', 'VARCHAR', false, 16, null);
         $this->addColumn('filePath', 'Filepath', 'VARCHAR', false, 256, null);
         $this->addColumn('fileName', 'Filename', 'VARCHAR', false, 256, null);
@@ -391,6 +405,13 @@ class ImageTableMap extends TableMap
      */
     public function buildRelations(): void
     {
+        $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, null, false);
         $this->addRelation('Article', '\\Model\\Article', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
@@ -591,6 +612,7 @@ class ImageTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(ImageTableMap::COL_ID);
+            $criteria->addSelectColumn(ImageTableMap::COL_SITE_ID);
             $criteria->addSelectColumn(ImageTableMap::COL_TYPE);
             $criteria->addSelectColumn(ImageTableMap::COL_FILEPATH);
             $criteria->addSelectColumn(ImageTableMap::COL_FILENAME);
@@ -610,6 +632,7 @@ class ImageTableMap extends TableMap
             $criteria->addSelectColumn(ImageTableMap::COL_UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
+            $criteria->addSelectColumn($alias . '.site_id');
             $criteria->addSelectColumn($alias . '.type');
             $criteria->addSelectColumn($alias . '.filePath');
             $criteria->addSelectColumn($alias . '.fileName');
@@ -646,6 +669,7 @@ class ImageTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(ImageTableMap::COL_ID);
+            $criteria->removeSelectColumn(ImageTableMap::COL_SITE_ID);
             $criteria->removeSelectColumn(ImageTableMap::COL_TYPE);
             $criteria->removeSelectColumn(ImageTableMap::COL_FILEPATH);
             $criteria->removeSelectColumn(ImageTableMap::COL_FILENAME);
@@ -665,6 +689,7 @@ class ImageTableMap extends TableMap
             $criteria->removeSelectColumn(ImageTableMap::COL_UPDATED_AT);
         } else {
             $criteria->removeSelectColumn($alias . '.id');
+            $criteria->removeSelectColumn($alias . '.site_id');
             $criteria->removeSelectColumn($alias . '.type');
             $criteria->removeSelectColumn($alias . '.filePath');
             $criteria->removeSelectColumn($alias . '.fileName');

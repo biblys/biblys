@@ -155,6 +155,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery rightJoinWithCustomer() Adds a RIGHT JOIN clause and with to the query using the Customer relation
  * @method     ChildSiteQuery innerJoinWithCustomer() Adds a INNER JOIN clause and with to the query using the Customer relation
  *
+ * @method     ChildSiteQuery leftJoinImage($relationAlias = null) Adds a LEFT JOIN clause to the query using the Image relation
+ * @method     ChildSiteQuery rightJoinImage($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Image relation
+ * @method     ChildSiteQuery innerJoinImage($relationAlias = null) Adds a INNER JOIN clause to the query using the Image relation
+ *
+ * @method     ChildSiteQuery joinWithImage($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Image relation
+ *
+ * @method     ChildSiteQuery leftJoinWithImage() Adds a LEFT JOIN clause and with to the query using the Image relation
+ * @method     ChildSiteQuery rightJoinWithImage() Adds a RIGHT JOIN clause and with to the query using the Image relation
+ * @method     ChildSiteQuery innerJoinWithImage() Adds a INNER JOIN clause and with to the query using the Image relation
+ *
  * @method     ChildSiteQuery leftJoinInvitation($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invitation relation
  * @method     ChildSiteQuery rightJoinInvitation($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invitation relation
  * @method     ChildSiteQuery innerJoinInvitation($relationAlias = null) Adds a INNER JOIN clause to the query using the Invitation relation
@@ -325,7 +335,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery rightJoinWithWishlist() Adds a RIGHT JOIN clause and with to the query using the Wishlist relation
  * @method     ChildSiteQuery innerJoinWithWishlist() Adds a INNER JOIN clause and with to the query using the Wishlist relation
  *
- * @method     \Model\AlertQuery|\Model\CartQuery|\Model\CrowdfundingCampaignQuery|\Model\CrowfundingRewardQuery|\Model\CustomerQuery|\Model\InvitationQuery|\Model\StockItemListQuery|\Model\OptionQuery|\Model\OrderQuery|\Model\PageQuery|\Model\PaymentQuery|\Model\PostQuery|\Model\ArticleCategoryQuery|\Model\RightQuery|\Model\SessionQuery|\Model\SpecialOfferQuery|\Model\StockQuery|\Model\SubscriptionQuery|\Model\UserQuery|\Model\AuthenticationMethodQuery|\Model\VoteQuery|\Model\WishlistQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\AlertQuery|\Model\CartQuery|\Model\CrowdfundingCampaignQuery|\Model\CrowfundingRewardQuery|\Model\CustomerQuery|\Model\ImageQuery|\Model\InvitationQuery|\Model\StockItemListQuery|\Model\OptionQuery|\Model\OrderQuery|\Model\PageQuery|\Model\PaymentQuery|\Model\PostQuery|\Model\ArticleCategoryQuery|\Model\RightQuery|\Model\SessionQuery|\Model\SpecialOfferQuery|\Model\StockQuery|\Model\SubscriptionQuery|\Model\UserQuery|\Model\AuthenticationMethodQuery|\Model\VoteQuery|\Model\WishlistQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildSite|null findOne(?ConnectionInterface $con = null) Return the first ChildSite matching the query
  * @method     ChildSite findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildSite matching the query, or a new ChildSite object populated from the query conditions when no match is found
@@ -2793,6 +2803,179 @@ abstract class SiteQuery extends ModelCriteria
     {
         /** @var $q \Model\CustomerQuery */
         $q = $this->useInQuery('Customer', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\Image object
+     *
+     * @param \Model\Image|ObjectCollection $image the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByImage($image, ?string $comparison = null)
+    {
+        if ($image instanceof \Model\Image) {
+            $this
+                ->addUsingAlias(SiteTableMap::COL_SITE_ID, $image->getSiteId(), $comparison);
+
+            return $this;
+        } elseif ($image instanceof ObjectCollection) {
+            $this
+                ->useImageQuery()
+                ->filterByPrimaryKeys($image->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByImage() only accepts arguments of type \Model\Image or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Image relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinImage(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Image');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Image');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Image relation Image object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\ImageQuery A secondary query class using the current class as primary query
+     */
+    public function useImageQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinImage($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Image', '\Model\ImageQuery');
+    }
+
+    /**
+     * Use the Image relation Image object
+     *
+     * @param callable(\Model\ImageQuery):\Model\ImageQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withImageQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useImageQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Image table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\ImageQuery The inner query object of the EXISTS statement
+     */
+    public function useImageExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\ImageQuery */
+        $q = $this->useExistsQuery('Image', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Image table for a NOT EXISTS query.
+     *
+     * @see useImageExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\ImageQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useImageNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\ImageQuery */
+        $q = $this->useExistsQuery('Image', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Image table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\ImageQuery The inner query object of the IN statement
+     */
+    public function useInImageQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\ImageQuery */
+        $q = $this->useInQuery('Image', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Image table for a NOT IN query.
+     *
+     * @see useImageInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\ImageQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInImageQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\ImageQuery */
+        $q = $this->useInQuery('Image', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 

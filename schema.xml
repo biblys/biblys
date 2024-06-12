@@ -576,6 +576,10 @@
   </table>
   <table name="images" idMethod="native" phpName="Image">
     <column name="id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" type="INTEGER"/>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
     <column name="type" type="VARCHAR" size="16" />
     <column name="filePath" type="VARCHAR" size="256" />
     <column name="fileName" type="VARCHAR" size="256" />
