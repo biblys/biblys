@@ -29,6 +29,11 @@ Corrections
 
 - Le statut HTTP des pages d'erreur 404 est bien 404
 
+### 2.51.5 (26 mars 2021)
+
+Correction d'une erreur qui pouvait conduire à l'affichage d'une erreur 404
+après l'authentification via Axys.
+
 ### 2.51.4 (19 mars 2021)
 
 Corrections
