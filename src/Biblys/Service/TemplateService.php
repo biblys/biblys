@@ -109,7 +109,7 @@ class TemplateService
             $currentUserService,
             $request,
         );
-        $filters = $this->_getCustomFilters($config);
+        $filters = $this->_getCustomFilters($config, $currentSite);
 
         $loader = new TemplateLoader($currentSite, new Filesystem());
         if ($config->get("environment") === "dev") {
@@ -252,7 +252,7 @@ class TemplateService
         return $trackers;
     }
 
-    public function _getCustomFilters(Config $config): array
+    public function _getCustomFilters(Config $config, CurrentSite $currentSite): array
     {
         $filters = [];
 
@@ -271,7 +271,7 @@ class TemplateService
             return $authors[0];
         });
 
-        $imagesService = new ImagesService($config, new Filesystem());
+        $imagesService = new ImagesService($config, $currentSite, new Filesystem());
 
         $filters[] = new TwigFilter('hasCover', function (Article $article) use($imagesService) {
             return $imagesService->articleHasCoverImage($article);

@@ -3,6 +3,7 @@
 namespace Framework\ArgumentResolver;
 
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Images\ImagesService;
 use Exception;
 use Generator;
@@ -29,6 +30,7 @@ class ImagesServiceValueResolver implements ArgumentValueResolverInterface
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
         $config = Config::load();
-        yield new ImagesService($config, new Filesystem());
+        $currentSite = CurrentSite::buildFromConfig($config);
+        yield new ImagesService($config, $currentSite, new Filesystem());
     }
 }
