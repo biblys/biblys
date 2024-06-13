@@ -28,3 +28,7 @@ node_modules
 .phpunit.result.cache
 data
 .yarn
+
+# IDE config files
+.idea
+.vscode
