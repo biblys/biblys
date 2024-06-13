@@ -13,7 +13,7 @@
 1. Clone git repository
 
 ```shell
-git clone git@github.com:clemlatz/biblys.git --depth=100
+git clone git@github.com:biblys/biblys.git --depth=100
 ```
 
 2. Install composer dependencies
@@ -64,19 +64,19 @@ smtp:
   port: 1025
 ```
 
-5. Start docker containers
+7. Start docker containers
 
 ```shell
 docker-compose up -d
 ```
 
-6. Create database
+8. Create database
 
 ```shell
 composer run propel:migrate
 ```
 
-7. Add authentication secret
+9. Add authentication secret
 
 Generate a 32-chars long random string, eg. with openssl:
 
@@ -91,13 +91,13 @@ authentication:
   secret: abcd1234…
 ```
 
-8. Add seeds
+10. Add seeds
 
 ```shell
 composer run db:seed
 ```
 
-9. Access site and login
+11. Access site and login
 
 Go to http://localhost:8088/
 
