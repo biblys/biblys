@@ -110,25 +110,35 @@ class ImagesService
             return null;
         }
 
-        $baseUrl = rtrim($this->baseUrl, "/");
-        $filePath = trim($image->getFilepath(), "/");
-        $filename = trim($image->getFilename(), "/");
+        $url = "$this->baseUrl/{$image->getFilepath()}/{$image->getFilename()}";
+        $normalizedUrl = $this->_removeDuplicateSlashes($url);
         $version = $image->getVersion() > 1 ? "?v={$image->getVersion()}" : "";
+        return $normalizedUrl . $version;
+    }
 
-        return "$baseUrl/$filePath/$filename$version";
+    public function getCoverPathForArticle(Article $article): ?string
+    {
+        $image = $this->_getCoverImageForArticle($article);
+        if (!$image) {
+            return null;
+        }
+
+        return $this->_buildArticleCoverImagePath($image);
     }
 
     private function _buildArticleCoverImagePath(Image $image): ?string
     {
-        return "$this->basePath/{$image->getFilepath()}/{$image->getFilename()}";
+        $path = "$this->basePath/{$image->getFilepath()}/{$image->getFilename()}";
+        return $this->_removeDuplicateSlashes($path);
     }
 
-    /**
-     * @param Article $article
-     * @return Image|null
-     */
     private function _getCoverImageForArticle(Article $article): ?Image
     {
         return ImageQuery::create()->findOneByArticleId($article->getId());
+    }
+
+    private function _removeDuplicateSlashes(string $string): string|array
+    {
+        return str_replace("//", "/", $string);
     }
 }
