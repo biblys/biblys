@@ -15,8 +15,6 @@ use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Service\MetaTagsService;
 use Biblys\Service\TemplateService;
-use Biblys\Service\Updater\Updater;
-use Biblys\Service\Updater\UpdaterException;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
@@ -153,7 +151,6 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws LoaderError
-     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws TransportExceptionInterface
@@ -208,7 +205,6 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws LoaderError
-     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws TransportExceptionInterface
@@ -263,7 +259,6 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws LoaderError
-     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws TransportExceptionInterface
@@ -318,7 +313,6 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws LoaderError
-     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws TransportExceptionInterface
@@ -373,7 +367,6 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws UpdaterException
      * @throws GuzzleException
      */
     public function testAdmin()
@@ -383,8 +376,6 @@ class MainControllerTest extends TestCase
         $config = new Config();
         $config->set("environment", "test");
         $config->set("cloud", ["expires" => "2020-01-01"]);
-        $updater = $this->createMock(Updater::class);
-        $updater->method("isUpdateAvailable")->willReturn(false);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = new CloudService($config, new Client());
@@ -418,7 +409,6 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws UpdaterException
      * @throws GuzzleException
      */
     public function testAdminWithHotNews()
@@ -428,8 +418,6 @@ class MainControllerTest extends TestCase
         $config = new Config();
         $hotNews = ["date" => "2019-04-28", "message" => "Un message à caractère informatif", "link" => "https://www.biblys.fr"];
         $config->set("cloud", ["hot_news" => $hotNews]);
-        $updater = $this->createMock(Updater::class);
-        $updater->method("isUpdateAvailable")->willReturn(false);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = new CloudService($config, new Client());
@@ -453,7 +441,6 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws UpdaterException
      * @throws GuzzleException
      */
     public function testAdminWithHotNewsMarkedAsRead()
@@ -463,8 +450,6 @@ class MainControllerTest extends TestCase
         $config = new Config();
         $hotNews = ["date" => "2019-04-28", "message" => "Un message à caractère informatif", "link" => "https://www.biblys.fr"];
         $config->set("cloud", ["hot_news" => $hotNews]);
-        $updater = $this->createMock(Updater::class);
-        $updater->method("isUpdateAvailable")->willReturn(false);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = new CloudService($config, new Client());
@@ -488,7 +473,6 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws UpdaterException
      * @throws GuzzleException
      */
     public function testAdminWithoutCloudSubscription()
@@ -498,8 +482,6 @@ class MainControllerTest extends TestCase
         $config = new Config();
         $config->set("environment", "test");
         $config->set("cloud", ["customer_id" => "12345"]);
-        $updater = $this->createMock(Updater::class);
-        $updater->method("isUpdateAvailable")->willReturn(false);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloudService = $this->createMock(CloudService::class);
@@ -528,7 +510,6 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws UpdaterException
      * @throws GuzzleException
      */
     public function testAdminWithUnpaidCloudSubscription()
@@ -538,8 +519,6 @@ class MainControllerTest extends TestCase
         $config = new Config();
         $config->set("environment", "test");
         $config->set("cloud", ["customer_id" => "12345"]);
-        $updater = $this->createMock(Updater::class);
-        $updater->method("isUpdateAvailable")->willReturn(false);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloudSubscription = $this->createMock(CloudSubscription::class);
@@ -578,7 +557,6 @@ class MainControllerTest extends TestCase
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws UpdaterException
      */
     public function testAdminShortcuts()
     {
@@ -711,7 +689,6 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws UpdaterException
      * @throws GuzzleException
      */
     public function testAdminWithEbooks()
@@ -719,8 +696,6 @@ class MainControllerTest extends TestCase
         // given
         $controller = new MainController();
         $config = new Config();
-        $updater = $this->createMock(Updater::class);
-        $updater->method("isUpdateAvailable")->willReturn(false);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = new CloudService($config, new Client());
@@ -743,7 +718,6 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws UpdaterException
      * @throws GuzzleException
      * @throws Exception
      */
@@ -752,8 +726,6 @@ class MainControllerTest extends TestCase
         // given
         $controller = new MainController();
         $config = new Config(["smtp" => null]);
-        $updater = $this->createMock(Updater::class);
-        $updater->method("isUpdateAvailable")->willReturn(false);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = $this->createMock(CloudService::class);

@@ -2,8 +2,6 @@
 
 use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Config;
-use Biblys\Service\FlashMessagesService;
-use Biblys\Service\Updater\Updater;
 use Framework\ArgumentResolver\BiblysCloudValueResolver;
 use Framework\ArgumentResolver\ConfigValueResolver;
 use Framework\ArgumentResolver\CurrentSiteValueResolver;
@@ -20,7 +18,6 @@ use Framework\ArgumentResolver\QueryParamsServiceValueResolver;
 use Framework\ArgumentResolver\SessionValueResolver;
 use Framework\ArgumentResolver\TemplateServiceValueResolver;
 use Framework\ArgumentResolver\TokenServiceValueResolver;
-use Framework\ArgumentResolver\UpdaterValueResolver;
 use Framework\ArgumentResolver\UrlGeneratorValueResolver;
 use Framework\ArgumentResolver\WatermarkingServiceValueResolver;
 use Framework\RequestListener;
@@ -64,7 +61,6 @@ $argumentResolvers[] = new QueryParamsServiceValueResolver();
 $argumentResolvers[] = new SessionValueResolver();
 $argumentResolvers[] = new TemplateServiceValueResolver();
 $argumentResolvers[] = new TokenServiceValueResolver();
-$argumentResolvers[] = new UpdaterValueResolver();
 $argumentResolvers[] = new UrlGeneratorValueResolver();
 $argumentResolvers[] = new WatermarkingServiceValueResolver();
 $container->register("argument_resolver", ArgumentResolver::class)
@@ -87,8 +83,6 @@ $container->register("framework", HttpKernel::class)
     ]);
 
 $container->register("config", Config::class);
-$container->register("updater", Updater::class)
-    ->setArguments([__DIR__."/../", BIBLYS_VERSION, new Reference("config")]);
 $container->register("biblys_cloud", CloudService::class)
     ->setArguments([new Reference("config")]);
 

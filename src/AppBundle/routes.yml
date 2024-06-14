@@ -4,10 +4,6 @@ maintenance_infos:
   path: /biblys/infos
   controller: AppBundle\Controller\MaintenanceController::infosAction
 
-maintenance_update:
-  path: /admin/update
-  controller: AppBundle\Controller\MaintenanceController::updateAction
-
 # Main
 
 main_home:
