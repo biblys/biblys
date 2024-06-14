@@ -22,7 +22,8 @@
     "propel:migrate": "vendor/bin/propel migrate",
     "db:reset": "bin/console db:reset",
     "db:seed": "bin/console db:seed",
-    "db:prepare": ["@db:reset", "@db:seed"]
+    "db:prepare": ["@db:reset", "@db:seed"],
+    "images:import": "bin/console images:import"
   },
   "require": {
     "php": "~8.1",
