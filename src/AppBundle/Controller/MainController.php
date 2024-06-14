@@ -15,7 +15,6 @@ use Biblys\Service\Mailer;
 use Biblys\Service\MetaTagsService;
 use Biblys\Service\Pagination;
 use Biblys\Service\TemplateService;
-use Biblys\Service\Updater\UpdaterException;
 use CartManager;
 use Exception;
 use Framework\Controller;
@@ -266,7 +265,6 @@ class MainController extends Controller
     }
 
     /**
-     * @throws UpdaterException
      * @throws PropelException
      * @throws Exception
      * @throws GuzzleException
@@ -340,7 +338,6 @@ class MainController extends Controller
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws UpdaterException
      * @throws Exception
      */
     public function adminShortcutsAction(
