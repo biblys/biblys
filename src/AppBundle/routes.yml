@@ -8,14 +8,6 @@ maintenance_update:
   path: /admin/update
   controller: AppBundle\Controller\MaintenanceController::updateAction
 
-maintenance_changelog_index:
-  path: /biblys/changelog
-  controller: AppBundle\Controller\MaintenanceController::changelogIndexAction
-
-maintenance_changelog_show:
-  path: /biblys/changelog/{version}
-  controller: AppBundle\Controller\MaintenanceController::changelogShowAction
-
 # Main
 
 main_home:
