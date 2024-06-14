@@ -6,14 +6,26 @@ require __DIR__."/../vendor/autoload.php";
 
 use Biblys\Database\Connection;
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
+use Biblys\Service\Images\ImagesService;
 use Command\CreateSeedsCommand;
+use Command\ImportImagesCommand;
 use Command\ResetDatabaseCommand;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
 $config = Config::load();
 Connection::initPropel($config);
 
+$config = Config::load();
+$finder = new Finder();
+$currentSite = CurrentSite::buildFromConfig($config);
+$filesystem = new Filesystem();
+$imagesServices = new ImagesService($config, $currentSite, $filesystem);
+
 $application = new Application();
+$application->add(new ImportImagesCommand($config, $finder, $filesystem, $imagesServices));
 $application->add(new ResetDatabaseCommand());
 $application->add(new CreateSeedsCommand());
 $application->run();
