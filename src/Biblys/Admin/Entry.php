@@ -5,7 +5,6 @@ namespace Biblys\Admin;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Config;
-use Biblys\Service\Updater\UpdaterException;
 use Exception;
 use GuzzleHttp\Client;
 use OrderManager;
@@ -247,7 +246,7 @@ class Entry
             $entries[] = new Entry('Abonnement Cloud', ['category' => 'biblys', 'path' => 'main_admin_cloud', 'icon' => 'cloud']);
         }
         $entries[] = new Entry('Documentation', ['category' => 'biblys', 'url' => 'https://docs.biblys.fr/', 'icon' => 'book']);
-        $entries[] = new Entry('Mise à jour', ['category' => 'biblys', 'path' => 'maintenance_update', 'icon' => 'cloud-download']);
+        $entries[] = new Entry('Mises à jour', ['category' => 'biblys', 'url' => 'https://github.com/biblys/biblys/releases/', 'icon' => 'cloud-download']);
 
         return $entries;
     }
@@ -287,7 +286,6 @@ class Entry
     /**
      * @param string $category
      * @return Entry[]
-     * @throws UpdaterException
      */
     public static function findByCategory(string $category): array
     {
