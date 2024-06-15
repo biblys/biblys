@@ -10,37 +10,27 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
+use Biblys\Service\TemplateService;
 use Model\ArticleQuery;
 use Model\CartQuery;
-use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
-/**
- * @throws InvalidDateFormatException
- * @throws PropelException
- */
-
 return function (
-    Request $request,
-    Config $config,
-    CurrentSite $currentSite,
-    CurrentUser $currentUser,
-    UrlGenerator $urlGenerator,
-): Response
-{
+    Request         $request,
+    Config          $config,
+    CurrentSite     $currentSite,
+    CurrentUser     $currentUser,
+    UrlGenerator    $urlGenerator,
+    ImagesService   $imagesService,
+    TemplateService $templateService,
+): Response {
     $om = new OrderManager();
 
     $content = null;
-
-    $imagesService = new ImagesService(
-        config: $config,
-        currentSite: $currentSite,
-        filesystem: new Symfony\Component\Filesystem\Filesystem()
-    );
 
     $currentUrlService = new CurrentUrlService($request);
     $currentUrl = $currentUrlService->getRelativeUrl();
@@ -83,24 +73,32 @@ return function (
     $cartDownloadableItems = [];
 
     foreach ($stocks as $stock) {
-        /** @var Article $article */
-        $article = $stock->get('article');
-        $type = $article->getType();
+        /** @var Article $articleEntity */
+        $articleEntity = $stock->get('article');
+        $article = ArticleQuery::create()->findPk($stock->get("article_id"));
+        $type = $articleEntity->getType();
 
         // Cover
         $cover = null;
         if ($stock->hasPhoto()) {
             $cover = $stock->getPhotoTag(['size' => 'h60', 'rel' => 'lightbox', 'class' => 'cover']);
-        } elseif ($article->hasCover()) {
-            $cover = $article->getCoverTag(['size' => 'h60', 'rel' => 'lightbox', 'class' => 'cover']);
+        } elseif ($imagesService->articleHasCoverImage($article)) {
+            $cover = $templateService->render("AppBundle:Article:_cover.html.twig", [
+                    "article" => $article,
+                    "height" => 60,
+                    "class" => "cover",
+                    "link" => false,
+                ]
+            );
         }
 
         // Books & ebooks
         $articleType = null;
         $purchased = null;
+        $articleModel = ArticleQuery::create()->findPk($articleEntity->get("id"));
         if ($type->getId() == 2) {
             $articleType = ' <strong>(numérique)</strong>';
-            $articleModel = ArticleQuery::create()->findPk($article->get("id"));
+            /** @var \Model\Article $articleModel */
             if ($currentUser->hasPurchasedArticle($articleModel)) {
                 $purchased = '<p class="warning left"><a href="/pages/log_mybooks" title="Vous avez déjà acheté ce titre. Juste pour info.">Déjà acheté !</a></p>';
             }
@@ -125,36 +123,36 @@ return function (
 
         // Preorder
         $preorder = null;
-        if ($article->get('pubdate') > date("Y-m-d")) {
+        if ($articleEntity->get('pubdate') > date("Y-m-d")) {
             $pre_order = 1;
-            $preorder = '<p class="warning left">&Agrave; para&icirc;tre le '._date($article->get('pubdate'), 'd/m/Y').'</p>';
+            $preorder = '<p class="warning left">&Agrave; para&icirc;tre le ' . _date($articleEntity->get('pubdate'), 'd/m/Y') . '</p>';
             $availability = '<span class="fa fa-square lightblue" title="Précommande"></span>&nbsp;';
         }
 
         // Editable price
         $editable_price_form = null;
-        if ($article->has('price_editable')) {
+        if ($articleEntity->has('price_editable')) {
             $editable_price_form = '
-            <form action="/stock/'.$stock->get("id").'/edit-free-price" method="post">
+            <form action="/stock/' . $stock->get("id") . '/edit-free-price" method="post">
                 <fieldset>
-                    <input type="hidden" name="stock_id" value="'.$stock->get('id').'">
+                    <input type="hidden" name="stock_id" value="' . $stock->get('id') . '">
                     Modifier le montant :
-                        <input type="number" name="new_price" min="'.($article->get('price') / 100).'" value="'.($stock->get('selling_price') / 100).'" step=10 class="nano" required> &euro;
+                        <input type="number" name="new_price" min="' . ($articleEntity->get('price') / 100) . '" value="' . ($stock->get('selling_price') / 100) . '" step=10 class="nano" required> &euro;
                     <button type="submit" class="btn btn-info btn-xs">OK</button>
                 </fieldset>
             </form>
         ';
         }
 
-        $articleUrl = $urlGenerator->generate("article_show", ["slug" => $article->get("url")]);
+        $articleUrl = $urlGenerator->generate("article_show", ["slug" => $articleEntity->get("url")]);
 
         $cartLine = '
             <tr id="cart_tr_' . $stock->get('id') . '">
                 <td class="center">' . $cover . '</td>
                 <td>
-                    <a href="' . $articleUrl . '">' . $article->get('title') . '</a>' . $articleType . '<br>
-                    de ' . authors($article->get('authors')) . '<br>
-                    coll. ' . $article->get('collection')->get('name') . ' ' . numero($article->get('number')) . '<br>
+                    <a href="' . $articleUrl . '">' . $articleEntity->get('title') . '</a>' . $articleType . '<br>
+                    de ' . authors($articleEntity->get('authors')) . '<br>
+                    coll. ' . $articleEntity->get('collection')->get('name') . ' ' . numero($articleEntity->get('number')) . '<br>
                     ' . $purchased . $preorder . '
                     ' . ($stock->has('condition') ? 'État : ' . $stock->get('condition') . '<br>' : null) . '
                     ' . $editable_price_form . '
@@ -174,17 +172,17 @@ return function (
             </tr>
         ';
 
-        if ($article->isPhysical()) {
+        if ($articleEntity->isPhysical()) {
             $cartPhysicalItems[] = $cartLine;
         }
 
-        if ($article->isDownloadable()) {
+        if ($articleEntity->isDownloadable()) {
             $cartDownloadableItems[] = $cartLine;
         }
 
         if ($OneArticle == 0) {
-            $OneArticle = $article->get('id');
-        } elseif ($OneArticle != $article->get('id')) {
+            $OneArticle = $articleEntity->get('id');
+        } elseif ($OneArticle != $articleEntity->get('id')) {
             $OneArticle = "no";
         }
 
@@ -197,7 +195,7 @@ return function (
     if ($currentUser->isAdmin()) {
         $content .= '
             <div class="admin">
-                <p>Panier n&deg; '.$cart->getId().'</p>
+                <p>Panier n&deg; ' . $cart->getId() . '</p>
             </div>
         ';
     }
@@ -216,7 +214,7 @@ return function (
                 </tr>
             </thead>
             <tbody>
-                '.implode($cartPhysicalItems).'
+                ' . implode($cartPhysicalItems) . '
             </tbody>
         ';
     }
@@ -229,20 +227,19 @@ return function (
                 </tr>
             </thead>
             <tbody>
-                '.implode($cartDownloadableItems).'
+                ' . implode($cartDownloadableItems) . '
             </tbody>
         ';
     }
-
 
 
     if (isset($Articles) && $Articles > 0) {
         if (!$currentUser->isAuthentified()) {
             $content .= '
             <p class="warning">
-                Attention : '."vous n'êtes pas connecté".'. Si vous quittez le site, votre
+                Attention : ' . "vous n'êtes pas connecté" . '. Si vous quittez le site, votre
                 panier ne sera pas sauvegardé.
-                <a href="'.$loginUrl.'">Connectez-vous</a> 
+                <a href="' . $loginUrl . '">Connectez-vous</a> 
                 pour sauvegarder votre panier.
             </p><br />';
         }
@@ -264,9 +261,9 @@ return function (
                 $content .= '
                 </table>
 
-                <h2>Commande en cours (n&deg; <a href="/order/'.$o["order_url"].'">'.$o["order_id"].'</a>)</h2>
+                <h2>Commande en cours (n&deg; <a href="/order/' . $o["order_url"] . '">' . $o["order_id"] . '</a>)</h2>
 
-                <p>Vous avez déj&agrave; une commande en attente de paiement. Les livres de votre panier seront ajoutés aux livres de la commande ci-dessous et les frais de port recalculés en conséquence. Si vous ne souhaitez plus commander les livres de la commande n&deg; '.$o["order_id"].', <a href="/contact/">contactez-nous</a> pour faire annuler la commande.</p>
+                <p>Vous avez déj&agrave; une commande en attente de paiement. Les livres de votre panier seront ajoutés aux livres de la commande ci-dessous et les frais de port recalculés en conséquence. Si vous ne souhaitez plus commander les livres de la commande n&deg; ' . $o["order_id"] . ', <a href="/contact/">contactez-nous</a> pour faire annuler la commande.</p>
 
                 <br />
                 <table class="table">
@@ -276,41 +273,42 @@ return function (
                 $copies = $order->getCopies();
                 foreach ($copies as $copy) {
                     $s = $copy;
-                    $article = $copy->getArticle();
+                    $articleEntity = $copy->getArticle();
+                    $articleModel = ArticleQuery::create()->findPk($articleEntity->get("id"));
 
                     // Image
                     $s["couv"] = null;
                     $stockPhoto = new Media("stock", $s["stock_id"]);
-                    $articleCover = new Media("article", $article->get("id"));
+                    $articleCoverUrl = $imagesService->getCoverUrlForArticle($articleModel, height: 100);
                     if ($stockPhoto->exists()) {
-                        $s["couv"] = '<a href="'.$stockPhoto->getUrl().'" rel="lightbox"><img src="'.$stockPhoto->getUrl(["size" => "h60"]).'" alt="'.$s["article_title"].'" height="60" /></a>';
-                    } elseif ($articleCover->exists()) {
-                        $s["couv"] = '<a href="'.$articleCover->getUrl().'" rel="lightbox"><img src="'.$articleCover->getUrl(["size" => "h60"]).'" alt="'.$article->get('title').'" /></a>';
+                        $s["couv"] = '<a href="' . $stockPhoto->getUrl() . '" rel="lightbox"><img src="' . $stockPhoto->getUrl(["size" => "h60"]) . '" alt="' . $s["article_title"] . '" height="60" /></a>';
+                    } elseif ($articleCoverUrl) {
+                        $s["couv"] = '<img src="' . $articleCoverUrl . '" alt="' . $articleEntity->get('title') . '" /></a>';
                     }
 
                     $content .= '
                     <tr>
-                        <td>'.$s["stock_id"].'</td>
-                        <td>'.$s["couv"].'</td>
+                        <td>' . $s["stock_id"] . '</td>
+                        <td>' . $s["couv"] . '</td>
                         <td>
-                            <a href="'.$urlGenerator->generate('article_show', ['slug' => $article->get('url')]).'">
-                                '.$article->get('title').'
+                            <a href="' . $urlGenerator->generate('article_show', ['slug' => $articleEntity->get('url')]) . '">
+                                ' . $articleEntity->get('title') . '
                             </a><br />
-                            de '.authors($article->get('authors')).'<br />
-                            coll. '.$article->get('collection')->get('name').' '.numero($article->get('number')).'<br />
+                            de ' . authors($articleEntity->get('authors')) . '<br />
+                            coll. ' . $articleEntity->get('collection')->get('name') . ' ' . numero($articleEntity->get('number')) . '<br />
                 ';
                     if (!empty($s["stock_condition"])) {
-                        $content .= 'État : '.$s["stock_condition"].'<br />';
+                        $content .= 'État : ' . $s["stock_condition"] . '<br />';
                     }
                     $content .= '
                         </td>
                 ';
                     if ($currentSite->getSite()->getShippingFee() == "fr") {
-                        $content .= '<td class="right">'.$s["stock_weight"].'g</td>';
+                        $content .= '<td class="right">' . $s["stock_weight"] . 'g</td>';
                     }
                     $content .= '
                         <td class="right">
-                            '.currency($s["stock_selling_price"] / 100).'<br />
+                            ' . currency($s["stock_selling_price"] / 100) . '<br />
                         </td>
                         <td class="center">
                         </td>
@@ -330,7 +328,7 @@ return function (
                 <tfoot>
                     <tr>
                         <td colspan="3">Total</td>
-                        <td class="text-right">'.currency($Total / 100).' <input type="hidden" id="sub_total" value="'.$Total.'"></td>
+                        <td class="text-right">' . currency($Total / 100) . ' <input type="hidden" id="sub_total" value="' . $Total . '"></td>
                     </tr>
                 </tfoot>
             </table>
@@ -340,6 +338,8 @@ return function (
         $content .= CartHelpers::getSpecialOffersNotice(
             $currentSite,
             $urlGenerator,
+            $imagesService,
+            $templateService,
             $cart
         );
 
@@ -367,7 +367,7 @@ return function (
             // Countries
             $countries = $com->getAll();
             $destinations = array_map(function ($country) {
-                return '<option value="'.$country->get('id').'">'.$country->get('name').'</option>';
+                return '<option value="' . $country->get('id') . '">' . $country->get('name') . '</option>';
             }, $countries);
             $default_destination = $com->get(["country_name" => "France"]);
 
@@ -392,13 +392,13 @@ return function (
             $content .= '
                 <h2>Mode d\'expédition</h2>
                 
-                '.$freeShippingNotice.'
+                ' . $freeShippingNotice . '
 
-                '.$plus30.'
+                ' . $plus30 . '
 
-                <input type="hidden" id="order_weight" value="'.$Poids.'">
-                <input type="hidden" id="order_amount" value="'.$Total.'">
-                <input type="hidden" id="articles_num" value="'.$Articles.'">
+                <input type="hidden" id="order_weight" value="' . $Poids . '">
+                <input type="hidden" id="order_amount" value="' . $Total . '">
+                <input type="hidden" id="articles_num" value="' . $Articles . '">
 
                 <table class="table">
                     <thead>
@@ -413,8 +413,8 @@ return function (
                         <tr>
                             <td>
                                 <select id="country_id" name="country_id" class="form-control" required>
-                                    <option value="'.$default_destination->get('id').'">'.$default_destination->get('name').'</option>
-                                    '.implode($destinations).'
+                                    <option value="' . $default_destination->get('id') . '">' . $default_destination->get('name') . '</option>
+                                    ' . implode($destinations) . '
                                 </select>
                             </td>
                             <td>
@@ -432,7 +432,7 @@ return function (
                         <tr>
                             <td></td>
                             <td class="bold right">Montant &agrave; régler :</td>
-                            <td id="total" class="right bold">'.currency($Total / 100).'</td>
+                            <td id="total" class="right bold">' . currency($Total / 100) . '</td>
                         </tr>
                     </tbody>
                 </table>
@@ -445,18 +445,18 @@ return function (
             $content .= '<p class="alert alert-warning">La vente en ligne est temporairement désactivée sur ce site.</p>';
         } elseif ($downloadable && !$currentUser->isAuthentified()) {
             $content .= '<br />'
-               .'<div class="center">'
-               .'<p class="warning">Votre panier contient au moins un livre numérique. Vous devez vous <a href="'.$loginUrl.'">identifier</a> pour continuer.</p>'
-               .'<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
-               .'</div>';
+                . '<div class="center">'
+                . '<p class="warning">Votre panier contient au moins un livre numérique. Vous devez vous <a href="' . $loginUrl . '">identifier</a> pour continuer.</p>'
+                . '<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
+                . '</div>';
 
             // If cart contains crowdfunding rewards and user not logged
         } elseif (!empty($crowdfunding) && !$currentUser->isAuthentified()) {
             $content .= '<br>'
-               .'<div class="center">'
-               .'<p class="warning">Votre panier contient au moins une contrepartie de financement participatif.<br>Vous devez vous <a href="'.$loginUrl.'">identifier</a> pour continuer.</p>'
-               .'<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
-               .'</div>';
+                . '<div class="center">'
+                . '<p class="warning">Votre panier contient au moins une contrepartie de financement participatif.<br>Vous devez vous <a href="' . $loginUrl . '">identifier</a> pour continuer.</p>'
+                . '<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
+                . '</div>';
         } elseif (isset($o["order_id"])) {
             $content .= '<div class="center"><button type="submit" class="btn btn-primary" id="continue">Ajouter à la commande en cours</button></div>';
         } else {

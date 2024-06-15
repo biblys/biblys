@@ -4,7 +4,9 @@ use Biblys\Exception\CannotAddStockItemToCartException;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\Images\ImagesService;
 use Entity\Exception\CartException;
+use Model\ArticleQuery;
 use Model\WishQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,30 +39,32 @@ class Cart extends Entity
      * @throws Exception
      * @throws Exception
      */
-    public function getLine($stock): string
+    public function getLine(ImagesService $imagesService, $stock): string
     {
         global $urlgenerator;
 
-        $article = $stock->get('article');
+        /** @var Article $articleEntity */
+        $articleEntity = $stock->get('article');
+        $articleModel = ArticleQuery::create()->findPk($articleEntity->get("id"));
 
         // Image
-        $article_cover = new Media('article', $article->get('id'));
+        $articleCoverUrl = $imagesService->getCoverUrlForArticle($articleModel, height: 100);
         $stock_cover = new Media('stock', $stock->get('id'));
 
-        if ($article_cover->exists()) $cover = '<a href="' . $article_cover->getUrl() . '" rel="lightbox"><img src="' . $article_cover->getUrl(['size' => 'h100']) . '" height=55 alt="' . $article->get('title') . '"></a>';
-        elseif ($stock_cover->exists()) $cover = '<a href="' . $stock_cover->getUrl() . '" rel="lightbox"><img src="' . $stock_cover->getUrl(['size' => 'h100']) . '" height=55 alt="' . $article->get('title') . '"></a>';
+        if ($articleCoverUrl) $cover = '<img src="' . $articleCoverUrl . '" height=55 alt="' . $articleEntity->get('title') . '">';
+        elseif ($stock_cover->exists()) $cover = '<a href="' . $stock_cover->getUrl() . '" rel="lightbox"><img src="' . $stock_cover->getUrl(['size' => 'h100']) . '" height=55 alt="' . $articleEntity->get('title') . '"></a>';
         else $cover = NULL;
 
-        $articleUrl = $urlgenerator->generate("article_show", ["slug" => $article->get("url")]);
+        $articleUrl = $urlgenerator->generate("article_show", ["slug" => $articleEntity->get("url")]);
 
         return '
                 <tr id="stock_' . $stock->get('id') . '">
                     <td class="va-middle right"><a href="/pages/adm_stock?id=' . $stock->get('id') . '">' . $stock->get('id') . '</a></td>
                     <td class="va-middle center">' . $cover . '</td>
                     <td class="va-middle">
-                        <a href="' . $articleUrl . '">' . $article->get('title') . '</a><br>
-                        de ' . authors($article->get('authors')) . '<br>
-                        Ed. ' . $article->get('publisher')->get('name') . '
+                        <a href="' . $articleUrl . '">' . $articleEntity->get('title') . '</a><br>
+                        de ' . authors($articleEntity->get('authors')) . '<br>
+                        Ed. ' . $articleEntity->get('publisher')->get('name') . '
                     </td>
                     <td class="va-middle right stock_selling_price" data-price="' . $stock->get('selling_price') . '">
                         ' . $stock->get('condition') . '

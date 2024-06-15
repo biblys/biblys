@@ -3,6 +3,8 @@
 namespace Biblys\Legacy;
 
 use Biblys\Service\CurrentSite;
+use Biblys\Service\Images\ImagesService;
+use Biblys\Service\TemplateService;
 use Biblys\Test\ModelFactory;
 use DateTime;
 use Mockery;
@@ -34,11 +36,17 @@ class CartHelpersTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $imageServices = Mockery::mock(ImagesService::class);
+        $imageServices->expects("articleHasCoverImage")->andReturn(true);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("render");
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
             $currentSite,
             $urlGenerator,
+            $imageServices,
+            $templateService,
             ModelFactory::createCart(site: $site),
         );
 
@@ -65,11 +73,17 @@ class CartHelpersTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $imageServices = Mockery::mock(ImagesService::class);
+        $imageServices->expects("articleHasCoverImage")->andReturn(true);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("render");
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
             $currentSite,
             $urlGenerator,
+            $imageServices,
+            $templateService,
             ModelFactory::createCart(site: $site),
         );
 
@@ -96,11 +110,17 @@ class CartHelpersTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $imageServices = Mockery::mock(ImagesService::class);
+        $imageServices->expects("articleHasCoverImage")->andReturn(true);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("render");
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
             $currentSite,
             $urlGenerator,
+            $imageServices,
+            $templateService,
             ModelFactory::createCart(site: $site),
         );
 
@@ -130,11 +150,18 @@ class CartHelpersTest extends TestCase
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate");
+        $imageServices = Mockery::mock(ImagesService::class);
+        $imageServices->expects("articleHasCoverImage")->andReturn(true);
+        $imageServices->expects("articleHasCoverImage")->andReturn(true);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("render");
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
             $currentSite,
             $urlGenerator,
+            $imageServices,
+            $templateService,
             $cart,
         );
 
@@ -182,11 +209,17 @@ class CartHelpersTest extends TestCase
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate");
+        $imageServices = Mockery::mock(ImagesService::class);
+        $imageServices->expects("articleHasCoverImage")->andReturn(true);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("render");
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
             $currentSite,
             $urlGenerator,
+            $imageServices,
+            $templateService,
             $cart,
         );
 
@@ -226,11 +259,17 @@ class CartHelpersTest extends TestCase
         $urlGenerator->shouldReceive("generate")
             ->with("cart_add_article", ["articleId" => $freeArticle->getId()])
             ->andReturn("/cart_url");
+        $imageServices = Mockery::mock(ImagesService::class);
+        $imageServices->expects("articleHasCoverImage")->andReturn(true);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("render");
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
             $currentSite,
             $urlGenerator,
+            $imageServices,
+            $templateService,
             $cart,
         );
 
@@ -275,11 +314,17 @@ class CartHelpersTest extends TestCase
         $urlGenerator->shouldReceive("generate")
             ->with("cart_add_article", ["articleId" => $freeArticle->getId()])
             ->andReturn("/cart_url");
+        $imageServices = Mockery::mock(ImagesService::class);
+        $imageServices->expects("articleHasCoverImage")->andReturn(true);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("render");
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
             $currentSite,
             $urlGenerator,
+            $imageServices,
+            $templateService,
             $cart,
         );
 
