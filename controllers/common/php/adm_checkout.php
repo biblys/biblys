@@ -2,6 +2,7 @@
 
 use Biblys\Exception\CannotAddStockItemToCartException;
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\Images\ImagesService;
 use Model\UserQuery;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -21,13 +22,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @throws PropelException
  */
 return function (
-    Request     $request,
-    CurrentUser $currentUser,
-    CurrentSite $currentSite
+    Request       $request,
+    CurrentUser   $currentUser,
+    CurrentSite   $currentSite,
+    ImagesService $imagesService,
 ): Response|JsonResponse|RedirectResponse {
     $_SQL = LegacyCodeHelper::getGlobalDatabaseConnection();
 
-$cm = new CartManager();
+    $cm = new CartManager();
 
     $cartId = $request->query->get("cart_id");
     if (!$cartId) {
@@ -151,7 +153,7 @@ $cm = new CartManager();
                 $stocks = $cm->getStock($cart);
                 foreach ($stocks as $stock) {
                     if ($stock->get('id') == $_GET['id']) {
-                        $params['line'] = $cart->getLine($stock);
+                        $params['line'] = $cart->getLine($imagesService, $stock);
                     }
                 }
                 return new JsonResponse($params);
@@ -223,13 +225,13 @@ $cm = new CartManager();
     }
 
 // Current cart's seller
-$seller_field = null;
-if ($cart->has('seller_id')) {
-    $seller = UserQuery::create()->findPk($cart->get('seller_id'));
-    if ($seller) {
-        $seller_field = '
-            <input type="text" name="seller" id="seller" value="'.$seller->getEmail().'" class="long" required readonly>
-            <input type="hidden" name="seller_id" id="seller_id" value="'.$seller->getId().'" required>
+    $seller_field = null;
+    if ($cart->has('seller_id')) {
+        $seller = UserQuery::create()->findPk($cart->get('seller_id'));
+        if ($seller) {
+            $seller_field = '
+            <input type="text" name="seller" id="seller" value="' . $seller->getEmail() . '" class="long" required readonly>
+            <input type="hidden" name="seller_id" id="seller_id" value="' . $seller->getId() . '" required>
         ';
         }
     } else trigger_error('No seller id.');
@@ -240,7 +242,7 @@ if ($cart->has('seller_id')) {
     $cart_total = 0;
     $stock = $cm->getStock($cart);
     foreach ($stock as $s) {
-        $cart_content .= $cart->getLine($s);
+        $cart_content .= $cart->getLine($imagesService, $s);
         $cart_count++;
         $cart_total += $s->get('selling_price');
     }
@@ -308,7 +310,7 @@ if ($cart->has('seller_id')) {
                     (<a href='https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037100434/2018-06-23'>Article 1770 du Code général des impôts</a>)
                 </small></em>
             </p>
-            ".'
+            " . '
             <p>
                 <a class="btn btn-warning" href="https://www.economie.gouv.fr/entreprises/professionnels-logiciels-caisse">
                     En savoir plus

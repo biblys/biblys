@@ -5,6 +5,7 @@ namespace Biblys\Legacy;
 use ArticleManager;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Images\ImagesService;
+use Biblys\Service\TemplateService;
 use DateTime;
 use Exception;
 use Model\Article;
@@ -162,9 +163,11 @@ class CartHelpers
      * @throws Exception
      */
     public static function getSpecialOffersNotice(
-        CurrentSite  $currentSite,
-        UrlGenerator $urlGenerator,
-        Cart         $cart,
+        CurrentSite     $currentSite,
+        UrlGenerator    $urlGenerator,
+        ImagesService   $imagesService,
+        TemplateService $templateService,
+        Cart            $cart
     ): string
     {
         $specialOffers = SpecialOfferQuery::create()
@@ -180,7 +183,9 @@ class CartHelpers
             $notice .= self::_buildSpecialOfferNotice(
                 $specialOffer,
                 $urlGenerator,
-                $cart
+                $imagesService,
+                $templateService,
+                $cart,
             );
         }
 
@@ -191,9 +196,11 @@ class CartHelpers
      * @throws Exception
      */
     private static function _buildSpecialOfferNotice(
-        SpecialOffer $specialOffer,
-        UrlGenerator $urlGenerator,
-        Cart         $cart
+        SpecialOffer    $specialOffer,
+        UrlGenerator    $urlGenerator,
+        ImagesService   $imagesService,
+        TemplateService $templateService,
+        Cart            $cart,
     ): string
     {
         $targetQuantity = $specialOffer->getTargetQuantity();
@@ -246,7 +253,7 @@ class CartHelpers
             $cartButtonUrl = $urlGenerator->generate(
                 "cart_add_article", ["articleId" => $freeArticle->getId()]
             );
-            $cartButton = '<form method="post" action="'.$cartButtonUrl.'">';
+            $cartButton = '<form method="post" action="' . $cartButtonUrl . '">';
             $cartButton .= '<button type="submit" class="btn btn-success">Ajouter au panier</button>';
             $cartButton .= '</form>';
         }
@@ -259,8 +266,14 @@ class CartHelpers
         }
 
         $cover = null;
-        if ($freeArticleEntity->hasCover()) {
-            $cover = $freeArticleEntity->getCoverTag(['size' => 'w256', 'rel' => 'lightbox', 'class' => 'cover']);
+        if ($imagesService->articleHasCoverImage($freeArticle)) {
+            $cover = $templateService->render("AppBundle:Article:_cover.html.twig", [
+                    "article" => $freeArticle,
+                    "width" => 256,
+                    "class" => "cover",
+                    "rel" => "lightbox",
+                ]
+            );
         }
 
         $collectionUrl = $urlGenerator->generate(
@@ -269,7 +282,7 @@ class CartHelpers
 
         return '
             <div class="SpecialOfferNotice">
-                <h2 class="SpecialOfferNotice-title">'.$specialOffer->getName().'</h2>
+                <h2 class="SpecialOfferNotice-title">' . $specialOffer->getName() . '</h2>
                 <div class="SpecialOfferNotice-cover">
                     ' . $cover . '
                 </div>
@@ -283,7 +296,7 @@ class CartHelpers
                     <p>
                         <strong>
                             Offert pour ' . $targetQuantity . ' titres de la collection 
-                            <a href="'.$collectionUrl.'">' . $targetCollection->getName() . '</a> 
+                            <a href="' . $collectionUrl . '">' . $targetCollection->getName() . '</a> 
                             achetés&nbsp;!<br />
                             <small>' . $sentence . '</small>
                         </strong>

@@ -30,9 +30,9 @@
       {% for ebook in ebooks %}
         <tr class="{{ ebook.updated ? "alert alert-info" : "" }}">
           <td class="center">
-            {% if ebook.articleCoverUrl %}
+            {% if ebook.article|hasCover %}
               <a href="{{ path("article_show", { slug: ebook.article.url }) }}">
-                <img src="{{ ebook.articleCoverUrl }}" alt="{{ ebook.article.title }}" />
+                <img src="{{ ebook.article|coverUrl }}" height="100" alt="{{ ebook.article.title }}" />
               </a>
             {% endif %}
           </td>
