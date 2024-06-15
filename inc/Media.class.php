@@ -18,6 +18,15 @@ class Media
      */
     public function __construct($type, $id)
     {
+        if ($type === "article") {
+            trigger_deprecation(
+                "biblys",
+                "2.83.0",
+                "Using Media with 'article' type is deprecated." .
+                        "Use ImagesService->getCoverUrlForArticle instead"
+            );
+        }
+
         $this->setDomain('media'); // domaine par défaut
 
         $this->setId($id);
