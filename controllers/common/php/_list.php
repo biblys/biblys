@@ -5,7 +5,9 @@ global $urlgenerator, $request;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\Images\ImagesService;
 use Biblys\Service\Slug\SlugService;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -21,11 +23,10 @@ $config = Config::load();
 $request = Request::createFromGlobals();
 $currentSite = CurrentSite::buildFromConfig($config);
 $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-
+$imagesService = new ImagesService($config, $currentSite, new Filesystem());
 
 $json = null; // JSON response
 $filters = null;
-$covers_lane = null;
 
 $sel_etat = null;
 $_og_image = null;
@@ -243,7 +244,6 @@ $sql = EntityManager::prepareAndExecute("
 );
 
 $ix = $offset;
-$covers = [];
 $table = null;
 while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     $x['new'] = 0;
@@ -291,12 +291,6 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
         $x["dispo_order"] = 0;
         $x["best_price"] = 0;
         $x["condition"] = ' soldout';
-    }
-
-    // Couverture
-    $media = new Media("article", $article->get("id"));
-    if ($media->exists() && count($covers) < 12) {
-        $covers[] = $x;
     }
 
     $x["article_url"] = $urlgenerator->generate("article_show", ["slug" => $x["article_url"]]);
@@ -391,25 +385,6 @@ if ($ix < $num) {
     $nextPage = null;
 }
 
-// Couvertures (6 au hasard)
-if (count($covers) >= 12) {
-    $cover_lane = "";
-    for ($ic = 0; $ic < 7; $ic++) {
-        $c = $covers[rand(0, count($covers)-1)];
-        $media = new Media("article", $c["article_id"]);
-        $cover_lane .= ' <a href="/a/'.$c['article_url'].'"><img src="'.$media->getUrl(["size" => "h125"]) .'" style="max-width: 90px;" alt="'.$c['article_title'].' de '.authors($c['article_authors']).'" title="'.$c['article_title'].' de '.authors($c['article_authors']).'"></a> ';
-    }
-    if (!empty($cover_lane)) {
-        $covers_lane = '<div id="coverLane" class="right">'.$cover_lane.'</div>';
-    }
-} else {
-    $covers = [];
-}
-if (isset($c) && count($covers) >= 1) {
-    $media = new Media("article", $c["article_id"]);
-    $_og_image = '<meta property="og:image" content="'.$media->getUrl().'">';
-}
-
 if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
     $_WS["query"] = $_GET["q"];
     $_WS["results"] = $num;
@@ -418,7 +393,6 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
     } else {
         $_WS["nextPage"] = 0;
     }
-    $_WS["covers"] = $covers;
     $_WS["articles"] = $json;
 
     $response = new JsonResponse();
@@ -437,7 +411,7 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
     $sel[$listOrderBy.$listSortOrder] = ' data-selected="true"';
     $sel[$sel_etat] = ' data-selected="true"';
 
-    $listContent = $covers_lane.'
+    $listContent = '
 
         <div id="listOptions">
             <span>
