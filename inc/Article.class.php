@@ -269,11 +269,18 @@ class Article extends Entity
     /**
      * Get article cover
      * @throws Exception
+     * @deprecated Article->getCover is deprecated. Use ImagesService instead.
      */
     public function getCover($size = null): Media|string|null
     {
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.83.0",
+            "Article->getCover is deprecated, use ImagesService instead."
+        );
+
         if (!isset($this->cover)) {
-            $this->cover = new Media('article', $this->get('id'));
+            $this->cover = new Media("article", $this->get("id"));
         }
 
         if ($size === null) {
@@ -281,28 +288,13 @@ class Article extends Entity
         }
 
         if ($size === "object") {
-            trigger_deprecation(
-                "biblys/biblys",
-                "2.53.1",
-                "Article->getCover(\"object\") is deprecated, use Article->getCover() instead."
-            );
             return $this->cover;
         }
 
         if ($size === "url") {
-            trigger_deprecation(
-                "biblys/biblys",
-                "2.53.1",
-                "Article->getCover(\"url\") is depreciated, use Article->getCoverUrl() instead."
-            );
             return $this->getCoverUrl();
         }
 
-        trigger_deprecation(
-            "biblys/biblys",
-            "2.53.1",
-            "Article->getCover(\$size) is depreciated, use Article->getCoverTag() instead."
-        );
         return $this->getCoverTag(["size" => $size]);
     }
 
@@ -310,9 +302,16 @@ class Article extends Entity
      * Returns true if article has a cover
      * @return bool
      * @throws Exception
+     * @deprecated Article->getCover is deprecated, use ImagesService instead.
      */
     public function hasCover(): bool
     {
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.83.0",
+            "Article->getCover is deprecated, use ImagesService instead."
+        );
+
         $cover = $this->getCover();
         return $cover->exists();
     }
@@ -373,9 +372,16 @@ class Article extends Entity
     /**
      * Return article's cover url
      * @throws Exception
+     * @deprecated
      */
     public function getCoverUrl(array $options = []): ?string
     {
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.83.0",
+            "Article->getCoverUrl is deprecated, use ImagesService instead."
+        );
+
         if (!$this->hasCover()) {
             return null;
         }
