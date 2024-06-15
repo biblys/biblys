@@ -3,8 +3,11 @@
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\FlashMessagesService;
+use Biblys\Service\Images\ImagesService;
 use Biblys\Service\Mailer;
+use Biblys\Service\TemplateService;
 use Model\AlertQuery;
+use Model\ArticleQuery;
 use Model\CartQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
@@ -15,15 +18,6 @@ use Symfony\Component\HttpFoundation\Session\Session as CurrentSession;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
-/** @var CurrentSite $currentSite */
-/** @var Symfony\Component\HttpFoundation\Session\Session $session */
-/** @var Site $globalSite */
-
-/**
- * @throws InvalidDateFormatException
- * @throws PropelException
- * @throws TransportExceptionInterface
- */
 return function (
     Request              $request,
     CurrentSession       $session,
@@ -31,6 +25,8 @@ return function (
     Mailer               $mailer,
     UrlGenerator         $urlgenerator,
     FlashMessagesService $flashMessagesService,
+    ImagesService        $imagesService,
+    TemplateService      $templateService,
 ): Response|RedirectResponse {
     $sm = new StockManager();
     $am = new ArticleManager();
@@ -121,9 +117,9 @@ return function (
 
         // Get related article
         $article_id = $request->request->get('article_id');
-        /** @var Article $article */
-        $article = $am->getById($article_id);
-        if (!$article) {
+        /** @var Article $articleModel */
+        $articleModel = $am->getById($article_id);
+        if (!$articleModel) {
             throw new Exception("Cannot find article with id $article_id");
         }
 
@@ -135,8 +131,8 @@ return function (
             if (!$rayon) {
                 throw new Exception("Cannot find rayon with id $rayon_id");
             }
-            $rayon->addArticle($article);
-            $session->getFlashBag()->add('info', 'L\'article <strong>' . $article->get('title') . '</strong> a été ajouté au rayon <strong>' . $rayon->get('name') . '</strong>.');
+            $rayon->addArticle($articleModel);
+            $session->getFlashBag()->add('info', 'L\'article <strong>' . $articleModel->get('title') . '</strong> a été ajouté au rayon <strong>' . $rayon->get('name') . '</strong>.');
         }
 
         for ($i = 0; $i < $_POST['stock_num']; ++$i) {
@@ -246,16 +242,16 @@ return function (
             );
         } elseif ($_POST['stock_num'] == 1) {
             $flashMessagesService->add("success",
-                "Un exemplaire de {$article->get('title')} a été ajouté au stock."
+                "Un exemplaire de {$articleModel->get('title')} a été ajouté au stock."
             );
         } else {
             $flashMessagesService->add("success",
-                "{$_POST['stock_num']} exemplaires de {$article->get('title')} ont été ajoutés au stock."
+                "{$_POST['stock_num']} exemplaires de {$articleModel->get('title')} ont été ajoutés au stock."
             );
         }
 
         // Update CFReward if necessary
-        $rewards = $article->getCFRewards();
+        $rewards = $articleModel->getCFRewards();
         if ($rewards) {
             $cfrm = new CFRewardManager();
             $rewards_updated = 0;
@@ -271,10 +267,10 @@ return function (
         }
 
         // Update article weight if different from stock weight
-        if (!empty($_POST['stock_weight']) && $article->get('weight') != $_POST['stock_weight']) {
-            $article->set('article_weight', $_POST['stock_weight']);
-            $am->update($article);
-            $session->getFlashBag()->add('info', "Le poids de l'article <strong>" . $article->get('title') . '</strong> a été mis à <strong>' . $article->get('weight') . 'g</strong>.');
+        if (!empty($_POST['stock_weight']) && $articleModel->get('weight') != $_POST['stock_weight']) {
+            $articleModel->set('article_weight', $_POST['stock_weight']);
+            $am->update($articleModel);
+            $session->getFlashBag()->add('info', "Le poids de l'article <strong>" . $articleModel->get('title') . '</strong> a été mis à <strong>' . $articleModel->get('weight') . 'g</strong>.');
         }
 
         $copyCondition = $request->request->get("stock_condition");
@@ -283,7 +279,7 @@ return function (
             /** @var Mailer $mailer */
             $copyYear = $request->request->get("stock_pub_year");
             $copyPrice = $request->request->get("stock_selling_price");
-            $result = _sendAlertsForArticle($article, $copyYear, $copyPrice, $copyCondition, $mailer, $currentSite);
+            $result = _sendAlertsForArticle($articleModel, $copyYear, $copyPrice, $copyCondition, $mailer, $currentSite);
             if ($result["sent"] > 0) {
                 $session->getFlashBag()->add(
                     "info",
@@ -407,25 +403,26 @@ return function (
         $stock->set('article_id', $addParam);
     }
 
-    $article = $stock->getArticle();
+    $article = ArticleQuery::create()->findPk($stock->get("article_id"));
     if ($article) {
-        $a = $article;
+        /** @var Article $articleModel */
+        $articleModel = $am->getById($article->getId());
+        $a = $articleModel;
 
-        $article = $am->getById($a['article_id']);
         $articleUrl = $urlgenerator->generate(
             'article_show',
             [
-                'slug' => $article->get('url'),
+                'slug' => $articleModel->get('url'),
             ]
         );
         $articleCover = null;
-        /** @var Article $article */
-        if ($article->hasCover()) {
-            $articleCover = $article->getCoverTag(
-                [
-                    'class' => 'article-thumb-cover',
-                    'link' => false,
-                    'height' => '100',
+
+        if ($imagesService->articleHasCoverImage($article)) {
+            $articleCover = $templateService->render("AppBundle:Article:_cover.html.twig", [
+                    "article" => $article,
+                    "height" => 100,
+                    "class" => "article-thumb-cover",
+                    "link" => $articleUrl,
                 ]
             );
         }
@@ -463,7 +460,7 @@ return function (
         // Autres exemplaires
         if ($mode == 'insert') {
             $exs = null;
-            $copies = $article->getStock();
+            $copies = $articleModel->getStock();
             $in_stock = 0;
             $in_base = 0;
             foreach ($copies as $copy) {
@@ -510,7 +507,7 @@ return function (
                 ->filterBySite($currentSite->getSite())
                 ->_or()
                 ->filterByUserId(null, Criteria::ISNULL)
-                ->findByArticleId($article->get("id"))
+                ->findByArticleId($articleModel->get("id"))
                 ->getArrayCopy();
             $alerts = array_map(/**
              * @throws PropelException
@@ -559,7 +556,7 @@ return function (
         }
 
         // Fournisseur
-        $suppliers = $article->get('publisher')->getSuppliers();
+        $suppliers = $articleModel->get('publisher')->getSuppliers();
         $supplier = null;
         if ($suppliers) {
             $su = $suppliers[0];
