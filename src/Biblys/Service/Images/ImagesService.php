@@ -103,7 +103,12 @@ class ImagesService
         return ImageQuery::create()->filterByArticle($article)->exists();
     }
 
-    public function getCoverUrlForArticle(Article $article): ?string
+    public function getCoverUrlForArticle(
+        Article $article,
+        int $width = null,
+        int $height = null
+    ):
+    ?string
     {
         $image = $this->_getCoverImageForArticle($article);
         if (!$image) {
