@@ -72,11 +72,6 @@ return function (
             ';
         }
 
-        $articleCoverUrl = null;
-        if ($articleEntity->hasCover()) {
-            $articleCoverUrl = $articleEntity->getCoverUrl(["size" => "h60"]);
-        }
-
         // Liens de téléchargement
         if ($articleEntity->get('pubdate') > date("Y-m-d") && !$copy->getAllowPredownload()) {
             $dl_links = 'A para&icirc;tre<br />le ' . _date($articleEntity->get('pubdate'), 'd/m');
@@ -113,7 +108,6 @@ return function (
         $ebooks[] = [
             "article" => $article,
             "updated" => $copy->isFileUpdated(),
-            "articleCoverUrl" => $articleCoverUrl,
             "dlLinks" => $dl_links,
         ];
     }

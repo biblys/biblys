@@ -2,15 +2,14 @@
 
 namespace AppBundle\Controller\Legacy;
 
-use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
-use Biblys\Test\EntityFactory;
+use Biblys\Service\Images\ImagesService;
+use Biblys\Service\TemplateService;
 use Biblys\Test\ModelFactory;
 use Exception;
 use Mockery;
-use Model\ArticleQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Site;
@@ -55,9 +54,13 @@ class CartTest extends TestCase
         $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
         $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $imagesService = Mockery::mock(ImagesService::class);
+        $imagesService->expects("articleHasCoverImage")->andReturn(true);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("render");
 
         // when
-        $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator);
+        $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator, $imagesService, $templateService);
 
         // then
         $this->assertEquals(
@@ -124,9 +127,13 @@ class CartTest extends TestCase
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
         $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
         $config = new Config();
+        $imagesService = Mockery::mock(ImagesService::class);
+        $imagesService->expects("articleHasCoverImage")->andReturn(true);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("render");
 
         // when
-        $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator);
+        $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator, $imagesService, $templateService);
 
         // then
         $this->assertStringContainsString(
@@ -188,9 +195,13 @@ class CartTest extends TestCase
         $currentUser->shouldReceive("isAdmin")->andReturn(false);
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
         $config = new Config();
+        $imagesService = Mockery::mock(ImagesService::class);
+        $imagesService->expects("articleHasCoverImage")->andReturn(true);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("render");
 
         // when
-        $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator);
+        $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator, $imagesService, $templateService);
 
         // then
         $this->assertStringContainsString(
@@ -258,9 +269,14 @@ class CartTest extends TestCase
         $config = Mockery::mock(Config::class);
         $config->shouldReceive("get")->with("media_path")->andReturn(null);
         $config->shouldReceive("get")->with("media_url")->andReturn(null);
+        $imagesService = Mockery::mock(ImagesService::class);
+        $imagesService->expects("articleHasCoverImage")->andReturn(true);
+        $imagesService->expects("getCoverUrlForArticle");
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("render");
 
         // when
-        $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator);
+        $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator, $imagesService, $templateService);
 
         // then
         $this->assertStringContainsString(
