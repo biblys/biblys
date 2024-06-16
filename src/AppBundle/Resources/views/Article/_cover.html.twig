@@ -10,7 +10,12 @@
    style="cursor: {{ cursor }};"
 >
   <img
-    src="{{ article|coverUrl }}"
+    src="{{ article|coverUrl(
+      width|default(null),
+      height|default(null),
+    ) }}"
+    width="{{ width|default(null) }}"
+    height="{{ height|default(null) }}"
     {% if class is defined %} class="{{ class }}" {% endif %}
     alt="{{ article.title }}"
   >
