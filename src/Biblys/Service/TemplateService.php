@@ -277,9 +277,14 @@ class TemplateService
             return $imagesService->articleHasCoverImage($article);
         });
 
-        $filters[] = new TwigFilter('coverUrl', function (Article $article) use($imagesService) {
-            return $imagesService->getCoverUrlForArticle($article);
-        });
+        $filters[] = new TwigFilter('coverUrl',
+            function (Article $article, array $options = []) use ($imagesService) {
+                $width = $options["width"] ?? null;
+                $height = $options["height"] ?? null;
+                return $imagesService->getCoverUrlForArticle($article, width: $width, height: $height);
+            },
+            ['is_variadic' => true]
+        );
 
         $filters[] = new TwigFilter('currency', function ($amount, $cents = false) {
             return currency($amount, $cents);
