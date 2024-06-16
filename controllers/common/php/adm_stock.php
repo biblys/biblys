@@ -1,17 +1,17 @@
-<?php /** @noinspection PhpUnhandledExceptionInspection */
+<?php
 
 use Biblys\Exception\InvalidEmailAddressException;
-use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Mailer;
 use Model\AlertQuery;
 use Model\CartQuery;
-use Model\UserQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session as CurrentSession;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
@@ -19,430 +19,424 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 /** @var Symfony\Component\HttpFoundation\Session\Session $session */
 /** @var Site $globalSite */
 
-$sm = new StockManager();
-$am = new ArticleManager();
-$alm = new AlertManager();
-$om = new OrderManager();
-$rm = new RayonManager();
+/**
+ * @throws InvalidDateFormatException
+ * @throws PropelException
+ * @throws TransportExceptionInterface
+ */
+return function (
+    Request              $request,
+    CurrentSession       $session,
+    CurrentSite          $currentSite,
+    Mailer               $mailer,
+    UrlGenerator         $urlgenerator,
+    FlashMessagesService $flashMessagesService,
+): Response|RedirectResponse {
+    $sm = new StockManager();
+    $am = new ArticleManager();
+    $om = new OrderManager();
+    $rm = new RayonManager();
 
-$content = null;
+    $content = null;
 
-$div_admin = null;
+    $div_admin = null;
 
-// Exemplaire retourne
-/** @var Request $request */
-$returnedStockId = $request->query->get('return');
-if ($returnedStockId) {
-    /** @var Stock $stock */
-    $stock = $sm->getById($returnedStockId);
-    $stock->setReturned();
-    $sm->update($stock);
-    return new RedirectResponse('/pages/adm_stock?id=' . $_GET['return'] . '&returned=1');
-}
+    // Exemplaire retourne
+    $returnedStockId = $request->query->get('return');
+    if ($returnedStockId) {
+        /** @var Stock $stock */
+        $stock = $sm->getById($returnedStockId);
+        $stock->setReturned();
+        $sm->update($stock);
+        return new RedirectResponse('/pages/adm_stock?id=' . $_GET['return'] . '&returned=1');
+    }
 
 // Exemplaire perdu
-$lostCopyId = $request->query->get('lost');
-if ($lostCopyId) {
-    $lostCopy = $sm->getById($lostCopyId);
-    $lostCopy->set('stock_lost_date', date('Y-m-d H:i:s'))
-        ->set('stock_return_date', null)
-        ->set('stock_cart_date', null)
-        ->set('stock_selling_date', null);
-    $sm->update($lostCopy);
-    $session->getFlashBag()->add('success', 'L\'exemplaire n° ' . $lostCopyId . ' a été marqué comme perdu.');
-    return new RedirectResponse('/pages/adm_stock?id=' . $lostCopyId);
-}
+    $lostCopyId = $request->query->get('lost');
+    if ($lostCopyId) {
+        $lostCopy = $sm->getById($lostCopyId);
+        $lostCopy->set('stock_lost_date', date('Y-m-d H:i:s'))
+            ->set('stock_return_date', null)
+            ->set('stock_cart_date', null)
+            ->set('stock_selling_date', null);
+        $sm->update($lostCopy);
+        $session->getFlashBag()->add('success', 'L\'exemplaire n° ' . $lostCopyId . ' a été marqué comme perdu.');
+        return new RedirectResponse('/pages/adm_stock?id=' . $lostCopyId);
+    }
 
 // Copies sold in shop
-if (isset($_GET['sold'])) {
-    // All copies sold in shop are associated to a fake customer that needs
-    // to be created and specified via the `fake_shop_customer` site option.
-    // This allows to create only one order for shop sales per day.
-    $fakeCustomerId = $globalSite->getOpt('fake_shop_customer');
-    if (!$fakeCustomerId) {
-        throw new Exception("L'option de site `fake_shop_customer` doit être définie.");
-    }
+    if (isset($_GET['sold'])) {
+        // All copies sold in shop are associated to a fake customer that needs
+        // to be created and specified via the `fake_shop_customer` site option.
+        // This allows to create only one order for shop sales per day.
+        $fakeCustomerId = $currentSite->getOption('fake_shop_customer');
+        if (!$fakeCustomerId) {
+            throw new Exception("L'option de site `fake_shop_customer` doit être définie.");
+        }
 
-    if ($stock = $sm->get(['stock_id' => $_GET['sold']])) {
-        if (!$stock->isAvailable()) {
-            trigger_error('Exemplaire indisponible.');
-        } else {
-            try {
-                // Get order for current day shop sales if it exists
-                $orderDate = date('Y-m-d') . ' 00:00:00';
-                $order = $om->get([
-                    'customer_id' => $fakeCustomerId,
-                    'order_created' => $orderDate,
-                ]);
+        if ($stock = $sm->get(['stock_id' => $_GET['sold']])) {
+            if (!$stock->isAvailable()) {
+                trigger_error('Exemplaire indisponible.');
+            } else {
+                try {
+                    // Get order for current day shop sales if it exists
+                    $orderDate = date('Y-m-d') . ' 00:00:00';
+                    $order = $om->get([
+                        'customer_id' => $fakeCustomerId,
+                        'order_created' => $orderDate,
+                    ]);
 
-                // Else, create a new one
-                if (!$order) {
-                    $order = $om->create();
-                    $order->set('order_created', $orderDate)
-                        ->set('customer_id', $fakeCustomerId)
-                        ->set('order_type', 'shop')
-                        ->set('order_payment_date', $orderDate);
-                    $om->update($order);
+                    // Else, create a new one
+                    if (!$order) {
+                        $order = $om->create();
+                        $order->set('order_created', $orderDate)
+                            ->set('customer_id', $fakeCustomerId)
+                            ->set('order_type', 'shop')
+                            ->set('order_payment_date', $orderDate);
+                        $om->update($order);
+                    }
+
+                    // Add the copy to the order
+                    $om->addStock($order, $stock);
+
+                    // Update the order amount from stock
+                    $om->updateFromStock($order);
+                } catch (Exception $e) {
+                    trigger_error($e->getMessage());
                 }
 
-                // Add the copy to the order
-                $om->addStock($order, $stock);
+                return new RedirectResponse('/pages/adm_stock?id=' . $stock->get('id') . '&solded=1');
+            }
+        } else {
+            trigger_error('Exemplaire introuvable');
+        }
+    }
 
-                // Update the order amount from stock
-                $om->updateFromStock($order);
-            } catch (Exception $e) {
-                trigger_error($e->getMessage());
+    $mode = "";
+    if ($request->getMethod() === 'POST') {
+        // AddSlashes
+        foreach ($_POST as $key => $value) {
+            $_POST[$key] = addslashes($value);
+        }
+
+        // Get related article
+        $article_id = $request->request->get('article_id');
+        /** @var Article $article */
+        $article = $am->getById($article_id);
+        if (!$article) {
+            throw new Exception("Cannot find article with id $article_id");
+        }
+
+        // Add to rayon
+        $rayon_id = $request->request->get('add_to_rayon');
+        if ($rayon_id) {
+            /** @var Rayon $rayon */
+            $rayon = $rm->getById($rayon_id);
+            if (!$rayon) {
+                throw new Exception("Cannot find rayon with id $rayon_id");
+            }
+            $rayon->addArticle($article);
+            $session->getFlashBag()->add('info', 'L\'article <strong>' . $article->get('title') . '</strong> a été ajouté au rayon <strong>' . $rayon->get('name') . '</strong>.');
+        }
+
+        for ($i = 0; $i < $_POST['stock_num']; ++$i) {
+            // Creation de l'exemplaire
+            if (empty($_POST['stock_id']) or $_POST['stock_num'] > 1) {
+                $stock = $sm->create();
+                $_POST['stock_id'] = $stock->get('id');
+                $mode = 'insert';
+            } else {
+                $mode = 'update';
             }
 
-            return new RedirectResponse('/pages/adm_stock?id=' . $stock->get('id') . '&solded=1');
+            $stock = $sm->getById($_POST['stock_id']);
+
+            // Photo
+            $photo = new Media('stock', $_POST['stock_id']);
+
+            // Suppression de la photo
+            if (isset($_POST['delete_photo']) && $_POST['delete_photo'] == 1) {
+                if ($photo->exists()) {
+                    $photo->delete();
+                    $flashMessagesService->add("success", "La photo de l'exemplaire a été supprimée.");
+                }
+            }
+
+            // Update copy
+            $stock->set('article_id', $request->request->get('article_id'))
+                ->set('stock_invoice', $request->request->get('stock_invoice'))
+                ->set('stock_depot', $request->request->get('stock_depot'))
+                ->set('stock_stockage', $request->request->get('stock_stockage'))
+                ->set('stock_condition', $request->request->get('stock_condition'))
+                ->set('stock_condition_details', $request->request->get('stock_condition_details'))
+                ->set('stock_purchase_price', $request->request->get('stock_purchase_price'))
+                ->set('stock_selling_price', $request->request->get('stock_selling_price'))
+                ->set('stock_selling_price_saved', $request->request->get('stock_selling_price_saved'))
+                ->set('stock_weight', $request->request->get('stock_weight'))
+                ->set('stock_pub_year', $request->request->get('stock_pub_year'))
+                ->set('stock_purchase_date', $request->request->get('stock_purchase_date'))
+                ->set('stock_onsale_date', $request->request->get('stock_onsale_date'))
+                ->set('stock_selling_date', $request->request->get('stock_selling_date'))
+                ->set('stock_cart_date', $request->request->get('stock_cart_date'))
+                ->set('stock_return_date', $request->request->get('stock_return_date'))
+                ->set('stock_lost_date', $request->request->get('stock_lost_date'))
+                ->set('stock_condition', $request->request->get('stock_condition'))
+                ->set('cart_id', $request->request->get('cart_id'))
+                ->set('order_id', $request->request->get('order_id'));
+
+            // Update campaign_id
+            $campaign_id = (int)$request->request->get('campaign_id');
+            $stock->set('campaign_id', $campaign_id);
+
+            // Update reward_id
+            $reward_id = (int)$request->request->get('reward_id');
+            $stock->set('reward_id', $reward_id);
+
+            // Persist copy
+            $sm->update($stock);
+
+            // Calculate tax
+            $stock = $sm->calculateTax($stock);
+            $sm->update($stock);
+
+            // Update related order
+            $orderId = $stock->get("order_id");
+            if ($orderId) {
+                /** @var Order $order */
+                $order = $om->getById($orderId);
+                if ($order) {
+                    $om->updateFromStock($order);
+                }
+                $session->getFlashBag()->add('success', "Le montant de la commande n° $orderId a été mis à jour.");
+            }
+
+            // Update related campaign
+            if ($campaign_id) {
+                $cfcm = new CFCampaignManager();
+                $campaign = $cfcm->getById($campaign_id);
+                if ($campaign) {
+                    $cfcm->updateFromSales($campaign);
+                    $session->getFlashBag()->add('success', 'La campagne <strong>' . $campaign->get('title') . '</strong> a été mise à jour.');
+                }
+            }
+
+            // Upload de la photo de l'exemplaire
+            if (!empty($_FILES['upload_photo']['tmp_name']) && !isset($stock_photo)) {
+                if ($photo->exists()) {
+                    $photo->delete();
+                }
+                $photo->upload($_FILES['upload_photo']['tmp_name']);
+                $stock_photo = $photo->path();
+            }
+
+            // Recuperation de la photo en cas de duplication
+            if (isset($stock_photo) && $i > 0) {
+                if ($photo->exists()) {
+                    $photo->delete();
+                }
+                $photo->upload($stock_photo);
+            }
         }
-    } else {
-        trigger_error('Exemplaire introuvable');
-    }
-}
 
-$mode = "";
-if ($request->getMethod() === 'POST') {
-    // AddSlashes
-    foreach ($_POST as $key => $value) {
-        $_POST[$key] = addslashes($value);
-    }
-
-    // Get related article
-    $article_id = $request->request->get('article_id');
-    /** @var Article $article */
-    $article = $am->getById($article_id);
-    if (!$article) {
-        throw new Exception("Cannot find article with id $article_id");
-    }
-
-    // Add to rayon
-    $rayon_id = $request->request->get('add_to_rayon');
-    if ($rayon_id) {
-        /** @var Rayon $rayon */
-        $rayon = $rm->getById($rayon_id);
-        if (!$rayon) {
-            throw new Exception("Cannot find rayon with id $rayon_id");
-        }
-        $rayon->addArticle($article);
-        $session->getFlashBag()->add('info', 'L\'article <strong>' . $article->get('title') . '</strong> a été ajouté au rayon <strong>' . $rayon->get('name') . '</strong>.');
-    }
-
-    for ($i = 0; $i < $_POST['stock_num']; ++$i) {
-        // Creation de l'exemplaire
-        if (empty($_POST['stock_id']) or $_POST['stock_num'] > 1) {
-            $stock = $sm->create();
-            $_POST['stock_id'] = $stock->get('id');
-            $content .= '<p class="success">L\'exemplaire n&deg; <a href="/pages/adm_stock?id=' . $_POST['stock_id'] . '">' . $_POST['stock_id'] . '</a> a bien été ajouté au stock !</p>';
-            $mode = 'insert';
-            $update_date = 'NULL';
+        // Flash messages
+        if ($mode == 'update') {
+            /** @var Stock $stock */
+            $flashMessagesService->add("success",
+                "L'exemplaire n° {$stock->get('id')} a été mis à jour."
+            );
+        } elseif ($_POST['stock_num'] == 1) {
+            $flashMessagesService->add("success",
+                "Un exemplaire de {$article->get('title')} a été ajouté au stock."
+            );
         } else {
-            $mode = 'update';
-            $update_date = 'NOW()';
+            $flashMessagesService->add("success",
+                "{$_POST['stock_num']} exemplaires de {$article->get('title')} ont été ajoutés au stock."
+            );
         }
 
-        $stock = $sm->getById($_POST['stock_id']);
+        // Update CFReward if necessary
+        $rewards = $article->getCFRewards();
+        if ($rewards) {
+            $cfrm = new CFRewardManager();
+            $rewards_updated = 0;
+
+            foreach ($rewards as $reward) {
+                $cfrm->updateQuantity($reward);
+                ++$rewards_updated;
+            }
+
+            if ($rewards_updated) {
+                $session->getFlashBag()->add('info', 'Les quantités de <strong>' . $rewards_updated . ' contrepartie' . s($rewards_updated) . '</strong> ont été mises à jour.');
+            }
+        }
+
+        // Update article weight if different from stock weight
+        if (!empty($_POST['stock_weight']) && $article->get('weight') != $_POST['stock_weight']) {
+            $article->set('article_weight', $_POST['stock_weight']);
+            $am->update($article);
+            $session->getFlashBag()->add('info', "Le poids de l'article <strong>" . $article->get('title') . '</strong> a été mis à <strong>' . $article->get('weight') . 'g</strong>.');
+        }
+
+        $copyCondition = $request->request->get("stock_condition");
+        if (_shouldAlertsBeSent($mode, $copyCondition, $currentSite)) {
+            /** @var PDO $_SQL */
+            /** @var Mailer $mailer */
+            $copyYear = $request->request->get("stock_pub_year");
+            $copyPrice = $request->request->get("stock_selling_price");
+            $result = _sendAlertsForArticle($article, $copyYear, $copyPrice, $copyCondition, $mailer, $currentSite);
+            if ($result["sent"] > 0) {
+                $session->getFlashBag()->add(
+                    "info",
+                    $result["sent"] . ' alerte' . s($result["sent"]) . " " . s($result["sent"], 'a', 'ont') . ' été envoyée' . s($result["sent"]) . '.');
+            }
+            if (count($result["errors"]) > 0) {
+                foreach ($result["errors"] as $error) {
+                    $session->getFlashBag()->add(
+                        "warning",
+                        "L'alerte pour <strong>" . $error["email"] . "</strong> n'a pas pu être envoyée : "
+                        . $error["reason"]
+                    );
+                }
+            }
+        }
+
+        return new RedirectResponse('/pages/adm_stock?id=' . $_POST['stock_id']);
+    }
+
+    $photo_field = null;
+
+    $copyId = $request->query->get('copy');
+    $delId = $request->query->get('del');
+
+    // Modifier un exemplaire existant
+    if (!empty($_GET['id'])) {
+        $request->attributes->set("page_title", "Modifier l'exemplaire n° {$_GET['id']}");
+        $content .= "<h1><span class=\"fa fa-cubes\"></span> Modifier l'exemplaire n°{$_GET['id']}</h1>";
+
+        if (isset($_GET['created'])) {
+            $content .= '<p class="success">' . $_GET['created'] . ' exemplaire' . s($_GET['created']) . ' ajouté' . s($_GET['created']) . ' au stock !</p>';
+        } elseif (isset($_GET['returned'])) {
+            $content .= '<p class="success">L\'exemplaire a été retourné.</p>';
+        } elseif (isset($_GET['losted'])) {
+            $content .= '<p class="success">L\'exemplaire a été marqué comme perdu.</p>';
+        } elseif (isset($_GET['solded'])) {
+            $content .= '<p class="success">L\'exemplaire a été marqué comme vendu en magasin.</p>';
+        }
+
+        if (isset($_GET['alerts'])) {
+            $content .= '<p class="success">' . $_GET['alerts'] . ' alerte' . s($_GET['alerts']) . ' ' . s($_GET['alerts'], 'a', 'ont') . ' été envoyée' . s($_GET['alerts']) . '</p>';
+        }
+
+        $stockId = $request->query->get('id');
+        $stock = $sm->getById($stockId);
+
+        if (!$stock) {
+            throw new Exception('Cet exemplaire n\'existe pas');
+        }
+        $s = $stock;
+        $mode = 'update';
+
+        if ($s['stock_pub_year'] == 0) {
+            $s['stock_pub_year'] = null;
+        }
 
         // Photo
-        $photo = new Media('stock', $_POST['stock_id']);
-
-        // Suppression de la photo
-        if (isset($_POST['delete_photo']) && $_POST['delete_photo'] == 1) {
-            if ($photo->exists()) {
-                $photo->delete();
-                $content = '<p class="success">La photo de l\'exemplaire a été supprimée !</p>';
-            }
-        }
-
-        // Update copy
-        $stock->set('article_id', $request->request->get('article_id'))
-            ->set('stock_invoice', $request->request->get('stock_invoice'))
-            ->set('stock_depot', $request->request->get('stock_depot'))
-            ->set('stock_stockage', $request->request->get('stock_stockage'))
-            ->set('stock_condition', $request->request->get('stock_condition'))
-            ->set('stock_condition_details', $request->request->get('stock_condition_details'))
-            ->set('stock_purchase_price', $request->request->get('stock_purchase_price'))
-            ->set('stock_selling_price', $request->request->get('stock_selling_price'))
-            ->set('stock_selling_price_saved', $request->request->get('stock_selling_price_saved'))
-            ->set('stock_weight', $request->request->get('stock_weight'))
-            ->set('stock_pub_year', $request->request->get('stock_pub_year'))
-            ->set('stock_purchase_date', $request->request->get('stock_purchase_date'))
-            ->set('stock_onsale_date', $request->request->get('stock_onsale_date'))
-            ->set('stock_selling_date', $request->request->get('stock_selling_date'))
-            ->set('stock_cart_date', $request->request->get('stock_cart_date'))
-            ->set('stock_return_date', $request->request->get('stock_return_date'))
-            ->set('stock_lost_date', $request->request->get('stock_lost_date'))
-            ->set('stock_condition', $request->request->get('stock_condition'))
-            ->set('cart_id', $request->request->get('cart_id'))
-            ->set('order_id', $request->request->get('order_id'));
-
-        // Update campaign_id
-        $campaign_id = (int) $request->request->get('campaign_id');
-        $stock->set('campaign_id', $campaign_id);
-
-        // Update reward_id
-        $reward_id = (int) $request->request->get('reward_id');
-        $stock->set('reward_id', $reward_id);
-
-        // Persist copy
-        $sm->update($stock);
-
-        // Calculate tax
-        $stock = $sm->calculateTax($stock);
-        $sm->update($stock);
-
-        // Update related order
-        $orderId = $stock->get("order_id");
-        if ($orderId) {
-            /** @var Order $order */
-            $order = $om->getById($orderId);
-            if ($order) {
-                $om->updateFromStock($order);
-            }
-            $session->getFlashBag()->add('success', "Le montant de la commande n° $orderId a été mis à jour.");
-        }
-
-        // Update related campaign
-        if ($campaign_id) {
-            $cfcm = new CFCampaignManager();
-            $campaign = $cfcm->getById($campaign_id);
-            if ($campaign) {
-                $cfcm->updateFromSales($campaign);
-                $session->getFlashBag()->add('success', 'La campagne <strong>' . $campaign->get('title') . '</strong> a été mise à jour.');
-            }
-        }
-
-        // Upload de la photo de l'exemplaire
-        if (!empty($_FILES['upload_photo']['tmp_name']) && !isset($stock_photo)) {
-            if ($photo->exists()) {
-                $photo->delete();
-            }
-            $photo->upload($_FILES['upload_photo']['tmp_name']);
-            $stock_photo = $photo->path();
-        }
-
-        // Recuperation de la photo en cas de duplication
-        if (isset($stock_photo) && $i > 0) {
-            if ($photo->exists()) {
-                $photo->delete();
-            }
-            $photo->upload($stock_photo);
-        }
-    }
-
-    // Flash messages
-    if ($mode == 'update') {
         /** @var Stock $stock */
-        $session->getFlashBag()->add('success', "L'exemplaire n° " . $stock->get('id') . ' a été mis à jour.');
-    } elseif ($_POST['stock_num'] == 1) {
-        $session->getFlashBag()->add('success', 'Un exemplaire de <strong>' . $article->get('title') . '</strong> a été ajouté au stock.');
-    } else {
-        $session->getFlashBag()->add('success', $_POST['stock_num'] . ' exemplaires de <strong>' . $article->get('title') . '</strong> ont été ajoutés au stock.');
-    }
-
-    // Update CFReward if necessary
-    $rewards = $article->getCFRewards();
-    if ($rewards) {
-        $cfrm = new CFRewardManager();
-        $rewards_updated = 0;
-
-        foreach ($rewards as $reward) {
-            $cfrm->updateQuantity($reward);
-            ++$rewards_updated;
-        }
-
-        if ($rewards_updated) {
-            $session->getFlashBag()->add('info', 'Les quantités de <strong>' . $rewards_updated . ' contrepartie' . s($rewards_updated) . '</strong> ont été mises à jour.');
-        }
-    }
-
-    // Update article weight if different from stock weight
-    if (!empty($_POST['stock_weight']) && $article->get('weight') != $_POST['stock_weight']) {
-        $article->set('article_weight', $_POST['stock_weight']);
-        $am->update($article);
-        $session->getFlashBag()->add('info', "Le poids de l'article <strong>" . $article->get('title') . '</strong> a été mis à <strong>' . $article->get('weight') . 'g</strong>.');
-    }
-
-    $copyCondition = $request->request->get("stock_condition");
-    if (_shouldAlertsBeSent($mode, $copyCondition, $currentSite)) {
-        /** @var PDO $_SQL */
-        /** @var Mailer $mailer */
-        $copyYear = $request->request->get("stock_pub_year");
-        $copyPrice = $request->request->get("stock_selling_price");
-        $result = _sendAlertsForArticle($article, $copyYear, $copyPrice, $copyCondition, $mailer, $currentSite);
-        if ($result["sent"] > 0) {
-            $session->getFlashBag()->add(
-                "info",
-                $result["sent"].' alerte'.s($result["sent"])." ".s($result["sent"], 'a', 'ont').' été envoyée'.s($result["sent"]).'.');
-        }
-        if (count($result["errors"]) > 0) {
-            foreach($result["errors"] as $error) {
-                $session->getFlashBag()->add(
-                    "warning",
-                    "L'alerte pour <strong>".$error["email"]."</strong> n'a pas pu être envoyée : "
-                    .$error["reason"]
-                );
-            }
-        }
-    }
-
-    return new RedirectResponse('/pages/adm_stock?id=' . $_POST['stock_id']);
-}
-
-$photo_field = null;
-
-$copyId = $request->query->get('copy');
-$delId = $request->query->get('del');
-
-// Modifier un exemplaire existant
-if (!empty($_GET['id'])) {
-    $request->attributes->set("page_title", "Modifier l'exemplaire n° {$_GET['id']}");
-    $content .= "<h1><span class=\"fa fa-cubes\"></span> Modifier l'exemplaire n°{$_GET['id']}</h1>";
-
-    if (isset($_GET['created'])) {
-        $content .= '<p class="success">' . $_GET['created'] . ' exemplaire' . s($_GET['created']) . ' ajouté' . s($_GET['created']) . ' au stock !</p>';
-    } elseif (isset($_GET['returned'])) {
-        $content .= '<p class="success">L\'exemplaire a été retourné.</p>';
-    } elseif (isset($_GET['losted'])) {
-        $content .= '<p class="success">L\'exemplaire a été marqué comme perdu.</p>';
-    } elseif (isset($_GET['solded'])) {
-        $content .= '<p class="success">L\'exemplaire a été marqué comme vendu en magasin.</p>';
-    }
-
-    if (isset($_GET['alerts'])) {
-        $content .= '<p class="success">' . $_GET['alerts'] . ' alerte' . s($_GET['alerts']) . ' ' . s($_GET['alerts'], 'a', 'ont') . ' été envoyée' . s($_GET['alerts']) . '</p>';
-    }
-
-    $stockId = $request->query->get('id');
-    $stock = $sm->getById($stockId);
-
-    if (!$stock) {
-        throw new Exception('Cet exemplaire n\'existe pas');
-    }
-    $s = $stock;
-    $mode = 'update';
-
-    if ($s['stock_pub_year'] == 0) {
-        $s['stock_pub_year'] = null;
-    }
-
-    // Photo
-    /** @var Stock $stock */
-    if ($stock->hasPhoto()) {
-        $photo_field = '
+        if ($stock->hasPhoto()) {
+            $photo_field = '
             <div class="floatR center">
                 ' . $stock->getPhotoTag(['size' => 'w90']) . '<br/>
                 <input type="checkbox" name="delete_photo" value="1" /> Supprimer
             </div>';
-    } else {
-        $photo_field = null;
-    }
+        }
 
-    $div_admin = '
+        $div_admin = '
         <p>Exemplaire n&deg; ' . $s['stock_id'] . '</p>
         <p><a href="/pages/adm_stocks?article_id=' . $s['article_id'] . '">autres exemplaires</a></p>
         <p><a href="/pages/adm_stock?add=' . $s['article_id'] . '#add">nouvel exemplaire</a></p>
         <p><a href="/pages/adm_stock?del=' . $s['stock_id'] . '" data-confirm="Voulez-vous vraiment SUPPRIMER cet exemplaire ?">supprimer</a></p>
     ';
-} elseif (!empty($copyId)) {
-    $request->attributes->set("page_title", "Dupliquer l'exemplaire n&deg; $copyId");
-    $content .= '<h1><span class="fa fa-copy"></span> Dupliquer l\'exemplaire n<sup>o</sup> ' . $_GET['copy'] . '</h1>';
-    $stock = $sm->getById($copyId);
-    if (!$stock) {
-        throw new Exception('Cet exemplaire n\'existe pas');
+    } elseif (!empty($copyId)) {
+        $request->attributes->set("page_title", "Dupliquer l'exemplaire n&deg; $copyId");
+        $content .= '<h1><span class="fa fa-copy"></span> Dupliquer l\'exemplaire n<sup>o</sup> ' . $_GET['copy'] . '</h1>';
+        $stock = $sm->getById($copyId);
+        if (!$stock) {
+            throw new Exception('Cet exemplaire n\'existe pas');
+        }
+        $mode = 'insert';
+        $_GET['id'] = null;
+    } elseif (!empty($_GET['add'])) { // Ajouter un exemplaire
+        $request->attributes->set("page_title", "Ajouter au stock un nouvel exemplaire de...");
+        $content .= '<h1 id="add"><span class="fa fa-plus"></span>Ajouter au stock un nouvel exemplaire de...</h1>';
+        $s['article_id'] = $_GET['add'];
+        $mode = 'insert';
+
+        // Default values
+        $s['stock_pub_year'] = null;
+        $s['stock_selling_price_saved'] = null;
+
+        $s['stock_invoice'] = $currentSite->getOption('default_stock_invoice') ? $currentSite->getOption('default_stock_invoice') : null;
+        $s['stock_stockage'] = $currentSite->getOption('default_stock_stockage') ? $currentSite->getOption('default_stock_stockage') : null;
+        $s['stock_selling_price'] = $currentSite->getOption('default_stock_selling_price') ? $currentSite->getOption('default_stock_selling_price') : null;
+        $s['stock_purchase_price'] = $currentSite->getOption('default_stock_purchase_price') ? $currentSite->getOption('default_stock_purchase_price') : null;
+        $s['stock_condition'] = $currentSite->getOption('default_stock_condition') ? $currentSite->getOption('default_stock_condition') : null;
+        $s['stock_condition_details'] = $currentSite->getOption('default_stock_condition_details') ? $currentSite->getOption('default_stock_condition_details') : null;
+
+        if (!$currentSite->getOption('default_stock_purchase_date')) {
+            $s['stock_purchase_date'] = date('Y-m-d H:i:s');
+            $s['stock_onsale_date'] = date('Y-m-d H:i:s');
+        } else {
+            $s['stock_purchase_date'] = $currentSite->getOption('default_stock_purchase_date');
+            $s['stock_onsale_date'] = $currentSite->getOption('default_stock_purchase_date');
+        }
+        $_GET['id'] = 0;
+    } elseif ($delId) {
+        $copyToDelete = $sm->getById($delId);
+        $sm->delete($copyToDelete);
+        $session->getFlashBag()->add('success', 'L\'exemplaire ' . $delId . ' a bien été supprimé.');
+        return new RedirectResponse('/pages/adm_stock');
     }
-    $mode = 'insert';
-    $_GET['id'] = null;
-} elseif (!empty($_GET['add'])) { // Ajouter un exemplaire
-    $request->attributes->set("page_title", "Ajouter au stock un nouvel exemplaire de...");
-    $content .= '<h1 id="add"><span class="fa fa-plus"></span>Ajouter au stock un nouvel exemplaire de...</h1>';
-    $s['article_id'] = $_GET['add'];
-    $mode = 'insert';
 
-    // Default values
-    $s['stock_pub_year'] = null;
-    $s['stock_selling_price_saved'] = null;
-    $s['stock_insert'] = null;
-    $s['stock_update'] = null;
-
-    $s['stock_invoice'] = $globalSite->getOpt('default_stock_invoice') ? $globalSite->getOpt('default_stock_invoice') : null;
-    $s['stock_stockage'] = $globalSite->getOpt('default_stock_stockage') ? $globalSite->getOpt('default_stock_stockage') : null;
-    $s['stock_shop'] = $globalSite->getOpt('default_stock_shop') ? $globalSite->getOpt('default_stock_shop') : null;
-    $s['stock_selling_price'] = $globalSite->getOpt('default_stock_selling_price') ? $globalSite->getOpt('default_stock_selling_price') : null;
-    $s['stock_purchase_price'] = $globalSite->getOpt('default_stock_purchase_price') ? $globalSite->getOpt('default_stock_purchase_price') : null;
-    $s['stock_condition'] = $globalSite->getOpt('default_stock_condition') ? $globalSite->getOpt('default_stock_condition') : null;
-    $s['stock_condition_details'] = $globalSite->getOpt('default_stock_condition_details') ? $globalSite->getOpt('default_stock_condition_details') : null;
-
-    if (!$globalSite->getOpt('default_stock_purchase_date')) {
-        $s['stock_purchase_date'] = date('Y-m-d H:i:s');
-        $s['stock_onsale_date'] = date('Y-m-d H:i:s');
-    } else {
-        $s['stock_purchase_date'] = $globalSite->getOpt('default_stock_purchase_date');
-        $s['stock_onsale_date'] = $globalSite->getOpt('default_stock_purchase_date');
+    $stock = new Stock([]);
+    if (isset($s['stock_id'])) {
+        $stock = $sm->getById($s['stock_id']);
     }
-    $_GET['id'] = 0;
-} elseif ($delId) {
-    $copyToDelete = $sm->getById($delId);
-    $sm->delete($copyToDelete);
-    $session->getFlashBag()->add('success', 'L\'exemplaire ' . $delId . ' a bien été supprimé.');
-    return new RedirectResponse('/pages/adm_stock');
-}
 
-$stock = new Stock([]);
-if (isset($s['stock_id'])) {
-    $stock = $sm->getById($s['stock_id']);
-}
+    $addParam = $request->query->get('add');
+    if ($addParam) {
+        $stock->set('article_id', $addParam);
+    }
 
-$addParam = $request->query->get('add');
-if ($addParam) {
-    $stock->set('article_id', $addParam);
-}
+    $article = $stock->getArticle();
+    if ($article) {
+        $a = $article;
 
-$article = $stock->getArticle();
-if ($article) {
-    $a = $article;
-    /** @var UrlGenerator $urlgenerator */
-    $articleUrl = $urlgenerator->generate(
-        'article_show',
-        ['slug' => $article->get('url')]
-    );
-
-    $articleCover = null;
-    if ($article->hasCover()) {
-        $articleCover = $article->getCoverTag(
+        $article = $am->getById($a['article_id']);
+        $articleUrl = $urlgenerator->generate(
+            'article_show',
             [
-                'size' => 'h100',
-                'class' => 'article-thumb-cover',
-                'link' => false,
+                'slug' => $article->get('url'),
             ]
         );
-    }
+        $articleCover = null;
+        /** @var Article $article */
+        if ($article->hasCover()) {
+            $articleCover = $article->getCoverTag(
+                [
+                    'class' => 'article-thumb-cover',
+                    'link' => false,
+                    'height' => '100',
+                ]
+            );
+        }
 
-    $article = $am->getById($a['article_id']);
-    $articleUrl = $urlgenerator->generate(
-        'article_show',
-        [
-            'slug' => $article->get('url'),
-        ]
-    );
-    $articleCover = null;
-    /** @var Article $article */
-    if ($article->hasCover()) {
-        $articleCover = $article->getCoverTag(
-            [
-                'class' => 'article-thumb-cover',
-                'link' => false,
-                'height' => '100',
-            ]
-        );
-    }
-
-    $content .= '
-        <a href="' . $articleUrl . '">
+        $content .= '
             <div class="article-thumb">
                 ' . $articleCover . '
                 <div class="article-thumb-data">
-                    <h3>' . $a['article_title'] . '</h3>
+                    <h3>
+                        <a href="' . $articleUrl . '"> ' . $a['article_title'] . '</a>
+                    </h3>
                     <p>
                         de ' . truncate($a['article_authors'], 65, '...', true, true) . '<br />
                         coll. ' . $a['article_collection'] . ' ' . numero($a['article_number']) . ' (' . $a['article_publisher'] . ')<br />
@@ -453,33 +447,32 @@ if ($article) {
         </a>
     ';
 
-    if (!empty($a['article_weight'])) {
-        $article_weight = '<input type="hidden" name="article_weight" value="' . $a['article_weight'] . '">';
-    } else {
-        $article_weight = null;
-    }
+        if (!empty($a['article_weight'])) {
+            $article_weight = '<input type="hidden" name="article_weight" value="' . $a['article_weight'] . '">';
+        } else {
+            $article_weight = null;
+        }
 
-    // Pas de poids minimum si livre numérique
-    $stock_weight_minimum = 0;
-    $weight_required = $globalSite->getOpt('weight_required');
-    if ($weight_required) {
-        $stock_weight_minimum = $weight_required;
-    }
+        // Pas de poids minimum si livre numérique
+        $stock_weight_minimum = 0;
+        $weight_required = $currentSite->getOption('weight_required');
+        if ($weight_required) {
+            $stock_weight_minimum = $weight_required;
+        }
 
-    // Autres exemplaires
-    if ($mode == 'insert') {
-        $ex = null;
-        $exs = null;
-        $copies = $article->getStock();
-        $in_stock = 0;
-        $in_base = 0;
-        foreach ($copies as $copy) {
-            $os = $copy;
-            if (!$os['stock_selling_date'] && !$os['stock_return_date'] && !$os['stock_lost_date']) {
-                ++$in_stock;
-            }
-            ++$in_base;
-            $exs .= '
+        // Autres exemplaires
+        if ($mode == 'insert') {
+            $exs = null;
+            $copies = $article->getStock();
+            $in_stock = 0;
+            $in_base = 0;
+            foreach ($copies as $copy) {
+                $os = $copy;
+                if (!$os['stock_selling_date'] && !$os['stock_return_date'] && !$os['stock_lost_date']) {
+                    ++$in_stock;
+                }
+                ++$in_base;
+                $exs .= '
                         <tr>
                             <td><a href="adm_stock?id=' . $os['stock_id'] . '">' . $os['stock_id'] . '</a></td>
                             <td>' . price($os['stock_purchase_price'], 'EUR') . '</td>
@@ -491,9 +484,9 @@ if ($article) {
                             <td>' . _date($os['stock_selling_date'], 'd/m/Y') . ' ' . _date($os['stock_return_date'], 'd/m/Y') . '</td>
                         </tr>
             ';
-        }
-        if (isset($exs)) {
-            $content .= '
+            }
+            if (isset($exs)) {
+                $content .= '
                 <table class="unfold admin-table">
                     <thead>
                         <tr>
@@ -508,54 +501,52 @@ if ($article) {
                     </tbody>
                 </table>
             ';
+            }
         }
-    }
 
-    // alertes
-    if ($mode == 'insert') {
-        $ex = null;
-        $als = null;
-        $alerts = AlertQuery::create()
-            ->filterBySite($currentSite->getSite())
-            ->_or()
-            ->filterByUserId(null, Criteria::ISNULL)
-            ->findByArticleId($article->get("id"))
-            ->getArrayCopy();
-        $alerts = array_map(/**
-         * @throws PropelException
-         */ function (\Model\Alert $alert) use($currentSite) {
-             $recipientEmail = $alert->getUser()?->getEmail() ?? $alert->getRecipientEmail();
-             if (!$recipientEmail) {
-                 return "";
-             }
+        // alertes
+        if ($mode == 'insert') {
+            $alerts = AlertQuery::create()
+                ->filterBySite($currentSite->getSite())
+                ->_or()
+                ->filterByUserId(null, Criteria::ISNULL)
+                ->findByArticleId($article->get("id"))
+                ->getArrayCopy();
+            $alerts = array_map(/**
+             * @throws PropelException
+             */ function (\Model\Alert $alert) use ($currentSite) {
+                $recipientEmail = $alert->getUser()?->getEmail() ?? $alert->getRecipientEmail();
+                if (!$recipientEmail) {
+                    return "";
+                }
 
-            return '
+                return '
                 <tr>
                     <td>' . $recipientEmail . '</a></td>
                 </tr>
             ';
-        }, $alerts);
-        $alerts = array_filter($alerts, function ($alert) {
-            return $alert !== "";
-        });
-        $alerts_num = count($alerts);
+            }, $alerts);
+            $alerts = array_filter($alerts, function ($alert) {
+                return $alert !== "";
+            });
+            $alerts_num = count($alerts);
 
-        if ($alerts_num > 0) {
-            $disabledAlertsWarning = null;
-            if (!$currentSite->hasOptionEnabled("alerts")) {
-                $disabledAlertsWarning = '
+            if ($alerts_num > 0) {
+                $disabledAlertsWarning = null;
+                if (!$currentSite->hasOptionEnabled("alerts")) {
+                    $disabledAlertsWarning = '
                     <span class="fa fa-exclamation-triangle" title="Les envois d\'alertes sont désactivés."></span>
                 ';
-            }
+                }
 
-            $content .= '
+                $content .= '
                 <table class="unfold admin-table">
                     <thead>
                         <tr>
                             <th colspan="9">
                                 <span class="fa fa-chevron-down"></span>
                                 ' . $alerts_num . ' alerte' . s($alerts_num) . '
-                                '. $disabledAlertsWarning . '
+                                ' . $disabledAlertsWarning . '
                             </th>
                         </tr>
                     </thead>
@@ -564,53 +555,44 @@ if ($article) {
                     </tbody>
                 </table>
             ';
+            }
         }
-    }
 
-    // Fournisseur
-    $suppliers = $article->get('publisher')->getSuppliers();
-    $supplier = null;
-    $su = null;
-    if ($suppliers) {
-        $su = $suppliers[0];
-        $supplier = '
+        // Fournisseur
+        $suppliers = $article->get('publisher')->getSuppliers();
+        $supplier = null;
+        if ($suppliers) {
+            $su = $suppliers[0];
+            $supplier = '
             <label for="Fournisseur" class="disabled">Fournisseur :</label>
             <input type="text" name="Fournisseur" id="Fournisseur" value="' . $su['supplier_name'] . '" class="short disabled" disabled />
             <br />
         ';
-    }
-
-    // TVA d'après article
-    $tva = null;
-    $s['stock_tva'] = 0;
-    if ($su && !$su['supplier_notva'] && !LegacyCodeHelper::getGlobalSite()['default_notva']) {
-        $s['stock_tva'] = $article->getTaxRate();
-        $tva = '
-            <label for="stock_tva" class="disabled">TVA :</label>
-            <input type="text" name="stock_tva" id="stock_tva" value="' . $s['stock_tva'] . ' %" class="mini" disabled />
-            <br />
-        ';
-    }
-    $TVA = 1 + $s['stock_tva'] / 100;
-
-    // Prix d'achat par defaut
-    if (empty($s['stock_selling_price']) && $globalSite->getOpt('default_stock_discount') && !empty($a['article_price']) and !empty($a['article_tva'])) {
-        $s['stock_purchase_price'] = round($a['article_price'] / $TVA * (100 - $globalSite->getOpt('default_stock_discount')) / 100);
-        if ($globalSite->getOpt('default_stock_super_discount')) {
-            $s['stock_purchase_price'] = round($s['stock_purchase_price'] * (1 - $globalSite->getOpt('default_stock_super_discount') / 100));
         }
-        if ($globalSite->getOpt('default_stock_cascading_discount')) {
-            for ($ir = 0; $ir < $globalSite->getOpt('default_stock_cascading_discount'); ++$ir) {
-                $s['stock_purchase_price'] = $s['stock_purchase_price'] - ($s['stock_purchase_price'] * 0.01);
+
+        // TVA d'après article
+        $tva = null;
+        $s['stock_tva'] = 0;
+        $TVA = 1 + $s['stock_tva'] / 100;
+
+        // Prix d'achat par defaut
+        if (empty($s['stock_selling_price']) && $currentSite->getOption('default_stock_discount') && !empty($a['article_price']) and !empty($a['article_tva'])) {
+            $s['stock_purchase_price'] = round($a['article_price'] / $TVA * (100 - $currentSite->getOption('default_stock_discount')) / 100);
+            if ($currentSite->getOption('default_stock_super_discount')) {
+                $s['stock_purchase_price'] = round($s['stock_purchase_price'] * (1 - $currentSite->getOption('default_stock_super_discount') / 100));
             }
-            $s['stock_purchase_price'] = round($s['stock_purchase_price']);
+            if ($currentSite->getOption('default_stock_cascading_discount')) {
+                for ($ir = 0; $ir < $currentSite->getOption('default_stock_cascading_discount'); ++$ir) {
+                    $s['stock_purchase_price'] = $s['stock_purchase_price'] - ($s['stock_purchase_price'] * 0.01);
+                }
+                $s['stock_purchase_price'] = round($s['stock_purchase_price']);
+            }
         }
-    }
 
-    // Exemplaire vendu : afficher le prix HT et la TVA
-    $tva_fields = null;
-    if ($globalSite->has('tva') && $stock->has('selling_date')) {
-        $tva_fields = '
+        // Exemplaire vendu : afficher le prix HT et la TVA
+        $tva_fields = null;
+        if ($currentSite->getOption('tva') && $stock->has('selling_date')) {
+            $tva_fields = '
             <p>
                 <label>Prix de vente HT :</label>
                 <input type="text" readonly value="' . $stock->get('selling_price_ht') . '" class="mini"> centimes
@@ -628,124 +610,105 @@ if ($article) {
                 <input type="text" readonly value="' . $stock->getDiscountRate() . '" class="mini"> %
             </p>
         ';
-    } elseif ($globalSite->has('tva') && $stock->has('id')) {
-        $tva_fields = '
+        } elseif ($currentSite->getOption('tva') && $stock->has('id')) {
+            $tva_fields = '
             <p>
                 <label>Remise recalculée :</label>
                 <input type="text" readonly value="' . $stock->getDiscountRate() . '" class="mini"> %
             </p>
         ';
-    }
+        }
 
-    // Prix de vente par défaut d'après prix éditeur
-    if (empty($s['stock_selling_price']) and !empty($a['article_price'])) {
-        $s['stock_selling_price'] = $a['article_price'];
-    }
+        // Prix de vente par défaut d'après prix éditeur
+        if (empty($s['stock_selling_price']) and !empty($a['article_price'])) {
+            $s['stock_selling_price'] = $a['article_price'];
+        }
 
-    // Poids d'après fiche article
-    if (empty($s['stock_weight']) && !$a['collection_incorrect_weights']) {
-        $s['stock_weight'] = $a['article_weight'];
-    }
+        // Poids d'après fiche article
+        if (empty($s['stock_weight']) && !$a['collection_incorrect_weights']) {
+            $s['stock_weight'] = $a['article_weight'];
+        }
 
-    // Rabais sur le prix neuf
-    if (!empty(LegacyCodeHelper::getGlobalSite()['Rabais']) and !empty($a['article_price'])) {
-        $s['stock_selling_price'] = $a['article_price'] - ($a['article_price'] / 100 * LegacyCodeHelper::getGlobalSite()['Rabais']);
-    }
-
-    $invoice = '<input type="text" name="stock_invoice" id="stock_invoice" value="' . $s['stock_invoice'] . '" />';
-    if (empty($s['stock_invoice'])) {
-        $invoicesQuery = EntityManager::prepareAndExecute(
-            'SELECT `stock_invoice` FROM `stock` WHERE `site_id` = :site_id
+        $invoice = '<input type="text" name="stock_invoice" id="stock_invoice" value="' . $s['stock_invoice'] . '" />';
+        if (empty($s['stock_invoice'])) {
+            $invoicesQuery = EntityManager::prepareAndExecute(
+                'SELECT `stock_invoice` FROM `stock` WHERE `site_id` = :site_id
                         GROUP BY `stock_invoice`',
-            ['site_id' => $globalSite->get('id')]
-        );
-        $invoices = $invoicesQuery->fetchAll(PDO::FETCH_ASSOC);
-        $invoices_options = null;
-        foreach ($invoices as $invoice) {
-            $invoices_options .= '<option>' . $invoice['stock_invoice'] . '</option>';
+                ['site_id' => $currentSite->getId()]
+            );
+            $invoices = $invoicesQuery->fetchAll(PDO::FETCH_ASSOC);
+            $invoices_options = null;
+            foreach ($invoices as $invoice) {
+                $invoices_options .= '<option>' . $invoice['stock_invoice'] . '</option>';
+            }
+            $invoice = '<select name="stock_invoice" id="stock_invoice">' . $invoices_options . '</select>';
         }
-        $invoice = '<select name="stock_invoice" id="stock_invoice">' . $invoices_options . '</select>';
-    }
 
-    // STOCK
-    $stock_default = null;
-    if (!empty($s['stock_shop'])) {
-        if ($s['stock_shop'] == 1) {
-            $stock_default = '<option value="1" selected="selected">Ys</option>';
-        } elseif ($s['stock_shop'] == 2) {
-            $stock_default = '<option value="2" selected="selected">Scylla</option>';
-        } elseif ($s['stock_shop'] == 7) {
-            $stock_default = '<option value="7" selected="selected">Dystopia</option>';
-        }
-    }
-
-    $remises = null;
-    if (!empty($globalSite->getOpt('default_stock_discount')) and $mode == 'insert') {
-        $remises .= '
+        $remises = null;
+        if (!empty($currentSite->getOption('default_stock_discount')) and $mode == 'insert') {
+            $remises .= '
                 <label for="Remise" class="disabled">Remise :</label>
-                <input type="text" name="Remise" id="Remise" value="' . $globalSite->getOpt('default_stock_discount') . ' %" class="court" disabled />
+                <input type="text" name="Remise" id="Remise" value="' . $currentSite->getOption('default_stock_discount') . ' %" class="court" disabled />
                 <br />
         ';
-    }
-    if (!empty($globalSite->getOpt('default_stock_super_discount')) and $mode == 'insert') {
-        $remises .= '
+        }
+        if (!empty($currentSite->getOption('default_stock_super_discount')) and $mode == 'insert') {
+            $remises .= '
                 <label for="Remise2" class="disabled">Sur-remise :</label>
-                <input type="text" name="Remise2" id="Remise2" value="' . $globalSite->getOpt('default_stock_super_discount') . ' %" class="court" disabled />
+                <input type="text" name="Remise2" id="Remise2" value="' . $currentSite->getOption('default_stock_super_discount') . ' %" class="court" disabled />
                 <br />
         ';
-    }
-    if (!empty($globalSite->getOpt('default_stock_cascading_discount')) and $mode == 'insert') {
-        $remises .= '
+        }
+        if (!empty($currentSite->getOption('default_stock_cascading_discount')) and $mode == 'insert') {
+            $remises .= '
                 <label for="Remise3" class="disabled">Remise en cascade :</label>
-                <input type="text" name="Remise3" id="Remise3" value="' . $globalSite->getOpt('default_stock_cascading_discount') . ' %" class="court" disabled />
+                <input type="text" name="Remise3" id="Remise3" value="' . $currentSite->getOption('default_stock_cascading_discount') . ' %" class="court" disabled />
                 <br />
         ';
-    }
+        }
 
-    $stock_shop = '<input type="hidden" name="stock_shop" value="' . $currentSite->getId() . '" />';
+        // Add article to rayons
+        $rayons = $rm->getAll();
+        $rayon_select = null;
+        if ($rayons) {
+            $rayons_options = array_map(function ($rayon) {
+                return '<option value="' . $rayon->get('id') . '">' . $rayon->get('name') . '</option>';
+            }, $rayons);
+            $rayon_select = '<select name="add_to_rayon"><option value="">Ajouter l\'article au rayon...</option>' . join($rayons_options) . '</select><br>';
+        }
 
-    // Add article to rayons
-    $rayons = $rm->getAll();
-    $rayon_select = null;
-    if ($rayons) {
-        $rayons_options = array_map(function ($rayon) {
-            return '<option value="' . $rayon->get('id') . '">' . $rayon->get('name') . '</option>';
-        }, $rayons);
-        $rayon_select = '<select name="add_to_rayon"><option value="">Ajouter l\'article au rayon...</option>' . join($rayons_options) . '</select><br>';
-    }
-
-    $orderLink = null;
-    $removeLink = null;
-    $order = $om->getById($stock->get('order_id'));
-    if ($order) {
-        $orderLink = '
+        $orderLink = null;
+        $removeLink = null;
+        $order = $om->getById($stock->get('order_id'));
+        if ($order) {
+            $orderLink = '
             <a class="btn btn-primary" href="/pages/adm_order?order_id=' . $order->get('id') . '">
                 Modifier
             </a>
         ';
-        $removeLink = '
+            $removeLink = '
             <a class="btn btn-primary"
                 href="/pages/adm_order?order_id=' . $order->get('id') . '&stock_remove=' . $stock->get('id') . '">
                     Retirer de la commande et remettre en vente
             </a>
         ';
-    }
+        }
 
-    $cancelReturnLink = null;
-    if ($stock->isReturned()) {
-        $cancelReturnLink = '
+        $cancelReturnLink = null;
+        if ($stock->isReturned()) {
+            $cancelReturnLink = '
             <a class="btn btn-primary"
                 href="' . $urlgenerator->generate(
-            'stock_cancel_return',
-            ['stockId' => $stock->get('id')]
-        ) . '">
+                    'stock_cancel_return',
+                    ['stockId' => $stock->get('id')]
+                ) . '">
                 Annuler le retour et remettre en vente
             </a>
         ';
-    }
+        }
 
-    $nextYear = (new DateTime("next year"))->format("Y");
-    $content .= '
+        $nextYear = (new DateTime("next year"))->format("Y");
+        $content .= '
 
         <div class="buttons">
             ' . $removeLink . ' ' . $cancelReturnLink . '
@@ -773,7 +736,7 @@ if ($article) {
                     type="text" 
                     name="stock_stockage" 
                     id="stock_stockage" 
-                    value="'.$s["stock_stockage"].'" 
+                    value="' . $s["stock_stockage"] . '" 
                     class="short"
                     maxlength="16" 
                 />
@@ -825,20 +788,20 @@ if ($article) {
 
     ';
 
-    $cfcm = new CFCampaignManager();
-    $campaigns = $cfcm->getAll();
-    if ($campaigns) {
-        $campaigns = array_map(function ($campaign) use ($stock) {
-            return '<option value="' . $campaign->get('id') . '"' . ($stock->get('campaign_id') == $campaign->get('id') ? ' selected' : null) . '>' . $campaign->get('title') . '</option>';
-        }, $campaigns);
+        $cfcm = new CFCampaignManager();
+        $campaigns = $cfcm->getAll();
+        if ($campaigns) {
+            $campaigns = array_map(function ($campaign) use ($stock) {
+                return '<option value="' . $campaign->get('id') . '"' . ($stock->get('campaign_id') == $campaign->get('id') ? ' selected' : null) . '>' . $campaign->get('title') . '</option>';
+            }, $campaigns);
 
-        $cfrm = new CFRewardManager();
-        $rewards = $cfrm->getAll([], ['order' => 'reward_price']);
-        $rewards = array_map(function ($reward) use ($stock) {
-            return '<option value="' . $reward->get('id') . '"' . ($stock->get('reward_id') == $reward->get('id') ? ' selected' : null) . '>[' . price($reward->get('price'), 'EUR') . '] ' . $reward->get('content') . '</option>';
-        }, $rewards);
+            $cfrm = new CFRewardManager();
+            $rewards = $cfrm->getAll([], ['order' => 'reward_price']);
+            $rewards = array_map(function ($reward) use ($stock) {
+                return '<option value="' . $reward->get('id') . '"' . ($stock->get('reward_id') == $reward->get('id') ? ' selected' : null) . '>[' . price($reward->get('price'), 'EUR') . '] ' . $reward->get('content') . '</option>';
+            }, $rewards);
 
-        $content .= '
+            $content .= '
             <p>
                 <label for="campaign_id">Campagne liée :</label>
                 <select name="campaign_id" id="campaign_id" class="form-control">
@@ -855,14 +818,14 @@ if ($article) {
             </p>
             <br>
         ';
-    } else {
-        $content .= '
+        } else {
+            $content .= '
             <input type="hidden" name="campaign_id" value="' . $stock->get('campaign_id') . '">
             <input type="hidden" name="reward_id" value="' . $stock->get('reward_id') . '">
         ';
-    }
+        }
 
-    $content .= '
+        $content .= '
 
                 <label for="stock_purchase_date" class="required">Date d\'achat :</label>
                 <input type="text" name="stock_purchase_date" id="stock_purchase_date" value="' . $s['stock_purchase_date'] . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime required" required />
@@ -872,8 +835,8 @@ if ($article) {
                 <br /><br />
     ';
 
-    if ($mode == 'insert') {
-        $content .= '
+        if ($mode == 'insert') {
+            $content .= '
                 <div class="center">
                     <button type="submit" class="btn btn-primary">Ajouter au stock</button>
                     <input type="number" name="stock_num" min="1" max="99" maxlength="2" value="1" class="nano" /> exemplaire(s)
@@ -881,8 +844,8 @@ if ($article) {
                 <br />
             </fieldset>
         ';
-    } else {
-        $content .= '
+        } else {
+            $content .= '
                 <div class="center">
                     <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
                     <input type="hidden" name="stock_num" value="1" class="mini" />
@@ -890,9 +853,9 @@ if ($article) {
                 <br />
             </fieldset>
         ';
-    }
+        }
 
-    $content .= '
+        $content .= '
         <fieldset>
             <legend>Statut de l\'exemplaire</legend>
             <label for="stock_cart_date">Mis en panier le :</label>
@@ -922,8 +885,8 @@ if ($article) {
         </fieldset>
     ';
 
-    if ($mode == 'update') {
-        $content .= '
+        if ($mode == 'update') {
+            $content .= '
             <fieldset>
                 <legend>Base de données</legend>
                 <label for="stock_insert" class="readonly">Fiche créée le :</label>
@@ -934,32 +897,32 @@ if ($article) {
                 <br /><br />
             </fieldset>
         ';
-    }
+        }
 
-    $content .= '</form>';
+        $content .= '</form>';
 
-    // Add to cart
-    if ($mode == 'update' && $stock->isAvailable()) {
-        $carts = CartQuery::create()
-            ->filterBySite($currentSite->getSite())
-            ->filterByType("web")
-            ->orderByUpdatedAt()
-            ->limit(100)
-            ->find();
-        $cartOptions = array_map(/**
-         * @throws PropelException
-         */ function (\Model\Cart $cart) {
-            $identity = "Utilisateur inconnu";
-            if ($cart->getUser() !== null) {
-                $identity = $cart->getUser()->getEmail();
-            } elseif ($cart->getAxysAccountId()) {
-                $identity = "Utilisateur Axys n° {$cart->getAxysAccountId()}";
-            }
+        // Add to cart
+        if ($mode == 'update' && $stock->isAvailable()) {
+            $carts = CartQuery::create()
+                ->filterBySite($currentSite->getSite())
+                ->filterByType("web")
+                ->orderByUpdatedAt()
+                ->limit(100)
+                ->find();
+            $cartOptions = array_map(/**
+             * @throws PropelException
+             */ function (\Model\Cart $cart) {
+                $identity = "Utilisateur inconnu";
+                if ($cart->getUser() !== null) {
+                    $identity = $cart->getUser()->getEmail();
+                } elseif ($cart->getAxysAccountId()) {
+                    $identity = "Utilisateur Axys n° {$cart->getAxysAccountId()}";
+                }
 
-            return "<option value=\"{$cart->getId()}\">Panier {$cart->getId()} de $identity</option>";
-        }, $carts->getArrayCopy());
+                return "<option value=\"{$cart->getId()}\">Panier {$cart->getId()} de $identity</option>";
+            }, $carts->getArrayCopy());
 
-        $content .= '
+            $content .= '
         <form method="post" action="' . $urlgenerator->generate('stock_add_to_cart', ['stock_id' => $stock->get('id')]) . '" class="fieldset form-inline">
             <fieldset>
                 <legend>Ajouter à un panier</legend>
@@ -973,19 +936,23 @@ if ($article) {
             </fieldset>
         </form>
         ';
+        }
+    } elseif (isset($_GET['add']) or isset($_GET['id'])) {
+        $content .= '<p class="error">Erreur : article inconnu</p>';
     }
-} elseif (isset($_GET['add']) or isset($_GET['id'])) {
-    $content .= '<p class="error">Erreur : article inconnu</p>';
-}
 
-$content .= '
+    $content .= '
     <div class="admin">
         ' . $div_admin . '
     </div>
 ';
 
-return new Response($content);
+    return new Response($content);
+};
 
+/**
+ * @throws PropelException
+ */
 function _shouldAlertsBeSent(string $mode, string $copyCondition, CurrentSite $currentSite): bool
 {
     return $currentSite->hasOptionEnabled("alerts") && $mode === "insert" && $copyCondition !== "Neuf";
@@ -994,13 +961,14 @@ function _shouldAlertsBeSent(string $mode, string $copyCondition, CurrentSite $c
 /**
  * @throws TransportExceptionInterface
  * @throws PropelException
+ * @throws Exception
  */
 function _sendAlertsForArticle(
-    Article $article,
-    string $copyYear,
-    string $copyPrice,
-    string $copyCondition,
-    Mailer  $mailer,
+    Article     $article,
+    string      $copyYear,
+    string      $copyPrice,
+    string      $copyCondition,
+    Mailer      $mailer,
     CurrentSite $currentSite,
 ): array
 {
@@ -1022,7 +990,7 @@ function _sendAlertsForArticle(
 
         $customMessage = $currentSite->getOption("alerts_custom_message");
         if ($customMessage) {
-            $customMessage = '<p><strong>'.$customMessage.'</strong></p>';
+            $customMessage = '<p><strong>' . $customMessage . '</strong></p>';
         }
 
         $articleUrl = "https://{$currentSite->getSite()->getDomain()}/a/{$article->get("url")}";
@@ -1031,25 +999,25 @@ function _sendAlertsForArticle(
             <p>Bonjour,</p>
             <p>Vous avez créé une alerte pour le livre&nbsp;:</p>
             <p>
-                <a href="'.$articleUrl.'">'.$article->get("title").'</a><br />
-                de '.authors($article->get("authors")).'<br />
-                coll. '.$article->get("collection")->get("name").numero($article->get("number")).' ('.$article->get("publisher")->get("name").')
+                <a href="' . $articleUrl . '">' . $article->get("title") . '</a><br />
+                de ' . authors($article->get("authors")) . '<br />
+                coll. ' . $article->get("collection")->get("name") . numero($article->get("number")) . ' (' . $article->get("publisher")->get("name") . ')
             </p>
             <p>
                 Un exemplaire de ce livre vient d\'être mis en vente chez 
-                <a href="https://'.$currentSite->getSite()->getDomain().'/a/'.$article->get("url") .'">' .$currentSite->getTitle().'</a>&nbsp;!
+                <a href="https://' . $currentSite->getSite()->getDomain() . '/a/' . $article->get("url") . '">' . $currentSite->getTitle() . '</a>&nbsp;!
             </p>
             <p>
-                Édition de '.$copyYear.'<br />
-                État : '.$copyCondition.'<br />
-                Prix : '.currency($copyPrice / 100).'
+                Édition de ' . $copyYear . '<br />
+                État : ' . $copyCondition . '<br />
+                Prix : ' . currency($copyPrice / 100) . '
             </p>
             
-            '.$customMessage.'
+            ' . $customMessage . '
             
             <p>
                 Pour en savoir plus ou acheter ce livre, rendez-vous sur :<br />
-                <a href="'.$articleUrl.'">'.$articleUrl.'</a>
+                <a href="' . $articleUrl . '">' . $articleUrl . '</a>
             </p>
             <p>
                 Attention !<br />
@@ -1057,14 +1025,14 @@ function _sendAlertsForArticle(
                 premier servi. Il se peut donc que le livre ne soit déjà plus disponible lors de votre visite. Ne 
                 perdez pas de temps !
             </p>
-            <p><a href="https://'.$currentSite->getSite()->getDomain().'/pages/log_myalerts">Modifier ou annuler mes alertes</a></p>
+            <p><a href="https://' . $currentSite->getSite()->getDomain() . '/pages/log_myalerts">Modifier ou annuler mes alertes</a></p>
             <p>À très bientôt dans les librairies Biblys !</p>
         ';
 
         try {
             $mailer->send($recipientEmail, $subject, $message);
             $sentAlerts++;
-        } catch(InvalidEmailAddressException $exception) {
+        } catch (InvalidEmailAddressException $exception) {
             $errors[] = [
                 "email" => $recipientEmail,
                 "reason" => $exception->getMessage(),
