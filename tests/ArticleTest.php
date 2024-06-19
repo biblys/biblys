@@ -24,6 +24,22 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     /**
      * @throws Exception
      */
+    public function testGetModel(): void
+    {
+        // given
+        $article = new Article(["id" => 1234]);
+
+        // when
+        $model = $article->getModel();
+
+        // then
+        $this->assertInstanceOf(\Model\Article::class, $model);
+        $this->assertEquals(1234, $model->getId());
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testValidateOnFetch()
     {
         // given
