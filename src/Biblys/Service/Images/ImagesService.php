@@ -115,10 +115,12 @@ class ImagesService
             return null;
         }
 
-        $url = "$this->baseUrl/{$image->getFilepath()}/{$image->getFilename()}";
-        $normalizedUrl = $this->_removeDuplicateSlashes($url);
+        $baseUrl = rtrim($this->baseUrl, "/");
+        $filePath = trim($image->getFilepath(), "/");
+        $fileName = trim($image->getFilename(), "/");
+        $url = "$baseUrl/$filePath/$fileName";
         $version = $image->getVersion() > 1 ? "?v={$image->getVersion()}" : "";
-        return $normalizedUrl . $version;
+        return $url . $version;
     }
 
     public function getCoverPathForArticle(Article $article): ?string
