@@ -935,7 +935,7 @@ function reloadEvents(scope) {
     .click(function() {
       const button = $(this);
       button
-        .find('i.fa')
+        .find('.fa')
         .removeClass('fa-heart-o fa-heart red')
         .addClass('fa-spin fa-spinner');
 
@@ -954,18 +954,18 @@ function reloadEvents(scope) {
           if (data.error) {
             _alert(data.error);
             button
-              .find('i.fa')
+              .find('.fa')
               .removeClass('fa-spin fa-spinner')
               .addClass('fa-heart-o');
           } else if (data.created) {
             button
-              .find('i.fa')
+              .find('.fa')
               .removeClass('fa-spin fa-spinner')
               .addClass('fa-heart red');
             new Biblys.Notification(data.message, { type: 'success' });
           } else if (data.deleted) {
             button
-              .find('i.fa')
+              .find('.fa')
               .removeClass('fa-spin fa-spinner')
               .addClass('fa-heart-o');
             new Biblys.Notification(data.message, { type: 'success' });
