@@ -93,6 +93,17 @@ class Article extends Entity
     }
 
     /**
+     * @throws Exception
+     */
+    public function getModel(): \Model\Article
+    {
+        $model = new \Model\Article();
+        $model->setId($this->get("id"));
+
+        return $model;
+    }
+
+    /**
      * @throws InvalidEntityFetchedException
      */
     public function validateOnFetch(): void
