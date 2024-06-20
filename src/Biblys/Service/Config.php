@@ -133,4 +133,14 @@ class Config
 
         return false;
     }
+
+    public function getImagesPath(): string
+    {
+        return $this->get("images.path") ?? "public/images/";
+    }
+
+    public function getImagesBaseUrl(): string
+    {
+        return $this->get("images.base_url") ?? "/images/";
+    }
 }

@@ -34,7 +34,7 @@ site: 1
 #  secret: abcdefghijklmnopqrstuvxyz12345678
 
 #axys:
-#    client_id: abcd1234
+#  client_id: abcd1234
 #  client_secret: efgh5678
 #  redirect_uri: http://paronymie.fr/openid/callback
 #  base_uri: https://axys.me/
@@ -51,6 +51,10 @@ site: 1
 
 ## Set HTTP Strict Transport Security to 6 months
 #hsts: true
+
+#images:
+#  path: public/images/
+#  base_url: /images/
 
 ## Path to composer home folder must be defined
 ## to allow auto-updates

@@ -133,6 +133,8 @@ class ConfigTest extends PHPUnit\Framework\TestCase
         $config->getAuthenticationSecret();
     }
 
+    /** isAxysEnabled */
+
     public function testIsAxysEnabledWhenDisabled(): void
     {
         // given
@@ -158,5 +160,69 @@ class ConfigTest extends PHPUnit\Framework\TestCase
 
         // then
         $this->assertTrue($isEnabled);
+    }
+
+    /** getImagesPath */
+
+    /**
+     * @throws Exception
+     */
+    public function testGetImagesPathReturnsConfigValue(): void
+    {
+        // given
+        $config = new Config(["images" => ["path" => "/path/to/images"]]);
+
+        // when
+        $path = $config->getImagesPath();
+
+        // then
+        $this->assertEquals("/path/to/images", $path);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetImagesPathReturnsDefaultValue(): void
+    {
+        // given
+        $config = new Config();
+
+        // when
+        $path = $config->getImagesPath();
+
+        // then
+        $this->assertEquals("public/images/", $path);
+    }
+
+    /** getImagesBaseUrl */
+
+    /**
+     * @throws Exception
+     */
+    public function testGetImagesBaseUrlReturnsConfigValue(): void
+    {
+        // given
+        $config = new Config(["images" => ["base_url" => "https://paronymie.fr/images/"]]);
+
+        // when
+        $baseUrl = $config->getImagesBaseUrl();
+
+        // then
+        $this->assertEquals("https://paronymie.fr/images/", $baseUrl);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetImagesBaseUrlReturnsDefaultValue(): void
+    {
+        // given
+        $config = new Config();
+
+        // when
+        $baseUrl = $config->getImagesBaseUrl();
+
+        // then
+        $this->assertEquals("/images/", $baseUrl);
     }
 }
