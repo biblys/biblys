@@ -1,0 +1,30 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Espace disque
+{% endblock %}
+
+{% block main %}
+  <h1><span class="fa fa-database"></span> Espace disque</h1>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Fichiers</th>
+        <th>Taille</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Articles</td>
+        <td>{{ articles }} Go</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>Total :</th>
+        <th>{{ total }} Go</th>
+      </tr>
+    </tfoot>
+  </table>
+{% endblock %}
