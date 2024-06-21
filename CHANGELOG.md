@@ -14,10 +14,31 @@ Améliorations
 
 Déploiement
 
-Jouer les migrations
+1. Jouer les migrations
 
 ```shell
 composer db:migrate
+```
+
+2. Mettre à jour la configuration, en remplaçant
+
+```yaml
+media_path: public/images
+media_url: /images/
+```
+
+par
+
+```yaml
+images:
+  path: public/images
+  base_url: /images/
+```
+
+3. Importer en base les images de couverture des articles
+
+```shell
+composer images:import
 ```
 
 ## 2.82.0 (5 juin 2024)
