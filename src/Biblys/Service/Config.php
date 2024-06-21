@@ -73,10 +73,6 @@ class Config
             return 1;
         }
 
-        if ($path === "media_path") {
-            return "/public/media";
-        }
-
         if ($path === "composer_home") {
             return "~/.composer";
         }

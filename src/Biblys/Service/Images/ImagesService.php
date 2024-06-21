@@ -24,9 +24,9 @@ class ImagesService
         private readonly Filesystem  $filesystem,
     )
     {
-        $basePathFromRoot = $this->config->get("media_path") ?: "public/images";
+        $basePathFromRoot = $this->config->getImagesPath();
         $this->basePath = __DIR__ . "/../../../../$basePathFromRoot";
-        $this->baseUrl = $this->config->get("media_url") ?: "/images/";
+        $this->baseUrl = $this->config->getImagesBaseUrl();
     }
 
     /**

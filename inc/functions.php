@@ -72,10 +72,6 @@ function biblysPath(): string
     return __DIR__."/../";
 }
 
-// Media path
-$media_path = __DIR__."/../".$config->get("media_path");
-define('MEDIA_PATH', $media_path);
-
 // Get request
 $request = Request::createFromGlobals();
 
@@ -331,31 +327,8 @@ function media_url($type, $id, $size = '0'): string
  */
 function media_exists($type, $id): bool
 {
-    if ('article' == $type) {
-        $type = 'book';
-    }
-    if ('extrait' == $type) {
-        $ext = 'pdf';
-    } elseif ('publisher' == $type) {
-        $ext = 'png';
-    } else {
-        $ext = 'jpg';
-    }
-    $path = MEDIA_PATH . '//' . $type . '/' . file_dir($id) . '/' . $id . '.' . $ext;
-    if ('ebook-pdf' == $type) {
-        $path = __DIR__ . '/../dl/pdf/' . file_dir($id) . '/' . $id . '.pdf';
-    }
-    if ('ebook-epub' == $type) {
-        $path = __DIR__ . '/../dl/epub/' . file_dir($id) . '/' . $id . '.epub';
-    }
-    if ('ebook-azw' == $type) {
-        $path = __DIR__ . '/../dl/azw/' . file_dir($id) . '/' . $id . '.azw';
-    }
-    if (file_exists($path)) {
-        return true;
-    } else {
-        return false;
-    }
+    $media = new Media($type, $id);
+    return $media->exists();
 }
 
 function numero($x, $b = ' n&deg;&nbsp;'): string
