@@ -41,7 +41,7 @@ class ImportImagesCommand extends Command
     {
         $loggerService = new LoggerService();
 
-        $coversDirectory = $this->config->get("media_path") . "/book";
+        $coversDirectory = $this->config->getImagesPath() . "/book";
         $output->writeln(["Listing in files {$coversDirectory}…"]);
         $loggerService->log("images-import", "info", "Listing files {$coversDirectory}…");
 

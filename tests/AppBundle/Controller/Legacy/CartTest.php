@@ -267,8 +267,8 @@ class CartTest extends TestCase
         $currentUser->shouldReceive("isAdmin")->andReturn(false);
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
         $config = Mockery::mock(Config::class);
-        $config->shouldReceive("get")->with("media_path")->andReturn(null);
-        $config->shouldReceive("get")->with("media_url")->andReturn(null);
+        $config->shouldReceive("getImagesPath")->with()->andReturn(null);
+        $config->shouldReceive("getImagesBaseUrl")->with()->andReturn(null);
         $imagesService = Mockery::mock(ImagesService::class);
         $imagesService->expects("articleHasCoverImage")->andReturn(true);
         $imagesService->expects("getCoverUrlForArticle");

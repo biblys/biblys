@@ -1,5 +1,7 @@
 <?php
 
+use Biblys\Service\Config;
+
 class Media
 {
     private int $_id;
@@ -12,18 +14,21 @@ class Media
     private ?string $_path = null;
     private bool $_exists = false;
     private array $_dimensions;
+    private Config $config;
 
     /**
      * @throws Exception
      */
     public function __construct($type, $id)
     {
+        $this->config = Config::load();
+
         if ($type === "article") {
             trigger_deprecation(
                 "biblys",
                 "2.83.0",
                 "Using Media with 'article' type is deprecated." .
-                        "Use ImagesService->getCoverUrlForArticle instead"
+                "Use ImagesService->getCoverUrlForArticle instead"
             );
         }
 
@@ -40,14 +45,13 @@ class Media
      */
     public function update(): void
     {
-
         // Dossier
         $this->setDir(str_pad(substr($this->id(), -2, 2), 2, '0', STR_PAD_LEFT));
 
         // Path
         if ($this->domain() == 'media') {
-            $this->setDirectoryPath(MEDIA_PATH.'/'.$this->type().'/'.$this->dir().'/');
-            $this->setPath($this->directoryPath().$this->id().'.'.$this->ext());
+            $this->setDirectoryPath($this->config->getImagesPath() . '/' . $this->type() . '/' . $this->dir() . '/');
+            $this->setPath($this->directoryPath() . $this->id() . '.' . $this->ext());
         }
 
         // Exists
@@ -126,17 +130,17 @@ class Media
         $exif = exif_read_data($file);
         if (!empty($exif['Orientation'])) {
             switch ($exif['Orientation']) {
-            case 3:
-                $image = imagerotate($image, 180, 0);
-                break;
+                case 3:
+                    $image = imagerotate($image, 180, 0);
+                    break;
 
-            case 6:
-                $image = imagerotate($image, -90, 0);
-                break;
+                case 6:
+                    $image = imagerotate($image, -90, 0);
+                    break;
 
-            case 8:
-                $image = imagerotate($image, 90, 0);
-                break;
+                case 8:
+                    $image = imagerotate($image, 90, 0);
+                    break;
             }
         }
 
@@ -152,7 +156,7 @@ class Media
     public function delete(): void
     {
         if ($this->exists()) {
-            foreach (glob(substr($this->path(), 0, -4)."*") as $f) {
+            foreach (glob(substr($this->path(), 0, -4) . "*") as $f) {
                 unlink($f) or error("media delete error");
             }
         }
@@ -162,7 +166,7 @@ class Media
 
     private function setId($id): void
     {
-        $this->_id = (int) $id;
+        $this->_id = (int)$id;
     }
 
     /**
@@ -176,7 +180,7 @@ class Media
         }
 
         // Types autorisés
-        $types = array('article','book','stock','people','extrait','event','post','publisher','pdf','epub','azw');
+        $types = array('article', 'book', 'stock', 'people', 'extrait', 'event', 'post', 'publisher', 'pdf', 'epub', 'azw');
 
         // Extension correspondante
         if ($type == "extrait" || $type == "pdf") {
@@ -202,40 +206,40 @@ class Media
         }
 
         if (in_array($type, $types)) {
-            $this->_type = (string) $type;
+            $this->_type = (string)$type;
         } else {
-            throw new Exception('Type '.$type.' inconnu');
+            throw new Exception('Type ' . $type . ' inconnu');
         }
     }
 
     private function setExt($ext): void
     {
-        $this->_ext = (string) $ext;
+        $this->_ext = (string)$ext;
     }
 
     private function setMime($mime): void
     {
-        $this->_mime = (string) $mime;
+        $this->_mime = (string)$mime;
     }
 
     private function setDomain($domain): void
     {
-        $this->_domain = (string) $domain;
+        $this->_domain = (string)$domain;
     }
 
     private function setDirectoryPath($directoryPath): void
     {
-        $this->_directoryPath = (string) $directoryPath;
+        $this->_directoryPath = (string)$directoryPath;
     }
 
     private function setPath($path): void
     {
-        $this->_path = (string) $path;
+        $this->_path = (string)$path;
     }
 
     private function setDir($dir): void
     {
-        $this->_dir = (string) $dir;
+        $this->_dir = (string)$dir;
     }
 
     public function setExists(bool $exists): void
@@ -304,7 +308,7 @@ class Media
 
         $version = '';
         if (isset($options['version']) && $options['version'] > 1) {
-            $version = '?v='.$options['version'];
+            $version = '?v=' . $options['version'];
         }
 
         $orientation = null;
@@ -316,19 +320,16 @@ class Media
             unset($options["size"]);
         }
 
-        $baseUrl = '/'.$this->type().
-            '/'.$this->dir().
-            '/'.$this->id().
-            '.'.$this->ext().
+        $baseUrl = '/' . $this->type() .
+            '/' . $this->dir() .
+            '/' . $this->id() .
+            '.' . $this->ext() .
             $version;
 
         $imagesCdn = $config->get('images_cdn');
-        $mediaUrl = '/media';
-        if ($config->get('media_url')) {
-            $mediaUrl = $config->get('media_url');
-        }
+        $mediaUrl = $config->getImagesBaseUrl();
+
         if ($imagesCdn) {
-            
             if ($imagesCdn['service'] === 'cloudimage') {
                 $operation = 'cdn';
                 $operationSize = 'n';
@@ -337,23 +338,23 @@ class Media
                     $operationSize = $size;
                 }
 
-                $url = $mediaUrl.$baseUrl;
-                return 'https://'.$imagesCdn['options']['token'].'.cloudimg.io/'.$operation.'/'.$operationSize.'/faf/'.$url;
+                $url = $mediaUrl . $baseUrl;
+                return 'https://' . $imagesCdn['options']['token'] . '.cloudimg.io/' . $operation . '/' . $operationSize . '/faf/' . $url;
             }
-            
+
             if ($imagesCdn['service'] === 'weserv') {
-                $url = $mediaUrl .$baseUrl;
+                $url = $mediaUrl . $baseUrl;
                 $weservOptions = ["url" => $url];
-                
+
                 if ($orientation && isset($size)) {
                     $weservOptions[$orientation] = $size;
                 }
 
-                return "//images.weserv.nl?".http_build_query($weservOptions);
+                return "//images.weserv.nl?" . http_build_query($weservOptions);
             }
         }
 
-        return $mediaUrl .$baseUrl;
+        return $mediaUrl . $baseUrl;
     }
 
     public function exists(): bool
