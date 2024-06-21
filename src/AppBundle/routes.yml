@@ -4,6 +4,10 @@ maintenance_infos:
   path: /biblys/infos
   controller: AppBundle\Controller\MaintenanceController::infosAction
 
+maintenance_disk_usage:
+  path: /admin/disk-usage
+  controller: AppBundle\Controller\MaintenanceController::diskUsageAction
+
 # Main
 
 main_home:
