@@ -177,7 +177,7 @@ class ImagesServiceTest extends TestCase
         $site = ModelFactory::createSite();
         $article = ModelFactory::createArticle();
 
-        $config = new Config(["media_url" => "/images/"]);
+        $config = new Config(["images" => ["path" => "/images/"]]);
         $currentSite = new CurrentSite($site);
         $filesystem = Mockery::mock(Filesystem::class);
         $service = new ImagesService($config, $currentSite, $filesystem);
@@ -199,7 +199,7 @@ class ImagesServiceTest extends TestCase
         // given
         $site = ModelFactory::createSite();
 
-        $config = new Config(["media_url" => "/images/"]);
+        $config = new Config(["images" => ["base_url" => "/images/"]]);
         $currentSite = new CurrentSite($site);
         $filesystem = Mockery::mock(Filesystem::class);
         $service = new ImagesService($config, $currentSite, $filesystem);
@@ -234,7 +234,7 @@ class ImagesServiceTest extends TestCase
             version: 2,
         );
 
-        $config = new Config(["media_url" => "images/"]);
+        $config = new Config(["images" => ["base_url" => "images/"]]);
         $currentSite = new CurrentSite($site);
         $filesystem = Mockery::mock(Filesystem::class);
         $service = new ImagesService($config, $currentSite, $filesystem);
@@ -263,7 +263,7 @@ class ImagesServiceTest extends TestCase
             version: 2,
         );
 
-        $config = new Config(["media_url" => "https://paronymie.fr/images/"]);
+        $config = new Config(["images" => ["base_url" => "https://paronymie.fr/images/"]]);
         $currentSite = new CurrentSite($site);
         $filesystem = Mockery::mock(Filesystem::class);
         $service = new ImagesService($config, $currentSite, $filesystem);
@@ -287,7 +287,7 @@ class ImagesServiceTest extends TestCase
         $site = ModelFactory::createSite();
         $article = ModelFactory::createArticle();
 
-        $config = new Config(["media_url" => "/images/"]);
+        $config = new Config(["images" => ["base_url" => "/images/"]]);
         $currentSite = new CurrentSite($site);
         $filesystem = Mockery::mock(Filesystem::class);
         $service = new ImagesService($config, $currentSite, $filesystem);
@@ -308,7 +308,7 @@ class ImagesServiceTest extends TestCase
         // given
         $site = ModelFactory::createSite();
 
-        $config = new Config(["media_path" => "/images/"]);
+        $config = new Config(["images" => ["path" => "/images/"]]);
         $currentSite = new CurrentSite($site);
         $filesystem = Mockery::mock(Filesystem::class);
         $service = new ImagesService($config, $currentSite, $filesystem);

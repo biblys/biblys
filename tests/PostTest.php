@@ -94,7 +94,7 @@ class PostTest extends PHPUnit\Framework\TestCase
         $post = $pm->create(["post_illustration_legend" => "Une belle image"]);
         $tag = $post->getIllustrationTag();
 
-        $this->assertMatchesRegularExpression('/<img src="\/media\/post\/\d+\/\d+\.jpg" alt="Une belle image" class="illustration">/', $tag);
+        $this->assertMatchesRegularExpression('/<img src="\/images\/\/post\/\d+\/\d+\.jpg" alt="Une belle image" class="illustration">/', $tag);
     }
 
     public function testGetIllustrationUrl()
@@ -106,7 +106,7 @@ class PostTest extends PHPUnit\Framework\TestCase
         $url = $post->getIllustrationUrl();
 
         // then
-        $this->assertEquals("/media/post/01/1.jpg", $url);
+        $this->assertEquals("/images//post/01/1.jpg", $url);
     }
 
     public function testGetIllustrationUrlWithVersion()
@@ -118,7 +118,7 @@ class PostTest extends PHPUnit\Framework\TestCase
         $url = $post->getIllustrationUrl();
 
         // then
-        $this->assertEquals("/media/post/01/1.jpg?v=3", $url);
+        $this->assertEquals("/images//post/01/1.jpg?v=3", $url);
     }
 
     /**
@@ -131,7 +131,7 @@ class PostTest extends PHPUnit\Framework\TestCase
         $post = $pm->create(["post_illustration_legend" => "Une belle image"]);
         $tag = $post->getIllustrationTag(height: 60);
 
-        $this->assertMatchesRegularExpression('/<img src="\/media\/post\/\d+\/\d+\.jpg" alt="Une belle image" height=60 class="illustration">/', $tag);
+        $this->assertMatchesRegularExpression('/<img src="\/images\/\/post\/\d+\/\d+\.jpg" alt="Une belle image" height=60 class="illustration">/', $tag);
     }
 
     /**
