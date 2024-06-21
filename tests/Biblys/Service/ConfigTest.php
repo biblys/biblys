@@ -49,10 +49,10 @@ class ConfigTest extends PHPUnit\Framework\TestCase
         $config = new Config();
 
         // when
-        $option = $config->get("media_path");
+        $option = $config->get("site");
 
         // then
-        $this->assertEquals("/public/media", $option);
+        $this->assertEquals("1", $option);
     }
 
     /**
