@@ -235,6 +235,7 @@ class Entry
 
         $entries = self::_addAnalyticsLinks($config, $entries);
 
+        $entries[] = new Entry('Espace disque', ['category' => 'site', 'path' => 'maintenance_disk_usage', 'icon' => 'database']);
         $entries[] = new Entry('Options', ['category' => 'site', 'path' => 'site_options', 'icon' => 'cogs']);
         $entries[] = new Entry('Valeurs par défaut', ['category' => 'site', 'path' => 'site_default_values', 'icon' => 'pencil-square-o']);
         $entries[] = new Entry('Éditeur de thème', ['category' => 'site', 'path' => 'template_index', 'icon' => 'code']);
