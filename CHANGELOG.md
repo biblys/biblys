@@ -14,17 +14,38 @@ Améliorations
 
 Déploiement
 
-Jouer les migrations
+1. Jouer les migrations
 
 ```shell
 composer db:migrate
 ```
 
-### 2.82.1 (26 juin 2024)
+2. Mettre à jour la configuration, en remplaçant
+
+```yaml
+media_path: public/images
+media_url: /images/
+```
+
+par
+
+```yaml
+images:
+  path: public/images
+  base_url: /images/
+```
+
+3. Importer en base les images de couverture des articles
+
+```shell
+composer images:import
+```
+
+## 2.82.1 (26 juin 2024)
 
 Corrections
 
-Les validations des paramètres lors de l'envoi d'un courriel de connexion 
+Les validations des paramètres lors de l'envoi d'un courriel de connexion
 pouvait déclencher une erreur. C'est corrigé.
 
 ## 2.82.0 (5 juin 2024)
