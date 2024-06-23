@@ -9,8 +9,9 @@ Améliorations
 - Pour prévenir toute confusion, les articles physiques à expédier et les 
   articles numériques à télécharger sont désormais clairement distingués 
   dans le panier.
-- Une entrée est désormais créé en base de données pour chaque couverture 
-  d'articles, ce qui permet d'en faciliter la gestion.
+- Une page nouvelle page "Espace disque" dans l'administration permet de 
+  connaître l'espace disque occupé par les images (pour l'instant uniquement 
+  les images de couvertures des articles).
 
 Déploiement
 
