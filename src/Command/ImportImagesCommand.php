@@ -96,7 +96,7 @@ class ImportImagesCommand extends Command
 
         $progress->finish();
 
-        $output->writeln(["Loaded $loadedImagesCount images, skilled $skippedFilesCount files and deleted $deletedFilesCount files."]);
+        $output->writeln(["Loaded $loadedImagesCount images, skipped $skippedFilesCount files and deleted $deletedFilesCount files."]);
         return 0;
     }
 }
