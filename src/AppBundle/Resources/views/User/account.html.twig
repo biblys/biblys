@@ -46,7 +46,7 @@
 
     {% if app.currentSite.hasOptionEnabled("show_elibrary") %}
       <li>
-        <a href="/pages/log_myebooks">
+        <a href="{{ path('user_library') }}">
           <span class="fa fa-book"></span>
           Ma bibliothèque
         </a>
