@@ -21,7 +21,7 @@ return function (
 {
     $request->attributes->set("page_title", "Ma bibliothèque numérique");
 
-    $ebooks = [];
+    $items = [];
 
     $libraryItems = StockQuery::create()
         ->filterBySite($currentSite->getSite())
@@ -38,8 +38,6 @@ return function (
             continue;
         }
 
-        $downloadLinks = [];
-
         $downloadIcon = 'cloud-download';
         if ($item->getFileUpdated()) {
             $updated++;
@@ -51,37 +49,18 @@ return function (
             ->filterByAccess(\Model\File::ACCESS_RESTRICTED)
             ->find()
             ->getData();
-        /** @var \Model\File $file */
-        foreach ($downloadableFiles as $file) {
-            $downloadUrl = $urlGenerator->generate('file_download', [
-                'id' => $file->getId(),
-                'format' => ltrim($file->getFileType()->getExtension() ?: ".ext", '.'),
-            ]);
 
-            $downloadLinks[] = '
-                <li>
-                    <a
-                        href="'.$downloadUrl.'"
-                        title="' . $file->getVersion() . ' | ' . file_size($file->getSize() . ' | ' . $file->getFileType()->getName()) . '"
-                        aria-label="Télécharger ' . $file->getFileType()->getName(). '"
-                    >
-                        <img src="' . $file->getFileType()->getIcon() . '" width=16 alt="Télécharger"> ' . $file->getFileType()->getName() . '
-                    </a>
-                </li>
-            ';
-        }
-
-        $ebooks[] = [
+        $items[] = [
             "article" => $article,
             "updated" => $item->isFileUpdated(),
             "predownload_is_allowed" => $item->isAllowPredownload(),
             "download_icon" => $downloadIcon,
-            "download_links" => $downloadLinks,
+            "downloadable_files" => $downloadableFiles,
         ];
     }
 
     return $templateService->renderResponse("AppBundle:Legacy:user_ebooks.html.twig", [
         "updatesAvailable" => $updated > 0,
-        "ebooks" => $ebooks,
+        "items" => $items,
     ]);
 };
