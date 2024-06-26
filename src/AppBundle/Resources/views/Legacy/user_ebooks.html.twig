@@ -27,39 +27,49 @@
   <br />
   <table class="ebooks">
     <tbody>
-      {% for ebook in ebooks %}
-        <tr class="{{ ebook.updated ? "alert alert-info" : "" }}">
+      {% for item in items %}
+        <tr class="{{ item.updated ? "alert alert-info" : "" }}">
           <td class="center">
-            {% if ebook.article|hasCover %}
-              <a href="{{ path("article_show", { slug: ebook.article.url }) }}">
-                <img src="{{ ebook.article|coverUrl }}" height="100" alt="{{ ebook.article.title }}" />
+            {% if item.article|hasCover %}
+              <a href="{{ path("article_show", { slug: item.article.url }) }}">
+                <img src="{{ item.article|coverUrl }}" height="100" alt="{{ item.article.title }}" />
               </a>
             {% endif %}
           </td>
           <td style="max-width: 50%">
-            <a href="{{ ebook.article.url }}">{{ ebook.article.title }}</a>
-            <br>{{ ebook.article.authors }}
+            <a href="{{ item.article.url }}">{{ item.article.title }}</a>
+            <br>{{ item.article.authors }}
           </td>
           <td class="center" style="width: 125px;">
-            {% if not ebook.article.isPublished and not ebook.predownload_is_allowed %}
-              À paraître le {{ ebook.article.pubdate|date('d/m') }}
-            {% elseif ebook.download_links %}
-              {% if ebook.article.isWatermarkable %}
+            {% if not item.article.isPublished and not item.predownload_is_allowed %}
+              À paraître le {{ item.article.pubdate|date('d/m') }}
+            {% elseif item.downloadable_files %}
+              {% if item.article.isWatermarkable %}
                 <a class="btn btn-primary"
-                   href="{{ path('article_download_with_watermark', { id: ebook.article.id }) }}">
-                  <span class="fa fa-{{ ebook.download_icon }}"></span>
+                   href="{{ path('article_download_with_watermark', { id: item.article.id }) }}">
+                  <span class="fa fa-{{ item.download_icon }}"></span>
                   &nbsp; Télécharger &nbsp;
                 </a>
               {%  else %}
                 <div class="dropdown">
                   <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
                           aria-label="Ouvrir le menu de sélection du format">
-                    <span class="fa fa-{{ ebook.download_icon }}"></span>
+                    <span class="fa fa-{{ item.download_icon }}"></span>
                     &nbsp; Télécharger &nbsp;
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu">
-                    {{ ebook.download_links|join|raw }}
+                    {% for file in item.downloadable_files %}
+                      <li>
+                        <a
+                          href="{{ path('file_download', { id: file.id, format: 'ext' }) }}"
+                          title="v{{ file.version}} | {{ file.size }} octets | {{ file.fileType.name }}"
+                          aria-label="Télécharger {{ file.fileType.name }}"
+                        >
+                          <img src="{{ file.fileType.icon }}" width=16 alt="Télécharger"> {{ file.fileType.name }}
+                        </a>
+                      </li>
+                    {% endfor %}
                   </ul>
                 </div>
               {% endif %}
