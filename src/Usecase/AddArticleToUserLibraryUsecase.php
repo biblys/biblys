@@ -12,6 +12,7 @@ use Model\StockQuery;
 use Model\User;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class AddArticleToUserLibraryUsecase
 {
@@ -26,12 +27,13 @@ class AddArticleToUserLibraryUsecase
      * @throws TransportExceptionInterface
      */
     public function execute(
-        CurrentSite $currentSite,
-        User        $user,
-        Article     $article = null,
-        array       $items = [],
-        bool        $allowsPreDownload = false,
-        bool        $sendEmail = false,
+        CurrentSite  $currentSite,
+        UrlGenerator $urlGenerator,
+        User         $user,
+        Article      $article = null,
+        array        $items = [],
+        bool         $allowsPreDownload = false,
+        bool         $sendEmail = false,
     ): void
     {
         if ($article) {
@@ -79,7 +81,7 @@ class AddArticleToUserLibraryUsecase
         }
 
         if ($sendEmail) {
-            $elibraryUrl = "https://{$currentSite->getSite()->getDomain()}/pages/log_myebooks";
+            $elibraryUrl = $urlGenerator->generate("user_library");
             $subject = 'De nouveaux livres numériques disponibles dans votre bibliothèque.';
             $message = '
                     <p>Bonjour,</p>

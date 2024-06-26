@@ -24,14 +24,13 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-require_once __DIR__."/../../setUp.php";
+require_once __DIR__ . "/../../setUp.php";
 
 class InvitationControllerTest extends TestCase
 {
@@ -537,9 +536,11 @@ class InvitationControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         $currentUser = $this->createMock(CurrentUser::class);
         $session = $this->createMock(Session::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/user_library_url");
 
         // when
-        $controller->consumeAction($request, $currentSite, $currentUser, $session);
+        $controller->consumeAction($request, $currentSite, $currentUser, $session, urlGenerator: $urlGenerator);
     }
 
     /**
@@ -566,9 +567,11 @@ class InvitationControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         $currentUser = $this->createMock(CurrentUser::class);
         $session = $this->createMock(Session::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/user_library_url");
 
         // when
-        $controller->consumeAction($request, $currentSite, $currentUser, $session);
+        $controller->consumeAction(request: $request, currentSite: $currentSite, currentUser: $currentUser, session: $session, urlGenerator: $urlGenerator);
     }
 
     /**
@@ -595,9 +598,11 @@ class InvitationControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         $currentUser = $this->createMock(CurrentUser::class);
         $session = $this->createMock(Session::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/user_library_url");
 
         // when
-        $controller->consumeAction($request, $currentSite, $currentUser, $session);
+        $controller->consumeAction(request: $request, currentSite: $currentSite, currentUser: $currentUser, session: $session, urlGenerator: $urlGenerator);
     }
 
     /**
@@ -630,9 +635,13 @@ class InvitationControllerTest extends TestCase
         $request->request->set("code", "UNAUTHPU");
         $currentUser = $this->createMock(CurrentUser::class);
         $session = $this->createMock(Session::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/user_library_url");
 
         // when
-        $controller->consumeAction($request, $currentSite, $currentUser, $session);
+        $controller->consumeAction(
+            request: $request, currentSite: $currentSite, currentUser: $currentUser, session: $session, urlGenerator: $urlGenerator
+        );
     }
 
     /**
@@ -665,9 +674,13 @@ class InvitationControllerTest extends TestCase
         $request->request->set("code", "NONDOPUB");
         $currentUser = $this->createMock(CurrentUser::class);
         $session = $this->createMock(Session::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/user_library_url");
 
         // when
-        $controller->consumeAction($request, $currentSite, $currentUser, $session);
+        $controller->consumeAction(
+            request: $request, currentSite: $currentSite, currentUser: $currentUser, session: $session, urlGenerator: $urlGenerator
+        );
     }
 
     /**
@@ -697,9 +710,11 @@ class InvitationControllerTest extends TestCase
         $request->request->set("code", "PAPERBOO");
         $currentUser = $this->createMock(CurrentUser::class);
         $session = $this->createMock(Session::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/user_library_url");
 
         // when
-        $controller->consumeAction($request, $currentSite, $currentUser, $session);
+        $controller->consumeAction(request: $request, currentSite: $currentSite, currentUser: $currentUser, session: $session, urlGenerator: $urlGenerator);
     }
 
     /**
@@ -728,13 +743,15 @@ class InvitationControllerTest extends TestCase
             ->with("success", "Livre numérique a été ajouté à votre bibliothèque.");
         $session = $this->createMock(Session::class);
         $session->expects($this->once())->method("getFlashBag")->willReturn($flashBag);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/user_library_url");
 
         // when
-        $response = $controller->consumeAction($request, $currentSite, $currentUser, $session);
+        $response = $controller->consumeAction($request, $currentSite, $currentUser, $session, $urlGenerator);
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("/pages/log_myebooks", $response->getTargetUrl());
+        $this->assertEquals("/user_library_url", $response->getTargetUrl());
         $consumedInvitation = InvitationQuery::create()->findPk($invitation->getId());
         $this->assertNotNull(
             $consumedInvitation->getConsumedAt(),
@@ -784,8 +801,11 @@ class InvitationControllerTest extends TestCase
         $request->request->set("code", "ELIBRARY");
         $currentUser = new CurrentUser($user, "token");
 
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/user_library_url");
+
         // when
-        $response = $controller->consumeAction($request, $currentSite, $currentUser, $session);
+        $response = $controller->consumeAction($request, $currentSite, $currentUser, $session, urlGenerator: $urlGenerator);
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
@@ -829,13 +849,15 @@ class InvitationControllerTest extends TestCase
             ->with("success", "Livre numérique a été ajouté à votre bibliothèque.");
         $session = $this->createMock(Session::class);
         $session->expects($this->once())->method("getFlashBag")->willReturn($flashBag);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/user_library_url");
 
         // when
-        $response = $controller->consumeAction($request, $currentSite, $currentUser, $session);
+        $response = $controller->consumeAction($request, $currentSite, $currentUser, $session, urlGenerator: $urlGenerator);
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("/pages/log_myebooks", $response->getTargetUrl());
+        $this->assertEquals("/user_library_url", $response->getTargetUrl());
         $consumedInvitation = InvitationQuery::create()->findPk($invitation->getId());
         $this->assertNotNull(
             $consumedInvitation->getConsumedAt(),
@@ -890,13 +912,15 @@ class InvitationControllerTest extends TestCase
             ->with("success", "Multiple 3 a été ajouté à votre bibliothèque.");
         $session = Mockery::mock(Session::class);
         $session->shouldReceive("getFlashBag")->andReturn($flashBag);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("/user_library_url");
 
         // when
-        $response = $controller->consumeAction($request, $currentSite, $currentUser, $session);
+        $response = $controller->consumeAction($request, $currentSite, $currentUser, $session, urlGenerator: $urlGenerator);
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("/pages/log_myebooks", $response->getTargetUrl());
+        $this->assertEquals("/user_library_url", $response->getTargetUrl());
         $consumedInvitation = InvitationQuery::create()->findPk($invitation->getId());
         $this->assertNotNull(
             $consumedInvitation->getConsumedAt(),
