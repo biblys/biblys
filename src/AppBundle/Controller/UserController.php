@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Exception\InvalidConfigurationException;
 use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Service\BodyParamsService;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -110,22 +111,30 @@ class UserController extends Controller
      * @throws InvalidConfigurationException
      */
     public function sendLoginEmailAction(
-        Request         $request,
-        CurrentSite     $currentSite,
-        TokenService    $tokenService,
-        TemplateService $templateService,
-        UrlGenerator    $urlGenerator,
-        Mailer          $mailer,
+        Request           $request,
+        BodyParamsService $bodyParams,
+        CurrentSite       $currentSite,
+        TokenService      $tokenService,
+        TemplateService   $templateService,
+        UrlGenerator      $urlGenerator,
+        Mailer            $mailer,
     ): Response
     {
-        $recipientEmail = $request->request->get("email");
-        $returnUrl = $request->request->get("return_url", "/");
-        $honeyPot = $request->request->get("username");
+        $bodyParams->parse([
+            "email" => ["type" => "string"],
+            "return_url" => ["type" => "string", "default" => "/"],
+            "username" => ["type" => "string", "default" => ""],
+        ]);
+
+        $recipientEmail = $bodyParams->get("email");
+        $returnUrl = $bodyParams->get("return_url");
+        $honeyPot = $bodyParams->get("username");
         $senderEmail = $currentSite->getSite()->getContact();
 
         try {
             $mailer->validateEmail($recipientEmail);
-        } catch (InvalidEmailAddressException $exception) {
+        } catch
+        (InvalidEmailAddressException $exception) {
             throw new BadRequestHttpException($exception->getMessage(), $exception);
         }
 
@@ -411,7 +420,7 @@ class UserController extends Controller
         $token = $queryParams->get("token");
 
         try {
-        $decodedToken = $tokenService->decodeEmailUpdateToken($token);
+            $decodedToken = $tokenService->decodeEmailUpdateToken($token);
         } catch (InvalidTokenException) {
             throw new BadRequestHttpException("Ce lien est invalide.");
         }

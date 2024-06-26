@@ -5,6 +5,7 @@ use Biblys\Service\Config;
 use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Updater\Updater;
 use Framework\ArgumentResolver\BiblysCloudValueResolver;
+use Framework\ArgumentResolver\BodyParamsServiceValueResolver;
 use Framework\ArgumentResolver\ConfigValueResolver;
 use Framework\ArgumentResolver\CurrentSiteValueResolver;
 use Framework\ArgumentResolver\CurrentUrlServiceValueResolver;
@@ -48,6 +49,7 @@ $container->register("controller_resolver", ControllerResolver::class);
 
 $argumentResolvers = ArgumentResolver::getDefaultArgumentValueResolvers();
 $argumentResolvers[] = new BiblysCloudValueResolver();
+$argumentResolvers[] = new BodyParamsServiceValueResolver();
 $argumentResolvers[] = new ConfigValueResolver();
 $argumentResolvers[] = new CurrentSiteValueResolver();
 $argumentResolvers[] = new CurrentUrlServiceValueResolver();
