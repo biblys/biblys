@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.82.1 (26 juin 2024)
+
+Corrections
+
+Les validations des paramètres lors de l'envoi d'un courriel de connexion 
+pouvait déclencher une erreur. C'est corrigé.
+
 ## 2.82.0 (5 juin 2024)
 
 Utilisateurs locaux
