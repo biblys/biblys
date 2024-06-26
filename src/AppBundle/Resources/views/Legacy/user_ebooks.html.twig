@@ -41,7 +41,31 @@
             <br>{{ ebook.article.authors }}
           </td>
           <td class="center" style="width: 125px;">
-            {{ ebook.dlLinks|raw }}
+            {% if not ebook.article.isPublished and not ebook.predownload_is_allowed %}
+              À paraître le {{ ebook.article.pubdate|date('d/m') }}
+            {% elseif ebook.download_links %}
+              {% if ebook.article.isWatermarkable %}
+                <a class="btn btn-primary"
+                   href="{{ path('article_download_with_watermark', { id: ebook.article.id }) }}">
+                  <span class="fa fa-{{ ebook.download_icon }}"></span>
+                  &nbsp; Télécharger &nbsp;
+                </a>
+              {%  else %}
+                <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                          aria-label="Ouvrir le menu de sélection du format">
+                    <span class="fa fa-{{ ebook.download_icon }}"></span>
+                    &nbsp; Télécharger &nbsp;
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    {{ ebook.download_links|join|raw }}
+                  </ul>
+                </div>
+              {% endif %}
+            {% else %}
+              Aucun fichier disponible
+            {% endif %}
           </td>
         </tr>
       {% endfor %}
