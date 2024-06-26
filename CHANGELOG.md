@@ -9,6 +9,8 @@ Améliorations
 - Pour prévenir toute confusion, les articles physiques à expédier et les 
   articles numériques à télécharger sont désormais clairement distingués 
   dans le panier.
+- Les bibliothèques numériques contenant plus de 25 articles sont désormais 
+  paginées pour en faciliter l'exploration. 
 - Une page nouvelle page "Espace disque" dans l'administration permet de 
   connaître l'espace disque occupé par les images (pour l'instant uniquement 
   les images de couvertures des articles).
