@@ -885,7 +885,7 @@ class OrderManager extends EntityManager
         $mailer->send($order->get('email'), $subject, $message);
 
         // Physical types
-        $types = Biblys\Article\Type::getAllPhysicalTypes();
+        $types = \Biblys\Data\ArticleType::getAllPhysicalTypes();
         $physical_types = array_map(function ($type) {
             return $type->getId();
         }, $types);

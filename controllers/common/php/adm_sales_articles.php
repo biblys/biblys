@@ -81,7 +81,7 @@ $stock->execute($params) or error($stock->errorInfo());
 
 // Types
 /** @var Request $request */
-$type_options = Biblys\Article\Type::getOptions($request->query->get('type_id'));
+$type_options = \Biblys\Data\ArticleType::getOptions($request->query->get('type_id'));
 
 $tbody = null;
 $total_articles = 0; $total_stock = null; $total_sales = null; $total_revenue = null;

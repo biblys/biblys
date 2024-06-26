@@ -4,7 +4,7 @@
 * @backupStaticAttributes disabled
 */
 
-use Biblys\Article\Type;
+use Biblys\Data\ArticleType;
 
 require_once "setUp.php";
 
@@ -16,14 +16,14 @@ class ArticleTypeTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $type = new Type();
+        $type = new ArticleType();
 
-        $this->assertInstanceOf('Biblys\Article\Type', $type);
+        $this->assertInstanceOf('Biblys\Data\ArticleType', $type);
     }
 
     public function testSetId()
     {
-        $type = new Type();
+        $type = new ArticleType();
 
         $type->setId(1);
         $id = $type->getId();
@@ -33,7 +33,7 @@ class ArticleTypeTest extends PHPUnit\Framework\TestCase
 
     public function testSetName()
     {
-        $type = new Type();
+        $type = new ArticleType();
 
         $type->setName('Livre papier');
         $name = $type->getName();
@@ -45,7 +45,7 @@ class ArticleTypeTest extends PHPUnit\Framework\TestCase
 
     public function testSetSlug()
     {
-        $type = new Type();
+        $type = new ArticleType();
 
         $type->setSlug('livre-papier');
         $slug = $type->getSlug();
@@ -55,7 +55,7 @@ class ArticleTypeTest extends PHPUnit\Framework\TestCase
 
     public function testSetTax()
     {
-        $type = new Type();
+        $type = new ArticleType();
 
         $type->setTax('BOOK');
         $slug = $type->getTax();
@@ -65,7 +65,7 @@ class ArticleTypeTest extends PHPUnit\Framework\TestCase
 
     public function testSetDownloadable()
     {
-        $type = new Type();
+        $type = new ArticleType();
 
         $this->assertFalse($type->isDownloadable());
 
@@ -76,7 +76,7 @@ class ArticleTypeTest extends PHPUnit\Framework\TestCase
 
     public function testSetPhysical()
     {
-        $type = new Type();
+        $type = new ArticleType();
 
         $this->assertFalse($type->isPhysical());
 
@@ -87,7 +87,7 @@ class ArticleTypeTest extends PHPUnit\Framework\TestCase
 
     public function testGetById()
     {
-        $type = Type::getById(1);
+        $type = ArticleType::getById(1);
 
         $id = $type->getId();
 
@@ -96,7 +96,7 @@ class ArticleTypeTest extends PHPUnit\Framework\TestCase
 
     public function testGetBySlug()
     {
-        $type = Type::getBySlug('livre-papier');
+        $type = ArticleType::getBySlug('livre-papier');
 
         $id = $type->getId();
 
@@ -105,7 +105,7 @@ class ArticleTypeTest extends PHPUnit\Framework\TestCase
 
     public function testGetAllPhysicalTypes()
     {
-        $types = Type::getAllPhysicalTypes();
+        $types = ArticleType::getAllPhysicalTypes();
 
         foreach ($types as $type) {
             $this->assertTrue($type->isPhysical());
@@ -114,7 +114,7 @@ class ArticleTypeTest extends PHPUnit\Framework\TestCase
 
     public function testGetAllDownloadableTypes()
     {
-        $types = Type::getAllDownloadableTypes();
+        $types = ArticleType::getAllDownloadableTypes();
 
         foreach ($types as $type) {
             $this->assertTrue($type->isDownloadable());
@@ -123,7 +123,7 @@ class ArticleTypeTest extends PHPUnit\Framework\TestCase
 
     public function testGetTypeOptions()
     {
-        $options = Type::getOptions(3);
+        $options = ArticleType::getOptions(3);
 
         $this->assertEquals($options[2], '<option value="3" selected>CD</option>');
     }

@@ -52,7 +52,7 @@ return function (Request $request, CurrentSite $currentSite): Response
         $years .= '<option value="' . $y . '" ' . $sel . '>' . $y . '</option>';
     }
 
-    $type_options = Biblys\Article\Type::getOptions($request->query->get('type'));
+    $type_options = \Biblys\Data\ArticleType::getOptions($request->query->get('type'));
 
     if ($currentSite->getSite()->getTva()) $HT = 'HT'; else $HT = 'TTC';
 

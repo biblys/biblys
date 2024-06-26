@@ -92,7 +92,7 @@ if (!empty($rates)) {
 
 // Types d'articles
 $ty = [];
-$types = Biblys\Article\Type::getAll();
+$types = \Biblys\Data\ArticleType::getAll();
 $type_r = array();
 foreach ($types as $t) {
     $ty[$t->getId()]['name'] = $t->getName();
