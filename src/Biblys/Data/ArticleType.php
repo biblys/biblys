@@ -1,10 +1,10 @@
 <?php
 
-namespace Biblys\Article;
+namespace Biblys\Data;
 
 use Biblys\Service\Slug\SlugService;
 
-class Type
+class ArticleType
 {
     private int $_id;
     private string $_name;
@@ -82,13 +82,13 @@ class Type
 
     /**
      * Return all types
-     * @return Type[] an array containing all Types
+     * @return ArticleType[] an array containing all Types
      */
     public static function getAll(): array
     {
         $types = [];
 
-        $livre = new Type();
+        $livre = new ArticleType();
         $livre->setId(self::BOOK);
         $livre->setName('Livre papier');
         $livre->setTax('BOOK');
@@ -96,7 +96,7 @@ class Type
         $livre->setDownloadable(false);
         $types[] = $livre;
 
-        $type = new Type();
+        $type = new ArticleType();
         $type->setId(self::EBOOK);
         $type->setName('Livre numérique');
         $type->setTax('EBOOK');
@@ -104,7 +104,7 @@ class Type
         $type->setDownloadable(true);
         $types[] = $type;
 
-        $type = new Type();
+        $type = new ArticleType();
         $type->setId(3);
         $type->setName('CD');
         $type->setTax('CD');
@@ -112,7 +112,7 @@ class Type
         $type->setDownloadable(false);
         $types[] = $type;
 
-        $type = new Type();
+        $type = new ArticleType();
         $type->setId(4);
         $type->setName('DVD');
         $type->setTax('DVD');
@@ -120,7 +120,7 @@ class Type
         $type->setDownloadable(false);
         $types[] = $type;
 
-        $type = new Type();
+        $type = new ArticleType();
         $type->setId(5);
         $type->setName('Jeu');
         $type->setTax('STANDARD');
@@ -128,7 +128,7 @@ class Type
         $type->setDownloadable(false);
         $types[] = $type;
 
-        $type = new Type();
+        $type = new ArticleType();
         $type->setId(6);
         $type->setName('Goodies');
         $type->setTax('STANDARD');
@@ -136,7 +136,7 @@ class Type
         $type->setDownloadable(false);
         $types[] = $type;
 
-        $type = new Type();
+        $type = new ArticleType();
         $type->setId(7);
         $type->setName('Drouille');
         $type->setTax('BOOK');
@@ -144,7 +144,7 @@ class Type
         $type->setDownloadable(false);
         $types[] = $type;
 
-        $type = new Type();
+        $type = new ArticleType();
         $type->setId(8);
         $type->setName('Lot');
         $type->setTax('BOOK');
@@ -152,7 +152,7 @@ class Type
         $type->setDownloadable(false);
         $types[] = $type;
 
-        $type = new Type();
+        $type = new ArticleType();
         $type->setId(9);
         $type->setName('BD');
         $type->setTax('BOOK');
@@ -160,7 +160,7 @@ class Type
         $type->setDownloadable(false);
         $types[] = $type;
 
-        $type = new Type();
+        $type = new ArticleType();
         $type->setId(10);
         $type->setName('Abonnement');
         $type->setTax('STANDARD');
@@ -168,7 +168,7 @@ class Type
         $type->setDownloadable(false);
         $types[] = $type;
 
-        $type = new Type();
+        $type = new ArticleType();
         $type->setId(self::EAUDIOBOOK);
         $type->setName('Livre audio');
         $type->setTax('EAUDIOBOOK');
@@ -176,7 +176,7 @@ class Type
         $type->setDownloadable(true);
         $types[] = $type;
 
-        $type = new Type();
+        $type = new ArticleType();
         $type->setId(12);
         $type->setName('Carte à code');
         $type->setTax('EBOOK');
@@ -184,7 +184,7 @@ class Type
         $type->setDownloadable(false);
         $types[] = $type;
 
-        $type = new Type();
+        $type = new ArticleType();
         $type->setId(13);
         $type->setName('Périodique');
         $type->setTax('PERIODICAL');
@@ -192,7 +192,7 @@ class Type
         $type->setDownloadable(false);
         $types[] = $type;
 
-        $type = new Type();
+        $type = new ArticleType();
         $type->setId(14);
         $type->setName('Jeu de rôle');
         $type->setTax('BOOK');
@@ -200,7 +200,7 @@ class Type
         $type->setDownloadable(false);
         $types[] = $type;
 
-        $type = new Type();
+        $type = new ArticleType();
         $type->setId(15);
         $type->setName('Carterie');
         $type->setTax('STANDARD');
@@ -213,7 +213,7 @@ class Type
 
     /**
      * Get only physical types
-     * @return Type[] a filtered array of Types
+     * @return ArticleType[] a filtered array of Types
      */
     public static function getAllPhysicalTypes(): array
     {
@@ -241,7 +241,7 @@ class Type
         });
     }
 
-    public static function getById($id): bool|Type
+    public static function getById($id): bool|ArticleType
     {
         $types = self::getAll();
 
@@ -254,7 +254,7 @@ class Type
         return false;
     }
 
-    public static function getBySlug($slug): bool|Type
+    public static function getBySlug($slug): bool|ArticleType
     {
         $types = self::getAll();
 

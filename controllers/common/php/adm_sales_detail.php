@@ -84,7 +84,7 @@ $export = array();
 $header = array('Ref.','Titre','État','Prix');
 
 // Types
-$type_options = Biblys\Article\Type::getOptions($request->query->get('type_id'));
+$type_options = \Biblys\Data\ArticleType::getOptions($request->query->get('type_id'));
 
 // Rayons
 $rayon_options = null;

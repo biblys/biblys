@@ -2,7 +2,7 @@
 
 namespace Model;
 
-use Biblys\Article\Type;
+use Biblys\Data\ArticleType;
 use Model\Base\Cart as BaseCart;
 use Propel\Runtime\Exception\PropelException;
 
@@ -23,7 +23,7 @@ class Cart extends BaseCart
      */
     public function getPhysicalArticleCount(): int
     {
-        $physicalTypes = Type::getAllPhysicalTypes();
+        $physicalTypes = ArticleType::getAllPhysicalTypes();
         $physicalTypeIds = array_map(function ($type) {
             return $type->getId();
         }, $physicalTypes);
@@ -41,7 +41,7 @@ class Cart extends BaseCart
      */
     public function getDownloadableArticleCount(): int
     {
-        $downloadableTypes = Type::getAllDownloadableTypes();
+        $downloadableTypes = ArticleType::getAllDownloadableTypes();
         $downloadableTypeIds = array_map(function ($type) {
             return $type->getId();
         }, $downloadableTypes);

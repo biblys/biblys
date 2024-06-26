@@ -56,7 +56,7 @@ if (empty($_GET["date"])) $_GET["date"] = date("Y-m-d");
     }
 
 	// Types d'articles
-    $types = Biblys\Article\Type::getAll();
+    $types = \Biblys\Data\ArticleType::getAll();
 	$type_r = array();
 	foreach ($types as $t)
 	{

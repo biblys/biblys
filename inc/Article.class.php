@@ -2,7 +2,7 @@
 
 /** @noinspection PhpParameterNameChangedDuringInheritanceInspection */
 
-use Biblys\Article\Type;
+use Biblys\Data\ArticleType;
 use Biblys\Contributor\Contributor;
 use Biblys\Contributor\Job;
 use Biblys\Contributor\UnknownJobException;
@@ -953,7 +953,7 @@ class Article extends Entity
         return share_buttons($url, $this->get('title') . ' de ' . $this->get('authors'), $options);
     }
 
-    public function setType(Type $type): void
+    public function setType(ArticleType $type): void
     {
         $this->set('type_id', $type->getId());
     }
@@ -961,10 +961,10 @@ class Article extends Entity
     /**
      * @throws Exception
      */
-    public function getType(): bool|Type
+    public function getType(): bool|ArticleType
     {
         $type_id = $this->get('type_id');
-        return Type::getById($type_id);
+        return ArticleType::getById($type_id);
     }
 
     /**

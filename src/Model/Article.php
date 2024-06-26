@@ -2,7 +2,7 @@
 
 namespace Model;
 
-use Biblys\Article\Type;
+use Biblys\Data\ArticleType;
 use Biblys\Exception\CannotDeleteArticleWithStock;
 use DateTime;
 use Exception;
@@ -77,9 +77,9 @@ class Article extends BaseArticle
         return count($this->collStocks);
     }
 
-    public function getType(): Type
+    public function getType(): ArticleType
     {
-        return Type::getById($this->getTypeId());
+        return ArticleType::getById($this->getTypeId());
     }
 
     public function isWatermarkable(): bool

@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use ArticleManager;
-use Biblys\Article\Type;
+use Biblys\Data\ArticleType;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -776,7 +776,7 @@ class ArticleControllerTest extends TestCase
     {
         // given
         $request = RequestFactory::createAuthRequest();
-        $article = ModelFactory::createArticle(price: 0, typeId: Type::EBOOK);
+        $article = ModelFactory::createArticle(price: 0, typeId: ArticleType::EBOOK);
         $controller = new ArticleController();
         $currentSiteService = $this->createMock(CurrentSite::class);
         $currentUserService = $this->createMock(CurrentUser::class);
@@ -819,7 +819,7 @@ class ArticleControllerTest extends TestCase
     {
         // given
         $request = RequestFactory::createAuthRequest();
-        $article = ModelFactory::createArticle(price: 0, typeId: Type::EBOOK);
+        $article = ModelFactory::createArticle(price: 0, typeId: ArticleType::EBOOK);
         $user = ModelFactory::createUser(email: "free-reader@example.org");
         $controller = new ArticleController();
         $currentSiteService = $this->createMock(CurrentSite::class);
@@ -879,7 +879,7 @@ class ArticleControllerTest extends TestCase
         // given
         $controller = new ArticleController();
         $request = RequestFactory::createAuthRequest();
-        $article = ModelFactory::createArticle(price: 0, typeId: Type::EBOOK);
+        $article = ModelFactory::createArticle(price: 0, typeId: ArticleType::EBOOK);
         $site = ModelFactory::createSite();
         $user = ModelFactory::createUser();
         ModelFactory::createStockItem(site: $site, article: $article, user: $user);

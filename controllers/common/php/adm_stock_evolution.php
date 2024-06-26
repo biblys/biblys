@@ -96,7 +96,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 	}
 
 	// Article types
-    $type_options = Biblys\Article\Type::getOptions($request->query->get('type_id'));
+    $type_options = \Biblys\Data\ArticleType::getOptions($request->query->get('type_id'));
 
 	// Selected period
 	$ps['year'] = null; $ps['month'] = null; $ps['week'] = null; $ps['day'] = null;

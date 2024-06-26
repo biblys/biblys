@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller\Legacy;
 
-use Biblys\Article\Type;
+use Biblys\Data\ArticleType;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -107,7 +107,7 @@ class OrderDeliveryTest extends TestCase
         $siteManager = new SiteManager();
         $GLOBALS["LEGACY_CURRENT_SITE"] = $siteManager->getById($site->getId());
         $cart = ModelFactory::createCart(site: $site);
-        $article = ModelFactory::createArticle(typeId: Type::EBOOK);
+        $article = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
         ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
         $country = ModelFactory::createCountry();
 
