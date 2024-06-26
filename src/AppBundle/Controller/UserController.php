@@ -18,9 +18,13 @@ use DateTime;
 use Exception;
 use Framework\Controller;
 use Model\AuthenticationMethodQuery;
+use Model\File;
+use Model\FileQuery;
 use Model\Session;
+use Model\StockQuery;
 use Model\User;
 use Model\UserQuery;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -439,5 +443,61 @@ class UserController extends Controller
 
         $userAccountUrl = $urlGenerator->generate("user_account");
         return new RedirectResponse($userAccountUrl);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function libraryAction(
+        CurrentSite $currentSite,
+        CurrentUser $currentUser,
+        TemplateService $templateService,
+    ): Response
+    {
+        $currentUser->authUser();
+
+        $libraryItems = StockQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByUser($currentUser->getUser())
+            ->orderBySellingDate(Criteria::DESC)
+            ->find();
+
+        $items = [];
+        $updated = 0;
+        foreach ($libraryItems as $item) {
+
+            $article = $item->getArticle();
+            if (!$article || !$article->getType()->isDownloadable()) {
+                continue;
+            }
+
+            $downloadIcon = 'cloud-download';
+            if ($item->getFileUpdated()) {
+                $updated++;
+                $downloadIcon = 'refresh';
+            }
+
+            $downloadableFiles = FileQuery::create()
+                ->filterByArticleId($article->getId())
+                ->filterByAccess(File::ACCESS_RESTRICTED)
+                ->find()
+                ->getData();
+
+            $items[] = [
+                "article" => $article,
+                "updated" => $item->isFileUpdated(),
+                "predownload_is_allowed" => $item->isAllowPredownload(),
+                "download_icon" => $downloadIcon,
+                "downloadable_files" => $downloadableFiles,
+            ];
+        }
+
+        return $templateService->renderResponse("AppBundle:User:library.html.twig", [
+            "updates_available" => $updated > 0,
+            "items" => $items
+        ]);
     }
 }
