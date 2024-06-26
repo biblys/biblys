@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Data\ArticleType;
 use Biblys\Exception\InvalidConfigurationException;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\Config;
@@ -1071,5 +1072,56 @@ class UserControllerTest extends TestCase
 
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals("/user/account", $response->getTargetUrl());
+    }
+
+    /* UserController->libraryAction */
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function testLibraryAction()
+    {
+        // given
+        $controller = new UserController();
+
+        $user = ModelFactory::createUser();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authUser")->andReturns();
+        $currentUser->shouldReceive("getUser")->andReturn($user);
+
+        $site = ModelFactory::createSite();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->shouldReceive("renderResponse")->andReturn(
+            new Response("In my library")
+        );
+
+        $article = ModelFactory::createArticle(title: "In my library", typeId: ArticleType::EBOOK);
+        ModelFactory::createStockItem(
+            site: $currentSite->getSite(),
+            article: $article,
+            user: $user,
+            sellingDate: new DateTime(),
+        );
+
+        // when
+        $response = $controller->libraryAction($currentSite, $currentUser, $templateService);
+
+        // then
+        $this->assertEquals(
+            "200",
+            $response->getStatusCode(),
+            "responds with status code 200"
+        );
+        $this->assertStringContainsString(
+            "In my library",
+            $response->getContent(),
+            "displays the article title"
+        );
     }
 }

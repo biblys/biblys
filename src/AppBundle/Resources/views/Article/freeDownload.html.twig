@@ -1,13 +1,17 @@
 {% extends "layout:base.html.twig" %}
 
 {% block title %}
-    Administration Biblys
+    Téléchargement gratuit
 {% endblock %}
 
 {% block main %}
     <h1>Téléchargement gratuit</h1>
 
-    <p><strong>{{ article.title }}</strong> sera ajouté à votre <a href="/pages/log_myebooks">bibliothèque numérique</a> d'où vous pourrez le télécharger à volonté et dans tous les formats disponibles.</p>
+    <p>
+        <strong>{{ article.title }}</strong> sera ajouté à votre
+        <a href="{{ path('user_library') }}">bibliothèque numérique</a>
+        d'où vous pourrez le télécharger à volonté et dans tous les formats disponibles.
+    </p>
 
     <form method="post">
 
