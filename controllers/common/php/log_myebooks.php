@@ -56,8 +56,8 @@ return function (
 
             $downloadLinks[] = '
                 <li>
-                    <a 
-                        href="'.$downloadUrl.'" 
+                    <a
+                        href="'.$downloadUrl.'"
                         title="' . $file->get('version') . ' | ' . file_size($file->get ('size')) . ' | ' . $file->getType('name') . '"
                         aria-label="Télécharger ' . $file->getType('name') . '"
                     >
@@ -67,42 +67,12 @@ return function (
             ';
         }
 
-        if (!$article->isPublished() && !$item->isAllowPredownload()) {
-            $downloadButton = 'A paraître<br />le ' . _date($article->getPubdate(), 'd/m');
-        }
-        elseif ($article->isWatermarkable()) {
-            $downloadButton = '
-                <a class="btn btn-primary"
-                    href="'.$urlGenerator->generate("article_download_with_watermark", [
-                        "id" => $article->getId()
-                    ]).'"
-                >
-                    <span class="fa fa-' . $downloadIcon . '"></span>
-                    &nbsp; Télécharger &nbsp; 
-                </a>
-            ';
-        } elseif (empty($downloadLinks)) {
-            $downloadButton = 'Aucun fichier disponible';
-        } else {
-            $downloadButton = '
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
-                            aria-label="Ouvrir le menu de sélection du format">
-                        <span class="fa fa-' . $downloadIcon . '"></span>
-                        &nbsp; Télécharger &nbsp; 
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        ' . implode($downloadLinks) . '
-                    </ul>
-                </div>
-            ';
-        }
-
         $ebooks[] = [
             "article" => $article,
             "updated" => $item->isFileUpdated(),
-            "dlLinks" => $downloadButton,
+            "predownload_is_allowed" => $item->isAllowPredownload(),
+            "download_icon" => $downloadIcon,
+            "download_links" => $downloadLinks,
         ];
     }
 
