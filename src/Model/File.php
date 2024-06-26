@@ -2,6 +2,7 @@
 
 namespace Model;
 
+use Biblys\Data\FileType;
 use Model\Base\File as BaseFile;
 
 /**
@@ -15,5 +16,11 @@ use Model\Base\File as BaseFile;
  */
 class File extends BaseFile
 {
+    public const ACCESS_PUBLIC = 0;
+    public const ACCESS_RESTRICTED = 1;
 
+    public function getFileType(): FileType
+    {
+        return FileType::getByMediaType($this->getType());
+    }
 }
