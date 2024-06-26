@@ -4,6 +4,7 @@ namespace Model;
 
 use Biblys\Article\Type;
 use Biblys\Exception\CannotDeleteArticleWithStock;
+use DateTime;
 use Exception;
 use Model\Base\Article as BaseArticle;
 use Model\StockQuery as ChildStockQuery;
@@ -14,6 +15,15 @@ use Propel\Runtime\Exception\PropelException;
 class Article extends BaseArticle
 {
     public static int $AVAILABILITY_PRIVATELY_PRINTED = 10;
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function isPublished(): bool
+    {
+        return $this->getPubdate() <= new DateTime();
+    }
 
     public function isPrivatelyPrinted(): bool
     {
