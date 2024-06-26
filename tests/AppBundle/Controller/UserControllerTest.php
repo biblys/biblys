@@ -1096,6 +1096,10 @@ class UserControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
 
+        $queryParams = Mockery::mock(QueryParamsService::class);
+        $queryParams->expects("parse");
+        $queryParams->expects("get")->andReturn("0");
+
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->shouldReceive("renderResponse")->andReturn(
             new Response("In my library")
@@ -1110,7 +1114,12 @@ class UserControllerTest extends TestCase
         );
 
         // when
-        $response = $controller->libraryAction($currentSite, $currentUser, $templateService);
+        $response = $controller->libraryAction(
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            queryParams: $queryParams,
+            templateService: $templateService,
+        );
 
         // then
         $this->assertEquals(
