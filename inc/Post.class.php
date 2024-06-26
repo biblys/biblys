@@ -17,10 +17,10 @@ class Post extends Entity
          */
         private $publisher = null;
 
-    /**
-     * @throws PropelException
-     */
-    public static function buildFromModel(\Model\Post $post): Post
+        /**
+         * @throws PropelException
+         */
+        public static function buildFromModel(\Model\Post $post): Post
         {
             return new Post([
                 "post_id" => $post->getId(),
@@ -29,6 +29,7 @@ class Post extends Entity
                 "post_content" => $post->getContent(),
                 "post_date" => $post->getDate()->format("Y-m-d H:i:s"),
                 "post_illustration_legend" => $post->getIllustrationLegend(),
+                "category_id" => $post->getCategoryId(),
             ]);
         }
 
