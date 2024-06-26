@@ -234,10 +234,11 @@ class InvitationController extends Controller
      * @throws PropelException
      */
     public function consumeAction(
-        Request     $request,
-        CurrentSite $currentSite,
-        CurrentUser $currentUser,
-        Session     $session,
+        Request      $request,
+        CurrentSite  $currentSite,
+        CurrentUser  $currentUser,
+        Session      $session,
+        UrlGenerator $urlGenerator,
     ): RedirectResponse
     {
         $currentUser->authUser();
@@ -272,7 +273,8 @@ class InvitationController extends Controller
 
         $con->commit();
 
-        return new RedirectResponse("/pages/log_myebooks");
+        $userLibraryUrl = $urlGenerator->generate("user_library");
+        return new RedirectResponse($userLibraryUrl);
     }
 
     /**

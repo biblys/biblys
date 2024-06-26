@@ -15,6 +15,7 @@ use Model\StockQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 require_once __DIR__ . "/../setUp.php";
 
@@ -37,6 +38,8 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $article = ModelFactory::createArticle(publisher: $publisher);
         $mailer = Mockery::mock(Mailer::class);
         $usecase = new AddArticleToUserLibraryUsecase($mailer);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("user_library");
 
         // then
         $this->expectException(BusinessRuleException::class);
@@ -45,7 +48,7 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         );
 
         // when
-        $usecase->execute(currentSite: $currentSite, user: $user, article: $article);
+        $usecase->execute(currentSite: $currentSite, urlGenerator: $urlGenerator, user: $user, article: $article);
     }
 
     /**
@@ -65,13 +68,15 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $article = ModelFactory::createArticle(title: "Paper book", publisher: $publisher);
         $mailer = Mockery::mock(Mailer::class);
         $usecase = new AddArticleToUserLibraryUsecase($mailer);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("user_library");
 
         // then
         $this->expectException(BusinessRuleException::class);
         $this->expectExceptionMessage("L'article Paper book n'est pas téléchargeable.");
 
         // when
-        $usecase->execute(currentSite: $currentSite, user: $user, article: $article);
+        $usecase->execute(currentSite: $currentSite, urlGenerator: $urlGenerator, user: $user, article: $article);
     }
 
     /**
@@ -94,9 +99,11 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         ModelFactory::createStockItem(site: $site, article: $article, user: $user);
         $mailer = Mockery::mock(Mailer::class);
         $usecase = new AddArticleToUserLibraryUsecase($mailer);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("user_library");
 
         // when
-        $usecase->execute(currentSite: $currentSite, user: $user, article: $article);
+        $usecase->execute(currentSite: $currentSite, urlGenerator: $urlGenerator, user: $user, article: $article);
 
         // then
         $libraryItemsForArticle = StockQuery::create()
@@ -125,9 +132,11 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldReceive("send");
         $usecase = new AddArticleToUserLibraryUsecase($mailer);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("user_library");
 
         // when
-        $usecase->execute(currentSite: $currentSite, user: $user, article: $article);
+        $usecase->execute(currentSite: $currentSite, urlGenerator: $urlGenerator, user: $user, article: $article);
 
         // then
         $libraryItem = StockQuery::create()
@@ -161,13 +170,15 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $item = ModelFactory::createStockItem(site: $site, article: $article, user: $otherUser);
         $mailer = Mockery::mock(Mailer::class);
         $usecase = new AddArticleToUserLibraryUsecase($mailer);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("user_library");
 
         // then
         $this->expectException(BusinessRuleException::class);
         $this->expectExceptionMessage("L'exemplaire {$item->getId()} est déjà dans une bibliothèque.");
 
         // when
-        $usecase->execute(currentSite: $currentSite, user: $user, items: [$item]);
+        $usecase->execute(currentSite: $currentSite, urlGenerator: $urlGenerator, user: $user, items: [$item]);
     }
 
     /**
@@ -191,9 +202,11 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldReceive("send");
         $usecase = new AddArticleToUserLibraryUsecase($mailer);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("user_library");
 
         // when
-        $usecase->execute(currentSite: $currentSite, user: $user, items: [$item1, $item2]);
+        $usecase->execute(currentSite: $currentSite, urlGenerator: $urlGenerator, user: $user, items: [$item1, $item2]);
 
         // then
         $item1->reload();
@@ -225,10 +238,12 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldReceive("send");
         $usecase = new AddArticleToUserLibraryUsecase($mailer);
-
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("user_library");
         // when
         $usecase->execute(
             currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
             user: $user,
             article: $article,
             allowsPreDownload: true
@@ -263,10 +278,12 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldReceive("send");
         $usecase = new AddArticleToUserLibraryUsecase($mailer);
-
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("user_library");
         // when
         $usecase->execute(
             currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
             user: $user,
             article: $article,
             sendEmail: true,

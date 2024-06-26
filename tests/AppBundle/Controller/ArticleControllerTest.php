@@ -787,17 +787,20 @@ class ArticleControllerTest extends TestCase
             ->andReturn(new Response(""));
         $mailer = Mockery::mock(Mailer::class);
         $session = Mockery::mock(Session::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->with("user_library")->andReturn("/user_library");
 
         // when
         $response = $controller->freeDownloadAction(
-            $request,
-            $currentSiteService,
-            $currentUserService,
-            $mailingListService,
-            $templateService,
-            $mailer,
-            $session,
-            $article->getId(),
+            request: $request,
+            currentSiteService: $currentSiteService,
+            currentUserService: $currentUserService,
+            mailingListService: $mailingListService,
+            templateService: $templateService,
+            mailer: $mailer,
+            session: $session,
+            urlGenerator: $urlGenerator,
+            id: $article->getId(),
         );
 
         // then
@@ -845,17 +848,20 @@ class ArticleControllerTest extends TestCase
             ->andReturn(new Response("Je souhaite recevoir la newsletter pour être tenu·e"));
         $mailer = Mockery::mock(Mailer::class);
         $session = Mockery::mock(Session::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->with("user_library")->andReturn("/user_library");
 
         // when
         $response = $controller->freeDownloadAction(
-            $request,
-            $currentSiteService,
-            $currentUserService,
-            $mailingListService,
-            $templateService,
-            $mailer,
-            $session,
-            $article->getId(),
+            request: $request,
+            currentSiteService: $currentSiteService,
+            currentUserService: $currentUserService,
+            mailingListService: $mailingListService,
+            templateService: $templateService,
+            mailer: $mailer,
+            session: $session,
+            urlGenerator: $urlGenerator,
+            id: $article->getId(),
         );
 
         // then
@@ -893,6 +899,8 @@ class ArticleControllerTest extends TestCase
         $templateService = Mockery::mock(TemplateService::class);
         $mailer = Mockery::mock(Mailer::class);
         $session = Mockery::mock(Session::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->with("user_library")->andReturn("/user_library");
 
         // when
         $response = $controller->freeDownloadAction(
@@ -903,12 +911,13 @@ class ArticleControllerTest extends TestCase
             $templateService,
             $mailer,
             $session,
+            $urlGenerator,
             $article->getId(),
         );
 
         // then
         $this->assertEquals(302, $response->getStatusCode(), "returns HTTP 302");
-        $this->assertEquals("/pages/log_myebooks", $response->getTargetUrl(), "redirects to elibrary");
+        $this->assertEquals("/user_library", $response->getTargetUrl(), "redirects to elibrary");
     }
 
     /**

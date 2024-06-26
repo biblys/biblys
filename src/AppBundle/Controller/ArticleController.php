@@ -286,6 +286,7 @@ class ArticleController extends Controller
         TemplateService $templateService,
         Mailer $mailer,
         Session $session,
+        UrlGenerator $urlGenerator,
         $id,
     ): RedirectResponse|Response
     {
@@ -311,6 +312,8 @@ class ArticleController extends Controller
             throw new NotFoundException($articleEntity->get('title')." n'est pas disponible.");
         }
 
+        $userLibraryUrl = $urlGenerator->generate("user_library");
+
         $currentUser = $currentUserService->getUser();
         $currentUserPurchasesForArticle = StockQuery::create()
             ->filterBySite($currentSiteService->getSite())
@@ -318,7 +321,7 @@ class ArticleController extends Controller
             ->filterByArticleId($articleEntity->get("id"))
             ->count();
         if ($currentUserPurchasesForArticle > 0) {
-            return new RedirectResponse("/pages/log_myebooks");
+            return new RedirectResponse($userLibraryUrl);
         }
 
         $request->attributes->set("page_title", "Téléchargement gratuit de {$articleEntity->get('title')}");
@@ -361,7 +364,7 @@ class ArticleController extends Controller
                 $session->getFlashBag()->add("error", $errorMessage);
             }
 
-            return new RedirectResponse("/pages/log_myebooks");
+            return new RedirectResponse($userLibraryUrl);
         }
 
         return $templateService->renderResponse('AppBundle:Article:freeDownload.html.twig', [
