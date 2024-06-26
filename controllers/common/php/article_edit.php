@@ -385,7 +385,7 @@ return function (
     $article_ean_class = null;
     $article_title_class = null;
 
-    $type_options = Biblys\Article\Type::getOptions($articleEntity->get('type_id'));
+    $type_options = \Biblys\Data\ArticleType::getOptions($articleEntity->get('type_id'));
 
     if ($a['type_id'] == 2) {
         $article_ean_div_class = 'hidden';

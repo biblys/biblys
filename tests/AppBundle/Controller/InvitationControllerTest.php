@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Article\Type;
+use Biblys\Data\ArticleType;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -51,7 +51,7 @@ class InvitationControllerTest extends TestCase
         $flashBag->shouldReceive("add")
             ->with("success", "Une invitation pour Sent Book a été envoyée à user@example.org");
         $publisher = ModelFactory::createPublisher();
-        $article = ModelFactory::createArticle(title: "Sent Book", typeId: Type::EBOOK, publisher: $publisher);
+        $article = ModelFactory::createArticle(title: "Sent Book", typeId: ArticleType::EBOOK, publisher: $publisher);
         $request->request->set("article_ids", [$article->getId()]);
         $request->request->set("mode", "download");
         $site = ModelFactory::createSite();
@@ -112,7 +112,7 @@ class InvitationControllerTest extends TestCase
         $session->method("getFlashBag")->willReturn($flashBag);
 
         $publisher = ModelFactory::createPublisher();
-        $article = ModelFactory::createArticle(title: "Sent Book", typeId: Type::EBOOK, publisher: $publisher);
+        $article = ModelFactory::createArticle(title: "Sent Book", typeId: ArticleType::EBOOK, publisher: $publisher);
         $request->request->set("article_ids", [$article->getId()]);
 
         $site = ModelFactory::createSite();
@@ -176,7 +176,7 @@ class InvitationControllerTest extends TestCase
         $flashBag->shouldReceive("add")
             ->with("success", "Une invitation à télécharger « Sent Book » a été créée pour manual3@example.org");
         $publisher = ModelFactory::createPublisher();
-        $article = ModelFactory::createArticle(title: "Sent Book", typeId: Type::EBOOK, publisher: $publisher);
+        $article = ModelFactory::createArticle(title: "Sent Book", typeId: ArticleType::EBOOK, publisher: $publisher);
         $request->request->set("article_ids", [$article->getId()]);
         $request->request->set("mode", "manual");
         $site = ModelFactory::createSite();
@@ -233,7 +233,7 @@ class InvitationControllerTest extends TestCase
         $flashBag->shouldReceive("add")
             ->with("success", "Une invitation pour « Sent Book » a été envoyée à send3@example.org");
         $publisher = ModelFactory::createPublisher();
-        $article = ModelFactory::createArticle(title: "Sent Book", typeId: Type::EBOOK, publisher: $publisher);
+        $article = ModelFactory::createArticle(title: "Sent Book", typeId: ArticleType::EBOOK, publisher: $publisher);
         $request->request->set("article_ids", [$article->getId()]);
         $request->request->set("mode", "send");
         $site = ModelFactory::createSite();
@@ -290,7 +290,7 @@ class InvitationControllerTest extends TestCase
         $flashBag->shouldReceive("add")
             ->with("success", "Une invitation pour Sent Book a été envoyée à download3@example.org");
         $publisher = ModelFactory::createPublisher();
-        $article = ModelFactory::createArticle(title: "Sent Book", typeId: Type::EBOOK, publisher: $publisher);
+        $article = ModelFactory::createArticle(title: "Sent Book", typeId: ArticleType::EBOOK, publisher: $publisher);
         $request->request->set("article_ids", [$article->getId()]);
         $request->request->set("mode", "download");
         $site = ModelFactory::createSite();
@@ -342,7 +342,7 @@ class InvitationControllerTest extends TestCase
         $flashBag->shouldReceive("add")
             ->with("success", "Une invitation pour Sent Book a été envoyée à predownload@example.org");
         $publisher = ModelFactory::createPublisher();
-        $article = ModelFactory::createArticle(title: "Sent Book", typeId: Type::EBOOK, publisher: $publisher);
+        $article = ModelFactory::createArticle(title: "Sent Book", typeId: ArticleType::EBOOK, publisher: $publisher);
         $request->request->set("article_ids", [$article->getId()]);
         $request->request->set("mode", "download");
         $request->request->set("allows_pre_download", "1");
@@ -395,9 +395,9 @@ class InvitationControllerTest extends TestCase
         $flashBag->shouldReceive("add")
             ->with("success", "Une invitation pour « Invited 1 » et 2 autres a été envoyée à multiple@example.org");
         $publisher = ModelFactory::createPublisher();
-        $article1 = ModelFactory::createArticle(title: "Invited 1", typeId: Type::EBOOK, publisher: $publisher);
-        $article2 = ModelFactory::createArticle(title: "Invited 2", typeId: Type::EBOOK, publisher: $publisher);
-        $article3 = ModelFactory::createArticle(title: "Invited 3", typeId: Type::EBOOK, publisher: $publisher);
+        $article1 = ModelFactory::createArticle(title: "Invited 1", typeId: ArticleType::EBOOK, publisher: $publisher);
+        $article2 = ModelFactory::createArticle(title: "Invited 2", typeId: ArticleType::EBOOK, publisher: $publisher);
+        $article3 = ModelFactory::createArticle(title: "Invited 3", typeId: ArticleType::EBOOK, publisher: $publisher);
         $request->request->set("article_ids", [$article1->getId(), $article2->getId(), $article3->getId()]);
         $request->request->set("mode", "send");
         $site = ModelFactory::createSite();
@@ -448,7 +448,7 @@ class InvitationControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $publisher = ModelFactory::createPublisher();
         $article = ModelFactory::createArticle(
-            title: "The Code Show", typeId: Type::EBOOK, publisher: $publisher
+            title: "The Code Show", typeId: ArticleType::EBOOK, publisher: $publisher
         );
         $invitation = ModelFactory::createInvitation(
             site: $site, articles: [$article], email: "SHOWCODE", code: "SHOWCODE"
@@ -615,9 +615,9 @@ class InvitationControllerTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $validPublisher = ModelFactory::createPublisher(name: "Éditeur autorisé");
-        $validArticle = ModelFactory::createArticle(typeId: Type::EBOOK, publisher: $validPublisher);
+        $validArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK, publisher: $validPublisher);
         $invalidPublisher = ModelFactory::createPublisher(name: "Éditeur filtré");
-        $invalidArticle = ModelFactory::createArticle(typeId: Type::EBOOK, publisher: $invalidPublisher);
+        $invalidArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK, publisher: $invalidPublisher);
         ModelFactory::createInvitation(
             site: $site, articles: [$validArticle, $invalidArticle], email: "UNAUTHPU", code: "UNAUTHPU"
         );
@@ -650,9 +650,9 @@ class InvitationControllerTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $validPublisher = ModelFactory::createPublisher(name: "Éditeur autorisé");
-        $validArticle = ModelFactory::createArticle(typeId: Type::EBOOK, publisher: $validPublisher);
+        $validArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK, publisher: $validPublisher);
         $invalidPublisher = ModelFactory::createPublisher(name: "Éditeur non autorisé");
-        $invalidArticle = ModelFactory::createArticle(typeId: Type::EBOOK, publisher: $invalidPublisher);
+        $invalidArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK, publisher: $invalidPublisher);
         ModelFactory::createInvitation(
             site: $site, articles: [$validArticle, $invalidArticle], email: "NONDOPUB", code: "NONDOPUB"
         );
@@ -683,7 +683,7 @@ class InvitationControllerTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $validArticle = ModelFactory::createArticle(title: "Livre papier", typeId: Type::EBOOK);
+        $validArticle = ModelFactory::createArticle(title: "Livre papier", typeId: ArticleType::EBOOK);
         $invalidArticle = ModelFactory::createArticle(title: "Livre papier");
         ModelFactory::createInvitation(
             site: $site, articles: [$validArticle, $invalidArticle], email: "PAPERBOO", code: "PAPERBOO"
@@ -710,7 +710,7 @@ class InvitationControllerTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $article = ModelFactory::createArticle(title: "Livre numérique", typeId: Type::EBOOK);
+        $article = ModelFactory::createArticle(title: "Livre numérique", typeId: ArticleType::EBOOK);
         $invitation = ModelFactory::createInvitation(
             site: $site, articles: [$article], email: "ALLRIGHT", code: "ALLRIGHT"
         );
@@ -760,8 +760,8 @@ class InvitationControllerTest extends TestCase
         $user = ModelFactory::createUser();
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $validArticle = ModelFactory::createArticle(title: "Autre article", typeId: Type::EBOOK);
-        $articleInLibrary = ModelFactory::createArticle(title: "Dans ma bibliothèque", typeId: Type::EBOOK);
+        $validArticle = ModelFactory::createArticle(title: "Autre article", typeId: ArticleType::EBOOK);
+        $articleInLibrary = ModelFactory::createArticle(title: "Dans ma bibliothèque", typeId: ArticleType::EBOOK);
         ModelFactory::createInvitation(
             site: $site, articles: [$validArticle, $articleInLibrary], code: "ELIBRARY"
         );
@@ -810,7 +810,7 @@ class InvitationControllerTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $article = ModelFactory::createArticle(title: "Livre numérique", typeId: Type::EBOOK);
+        $article = ModelFactory::createArticle(title: "Livre numérique", typeId: ArticleType::EBOOK);
         $invitation = ModelFactory::createInvitation(
             site: $site, articles: [$article], email: "ALLRIGHT", code: "ALLRIGHT",
             allowsPreDownload: true
@@ -861,13 +861,13 @@ class InvitationControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         $publisher = ModelFactory::createPublisher();
         $article1 = ModelFactory::createArticle(
-            title: "Multiple 1", typeId: Type::EBOOK, publisher: $publisher
+            title: "Multiple 1", typeId: ArticleType::EBOOK, publisher: $publisher
         );
         $article2 = ModelFactory::createArticle(
-            title: "Multiple 2", typeId: Type::EBOOK, publisher: $publisher
+            title: "Multiple 2", typeId: ArticleType::EBOOK, publisher: $publisher
         );
         $article3 = ModelFactory::createArticle(
-            title: "Multiple 3", typeId: Type::EBOOK, publisher: $publisher
+            title: "Multiple 3", typeId: ArticleType::EBOOK, publisher: $publisher
         );
         $invitation = ModelFactory::createInvitation(
             site: $site, articles: [$article1, $article2, $article3],
@@ -938,7 +938,7 @@ class InvitationControllerTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $article = ModelFactory::createArticle(title: "Listed Book", typeId: Type::EBOOK);
+        $article = ModelFactory::createArticle(title: "Listed Book", typeId: ArticleType::EBOOK);
         ModelFactory::createInvitation(
             site: $site,
             articles: [$article],

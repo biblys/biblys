@@ -2,7 +2,7 @@
 
 namespace Model;
 
-use Biblys\Article\Type;
+use Biblys\Data\ArticleType;
 use Biblys\Test\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -20,7 +20,7 @@ class CartTest extends TestCase
         $cart = ModelFactory::createCart();
         $physicalArticle = ModelFactory::createArticle();
         ModelFactory::createStockItem(article: $physicalArticle, cart: $cart);
-        $downloadableArticle = ModelFactory::createArticle(typeId: Type::EBOOK);
+        $downloadableArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
         ModelFactory::createStockItem(article: $downloadableArticle, cart: $cart);
 
         // when
@@ -39,7 +39,7 @@ class CartTest extends TestCase
         $cart = ModelFactory::createCart();
         $physicalArticle = ModelFactory::createArticle();
         ModelFactory::createStockItem(article: $physicalArticle, cart: $cart);
-        $downloadableArticle = ModelFactory::createArticle(typeId: Type::EBOOK);
+        $downloadableArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
         ModelFactory::createStockItem(article: $downloadableArticle, cart: $cart);
 
         // when
@@ -56,7 +56,7 @@ class CartTest extends TestCase
     {
         // given
         $cart = ModelFactory::createCart();
-        $downloadableArticle = ModelFactory::createArticle(typeId: Type::EBOOK);
+        $downloadableArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
         ModelFactory::createStockItem(article: $downloadableArticle, cart: $cart);
 
         // when
@@ -75,7 +75,7 @@ class CartTest extends TestCase
         $cart = ModelFactory::createCart();
         $physicalArticle = ModelFactory::createArticle();
         ModelFactory::createStockItem(article: $physicalArticle, cart: $cart);
-        $downloadableArticle = ModelFactory::createArticle(typeId: Type::EBOOK);
+        $downloadableArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
         ModelFactory::createStockItem(article: $downloadableArticle, cart: $cart);
 
         // when
@@ -111,7 +111,7 @@ class CartTest extends TestCase
         $cart = ModelFactory::createCart();
         $physicalArticle = ModelFactory::createArticle();
         ModelFactory::createStockItem(article: $physicalArticle, cart: $cart);
-        $downloadableArticle = ModelFactory::createArticle(typeId: Type::EBOOK);
+        $downloadableArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
         ModelFactory::createStockItem(article: $downloadableArticle, cart: $cart);
 
         // when

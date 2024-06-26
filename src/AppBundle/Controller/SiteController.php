@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Article\Type;
+use Biblys\Data\ArticleType;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Exception;
@@ -109,7 +109,7 @@ class SiteController extends Controller
         }
 
         return $this->render('AppBundle:Site:defaultValues.html.twig', [
-            'type_options' => Type::getOptions($currentSite->getOption('default_type_id')),
+            'type_options' => ArticleType::getOptions($currentSite->getOption('default_type_id')),
             'options' => [
                 'default_collection_id' => $currentSite->getOption('default_collection_id'),
                 'default_article_source_id' => $currentSite->getOption('default_article_source_id'),

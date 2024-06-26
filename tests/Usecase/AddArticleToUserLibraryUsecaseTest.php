@@ -2,7 +2,7 @@
 
 namespace Usecase;
 
-use Biblys\Article\Type;
+use Biblys\Data\ArticleType;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
@@ -89,7 +89,7 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $publisher = ModelFactory::createPublisher(name: "Autorisé");
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $article = ModelFactory::createArticle(
-            title: "Already", typeId: Type::EBOOK, publisher: $publisher
+            title: "Already", typeId: ArticleType::EBOOK, publisher: $publisher
         );
         ModelFactory::createStockItem(site: $site, article: $article, user: $user);
         $mailer = Mockery::mock(Mailer::class);
@@ -121,7 +121,7 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $user = ModelFactory::createUser(site: $site);
         $publisher = ModelFactory::createPublisher(name: "Autorisé");
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
-        $article = ModelFactory::createArticle(typeId: Type::EBOOK, publisher: $publisher);
+        $article = ModelFactory::createArticle(typeId: ArticleType::EBOOK, publisher: $publisher);
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldReceive("send");
         $usecase = new AddArticleToUserLibraryUsecase($mailer);
@@ -156,7 +156,7 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $otherUser = ModelFactory::createUser(site: $site);
         $publisher = ModelFactory::createPublisher(name: "Autorisé");
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
-        $article = ModelFactory::createArticle(title: 'Already', typeId: Type::EBOOK, publisher:
+        $article = ModelFactory::createArticle(title: 'Already', typeId: ArticleType::EBOOK, publisher:
             $publisher);
         $item = ModelFactory::createStockItem(site: $site, article: $article, user: $otherUser);
         $mailer = Mockery::mock(Mailer::class);
@@ -184,9 +184,9 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $user = ModelFactory::createUser(site: $site);
         $publisher = ModelFactory::createPublisher(name: "Autorisé");
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
-        $article1 = ModelFactory::createArticle(title: 'Ebook 1', typeId: Type::EBOOK, publisher: $publisher);
+        $article1 = ModelFactory::createArticle(title: 'Ebook 1', typeId: ArticleType::EBOOK, publisher: $publisher);
         $item1 = ModelFactory::createStockItem(site: $site, article: $article1);
-        $article2 = ModelFactory::createArticle(title: 'Ebook 2', typeId: Type::EAUDIOBOOK, publisher: $publisher);
+        $article2 = ModelFactory::createArticle(title: 'Ebook 2', typeId: ArticleType::EAUDIOBOOK, publisher: $publisher);
         $item2 = ModelFactory::createStockItem(site: $site, article: $article2);
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldReceive("send");
@@ -221,7 +221,7 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $user = ModelFactory::createUser(site: $site);
         $publisher = ModelFactory::createPublisher(name: "Autorisé");
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
-        $article = ModelFactory::createArticle(typeId: Type::EBOOK, publisher: $publisher);
+        $article = ModelFactory::createArticle(typeId: ArticleType::EBOOK, publisher: $publisher);
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldReceive("send");
         $usecase = new AddArticleToUserLibraryUsecase($mailer);
@@ -259,7 +259,7 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $user = ModelFactory::createUser(site: $site);
         $publisher = ModelFactory::createPublisher(name: "Autorisé");
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
-        $article = ModelFactory::createArticle(typeId: Type::EBOOK, publisher: $publisher);
+        $article = ModelFactory::createArticle(typeId: ArticleType::EBOOK, publisher: $publisher);
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldReceive("send");
         $usecase = new AddArticleToUserLibraryUsecase($mailer);

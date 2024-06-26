@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller\Legacy;
 
-use Biblys\Article\Type;
+use Biblys\Data\ArticleType;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\TemplateService;
@@ -45,7 +45,7 @@ class MyEbooksTest extends TestCase
             new Response("In my library")
         );
 
-        $article = ModelFactory::createArticle(title: "In my library", typeId: Type::EBOOK);
+        $article = ModelFactory::createArticle(title: "In my library", typeId: ArticleType::EBOOK);
         ModelFactory::createStockItem(
             site: $currentSite->getSite(),
             article: $article,

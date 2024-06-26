@@ -2,7 +2,7 @@
 
 namespace Biblys\Test;
 
-use Biblys\Article\Type;
+use Biblys\Data\ArticleType;
 use Biblys\Service\Slug\SlugService;
 use DateTime;
 use Model\Alert;
@@ -51,7 +51,7 @@ class ModelFactory
         string         $ean = "9781234567890",
         string         $url = "author/article",
         int            $price = 999,
-        int            $typeId = Type::BOOK,
+        int            $typeId = ArticleType::BOOK,
         string         $keywords = null,
         string         $lemoninkMasterId = null,
         Publisher      $publisher = null,
