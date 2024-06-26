@@ -735,6 +735,11 @@ user_update_email:
   path: /user/update-email
   controller: AppBundle\Controller\UserController::updateEmailAction
 
+user_library:
+  methods: GET
+  path: /user/library
+  controller: AppBundle\Controller\UserController::libraryAction
+
 # Legacy controllers
 
 legacy_article:
