@@ -9,6 +9,8 @@ Améliorations
 - Pour prévenir toute confusion, les articles physiques à expédier et les 
   articles numériques à télécharger sont désormais clairement distingués 
   dans le panier.
+- Les livres affichés dans la bibliothèque numérique peuvent désormais être
+  filtrées grâce à un champ de recherche.
 - Les bibliothèques numériques contenant plus de 25 articles sont désormais 
   paginées pour en faciliter l'exploration. 
 - Une page nouvelle page "Espace disque" dans l'administration permet de 
