@@ -3,7 +3,6 @@
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\TemplateService;
-use Model\ArticleQuery;
 use Model\StockQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -25,7 +24,7 @@ return function (
 
     $ebooks = [];
 
-    $copies = StockQuery::create()
+    $libraryItems = StockQuery::create()
         ->filterBySite($currentSite->getSite())
         ->filterByUser($currentUser->getUser())
         ->orderBySellingDate(Criteria::DESC)
@@ -33,33 +32,29 @@ return function (
 
     $updated = 0;
 
-    $am = new ArticleManager();
-    foreach ($copies as $copy) {
+    foreach ($libraryItems as $item) {
 
-        /** @var Article $articleEntity */
-        $articleEntity = $am->getById($copy->getArticleId());
-        $article = ArticleQuery::create()->findPk($copy->getArticleId());
-
-        if (!$articleEntity || !$articleEntity->isDownloadable()) {
+        $article = $item->getArticle();
+        if (!$article || !$article->getType()->isDownloadable()) {
             continue;
         }
 
-        $download_links = [];
+        $downloadLinks = [];
 
-        $download_icon = 'cloud-download';
-        if ($copy->getFileUpdated()) {
+        $downloadIcon = 'cloud-download';
+        if ($item->getFileUpdated()) {
             $updated++;
-            $download_icon = 'refresh';
+            $downloadIcon = 'refresh';
         }
 
-        $files = $fm->getAll(['article_id' => $articleEntity->get('id'), 'file_access' => 1]);
+        $files = $fm->getAll(['article_id' => $article->getId(), 'file_access' => 1]);
         foreach ($files as $file) {
             $downloadUrl = $urlGenerator->generate('file_download', [
                 'id' => $file->get('id'),
                 'format' => ltrim($file->getType('ext') ?: ".ext", '.'),
             ]);
 
-            $download_links[] = '
+            $downloadLinks[] = '
                 <li>
                     <a 
                         href="'.$downloadUrl.'" 
@@ -72,34 +67,33 @@ return function (
             ';
         }
 
-        // Liens de téléchargement
-        if ($articleEntity->get('pubdate') > date("Y-m-d") && !$copy->getAllowPredownload()) {
-            $dl_links = 'A para&icirc;tre<br />le ' . _date($articleEntity->get('pubdate'), 'd/m');
+        if (!$article->isPublished() && !$item->isAllowPredownload()) {
+            $downloadButton = 'A paraître<br />le ' . _date($article->getPubdate(), 'd/m');
         }
         elseif ($article->isWatermarkable()) {
-            $dl_links = '
+            $downloadButton = '
                 <a class="btn btn-primary"
                     href="'.$urlGenerator->generate("article_download_with_watermark", [
                         "id" => $article->getId()
                     ]).'"
                 >
-                    <span class="fa fa-' . $download_icon . '"></span>
+                    <span class="fa fa-' . $downloadIcon . '"></span>
                     &nbsp; Télécharger &nbsp; 
                 </a>
             ';
-        } elseif (empty($download_links)) {
-            $dl_links = 'Aucun fichier disponible';
+        } elseif (empty($downloadLinks)) {
+            $downloadButton = 'Aucun fichier disponible';
         } else {
-            $dl_links = '
+            $downloadButton = '
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
                             aria-label="Ouvrir le menu de sélection du format">
-                        <span class="fa fa-' . $download_icon . '"></span>
+                        <span class="fa fa-' . $downloadIcon . '"></span>
                         &nbsp; Télécharger &nbsp; 
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        ' . implode($download_links) . '
+                        ' . implode($downloadLinks) . '
                     </ul>
                 </div>
             ';
@@ -107,8 +101,8 @@ return function (
 
         $ebooks[] = [
             "article" => $article,
-            "updated" => $copy->isFileUpdated(),
-            "dlLinks" => $dl_links,
+            "updated" => $item->isFileUpdated(),
+            "dlLinks" => $downloadButton,
         ];
     }
 
