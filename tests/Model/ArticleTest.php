@@ -13,6 +13,50 @@ require_once __DIR__."/../setUp.php";
 
 class ArticleTest extends TestCase
 {
+    /** Article->isPublished */
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsPublishedReturnsTrueForPastDate()
+    {
+        // given
+        $article = new Article();
+        $article->setPubdate("2019-04-28");
+
+        // when
+        $isPublished = $article->isPublished();
+
+        // then
+        $this->assertTrue($isPublished);
+    }
+
+    public function testIsPublishedReturnsTrueForPresentDate()
+    {
+        // given
+        $article = new Article();
+        $article->setPubdate(date("Y-m-d"));
+
+        // when
+        $isPublished = $article->isPublished();
+
+        // then
+        $this->assertTrue($isPublished);
+    }
+
+    public function testIsPublishedReturnsTrueForFutureDate()
+    {
+        // given
+        $article = new Article();
+        $article->setPubdate("2099-04-28");
+
+        // when
+        $isPublished = $article->isPublished();
+
+        // then
+        $this->assertFalse($isPublished);
+    }
+
     /**
      * @throws Exception
      */
