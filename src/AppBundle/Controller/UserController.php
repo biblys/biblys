@@ -461,19 +461,25 @@ class UserController extends Controller
     {
         $currentUser->authUser();
 
-        $queryParams->parse(["p" => ["type" => "numeric", "default" => 0]]);
+        $queryParams->parse([
+            "q" => ["type" => "string", "default" => ""],
+            "p" => ["type" => "numeric", "default" => 0],
+        ]);
+        $searchQuery = $queryParams->get("q");
         $currentPageIndex = $queryParams->get("p");
 
-        $libraryItemsCount = StockQuery::create()
+        $baseQuery = StockQuery::create()
             ->filterBySite($currentSite->getSite())
             ->filterByUser($currentUser->getUser())
-            ->count();
+            ->useArticleQuery()
+            ->filterByKeywords("%$searchQuery%", Criteria::LIKE)
+            ->endUse();
+        $libraryItemsCount = $baseQuery->count();
 
         $pagination = new Pagination(currentPageIndex: $currentPageIndex, itemCount: $libraryItemsCount, limit: 25);
+        $pagination->setQueryParams(["q" => $searchQuery]);
 
-        $libraryItems = StockQuery::create()
-            ->filterBySite($currentSite->getSite())
-            ->filterByUser($currentUser->getUser())
+        $libraryItems = $baseQuery
             ->orderBySellingDate(Criteria::DESC)
             ->offset($pagination->getOffset())
             ->limit($pagination->getLimit())
@@ -513,6 +519,7 @@ class UserController extends Controller
             "updates_available" => $updated > 0,
             "items" => $items,
             "pages" => $pagination,
+            "searchQuery" => $searchQuery,
         ]);
     }
 }

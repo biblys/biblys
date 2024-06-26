@@ -1219,15 +1219,7 @@ span.loading {
 
 /* EBOOKS */
 
-table.ebooks {
-  width: 90%;
-  border-collapse: collapse;
-}
-
-table.ebooks td {
-  padding: 10px;
-  border-bottom: 2px #ebebeb solid;
-  border-top: 2px #ebebeb solid;
+.UserLibrary td {
   vertical-align: middle;
 }
 

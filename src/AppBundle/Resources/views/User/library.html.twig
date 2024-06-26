@@ -7,8 +7,15 @@
 {% block main %}
   <h1>Ma bibliothèque numérique</h1>
 
+  {% if searchQuery %}
+    <h2>
+      Recherche de &laquo; {{ searchQuery }} &raquo;
+      <a href="{{ path("user_library") }}" class="btn btn-sm btn-default">retour</a>
+    </h2>
+  {% endif %}
+
   <p>
-    Ci-dessous, vous retrouverez la liste de tous les livres numériques achetés sur notre plateforme. Vous pouvez les
+    Ci-dessous, vous retrouverez la liste de tous les livres numériques achetés sur notre site. Vous pouvez les
     télécharger à volonté et dans le format qui vous convient.
   </p>
   <p>
@@ -16,20 +23,30 @@
     <a href="/docs/ebooks">comment télécharger et lire des livres numériques</a>.
   </p>
 
-  {% if updates_available %}
-    <br>
-    <p class="alert alert-info">
-      <span class="fa fa-refresh"></span>&nbsp;
-      Certains fichiers ont été mis à jour depuis votre dernier téléchargement.
-    </p>
-  {% endif %}
+  <form class="form-inline text-right">
+    <div class="form-group">
+      <input
+        id="library-search-query"
+        name="q"
+        class="form-control"
+        type="search"
+        placeholder="Rechercher…"
+        aria-label="Rechercher dans la bibliothèque"
+        value="{{ searchQuery }}"
+      />
+    </div>
+    <button type="submit" class="btn btn-primary" aria-label="Rechercher">
+      <span class="fa fa-search"></span>
+    </button>
+  </form>
 
   <br />
-  <table class="ebooks">
+
+  <table class="table UserLibrary">
     <tbody>
       {% for item in items %}
-        <tr class="{{ item.updated ? "alert alert-info" : "" }}">
-          <td class="center">
+        <tr>
+          <td class="center align-middle">
             {% if item.article|hasCover %}
               <a href="{{ path("article_show", { slug: item.article.url }) }}">
                 <img src="{{ item.article|coverUrl }}" height="100" alt="{{ item.article.title }}" />
@@ -40,7 +57,7 @@
             <a href="{{ item.article.url }}">{{ item.article.title }}</a>
             <br>{{ item.article.authors }}
           </td>
-          <td class="center" style="width: 125px;">
+          <td class="center align-middle" style="width: 125px;">
             {% if not item.article.isPublished and not item.predownload_is_allowed %}
               À paraître le {{ item.article.pubdate|date('d/m') }}
             {% elseif item.downloadable_files %}
@@ -83,4 +100,12 @@
   </table>
 
   {% include 'AppBundle:Utils:_pagination.html.twig' %}
+
+  {% if updates_available %}
+    <br>
+    <p class="alert alert-info">
+      Les livres signalés par le sigle &nbsp;<span class="fa fa-refresh"></span>&nbsp; ont été mis à jour depuis votre dernier
+      téléchargement.
+    </p>
+  {% endif %}
 {% endblock %}
