@@ -3,6 +3,7 @@
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\TemplateService;
+use Model\FileQuery;
 use Model\StockQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -18,8 +19,6 @@ return function (
     TemplateService $templateService,
 ): Response|RedirectResponse
 {
-    $fm = new FileManager();
-
     $request->attributes->set("page_title", "Ma bibliothèque numérique");
 
     $ebooks = [];
@@ -47,21 +46,26 @@ return function (
             $downloadIcon = 'refresh';
         }
 
-        $files = $fm->getAll(['article_id' => $article->getId(), 'file_access' => 1]);
-        foreach ($files as $file) {
+        $downloadableFiles = FileQuery::create()
+            ->filterByArticleId($article->getId())
+            ->filterByAccess(\Model\File::ACCESS_RESTRICTED)
+            ->find()
+            ->getData();
+        /** @var \Model\File $file */
+        foreach ($downloadableFiles as $file) {
             $downloadUrl = $urlGenerator->generate('file_download', [
-                'id' => $file->get('id'),
-                'format' => ltrim($file->getType('ext') ?: ".ext", '.'),
+                'id' => $file->getId(),
+                'format' => ltrim($file->getFileType()->getExtension() ?: ".ext", '.'),
             ]);
 
             $downloadLinks[] = '
                 <li>
                     <a
                         href="'.$downloadUrl.'"
-                        title="' . $file->get('version') . ' | ' . file_size($file->get ('size')) . ' | ' . $file->getType('name') . '"
-                        aria-label="Télécharger ' . $file->getType('name') . '"
+                        title="' . $file->getVersion() . ' | ' . file_size($file->getSize() . ' | ' . $file->getFileType()->getName()) . '"
+                        aria-label="Télécharger ' . $file->getFileType()->getName(). '"
                     >
-                        <img src="' . $file->getType('icon') . '" width=16 alt="Télécharger"> ' . $file->getType('name') . '
+                        <img src="' . $file->getFileType()->getIcon() . '" width=16 alt="Télécharger"> ' . $file->getFileType()->getName() . '
                     </a>
                 </li>
             ';
