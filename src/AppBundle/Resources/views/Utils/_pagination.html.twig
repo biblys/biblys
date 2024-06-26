@@ -1,0 +1,49 @@
+{% if pages is defined and pages.total > 1 %}
+
+	<nav class="Pagination text-center" aria-label="Page navigation">
+		<ul class="pagination">
+			{% if pages.previous > -1 %}
+				<li class="Pagination__previous">
+					<a
+						href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ pages.previous }}"
+						aria-label="Précédent"
+					>
+						<span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
+			{% endif %}
+
+			{% for i in 1..pages.total %}
+				{% if pages.current == i %}
+					<li class="Pagination__page Pagination__page--current active">
+						<a
+							href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ i - 1 }}"
+						>
+							{{ i }}
+						</a>
+					</li>
+				{% else %}
+					<li class="Pagination__page">
+						<a
+							href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ i - 1 }}"
+						>
+							{{ i }}
+						</a>
+					</li>
+				{% endif %}
+			{% endfor %}
+
+			{% if pages.next %}
+				<li class="Pagination__next">
+					<a
+						href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ pages.next }}"
+					 	aria-label="Next"
+					>
+						<span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+			{% endif %}
+		</ul>
+	</nav>
+
+{% endif %}
