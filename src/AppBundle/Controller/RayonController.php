@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use ArticleManager;
-use Biblys\Article\Type;
+use Biblys\Data\ArticleType;
 use Biblys\Isbn\Isbn as Isbn;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentUser;
@@ -294,7 +294,7 @@ class RayonController extends Controller
 
         $request->attributes->set("page_title", 'Ajouter au rayon ' . $rayon->get('name'));
 
-        $types = Type::getAll();
+        $types = ArticleType::getAll();
 
         return $this->render('AppBundle:Rayon:addArticle.html.twig', [
             'rayon' => $rayon,

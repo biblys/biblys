@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller\Legacy;
 
-use Biblys\Article\Type;
+use Biblys\Data\ArticleType;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -28,7 +28,7 @@ class ArticleEditTest extends TestCase
         // given
         $controller = require __DIR__."/../../../../controllers/common/php/article_edit.php";
 
-        $article = ModelFactory::createArticle(typeId: Type::EBOOK);
+        $article = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
         $request = new Request();
         $request->query->set("id", $article->getId());
 

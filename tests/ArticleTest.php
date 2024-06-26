@@ -610,7 +610,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     public function testSetGetType()
     {
         $article = new Article(["publisher_id" => 1]);
-        $type = Biblys\Article\Type::getById(1);
+        $type = \Biblys\Data\ArticleType::getById(1);
 
         $article->setType($type);
         $type = $article->getType();

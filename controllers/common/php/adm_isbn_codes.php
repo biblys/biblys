@@ -86,7 +86,7 @@
     }
 
     // Article types
-    $types = Biblys\Article\Type::getAll();
+    $types = \Biblys\Data\ArticleType::getAll();
     $types_options = [];
     foreach ($types as $type) {
         $types_options[] = '

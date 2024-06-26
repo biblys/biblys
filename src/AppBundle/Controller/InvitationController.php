@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Article\Type;
+use Biblys\Data\ArticleType;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -56,7 +56,7 @@ class InvitationController extends Controller
     {
         $currentUser->authAdmin();
 
-        $downloadableTypes = Type::getAllDownloadableTypes();
+        $downloadableTypes = ArticleType::getAllDownloadableTypes();
         $downloadbleTypeIds = array_map(function ($type) {
             return $type->getId();
         }, $downloadableTypes);

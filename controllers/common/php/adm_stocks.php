@@ -64,7 +64,7 @@ if (isset($_GET['stock_condition'])) {
     $a[$_GET['stock_condition']] = ' selected';
 }
 
-$types = Biblys\Article\Type::getAll();
+$types = \Biblys\Data\ArticleType::getAll();
 $types_options = array_map(function ($type) {
     global $request;
 
