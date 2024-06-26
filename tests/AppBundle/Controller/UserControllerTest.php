@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Exception\InvalidConfigurationException;
 use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Service\BodyParamsService;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -220,8 +221,6 @@ class UserControllerTest extends TestCase
         $site = ModelFactory::createSite(contact: "editions@paronymie.fr");
         $currentSite = new CurrentSite($site);
         $request = new Request();
-        $request->request->set("email", "invalid-email");
-        $request->request->set("return_url", "/continue");
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->shouldReceive("renderResponse")
             ->andReturn($expectedResponse);
@@ -234,6 +233,11 @@ class UserControllerTest extends TestCase
         $mailer->expects("validateEmail")->andThrow(
             new InvalidEmailAddressException("L'adresse invalid-email est invalide.")
         );
+        $bodyParamsService = Mockery::mock(BodyParamsService::class);
+        $bodyParamsService->expects("parse")->andReturns();
+        $bodyParamsService->expects("get")->with("email")->andReturn("invalid-email");
+        $bodyParamsService->expects("get")->with("return_url")->andReturn("/continue");
+        $bodyParamsService->expects("get")->with("username")->andReturn("");
 
         // then
         $this->expectException(BadRequestHttpException::class);
@@ -241,7 +245,13 @@ class UserControllerTest extends TestCase
 
         // when
         $controller->sendLoginEmailAction(
-            $request, $currentSite, $tokenService, $templateService, $urlGenerator, $mailer,
+            $request,
+            $bodyParamsService,
+            $currentSite,
+            $tokenService,
+            $templateService,
+            $urlGenerator,
+            $mailer,
         );
     }
 
@@ -262,9 +272,6 @@ class UserControllerTest extends TestCase
         $site = ModelFactory::createSite(contact: "editions@paronymie.fr");
         $currentSite = new CurrentSite($site);
         $request = new Request();
-        $request->request->set("email", "user@example.net");
-        $request->request->set("return_url", "/continue");
-        $request->request->set("username", "");
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->shouldReceive("renderResponse")
             ->andReturn($expectedResponse);
@@ -277,9 +284,21 @@ class UserControllerTest extends TestCase
         $mailer->expects("validateEmail");
         $mailer->expects("send");
 
+        $bodyParamsService = Mockery::mock(BodyParamsService::class);
+        $bodyParamsService->expects("parse")->andReturns();
+        $bodyParamsService->expects("get")->with("email")->andReturn("user@example.net");
+        $bodyParamsService->expects("get")->with("return_url")->andReturn("/continue");
+        $bodyParamsService->expects("get")->with("username")->andReturn("");
+
         // when
         $returnedResponse = $controller->sendLoginEmailAction(
-            $request, $currentSite, $tokenService, $templateService, $urlGenerator, $mailer,
+            $request,
+            $bodyParamsService,
+            $currentSite,
+            $tokenService,
+            $templateService,
+            $urlGenerator,
+            $mailer,
         );
 
         // then
@@ -316,9 +335,6 @@ class UserControllerTest extends TestCase
         $site = ModelFactory::createSite(contact: "editions@paronymie.fr");
         $currentSite = new CurrentSite($site);
         $request = new Request();
-        $request->request->set("email", "user@example.net");
-        $request->request->set("return_url", "/continue");
-        $request->request->set("username", "honeypot");
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->shouldReceive("renderResponse")
             ->andReturn($expectedResponse);
@@ -330,10 +346,21 @@ class UserControllerTest extends TestCase
         $mailer = Mockery::mock(Mailer::class);
         $mailer->expects("validateEmail");
         $mailer->expects("send");
+        $bodyParamsService = Mockery::mock(BodyParamsService::class);
+        $bodyParamsService->expects("parse")->andReturns();
+        $bodyParamsService->expects("get")->with("email")->andReturn("user@example.net");
+        $bodyParamsService->expects("get")->with("return_url")->andReturn("/continue");
+        $bodyParamsService->expects("get")->with("username")->andReturn("honeypot");
 
         // when
         $response = $controller->sendLoginEmailAction(
-            $request, $currentSite, $tokenService, $templateService, $urlGenerator, $mailer,
+            $request,
+            $bodyParamsService,
+            $currentSite,
+            $tokenService,
+            $templateService,
+            $urlGenerator,
+            $mailer,
         );
 
         // then
@@ -364,9 +391,6 @@ class UserControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         ModelFactory::createUser(site: $site, email: "user@example.net");
         $request = new Request();
-        $request->request->set("email", "user@example.net");
-        $request->request->set("return_url", "/continue");
-        $request->request->set("username", "");
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->shouldReceive("renderResponse")
             ->andReturn($expectedResponse);
@@ -379,10 +403,21 @@ class UserControllerTest extends TestCase
         $tokenService->expects("createLoginToken")->andReturn("token");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->expects("generate")->andReturn("login_url");
+        $bodyParamsService = Mockery::mock(BodyParamsService::class);
+        $bodyParamsService->expects("parse")->andReturns();
+        $bodyParamsService->expects("get")->with("email")->andReturn("user@example.net");
+        $bodyParamsService->expects("get")->with("return_url")->andReturn("/continue");
+        $bodyParamsService->expects("get")->with("username")->andReturn("");
 
         // when
         $returnedResponse = $controller->sendLoginEmailAction(
-            $request, $currentSite, $tokenService, $templateService, $urlGenerator, $mailer
+            $request,
+            $bodyParamsService,
+            $currentSite,
+            $tokenService,
+            $templateService,
+            $urlGenerator,
+            $mailer
         );
 
         // then
