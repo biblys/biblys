@@ -11,6 +11,7 @@ use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
 use Biblys\Service\InvalidTokenException;
 use Biblys\Service\Mailer;
+use Biblys\Service\Pagination;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use Biblys\Service\TokenService;
@@ -452,17 +453,30 @@ class UserController extends Controller
      * @throws LoaderError
      */
     public function libraryAction(
-        CurrentSite $currentSite,
-        CurrentUser $currentUser,
-        TemplateService $templateService,
+        CurrentSite        $currentSite,
+        CurrentUser        $currentUser,
+        QueryParamsService $queryParams,
+        TemplateService    $templateService,
     ): Response
     {
         $currentUser->authUser();
+
+        $queryParams->parse(["p" => ["type" => "numeric", "default" => 0]]);
+        $currentPageIndex = $queryParams->get("p");
+
+        $libraryItemsCount = StockQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByUser($currentUser->getUser())
+            ->count();
+
+        $pagination = new Pagination(currentPageIndex: $currentPageIndex, itemCount: $libraryItemsCount, limit: 25);
 
         $libraryItems = StockQuery::create()
             ->filterBySite($currentSite->getSite())
             ->filterByUser($currentUser->getUser())
             ->orderBySellingDate(Criteria::DESC)
+            ->offset($pagination->getOffset())
+            ->limit($pagination->getLimit())
             ->find();
 
         $items = [];
@@ -497,7 +511,8 @@ class UserController extends Controller
 
         return $templateService->renderResponse("AppBundle:User:library.html.twig", [
             "updates_available" => $updated > 0,
-            "items" => $items
+            "items" => $items,
+            "pages" => $pagination,
         ]);
     }
 }
