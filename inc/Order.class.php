@@ -23,6 +23,7 @@ use Payplug\Exception\HttpException;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Product;
 use Stripe\Stripe;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Usecase\AddArticleToUserLibraryUsecase;
 
 class Order extends Entity
@@ -925,8 +926,11 @@ class OrderManager extends EntityManager
             }, $ebooks);
 
             $usecase = new AddArticleToUserLibraryUsecase($mailer);
+            $container = include __DIR__."/../src/container.php";
+            $urlGenerator = $container->get("url_generator");
             $usecase->execute(
                 currentSite: $currentSite,
+                urlGenerator: $urlGenerator,
                 user: $user,
                 items: $items,
                 sendEmail: true,
