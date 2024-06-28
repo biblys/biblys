@@ -16,6 +16,7 @@ use CountryManager;
 use Exception;
 use Model\ArticleQuery;
 use Model\PeopleQuery;
+use Model\User;
 use Order;
 use OrderManager;
 use People;
@@ -103,11 +104,15 @@ class EntityFactory
     /**
      * @throws Exception
      */
-    public static function createOrder(array $attributes = []): Order
+    public static function createOrder(
+        array $attributes = [],
+        User $user = null,
+        string $orderEmail = "customer@example.net",
+    ): Order
     {
         $om = new OrderManager();
         $order = $om->create([
-            "order_email" => "customer@example.net",
+            "order_email" => $orderEmail,
             "order_firstname" => "Alec",
             "reward_id" => $attributes["reward_id"] ?? null,
         ]);
@@ -116,6 +121,9 @@ class EntityFactory
         $order->set("country_id", $country->get("id"));
         $order->set("order_shipping", $attributes["order_shipping"] ?? 0);
         $order->set("order_payment_date", $attributes["order_payment_date"] ?? null);
+
+        $order->set("user_id", $user?->getId() ?? null);
+        $om->update($order);
 
         return $order;
     }

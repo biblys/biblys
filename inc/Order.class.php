@@ -23,6 +23,7 @@ use Payplug\Exception\HttpException;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Product;
 use Stripe\Stripe;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Usecase\AddArticleToUserLibraryUsecase;
 
@@ -447,7 +448,7 @@ class Order extends Entity
 
     /**
      * Update order's shipping fee after creation
-     * @param Fee $fee the fee
+     * @param Shipping $fee the fee
      * @throws Exception if order is Payed
      */
     public function setShippingFee(Shipping $fee)
@@ -622,6 +623,7 @@ class OrderManager extends EntityManager
      * Create order
      * @param array $defaults
      * @return Order
+     * @throws Exception
      */
     public function create(array $defaults = array()): Order
     {
@@ -635,9 +637,11 @@ class OrderManager extends EntityManager
         }
 
         try {
-            return parent::create($defaults);
+            /** @var Order $order */
+            $order = parent::create($defaults);
+            return $order;
         } catch (Exception $e) {
-            trigger_error($e->getMessage());
+            throw new Exception($e->getMessage());
         }
     }
 
@@ -782,6 +786,8 @@ class OrderManager extends EntityManager
      * @param {Order} $order : the order
      * @param {Payment} $payment : a Payment object or the mode as a String
      * @param {Int} $amount : if Payment is not provided
+     * @throws Exception
+     * @throws TransportExceptionInterface
      */
     public function addPayment(Order $order, $payment, $amount = 0)
     {
@@ -827,18 +833,19 @@ class OrderManager extends EntityManager
 
         // If order is paid entirely, mark as payed
         if ($remaining == 0) {
-            $this->markAsPayed($order);
+            $config = Config::load();
+            $currentSite = CurrentSite::buildFromConfig($config);
+            $container = include __DIR__."/../src/container.php";
+            $urlGenerator = $container->get("url_generator");
+            $this->markAsPayed($currentSite, $urlGenerator, $order);
         }
     }
 
     /**
-     * Mark Order as payed (and send ebooks)
-     * @param object $order The order to mark as payed
-     * @param string $mode Payment mode
      * @throws Exception
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
-    public function markAsPayed(Order $order)
+    public function markAsPayed(CurrentSite $currentSite, UrlGenerator $urlGenerator, Order $order): void
     {
         $mailer = $this->getMailer();
 
@@ -917,17 +924,12 @@ class OrderManager extends EntityManager
 
         // Books & e-books
         if ($order->has('user_id') && !empty($ebooks)) {
-            $config = Config::load();
-            $currentSite = CurrentSite::buildFromConfig($config);
-            $user = UserQuery::create()->findPk($order->get('user_id'));
-
             $items = array_map(function (Stock $ebook) {
                 return StockQuery::create()->findPk($ebook->get('id'));
             }, $ebooks);
 
+            $user = UserQuery::create()->findPk($order->get('user_id'));
             $usecase = new AddArticleToUserLibraryUsecase($mailer);
-            $container = include __DIR__."/../src/container.php";
-            $urlGenerator = $container->get("url_generator");
             $usecase->execute(
                 currentSite: $currentSite,
                 urlGenerator: $urlGenerator,
@@ -1012,8 +1014,6 @@ class OrderManager extends EntityManager
             <p>
                 Merci pour votre confiance.
             </p>
-
-            <p><a href=""http://'.$globalSite->get('domain').'/>'.$globalSite->get('title').'</a></p>
         ';
         $mailer->send($order->get('email'), $subject, $content);
 
