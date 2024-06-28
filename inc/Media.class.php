@@ -55,7 +55,8 @@ class Media
         }
 
         // Exists
-        if ($this->path() !== null && file_exists($this->path())) {
+        $fullPath = realpath(__DIR__ . "/../" . $this->path());
+        if ($fullPath !== false) {
             $this->setExists(true);
         }
     }
