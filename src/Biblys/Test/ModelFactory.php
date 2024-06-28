@@ -234,6 +234,7 @@ class ModelFactory
      */
     public static function createOrder(
         Site   $site = null,
+        User   $user = null,
         string $axysAccountId = null,
         string $slug = null,
     ): Order
