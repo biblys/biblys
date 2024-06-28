@@ -7,7 +7,7 @@ use Mailjet\Client;
 use Mailjet\Client as Mailjet;
 use Mailjet\Resources;
 use Mailjet\Response;
-use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class MailjetMailingList implements MailingListInterface
 {
@@ -117,8 +117,9 @@ class MailjetMailingList implements MailingListInterface
         ]);
         if (!$response->success()) {
             $data = $response->getData();
-            $errorMessage = "Mailjet a répondu : {$data["ErrorInfo"]} {$data["ErrorMessage"]}";
-            throw new ServiceUnavailableHttpException(null, $errorMessage);
+            $errorDetails = join ($data["ErrorInfo"]);
+            $errorMessage = "Mailjet a répondu : {$data["StatusCode"]} {$data["ErrorMessage"]} : $errorDetails";
+            throw new BadRequestHttpException($errorMessage);
         }
         return $response;
     }
