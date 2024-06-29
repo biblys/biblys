@@ -114,14 +114,8 @@ return function (
             $crowdfunding++;
         }
 
-        // On order
-        $availability = null;
-        if (!$stock->get('purchase_date') && $currentSite->getSite()->getPublisherId() === null) {
-            $on_order = 1;
-            $availability = '<span class="fa fa-square lightblue" title="Sur commande"></span>&nbsp;';
-        }
-
         // Preorder
+        $availability = "";
         $preorder = null;
         if ($articleEntity->get('pubdate') > date("Y-m-d")) {
             $pre_order = 1;
@@ -346,11 +340,6 @@ return function (
         // Pre-order books
         if ($pre_order) {
             $content .= '<p class="warning">Certains des livres de votre panier (<span class="fa fa-square lightblue" title="Précommande"></span>) sont à paraître. Votre commande sera expédiée lorsque tous les articles qu\'elle contient seront parus.</p>';
-        }
-
-        // On order books
-        if ($on_order) {
-            $content .= '<p class="warning">Certains des livres de votre panier (<span class="fa fa-square lightblue" title="Sur commande"></span>) ne sont pas disponibles en stock et doivent être commandés. L\'expédition de votre commande peut être retardée de 72h.</p>';
         }
 
         $content .= CartHelpers::getCartSuggestions($currentSite, $urlGenerator, $imagesService);
