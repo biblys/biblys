@@ -103,11 +103,6 @@ $_ECHO .='
 				<input type="checkbox" name="supplier_notva" id="supplier_notva" value="1" '.($supplier->has('notva') ? 'checked' : null).'>
 				<label class="after" for="supplier_notva">Exempté de TVA</label>
 			</p>
-
-			<p>
-				<input type="checkbox" name="supplier_on_order" id="supplier_on_order" value="1" '.($supplier->has('on_order') ? 'checked' : null).'>
-				<label class="after" for="supplier_on_order">Livres vendables sur commande</label>
-			</p>
 		</fieldset>
 		<fieldset class="center">
 			<button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Enregistrer le fournisseur</button>

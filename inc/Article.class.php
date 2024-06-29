@@ -1514,13 +1514,6 @@ class ArticleManager extends EntityManager
             $links .= ' [hide:' . $h["site_id"] . ']';
         }
 
-        if ($article->has('publisher_id')) {
-            $onorders = $_SQL->query("SELECT `links`.`site_id` FROM `links` JOIN `suppliers` USING(`supplier_id`) WHERE `publisher_id` = " . $article->get('publisher_id') . " AND `supplier_on_order` = 1");
-            while ($oo = $onorders->fetch()) {
-                $links .= ' [onorder:' . $oo["site_id"] . ']';
-            }
-        }
-
         // EANs of downloadable files
         $fm = new FileManager();
         if ($dlfiles = $fm->getAll(["article_id" => $article->get('id')])) {
