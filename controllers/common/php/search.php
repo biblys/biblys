@@ -118,12 +118,6 @@ if (!$input) {
 				$sql[] = "`stock_condition` != 'Neuf'";
 				$filters .= ' d\'occasion';
 			}
-			elseif ($q == "commande")
-			{
-                /** @var $site */
-                $sql[] = "`stock_id` IS NULL AND `article_links` LIKE '%[onorder:".$site->get("id")."]%' AND `article_availability` = 1";
-				$filters .= ' sur commande';
-			}
 			elseif ($q == "indisp")
 			{
 				$sql[] = "`stock_id` IS NULL";

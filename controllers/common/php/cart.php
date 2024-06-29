@@ -60,7 +60,6 @@ return function (
     $Total = 0;
     $Articles = 0;
     $pre_order = 0;
-    $on_order = 0;
     $downloadable = 0;
 
     $sm = new StockManager();

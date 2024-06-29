@@ -160,45 +160,6 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test on order
-     * @depends testUpdate
-     * @throws Exception
-     */
-    public function testOnOrder(Article $article)
-    {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
-        $siteId = $globalSite->get("id");
-
-        // Create a fake publisher for article
-        $pm = new PublisherManager();
-        $publisher = $pm->create([
-            'publisher_name' => 'Publitou' . rand(1, 10000),
-            'publisher_url' => 'publitou' . rand(1, 10000)
-        ]);
-        $article->set('publisher_id', $publisher->get('id'));
-
-        // Create a fake on order supplier
-        $sm = new SupplierManager();
-        $supplier = $sm->create(['supplier_on_order' => 1]);
-
-        // Associate publisher with supplier
-        $lm = new LinkManager();
-        $lm->create([
-            'site_id' => $siteId,
-            'publisher_id' => $publisher->get('id'),
-            'supplier_id' => $supplier->get('id')
-        ]);
-
-        // Refresh metadata
-        $article = $this->m->refreshMetadata($article);
-
-        $this->assertStringContainsString(
-            "[onorder:$siteId]",
-            $article->get('links')
-        );
-    }
-
-    /**
      * Test generating cover tag
      * @throws Exception
      */

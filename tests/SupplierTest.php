@@ -47,14 +47,12 @@ class SupplierTest extends PHPUnit\Framework\TestCase
         $sm = new SupplierManager();
 
         $supplier->set('supplier_name', 'Fournitout');
-        $supplier->set('supplier_on_order', 1);
         $sm->update($supplier);
 
         $updatedSupplier = $sm->getById($supplier->get('id'));
 
         $this->assertTrue($updatedSupplier->has('updated'));
         $this->assertEquals($updatedSupplier->get('name'), 'Fournitout');
-        $this->assertEquals($updatedSupplier->get('on_order'), 1);
 
         return $updatedSupplier;
     }

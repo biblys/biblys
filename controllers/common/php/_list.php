@@ -99,9 +99,6 @@ if (!empty($_GET["q"])) {
             } elseif ($q == "occasion") {
                 $sql[] = "`stock_condition` != 'Neuf'";
                 $filters .= ' d\'occasion';
-            } elseif ($q == "commande") {
-                $sql[] = "`stock_id` IS NULL AND `article_links` LIKE '%[onorder:" .$currentSite->getId() ."]%' AND `article_availability` = 1";
-                $filters .= ' sur commande';
             } elseif ($q == "indisp") {
                 $sql[] = "`stock_id` IS NULL";
                 $filters .= ' pas en stock';
@@ -276,14 +273,6 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
         $x["dispo_order"] = 1;
         $x["price"] = currency($x['best_price'] / 100);
 
-
-        // Sur commande
-    } elseif (strstr($x["article_links"], '[onorder:'. $currentSite->getId().']') && $x["article_availability"] == 1) {
-        $x["availability"] = '<img src="/common/img/square_blue.png" alt="Sur commande" title="Sur commande" />';
-        $x["price"] = price($x["article_price"], 'EUR');
-        $x["condition"] = ' onorder';
-    }
-
     // Indisponible
     else {
         $x["availability"] = '<img src="/common/img/square_red.png" alt="Pas en stock" title="Pas en stock" />';
@@ -428,7 +417,6 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
                     <li class="pointer" data-filter="all' .$sel['all'].'"><a><i class="fa fa-square black"></i>&nbsp; tous les livres</a></li>
                     <li class="pointer" data-filter="neuf"'.$sel['neuf'].'><a><i class="fa fa-square green"></i>&nbsp; livres neufs</a></li>
                     <li class="pointer" data-filter="occasion"'.$sel['occasion'].'><a><i class="fa fa-square orange"></i>&nbsp; livres d\'occasion</a></li>
-                    <li class="pointer" data-filter="commande"'.$sel['command'].'><a><i class="fa fa-square blue"></i>&nbsp; dispo. sur commande</a></li>
                     <li class="pointer" data-filter="indisp"'.$sel['indisp'].'><a><i class="fa fa-square red"></i>&nbsp; pas en stock</a></li>
                 </ul>
             </div>
