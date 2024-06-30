@@ -273,8 +273,8 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
         $x["dispo_order"] = 1;
         $x["price"] = currency($x['best_price'] / 100);
 
-    // Indisponible
-    else {
+        // Indisponible
+    } else {
         $x["availability"] = '<img src="/common/img/square_red.png" alt="Pas en stock" title="Pas en stock" />';
         $x["price"] = "pas en stock";
         $x["dispo_order"] = 0;
