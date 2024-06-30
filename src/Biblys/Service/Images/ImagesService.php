@@ -120,7 +120,14 @@ class ImagesService
         $fileName = trim($image->getFilename(), "/");
         $url = "$baseUrl/$filePath/$fileName";
         $version = $image->getVersion() > 1 ? "?v={$image->getVersion()}" : "";
-        return $url . $version;
+        $urlWithVersion = $url . $version;
+
+        if ($this->config->get("images.cdn.service") === "weserv") {
+            $cdnService = new WeservCdnService();
+            return $cdnService->buildUrl(url: $urlWithVersion, width: $width, height: $height);
+        }
+
+        return $urlWithVersion;
     }
 
     public function getCoverPathForArticle(Article $article): ?string
