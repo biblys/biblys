@@ -279,8 +279,8 @@ class TemplateService
 
         $filters[] = new TwigFilter('coverUrl',
             function (Article $article, array $options = []) use ($imagesService) {
-                $width = $options["width"] ?? null;
-                $height = $options["height"] ?? null;
+                $width = $options[0] ?? null;
+                $height = $options[1] ?? null;
                 return $imagesService->getCoverUrlForArticle($article, width: $width, height: $height);
             },
             ['is_variadic' => true]

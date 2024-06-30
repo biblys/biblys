@@ -4,9 +4,18 @@ namespace Biblys\Service\Images;
 
 class WeservCdnService
 {
-    public function buildUrl(string $localUrl): string
+    public function buildUrl(string $url, int $width = null, int $height = null): string
     {
-        $weservOptions = ["url" => $localUrl];
+        $weservOptions = ["url" => $url];
+
+        if ($width !== null) {
+            $weservOptions["w"] = $width;
+        }
+
+        if ($height !== null) {
+            $weservOptions["h"] = $height;
+        }
+
         return "//images.weserv.nl/?".http_build_query($weservOptions);
     }
 }
