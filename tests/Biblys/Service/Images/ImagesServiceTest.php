@@ -247,6 +247,43 @@ class ImagesServiceTest extends TestCase
         $this->assertEquals("images/book/covers/book-cover-updated.jpeg?v=2", $coverUrl);
     }
 
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetCoverUrlForArticleWithCDN(): void
+    {
+        // given
+        $site = ModelFactory::createSite();
+
+        $config = new Config([
+            "images" => [
+                "base_url" => "https://paronymie.fr/images/",
+                "cdn" => ["service" => "weserv"],
+            ],
+        ]);
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        $article = ModelFactory::createArticle();
+        ModelFactory::createImage(
+            article: $article,
+            filePath: "book/covers/",
+            fileName: "book-cover.jpeg",
+        );
+
+        // when
+        $coverUrl = $service->getCoverUrlForArticle($article);
+
+        // then
+        $this->assertEquals(
+            "//images.weserv.nl/?url=https%3A%2F%2Fparonymie.fr%2Fimages%2Fbook%2Fcovers%2Fbook-cover.jpeg",
+            $coverUrl
+        );
+    }
+
     /**
      * @throws PropelException
      * @throws Exception

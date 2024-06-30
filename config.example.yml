@@ -55,6 +55,8 @@ site: 1
 #images:
 #  path: public/images/
 #  base_url: /images/
+#  cdn:
+#    service: weserv
 
 ## Path to composer home folder must be defined
 ## to allow auto-updates
