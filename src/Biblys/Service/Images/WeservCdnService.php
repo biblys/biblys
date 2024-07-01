@@ -2,7 +2,7 @@
 
 namespace Biblys\Service\Images;
 
-class WeservCdnService
+class WeservCdnService implements CdnService
 {
     public function buildUrl(string $url, int $width = null, int $height = null): string
     {
