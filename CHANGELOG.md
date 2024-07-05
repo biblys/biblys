@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 2.83.0 (DEV)
+## 2.83.0 (5 juillet 2024)
 
 Améliorations
 
@@ -25,19 +25,24 @@ Déploiement
 composer db:migrate
 ```
 
-2. Mettre à jour la configuration, en remplaçant
+2. Mettre à jour la configuration, en remplaçant les paramètres `media_path`,
+  `media_url` et `images_cdn` :
 
 ```yaml
 media_path: public/images
 media_url: /images/
+images_cdn: 
+  service: weserv
 ```
 
-par
+par `images.path`, `images.base_url` et `images.cdn` :
 
 ```yaml
 images:
   path: public/images
   base_url: /images/
+  cdn:
+    service: weserv
 ```
 
 3. Importer en base les images de couverture des articles
