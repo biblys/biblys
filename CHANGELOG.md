@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.83.1 (8 juillet 2024)
+
+Corrections
+
+- Certaines images, après envoi sur le serveur, pouvaient ne pas s'afficher.
+  C'est corrigé.
+
 ## 2.83.0 (5 juillet 2024)
 
 Améliorations

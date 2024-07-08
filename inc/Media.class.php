@@ -50,13 +50,13 @@ class Media
 
         // Path
         if ($this->domain() == 'media') {
-            $this->setDirectoryPath($this->config->getImagesPath() . '/' . $this->type() . '/' . $this->dir() . '/');
+            $directoryPath = __DIR__ . "/../" . $this->config->getImagesPath() . '/' . $this->type() . '/' . $this->dir() . '/';
+            $this->setDirectoryPath($directoryPath);
             $this->setPath($this->directoryPath() . $this->id() . '.' . $this->ext());
         }
 
         // Exists
-        $fullPath = realpath(__DIR__ . "/../" . $this->path());
-        if ($fullPath !== false) {
+        if (realpath($this->path()) !== false) {
             $this->setExists(true);
         }
     }
