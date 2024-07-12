@@ -6,6 +6,7 @@ use ArticleManager;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Pagination;
+use Biblys\Service\QueryParamsService;
 use Exception;
 use Framework\Controller;
 use PeopleManager;
@@ -55,7 +56,10 @@ class PeopleController extends Controller
      * @throws LoaderError
      * @throws Exception
      */
-    public function showAction(Request $request, $slug): RedirectResponse|Response
+    public function showAction(
+        QueryParamsService $queryParams,
+                           $slug
+    ): RedirectResponse|Response
     {
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
@@ -72,10 +76,9 @@ class PeopleController extends Controller
             return new RedirectResponse("/legacy/p/$slug/");
         }
 
-        $request->attributes->set("page_title", $people->getName());
-
         // Pagination
-        $page = (int)$request->query->get('p', 0);
+        $queryParams->parse(["p" => ["type" => "numeric", "min" => 0, "default" => 0]]);
+        $page = $queryParams->getInteger("p");
         $totalCount = $am->countAllFromPeople($people);
         $pagination = new Pagination($page, $totalCount);
 
