@@ -6,6 +6,8 @@ Corrections
 
 - Certaines images, après envoi sur le serveur, pouvaient ne pas s'afficher.
   C'est corrigé.
+- Une faille de sécurité affectant la gestion des listes d'exemplaires a
+  été corrigée.
 
 ## 2.83.0 (5 juillet 2024)
 

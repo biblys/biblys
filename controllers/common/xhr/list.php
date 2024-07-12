@@ -1,6 +1,9 @@
 <?php
 
 use Biblys\Isbn\Isbn;
+use Biblys\Service\CurrentUser;
+
+/** @var CurrentUser $currentUser */
 
 $lm = new LinkManager();
 
@@ -9,6 +12,8 @@ $query = $request->request->get("query", $query);
 $listId = $request->request->get("list_id");
 $stockId = $request->request->get("stock_id");
 $del = $request->request->get("del");
+
+$currentUser->authAdmin();
 
 if ($query) {
     $req = null;
