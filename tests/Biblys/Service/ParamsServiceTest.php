@@ -309,6 +309,72 @@ class ParamsServiceTest extends TestCase
         $this->assertEquals("été", $q);
     }
 
+    /** "min" rule */
+
+    public function testIfValueIsLessThanMinimum()
+    {
+        // given
+        $request = new Request();
+        $request->query->set("p", "1");
+
+        $specs = [
+            "p" => [
+                "type" => "numeric",
+                "min" => 3,
+            ],
+        ];
+        $queryParamsService = new GenericParamsService($request);
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("Parameter 'p' cannot be less than 3");
+
+        // when
+        $queryParamsService->parse($specs);
+    }
+
+    public function testIfValueEqualsMinimum()
+    {
+        // given
+        $request = new Request();
+        $request->query->set("p", "3");
+
+        $specs = [
+            "p" => [
+                "type" => "numeric",
+                "min" => 3,
+            ],
+        ];
+        $queryParamsService = new GenericParamsService($request);
+
+        // when
+        $queryParamsService->parse($specs);
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
+
+    public function testIfValueIsGreaterThanMinimum()
+    {
+        // given
+        $request = new Request();
+        $request->query->set("p", "5");
+
+        $specs = [
+            "p" => [
+                "type" => "numeric",
+                "min" => 3,
+            ],
+        ];
+        $queryParamsService = new GenericParamsService($request);
+
+        // when
+        $queryParamsService->parse($specs);
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
+
     /** getInt */
 
     public function testGetIntConvertsNumericStringToInt(): void

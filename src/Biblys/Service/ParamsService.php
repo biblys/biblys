@@ -115,6 +115,14 @@ abstract class ParamsService
                     continue;
                 }
 
+                if ($rule === "min") {
+                    if (intval($value) < $ruleValue) {
+                        throw new BadRequestHttpException("Parameter '$param' cannot be less than $ruleValue");
+                    }
+
+                    continue;
+                }
+
                 throw new InvalidArgumentException("Unknown validation rule '$rule'");
             }
         }
