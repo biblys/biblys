@@ -7,73 +7,80 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class BodyParamsServiceTest extends TestCase
+class GenericParamsService extends ParamsService
 {
+    public function __construct(private readonly Request $request)
+    {
+        $params = $this->request->query->all();
+        parent::__construct($params);
+    }
+}
 
+class ParamsServiceTest extends TestCase
+{
     /**
      * Valid value
      */
-
     public function testValidValue()
     {
         // given
         $request = new Request();
-        $request->request->set("login", "user313");
-
-        $specs = [
-            "login" => [
-                "type" => "string",
-            ],
-        ];
-        $bodyParamsService = new BodyParamsService($request);
-
-        // when
-        $bodyParamsService->parse($specs);
-        $param = $bodyParamsService->get("login");
-
-        // then
-        $this->assertEquals("user313", $param);
-    }
-
-    public function testUnexpectedBodyParam(): void
-    {
-        // given
-        $request = new Request();
-        $request->request->set("ref", "unexpected body param");
+        $request->query->set("q", "search terms");
 
         $specs = [
             "q" => [
                 "type" => "string",
             ],
         ];
-        $bodyParamsService = new BodyParamsService($request);
+        $queryParamsService = new GenericParamsService($request);
+
+        // when
+        $queryParamsService->parse($specs);
+        $searchQuery = $queryParamsService->get("q");
+
+        // then
+        $this->assertEquals("search terms", $searchQuery);
+    }
+
+    public function testUnexpectedQueryParam(): void
+    {
+        // given
+        $request = new Request();
+        $request->query->set("ref", "unexpected query param");
+
+        $specs = [
+            "q" => [
+                "type" => "string",
+            ],
+        ];
+        $queryParamsService = new GenericParamsService($request);
 
         // then
         $this->expectException(BadRequestHttpException::class);
         $this->expectExceptionMessage("Unexpected parameter 'ref'");
 
         // when
-        $bodyParamsService->parse($specs);
+        $queryParamsService->parse($specs);
     }
 
     public function testUnknownRule(): void {
         // given
         $request = new Request();
-        $request->request->set("q", "11");
+        $request->query->set("q", "11");
 
         $specs = [
             "q" => [
                 "is_prime" => "true",
             ],
         ];
-        $bodyParamsService = new BodyParamsService($request);
+        $queryParamsService = new GenericParamsService($request);
 
         // then
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Unknown validation rule 'is_prime'");
 
         // when
-        $bodyParamsService->parse($specs);
+        $queryParamsService->parse($specs);
     }
 
     public function testMissingParameter()
@@ -86,14 +93,14 @@ class BodyParamsServiceTest extends TestCase
                 "type" => "string",
             ],
         ];
-        $bodyParamsService = new BodyParamsService($request);
+        $queryParamsService = new GenericParamsService($request);
 
         // then
         $this->expectException(BadRequestHttpException::class);
         $this->expectExceptionMessage("Parameter 'q' is required");
 
         // when
-        $bodyParamsService->parse($specs);
+        $queryParamsService->parse($specs);
     }
 
     /** "type" rule */
@@ -102,21 +109,21 @@ class BodyParamsServiceTest extends TestCase
     {
         // given
         $request = new Request();
-        $request->request->set("q", "search terms");
+        $request->query->set("q", "search terms");
 
         $specs = [
             "q" => [
                 "type" => "book",
             ],
         ];
-        $bodyParamsService = new BodyParamsService($request);
+        $queryParamsService = new GenericParamsService($request);
 
         // then
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Invalid value 'book' for type rule");
 
         // when
-        $bodyParamsService->parse($specs);
+        $queryParamsService->parse($specs);
     }
 
     /** "type:string" rule */
@@ -125,21 +132,21 @@ class BodyParamsServiceTest extends TestCase
     {
         // given
         $request = new Request();
-        $request->request->set("q", [1]);
+        $request->query->set("q", [1]);
 
         $specs = [
             "q" => [
                 "type" => "string",
             ],
         ];
-        $bodyParamsService = new BodyParamsService($request);
+        $queryParamsService = new GenericParamsService($request);
 
         // then
         $this->expectException(BadRequestHttpException::class);
         $this->expectExceptionMessage("Parameter 'q' must be of type string");
 
         // when
-        $bodyParamsService->parse($specs);
+        $queryParamsService->parse($specs);
     }
 
     /** "type:numeric" rule */
@@ -148,21 +155,21 @@ class BodyParamsServiceTest extends TestCase
     {
         // given
         $request = new Request();
-        $request->request->set("page", "abc");
+        $request->query->set("page", "abc");
 
         $specs = [
             "page" => [
                 "type" => "numeric",
             ],
         ];
-        $bodyParamsService = new BodyParamsService($request);
+        $queryParamsService = new GenericParamsService($request);
 
         // then
         $this->expectException(BadRequestHttpException::class);
         $this->expectExceptionMessage("Parameter 'page' must be of type numeric");
 
         // when
-        $bodyParamsService->parse($specs);
+        $queryParamsService->parse($specs);
     }
 
     /** "default" rule */
@@ -178,11 +185,11 @@ class BodyParamsServiceTest extends TestCase
                 "default" => "0",
             ],
         ];
-        $bodyParamsService = new BodyParamsService($request);
-        $bodyParamsService->parse($specs);
+        $queryParamsService = new GenericParamsService($request);
+        $queryParamsService->parse($specs);
 
         // when
-        $page = $bodyParamsService->get("page");
+        $page = $queryParamsService->get("page");
 
         // then
         $this->assertEquals("0", $page);
@@ -192,7 +199,7 @@ class BodyParamsServiceTest extends TestCase
     {
         // given
         $request = new Request();
-        $request->request->set("page", "1");
+        $request->query->set("page", "1");
 
         $specs = [
             "page" => [
@@ -200,11 +207,11 @@ class BodyParamsServiceTest extends TestCase
                 "default" => "0",
             ],
         ];
-        $bodyParamsService = new BodyParamsService($request);
-        $bodyParamsService->parse($specs);
+        $queryParamsService = new GenericParamsService($request);
+        $queryParamsService->parse($specs);
 
         // when
-        $page = $bodyParamsService->get("page");
+        $page = $queryParamsService->get("page");
 
         // then
         $this->assertEquals("1", $page);
@@ -216,7 +223,7 @@ class BodyParamsServiceTest extends TestCase
     {
         // given
         $request = new Request();
-        $request->request->set("q", "la");
+        $request->query->set("q", "la");
 
         $specs = [
             "q" => [
@@ -224,21 +231,21 @@ class BodyParamsServiceTest extends TestCase
                 "mb_min_length" => 3,
             ],
         ];
-        $bodyParamsService = new BodyParamsService($request);
+        $queryParamsService = new GenericParamsService($request);
 
         // then
         $this->expectException(BadRequestHttpException::class);
         $this->expectExceptionMessage("Parameter 'q' must be at least 3 characters long");
 
         // when
-        $bodyParamsService->parse($specs);
+        $queryParamsService->parse($specs);
     }
 
     public function testLengthIsLongerThanMinimumLength()
     {
         // given
         $request = new Request();
-        $request->request->set("q", "les");
+        $request->query->set("q", "les");
 
         $specs = [
             "q" => [
@@ -246,11 +253,11 @@ class BodyParamsServiceTest extends TestCase
                 "mb_min_length" => 3,
             ],
         ];
-        $bodyParamsService = new BodyParamsService($request);
-        $bodyParamsService->parse($specs);
+        $queryParamsService = new GenericParamsService($request);
+        $queryParamsService->parse($specs);
 
         // when
-        $q = $bodyParamsService->get("q");
+        $q = $queryParamsService->get("q");
 
         // then
         $this->assertEquals("les", $q);
@@ -262,7 +269,7 @@ class BodyParamsServiceTest extends TestCase
     {
         // given
         $request = new Request();
-        $request->request->set("q", "hiver");
+        $request->query->set("q", "hiver");
 
         $specs = [
             "q" => [
@@ -270,21 +277,21 @@ class BodyParamsServiceTest extends TestCase
                 "mb_max_length" => 3,
             ],
         ];
-        $bodyParamsService = new BodyParamsService($request);
+        $queryParamsService = new GenericParamsService($request);
 
         // then
         $this->expectException(BadRequestHttpException::class);
         $this->expectExceptionMessage("Parameter 'q' must be 3 characters long or shorter");
 
         // when
-        $bodyParamsService->parse($specs);
+        $queryParamsService->parse($specs);
     }
 
     public function testLengthIsShorterThanMaximumLength()
     {
         // given
         $request = new Request();
-        $request->request->set("q", "été");
+        $request->query->set("q", "été");
 
         $specs = [
             "q" => [
@@ -292,11 +299,11 @@ class BodyParamsServiceTest extends TestCase
                 "mb_max_length" => 3,
             ],
         ];
-        $bodyParamsService = new BodyParamsService($request);
-        $bodyParamsService->parse($specs);
+        $queryParamsService = new GenericParamsService($request);
+        $queryParamsService->parse($specs);
 
         // when
-        $q = $bodyParamsService->get("q");
+        $q = $queryParamsService->get("q");
 
         // then
         $this->assertEquals("été", $q);
@@ -308,18 +315,18 @@ class BodyParamsServiceTest extends TestCase
     {
         // given
         $request = new Request();
-        $request->request->set("page", "123");
+        $request->query->set("page", "123");
 
         $specs = [
             "page" => [
                 "type" => "numeric",
             ],
         ];
-        $bodyParamsService = new BodyParamsService($request);
-        $bodyParamsService->parse($specs);
+        $queryParamsService = new GenericParamsService($request);
+        $queryParamsService->parse($specs);
 
         // when
-        $page = $bodyParamsService->getInteger("page");
+        $page = $queryParamsService->getInteger("page");
 
         // then
         $this->assertEquals(123, $page);
@@ -331,21 +338,21 @@ class BodyParamsServiceTest extends TestCase
     {
         // given
         $request = new Request();
-        $request->request->set("alphabet", "abc");
+        $request->query->set("alphabet", "abc");
 
         $specs = [
             "alphabet" => [
                 "type" => "string",
             ],
         ];
-        $bodyParamsService = new BodyParamsService($request);
-        $bodyParamsService->parse($specs);
+        $queryParamsService = new GenericParamsService($request);
+        $queryParamsService->parse($specs);
 
         // then
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Cannot get non numeric parameter 'alphabet' as an integer");
 
         // when
-        $bodyParamsService->getInteger("alphabet");
+        $queryParamsService->getInteger("alphabet");
     }
 }
