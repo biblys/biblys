@@ -8,6 +8,7 @@ Corrections
   C'est corrigé.
 - Une faille de sécurité affectant la gestion des listes d'exemplaires a
   été corrigée.
+- La validation des paramètres de requête a été améliorée.
 
 ## 2.83.0 (5 juillet 2024)
 
