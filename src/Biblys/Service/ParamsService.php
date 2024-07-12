@@ -75,6 +75,12 @@ abstract class ParamsService
                                 "Parameter '$param' must be of type string"
                             );
                         }
+
+                        $utf8Value = mb_convert_encoding($value, "UTF-8", "UTF-8");
+                        if ($utf8Value !== $value) {
+                            throw new BadRequestHttpException("Malformed UTF characters in parameter '$param'");
+                        }
+
                         continue;
                     }
 
