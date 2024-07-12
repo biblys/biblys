@@ -15,18 +15,12 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class ImagesService
 {
-    private string $basePath;
-    private string|array|bool $baseUrl;
-
     public function __construct(
         private readonly Config      $config,
         private readonly CurrentSite $currentSite,
         private readonly Filesystem  $filesystem,
     )
     {
-        $basePathFromRoot = $this->config->getImagesPath();
-        $this->basePath = __DIR__ . "/../../../../$basePathFromRoot";
-        $this->baseUrl = $this->config->getImagesBaseUrl();
     }
 
     /**
@@ -45,30 +39,32 @@ class ImagesService
         list($width, $height) = $imageDimensions;
 
         $image = $this->_getCoverImageForArticle($article);
-        if ($image) {
-            $image->setVersion($image->getVersion() + 1);
-            $this->filesystem->remove($this->_buildArticleCoverImagePath($image));
+        if ($image->exists()) {
+            $imageModel = $image->getModel();
+            $imageModel->setVersion($imageModel->getVersion() + 1);
+            $this->filesystem->remove($image->getFilePath());
         } else {
-            $image = new Image();
-            $image->setVersion(1);
+            $imageModel = new Image();
+            $imageModel->setVersion(1);
+            $image->setModel($imageModel);
         }
 
-        $image->setSite($this->currentSite->getSite());
-        $image->setType("cover");
-        $image->setArticleId($article->getId());
-        $image->setFilepath("book/$imageDirectory/");
-        $image->setFilename("{$article->getId()}.jpg");
-        $image->setMediatype(mime_content_type($imagePath));
-        $image->setFilesize(filesize($imagePath));
-        $image->setWidth($width);
-        $image->setHeight($height);
+        $imageModel->setSite($this->currentSite->getSite());
+        $imageModel->setType("cover");
+        $imageModel->setArticleId($article->getId());
+        $imageModel->setFilepath("book/$imageDirectory/");
+        $imageModel->setFilename("{$article->getId()}.jpg");
+        $imageModel->setMediatype(mime_content_type($imagePath));
+        $imageModel->setFilesize(filesize($imagePath));
+        $imageModel->setWidth($width);
+        $imageModel->setHeight($height);
 
         $db = Propel::getWriteConnection(ImageTableMap::DATABASE_NAME);
         $db->beginTransaction();
 
         try {
-            $image->save($db);
-            $this->filesystem->copy($imagePath, $this->_buildArticleCoverImagePath($image));
+            $imageModel->save($db);
+            $this->filesystem->copy($imagePath, $image->getFilePath());
             $db->commit();
         } catch (Exception $exception) {
             $db->rollBack();
@@ -86,8 +82,9 @@ class ImagesService
 
         try {
             $image = $this->_getCoverImageForArticle($article);
-            $image->delete($db);
-            $this->filesystem->remove($this->_buildArticleCoverImagePath($image));
+            $imageModel = $image->getModel();
+            $imageModel->delete($db);
+            $this->filesystem->remove($image->getFilePath());
             $db->commit();
         } catch (Exception $exception) {
             $db->rollBack();
@@ -111,48 +108,16 @@ class ImagesService
     ?string
     {
         $image = $this->_getCoverImageForArticle($article);
-        if (!$image) {
+        if (!$image->exists()) {
             return null;
         }
 
-        $baseUrl = rtrim($this->baseUrl, "/");
-        $filePath = trim($image->getFilepath(), "/");
-        $fileName = trim($image->getFilename(), "/");
-        $url = "$baseUrl/$filePath/$fileName";
-        $version = $image->getVersion() > 1 ? "?v={$image->getVersion()}" : "";
-        $urlWithVersion = $url . $version;
-
-        if ($this->config->get("images.cdn.service") === "weserv") {
-            $cdnService = new WeservCdnService();
-            return $cdnService->buildUrl(url: $urlWithVersion, width: $width, height: $height);
-        }
-
-        return $urlWithVersion;
+        return $image->getUrl($width, $height);
     }
 
-    public function getCoverPathForArticle(Article $article): ?string
+    private function _getCoverImageForArticle(Article $article): ImageForModel
     {
-        $image = $this->_getCoverImageForArticle($article);
-        if (!$image) {
-            return null;
-        }
-
-        return $this->_buildArticleCoverImagePath($image);
-    }
-
-    private function _buildArticleCoverImagePath(Image $image): ?string
-    {
-        $path = "$this->basePath/{$image->getFilepath()}/{$image->getFilename()}";
-        return $this->_removeDuplicateSlashes($path);
-    }
-
-    private function _getCoverImageForArticle(Article $article): ?Image
-    {
-        return ImageQuery::create()->findOneByArticleId($article->getId());
-    }
-
-    private function _removeDuplicateSlashes(string $string): string|array
-    {
-        return str_replace("//", "/", $string);
+        $image = ImageQuery::create()->findOneByArticleId($article->getId());
+        return new ImageForModel($this->config, $image);
     }
 }
