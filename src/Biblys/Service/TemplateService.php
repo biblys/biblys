@@ -274,14 +274,14 @@ class TemplateService
         $imagesService = new ImagesService($config, $currentSite, new Filesystem());
 
         $filters[] = new TwigFilter('hasCover', function (Article $article) use($imagesService) {
-            return $imagesService->articleHasCoverImage($article);
+            return $imagesService->imageExistsFor($article);
         });
 
         $filters[] = new TwigFilter('coverUrl',
             function (Article $article, array $options = []) use ($imagesService) {
                 $width = $options[0] ?? null;
                 $height = $options[1] ?? null;
-                return $imagesService->getCoverUrlForArticle($article, width: $width, height: $height);
+                return $imagesService->getImageUrlFor($article, width: $width, height: $height);
             },
             ['is_variadic' => true]
         );

@@ -20,12 +20,12 @@ require_once __DIR__ . "/../../../setUp.php";
 
 class ImagesServiceTest extends TestCase
 {
-    /** ImagesService->addArticleCoverImage */
+    /** ImagesService->addImageFor */
 
     /**
      * @throws PropelException
      */
-    public function testAddArticleCoverImageCreatesImage(): void
+    public function testAddImageForCreatesImage(): void
     {
         // given
         $article = new Article();
@@ -39,7 +39,7 @@ class ImagesServiceTest extends TestCase
         $service = new ImagesService($config, $currentSite, $filesystem);
 
         // when
-        $service->addArticleCoverImage($article, __DIR__ . "/image.jpeg");
+        $service->addImageFor($article, __DIR__ . "/image.jpeg");
 
         // then
         $image = ImageQuery::create()->findOneByArticleId($article->getId());
@@ -59,7 +59,7 @@ class ImagesServiceTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function testAddArticleCoverImageCreatesUpdatesImage(): void
+    public function testAddImageForCreatesUpdatesImage(): void
     {
         // given
         $site = ModelFactory::createSite();
@@ -73,11 +73,11 @@ class ImagesServiceTest extends TestCase
         $filesystem->expects("remove");
         $service = new ImagesService($config, $currentSite, $filesystem);
 
-        $service->addArticleCoverImage($article, __DIR__ . "/image.jpeg");
+        $service->addImageFor($article, __DIR__ . "/image.jpeg");
         $createdImage = ImageQuery::create()->findOneByArticleId($article->getId());
 
         // when
-        $service->addArticleCoverImage($article, __DIR__ . "/image2.jpeg");
+        $service->addImageFor($article, __DIR__ . "/image2.jpeg");
 
         // then
         $updatedImage = ImageQuery::create()->findOneByArticleId($article->getId());
@@ -97,7 +97,7 @@ class ImagesServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testAddArticleCoverImageIfFileCopyFails(): void
+    public function testAddImageForIfFileCopyFails(): void
     {
         // given
         $site = ModelFactory::createSite();
@@ -111,7 +111,7 @@ class ImagesServiceTest extends TestCase
 
         // when
         $exception = Helpers::runAndCatchException(function () use ($service, $article) {
-            $service->addArticleCoverImage($article, __DIR__ . "/image.jpeg");
+            $service->addImageFor($article, __DIR__ . "/image.jpeg");
         });
 
         // then
@@ -120,12 +120,12 @@ class ImagesServiceTest extends TestCase
         $this->assertNull($image);
     }
 
-    /** ImagesService->articleHasCoverImage */
+    /** ImagesService->imageExistsFor */
 
     /**
      * @throws PropelException
      */
-    public function testArticleHasCoverImageReturnsTrue()
+    public function testImageExistsForReturnsTrue()
     {
         // given
         $site = ModelFactory::createSite();
@@ -138,7 +138,7 @@ class ImagesServiceTest extends TestCase
         $service = new ImagesService($config, $currentSite, $filesystem);
 
         // when
-        $hasCover = $service->articleHasCoverImage($article);
+        $hasCover = $service->imageExistsFor($article);
 
         // then
         $this->assertTrue($hasCover);
@@ -147,7 +147,7 @@ class ImagesServiceTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function testArticleHasCoverImageReturnsFalse()
+    public function testImageExistsForReturnsFalse()
     {
         // given
         $site = ModelFactory::createSite();
@@ -159,19 +159,19 @@ class ImagesServiceTest extends TestCase
         $service = new ImagesService($config, $currentSite ,$filesystem);
 
         // when
-        $hasCover = $service->articleHasCoverImage($article);
+        $hasCover = $service->imageExistsFor($article);
 
         // then
         $this->assertFalse($hasCover);
     }
 
-    /** ImagesService->getCoverUrlForArticle */
+    /** ImagesService->getImageUrlFor */
 
     /**
      * @throws PropelException
      * @throws Exception
      */
-    public function testGetCoverUrlForArticleIfItDoesNotExist(): void
+    public function testGetImageUrlForIfItDoesNotExist(): void
     {
         // given
         $site = ModelFactory::createSite();
@@ -184,7 +184,7 @@ class ImagesServiceTest extends TestCase
 
 
         // when
-        $coverUrl = $service->getCoverUrlForArticle($article);
+        $coverUrl = $service->getImageUrlFor($article);
 
         // then
         $this->assertNull($coverUrl);
@@ -194,7 +194,7 @@ class ImagesServiceTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
-    public function testGetCoverUrlForArticleIfItExists(): void
+    public function testGetImageUrlForIfItExists(): void
     {
         // given
         $site = ModelFactory::createSite();
@@ -212,7 +212,7 @@ class ImagesServiceTest extends TestCase
         );
 
         // when
-        $coverUrl = $service->getCoverUrlForArticle($article);
+        $coverUrl = $service->getImageUrlFor($article);
 
         // then
         $this->assertEquals("/images/book/covers/book-cover.jpeg", $coverUrl);
@@ -223,7 +223,7 @@ class ImagesServiceTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function testDeleteArticleCoverImageDeletesImage(): void
+    public function testDeleteImageForDeletesImage(): void
     {
         // given
         $article = ModelFactory::createArticle();
@@ -237,7 +237,7 @@ class ImagesServiceTest extends TestCase
         $service = new ImagesService($config, $currentSite, $filesystem);
 
         // when
-        $service->deleteArticleCoverImage($article);
+        $service->deleteImageFor($article);
 
         // then
         $deletedImage = ImageQuery::create()->findOneByArticleId($article->getId());
@@ -245,13 +245,11 @@ class ImagesServiceTest extends TestCase
         $filesystem->shouldHaveReceived("remove");
     }
 
-    /** ImagesService->deleteArticleCoverImage */
-
     /**
      * @throws PropelException
      * @throws Exception
      */
-    public function testDeleteArticleCoverImageIfFileDeletionFails(): void
+    public function testDeleteImageForIfFileDeletionFails(): void
     {
         // given
         $article = ModelFactory::createArticle();
@@ -266,7 +264,7 @@ class ImagesServiceTest extends TestCase
 
         // when
         $exception = Helpers::runAndCatchException(function() use($service, $article) {
-            $service->deleteArticleCoverImage($article);
+            $service->deleteImageFor($article);
         });
 
         // then

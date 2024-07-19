@@ -218,7 +218,7 @@ return function (
 
             // Upload de la photo de l'exemplaire
             if (!empty($_FILES['upload_photo']['tmp_name']) && !isset($stock_photo)) {
-                if ($photo->exists()) {
+                if ($imagesService->imageExistsFor($stockEntity)) {
                     $photo->delete();
                 }
                 $photo->upload($_FILES['upload_photo']['tmp_name']);
@@ -417,7 +417,7 @@ return function (
         );
         $articleCover = null;
 
-        if ($imagesService->articleHasCoverImage($article)) {
+        if ($imagesService->imageExistsFor($article)) {
             $articleCover = $templateService->render("AppBundle:Article:_cover.html.twig", [
                     "article" => $article,
                     "height" => 100,

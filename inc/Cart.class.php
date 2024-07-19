@@ -48,7 +48,7 @@ class Cart extends Entity
         $articleModel = ArticleQuery::create()->findPk($articleEntity->get("id"));
 
         // Image
-        $articleCoverUrl = $imagesService->getCoverUrlForArticle($articleModel, height: 100);
+        $articleCoverUrl = $imagesService->getImageUrlFor($articleModel, height: 100);
         $stock_cover = new Media('stock', $stock->get('id'));
 
         if ($articleCoverUrl) $cover = '<img src="' . $articleCoverUrl . '" height=55 alt="' . $articleEntity->get('title') . '">';
