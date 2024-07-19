@@ -60,7 +60,7 @@ class CartHelpers
         foreach ($articles as $article) {
             $cartUrl = $urlGenerator->generate("cart_add_article", ["articleId" => $article->getId()]);
             $coverHtml = "";
-            $articleCoverImageUrl = $imagesService->getCoverUrlForArticle($article);
+            $articleCoverImageUrl = $imagesService->getImageUrlFor($article);
             if ($articleCoverImageUrl) {
                 $coverHtml = '
                         <div class="cart-suggestions_article_cover">
@@ -266,7 +266,7 @@ class CartHelpers
         }
 
         $cover = null;
-        if ($imagesService->articleHasCoverImage($freeArticle)) {
+        if ($imagesService->imageExistsFor($freeArticle)) {
             $cover = $templateService->render("AppBundle:Article:_cover.html.twig", [
                     "article" => $freeArticle,
                     "width" => 256,

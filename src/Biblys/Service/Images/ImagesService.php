@@ -26,7 +26,7 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    public function addArticleCoverImage(Article $article, string $imagePath): void
+    public function addImageFor(Article $article, string $imagePath): void
     {
         $imageDirectory = str_pad(
             string: substr(string: $article->getId(), offset: -2, length: 2),
@@ -38,7 +38,7 @@ class ImagesService
         $imageDimensions = getimagesize($imagePath);
         list($width, $height) = $imageDimensions;
 
-        $image = $this->_getCoverImageForArticle($article);
+        $image = $this->_getImageFor($article);
         if ($image->exists()) {
             $imageModel = $image->getModel();
             $imageModel->setVersion($imageModel->getVersion() + 1);
@@ -75,13 +75,13 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    public function deleteArticleCoverImage(Article $article): void
+    public function deleteImageFor(Article $article): void
     {
         $db = Propel::getWriteConnection(ImageTableMap::DATABASE_NAME);
         $db->beginTransaction();
 
         try {
-            $image = $this->_getCoverImageForArticle($article);
+            $image = $this->_getImageFor($article);
             $imageModel = $image->getModel();
             $imageModel->delete($db);
             $this->filesystem->remove($image->getFilePath());
@@ -95,19 +95,19 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    public function articleHasCoverImage(Article $article): bool
+    public function imageExistsFor(Article $article): bool
     {
         return ImageQuery::create()->filterByArticle($article)->exists();
     }
 
-    public function getCoverUrlForArticle(
+    public function getImageUrlFor(
         Article $article,
         int $width = null,
         int $height = null
     ):
     ?string
     {
-        $image = $this->_getCoverImageForArticle($article);
+        $image = $this->_getImageFor($article);
         if (!$image->exists()) {
             return null;
         }
@@ -115,9 +115,25 @@ class ImagesService
         return $image->getUrl($width, $height);
     }
 
-    private function _getCoverImageForArticle(Article $article): ImageForModel
+    private function _getImageFor(Article $article): ImageForModel
     {
         $image = ImageQuery::create()->findOneByArticleId($article->getId());
         return new ImageForModel($this->config, $image);
+    }
+
+    /** Deprecated methods */
+
+    /**
+     * @deprecated ImagesService->getCoverUrlForArticle is deprecated. Use method getImageUrlFor instead.
+     */
+    public function getCoverUrlForArticle(Article $article, int $width = null, int $height = null): void
+    {
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.84.0",
+            "ImagesService->getCoverUrlForArticle is deprecated. Use method getImageUrlFor instead.",
+        );
+
+        $this->getImageUrlFor($article, $width, $height);
     }
 }

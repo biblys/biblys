@@ -404,8 +404,8 @@ class ArticleController extends Controller
             try {
                 $article->preDelete();
 
-                if ($imagesService->articleHasCoverImage($article)) {
-                    $imagesService->deleteArticleCoverImage($article);
+                if ($imagesService->imageExistsFor($article)) {
+                    $imagesService->deleteImageFor($article);
                 }
 
                 $article->delete();

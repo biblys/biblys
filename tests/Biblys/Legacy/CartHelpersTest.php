@@ -37,7 +37,7 @@ class CartHelpersTest extends TestCase
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $imageServices = Mockery::mock(ImagesService::class);
-        $imageServices->expects("articleHasCoverImage")->andReturn(true);
+        $imageServices->expects("imageExistsFor")->andReturn(true);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("render");
 
@@ -74,7 +74,7 @@ class CartHelpersTest extends TestCase
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $imageServices = Mockery::mock(ImagesService::class);
-        $imageServices->expects("articleHasCoverImage")->andReturn(true);
+        $imageServices->expects("imageExistsFor")->andReturn(true);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("render");
 
@@ -111,7 +111,7 @@ class CartHelpersTest extends TestCase
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $imageServices = Mockery::mock(ImagesService::class);
-        $imageServices->expects("articleHasCoverImage")->andReturn(true);
+        $imageServices->expects("imageExistsFor")->andReturn(true);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("render");
 
@@ -151,8 +151,8 @@ class CartHelpersTest extends TestCase
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate");
         $imageServices = Mockery::mock(ImagesService::class);
-        $imageServices->expects("articleHasCoverImage")->andReturn(true);
-        $imageServices->expects("articleHasCoverImage")->andReturn(true);
+        $imageServices->expects("imageExistsFor")->andReturn(true);
+        $imageServices->expects("imageExistsFor")->andReturn(true);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("render");
 
@@ -210,7 +210,7 @@ class CartHelpersTest extends TestCase
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate");
         $imageServices = Mockery::mock(ImagesService::class);
-        $imageServices->expects("articleHasCoverImage")->andReturn(true);
+        $imageServices->expects("imageExistsFor")->andReturn(true);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("render");
 
@@ -260,7 +260,7 @@ class CartHelpersTest extends TestCase
             ->with("cart_add_article", ["articleId" => $freeArticle->getId()])
             ->andReturn("/cart_url");
         $imageServices = Mockery::mock(ImagesService::class);
-        $imageServices->expects("articleHasCoverImage")->andReturn(true);
+        $imageServices->expects("imageExistsFor")->andReturn(true);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("render");
 
@@ -315,7 +315,7 @@ class CartHelpersTest extends TestCase
             ->with("cart_add_article", ["articleId" => $freeArticle->getId()])
             ->andReturn("/cart_url");
         $imageServices = Mockery::mock(ImagesService::class);
-        $imageServices->expects("articleHasCoverImage")->andReturn(true);
+        $imageServices->expects("imageExistsFor")->andReturn(true);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("render");
 
