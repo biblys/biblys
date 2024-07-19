@@ -55,7 +55,7 @@ class CartTest extends TestCase
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
         $currentUser->shouldReceive("isAdmin")->andReturn(false);
         $imagesService = Mockery::mock(ImagesService::class);
-        $imagesService->expects("articleHasCoverImage")->andReturn(true);
+        $imagesService->expects("imageExistsFor")->andReturn(true);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("render");
 
@@ -128,7 +128,7 @@ class CartTest extends TestCase
         $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
         $config = new Config();
         $imagesService = Mockery::mock(ImagesService::class);
-        $imagesService->expects("articleHasCoverImage")->andReturn(true);
+        $imagesService->expects("imageExistsFor")->andReturn(true);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("render");
 
@@ -196,7 +196,7 @@ class CartTest extends TestCase
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
         $config = new Config();
         $imagesService = Mockery::mock(ImagesService::class);
-        $imagesService->expects("articleHasCoverImage")->andReturn(true);
+        $imagesService->expects("imageExistsFor")->andReturn(true);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("render");
 
@@ -270,8 +270,8 @@ class CartTest extends TestCase
         $config->shouldReceive("getImagesPath")->with()->andReturn(null);
         $config->shouldReceive("getImagesBaseUrl")->with()->andReturn(null);
         $imagesService = Mockery::mock(ImagesService::class);
-        $imagesService->expects("articleHasCoverImage")->andReturn(true);
-        $imagesService->expects("getCoverUrlForArticle");
+        $imagesService->expects("imageExistsFor")->andReturn(true);
+        $imagesService->expects("getImageUrlFor");
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("render");
 

@@ -270,7 +270,7 @@ class ArticleControllerTest extends TestCase
             ->shouldReceive("renderResponse")
             ->andReturn(new Response(""));
         $imagesService = Mockery::mock(ImagesService::class);
-        $imagesService->expects("deleteArticleCoverImage");
+        $imagesService->expects("deleteImageFor");
 
         // when
         $response = $controller->deleteAction(
@@ -313,7 +313,7 @@ class ArticleControllerTest extends TestCase
             ->shouldReceive("renderResponse")
             ->andReturn(new Response(""));
         $imagesService = Mockery::mock(ImagesService::class);
-        $imagesService->expects("articleHasCoverImage")->andReturn(false);
+        $imagesService->expects("imageExistsFor")->andReturn(false);
 
         // when
         $response = $controller->deleteAction(
@@ -329,7 +329,7 @@ class ArticleControllerTest extends TestCase
         // then
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertEquals("/url", $response->getTargetUrl());
-        $imagesService->shouldNotHaveReceived("deleteArticleCoverImage");
+        $imagesService->shouldNotHaveReceived("deleteImageFor");
         $this->assertTrue($article->isDeleted());
     }
 
@@ -359,8 +359,8 @@ class ArticleControllerTest extends TestCase
             ->shouldReceive("renderResponse")
             ->andReturn(new Response(""));
         $imagesService = Mockery::mock(ImagesService::class);
-        $imagesService->expects("articleHasCoverImage")->andReturn(true);
-        $imagesService->expects("deleteArticleCoverImage");
+        $imagesService->expects("imageExistsFor")->andReturn(true);
+        $imagesService->expects("deleteImageFor");
 
         // when
         $response = $controller->deleteAction(
@@ -378,7 +378,7 @@ class ArticleControllerTest extends TestCase
         $this->assertEquals("/url", $response->getTargetUrl());
         $this->assertTrue($article->isDeleted());
         /** @noinspection PhpUndefinedMethodInspection */
-        $imagesService->shouldHaveReceived("deleteArticleCoverImage")->with($article);
+        $imagesService->shouldHaveReceived("deleteImageFor")->with($article);
     }
 
     /**
@@ -405,8 +405,8 @@ class ArticleControllerTest extends TestCase
             ->shouldReceive("renderResponse")
             ->andReturn(new Response(""));
         $imagesService = Mockery::mock(ImagesService::class);
-        $imagesService->expects("articleHasCoverImage")->andReturn(true);
-        $imagesService->expects("deleteArticleCoverImage")->andThrow(FileNotFoundException::class);
+        $imagesService->expects("imageExistsFor")->andReturn(true);
+        $imagesService->expects("deleteImageFor")->andThrow(FileNotFoundException::class);
 
         // when
         $exception = Helpers::runAndCatchException(function () use (
@@ -454,7 +454,7 @@ class ArticleControllerTest extends TestCase
             ->shouldReceive("renderResponse")
             ->andReturn(new Response(""));
         $imagesService = Mockery::mock(ImagesService::class);
-        $imagesService->expects("deleteArticleCoverImage");
+        $imagesService->expects("deleteImageFor");
 
         // when
         $exception = Helpers::runAndCatchException(function () use (
@@ -479,7 +479,7 @@ class ArticleControllerTest extends TestCase
             $exception->getMessage()
         );
         $this->assertFalse($article->isDeleted());
-        $imagesService->shouldNotHaveReceived("deleteArticleCoverImage");
+        $imagesService->shouldNotHaveReceived("deleteImageFor");
     }
 
     /** ArticleController->searchAction */

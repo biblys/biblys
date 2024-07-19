@@ -78,7 +78,7 @@ class ImportImagesCommand extends Command
                 continue;
             }
 
-            if ($this->imagesService->articleHasCoverImage($article)) {
+            if ($this->imagesService->imageExistsFor($article)) {
                 $progress->setMessage("Skipped already imported cover for article $articleId ({$article->getTitle()})");
                 $loggerService->log("images-import", "info", "Ignored already imported cover for article $articleId  ({$article->getTitle()})");
                 $progress->advance();
@@ -86,7 +86,7 @@ class ImportImagesCommand extends Command
                 continue;
             }
 
-            $this->imagesService->addArticleCoverImage($article, $filePath);
+            $this->imagesService->addImageFor($article, $filePath);
 
             $progress->setMessage("Imported cover for article $articleId ({$article->getTitle()})");
             $loggerService->log("images-import", "info", "Imported cover for article $articleId ({$article->getTitle()})");

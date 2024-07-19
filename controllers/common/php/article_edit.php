@@ -162,16 +162,16 @@ return function (
         $coverImageFileToDownload = $request->request->get("article_cover_import");
         $shouldDeleteArticleCover = $request->request->get("article_cover_delete");
         if (!empty($uploadedCoverImageFile)) {
-            $imagesService->addArticleCoverImage($article, $uploadedCoverImageFile);
+            $imagesService->addImageFor($article, $uploadedCoverImageFile);
             $articleEntity->bumpCoverVersion();
         } elseif (!empty($coverImageFileToDownload)) {
             $filesystem = new Symfony\Component\Filesystem\Filesystem();
             $temporaryFile = $filesystem->tempnam(sys_get_temp_dir(), 'article_cover_upload');
             $filesystem->copy($coverImageFileToDownload, $temporaryFile);
-            $imagesService->addArticleCoverImage($article, $temporaryFile);
+            $imagesService->addImageFor($article, $temporaryFile);
             $articleEntity->bumpCoverVersion();
         } elseif ($shouldDeleteArticleCover) {
-            $imagesService->deleteArticleCoverImage($article);
+            $imagesService->deleteImageFor($article);
             $articleEntity->bumpCoverVersion();
         }
         unset($_POST['article_cover_upload']);
@@ -314,7 +314,7 @@ return function (
                 ]
             );
 
-            $articleCoverUrl = $imagesService->getCoverUrlForArticle($article);
+            $articleCoverUrl = $imagesService->getImageUrlFor($article);
             $articleCover = "";
             if ($articleCoverUrl) {
                 $articleCover = '<img 
@@ -519,7 +519,7 @@ return function (
 
     // Couverture
     $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg" />';
-    if ($imagesService->articleHasCoverImage($article)) {
+    if ($imagesService->imageExistsFor($article)) {
         $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg" hidden /> <label class="after btn btn-default" for="article_cover_upload">Remplacer</label> <input type="checkbox" id="article_cover_delete" name="article_cover_delete" value="1" /> <label for="article_cover_delete" class="after">Supprimer</label>';
     }
 

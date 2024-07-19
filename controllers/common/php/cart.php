@@ -81,7 +81,7 @@ return function (
         $cover = null;
         if ($stock->hasPhoto()) {
             $cover = $stock->getPhotoTag(['size' => 'h60', 'rel' => 'lightbox', 'class' => 'cover']);
-        } elseif ($imagesService->articleHasCoverImage($article)) {
+        } elseif ($imagesService->imageExistsFor($article)) {
             $cover = $templateService->render("AppBundle:Article:_cover.html.twig", [
                     "article" => $article,
                     "height" => 60,
@@ -272,7 +272,7 @@ return function (
                     // Image
                     $s["couv"] = null;
                     $stockPhoto = new Media("stock", $s["stock_id"]);
-                    $articleCoverUrl = $imagesService->getCoverUrlForArticle($articleModel, height: 100);
+                    $articleCoverUrl = $imagesService->getImageUrlFor($articleModel, height: 100);
                     if ($stockPhoto->exists()) {
                         $s["couv"] = '<a href="' . $stockPhoto->getUrl() . '" rel="lightbox"><img src="' . $stockPhoto->getUrl(["size" => "h60"]) . '" alt="' . $s["article_title"] . '" height="60" /></a>';
                     } elseif ($articleCoverUrl) {
