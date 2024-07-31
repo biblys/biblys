@@ -789,16 +789,18 @@ class ModelFactory
      */
     public static function createImage(
         Article $article = null,
-        string $type = null,
-        string $filePath = "/images/",
-        string $fileName = "image.jpg",
-        int $fileSize = 100,
-        int $version = 1,
+        Stock   $stockItem = null,
+        string  $type = null,
+        string  $filePath = "/images/",
+        string  $fileName = "image.jpg",
+        int     $fileSize = 100,
+        int     $version = 1,
     ): Image
     {
         $image = new Image();
         $image->setType($type);
         $image->setArticle($article);
+        $image->setStockItem($stockItem);
         $image->setFilePath($filePath);
         $image->setFileName($fileName);
         $image->setFileSize($fileSize);
