@@ -13,6 +13,7 @@ use Biblys\Service\Images\ImagesService;
 use Biblys\Service\TemplateService;
 use Model\ArticleQuery;
 use Model\CartQuery;
+use Model\StockQuery;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -63,6 +64,7 @@ return function (
     $downloadable = 0;
 
     $sm = new StockManager();
+    /** @var Stock[] $stocks */
     $stocks = $sm->getAll([
         'cart_id' => $cart->getId(),
         'site_id' => $currentSite->getSite()->getId(),
@@ -71,16 +73,23 @@ return function (
     $cartPhysicalItems = [];
     $cartDownloadableItems = [];
 
-    foreach ($stocks as $stock) {
+    foreach ($stocks as $stockEntity) {
+        $stockItem = StockQuery::create()->findPk($stockEntity->get("id"));
         /** @var Article $articleEntity */
-        $articleEntity = $stock->get('article');
-        $article = ArticleQuery::create()->findPk($stock->get("article_id"));
+        $articleEntity = $stockEntity->get('article');
+        $article = ArticleQuery::create()->findPk($stockEntity->get("article_id"));
         $type = $articleEntity->getType();
 
         // Cover
         $cover = null;
-        if ($stock->hasPhoto()) {
-            $cover = $stock->getPhotoTag(['size' => 'h60', 'rel' => 'lightbox', 'class' => 'cover']);
+        if ($imagesService->imageExistsFor($stockItem)) {
+            $cover = $templateService->render("AppBundle:StockItem:_photo.html.twig", [
+                    "stockItem" => $stockItem,
+                    "height" => 60,
+                    "class" => "cover",
+                    "link" => false,
+                ]
+            );
         } elseif ($imagesService->imageExistsFor($article)) {
             $cover = $templateService->render("AppBundle:Article:_cover.html.twig", [
                     "article" => $article,
@@ -109,7 +118,7 @@ return function (
         }
 
         // Crowdfunding
-        if ($stock->has('campaign')) {
+        if ($stockEntity->has('campaign')) {
             $crowdfunding++;
         }
 
@@ -126,11 +135,11 @@ return function (
         $editable_price_form = null;
         if ($articleEntity->has('price_editable')) {
             $editable_price_form = '
-            <form action="/stock/' . $stock->get("id") . '/edit-free-price" method="post">
+            <form action="/stock/' . $stockEntity->get("id") . '/edit-free-price" method="post">
                 <fieldset>
-                    <input type="hidden" name="stock_id" value="' . $stock->get('id') . '">
+                    <input type="hidden" name="stock_id" value="' . $stockEntity->get('id') . '">
                     Modifier le montant :
-                        <input type="number" name="new_price" min="' . ($articleEntity->get('price') / 100) . '" value="' . ($stock->get('selling_price') / 100) . '" step=10 class="nano" required> &euro;
+                        <input type="number" name="new_price" min="' . ($articleEntity->get('price') / 100) . '" value="' . ($stockEntity->get('selling_price') / 100) . '" step=10 class="nano" required> &euro;
                     <button type="submit" class="btn btn-info btn-xs">OK</button>
                 </fieldset>
             </form>
@@ -140,23 +149,23 @@ return function (
         $articleUrl = $urlGenerator->generate("article_show", ["slug" => $articleEntity->get("url")]);
 
         $cartLine = '
-            <tr id="cart_tr_' . $stock->get('id') . '">
+            <tr id="cart_tr_' . $stockEntity->get('id') . '">
                 <td class="center">' . $cover . '</td>
                 <td>
                     <a href="' . $articleUrl . '">' . $articleEntity->get('title') . '</a>' . $articleType . '<br>
                     de ' . authors($articleEntity->get('authors')) . '<br>
                     coll. ' . $articleEntity->get('collection')->get('name') . ' ' . numero($articleEntity->get('number')) . '<br>
                     ' . $purchased . $preorder . '
-                    ' . ($stock->has('condition') ? 'État : ' . $stock->get('condition') . '<br>' : null) . '
+                    ' . ($stockEntity->has('condition') ? 'État : ' . $stockEntity->get('condition') . '<br>' : null) . '
                     ' . $editable_price_form . '
                 </td>
-                ' . ($currentSite->getSite()->getShippingFee() == "fr" ? '<td class="right">' . $stock->get('weight') . 'g</td>' : null) . '
+                ' . ($currentSite->getSite()->getShippingFee() == "fr" ? '<td class="right">' . $stockEntity->get('weight') . 'g</td>' : null) . '
                 <td class="right">
                     ' . $availability . '
-                    ' . currency($stock->get('selling_price') / 100) . '<br />
+                    ' . currency($stockEntity->get('selling_price') / 100) . '<br />
                 </td>
                 <td class="center">
-                    <form method="POST" action="/cart/remove-stock/' . $stock->get("id") . '">
+                    <form method="POST" action="/cart/remove-stock/' . $stockEntity->get("id") . '">
                         <button type="submit" class="btn btn-danger btn-sm">
                             <span class="fa fa-close"></span> Retirer
                         </button>
@@ -180,8 +189,8 @@ return function (
         }
 
         // Totaux
-        $Poids += $stock->get('weight');
-        $Total += $stock->get('selling_price');
+        $Poids += $stockEntity->get('weight');
+        $Total += $stockEntity->get('selling_price');
         $Articles++;
     }
 
@@ -267,14 +276,16 @@ return function (
                 foreach ($copies as $copy) {
                     $s = $copy;
                     $articleEntity = $copy->getArticle();
-                    $articleModel = ArticleQuery::create()->findPk($articleEntity->get("id"));
+                    $stockItem = ArticleQuery::create()->findPk($s["stock_id"]);
+                    $articleModel = $stockItem->getArticle();
 
                     // Image
                     $s["couv"] = null;
-                    $stockPhoto = new Media("stock", $s["stock_id"]);
+                    $stockItemPhotoUrl = $imagesService->getImageUrlFor($stockItem, height: 60);
+                    $stockItemPhotoThumbnailUrl = $imagesService->getImageUrlFor($stockItem, height: 60);
                     $articleCoverUrl = $imagesService->getImageUrlFor($articleModel, height: 100);
-                    if ($stockPhoto->exists()) {
-                        $s["couv"] = '<a href="' . $stockPhoto->getUrl() . '" rel="lightbox"><img src="' . $stockPhoto->getUrl(["size" => "h60"]) . '" alt="' . $s["article_title"] . '" height="60" /></a>';
+                    if ($stockItemPhotoUrl) {
+                        $s["couv"] = '<a href="' . $stockItemPhotoUrl . '" rel="lightbox"><img src="' . $stockItemPhotoThumbnailUrl . '" alt="' . $s["article_title"] . '" height="60" /></a>';
                     } elseif ($articleCoverUrl) {
                         $s["couv"] = '<img src="' . $articleCoverUrl . '" alt="' . $articleEntity->get('title') . '" /></a>';
                     }
@@ -343,6 +354,7 @@ return function (
 
         $content .= CartHelpers::getCartSuggestions($currentSite, $urlGenerator, $imagesService);
 
+        /** @noinspection HtmlUnknownTarget */
         $content .= '
             <form id="validate_cart" action="order_delivery" method="get">
                 <fieldset>

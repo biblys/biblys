@@ -7,14 +7,14 @@ use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
-use Biblys\Service\Mailer;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Biblys\Service\Images\ImagesService;
+use Model\StockQuery;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
-use Symfony\Component\Routing\Generator\UrlGenerator;
 
 $om = new OrderManager();
 $am = new ArticleManager();
@@ -23,6 +23,7 @@ $config = Config::load();
 $request = Request::createFromGlobals();
 $currentSiteService = CurrentSite::buildFromConfig($config);
 $currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
+$imagesService = new ImagesService($config, $currentSiteService, new Filesystem());
 
 $orderUrl = LegacyCodeHelper::getRouteParam("url");
 $order = $om->get(["order_url" => $orderUrl]);
@@ -157,17 +158,19 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
     $books = NULL;
     foreach ($copies as $copy) {
         $article = $copy->getArticle() ?: ArticleManager::buildUnknownArticle();
+        $stockItem = StockQuery::create()->findPk($copy->get('id'));
+        $articleModel = $stockItem->getArticle();
         $a = $article;
         $i++;
 
         // Image
-        $cover_stock = new Media('stock', $copy->get('id'));
-        $cover_article = new Media('stock', $copy->get('id'));
-        $cover = NULL;
-        if ($cover_article->exists()) {
-            $cover = '<a href="' . $cover_article->getUrl() . '" rel="lightbox"><img src="' . $cover_article->getUrl(["size" => "h100"]) . '" height=60 alt="' . $a["article_title"] . '"></a>';
-        } elseif ($cover_stock->exists()) {
-            $cover = '<a href="' . $cover_stock->getUrl() . '" rel="lightbox"><img src="' . $cover_stock->getUrl(["size" => "h100"]) . '" height=60 alt="' . $a["article_title"] . '"></a>';
+        $cover = null;
+        $stockItemPhotoUrl = $imagesService->getImageUrlFor($stockItem, height: 60);
+        $articleCoverUrl = $imagesService->getImageUrlFor($articleModel, height: 60);
+        if ($stockItemPhotoUrl) {
+            $cover = '<img src="' . $stockItemPhotoUrl . '" alt="' . $articleModel->getTitle() . '" height="60" />';
+        } elseif ($articleCoverUrl) {
+            $cover = '<img src="' . $articleCoverUrl . '" alt="' . $articleModel->getTitle() . '" /></a>';
         }
 
         // Precommande

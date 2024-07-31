@@ -2,6 +2,7 @@
 
 use Biblys\Data\ArticleType;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\Images\ImagesService;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,7 +12,11 @@ use Symfony\Component\HttpFoundation\Response;
  * @throws InvalidDateFormatException
  * @throws PropelException
  */
-return function (Request $request, CurrentSite $currentSite): Response|RedirectResponse
+return function (
+    Request $request,
+    CurrentSite $currentSite,
+    ImagesService $imagesService
+): Response|RedirectResponse
 {
     $lm = new ListeManager();
     $sm = new StockManager();
@@ -403,10 +408,14 @@ return function (Request $request, CurrentSite $currentSite): Response|RedirectR
                     </td>
             ';
 
-            if ($num < 700 && $stock->hasPhoto()) {
-                $line .= '<td class="center">' .
-                    $stock->getPhotoTag(['size' => 'h50'])
-                    . '</td>';
+            $stockModel = new \Model\Stock();
+            $stockModel->setId($x["stock_id"]);
+            if ($num < 700 && $imagesService->imageExistsFor($stockModel)) {
+                $line .= '<td class="center">
+                     <a href="' . $imagesService->getImageUrlFor($stockModel) . '" rel="lightbox">
+                            <img src="' . $imagesService->getImageUrlFor($stockModel, height: 50) . '" alt="" height=50>
+                        </a>
+                    </td>';
             } else {
                 $line .= '<td></td>';
             }
