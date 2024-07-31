@@ -27,10 +27,29 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    public function addImageFor(Article $article, string $imagePath): void
+    public function addImageFor(Article|Stock $model, string $imagePath): void
     {
+        match (get_class($model)) {
+            Article::class => $this->_addImage($imagePath, type: "cover", typeDirectory: "book", article: $model),
+            Stock::class => $this->_addImage($imagePath, type: "photo", typeDirectory: "stock", stockItem: $model),
+        };
+    }
+
+    /**
+     * @throws PropelException
+     */
+    private function _addImage(
+        string  $imagePath,
+        string  $type,
+        string  $typeDirectory,
+        Article $article = null,
+        Stock   $stockItem = null,
+    ): void
+    {
+        $model = $article ?? $stockItem;
+
         $imageDirectory = str_pad(
-            string: substr(string: $article->getId(), offset: -2, length: 2),
+            string: substr(string: $model->getId(), offset: -2, length: 2),
             length: 2,
             pad_string: '0',
             pad_type: STR_PAD_LEFT
@@ -39,7 +58,7 @@ class ImagesService
         $imageDimensions = getimagesize($imagePath);
         list($width, $height) = $imageDimensions;
 
-        $image = $this->_getImageFor($article);
+        $image = $this->_getImageFor($model);
         if ($image->exists()) {
             $imageModel = $image->getModel();
             $imageModel->setVersion($imageModel->getVersion() + 1);
@@ -51,10 +70,11 @@ class ImagesService
         }
 
         $imageModel->setSite($this->currentSite->getSite());
-        $imageModel->setType("cover");
-        $imageModel->setArticleId($article->getId());
-        $imageModel->setFilepath("book/$imageDirectory/");
-        $imageModel->setFilename("{$article->getId()}.jpg");
+        $imageModel->setType($type);
+        $imageModel->setStockItemId($stockItem?->getId());
+        $imageModel->setArticleId($article?->getId());
+        $imageModel->setFilepath("$typeDirectory/$imageDirectory/");
+        $imageModel->setFilename("{$model->getId()}.jpg");
         $imageModel->setMediatype(mime_content_type($imagePath));
         $imageModel->setFilesize(filesize($imagePath));
         $imageModel->setWidth($width);
@@ -104,6 +124,9 @@ class ImagesService
         };
     }
 
+    /**
+     * @throws PropelException
+     */
     public function getImageUrlFor(
         Article $article,
         int $width = null,
@@ -119,15 +142,24 @@ class ImagesService
         return $image->getUrl($width, $height);
     }
 
-    private function _getImageFor(Article $article): ImageForModel
+    /**
+     * @throws PropelException
+     */
+    private function _getImageFor(Article|Stock $model): ImageForModel
     {
-        $image = ImageQuery::create()->findOneByArticleId($article->getId());
+        if ($model instanceof Stock) {
+            $image = ImageQuery::create()->filterByStockItem($model)->findOne();
+            return new ImageForModel($this->config, $image);
+        }
+
+        $image = ImageQuery::create()->filterByArticle($model)->findOne();
         return new ImageForModel($this->config, $image);
     }
 
     /** Deprecated methods */
 
     /**
+     * @throws PropelException
      * @deprecated ImagesService->getCoverUrlForArticle is deprecated. Use method getImageUrlFor instead.
      */
     public function getCoverUrlForArticle(Article $article, int $width = null, int $height = null): void

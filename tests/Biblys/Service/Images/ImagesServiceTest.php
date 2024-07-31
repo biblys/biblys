@@ -11,6 +11,7 @@ use Mockery;
 use Model\Article;
 use Model\Image;
 use Model\ImageQuery;
+use Model\Stock;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
@@ -20,12 +21,12 @@ require_once __DIR__ . "/../../../setUp.php";
 
 class ImagesServiceTest extends TestCase
 {
-    /** ImagesService->addImageFor */
+    /** ImagesService->addImageFor (article) */
 
     /**
      * @throws PropelException
      */
-    public function testAddImageForCreatesImage(): void
+    public function testAddImageForCreatesImageWithArticle(): void
     {
         // given
         $article = new Article();
@@ -59,7 +60,7 @@ class ImagesServiceTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function testAddImageForCreatesUpdatesImage(): void
+    public function testAddImageForCreatesUpdatesImageWithArticle(): void
     {
         // given
         $site = ModelFactory::createSite();
@@ -97,7 +98,7 @@ class ImagesServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testAddImageForIfFileCopyFails(): void
+    public function testAddImageForIfFileCopyFailsWithArticle(): void
     {
         // given
         $site = ModelFactory::createSite();
@@ -117,6 +118,106 @@ class ImagesServiceTest extends TestCase
         // then
         $this->assertInstanceOf(FileNotFoundException::class, $exception);
         $image = ImageQuery::create()->findOneByArticleId($article->getId());
+        $this->assertNull($image);
+    }
+
+    /** ImagesService->addImageFor (stockItem) */
+
+    /**
+     * @throws PropelException
+     */
+    public function testAddImageForCreatesImageWithStockItem(): void
+    {
+        // given
+        $stockItem = new Stock();
+        $stockItem->setId(1984);
+        $site = ModelFactory::createSite();
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects('copy');
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        // when
+        $service->addImageFor($stockItem, __DIR__ . "/image.jpeg");
+
+        // then
+        $image = ImageQuery::create()->filterByStockItem($stockItem)->findOne();
+        $this->assertInstanceOf(Image::class, $image);
+        $this->assertEquals($site, $image->getSite());
+        $this->assertEquals("photo", $image->getType());
+        $this->assertEquals("stock/84/", $image->getFilepath());
+        $this->assertEquals("1984.jpg", $image->getFilename());
+        $this->assertEquals(1, $image->getVersion());
+        $this->assertEquals("image/jpeg", $image->getMediatype());
+        $this->assertEquals(14788, $image->getFilesize());
+        $this->assertEquals(200, $image->getWidth());
+        $this->assertEquals(300, $image->getHeight());
+        $filesystem->shouldHaveReceived("copy");
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testAddImageForCreatesUpdatesImageWithStockItem(): void
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $stockItem = ModelFactory::createStockItem();
+        $stockItem->setId(1985);
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects("copy");
+        $filesystem->expects("remove");
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        $service->addImageFor($stockItem, __DIR__ . "/image.jpeg");
+        $createdImage = ImageQuery::create()->filterByStockItem($stockItem)->findOne();
+
+        // when
+        $service->addImageFor($stockItem, __DIR__ . "/image2.jpeg");
+
+        // then
+        $updatedImage = ImageQuery::create()->filterByStockItem($stockItem)->findOne();
+        $this->assertInstanceOf(Image::class, $updatedImage);
+        $this->assertEquals($createdImage->getId(), $updatedImage->getId());
+        $this->assertEquals("stock/85/", $updatedImage->getFilepath());
+        $this->assertEquals("1985.jpg", $updatedImage->getFilename());
+        $this->assertEquals(2, $updatedImage->getVersion());
+        $this->assertEquals("image/jpeg", $updatedImage->getMediatype());
+        $this->assertEquals(4410, $updatedImage->getFilesize());
+        $this->assertEquals(100, $updatedImage->getWidth());
+        $this->assertEquals(150, $updatedImage->getHeight());
+        $filesystem->shouldHaveReceived("remove");
+        $filesystem->shouldHaveReceived("copy");
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testAddImageForIfFileCopyFailsWithStockItem(): void
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $stockItem = ModelFactory::createStockItem();
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects("copy")->andThrow(new FileNotFoundException());
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        // when
+        $exception = Helpers::runAndCatchException(function () use ($service, $stockItem) {
+            $service->addImageFor($stockItem, __DIR__ . "/image.jpeg");
+        });
+
+        // then
+        $this->assertInstanceOf(FileNotFoundException::class, $exception);
+        $image = ImageQuery::create()->filterByStockItem($stockItem)->findOne();
         $this->assertNull($image);
     }
 
