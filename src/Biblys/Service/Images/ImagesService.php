@@ -9,6 +9,7 @@ use Model\Article;
 use Model\Image;
 use Model\ImageQuery;
 use Model\Map\ImageTableMap;
+use Model\Stock;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Propel;
 use Symfony\Component\Filesystem\Filesystem;
@@ -95,9 +96,12 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    public function imageExistsFor(Article $article): bool
+    public function imageExistsFor(Article|Stock $model): bool
     {
-        return ImageQuery::create()->filterByArticle($article)->exists();
+        return match (get_class($model)) {
+            Article::class => ImageQuery::create()->filterByArticle($model)->exists(),
+            Stock::class => ImageQuery::create()->filterByStockItem($model)->exists(),
+        };
     }
 
     public function getImageUrlFor(
