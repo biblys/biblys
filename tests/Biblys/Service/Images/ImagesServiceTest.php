@@ -120,12 +120,12 @@ class ImagesServiceTest extends TestCase
         $this->assertNull($image);
     }
 
-    /** ImagesService->imageExistsFor */
+    /** ImagesService->imageExistsFor (article) */
 
     /**
      * @throws PropelException
      */
-    public function testImageExistsForReturnsTrue()
+    public function testImageExistsForReturnsTrueWithArticle()
     {
         // given
         $site = ModelFactory::createSite();
@@ -147,7 +147,7 @@ class ImagesServiceTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function testImageExistsForReturnsFalse()
+    public function testImageExistsForReturnsFalseWithArticle()
     {
         // given
         $site = ModelFactory::createSite();
@@ -160,6 +160,51 @@ class ImagesServiceTest extends TestCase
 
         // when
         $hasCover = $service->imageExistsFor($article);
+
+        // then
+        $this->assertFalse($hasCover);
+    }
+
+    /** ImagesService->imageExistsFor (stockItem) */
+
+    /**
+     * @throws PropelException
+     */
+    public function testImageExistsForReturnsTrueWithStockItem()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $stockItem = ModelFactory::createStockItem();
+        ModelFactory::createImage(stockItem: $stockItem);
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        // when
+        $hasCover = $service->imageExistsFor($stockItem);
+
+        // then
+        $this->assertTrue($hasCover);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testImageExistsForReturnsFalseWithStockItem()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $stockItem = ModelFactory::createStockItem();
+
+        $currentSite = new CurrentSite($site);
+        $config = new Config();
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $currentSite ,$filesystem);
+
+        // when
+        $hasCover = $service->imageExistsFor($stockItem);
 
         // then
         $this->assertFalse($hasCover);
