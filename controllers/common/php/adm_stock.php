@@ -133,25 +133,24 @@ return function (
             $session->getFlashBag()->add('info', 'L\'article <strong>' . $articleModel->get('title') . '</strong> a été ajouté au rayon <strong>' . $rayon->get('name') . '</strong>.');
         }
 
+        $stockId = $request->request->get("stock_id");
         for ($i = 0; $i < $_POST['stock_num']; ++$i) {
             // Creation de l'exemplaire
-            if (empty($_POST['stock_id']) or $_POST['stock_num'] > 1) {
+            if (empty($stockId) or $_POST['stock_num'] > 1) {
                 $stockEntity = $sm->create();
-                $_POST['stock_id'] = $stockEntity->get('id');
+                $stockId = $stockEntity->get('id');
                 $mode = 'insert';
             } else {
                 $mode = 'update';
             }
 
-            $stockEntity = $sm->getById($_POST['stock_id']);
-
-            // Photo
-            $photo = new Media('stock', $_POST['stock_id']);
+            $stockEntity = $sm->getById($stockId);
+            $stock = StockQuery::create()->findPk($stockId);
 
             // Suppression de la photo
             if (isset($_POST['delete_photo']) && $_POST['delete_photo'] == 1) {
-                if ($photo->exists()) {
-                    $photo->delete();
+                if ($imagesService->imageExistsFor($stock)) {
+                    $imagesService->deleteImageFor($stock);
                     $flashMessagesService->add("success", "La photo de l'exemplaire a été supprimée.");
                 }
             }
@@ -215,20 +214,11 @@ return function (
             }
 
             // Upload de la photo de l'exemplaire
-            if (!empty($_FILES['upload_photo']['tmp_name']) && !isset($stock_photo)) {
-                if ($imagesService->imageExistsFor($stockEntity)) {
-                    $photo->delete();
+            if (!empty($_FILES['upload_photo']['tmp_name'])) {
+                if ($imagesService->imageExistsFor($stock)) {
+                    $imagesService->deleteImageFor($stock);
                 }
-                $photo->upload($_FILES['upload_photo']['tmp_name']);
-                $stock_photo = $photo->path();
-            }
-
-            // Recuperation de la photo en cas de duplication
-            if (isset($stock_photo) && $i > 0) {
-                if ($photo->exists()) {
-                    $photo->delete();
-                }
-                $photo->upload($stock_photo);
+                $imagesService->addImageFor($stock, $_FILES['upload_photo']['tmp_name']);
             }
         }
 
@@ -294,7 +284,7 @@ return function (
             }
         }
 
-        return new RedirectResponse('/pages/adm_stock?id=' . $_POST['stock_id']);
+        return new RedirectResponse('/pages/adm_stock?id=' . $stockId);
     }
 
     $photo_field = null;
@@ -336,10 +326,14 @@ return function (
 
         // Photo
         /** @var Stock $stockEntity */
-        if ($stockEntity->hasPhoto()) {
+        if ($imagesService->imageExistsFor($stock)) {
+            $photoThumbnailUrl = $imagesService->getImageUrlFor($stock, width: 250);
+            $photoUrl = $imagesService->getImageUrlFor($stock);
             $photo_field = '
             <div class="floatR center">
-                ' . $stockEntity->getPhotoTag(['size' => 'w90']) . '<br/>
+                <a href="'.$photoThumbnailUrl.'" rel="lightbox">
+                    <img src="' .$photoUrl.'" alt="Photo de l‘exemplaire" width="200">
+                </a><br/>
                 <input type="checkbox" name="delete_photo" value="1" /> Supprimer
             </div>';
         }

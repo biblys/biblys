@@ -7,6 +7,7 @@ use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
 use Entity\Exception\CartException;
 use Model\ArticleQuery;
+use Model\StockQuery;
 use Model\WishQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,39 +40,41 @@ class Cart extends Entity
      * @throws Exception
      * @throws Exception
      */
-    public function getLine(ImagesService $imagesService, $stock): string
+    public function getLine(ImagesService $imagesService, Stock $stockEntity): string
     {
         global $urlgenerator;
 
+        $stock = StockQuery::create()->findPk($stockEntity->get('id'));
+
         /** @var Article $articleEntity */
-        $articleEntity = $stock->get('article');
+        $articleEntity = $stockEntity->get('article');
         $articleModel = ArticleQuery::create()->findPk($articleEntity->get("id"));
 
         // Image
         $articleCoverUrl = $imagesService->getImageUrlFor($articleModel, height: 100);
-        $stock_cover = new Media('stock', $stock->get('id'));
+        $stockItemPhotoUrl = $imagesService->getImageUrlFor($stock, height: 100);
 
         if ($articleCoverUrl) $cover = '<img src="' . $articleCoverUrl . '" height=55 alt="' . $articleEntity->get('title') . '">';
-        elseif ($stock_cover->exists()) $cover = '<a href="' . $stock_cover->getUrl() . '" rel="lightbox"><img src="' . $stock_cover->getUrl(['size' => 'h100']) . '" height=55 alt="' . $articleEntity->get('title') . '"></a>';
+        elseif ($stockItemPhotoUrl) $cover = '<img src="' . $stockItemPhotoUrl . '" height=55 alt="' . $articleEntity->get('title') . '">';
         else $cover = NULL;
 
         $articleUrl = $urlgenerator->generate("article_show", ["slug" => $articleEntity->get("url")]);
 
         return '
-                <tr id="stock_' . $stock->get('id') . '">
-                    <td class="va-middle right"><a href="/pages/adm_stock?id=' . $stock->get('id') . '">' . $stock->get('id') . '</a></td>
+                <tr id="stock_' . $stockEntity->get('id') . '">
+                    <td class="va-middle right"><a href="/pages/adm_stock?id=' . $stockEntity->get('id') . '">' . $stockEntity->get('id') . '</a></td>
                     <td class="va-middle center">' . $cover . '</td>
                     <td class="va-middle">
                         <a href="' . $articleUrl . '">' . $articleEntity->get('title') . '</a><br>
                         de ' . authors($articleEntity->get('authors')) . '<br>
                         Ed. ' . $articleEntity->get('publisher')->get('name') . '
                     </td>
-                    <td class="va-middle right stock_selling_price" data-price="' . $stock->get('selling_price') . '">
-                        ' . $stock->get('condition') . '
-                        ' . currency($stock->get('selling_price') / 100) . '
+                    <td class="va-middle right stock_selling_price" data-price="' . $stockEntity->get('selling_price') . '">
+                        ' . $stockEntity->get('condition') . '
+                        ' . currency($stockEntity->get('selling_price') / 100) . '
                     </td>
                     <td class="center va-middle">
-                        <button title="Retirer du panier" data-remove_from_cart="' . $stock->get('id') . '" class="btn btn-warning btn-sm event">
+                        <button title="Retirer du panier" data-remove_from_cart="' . $stockEntity->get('id') . '" class="btn btn-warning btn-sm event">
                             <i class="fa fa-close"></i>
                         </button>
                     </td>
