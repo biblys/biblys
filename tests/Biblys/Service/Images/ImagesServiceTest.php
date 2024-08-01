@@ -311,13 +311,13 @@ class ImagesServiceTest extends TestCase
         $this->assertFalse($hasCover);
     }
 
-    /** ImagesService->getImageUrlFor */
+    /** ImagesService->getImageUrlFor (article) */
 
     /**
      * @throws PropelException
      * @throws Exception
      */
-    public function testGetImageUrlForIfItDoesNotExist(): void
+    public function testGetImageUrlForIfItDoesNotExistWithArticle(): void
     {
         // given
         $site = ModelFactory::createSite();
@@ -340,7 +340,7 @@ class ImagesServiceTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
-    public function testGetImageUrlForIfItExists(): void
+    public function testGetImageUrlForIfItExistsWithArticle(): void
     {
         // given
         $site = ModelFactory::createSite();
@@ -359,6 +359,59 @@ class ImagesServiceTest extends TestCase
 
         // when
         $coverUrl = $service->getImageUrlFor($article);
+
+        // then
+        $this->assertEquals("/images/book/covers/book-cover.jpeg", $coverUrl);
+    }
+
+    /** ImagesService->getImageUrlFor (stockItem) */
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetImageUrlForIfItDoesNotExistWithStockItem(): void
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $stockItem = ModelFactory::createStockItem();
+
+        $config = new Config(["images" => ["path" => "/images/"]]);
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+
+        // when
+        $coverUrl = $service->getImageUrlFor($stockItem);
+
+        // then
+        $this->assertNull($coverUrl);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetImageUrlForIfItExistsWithStockItem(): void
+    {
+        // given
+        $site = ModelFactory::createSite();
+
+        $config = new Config(["images" => ["base_url" => "/images/"]]);
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        $stockItem = ModelFactory::createStockItem();
+        ModelFactory::createImage(
+            stockItem: $stockItem,
+            filePath: "book/covers/",
+            fileName: "book-cover.jpeg",
+        );
+
+        // when
+        $coverUrl = $service->getImageUrlFor($stockItem);
 
         // then
         $this->assertEquals("/images/book/covers/book-cover.jpeg", $coverUrl);
