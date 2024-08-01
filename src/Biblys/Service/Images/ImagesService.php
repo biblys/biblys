@@ -128,13 +128,13 @@ class ImagesService
      * @throws PropelException
      */
     public function getImageUrlFor(
-        Article $article,
-        int $width = null,
-        int $height = null
+        Article|Stock $model,
+        int           $width = null,
+        int           $height = null
     ):
     ?string
     {
-        $image = $this->_getImageFor($article);
+        $image = $this->_getImageFor($model);
         if (!$image->exists()) {
             return null;
         }
