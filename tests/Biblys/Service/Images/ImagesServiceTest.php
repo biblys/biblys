@@ -422,7 +422,7 @@ class ImagesServiceTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function testDeleteImageForDeletesImage(): void
+    public function testDeleteImageForDeletesImageWithArticle(): void
     {
         // given
         $article = ModelFactory::createArticle();
@@ -440,6 +440,31 @@ class ImagesServiceTest extends TestCase
 
         // then
         $deletedImage = ImageQuery::create()->findOneByArticleId($article->getId());
+        $this->assertNull($deletedImage);
+        $filesystem->shouldHaveReceived("remove");
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testDeleteImageForDeletesImageWithStockItem(): void
+    {
+        // given
+        $stockItem = ModelFactory::createStockItem();
+        ModelFactory::createImage(stockItem: $stockItem);
+        $site = ModelFactory::createSite();
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects("remove");
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        // when
+        $service->deleteImageFor($stockItem);
+
+        // then
+        $deletedImage = ImageQuery::create()->filterByStockItem($stockItem)->findOne();
         $this->assertNull($deletedImage);
         $filesystem->shouldHaveReceived("remove");
     }
