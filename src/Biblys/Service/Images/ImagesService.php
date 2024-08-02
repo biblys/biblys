@@ -96,7 +96,7 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    public function deleteImageFor(Article $article): void
+    public function deleteImageFor(Article|Stock $article): void
     {
         $db = Propel::getWriteConnection(ImageTableMap::DATABASE_NAME);
         $db->beginTransaction();
