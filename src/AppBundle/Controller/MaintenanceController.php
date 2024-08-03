@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\TemplateService;
 use Framework\Controller;
@@ -30,6 +31,7 @@ class MaintenanceController extends Controller
      */
     public function diskUsageAction(
         CurrentUser     $currentUser,
+        CurrentSite     $currentSite,
         TemplateService $templateService,
     ): Response
     {
@@ -37,20 +39,31 @@ class MaintenanceController extends Controller
 
         $articles = ImageQuery::create()
             ->filterByType("cover")
-            ->withColumn('SUM(`fileSize`)', 'total')
-            ->select(['total'])
+            ->withColumn('COUNT(`id`)', 'count')
+            ->withColumn('SUM(`fileSize`)', 'size')
+            ->select(['count', 'size'])
             ->find()
             ->getData()[0];
 
-        $total = ImageQuery::create()
-            ->withColumn('SUM(`fileSize`)', 'total')
-            ->select(['total'])
+        $stockItems = ImageQuery::create()
+            ->filterByType("photo")
+            ->filterBySite($currentSite->getSite())
+            ->withColumn('COUNT(`id`)', 'count')
+            ->withColumn('SUM(`fileSize`)', 'size')
+            ->select(['count', 'size'])
             ->find()
             ->getData()[0];
+
+        $totalCount = $articles["count"] + $stockItems["count"];
+        $totalSize = $articles["size"] + $stockItems["size"];
 
         return $templateService->renderResponse("AppBundle:Maintenance:disk-usage.html.twig", [
-            "articles" => $this->_convertToGigabytes($articles),
-            "total" => $this->_convertToGigabytes($total),
+            "articlesCount" => $articles["count"],
+            "articlesSize" => $this->_convertToGigabytes($articles["size"]),
+            "stockItemsCount" => $stockItems["count"],
+            "stockItemsSize" => $this->_convertToGigabytes($stockItems["size"]),
+            "totalCount" => $totalCount,
+            "totalSize" => $this->_convertToGigabytes($totalSize),
         ]);
     }
 

@@ -10,20 +10,28 @@
   <table class="table table-striped">
     <thead>
       <tr>
+        <th>Type</th>
         <th>Fichiers</th>
         <th>Taille</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>Articles</td>
-        <td>{{ articles }} Go</td>
+        <td>Articles (images de couverture)</td>
+        <td>{{ articlesCount }}</td>
+        <td>{{ articlesSize }} Go</td>
+      </tr>
+      <tr>
+        <td>Exemplaires d'occasion (photos)</td>
+        <td>{{ stockItemsCount }}</td>
+        <td>{{ stockItemsSize }} Go</td>
       </tr>
     </tbody>
     <tfoot>
       <tr>
         <th>Total :</th>
-        <th>{{ total }} Go</th>
+        <th>{{ totalCount }}</th>
+        <th>{{ totalSize }} Go</th>
       </tr>
     </tfoot>
   </table>
