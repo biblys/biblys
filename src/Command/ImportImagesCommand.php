@@ -106,6 +106,20 @@ class ImportImagesCommand extends Command
                     continue;
                 }
 
+                if ($modelType === "stock" && $model->getArticle() === null) {
+                    $model->delete();
+                    $this->filesystem->remove($filePath);
+                    $progress->setMessage("Deleted image and stock for inexistant article {$model->getArticleId()}");
+                    $loggerService->log(
+                        "images-import",
+                        "info",
+                        "Deleted image and stock for inexistant article {$model->getArticleId()}"
+                    );
+                    $progress->advance();
+                    $deletedFilesCount++;
+                    continue;
+                }
+
                 $modelTitle = $this->_getModelTitle($model, $modelType);
 
                 if ($this->imagesService->imageExistsFor($model)) {
