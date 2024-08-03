@@ -8,6 +8,7 @@ use Biblys\Service\LoggerService;
 use Exception;
 use Model\Article;
 use Model\ArticleQuery;
+use Model\ImageQuery;
 use Model\Stock;
 use Model\StockQuery;
 use Propel\Runtime\Exception\PropelException;
@@ -140,6 +141,12 @@ class ImportImagesCommand extends Command
                 }
 
                 $this->imagesService->addImageFor($model, $filePath);
+
+                if ($modelType === "stock") {
+                    $image = ImageQuery::create()->filterByStockItem($model)->findOne();
+                    $image->setSite($model->getSite());
+                    $image->save();
+                }
 
                 $progress->setMessage("Imported image for $modelType $modelId ($modelTitle)");
                 $loggerService->log("images-import", "info", "Imported image for $modelType $modelId ($modelTitle)");
