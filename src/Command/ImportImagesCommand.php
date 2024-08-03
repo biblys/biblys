@@ -41,6 +41,13 @@ class ImportImagesCommand extends Command
             InputArgument::REQUIRED,
             "The model type to import images for"
         );
+        $this->addOption(
+            name: "start",
+            shortcut: "s",
+            mode: InputArgument::OPTIONAL,
+            description: "Directory to start the import from (0-99)",
+            default: 0,
+        );
     }
 
     /**
@@ -50,7 +57,9 @@ class ImportImagesCommand extends Command
     {
         $loggerService = new LoggerService();
 
-        $modelType = $input->getArgument('target_model');
+        $modelType = $input->getArgument("target_model");
+        $startDirectory = $input->getOption("start");
+
         $sourceDirectory = $modelType === "article" ? "book" : $modelType;
 
         $imagesDirectory = $this->config->getImagesPath() . $sourceDirectory;
@@ -60,7 +69,7 @@ class ImportImagesCommand extends Command
         $imagesSubDirectories = [];
         $imagesDirectoryFullPath = __DIR__ . "/../../" . $imagesDirectory;
         $fileCount = 0;
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = $startDirectory; $i < 100; $i++) {
             $currentDirectoryName = str_pad($i, 2, "0", STR_PAD_LEFT);
             $currentDirectory = $imagesDirectoryFullPath . "/" . $currentDirectoryName;
             $currentDirectoryPath = $imagesDirectory . "/" . $currentDirectoryName;
