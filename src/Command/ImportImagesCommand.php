@@ -6,9 +6,14 @@ use Biblys\Service\Config;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Service\LoggerService;
 use Exception;
+use Model\Article;
 use Model\ArticleQuery;
+use Model\Stock;
+use Model\StockQuery;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -19,10 +24,10 @@ class ImportImagesCommand extends Command
     protected static $defaultName = "images:import";
 
     public function __construct(
-        private readonly Config $config,
-        private readonly Filesystem $filesystem,
+        private readonly Config        $config,
+        private readonly Filesystem    $filesystem,
         private readonly ImagesService $imagesService,
-        string $name = null,
+        string                         $name = null,
     )
     {
         parent::__construct($name);
@@ -30,7 +35,12 @@ class ImportImagesCommand extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Clears database and execute migrations');
+        $this->setDescription("Creates entries in the database for images found in the images directory");
+        $this->addArgument(
+            "target_model",
+            InputArgument::REQUIRED,
+            "The model type to import images for"
+        );
     }
 
     /**
@@ -40,30 +50,33 @@ class ImportImagesCommand extends Command
     {
         $loggerService = new LoggerService();
 
-        $coversDirectory = $this->config->getImagesPath() . "book";
-        $output->writeln(["Listing in files {$coversDirectory}…"]);
-        $loggerService->log("images-import", "info", "Listing files {$coversDirectory}…");
+        $modelType = $input->getArgument('target_model');
+        $sourceDirectory = $modelType === "article" ? "book" : $modelType;
 
-        $coverDirectories = [];
-        $coversDirectoryFullPath = __DIR__ . "/../../" . $coversDirectory;
+        $imagesDirectory = $this->config->getImagesPath() . $sourceDirectory;
+        $output->writeln(["Listing in files {$imagesDirectory}…"]);
+        $loggerService->log("images-import", "info", "Listing files {$imagesDirectory}…");
+
+        $imagesSubDirectories = [];
+        $imagesDirectoryFullPath = __DIR__ . "/../../" . $imagesDirectory;
         $fileCount = 0;
         for ($i = 0; $i < 100; $i++) {
             $currentDirectoryName = str_pad($i, 2, "0", STR_PAD_LEFT);
-            $currentDirectory = $coversDirectoryFullPath . "/" . $currentDirectoryName;
-            $currentDirectoryPath = $coversDirectory . "/". $currentDirectoryName;
+            $currentDirectory = $imagesDirectoryFullPath . "/" . $currentDirectoryName;
+            $currentDirectoryPath = $imagesDirectory . "/" . $currentDirectoryName;
             if (!$this->filesystem->exists($currentDirectory)) {
                 $output->writeln(["- Directory $currentDirectoryPath : —"]);
                 continue;
             }
 
             $finder = new Finder();
-            $coverFilesInCurrentDirectory = $finder
+            $imageFilesInCurrentDirectory = $finder
                 ->in($currentDirectory)
                 ->files();
-            $currentDirectoryFileCount = $coverFilesInCurrentDirectory->count();
+            $currentDirectoryFileCount = $imageFilesInCurrentDirectory->count();
             $fileCount += $currentDirectoryFileCount;
             $output->writeln(["- Directory $currentDirectoryPath : $currentDirectoryFileCount files"]);
-            $coverDirectories[] = $coverFilesInCurrentDirectory;
+            $imagesSubDirectories[] = $imageFilesInCurrentDirectory;
         }
 
         $output->writeln(["$fileCount files to process"]);
@@ -77,34 +90,36 @@ class ImportImagesCommand extends Command
         $deletedFilesCount = 0;
         $skippedFilesCount = 0;
         $loadedImagesCount = 0;
-        foreach ($coverDirectories as $coverDirectoryFiles) {
-            foreach ($coverDirectoryFiles as $coverFile) {
-                $filePath = $coverFile->getRealPath();
-                preg_match_all('/book\/\d{2}\/(\d+)\.jpg/m', $filePath, $matches);
-                $articleId = $matches[1][0];
-                $article = ArticleQuery::create()->findPk($articleId);
+        foreach ($imagesSubDirectories as $imagesDirectoryFiles) {
+            foreach ($imagesDirectoryFiles as $imageFile) {
+                $filePath = $imageFile->getRealPath();
+                preg_match_all("/$sourceDirectory\\/\\d{2}\\/(\\d+)\\.jpg/m", $filePath, $matches);
+                $modelId = $matches[1][0];
+                $model = $this->_getModelQuery($modelType)->findPk($modelId);
 
-                if (!$article) {
+                if (!$model) {
                     $this->filesystem->remove($filePath);
-                    $progress->setMessage("Deleted cover for inexistant article $articleId");
-                    $loggerService->log("images-import", "info", "Deleted cover for inexistant article $articleId");
+                    $progress->setMessage("Deleted image for inexistant $modelType $modelId");
+                    $loggerService->log("images-import", "info", "Deleted image for inexistant $modelType $modelId");
                     $progress->advance();
                     $deletedFilesCount++;
                     continue;
                 }
 
-                if ($this->imagesService->imageExistsFor($article)) {
-                    $progress->setMessage("Skipped already imported cover for article $articleId ({$article->getTitle()})");
-                    $loggerService->log("images-import", "info", "Ignored already imported cover for article $articleId  ({$article->getTitle()})");
+                $modelTitle = $this->_getModelTitle($model, $modelType);
+
+                if ($this->imagesService->imageExistsFor($model)) {
+                    $progress->setMessage("Skipped already imported image for $modelType $modelId ($modelTitle)");
+                    $loggerService->log("images-import", "info", "Ignored already imported image for $modelType $modelId ($modelTitle)");
                     $progress->advance();
                     $skippedFilesCount++;
                     continue;
                 }
 
-                $this->imagesService->addImageFor($article, $filePath);
+                $this->imagesService->addImageFor($model, $filePath);
 
-                $progress->setMessage("Imported cover for article $articleId ({$article->getTitle()})");
-                $loggerService->log("images-import", "info", "Imported cover for article $articleId ({$article->getTitle()})");
+                $progress->setMessage("Imported image for $modelType $modelId ($modelTitle)");
+                $loggerService->log("images-import", "info", "Imported image for $modelType $modelId ($modelTitle)");
                 $loadedImagesCount++;
                 $progress->advance();
             }
@@ -114,5 +129,30 @@ class ImportImagesCommand extends Command
 
         $output->writeln(["", "Loaded $loadedImagesCount images, skipped $skippedFilesCount files and deleted $deletedFilesCount files."]);
         return 0;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function _getModelQuery(string $modelType): ArticleQuery|StockQuery
+    {
+        return match ($modelType) {
+            "article" => ArticleQuery::create(),
+            "stock" => StockQuery::create(),
+            default => throw new Exception("Unsupported model type $modelType"),
+        };
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    private function _getModelTitle(Article|Stock $model, string $modelType): string
+    {
+        return match ($modelType) {
+            "article" => $model->getTitle(),
+            "stock" => $model->getArticle()->getTitle(),
+            default => throw new Exception("Unsupported model type"),
+        };
     }
 }
