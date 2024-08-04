@@ -270,7 +270,7 @@ class CartManager extends EntityManager
         CFReward  $reward = null
     ): bool
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
         $request = Request::createFromGlobals();
         $config = Config::load();
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);

@@ -41,7 +41,7 @@ class LegacyController extends Controller
     {
         global $_ECHO, $_SQL, $urlgenerator;
 
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
 
         $pageQueryParam = $request->get('page', 'home');
 
