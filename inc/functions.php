@@ -620,9 +620,6 @@ function share_buttons($url, $text = null, $options = []): string
 // Returns site controller if it exists, or default controller, or false
 function get_controller_path($controller): bool|string
 {
-    /** @noinspection PhpUnusedLocalVariableInspection */
-    $globalSite = LegacyCodeHelper::getGlobalSite();
-
     $default_path = __DIR__."/../controllers/common/php/".$controller.".php";
     $app_path = __DIR__."/../app/controllers/".$controller.".php";
 
