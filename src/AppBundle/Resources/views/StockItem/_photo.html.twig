@@ -1,0 +1,22 @@
+{% set linkUrl = stockItem|imageUrl %}
+{% set cursor = "zoom-in" %}
+{% if link is defined %}
+  {% set linkUrl = link %}
+  {% set cursor = "pointer" %}
+{% endif %}
+
+<a href="{{ linkUrl }}"
+  {% if rel is defined %} rel="{{ rel }}" {% endif %}
+   style="cursor: {{ cursor }};"
+>
+  <img
+    src="{{ stockItem|imageUrl(
+      width|default(null),
+      height|default(null),
+    ) }}"
+    width="{{ width|default(null) }}"
+    height="{{ height|default(null) }}"
+    {% if class is defined %} class="{{ class }}" {% endif %}
+    alt="{{ stockItem.article.title }}"
+  >
+</a>
