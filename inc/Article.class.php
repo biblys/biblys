@@ -1120,7 +1120,7 @@ class ArticleManager extends EntityManager
             return $where;
         }
 
-        $currentSite = LegacyCodeHelper::getGlobalSite();
+        $currentSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
 
         $publisherFilter = $currentSite->getOpt('publisher_filter');
         if ($publisherFilter && !array_key_exists('publisher_id', $where)) {
