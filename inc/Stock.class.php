@@ -99,7 +99,7 @@ class Stock extends Entity
      */
     public function isAvailable()
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
 
         if (!$this->has('id')) {
             return false;

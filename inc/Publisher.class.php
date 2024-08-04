@@ -203,7 +203,7 @@ class PublisherManager extends EntityManager
             return $where;
         }
 
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
 
         $publisherFilter = $globalSite->getOpt('publisher_filter');
         if ($publisherFilter && !array_key_exists('publisher_id', $where)) {

@@ -357,7 +357,7 @@ class EntityManager
     public function count(array $where = [])
     {
         if ($this->siteAgnostic === false) {
-            $globalSite = LegacyCodeHelper::getGlobalSite();
+            $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
             $where['site_id'] = $globalSite->get('id');
         }
 
@@ -386,7 +386,7 @@ class EntityManager
     public function getAll(array $where = array(), array $options = array(), $withJoins = true)
     {
         if ($this->siteAgnostic === false && !isset($where['site_id'])) {
-            $globalSite = LegacyCodeHelper::getGlobalSite();
+            $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
             $where['site_id'] = $globalSite->get('id');
         }
 
