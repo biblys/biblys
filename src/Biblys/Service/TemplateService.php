@@ -10,6 +10,7 @@ use Cart;
 use Exception;
 use Framework\TemplateLoader;
 use Model\Article;
+use Model\Stock;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
@@ -282,6 +283,15 @@ class TemplateService
                 $width = $options[0] ?? null;
                 $height = $options[1] ?? null;
                 return $imagesService->getImageUrlFor($article, width: $width, height: $height);
+            },
+            ['is_variadic' => true]
+        );
+
+        $filters[] = new TwigFilter('imageUrl',
+            function (Article|Stock $model, array $options = []) use ($imagesService) {
+                $width = $options[0] ?? null;
+                $height = $options[1] ?? null;
+                return $imagesService->getImageUrlFor($model, width: $width, height: $height);
             },
             ['is_variadic' => true]
         );
