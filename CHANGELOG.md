@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.84.0 (DEV)
+
+Améliorations
+
+- La page "Espace disque" affiche désormais la taille occupée par les photos
+  d'exemplaires.
+
 ## 2.83.1 (12 juillet 2024)
 
 Corrections
