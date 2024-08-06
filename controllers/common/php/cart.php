@@ -87,7 +87,7 @@ return function (
                     "stockItem" => $stockItem,
                     "height" => 60,
                     "class" => "cover",
-                    "link" => false,
+                    "rel" => "lightbox",
                 ]
             );
         } elseif ($imagesService->imageExistsFor($article)) {
