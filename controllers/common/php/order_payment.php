@@ -219,6 +219,19 @@ else // CHOIX DU MODE DE PAIMENT
             ';
         }
 
+        if ($globalSite->getOpt('payment_iban')) {
+            $payment_options .= '
+                <h4 class="radio">
+                    <label for="payment_transfer" class="radio">
+                        <input type="radio" name="payment" id="payment_transfer" value="transfer"> Virement
+                    </label>
+                </h4>
+                <p>
+                    Effectuer un virement vers notre compte. Votre commande sera expédiée après apparition du virement sur notre relevé de compte.
+                </p>
+            ';
+        }
+
         // Stripe
         if ($stripe) {
             $payment_options .= '
