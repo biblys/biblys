@@ -7,6 +7,11 @@ Améliorations
 - La page "Espace disque" affiche désormais la taille occupée par les photos
   d'exemplaires.
 
+Corrections
+
+- L'option de paiement par virement pouvait ne pas s'afficher lorsque l'option
+  du retrait en magasin était choisie. C'est corrigé.
+
 ## 2.83.1 (12 juillet 2024)
 
 Corrections
