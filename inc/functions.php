@@ -46,6 +46,18 @@ if (!file_exists($autoloadFile)) {
 }
 
 $config = Config::load();
+
+if ($config->get("sentry")) {
+    Sentry\init([
+        "dsn" => $config->get("sentry.dsn"),
+        "traces_sample_rate" => 1.0,
+        "profiles_sample_rate" => 1.0,
+        "environment" => $config->get("environment"),
+        "server_name" => $_SERVER["HTTP_HOST"],
+        "release" => BIBLYS_VERSION,
+    ]);
+}
+
 $rollbarConfig = $config->get("rollbar");
 if ($rollbarConfig) {
     Rollbar::init([
