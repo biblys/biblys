@@ -112,6 +112,11 @@ site: 1
 #  website_id: abcd-1234-efgh-5678
 #  share_url: https://analytics.umami.is/share/9876ijkl5432mnop/biblys.fr
 
+## Sentry
+## https://sentry.io
+#sentry:
+#  dsn: https://abcd1234@efgh5678.ingest.de.sentry.io/ijlk9876
+
 ## Rollbar
 #rollbar:
 #  access_token: abcdef12345
