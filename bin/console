@@ -2,12 +2,13 @@
 
 <?php
 
-require __DIR__."/../vendor/autoload.php";
+require __DIR__ . "/../vendor/autoload.php";
 
 use Biblys\Database\Connection;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Images\ImagesService;
+use Biblys\Service\InvalidSiteIdException;
 use Command\CreateSeedsCommand;
 use Command\ImportImagesCommand;
 use Command\ResetDatabaseCommand;
@@ -17,13 +18,16 @@ use Symfony\Component\Filesystem\Filesystem;
 $config = Config::load();
 Connection::initPropel($config);
 
-$config = Config::load();
-$currentSite = CurrentSite::buildFromConfig($config);
-$filesystem = new Filesystem();
-$imagesServices = new ImagesService($config, $currentSite, $filesystem);
-
 $application = new Application();
-$application->add(new ImportImagesCommand($config, $filesystem, $imagesServices));
 $application->add(new ResetDatabaseCommand());
 $application->add(new CreateSeedsCommand());
+
+try {
+    $currentSite = CurrentSite::buildFromConfig($config);
+    $filesystem = new Filesystem();
+    $imagesServices = new ImagesService($config, $currentSite, $filesystem);
+    $application->add(new ImportImagesCommand($config, $filesystem, $imagesServices));
+} catch (InvalidSiteIdException) {
+}
+
 $application->run();
