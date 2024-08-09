@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3325f70f29178c32a730ad1d256eab3a",
+    "content-hash": "3d3f41b21f49e57c4fc527742ec6f55c",
     "packages": [
         {
             "name": "biblys/eurotax",
@@ -1879,6 +1879,65 @@
             "time": "2015-03-20T14:31:23+00:00"
         },
         {
+            "name": "jean85/pretty-package-versions",
+            "version": "2.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Jean85/pretty-package-versions.git",
+                "reference": "f9fdd29ad8e6d024f52678b570e5593759b550b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Jean85/pretty-package-versions/zipball/f9fdd29ad8e6d024f52678b570e5593759b550b4",
+                "reference": "f9fdd29ad8e6d024f52678b570e5593759b550b4",
+                "shasum": ""
+            },
+            "require": {
+                "composer-runtime-api": "^2.0.0",
+                "php": "^7.1|^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.2",
+                "jean85/composer-provided-replaced-stub-package": "^1.0",
+                "phpstan/phpstan": "^1.4",
+                "phpunit/phpunit": "^7.5|^8.5|^9.4",
+                "vimeo/psalm": "^4.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Jean85\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alessandro Lai",
+                    "email": "alessandro.lai85@gmail.com"
+                }
+            ],
+            "description": "A library to get pretty versions strings of installed dependencies",
+            "keywords": [
+                "composer",
+                "package",
+                "release",
+                "versions"
+            ],
+            "support": {
+                "issues": "https://github.com/Jean85/pretty-package-versions/issues",
+                "source": "https://github.com/Jean85/pretty-package-versions/tree/2.0.6"
+            },
+            "time": "2024-03-08T09:58:59+00:00"
+        },
+        {
             "name": "justinrainbow/json-schema",
             "version": "5.3.0",
             "source": {
@@ -3717,6 +3776,95 @@
                 "source": "https://github.com/Seldaek/phar-utils/tree/1.2.1"
             },
             "time": "2022-08-31T10:31:18+00:00"
+        },
+        {
+            "name": "sentry/sentry",
+            "version": "4.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/getsentry/sentry-php.git",
+                "reference": "788ec170f51ebb22f2809a1e3f78b19ccd39b70d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/788ec170f51ebb22f2809a1e3f78b19ccd39b70d",
+                "reference": "788ec170f51ebb22f2809a1e3f78b19ccd39b70d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "guzzlehttp/psr7": "^1.8.4|^2.1.1",
+                "jean85/pretty-package-versions": "^1.5|^2.0.4",
+                "php": "^7.2|^8.0",
+                "psr/log": "^1.0|^2.0|^3.0",
+                "symfony/options-resolver": "^4.4.30|^5.0.11|^6.0|^7.0"
+            },
+            "conflict": {
+                "raven/raven": "*"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.4",
+                "guzzlehttp/promises": "^1.0|^2.0",
+                "guzzlehttp/psr7": "^1.8.4|^2.1.1",
+                "monolog/monolog": "^1.6|^2.0|^3.0",
+                "phpbench/phpbench": "^1.0",
+                "phpstan/phpstan": "^1.3",
+                "phpunit/phpunit": "^8.5.14|^9.4",
+                "symfony/phpunit-bridge": "^5.2|^6.0|^7.0",
+                "vimeo/psalm": "^4.17"
+            },
+            "suggest": {
+                "monolog/monolog": "Allow sending log messages to Sentry by using the included Monolog handler."
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "Sentry\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sentry",
+                    "email": "accounts@sentry.io"
+                }
+            ],
+            "description": "PHP SDK for Sentry (http://sentry.io)",
+            "homepage": "http://sentry.io",
+            "keywords": [
+                "crash-reporting",
+                "crash-reports",
+                "error-handler",
+                "error-monitoring",
+                "log",
+                "logging",
+                "profiling",
+                "sentry",
+                "tracing"
+            ],
+            "support": {
+                "issues": "https://github.com/getsentry/sentry-php/issues",
+                "source": "https://github.com/getsentry/sentry-php/tree/4.9.0"
+            },
+            "funding": [
+                {
+                    "url": "https://sentry.io/",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://sentry.io/pricing/",
+                    "type": "custom"
+                }
+            ],
+            "time": "2024-08-08T14:40:50+00:00"
         },
         {
             "name": "spatie/image",
