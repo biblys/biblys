@@ -6,6 +6,10 @@ Corrections
 
 - Lors du paiement par chèque l'adresse d'expédition du chèque n'était plus
   affichée correctement. C'est corrigé.
+- La photo sur la page de modification d'un exemplaire s'affichait en basse
+  résolution lorsqu'elle était cliquée. Ce n'est plus le cas.
+- Le script de réinitialisation de la base de données renvoyait une erreur.
+  Maintenant, ça fonctionne.
 
 ## 2.84.0 (7 août 2024)
 
