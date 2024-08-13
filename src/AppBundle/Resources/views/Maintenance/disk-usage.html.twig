@@ -16,27 +16,27 @@
     <thead>
       <tr>
         <th>Type</th>
-        <th>Fichiers</th>
-        <th>Taille</th>
+        <th class="text-center">Fichiers</th>
+        <th class="text-center">Taille</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td>Articles (images de couverture)</td>
-        <td>{{ articlesCount }}</td>
-        <td>{{ articlesSize }} Go</td>
+        <td class="text-right">{{ articlesCount }}</td>
+        <td class="text-right">{{ articlesSize }} Go</td>
       </tr>
       <tr>
         <td>Exemplaires d'occasion (photos)</td>
-        <td>{{ stockItemsCount }}</td>
-        <td>{{ stockItemsSize }} Go</td>
+        <td class="text-right">{{ stockItemsCount }}</td>
+        <td class="text-right">{{ stockItemsSize }} Go</td>
       </tr>
     </tbody>
     <tfoot>
       <tr>
-        <th>Total :</th>
-        <th>{{ totalCount }}</th>
-        <th>{{ totalSize }} Go</th>
+        <th>Total</th>
+        <th class="text-right">{{ totalCount }}</th>
+        <th class="text-right">{{ totalSize }} Go</th>
       </tr>
     </tfoot>
   </table>
