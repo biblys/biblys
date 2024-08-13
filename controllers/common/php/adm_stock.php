@@ -327,12 +327,12 @@ return function (
         // Photo
         /** @var Stock $stockEntity */
         if ($imagesService->imageExistsFor($stock)) {
-            $photoThumbnailUrl = $imagesService->getImageUrlFor($stock, width: 250);
+            $photoThumbnailUrl = $imagesService->getImageUrlFor($stock, width: 200);
             $photoUrl = $imagesService->getImageUrlFor($stock);
             $photo_field = '
             <div class="floatR center">
-                <a href="'.$photoThumbnailUrl.'" rel="lightbox">
-                    <img src="' .$photoUrl.'" alt="Photo de l‘exemplaire" width="200">
+                <a href="'.$photoUrl.'" rel="lightbox">
+                    <img src="' .$photoThumbnailUrl.'" alt="Photo de l‘exemplaire" width="200">
                 </a><br/>
                 <input type="checkbox" name="delete_photo" value="1" /> Supprimer
             </div>';
