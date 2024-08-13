@@ -74,7 +74,7 @@
     "euskadi31/opengraph": "^2.0",
     "symfony/rate-limiter": "^6.3",
     "league/html-to-markdown": "^5.1",
-    "getbrevo/brevo-php": "2.0.0",
+    "getbrevo/brevo-php": "2.0.2",
     "lemonink/lemonink-php": "^1.1",
     "ext-simplexml": "*",
     "ext-curl": "*",
