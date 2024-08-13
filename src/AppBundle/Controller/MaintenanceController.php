@@ -37,13 +37,24 @@ class MaintenanceController extends Controller
     {
         $currentUser->authAdmin();
 
-        $articles = ImageQuery::create()
+        $publisherFilter = $currentSite->getOption("publisher_filter");
+
+        $articlesQuery = ImageQuery::create()
             ->filterByType("cover")
             ->withColumn('COUNT(`id`)', 'count')
             ->withColumn('SUM(`fileSize`)', 'size')
-            ->select(['count', 'size'])
-            ->find()
-            ->getData()[0];
+            ->select(['count', 'size']);
+
+        if ($publisherFilter) {
+            $allowedPublisherIds = explode(",", $publisherFilter);
+            $articlesQuery = $articlesQuery
+                ->joinWithArticle()
+                ->useArticleQuery()
+                    ->filterByPublisherId($allowedPublisherIds)
+                ->endUse();
+        }
+
+        $articles = $articlesQuery->find()->getData()[0];
 
         $stockItems = ImageQuery::create()
             ->filterByType("photo")
