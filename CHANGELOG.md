@@ -4,6 +4,8 @@
 
 Corrections
 
+- Si un filtre éditeur est configuré, seuls les articles des éditeurs
+  concernés seront comptabilisés sur la page Espace disque.
 - Lors du paiement par chèque l'adresse d'expédition du chèque n'était plus
   affichée correctement. C'est corrigé.
 - La photo sur la page de modification d'un exemplaire s'affichait en basse
