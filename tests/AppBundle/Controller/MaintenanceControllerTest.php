@@ -38,6 +38,7 @@ class MaintenanceControllerTest extends TestCase
         $currentUser->expects("authAdmin")->andReturns();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->expects("getSite")->andReturns($site);
+        $currentSite->expects("getOption")->andReturns(null);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("renderResponse")->andReturns(new Response("response"));
 
@@ -56,6 +57,51 @@ class MaintenanceControllerTest extends TestCase
                 "stockItemsSize" => 0.093,
                 "totalCount" => 2,
                 "totalSize" => 0.186,
+            ]);
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertEquals("response", $response->getContent());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function testDiskUsageActionWithPublisherFilter(): void
+    {
+        // given
+        $controller = new MaintenanceController();
+
+        $articleFromCurrentSite = ModelFactory::createArticle();
+        ModelFactory::createImage(article: $articleFromCurrentSite, type: 'cover', fileSize: 99999999);
+        $articleFromOtherSite = ModelFactory::createArticle();
+        ModelFactory::createImage(article: $articleFromOtherSite, type: 'cover', fileSize: 99999999);
+        $site = ModelFactory::createSite();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin")->andReturns();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->expects("getSite")->andReturns($site);
+        $currentSite->expects("getOption")->andReturns($articleFromCurrentSite->getPublisherId());
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("renderResponse")->andReturns(new Response("response"));
+
+        // when
+        $response = $controller->diskUsageAction($currentUser, $currentSite, $templateService);
+
+        // then
+        /** @noinspection PhpUndefinedMethodInspection */
+        $currentUser->shouldHaveReceived("authAdmin")->withNoArgs();
+        /** @noinspection PhpUndefinedMethodInspection */
+        $templateService->shouldHaveReceived("renderResponse")
+            ->with("AppBundle:Maintenance:disk-usage.html.twig", [
+                "articlesCount" => 1,
+                "articlesSize" => 0.093,
+                "stockItemsCount" => 0,
+                "stockItemsSize" => 0,
+                "totalCount" => 1,
+                "totalSize" => 0.093,
             ]);
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals("response", $response->getContent());
