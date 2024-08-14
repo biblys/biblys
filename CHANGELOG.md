@@ -1,5 +1,13 @@
 # Historique des modifications
 
+## 2.85.0 (DEV)
+
+Améliorations
+
+- Une nouvelle commande `images:optimize` permet d'optimiser l'espace disque
+  occupée par les images en limitant la taille de leur plus grand côté à
+  2000 pixels.
+
 ## 2.84.1 (14 août 2024)
 
 Corrections
