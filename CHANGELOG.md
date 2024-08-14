@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.84.1 (DEV)
+
+Corrections
+
+- Lors du paiement par chèque l'adresse d'expédition du chèque n'était plus
+  affichée correctement. C'est corrigé.
+
 ## 2.84.0 (7 août 2024)
 
 Améliorations
