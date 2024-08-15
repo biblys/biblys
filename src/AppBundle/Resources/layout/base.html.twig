@@ -1,5 +1,6 @@
 <html lang="fr">
   <head>
+    {{ app.metaTags|raw }}
     <title>{% block title %}{% endblock %} | {{ app.currentSite.title }}</title>
     {% include "layout:_assets_css.html.twig" %}
   </head>
