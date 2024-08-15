@@ -24,13 +24,13 @@ class MetaTagsService
         $this->writer->append(Opengraph::OG_IMAGE, $string);
     }
 
-    public function dump(): string
+    public function disallowSeoIndexing(): void
     {
-        return $this->writer->render();
+        $this->writer->append("robots", "noindex");
     }
 
     public function dump(): string
     {
-        $this->writer->append("robots", "noindex");
+        return $this->writer->render();
     }
 }
