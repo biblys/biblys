@@ -7,6 +7,9 @@ Améliorations
 - Une nouvelle commande `images:optimize` permet d'optimiser l'espace disque
   occupée par les images en limitant la taille de leur plus grand côté à
   2000 pixels.
+- Biblys supporte désormais la plateforme de surveillance des erreurs et des
+  performances Sentry. Pour l'activer, ajouter le paramètre `sentry.dsn` à
+  la configuration.
 
 ## 2.84.1 (14 août 2024)
 
