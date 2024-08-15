@@ -38,6 +38,22 @@ class MetaTagsServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
+    public function testDisallowSeoIndexing()
+    {
+        // given
+        $writer = $this->createMock(Writer::class);
+        $writer->expects($this->once())
+            ->method("append")
+            ->with($this->equalTo("robots"), $this->equalTo("noindex"));
+        $metaTagsService = new MetaTagsService($writer);
+
+        // when
+        $metaTagsService->disallowSeoIndexing();
+
+        // then
+        $this->assertTrue(true);
+    }
+
     public function testDump()
     {
         // given
