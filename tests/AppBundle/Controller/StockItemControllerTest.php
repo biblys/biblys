@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 require_once __DIR__."/../../setUp.php";
 
-class StockControllerTest extends TestCase
+class StockItemControllerTest extends TestCase
 {
     /**
      * @throws PropelException
@@ -22,7 +22,7 @@ class StockControllerTest extends TestCase
     public function testEditFreePriceAction()
     {
         // given
-        $controller = new StockController();
+        $controller = new StockItemController();
 
         $site = ModelFactory::createSite();
         $cart = ModelFactory::createCart(site: $site);
