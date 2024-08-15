@@ -17,7 +17,7 @@ class WishlistManager extends EntityManager
         
         if (!isset($defaults["wishlist_name"]))
         {
-            $defaults["wishlist_name"] = "Ma liste d'envies Biblys";
+            $defaults["wishlist_name"] = "Ma liste d'envies";
         }
         
         if (!isset($defaults["wishlist_current"]))
