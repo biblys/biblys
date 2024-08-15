@@ -8,6 +8,7 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
+use Biblys\Service\MetaTagsService;
 use Biblys\Service\TemplateService;
 use Model\ArticleQuery;
 use Model\CartQuery;
@@ -28,7 +29,10 @@ return function (
     UrlGenerator    $urlGenerator,
     ImagesService   $imagesService,
     TemplateService $templateService,
+    MetaTagsService $metaTagsService,
 ): Response {
+    $metaTagsService->disallowSeoIndexing();
+
     $content = null;
 
     $currentUrlService = new CurrentUrlService($request);
