@@ -6,6 +6,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
+use Biblys\Service\MetaTagsService;
 use Biblys\Service\TemplateService;
 use Biblys\Test\ModelFactory;
 use Exception;
@@ -58,9 +59,20 @@ class CartTest extends TestCase
         $imagesService->expects("imageExistsFor")->andReturn(true);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("render");
+        $metaTagsService = Mockery::mock(MetaTagsService::class);
+        $metaTagsService->shouldReceive("disallowSeoIndexing");
 
         // when
-        $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator, $imagesService, $templateService);
+        $response = $controller(
+            $request,
+            $config,
+            $currentSite,
+            $currentUser,
+            $urlGenerator,
+            $imagesService,
+            $templateService,
+            $metaTagsService,
+        );
 
         // then
         $this->assertEquals(
@@ -209,9 +221,21 @@ class CartTest extends TestCase
         $imagesService->expects("imageExistsFor")->andReturn(true);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("render");
+        $templateService->expects("render");
+        $metaTagsService = Mockery::mock(MetaTagsService::class);
+        $metaTagsService->shouldReceive("disallowSeoIndexing");
 
         // when
-        $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator, $imagesService, $templateService);
+        $response = $controller(
+            $request,
+            $config,
+            $currentSite,
+            $currentUser,
+            $urlGenerator,
+            $imagesService,
+            $templateService,
+            $metaTagsService,
+        );
 
         // then
         $this->assertStringContainsString(
@@ -277,9 +301,21 @@ class CartTest extends TestCase
         $imagesService->expects("imageExistsFor")->andReturn(true);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("render");
+        $templateService->expects("render");
+        $metaTagsService = Mockery::mock(MetaTagsService::class);
+        $metaTagsService->shouldReceive("disallowSeoIndexing");
 
         // when
-        $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator, $imagesService, $templateService);
+        $response = $controller(
+            $request,
+            $config,
+            $currentSite,
+            $currentUser,
+            $urlGenerator,
+            $imagesService,
+            $templateService,
+            $metaTagsService,
+        );
 
         // then
         $this->assertStringContainsString(
@@ -352,9 +388,21 @@ class CartTest extends TestCase
         $imagesService->expects("getImageUrlFor");
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("render");
+        $templateService->expects("render");
+        $metaTagsService = Mockery::mock(MetaTagsService::class);
+        $metaTagsService->shouldReceive("disallowSeoIndexing");
 
         // when
-        $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator, $imagesService, $templateService);
+        $response = $controller(
+            $request,
+            $config,
+            $currentSite,
+            $currentUser,
+            $urlGenerator,
+            $imagesService,
+            $templateService,
+            $metaTagsService,
+        );
 
         // then
         $this->assertStringContainsString(

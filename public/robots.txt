@@ -3,5 +3,4 @@ Disallow: /admin/*
 Disallow: /pages/log_*
 Disallow: /pages/pub_*
 Disallow: /pages/adm_*
-Disallow: /pages/cart
 Allow: /
