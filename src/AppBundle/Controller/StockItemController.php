@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Usecase\UpdateStockItemPriceUsecase;
 
-class StockController extends Controller
+class StockItemController extends Controller
 {
     /**
      * @throws PropelException

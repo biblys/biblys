@@ -649,19 +649,19 @@ stats_umami:
 
 stock_add_to_cart:
   path: /stock/{stock_id}/add-to-cart
-  controller: AppBundle\Controller\StockController::addToCartAction
+  controller: AppBundle\Controller\StockItemController::addToCartAction
 
 stock_search:
   path: /stock/search/{query}
-  controller: AppBundle\Controller\StockController::searchAction
+  controller: AppBundle\Controller\StockItemController::searchAction
 
 stock_cancel_return:
   path: /admin/stock/{stockId}/cancel-return
-  controller: AppBundle\Controller\StockController::cancelReturnAction
+  controller: AppBundle\Controller\StockItemController::cancelReturnAction
 
 stock_edit_free_price:
   path: /stock/{stockId}/edit-free-price
-  controller: AppBundle\Controller\StockController::editFreePriceAction
+  controller: AppBundle\Controller\StockItemController::editFreePriceAction
   methods: POST
   requirements:
     stockId: \d+
