@@ -29,7 +29,7 @@ class MetaTagsService
         return $this->writer->render();
     }
 
-    public function disallowSeoIndexing(): void
+    public function dump(): string
     {
         $this->writer->append("robots", "noindex");
     }
