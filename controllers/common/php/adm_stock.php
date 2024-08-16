@@ -36,7 +36,7 @@ return function (
 
     $content = null;
 
-    $div_admin = null;
+    $adminActions = null;
 
     $returnedStockId = $request->query->get('return');
     if ($returnedStockId) {
@@ -290,7 +290,6 @@ return function (
     $photo_field = null;
 
     $copyId = $request->query->get('copy');
-    $delId = $request->query->get('del');
 
     // Modifier un exemplaire existant
     if (!empty($_GET['id'])) {
@@ -338,12 +337,11 @@ return function (
             </div>';
         }
 
-        $div_admin = '
-        <p>Exemplaire n&deg; ' . $stockEntity['stock_id'] . '</p>
-        <p><a href="/pages/adm_stocks?article_id=' . $stockEntity['article_id'] . '">autres exemplaires</a></p>
-        <p><a href="/pages/adm_stock?add=' . $stockEntity['article_id'] . '#add">nouvel exemplaire</a></p>
-        <p><a href="/pages/adm_stock?del=' . $stockEntity['stock_id'] . '" data-confirm="Voulez-vous vraiment SUPPRIMER cet exemplaire ?">supprimer</a></p>
-    ';
+        $adminActions = '
+            <p>Exemplaire n&deg; ' . $stock->getId() . '</p>
+            <p><a href="/pages/adm_stocks?article_id=' . $stock->getArticleId() . '">autres exemplaires</a></p>
+            <p><a href="/pages/adm_stock?add=' . $stock->getArticleId() . '#add">nouvel exemplaire</a></p>
+        ';
     } elseif (!empty($copyId)) {
         $request->attributes->set("page_title", "Dupliquer l'exemplaire n&deg; $copyId");
         $content .= '<h1><span class="fa fa-copy"></span> Dupliquer l\'exemplaire n<sup>o</sup> ' . $_GET['copy'] . '</h1>';
@@ -379,11 +377,6 @@ return function (
             $stockEntity['stock_onsale_date'] = $currentSite->getOption('default_stock_purchase_date');
         }
         $_GET['id'] = 0;
-    } elseif ($delId) {
-        $copyToDelete = $sm->getById($delId);
-        $sm->delete($copyToDelete);
-        $session->getFlashBag()->add('success', 'L\'exemplaire ' . $delId . ' a bien été supprimé.');
-        return new RedirectResponse('/pages/adm_stock');
     }
 
     if (!isset($stockEntity)) {
@@ -915,26 +908,37 @@ return function (
         }, $carts->getArrayCopy());
 
         $content .= '
-    <form method="post" action="' . $urlgenerator->generate('stock_add_to_cart', ['stock_id' => $stockEntity->get('id')]) . '" class="fieldset form-inline">
-        <fieldset>
-            <legend>Ajouter à un panier</legend>
-                <p class="text-center">
-                    Ajouter l\'exemplaire au panier :
-                    <select class="form-control" name="cart_id">
-                        ' . join($cartOptions) . '
-                    </select>
-                    <button class="btn btn-primary" type="submit">OK</button>
-                </p>
-        </fieldset>
-    </form>
-    ';
+            <form method="post" action="' . $urlgenerator->generate('stock_add_to_cart', ['stock_id' => $stockEntity->get('id')]) . '" class="fieldset form-inline">
+                <fieldset>
+                    <legend>Ajouter à un panier</legend>
+                        <p class="text-center">
+                            Ajouter l\'exemplaire au panier :
+                            <select class="form-control" name="cart_id">
+                                ' . join($cartOptions) . '
+                            </select>
+                            <button class="btn btn-primary" type="submit">OK</button>
+                        </p>
+                </fieldset>
+            </form>
+        ';
+    }
+
+    if ($stock) {
+        $deleteUrl = $urlgenerator->generate("stock_item_delete", ["stockId" => $stock->getId()]);
+        $content .= '
+            <form action="'. $deleteUrl .'" method="post" class="text-center">
+              <button type="submit" class="btn btn-danger" data-confirm="Voulez-vous vraiment supprimer définitivement cet exemplaire ?">
+                Supprimer cet exemplaire
+              </button>
+            </form>
+        ';
     }
 
     $content .= '
-    <div class="admin">
-        ' . $div_admin . '
-    </div>
-';
+        <div class="admin">
+            ' . $adminActions . '
+        </div>
+    ';
 
     return new Response($content);
 };
