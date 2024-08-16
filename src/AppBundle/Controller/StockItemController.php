@@ -6,6 +6,7 @@ use ArticleManager;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
+use Biblys\Service\Images\ImagesService;
 use Cart;
 use CartManager;
 use Exception;
@@ -186,6 +187,7 @@ class StockItemController extends Controller
      */
     public function deleteAction(
         CurrentSite $currentSite,
+        ImagesService $imagesService,
         FlashMessagesService $flashMessages,
         int $stockId
     ): RedirectResponse
@@ -195,7 +197,11 @@ class StockItemController extends Controller
             throw new NotFoundHttpException("Stock item $stockId not found");
         }
 
+        if ($imagesService->imageExistsFor($stockItem)) {
+            $imagesService->deleteImageFor($stockItem);
+        }
         $stockItem->delete();
+
         $flashMessages->add(
             "success",
             "L'exemplaire n° $stockId ({$stockItem->getArticle()->getTitle()}) a été supprimé."
