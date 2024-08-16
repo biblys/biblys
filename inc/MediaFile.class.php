@@ -7,7 +7,10 @@ class MediaFile extends Entity
     protected $prefix = 'media';
     public $trackChange = false;
 
-    public function getUrl()
+    /**
+     * @throws Exception
+     */
+    public function getUrl(): string
     {
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
@@ -22,9 +25,12 @@ class MediaFileManager extends EntityManager
         $table = 'medias',
         $object = 'MediaFile';
 
-    public function getMediaFolderPath()
+    /**
+     * @throws Exception
+     */
+    public function getMediaFolderPath(): string
     {
-        $mediaFolderPath = biblysPath() . 'public/media/';
+        $mediaFolderPath = __DIR__ . '/../public/media/';
         if (!is_dir($mediaFolderPath)) {
             throw new Exception("Le dossier $mediaFolderPath n'existe pas.");
         }
@@ -32,7 +38,10 @@ class MediaFileManager extends EntityManager
         return $mediaFolderPath;
     }
 
-    public function deleteDirectory($dir)
+    /**
+     * @throws Exception
+     */
+    public function deleteDirectory($dir): void
     {
         $dirFullPath = $this->getMediaFolderPath() . $dir;
 
@@ -43,7 +52,7 @@ class MediaFileManager extends EntityManager
         }
 
         if (!empty(array_slice(scandir($dirFullPath), 2))) {
-            throw new \Exception("Directory $dir is not empty");
+            throw new Exception("Directory $dir is not empty");
         }
 
         // Delete folder
@@ -53,12 +62,12 @@ class MediaFileManager extends EntityManager
         }
     }
 
-    public function beforeDelete($media)
+    public function beforeDelete($entity): void
     {
         $mediaFolderPath = $this->getMediaFolderPath();
 
         // Delete file
-        $filePath = $mediaFolderPath . $media->get('dir') . '/' . $media->get('file') . '.' . $media->get('ext');
+        $filePath = $mediaFolderPath . $entity->get('dir') . '/' . $entity->get('file') . '.' . $entity->get('ext');
         if (file_exists($filePath)) {
             $deleted = @unlink($filePath);
             if (!$deleted) {
@@ -67,7 +76,7 @@ class MediaFileManager extends EntityManager
         }
 
         // Delete thumbs created for this file
-        $thumbs = glob($mediaFolderPath . $media->get('dir') . '/' . $media->get('file') . '__*.jpg');
+        $thumbs = glob($mediaFolderPath . $entity->get('dir') . '/' . $entity->get('file') . '__*.jpg');
         foreach ($thumbs as $thumb) {
             $deleted = unlink($thumb);
             if (!$deleted) {
