@@ -10,6 +10,7 @@ use Model\Article;
 use Model\ArticleCategory;
 use Model\AuthenticationMethod;
 use Model\Customer;
+use Model\File;
 use Model\Image;
 use Model\Invitation;
 use Model\BookCollection;
@@ -234,7 +235,6 @@ class ModelFactory
      */
     public static function createOrder(
         Site   $site = null,
-        User   $user = null,
         string $axysAccountId = null,
         string $slug = null,
     ): Order
@@ -811,6 +811,22 @@ class ModelFactory
         $image->save();
 
         return $image;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createDownloadableFile(
+        Article $article = null,
+        int   $fileSize = 100,
+    ): File
+    {
+        $file = new File();
+        $file->setArticleId($article->getId());
+        $file->setSize($fileSize);
+        $file->save();
+
+        return $file;
     }
 
 }

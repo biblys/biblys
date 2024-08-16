@@ -4,6 +4,8 @@
 
 Améliorations
 
+- La page "Espace disque" affiche désormais la taille occupée par les 
+  fichiers téléchargeables.
 - Une nouvelle commande `images:optimize` permet d'optimiser l'espace disque
   occupée par les images en limitant la taille de leur plus grand côté à
   2000 pixels.

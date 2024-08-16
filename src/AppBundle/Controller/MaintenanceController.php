@@ -6,6 +6,7 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\TemplateService;
 use Framework\Controller;
+use Model\FileQuery;
 use Model\ImageQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -56,6 +57,20 @@ class MaintenanceController extends Controller
 
         $articles = $articlesQuery->find()->getData()[0];
 
+        $downloadableFiles = ["count" => 0, "size" => 0];
+        if ($publisherFilter) {
+            $downloadableFiles = FileQuery::create()
+                ->withColumn('COUNT(`file_id`)', 'count')
+                ->withColumn('SUM(`file_size`)', 'size')
+                ->select(['count', 'size'])
+                ->joinWithArticle()
+                ->useArticleQuery()
+                    ->filterByPublisherId($allowedPublisherIds)
+                ->endUse()
+                ->find()
+                ->getData()[0];
+        }
+
         $stockItems = ImageQuery::create()
             ->filterByType("photo")
             ->filterBySite($currentSite->getSite())
@@ -65,14 +80,16 @@ class MaintenanceController extends Controller
             ->find()
             ->getData()[0];
 
-        $totalCount = $articles["count"] + $stockItems["count"];
-        $totalSize = $articles["size"] + $stockItems["size"];
+        $totalCount = $articles["count"] + $downloadableFiles["count"] + $stockItems["count"];
+        $totalSize = $articles["size"] + $downloadableFiles["size"] + $stockItems["size"];
 
         return $templateService->renderResponse("AppBundle:Maintenance:disk-usage.html.twig", [
             "articlesCount" => $articles["count"],
             "articlesSize" => $this->_convertToGigabytes($articles["size"]),
             "stockItemsCount" => $stockItems["count"],
             "stockItemsSize" => $this->_convertToGigabytes($stockItems["size"]),
+            "downloadableFilesCount" => $downloadableFiles["count"],
+            "downloadableFilesSize" => $this->_convertToGigabytes($downloadableFiles["size"]),
             "totalCount" => $totalCount,
             "totalSize" => $this->_convertToGigabytes($totalSize),
         ]);
