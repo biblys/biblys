@@ -645,7 +645,7 @@ stats_umami:
   path: /admin/stats/umami
   controller: AppBundle\Controller\StatsController::umami
 
-# Stock
+# StockItem
 
 stock_add_to_cart:
   path: /stock/{stock_id}/add-to-cart
@@ -662,6 +662,13 @@ stock_cancel_return:
 stock_edit_free_price:
   path: /stock/{stockId}/edit-free-price
   controller: AppBundle\Controller\StockItemController::editFreePriceAction
+  methods: POST
+  requirements:
+    stockId: \d+
+
+stock_item_delete:
+  path: /admin/stock-item/{stockId}/delete
+  controller: AppBundle\Controller\StockItemController::deleteAction
   methods: POST
   requirements:
     stockId: \d+
