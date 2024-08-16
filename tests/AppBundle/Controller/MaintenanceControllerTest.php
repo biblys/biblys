@@ -55,6 +55,8 @@ class MaintenanceControllerTest extends TestCase
                 "articlesSize" => 0.093,
                 "stockItemsCount" => 1,
                 "stockItemsSize" => 0.093,
+                "downloadableFilesCount" => 0,
+                "downloadableFilesSize" => 0,
                 "totalCount" => 2,
                 "totalSize" => 0.186,
             ]);
@@ -78,6 +80,7 @@ class MaintenanceControllerTest extends TestCase
         $articleFromOtherSite = ModelFactory::createArticle();
         ModelFactory::createImage(article: $articleFromOtherSite, type: 'cover', fileSize: 99999999);
         $site = ModelFactory::createSite();
+        ModelFactory::createDownloadableFile(article: $articleFromCurrentSite, fileSize: 99999999);
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authAdmin")->andReturns();
@@ -98,10 +101,12 @@ class MaintenanceControllerTest extends TestCase
             ->with("AppBundle:Maintenance:disk-usage.html.twig", [
                 "articlesCount" => 1,
                 "articlesSize" => 0.093,
+                "downloadableFilesCount" => 1,
+                "downloadableFilesSize" => 0.093,
                 "stockItemsCount" => 0,
                 "stockItemsSize" => 0,
-                "totalCount" => 1,
-                "totalSize" => 0.093,
+                "totalCount" => 2,
+                "totalSize" => 0.186,
             ]);
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals("response", $response->getContent());
