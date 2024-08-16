@@ -5,6 +5,8 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\Article as ChildArticle;
+use Model\ArticleQuery as ChildArticleQuery;
 use Model\FileQuery as ChildFileQuery;
 use Model\User as ChildUser;
 use Model\UserQuery as ChildUserQuery;
@@ -172,6 +174,11 @@ abstract class File implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $file_created;
+
+    /**
+     * @var        ChildArticle
+     */
+    protected $aArticle;
 
     /**
      * @var        ChildUser
@@ -672,6 +679,10 @@ abstract class File implements ActiveRecordInterface
             $this->modifiedColumns[FileTableMap::COL_ARTICLE_ID] = true;
         }
 
+        if ($this->aArticle !== null && $this->aArticle->getId() !== $v) {
+            $this->aArticle = null;
+        }
+
         return $this;
     }
 
@@ -1082,6 +1093,9 @@ abstract class File implements ActiveRecordInterface
      */
     public function ensureConsistency(): void
     {
+        if ($this->aArticle !== null && $this->article_id !== $this->aArticle->getId()) {
+            $this->aArticle = null;
+        }
         if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
             $this->aUser = null;
         }
@@ -1124,6 +1138,7 @@ abstract class File implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aArticle = null;
             $this->aUser = null;
         } // if (deep)
     }
@@ -1245,6 +1260,13 @@ abstract class File implements ActiveRecordInterface
             // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
+
+            if ($this->aArticle !== null) {
+                if ($this->aArticle->isModified() || $this->aArticle->isNew()) {
+                    $affectedRows += $this->aArticle->save($con);
+                }
+                $this->setArticle($this->aArticle);
+            }
 
             if ($this->aUser !== null) {
                 if ($this->aUser->isModified() || $this->aUser->isNew()) {
@@ -1579,6 +1601,21 @@ abstract class File implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aArticle) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'article';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'articles';
+                        break;
+                    default:
+                        $key = 'Article';
+                }
+
+                $result[$key] = $this->aArticle->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aUser) {
 
                 switch ($keyType) {
@@ -1965,6 +2002,57 @@ abstract class File implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildArticle object.
+     *
+     * @param ChildArticle|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setArticle(ChildArticle $v = null)
+    {
+        if ($v === null) {
+            $this->setArticleId(NULL);
+        } else {
+            $this->setArticleId($v->getId());
+        }
+
+        $this->aArticle = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildArticle object, it will not be re-added.
+        if ($v !== null) {
+            $v->addFile($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildArticle object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildArticle|null The associated ChildArticle object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getArticle(?ConnectionInterface $con = null)
+    {
+        if ($this->aArticle === null && ($this->article_id != 0)) {
+            $this->aArticle = ChildArticleQuery::create()->findPk($this->article_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aArticle->addFiles($this);
+             */
+        }
+
+        return $this->aArticle;
+    }
+
+    /**
      * Declares an association between this object and a ChildUser object.
      *
      * @param ChildUser|null $v
@@ -2024,6 +2112,9 @@ abstract class File implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aArticle) {
+            $this->aArticle->removeFile($this);
+        }
         if (null !== $this->aUser) {
             $this->aUser->removeFile($this);
         }
@@ -2066,6 +2157,7 @@ abstract class File implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
+        $this->aArticle = null;
         $this->aUser = null;
         return $this;
     }

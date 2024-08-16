@@ -527,6 +527,9 @@
   <table name="files" idMethod="native" phpName="File">
     <column name="file_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="article_id" phpName="ArticleId" type="INTEGER" sqlType="int unsigned"/>
+    <foreign-key foreignTable="articles" skipSql="true">
+      <reference local="article_id" foreign="article_id"/>
+    </foreign-key>
     <column name="axys_account_id" phpName="AxysAccountId" type="INTEGER" sqlType="int unsigned"/>
     <column name="user_id" phpName="UserId" type="INTEGER" sqlType="int unsigned"/>
     <foreign-key foreignTable="users" skipSql="true">
