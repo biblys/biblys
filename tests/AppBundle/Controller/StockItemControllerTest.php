@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
+use Biblys\Service\Images\ImagesService;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Exception;
@@ -82,15 +83,18 @@ class StockItemControllerTest extends TestCase
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
+        $imagesService = Mockery::spy(ImagesService::class);
+        $imagesService->expects("imageExistsFor")->andReturn(true);
         $flashMessages = Mockery::spy(FlashMessagesService::class);
 
         // when
-        $response = $controller->deleteAction($currentSite, $flashMessages, $stockItem->getId());
+        $response = $controller->deleteAction($currentSite, $imagesService, $flashMessages, $stockItem->getId());
 
         // then
         $this->assertEquals(301, $response->getStatusCode());
         $this->assertEquals("/pages/adm_stocks", $response->getTargetUrl());
         $this->assertTrue($stockItem->isDeleted(), "should have deleted the stock item");
+        $imagesService->shouldHaveReceived("deleteImageFor", [$stockItem]);
         $flashMessages->shouldHaveReceived("add", [
             "success",
             "L'exemplaire n° ".$stockItem->getId()." (Exemplaire à supprimer) a été supprimé."
@@ -112,10 +116,11 @@ class StockItemControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $flashMessages = Mockery::mock(FlashMessagesService::class);
+        $imagesService = Mockery::spy(ImagesService::class);
 
         // when
-        $exception = Helpers::runAndCatchException(function() use ($controller, $currentSite, $flashMessages, $stockItemFromOtherSite) {
-            $controller->deleteAction($currentSite, $flashMessages, $stockItemFromOtherSite->getId());
+        $exception = Helpers::runAndCatchException(function() use ($controller, $currentSite, $imagesService, $flashMessages, $stockItemFromOtherSite) {
+            $controller->deleteAction($currentSite, $imagesService, $flashMessages, $stockItemFromOtherSite->getId());
         });
 
         // then
