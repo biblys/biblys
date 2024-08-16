@@ -23,7 +23,7 @@ return function (Request $request): Response
         $_GET['dir'] = null;
     }
 
-// Nouveau dossier
+    // Nouveau dossier
     if (!empty($_POST['new_dir'])) {
         $newDirSlug = $slugService->slugify($_POST['new_dir']);
         mkdir($mediaFolderPath . $newDirSlug);
@@ -83,15 +83,15 @@ return function (Request $request): Response
     closedir($dir);
 
     $content .= '
-    <img src="/common/icons/directory_16x16.png" alt="Dossier" /> 
-    <a href="/pages/adm_media?CKEditorFuncNum=' . ($_GET['CKEditorFuncNum'] ?? null) . '">media</a>
-';
+        <img src="/common/icons/directory_16x16.png" alt="Dossier" /> 
+        <a href="/pages/adm_media?CKEditorFuncNum=' . ($_GET['CKEditorFuncNum'] ?? null) . '">media</a>
+    ';
 
     $getFile = $request->query->get('file');
     $getDir = $request->query->get('dir');
     $getDel = $request->query->get('del');
 
-// Display a single file
+    // Display a single file
 
     if ($getDir && $getFile) {
 
@@ -123,10 +123,10 @@ return function (Request $request): Response
         $media_ext = $fileExt;
 
         $content .= '
-        &raquo;
-        <img src="/common/icons/directory_16x16.png" alt="" role="presentation" /> 
-        <a href="/pages/adm_media?dir=' . $_GET['dir'] . '&CKEditorFuncNum=' . $_GET['CKEditorFuncNum'] . '">' . $_GET['dir'] . '</a>
-    ';
+            &raquo;
+            <img src="/common/icons/directory_16x16.png" alt="" role="presentation" /> 
+            <a href="/pages/adm_media?dir=' . $_GET['dir'] . '&CKEditorFuncNum=' . $_GET['CKEditorFuncNum'] . '">' . $_GET['dir'] . '</a>
+        ';
 
         if ($getDel) {
             $mm->delete($file);
@@ -152,57 +152,57 @@ return function (Request $request): Response
                 }
 
                 $content .= '
-                &raquo;
-                <img src="/common/icons/file_16x16.png" alt="Fichier" /> 
-                <a href="/pages/adm_media?dir=' . $_GET['dir'] . '&file=' . $_GET['file'] . '&CKEditorFuncNum=' . $_GET['CKEditorFuncNum'] . '">
-                    ' . $_GET['file'] . '
-                </a> 
-                <a 
-                    href="/pages/adm_media?dir=' . $_GET['dir'] . '&file=' . $_GET['file'] . '&del=1&CKEditorFuncNum=' . $_GET['CKEditorFuncNum'] . '" 
-                    data-confirm="Voulez-vous vraiment supprimer le fichier ' . $m['media_file'] . '.' . $m['media_ext'] . ' ?"
-                >
-                    <span class="fa fa-trash-o"></span>
-                </a>
-            ';
+                    &raquo;
+                    <img src="/common/icons/file_16x16.png" alt="Fichier" /> 
+                    <a href="/pages/adm_media?dir=' . $_GET['dir'] . '&file=' . $_GET['file'] . '&CKEditorFuncNum=' . $_GET['CKEditorFuncNum'] . '">
+                        ' . $_GET['file'] . '
+                    </a> 
+                    <a 
+                        href="/pages/adm_media?dir=' . $_GET['dir'] . '&file=' . $_GET['file'] . '&del=1&CKEditorFuncNum=' . $_GET['CKEditorFuncNum'] . '" 
+                        data-confirm="Voulez-vous vraiment supprimer le fichier ' . $m['media_file'] . '.' . $m['media_ext'] . ' ?"
+                    >
+                        <span class="fa fa-trash-o"></span>
+                    </a>
+                ';
                 $content .= '<div class="center"><img src="' . $request->getScheme() . '://' . $_SERVER['HTTP_HOST'] . '/media/' . $m['media_dir'] . '/' . $m['media_file'] . '.' . $m['media_ext'] . '" style="max-width: 450px;" onClick="window.opener.CKEDITOR.tools.callFunction(\'' . $_GET['CKEditorFuncNum'] . '\',\'' . $request->getScheme() . '://' . $_SERVER['HTTP_HOST'] . '/media/' . $m['media_dir'] . '/' . $m['media_file'] . '.' . $m['media_ext'] . '\'); window.close();" title="Cliquer sur l\'image pour l\'insérer." class="pointer"  alt="Cliquer sur l\'image pour l\'insérer"/></div>';
                 $content .= '<br />';
                 $content .= '
-                <form method="post">
-                    <fieldset>
-                        <label for="media_id" class="disabled">Media n&deg;</label>
-                        <input type="text" name="media_id" id="media_id" value="' . $m['media_id'] . '" class="short" readonly="readonly" /><br />
-
-                        <label for="media_url">URL :</label>
-                        <input type="text" name="media_url" id="media_url" class="long" value="' . $request->getScheme() . '://' . $_SERVER['HTTP_HOST'] . '/media/' . $m['media_dir'] . '/' . $m['media_file'] . '.' . $m['media_ext'] . '" /><br />
-                        <br />
-
-                        <label for="media_title">Titre :</label>
-                        <input type="text" name="media_title" id="media_title" value="' . $m['media_title'] . '" class="long" /><br />
-
-                        <label for="category_id">Catégorie :</label>
-                        <select name="category_id">
-                            <option value="0" />
-                            ' . $categories_options . '
-                        </select>
-                        <br /><br />
-
-
-                        <label for="media_link">Lien :</label>
-                        <input type="url" placeholder="' . $request->getScheme() . '://" name="media_link" id="media_link" value="' . $m['media_link'] . '" class="long" /><br />
-
-                        <label for="media_headline">À la une :</label>
-                        <input type="checkbox" name="media_headline" value="1"' . ($m['media_headline'] ? ' checked' : null) . ' /><br />
-                        <br />
-
-                        <textarea id="media_description" name="media_desc" class="wysiwyg">' . $m['media_desc'] . '</textarea><br />
-
-                        <div class="center">
-                            <button type="submit" class="btn btn-primary">Mettre à jour</button>
-                        </div>
-
-                    </fieldset>
-                </form>
-            ';
+                    <form method="post">
+                        <fieldset>
+                            <label for="media_id" class="disabled">Media n&deg;</label>
+                            <input type="text" name="media_id" id="media_id" value="' . $m['media_id'] . '" class="short" readonly="readonly" /><br />
+    
+                            <label for="media_url">URL :</label>
+                            <input type="text" name="media_url" id="media_url" class="long" value="' . $request->getScheme() . '://' . $_SERVER['HTTP_HOST'] . '/media/' . $m['media_dir'] . '/' . $m['media_file'] . '.' . $m['media_ext'] . '" /><br />
+                            <br />
+    
+                            <label for="media_title">Titre :</label>
+                            <input type="text" name="media_title" id="media_title" value="' . $m['media_title'] . '" class="long" /><br />
+    
+                            <label for="category_id">Catégorie :</label>
+                            <select name="category_id">
+                                <option value="0" />
+                                ' . $categories_options . '
+                            </select>
+                            <br /><br />
+    
+    
+                            <label for="media_link">Lien :</label>
+                            <input type="url" placeholder="' . $request->getScheme() . '://" name="media_link" id="media_link" value="' . $m['media_link'] . '" class="long" /><br />
+    
+                            <label for="media_headline">À la une :</label>
+                            <input type="checkbox" name="media_headline" value="1"' . ($m['media_headline'] ? ' checked' : null) . ' /><br />
+                            <br />
+    
+                            <textarea id="media_description" name="media_desc" class="wysiwyg">' . $m['media_desc'] . '</textarea><br />
+    
+                            <div class="center">
+                                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                            </div>
+    
+                        </fieldset>
+                    </form>
+                ';
             } else {
                 throw new Exception("Pas d'entrée en base pour ce fichier ce fichier.");
             }
@@ -215,17 +215,17 @@ return function (Request $request): Response
         } else {
 
             $content .= '
-            &raquo;
-            <img src="/common/icons/directory_16x16.png" alt="" role="presentation" /> 
-            <a href="/pages/adm_media?dir=' . $_GET['dir'] . '&CKEditorFuncNum=' . $_GET['CKEditorFuncNum'] . '">
-                ' . $_GET['dir'] . '
-            </a>
-            <a 
-                href="/pages/adm_media?dir=' . $_GET['dir'] . '&del=1&CKEditorFuncNum=' . $_GET['CKEditorFuncNum'] . '" 
-                data-confirm="Voulez-vous vraiment supprimer le dossier ' . $_GET['dir'] . ' et tous les fichiers qu\'il contient ?"
-            >
-                <span class="fa fa-trash-o"></span>
-            </a>';
+                &raquo;
+                <img src="/common/icons/directory_16x16.png" alt="" role="presentation" /> 
+                <a href="/pages/adm_media?dir=' . $_GET['dir'] . '&CKEditorFuncNum=' . $_GET['CKEditorFuncNum'] . '">
+                    ' . $_GET['dir'] . '
+                </a>
+                <a 
+                    href="/pages/adm_media?dir=' . $_GET['dir'] . '&del=1&CKEditorFuncNum=' . $_GET['CKEditorFuncNum'] . '" 
+                    data-confirm="Voulez-vous vraiment supprimer le dossier ' . $_GET['dir'] . ' et tous les fichiers qu\'il contient ?"
+                >
+                    <span class="fa fa-trash-o"></span>
+                </a>';
 
             sort($fichier);
             foreach ($fichier as $lien) {
@@ -236,20 +236,20 @@ return function (Request $request): Response
             $content .= '<ul></li>';
 
             $content .= '
+                            </li>
+                        </ul>
                     </li>
                 </ul>
-            </li>
-        </ul>
-        ';
+            ';
 
             // Ajouter un fichier
             $content .= '
-            <br />
-            <p>
-                <form enctype="multipart/form-data" method="post">Ajouter un fichier au dossier &laquo; ' . $_GET['dir'] . ' &raquo; :<br />
-                <input type="file" name="uploads[]" class="autosubmit" multiple="multiple" /></form>
-            </p>
-        ';
+                <br />
+                <p>
+                    <form enctype="multipart/form-data" method="post">Ajouter un fichier au dossier &laquo; ' . $_GET['dir'] . ' &raquo; :<br />
+                    <input type="file" name="uploads[]" class="autosubmit" multiple="multiple" /></form>
+                </p>
+            ';
         }
     } else {
         // À la racine, on liste les dossiers
@@ -259,13 +259,13 @@ return function (Request $request): Response
         }
         $content .= '</ul>';
         $content .= '
-        <br>
-        <p>Choisir un dossier ci-dessus ou créer un nouveau dossier :</p>
-        <form method="post">
-            <input type="text" name="new_dir" placeholder="Nouveau dossier...">
-            <button type="submit" class="btn btn-primary">Créer</button>
-        </form>
-    </p>';
+            <br>
+            <p>Choisir un dossier ci-dessus ou créer un nouveau dossier :</p>
+            <form method="post">
+                <input type="text" name="new_dir" placeholder="Nouveau dossier...">
+                <button type="submit" class="btn btn-primary">Créer</button>
+            </form>
+        </p>';
     }
 
     $content .= '</ul>';
