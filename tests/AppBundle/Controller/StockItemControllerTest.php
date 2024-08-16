@@ -4,12 +4,15 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\FlashMessagesService;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Exception;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 require_once __DIR__."/../../setUp.php";
 
@@ -62,5 +65,62 @@ class StockItemControllerTest extends TestCase
             $cart->getAmount(),
             "it should have updated cart amount"
         );
+    }
+
+    /** StockItemController->deleteAction */
+
+    /**
+     * @throws PropelException
+     */
+    public function testDeleteAction()
+    {
+        // given
+        $controller = new StockItemController();
+        $site = ModelFactory::createSite();
+        $article = ModelFactory::createArticle(title: "Exemplaire à supprimer");
+        $stockItem = ModelFactory::createStockItem(site: $site, article: $article);
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $flashMessages = Mockery::spy(FlashMessagesService::class);
+
+        // when
+        $response = $controller->deleteAction($currentSite, $flashMessages, $stockItem->getId());
+
+        // then
+        $this->assertEquals(301, $response->getStatusCode());
+        $this->assertEquals("/pages/adm_stocks", $response->getTargetUrl());
+        $this->assertTrue($stockItem->isDeleted(), "should have deleted the stock item");
+        $flashMessages->shouldHaveReceived("add", [
+            "success",
+            "L'exemplaire n° ".$stockItem->getId()." (Exemplaire à supprimer) a été supprimé."
+        ]);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testDeleteActionReturns404()
+    {
+        // given
+        $controller = new StockItemController();
+        $site = ModelFactory::createSite();
+        $otherSite = ModelFactory::createSite();
+        $stockItemFromOtherSite = ModelFactory::createStockItem(site: $otherSite);
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $flashMessages = Mockery::mock(FlashMessagesService::class);
+
+        // when
+        $exception = Helpers::runAndCatchException(function() use ($controller, $currentSite, $flashMessages, $stockItemFromOtherSite) {
+            $controller->deleteAction($currentSite, $flashMessages, $stockItemFromOtherSite->getId());
+        });
+
+        // then
+        $this->assertInstanceOf(NotFoundHttpException::class, $exception);
+        $this->assertEquals("Stock item ".$stockItemFromOtherSite->getId()." not found", $exception->getMessage());
+        $this->assertFalse($stockItemFromOtherSite->isDeleted(), "should not have deleted the stock item");
     }
 }

@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use ArticleManager;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\FlashMessagesService;
 use Cart;
 use CartManager;
 use Exception;
@@ -18,6 +19,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Usecase\UpdateStockItemPriceUsecase;
 
@@ -177,5 +179,28 @@ class StockItemController extends Controller
         }
 
         return new RedirectResponse("/pages/cart");
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function deleteAction(
+        CurrentSite $currentSite,
+        FlashMessagesService $flashMessages,
+        int $stockId
+    ): RedirectResponse
+    {
+        $stockItem = StockQuery::create()->filterBySite($currentSite->getSite())->findPk($stockId);
+        if (!$stockItem) {
+            throw new NotFoundHttpException("Stock item $stockId not found");
+        }
+
+        $stockItem->delete();
+        $flashMessages->add(
+            "success",
+            "L'exemplaire n° $stockId ({$stockItem->getArticle()->getTitle()}) a été supprimé."
+        );
+
+        return new RedirectResponse('/pages/adm_stocks', 301);
     }
 }
