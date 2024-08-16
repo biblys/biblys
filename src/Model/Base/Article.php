@@ -9,6 +9,8 @@ use Model\Article as ChildArticle;
 use Model\ArticleQuery as ChildArticleQuery;
 use Model\BookCollection as ChildBookCollection;
 use Model\BookCollectionQuery as ChildBookCollectionQuery;
+use Model\File as ChildFile;
+use Model\FileQuery as ChildFileQuery;
 use Model\Image as ChildImage;
 use Model\ImageQuery as ChildImageQuery;
 use Model\Invitation as ChildInvitation;
@@ -26,6 +28,7 @@ use Model\SpecialOfferQuery as ChildSpecialOfferQuery;
 use Model\Stock as ChildStock;
 use Model\StockQuery as ChildStockQuery;
 use Model\Map\ArticleTableMap;
+use Model\Map\FileTableMap;
 use Model\Map\ImageTableMap;
 use Model\Map\InvitationsArticlesTableMap;
 use Model\Map\LinkTableMap;
@@ -658,6 +661,13 @@ abstract class Article implements ActiveRecordInterface
     protected $aBookCollection;
 
     /**
+     * @var        ObjectCollection|ChildFile[] Collection to store aggregation of ChildFile objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildFile> Collection to store aggregation of ChildFile objects.
+     */
+    protected $collFiles;
+    protected $collFilesPartial;
+
+    /**
      * @var        ObjectCollection|ChildImage[] Collection to store aggregation of ChildImage objects.
      * @phpstan-var ObjectCollection&\Traversable<ChildImage> Collection to store aggregation of ChildImage objects.
      */
@@ -724,6 +734,13 @@ abstract class Article implements ActiveRecordInterface
      * @phpstan-var ObjectCollection&\Traversable<ChildInvitation>
      */
     protected $invitationsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildFile[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildFile>
+     */
+    protected $filesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -3937,6 +3954,8 @@ abstract class Article implements ActiveRecordInterface
 
             $this->aPublisher = null;
             $this->aBookCollection = null;
+            $this->collFiles = null;
+
             $this->collImages = null;
 
             $this->collInvitationsArticless = null;
@@ -4131,6 +4150,24 @@ abstract class Article implements ActiveRecordInterface
                 }
             }
 
+
+            if ($this->filesScheduledForDeletion !== null) {
+                if (!$this->filesScheduledForDeletion->isEmpty()) {
+                    foreach ($this->filesScheduledForDeletion as $file) {
+                        // need to save related object because we set the relation to null
+                        $file->save($con);
+                    }
+                    $this->filesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collFiles !== null) {
+                foreach ($this->collFiles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
 
             if ($this->imagesScheduledForDeletion !== null) {
                 if (!$this->imagesScheduledForDeletion->isEmpty()) {
@@ -5288,6 +5325,21 @@ abstract class Article implements ActiveRecordInterface
 
                 $result[$key] = $this->aBookCollection->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
+            if (null !== $this->collFiles) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'files';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'filess';
+                        break;
+                    default:
+                        $key = 'Files';
+                }
+
+                $result[$key] = $this->collFiles->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collImages) {
 
                 switch ($keyType) {
@@ -6356,6 +6408,12 @@ abstract class Article implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
+            foreach ($this->getFiles() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addFile($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getImages() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addImage($relObj->copy($deepCopy));
@@ -6535,6 +6593,10 @@ abstract class Article implements ActiveRecordInterface
      */
     public function initRelation($relationName): void
     {
+        if ('File' === $relationName) {
+            $this->initFiles();
+            return;
+        }
         if ('Image' === $relationName) {
             $this->initImages();
             return;
@@ -6559,6 +6621,271 @@ abstract class Article implements ActiveRecordInterface
             $this->initStocks();
             return;
         }
+    }
+
+    /**
+     * Clears out the collFiles collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addFiles()
+     */
+    public function clearFiles()
+    {
+        $this->collFiles = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collFiles collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialFiles($v = true): void
+    {
+        $this->collFilesPartial = $v;
+    }
+
+    /**
+     * Initializes the collFiles collection.
+     *
+     * By default this just sets the collFiles collection to an empty array (like clearcollFiles());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initFiles(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collFiles && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = FileTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collFiles = new $collectionClassName;
+        $this->collFiles->setModel('\Model\File');
+    }
+
+    /**
+     * Gets an array of ChildFile objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildArticle is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildFile[] List of ChildFile objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildFile> List of ChildFile objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getFiles(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collFilesPartial && !$this->isNew();
+        if (null === $this->collFiles || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collFiles) {
+                    $this->initFiles();
+                } else {
+                    $collectionClassName = FileTableMap::getTableMap()->getCollectionClassName();
+
+                    $collFiles = new $collectionClassName;
+                    $collFiles->setModel('\Model\File');
+
+                    return $collFiles;
+                }
+            } else {
+                $collFiles = ChildFileQuery::create(null, $criteria)
+                    ->filterByArticle($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collFilesPartial && count($collFiles)) {
+                        $this->initFiles(false);
+
+                        foreach ($collFiles as $obj) {
+                            if (false == $this->collFiles->contains($obj)) {
+                                $this->collFiles->append($obj);
+                            }
+                        }
+
+                        $this->collFilesPartial = true;
+                    }
+
+                    return $collFiles;
+                }
+
+                if ($partial && $this->collFiles) {
+                    foreach ($this->collFiles as $obj) {
+                        if ($obj->isNew()) {
+                            $collFiles[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collFiles = $collFiles;
+                $this->collFilesPartial = false;
+            }
+        }
+
+        return $this->collFiles;
+    }
+
+    /**
+     * Sets a collection of ChildFile objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $files A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setFiles(Collection $files, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildFile[] $filesToDelete */
+        $filesToDelete = $this->getFiles(new Criteria(), $con)->diff($files);
+
+
+        $this->filesScheduledForDeletion = $filesToDelete;
+
+        foreach ($filesToDelete as $fileRemoved) {
+            $fileRemoved->setArticle(null);
+        }
+
+        $this->collFiles = null;
+        foreach ($files as $file) {
+            $this->addFile($file);
+        }
+
+        $this->collFiles = $files;
+        $this->collFilesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related File objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related File objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countFiles(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collFilesPartial && !$this->isNew();
+        if (null === $this->collFiles || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collFiles) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getFiles());
+            }
+
+            $query = ChildFileQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByArticle($this)
+                ->count($con);
+        }
+
+        return count($this->collFiles);
+    }
+
+    /**
+     * Method called to associate a ChildFile object to this object
+     * through the ChildFile foreign key attribute.
+     *
+     * @param ChildFile $l ChildFile
+     * @return $this The current object (for fluent API support)
+     */
+    public function addFile(ChildFile $l)
+    {
+        if ($this->collFiles === null) {
+            $this->initFiles();
+            $this->collFilesPartial = true;
+        }
+
+        if (!$this->collFiles->contains($l)) {
+            $this->doAddFile($l);
+
+            if ($this->filesScheduledForDeletion and $this->filesScheduledForDeletion->contains($l)) {
+                $this->filesScheduledForDeletion->remove($this->filesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildFile $file The ChildFile object to add.
+     */
+    protected function doAddFile(ChildFile $file): void
+    {
+        $this->collFiles[]= $file;
+        $file->setArticle($this);
+    }
+
+    /**
+     * @param ChildFile $file The ChildFile object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeFile(ChildFile $file)
+    {
+        if ($this->getFiles()->contains($file)) {
+            $pos = $this->collFiles->search($file);
+            $this->collFiles->remove($pos);
+            if (null === $this->filesScheduledForDeletion) {
+                $this->filesScheduledForDeletion = clone $this->collFiles;
+                $this->filesScheduledForDeletion->clear();
+            }
+            $this->filesScheduledForDeletion[]= $file;
+            $file->setArticle(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Article is new, it will return
+     * an empty collection; or if this Article has previously
+     * been saved, it will retrieve related Files from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Article.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildFile[] List of ChildFile objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildFile}> List of ChildFile objects
+     */
+    public function getFilesJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildFileQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getFiles($query, $con);
     }
 
     /**
@@ -8799,6 +9126,11 @@ abstract class Article implements ActiveRecordInterface
     public function clearAllReferences(bool $deep = false)
     {
         if ($deep) {
+            if ($this->collFiles) {
+                foreach ($this->collFiles as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collImages) {
                 foreach ($this->collImages as $o) {
                     $o->clearAllReferences($deep);
@@ -8836,6 +9168,7 @@ abstract class Article implements ActiveRecordInterface
             }
         } // if ($deep)
 
+        $this->collFiles = null;
         $this->collImages = null;
         $this->collInvitationsArticless = null;
         $this->collLinks = null;

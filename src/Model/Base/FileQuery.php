@@ -59,6 +59,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFileQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildFileQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
+ * @method     ChildFileQuery leftJoinArticle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Article relation
+ * @method     ChildFileQuery rightJoinArticle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Article relation
+ * @method     ChildFileQuery innerJoinArticle($relationAlias = null) Adds a INNER JOIN clause to the query using the Article relation
+ *
+ * @method     ChildFileQuery joinWithArticle($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Article relation
+ *
+ * @method     ChildFileQuery leftJoinWithArticle() Adds a LEFT JOIN clause and with to the query using the Article relation
+ * @method     ChildFileQuery rightJoinWithArticle() Adds a RIGHT JOIN clause and with to the query using the Article relation
+ * @method     ChildFileQuery innerJoinWithArticle() Adds a INNER JOIN clause and with to the query using the Article relation
+ *
  * @method     ChildFileQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
  * @method     ChildFileQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
  * @method     ChildFileQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
@@ -69,7 +79,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFileQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
  * @method     ChildFileQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
  *
- * @method     \Model\UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\ArticleQuery|\Model\UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildFile|null findOne(?ConnectionInterface $con = null) Return the first ChildFile matching the query
  * @method     ChildFile findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildFile matching the query, or a new ChildFile object populated from the query conditions when no match is found
@@ -387,6 +397,8 @@ abstract class FileQuery extends ModelCriteria
      * $query->filterByArticleId(array(12, 34)); // WHERE article_id IN (12, 34)
      * $query->filterByArticleId(array('min' => 12)); // WHERE article_id > 12
      * </code>
+     *
+     * @see       filterByArticle()
      *
      * @param mixed $articleId The value to use as filter.
      *              Use scalar values for equality.
@@ -914,6 +926,181 @@ abstract class FileQuery extends ModelCriteria
         $this->addUsingAlias(FileTableMap::COL_FILE_CREATED, $createdAt, $comparison);
 
         return $this;
+    }
+
+    /**
+     * Filter the query by a related \Model\Article object
+     *
+     * @param \Model\Article|ObjectCollection $article The related object(s) to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByArticle($article, ?string $comparison = null)
+    {
+        if ($article instanceof \Model\Article) {
+            return $this
+                ->addUsingAlias(FileTableMap::COL_ARTICLE_ID, $article->getId(), $comparison);
+        } elseif ($article instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            $this
+                ->addUsingAlias(FileTableMap::COL_ARTICLE_ID, $article->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
+        } else {
+            throw new PropelException('filterByArticle() only accepts arguments of type \Model\Article or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Article relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinArticle(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Article');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Article');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Article relation Article object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\ArticleQuery A secondary query class using the current class as primary query
+     */
+    public function useArticleQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinArticle($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Article', '\Model\ArticleQuery');
+    }
+
+    /**
+     * Use the Article relation Article object
+     *
+     * @param callable(\Model\ArticleQuery):\Model\ArticleQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withArticleQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useArticleQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Article table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\ArticleQuery The inner query object of the EXISTS statement
+     */
+    public function useArticleExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\ArticleQuery */
+        $q = $this->useExistsQuery('Article', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Article table for a NOT EXISTS query.
+     *
+     * @see useArticleExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\ArticleQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useArticleNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\ArticleQuery */
+        $q = $this->useExistsQuery('Article', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Article table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\ArticleQuery The inner query object of the IN statement
+     */
+    public function useInArticleQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\ArticleQuery */
+        $q = $this->useInQuery('Article', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Article table for a NOT IN query.
+     *
+     * @see useArticleInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\ArticleQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInArticleQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\ArticleQuery */
+        $q = $this->useInQuery('Article', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
     }
 
     /**

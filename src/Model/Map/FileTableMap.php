@@ -333,7 +333,7 @@ class FileTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('file_id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, null, null);
+        $this->addForeignKey('article_id', 'ArticleId', 'INTEGER', 'articles', 'article_id', false, null, null);
         $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
         $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
         $this->addColumn('file_title', 'Title', 'VARCHAR', false, 32, null);
@@ -356,6 +356,13 @@ class FileTableMap extends TableMap
      */
     public function buildRelations(): void
     {
+        $this->addRelation('Article', '\\Model\\Article', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':article_id',
+    1 => ':article_id',
+  ),
+), null, null, null, false);
         $this->addRelation('User', '\\Model\\User', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
