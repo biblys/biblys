@@ -79,6 +79,84 @@ class CartTest extends TestCase
             "it should display the finalize order button"
         );
     }
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testCartDisplayWithExistingOrderInProgress()
+    {
+        // given
+        $controller = require __DIR__ . "/../../../../controllers/common/php/cart.php";
+
+        ModelFactory::createCountry();
+        /* @var Site $globalSite */
+        $flashBag = $this
+            ->getMockBuilder("Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface")
+            ->getMock();
+        $flashBag->method("get")->willReturn([]);
+        $session = $this
+            ->getMockBuilder("Symfony\Component\HttpFoundation\Session\Session")
+            ->getMock();
+        $session->method("getFlashBag")->willReturn($flashBag);
+        $request = new Request();
+
+        $site = ModelFactory::createSite();
+        $cart = ModelFactory::createCart(site: $site);
+        $article = ModelFactory::createArticle(title: "Le livre dans mon panier");
+        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
+        $user = ModelFactory::createUser(site: $site);
+        $customer = ModelFactory::createCustomer(site: $site);
+        $order = ModelFactory::createOrder(site: $site, user: $user);
+        $articleInOrder = ModelFactory::createArticle(title: "Le livre dans ma commande");
+        ModelFactory::createStockItem(site: $site, article: $articleInOrder, order: $order);
+
+        $config = new Config();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("getOption")->andReturn(null);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
+        $currentUser->shouldReceive("isAuthentified")->andReturn(true);
+        $currentUser->shouldReceive("getUser")->andReturn($user);
+        $currentUser->shouldReceive("getOrCreateCustomer")->andReturn($customer);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $imagesService = Mockery::mock(ImagesService::class);
+        $imagesService->expects("imageExistsFor")->andReturn(true);
+        $imagesService->expects("getImageUrlFor")->andReturn(null);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("render");
+
+        // when
+        $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator, $imagesService, $templateService);
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should respond with http 200"
+        );
+        $this->assertStringContainsString(
+            "Le livre dans mon panier",
+            $response->getContent(),
+            "it should display article in cart"
+        );
+        $this->assertStringContainsString(
+            "Commande en cours",
+            $response->getContent(),
+            "it should display order in progress title",
+        );
+        $this->assertStringContainsString(
+            "Le livre dans ma commande",
+            $response->getContent(),
+            "it should display article in order"
+        );
+        $this->assertStringContainsString(
+            "Ajouter à la commande en cours",
+            $response->getContent(),
+            "it should display the finalize order button"
+        );
+    }
 
     /**
      * @throws PropelException

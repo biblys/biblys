@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.84.2 (DEV)
+
+Correction
+
+- La page du panier pouvait afficher une erreur s'il existait déjà une
+  commande en cours. C'est corrigé.
+
 ## 2.84.1 (14 août 2024)
 
 Corrections
