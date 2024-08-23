@@ -241,6 +241,7 @@ class ModelFactory
     {
         $order = new Order();
         $order->setSite($site ?? ModelFactory::createSite());
+        $order->setUser($user);
         $order->setType("web");
         $order->setAxysAccountId($axysAccountId);
         $order->setSlug($slug ?? "order-slug");

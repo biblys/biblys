@@ -2,8 +2,6 @@
 
 /** @noinspection PhpUnhandledExceptionInspection */
 
-global $urlgenerator;
-
 use Biblys\Legacy\CartHelpers;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
@@ -13,7 +11,9 @@ use Biblys\Service\Images\ImagesService;
 use Biblys\Service\TemplateService;
 use Model\ArticleQuery;
 use Model\CartQuery;
+use Model\OrderQuery;
 use Model\StockQuery;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -29,8 +29,6 @@ return function (
     ImagesService   $imagesService,
     TemplateService $templateService,
 ): Response {
-    $om = new OrderManager();
-
     $content = null;
 
     $currentUrlService = new CurrentUrlService($request);
@@ -234,7 +232,7 @@ return function (
         ';
     }
 
-
+    $orderInProgress = null;
     if (isset($Articles) && $Articles > 0) {
         if (!$currentUser->isAuthentified()) {
             $content .= '
@@ -248,52 +246,51 @@ return function (
 
         // Deja une commande en cours ?
         if ($currentUser->isAuthentified()) {
-            $order = $om->get(
-                [
-                    'order_type' => 'web',
-                    'user_id' => $currentUser->getUser()->getId(),
-                    'order_payment_date' => 'NULL',
-                    'order_shipping_date' => 'NULL',
-                    'order_cancel_date' => 'NULL'
-                ]
-            );
-            if ($order) {
-                $o = $order;
-
+            $orderInProgress = OrderQuery::create()
+                ->filterByUser($currentUser->getUser())
+                ->filterBySite($currentSite->getSite())
+                ->filterByPaymentDate(null, Criteria::ISNULL)
+                ->filterByShippingDate(null, Criteria::ISNULL)
+                ->filterByCancelDate(null, Criteria::ISNULL)
+                ->findOne();
+            if ($orderInProgress) {
                 $content .= '
                 </table>
 
-                <h2>Commande en cours (n&deg; <a href="/order/' . $o["order_url"] . '">' . $o["order_id"] . '</a>)</h2>
+                <h2>Commande en cours (n&deg; <a href="/order/' . $orderInProgress->getSlug() . '">' . $orderInProgress->getid() . '</a>)</h2>
 
-                <p>Vous avez déj&agrave; une commande en attente de paiement. Les livres de votre panier seront ajoutés aux livres de la commande ci-dessous et les frais de port recalculés en conséquence. Si vous ne souhaitez plus commander les livres de la commande n&deg; ' . $o["order_id"] . ', <a href="/contact/">contactez-nous</a> pour faire annuler la commande.</p>
+                <p>Vous avez déj&agrave; une commande en attente de paiement. Les livres de votre panier seront ajoutés aux livres de la commande ci-dessous et les frais de port recalculés en conséquence. Si vous ne souhaitez plus commander les livres de la commande n&deg; ' . $orderInProgress->getid() . ', <a href="/contact/">contactez-nous</a> pour faire annuler la commande.</p>
 
                 <br />
                 <table class="table">
                     <tbody>
             ';
 
-                $copies = $order->getCopies();
+                $copies = $sm->getAll([
+                    'order_id' => $orderInProgress->getId(),
+                    'site_id' => $currentSite->getSite()->getId(),
+                ]);
                 foreach ($copies as $copy) {
                     $s = $copy;
                     $articleEntity = $copy->getArticle();
-                    $stockItem = ArticleQuery::create()->findPk($s["stock_id"]);
+                    $stockItem = StockQuery::create()->findPk($s["stock_id"]);
                     $articleModel = $stockItem->getArticle();
 
                     // Image
-                    $s["couv"] = null;
+                    $s["cover"] = null;
                     $stockItemPhotoUrl = $imagesService->getImageUrlFor($stockItem, height: 60);
                     $stockItemPhotoThumbnailUrl = $imagesService->getImageUrlFor($stockItem, height: 60);
                     $articleCoverUrl = $imagesService->getImageUrlFor($articleModel, height: 100);
                     if ($stockItemPhotoUrl) {
-                        $s["couv"] = '<a href="' . $stockItemPhotoUrl . '" rel="lightbox"><img src="' . $stockItemPhotoThumbnailUrl . '" alt="' . $s["article_title"] . '" height="60" /></a>';
+                        $s["cover"] = '<a href="' . $stockItemPhotoUrl . '" rel="lightbox"><img src="' . $stockItemPhotoThumbnailUrl . '" alt="' . $s["article_title"] . '" height="60" /></a>';
                     } elseif ($articleCoverUrl) {
-                        $s["couv"] = '<img src="' . $articleCoverUrl . '" alt="' . $articleEntity->get('title') . '" /></a>';
+                        $s["cover"] = '<img src="' . $articleCoverUrl . '" alt="' . $articleEntity->get('title') . '" /></a>';
                     }
 
                     $content .= '
                     <tr>
                         <td>' . $s["stock_id"] . '</td>
-                        <td>' . $s["couv"] . '</td>
+                        <td>' . $s["cover"] . '</td>
                         <td>
                             <a href="' . $urlGenerator->generate('article_show', ['slug' => $articleEntity->get('url')]) . '">
                                 ' . $articleEntity->get('title') . '
@@ -457,7 +454,7 @@ return function (
                 . '<p class="warning">Votre panier contient au moins une contrepartie de financement participatif.<br>Vous devez vous <a href="' . $loginUrl . '">identifier</a> pour continuer.</p>'
                 . '<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
                 . '</div>';
-        } elseif (isset($o["order_id"])) {
+        } elseif ($orderInProgress) {
             $content .= '<div class="center"><button type="submit" class="btn btn-primary" id="continue">Ajouter à la commande en cours</button></div>';
         } else {
             $content .= '<div class="center"><button type="submit" class="btn btn-primary" id="continue">Finaliser votre commande</button></div>';
