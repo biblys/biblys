@@ -2,10 +2,12 @@
 
 ## 2.84.2 (DEV)
 
-Correction
+Corrections
 
 - La page du panier pouvait afficher une erreur s'il existait déjà une
   commande en cours. C'est corrigé.
+- L'ajout d'un livre numérique gratuit à la bibliothèque pouvait déclencher
+  une erreur. Maintenant, ça marche.
 
 ## 2.84.1 (14 août 2024)
 

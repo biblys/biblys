@@ -356,6 +356,7 @@ class ArticleController extends Controller
                 $usecase = new AddArticleToUserLibraryUsecase($mailer);
                 $usecase->execute(
                     currentSite: $currentSiteService,
+                    urlGenerator: $urlGenerator,
                     user: $currentUser,
                     article: $article,
                 );
