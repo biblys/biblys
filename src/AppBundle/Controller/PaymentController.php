@@ -105,7 +105,7 @@ class PaymentController extends Controller
      */
     public function stripeWebhookAction(Request $request): JsonResponse
     {
-        global $config;
+        $config = \Biblys\Legacy\LegacyCodeHelper::getGlobalConfig();;
 
         Log::stripe("INFO", 'Receiving new webhook from Stripe…');
 

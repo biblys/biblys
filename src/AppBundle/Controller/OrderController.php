@@ -275,7 +275,7 @@ class OrderController extends Controller
         $url
     ): Response
     {
-        global $config;
+        $config = \Biblys\Legacy\LegacyCodeHelper::getGlobalConfig();;
 
         $payplug_config = $config->get('payplug');
         if (!$payplug_config) {
