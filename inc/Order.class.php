@@ -240,7 +240,9 @@ class Order extends Entity
      */
     public function createPayplugPayment()
     {
-        global $config, $urlgenerator, $request;
+        global $config, $urlgenerator;
+
+        $request = LegacyCodeHelper::getGlobalRequest();
 
         $payplug = $config->get('payplug');
         if (!$payplug) {

@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 
 class Media
@@ -305,7 +306,7 @@ class Media
 
     public function getUrl(array $options = []): string
     {
-        global $config;
+        $config = LegacyCodeHelper::getGlobalConfig();
 
         $version = '';
         if (isset($options['version']) && $options['version'] > 1) {

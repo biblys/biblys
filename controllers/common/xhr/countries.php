@@ -1,9 +1,10 @@
 <?php
 
-global $request;
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+$request = LegacyCodeHelper::getGlobalRequest();
 $cm = new CountryManager();
 
 $term = $request->query->get("term");

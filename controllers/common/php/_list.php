@@ -1,7 +1,9 @@
 <?php /** @noinspection PhpUnhandledExceptionInspection */
 
-global $urlgenerator, $request;
+global $urlgenerator;
 
+
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -11,6 +13,8 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+
+$request = LegacyCodeHelper::getGlobalRequest();
 
 $sm = new StockManager();
 

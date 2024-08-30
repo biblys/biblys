@@ -6,7 +6,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
-global $request, $_SQL;
+global $_SQL;
+
+$request = LegacyCodeHelper::getGlobalRequest();
 $globalSite = LegacyCodeHelper::getGlobalSite();
 
 $pm = new PublisherManager();

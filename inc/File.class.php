@@ -1,6 +1,7 @@
 <?php
 
 use Biblys\Exception\InvalidEntityException;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentUser;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -58,7 +59,7 @@ class File extends Entity
      */
     public function addDownloadBy(CurrentUser $currentUser): void
     {
-        global $request;
+        $request = LegacyCodeHelper::getGlobalRequest();
 
         $dm = new DownloadManager();
 
