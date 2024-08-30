@@ -2,5 +2,15 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "managers": ["composer"],
+      "enabled": true
+    },
+    {
+      "managers": ["npm", "nvm"],
+      "enabled": false
+    }
   ]
 }
