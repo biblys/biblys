@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3d3f41b21f49e57c4fc527742ec6f55c",
+    "content-hash": "170429f720a42f7b4a0e80d2c9287e68",
     "packages": [
         {
             "name": "biblys/eurotax",

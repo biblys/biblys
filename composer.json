@@ -37,7 +37,7 @@
     "symfony/var-dumper": "~5.1",
     "symfony/http-kernel": "^4.4",
     "symfony/yaml": "^5.2",
-    "symfony/config": "^4.3|^6.0",
+    "symfony/config": "^6.0",
     "monolog/monolog": "^2.0",
     "google/recaptcha": "^1.1",
     "paypal/rest-api-sdk-php": "^1.14",
