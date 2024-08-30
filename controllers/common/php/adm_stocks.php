@@ -1,6 +1,7 @@
 <?php
 
 use Biblys\Data\ArticleType;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Images\ImagesService;
 use Propel\Runtime\Exception\PropelException;
@@ -85,7 +86,7 @@ return function (
 
     $types = ArticleType::getAll();
     $types_options = array_map(function ($type) {
-        global $request;
+        $request = LegacyCodeHelper::getGlobalRequest();
 
         return '<option value="' . $type->getId() . '"' . ($type->getId() == $request->query->get('type_id', 0) ? ' selected' : null) . '>' . $type->getName() . '</option>';
     }, $types);

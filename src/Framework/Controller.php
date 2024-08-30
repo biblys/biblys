@@ -77,7 +77,7 @@ class Controller
      */
     public function setOpengraphTags($tags = []): void
     {
-        global $request;
+        $request = LegacyCodeHelper::getGlobalRequest();
 
         if (!isset($tags['type'])) {
             $tags['type'] = 'website';
@@ -101,7 +101,7 @@ class Controller
 
     public function setTwitterCardsTags($tags): void
     {
-        global $request;
+        $request = LegacyCodeHelper::getGlobalRequest();
 
         if (!isset($tags['card'])) {
             $tags['card'] = 'summary';
