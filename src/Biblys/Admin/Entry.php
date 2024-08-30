@@ -180,7 +180,7 @@ class Entry
      */
     public static function findAll(): array
     {
-        global $config;
+        $config = \Biblys\Legacy\LegacyCodeHelper::getGlobalConfig();;
 
         // Orders to be shipped
         $om = new OrderManager();

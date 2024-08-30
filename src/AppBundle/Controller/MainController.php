@@ -180,7 +180,7 @@ class MainController extends Controller
         TemplateService $templateService,
         Mailer $mailer): Response
     {
-        global $config;
+        $config = \Biblys\Legacy\LegacyCodeHelper::getGlobalConfig();;
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $name = $request->request->get('name');

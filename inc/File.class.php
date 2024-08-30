@@ -81,7 +81,7 @@ class File extends Entity
     /* Get file dir and create it if needed */
     public function getDir(): string
     {
-        global $config;
+        $config = LegacyCodeHelper::getGlobalConfig();
         $dir = $config->get('downloadable_path').str_pad(substr($this->get('file_id'), -2, 2), 2, '0', STR_PAD_LEFT).'/'.$this->get('file_id').'/';
         if (!file_exists($dir)) {
             mkdir($dir, 0777, true);

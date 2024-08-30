@@ -90,7 +90,7 @@ class CronsController extends Controller
     {
         $currentUser->authAdmin();
 
-        global $config;
+        $config = LegacyCodeHelper::getGlobalConfig();;
 
         if (!in_array($slug, ['test', 'export-pdl'])) {
             throw new ResourceNotFoundException('Unknown cron task ' . htmlentities($slug));
@@ -127,7 +127,7 @@ class CronsController extends Controller
      */
     public function testAction(Request $request): JsonResponse
     {
-        global $config;
+        $config = LegacyCodeHelper::getGlobalConfig();;
 
         $request->headers->set('Accept', 'application/json');
 
@@ -163,7 +163,7 @@ class CronsController extends Controller
     public function exportPdlAction(Request $request): JsonResponse
     {
         $globalSite = LegacyCodeHelper::getGlobalSite();
-        global $config;
+        $config = LegacyCodeHelper::getGlobalConfig();;
 
         $request->headers->set('Accept', 'application/json');
 
