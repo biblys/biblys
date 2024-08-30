@@ -138,9 +138,20 @@ class CartTest extends TestCase
         $imagesService->expects("getImageUrlFor")->andReturn(null);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("render");
+        $metaTagsService = Mockery::mock(MetaTagsService::class);
+        $metaTagsService->shouldReceive("disallowSeoIndexing");
 
         // when
-        $response = $controller($request, $config, $currentSite, $currentUser, $urlGenerator, $imagesService, $templateService);
+        $response = $controller(
+            $request,
+            $config,
+            $currentSite,
+            $currentUser,
+            $urlGenerator,
+            $imagesService,
+            $templateService,
+            $metaTagsService,
+        );
 
         // then
         $this->assertEquals(
