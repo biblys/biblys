@@ -69,7 +69,7 @@
     "symfony/mailer": "^5.4",
     "firebase/php-jwt": "^6.3",
     "mailjet/mailjet-apiv3-php": "^1.5",
-    "symfony/string": "^6.2",
+    "symfony/string": "^7.1",
     "facile-it/php-openid-client": "^0.3.3",
     "symfony/psr-http-message-bridge": "^2.2",
     "euskadi31/opengraph": "^2.0",
