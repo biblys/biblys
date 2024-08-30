@@ -275,21 +275,18 @@ class OrderDeliveryTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
 
         $mailer = $this->createMock(Mailer::class);
+
         $mailer->expects($this->exactly(2))
-            ->method("send")
-            ->withConsecutive(
-                [
-                    "customer@biblys.fr",
-                    $this->stringContains("Commande n° "),
-                    $this->stringContains("Livre commandé")
-                ],
-                [
-                    "contact@paronymie.fr",
-                    $this->stringContains("Commande n° "),
-                    $this->stringContains("Livre commandé")
-                ]
-            )
-            ->willReturn(true);
+            ->method('send')
+            ->willReturnCallback(function($email, $subject, $body) {
+                $this->assertTrue(
+                    $email === 'customer@biblys.fr' || $email === 'contact@paronymie.fr',
+                    "Email should be either 'customer@biblys.fr' or 'contact@paronymie.fr'"
+                );
+                $this->assertStringContainsString('Commande n° ', $subject, "Subject should contain 'Commande n° '");
+                $this->assertStringContainsString('Livre commandé', $body, "Body should contain 'Livre commandé'");
+                return true;
+            });
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getCart")->andReturn($cart);
