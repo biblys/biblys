@@ -946,7 +946,9 @@ class Article extends Entity
      */
     public function getShareButtons(array $options = []): string
     {
-        global $request, $urlgenerator;
+        global $urlgenerator;
+
+        $request = LegacyCodeHelper::getGlobalRequest();
 
         $host = $request->getScheme() . '://' . $request->getHost();
         $url = $host . $urlgenerator->generate('article_show', ['slug' => $this->get('url')]);

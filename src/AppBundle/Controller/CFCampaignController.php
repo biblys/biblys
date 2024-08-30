@@ -94,7 +94,7 @@ class CFCampaignController extends Controller
      */
     public function newAction(Request $request, CurrentUser $currentUser): RedirectResponse|Response
     {
-        global $request;
+        $request = LegacyCodeHelper::getGlobalRequest();
 
         $currentUser->authAdmin();
 
@@ -135,7 +135,7 @@ class CFCampaignController extends Controller
      */
     public function editAction(Request $request, CurrentUser $currentUser, $id): RedirectResponse|Response
     {
-        global $request;
+        $request = LegacyCodeHelper::getGlobalRequest();
 
         $currentUser->authAdmin();
 
