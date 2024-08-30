@@ -108,7 +108,9 @@ class Order extends Entity
      */
     public function createPaypalPaymentLink()
     {
-        global $config, $urlgenerator;
+        global $urlgenerator;
+
+        $config = \Biblys\Legacy\LegacyCodeHelper::getGlobalConfig();
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $sm = new StockManager();
@@ -213,7 +215,7 @@ class Order extends Entity
      */
     private function getPaypalApiContext()
     {
-        global $config;
+        $config = \Biblys\Legacy\LegacyCodeHelper::getGlobalConfig();
 
         $paypal_config = $config->get("paypal");
         if (!$paypal_config) {
@@ -240,7 +242,9 @@ class Order extends Entity
      */
     public function createPayplugPayment()
     {
-        global $config, $urlgenerator;
+        global $urlgenerator;
+
+        $config = \Biblys\Legacy\LegacyCodeHelper::getGlobalConfig();
 
         $request = LegacyCodeHelper::getGlobalRequest();
 
@@ -326,7 +330,7 @@ class Order extends Entity
 
     public function createStripePayment()
     {
-        global $config;
+        $config = \Biblys\Legacy\LegacyCodeHelper::getGlobalConfig();;
 
         $stripe = $config->get('stripe');
         if (!$stripe) {
