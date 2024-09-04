@@ -15,6 +15,11 @@ Améliorations
   performances Sentry. Pour l'activer, ajouter le paramètre `sentry.dsn` à
   la configuration.
 
+Correctifs
+
+- Le montant indiqué dans le courriel de confirmation de paiement d'une
+  commande n'incluait pas les frais de port. C'est corrigé.
+
 ## 2.84.2 (28 août 2024)
 
 Corrections

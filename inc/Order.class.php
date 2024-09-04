@@ -820,7 +820,7 @@ class OrderManager extends EntityManager
         $current_amount += $payment->get('amount');
         $order->set('order_payment_'.$mode, $current_amount);
 
-        // Substract paid amount to remaining amount to be paid
+        // Subtract paid amount to remaining amount to be paid
         $remaining = $order->get('order_amount_tobepaid') - $amount;
 
         // Remaining amount should not be less than 0
@@ -837,7 +837,7 @@ class OrderManager extends EntityManager
         // Persist order
         $this->update($order);
 
-        // If order is paid entirely, mark as payed
+        // If order is paid entirely, mark as paid
         if ($remaining == 0) {
             $config = Config::load();
             $currentSite = CurrentSite::buildFromConfig($config);
@@ -879,12 +879,12 @@ class OrderManager extends EntityManager
 
             <p>
                 Commande n° '.$order->get('id').'<br>
-                Montant : '.currency($order->get('amount') / 100).'<br>
-                Mode de règlement : '.$order->get('payment_mode').'<br>
+                Montant : '.currency($order->getTotal() / 100).'<br>
+                Mode de règlement : '.$order->get('payment_mode'). '<br>
             </p>
 
             <p>
-                <a href="http://'.$this->site->get('domain').'/order/'.$order->get('url').'">Suivi de la commande</a></a>
+                <a href="https://' .$this->site->get('domain').'/order/'.$order->get('url').'">Suivi de la commande</a></a>
             </p>
 
             '.$order_downloadable.'
