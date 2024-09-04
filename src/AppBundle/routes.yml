@@ -705,6 +705,13 @@ user_index:
   path: /admin/users/
   controller: AppBundle\Controller\UserController::indexAction
 
+user_show:
+  path: /admin/users/{id}
+  controller: AppBundle\Controller\UserController::showAction
+  methods: GET
+  requirements:
+        id: \d+
+
 user_login:
   path: /user/login
   controller: AppBundle\Controller\UserController::login

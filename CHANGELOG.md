@@ -4,6 +4,8 @@
 
 Améliorations
 
+- Une nouvelle page individuelle permet de consulter les informations d'un·e
+  utilisateur·ice, notamment ses méthodes de connexion.  
 - La page "Espace disque" affiche désormais la taille occupée par les 
   fichiers téléchargeables.
 - Une nouvelle commande `images:optimize` permet d'optimiser l'espace disque

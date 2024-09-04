@@ -65,6 +65,30 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function showAction(
+        CurrentSite     $currentSite,
+        CurrentUser     $currentUser,
+        TemplateService $templateService,
+        int $id,
+    ): Response
+    {
+        $currentUser->authAdmin();
+
+        $user = UserQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->findPk($id);
+
+        return $templateService->renderResponse("AppBundle:User:show.html.twig", [
+            "user" => $user,
+        ]);
+    }
+
 
     /**
      * @throws SyntaxError
