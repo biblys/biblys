@@ -7,24 +7,32 @@
 {% block main %}
   <h1>
     <span class="fa fa-user"></span>
-    Utilisateur·trice·s
+    Utilisateur·ices ({{ users|length }})
   </h1>
 
   <table class="table">
     <thead>
       <tr>
         <th>Id</th>
-        <th>E-mail</th>
-        <th>Première connexion</th>
+        <th>Utilisateur·ice</th>
         <th>Dernière connexion</th>
       </tr>
     </thead>
     <tbody>
     {% for user in users %}
       <tr>
-        <td>{{ user.id }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.createdAt|date }}</td>
+        <td>
+            {{ user.id }}
+          </a>
+        </td>
+        <td>
+          {{ user.email }}
+          {% for method in user.authenticationMethods %}
+            <span class="label label-success">
+              {{ method.identityProvider }}
+            </span>
+          {% endfor %}
+        </td>
         <td>{{ user.lastLoggedAt|date('d/m/Y H:i') }}</td>
         <td>
           <a
