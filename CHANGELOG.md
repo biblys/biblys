@@ -83,13 +83,13 @@ Améliorations
 
 Déploiement
 
-1. Jouer les migrations
+\1. Jouer les migrations
 
 ```shell
 composer db:migrate
 ```
 
-2. Mettre à jour la configuration, en remplaçant les paramètres `media_path`,
+\2. Mettre à jour la configuration, en remplaçant les paramètres `media_path`,
   `media_url` et `images_cdn` :
 
 ```yaml
@@ -109,7 +109,7 @@ images:
     service: weserv
 ```
 
-3. Importer en base les images de couverture des articles
+\3. Importer en base les images de couverture des articles
 
 ```shell
 composer images:import
@@ -120,7 +120,7 @@ composer images:import
 Corrections
 
 Les validations des paramètres lors de l'envoi d'un courriel de connexion
-pouvait déclencher une erreur. C'est corrigé.
+pouvaient déclencher une erreur. C'est corrigé.
 
 ## 2.82.0 (5 juin 2024)
 
@@ -140,8 +140,8 @@ Offres spéciales
 Autres améliorations
 
 - Un lien vers le panier apparaît désormais dans le menu supérieur, à côté 
-  du lien "Mon compte"
-- Une page listant les utilisateur·trice·s a été ajouté à l'administration.
+  du lien "Mon compte".
+- Une page listant les utilisateur·ices a été ajouté à l'administration.
 
 Déploiement
 
@@ -271,7 +271,7 @@ Corrections
 
 Corrections
 
-- Les erreurs lors de la création d'un nouvelle collection n'étaient pas
+- Les erreurs lors de la création d'une nouvelle collection n'étaient pas
   affichées. C'est corrigé.
 
 ## 2.78.0 (6 mars 2024)
@@ -281,7 +281,7 @@ Améliorations
 - Le panier visiteur est désormais rattaché au compte l'utilisateur au moment de
   la connexion.
 - L'adresse e-mail du compte courant est désormais affiché sur la page "Mon
-  compte"
+  compte".
 - La page "Catalogue" de l'administration est désormais paginée et affiche 100
   articles par page.
 - Les boutons "Confirmer la réception" et "Signaler un incident" sur la page
@@ -323,7 +323,7 @@ Corrections
   corrigé.
 - Les anciennes urls des pages articles et contributeurs pouvaient renvoyer
   une erreur 404. Désormais, elles redirigent vers les urls des nouvelles pages.
-- L'ajout d'un article à un lot pouvait échouer sans erreur. Maintenant, ça
+- L'ajout d'un article à un lot pouvait échouer sans erreurs. Maintenant, ça
   marche.
 
 ### 2.75.2 (20 décembre 2023)
@@ -439,7 +439,7 @@ Améliorations
 - Une option de site "sales_disabled" a été ajoutée pour désactiver les
   ventes sur le site.
 - Le formulaire de contact affichera désormais une erreur si le contenu du
-  champ "Sujet" est long de moins de 6 caractères.
+  champ "Sujet" est long de moins de six caractères.
 - L'ancien outil d'envoi de livres numériques a été supprimé.
 
 Corrections
@@ -1023,8 +1023,8 @@ Corrections
   "Ventes par article". C'est corrigé.
 - L'erreur affichée lors de l'enregistrement d'un modèle était laconique.
   C'est amélioré.
-- L'enregistrement du fichier de styles CSS pouvait déclencher une erreur
-    500. Ce n'est plus le cas.
+- L'enregistrement du fichier de styles CSS pouvait déclencher une erreur 500. Ce
+  n'est plus le cas.
 
 ### 2.58.2 (4 février 2022)
 
@@ -1041,7 +1041,7 @@ Corrections
 
 Corrections
 
-- Certaines configurations de page d'accueil pouvait déclencher une erreur à
+- Certaines configurations de page d'accueil pouvaient déclencher une erreur à
   cause d'une dépendance manquante. C'est corrigé.
 - Le formattage d'une date pouvait déclencher une erreur sous certaines
   conditions. Les pendules ont été remises à l'heure.
@@ -1093,7 +1093,7 @@ le mode d'expédition "retrait en magasin" était mal enregitrée. C'est rétabl
 
 ### 2.56.2 (19 décembre 2021)
 
-Correction: Une commande pouvait être enregistrée avec des frais de port à 0 €
+Correction : Une commande pouvait être enregistrée avec des frais de port à 0 €
 si le client double-cliquait sur le bouton de validation. C'est corrigé.
 
 ### 2.56.1 (19 novembre 2021)
@@ -1166,7 +1166,7 @@ Améliorations
 
 - Il est désormais possible de préciser le genre à utiliser pour les
   contributeurs ("féminin", "masculin" ou "neutre")
-- Le genre par défaut est désormais "neutre" et plus "masculin"
+- Le genre par défaut est désormais "neutre" et plus "masculin".
 
 ### 2.54.2 (17 septembre 2021)
 
@@ -1176,7 +1176,7 @@ Corrections
   s'affichent désormais correctement
 - L'ajout d'un rayon à un article en cours de création ne provoque plus
   d'erreurs
-- La page frais de port de l'administration affiche uniquement les frais
+- La page Frais de port de l'administration affiche uniquement les frais
   de port du site en cours
 
 ### 2.54.1 (10 septembre 2021)
@@ -1226,7 +1226,7 @@ Corrections
 Corrections
 
 - L'association d'un article à un éditeur filtré ou à une collection appartenant
-  à un éditeur filtré est à nouveau possible mais affiche une erreur claire
+  à un éditeur filtré est à nouveau possible, mais affiche une erreur claire.
 - La recherche d'un client par nom ne provoque plus d'erreur
 
 ### 2.53.3 (25 juin 2021)
@@ -1246,7 +1246,7 @@ Corrections
 Corrections
 
 - Les utilisateurs avec des droits sur un éditeur ne peuvent plus gérer cet
-  éditeur sur un site où l'éditeur n'est pas autorisé
+  éditeur sur un site sur lequel l'éditeur n'est pas autorisé.
 - Le message d'erreur affiché lorsqu'un nouvel article est soumis avec un code
   ISBN invalide a été amélioré
 - Le message d'erreur affiché lorsqu'un nouvel article est soumis avec une url
@@ -1271,7 +1271,7 @@ tout en préparant la refonte prochaine du panier.
 
 Corrections
 
-- Le calcul des frais de port ne provoque plus d'erreurs serveur lorsqu'appelé
+- Le calcul des frais de port ne provoque plus d'erreurs serveur lorsque appelé
   avec de mauvais paramètres
 - L'affichage d'une version de Biblys inexistante provoque une erreur 404
   plutôt qu'une erreur serveur
@@ -1286,7 +1286,7 @@ Corrections
 - L'utilisation d'un mauvais paramètre de tri dans une liste de
   résultats de recherche ne renvoie plus une erreur serveur.
 - Le message d'erreur lors de l'ajout d'un article dans un rayon dans lequel
-  cet article est déjà s'affiche désormais correctement
+  cet article est déjà s'affiche désormais correctement.
 
 ### 2.52.2 (16 avril 2021)
 
@@ -1325,12 +1325,12 @@ Améliorations
 - Ajout d'un champ pour ajouter un logo à une fiche éditeur
 - Le bouton "Vider tous les paniers" a été supprimé
 - Les redirections de pages causées par un changement d'url utilisent désormais
-  le statut HTTP 301 plutôt que 302
+  le statut HTTP 301 plutôt que 302.
 - L'erreur affichée sur la page de contact a été améliorée
 
 Corrections
 
-- Le statut HTTP des pages d'erreur 404 est bien 404
+- Le statut HTTP des pages d'erreur 404 est bien 404.
 
 ### 2.51.5 (26 mars 2021)
 
@@ -1343,7 +1343,7 @@ Corrections
 
 - L'url d'un article contient bien le nom de l'auteur et plus "anonyme"/ si
   l'article a un ou plusieurs auteurs associés.
-- Le compte du nombre d'éditeur est désormais correct si le site utilise un
+- Le compte du nombre d'éditeurs est désormais correct si le site utilise un
   filtre éditeurs
 - Le formulaire d'édition d'un article fonctionne à nouveau si le site n'a aucun
   rayon
@@ -1364,7 +1364,7 @@ Corrections
 
 Corrections
 
-- Les erreurs serveur survenant lors de l'import d'un article s'affiche à
+- Les erreurs serveur survenant lors de l'import d'un article s'affichent à
   nouveau correctement
 - L'import d'un article associé à un contributeur ayant précédemment été
   supprimé fonctionne à nouveau
@@ -1403,7 +1403,7 @@ Corrections
 
 - L'échec d'un paiement via PayPlug ne cause plus d'erreur
 - La modification des options "Exempté de TVA" et "Livres vendables sur
-  commande" des fournisseurs fonctionne à nouveau
+  commande" des fournisseurs fonctionnent à nouveau
 
 ### 2.50.0 (7 octobre 2020)
 
@@ -1414,7 +1414,7 @@ Améliorations
   commande
 - Le sujet du courriel de confirmation d'expédition d'une commande à retirer en
   magasin est désormais "Commande disponible en magasin" plutôt que "Commande
-  expédiée"
+  expédiée".
 - Ajout d'une page pour gérer les comptes autorisés à gérer un éditeur
 
 ### 2.49.4 (30 septembre 2020)
@@ -1441,7 +1441,7 @@ Corrections
   plus d'erreur
 - La mise à jour d'un contributeur existant ne provoque plus d'erreur
 - Le tronquage d'une chaîne de caractères utf-8 est calculé au nombre de bits et
-  plus au nombre de caractères
+  plus au nombre de caractères.
 
 ### 2.49.1 (7 septembre 2020)
 
@@ -1506,14 +1506,14 @@ Corrections
 - La case d'abonnement à la newsletter lors du téléchargement d'un livre
   numérique
   gratuit n'est plus cochée par défaut
-- La suppression de tous les panier fonctionne à nouveau
+- La suppression de tous les paniers fonctionne à nouveau
 - Amélioration des messages d'erreur lors d'une tentative de téléchargement d'un
   fichier téléchargeable en accès restreint.
 - La génération de l'adresse de retour lors de la connexion Axys fonctionne
   à nouveau
 - Les médias uploadés s'affichent correctement dans l'administration
 
-Déploiement:
+Déploiement :
 
 - Déplacer `/public/:site/media/` vers `
 
@@ -1542,7 +1542,7 @@ Améliorations
 - Ajout des rayons au suivi e-commerce de Matomo
 - Ajout d'une option de suppression d'un éditeur
 - Les alertes sont désormais supprimées lorsque l'article correspondant est
-  acheté (#145)
+  acheté (#145).
 - Les pictogrammes de disponibilité d'un exemplaire sont désormais plus lisibles
 
 Corrections
@@ -1552,7 +1552,7 @@ Corrections
 - La suppression du champ item d'un article fonctionne à nopuveau
 - L'association d'un article à un autre via le chant "Lier à l'article"
   fonctionne à nouveau
-- Les actions supprimer et retourner un exemplaire fonctionnent à nouveau
+- Les actions "Supprimer" et "Retourner un exemplaire" fonctionnent à nouveau
 
 ### 2.46.0 (2 février 2020)
 
@@ -1643,9 +1643,9 @@ Améliorations
 - PHP 7.2 est désormais la version minimale requise pour Biblys
 - Ajout d'un type d'article "Carterie"
 - Le temps restant avant la fin d'une campagne de financement participatif
-  s'affiche désormais en jours, heures, minutes, puis secondes
+  s'affiche désormais en jours, heures, minutes, puis secondes.
 - Les campagnes de financement participatif commencent à minuit et se terminent
-  à 23h59
+  à 23h59.
 
 Corrections
 
@@ -1712,7 +1712,7 @@ Déploiement
   d'une précédente commande lors de l'enregistrement d'une nouvelle
 - Ajout d'un champ "Nom de campagne" aux envois de newsletter
 - Ajout d'un numéro de version aux urls des couvertures des livres pour pallier
-  aux problèmes de mise en cache
+  les problèmes de mise en cache
 - Amélioration de l'affichage et du signalement des messages d'erreur
 - Ajout d'un bouton "remettre en vente" à la fiche exemplaire
 - Ajout d'une option de configuration pour définir le port du serveur MySQL
@@ -1724,7 +1724,7 @@ Déploiement
   PayPal
 - Amélioration de l'affichage des erreurs dans l'outil de gestion des commandes
 
-Déploiement:
+Déploiement :
 
 - Configurer SMTP
 - Configurer CDN images
@@ -1746,7 +1746,7 @@ Déploiement:
   participatif illimité au panier
 - Correction d'une faille de sécurité dans le panier
 - Lors de l'ajout d'un article au panier, sont désormais ajoutés en priorité
-  les exemplaires qui ne sont pas déjà dans le panier d'un autre client
+  les exemplaires qui ne sont pas déjà dans le panier d'un autre client.
 - Correction d'un problème affectant l'éditeur de thème sur d'anciennes versions
   de
   Safari
@@ -1767,7 +1767,7 @@ Déploiement:
 - Les champs "Quatrième de couverture", "Sommaire", "Bonus", "Accroche" et
   "Notice bibliographique" sont désormais masqués lorsqu'ils sont vides.
 - Une nouvelle option de site permet de définir une opération spéciale avec un
-  article offert pour un nombre d'article achetés au sein d'une collection
+  article offert pour un nombre d'articles achetés au sein d'une collection.
 - Les adresses en https:// sont désormais reconnues dans le champ site web de
   la fiche éditeur
 - Correction d'un problème lors de l'envoi au serveur d'une image au format PNG
@@ -1783,7 +1783,7 @@ Déploiement:
   à un article
 - Correction d'un faux positif lors de la vérification d'unicité d'un ISBN
   à cause d'articles supprimés
-- Correction d'un bug laissant apparaître des articles supprimées lors de
+- Correction d'un bug laissant apparaître des articles supprimés lors de
   l'ajout rapide d'exemplaires
 
 ## 2.36.0 (25 mai 2018)
@@ -1793,12 +1793,12 @@ Déploiement:
 - Amélioration de l'outil de génération des termes de recherches lorsqu'il est
   utilisé avec un grand nombre de titres
 - Amélioration l'importation nooSFere pour des livres référencés avec un ISBN-10
-- Les pied de pages des factures ne sont plus répétés à chaque page lors de
+- Les pieds de page des factures ne sont plus répétés à chaque page lors de
   l'impression
 - Ajout d'un message d'avertissement sur la caisse pour les assujetis à la TVA
 - Ajout d'un message d'avertissement RGPD sur l'outil de newsletter
 - Correction d'un bug affectant le calcul du nombre d'articles dont les termes
-  de recherches doivent êtres regénérés
+  de recherches doivent être regénérés
 - Correction d'un bug affectant le changement de nom d'une collection
 - Correction d'un bug qui laissait apparaître des contributeurs supprimés
 - Correction d'un bug qui laissait apparaître des alertes supprimées
@@ -1855,13 +1855,13 @@ Déploiement:
 - Ajout d'un type de reliure "Integra"
 - Ajout d'une option de site "collection_filter_hide" pour masquer des
   collections
-- Le panier listent désormais les livres triés par date d'ajout (#121)
+- Le panier liste désormais les livres triés par date d'ajout (#121).
 - Les mots-clés s'affichent désormais par ordre alphabetique sur les fiches
-  articles (#129)
+  articles (#129).
 
 ## 2.31.1 (10 octobre 2017)
 
-- Correction d'un bug qui permettait de créer des mots-clés vide
+- Correction d'un bug qui permettait de créer des mots-clés vides
 - Correction d'un bug affectant la modification d'une collection
 - Correction d'erreurs 404 apparaissant lors de l'accès à certains billets
 
@@ -1896,7 +1896,7 @@ Déploiement:
 - Refonte de la gestion des fournisseurs des éditeurs
 - Suppression de l'ancienne interface d'administration
 - Correction d'un bug affectant le téléchargement de fichier sur Safari iOS
-- Correction d'un bug affectant l'ajout de mot-clés sur une fiche article vierge
+- Correction d'un bug affectant l'ajout de mots-clés sur une fiche article vierge
 - Correction du calcul de la TVA des articles de type 'Jeu de rôle'
 - Correction d'un bug affectant la suppression des billets
 - Correction d'un bug affectant les notifications pour les termes de recherche
@@ -1914,8 +1914,8 @@ Déploiement:
 - Ajout de la mention "Mise à dispo. en magasin" plutôt que "Expédiée" sur les
   commandes à retirer en magasin (#112)
 - Ajout d'une option pour ajouter un dégradé sur les textes dépliables
-- Tous les type de contributeurs d'un article sont désormais ajoutés à ses
-  termes de recherche (#115)
+- Tous les types de contributeurs d'un article sont désormais ajoutés à ses
+  termes de recherche (#115).
 - Refonte de l'outil d'actualisation des termes de recherche
 - Refonte de l'outil d'envoi des livres numériques
 - Envoi des livres numériques : ajout d'option pour ne pas envoyer de courriel
@@ -1945,12 +1945,12 @@ Déploiement:
 
 - Refonte du système de notifications
 - Refonte de la page Suivi des conversions
-- Information des suivi de conversions sur la page de la commande
+- Information du suivi de conversions sur la page de la commande
 - Ajout de la possibilité de supprimer un article
 - Ajout d'un modèle 'Page d'accueil (derniers articles parus)' à l'éditeur
   de thèmes
 - Ajout d'un modèle 'Formulaire de contact' à l'éditeur de thèmes
-- Affichage d'une erreur si un fichier media présent sur le disque ne possède
+- Affichage d'une erreur si un fichier média présent sur le disque ne possède
   pas d'entrée équivalente dans la base de données
 - Affichage d'une erreur si la valeur de l'option de site `admin_entries` est
   mal formatée
@@ -2092,7 +2092,7 @@ Déploiement:
 ## 2.18.0 (1er mai 2016)
 
 - Il est désormais possible d'ajouter un article à un rayon directement depuis
-  la page d'ajout ou de modification d'un exemplaire lié
+  la page d'ajout ou de modification d'un exemplaire lié.
 - Ajout d'une page pour lister et supprimer les articles d'un rayon
 - Correction d'un bug affectant l'ajout d'un livre à un rayon
 
@@ -2140,7 +2140,7 @@ Déploiement:
 - Ajout d'une option pour activer le protocole HTTPS pour Axys
 - Ajout d'une page de statistiques pour les exemplaires perdus
 - La jauge des campagnes de financement peut désormais dépasser 100 %
-- Les contreparties mise en avant s'affichent désormais en tête de liste
+- Les contreparties mises en avant s'affichent désormais en tête de liste
 
 ## 2.14.1 (9 mars 2016)
 
@@ -2244,7 +2244,7 @@ Déploiement:
 ## 2.8.0 (21 décembre 2015)
 
 - L'inscription à la newsletter est désormais proposé lors de l'enregistrement
-  d'une commande et lors du téléchargement d'un livre gratuit
+  d'une commande et lors du téléchargement d'un livre gratuit.
 - Ajout d'une page d'explication lors du téléchargement d'un livre gratuit
 - Ajout d'un outil d'export des abonnés à la newsletter
 - Correction d'un bug obligeant à choisir une option d'expédition pour un panier
@@ -2274,9 +2274,9 @@ Déploiement:
 
 - Les campagnes de financement participatif et les quantités disponibles pour
   chaque contrepartie sont désormais automatiquement mises à jour après chaque
-  nouvelle commande
+  nouvelle commande.
 - Ajout d'un lien pour actualiser manuellement les stats de campagne
-- Ajout du nombre de jour restant avant la fin de la campagne
+- Ajout du nombre de jours restant avant la fin de la campagne
 - Les contreparties sont désormais classées de la moins chère à la plus chère
 - Le pourcentage de progression de la commande est désormais plus précis
 
@@ -2345,7 +2345,7 @@ Déploiement:
 
 ## 2.3.22 (2 octobre 2015)
 
-- Librairies: réactivation de la précommande pour les livres à paraître s'ils
+- Librairies : réactivation de la précommande pour les livres à paraître s'ils
   sont en stock
 
 ## 2.3.21 (27 septembre 2015)
@@ -2379,7 +2379,7 @@ Déploiement:
 - Intégration de la nouvelle interface de paiement Paypal
 - Ajout d'une option pour demander la suppression d'un article
 - Les articles à paraître ne peuvent plus être ajoutés au panier (sauf
-  précommande)
+  précommande).
 
 ## 2.3.18.5 (6 septembre 2015)
 
@@ -2401,7 +2401,7 @@ Déploiement:
 ## 2.3.18.1 (25 juillet 2015)
 
 - Correction d'un problème de modification des options du site
-- Correction des champs description courte et spécialités dans la fiche éditeur
+- Correction des champs description courte et spécialités sur la fiche éditeur
 
 ## 2.3.18 (24 juillet 2015)
 
@@ -2528,8 +2528,8 @@ Biblys 2.3 : Financement participatif
 
 ## 2.2.18 (1er février 2015)
 
-- Traitement par lot : application d'une promotion sur tous les exemplaires d'
-  une liste
+- Traitement par lot : application d'une promotion sur tous les exemplaires 
+  d'une liste
 - Page d'inventaire : Ajout d'un filtre par type d'article
 - Il est désormais possible de lier un billet de blog à un éditeur
 
@@ -2544,7 +2544,7 @@ Biblys 2.3 : Financement participatif
 ## 2.2.16 (26 janvier 2015)
 
 - Calcul de la TVA au moment de l'achat d'un article
-- Ajout d'une liste des liste sur la page inventaire
+- Ajout d'une liste des listes sur la page inventaire
 - Ajout d'un menu déroulant pour sélectionner un pays sur le formulaire de
   modification des commandes
 - (Correction) Affichage des factures si le pays du client n'est pas spécifié
@@ -2564,7 +2564,7 @@ Biblys 2.3 : Financement participatif
 
 ## 2.2.13 (9 janvier 2015)
 
-- (Correction) Les articles vendable sur commande sont bien marqués comme tels
+- (Correction) Les articles vendables sur commande sont bien marqués comme tels
 - (Correction) Menu de selection d'un fournisseur
 - (Correction) Case à cocher fournisseur "Vendable sur commande"
 
