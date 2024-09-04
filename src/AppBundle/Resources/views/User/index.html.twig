@@ -26,6 +26,14 @@
         <td>{{ user.email }}</td>
         <td>{{ user.createdAt|date }}</td>
         <td>{{ user.lastLoggedAt|date('d/m/Y H:i') }}</td>
+        <td>
+          <a
+            href="{{ path('user_show', { id: user.id }) }}"
+            class="btn btn-info"
+          >
+            <span class="fa fa-eye"></span>
+          </a>
+        </td>
       </tr>
     {% endfor %}
     </tbody>

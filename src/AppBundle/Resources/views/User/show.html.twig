@@ -1,0 +1,41 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Utilisateur·ice n° {{ user.id }} ({{ user.email }})
+{% endblock %}
+
+{% block main %}
+  <h1>
+    <span class="fa fa-user"></span>
+    Utilisateur·ice n° {{ user.id }}
+  </h1>
+
+  <table class="table table-striped">
+    <tr>
+      <td>Adresse e-mail</td>
+      <td>{{ user.email }}</td>
+    </tr>
+    <tr>
+      <td>Première connexion</td>
+      <td>{{ user.createdAt|date }}</td>
+    </tr>
+    <tr>
+      <td>Dernière connexion</td>
+      <td>{{ user.lastLoggedAt|date('d/m/Y H:i') }} </td>
+    </tr>
+    <tr>
+      <td>Méthodes de connexion</td>
+      <td>
+        <ul>
+          {% for method in user.authenticationMethods %}
+            <li>
+              Compte {{ method.identityProvider }} n° {{ method.externalId }}
+            </li>
+          {% else %}
+            —
+          {% endfor %}
+        </ul>
+      </td>
+    </tr>
+  </table>
+{% endblock %}

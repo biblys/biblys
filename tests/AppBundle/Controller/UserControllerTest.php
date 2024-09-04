@@ -71,14 +71,43 @@ class UserControllerTest extends TestCase
     }
 
     /**
-     * #login
-     */
-
-    /**
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
+     */
+    public function testShowAction()
+    {
+        // given
+        $controller = new UserController();
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createUser(site: $site);
+        $currentSite = new CurrentSite($site);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive('authAdmin')->andReturns();
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->shouldReceive("renderResponse")
+            ->with("AppBundle:User:show.html.twig", [
+                "user" => $user
+            ])->andReturn(new Response());
+
+        // when
+        $response = $controller->showAction($currentSite, $currentUser, $templateService, $user->getId());
+
+        // then
+        $this->assertEquals("200", $response->getStatusCode());
+    }
+
+    /**
+     * #login
+     */
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testLogin()
     {
@@ -107,10 +136,11 @@ class UserControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testLoginWhenAxysIsEnabled()
     {
@@ -139,10 +169,11 @@ class UserControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testLoginWithReturnUrl()
     {
@@ -170,10 +201,11 @@ class UserControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testLoginForAuthentifiedUser()
     {
