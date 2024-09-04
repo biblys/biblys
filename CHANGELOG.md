@@ -148,7 +148,7 @@ Déploiement
 - Ajouter une chaine de 32 caractères aléatoire pour la valeur de l'optiond 
   configuration `authentication.secret`.
 
-### 2.81.2 (22 mai 2024)
+## 2.81.2 (22 mai 2024)
 
 Corrections
 
@@ -163,7 +163,7 @@ Déploiement
 
 - Executer les migrations.
 
-### 2.81.1 (15 mai 2024)
+## 2.81.1 (15 mai 2024)
 
 Corrections
 
@@ -172,7 +172,7 @@ des comptes utilisateurs locaux ont été corrigés.
 
 ## 2.81.0 (10 mai 2024)
 
-### Utilisateurs locaux
+## Utilisateurs locaux
 
 - Les utilisateurs sont désormais importés depuis le fournisseur d'identité 
   à la première connexion et enregistrées localement.
@@ -180,14 +180,14 @@ des comptes utilisateurs locaux ont été corrigés.
   uniquement via le protocole OpenID Connect et sont conditionnés au 
   consentement de l'utilisateur.
 
-### Autres améliorations
+## Autres améliorations
 
 - Une option de site `order_mail_subject_prefix` a été ajoutée. Elle permet
   d'ajouter un préfixe au sujet des courriels de confirmation de commande.
   Par exemple, si le préfixe est "YS |", le sujet du courriel sera "YS |
   Commande n°".
 
-### 2.80.1 (8 mai 2024)
+## 2.80.1 (8 mai 2024)
 
 Corrections
 
@@ -206,14 +206,14 @@ Améliorations
   contacts ont été ajoutés.
 - Un lien vers le stock des articles a été ajouté sur la page Catalogue.
 
-### 2.79.3 (1er mai 2024)
+## 2.79.3 (1er mai 2024)
 
 Corrections
 
 - L'affichage d'une page de collection pouvait déclencher une erreur si 
   l'option `articles_per_page` n'avait pas de valeur définie. C'est corrigé.
 
-### 2.79.2 (17 avril 2024)
+## 2.79.2 (17 avril 2024)
 
 Corrections
 
@@ -221,7 +221,7 @@ Corrections
   à afficher sur une page, n'était pas pris en compte sur les pages de 
   collection. C'est corrigé.
 
-### 2.79.1 (10 avril 2024)
+## 2.79.1 (10 avril 2024)
 
 Corrections
 
@@ -246,28 +246,28 @@ Autres améliorations
 - Si renseigné, le numéro de téléphone du client apparaîtra désormais sur la 
   page de la commande
 
-### 2.78.4 (3 avril 2024)
+## 2.78.4 (3 avril 2024)
 
 Corrections
 
 - Les erreurs lors de l'import pouvaient ne pas être affichées correctement.
   C'est réparé.
 
-### 2.78.3 (25 mars 2024)
+## 2.78.3 (25 mars 2024)
 
 Corrections
 
 - Une erreur pouvait survenir sur la page d'ajout d'exemplaire si une alerte 
   était associé à un utilisateur supprimé. C'est corrigé.
 
-### 2.78.2 (20 mars 2024)
+## 2.78.2 (20 mars 2024)
 
 Corrections
 
 - L'état des livres d'occasion n'apparaissaient plus sur la facture. C'est 
   corrigé.
 
-### 2.78.1 (13 mars 2024)
+## 2.78.1 (13 mars 2024)
 
 Corrections
 
@@ -292,7 +292,7 @@ Déploiement
 - Dans les controllers, remplacer `$_SITE`
   par `LegacyCodeHelper::getGlobalSite()`.
 
-### 2.77.1 (21 février 2024)
+## 2.77.1 (21 février 2024)
 
 Corrections
 
@@ -315,7 +315,7 @@ Améliorations
   dans leur panier au moment de la validation de commande, grâce à l'option
   de site `cart_suggestions_rayon_id`.
 
-### 2.75.3 (27 décembre 2023)
+## 2.75.3 (27 décembre 2023)
 
 Corrections
 
@@ -326,7 +326,7 @@ Corrections
 - L'ajout d'un article à un lot pouvait échouer sans erreurs. Maintenant, ça
   marche.
 
-### 2.75.2 (20 décembre 2023)
+## 2.75.2 (20 décembre 2023)
 
 Corrections
 
@@ -336,7 +336,7 @@ Corrections
 - La création d'une liste d'exemplaires pouvait déclencher une erreur.
   Maintenant, ça marche.
 
-### 2.75.1 (13 décembre 2023)
+## 2.75.1 (13 décembre 2023)
 
 Corrections
 
@@ -374,7 +374,7 @@ Déploiement
   par `LegacyCodeHelper::getRouteParam($key)`
   dans les controllers legacy.
 
-### 2.74.2 (DEV)
+## 2.74.2 (DEV)
 
 Corrections
 
@@ -382,7 +382,7 @@ Corrections
 - Seul le premier article d'une invitation était validé au moment de
   l'acceptation de l'invitation. Désormais, ils le sont tous.
 
-### 2.74.2 (2 décembre 2023)
+## 2.74.2 (2 décembre 2023)
 
 Corrections
 
@@ -390,7 +390,7 @@ Corrections
 - Seul le premier article d'une invitation était validé au moment de
   l'acceptation de l'invitation. Désormais, ils le sont tous.
 
-### 2.74.1 (8 novembre 2023)
+## 2.74.1 (8 novembre 2023)
 
 Corrections
 
@@ -417,7 +417,7 @@ Corrections
   l'adresse email utilisée correspondait bien à un compte utilisateur. C'est
   corrigé.
 
-### 2.73.1 (18 octobre 2023)
+## 2.73.1 (18 octobre 2023)
 
 Corrections
 
@@ -449,7 +449,7 @@ Corrections
   le cas.
 - La page d'édition d'une commande pouvait déclencher une erreur. C'est corrigé.
 
-### 2.72.2 (27 septembre 2023)
+## 2.72.2 (27 septembre 2023)
 
 Corrections
 
@@ -457,7 +457,7 @@ Corrections
   le message affiché était "Aucun résultat". Désormais, c'est le message
   d'erreur renvoyé par noosSFere.
 
-### 2.72.1 (13 septembre 2023)
+## 2.72.1 (13 septembre 2023)
 
 Corrections
 
@@ -496,7 +496,7 @@ Autres améliorations
 - L'erreur affichée lors du refus de la connexion avec Axys a été rendue
   plus explicite.
 
-### 2.71.2 (31 août 2023)
+## 2.71.2 (31 août 2023)
 
 Corrections
 
@@ -505,7 +505,7 @@ Corrections
   catalogue de l'administration. Ce n'est plus le cas.
 - L'affichage des erreurs au moment de la connexion avec Axys a été améliorée.
 
-### 2.71.1 (24 août 2023)
+## 2.71.1 (24 août 2023)
 
 Corrections
 
@@ -522,7 +522,7 @@ Améliorations
 - Il n'est plus possible d'inviter un utilisateur à être administrateur s'il
   ne possède pas un compte au préalable.
 
-### 2.70.2 (16 août 2023)
+## 2.70.2 (16 août 2023)
 
 Corrections
 
@@ -537,7 +537,7 @@ Corrections
 - Le téléversement d'un fichier depuis la page Gestion des médias échouait
   dans certains cas. Maintenant, ça marche.
 
-### 2.70.1 (9 août 2023)
+## 2.70.1 (9 août 2023)
 
 Corrections
 
@@ -554,14 +554,14 @@ Déploiement
 
 - Exécuter les migrations
 
-### 2.69.3 (2 août 2023)
+## 2.69.3 (2 août 2023)
 
 Corrections
 
 - Une erreur 404 pouvait survenir lors de l'ajout d'un nouvel article ou
   l'accès au catalogue en tant qu'éditeur. C'est corrigé.
 
-### 2.69.2 (26 juillet 2023)
+## 2.69.2 (26 juillet 2023)
 
 Corrections
 
@@ -571,7 +571,7 @@ Corrections
 - Une alerte créée sans prix maximum pouvait déclencher une erreur sur la
   page d'ajout d'un exemplaire au stock. Ça n'arrivera plus.
 
-### 2.69.1 (20 juilet 2023)
+## 2.69.1 (20 juilet 2023)
 
 Corrections
 
@@ -600,7 +600,7 @@ Déploiement
   par `LegacyCodeHelper::getGlobalSite()`.
 - Remplacer liens vers `adm_article` par `article_edit`.
 
-### 2.68.6 (14 juin 2023)
+## 2.68.6 (14 juin 2023)
 
 Corrections
 
@@ -609,7 +609,7 @@ Corrections
 - L'affichage de la page d'édition d'article pouvait échouer pour un article
   associé à un rayon supprimé. C'est corrigé.
 
-### 2.68.5 (9 juin 2023)
+## 2.68.5 (9 juin 2023)
 
 Corrections
 
@@ -618,21 +618,21 @@ Corrections
 - L'affichage de la facture d'une commande à laquelle n'était associé aucun
   pays de livraison déclenchait une erreur. C'est corrigé.
 
-### 2.68.4 (27 mai 2023)
+## 2.68.4 (27 mai 2023)
 
 Corrections
 
 - Un problème de variable indéfini empêchait le bon fonctionnement de la
   page d'édition des billets.
 
-### 2.68.3 (17 mai 2023)
+## 2.68.3 (17 mai 2023)
 
 Corrections
 
 - La journalisation des notices de dépréciation pouvait créer des journaux très
   lourds très rapidement. Elle est désormais désactivée par défaut.
 
-### 2.68.2 (10 mai 2023)
+## 2.68.2 (10 mai 2023)
 
 Corrections
 
@@ -641,7 +641,7 @@ Corrections
 - L'accès anonyme à une page de commande pouvait déclencher une erreur.
   Désormais, c'est l'invite à s'identifier qui s'affiche.
 
-### 2.68.1 (7 mai 2023)
+## 2.68.1 (7 mai 2023)
 
 Corrections
 
@@ -671,7 +671,7 @@ Deploiement
 - Dans les controllers, remplacer `$_V` par `getLegacyVisitor()`.
 - Executer les migrations (supprimer au préalable les colonnes `cart_gift…`)
 
-### 2.67.3 (26 avril 2023)
+## 2.67.3 (26 avril 2023)
 
 Corrections
 
@@ -680,7 +680,7 @@ Corrections
 - Une erreur pouvait empêcher le bon affichage de la page "Mes souhaits".
   C'est corrigé.
 
-### 2.67.2 (19 avril 2023)
+## 2.67.2 (19 avril 2023)
 
 Corrections
 
@@ -695,7 +695,7 @@ Corrections
 - Les images de couvertures et photos d'exemplaires pouvaient ne pas
   s'afficher sur la page panier. C'est corrigé.
 
-### 2.67.1 (12 avril 2023)
+## 2.67.1 (12 avril 2023)
 
 Corrections
 
@@ -724,14 +724,14 @@ Déploiement
 - Ajouter `{% include "layout:_overall_menu.html.twig" %}` au fichier de layout
   base.html.twig, juste après l'ouverture de la base `<body>`
 
-### 2.66.3 (27 mars 2023)
+## 2.66.3 (27 mars 2023)
 
 Corrections
 
 - Le code du tracker de suivi Matomo Analytics n'était plus inséré, même si
   l'option de configuration correspondant été présente. C'est corrigé.
 
-### 2.66.2 (15 mars 2023)
+## 2.66.2 (15 mars 2023)
 
 Corrections
 
@@ -744,7 +744,7 @@ Corrections
   erreur. Désormais, la mention "Article inconnu" s'affichera à la place du
   titre.
 
-### 2.66.1 (8 mars 2023)
+## 2.66.1 (8 mars 2023)
 
 Corrections
 
@@ -774,14 +774,14 @@ Déploiement
 - L'option de site permettant d'utiliser une page statique comme page
   d'accueil s'écrit désormais `page:{slug}` plutôt que `page:{id}`.
 
-### 2.65.4 (15 février 2023)
+## 2.65.4 (15 février 2023)
 
 Corrections
 
 - Le masquage des éléments lors de l'impression d'une facture ne
   fonctionnait plus, c'est corrigé.
 
-### 2.65.3 (1 février 2023)
+## 2.65.3 (1 février 2023)
 
 Corrections
 
@@ -791,7 +791,7 @@ Corrections
 - Une erreur pouvait survenir lors de l'ajout d'un administrateur.
   Maintenant, ça marche.
 
-### 2.65.2 (21 janvier 2023)
+## 2.65.2 (21 janvier 2023)
 
 Corrections
 
@@ -800,7 +800,7 @@ Corrections
 - Une erreur "WARNING" du mode développement pouvait parfois apparaître en
   mode production. Ça n'arrivera plus.
 
-### 2.65.1 (11 janvier 2023)
+## 2.65.1 (11 janvier 2023)
 
 Corrections
 
@@ -821,7 +821,7 @@ Déploiement
 
 - Utiliser PHP 8.0.
 
-### 2.64.3 (23 décembre 2022)
+## 2.64.3 (23 décembre 2022)
 
 Corrections
 
@@ -830,14 +830,14 @@ Corrections
 - Sur la page des stocks éditeur, le nombre de livre en stock n'était plus
   mis à jour lorsque le champ était déselectionné. C'est corrigé.
 
-### 2.64.2 (16 décembre 2022)
+## 2.64.2 (16 décembre 2022)
 
 Corrections
 
 - Les erreurs "Requête invalide" (HTTP 400) étaient mal prises en compte.
   C'est réparé.
 
-### 2.64.1 (11 décembre 2022)
+## 2.64.1 (11 décembre 2022)
 
 Corrections
 
@@ -857,7 +857,7 @@ Améliorations
 - Une option "mode" a été ajoutée à la configuration Paypal pour pouvoir
   choisir d'activer le mode "sandbox" ou le mode "live" (par défaut)
 
-### 2.63.1 (23 septembre 2022)
+## 2.63.1 (23 septembre 2022)
 
 Corrections
 
@@ -887,7 +887,7 @@ Déploiement
 
 - Biblys ne supporte plus PHP 7.3. La nouvelle version minimale requise est 7.4.
 
-### 2.62.2 (22 juillet 2022)
+## 2.62.2 (22 juillet 2022)
 
 Corrections
 
@@ -897,7 +897,7 @@ Corrections
 - Certains boutons et fonctionnalités de la page de gestion des stocks
   étaient parfois ignorées. C'est réparé.
 
-### 2.62.1 (12 juillet 2022)
+## 2.62.1 (12 juillet 2022)
 
 Corrections
 
@@ -926,13 +926,13 @@ Améliorations
 Cette mise à jour apporte le support de la nouvelle version d'Axys basée sur
 le standard OpenID Connect.
 
-### 2.60.2 (15 avril 2022)
+## 2.60.2 (15 avril 2022)
 
 Correction
 
 La suppression d'un livre pouvait provoquer une erreur. C'est corrigé.
 
-### 2.60.1 (8 avril 2022)
+## 2.60.1 (8 avril 2022)
 
 Corrections
 
@@ -961,21 +961,21 @@ Corrections
   message d'erreur "Cet éditeur ne fait pas partie des éditeurs autorisés".
   C'est corrigé.
 
-### 2.59.3 (25 mars 2022)
+## 2.59.3 (25 mars 2022)
 
 Correction
 
 Une erreur est empêchait l'utilisateur de la page ”Ventes numériques” de
 l'administration. C'est corrigé.
 
-### 2.59.2 (18 mars 2022)
+## 2.59.2 (18 mars 2022)
 
 Correction
 
 La création d'une alerte pouvait échouer silencieusement si l'utilisateur
 n'était pas authentifié. Un message d'erreur est désormais affiché.
 
-### 2.59.1 (11 mars 2022)
+## 2.59.1 (11 mars 2022)
 
 Corrections
 
@@ -1010,12 +1010,12 @@ Corrections
 - L'annulation d'une commande contenant un exemplaire associé à une campagne
   de financement participatif pouvait déclencher une erreur. Plus maintenant.
 
-### 2.58.4 (20 février 2022)
+## 2.58.4 (20 février 2022)
 
 Correction : l'enregistrement d'un modèle de thème pouvait échouer sans
 erreur dans certain cas. C'est corrigé.
 
-### 2.58.3 (11 février 2022)
+## 2.58.3 (11 février 2022)
 
 Corrections
 
@@ -1026,7 +1026,7 @@ Corrections
 - L'enregistrement du fichier de styles CSS pouvait déclencher une erreur 500. Ce
   n'est plus le cas.
 
-### 2.58.2 (4 février 2022)
+## 2.58.2 (4 février 2022)
 
 Corrections
 
@@ -1037,7 +1037,7 @@ Corrections
 - L'enregistrement d'une commande sans frais de port pouvait déclencher une
   erreur. Ça fonctionne à présent.
 
-### 2.58.1 (4 février 2022)
+## 2.58.1 (4 février 2022)
 
 Corrections
 
@@ -1056,22 +1056,22 @@ Améliorations
 - Un lien vers la page des conditions générales de vente a été ajouté au
   courriel de confirmation de commande.
 
-### 2.57.4 (28 janvier 2022)
+## 2.57.4 (28 janvier 2022)
 
 Cette mise à jour purement technique ajoute une option de configuration
 nécessaire pour préparer une migration de la base de données.
 
-### 2.57.3 (21 janvier 2022)
+## 2.57.3 (21 janvier 2022)
 
 Correction : une erreur empêchait l'afffichage de la page de gestion d'un rayon
 dans l'administration. C'est corrigé.
 
-### 2.57.2 (16 janvier 2022)
+## 2.57.2 (16 janvier 2022)
 
 Correction : un utilisateur pouvait accéder à la page d'édition d'un billet de
 blog sans être identifié. C'est corrigé.
 
-### 2.57.1 (16 janvier 2022)
+## 2.57.1 (16 janvier 2022)
 
 Correction : l'accès à la page de rédaction d'un billet de blog en tant
 qu'éditeur provoquait une erreur. C'est corrigé.
@@ -1086,17 +1086,17 @@ Améliorations
   purement techniques visant à améliorer la stabilité et la maintenabilité de
   Biblys, tout en préparant la refonte prochaine du panier.
 
-### 2.56.3 (24 décembre 2021)
+## 2.56.3 (24 décembre 2021)
 
 Correction : l'information selon laquelle une commande avait été validée avec
 le mode d'expédition "retrait en magasin" était mal enregitrée. C'est rétabli.
 
-### 2.56.2 (19 décembre 2021)
+## 2.56.2 (19 décembre 2021)
 
 Correction : Une commande pouvait être enregistrée avec des frais de port à 0 €
 si le client double-cliquait sur le bouton de validation. C'est corrigé.
 
-### 2.56.1 (19 novembre 2021)
+## 2.56.1 (19 novembre 2021)
 
 Corrections
 
@@ -1117,7 +1117,7 @@ Corrections
 - Un e-mail était envoyé lors de l'annulation d'une vente magasin. C'est
   corrigé.
 
-### 2.55.4 (29 octobre 2021)
+## 2.55.4 (29 octobre 2021)
 
 Corrections
 
@@ -1128,7 +1128,7 @@ Corrections
 - L'import noosfere pouvait échouer lorsque les contributeurs étaient associés
   à certains rôles inconnus de Biblys. Maintenant, ça marche.
 
-### 2.55.3 (22 octobre 2021)
+## 2.55.3 (22 octobre 2021)
 
 Corrections
 
@@ -1140,7 +1140,7 @@ Corrections
 - Sur Safari, le rôle choisi pour un contributeur ne s'affichait pas
   correctement lors de l'édition d'un article. C'est maintenant le cas.
 
-### 2.55.2 (17 octobre 2021)
+## 2.55.2 (17 octobre 2021)
 
 Corrections
 
@@ -1149,7 +1149,7 @@ Corrections
 - Les liens vers les pages évènements déclenchaient une erreur 404. Ce n'est
   plus le cas.
 
-### 2.55.1 (9 octobre 2021)
+## 2.55.1 (9 octobre 2021)
 
 Corrections
 
@@ -1168,7 +1168,7 @@ Améliorations
   contributeurs ("féminin", "masculin" ou "neutre")
 - Le genre par défaut est désormais "neutre" et plus "masculin".
 
-### 2.54.2 (17 septembre 2021)
+## 2.54.2 (17 septembre 2021)
 
 Corrections
 
@@ -1179,7 +1179,7 @@ Corrections
 - La page Frais de port de l'administration affiche uniquement les frais
   de port du site en cours
 
-### 2.54.1 (10 septembre 2021)
+## 2.54.1 (10 septembre 2021)
 
 Corrections
 
@@ -1193,35 +1193,35 @@ Cette mise à jour apporte un certain nombre de modifications purement
 techniques visant à améliorer la stabilité et la maintenabilité de Biblys,
 tout en préparant la refonte prochaine du panier.
 
-### 2.53.8 (27 août 2021)
+## 2.53.8 (27 août 2021)
 
 Corrections
 
 - La mise à jour du fichier CSS via l'éditeur de thème fonctionne à nouveau
 - Le filtrage des billets par catégorie fonctionne à nouveau
 
-### 2.53.7 (30 juillet 2021)
+## 2.53.7 (30 juillet 2021)
 
 Corrections
 
 - L'erreur affichée lors de l'ajout au panier d'un livre pour lequel aucun
   exemplaire n'est disponible a été améliorée.
 
-### 2.53.6 (22 juillet 2021)
+## 2.53.6 (22 juillet 2021)
 
 Corrections
 
 - L'appel d'une page paginée avec un numéro de page ne provoque plus d'erreur
   serveur
 
-### 2.53.5 (10 juillet 2021)
+## 2.53.5 (10 juillet 2021)
 
 Corrections
 
 - L'appel d'une page paginée avec un numéro de page inférieur à zéro ne
   provoque plus une erreur serveur
 
-### 2.53.4 (2 juillet 2021)
+## 2.53.4 (2 juillet 2021)
 
 Corrections
 
@@ -1229,7 +1229,7 @@ Corrections
   à un éditeur filtré est à nouveau possible, mais affiche une erreur claire.
 - La recherche d'un client par nom ne provoque plus d'erreur
 
-### 2.53.3 (25 juin 2021)
+## 2.53.3 (25 juin 2021)
 
 Corrections
 
@@ -1241,7 +1241,7 @@ Corrections
 - Les éditeurs filtrés n'apparaissent plus dans les propositions lors de
   l'association d'une collection à une fiche article
 
-### 2.53.2 (18 juin 2021)
+## 2.53.2 (18 juin 2021)
 
 Corrections
 
@@ -1252,7 +1252,7 @@ Corrections
 - Le message d'erreur affiché lorsqu'un nouvel article est soumis avec une url
   déjà existante a été amélioré
 
-### 2.53.1 (11 juin 2021)
+## 2.53.1 (11 juin 2021)
 
 Corrections
 
@@ -1267,7 +1267,7 @@ Cette mise à jour apporte un certain nombre de modifications purement
 techniques visant à améliorer la stabilité et la maintenabilité de Biblys,
 tout en préparant la refonte prochaine du panier.
 
-### 2.52.4 (21 mai 2021)
+## 2.52.4 (21 mai 2021)
 
 Corrections
 
@@ -1279,7 +1279,7 @@ Corrections
 - La réception d'une notification d'un remboursement PayPlug ne provoque plus
   une erreur serveur
 
-### 2.52.3 (14 mai 2021)
+## 2.52.3 (14 mai 2021)
 
 Corrections
 
@@ -1288,7 +1288,7 @@ Corrections
 - Le message d'erreur lors de l'ajout d'un article dans un rayon dans lequel
   cet article est déjà s'affiche désormais correctement.
 
-### 2.52.2 (16 avril 2021)
+## 2.52.2 (16 avril 2021)
 
 Corrections
 
@@ -1299,7 +1299,7 @@ Corrections
   que d'afficher une erreur
 - La création d'un client depuis la caisse fonctionne à nouveau
 
-### 2.52.1 (9 avril 2021)
+## 2.52.1 (9 avril 2021)
 
 Corrections
 
@@ -1332,12 +1332,12 @@ Corrections
 
 - Le statut HTTP des pages d'erreur 404 est bien 404.
 
-### 2.51.5 (26 mars 2021)
+## 2.51.5 (26 mars 2021)
 
 Correction d'une erreur qui pouvait conduire à l'affichage d'une erreur 404
 après l'authentification via Axys.
 
-### 2.51.4 (19 mars 2021)
+## 2.51.4 (19 mars 2021)
 
 Corrections
 
@@ -1348,19 +1348,19 @@ Corrections
 - Le formulaire d'édition d'un article fonctionne à nouveau si le site n'a aucun
   rayon
 
-### 2.51.3 (5 mars 2021)
+## 2.51.3 (5 mars 2021)
 
 Correction : le raccourci "Ajouter au stock" de la barre d'administration
 fonctionne à nouveau.
 
-### 2.51.2 (26 février 2021)
+## 2.51.2 (26 février 2021)
 
 Corrections
 
 - L'accès au tableau de bord en tant qu'éditeur fonctionne à nouveau
 - Il n'est plus possible d'associer un article à un cycle supprimé
 
-### 2.51.1 (18 février 2020)
+## 2.51.1 (18 février 2020)
 
 Corrections
 
@@ -1369,7 +1369,7 @@ Corrections
 - L'import d'un article associé à un contributeur ayant précédemment été
   supprimé fonctionne à nouveau
 
-### 2.51.0 (5 février 2021)
+## 2.51.0 (5 février 2021)
 
 - Amélioration des performances
 - Frais de port : il est désormais possible de préciser un montant minimum
@@ -1383,12 +1383,12 @@ Corrections
   pré-remplie avec l'adresse e-mail de son compte utilisateur lors de
   l'enregistrement d'une nouvelle commande
 
-### 2.50.3 (26 janvier 2021)
+## 2.50.3 (26 janvier 2021)
 
 - Correction : cliquer sur annuler dans la boîte de dialogue du numéro de suivi
   d'une commande ne marque plus la commande comme expédiée.
 
-### 2.50.2 (15 décembre 2020)
+## 2.50.2 (15 décembre 2020)
 
 Corrections
 
@@ -1397,7 +1397,7 @@ Corrections
 - L'outil de gestion des frais de port affiche désormais correctement les
   tranches sans commentaires.
 
-### 2.50.1 (14 octobre 2020)
+## 2.50.1 (14 octobre 2020)
 
 Corrections
 
@@ -1405,7 +1405,7 @@ Corrections
 - La modification des options "Exempté de TVA" et "Livres vendables sur
   commande" des fournisseurs fonctionnent à nouveau
 
-### 2.50.0 (7 octobre 2020)
+## 2.50.0 (7 octobre 2020)
 
 Améliorations
 
@@ -1417,20 +1417,20 @@ Améliorations
   expédiée".
 - Ajout d'une page pour gérer les comptes autorisés à gérer un éditeur
 
-### 2.49.4 (30 septembre 2020)
+## 2.49.4 (30 septembre 2020)
 
 Corrections
 
 - L'écriture des journaux d'erreurs fonctionne à nouveau pour l'authentification
   les paiements par Paypal
 
-### 2.49.3 (23 septembre 2020)
+## 2.49.3 (23 septembre 2020)
 
 Correction d'un problème qui pouvait conduire, dans certains cas, à l'apparition
 des rayons associés à un article depuis un autre site à apparaître sur les
 fiches articles.
 
-### 2.49.2 (15 septembre 2020)
+## 2.49.2 (15 septembre 2020)
 
 Corrections
 
@@ -1443,7 +1443,7 @@ Corrections
 - Le tronquage d'une chaîne de caractères utf-8 est calculé au nombre de bits et
   plus au nombre de caractères.
 
-### 2.49.1 (7 septembre 2020)
+## 2.49.1 (7 septembre 2020)
 
 Corrections
 
@@ -1454,7 +1454,7 @@ Corrections
 - L'ajout d'une valeur dépassant 256 caractères dans le champ auteurs ne
   provoque plus d'erreur
 
-### 2.49.0 (2 septembre 2020)
+## 2.49.0 (2 septembre 2020)
 
 Améliorations
 
@@ -1473,7 +1473,7 @@ Déploiement
 
 - Ajouter `{AXYS_MENU}` dans `layout.html.twig` avant `</body>`
 
-### 2.48.1 (10 juillet 2020)
+## 2.48.1 (10 juillet 2020)
 
 Corrections
 
@@ -1483,7 +1483,7 @@ Corrections
 - La suppression d'un compte administateur fonctionne à nouveau
 - La suppression d'un panier fonctionne à nouveau
 
-### 2.48.0 (5 juin 2020)
+## 2.48.0 (5 juin 2020)
 
 Améliorations
 
@@ -1528,11 +1528,11 @@ mkdir -p app/public/theme \
 And add `<link rel="stylesheet" href="/theme/styles.css?{ASSETS_VERSION}" />`
 to `layout.html.twig`'s head section
 
-### 2.47.1 (4 mars 2020)
+## 2.47.1 (4 mars 2020)
 
 - Les frais de port globaux fonctionnent à nouveau
 
-### 2.47.0 (1er mars 2020)
+## 2.47.0 (1er mars 2020)
 
 Améliorations
 
@@ -1554,7 +1554,7 @@ Corrections
   fonctionne à nouveau
 - Les actions "Supprimer" et "Retourner un exemplaire" fonctionnent à nouveau
 
-### 2.46.0 (2 février 2020)
+## 2.46.0 (2 février 2020)
 
 Améliorations
 
@@ -1577,7 +1577,7 @@ Déploiement
   chèque
 - Configurer Matomo
 
-### 2.45.0 (1er décembre 2019)
+## 2.45.0 (1er décembre 2019)
 
 Améliorations
 
@@ -1597,7 +1597,7 @@ Corrections
 - La création d'une nouvelle page fonctionne à nouveau
 - Le filtrage par rayon de l'extrait d'inventaire fonctionne à nouveau
 
-### 2.44.0 (5 octobre 2019)
+## 2.44.0 (5 octobre 2019)
 
 Améliorations
 
