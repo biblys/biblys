@@ -57,7 +57,8 @@ class UserController extends Controller
 
         $users = UserQuery::create()
             ->filterBySite($currentSite->getSite())
-            ->orderByLastLoggedAt()
+            ->leftJoinWithAuthenticationMethod()
+            ->orderByEmail()
             ->find();
 
         return $templateService->renderResponse("AppBundle:User:index.html.twig", [
