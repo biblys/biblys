@@ -28,6 +28,7 @@ class LegacyController extends Controller
         UrlGenerator      $urlGenerator,
         CurrentUser       $currentUser,
         CurrentSite       $currentSite,
+        Request           $request,
     ): void
     {
         LegacyCodeHelper::catchDeprecationNotices($config, $session);
