@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.85.1 (DEV)
+
+Correctifs
+
+- La recherche d'une collection lors de la création d'un article pouvait
+  déclencher une erreur. C'est corrigé.
+
 ## 2.85.0 (4 septembre 2024)
 
 Améliorations
