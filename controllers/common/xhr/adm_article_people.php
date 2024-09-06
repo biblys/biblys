@@ -1,93 +1,94 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-$pm = new PeopleManager();
-$rm = new RoleManager();
-$am = new ArticleManager();
+/**
+ * @throws Exception
+ */
+function admArticlePeopleController(Request $request): JsonResponse
+{
+    $pm = new PeopleManager();
+    $am = new ArticleManager();
 
-$am->setIgnoreSiteFilters(true);
+    $am->setIgnoreSiteFilters(true);
 
-$term = filter_input(INPUT_GET, 'term', FILTER_SANITIZE_SPECIAL_CHARS);
+    $term = filter_input(INPUT_GET, 'term', FILTER_SANITIZE_SPECIAL_CHARS);
+    $action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_SPECIAL_CHARS);
+    $articleId = filter_input(INPUT_POST, 'article_id', FILTER_SANITIZE_NUMBER_INT);
 
-$action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_SPECIAL_CHARS);
-$articleId = filter_input(INPUT_POST, 'article_id', FILTER_SANITIZE_NUMBER_INT);
-$peopleId = filter_input(INPUT_POST, 'people_id', FILTER_SANITIZE_NUMBER_INT);
-$jobId = filter_input(INPUT_POST, 'job_id', FILTER_SANITIZE_NUMBER_INT);
-$roleId = filter_input(INPUT_POST, 'role_id', FILTER_SANITIZE_NUMBER_INT);
-$peopleName = filter_input(INPUT_POST, 'people_name', FILTER_SANITIZE_SPECIAL_CHARS);
+    /** @var Article $article */
+    $article = $am->getById($articleId);
+    if ($articleId && !$article) {
+        throw new Exception("Article $articleId inconnu.");
+    }
 
-$article = $am->getById($articleId);
-if ($articleId && !$article) {
-    throw new Exception("Article $articleId inconnu.");
-}
+    $json = [];
 
-$json = [];
-
-// Search for existing contributors
-if (isset($term)) {
-    $i = 0;
-    $req = null;
-    /** @var Request $request */
-    $term = $request->query->get('term');
-    $query = explode(" ", trim($term));
-    $params = [];
-    foreach ($query as $q) {
-        if (isset($req)) {
-            $req .= " AND ";
+    // Search for existing contributors
+    if (isset($term)) {
+        $i = 0;
+        $req = null;
+        $term = $request->query->get('term');
+        $query = explode(" ", trim($term));
+        $params = [];
+        foreach ($query as $q) {
+            if (isset($req)) {
+                $req .= " AND ";
+            }
+            $req .= "`people_name` LIKE :q" . $i;
+            $params['q' . $i] = '%' . $q . '%';
+            $i++;
         }
-        $req .= "`people_name` LIKE :q".$i."";
-        $params['q'.$i] = '%'.$q.'%';
-        $i++;
+
+        $people = LegacyCodeHelper::getGlobalDatabaseConnection()->prepare(
+            "SELECT `people_id`, `people_name` FROM `people` 
+        WHERE " . $req . " ORDER BY `people_alpha`"
+        );
+        $people->execute($params);
+        while ($p = $people->fetch(PDO::FETCH_ASSOC)) {
+            $json[$i]["label"] = $p["people_name"];
+            $json[$i]["value"] = $p["people_name"];
+            $json[$i]["id"] = $p["people_id"];
+            $i++;
+        }
+        $json[$i]["label"] = '=> Créer un nouveau contributeur ';
+        $json[$i]["value"] = $term;
+        $json[$i]["create"] = 1;
+
+    } elseif ($action === 'create') {
+
+        $peopleFirstName = $request->request->get('people_first_name');
+        $peopleLastName = $request->request->get('people_last_name');
+        $people = $pm->create(
+            [
+                'people_first_name' => $peopleFirstName,
+                'people_last_name' => $peopleLastName,
+            ]
+        );
+
+        $json = [
+            'people_id' => $people->get('id'),
+            'people_name' => $people->get('name'),
+            'job_id' => 1
+        ];
     }
 
-    /** @var PDO \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection() */
-    $people = \Biblys\Legacy\LegacyCodeHelper::getGlobalDatabaseConnection()->prepare(
-        "SELECT `people_id`, `people_name` FROM `people` 
-        WHERE ".$req." ORDER BY `people_alpha`"
-    );
-    $people->execute($params);
-    while ($p = $people->fetch(PDO::FETCH_ASSOC)) {
-        $json[$i]["label"] = $p["people_name"];
-        $json[$i]["value"] = $p["people_name"];
-        $json[$i]["id"] = $p["people_id"];
-        $i++;
+    // Return an updated list of authors
+    if ($article) {
+        $people = $article->getAuthors();
+        $authors = array_map(
+            function ($people) {
+                return $people->getName();
+            }, $people
+        );
+        $json['authors'] = implode(', ', $authors);
     }
-    $json[$i]["label"] = '=> Créer un nouveau contributeur ';
-    $json[$i]["value"] = $term;
-    $json[$i]["create"] = 1;
 
-} elseif ($action === 'create') {
-
-    /** @var Request $request */
-    $peopleFirstName = $request->request->get('people_first_name');
-    $peopleLastName = $request->request->get('people_last_name');
-    $people = $pm->create(
-        [
-            'people_first_name' => $peopleFirstName,
-            'people_last_name' => $peopleLastName,
-        ]
-    );
-
-    $json = [
-        'people_id' => $people->get('id'),
-        'people_name' => $people->get('name'),
-        'job_id' => 1
-    ];
+    return new JsonResponse($json);
 }
 
-// Return updated list of authors
-if ($article) {
-    $people = $article->getAuthors();
-    $authors = array_map(
-        function ($people) {
-            return $people->getName();
-        }, $people
-    );
-    $json['authors'] = implode(', ', $authors);
-}
-    
-$response = new JsonResponse($json);
+$request = LegacyCodeHelper::getGlobalRequest();
+$response = admArticlePeopleController($request);
 $response->send();
-
