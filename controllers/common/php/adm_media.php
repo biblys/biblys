@@ -54,6 +54,7 @@ return function (
             $mediaFile->setDir($_GET['dir']);
             $mediaFile->setFile($fileName);
             $mediaFile->setExt($fileExtension);
+            $mediaFile->setFileSize($uploadedFile->getSize());
             $mediaFile->save();
 
             $flashMessagesService->add("success", "Le fichier « $fileName.$fileExtension » a été ajouté au dossier « $targetDirectory ».");
