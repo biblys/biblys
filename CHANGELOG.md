@@ -6,13 +6,13 @@
 
 - La documentation d'installation locale de Biblys locale pour le développement
   ([INSTALL.MD](./INSTALL.md)) a été améliorée (#81 par @HEYGUL).
-- Les pays de livraison et les langues sont désormais ajoutés à la base de données 
-  lors de l'installation de Biblys, afin d'éviter une manipulation manuelle (#83 
+- Les pays de livraison et les langues sont désormais ajoutés à la base de données
+  lors de l'installation de Biblys, afin d'éviter une manipulation manuelle (#83
   et #88 par @HEYGUL).
- 
+
 ### Déploiement
 
-Jouer les migrations :
+Jouer les migrations
 
 ```shell
 composer propel migrate
