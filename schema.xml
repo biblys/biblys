@@ -851,6 +851,7 @@
     <column name="media_dir" phpName="Dir" type="LONGVARCHAR"/>
     <column name="media_file" phpName="File" type="LONGVARCHAR"/>
     <column name="media_ext" phpName="Ext" type="LONGVARCHAR"/>
+    <column name="media_file_size" phpName="FileSize" type="INTEGER"/>
     <column name="media_title" phpName="Title" type="LONGVARCHAR"/>
     <column name="media_desc" phpName="Desc" type="LONGVARCHAR"/>
     <column name="media_link" phpName="Link" type="LONGVARCHAR"/>

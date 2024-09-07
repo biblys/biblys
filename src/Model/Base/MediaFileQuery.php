@@ -23,6 +23,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMediaFileQuery orderByDir($order = Criteria::ASC) Order by the media_dir column
  * @method     ChildMediaFileQuery orderByFile($order = Criteria::ASC) Order by the media_file column
  * @method     ChildMediaFileQuery orderByExt($order = Criteria::ASC) Order by the media_ext column
+ * @method     ChildMediaFileQuery orderByFileSize($order = Criteria::ASC) Order by the media_file_size column
  * @method     ChildMediaFileQuery orderByTitle($order = Criteria::ASC) Order by the media_title column
  * @method     ChildMediaFileQuery orderByDesc($order = Criteria::ASC) Order by the media_desc column
  * @method     ChildMediaFileQuery orderByLink($order = Criteria::ASC) Order by the media_link column
@@ -38,6 +39,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMediaFileQuery groupByDir() Group by the media_dir column
  * @method     ChildMediaFileQuery groupByFile() Group by the media_file column
  * @method     ChildMediaFileQuery groupByExt() Group by the media_ext column
+ * @method     ChildMediaFileQuery groupByFileSize() Group by the media_file_size column
  * @method     ChildMediaFileQuery groupByTitle() Group by the media_title column
  * @method     ChildMediaFileQuery groupByDesc() Group by the media_desc column
  * @method     ChildMediaFileQuery groupByLink() Group by the media_link column
@@ -64,6 +66,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMediaFile|null findOneByDir(string $media_dir) Return the first ChildMediaFile filtered by the media_dir column
  * @method     ChildMediaFile|null findOneByFile(string $media_file) Return the first ChildMediaFile filtered by the media_file column
  * @method     ChildMediaFile|null findOneByExt(string $media_ext) Return the first ChildMediaFile filtered by the media_ext column
+ * @method     ChildMediaFile|null findOneByFileSize(int $media_file_size) Return the first ChildMediaFile filtered by the media_file_size column
  * @method     ChildMediaFile|null findOneByTitle(string $media_title) Return the first ChildMediaFile filtered by the media_title column
  * @method     ChildMediaFile|null findOneByDesc(string $media_desc) Return the first ChildMediaFile filtered by the media_desc column
  * @method     ChildMediaFile|null findOneByLink(string $media_link) Return the first ChildMediaFile filtered by the media_link column
@@ -82,6 +85,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMediaFile requireOneByDir(string $media_dir) Return the first ChildMediaFile filtered by the media_dir column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMediaFile requireOneByFile(string $media_file) Return the first ChildMediaFile filtered by the media_file column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMediaFile requireOneByExt(string $media_ext) Return the first ChildMediaFile filtered by the media_ext column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMediaFile requireOneByFileSize(int $media_file_size) Return the first ChildMediaFile filtered by the media_file_size column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMediaFile requireOneByTitle(string $media_title) Return the first ChildMediaFile filtered by the media_title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMediaFile requireOneByDesc(string $media_desc) Return the first ChildMediaFile filtered by the media_desc column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMediaFile requireOneByLink(string $media_link) Return the first ChildMediaFile filtered by the media_link column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -106,6 +110,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildMediaFile> findByFile(string|array<string> $media_file) Return ChildMediaFile objects filtered by the media_file column
  * @method     ChildMediaFile[]|Collection findByExt(string|array<string> $media_ext) Return ChildMediaFile objects filtered by the media_ext column
  * @psalm-method Collection&\Traversable<ChildMediaFile> findByExt(string|array<string> $media_ext) Return ChildMediaFile objects filtered by the media_ext column
+ * @method     ChildMediaFile[]|Collection findByFileSize(int|array<int> $media_file_size) Return ChildMediaFile objects filtered by the media_file_size column
+ * @psalm-method Collection&\Traversable<ChildMediaFile> findByFileSize(int|array<int> $media_file_size) Return ChildMediaFile objects filtered by the media_file_size column
  * @method     ChildMediaFile[]|Collection findByTitle(string|array<string> $media_title) Return ChildMediaFile objects filtered by the media_title column
  * @psalm-method Collection&\Traversable<ChildMediaFile> findByTitle(string|array<string> $media_title) Return ChildMediaFile objects filtered by the media_title column
  * @method     ChildMediaFile[]|Collection findByDesc(string|array<string> $media_desc) Return ChildMediaFile objects filtered by the media_desc column
@@ -221,7 +227,7 @@ abstract class MediaFileQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT media_id, site_id, category_id, media_dir, media_file, media_ext, media_title, media_desc, media_link, media_headline, media_insert, media_update, media_created, media_updated FROM medias WHERE media_id = :p0';
+        $sql = 'SELECT media_id, site_id, category_id, media_dir, media_file, media_ext, media_file_size, media_title, media_desc, media_link, media_headline, media_insert, media_update, media_created, media_updated FROM medias WHERE media_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -524,6 +530,49 @@ abstract class MediaFileQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_EXT, $ext, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the media_file_size column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByFileSize(1234); // WHERE media_file_size = 1234
+     * $query->filterByFileSize(array(12, 34)); // WHERE media_file_size IN (12, 34)
+     * $query->filterByFileSize(array('min' => 12)); // WHERE media_file_size > 12
+     * </code>
+     *
+     * @param mixed $fileSize The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByFileSize($fileSize = null, ?string $comparison = null)
+    {
+        if (is_array($fileSize)) {
+            $useMinMax = false;
+            if (isset($fileSize['min'])) {
+                $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_FILE_SIZE, $fileSize['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($fileSize['max'])) {
+                $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_FILE_SIZE, $fileSize['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_FILE_SIZE, $fileSize, $comparison);
 
         return $this;
     }
