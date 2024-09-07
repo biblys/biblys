@@ -844,7 +844,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="medias" idMethod="native" phpName="Media">
+  <table name="medias" idMethod="native" phpName="MediaFile">
     <column name="media_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int unsigned"/>
     <column name="category_id" phpName="CategoryId" type="INTEGER" sqlType="int unsigned"/>
