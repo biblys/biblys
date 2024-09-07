@@ -4,6 +4,7 @@
 
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Slug\SlugService;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,27 +31,17 @@ return function (Request $request, CurrentSite $currentSite): Response
         mkdir($mediaFolderPath . $newDirSlug);
     }
 
-    if (!empty($_FILES)) {
-        $uploadedFilesData = $_FILES['uploads'];
-        $uploadedFiles = $uploadedFilesData;
-        if (is_array($uploadedFilesData['name'])) {
-            for ($i = 0; $i < count($uploadedFilesData['name']); ++$i) {
-                $uploadedFiles[] = [
-                    'name' => $uploadedFilesData['name'][$i],
-                    'tmp_name' => $uploadedFilesData['tmp_name'][$i],
-                ];
-            }
-        }
-
+    /** @var UploadedFile[] $uploadedFiles */
+    $uploadedFiles = $request->files->get("uploads", []);
+    if (count($uploadedFiles) > 0) {
         foreach ($uploadedFiles as $uploadedFile) {
-            $parsedFileName = explode('.', $uploadedFile["name"]);
-            $fileName = $slugService->slugify($parsedFileName[0]);
-            $fileExtension = $slugService->slugify($parsedFileName[1]);
-            $uploadedFile["name"] = "$fileName.$fileExtension";
+            $rawFileName = explode(".", $uploadedFile->getClientOriginalName())[0];
+            $fileName = $slugService->slugify($rawFileName);
+            $fileExtension = $slugService->slugify($uploadedFile->getClientOriginalExtension());
+            $targetDirectory = $_GET["dir"];
+            $targetFilePath = "$mediaFolderPath$targetDirectory/$fileName.$fileExtension";
 
-            $temporaryUploadedFilePath = $uploadedFile['tmp_name'];
-            $targetFilePath = $mediaFolderPath . $_GET['dir'] . '/' . $uploadedFile['name'];
-            copy($temporaryUploadedFilePath, $targetFilePath);
+            copy($uploadedFile->getRealPath(), $targetFilePath);
             chmod($targetFilePath, 0604);
 
             $mediaFile = new \Model\MediaFile();
