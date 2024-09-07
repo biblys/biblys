@@ -2,10 +2,10 @@
 
 namespace Model;
 
-use Model\Base\MediaQuery as BaseMediaQuery;
+use Model\Base\MediaFile as BaseMediaFile;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'medias' table.
+ * Skeleton subclass for representing a row from the 'medias' table.
  *
  *
  *
@@ -13,7 +13,7 @@ use Model\Base\MediaQuery as BaseMediaQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class MediaQuery extends BaseMediaQuery
+class MediaFile extends BaseMediaFile
 {
 
 }

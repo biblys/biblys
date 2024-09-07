@@ -4,9 +4,9 @@ namespace Model\Base;
 
 use \Exception;
 use \PDO;
-use Model\Media as ChildMedia;
-use Model\MediaQuery as ChildMediaQuery;
-use Model\Map\MediaTableMap;
+use Model\MediaFile as ChildMediaFile;
+use Model\MediaFileQuery as ChildMediaFileQuery;
+use Model\Map\MediaFileTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -17,145 +17,145 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the `medias` table.
  *
- * @method     ChildMediaQuery orderById($order = Criteria::ASC) Order by the media_id column
- * @method     ChildMediaQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
- * @method     ChildMediaQuery orderByCategoryId($order = Criteria::ASC) Order by the category_id column
- * @method     ChildMediaQuery orderByDir($order = Criteria::ASC) Order by the media_dir column
- * @method     ChildMediaQuery orderByFile($order = Criteria::ASC) Order by the media_file column
- * @method     ChildMediaQuery orderByExt($order = Criteria::ASC) Order by the media_ext column
- * @method     ChildMediaQuery orderByTitle($order = Criteria::ASC) Order by the media_title column
- * @method     ChildMediaQuery orderByDesc($order = Criteria::ASC) Order by the media_desc column
- * @method     ChildMediaQuery orderByLink($order = Criteria::ASC) Order by the media_link column
- * @method     ChildMediaQuery orderByHeadline($order = Criteria::ASC) Order by the media_headline column
- * @method     ChildMediaQuery orderByInsert($order = Criteria::ASC) Order by the media_insert column
- * @method     ChildMediaQuery orderByUpdate($order = Criteria::ASC) Order by the media_update column
- * @method     ChildMediaQuery orderByCreatedAt($order = Criteria::ASC) Order by the media_created column
- * @method     ChildMediaQuery orderByUpdatedAt($order = Criteria::ASC) Order by the media_updated column
+ * @method     ChildMediaFileQuery orderById($order = Criteria::ASC) Order by the media_id column
+ * @method     ChildMediaFileQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
+ * @method     ChildMediaFileQuery orderByCategoryId($order = Criteria::ASC) Order by the category_id column
+ * @method     ChildMediaFileQuery orderByDir($order = Criteria::ASC) Order by the media_dir column
+ * @method     ChildMediaFileQuery orderByFile($order = Criteria::ASC) Order by the media_file column
+ * @method     ChildMediaFileQuery orderByExt($order = Criteria::ASC) Order by the media_ext column
+ * @method     ChildMediaFileQuery orderByTitle($order = Criteria::ASC) Order by the media_title column
+ * @method     ChildMediaFileQuery orderByDesc($order = Criteria::ASC) Order by the media_desc column
+ * @method     ChildMediaFileQuery orderByLink($order = Criteria::ASC) Order by the media_link column
+ * @method     ChildMediaFileQuery orderByHeadline($order = Criteria::ASC) Order by the media_headline column
+ * @method     ChildMediaFileQuery orderByInsert($order = Criteria::ASC) Order by the media_insert column
+ * @method     ChildMediaFileQuery orderByUpdate($order = Criteria::ASC) Order by the media_update column
+ * @method     ChildMediaFileQuery orderByCreatedAt($order = Criteria::ASC) Order by the media_created column
+ * @method     ChildMediaFileQuery orderByUpdatedAt($order = Criteria::ASC) Order by the media_updated column
  *
- * @method     ChildMediaQuery groupById() Group by the media_id column
- * @method     ChildMediaQuery groupBySiteId() Group by the site_id column
- * @method     ChildMediaQuery groupByCategoryId() Group by the category_id column
- * @method     ChildMediaQuery groupByDir() Group by the media_dir column
- * @method     ChildMediaQuery groupByFile() Group by the media_file column
- * @method     ChildMediaQuery groupByExt() Group by the media_ext column
- * @method     ChildMediaQuery groupByTitle() Group by the media_title column
- * @method     ChildMediaQuery groupByDesc() Group by the media_desc column
- * @method     ChildMediaQuery groupByLink() Group by the media_link column
- * @method     ChildMediaQuery groupByHeadline() Group by the media_headline column
- * @method     ChildMediaQuery groupByInsert() Group by the media_insert column
- * @method     ChildMediaQuery groupByUpdate() Group by the media_update column
- * @method     ChildMediaQuery groupByCreatedAt() Group by the media_created column
- * @method     ChildMediaQuery groupByUpdatedAt() Group by the media_updated column
+ * @method     ChildMediaFileQuery groupById() Group by the media_id column
+ * @method     ChildMediaFileQuery groupBySiteId() Group by the site_id column
+ * @method     ChildMediaFileQuery groupByCategoryId() Group by the category_id column
+ * @method     ChildMediaFileQuery groupByDir() Group by the media_dir column
+ * @method     ChildMediaFileQuery groupByFile() Group by the media_file column
+ * @method     ChildMediaFileQuery groupByExt() Group by the media_ext column
+ * @method     ChildMediaFileQuery groupByTitle() Group by the media_title column
+ * @method     ChildMediaFileQuery groupByDesc() Group by the media_desc column
+ * @method     ChildMediaFileQuery groupByLink() Group by the media_link column
+ * @method     ChildMediaFileQuery groupByHeadline() Group by the media_headline column
+ * @method     ChildMediaFileQuery groupByInsert() Group by the media_insert column
+ * @method     ChildMediaFileQuery groupByUpdate() Group by the media_update column
+ * @method     ChildMediaFileQuery groupByCreatedAt() Group by the media_created column
+ * @method     ChildMediaFileQuery groupByUpdatedAt() Group by the media_updated column
  *
- * @method     ChildMediaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildMediaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildMediaQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method     ChildMediaFileQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildMediaFileQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildMediaFileQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildMediaQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildMediaQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildMediaQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method     ChildMediaFileQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method     ChildMediaFileQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method     ChildMediaFileQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildMedia|null findOne(?ConnectionInterface $con = null) Return the first ChildMedia matching the query
- * @method     ChildMedia findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildMedia matching the query, or a new ChildMedia object populated from the query conditions when no match is found
+ * @method     ChildMediaFile|null findOne(?ConnectionInterface $con = null) Return the first ChildMediaFile matching the query
+ * @method     ChildMediaFile findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildMediaFile matching the query, or a new ChildMediaFile object populated from the query conditions when no match is found
  *
- * @method     ChildMedia|null findOneById(int $media_id) Return the first ChildMedia filtered by the media_id column
- * @method     ChildMedia|null findOneBySiteId(int $site_id) Return the first ChildMedia filtered by the site_id column
- * @method     ChildMedia|null findOneByCategoryId(int $category_id) Return the first ChildMedia filtered by the category_id column
- * @method     ChildMedia|null findOneByDir(string $media_dir) Return the first ChildMedia filtered by the media_dir column
- * @method     ChildMedia|null findOneByFile(string $media_file) Return the first ChildMedia filtered by the media_file column
- * @method     ChildMedia|null findOneByExt(string $media_ext) Return the first ChildMedia filtered by the media_ext column
- * @method     ChildMedia|null findOneByTitle(string $media_title) Return the first ChildMedia filtered by the media_title column
- * @method     ChildMedia|null findOneByDesc(string $media_desc) Return the first ChildMedia filtered by the media_desc column
- * @method     ChildMedia|null findOneByLink(string $media_link) Return the first ChildMedia filtered by the media_link column
- * @method     ChildMedia|null findOneByHeadline(string $media_headline) Return the first ChildMedia filtered by the media_headline column
- * @method     ChildMedia|null findOneByInsert(string $media_insert) Return the first ChildMedia filtered by the media_insert column
- * @method     ChildMedia|null findOneByUpdate(string $media_update) Return the first ChildMedia filtered by the media_update column
- * @method     ChildMedia|null findOneByCreatedAt(string $media_created) Return the first ChildMedia filtered by the media_created column
- * @method     ChildMedia|null findOneByUpdatedAt(string $media_updated) Return the first ChildMedia filtered by the media_updated column
+ * @method     ChildMediaFile|null findOneById(int $media_id) Return the first ChildMediaFile filtered by the media_id column
+ * @method     ChildMediaFile|null findOneBySiteId(int $site_id) Return the first ChildMediaFile filtered by the site_id column
+ * @method     ChildMediaFile|null findOneByCategoryId(int $category_id) Return the first ChildMediaFile filtered by the category_id column
+ * @method     ChildMediaFile|null findOneByDir(string $media_dir) Return the first ChildMediaFile filtered by the media_dir column
+ * @method     ChildMediaFile|null findOneByFile(string $media_file) Return the first ChildMediaFile filtered by the media_file column
+ * @method     ChildMediaFile|null findOneByExt(string $media_ext) Return the first ChildMediaFile filtered by the media_ext column
+ * @method     ChildMediaFile|null findOneByTitle(string $media_title) Return the first ChildMediaFile filtered by the media_title column
+ * @method     ChildMediaFile|null findOneByDesc(string $media_desc) Return the first ChildMediaFile filtered by the media_desc column
+ * @method     ChildMediaFile|null findOneByLink(string $media_link) Return the first ChildMediaFile filtered by the media_link column
+ * @method     ChildMediaFile|null findOneByHeadline(string $media_headline) Return the first ChildMediaFile filtered by the media_headline column
+ * @method     ChildMediaFile|null findOneByInsert(string $media_insert) Return the first ChildMediaFile filtered by the media_insert column
+ * @method     ChildMediaFile|null findOneByUpdate(string $media_update) Return the first ChildMediaFile filtered by the media_update column
+ * @method     ChildMediaFile|null findOneByCreatedAt(string $media_created) Return the first ChildMediaFile filtered by the media_created column
+ * @method     ChildMediaFile|null findOneByUpdatedAt(string $media_updated) Return the first ChildMediaFile filtered by the media_updated column
  *
- * @method     ChildMedia requirePk($key, ?ConnectionInterface $con = null) Return the ChildMedia by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMedia requireOne(?ConnectionInterface $con = null) Return the first ChildMedia matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMediaFile requirePk($key, ?ConnectionInterface $con = null) Return the ChildMediaFile by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMediaFile requireOne(?ConnectionInterface $con = null) Return the first ChildMediaFile matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildMedia requireOneById(int $media_id) Return the first ChildMedia filtered by the media_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMedia requireOneBySiteId(int $site_id) Return the first ChildMedia filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMedia requireOneByCategoryId(int $category_id) Return the first ChildMedia filtered by the category_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMedia requireOneByDir(string $media_dir) Return the first ChildMedia filtered by the media_dir column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMedia requireOneByFile(string $media_file) Return the first ChildMedia filtered by the media_file column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMedia requireOneByExt(string $media_ext) Return the first ChildMedia filtered by the media_ext column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMedia requireOneByTitle(string $media_title) Return the first ChildMedia filtered by the media_title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMedia requireOneByDesc(string $media_desc) Return the first ChildMedia filtered by the media_desc column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMedia requireOneByLink(string $media_link) Return the first ChildMedia filtered by the media_link column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMedia requireOneByHeadline(string $media_headline) Return the first ChildMedia filtered by the media_headline column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMedia requireOneByInsert(string $media_insert) Return the first ChildMedia filtered by the media_insert column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMedia requireOneByUpdate(string $media_update) Return the first ChildMedia filtered by the media_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMedia requireOneByCreatedAt(string $media_created) Return the first ChildMedia filtered by the media_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMedia requireOneByUpdatedAt(string $media_updated) Return the first ChildMedia filtered by the media_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMediaFile requireOneById(int $media_id) Return the first ChildMediaFile filtered by the media_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMediaFile requireOneBySiteId(int $site_id) Return the first ChildMediaFile filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMediaFile requireOneByCategoryId(int $category_id) Return the first ChildMediaFile filtered by the category_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMediaFile requireOneByDir(string $media_dir) Return the first ChildMediaFile filtered by the media_dir column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMediaFile requireOneByFile(string $media_file) Return the first ChildMediaFile filtered by the media_file column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMediaFile requireOneByExt(string $media_ext) Return the first ChildMediaFile filtered by the media_ext column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMediaFile requireOneByTitle(string $media_title) Return the first ChildMediaFile filtered by the media_title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMediaFile requireOneByDesc(string $media_desc) Return the first ChildMediaFile filtered by the media_desc column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMediaFile requireOneByLink(string $media_link) Return the first ChildMediaFile filtered by the media_link column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMediaFile requireOneByHeadline(string $media_headline) Return the first ChildMediaFile filtered by the media_headline column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMediaFile requireOneByInsert(string $media_insert) Return the first ChildMediaFile filtered by the media_insert column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMediaFile requireOneByUpdate(string $media_update) Return the first ChildMediaFile filtered by the media_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMediaFile requireOneByCreatedAt(string $media_created) Return the first ChildMediaFile filtered by the media_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMediaFile requireOneByUpdatedAt(string $media_updated) Return the first ChildMediaFile filtered by the media_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildMedia[]|Collection find(?ConnectionInterface $con = null) Return ChildMedia objects based on current ModelCriteria
- * @psalm-method Collection&\Traversable<ChildMedia> find(?ConnectionInterface $con = null) Return ChildMedia objects based on current ModelCriteria
+ * @method     ChildMediaFile[]|Collection find(?ConnectionInterface $con = null) Return ChildMediaFile objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildMediaFile> find(?ConnectionInterface $con = null) Return ChildMediaFile objects based on current ModelCriteria
  *
- * @method     ChildMedia[]|Collection findById(int|array<int> $media_id) Return ChildMedia objects filtered by the media_id column
- * @psalm-method Collection&\Traversable<ChildMedia> findById(int|array<int> $media_id) Return ChildMedia objects filtered by the media_id column
- * @method     ChildMedia[]|Collection findBySiteId(int|array<int> $site_id) Return ChildMedia objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildMedia> findBySiteId(int|array<int> $site_id) Return ChildMedia objects filtered by the site_id column
- * @method     ChildMedia[]|Collection findByCategoryId(int|array<int> $category_id) Return ChildMedia objects filtered by the category_id column
- * @psalm-method Collection&\Traversable<ChildMedia> findByCategoryId(int|array<int> $category_id) Return ChildMedia objects filtered by the category_id column
- * @method     ChildMedia[]|Collection findByDir(string|array<string> $media_dir) Return ChildMedia objects filtered by the media_dir column
- * @psalm-method Collection&\Traversable<ChildMedia> findByDir(string|array<string> $media_dir) Return ChildMedia objects filtered by the media_dir column
- * @method     ChildMedia[]|Collection findByFile(string|array<string> $media_file) Return ChildMedia objects filtered by the media_file column
- * @psalm-method Collection&\Traversable<ChildMedia> findByFile(string|array<string> $media_file) Return ChildMedia objects filtered by the media_file column
- * @method     ChildMedia[]|Collection findByExt(string|array<string> $media_ext) Return ChildMedia objects filtered by the media_ext column
- * @psalm-method Collection&\Traversable<ChildMedia> findByExt(string|array<string> $media_ext) Return ChildMedia objects filtered by the media_ext column
- * @method     ChildMedia[]|Collection findByTitle(string|array<string> $media_title) Return ChildMedia objects filtered by the media_title column
- * @psalm-method Collection&\Traversable<ChildMedia> findByTitle(string|array<string> $media_title) Return ChildMedia objects filtered by the media_title column
- * @method     ChildMedia[]|Collection findByDesc(string|array<string> $media_desc) Return ChildMedia objects filtered by the media_desc column
- * @psalm-method Collection&\Traversable<ChildMedia> findByDesc(string|array<string> $media_desc) Return ChildMedia objects filtered by the media_desc column
- * @method     ChildMedia[]|Collection findByLink(string|array<string> $media_link) Return ChildMedia objects filtered by the media_link column
- * @psalm-method Collection&\Traversable<ChildMedia> findByLink(string|array<string> $media_link) Return ChildMedia objects filtered by the media_link column
- * @method     ChildMedia[]|Collection findByHeadline(string|array<string> $media_headline) Return ChildMedia objects filtered by the media_headline column
- * @psalm-method Collection&\Traversable<ChildMedia> findByHeadline(string|array<string> $media_headline) Return ChildMedia objects filtered by the media_headline column
- * @method     ChildMedia[]|Collection findByInsert(string|array<string> $media_insert) Return ChildMedia objects filtered by the media_insert column
- * @psalm-method Collection&\Traversable<ChildMedia> findByInsert(string|array<string> $media_insert) Return ChildMedia objects filtered by the media_insert column
- * @method     ChildMedia[]|Collection findByUpdate(string|array<string> $media_update) Return ChildMedia objects filtered by the media_update column
- * @psalm-method Collection&\Traversable<ChildMedia> findByUpdate(string|array<string> $media_update) Return ChildMedia objects filtered by the media_update column
- * @method     ChildMedia[]|Collection findByCreatedAt(string|array<string> $media_created) Return ChildMedia objects filtered by the media_created column
- * @psalm-method Collection&\Traversable<ChildMedia> findByCreatedAt(string|array<string> $media_created) Return ChildMedia objects filtered by the media_created column
- * @method     ChildMedia[]|Collection findByUpdatedAt(string|array<string> $media_updated) Return ChildMedia objects filtered by the media_updated column
- * @psalm-method Collection&\Traversable<ChildMedia> findByUpdatedAt(string|array<string> $media_updated) Return ChildMedia objects filtered by the media_updated column
+ * @method     ChildMediaFile[]|Collection findById(int|array<int> $media_id) Return ChildMediaFile objects filtered by the media_id column
+ * @psalm-method Collection&\Traversable<ChildMediaFile> findById(int|array<int> $media_id) Return ChildMediaFile objects filtered by the media_id column
+ * @method     ChildMediaFile[]|Collection findBySiteId(int|array<int> $site_id) Return ChildMediaFile objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildMediaFile> findBySiteId(int|array<int> $site_id) Return ChildMediaFile objects filtered by the site_id column
+ * @method     ChildMediaFile[]|Collection findByCategoryId(int|array<int> $category_id) Return ChildMediaFile objects filtered by the category_id column
+ * @psalm-method Collection&\Traversable<ChildMediaFile> findByCategoryId(int|array<int> $category_id) Return ChildMediaFile objects filtered by the category_id column
+ * @method     ChildMediaFile[]|Collection findByDir(string|array<string> $media_dir) Return ChildMediaFile objects filtered by the media_dir column
+ * @psalm-method Collection&\Traversable<ChildMediaFile> findByDir(string|array<string> $media_dir) Return ChildMediaFile objects filtered by the media_dir column
+ * @method     ChildMediaFile[]|Collection findByFile(string|array<string> $media_file) Return ChildMediaFile objects filtered by the media_file column
+ * @psalm-method Collection&\Traversable<ChildMediaFile> findByFile(string|array<string> $media_file) Return ChildMediaFile objects filtered by the media_file column
+ * @method     ChildMediaFile[]|Collection findByExt(string|array<string> $media_ext) Return ChildMediaFile objects filtered by the media_ext column
+ * @psalm-method Collection&\Traversable<ChildMediaFile> findByExt(string|array<string> $media_ext) Return ChildMediaFile objects filtered by the media_ext column
+ * @method     ChildMediaFile[]|Collection findByTitle(string|array<string> $media_title) Return ChildMediaFile objects filtered by the media_title column
+ * @psalm-method Collection&\Traversable<ChildMediaFile> findByTitle(string|array<string> $media_title) Return ChildMediaFile objects filtered by the media_title column
+ * @method     ChildMediaFile[]|Collection findByDesc(string|array<string> $media_desc) Return ChildMediaFile objects filtered by the media_desc column
+ * @psalm-method Collection&\Traversable<ChildMediaFile> findByDesc(string|array<string> $media_desc) Return ChildMediaFile objects filtered by the media_desc column
+ * @method     ChildMediaFile[]|Collection findByLink(string|array<string> $media_link) Return ChildMediaFile objects filtered by the media_link column
+ * @psalm-method Collection&\Traversable<ChildMediaFile> findByLink(string|array<string> $media_link) Return ChildMediaFile objects filtered by the media_link column
+ * @method     ChildMediaFile[]|Collection findByHeadline(string|array<string> $media_headline) Return ChildMediaFile objects filtered by the media_headline column
+ * @psalm-method Collection&\Traversable<ChildMediaFile> findByHeadline(string|array<string> $media_headline) Return ChildMediaFile objects filtered by the media_headline column
+ * @method     ChildMediaFile[]|Collection findByInsert(string|array<string> $media_insert) Return ChildMediaFile objects filtered by the media_insert column
+ * @psalm-method Collection&\Traversable<ChildMediaFile> findByInsert(string|array<string> $media_insert) Return ChildMediaFile objects filtered by the media_insert column
+ * @method     ChildMediaFile[]|Collection findByUpdate(string|array<string> $media_update) Return ChildMediaFile objects filtered by the media_update column
+ * @psalm-method Collection&\Traversable<ChildMediaFile> findByUpdate(string|array<string> $media_update) Return ChildMediaFile objects filtered by the media_update column
+ * @method     ChildMediaFile[]|Collection findByCreatedAt(string|array<string> $media_created) Return ChildMediaFile objects filtered by the media_created column
+ * @psalm-method Collection&\Traversable<ChildMediaFile> findByCreatedAt(string|array<string> $media_created) Return ChildMediaFile objects filtered by the media_created column
+ * @method     ChildMediaFile[]|Collection findByUpdatedAt(string|array<string> $media_updated) Return ChildMediaFile objects filtered by the media_updated column
+ * @psalm-method Collection&\Traversable<ChildMediaFile> findByUpdatedAt(string|array<string> $media_updated) Return ChildMediaFile objects filtered by the media_updated column
  *
- * @method     ChildMedia[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildMedia> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildMediaFile[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildMediaFile> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
-abstract class MediaQuery extends ModelCriteria
+abstract class MediaFileQuery extends ModelCriteria
 {
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \Model\Base\MediaQuery object.
+     * Initializes internal state of \Model\Base\MediaFileQuery object.
      *
      * @param string $dbName The database name
      * @param string $modelName The phpName of a model, e.g. 'Book'
      * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'default', $modelName = '\\Model\\Media', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\Model\\MediaFile', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new ChildMediaQuery object.
+     * Returns a new ChildMediaFileQuery object.
      *
      * @param string $modelAlias The alias of a model in the query
      * @param Criteria $criteria Optional Criteria to build the query from
      *
-     * @return ChildMediaQuery
+     * @return ChildMediaFileQuery
      */
     public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
-        if ($criteria instanceof ChildMediaQuery) {
+        if ($criteria instanceof ChildMediaFileQuery) {
             return $criteria;
         }
-        $query = new ChildMediaQuery();
+        $query = new ChildMediaFileQuery();
         if (null !== $modelAlias) {
             $query->setModelAlias($modelAlias);
         }
@@ -178,7 +178,7 @@ abstract class MediaQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
-     * @return ChildMedia|array|mixed the result, formatted by the current formatter
+     * @return ChildMediaFile|array|mixed the result, formatted by the current formatter
      */
     public function findPk($key, ?ConnectionInterface $con = null)
     {
@@ -187,7 +187,7 @@ abstract class MediaQuery extends ModelCriteria
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(MediaTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(MediaFileTableMap::DATABASE_NAME);
         }
 
         $this->basePreSelect($con);
@@ -200,7 +200,7 @@ abstract class MediaQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = MediaTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
+        if ((null !== ($obj = MediaFileTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -217,7 +217,7 @@ abstract class MediaQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildMedia A model object, or null if the key is not found
+     * @return ChildMediaFile A model object, or null if the key is not found
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
@@ -232,10 +232,10 @@ abstract class MediaQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildMedia $obj */
-            $obj = new ChildMedia();
+            /** @var ChildMediaFile $obj */
+            $obj = new ChildMediaFile();
             $obj->hydrate($row);
-            MediaTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
+            MediaFileTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -248,7 +248,7 @@ abstract class MediaQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con A connection object
      *
-     * @return ChildMedia|array|mixed the result, formatted by the current formatter
+     * @return ChildMediaFile|array|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, ConnectionInterface $con)
     {
@@ -295,7 +295,7 @@ abstract class MediaQuery extends ModelCriteria
     public function filterByPrimaryKey($key)
     {
 
-        $this->addUsingAlias(MediaTableMap::COL_MEDIA_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_ID, $key, Criteria::EQUAL);
 
         return $this;
     }
@@ -310,7 +310,7 @@ abstract class MediaQuery extends ModelCriteria
     public function filterByPrimaryKeys($keys)
     {
 
-        $this->addUsingAlias(MediaTableMap::COL_MEDIA_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_ID, $keys, Criteria::IN);
 
         return $this;
     }
@@ -338,11 +338,11 @@ abstract class MediaQuery extends ModelCriteria
         if (is_array($id)) {
             $useMinMax = false;
             if (isset($id['min'])) {
-                $this->addUsingAlias(MediaTableMap::COL_MEDIA_ID, $id['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_ID, $id['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($id['max'])) {
-                $this->addUsingAlias(MediaTableMap::COL_MEDIA_ID, $id['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_ID, $id['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -353,7 +353,7 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(MediaTableMap::COL_MEDIA_ID, $id, $comparison);
+        $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_ID, $id, $comparison);
 
         return $this;
     }
@@ -381,11 +381,11 @@ abstract class MediaQuery extends ModelCriteria
         if (is_array($siteId)) {
             $useMinMax = false;
             if (isset($siteId['min'])) {
-                $this->addUsingAlias(MediaTableMap::COL_SITE_ID, $siteId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(MediaFileTableMap::COL_SITE_ID, $siteId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($siteId['max'])) {
-                $this->addUsingAlias(MediaTableMap::COL_SITE_ID, $siteId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(MediaFileTableMap::COL_SITE_ID, $siteId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -396,7 +396,7 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(MediaTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(MediaFileTableMap::COL_SITE_ID, $siteId, $comparison);
 
         return $this;
     }
@@ -424,11 +424,11 @@ abstract class MediaQuery extends ModelCriteria
         if (is_array($categoryId)) {
             $useMinMax = false;
             if (isset($categoryId['min'])) {
-                $this->addUsingAlias(MediaTableMap::COL_CATEGORY_ID, $categoryId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(MediaFileTableMap::COL_CATEGORY_ID, $categoryId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($categoryId['max'])) {
-                $this->addUsingAlias(MediaTableMap::COL_CATEGORY_ID, $categoryId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(MediaFileTableMap::COL_CATEGORY_ID, $categoryId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -439,7 +439,7 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(MediaTableMap::COL_CATEGORY_ID, $categoryId, $comparison);
+        $this->addUsingAlias(MediaFileTableMap::COL_CATEGORY_ID, $categoryId, $comparison);
 
         return $this;
     }
@@ -467,7 +467,7 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(MediaTableMap::COL_MEDIA_DIR, $dir, $comparison);
+        $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_DIR, $dir, $comparison);
 
         return $this;
     }
@@ -495,7 +495,7 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(MediaTableMap::COL_MEDIA_FILE, $file, $comparison);
+        $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_FILE, $file, $comparison);
 
         return $this;
     }
@@ -523,7 +523,7 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(MediaTableMap::COL_MEDIA_EXT, $ext, $comparison);
+        $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_EXT, $ext, $comparison);
 
         return $this;
     }
@@ -551,7 +551,7 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(MediaTableMap::COL_MEDIA_TITLE, $title, $comparison);
+        $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_TITLE, $title, $comparison);
 
         return $this;
     }
@@ -579,7 +579,7 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(MediaTableMap::COL_MEDIA_DESC, $desc, $comparison);
+        $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_DESC, $desc, $comparison);
 
         return $this;
     }
@@ -607,7 +607,7 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(MediaTableMap::COL_MEDIA_LINK, $link, $comparison);
+        $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_LINK, $link, $comparison);
 
         return $this;
     }
@@ -635,7 +635,7 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(MediaTableMap::COL_MEDIA_HEADLINE, $headline, $comparison);
+        $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_HEADLINE, $headline, $comparison);
 
         return $this;
     }
@@ -665,11 +665,11 @@ abstract class MediaQuery extends ModelCriteria
         if (is_array($insert)) {
             $useMinMax = false;
             if (isset($insert['min'])) {
-                $this->addUsingAlias(MediaTableMap::COL_MEDIA_INSERT, $insert['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_INSERT, $insert['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($insert['max'])) {
-                $this->addUsingAlias(MediaTableMap::COL_MEDIA_INSERT, $insert['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_INSERT, $insert['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -680,7 +680,7 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(MediaTableMap::COL_MEDIA_INSERT, $insert, $comparison);
+        $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_INSERT, $insert, $comparison);
 
         return $this;
     }
@@ -710,11 +710,11 @@ abstract class MediaQuery extends ModelCriteria
         if (is_array($update)) {
             $useMinMax = false;
             if (isset($update['min'])) {
-                $this->addUsingAlias(MediaTableMap::COL_MEDIA_UPDATE, $update['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_UPDATE, $update['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($update['max'])) {
-                $this->addUsingAlias(MediaTableMap::COL_MEDIA_UPDATE, $update['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_UPDATE, $update['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -725,7 +725,7 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(MediaTableMap::COL_MEDIA_UPDATE, $update, $comparison);
+        $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_UPDATE, $update, $comparison);
 
         return $this;
     }
@@ -755,11 +755,11 @@ abstract class MediaQuery extends ModelCriteria
         if (is_array($createdAt)) {
             $useMinMax = false;
             if (isset($createdAt['min'])) {
-                $this->addUsingAlias(MediaTableMap::COL_MEDIA_CREATED, $createdAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_CREATED, $createdAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($createdAt['max'])) {
-                $this->addUsingAlias(MediaTableMap::COL_MEDIA_CREATED, $createdAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_CREATED, $createdAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -770,7 +770,7 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(MediaTableMap::COL_MEDIA_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_CREATED, $createdAt, $comparison);
 
         return $this;
     }
@@ -800,11 +800,11 @@ abstract class MediaQuery extends ModelCriteria
         if (is_array($updatedAt)) {
             $useMinMax = false;
             if (isset($updatedAt['min'])) {
-                $this->addUsingAlias(MediaTableMap::COL_MEDIA_UPDATED, $updatedAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_UPDATED, $updatedAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($updatedAt['max'])) {
-                $this->addUsingAlias(MediaTableMap::COL_MEDIA_UPDATED, $updatedAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_UPDATED, $updatedAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -815,7 +815,7 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(MediaTableMap::COL_MEDIA_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_UPDATED, $updatedAt, $comparison);
 
         return $this;
     }
@@ -823,14 +823,14 @@ abstract class MediaQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param ChildMedia $media Object to remove from the list of results
+     * @param ChildMediaFile $mediaFile Object to remove from the list of results
      *
      * @return $this The current query, for fluid interface
      */
-    public function prune($media = null)
+    public function prune($mediaFile = null)
     {
-        if ($media) {
-            $this->addUsingAlias(MediaTableMap::COL_MEDIA_ID, $media->getId(), Criteria::NOT_EQUAL);
+        if ($mediaFile) {
+            $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_ID, $mediaFile->getId(), Criteria::NOT_EQUAL);
         }
 
         return $this;
@@ -845,7 +845,7 @@ abstract class MediaQuery extends ModelCriteria
     public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(MediaTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(MediaFileTableMap::DATABASE_NAME);
         }
 
         // use transaction because $criteria could contain info
@@ -856,8 +856,8 @@ abstract class MediaQuery extends ModelCriteria
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            MediaTableMap::clearInstancePool();
-            MediaTableMap::clearRelatedInstancePool();
+            MediaFileTableMap::clearInstancePool();
+            MediaFileTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -875,23 +875,23 @@ abstract class MediaQuery extends ModelCriteria
     public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(MediaTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(MediaFileTableMap::DATABASE_NAME);
         }
 
         $criteria = $this;
 
         // Set the correct dbName
-        $criteria->setDbName(MediaTableMap::DATABASE_NAME);
+        $criteria->setDbName(MediaFileTableMap::DATABASE_NAME);
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
 
-            MediaTableMap::removeInstanceFromPool($criteria);
+            MediaFileTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
-            MediaTableMap::clearRelatedInstancePool();
+            MediaFileTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -908,7 +908,7 @@ abstract class MediaQuery extends ModelCriteria
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        $this->addUsingAlias(MediaTableMap::COL_MEDIA_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
 
         return $this;
     }
@@ -920,7 +920,7 @@ abstract class MediaQuery extends ModelCriteria
      */
     public function lastUpdatedFirst()
     {
-        $this->addDescendingOrderByColumn(MediaTableMap::COL_MEDIA_UPDATED);
+        $this->addDescendingOrderByColumn(MediaFileTableMap::COL_MEDIA_UPDATED);
 
         return $this;
     }
@@ -932,7 +932,7 @@ abstract class MediaQuery extends ModelCriteria
      */
     public function firstUpdatedFirst()
     {
-        $this->addAscendingOrderByColumn(MediaTableMap::COL_MEDIA_UPDATED);
+        $this->addAscendingOrderByColumn(MediaFileTableMap::COL_MEDIA_UPDATED);
 
         return $this;
     }
@@ -944,7 +944,7 @@ abstract class MediaQuery extends ModelCriteria
      */
     public function lastCreatedFirst()
     {
-        $this->addDescendingOrderByColumn(MediaTableMap::COL_MEDIA_CREATED);
+        $this->addDescendingOrderByColumn(MediaFileTableMap::COL_MEDIA_CREATED);
 
         return $this;
     }
@@ -958,7 +958,7 @@ abstract class MediaQuery extends ModelCriteria
      */
     public function recentlyCreated($nbDays = 7)
     {
-        $this->addUsingAlias(MediaTableMap::COL_MEDIA_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(MediaFileTableMap::COL_MEDIA_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
 
         return $this;
     }
@@ -970,7 +970,7 @@ abstract class MediaQuery extends ModelCriteria
      */
     public function firstCreatedFirst()
     {
-        $this->addAscendingOrderByColumn(MediaTableMap::COL_MEDIA_CREATED);
+        $this->addAscendingOrderByColumn(MediaFileTableMap::COL_MEDIA_CREATED);
 
         return $this;
     }
