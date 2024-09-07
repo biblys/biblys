@@ -2,13 +2,14 @@
 
 /** @noinspection JSUnresolvedReference */
 
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Slug\SlugService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  */
-return function (Request $request): Response
+return function (Request $request, CurrentSite $currentSite): Response
 {
     $slugService = new SlugService();
 
@@ -30,34 +31,34 @@ return function (Request $request): Response
     }
 
     if (!empty($_FILES)) {
-        $files = [];
-        $fileData = $_FILES['uploads'];
-        if (is_array($fileData['name'])) {//This is the problem
-            for ($i = 0; $i < count($fileData['name']); ++$i) {
-                $files[] = [
-                    'name' => $fileData['name'][$i],
-                    'tmp_name' => $fileData['tmp_name'][$i],
+        $uploadedFilesData = $_FILES['uploads'];
+        $uploadedFiles = $uploadedFilesData;
+        if (is_array($uploadedFilesData['name'])) {
+            for ($i = 0; $i < count($uploadedFilesData['name']); ++$i) {
+                $uploadedFiles[] = [
+                    'name' => $uploadedFilesData['name'][$i],
+                    'tmp_name' => $uploadedFilesData['tmp_name'][$i],
                 ];
             }
-        } else {
-            $files[] = $fileData;
         }
 
-        foreach ($files as $file) {
-            $file_name = explode('.', $file['name']);
-            $file_name[0] = $slugService->slugify($file_name[0]);
-            $file_name[1] = $slugService->slugify($file_name[1]);
-            $file['name'] = $file_name[0] . '.' . $file_name[1];
-            copy($file['tmp_name'], $mediaFolderPath . $_GET['dir'] . '/' . $file['name']);
-            chmod($mediaFolderPath . $_GET['dir'] . '/' . $file['name'], 0604);
-            EntityManager::prepareAndExecute(
-                'INSERT INTO `medias`(`site_id`,`media_dir`,`media_file`,`media_ext`,`media_insert`)
-            VALUES(:site_id, :media_dir, :media_file, :media_ext, NOW())', [
-                'site_id' => $GLOBALS["LEGACY_CURRENT_SITE"]->get('id'),
-                'media_dir' => $request->query->get('dir'),
-                'media_file' => $file_name[0],
-                'media_ext' => $file_name[1],
-            ]);
+        foreach ($uploadedFiles as $uploadedFile) {
+            $parsedFileName = explode('.', $uploadedFile["name"]);
+            $fileName = $slugService->slugify($parsedFileName[0]);
+            $fileExtension = $slugService->slugify($parsedFileName[1]);
+            $uploadedFile["name"] = "$fileName.$fileExtension";
+
+            $temporaryUploadedFilePath = $uploadedFile['tmp_name'];
+            $targetFilePath = $mediaFolderPath . $_GET['dir'] . '/' . $uploadedFile['name'];
+            copy($temporaryUploadedFilePath, $targetFilePath);
+            chmod($targetFilePath, 0604);
+
+            $mediaFile = new \Model\MediaFile();
+            $mediaFile->setSiteId($currentSite->getId());
+            $mediaFile->setDir($_GET['dir']);
+            $mediaFile->setFile($fileName);
+            $mediaFile->setExt($fileExtension);
+            $mediaFile->save();
         }
     }
 
