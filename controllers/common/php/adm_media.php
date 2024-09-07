@@ -3,6 +3,7 @@
 /** @noinspection JSUnresolvedReference */
 
 use Biblys\Service\CurrentSite;
+use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Slug\SlugService;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,7 +11,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  */
-return function (Request $request, CurrentSite $currentSite): Response
+return function (
+    Request $request,
+    CurrentSite $currentSite,
+    FlashMessagesService $flashMessagesService,
+): Response
 {
     $slugService = new SlugService();
 
@@ -50,6 +55,8 @@ return function (Request $request, CurrentSite $currentSite): Response
             $mediaFile->setFile($fileName);
             $mediaFile->setExt($fileExtension);
             $mediaFile->save();
+
+            $flashMessagesService->add("success", "Le fichier « $fileName.$fileExtension » a été ajouté au dossier « $targetDirectory ».");
         }
     }
 
