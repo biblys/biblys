@@ -5,8 +5,8 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
-use Model\MediaQuery as ChildMediaQuery;
-use Model\Map\MediaTableMap;
+use Model\MediaFileQuery as ChildMediaFileQuery;
+use Model\Map\MediaFileTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -27,14 +27,14 @@ use Propel\Runtime\Util\PropelDateTime;
  *
  * @package    propel.generator.Model.Base
  */
-abstract class Media implements ActiveRecordInterface
+abstract class MediaFile implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      *
      * @var string
      */
-    public const TABLE_MAP = '\\Model\\Map\\MediaTableMap';
+    public const TABLE_MAP = '\\Model\\Map\\MediaFileTableMap';
 
 
     /**
@@ -170,7 +170,7 @@ abstract class Media implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * Initializes internal state of Model\Base\Media object.
+     * Initializes internal state of Model\Base\MediaFile object.
      */
     public function __construct()
     {
@@ -263,9 +263,9 @@ abstract class Media implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Media</code> instance.  If
-     * <code>obj</code> is an instance of <code>Media</code>, delegates to
-     * <code>equals(Media)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>MediaFile</code> instance.  If
+     * <code>obj</code> is an instance of <code>MediaFile</code>, delegates to
+     * <code>equals(MediaFile)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param mixed $obj The object to compare to.
      * @return bool Whether equal to the object specified.
@@ -597,7 +597,7 @@ abstract class Media implements ActiveRecordInterface
 
         if ($this->media_id !== $v) {
             $this->media_id = $v;
-            $this->modifiedColumns[MediaTableMap::COL_MEDIA_ID] = true;
+            $this->modifiedColumns[MediaFileTableMap::COL_MEDIA_ID] = true;
         }
 
         return $this;
@@ -617,7 +617,7 @@ abstract class Media implements ActiveRecordInterface
 
         if ($this->site_id !== $v) {
             $this->site_id = $v;
-            $this->modifiedColumns[MediaTableMap::COL_SITE_ID] = true;
+            $this->modifiedColumns[MediaFileTableMap::COL_SITE_ID] = true;
         }
 
         return $this;
@@ -637,7 +637,7 @@ abstract class Media implements ActiveRecordInterface
 
         if ($this->category_id !== $v) {
             $this->category_id = $v;
-            $this->modifiedColumns[MediaTableMap::COL_CATEGORY_ID] = true;
+            $this->modifiedColumns[MediaFileTableMap::COL_CATEGORY_ID] = true;
         }
 
         return $this;
@@ -657,7 +657,7 @@ abstract class Media implements ActiveRecordInterface
 
         if ($this->media_dir !== $v) {
             $this->media_dir = $v;
-            $this->modifiedColumns[MediaTableMap::COL_MEDIA_DIR] = true;
+            $this->modifiedColumns[MediaFileTableMap::COL_MEDIA_DIR] = true;
         }
 
         return $this;
@@ -677,7 +677,7 @@ abstract class Media implements ActiveRecordInterface
 
         if ($this->media_file !== $v) {
             $this->media_file = $v;
-            $this->modifiedColumns[MediaTableMap::COL_MEDIA_FILE] = true;
+            $this->modifiedColumns[MediaFileTableMap::COL_MEDIA_FILE] = true;
         }
 
         return $this;
@@ -697,7 +697,7 @@ abstract class Media implements ActiveRecordInterface
 
         if ($this->media_ext !== $v) {
             $this->media_ext = $v;
-            $this->modifiedColumns[MediaTableMap::COL_MEDIA_EXT] = true;
+            $this->modifiedColumns[MediaFileTableMap::COL_MEDIA_EXT] = true;
         }
 
         return $this;
@@ -717,7 +717,7 @@ abstract class Media implements ActiveRecordInterface
 
         if ($this->media_title !== $v) {
             $this->media_title = $v;
-            $this->modifiedColumns[MediaTableMap::COL_MEDIA_TITLE] = true;
+            $this->modifiedColumns[MediaFileTableMap::COL_MEDIA_TITLE] = true;
         }
 
         return $this;
@@ -737,7 +737,7 @@ abstract class Media implements ActiveRecordInterface
 
         if ($this->media_desc !== $v) {
             $this->media_desc = $v;
-            $this->modifiedColumns[MediaTableMap::COL_MEDIA_DESC] = true;
+            $this->modifiedColumns[MediaFileTableMap::COL_MEDIA_DESC] = true;
         }
 
         return $this;
@@ -757,7 +757,7 @@ abstract class Media implements ActiveRecordInterface
 
         if ($this->media_link !== $v) {
             $this->media_link = $v;
-            $this->modifiedColumns[MediaTableMap::COL_MEDIA_LINK] = true;
+            $this->modifiedColumns[MediaFileTableMap::COL_MEDIA_LINK] = true;
         }
 
         return $this;
@@ -777,7 +777,7 @@ abstract class Media implements ActiveRecordInterface
 
         if ($this->media_headline !== $v) {
             $this->media_headline = $v;
-            $this->modifiedColumns[MediaTableMap::COL_MEDIA_HEADLINE] = true;
+            $this->modifiedColumns[MediaFileTableMap::COL_MEDIA_HEADLINE] = true;
         }
 
         return $this;
@@ -796,7 +796,7 @@ abstract class Media implements ActiveRecordInterface
         if ($this->media_insert !== null || $dt !== null) {
             if ($this->media_insert === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->media_insert->format("Y-m-d H:i:s.u")) {
                 $this->media_insert = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[MediaTableMap::COL_MEDIA_INSERT] = true;
+                $this->modifiedColumns[MediaFileTableMap::COL_MEDIA_INSERT] = true;
             }
         } // if either are not null
 
@@ -816,7 +816,7 @@ abstract class Media implements ActiveRecordInterface
         if ($this->media_update !== null || $dt !== null) {
             if ($this->media_update === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->media_update->format("Y-m-d H:i:s.u")) {
                 $this->media_update = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[MediaTableMap::COL_MEDIA_UPDATE] = true;
+                $this->modifiedColumns[MediaFileTableMap::COL_MEDIA_UPDATE] = true;
             }
         } // if either are not null
 
@@ -836,7 +836,7 @@ abstract class Media implements ActiveRecordInterface
         if ($this->media_created !== null || $dt !== null) {
             if ($this->media_created === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->media_created->format("Y-m-d H:i:s.u")) {
                 $this->media_created = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[MediaTableMap::COL_MEDIA_CREATED] = true;
+                $this->modifiedColumns[MediaFileTableMap::COL_MEDIA_CREATED] = true;
             }
         } // if either are not null
 
@@ -856,7 +856,7 @@ abstract class Media implements ActiveRecordInterface
         if ($this->media_updated !== null || $dt !== null) {
             if ($this->media_updated === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->media_updated->format("Y-m-d H:i:s.u")) {
                 $this->media_updated = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[MediaTableMap::COL_MEDIA_UPDATED] = true;
+                $this->modifiedColumns[MediaFileTableMap::COL_MEDIA_UPDATED] = true;
             }
         } // if either are not null
 
@@ -899,55 +899,55 @@ abstract class Media implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : MediaTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : MediaFileTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->media_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : MediaTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : MediaFileTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : MediaTableMap::translateFieldName('CategoryId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : MediaFileTableMap::translateFieldName('CategoryId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->category_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : MediaTableMap::translateFieldName('Dir', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : MediaFileTableMap::translateFieldName('Dir', TableMap::TYPE_PHPNAME, $indexType)];
             $this->media_dir = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : MediaTableMap::translateFieldName('File', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : MediaFileTableMap::translateFieldName('File', TableMap::TYPE_PHPNAME, $indexType)];
             $this->media_file = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : MediaTableMap::translateFieldName('Ext', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : MediaFileTableMap::translateFieldName('Ext', TableMap::TYPE_PHPNAME, $indexType)];
             $this->media_ext = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : MediaTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : MediaFileTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
             $this->media_title = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : MediaTableMap::translateFieldName('Desc', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : MediaFileTableMap::translateFieldName('Desc', TableMap::TYPE_PHPNAME, $indexType)];
             $this->media_desc = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : MediaTableMap::translateFieldName('Link', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : MediaFileTableMap::translateFieldName('Link', TableMap::TYPE_PHPNAME, $indexType)];
             $this->media_link = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : MediaTableMap::translateFieldName('Headline', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : MediaFileTableMap::translateFieldName('Headline', TableMap::TYPE_PHPNAME, $indexType)];
             $this->media_headline = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : MediaTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : MediaFileTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->media_insert = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : MediaTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : MediaFileTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->media_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : MediaTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : MediaFileTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->media_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : MediaTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : MediaFileTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -960,10 +960,10 @@ abstract class Media implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 14; // 14 = MediaTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 14; // 14 = MediaFileTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\Model\\Media'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\Model\\MediaFile'), 0, $e);
         }
     }
 
@@ -1006,13 +1006,13 @@ abstract class Media implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(MediaTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(MediaFileTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildMediaQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildMediaFileQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -1031,8 +1031,8 @@ abstract class Media implements ActiveRecordInterface
      * @param ConnectionInterface $con
      * @return void
      * @throws \Propel\Runtime\Exception\PropelException
-     * @see Media::setDeleted()
-     * @see Media::isDeleted()
+     * @see MediaFile::setDeleted()
+     * @see MediaFile::isDeleted()
      */
     public function delete(?ConnectionInterface $con = null): void
     {
@@ -1041,11 +1041,11 @@ abstract class Media implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(MediaTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(MediaFileTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildMediaQuery::create()
+            $deleteQuery = ChildMediaFileQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -1080,7 +1080,7 @@ abstract class Media implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(MediaTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(MediaFileTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -1091,16 +1091,16 @@ abstract class Media implements ActiveRecordInterface
                 // timestampable behavior
                 $time = time();
                 $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
-                if (!$this->isColumnModified(MediaTableMap::COL_MEDIA_CREATED)) {
+                if (!$this->isColumnModified(MediaFileTableMap::COL_MEDIA_CREATED)) {
                     $this->setCreatedAt($highPrecision);
                 }
-                if (!$this->isColumnModified(MediaTableMap::COL_MEDIA_UPDATED)) {
+                if (!$this->isColumnModified(MediaFileTableMap::COL_MEDIA_UPDATED)) {
                     $this->setUpdatedAt($highPrecision);
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(MediaTableMap::COL_MEDIA_UPDATED)) {
+                if ($this->isModified() && !$this->isColumnModified(MediaFileTableMap::COL_MEDIA_UPDATED)) {
                     $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
                 }
             }
@@ -1112,7 +1112,7 @@ abstract class Media implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                MediaTableMap::addInstanceToPool($this);
+                MediaFileTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -1169,52 +1169,52 @@ abstract class Media implements ActiveRecordInterface
         $modifiedColumns = [];
         $index = 0;
 
-        $this->modifiedColumns[MediaTableMap::COL_MEDIA_ID] = true;
+        $this->modifiedColumns[MediaFileTableMap::COL_MEDIA_ID] = true;
         if (null !== $this->media_id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . MediaTableMap::COL_MEDIA_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . MediaFileTableMap::COL_MEDIA_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_ID)) {
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_ID)) {
             $modifiedColumns[':p' . $index++]  = 'media_id';
         }
-        if ($this->isColumnModified(MediaTableMap::COL_SITE_ID)) {
+        if ($this->isColumnModified(MediaFileTableMap::COL_SITE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'site_id';
         }
-        if ($this->isColumnModified(MediaTableMap::COL_CATEGORY_ID)) {
+        if ($this->isColumnModified(MediaFileTableMap::COL_CATEGORY_ID)) {
             $modifiedColumns[':p' . $index++]  = 'category_id';
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_DIR)) {
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_DIR)) {
             $modifiedColumns[':p' . $index++]  = 'media_dir';
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_FILE)) {
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_FILE)) {
             $modifiedColumns[':p' . $index++]  = 'media_file';
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_EXT)) {
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_EXT)) {
             $modifiedColumns[':p' . $index++]  = 'media_ext';
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_TITLE)) {
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_TITLE)) {
             $modifiedColumns[':p' . $index++]  = 'media_title';
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_DESC)) {
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_DESC)) {
             $modifiedColumns[':p' . $index++]  = 'media_desc';
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_LINK)) {
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_LINK)) {
             $modifiedColumns[':p' . $index++]  = 'media_link';
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_HEADLINE)) {
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_HEADLINE)) {
             $modifiedColumns[':p' . $index++]  = 'media_headline';
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_INSERT)) {
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_INSERT)) {
             $modifiedColumns[':p' . $index++]  = 'media_insert';
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_UPDATE)) {
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_UPDATE)) {
             $modifiedColumns[':p' . $index++]  = 'media_update';
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_CREATED)) {
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_CREATED)) {
             $modifiedColumns[':p' . $index++]  = 'media_created';
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_UPDATED)) {
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'media_updated';
         }
 
@@ -1330,7 +1330,7 @@ abstract class Media implements ActiveRecordInterface
      */
     public function getByName(string $name, string $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = MediaTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = MediaFileTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1409,11 +1409,11 @@ abstract class Media implements ActiveRecordInterface
      */
     public function toArray(string $keyType = TableMap::TYPE_PHPNAME, bool $includeLazyLoadColumns = true, array $alreadyDumpedObjects = []): array
     {
-        if (isset($alreadyDumpedObjects['Media'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['MediaFile'][$this->hashCode()])) {
             return ['*RECURSION*'];
         }
-        $alreadyDumpedObjects['Media'][$this->hashCode()] = true;
-        $keys = MediaTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['MediaFile'][$this->hashCode()] = true;
+        $keys = MediaFileTableMap::getFieldNames($keyType);
         $result = [
             $keys[0] => $this->getId(),
             $keys[1] => $this->getSiteId(),
@@ -1468,7 +1468,7 @@ abstract class Media implements ActiveRecordInterface
      */
     public function setByName(string $name, $value, string $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = MediaTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = MediaFileTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
 
@@ -1552,7 +1552,7 @@ abstract class Media implements ActiveRecordInterface
      */
     public function fromArray(array $arr, string $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = MediaTableMap::getFieldNames($keyType);
+        $keys = MediaFileTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
@@ -1637,49 +1637,49 @@ abstract class Media implements ActiveRecordInterface
      */
     public function buildCriteria(): Criteria
     {
-        $criteria = new Criteria(MediaTableMap::DATABASE_NAME);
+        $criteria = new Criteria(MediaFileTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_ID)) {
-            $criteria->add(MediaTableMap::COL_MEDIA_ID, $this->media_id);
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_ID)) {
+            $criteria->add(MediaFileTableMap::COL_MEDIA_ID, $this->media_id);
         }
-        if ($this->isColumnModified(MediaTableMap::COL_SITE_ID)) {
-            $criteria->add(MediaTableMap::COL_SITE_ID, $this->site_id);
+        if ($this->isColumnModified(MediaFileTableMap::COL_SITE_ID)) {
+            $criteria->add(MediaFileTableMap::COL_SITE_ID, $this->site_id);
         }
-        if ($this->isColumnModified(MediaTableMap::COL_CATEGORY_ID)) {
-            $criteria->add(MediaTableMap::COL_CATEGORY_ID, $this->category_id);
+        if ($this->isColumnModified(MediaFileTableMap::COL_CATEGORY_ID)) {
+            $criteria->add(MediaFileTableMap::COL_CATEGORY_ID, $this->category_id);
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_DIR)) {
-            $criteria->add(MediaTableMap::COL_MEDIA_DIR, $this->media_dir);
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_DIR)) {
+            $criteria->add(MediaFileTableMap::COL_MEDIA_DIR, $this->media_dir);
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_FILE)) {
-            $criteria->add(MediaTableMap::COL_MEDIA_FILE, $this->media_file);
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_FILE)) {
+            $criteria->add(MediaFileTableMap::COL_MEDIA_FILE, $this->media_file);
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_EXT)) {
-            $criteria->add(MediaTableMap::COL_MEDIA_EXT, $this->media_ext);
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_EXT)) {
+            $criteria->add(MediaFileTableMap::COL_MEDIA_EXT, $this->media_ext);
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_TITLE)) {
-            $criteria->add(MediaTableMap::COL_MEDIA_TITLE, $this->media_title);
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_TITLE)) {
+            $criteria->add(MediaFileTableMap::COL_MEDIA_TITLE, $this->media_title);
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_DESC)) {
-            $criteria->add(MediaTableMap::COL_MEDIA_DESC, $this->media_desc);
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_DESC)) {
+            $criteria->add(MediaFileTableMap::COL_MEDIA_DESC, $this->media_desc);
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_LINK)) {
-            $criteria->add(MediaTableMap::COL_MEDIA_LINK, $this->media_link);
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_LINK)) {
+            $criteria->add(MediaFileTableMap::COL_MEDIA_LINK, $this->media_link);
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_HEADLINE)) {
-            $criteria->add(MediaTableMap::COL_MEDIA_HEADLINE, $this->media_headline);
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_HEADLINE)) {
+            $criteria->add(MediaFileTableMap::COL_MEDIA_HEADLINE, $this->media_headline);
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_INSERT)) {
-            $criteria->add(MediaTableMap::COL_MEDIA_INSERT, $this->media_insert);
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_INSERT)) {
+            $criteria->add(MediaFileTableMap::COL_MEDIA_INSERT, $this->media_insert);
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_UPDATE)) {
-            $criteria->add(MediaTableMap::COL_MEDIA_UPDATE, $this->media_update);
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_UPDATE)) {
+            $criteria->add(MediaFileTableMap::COL_MEDIA_UPDATE, $this->media_update);
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_CREATED)) {
-            $criteria->add(MediaTableMap::COL_MEDIA_CREATED, $this->media_created);
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_CREATED)) {
+            $criteria->add(MediaFileTableMap::COL_MEDIA_CREATED, $this->media_created);
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_UPDATED)) {
-            $criteria->add(MediaTableMap::COL_MEDIA_UPDATED, $this->media_updated);
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_UPDATED)) {
+            $criteria->add(MediaFileTableMap::COL_MEDIA_UPDATED, $this->media_updated);
         }
 
         return $criteria;
@@ -1697,8 +1697,8 @@ abstract class Media implements ActiveRecordInterface
      */
     public function buildPkeyCriteria(): Criteria
     {
-        $criteria = ChildMediaQuery::create();
-        $criteria->add(MediaTableMap::COL_MEDIA_ID, $this->media_id);
+        $criteria = ChildMediaFileQuery::create();
+        $criteria->add(MediaFileTableMap::COL_MEDIA_ID, $this->media_id);
 
         return $criteria;
     }
@@ -1761,7 +1761,7 @@ abstract class Media implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of \Model\Media (or compatible) type.
+     * @param object $copyObj An object of \Model\MediaFile (or compatible) type.
      * @param bool $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param bool $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws \Propel\Runtime\Exception\PropelException
@@ -1797,7 +1797,7 @@ abstract class Media implements ActiveRecordInterface
      * objects.
      *
      * @param bool $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \Model\Media Clone of current object.
+     * @return \Model\MediaFile Clone of current object.
      * @throws \Propel\Runtime\Exception\PropelException
      */
     public function copy(bool $deepCopy = false)
@@ -1866,7 +1866,7 @@ abstract class Media implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(MediaTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(MediaFileTableMap::DEFAULT_STRING_FORMAT);
     }
 
     // timestampable behavior
@@ -1878,7 +1878,7 @@ abstract class Media implements ActiveRecordInterface
      */
     public function keepUpdateDateUnchanged()
     {
-        $this->modifiedColumns[MediaTableMap::COL_MEDIA_UPDATED] = true;
+        $this->modifiedColumns[MediaFileTableMap::COL_MEDIA_UPDATED] = true;
 
         return $this;
     }
