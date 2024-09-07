@@ -63,7 +63,7 @@ class MediaFileTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 14;
+    public const NUM_COLUMNS = 15;
 
     /**
      * The number of lazy-loaded columns
@@ -73,7 +73,7 @@ class MediaFileTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 14;
+    public const NUM_HYDRATE_COLUMNS = 15;
 
     /**
      * the column name for the media_id field
@@ -104,6 +104,11 @@ class MediaFileTableMap extends TableMap
      * the column name for the media_ext field
      */
     public const COL_MEDIA_EXT = 'medias.media_ext';
+
+    /**
+     * the column name for the media_file_size field
+     */
+    public const COL_MEDIA_FILE_SIZE = 'medias.media_file_size';
 
     /**
      * the column name for the media_title field
@@ -159,11 +164,11 @@ class MediaFileTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'CategoryId', 'Dir', 'File', 'Ext', 'Title', 'Desc', 'Link', 'Headline', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'categoryId', 'dir', 'file', 'ext', 'title', 'desc', 'link', 'headline', 'insert', 'update', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [MediaFileTableMap::COL_MEDIA_ID, MediaFileTableMap::COL_SITE_ID, MediaFileTableMap::COL_CATEGORY_ID, MediaFileTableMap::COL_MEDIA_DIR, MediaFileTableMap::COL_MEDIA_FILE, MediaFileTableMap::COL_MEDIA_EXT, MediaFileTableMap::COL_MEDIA_TITLE, MediaFileTableMap::COL_MEDIA_DESC, MediaFileTableMap::COL_MEDIA_LINK, MediaFileTableMap::COL_MEDIA_HEADLINE, MediaFileTableMap::COL_MEDIA_INSERT, MediaFileTableMap::COL_MEDIA_UPDATE, MediaFileTableMap::COL_MEDIA_CREATED, MediaFileTableMap::COL_MEDIA_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['media_id', 'site_id', 'category_id', 'media_dir', 'media_file', 'media_ext', 'media_title', 'media_desc', 'media_link', 'media_headline', 'media_insert', 'media_update', 'media_created', 'media_updated', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'CategoryId', 'Dir', 'File', 'Ext', 'FileSize', 'Title', 'Desc', 'Link', 'Headline', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'categoryId', 'dir', 'file', 'ext', 'fileSize', 'title', 'desc', 'link', 'headline', 'insert', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [MediaFileTableMap::COL_MEDIA_ID, MediaFileTableMap::COL_SITE_ID, MediaFileTableMap::COL_CATEGORY_ID, MediaFileTableMap::COL_MEDIA_DIR, MediaFileTableMap::COL_MEDIA_FILE, MediaFileTableMap::COL_MEDIA_EXT, MediaFileTableMap::COL_MEDIA_FILE_SIZE, MediaFileTableMap::COL_MEDIA_TITLE, MediaFileTableMap::COL_MEDIA_DESC, MediaFileTableMap::COL_MEDIA_LINK, MediaFileTableMap::COL_MEDIA_HEADLINE, MediaFileTableMap::COL_MEDIA_INSERT, MediaFileTableMap::COL_MEDIA_UPDATE, MediaFileTableMap::COL_MEDIA_CREATED, MediaFileTableMap::COL_MEDIA_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['media_id', 'site_id', 'category_id', 'media_dir', 'media_file', 'media_ext', 'media_file_size', 'media_title', 'media_desc', 'media_link', 'media_headline', 'media_insert', 'media_update', 'media_created', 'media_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, ]
     ];
 
     /**
@@ -175,11 +180,11 @@ class MediaFileTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'CategoryId' => 2, 'Dir' => 3, 'File' => 4, 'Ext' => 5, 'Title' => 6, 'Desc' => 7, 'Link' => 8, 'Headline' => 9, 'Insert' => 10, 'Update' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'categoryId' => 2, 'dir' => 3, 'file' => 4, 'ext' => 5, 'title' => 6, 'desc' => 7, 'link' => 8, 'headline' => 9, 'insert' => 10, 'update' => 11, 'createdAt' => 12, 'updatedAt' => 13, ],
-        self::TYPE_COLNAME       => [MediaFileTableMap::COL_MEDIA_ID => 0, MediaFileTableMap::COL_SITE_ID => 1, MediaFileTableMap::COL_CATEGORY_ID => 2, MediaFileTableMap::COL_MEDIA_DIR => 3, MediaFileTableMap::COL_MEDIA_FILE => 4, MediaFileTableMap::COL_MEDIA_EXT => 5, MediaFileTableMap::COL_MEDIA_TITLE => 6, MediaFileTableMap::COL_MEDIA_DESC => 7, MediaFileTableMap::COL_MEDIA_LINK => 8, MediaFileTableMap::COL_MEDIA_HEADLINE => 9, MediaFileTableMap::COL_MEDIA_INSERT => 10, MediaFileTableMap::COL_MEDIA_UPDATE => 11, MediaFileTableMap::COL_MEDIA_CREATED => 12, MediaFileTableMap::COL_MEDIA_UPDATED => 13, ],
-        self::TYPE_FIELDNAME     => ['media_id' => 0, 'site_id' => 1, 'category_id' => 2, 'media_dir' => 3, 'media_file' => 4, 'media_ext' => 5, 'media_title' => 6, 'media_desc' => 7, 'media_link' => 8, 'media_headline' => 9, 'media_insert' => 10, 'media_update' => 11, 'media_created' => 12, 'media_updated' => 13, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'CategoryId' => 2, 'Dir' => 3, 'File' => 4, 'Ext' => 5, 'FileSize' => 6, 'Title' => 7, 'Desc' => 8, 'Link' => 9, 'Headline' => 10, 'Insert' => 11, 'Update' => 12, 'CreatedAt' => 13, 'UpdatedAt' => 14, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'categoryId' => 2, 'dir' => 3, 'file' => 4, 'ext' => 5, 'fileSize' => 6, 'title' => 7, 'desc' => 8, 'link' => 9, 'headline' => 10, 'insert' => 11, 'update' => 12, 'createdAt' => 13, 'updatedAt' => 14, ],
+        self::TYPE_COLNAME       => [MediaFileTableMap::COL_MEDIA_ID => 0, MediaFileTableMap::COL_SITE_ID => 1, MediaFileTableMap::COL_CATEGORY_ID => 2, MediaFileTableMap::COL_MEDIA_DIR => 3, MediaFileTableMap::COL_MEDIA_FILE => 4, MediaFileTableMap::COL_MEDIA_EXT => 5, MediaFileTableMap::COL_MEDIA_FILE_SIZE => 6, MediaFileTableMap::COL_MEDIA_TITLE => 7, MediaFileTableMap::COL_MEDIA_DESC => 8, MediaFileTableMap::COL_MEDIA_LINK => 9, MediaFileTableMap::COL_MEDIA_HEADLINE => 10, MediaFileTableMap::COL_MEDIA_INSERT => 11, MediaFileTableMap::COL_MEDIA_UPDATE => 12, MediaFileTableMap::COL_MEDIA_CREATED => 13, MediaFileTableMap::COL_MEDIA_UPDATED => 14, ],
+        self::TYPE_FIELDNAME     => ['media_id' => 0, 'site_id' => 1, 'category_id' => 2, 'media_dir' => 3, 'media_file' => 4, 'media_ext' => 5, 'media_file_size' => 6, 'media_title' => 7, 'media_desc' => 8, 'media_link' => 9, 'media_headline' => 10, 'media_insert' => 11, 'media_update' => 12, 'media_created' => 13, 'media_updated' => 14, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, ]
     ];
 
     /**
@@ -236,6 +241,14 @@ class MediaFileTableMap extends TableMap
         'COL_MEDIA_EXT' => 'MEDIA_EXT',
         'media_ext' => 'MEDIA_EXT',
         'medias.media_ext' => 'MEDIA_EXT',
+        'FileSize' => 'MEDIA_FILE_SIZE',
+        'MediaFile.FileSize' => 'MEDIA_FILE_SIZE',
+        'fileSize' => 'MEDIA_FILE_SIZE',
+        'mediaFile.fileSize' => 'MEDIA_FILE_SIZE',
+        'MediaFileTableMap::COL_MEDIA_FILE_SIZE' => 'MEDIA_FILE_SIZE',
+        'COL_MEDIA_FILE_SIZE' => 'MEDIA_FILE_SIZE',
+        'media_file_size' => 'MEDIA_FILE_SIZE',
+        'medias.media_file_size' => 'MEDIA_FILE_SIZE',
         'Title' => 'MEDIA_TITLE',
         'MediaFile.Title' => 'MEDIA_TITLE',
         'title' => 'MEDIA_TITLE',
@@ -325,6 +338,7 @@ class MediaFileTableMap extends TableMap
         $this->addColumn('media_dir', 'Dir', 'LONGVARCHAR', false, null, null);
         $this->addColumn('media_file', 'File', 'LONGVARCHAR', false, null, null);
         $this->addColumn('media_ext', 'Ext', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('media_file_size', 'FileSize', 'INTEGER', false, null, null);
         $this->addColumn('media_title', 'Title', 'LONGVARCHAR', false, null, null);
         $this->addColumn('media_desc', 'Desc', 'LONGVARCHAR', false, null, null);
         $this->addColumn('media_link', 'Link', 'LONGVARCHAR', false, null, null);
@@ -505,6 +519,7 @@ class MediaFileTableMap extends TableMap
             $criteria->addSelectColumn(MediaFileTableMap::COL_MEDIA_DIR);
             $criteria->addSelectColumn(MediaFileTableMap::COL_MEDIA_FILE);
             $criteria->addSelectColumn(MediaFileTableMap::COL_MEDIA_EXT);
+            $criteria->addSelectColumn(MediaFileTableMap::COL_MEDIA_FILE_SIZE);
             $criteria->addSelectColumn(MediaFileTableMap::COL_MEDIA_TITLE);
             $criteria->addSelectColumn(MediaFileTableMap::COL_MEDIA_DESC);
             $criteria->addSelectColumn(MediaFileTableMap::COL_MEDIA_LINK);
@@ -520,6 +535,7 @@ class MediaFileTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.media_dir');
             $criteria->addSelectColumn($alias . '.media_file');
             $criteria->addSelectColumn($alias . '.media_ext');
+            $criteria->addSelectColumn($alias . '.media_file_size');
             $criteria->addSelectColumn($alias . '.media_title');
             $criteria->addSelectColumn($alias . '.media_desc');
             $criteria->addSelectColumn($alias . '.media_link');
@@ -552,6 +568,7 @@ class MediaFileTableMap extends TableMap
             $criteria->removeSelectColumn(MediaFileTableMap::COL_MEDIA_DIR);
             $criteria->removeSelectColumn(MediaFileTableMap::COL_MEDIA_FILE);
             $criteria->removeSelectColumn(MediaFileTableMap::COL_MEDIA_EXT);
+            $criteria->removeSelectColumn(MediaFileTableMap::COL_MEDIA_FILE_SIZE);
             $criteria->removeSelectColumn(MediaFileTableMap::COL_MEDIA_TITLE);
             $criteria->removeSelectColumn(MediaFileTableMap::COL_MEDIA_DESC);
             $criteria->removeSelectColumn(MediaFileTableMap::COL_MEDIA_LINK);
@@ -567,6 +584,7 @@ class MediaFileTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.media_dir');
             $criteria->removeSelectColumn($alias . '.media_file');
             $criteria->removeSelectColumn($alias . '.media_ext');
+            $criteria->removeSelectColumn($alias . '.media_file_size');
             $criteria->removeSelectColumn($alias . '.media_title');
             $criteria->removeSelectColumn($alias . '.media_desc');
             $criteria->removeSelectColumn($alias . '.media_link');

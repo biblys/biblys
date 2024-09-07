@@ -106,6 +106,13 @@ abstract class MediaFile implements ActiveRecordInterface
     protected $media_ext;
 
     /**
+     * The value for the media_file_size field.
+     *
+     * @var        int|null
+     */
+    protected $media_file_size;
+
+    /**
      * The value for the media_title field.
      *
      * @var        string|null
@@ -456,6 +463,16 @@ abstract class MediaFile implements ActiveRecordInterface
     }
 
     /**
+     * Get the [media_file_size] column value.
+     *
+     * @return int|null
+     */
+    public function getFileSize()
+    {
+        return $this->media_file_size;
+    }
+
+    /**
      * Get the [media_title] column value.
      *
      * @return string|null
@@ -704,6 +721,26 @@ abstract class MediaFile implements ActiveRecordInterface
     }
 
     /**
+     * Set the value of [media_file_size] column.
+     *
+     * @param int|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setFileSize($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->media_file_size !== $v) {
+            $this->media_file_size = $v;
+            $this->modifiedColumns[MediaFileTableMap::COL_MEDIA_FILE_SIZE] = true;
+        }
+
+        return $this;
+    }
+
+    /**
      * Set the value of [media_title] column.
      *
      * @param string|null $v New value
@@ -917,37 +954,40 @@ abstract class MediaFile implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : MediaFileTableMap::translateFieldName('Ext', TableMap::TYPE_PHPNAME, $indexType)];
             $this->media_ext = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : MediaFileTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : MediaFileTableMap::translateFieldName('FileSize', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->media_file_size = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : MediaFileTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
             $this->media_title = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : MediaFileTableMap::translateFieldName('Desc', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : MediaFileTableMap::translateFieldName('Desc', TableMap::TYPE_PHPNAME, $indexType)];
             $this->media_desc = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : MediaFileTableMap::translateFieldName('Link', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : MediaFileTableMap::translateFieldName('Link', TableMap::TYPE_PHPNAME, $indexType)];
             $this->media_link = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : MediaFileTableMap::translateFieldName('Headline', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : MediaFileTableMap::translateFieldName('Headline', TableMap::TYPE_PHPNAME, $indexType)];
             $this->media_headline = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : MediaFileTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : MediaFileTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->media_insert = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : MediaFileTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : MediaFileTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->media_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : MediaFileTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : MediaFileTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->media_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : MediaFileTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : MediaFileTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -960,7 +1000,7 @@ abstract class MediaFile implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 14; // 14 = MediaFileTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 15; // 15 = MediaFileTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\MediaFile'), 0, $e);
@@ -1193,6 +1233,9 @@ abstract class MediaFile implements ActiveRecordInterface
         if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_EXT)) {
             $modifiedColumns[':p' . $index++]  = 'media_ext';
         }
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_FILE_SIZE)) {
+            $modifiedColumns[':p' . $index++]  = 'media_file_size';
+        }
         if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_TITLE)) {
             $modifiedColumns[':p' . $index++]  = 'media_title';
         }
@@ -1250,6 +1293,10 @@ abstract class MediaFile implements ActiveRecordInterface
                         break;
                     case 'media_ext':
                         $stmt->bindValue($identifier, $this->media_ext, PDO::PARAM_STR);
+
+                        break;
+                    case 'media_file_size':
+                        $stmt->bindValue($identifier, $this->media_file_size, PDO::PARAM_INT);
 
                         break;
                     case 'media_title':
@@ -1365,27 +1412,30 @@ abstract class MediaFile implements ActiveRecordInterface
                 return $this->getExt();
 
             case 6:
-                return $this->getTitle();
+                return $this->getFileSize();
 
             case 7:
-                return $this->getDesc();
+                return $this->getTitle();
 
             case 8:
-                return $this->getLink();
+                return $this->getDesc();
 
             case 9:
-                return $this->getHeadline();
+                return $this->getLink();
 
             case 10:
-                return $this->getInsert();
+                return $this->getHeadline();
 
             case 11:
-                return $this->getUpdate();
+                return $this->getInsert();
 
             case 12:
-                return $this->getCreatedAt();
+                return $this->getUpdate();
 
             case 13:
+                return $this->getCreatedAt();
+
+            case 14:
                 return $this->getUpdatedAt();
 
             default:
@@ -1421,19 +1471,16 @@ abstract class MediaFile implements ActiveRecordInterface
             $keys[3] => $this->getDir(),
             $keys[4] => $this->getFile(),
             $keys[5] => $this->getExt(),
-            $keys[6] => $this->getTitle(),
-            $keys[7] => $this->getDesc(),
-            $keys[8] => $this->getLink(),
-            $keys[9] => $this->getHeadline(),
-            $keys[10] => $this->getInsert(),
-            $keys[11] => $this->getUpdate(),
-            $keys[12] => $this->getCreatedAt(),
-            $keys[13] => $this->getUpdatedAt(),
+            $keys[6] => $this->getFileSize(),
+            $keys[7] => $this->getTitle(),
+            $keys[8] => $this->getDesc(),
+            $keys[9] => $this->getLink(),
+            $keys[10] => $this->getHeadline(),
+            $keys[11] => $this->getInsert(),
+            $keys[12] => $this->getUpdate(),
+            $keys[13] => $this->getCreatedAt(),
+            $keys[14] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[10]] instanceof \DateTimeInterface) {
-            $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
-        }
-
         if ($result[$keys[11]] instanceof \DateTimeInterface) {
             $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
         }
@@ -1444,6 +1491,10 @@ abstract class MediaFile implements ActiveRecordInterface
 
         if ($result[$keys[13]] instanceof \DateTimeInterface) {
             $result[$keys[13]] = $result[$keys[13]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[14]] instanceof \DateTimeInterface) {
+            $result[$keys[14]] = $result[$keys[14]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1505,27 +1556,30 @@ abstract class MediaFile implements ActiveRecordInterface
                 $this->setExt($value);
                 break;
             case 6:
-                $this->setTitle($value);
+                $this->setFileSize($value);
                 break;
             case 7:
-                $this->setDesc($value);
+                $this->setTitle($value);
                 break;
             case 8:
-                $this->setLink($value);
+                $this->setDesc($value);
                 break;
             case 9:
-                $this->setHeadline($value);
+                $this->setLink($value);
                 break;
             case 10:
-                $this->setInsert($value);
+                $this->setHeadline($value);
                 break;
             case 11:
-                $this->setUpdate($value);
+                $this->setInsert($value);
                 break;
             case 12:
-                $this->setCreatedAt($value);
+                $this->setUpdate($value);
                 break;
             case 13:
+                $this->setCreatedAt($value);
+                break;
+            case 14:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1573,28 +1627,31 @@ abstract class MediaFile implements ActiveRecordInterface
             $this->setExt($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setTitle($arr[$keys[6]]);
+            $this->setFileSize($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setDesc($arr[$keys[7]]);
+            $this->setTitle($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setLink($arr[$keys[8]]);
+            $this->setDesc($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setHeadline($arr[$keys[9]]);
+            $this->setLink($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setInsert($arr[$keys[10]]);
+            $this->setHeadline($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setUpdate($arr[$keys[11]]);
+            $this->setInsert($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setCreatedAt($arr[$keys[12]]);
+            $this->setUpdate($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
-            $this->setUpdatedAt($arr[$keys[13]]);
+            $this->setCreatedAt($arr[$keys[13]]);
+        }
+        if (array_key_exists($keys[14], $arr)) {
+            $this->setUpdatedAt($arr[$keys[14]]);
         }
 
         return $this;
@@ -1656,6 +1713,9 @@ abstract class MediaFile implements ActiveRecordInterface
         }
         if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_EXT)) {
             $criteria->add(MediaFileTableMap::COL_MEDIA_EXT, $this->media_ext);
+        }
+        if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_FILE_SIZE)) {
+            $criteria->add(MediaFileTableMap::COL_MEDIA_FILE_SIZE, $this->media_file_size);
         }
         if ($this->isColumnModified(MediaFileTableMap::COL_MEDIA_TITLE)) {
             $criteria->add(MediaFileTableMap::COL_MEDIA_TITLE, $this->media_title);
@@ -1774,6 +1834,7 @@ abstract class MediaFile implements ActiveRecordInterface
         $copyObj->setDir($this->getDir());
         $copyObj->setFile($this->getFile());
         $copyObj->setExt($this->getExt());
+        $copyObj->setFileSize($this->getFileSize());
         $copyObj->setTitle($this->getTitle());
         $copyObj->setDesc($this->getDesc());
         $copyObj->setLink($this->getLink());
@@ -1825,6 +1886,7 @@ abstract class MediaFile implements ActiveRecordInterface
         $this->media_dir = null;
         $this->media_file = null;
         $this->media_ext = null;
+        $this->media_file_size = null;
         $this->media_title = null;
         $this->media_desc = null;
         $this->media_link = null;
