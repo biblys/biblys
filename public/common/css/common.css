@@ -39,6 +39,11 @@ table {
   border-spacing: 0;
 }
 
+table td.min-cell {
+  width: 1%;
+  white-space: nowrap;
+}
+
 text-mini {
   font-size: 0.8em;
 }

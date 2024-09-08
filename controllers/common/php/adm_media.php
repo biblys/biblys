@@ -158,15 +158,10 @@ function _deleteMediaFile(MediaFileManager $mm, mixed $file, FlashMessagesServic
 function _displayMediaFile(string $getDir, CurrentSite $currentSite, string $fileName, string $fileExt, string $getFile, Request $request): Response
 {
     $CKEditorFuncNum = $request->query->getAlnum("CKEditorFuncNum");
-    $request->attributes->set("page_title", "Gestion des médias");
+    $request->attributes->set("page_title", "Médias");
     $content = '
-        <h1><span class="fa fa-image"></span> Gestion des médias</h1>
-        <img src="/common/icons/directory_16x16.png" alt="Dossier" /> 
-        <a href="/pages/adm_media?CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">media</a>
-            &raquo;
-            <img src="/common/icons/directory_16x16.png" alt="" role="presentation" /> 
-            <a href="/pages/adm_media?dir=' . $getDir . '&CKEditorFuncNum=' . $CKEditorFuncNum . '">' . $getDir . '</a>
-        ';
+       
+    ';
 
     $mediaFileQuery = EntityManager::prepareAndExecute(
         'SELECT * FROM `medias` WHERE `site_id` = :site_id AND `media_dir` = :media_dir AND `media_file` = :media_file AND `media_ext` = :media_ext LIMIT 1',
@@ -193,18 +188,22 @@ function _displayMediaFile(string $getDir, CurrentSite $currentSite, string $fil
     }
 
     $content .= '
-            &raquo;
-            <img src="/common/icons/file_16x16.png" alt="Fichier" /> 
-            <a href="/pages/adm_media?dir=' . $getDir . '&file=' . $getFile . '&CKEditorFuncNum=' . $CKEditorFuncNum . '">
-                ' . $getFile . '
-            </a> 
-            <a 
-                href="/pages/adm_media?dir=' . $getDir . '&file=' . $getFile . '&del=1&CKEditorFuncNum=' . $CKEditorFuncNum . '" 
-                data-confirm="Voulez-vous vraiment supprimer le fichier ' . $m['media_file'] . '.' . $m['media_ext'] . ' ?"
-            >
-                <span class="fa fa-trash-o"></span>
-            </a>
-        ';
+        <h1><span class="fa fa-image"></span> Médias</h1> 
+        
+        <ol class="breadcrumb">
+          <li>
+            <span class="fa fa-folder-o"></span> 
+            <a href="/pages/adm_media?CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">media</a>
+          </li>
+          <li>
+            <span class="fa fa-folder-open-o"></span>
+            <a href="/pages/adm_media?dir=' . $getDir . '&CKEditorFuncNum=' . $CKEditorFuncNum . '">' . $getDir . '</a>
+          </li>
+          <li class="active">
+            <span class="fa fa-file-o"></span> ' . $getFile . '
+          </li>
+        </ol>       
+    ';
     $content .= '<div class="center"><img src="' . $request->getScheme() . '://' . $request->getHttpHost() . '/media/' . $m['media_dir'] . '/' . $m['media_file'] . '.' . $m['media_ext'] . '" style="max-width: 450px;" onClick="window.opener.CKEDITOR.tools.callFunction(\'' . $CKEditorFuncNum . '\',\'' . $request->getScheme() . '://' . $request->getHttpHost() . '/media/' . $m['media_dir'] . '/' . $m['media_file'] . '.' . $m['media_ext'] . '\'); window.close();" title="Cliquer sur l\'image pour l\'insérer." class="pointer"  alt="Cliquer sur l\'image pour l\'insérer"/></div>';
     $content .= '<br />';
     $content .= '
@@ -243,6 +242,18 @@ function _displayMediaFile(string $getDir, CurrentSite $currentSite, string $fil
 
                 </fieldset>
             </form>
+            
+            <br />
+            
+            <div class="text-center">
+                <a 
+                    class="btn btn-danger"
+                    href="/pages/adm_media?dir=' . $getDir . '&file=' . $getFile . '&del=1&CKEditorFuncNum=' . $CKEditorFuncNum . '" 
+                    data-confirm="Voulez-vous vraiment supprimer le fichier ' . $m['media_file'] . '.' . $m['media_ext'] . ' ?"
+                >
+                    Supprimer le fichier &laquo; '.$getFile.' &raquo;
+                </a>
+            </div>
         ';
 
     return new Response($content);
@@ -263,22 +274,27 @@ function _displayMediaDirectory(CurrentSite $currentSite, string $currentDirecto
 {
     $CKEditorFuncNum = $request->query->getAlnum("CKEditorFuncNum");
 
-    $request->attributes->set("page_title", "Gestion des médias");
+    $request->attributes->set("page_title", "Médias");
     $content = '
-        <h1><span class="fa fa-image"></span> Gestion des médias</h1>
-        <img src="/common/icons/directory_16x16.png" alt="Dossier" /> 
-        <a href="/pages/adm_media?CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">media</a>
-            &raquo;
-            <img src="/common/icons/directory_16x16.png" alt="" role="presentation" /> 
-            <a href="/pages/adm_media?dir=' . $currentDirectory . '&CKEditorFuncNum=' . $CKEditorFuncNum . '">
-                ' . $currentDirectory . '
-            </a>
-            <a 
-                href="/pages/adm_media?dir=' . $currentDirectory . '&del=1&CKEditorFuncNum=' . $CKEditorFuncNum . '" 
-                data-confirm="Voulez-vous vraiment supprimer le dossier ' . $currentDirectory . ' et tous les fichiers qu\'il contient ?"
-            >
-                <span class="fa fa-trash-o"></span>
-            </a>';
+        <h1><span class="fa fa-image"></span> Médias</h1>
+       
+        <ol class="breadcrumb">
+          <li>
+            <span class="fa fa-folder-o"></span> 
+            <a href="/pages/adm_media?CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">media</a>
+          </li>
+          <li class="active">
+            <span class="fa fa-folder-open-o"></span> ' . $currentDirectory . '
+          </li>
+        </ol>
+        
+        <table class="table table-striped">
+        <tr>
+          <th aria-hidden="true"></th>
+          <th>Nom</th>
+          <th>Taille</th>
+        </tr>
+    ';
 
     /** @var \Model\MediaFile[] $mediaFiles */
     $mediaFiles = MediaFileQuery::create()
@@ -289,25 +305,43 @@ function _displayMediaDirectory(CurrentSite $currentSite, string $currentDirecto
     foreach ($mediaFiles as $file) {
         if (!str_contains($file, '__')) {
             $fullName = $file->getFile() . '.' . $file->getExt();
-            $content .= '<li>
-              <img src="/common/icons/file_16x16.png" alt="Dossier" /> 
-              <a href="/pages/adm_media?dir=' . $currentDirectory . '&file=' . $fullName . '&CKEditorFuncNum=' . $CKEditorFuncNum . '">
-                ' .$fullName . '
-              </a>
-            </li>';
+            $content .= '<tr>
+              <td aria-hidden="true" class="min-cell"><span class="fa fa-file"></span></td>
+              <td>
+                  <a href="/pages/adm_media?dir=' . $currentDirectory . '&file=' . $fullName . '&CKEditorFuncNum=' . $CKEditorFuncNum . '">
+                    ' .$fullName . '
+                  </a>
+              </td>
+              <td class="min-cell">
+                  '._convertToMegabytes($file->getFileSize()).' Mo
+              </td>
+            </tr>';
         }
     }
 
-    $content .= '<ul></li>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+    $content .= '</table>
+                
+            <form enctype="multipart/form-data" method="post" class="fieldset">
+              <fieldset>
+                  <label for="file-upload">
+                    Ajouter un fichier au dossier &laquo; ' . $currentDirectory . ' &raquo; :<br />
+                  </label>
+                  <input id="file-upload" type="file" name="uploads[]" multiple="multiple" />
+                  <button type="submit" class="btn btn-primary">Envoyer</button>
+              </fieldset>
+            </form>
             <br />
-            <p>
-                <form enctype="multipart/form-data" method="post">Ajouter un fichier au dossier &laquo; ' . $currentDirectory . ' &raquo; :<br />
-                <input type="file" name="uploads[]" class="autosubmit" multiple="multiple" /></form>
-            </p>
+            
+            <div class="text-center">
+                <a 
+                    class="btn btn-danger"
+                    href="/pages/adm_media?dir=' . $currentDirectory . '&del=1&CKEditorFuncNum=' . $CKEditorFuncNum . '" 
+                    data-confirm="Voulez-vous vraiment supprimer le dossier ' . $currentDirectory . ' et tous les fichiers qu\'il contient ?"
+                >
+                    Supprimer le dossier &laquo; '.$currentDirectory.' &raquo;
+                </a>
+            </div>
+        
         ';
 
     return new Response($content);
@@ -321,37 +355,65 @@ function _displayMediaDirectories(CurrentSite $currentSite, Request $request): R
     $CKEditorFuncNum = $request->query->getAlnum("CKEditorFuncNum");
 
     $mediaDirectories = MediaFileQuery::create()
-        ->select("Dir")
         ->filterBySiteId($currentSite->getId())
+        ->withColumn('media_dir', 'name')
+        ->withColumn('SUM(`media_file_size`)', 'size')
+        ->select(['name', 'size'])
         ->groupByDir()
         ->find();
 
-    $request->attributes->set("page_title", "Gestion des médias");
+    $request->attributes->set("page_title", "Médias");
     $content = '
-        <h1><span class="fa fa-image"></span> Gestion des médias</h1>
-        <img src="/common/icons/directory_16x16.png" alt="Dossier" /> 
-        <a href="/pages/adm_media?CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">media</a>
+        <h1><span class="fa fa-image"></span> Médias</h1>
+        <ol class="breadcrumb">
+          <li class="active">
+            <span class="fa fa-folder-open-o"></span> media
+          </li>
+        </ol>
+
+        <table class="table table-striped">
+        <tr>
+          <th aria-hidden="true"></th>
+          <th>Dossier</th>
+          <th>Taille</th>
+        </tr>
     ';
 
     foreach ($mediaDirectories as $directory) {
-        $content .= '<li>
-          <img src="/common/icons/directory_16x16.png" alt="Dossier" /> 
-          <a href="/pages/adm_media?dir=' . $directory . '&CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">
-            ' . $directory . '
-          </a>
-        </li>';
+        $content .= '<tr>
+          <td class="min-cell"><span class="fa fa-folder"></span></td>
+          <td> 
+              <a href="/pages/adm_media?dir=' . $directory["name"] . '&CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">
+                ' . $directory["name"] . '
+              </a>
+          </td>
+          <td class="min-cell">
+              '._convertToMegabytes($directory["size"]).' Mo
+          </td>
+        </tr>';
     }
-    $content .= '</ul>';
     $content .= '
+  
+        </table>
         <br>
-        <p>Choisir un dossier ci-dessus ou créer un nouveau dossier :</p>
-        <form method="post">
-            <input type="text" name="new_dir" placeholder="Nouveau dossier...">
-            <button type="submit" class="btn btn-primary">Créer</button>
+        
+        <form class="form-inline" method="post">
+        
+          <div class="form-group">
+            <label for="new-directory">Nouveau dossier :</label>
+            <input id="new-directory" type="text" name="new_dir">
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-sm">Créer</button>
         </form>
     </p>';
 
     $content .= '</ul>';
 
     return new Response($content);
+}
+
+function _convertToMegabytes(mixed $bytes): float
+{
+    return number_format($bytes / 1024 / 1024, 2);
 }
