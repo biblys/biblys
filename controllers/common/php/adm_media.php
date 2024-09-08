@@ -5,8 +5,8 @@
 use Biblys\Service\CurrentSite;
 use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Slug\SlugService;
+use Model\MediaFileQuery;
 use Propel\Runtime\Exception\PropelException;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -15,11 +15,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return function (
-    Request $request,
-    CurrentSite $currentSite,
+    Request              $request,
+    CurrentSite          $currentSite,
     FlashMessagesService $flashMessagesService,
-): Response
-{
+): Response {
     $slugService = new SlugService();
     $mm = new MediaFileManager();
     $mediaFolderPath = $mm->getMediaFolderPath();
@@ -81,10 +80,10 @@ return function (
             return _deleteMediaDirectory($mm, $getDir, $flashMessagesService);
         }
 
-        return _displayMediaDirectory($getDir, $CKEditorFuncNum, $content, $mediaFolderPath);
+        return _displayMediaDirectory($currentSite, $getDir, $CKEditorFuncNum, $content);
     }
 
-    return _displayMediaDirectories($mediaFolderPath, $CKEditorFuncNum, $content);
+    return _displayMediaDirectories($currentSite, $CKEditorFuncNum, $content);
 };
 
 function _createMediaDirectory(SlugService $slugService, string $postNewDir, string $mediaFolderPath, FlashMessagesService $flashMessagesService): RedirectResponse
@@ -251,30 +250,34 @@ function _deleteMediaDirectory(MediaFileManager $mm, string $getDir, FlashMessag
     return new RedirectResponse("/pages/adm_media");
 }
 
-function _displayMediaDirectory(string $getDir, string $CKEditorFuncNum, string $content, string $mediaFolderPath): Response
+function _displayMediaDirectory(CurrentSite $currentSite, string $currentDirectory, string $CKEditorFuncNum, string $content): Response
 {
     $content .= '
             &raquo;
             <img src="/common/icons/directory_16x16.png" alt="" role="presentation" /> 
-            <a href="/pages/adm_media?dir=' . $getDir . '&CKEditorFuncNum=' . $CKEditorFuncNum . '">
-                ' . $getDir . '
+            <a href="/pages/adm_media?dir=' . $currentDirectory . '&CKEditorFuncNum=' . $CKEditorFuncNum . '">
+                ' . $currentDirectory . '
             </a>
             <a 
-                href="/pages/adm_media?dir=' . $getDir . '&del=1&CKEditorFuncNum=' . $CKEditorFuncNum . '" 
-                data-confirm="Voulez-vous vraiment supprimer le dossier ' . $getDir . ' et tous les fichiers qu\'il contient ?"
+                href="/pages/adm_media?dir=' . $currentDirectory . '&del=1&CKEditorFuncNum=' . $CKEditorFuncNum . '" 
+                data-confirm="Voulez-vous vraiment supprimer le dossier ' . $currentDirectory . ' et tous les fichiers qu\'il contient ?"
             >
                 <span class="fa fa-trash-o"></span>
             </a>';
 
-    $finder = new Finder();
-    $fileList = $finder->files()->in($mediaFolderPath.$getDir)->depth('== 0')->sortByName();
+    /** @var \Model\MediaFile[] $mediaFiles */
+    $mediaFiles = MediaFileQuery::create()
+        ->filterBySiteId($currentSite->getId())
+        ->filterByDir($currentDirectory)
+        ->find();
 
-    foreach ($fileList as $file) {
+    foreach ($mediaFiles as $file) {
         if (!str_contains($file, '__')) {
+            $fullName = $file->getFile() . '.' . $file->getExt();
             $content .= '<li>
               <img src="/common/icons/file_16x16.png" alt="Dossier" /> 
-              <a href="/pages/adm_media?dir=' . $getDir . '&file=' . $file->getFilename() . '&CKEditorFuncNum=' . $CKEditorFuncNum . '">
-                ' . $file->getFilename() . '
+              <a href="/pages/adm_media?dir=' . $currentDirectory . '&file=' . $fullName . '&CKEditorFuncNum=' . $CKEditorFuncNum . '">
+                ' .$fullName . '
               </a>
             </li>';
         }
@@ -287,7 +290,7 @@ function _displayMediaDirectory(string $getDir, string $CKEditorFuncNum, string 
             </ul>
             <br />
             <p>
-                <form enctype="multipart/form-data" method="post">Ajouter un fichier au dossier &laquo; ' . $getDir . ' &raquo; :<br />
+                <form enctype="multipart/form-data" method="post">Ajouter un fichier au dossier &laquo; ' . $currentDirectory . ' &raquo; :<br />
                 <input type="file" name="uploads[]" class="autosubmit" multiple="multiple" /></form>
             </p>
         ';
@@ -295,15 +298,22 @@ function _displayMediaDirectory(string $getDir, string $CKEditorFuncNum, string 
     return new Response($content);
 }
 
-function _displayMediaDirectories(string $mediaFolderPath, string|null $CKEditorFuncNum, string $content): Response
+/**
+ * @throws PropelException
+ */
+function _displayMediaDirectories(CurrentSite $currentSite, string|null $CKEditorFuncNum, string $content): Response
 {
-    $finder = new Finder();
-    $directoryList = $finder->directories()->in($mediaFolderPath)->depth('== 0')->sortByName();
-    foreach ($directoryList as $directory) {
+    $mediaDirectories = MediaFileQuery::create()
+        ->select("Dir")
+        ->filterBySiteId($currentSite->getId())
+        ->groupByDir()
+        ->find();
+
+    foreach ($mediaDirectories as $directory) {
         $content .= '<li>
           <img src="/common/icons/directory_16x16.png" alt="Dossier" /> 
-          <a href="/pages/adm_media?dir=' . $directory->getFilename() . '&CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">
-            ' . $directory->getFilename() . '
+          <a href="/pages/adm_media?dir=' . $directory . '&CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">
+            ' . $directory . '
           </a>
         </li>';
     }
