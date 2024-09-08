@@ -4,6 +4,7 @@
 
 ### Améliorations
 
+- La présentation de la page "Gestion des médias" a été améliorée.
 - La documentation d'installation locale de Biblys locale pour le développement
   ([INSTALL.MD](./INSTALL.md)) a été améliorée (#81 par @HEYGUL).
 - Les pays de livraison et les langues sont désormais ajoutés à la base de données
