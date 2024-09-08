@@ -19,75 +19,71 @@ return function (
     CurrentSite          $currentSite,
     FlashMessagesService $flashMessagesService,
 ): Response {
-    $slugService = new SlugService();
-    $mm = new MediaFileManager();
-    $mediaFolderPath = $mm->getMediaFolderPath();
 
-    $getDir = $request->query->getAlnum("dir");
-    $getPath = $request->query->getAlnum("path");
-    if (!isset($getDir) || ($getDir == '/') || (isset($getPath) && strstr($getPath, '..'))) {
-        $getDir = null;
+    $currentDirectory = $request->query->getAlnum("dir");
+    if ($currentDirectory === '/') {
+        $currentDirectory = null;
     }
-
-    $getFile = $request->query->get("file");
-    $getDel = $request->query->getBoolean("del");
-    $CKEditorFuncNum = $request->query->getAlnum("CKEditorFuncNum");
 
     $postNewDir = $request->request->getAlnum("new_dir");
     if (!empty($postNewDir)) {
-        return _createMediaDirectory($slugService, $postNewDir, $mediaFolderPath, $flashMessagesService);
+        return _createMediaDirectory($postNewDir, $flashMessagesService);
     }
 
     /** @var UploadedFile[] $uploadedFiles */
     $uploadedFiles = $request->files->get("uploads", []);
     if (count($uploadedFiles) > 0) {
-        return _uploadMediaFiles($uploadedFiles, $slugService, $getDir, $mediaFolderPath, $currentSite, $flashMessagesService);
+        return _uploadMediaFiles($uploadedFiles, $currentDirectory, $currentSite, $flashMessagesService);
     }
 
-    $request->attributes->set("page_title", "Gestion des médias");
-    $content = '
-        <h1><span class="fa fa-image"></span> Gestion des médias</h1>
-        <img src="/common/icons/directory_16x16.png" alt="Dossier" /> 
-        <a href="/pages/adm_media?CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">media</a>
-    ';
-
     // Single file
-    if ($getDir && $getFile) {
+    $currentFile = $request->query->get("file");
+    if ($currentDirectory && $currentFile) {
 
-        $getFileArray = explode('.', $getFile);
+        $getFileArray = explode('.', $currentFile);
         $fileName = $getFileArray[0];
         $fileExt = $getFileArray[1];
 
-        $file = $mm->get(['media_dir' => $getDir, 'media_file' => $fileName, 'media_ext' => $fileExt]);
+        $mm = new MediaFileManager();
+        $file = $mm->get(['media_dir' => $currentDirectory, 'media_file' => $fileName, 'media_ext' => $fileExt]);
         if (!$file) {
-            throw new NotFoundHttpException("File $getFile not found in directory $getDir.");
+            throw new NotFoundHttpException("File $currentFile not found in directory $currentDirectory.");
         }
 
         if ($request->isMethod("POST")) {
-            return _updateMediaFileInfo($request, $flashMessagesService, $getFile, $getDir, $CKEditorFuncNum);
+            return _updateMediaFileInfo($request, $flashMessagesService, $currentFile, $currentDirectory);
         }
 
-        if ($getDel) {
-            return _deleteMediaFile($mm, $file, $flashMessagesService, $getFile, $getDir);
+        $delete = $request->query->getBoolean("del");
+        if ($delete) {
+            return _deleteMediaFile($mm, $file, $flashMessagesService, $currentFile, $currentDirectory);
         }
 
-        return _displayMediaFile($getDir, $CKEditorFuncNum, $content, $currentSite, $fileName, $fileExt, $getFile, $request);
+        return _displayMediaFile($currentDirectory, $currentSite, $fileName, $fileExt, $currentFile, $request);
     }
 
     // Single directory
-    if ($getDir) {
-        if ($getDel) {
-            return _deleteMediaDirectory($mm, $getDir, $flashMessagesService);
+    if ($currentDirectory) {
+        $delete = $request->query->getBoolean("del");
+        if ($delete) {
+            return _deleteMediaDirectory($currentDirectory, $flashMessagesService);
         }
 
-        return _displayMediaDirectory($currentSite, $getDir, $CKEditorFuncNum, $content);
+        return _displayMediaDirectory($currentSite, $currentDirectory, $request);
     }
 
-    return _displayMediaDirectories($currentSite, $CKEditorFuncNum, $content);
+    return _displayMediaDirectories($currentSite, $request);
 };
 
-function _createMediaDirectory(SlugService $slugService, string $postNewDir, string $mediaFolderPath, FlashMessagesService $flashMessagesService): RedirectResponse
+/**
+ * @throws Exception
+ */
+function _createMediaDirectory(string $postNewDir, FlashMessagesService $flashMessagesService): RedirectResponse
 {
+    $slugService = new SlugService();
+    $mm = new MediaFileManager();
+    $mediaFolderPath = $mm->getMediaFolderPath();
+
     $newDirSlug = $slugService->slugify($postNewDir);
     mkdir($mediaFolderPath . $newDirSlug);
     $flashMessagesService->add("success", "Le dossier « $postNewDir » a été créé.");
@@ -96,9 +92,14 @@ function _createMediaDirectory(SlugService $slugService, string $postNewDir, str
 
 /**
  * @throws PropelException
+ * @throws Exception
  */
-function _uploadMediaFiles(array $uploadedFiles, SlugService $slugService, float|InputBag|bool|int|string|null $getDir, string $mediaFolderPath, CurrentSite $currentSite, FlashMessagesService $flashMessagesService): RedirectResponse
+function _uploadMediaFiles(array $uploadedFiles, float|InputBag|bool|int|string|null $getDir, CurrentSite $currentSite, FlashMessagesService $flashMessagesService): RedirectResponse
 {
+    $mm = new MediaFileManager();
+    $mediaFolderPath = $mm->getMediaFolderPath();
+    $slugService = new SlugService();
+
     foreach ($uploadedFiles as $uploadedFile) {
         $rawFileName = explode(".", $uploadedFile->getClientOriginalName())[0];
         $fileName = $slugService->slugify($rawFileName);
@@ -122,8 +123,10 @@ function _uploadMediaFiles(array $uploadedFiles, SlugService $slugService, float
     return new RedirectResponse("/pages/adm_media?dir=$getDir");
 }
 
-function _updateMediaFileInfo(Request $request, FlashMessagesService $flashMessagesService, string $getFile, string $getDir, string $CKEditorFuncNum): RedirectResponse
+function _updateMediaFileInfo(Request $request, FlashMessagesService $flashMessagesService, string $getFile, string $getDir): RedirectResponse
 {
+    $CKEditorFuncNum = $request->query->getAlnum("CKEditorFuncNum");
+
     EntityManager::prepareAndExecute(
         'UPDATE `medias` SET `category_id` = :category_id, `media_title` = :media_title, `media_desc` = :media_desc, `media_link` = :media_link, `media_headline` = :media_headline WHERE `media_id` = :media_id LIMIT 1',
         [
@@ -152,9 +155,14 @@ function _deleteMediaFile(MediaFileManager $mm, mixed $file, FlashMessagesServic
 /**
  * @throws Exception
  */
-function _displayMediaFile(string $getDir, string $CKEditorFuncNum, string $content, CurrentSite $currentSite, string $fileName, string $fileExt, string $getFile, Request $request): Response
+function _displayMediaFile(string $getDir, CurrentSite $currentSite, string $fileName, string $fileExt, string $getFile, Request $request): Response
 {
-    $content .= '
+    $CKEditorFuncNum = $request->query->getAlnum("CKEditorFuncNum");
+    $request->attributes->set("page_title", "Gestion des médias");
+    $content = '
+        <h1><span class="fa fa-image"></span> Gestion des médias</h1>
+        <img src="/common/icons/directory_16x16.png" alt="Dossier" /> 
+        <a href="/pages/adm_media?CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">media</a>
             &raquo;
             <img src="/common/icons/directory_16x16.png" alt="" role="presentation" /> 
             <a href="/pages/adm_media?dir=' . $getDir . '&CKEditorFuncNum=' . $CKEditorFuncNum . '">' . $getDir . '</a>
@@ -243,16 +251,23 @@ function _displayMediaFile(string $getDir, string $CKEditorFuncNum, string $cont
 /**
  * @throws Exception
  */
-function _deleteMediaDirectory(MediaFileManager $mm, string $getDir, FlashMessagesService $flashMessagesService): RedirectResponse
+function _deleteMediaDirectory(string $getDir, FlashMessagesService $flashMessagesService): RedirectResponse
 {
+    $mm = new MediaFileManager();
     $mm->deleteDirectory($getDir);
     $flashMessagesService->add("success", "Le dossier « $getDir » a été supprimé.");
     return new RedirectResponse("/pages/adm_media");
 }
 
-function _displayMediaDirectory(CurrentSite $currentSite, string $currentDirectory, string $CKEditorFuncNum, string $content): Response
+function _displayMediaDirectory(CurrentSite $currentSite, string $currentDirectory, Request $request): Response
 {
-    $content .= '
+    $CKEditorFuncNum = $request->query->getAlnum("CKEditorFuncNum");
+
+    $request->attributes->set("page_title", "Gestion des médias");
+    $content = '
+        <h1><span class="fa fa-image"></span> Gestion des médias</h1>
+        <img src="/common/icons/directory_16x16.png" alt="Dossier" /> 
+        <a href="/pages/adm_media?CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">media</a>
             &raquo;
             <img src="/common/icons/directory_16x16.png" alt="" role="presentation" /> 
             <a href="/pages/adm_media?dir=' . $currentDirectory . '&CKEditorFuncNum=' . $CKEditorFuncNum . '">
@@ -301,13 +316,22 @@ function _displayMediaDirectory(CurrentSite $currentSite, string $currentDirecto
 /**
  * @throws PropelException
  */
-function _displayMediaDirectories(CurrentSite $currentSite, string|null $CKEditorFuncNum, string $content): Response
+function _displayMediaDirectories(CurrentSite $currentSite, Request $request): Response
 {
+    $CKEditorFuncNum = $request->query->getAlnum("CKEditorFuncNum");
+
     $mediaDirectories = MediaFileQuery::create()
         ->select("Dir")
         ->filterBySiteId($currentSite->getId())
         ->groupByDir()
         ->find();
+
+    $request->attributes->set("page_title", "Gestion des médias");
+    $content = '
+        <h1><span class="fa fa-image"></span> Gestion des médias</h1>
+        <img src="/common/icons/directory_16x16.png" alt="Dossier" /> 
+        <a href="/pages/adm_media?CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">media</a>
+    ';
 
     foreach ($mediaDirectories as $directory) {
         $content .= '<li>
