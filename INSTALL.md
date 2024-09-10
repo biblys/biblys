@@ -13,7 +13,7 @@
 1. Clone git repository
 
 ```shell
-git clone git@github.com:biblys/biblys.git --depth=100
+git clone git@github.com:biblys/biblys.git
 ```
 
 2. Install composer dependencies
@@ -38,10 +38,10 @@ cp config.example.yml app/config.yml
 
 5. Add database credentials to config file
 
-eg. when using provided MySQL docker image: 
+eg. when using provided MySQL docker image:
 
 ```shell
-db: 
+db:
   host: host.docker.internal
   host_for_cli: 127.0.0.1
   port: 3306
@@ -67,7 +67,7 @@ smtp:
 7. Start docker containers
 
 ```shell
-docker-compose up -d
+docker compose up -d
 ```
 
 8. Create database
