@@ -1,11 +1,12 @@
-environment: prod # dev|prod|test
+environment: dev # dev|prod|test
 
 db:
-  host:
+  host: host.docker.internal
+  host_for_cli: 127.0.0.1
   port: 3306
-  user:
+  user: root
   pass:
-  base:
+  base: biblys
 
 site: 1
 
@@ -39,13 +40,11 @@ site: 1
 #  redirect_uri: http://paronymie.fr/openid/callback
 #  base_uri: https://axys.me/
 
-#smtp:
-#  host: smtp.example.com
-#  user: sender@example.com
-#  pass: password123
-#  port: 587
-#  encryption: tls
-
+smtp:
+  host: host.docker.internal
+  user: sender@example.com
+  pass: password123
+  port: 1025
 ## Force HTTPS
 #https: true
 
