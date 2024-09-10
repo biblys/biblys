@@ -41,7 +41,7 @@ site: 1
 #  base_uri: https://axys.me/
 
 smtp:
-  host: host.docker.internal
+  host: biblys-mailpit
   user: sender@example.com
   pass: password123
   port: 1025
