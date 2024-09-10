@@ -26,7 +26,7 @@ status or any other topic.
 
 ## Install
 
-See [INSTALL.MD]()
+See [./INSTALL.MD]()
 
 ## Dev env with docker
 
@@ -35,7 +35,6 @@ $ docker-compose up -d
 ```
 
 If docker image needs to be updated:
-
 
 ```
 $ docker-compose up --build
