@@ -33,11 +33,11 @@ function admArticleCollectionController(
         // Si on est sur un site éditeur
         $publisherId = $currentSite->getSite()->getPublisherId();
         if ($publisherId) {
-            $_REQ_SITE = "AND `publisher_id` = :publisher_id";
+            $_REQ_SITE = "AND `publishers`.`publisher_id` = :publisher_id";
             $params["publisher_id"] = $publisherId;
         } // Si on est en mode gestion éditeur
         elseif (!$currentUser->isAdmin() && $currentUser->hasPublisherRight()) {
-            $_REQ_SITE = "AND `publisher_id` = :publisher_id";
+            $_REQ_SITE = "AND `publishers`.`publisher_id` = :publisher_id";
             $publisherId = $currentUser->getCurrentRight()->getPublisherId();
             $params["publisher_id"] = $publisherId;
         }
