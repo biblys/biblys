@@ -42,8 +42,7 @@ class Cart extends Entity
      */
     public function getLine(ImagesService $imagesService, Stock $stockEntity): string
     {
-        global $urlgenerator;
-
+        
         $stock = StockQuery::create()->findPk($stockEntity->get('id'));
 
         /** @var Article $articleEntity */
@@ -58,7 +57,7 @@ class Cart extends Entity
         elseif ($stockItemPhotoUrl) $cover = '<img src="' . $stockItemPhotoUrl . '" height=55 alt="' . $articleEntity->get('title') . '">';
         else $cover = NULL;
 
-        $articleUrl = $urlgenerator->generate("article_show", ["slug" => $articleEntity->get("url")]);
+        $articleUrl = \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate("article_show", ["slug" => $articleEntity->get("url")]);
 
         return '
                 <tr id="stock_' . $stockEntity->get('id') . '">

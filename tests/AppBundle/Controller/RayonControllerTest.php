@@ -151,8 +151,8 @@ class RayonControllerTest extends TestCase
      */
     public function _mockContainerWithUrlGenerator(): void
     {
-        $urlgenerator = $this->createMock(UrlGeneratorInterface::class);
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $GLOBALS["container"] = $this->createMock(ContainerInterface::class);
-        $GLOBALS["container"]->method("get")->willReturn($urlgenerator);
+        $GLOBALS["container"]->method("get")->willReturn($urlGenerator);
     }
 }

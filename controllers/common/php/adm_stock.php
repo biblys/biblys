@@ -24,7 +24,7 @@ return function (
     CurrentSession       $session,
     CurrentSite          $currentSite,
     Mailer               $mailer,
-    UrlGenerator         $urlgenerator,
+    UrlGenerator         $urlGenerator,
     FlashMessagesService $flashMessagesService,
     ImagesService        $imagesService,
     TemplateService      $templateService,
@@ -397,7 +397,7 @@ return function (
     $articleModel = $am->getById($article->getId());
     $a = $articleModel;
 
-    $articleUrl = $urlgenerator->generate(
+    $articleUrl = \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate(
         'article_show',
         [
             'slug' => $articleModel->get('url'),
@@ -683,7 +683,7 @@ return function (
     if ($stockEntity->isReturned()) {
         $cancelReturnLink = '
         <a class="btn btn-primary"
-            href="' . $urlgenerator->generate(
+            href="' . \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate(
                 'stock_cancel_return',
                 ['stockId' => $stockEntity->get('id')]
             ) . '">
@@ -908,7 +908,7 @@ return function (
         }, $carts->getArrayCopy());
 
         $content .= '
-            <form method="post" action="' . $urlgenerator->generate('stock_add_to_cart', ['stock_id' => $stockEntity->get('id')]) . '" class="fieldset form-inline">
+            <form method="post" action="' . \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('stock_add_to_cart', ['stock_id' => $stockEntity->get('id')]) . '" class="fieldset form-inline">
                 <fieldset>
                     <legend>Ajouter à un panier</legend>
                         <p class="text-center">
@@ -924,7 +924,7 @@ return function (
     }
 
     if ($stock) {
-        $deleteUrl = $urlgenerator->generate("stock_item_delete", ["stockId" => $stock->getId()]);
+        $deleteUrl = \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate("stock_item_delete", ["stockId" => $stock->getId()]);
         $content .= '
             <form action="'. $deleteUrl .'" method="post" class="text-center">
               <button type="submit" class="btn btn-danger" data-confirm="Voulez-vous vraiment supprimer définitivement cet exemplaire ?">

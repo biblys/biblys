@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-global $urlgenerator;
 $globalSite = LegacyCodeHelper::getGlobalSite();
 
 if (!isset($rank)) {
@@ -82,7 +81,7 @@ if ($request->getMethod() === 'POST') {
 
     $pm->update($post);
 
-    $postUrl = $urlgenerator->generate(
+    $postUrl = \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate(
         "post_show",
         ["slug" => $post->get("url")]
     );
@@ -137,7 +136,7 @@ if ($post) {
             <p>Billet n° '.$p["post_id"].'</p>
             <p><a href="/blog/'.$p["post_url"].'">voir</a></p>
             <p><a href="/pages/links?post_id='.$p["post_id"].'">lier</a></p>
-            <p><a href="'.$urlgenerator->generate('post_delete', ['id' => $p['post_id']]).'" data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?">supprimer</a></p>
+            <p><a href="'.\Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('post_delete', ['id' => $p['post_id']]).'" data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?">supprimer</a></p>
             <p><a href="/pages/'.$rank.'posts">billets</a></p>
         </div>
     ';
@@ -275,7 +274,7 @@ $content .= '
 if ($post) {
     $content .= '
     <a class="btn btn-danger" data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?"
-        href="'.$urlgenerator->generate('post_delete', [ 'id' => $post->get('id') ]).'">
+        href="'.\Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('post_delete', [ 'id' => $post->get('id') ]).'">
         <span class="fa fa-trash-o"></span>
         Supprimer le billet
     </a>

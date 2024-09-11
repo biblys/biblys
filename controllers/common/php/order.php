@@ -28,7 +28,6 @@ $imagesService = new ImagesService($config, $currentSiteService, new Filesystem(
 $orderUrl = LegacyCodeHelper::getRouteParam("url");
 $order = $om->get(["order_url" => $orderUrl]);
 
-global $urlgenerator;
 
 if (!$order) {
     throw new NotFoundException("Order $orderUrl not found.");
@@ -285,7 +284,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
         ';
     }
 
-    $contactPageUrl = $urlgenerator->generate("main_contact");
+    $contactPageUrl = \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate("main_contact");
     $content .= '
                 <tr>
                     <th colspan="3" class="right">Total T.T.C.&nbsp;:</th>

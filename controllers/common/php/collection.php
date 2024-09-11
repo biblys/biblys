@@ -37,11 +37,10 @@ if ($collection) {
     ';
 
     if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
-        /** @var $urlgenerator */
         $content .= '
             <div class="admin">
                 <p>Collection n&deg; '.$c["collection_id"].'</p>
-                <p><a href="'.$urlgenerator->generate('collection_edit', ['id' => $c['collection_id']]).'">modifier</a></p>
+                <p><a href="'.\Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('collection_edit', ['id' => $c['collection_id']]).'">modifier</a></p>
         ';
         if (LegacyCodeHelper::getGlobalSite()->has("shop")) {
             $content .= '<p><a href="/pages/adm_stocks?collection_id='.$c["collection_id"].'">stock</a></p>';

@@ -27,9 +27,6 @@ LegacyCodeHelper::catchDeprecationNotices($config, $session);
 
 $exceptionController = new ErrorController();
 
-$routes = RouteLoader::load();
-$GLOBALS["urlgenerator"] = new UrlGenerator($routes, new RequestContext());
-
 $container = include __DIR__."/../src/container.php";
 $container->register("listener.error", ErrorListener::class)
     ->setArguments(["AppBundle\Controller\ErrorController::exception"]);

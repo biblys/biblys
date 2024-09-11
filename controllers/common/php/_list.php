@@ -1,6 +1,6 @@
 <?php /** @noinspection PhpUnhandledExceptionInspection */
 
-global $urlgenerator;
+
 
 
 use Biblys\Legacy\LegacyCodeHelper;
@@ -286,7 +286,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
         $x["condition"] = ' soldout';
     }
 
-    $x["article_url"] = $urlgenerator->generate("article_show", ["slug" => $x["article_url"]]);
+    $x["article_url"] = \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate("article_show", ["slug" => $x["article_url"]]);
 
     // Auteurs
     $x["authors"] = authors($x["article_authors"], 'url');

@@ -843,8 +843,7 @@ class Article extends Entity
      */
     public function getCartButton($text = false): string
     {
-        global $urlgenerator;
-
+        
         trigger_deprecation(
             "biblys/biblys",
             "2.67.0",
@@ -854,7 +853,7 @@ class Article extends Entity
         if ($this->get('price') == 0) {
             return '
                 <a 
-                    href="' . $urlgenerator->generate('article_free_download', ['id' => $this->get('id')]) . '" 
+                    href="' . \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('article_free_download', ['id' => $this->get('id')]) . '" 
                     class="btn btn-primary cart-button' . ($text ? '' : ' btn-sm') . '"
                     rel="nofollow"
                 >
@@ -946,12 +945,11 @@ class Article extends Entity
      */
     public function getShareButtons(array $options = []): string
     {
-        global $urlgenerator;
-
+        
         $request = LegacyCodeHelper::getGlobalRequest();
 
         $host = $request->getScheme() . '://' . $request->getHost();
-        $url = $host . $urlgenerator->generate('article_show', ['slug' => $this->get('url')]);
+        $url = $host . \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('article_show', ['slug' => $this->get('url')]);
         return share_buttons($url, $this->get('title') . ' de ' . $this->get('authors'), $options);
     }
 
