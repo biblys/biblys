@@ -6,11 +6,14 @@ use Biblys\Database\Connection;
 use Biblys\Service\Config;
 use Biblys\Service\LoggerService;
 use Exception;
+use Framework\RouteLoader;
 use Model\SiteQuery;
 use PDO;
 use Site;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\RequestContext;
 use Visitor;
 use function trigger_deprecation;
 
@@ -224,5 +227,24 @@ class LegacyCodeHelper
         }
 
         return $GLOBALS["LEGACY_DATABASE_CONNECTION"];
+    }
+
+    /**
+     * @deprecated Using getGlobalDatabaseConnection is deprecated. Use EntityManager instead.
+     */
+    public static function getGlobalUrlGenerator(): UrlGenerator
+    {
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.86.0",
+            "Using getGlobalUrlGenerator is deprecated. Inject UrlGenerator in controller instead.",
+        );
+
+        if (!isset($GLOBALS["LEGACY_URL_GENERATOR"])) {
+            $routes = RouteLoader::load();
+            $GLOBALS["LEGACY_URL_GENERATOR"] = new UrlGenerator($routes, new RequestContext());
+        }
+
+        return $GLOBALS["LEGACY_URL_GENERATOR"];
     }
 }
