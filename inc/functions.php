@@ -118,8 +118,7 @@ Biblys\Database\Connection::initPropel($config);
 
 function authors(?string $nameString, string $mode = null): ?string
 {
-    global $urlgenerator;
-
+    
     if ($nameString === null) {
         return null;
     }
@@ -132,7 +131,8 @@ function authors(?string $nameString, string $mode = null): ?string
     }
 
     if ($mode === "url") {
-        $names = array_map(function ($name) use ($urlgenerator) {
+        $urlGenerator = \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator();
+        $names = array_map(function ($name) use ($urlGenerator) {
             $slugService = new SlugService();
             $slug = $slugService->slugify($name);
 
@@ -140,7 +140,7 @@ function authors(?string $nameString, string $mode = null): ?string
                 return $name;
             }
 
-            $url = $urlgenerator->generate("people_show", ["slug" => $slug]);
+            $url = $urlGenerator->generate("people_show", ["slug" => $slug]);
             return "<a href=\"$url\">$name</a>";
         }, $names);
     }

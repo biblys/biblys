@@ -71,7 +71,7 @@ if (isset($_GET["created"])) $alerts .= '<p class="success">Le nouveau fournisse
 if (isset($_GET["updated"])) $alerts .= '<p class="success">Le fournisseur a été mis à jour.</p>';
 
 if (isset($_GET["articles_to_update"])) {
-	$searchTermsUrl = $urlgenerator->generate('article_search_terms');
+	$searchTermsUrl = \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('article_search_terms');
 	$alerts .= '<p class="warning">'.$_GET['articles_to_update'].' articles devront être <a href="'.$searchTermsUrl.'">mis à jour</a>.</p>';
 }
 

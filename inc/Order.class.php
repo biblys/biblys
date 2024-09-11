@@ -108,8 +108,7 @@ class Order extends Entity
      */
     public function createPaypalPaymentLink()
     {
-        global $urlgenerator;
-
+        
         $config = \Biblys\Legacy\LegacyCodeHelper::getGlobalConfig();
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
@@ -165,7 +164,7 @@ class Order extends Entity
         if ($https) {
             $protocol = 'https';
         }
-        $returnUrl = $protocol.'://'.$globalSite->get('domain').$urlgenerator->generate('order_paypal_process', ['url' => $this->get('url')]);
+        $returnUrl = $protocol.'://'.$globalSite->get('domain').\Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('order_paypal_process', ['url' => $this->get('url')]);
         $cancelUrl = $protocol.'://'.$globalSite->get('domain').'/payment/'.$this->get('url');
         $redirectUrls = new RedirectUrls();
         $redirectUrls->setReturnUrl($returnUrl)
@@ -242,8 +241,7 @@ class Order extends Entity
      */
     public function createPayplugPayment()
     {
-        global $urlgenerator;
-
+        
         $config = \Biblys\Legacy\LegacyCodeHelper::getGlobalConfig();
 
         $request = LegacyCodeHelper::getGlobalRequest();
@@ -276,7 +274,7 @@ class Order extends Entity
             $ipn_host = $payplug['ipn_host'];
         }
 
-        $notification_url = $ipn_protocol.'://'.$ipn_host.$urlgenerator->generate('order_payplug_notification', ['url' => $this->get('url')]);
+        $notification_url = $ipn_protocol.'://'.$ipn_host.\Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('order_payplug_notification', ['url' => $this->get('url')]);
 
         // Gather customer info
         $billing = [

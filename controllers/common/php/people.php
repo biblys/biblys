@@ -18,7 +18,7 @@ return function (
     Request      $request,
     CurrentSite  $currentSite,
     CurrentUser  $currentUser,
-    UrlGenerator $urlgenerator,
+    UrlGenerator $urlGenerator,
 ): Response|RedirectResponse
 {
     $content = "";
@@ -57,7 +57,7 @@ return function (
         $content .= '
         <div class="admin">
             <p>Intervenant n° ' . $people->getId() . '</p>
-            <p><a href="' . $urlgenerator->generate("people_edit", ["id" => $peopleEntity->get("id")]) . '">modifier</a></p>
+            <p><a href="' . $urlGenerator->generate("people_edit", ["id" => $peopleEntity->get("id")]) . '">modifier</a></p>
         </div>
     ';
     }

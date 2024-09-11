@@ -29,8 +29,7 @@ class CFCampaignController extends Controller
      */
     public function showAction(Request $request, $slug): Response
     {
-        global $urlgenerator;
-
+        
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $cfcm = new CFCampaignManager();
@@ -44,7 +43,7 @@ class CFCampaignController extends Controller
             'type' => 'website',
             'title' => 'Financement participatif : '.$campaign->get('title'),
             'url' => 'https://'.$globalSite->get('domain').
-                $urlgenerator->generate('cf_campaign_show', ['slug' => $campaign->get('url')]),
+                \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('cf_campaign_show', ['slug' => $campaign->get('url')]),
             'description' => truncate(strip_tags($campaign->get('description')), '500', '...', true),
             'locale' => 'fr_FR',
             'image' => $campaign->get('image'),
