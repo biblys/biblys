@@ -118,15 +118,14 @@ class Controller
      */
     public function generateUrl(string $route, array $params = []): string
     {
-        global $urlgenerator;
-
+        
         trigger_deprecation(
             "biblys/biblys",
             "2.59.0",
             "Calling Controller->generateUrl() is deprecated, inject UrlGenerator in the controller instead."
         );
 
-        return $urlgenerator->generate($route, $params);
+        return \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate($route, $params);
     }
 
     public function getFormFactory(): FormFactoryInterface

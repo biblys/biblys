@@ -39,7 +39,7 @@ class LegacyController extends Controller
         MetaTagsService $metaTagsService,
     ): Response
     {
-        global $_ECHO, $_SQL, $urlgenerator;
+        global $_ECHO, $_SQL;
 
         $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
 

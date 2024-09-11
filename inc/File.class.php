@@ -225,8 +225,7 @@ class File extends Entity
      */
     public function getUrl(): string
     {
-        global $urlgenerator;
-
+        
         trigger_deprecation(
             "biblys/biblys",
             "2.75.0",
@@ -239,7 +238,7 @@ class File extends Entity
             );
         }
 
-        return $urlgenerator->generate('file_download', [
+        return \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('file_download', [
             'id' => $this->get('id'),
             'format' => ltrim($this->getType('ext'), '.'),
         ]);

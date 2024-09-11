@@ -18,7 +18,6 @@ $config = Config::load();
 Biblys\Database\Connection::initPropel($config);
 
 $routes = RouteLoader::load();
-$urlgenerator = new UrlGenerator($routes, new RequestContext());
 
 $container = include __DIR__."/../src/container.php";
 $container->setParameter("routes", $routes);
