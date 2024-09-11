@@ -68,9 +68,6 @@ class ArticleControllerTest extends TestCase
             ->shouldReceive("renderResponse")
             ->andReturn(new Response("Citoyens de demain"));
         $controller = new ArticleController();
-        $GLOBALS["urlgenerator"] = Mockery::mock(UrlGenerator::class);
-        $GLOBALS["urlgenerator"]->shouldReceive("generate")
-            ->andReturn("");
 
         // when
         $response = $controller->showAction(

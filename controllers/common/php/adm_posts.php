@@ -69,7 +69,6 @@ while($p = $posts->fetch(PDO::FETCH_ASSOC)) {
     else $p["status"] = '<img src="/common/img/square_red.png" alt="Hors ligne" />';
     if(empty($p["post_title"])) $p["post_title"] = truncate(strip_tags($p["post_content"]),50);
 
-    /** @var UrlGenerator $urlgenerator */
     $table .= '
         <tr>
             <td class="right">'.$p["status"].'</td>
@@ -81,7 +80,7 @@ while($p = $posts->fetch(PDO::FETCH_ASSOC)) {
                 <a href="/pages/'.$rank.'post?id='.$p["post_id"].'" title="Éditer">
                     <span class="fa fa-edit fa-lg"></span>
                 </a>
-                <a href="'.$urlgenerator->generate('post_delete', ['id' => $p['post_id']]).'" title="Supprimer" data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?">
+                <a href="'.\Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('post_delete', ['id' => $p['post_id']]).'" title="Supprimer" data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?">
                     <span class="fa fa-trash-o fa-lg">
                     </span>
                 </a>

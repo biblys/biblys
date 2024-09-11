@@ -15,21 +15,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
 class SiteController extends Controller
 {
-
-    private UrlGenerator $url;
-
-    public function __construct()
-    {
-        global $urlgenerator;
-        $this->url = $urlgenerator;
-    }
 
     /**
      * @throws LoaderError
@@ -67,7 +58,7 @@ class SiteController extends Controller
                 $currentSite->setOption($key, $val);
             }
 
-            return new RedirectResponse($this->url->generate("site_options"));
+            return new RedirectResponse(\Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate("site_options"));
         }
 
         $options = OptionQuery::create()
@@ -105,7 +96,7 @@ class SiteController extends Controller
                 $currentSite->setOption($key, $val);
             }
 
-            return new RedirectResponse($this->url->generate('site_default_values'));
+            return new RedirectResponse(\Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('site_default_values'));
         }
 
         return $this->render('AppBundle:Site:defaultValues.html.twig', [

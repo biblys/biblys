@@ -44,12 +44,12 @@ class ArticleEditTest extends TestCase
         $currentSite->shouldReceive("getOption")->andReturn("null");
         $currentUser->shouldReceive("authPublisher")->andReturn(true);
 
-        $urlgenerator = Mockery::mock(UrlGenerator::class);
-        $urlgenerator->shouldReceive("generate")->andReturn("url");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("url");
         $config = new Config(["lemonink" => ["api_key" => "abcd1234"]]);
 
         // when
-        $response = $controller($request, $currentUser, $currentSite, $urlgenerator, $config);
+        $response = $controller($request, $currentUser, $currentSite, $urlGenerator, $config);
 
         // then
         $this->assertEquals(

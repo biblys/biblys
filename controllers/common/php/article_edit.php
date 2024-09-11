@@ -31,7 +31,7 @@ return function (
     Request      $request,
     CurrentUser  $currentUser,
     CurrentSite  $currentSite,
-    UrlGenerator $urlgenerator,
+    UrlGenerator $urlGenerator,
     Config       $config,
 ): Response|RedirectResponse
 {
@@ -242,7 +242,7 @@ return function (
             } elseif (isset($redirect_to_new)) {
                 return new RedirectResponse('/pages/article_edit');
             } else {
-                $articleUrl = $urlgenerator->generate('article_show', [
+                $articleUrl = \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('article_show', [
                     'slug' => $articleEntity->get('url'),
                 ]);
                 return new RedirectResponse($articleUrl);
@@ -307,7 +307,7 @@ return function (
             $_MODE = 'update';
 
             $articleEntity = $am->getById($a['article_id']);
-            $articleUrl = $urlgenerator->generate(
+            $articleUrl = \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate(
                 'article_show',
                 [
                     'slug' => $articleEntity->get('url'),
@@ -1098,7 +1098,7 @@ return function (
         <fieldset>
             <legend>Suppression</legend>
             <p class="text-center">
-                <a class="btn btn-danger" href=' . $urlgenerator->generate('article_delete', ['id' => $articleEntity->get('id')]) . '>
+                <a class="btn btn-danger" href=' . \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('article_delete', ['id' => $articleEntity->get('id')]) . '>
                     <span class="fa fa-trash-o"></span>
                     Supprimer définitivement cet article
                 </a>

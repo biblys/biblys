@@ -67,8 +67,7 @@ class EventController extends Controller
         string $slug
     ): Response
     {
-        global $urlgenerator;
-
+        
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $em = new EventManager();
@@ -91,7 +90,7 @@ class EventController extends Controller
             "type" => "article",
             "title" => $event->get("title"),
             "url" => "https://".$request->getHost().
-                $urlgenerator->generate("event_show", ["slug" => $event->get("url")]),
+                \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate("event_show", ["slug" => $event->get("url")]),
             "description" => truncate(strip_tags($event->get('content')), '500', '...', true),
             "site_name" => $globalSite->get("title"),
             "locale" => "fr_FR",
