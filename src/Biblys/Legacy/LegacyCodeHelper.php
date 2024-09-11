@@ -230,7 +230,7 @@ class LegacyCodeHelper
     }
 
     /**
-     * @deprecated Using getGlobalDatabaseConnection is deprecated. Use EntityManager instead.
+     * @deprecated Using getGlobalUrlGenerator is deprecated. Inject UrlGenerator in controller instead
      */
     public static function getGlobalUrlGenerator(): UrlGenerator
     {
