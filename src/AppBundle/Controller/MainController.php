@@ -59,8 +59,6 @@ class MainController extends Controller
     {
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
-        \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate("main_home");
-
         $opengraph = ['title' => $globalSite->get('title')];
         $twitterCards = ['title' => $globalSite->get('title')];
 
