@@ -84,7 +84,7 @@
     "sentry/sentry": "^4.9"
   },
   "require-dev": {
-    "phpunit/phpunit": "~10",
+    "phpunit/phpunit": "~11",
     "roave/security-advisories": "dev-master",
     "mockery/mockery": "^1.6"
   },
