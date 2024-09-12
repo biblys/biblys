@@ -1,7 +1,7 @@
 environment: dev # dev|prod|test
 
 db:
-  host: host.docker.internal
+  host: biblys-mysql
   host_for_cli: 127.0.0.1
   port: 3306
   user: root
