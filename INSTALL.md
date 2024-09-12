@@ -1,5 +1,9 @@
 # Install
 
+This document describes how to install Biblys on a local development environment.
+It is intended for developers who want to contribute to the project or test it locally,
+but not recommended for production use.
+
 ## Requirements
 
 - Docker to use provided images:
