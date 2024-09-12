@@ -5,8 +5,8 @@
 - Docker to use provided images:
   - Apache web server with PHP 8.1+
   - MySQL 8.0 / MariaDB
+  - [Mailpit](https://mailpit.axllent.org/)
 - [Composer](https://getcomposer.org/)
-- SMTP service (or [Mailpit](https://mailpit.axllent.org/))
 
 ## Local install for development
 
@@ -42,7 +42,7 @@ eg. when using provided MySQL docker image:
 
 ```shell
 db:
-  host: host.docker.internal
+  host: biblys-mysql
   host_for_cli: 127.0.0.1
   port: 3306
   user: root
@@ -58,7 +58,7 @@ eg. when using Mailpit:
 
 ```shell
 smtp:
-  host: host.docker.internal
+  host: biblys-mailpit
   user: sender@example.com
   pass: password123
   port: 1025
