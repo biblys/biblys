@@ -1,8 +1,15 @@
 # Historique des modifications
 
+## 2.86.0 (DEV)
+
+### Améliorations
+
+- La documentation d'installation locale de Biblys locale pour le développement
+  ([INSTALL.MD](./INSTALL.md)) a été améliorée. 
+
 ## 2.85.2 (20 septembre 2024)
 
-### Correction
+### Corrections
 
 - La recherche d'exemplaire en stock avec un terme trop générique
   pouvait renvoyer un résultat trop grand et provoquer une erreur.
