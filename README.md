@@ -26,7 +26,7 @@ status or any other topic.
 
 ## Install
 
-See [./INSTALL.MD]()
+See [INSTALL.MD](./INSTALL.md).
 
 ## Dev env with docker
 
