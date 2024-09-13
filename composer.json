@@ -80,7 +80,7 @@
     "ext-simplexml": "*",
     "ext-curl": "*",
     "ext-fileinfo": "*",
-    "spatie/image": "^2.2",
+    "spatie/image": "^3.7",
     "sentry/sentry": "^4.9"
   },
   "require-dev": {
