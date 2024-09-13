@@ -2,10 +2,21 @@
 
 ## 2.86.0 (DEV)
 
-Améliorations
+### Améliorations
 
 - La documentation d'installation locale de Biblys locale pour le développement
-  ([INSTALL.MD](./INSTALL.md)) a été améliorée. 
+  ([INSTALL.MD](./INSTALL.md)) a été améliorée (#81 par @HEYGUL).
+- Les pays de livraison sont désormais ajoutés à la base de données lors de
+  l'installation de Biblys, afin d'éviter une manipulation manuelle (#83 par 
+  @HEYGUL).
+
+### Déploiement
+
+Jouer les migrations :
+
+```shell
+composer propel migrate
+```
 
 ## 2.85.1 (11 septembre 2024)
 
