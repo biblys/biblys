@@ -1,12 +1,15 @@
 # Historique des modifications
 
-## 2.85.2 (DEV)
+## 2.85.2 (20 septembre 2024)
 
 ### Correction
 
 - La recherche d'exemplaire en stock avec un terme trop générique
   pouvait renvoyer un résultat trop grand et provoquer une erreur.
   Les résultats sont désormais limités à 100.
+- Il était possible de donner des droits de gestion d'un éditeur
+  à un utilisateur n'existant pas sur le site courant.
+  Ce n'est plus possible.
 
 ## 2.85.1 (11 septembre 2024)
 
