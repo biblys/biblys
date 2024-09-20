@@ -3,15 +3,14 @@
 namespace AppBundle\Controller\Legacy;
 
 use Biblys\Data\ArticleType;
-use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Test\ModelFactory;
 use EntityManager;
-use Exception;
 use Mockery;
 use OrderManager;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use ShippingManager;
@@ -24,6 +23,7 @@ require_once __DIR__ . "/../../../setUp.php";
 class OrderDeliveryTest extends TestCase
 {
     /**
+     * @throws PropelException
      * @throws Exception
      */
     public function testValidatingAnOrder()
@@ -96,6 +96,7 @@ class OrderDeliveryTest extends TestCase
     }
 
     /**
+     * @throws PropelException
      * @throws Exception
      */
     public function testValidatingAnOrderWithoutShipping()
@@ -168,7 +169,9 @@ class OrderDeliveryTest extends TestCase
     }
 
     /**
+     * @throws PropelException
      * @throws Exception
+     * @throws \Exception
      */
     public function testValidatingAnOrderWithAnEmptyCart()
     {
@@ -203,11 +206,12 @@ class OrderDeliveryTest extends TestCase
         $_POST["cgv_checkbox"] = 1;
 
         $mailer = Mockery::mock(Mailer::class);
-        $config = new Config();
-        $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
 
         $site = ModelFactory::createSite();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")->andReturn(null);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
         $cart = ModelFactory::createCart(site: $site);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getCart")->andReturn($cart);
