@@ -344,7 +344,9 @@ class PublisherController extends Controller
         );
 
         $userEmail = $request->request->get('user_email');
-        $user = UserQuery::create()->findOneByEmail($userEmail);
+        $user = UserQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->findOneByEmail($userEmail);
         if (!$user) {
             $session->getFlashBag()->add("error", "Impossible de trouver un utilisateur avec l'adresse $userEmail.");
             return new RedirectResponse($publisherRightsUrl);
