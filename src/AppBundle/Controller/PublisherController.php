@@ -3,19 +3,19 @@
 namespace AppBundle\Controller;
 
 use ArticleManager;
-use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Pagination;
+use Biblys\Service\TemplateService;
 use CollectionManager;
 use Exception;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use Model\PublisherQuery;
 use Model\Right;
 use Model\RightQuery;
 use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
+use Publisher;
 use PublisherManager;
 use SupplierManager;
 use InvalidArgumentException;
@@ -39,17 +39,17 @@ class PublisherController extends Controller
 {
     /**
      * @route GET /publishers/
-     * @param Request $request
-     * @return Response
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function indexAction(Request $request): Response
+    public function indexAction(
+        Request         $request,
+        CurrentSite     $currentSite,
+        TemplateService $templateService,
+    ): Response
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
-
         $pm = new PublisherManager();
 
         $pageNumber = (int)$request->query->get("p", 0);
@@ -58,7 +58,7 @@ class PublisherController extends Controller
         }
 
         $totalCount = $pm->count();
-        $limit = $globalSite->getOpt('publisher_per_page') ? $globalSite->getOpt('publisher_per_page') : 100;
+        $limit = $currentSite->getOption('publisher_per_page') ? $currentSite->getOption('publisher_per_page') : 100;
         $pagination = new Pagination($pageNumber, $totalCount, $limit);
 
         $publishers = $pm->getAll([], [
@@ -67,7 +67,7 @@ class PublisherController extends Controller
             'offset' => $pagination->getOffset(),
         ]);
 
-        return $this->render('AppBundle:Publisher:index.html.twig', [
+        return $templateService->renderResponse('AppBundle:Publisher:index.html.twig', [
             'publishers' => $publishers,
             'pages' => $pagination,
         ]);
@@ -76,19 +76,19 @@ class PublisherController extends Controller
     /**
      * Show a Publisher's page and related articles
      * @route /editeur/{slug}.
-     * @param Request $request
-     * @param $slug
-     * @return Response
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws Exception
      */
-    public function showAction(Request $request, $slug): Response
+    public function showAction(
+        Request         $request,
+        CurrentSite     $currentSite,
+        TemplateService $templateService,
+        string          $slug
+    ): Response
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
-
         $pm = new PublisherManager();
         $am = new ArticleManager();
 
@@ -97,12 +97,12 @@ class PublisherController extends Controller
             throw new NotFoundException("Publisher $slug not found");
         }
 
-        $use_old_controller = $globalSite->getOpt('use_old_publisher_controller');
+        $use_old_controller = $currentSite->getOption('use_old_publisher_controller');
         if ($use_old_controller) {
             return new RedirectResponse('/o/editeur/' . $slug);
         }
 
-        $publisher_filter = $globalSite->getOpt('publisher_filter');
+        $publisher_filter = $currentSite->getOption('publisher_filter');
         if ($publisher_filter) {
             $publishersFromFilter = explode(',', $publisher_filter);
             if (!in_array($publisher->get('id'), $publishersFromFilter)) {
@@ -130,7 +130,7 @@ class PublisherController extends Controller
             'offset' => $pagination->getOffset(),
         ]);
 
-        return $this->render('AppBundle:Publisher:show.html.twig', [
+        return $templateService->renderResponse('AppBundle:Publisher:show.html.twig', [
             'publisher' => $publisher,
             'articles' => $articles,
             'pages' => $pagination,
@@ -149,10 +149,11 @@ class PublisherController extends Controller
      * @throws Exception
      */
     public function editAction(
-        Request      $request,
-        CurrentUser  $currentUser,
-        UrlGenerator $urlGenerator,
-        int          $id
+        Request         $request,
+        CurrentUser     $currentUser,
+        UrlGenerator    $urlGenerator,
+        TemplateService $templateService,
+        int             $id
     ): Response
     {
         $currentUser->authAdmin();
@@ -190,6 +191,7 @@ class PublisherController extends Controller
                 ->set('publisher_desc', $data['desc']);
 
             try {
+                /** @var Publisher $updated */
                 $updated = $pm->update($updated);
 
                 if ($data['logo'] !== null) {
@@ -205,7 +207,7 @@ class PublisherController extends Controller
             }
         }
 
-        return $this->render('AppBundle:Publisher:edit.html.twig', [
+        return $templateService->renderResponse('AppBundle:Publisher:edit.html.twig', [
             'publisher' => $publisher,
             'error' => $error,
             'form' => $form->createView(),
@@ -216,9 +218,7 @@ class PublisherController extends Controller
      * Delete a publisher.
      *
      * @route GET /admin/publisher/{id}/delete
-     * @throws AuthException
      * @throws LoaderError
-     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws Exception
@@ -227,6 +227,7 @@ class PublisherController extends Controller
         Request      $request,
         CurrentUser  $currentUser,
         UrlGenerator $urlGenerator,
+        TemplateService $templateService,
         int          $id,
     ): Response
     {
@@ -265,7 +266,7 @@ class PublisherController extends Controller
             return new RedirectResponse($url);
         }
 
-        return $this->render(
+        return $templateService->renderResponse(
             'AppBundle:Publisher:delete.html.twig', [
                 'publisher' => $publisher,
                 'collections' => $collections,
@@ -279,18 +280,15 @@ class PublisherController extends Controller
      * Publisher deletion confirm page.
      *
      * @route GET /admin/publisher/deleted
-     * @param Request $request
-     * @return Response
      * @throws LoaderError
-     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function deletedAction(Request $request): Response
+    public function deletedAction(Request $request, TemplateService $templateService): Response
     {
         $name = $request->query->get('name');
 
-        return $this->render(
+        return $templateService->renderResponse(
             'AppBundle:Publisher:deleted.html.twig',
             ['name' => $name]
         );
@@ -299,14 +297,13 @@ class PublisherController extends Controller
     /**
      * Manager a publisher's rights
      * @route /admin/publisher/{id}/rights.
-     * @throws AuthException
+     *
      * @throws LoaderError
-     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws Exception
      */
-    public function rightsAction(CurrentUser $currentUser, int $id): Response
+    public function rightsAction(CurrentUser $currentUser, TemplateService $templateService, int $id): Response
     {
         $currentUser->authAdmin();
 
@@ -315,7 +312,7 @@ class PublisherController extends Controller
             throw new NotFoundException("Publisher $id not found.");
         }
 
-        return $this->render('AppBundle:Publisher:rights.html.twig', [
+        return $templateService->renderResponse('AppBundle:Publisher:rights.html.twig', [
             'publisher' => $publisher,
         ]);
     }
@@ -323,7 +320,6 @@ class PublisherController extends Controller
     /**
      * Give a user the right to manage a publisher.
      *
-     * @throws AuthException
      * @throws PropelException
      * @throws Exception
      */
@@ -417,14 +413,12 @@ class PublisherController extends Controller
     /**
      * Manager a publisher's suppliers
      * @route /admin/publisher/{id}/suppliers.
-     * @throws AuthException
-     * @throws PropelException
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws Exception
      */
-    public function suppliersAction(CurrentUser $currentUser, int $id): Response
+    public function suppliersAction(CurrentUser $currentUser, TemplateService $templateService, int $id): Response
     {
         $currentUser->authAdmin();
 
@@ -439,7 +433,7 @@ class PublisherController extends Controller
         $sm = new SupplierManager();
         $suppliers = $sm->getAll([], ['order' => 'supplier_name']);
 
-        return $this->render('AppBundle:Publisher:suppliers.html.twig', [
+        return $templateService->renderResponse('AppBundle:Publisher:suppliers.html.twig', [
             'publisher' => $publisher,
             'suppliers' => $suppliers,
         ]);
@@ -447,7 +441,6 @@ class PublisherController extends Controller
 
     /**
      * Add a publisher's supplier.
-     * @throws AuthException
      * @throws PropelException
      * @throws Exception
      */
@@ -482,7 +475,6 @@ class PublisherController extends Controller
 
     /**
      * Add a publisher's supplier.
-     * @throws AuthException
      * @throws PropelException
      * @throws Exception
      */
