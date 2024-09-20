@@ -3,7 +3,6 @@
 namespace Command;
 
 use Biblys\Test\ModelFactory;
-use Model\Country;
 use Model\Publisher;
 use Model\Right;
 use Model\ShippingFee;
@@ -77,11 +76,6 @@ class CreateSeedsCommand extends Command
         $right->setSite($site);
         $right->save();
         $output->writeln(["Inserted user: publisher@paronymie.fr"]);
-
-        $country = new Country();
-        $country->setName("France");
-        $country->save();
-        $output->writeln(["Inserted country: France"]);
 
         // Site
         $shippingFee = new ShippingFee();
