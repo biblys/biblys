@@ -33,7 +33,7 @@ class StockItemController extends Controller
     public function searchAction($query): JsonResponse
     {
         $am = new ArticleManager();
-        $articles = $am->search($query);
+        $articles = $am->search($query, ["limit" => 100]);
 
         $results = [];
         foreach ($articles as $article) {

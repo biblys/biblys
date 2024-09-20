@@ -1,5 +1,13 @@
 # Historique des modifications
 
+## 2.85.2 (DEV)
+
+### Correction
+
+- La recherche d'exemplaire en stock avec un terme trop générique
+  pouvait renvoyer un résultat trop grand et provoquer une erreur.
+  Les résultats sont désormais limités à 100.
+
 ## 2.85.1 (11 septembre 2024)
 
 Correctifs
