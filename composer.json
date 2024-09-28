@@ -24,7 +24,8 @@
     "db:seed": "bin/console db:seed",
     "db:prepare": ["@db:reset", "@db:seed"],
     "images:import": "bin/console images:import",
-    "images:optimize": "bin/console images:optimize"
+    "images:optimize": "bin/console images:optimize",
+    "media:import": "bin/console media:import"
   },
   "require": {
     "php": "~8.1",
