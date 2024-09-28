@@ -15,6 +15,7 @@ use Biblys\Service\Images\ImagesService;
 use Biblys\Service\InvalidSiteIdException;
 use Command\CreateSeedsCommand;
 use Command\ImportImagesCommand;
+use Command\ImportMediaCommand;
 use Command\OptimizeImagesCommand;
 use Command\ResetDatabaseCommand;
 use Symfony\Component\Console\Application;
@@ -33,6 +34,7 @@ try {
     $imagesServices = new ImagesService($config, $currentSite, $filesystem);
     $application->add(new ImportImagesCommand($config, $filesystem, $imagesServices));
     $application->add(new OptimizeImagesCommand($config, $filesystem, $imagesServices));
+    $application->add(new ImportMediaCommand($currentSite, $filesystem));
 } catch (InvalidSiteIdException) {
 }
 
