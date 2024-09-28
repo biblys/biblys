@@ -18,6 +18,7 @@ use Model\Cart;
 use Model\Country;
 use Model\CrowdfundingCampaign;
 use Model\CrowfundingReward;
+use Model\MediaFile;
 use Model\Option;
 use Model\Link;
 use Model\Order;
@@ -828,6 +829,22 @@ class ModelFactory
         $file->save();
 
         return $file;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createMediaFile(
+        Site $site = null,
+        int $fileSize = 100,
+    ): MediaFile
+    {
+        $mediaFile = new MediaFile();
+        $mediaFile->setSiteId($site ? $site->getId() : self::createSite()->getId());
+        $mediaFile->setFileSize($fileSize);
+        $mediaFile->save();
+
+        return $mediaFile;
     }
 
 }
