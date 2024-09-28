@@ -3,11 +3,12 @@
   "extends": [
     "config:recommended"
   ],
-  "composer": {
+  "force": {
     "constraints": {
-      "php": "8.1.29"
+      "php": "8.1"
     }
   },
+  "constraintsFiltering": "strict",
   "packageRules": [
     {
       "managers": ["composer"],
