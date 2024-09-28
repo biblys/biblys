@@ -25,7 +25,7 @@ class UrlGeneratorValueResolver implements ArgumentValueResolverInterface
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
         $routes = RouteLoader::load();
-        $requestContext = RequestContext::fromUri($request->getUri());
+        $requestContext = RequestContext::fromUri($request->getSchemeAndHttpHost());
         yield new UrlGenerator($routes, $requestContext);
     }
 }
