@@ -8,6 +8,7 @@ use Biblys\Service\TemplateService;
 use Framework\Controller;
 use Model\FileQuery;
 use Model\ImageQuery;
+use Model\MediaFileQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -80,8 +81,16 @@ class MaintenanceController extends Controller
             ->find()
             ->getData()[0];
 
-        $totalCount = $articles["count"] + $downloadableFiles["count"] + $stockItems["count"];
-        $totalSize = $articles["size"] + $downloadableFiles["size"] + $stockItems["size"];
+        $mediaFiles = MediaFileQuery::create()
+            ->filterBySiteId($currentSite->getSite()->getId())
+            ->withColumn('COUNT(`media_id`)', 'count')
+            ->withColumn('SUM(`media_file_size`)', 'size')
+            ->select(['count', 'size'])
+            ->find()
+            ->getData()[0];
+
+        $totalCount = $articles["count"] + $downloadableFiles["count"] + $stockItems["count"] + $mediaFiles["count"];
+        $totalSize = $articles["size"] + $downloadableFiles["size"] + $stockItems["size"] + $mediaFiles["size"];
 
         return $templateService->renderResponse("AppBundle:Maintenance:disk-usage.html.twig", [
             "articlesCount" => $articles["count"],
@@ -90,6 +99,8 @@ class MaintenanceController extends Controller
             "stockItemsSize" => $this->_convertToGigabytes($stockItems["size"]),
             "downloadableFilesCount" => $downloadableFiles["count"],
             "downloadableFilesSize" => $this->_convertToGigabytes($downloadableFiles["size"]),
+            "mediaFilesCount" => $mediaFiles["count"],
+            "mediaFilesSize" => $this->_convertToGigabytes($mediaFiles["size"]),
             "totalCount" => $totalCount,
             "totalSize" => $this->_convertToGigabytes($totalSize),
         ]);
