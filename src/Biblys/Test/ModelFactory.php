@@ -793,6 +793,7 @@ class ModelFactory
     public static function createImage(
         Article $article = null,
         Stock   $stockItem = null,
+        Post    $post = null,
         Site    $site = null,
         string  $type = null,
         string  $filePath = "/images/",
@@ -805,6 +806,7 @@ class ModelFactory
         $image->setType($type);
         $image->setArticle($article);
         $image->setStockItem($stockItem);
+        $image->setPost($post);
         $image->setSite($site);
         $image->setFilePath($filePath);
         $image->setFileName($fileName);

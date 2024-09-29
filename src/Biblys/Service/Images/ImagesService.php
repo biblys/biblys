@@ -9,6 +9,7 @@ use Model\Article;
 use Model\Image;
 use Model\ImageQuery;
 use Model\Map\ImageTableMap;
+use Model\Post;
 use Model\Stock;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Propel;
@@ -27,11 +28,12 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    public function addImageFor(Article|Stock $model, string $imagePath): void
+    public function addImageFor(Article|Stock|Post $model, string $imagePath): void
     {
         match (get_class($model)) {
             Article::class => $this->_addImage($imagePath, type: "cover", typeDirectory: "book", article: $model),
             Stock::class => $this->_addImage($imagePath, type: "photo", typeDirectory: "stock", stockItem: $model),
+            Post::class => $this->_addImage($imagePath, type: "illustration", typeDirectory: "post", post: $model),
         };
     }
 
@@ -44,9 +46,10 @@ class ImagesService
         string  $typeDirectory,
         Article $article = null,
         Stock   $stockItem = null,
+        Post    $post = null,
     ): void
     {
-        $model = $article ?? $stockItem;
+        $model = $article ?? $stockItem ?? $post;
 
         $imageDirectory = str_pad(
             string: substr(string: $model->getId(), offset: -2, length: 2),
@@ -71,8 +74,9 @@ class ImagesService
 
         $imageModel->setSite($this->currentSite->getSite());
         $imageModel->setType($type);
-        $imageModel->setStockItemId($stockItem?->getId());
         $imageModel->setArticleId($article?->getId());
+        $imageModel->setStockItemId($stockItem?->getId());
+        $imageModel->setPostId($post?->getId());
         $imageModel->setFilepath("$typeDirectory/$imageDirectory/");
         $imageModel->setFilename("{$model->getId()}.jpg");
         $imageModel->setMediatype(mime_content_type($imagePath));
@@ -96,7 +100,7 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    public function deleteImageFor(Article|Stock $article): void
+    public function deleteImageFor(Article|Stock|Post $article): void
     {
         $db = Propel::getWriteConnection(ImageTableMap::DATABASE_NAME);
         $db->beginTransaction();
@@ -116,11 +120,12 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    public function imageExistsFor(Article|Stock $model): bool
+    public function imageExistsFor(Article|Stock|Post $model): bool
     {
         return match (get_class($model)) {
             Article::class => ImageQuery::create()->filterByArticle($model)->exists(),
             Stock::class => ImageQuery::create()->filterByStockItem($model)->exists(),
+            Post::class => ImageQuery::create()->filterByPost($model)->exists(),
         };
     }
 
@@ -128,9 +133,9 @@ class ImagesService
      * @throws PropelException
      */
     public function getImageUrlFor(
-        Article|Stock $model,
-        int           $width = null,
-        int           $height = null
+        Article|Stock|Post $model,
+        int                $width = null,
+        int                $height = null
     ):
     ?string
     {
@@ -145,10 +150,15 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    private function _getImageFor(Article|Stock $model): ImageForModel
+    private function _getImageFor(Article|Stock|Post $model): ImageForModel
     {
         if ($model instanceof Stock) {
             $image = ImageQuery::create()->filterByStockItem($model)->findOne();
+            return new ImageForModel($this->config, $image);
+        }
+
+        if ($model instanceof Post) {
+            $image = ImageQuery::create()->filterByPost($model)->findOne();
             return new ImageForModel($this->config, $image);
         }
 
@@ -161,6 +171,7 @@ class ImagesService
     /**
      * @throws PropelException
      * @deprecated ImagesService->getCoverUrlForArticle is deprecated. Use method getImageUrlFor instead.
+     * @noinspection PhpUnused
      */
     public function getCoverUrlForArticle(Article $article, int $width = null, int $height = null): void
     {

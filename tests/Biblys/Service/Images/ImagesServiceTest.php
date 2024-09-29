@@ -11,6 +11,7 @@ use Mockery;
 use Model\Article;
 use Model\Image;
 use Model\ImageQuery;
+use Model\Post;
 use Model\Stock;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -221,6 +222,106 @@ class ImagesServiceTest extends TestCase
         $this->assertNull($image);
     }
 
+    /** ImagesService->addImageFor (post) */
+
+    /**
+     * @throws PropelException
+     */
+    public function testAddImageForCreatesImageWithPost(): void
+    {
+        // given
+        $post = new Post();
+        $post->setId(1984);
+        $site = ModelFactory::createSite();
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects('copy');
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        // when
+        $service->addImageFor($post, __DIR__ . "/image.jpeg");
+
+        // then
+        $image = ImageQuery::create()->filterByPost($post)->findOne();
+        $this->assertInstanceOf(Image::class, $image);
+        $this->assertEquals($site, $image->getSite());
+        $this->assertEquals("illustration", $image->getType());
+        $this->assertEquals("post/84/", $image->getFilepath());
+        $this->assertEquals("1984.jpg", $image->getFilename());
+        $this->assertEquals(1, $image->getVersion());
+        $this->assertEquals("image/jpeg", $image->getMediatype());
+        $this->assertEquals(14788, $image->getFilesize());
+        $this->assertEquals(200, $image->getWidth());
+        $this->assertEquals(300, $image->getHeight());
+        $filesystem->shouldHaveReceived("copy");
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testAddImageForCreatesUpdatesImageWithPost(): void
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $post = ModelFactory::createPost();
+        $post->setId(1985);
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects("copy");
+        $filesystem->expects("remove");
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        $service->addImageFor($post, __DIR__ . "/image.jpeg");
+        $createdImage = ImageQuery::create()->filterByPost($post)->findOne();
+
+        // when
+        $service->addImageFor($post, __DIR__ . "/image2.jpeg");
+
+        // then
+        $updatedImage = ImageQuery::create()->filterByPost($post)->findOne();
+        $this->assertInstanceOf(Image::class, $updatedImage);
+        $this->assertEquals($createdImage->getId(), $updatedImage->getId());
+        $this->assertEquals("post/85/", $updatedImage->getFilepath());
+        $this->assertEquals("1985.jpg", $updatedImage->getFilename());
+        $this->assertEquals(2, $updatedImage->getVersion());
+        $this->assertEquals("image/jpeg", $updatedImage->getMediatype());
+        $this->assertEquals(4410, $updatedImage->getFilesize());
+        $this->assertEquals(100, $updatedImage->getWidth());
+        $this->assertEquals(150, $updatedImage->getHeight());
+        $filesystem->shouldHaveReceived("remove");
+        $filesystem->shouldHaveReceived("copy");
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testAddImageForIfFileCopyFailsWithPost(): void
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $post = ModelFactory::createPost();
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects("copy")->andThrow(new FileNotFoundException());
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        // when
+        $exception = Helpers::runAndCatchException(function () use ($service, $post) {
+            $service->addImageFor($post, __DIR__ . "/image.jpeg");
+        });
+
+        // then
+        $this->assertInstanceOf(FileNotFoundException::class, $exception);
+        $image = ImageQuery::create()->filterByPost($post)->findOne();
+        $this->assertNull($image);
+    }
+
     /** ImagesService->imageExistsFor (article) */
 
     /**
@@ -306,6 +407,51 @@ class ImagesServiceTest extends TestCase
 
         // when
         $hasCover = $service->imageExistsFor($stockItem);
+
+        // then
+        $this->assertFalse($hasCover);
+    }
+
+    /** ImagesService->imageExistsFor (post) */
+
+    /**
+     * @throws PropelException
+     */
+    public function testImageExistsForReturnsTrueWithPost()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $post = ModelFactory::createPost();
+        ModelFactory::createImage(post: $post);
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        // when
+        $hasCover = $service->imageExistsFor($post);
+
+        // then
+        $this->assertTrue($hasCover);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testImageExistsForReturnsFalseWithPost()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $post = ModelFactory::createPost();
+
+        $currentSite = new CurrentSite($site);
+        $config = new Config();
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $currentSite ,$filesystem);
+
+        // when
+        $hasCover = $service->imageExistsFor($post);
 
         // then
         $this->assertFalse($hasCover);
@@ -417,6 +563,59 @@ class ImagesServiceTest extends TestCase
         $this->assertEquals("/images/book/covers/book-cover.jpeg", $coverUrl);
     }
 
+    /** ImagesService->getImageUrlFor (post) */
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetImageUrlForIfItDoesNotExistWithPost(): void
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $post = ModelFactory::createPost();
+
+        $config = new Config(["images" => ["path" => "/images/"]]);
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+
+        // when
+        $coverUrl = $service->getImageUrlFor($post);
+
+        // then
+        $this->assertNull($coverUrl);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetImageUrlForIfItExistsWithPost(): void
+    {
+        // given
+        $site = ModelFactory::createSite();
+
+        $config = new Config(["images" => ["base_url" => "/images/"]]);
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        $post = ModelFactory::createPost();
+        ModelFactory::createImage(
+            post: $post,
+            filePath: "book/covers/",
+            fileName: "book-cover.jpeg",
+        );
+
+        // when
+        $coverUrl = $service->getImageUrlFor($post);
+
+        // then
+        $this->assertEquals("/images/book/covers/book-cover.jpeg", $coverUrl);
+    }
+
     /** ImagesService->deleteImageFor */
 
     /**
@@ -465,6 +664,31 @@ class ImagesServiceTest extends TestCase
 
         // then
         $deletedImage = ImageQuery::create()->filterByStockItem($stockItem)->findOne();
+        $this->assertNull($deletedImage);
+        $filesystem->shouldHaveReceived("remove");
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testDeleteImageForDeletesImageWithPost(): void
+    {
+        // given
+        $post = ModelFactory::createPost();
+        ModelFactory::createImage(post: $post);
+        $site = ModelFactory::createSite();
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects("remove");
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        // when
+        $service->deleteImageFor($post);
+
+        // then
+        $deletedImage = ImageQuery::create()->filterByPost($post)->findOne();
         $this->assertNull($deletedImage);
         $filesystem->shouldHaveReceived("remove");
     }
