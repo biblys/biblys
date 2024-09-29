@@ -45,10 +45,17 @@ class Post extends Entity
     }
 
     /**
+     * @deprecated Post->getIllustration is deprecated. Use method ImagesService->getImageUrlFor instead.
      * @throws Exception
      */
     public function getIllustration(): Media
     {
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.86.0",
+            "Post->getIllustration… methods are deprecated. Use method ImagesService->getImageUrlFor instead.",
+        );
+
         if (!isset($this->illustration)) {
             $this->illustration = new Media('post', $this->get('id'));
         }
@@ -57,6 +64,7 @@ class Post extends Entity
     }
 
     /**
+     * @deprecated Post->hasIllustration is deprecated. Use method ImagesService->imageExistsFor instead.
      * @throws Exception
      */
     public function hasIllustration(): bool
@@ -69,6 +77,7 @@ class Post extends Entity
     }
 
     /**
+     * @deprecated Post->getIllustrationUrl is deprecated. Use method ImagesService->getIllustrationUrl instead.
      * @throws Exception
      */
     public function getIllustrationUrl(): string
@@ -84,6 +93,7 @@ class Post extends Entity
     }
 
     /**
+     * @deprecated Post->getIllustrationTag is deprecated. Use method ImagesService->getImageUrlFor instead.
      * @throws Exception
      */
     public function getIllustrationTag(?int $height = null): string
