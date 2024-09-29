@@ -215,14 +215,11 @@ class PostController extends Controller
     private
     function _writePostToFile(Post $post, TemplateService $templateService): void
     {
-        $cover = new Media("post", $post->getId());
-
         $converter = new HtmlConverter();
         $markdown = $converter->convert($post->getContent());
 
         $response = $templateService->renderResponse('AppBundle:Post:export.md.twig', [
             "post" => $post,
-            "cover" => $cover,
             "content" => $markdown,
             "published" => $post->getStatus() ? "true" : "false",
         ]);
