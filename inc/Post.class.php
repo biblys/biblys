@@ -4,225 +4,225 @@ use Model\User;
 use Propel\Runtime\Exception\PropelException;
 
 class Post extends Entity
+{
+    protected $prefix = 'post';
+    private ?Media $illustration = null;
+    private ?Publisher $publisher = null;
+
+    /**
+     * @throws PropelException
+     */
+    public static function buildFromModel(\Model\Post $post): Post
     {
-        protected $prefix = 'post';
-        private ?Media $illustration = null;
-        private ?Publisher $publisher = null;
+        return new Post([
+            "post_id" => $post->getId(),
+            "post_title" => $post->getTitle(),
+            "post_url" => $post->getUrl(),
+            "post_content" => $post->getContent(),
+            "post_date" => $post->getDate()->format("Y-m-d H:i:s"),
+            "post_illustration_legend" => $post->getIllustrationLegend(),
+            "category_id" => $post->getCategoryId(),
+        ]);
+    }
 
-        /**
-         * @throws PropelException
-         */
-        public static function buildFromModel(\Model\Post $post): Post
-        {
-            return new Post([
-                "post_id" => $post->getId(),
-                "post_title" => $post->getTitle(),
-                "post_url" => $post->getUrl(),
-                "post_content" => $post->getContent(),
-                "post_date" => $post->getDate()->format("Y-m-d H:i:s"),
-                "post_illustration_legend" => $post->getIllustrationLegend(),
-                "category_id" => $post->getCategoryId(),
-            ]);
-        }
+    public function __construct($data)
+    {
+        /* JOINS */
 
-        public function __construct($data)
-        {
-            /* JOINS */
+        // Category (OneToMany)
+        $cm = new CategoryManager();
+        if (isset($data['category_id'])) $data['category'] = $cm->get(array('category_id' => $data['category_id']));
 
-            // Category (OneToMany)
-            $cm = new CategoryManager();
-            if (isset($data['category_id'])) $data['category'] = $cm->get(array('category_id' => $data['category_id']));
-
-            parent::__construct($data);
-        }
+        parent::__construct($data);
+    }
 
     /**
      * @throws Exception
      */
     public function getIllustration(): Media
-        {
-            if (!isset($this->illustration)) {
-                $this->illustration = new Media('post', $this->get('id'));
-            }
-
-            return $this->illustration;
+    {
+        if (!isset($this->illustration)) {
+            $this->illustration = new Media('post', $this->get('id'));
         }
+
+        return $this->illustration;
+    }
 
     /**
      * @throws Exception
      */
     public function hasIllustration(): bool
-        {
-            $illustration = $this->getIllustration();
-            if (!isset($this->illustrationExists)) {
-                $this->illustrationExists = $illustration->exists();
-            }
-            return $this->illustrationExists;
+    {
+        $illustration = $this->getIllustration();
+        if (!isset($this->illustrationExists)) {
+            $this->illustrationExists = $illustration->exists();
         }
+        return $this->illustrationExists;
+    }
 
     /**
      * @throws Exception
      */
     public function getIllustrationUrl(): string
-        {
-            $options = [];
+    {
+        $options = [];
 
-            $illustrationVersion = $this->get("illustration_version");
-            if ($illustrationVersion >= 1) {
-                $options["version"] = $illustrationVersion;
-            }
-
-            return $this->getIllustration()->getUrl($options);
+        $illustrationVersion = $this->get("illustration_version");
+        if ($illustrationVersion >= 1) {
+            $options["version"] = $illustrationVersion;
         }
+
+        return $this->getIllustration()->getUrl($options);
+    }
 
     /**
      * @throws Exception
      */
     public function getIllustrationTag(?int $height = null): string
-        {
-            $illustration = $this->getIllustration();
+    {
+        $illustration = $this->getIllustration();
 
-            $heightAttribute = "";
-            if ($height !== null) {
-                $heightAttribute = " height=$height";
-            }
-
-            return '<img src="'.$illustration->getUrl().'" alt="'.$this->get('illustration_legend').'"'.$heightAttribute.' class="illustration">';
+        $heightAttribute = "";
+        if ($height !== null) {
+            $heightAttribute = " height=$height";
         }
 
-        public function getFirstImageUrl(): ?string
-        {
-            if (!$this->has("content")) {
-                return null;
-            }
+        return '<img src="' . $illustration->getUrl() . '" alt="' . $this->get('illustration_legend') . '"' . $heightAttribute . ' class="illustration">';
+    }
 
-            preg_match('/<img.+src=[\'"](?P<src>.+?)[\'"].*>/i', $this->get('content'), $image);
-            if (empty($image['src'])) {
-                return null;
-            }
-
-            return $image["src"];
+    public function getFirstImageUrl(): ?string
+    {
+        if (!$this->has("content")) {
+            return null;
         }
 
-        /**
-         * Get related publisher
-         */
-        public function getPublisher(): ?Publisher
-        {
-            if (isset($this->publisher)) {
-                return $this->publisher;
-            }
+        preg_match('/<img.+src=[\'"](?P<src>.+?)[\'"].*>/i', $this->get('content'), $image);
+        if (empty($image['src'])) {
+            return null;
+        }
 
-            $publisher = null;
-            if ($this->has('publisher_id')) {
-                $pm = new PublisherManager();
-                $publisher = $pm->getById($this->get('publisher_id'));
-                if ($publisher === false) {
-                    $publisher = null;
-                }
-            }
+        return $image["src"];
+    }
 
-            $this->publisher = $publisher;
+    /**
+     * Get related publisher
+     */
+    public function getPublisher(): ?Publisher
+    {
+        if (isset($this->publisher)) {
             return $this->publisher;
         }
 
-        /**
-         * Get related articles
-         * @return Article[]
-         */
-        public function getArticles(): array
-        {
-            $lm = new LinkManager();
-            $am = new ArticleManager();
-            $am->setIgnoreSiteFilters(true);
-
-            $articles = [];
-            $links = $lm->getAll(["post_id" => $this->get("id"), "article_id" => "NOT NULL"]);
-            foreach ($links as $link) {
-                $articleId = $link->get('article_id');
-                $article = $am->getById($articleId);
-                if ($article) {
-                    $articles[] = $article;
-                }
+        $publisher = null;
+        if ($this->has('publisher_id')) {
+            $pm = new PublisherManager();
+            $publisher = $pm->getById($this->get('publisher_id'));
+            if ($publisher === false) {
+                $publisher = null;
             }
-
-            return $articles;
         }
 
-        /**
-         * Get related (linked) people
-         * @return People[]
-         */
-        public function getRelatedPeople(): array
-        {
-
-            $lm = new LinkManager();
-            $pm = new PeopleManager();
-
-            $people = [];
-            $links = $lm->getAll(["post_id" => $this->get("id"), "people_id" => "NOT NULL"]);
-            foreach ($links as $link) {
-                $people[] = $pm->getById($link->get("people_id"));
-            }
-
-            return $people;
-        }
-
-        /**
-         * @return bool true if a user is admin or post's author
-         */
-        public function canBeDeletedBy(User $user): bool
-        {
-            if ($user->getId() === $this->get('user_id')) {
-                return true;
-            }
-
-            return false;
-        }
-
-        /**
-         * Returns previous post from current post's date
-         * @noinspection PhpUnused
-         */
-        public function getPrevPost()
-        {
-            $pm = new PostManager();
-            return $pm->get(
-                ['post_date' => '< '.$this->get('date')],
-                ['order' => 'post_date', 'sort' => 'desc']
-            );
-        }
-
-        /**
-         * Returns next post from current post's date
-         * @noinspection PhpUnused
-         */
-        public function getNextPost()
-        {
-            $pm = new PostManager();
-            return $pm->get(['post_date' => '> '.$this->get('date')]);
-        }
+        $this->publisher = $publisher;
+        return $this->publisher;
     }
 
-    class PostManager extends EntityManager
+    /**
+     * Get related articles
+     * @return Article[]
+     */
+    public function getArticles(): array
     {
-        protected $prefix = 'post',
-                  $table = 'posts',
-                  $object = 'Post',
-                  $siteAgnostic = false;
+        $lm = new LinkManager();
+        $am = new ArticleManager();
+        $am->setIgnoreSiteFilters(true);
 
-        /**
-         * @throws Exception
-         */
-        public function create(array $defaults = array()): Entity
-        {
-            if (!isset($defaults['site_id'])) $defaults['site_id'] = $this->site['site_id'];
-            return parent::create($defaults);
+        $articles = [];
+        $links = $lm->getAll(["post_id" => $this->get("id"), "article_id" => "NOT NULL"]);
+        foreach ($links as $link) {
+            $articleId = $link->get('article_id');
+            $article = $am->getById($articleId);
+            if ($article) {
+                $articles[] = $article;
+            }
         }
 
-        public function getAll(array $where = array(), array $options = array(), $withJoins = true): array
-        {
-            $where['posts`.`site_id'] = $this->site['site_id'];
-            return parent::getAll($where, $options);
-        }
+        return $articles;
     }
+
+    /**
+     * Get related (linked) people
+     * @return People[]
+     */
+    public function getRelatedPeople(): array
+    {
+
+        $lm = new LinkManager();
+        $pm = new PeopleManager();
+
+        $people = [];
+        $links = $lm->getAll(["post_id" => $this->get("id"), "people_id" => "NOT NULL"]);
+        foreach ($links as $link) {
+            $people[] = $pm->getById($link->get("people_id"));
+        }
+
+        return $people;
+    }
+
+    /**
+     * @return bool true if a user is admin or post's author
+     */
+    public function canBeDeletedBy(User $user): bool
+    {
+        if ($user->getId() === $this->get('user_id')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns previous post from current post's date
+     * @noinspection PhpUnused
+     */
+    public function getPrevPost()
+    {
+        $pm = new PostManager();
+        return $pm->get(
+            ['post_date' => '< ' . $this->get('date')],
+            ['order' => 'post_date', 'sort' => 'desc']
+        );
+    }
+
+    /**
+     * Returns next post from current post's date
+     * @noinspection PhpUnused
+     */
+    public function getNextPost()
+    {
+        $pm = new PostManager();
+        return $pm->get(['post_date' => '> ' . $this->get('date')]);
+    }
+}
+
+class PostManager extends EntityManager
+{
+    protected $prefix = 'post',
+        $table = 'posts',
+        $object = 'Post',
+        $siteAgnostic = false;
+
+    /**
+     * @throws Exception
+     */
+    public function create(array $defaults = array()): Entity
+    {
+        if (!isset($defaults['site_id'])) $defaults['site_id'] = $this->site['site_id'];
+        return parent::create($defaults);
+    }
+
+    public function getAll(array $where = array(), array $options = array(), $withJoins = true): array
+    {
+        $where['posts`.`site_id'] = $this->site['site_id'];
+        return parent::getAll($where, $options);
+    }
+}
