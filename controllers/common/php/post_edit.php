@@ -4,7 +4,9 @@
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\Images\ImagesService;
 use Biblys\Service\Slug\SlugService;
+use Model\PostQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +20,7 @@ return function (
     Request $request,
     CurrentUser $currentUser,
     UrlGenerator $urlGenerator,
+    ImagesService $imagesService,
 ): Response|RedirectResponse
 {
     $currentUser->authPublisher();
@@ -31,31 +34,28 @@ return function (
         $postId = $request->request->get('post_id');
         if (!$postId) {
             /** @var @Post $post */
-            $post = $pm->create();
+            $postEntity = $pm->create();
         } else {
             /** @var @Post $post */
-            $post = $pm->getById($postId);
+            $postEntity = $pm->getById($postId);
         }
+        $post = PostQuery::create()->findPk($postEntity->get('id'));
 
         // URL de la page
         $slugService = new SlugService();
         $postUrl = $slugService->slugify($request->request->get('post_title'));
-        $urls = $pm->get(['post_id' => '!= ' . $post->get('id'), 'post_url' => $postUrl]);
+        $urls = $pm->get(['post_id' => '!= ' . $postEntity->get('id'), 'post_url' => $postUrl]);
         if ($urls) {
             $postUrl .= '_' . $postId;
         }
-        $post->set('post_url', $postUrl);
+        $postEntity->set('post_url', $postUrl);
 
         // Illustration
-        $illustration = new  Media("post", $post->get("id"));
-        $illustrationVersion = $post->get("illustration_version");
         if (!empty($_FILES["post_illustration_upload"]["tmp_name"])) {
-            $illustration->upload($_FILES["post_illustration_upload"]["tmp_name"]);
-            $illustrationVersion++;
+            $imagesService->addImageFor($post, $_FILES["post_illustration_upload"]["tmp_name"]);
         } elseif (isset($_POST["post_illustration_delete"]) && $_POST['post_illustration_delete']) {
-            $illustration->delete();
+            $imagesService->deleteImageFor($post);
         }
-        $post->set("post_illustration_version", $illustrationVersion);
 
         $fields = $request->request->all();
         foreach ($fields as $field => $val) {
@@ -64,30 +64,29 @@ return function (
                 "post_url",
                 "post_url_old",
                 "post_time",
-                "post_illustration_version",
                 "post_illustration_delete",
             ])) {
                 continue;
             }
-            $post->set($field, $val);
+            $postEntity->set($field, $val);
         }
 
         // Dates
         $date = $request->request->get("post_date");
         $time = $request->request->get("post_time");
-        $post->set('post_date', $date . " " . $time);
+        $postEntity->set('post_date', $date . " " . $time);
 
         // Selected checkbox
         $selected = $request->request->get("post_selected") ? 1 : 0;
-        $post->set('post_selected', $selected);
+        $postEntity->set('post_selected', $selected);
 
-        $post->remove("author_id");
+        $postEntity->remove("author_id");
 
-        $pm->update($post);
+        $pm->update($postEntity);
 
         $postUrl = $urlGenerator->generate(
             "post_show",
-            ["slug" => $post->get("url")]
+            ["slug" => $postEntity->get("url")]
         );
         return new RedirectResponse($postUrl);
 
@@ -101,7 +100,7 @@ return function (
     $post_selected = NULL;
 
     $postId = $request->query->get('id');
-    $post = $pm->getById($postId);
+    $postEntity = $pm->getById($postId);
     $author = null;
 
     $pageTitle = 'Nouveau billet';
@@ -132,8 +131,9 @@ return function (
         <input type="file" id="post_illustration_upload" name="post_illustration_upload" accept="image/jpeg" />
     ';
 
-    if ($post) {
-        $p = $post;
+    if ($postEntity) {
+        $post = PostQuery::create()->findPk($postEntity->get('id'));
+        $p = $postEntity;
         $pageTitle = 'Modifier « <a href="/blog/' . $p["post_url"] . '">' . $p["post_title"] . '</a> »';
         $content .= '
             <div class="admin">
@@ -150,11 +150,10 @@ return function (
         $p["post_time"] = substr($date[1], 0, 5);
 
         // Illustration
-        $postIllustration = new Media("post", $post->get("id"));
-        if ($postIllustration->exists()) {
+        if ($imagesService->imageExistsFor($post)) {
             $postIllustrationUpload = '
                 <div class="text-center">
-                    ' . $post->getIllustrationTag(height: 300) . '<br />
+                    ' . $postEntity->getIllustrationTag(height: 300) . '<br />
                     <input type="checkbox" value=1 name="post_illustration_delete" id="illustration_delete" />
                     <label for="illustration_delete">Supprimer</label>
                 </div>
@@ -165,13 +164,13 @@ return function (
         if ($p['post_selected']) $post_selected = ' checked';
     }
 
-    $post = false;
+    $postEntity = false;
     $post_id = $request->query->get('id', false);
     if ($post_id) {
         $pm = new PostManager();
-        $post = $pm->getById($post_id);
+        $postEntity = $pm->getById($post_id);
 
-        if (!$post) {
+        if (!$postEntity) {
             throw new Exception("Billet n° $post_id introuvable.");
         }
     }
@@ -258,10 +257,6 @@ return function (
                 ' . $postIllustrationUpload . '
             </p>
             <p>
-                <label class="floating" for="illustration_version">Version :</label>
-                <input type="number" value="" name="post_illustration_version" id="illustration_version" class="nano" />
-            </p>
-            <p>
                 <label class="floating" for="post_illustration_legend">Légende :</label>
                 <input type="text" name="post_illustration_legend" id="post_illustration_legend" value="' . ($p['post_illustration_legend'] ?? null) . '" maxlength=64 class="long" />
             </p>
@@ -275,10 +270,10 @@ return function (
         <fieldset class="center">
     ';
 
-    if ($post) {
+    if ($postEntity) {
         $content .= '
             <a class="btn btn-danger" data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?"
-                href="' . $urlGenerator->generate('post_delete', ['id' => $post->get('id')]) . '">
+                href="' . $urlGenerator->generate('post_delete', ['id' => $postEntity->get('id')]) . '">
                 <span class="fa fa-trash-o"></span>
                 Supprimer le billet
             </a>
