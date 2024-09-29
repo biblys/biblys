@@ -4,9 +4,7 @@ namespace Command;
 
 use Biblys\Service\Config;
 use Biblys\Service\Images\ImageForModel;
-use Biblys\Service\Images\ImagesService;
 use Biblys\Service\LoggerService;
-use Biblys\Test\ModelFactory;
 use Exception;
 use Model\ImageQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -24,7 +22,6 @@ class OptimizeImagesCommand extends Command
     public function __construct(
         private readonly Config        $config,
         private readonly Filesystem    $filesystem,
-        private readonly ImagesService $imagesService,
         string                         $name = null,
     )
     {
@@ -73,8 +70,6 @@ class OptimizeImagesCommand extends Command
                 ->save($optimizedImagePath);
             $newSizeInMB = round(filesize($optimizedImagePath) / 1024 / 1024, 2);
 
-            $model = $image->getArticle() ?? $image->getStockItem();
-//            $this->imagesService->addImageFor($model, $optimizedImagePath);
             $this->filesystem->remove($optimizedImagePath);
 
             $loggerService = new LoggerService();
