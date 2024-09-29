@@ -10,6 +10,7 @@ use Cart;
 use Exception;
 use Framework\TemplateLoader;
 use Model\Article;
+use Model\Post;
 use Model\Stock;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Bridge\Twig\Extension\FormExtension;
@@ -273,6 +274,10 @@ class TemplateService
 
         $imagesService = new ImagesService($config, $currentSite, new Filesystem());
 
+        $filters[] = new TwigFilter('hasImage', function (Article|Stock|Post $model) use($imagesService) {
+            return $imagesService->imageExistsFor($model);
+        });
+
         $filters[] = new TwigFilter('hasCover', function (Article $article) use($imagesService) {
             return $imagesService->imageExistsFor($article);
         });
@@ -287,7 +292,7 @@ class TemplateService
         );
 
         $filters[] = new TwigFilter('imageUrl',
-            function (Article|Stock $model, array $options = []) use ($imagesService) {
+            function (Article|Stock|Post $model, array $options = []) use ($imagesService) {
                 $width = $options[0] ?? null;
                 $height = $options[1] ?? null;
                 return $imagesService->getImageUrlFor($model, width: $width, height: $height);
