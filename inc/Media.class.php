@@ -24,12 +24,12 @@ class Media
     {
         $this->config = Config::load();
 
-        if ($type === "article") {
+        if (in_array($type, ["article", "stock", "post"])) {
             trigger_deprecation(
                 "biblys",
                 "2.83.0",
-                "Using Media with 'article' type is deprecated." .
-                "Use ImagesService->getCoverUrlForArticle instead"
+                "Using Media with '$type' type is deprecated." .
+                "Use ImagesService->getImageFor instead"
             );
         }
 
