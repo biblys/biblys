@@ -6,16 +6,8 @@ use Propel\Runtime\Exception\PropelException;
 class Post extends Entity
     {
         protected $prefix = 'post';
-
-        /**
-         * @var Media
-         */
-        private $illustration = null;
-
-        /**
-         * @var Publisher
-         */
-        private $publisher = null;
+        private ?Media $illustration = null;
+        private ?Publisher $publisher = null;
 
         /**
          * @throws PropelException
@@ -44,7 +36,10 @@ class Post extends Entity
             parent::__construct($data);
         }
 
-        public function getIllustration(): Media
+    /**
+     * @throws Exception
+     */
+    public function getIllustration(): Media
         {
             if (!isset($this->illustration)) {
                 $this->illustration = new Media('post', $this->get('id'));
@@ -53,7 +48,10 @@ class Post extends Entity
             return $this->illustration;
         }
 
-        public function hasIllustration(): bool
+    /**
+     * @throws Exception
+     */
+    public function hasIllustration(): bool
         {
             $illustration = $this->getIllustration();
             if (!isset($this->illustrationExists)) {
@@ -62,7 +60,10 @@ class Post extends Entity
             return $this->illustrationExists;
         }
 
-        public function getIllustrationUrl(): string
+    /**
+     * @throws Exception
+     */
+    public function getIllustrationUrl(): string
         {
             $options = [];
 
@@ -74,7 +75,10 @@ class Post extends Entity
             return $this->getIllustration()->getUrl($options);
         }
 
-        public function getIllustrationTag(?int $height = null): string
+    /**
+     * @throws Exception
+     */
+    public function getIllustrationTag(?int $height = null): string
         {
             $illustration = $this->getIllustration();
 
@@ -83,7 +87,7 @@ class Post extends Entity
                 $heightAttribute = " height=$height";
             }
 
-            return '<img src="'.$illustration->url().'" alt="'.$this->get('illustration_legend').'"'.$heightAttribute.' class="illustration">';
+            return '<img src="'.$illustration->getUrl().'" alt="'.$this->get('illustration_legend').'"'.$heightAttribute.' class="illustration">';
         }
 
         public function getFirstImageUrl(): ?string
@@ -165,7 +169,7 @@ class Post extends Entity
         }
 
         /**
-         * @return bool true if user is admin or post's author
+         * @return bool true if a user is admin or post's author
          */
         public function canBeDeletedBy(User $user): bool
         {
@@ -178,6 +182,7 @@ class Post extends Entity
 
         /**
          * Returns previous post from current post's date
+         * @noinspection PhpUnused
          */
         public function getPrevPost()
         {
@@ -190,6 +195,7 @@ class Post extends Entity
 
         /**
          * Returns next post from current post's date
+         * @noinspection PhpUnused
          */
         public function getNextPost()
         {
@@ -208,7 +214,7 @@ class Post extends Entity
         /**
          * @throws Exception
          */
-        public function create(array $defaults = array())
+        public function create(array $defaults = array()): Entity
         {
             if (!isset($defaults['site_id'])) $defaults['site_id'] = $this->site['site_id'];
             return parent::create($defaults);
