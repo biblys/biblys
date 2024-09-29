@@ -24,29 +24,6 @@ class Event extends Entity
         parent::__construct($data);
     }
 
-    public function getIllustration()
-    {
-        if (!isset($this->illustration)) {
-            $this->illustration = new Media('post', $this->get('id'));
-        }
-        return $this->illustration;
-    }
-
-    public function hasIllustration()
-    {
-        $illustration = $this->getIllustration();
-        if (!isset($this->illustrationExists)) {
-            $this->illustrationExists = $illustration->exists();
-        }
-        return $this->illustrationExists;
-    }
-
-    public function getIllustrationTag()
-    {
-        $illustration = $this->getIllustration();
-        return '<img src="'.$illustration->url().'" alt="'.$this->get('illustration_legend').'" class="illustration">';
-    }
-
     /**
      * Get related articles
      * @return {array} of {Articles}
