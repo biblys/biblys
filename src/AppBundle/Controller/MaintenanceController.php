@@ -81,6 +81,15 @@ class MaintenanceController extends Controller
             ->find()
             ->getData()[0];
 
+        $postIllustrations = ImageQuery::create()
+            ->filterByType("illustration")
+            ->filterBySite($currentSite->getSite())
+            ->withColumn('COUNT(`id`)', 'count')
+            ->withColumn('SUM(`fileSize`)', 'size')
+            ->select(['count', 'size'])
+            ->find()
+            ->getData()[0];
+
         $mediaFiles = MediaFileQuery::create()
             ->filterBySiteId($currentSite->getSite()->getId())
             ->withColumn('COUNT(`media_id`)', 'count')
@@ -89,14 +98,24 @@ class MaintenanceController extends Controller
             ->find()
             ->getData()[0];
 
-        $totalCount = $articles["count"] + $downloadableFiles["count"] + $stockItems["count"] + $mediaFiles["count"];
-        $totalSize = $articles["size"] + $downloadableFiles["size"] + $stockItems["size"] + $mediaFiles["size"];
+        $totalCount = $articles["count"]
+            + $stockItems["count"]
+            + $postIllustrations["count"]
+            + $mediaFiles["count"]
+            + $downloadableFiles["count"];
+        $totalSize = $articles["size"]
+            + $stockItems["size"]
+            + $postIllustrations["size"]
+            + $mediaFiles["size"]
+            + $downloadableFiles["size"];
 
         return $templateService->renderResponse("AppBundle:Maintenance:disk-usage.html.twig", [
             "articlesCount" => $articles["count"],
             "articlesSize" => $this->_convertToGigabytes($articles["size"]),
             "stockItemsCount" => $stockItems["count"],
             "stockItemsSize" => $this->_convertToGigabytes($stockItems["size"]),
+            "postIllustrationsCount" => $postIllustrations["count"],
+            "postIllustrationsSize" => $this->_convertToGigabytes($postIllustrations["size"]),
             "downloadableFilesCount" => $downloadableFiles["count"],
             "downloadableFilesSize" => $this->_convertToGigabytes($downloadableFiles["size"]),
             "mediaFilesCount" => $mediaFiles["count"],
