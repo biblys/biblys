@@ -33,6 +33,7 @@ class MaintenanceControllerTest extends TestCase
         ModelFactory::createImage(type: 'cover', fileSize: 99999999);
         ModelFactory::createImage(site: $site, type: 'photo', fileSize: 99999999);
         ModelFactory::createImage(type: 'other', fileSize: 99999999);
+        ModelFactory::createImage(site: $site, type: 'illustration', fileSize: 99999999);
         ModelFactory::createMediaFile(site: $site,
             fileSize: 99999999);
 
@@ -57,12 +58,14 @@ class MaintenanceControllerTest extends TestCase
                 "articlesSize" => 0.093,
                 "stockItemsCount" => 1,
                 "stockItemsSize" => 0.093,
+                "postIllustrationsCount" => 1,
+                "postIllustrationsSize" => 0.093,
                 "downloadableFilesCount" => 0,
                 "downloadableFilesSize" => 0.0,
                 "mediaFilesCount" => 1,
                 "mediaFilesSize" => 0.093,
-                "totalCount" => 3,
-                "totalSize" => 0.279,
+                "totalCount" => 4,
+                "totalSize" => 0.373,
             ]);
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals("response", $response->getContent());
@@ -105,6 +108,8 @@ class MaintenanceControllerTest extends TestCase
             ->with("AppBundle:Maintenance:disk-usage.html.twig", [
                 "articlesCount" => 1,
                 "articlesSize" => 0.093,
+                "postIllustrationsCount" => 0,
+                "postIllustrationsSize" => 0,
                 "downloadableFilesCount" => 1,
                 "downloadableFilesSize" => 0.093,
                 "stockItemsCount" => 0,
