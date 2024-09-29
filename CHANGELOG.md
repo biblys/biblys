@@ -32,6 +32,12 @@ composer propel migrate
 composer media:import
 ```
 
+3. Importer les illustrations de billets de blog
+
+```shell
+composer media:import post
+```
+
 ## 2.85.2 (20 septembre 2024)
 
 ### Corrections

@@ -9,6 +9,8 @@ use Exception;
 use Model\Article;
 use Model\ArticleQuery;
 use Model\ImageQuery;
+use Model\Post;
+use Model\PostQuery;
 use Model\Stock;
 use Model\StockQuery;
 use Propel\Runtime\Exception\PropelException;
@@ -148,6 +150,12 @@ class ImportImagesCommand extends Command
                     $image->save();
                 }
 
+                if ($modelType === "post") {
+                    $image = ImageQuery::create()->filterByPost($model)->findOne();
+                    $image->setSite($model->getSite());
+                    $image->save();
+                }
+
                 $progress->setMessage("Imported image for $modelType $modelId ($modelTitle)");
                 $loggerService->log("images-import", "info", "Imported image for $modelType $modelId ($modelTitle)");
                 $loadedImagesCount++;
@@ -164,11 +172,12 @@ class ImportImagesCommand extends Command
     /**
      * @throws Exception
      */
-    private function _getModelQuery(string $modelType): ArticleQuery|StockQuery
+    private function _getModelQuery(string $modelType): ArticleQuery|StockQuery|PostQuery
     {
         return match ($modelType) {
             "article" => ArticleQuery::create(),
             "stock" => StockQuery::create(),
+            "post" => PostQuery::create(),
             default => throw new Exception("Unsupported model type $modelType"),
         };
     }
@@ -177,12 +186,12 @@ class ImportImagesCommand extends Command
      * @throws PropelException
      * @throws Exception
      */
-    private function _getModelTitle(Article|Stock $model, string $modelType): string
+    private function _getModelTitle(Article|Stock|Post $model, string $modelType): string
     {
         return match ($modelType) {
-            "article" => $model->getTitle(),
+            "article", "post" => $model->getTitle(),
             "stock" => $model->getArticle()->getTitle(),
-            default => throw new Exception("Unsupported model type"),
+            default => throw new Exception("Unsupported model type $modelType"),
         };
     }
 }
