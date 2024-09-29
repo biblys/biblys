@@ -14,6 +14,22 @@ require_once "setUp.php";
 class PostTest extends PHPUnit\Framework\TestCase
 {
     /**
+     * @throws Exception
+     */
+    public function testGetModel(): void
+    {
+        // given
+        $entity = new Post(["id" => 1234]);
+
+        // when
+        $model = $entity->getModel();
+
+        // then
+        $this->assertInstanceOf(\Model\Post::class, $model);
+        $this->assertEquals(1234, $model->getId());
+    }
+
+    /**
      * Test creating a post
      */
     public function testCreate()

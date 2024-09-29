@@ -36,6 +36,14 @@ class Post extends Entity
         parent::__construct($data);
     }
 
+    public function getModel(): \Model\Post
+    {
+        $model = new \Model\Post();
+        $model->setId($this->get("id"));
+
+        return $model;
+    }
+
     /**
      * @throws Exception
      */
