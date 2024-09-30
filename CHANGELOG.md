@@ -23,19 +23,19 @@
 
 ### Déploiement
 
-1. Jouer les migrations
+#### 1. Jouer les migrations
 
 ```shell
 composer propel migrate
 ```
 
-2. Importer les médias
+#### 2. Importer les médias
 
 ```shell
 composer media:import
 ```
 
-3. Importer les illustrations de billets de blog
+#### 3. Importer les illustrations de billets de blog
 
 ```shell
 composer media:import post
@@ -64,8 +64,8 @@ Correctifs
 Améliorations
 
 - Une nouvelle page individuelle permet de consulter les informations d'un·e
-  utilisateur·ice, notamment ses méthodes de connexion.  
-- La page "Espace disque" affiche désormais la taille occupée par les 
+  utilisateur·ice, notamment ses méthodes de connexion.
+- La page "Espace disque" affiche désormais la taille occupée par les
   fichiers téléchargeables.
 - Une nouvelle commande `images:optimize` permet d'optimiser l'espace disque
   occupée par les images en limitant la taille de leur plus grand côté à
@@ -129,15 +129,15 @@ Améliorations
 
 - La validation d'une commande contenant des articles téléchargeables
   requiert maintenant l'acceptation des conditions spécifiques au numérique.
-- Pour prévenir toute confusion, les articles physiques à expédier et les 
-  articles numériques à télécharger sont désormais clairement distingués 
+- Pour prévenir toute confusion, les articles physiques à expédier et les
+  articles numériques à télécharger sont désormais clairement distingués
   dans le panier.
 - Les livres affichés dans la bibliothèque numérique peuvent désormais être
   filtrées grâce à un champ de recherche.
-- Les bibliothèques numériques contenant plus de 25 articles sont désormais 
-  paginées pour en faciliter l'exploration. 
-- Une page nouvelle page "Espace disque" dans l'administration permet de 
-  connaître l'espace disque occupé par les images (pour l'instant uniquement 
+- Les bibliothèques numériques contenant plus de 25 articles sont désormais
+  paginées pour en faciliter l'exploration.
+- Une page nouvelle page "Espace disque" dans l'administration permet de
+  connaître l'espace disque occupé par les images (pour l'instant uniquement
   les images de couvertures des articles).
 
 Déploiement
@@ -149,12 +149,12 @@ composer db:migrate
 ```
 
 \2. Mettre à jour la configuration, en remplaçant les paramètres `media_path`,
-  `media_url` et `images_cdn` :
+`media_url` et `images_cdn` :
 
 ```yaml
 media_path: public/images
 media_url: /images/
-images_cdn: 
+images_cdn:
   service: weserv
 ```
 
@@ -191,31 +191,31 @@ Utilisateurs locaux
 
 Offres spéciales
 
-- Les articles offerts dans le cadre d'une offre spéciale peuvent désormais 
+- Les articles offerts dans le cadre d'une offre spéciale peuvent désormais
   être ajoutés ou retirés du panier par le client
-- Les paniers contenant des articles liés à une offre spéciale font 
+- Les paniers contenant des articles liés à une offre spéciale font
   maintenant l'objet d'une validation au moment de la validation de commande.
 
 Autres améliorations
 
-- Un lien vers le panier apparaît désormais dans le menu supérieur, à côté 
+- Un lien vers le panier apparaît désormais dans le menu supérieur, à côté
   du lien "Mon compte".
 - Une page listant les utilisateur·ices a été ajouté à l'administration.
 
 Déploiement
 
-- Ajouter une chaine de 32 caractères aléatoire pour la valeur de l'optiond 
+- Ajouter une chaine de 32 caractères aléatoire pour la valeur de l'optiond
   configuration `authentication.secret`.
 
 ## 2.81.2 (22 mai 2024)
 
 Corrections
 
-- Dans la liste des exemplaires, le client ayant acheté un exemplaire 
+- Dans la liste des exemplaires, le client ayant acheté un exemplaire
   pouvait ne plus être affiché. C'est corrigé.
-- La page des options pouvait laisser apparaître les options des 
+- La page des options pouvait laisser apparaître les options des
   utilisateurs. Ce n'est plus le cas.
-- La mention "Déjà acheté" pouvait apparaître sur le panier pour des livres 
+- La mention "Déjà acheté" pouvait apparaître sur le panier pour des livres
   numérique n'ayant pas été acheté. C'est corrigé.
 
 Déploiement
@@ -233,10 +233,10 @@ des comptes utilisateurs locaux ont été corrigés.
 
 ## Utilisateurs locaux
 
-- Les utilisateurs sont désormais importés depuis le fournisseur d'identité 
+- Les utilisateurs sont désormais importés depuis le fournisseur d'identité
   à la première connexion et enregistrées localement.
-- Les échanges avec le fournisseur d'identité Axys se font désormais 
-  uniquement via le protocole OpenID Connect et sont conditionnés au 
+- Les échanges avec le fournisseur d'identité Axys se font désormais
+  uniquement via le protocole OpenID Connect et sont conditionnés au
   consentement de l'utilisateur.
 
 ## Autres améliorations
@@ -250,7 +250,7 @@ des comptes utilisateurs locaux ont été corrigés.
 
 Corrections
 
-- Les erreurs survenant lors de la gestion d'une commande dans 
+- Les erreurs survenant lors de la gestion d'une commande dans
   l'administration pouvaient ne pas s'afficher correctement. C'est corrigé.
 
 ## 2.80.0 (1er mai 2024)
@@ -258,10 +258,10 @@ Corrections
 Améliorations
 
 - Il est désormais possible dans le panier plusieurs offres simultanées.
-- Lors de l'accès à une page nécessitant d'être authentifié, l'utilisateur 
-  est désormais redirigé vers la page de connexion plutôt que vers une page 
+- Lors de l'accès à une page nécessitant d'être authentifié, l'utilisateur
+  est désormais redirigé vers la page de connexion plutôt que vers une page
   d'erreur.
-- Des boutons pour ajouter ou supprimer des adresses dans une liste de 
+- Des boutons pour ajouter ou supprimer des adresses dans une liste de
   contacts ont été ajoutés.
 - Un lien vers le stock des articles a été ajouté sur la page Catalogue.
 
@@ -269,23 +269,23 @@ Améliorations
 
 Corrections
 
-- L'affichage d'une page de collection pouvait déclencher une erreur si 
+- L'affichage d'une page de collection pouvait déclencher une erreur si
   l'option `articles_per_page` n'avait pas de valeur définie. C'est corrigé.
 
 ## 2.79.2 (17 avril 2024)
 
 Corrections
 
-- L'option `articles_per_page`, qui permet de spécifier le nombre d'articles 
-  à afficher sur une page, n'était pas pris en compte sur les pages de 
+- L'option `articles_per_page`, qui permet de spécifier le nombre d'articles
+  à afficher sur une page, n'était pas pris en compte sur les pages de
   collection. C'est corrigé.
 
 ## 2.79.1 (10 avril 2024)
 
 Corrections
 
-- L'entrée de valeurs trop longues pour les codes BISAC, CLIC, Dewey et 
-  Electre pouvait déclencher une erreur. Une limite de 16 caratère a été 
+- L'entrée de valeurs trop longues pour les codes BISAC, CLIC, Dewey et
+  Electre pouvait déclencher une erreur. Une limite de 16 caratère a été
   ajoutée.
 - Le lien vers la documentation des options de site a été mis à jour.
 
@@ -293,8 +293,8 @@ Corrections
 
 Offres spéciales
 
-- Il est désormais possible de créer une offre spéciale pour afficher une 
-  information dans le panier du type "Un article offert pour deux livres de 
+- Il est désormais possible de créer une offre spéciale pour afficher une
+  information dans le panier du type "Un article offert pour deux livres de
   la collection X achetés".
 
 Autres améliorations
@@ -302,7 +302,7 @@ Autres améliorations
 - Une option de site "order_phone_required" a été ajouté pour rendre
   obligatoire le numéro de téléphone lors de la validation de commande.
 - La validation des paramètres de requête lors de la recherche a été améliorée.
-- Si renseigné, le numéro de téléphone du client apparaîtra désormais sur la 
+- Si renseigné, le numéro de téléphone du client apparaîtra désormais sur la
   page de la commande
 
 ## 2.78.4 (3 avril 2024)
@@ -316,14 +316,14 @@ Corrections
 
 Corrections
 
-- Une erreur pouvait survenir sur la page d'ajout d'exemplaire si une alerte 
+- Une erreur pouvait survenir sur la page d'ajout d'exemplaire si une alerte
   était associé à un utilisateur supprimé. C'est corrigé.
 
 ## 2.78.2 (20 mars 2024)
 
 Corrections
 
-- L'état des livres d'occasion n'apparaissaient plus sur la facture. C'est 
+- L'état des livres d'occasion n'apparaissaient plus sur la facture. C'est
   corrigé.
 
 ## 2.78.1 (13 mars 2024)
@@ -1082,7 +1082,8 @@ Corrections
   "Ventes par article". C'est corrigé.
 - L'erreur affichée lors de l'enregistrement d'un modèle était laconique.
   C'est amélioré.
-- L'enregistrement du fichier de styles CSS pouvait déclencher une erreur 500. Ce
+- L'enregistrement du fichier de styles CSS pouvait déclencher une erreur 500.
+  Ce
   n'est plus le cas.
 
 ## 2.58.2 (4 février 2022)
@@ -1152,7 +1153,7 @@ le mode d'expédition "retrait en magasin" était mal enregitrée. C'est rétabl
 
 ## 2.56.2 (19 décembre 2021)
 
-Correction : Une commande pouvait être enregistrée avec des frais de port à 0 €
+Correction: Une commande pouvait être enregistrée avec des frais de port à 0 €
 si le client double-cliquait sur le bouton de validation. C'est corrigé.
 
 ## 2.56.1 (19 novembre 2021)
@@ -1572,7 +1573,7 @@ Corrections
   à nouveau
 - Les médias uploadés s'affichent correctement dans l'administration
 
-Déploiement :
+Déploiement:
 
 - Déplacer `/public/:site/media/` vers `
 
@@ -1783,7 +1784,7 @@ Déploiement
   PayPal
 - Amélioration de l'affichage des erreurs dans l'outil de gestion des commandes
 
-Déploiement :
+Déploiement:
 
 - Configurer SMTP
 - Configurer CDN images
@@ -1955,7 +1956,8 @@ Déploiement :
 - Refonte de la gestion des fournisseurs des éditeurs
 - Suppression de l'ancienne interface d'administration
 - Correction d'un bug affectant le téléchargement de fichier sur Safari iOS
-- Correction d'un bug affectant l'ajout de mots-clés sur une fiche article vierge
+- Correction d'un bug affectant l'ajout de mots-clés sur une fiche article
+  vierge
 - Correction du calcul de la TVA des articles de type 'Jeu de rôle'
 - Correction d'un bug affectant la suppression des billets
 - Correction d'un bug affectant les notifications pour les termes de recherche
@@ -2404,7 +2406,7 @@ Déploiement :
 
 ## 2.3.22 (2 octobre 2015)
 
-- Librairies : réactivation de la précommande pour les livres à paraître s'ils
+- Librairies: réactivation de la précommande pour les livres à paraître s'ils
   sont en stock
 
 ## 2.3.21 (27 septembre 2015)
@@ -2587,7 +2589,7 @@ Biblys 2.3 : Financement participatif
 
 ## 2.2.18 (1er février 2015)
 
-- Traitement par lot : application d'une promotion sur tous les exemplaires 
+- Traitement par lot : application d'une promotion sur tous les exemplaires
   d'une liste
 - Page d'inventaire : Ajout d'un filtre par type d'article
 - Il est désormais possible de lier un billet de blog à un éditeur
