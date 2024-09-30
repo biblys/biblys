@@ -4,19 +4,22 @@
 
 ### Gestion des médias
 
-- La présentation de la page "Gestion des médias" a été améliorée, avec notamment
-  l'affichage de la taille de chaque fichier.
-- Une section médias a été installé sur la page "Espace disque".
+- La présentation de la page "Gestion des médias" a été améliorée, avec
+  notamment l'affichage de la taille de chaque fichier.
+- Des sections "Billets de blog" et "Médias" ont été ajoutées à la page "Espace
+  disque".
 - Une commande `media:import` a été ajouté pour importer des médias depuis le
   répertoire public/media.
+- La commande `images:import` gère désormais les illustrations de billets de
+  blog.
 
 ### Expérience développeur
 
-- La documentation d'installation locale de Biblys locale pour le développement
-  ([INSTALL.MD](./INSTALL.md)) a été améliorée (#81 par @HEYGUL).
-- Les pays de livraison et les langues sont désormais ajoutés à la base de données
-  lors de l'installation de Biblys, afin d'éviter une manipulation manuelle (#83
-  et #88 par @HEYGUL).
+- La documentation d'installation locale de Biblys locale pour le
+  développement ([INSTALL.MD](./INSTALL.md)) a été améliorée (#81 par @HEYGUL).
+- Les pays de livraison et les langues sont désormais ajoutés à la base de
+  données lors de l'installation de Biblys, afin d'éviter une manipulation
+  manuelle (#83 et #88 par @HEYGUL).
 
 ### Déploiement
 
