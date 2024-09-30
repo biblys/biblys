@@ -214,6 +214,12 @@ class Noosfere
             /** @var Collection $collection */
             $collection = $cm->getById($existingCollection->getId());
 
+            if (!$collection) {
+                throw new ConflictHttpException(
+                    "Impossible d'importer cet article car il appartient à un éditeur non-autorisé sur ce site."
+                );
+            }
+
             if (!$collection->has('collection_noosfere_id') && !empty($collectionNoosfereId)) {
                 $collection->set('collection_noosfere_id', $collectionNoosfereId);
                 $cm->update($collection);
