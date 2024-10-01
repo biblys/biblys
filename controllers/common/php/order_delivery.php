@@ -11,6 +11,7 @@ use Biblys\Service\Mailer;
 use Biblys\Service\MailingList\Exception\InvalidConfigurationException;
 use Biblys\Service\MailingList\Exception\InvalidEmailAddressException;
 use Biblys\Service\MailingList\MailingListService;
+use Biblys\Service\QueryParamsService;
 use Model\CustomerQuery;
 use Model\PageQuery;
 use Propel\Runtime\Exception\PropelException;
@@ -34,8 +35,16 @@ return function (
     CurrentSite  $currentSite,
     UrlGenerator $urlGenerator,
     CurrentUser  $currentUser,
-    Mailer       $mailer): Response|RedirectResponse {
+    Mailer       $mailer,
+    QueryParamsService $queryParamsService
+): Response|RedirectResponse {
     global $_SQL;
+
+    $queryParamsService->parse([
+        "country_id" => ["type" => "numeric"],
+        "shipping_id" => ["type" => "numeric", "default" => 0],
+        "reuse" => ["type" => "numeric", "default" => 0],
+    ]);
 
     $request->attributes->set("page_title", "Votre commande");
 
@@ -93,10 +102,11 @@ return function (
         $totalPrice += $s->get('selling_price');
     }
 
-    $countryId = $request->query->get('country_id');
+    $countryId = $queryParamsService->getInteger("country_id");
     $countryInput = OrderDeliveryHelpers::getCountryInput($cart, $countryId);
 
-    $shipping = OrderDeliveryHelpers::calculateShippingFees($cart, $request->query->get('shipping_id'));
+    $shippingId = $queryParamsService->getInteger("shipping_id");
+    $shipping = OrderDeliveryHelpers::calculateShippingFees($cart, $shippingId);
     $shippingMode = $shipping ? $shipping->get("mode") : "";
     $shippingFee = $shipping ? $shipping->get("fee") : 0;
     $shippingType = $shipping?->get("type");
@@ -458,7 +468,7 @@ return function (
         </div>
     ';
 
-        if ($request->query->get('reuse') === '1') {
+        if ($queryParamsService->getInteger("reuse") === 1) {
             $order->set('title', $previousOrder->get('title'));
             $order->set('firstname', $previousOrder->get('firstname'));
             $order->set('lastname', $previousOrder->get('lastname'));

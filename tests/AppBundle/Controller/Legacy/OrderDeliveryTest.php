@@ -6,6 +6,7 @@ use Biblys\Data\ArticleType;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
+use Biblys\Service\QueryParamsService;
 use Biblys\Test\ModelFactory;
 use EntityManager;
 use Mockery;
@@ -43,12 +44,17 @@ class OrderDeliveryTest extends TestCase
         $_POST["order_lastname"] = "Famagouste";
         $country = ModelFactory::createCountry();
 
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->shouldReceive("parse");
+        $queryParamsService->shouldReceive("getInteger")->with("country_id")
+            ->andReturn($country->getId());
+        $queryParamsService->shouldReceive("getInteger")->with("shipping_id")
+            ->andReturn($shipping->getId());
+
         $request = new Request();
         $request->setMethod("POST");
         $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
         $request->query->set("page", "order_delivery");
-        $request->query->set("country_id", $country->getId());
-        $request->query->set("shipping_id", $shipping->getId());
         $request->request->set("order_firstname", "Barnabé");
         $request->request->set("order_lastname", "Famagouste");
         $request->request->set("order_address1", "123 rue des Peupliers");
@@ -73,7 +79,7 @@ class OrderDeliveryTest extends TestCase
         $currentUser->shouldReceive("getUser")->andReturn(null);
 
         // when
-        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer);
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService);
 
         // then
         $om = new OrderManager();
@@ -116,11 +122,17 @@ class OrderDeliveryTest extends TestCase
         $_POST["order_firstname"] = "Barnabé";
         $_POST["order_lastname"] = "Famagouste";
 
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->shouldReceive("parse");
+        $queryParamsService->shouldReceive("getInteger")->with("country_id")
+            ->andReturn($country->getId());
+        $queryParamsService->shouldReceive("getInteger")->with("shipping_id")
+            ->andReturn(0);
+
         $request = new Request();
         $request->setMethod("POST");
         $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
         $request->query->set("page", "order_delivery");
-        $request->query->set("country_id", $country->getId());
         $request->request->set("order_firstname", "Barnabé");
         $request->request->set("order_lastname", "Famagouste");
         $request->request->set("order_address1", "123 rue des Peupliers");
@@ -146,7 +158,7 @@ class OrderDeliveryTest extends TestCase
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
 
         // when
-        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer);
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService);
 
         // then
         $om = new OrderManager();
@@ -180,6 +192,9 @@ class OrderDeliveryTest extends TestCase
 
         $shm = new ShippingManager();
         $shipping = $shm->create();
+
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->shouldReceive("parse");
 
         $request = new Request();
         $request->setMethod("POST");
@@ -218,7 +233,7 @@ class OrderDeliveryTest extends TestCase
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
 
         // when
-        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer);
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode(), "it should answer with http status 200");
@@ -255,6 +270,13 @@ class OrderDeliveryTest extends TestCase
             "order_firstname" => "Barnabé",
             "order_lastname" => "Famagouste"
         ];
+
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->shouldReceive("parse");
+        $queryParamsService->shouldReceive("getInteger")->with("country_id")
+            ->andReturn($country->getId());
+        $queryParamsService->shouldReceive("getInteger")->with("shipping_id")
+            ->andReturn($shipping->getId());
 
         $request = new Request();
         $request->setMethod("POST");
@@ -297,7 +319,7 @@ class OrderDeliveryTest extends TestCase
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
 
         // when
-        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer);
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService);
 
         // then
         $this->assertInstanceOf(
