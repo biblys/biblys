@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 2.86.0 (DEV)
+## 2.86.0 (2 octobre 2024)
 
 ### Gestion des médias
 
