@@ -243,7 +243,7 @@ class LegacyCodeHelper
         if (!isset($GLOBALS["LEGACY_URL_GENERATOR"])) {
             $routes = RouteLoader::load();
             $request = Request::createFromGlobals();
-            $requestContext = RequestContext::fromUri($request->getUri());
+            $requestContext = RequestContext::fromUri($request->getSchemeAndHttpHost());
             $GLOBALS["LEGACY_URL_GENERATOR"] = new UrlGenerator($routes, $requestContext);
         }
 
