@@ -2,6 +2,7 @@
 
 namespace Biblys\Service;
 
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use DateTime;
@@ -15,6 +16,7 @@ use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 require_once __DIR__."/../../setUp.php";
@@ -46,6 +48,50 @@ class CurrentUserTest extends TestCase
     }
 
     /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testBuildFromRequestWithBadlyEncodedVisitorUidCookie()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $request = new Request();
+        $latin1VisitorUid = mb_convert_encoding("Ånonymøus", "ISO-8859-1", "UTF-8");
+        $request->cookies->set("visitor_uid", $latin1VisitorUid);
+
+        // when
+        $error = Helpers::runAndCatchException(fn() => CurrentUser::buildFromRequestAndConfig($request, $config));
+
+        // then
+        $this->assertInstanceOf(BadRequestHttpException::class, $error);
+        $this->assertEquals("Cookies must use charset UTF-8", $error->getMessage());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testBuildFromRequestWithBadlyEncodedUserUidCookie()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $request = new Request();
+        $latin1UserUid = mb_convert_encoding("Ånonymøus", "ISO-8859-1", "UTF-8");
+        $request->cookies->set("user_uid", $latin1UserUid);
+
+        // when
+        $error = Helpers::runAndCatchException(fn() => CurrentUser::buildFromRequestAndConfig($request, $config));
+
+        // then
+        $this->assertInstanceOf(BadRequestHttpException::class, $error);
+        $this->assertEquals("Cookies must use charset UTF-8", $error->getMessage());
+    }
+
+    /**
      * @throws UnauthorizedHttpException
      * @throws PropelException
      * @throws Exception
@@ -67,6 +113,29 @@ class CurrentUserTest extends TestCase
             $currentUser->getUser(),
             "it returns authentified user"
         );
+    }
+
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testBuildFromRequestWithBadlyEncodedHeader()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $request = new Request();
+        $latin1UserUid = mb_convert_encoding("Ånonymøus", "ISO-8859-1", "UTF-8");
+        $request->headers->set("AuthToken", $latin1UserUid);
+
+        // when
+        $error = Helpers::runAndCatchException(fn() => CurrentUser::buildFromRequestAndConfig($request, $config));
+
+        // then
+        $this->assertInstanceOf(BadRequestHttpException::class, $error);
+        $this->assertEquals("Cookies must use charset UTF-8", $error->getMessage());
     }
 
     /**

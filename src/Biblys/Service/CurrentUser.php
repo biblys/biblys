@@ -24,6 +24,7 @@ use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class CurrentUser
@@ -53,8 +54,19 @@ class CurrentUser
 
         $token = $cookieToken ?: $headerToken;
 
+        $isTokenUtf8Encoded = mb_check_encoding($token, "UTF-8");
+        if (!$isTokenUtf8Encoded) {
+            throw new BadRequestHttpException("Cookies must use charset UTF-8");
+        }
+
         if ($token === null) {
             $visitorUid = $request->cookies->get("visitor_uid");
+
+            $isCookieUtf8Encoded = mb_check_encoding($visitorUid, "UTF-8");
+            if (!$isCookieUtf8Encoded) {
+                throw new BadRequestHttpException("Cookies must use charset UTF-8");
+            }
+
             return new CurrentUser(null, $visitorUid);
         }
 
