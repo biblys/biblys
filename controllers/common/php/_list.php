@@ -11,7 +11,6 @@ use Biblys\Service\Images\ImagesService;
 use Biblys\Service\Slug\SlugService;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 $request = LegacyCodeHelper::getGlobalRequest();
@@ -24,7 +23,6 @@ $pqp = array(); // PDO search query params
 $slugService = new SlugService();
 
 $config = Config::load();
-$request = Request::createFromGlobals();
 $currentSite = CurrentSite::buildFromConfig($config);
 $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 $imagesService = new ImagesService($config, $currentSite, new Filesystem());
@@ -286,7 +284,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
         $x["condition"] = ' soldout';
     }
 
-    $x["article_url"] = \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate("article_show", ["slug" => $x["article_url"]]);
+    $x["article_url"] = LegacyCodeHelper::getGlobalUrlGenerator()->generate("article_show", ["slug" => $x["article_url"]]);
 
     // Auteurs
     $x["authors"] = authors($x["article_authors"], 'url');
