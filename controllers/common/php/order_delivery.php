@@ -41,7 +41,7 @@ return function (
     global $_SQL;
 
     $queryParamsService->parse([
-        "country_id" => ["type" => "numeric"],
+        "country_id" => ["type" => "numeric", "default" => 0],
         "shipping_id" => ["type" => "numeric", "default" => 0],
         "reuse" => ["type" => "numeric", "default" => 0],
     ]);
