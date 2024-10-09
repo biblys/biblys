@@ -114,6 +114,7 @@ return function (
     $shippingFee = $shipping ? $shipping->get("fee") : 0;
     $shippingType = $shipping?->get("type");
 
+    $pickupPointCode = "";
     if ($shippingType === "mondial-relay") {
         $pickupPointSelectUrl = $urlGenerator->generate("shipping_select_pickup_point", [
             "country_id" => $countryId,
@@ -215,6 +216,11 @@ return function (
             if ($shipping) {
                 $order->set('order_shipping_mode', $shippingType)
                     ->set('order_shipping', $shippingFee);
+            }
+
+            $pickupPointCode = $request->request->get("pickup_point_code", "");
+            if ($pickupPointCode) {
+                $order->set('mondial_relay_pickup_point_code', $pickupPointCode);
             }
 
             $comment = $request->request->get('comment', false);
@@ -469,6 +475,9 @@ return function (
         if ($shipping) {
             $url .= "&country_id=$countryId&shipping_id=" . $shipping->get("id");
         }
+        if ($pickupPointCode) {
+            $url .= "&pickup_point_code=$pickupPointCode";
+        }
         $content .= '
         <div class="previous-order">
             <p>
@@ -516,6 +525,17 @@ return function (
     }
 
     $isPhoneRequired = $currentSite->getOption("order_phone_required");
+
+    if ($pickupPointCode) {
+        $pickupPointForm = '
+           <fieldset class="order-delivery-form__fieldset order-delivery-form__pickup-points">
+              <legend>Point de retrait</legend>
+              ' . $pickupPoint->name . ' ('.$pickupPoint->postalCode.')
+              <a href="' . $pickupPointSelectUrl . '" class="btn btn-info">Modifier</a>
+              <input type="hidden" name="pickup_point_code" value="' . $pickupPointCode . '">
+            </fieldset>
+        ';
+    }
 
     $content .= '
     <form id="orderForm" method="post" class="order-delivery-form fieldset check ' . $form_class . '">
@@ -605,11 +625,7 @@ return function (
             </div>
          </fieldset>
          
-       <fieldset class="order-delivery-form__fieldset order-delivery-form__pickup-points">
-          <legend>Point de retrait</legend>
-          ' . $pickupPoint->name . ' ('.$pickupPoint->postalCode.')
-          <a href="' . $pickupPointSelectUrl . '" class="btn btn-info">Modifier</a>
-        </fieldset>
+         ' . $pickupPointForm . '
          
          <fieldset class="order-delivery-form__fieldset">
             <legend>Commentaires</legend>
