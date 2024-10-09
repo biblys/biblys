@@ -913,6 +913,7 @@
     <column name="order_shipping" phpName="Shipping" type="INTEGER" defaultValue="0"/>
     <column name="order_shipping_mode" phpName="ShippingMode" type="VARCHAR" size="32"/>
     <column name="order_track_number" phpName="TrackNumber" type="VARCHAR" size="16"/>
+    <column name="mondial_relay_pickup_point_code" phpName="MondialRelayPickupPointCode" type="VARCHAR" size="16"/>
     <column name="order_payment_mode" phpName="PaymentMode" type="VARCHAR" size="32"/>
     <column name="order_payment_cash" phpName="PaymentCash" type="INTEGER" sqlType="int unsigned" defaultValue="0"/>
     <column name="order_payment_cheque" phpName="PaymentCheque" type="INTEGER" sqlType="int unsigned" defaultValue="0"/>
