@@ -1,0 +1,55 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Point de retrait
+{% endblock %}
+
+{% block main %}
+
+  <h1>Choix du point de retrait</h1>
+
+  <form class="form-inline">
+    <div class="form-group">
+      <label for="postal_code">Votre code postal</label>
+      <input
+        type="text"
+        class="form-control"
+        id="postal_code"
+        name="postal_code"
+        placeholder="46800"
+        value="{{ postal_code }}"
+      >
+      <input type="hidden" name="country_id" value="{{ country_id }}">
+      <input type="hidden" name="shipping_id" value="{{ shipping_id }}">
+    </div>
+    <button type="submit" class="btn btn-info">Rechercher</button>
+  </form>
+
+  {% if pickup_points %}
+    <h2>Points de retrait disponibles pour {{ postal_code }} :</h2>
+  {% endif %}
+
+  {% for point in pickup_points %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{ point.name }}</h3>
+      </div>
+      <div class="panel-body">
+        <p>
+          {{ point.address }}<br />
+          {{ point.postalCode }}  {{ point.city }}<br />
+          <a href="{{ point.mapUrl }}" target="_blank" class="btn btn-default btn-sm">Voir sur la carte</a>
+        </p>
+        <p>
+          <a
+            href="/pages/order_delivery?pickup_point_code={{ point.id }}&country_id={{ country_id }}&shipping_id={{ shipping_id }}"
+            class="btn btn-primary"
+          >
+            Choisir ce point de retrait
+          </a>
+        </p>
+      </div>
+    </div>
+  {% endfor %}
+
+{% endblock %}
