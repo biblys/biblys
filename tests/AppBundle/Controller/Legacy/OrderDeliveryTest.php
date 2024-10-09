@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Legacy;
 
 use Biblys\Data\ArticleType;
+use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
@@ -78,8 +79,10 @@ class OrderDeliveryTest extends TestCase
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
         $currentUser->shouldReceive("getUser")->andReturn(null);
 
+        $config = new Config();
+
         // when
-        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService);
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config);
 
         // then
         $om = new OrderManager();
@@ -157,8 +160,10 @@ class OrderDeliveryTest extends TestCase
         $currentUser->shouldReceive("getCart")->andReturn($cart);
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
 
+        $config = new Config();
+
         // when
-        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService);
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config);
 
         // then
         $om = new OrderManager();
@@ -232,8 +237,10 @@ class OrderDeliveryTest extends TestCase
         $currentUser->shouldReceive("getCart")->andReturn($cart);
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
 
+        $config = new Config();
+
         // when
-        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService);
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config);
 
         // then
         $this->assertEquals(200, $response->getStatusCode(), "it should answer with http status 200");
@@ -318,8 +325,10 @@ class OrderDeliveryTest extends TestCase
         $currentUser->shouldReceive("getCart")->andReturn($cart);
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
 
+        $config = new Config();
+
         // when
-        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService);
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config);
 
         // then
         $this->assertInstanceOf(
