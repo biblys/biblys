@@ -616,6 +616,58 @@ class ImagesServiceTest extends TestCase
         $this->assertEquals("/images/book/covers/book-cover.jpeg", $coverUrl);
     }
 
+    /** ImagesService->getImageUrlFor (article) */
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetImagePathForIfItDoesNotExistWithArticle(): void
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $article = ModelFactory::createArticle();
+
+        $config = new Config(["images" => ["path" => "/images/"]]);
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        // when
+        $imagePath = $service->getImagePathFor($article);
+
+        // then
+        $this->assertNull($imagePath);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetImagePathForIfItExistsWithArticle(): void
+    {
+        // given
+        $site = ModelFactory::createSite();
+
+        $config = new Config(["images" => ["base_url" => "/images/"]]);
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        $article = ModelFactory::createArticle();
+        ModelFactory::createImage(
+            article: $article,
+            filePath: "book/covers/",
+            fileName: "book-cover.jpeg",
+        );
+
+        // when
+        $imagePath = $service->getImagePathFor($article);
+
+        // then
+        $this->assertStringEndsWith("/images/book/covers/book-cover.jpeg", $imagePath);
+    }
+
     /** ImagesService->deleteImageFor */
 
     /**
