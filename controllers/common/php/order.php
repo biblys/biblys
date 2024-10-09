@@ -54,10 +54,9 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
         ';
     }
 
-    // Etat de la commande
     $content .= '
         <div class="floatR">
-            <h4 class="text-right">état de la commande</h4>
+            <h4 class="text-right">État de la commande</h4>
             <p class="right">Validée le ' . _date($o["order_insert"], 'j f Y') . '</p>
     ';
 
@@ -88,17 +87,30 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
     }
 
     if (!empty($o["order_address2"])) $o["order_address2"] = $o["order_address2"] . '<br />';
-    $content .= '
-        <h4>Coordonnées</h4>
+    $content .= '<h4>Coordonnées</h4>';
+
+    $content .= ' 
         <p>
             ' . $o["order_title"] . ' ' . $o["order_firstname"] . ' ' . $o["order_lastname"] . '<br />
-            ' . $o["order_address1"] . '<br />
-            ' . $o["order_address2"] . '
-            ' . $o["order_postalcode"] . ' ' . $o["order_city"] . '<br />
-            ' . $country . '
         </p>
-        <p><a href="mailto:' . $o["order_email"] . '">' . $o["order_email"] . '</a></p>
     ';
+
+    if ($order->get("shipping_mode") === "normal" || $order->get("shipping_mode") === "suivi") {
+        $content .= '
+            <p>
+                ' . $o["order_address1"] . '<br />
+                ' . $o["order_address2"] . '
+                ' . $o["order_postalcode"] . ' ' . $o["order_city"] . '<br />
+                ' . $country . '
+            </p>
+        ';
+    } elseif ($order->get("shipping_mode") === "retrait") {
+        $content .= '<p>Retrait en magasin</p>';
+    } elseif ($order->get("shipping_mode") === "mondial-relay") {
+        $content .= '<p>Point Mondial Relay n° '.$order->get("mondial_relay_pickup_point_code").'</p>';
+    }
+
+    $content .= '<p><a href="mailto:' . $o["order_email"] . '">' . $o["order_email"] . '</a></p>';
 
     if ($order->has("phone")) {
         $content .= '<p>Tel: ' . $order->get("phone") . '</p>';
