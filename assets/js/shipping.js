@@ -191,6 +191,7 @@ export default class Shipping {
           <option value="normal" ${type === 'normal' ? 'selected' : ''}>Normal</option>
           <option value="suivi" ${type === 'suivi' ? 'selected' : ''}>Suivi avec numéro</option>
           <option value="magasin" ${type === 'magasin' ? 'selected' : ''}>Retrait en magasin</option>
+          <option value="mondial-relay" ${type === 'mondial-relay' ? 'selected' : ''}>Mondial Relay</option>
         </select>
       </div>
 
