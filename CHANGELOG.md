@@ -1,5 +1,14 @@
 # Historique des modifications
 
+## 2.86.1 (9 octobre 2024)
+
+### Corrections
+
+- Certains liens mal générés pouvaient déclencher des erreurs 404. C'est
+  corrigé.
+- La validation d'une commande contenant uniquement des articles téléchargeables
+  pouvait déclencher une erreur. Ça n'arrivera plus.
+
 ## 2.86.0 (2 octobre 2024)
 
 ### Gestion des médias
