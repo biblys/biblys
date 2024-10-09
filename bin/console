@@ -14,6 +14,7 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Service\InvalidSiteIdException;
 use Command\CreateSeedsCommand;
+use Command\ExportImagesCommand;
 use Command\ImportImagesCommand;
 use Command\ImportMediaCommand;
 use Command\OptimizeImagesCommand;
@@ -33,6 +34,7 @@ try {
     $filesystem = new Filesystem();
     $imagesServices = new ImagesService($config, $currentSite, $filesystem);
     $application->add(new ImportImagesCommand($config, $filesystem, $imagesServices));
+    $application->add(new ExportImagesCommand($imagesServices));
     $application->add(new OptimizeImagesCommand($config, $filesystem));
     $application->add(new ImportMediaCommand($currentSite, $filesystem));
 } catch (InvalidSiteIdException) {

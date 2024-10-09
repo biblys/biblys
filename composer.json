@@ -24,6 +24,7 @@
     "db:seed": "bin/console db:seed",
     "db:prepare": ["@db:reset", "@db:seed"],
     "images:import": "bin/console images:import",
+    "images:export": "bin/console images:export",
     "images:optimize": "bin/console images:optimize",
     "media:import": "bin/console media:import"
   },
