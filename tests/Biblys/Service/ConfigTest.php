@@ -162,6 +162,41 @@ class ConfigTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($isEnabled);
     }
 
+    /** isAxysEnabled */
+
+    /**
+     * @throws Exception
+     */
+    public function testIsMondialRelayEnabledWhenDisabled(): void
+    {
+        // given
+        $config = new Config([]);
+
+        // then
+        $isEnabled = $config->isMondialRelayEnabled();
+
+        // then
+        $this->assertFalse($isEnabled);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testIsMondialRelayEnabledWhenEnabled(): void
+    {
+        // given
+        $config = new Config(["mondial_relay"  => [
+            "code_enseigne" => "code_enseigne",
+            "private_key" => "private_key",
+        ]]);
+
+        // then
+        $isEnabled = $config->isMondialRelayEnabled();
+
+        // then
+        $this->assertTrue($isEnabled);
+    }
+
     /** getImagesPath */
 
     /**
