@@ -2,7 +2,7 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/assets/bundle/runtime.2f07c862.js",
+        "/assets/bundle/runtime.9d570109.js",
         "/assets/bundle/app.35bfc495.js"
       ],
       "css": [
@@ -11,7 +11,7 @@
     },
     "admin": {
       "js": [
-        "/assets/bundle/runtime.2f07c862.js",
+        "/assets/bundle/runtime.9d570109.js",
         "/assets/bundle/admin.31cfd0ee.js"
       ],
       "css": [
