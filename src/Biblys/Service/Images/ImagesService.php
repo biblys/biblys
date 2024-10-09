@@ -150,6 +150,19 @@ class ImagesService
     /**
      * @throws PropelException
      */
+    public function getImagePathFor(Article $article): ?string
+    {
+        $image = $this->_getImageFor($article);
+        if (!$image->exists()) {
+            return null;
+        }
+
+        return $image->getFilePath();
+    }
+
+    /**
+     * @throws PropelException
+     */
     private function _getImageFor(Article|Stock|Post $model): ImageForModel
     {
         if ($model instanceof Stock) {
