@@ -586,6 +586,10 @@ shipping_admin:
   path: /admin/shipping
   controller: AppBundle\Controller\ShippingController::adminAction
 
+shipping_select_pickup_point:
+  path: /shipping/select-pickup-point
+  controller: AppBundle\Controller\ShippingController::selectPickupPointAction
+
 # Site
 
 site_options:
