@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.87.0 (DEV)
+
+### Améliorations
+
+- Une nouvelle commande `images:export` permet d'exporter les images de
+  couverture des articles d'une collection précise.
+
 ## 2.86.1 (9 octobre 2024)
 
 ### Corrections
