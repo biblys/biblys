@@ -45,7 +45,7 @@ class ShippingFeeQuery extends BaseShippingFeeQuery
         $query = self::createForSite($currentSite);
         $fees = $query->orderByFee()->find();
 
-        $shippingTypes = ['magasin', 'normal', 'suivi'];
+        $shippingTypes = ['magasin', 'normal', 'suivi', 'mondial-relay'];
 
         $feesForEachTypes = array_map(
             function ($type) use ($fees, $zone, $weightIncludingWrapping, $amount, $currentSite) {
