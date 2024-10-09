@@ -136,3 +136,9 @@ smtp:
 ## https://lemonink.co
 #lemonink:
 #  api_key: mnopqrst345678
+
+## Mondial Relay Shipping
+## https://connect.mondialrelay.com/
+#mondial_relay:
+#  code_enseigne: ABCD1234
+#  private_key: abcdefghij
