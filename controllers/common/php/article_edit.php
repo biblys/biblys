@@ -335,7 +335,7 @@ return function (
                         <div>
                             <h3>' . $a['article_title'] . '</h3>
                             <p>
-                                de ' . truncate($a['article_authors'], 65, '...', true, true) . '<br />
+                                de ' . truncate($a['article_authors'] ?? "", 65, '...', true, true) . '<br />
                                 coll. ' . $a['article_collection'] . ' ' . numero($a['article_number']) . ' (' . $a['article_publisher'] . ')<br />
                                 Prix éditeur : ' . price($a['article_price'], 'EUR') . '
                             </p>
