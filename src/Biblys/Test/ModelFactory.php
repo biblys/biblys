@@ -10,6 +10,7 @@ use Model\Article;
 use Model\ArticleCategory;
 use Model\AuthenticationMethod;
 use Model\Customer;
+use Model\Event;
 use Model\File;
 use Model\Image;
 use Model\Invitation;
@@ -822,7 +823,7 @@ class ModelFactory
      */
     public static function createDownloadableFile(
         Article $article = null,
-        int   $fileSize = 100,
+        int     $fileSize = 100,
     ): File
     {
         $file = new File();
@@ -838,7 +839,7 @@ class ModelFactory
      */
     public static function createMediaFile(
         Site $site = null,
-        int $fileSize = 100,
+        int  $fileSize = 100,
     ): MediaFile
     {
         $mediaFile = new MediaFile();
@@ -847,6 +848,30 @@ class ModelFactory
         $mediaFile->save();
 
         return $mediaFile;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createEvent(
+        Site      $site,
+        Publisher $publisher = null,
+        bool      $status = true,
+    ): Event
+    {
+        $event = new Event();
+        $event->setSiteId($site->getId());
+        $event->setTitle("Event");
+        $event->setUrl("event");
+        $event->setStart(new DateTime());
+        $event->setEnd(new DateTime("+1 day"));
+        $event->setLocation("Paris");
+        $event->setStatus($status);
+        $event->setPublisherId($publisher?->getId());
+
+        $event->save();
+
+        return $event;
     }
 
 }

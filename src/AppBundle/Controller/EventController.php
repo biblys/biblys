@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\TemplateService;
 use EventManager;
@@ -10,6 +11,7 @@ use Framework\Controller;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -63,50 +65,47 @@ class EventController extends Controller
     public function showAction(
         Request $request,
         CurrentUser $currentUser,
+        CurrentSite $currentSite,
         TemplateService $templateService,
         string $slug
     ): Response
     {
-        
-        $globalSite = LegacyCodeHelper::getGlobalSite();
-
         $em = new EventManager();
-        $event = $em->get(["event_url" => $slug]);
+        $event = $em->get(["event_url" => $slug, "site_id" => $currentSite->getId()]);
         if (!$event) {
-            throw new NotFoundException("Event $slug not found.");
+            throw new NotFoundHttpException("Event $slug not found.");
         }
 
         // Offline event
-        $eventIsOffline = $event && $event->get('status') == 0;
-        $userCanSeeOfflineEvent = $event->get('user_id') !== $currentUser->getUser()->getId() ||
-            $currentUser->isAdmin();
-        if ($eventIsOffline && !$userCanSeeOfflineEvent) {
-            throw new NotFoundException("Event $slug not published.");
+        if (!$this->_userCanSeeEvent($event, $currentUser)) {
+            throw new NotFoundHttpException("Event $slug not published.");
         }
-
-        $request->attributes->set("page_title", $event->get("title"));
-
-        $opengraphTags = [
-            "type" => "article",
-            "title" => $event->get("title"),
-            "url" => "https://".$request->getHost().
-                \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate("event_show", ["slug" => $event->get("url")]),
-            "description" => truncate(strip_tags($event->get('content')), '500', '...', true),
-            "site_name" => $globalSite->get("title"),
-            "locale" => "fr_FR",
-            "article:published_time" => $event->get('date'),
-            "article:modified_time" => $event->get('updated')
-        ];
-
-        // Get event illustration for opengraph
-        if ($event->hasIllustration()) {
-            $opengraphTags["image"] = $event->getIllustration()->url();
-        }
-
-        $this->setOpengraphTags($opengraphTags);
 
         return $templateService->renderResponse('AppBundle:Event:show.html.twig', [
             'event' => $event
         ]);
+    }
+
+    /**
+     * @param mixed $event
+     * @param CurrentUser $currentUser
+     * @return bool
+     * @throws PropelException
+     */
+    private function _userCanSeeEvent(mixed $event, CurrentUser $currentUser): bool
+    {
+        if ($event->get('status') === 1) {
+            return true;
+        }
+
+        if (!$currentUser->isAuthentified()) {
+            return false;
+        }
+
+        if ($currentUser->isAdmin()) {
+            return true;
+        }
+
+        return false;
     }
 }
