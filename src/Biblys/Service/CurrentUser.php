@@ -54,7 +54,7 @@ class CurrentUser
 
         $token = $cookieToken ?: $headerToken;
 
-        $isTokenUtf8Encoded = mb_check_encoding($token, "UTF-8");
+        $isTokenUtf8Encoded = mb_check_encoding($token ?? "", "UTF-8");
         if (!$isTokenUtf8Encoded) {
             throw new BadRequestHttpException("Cookies must use charset UTF-8");
         }
@@ -62,7 +62,7 @@ class CurrentUser
         if ($token === null) {
             $visitorUid = $request->cookies->get("visitor_uid");
 
-            $isCookieUtf8Encoded = mb_check_encoding($visitorUid, "UTF-8");
+            $isCookieUtf8Encoded = mb_check_encoding($visitorUid ?? "", "UTF-8");
             if (!$isCookieUtf8Encoded) {
                 throw new BadRequestHttpException("Cookies must use charset UTF-8");
             }
