@@ -1,5 +1,7 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
+
 /**
  *
  */
@@ -64,10 +66,16 @@ class EventManager extends EntityManager
         }
         return parent::create($defaults);
     }
-    
+
+    /**
+     * @throws Exception
+     */
     public function getAll(array $where = array(), array $options = array(), $withJoins = true)
     {
-        $where['events`.`site_id'] = $this->site['site_id'];
+        if ($this->siteAgnostic === false && !isset($where['site_id'])) {
+            $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
+            $where['site_id'] = $globalSite->get('id');
+        }
 
         return parent::getAll($where, $options);
     }
