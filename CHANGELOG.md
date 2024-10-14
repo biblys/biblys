@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.86.2 (DEV)
+
+### Corrections
+
+- L'affichage d'un évènement publié par un utilisateur non authentifié pouvait
+  déclencher l'affichage de la page de connexion. C'est corrigé.
+
 ## 2.86.1 (9 octobre 2024)
 
 ### Corrections
