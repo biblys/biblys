@@ -157,11 +157,19 @@ class EntityFactory
     /**
      * @throws Exception
      */
-    public static function createShipping($attributes = []): Shipping
+    public static function createShipping(
+        string         $mode = "Lettre verte",
+        int            $fee = 100,
+    ): Shipping
     {
-        $shipping = ModelFactory::createShippingFee($attributes);
+        $shipping = ModelFactory::createShippingFee(
+            mode: $mode,
+            fee: $fee,
+        );
         $sm = new ShippingManager();
-        return $sm->getById($shipping->getId());
+        /** @var Shipping $entity */
+        $entity = $sm->getById($shipping->getId());
+        return $entity;
     }
 
     /**

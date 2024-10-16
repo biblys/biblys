@@ -22,13 +22,10 @@ class ShippingFeeQueryTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $country = ModelFactory::createCountry();
-        $fee = ModelFactory::createShippingFee([
-            "site_id" => $site->getId(),
-            "type" => "normal",
-            "zone" => $country->getShippingZone(),
-            "max_weight" => 1000,
-            "max_amount" => 2000,
-        ]);
+        $fee = ModelFactory::createShippingFee(
+            site: $site,
+            country: $country,
+        );
         $orderWeight = 500;
         $orderAmount = 1500;
         $currentSite = new CurrentSite($site);
