@@ -278,6 +278,23 @@ class OrderDeliveryHelpers
             $mailAddressType = '<p>Vous avez choisi le retrait en magasin. Vous serez averti par courriel lorsque votre commande sera disponible.</p><p><strong>Adresse de facturation :</strong></p>';
         }
 
+        $shippingAddress = '<p>
+                        ' . $order->get('title') . ' ' . $order->get('firstname') . ' ' . $order->get('lastname') . '<br />
+                        ' . $order->get('address1') . '<br />
+                        ' . ($order->has('address2') ? $order->get('address2') . '<br>' : null) . '
+                        ' . $order->get('postalcode') . ' ' . $order->get('city') . '<br />
+                        ' . $order->getCountryName() . '
+                    </p>';
+
+        $orderUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/order/' . $order->get('url');
+        if ($shipping && $shipping->get("type") === "mondial-relay") {
+            $shippingAddress = '<p>
+                        ' . $order->get("firstname") . ' ' . $order->get("lastname") . '<br />
+                        Point Mondial Relay n° '.$order->get("mondial_relay_pickup_point_code").'
+                        <a href="' . $orderUrl . '">Plus d’infos</a>
+                    </p>';
+        }
+
         $mailComment = null;
         if ($order->has('comment')) {
             $mailComment = '<p><strong>Commentaire du client :</strong></p><p>' . nl2br($order->get('comment')) . '</p>';
@@ -325,19 +342,13 @@ class OrderDeliveryHelpers
 
                     ' . $mailAddressType . '
 
-                    <p>
-                        ' . $order->get('title') . ' ' . $order->get('firstname') . ' ' . $order->get('lastname') . '<br />
-                        ' . $order->get('address1') . '<br />
-                        ' . ($order->has('address2') ? $order->get('address2') . '<br>' : null) . '
-                        ' . $order->get('postalcode') . ' ' . $order->get('city') . '<br />
-                        ' . $order->getCountryName() . '
-                    </p>
+                    ' . $shippingAddress . '
 
                     ' . $mailComment . '
 
                     <p>
                         Si ce n’est pas déjà fait, vous pouvez payer votre commande à l’adresse ci-dessous :<br />
-                        http://' . $_SERVER['HTTP_HOST'] . '/order/' . $order->get('url') . '
+                        ' . $orderUrl . '
                     </p>
                     
                     ' . $termsLink . '
@@ -350,7 +361,7 @@ class OrderDeliveryHelpers
         // Send email to customer from site
         $mailer->send($order->get('email'), $mailSubject, $mailBody);
 
-        // Send email to site contact adress
+        // Send email to site contact address
         $from = [$site->getContact() => trim($order->get('firstname') . ' ' . $order->get('lastname'))];
         $replyTo = $order->get('email');
         $mailSubject = trim($currentSite->getOption("order_mail_subject_prefix") . " " . $mailSubject);

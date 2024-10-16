@@ -240,7 +240,7 @@ class OrderDeliveryHelpersTest extends TestCase
                     </style>
                 </head>
                 <body>
-                    <p>Bonjour Alec,</p>
+                    <p>Bonjour Marie,</p>
 
                     <p>votre nouvelle commande a bien été enregistrée.</p>
 
@@ -270,7 +270,7 @@ class OrderDeliveryHelpersTest extends TestCase
                     <p><strong>Adresse d’expédition :</strong></p>
 
                     <p>
-                         Alec <br />
+                         Marie Golade<br />
                         <br />
                         
                          <br />
@@ -281,7 +281,7 @@ class OrderDeliveryHelpersTest extends TestCase
 
                     <p>
                         Si ce n’est pas déjà fait, vous pouvez payer votre commande à l’adresse ci-dessous :<br />
-                        http://www.biblys.fr/order/'.$order->get("url").'
+                        https://www.biblys.fr/order/'.$order->get("url").'
                     </p>
                     
                     
@@ -309,7 +309,133 @@ class OrderDeliveryHelpersTest extends TestCase
                 "contact@paronymie.fr",
                 "Commande n° {$order->get("id")}",
                 $mailBody,
-                ['contact@paronymie.fr' => 'Alec'],
+                ['contact@paronymie.fr' => 'Marie Golade'],
+                ['reply-to' => 'customer@example.net'],
+            )
+            ->andReturn(true);
+
+        // when
+        OrderDeliveryHelpers::sendOrderConfirmationMail(
+            $order,
+            $shipping,
+            $mailer,
+            $currentSite,
+            false,
+            $termsPage,
+        );
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
+
+
+    /**
+     * @throws InvalidEmailAddressException
+     * @throws PropelException
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     */
+    public function testSendOrderConfirmationMailWithMondialRelayShipping()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("getOption")->andReturn(null);
+        $cm = new CartManager();
+        $om = new OrderManager();
+        $cart = EntityFactory::createCart();
+        $article = EntityFactory::createArticle([
+            "article_title" => "Le livre au point retrait",
+            "article_url" => "le-livre-au-point-retrait",
+        ]);
+        $copy = EntityFactory::createStock(["article_id" => $article->get("id")]);
+        $cm->addStock($cart, $copy);
+        $order = EntityFactory::createOrder(firstName: "Rondial", lastName: "Melay",  mondialRelayPickupPointCode: "001234");
+        $om->hydrateFromCart($order, $cart);
+        $shipping = EntityFactory::createShipping(type: "mondial-relay", mode: "Mondial Relay", fee: 999);
+        $termsPage = ModelFactory::createPage();
+
+        $mailBody = '
+            <html lang="fr">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Commande n° '.$order->get("id").'</title>
+                    <style>
+                        p {
+                            margin-bottom: 5px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <p>Bonjour Rondial,</p>
+
+                    <p>votre nouvelle commande a bien été enregistrée.</p>
+
+                    <p><strong><a href="http://www.biblys.fr/order/'.$order->get("url").'">Commande n&deg; '.$order->get("id").'</a></strong></p>
+
+                    <p><strong>1 article</strong></p>
+
+                    
+                <p>
+                    <a href="http://www.biblys.fr/le-livre-au-point-retrait">Le livre au point retrait</a> 
+                    (La Blanche n&deg;&nbsp;19)<br>
+                    de <br>
+                    La Blanche<br>
+                    18,99&nbsp;&euro;
+                    <br />Emplacement : Paris
+                </p>
+            
+
+                    <p>
+                        ------------------------------<br />
+                        Frais de port : 9,99&nbsp;&euro; (Mondial Relay)<br>
+                        Total : 18,99&nbsp;&euro;
+                    </p>
+
+                    
+
+                    <p><strong>Adresse d’expédition :</strong></p>
+
+                    <p>
+                        Rondial Melay<br />
+                        Point Mondial Relay n° 001234
+                        <a href="https://www.biblys.fr/order/'.$order->get("url").'">Plus d’infos</a>
+                    </p>
+
+                    
+
+                    <p>
+                        Si ce n’est pas déjà fait, vous pouvez payer votre commande à l’adresse ci-dessous :<br />
+                        https://www.biblys.fr/order/'.$order->get("url").'
+                    </p>
+                    
+                    
+                    <p>
+                        Consultez nos conditions générales de vente :<br />
+                        http://www.biblys.fr/page/'.$termsPage->getUrl().'
+                    </p>
+                
+
+                    <p>Merci pour votre commande !</p>
+                </body>
+            </html>
+        ';
+
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->shouldReceive("send")
+            ->with(
+                "customer@example.net",
+                "Commande n° {$order->get("id")}",
+                $mailBody
+            )
+            ->andReturn(true);
+        $mailer->shouldReceive("send")
+            ->with(
+                "contact@paronymie.fr",
+                "Commande n° {$order->get("id")}",
+                $mailBody,
+                ['contact@paronymie.fr' => 'Rondial Melay'],
                 ['reply-to' => 'customer@example.net'],
             )
             ->andReturn(true);
@@ -367,7 +493,7 @@ class OrderDeliveryHelpersTest extends TestCase
                 "contact@paronymie.fr",
                 "PARONYMIE · Commande n° {$order->get("id")}",
                 Mockery::any(),
-                ['contact@paronymie.fr' => 'Alec'],
+                ['contact@paronymie.fr' => 'Marie Golade'],
                 ['reply-to' => 'customer@example.net'],
             )
             ->andReturn(true);
@@ -425,7 +551,7 @@ class OrderDeliveryHelpersTest extends TestCase
                     </style>
                 </head>
                 <body>
-                    <p>Bonjour Alec,</p>
+                    <p>Bonjour Marie,</p>
 
                     <p>votre commande a été mise à jour.</p>
 
@@ -455,7 +581,7 @@ class OrderDeliveryHelpersTest extends TestCase
                     <p><strong>Adresse d’expédition :</strong></p>
 
                     <p>
-                         Alec <br />
+                         Marie Golade<br />
                         <br />
                         
                          <br />
@@ -466,7 +592,7 @@ class OrderDeliveryHelpersTest extends TestCase
 
                     <p>
                         Si ce n’est pas déjà fait, vous pouvez payer votre commande à l’adresse ci-dessous :<br />
-                        http://www.biblys.fr/order/'.$order->get("url").'
+                        https://www.biblys.fr/order/'.$order->get("url").'
                     </p>
                     
                     
@@ -494,7 +620,7 @@ class OrderDeliveryHelpersTest extends TestCase
                 "contact@paronymie.fr",
                 "Commande n° {$order->get("id")} (mise à jour)",
                 $mailBody,
-                ['contact@paronymie.fr' => 'Alec'],
+                ['contact@paronymie.fr' => 'Marie Golade'],
                 ['reply-to' => 'customer@example.net'],
             )
             ->andReturn(true);
