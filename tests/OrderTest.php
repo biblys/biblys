@@ -535,7 +535,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
     {
         // given
         $om = new OrderManager();
-        $order = EntityFactory::createOrder(["order_shipping" => 247]);
+        $order = EntityFactory::createOrder(shippingId: 247);
         $stock = EntityFactory::createStock(["stock_selling_price" => 1000]);
         $om->addStock($order, $stock);
 
@@ -564,7 +564,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
         // given
         $om = new OrderManager();
         $stock = EntityFactory::createStock(["stock_selling_price" => 1000]);
-        $order = EntityFactory::createOrder(["order_shipping" => 247, "order_payment_date" => "2016-02-15 00:10:00"]);
+        $order = EntityFactory::createOrder(shippingId: 247, paymentDate: new DateTime("2016-02-15 00:10:00"));
         $om->addStock($order, $stock);
 
         // when

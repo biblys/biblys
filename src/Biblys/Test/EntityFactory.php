@@ -13,10 +13,10 @@ use Collection;
 use CollectionManager;
 use Country;
 use CountryManager;
+use DateTime;
 use Entity;
 use Exception;
 use Gallery;
-use GalleryManager;
 use MediaFile;
 use Model\ArticleQuery;
 use Model\PeopleQuery;
@@ -43,8 +43,8 @@ class EntityFactory
      * @throws PropelException
      */
     public static function createArticle(
-        array $attributes = [],
-        array $authors = null,
+        array  $attributes = [],
+        array  $authors = null,
         string $title = null,
     ): Article
     {
@@ -109,9 +109,10 @@ class EntityFactory
      * @throws Exception
      */
     public static function createOrder(
-        array $attributes = [],
-        User $user = null,
-        string $orderEmail = "customer@example.net",
+        User     $user = null,
+        string   $orderEmail = "customer@example.net",
+        int      $shippingId = 0,
+        DateTime $paymentDate = null,
     ): Order
     {
         $om = new OrderManager();
@@ -123,8 +124,8 @@ class EntityFactory
 
         $country = self::createCountry();
         $order->set("country_id", $country->get("id"));
-        $order->set("order_shipping", $attributes["order_shipping"] ?? 0);
-        $order->set("order_payment_date", $attributes["order_payment_date"] ?? null);
+        $order->set("order_shipping", $shippingId);
+        $order->set("order_payment_date", $paymentDate?->format("Y-m-d H:i:s"));
 
         $order->set("user_id", $user?->getId() ?? null);
         $om->update($order);
@@ -158,8 +159,8 @@ class EntityFactory
      * @throws Exception
      */
     public static function createShipping(
-        string         $mode = "Lettre verte",
-        int            $fee = 100,
+        string $mode = "Lettre verte",
+        int    $fee = 100,
     ): Shipping
     {
         $shipping = ModelFactory::createShippingFee(
