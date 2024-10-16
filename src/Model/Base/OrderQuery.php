@@ -37,6 +37,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery orderByShipping($order = Criteria::ASC) Order by the order_shipping column
  * @method     ChildOrderQuery orderByShippingMode($order = Criteria::ASC) Order by the order_shipping_mode column
  * @method     ChildOrderQuery orderByTrackNumber($order = Criteria::ASC) Order by the order_track_number column
+ * @method     ChildOrderQuery orderByMondialRelayPickupPointCode($order = Criteria::ASC) Order by the mondial_relay_pickup_point_code column
  * @method     ChildOrderQuery orderByPaymentMode($order = Criteria::ASC) Order by the order_payment_mode column
  * @method     ChildOrderQuery orderByPaymentCash($order = Criteria::ASC) Order by the order_payment_cash column
  * @method     ChildOrderQuery orderByPaymentCheque($order = Criteria::ASC) Order by the order_payment_cheque column
@@ -86,6 +87,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery groupByShipping() Group by the order_shipping column
  * @method     ChildOrderQuery groupByShippingMode() Group by the order_shipping_mode column
  * @method     ChildOrderQuery groupByTrackNumber() Group by the order_track_number column
+ * @method     ChildOrderQuery groupByMondialRelayPickupPointCode() Group by the mondial_relay_pickup_point_code column
  * @method     ChildOrderQuery groupByPaymentMode() Group by the order_payment_mode column
  * @method     ChildOrderQuery groupByPaymentCash() Group by the order_payment_cash column
  * @method     ChildOrderQuery groupByPaymentCheque() Group by the order_payment_cheque column
@@ -178,6 +180,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder|null findOneByShipping(int $order_shipping) Return the first ChildOrder filtered by the order_shipping column
  * @method     ChildOrder|null findOneByShippingMode(string $order_shipping_mode) Return the first ChildOrder filtered by the order_shipping_mode column
  * @method     ChildOrder|null findOneByTrackNumber(string $order_track_number) Return the first ChildOrder filtered by the order_track_number column
+ * @method     ChildOrder|null findOneByMondialRelayPickupPointCode(string $mondial_relay_pickup_point_code) Return the first ChildOrder filtered by the mondial_relay_pickup_point_code column
  * @method     ChildOrder|null findOneByPaymentMode(string $order_payment_mode) Return the first ChildOrder filtered by the order_payment_mode column
  * @method     ChildOrder|null findOneByPaymentCash(int $order_payment_cash) Return the first ChildOrder filtered by the order_payment_cash column
  * @method     ChildOrder|null findOneByPaymentCheque(int $order_payment_cheque) Return the first ChildOrder filtered by the order_payment_cheque column
@@ -230,6 +233,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder requireOneByShipping(int $order_shipping) Return the first ChildOrder filtered by the order_shipping column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByShippingMode(string $order_shipping_mode) Return the first ChildOrder filtered by the order_shipping_mode column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByTrackNumber(string $order_track_number) Return the first ChildOrder filtered by the order_track_number column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildOrder requireOneByMondialRelayPickupPointCode(string $mondial_relay_pickup_point_code) Return the first ChildOrder filtered by the mondial_relay_pickup_point_code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByPaymentMode(string $order_payment_mode) Return the first ChildOrder filtered by the order_payment_mode column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByPaymentCash(int $order_payment_cash) Return the first ChildOrder filtered by the order_payment_cash column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByPaymentCheque(int $order_payment_cheque) Return the first ChildOrder filtered by the order_payment_cheque column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -300,6 +304,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildOrder> findByShippingMode(string|array<string> $order_shipping_mode) Return ChildOrder objects filtered by the order_shipping_mode column
  * @method     ChildOrder[]|Collection findByTrackNumber(string|array<string> $order_track_number) Return ChildOrder objects filtered by the order_track_number column
  * @psalm-method Collection&\Traversable<ChildOrder> findByTrackNumber(string|array<string> $order_track_number) Return ChildOrder objects filtered by the order_track_number column
+ * @method     ChildOrder[]|Collection findByMondialRelayPickupPointCode(string|array<string> $mondial_relay_pickup_point_code) Return ChildOrder objects filtered by the mondial_relay_pickup_point_code column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByMondialRelayPickupPointCode(string|array<string> $mondial_relay_pickup_point_code) Return ChildOrder objects filtered by the mondial_relay_pickup_point_code column
  * @method     ChildOrder[]|Collection findByPaymentMode(string|array<string> $order_payment_mode) Return ChildOrder objects filtered by the order_payment_mode column
  * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentMode(string|array<string> $order_payment_mode) Return ChildOrder objects filtered by the order_payment_mode column
  * @method     ChildOrder[]|Collection findByPaymentCash(int|array<int> $order_payment_cash) Return ChildOrder objects filtered by the order_payment_cash column
@@ -459,7 +465,7 @@ abstract class OrderQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT order_id, order_url, site_id, axys_account_id, user_id, customer_id, seller_id, order_type, order_as_a_gift, order_gift_recipient, order_amount, order_discount, order_amount_tobepaid, shipping_id, country_id, order_shipping, order_shipping_mode, order_track_number, order_payment_mode, order_payment_cash, order_payment_cheque, order_payment_transfer, order_payment_card, order_payment_paypal, order_payment_payplug, order_payment_left, order_title, order_firstname, order_lastname, order_address1, order_address2, order_postalcode, order_city, order_country, order_email, order_phone, order_comment, order_utmz, order_referer, order_insert, order_payment_date, order_shipping_date, order_followup_date, order_confirmation_date, order_cancel_date, order_update, order_created, order_updated FROM orders WHERE order_id = :p0';
+        $sql = 'SELECT order_id, order_url, site_id, axys_account_id, user_id, customer_id, seller_id, order_type, order_as_a_gift, order_gift_recipient, order_amount, order_discount, order_amount_tobepaid, shipping_id, country_id, order_shipping, order_shipping_mode, order_track_number, mondial_relay_pickup_point_code, order_payment_mode, order_payment_cash, order_payment_cheque, order_payment_transfer, order_payment_card, order_payment_paypal, order_payment_payplug, order_payment_left, order_title, order_firstname, order_lastname, order_address1, order_address2, order_postalcode, order_city, order_country, order_email, order_phone, order_comment, order_utmz, order_referer, order_insert, order_payment_date, order_shipping_date, order_followup_date, order_confirmation_date, order_cancel_date, order_update, order_created, order_updated FROM orders WHERE order_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1252,6 +1258,34 @@ abstract class OrderQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(OrderTableMap::COL_ORDER_TRACK_NUMBER, $trackNumber, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the mondial_relay_pickup_point_code column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMondialRelayPickupPointCode('fooValue');   // WHERE mondial_relay_pickup_point_code = 'fooValue'
+     * $query->filterByMondialRelayPickupPointCode('%fooValue%', Criteria::LIKE); // WHERE mondial_relay_pickup_point_code LIKE '%fooValue%'
+     * $query->filterByMondialRelayPickupPointCode(['foo', 'bar']); // WHERE mondial_relay_pickup_point_code IN ('foo', 'bar')
+     * </code>
+     *
+     * @param string|string[] $mondialRelayPickupPointCode The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByMondialRelayPickupPointCode($mondialRelayPickupPointCode = null, ?string $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($mondialRelayPickupPointCode)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(OrderTableMap::COL_MONDIAL_RELAY_PICKUP_POINT_CODE, $mondialRelayPickupPointCode, $comparison);
 
         return $this;
     }

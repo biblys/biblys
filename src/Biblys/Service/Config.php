@@ -130,6 +130,17 @@ class Config
         return false;
     }
 
+    public function isMondialRelayEnabled(): bool
+    {
+        $clientId = $this->get("mondial_relay.code_enseigne");
+        $clientSecret = $this->get("mondial_relay.private_key");
+        if ($clientId && $clientSecret) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function getImagesPath(): string
     {
         return $this->get("images.path") ?? "public/images/";

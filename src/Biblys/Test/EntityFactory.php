@@ -13,6 +13,7 @@ use Collection;
 use CollectionManager;
 use Country;
 use CountryManager;
+use DateTime;
 use Exception;
 use Model\ArticleQuery;
 use Model\PeopleQuery;
@@ -39,8 +40,8 @@ class EntityFactory
      * @throws PropelException
      */
     public static function createArticle(
-        array $attributes = [],
-        array $authors = null,
+        array  $attributes = [],
+        array  $authors = null,
         string $title = null,
     ): Article
     {
@@ -105,22 +106,28 @@ class EntityFactory
      * @throws Exception
      */
     public static function createOrder(
-        array $attributes = [],
-        User $user = null,
-        string $orderEmail = "customer@example.net",
+        User     $user = null,
+        string   $firstName = "Marie",
+        string   $lastName = "Golade",
+        string   $orderEmail = "customer@example.net",
+        int      $shippingId = 0,
+        string   $mondialRelayPickupPointCode = null,
+        DateTime $paymentDate = null,
     ): Order
     {
         $om = new OrderManager();
         $order = $om->create([
             "order_email" => $orderEmail,
-            "order_firstname" => "Alec",
+            "order_firstname" => $firstName,
+            "order_lastname" => $lastName,
             "reward_id" => $attributes["reward_id"] ?? null,
         ]);
 
         $country = self::createCountry();
         $order->set("country_id", $country->get("id"));
-        $order->set("order_shipping", $attributes["order_shipping"] ?? 0);
-        $order->set("order_payment_date", $attributes["order_payment_date"] ?? null);
+        $order->set("order_shipping", $shippingId);
+        $order->set("order_mondial_relay_pickup_point_code", $mondialRelayPickupPointCode);
+        $order->set("order_payment_date", $paymentDate?->format("Y-m-d H:i:s"));
 
         $order->set("user_id", $user?->getId() ?? null);
         $om->update($order);
@@ -153,11 +160,22 @@ class EntityFactory
     /**
      * @throws Exception
      */
-    public static function createShipping($attributes = []): Shipping
+    public
+    static function createShipping(
+        string $type = "normal",
+        string $mode = "Lettre verte",
+        int    $fee = 100,
+    ): Shipping
     {
-        $shipping = ModelFactory::createShippingFee($attributes);
+        $shipping = ModelFactory::createShippingFee(
+            type: $type,
+            mode: $mode,
+            fee: $fee,
+        );
         $sm = new ShippingManager();
-        return $sm->getById($shipping->getId());
+        /** @var Shipping $entity */
+        $entity = $sm->getById($shipping->getId());
+        return $entity;
     }
 
     /**

@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpDeprecationInspection */
+<?php
 
 use Biblys\Legacy\CartHelpers;
 use Biblys\Legacy\LegacyCodeHelper;
@@ -12,6 +12,7 @@ use Biblys\Service\MailingList\Exception\InvalidConfigurationException;
 use Biblys\Service\MailingList\Exception\InvalidEmailAddressException;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\QueryParamsService;
+use DansMaCulotte\MondialRelay\DeliveryChoice;
 use Model\CustomerQuery;
 use Model\PageQuery;
 use Propel\Runtime\Exception\PropelException;
@@ -31,18 +32,20 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
  * @throws TransportExceptionInterface
  */
 return function (
-    Request      $request,
-    CurrentSite  $currentSite,
-    UrlGenerator $urlGenerator,
-    CurrentUser  $currentUser,
-    Mailer       $mailer,
-    QueryParamsService $queryParamsService
+    Request            $request,
+    CurrentSite        $currentSite,
+    UrlGenerator       $urlGenerator,
+    CurrentUser        $currentUser,
+    Mailer             $mailer,
+    QueryParamsService $queryParamsService,
+    Config             $config,
 ): Response|RedirectResponse {
     global $_SQL;
 
     $queryParamsService->parse([
         "country_id" => ["type" => "numeric", "default" => 0],
         "shipping_id" => ["type" => "numeric", "default" => 0],
+        "pickup_point_code" => ["type" => "string", "default" => ""],
         "reuse" => ["type" => "numeric", "default" => 0],
     ]);
 
@@ -110,6 +113,25 @@ return function (
     $shippingMode = $shipping ? $shipping->get("mode") : "";
     $shippingFee = $shipping ? $shipping->get("fee") : 0;
     $shippingType = $shipping?->get("type");
+
+    $pickupPointCode = "";
+    if ($shippingType === "mondial-relay") {
+        $pickupPointSelectUrl = $urlGenerator->generate("shipping_select_pickup_point", [
+            "country_id" => $countryId,
+            "shipping_id" => $shippingId,
+        ]);
+
+        $pickupPointCode = $queryParamsService->get("pickup_point_code");
+        if (!$pickupPointCode) {
+            return new RedirectResponse($pickupPointSelectUrl, 301);
+        }
+
+        $delivery = new DeliveryChoice([
+            "site_id" => $config->get("mondial_relay.code_enseigne"),
+            "site_key" => $config->get("mondial_relay.private_key"),
+        ]);
+        $pickupPoint = $delivery->findPickupPointByCode('FR', $pickupPointCode);
+    }
 
     // Add shipping to order total amount
     $total = $totalPrice;
@@ -194,6 +216,11 @@ return function (
             if ($shipping) {
                 $order->set('order_shipping_mode', $shippingType)
                     ->set('order_shipping', $shippingFee);
+            }
+
+            $pickupPointCode = $request->request->get("pickup_point_code", "");
+            if ($pickupPointCode) {
+                $order->set('mondial_relay_pickup_point_code', $pickupPointCode);
             }
 
             $comment = $request->request->get('comment', false);
@@ -448,6 +475,9 @@ return function (
         if ($shipping) {
             $url .= "&country_id=$countryId&shipping_id=" . $shipping->get("id");
         }
+        if ($pickupPointCode) {
+            $url .= "&pickup_point_code=$pickupPointCode";
+        }
         $content .= '
         <div class="previous-order">
             <p>
@@ -495,6 +525,17 @@ return function (
     }
 
     $isPhoneRequired = $currentSite->getOption("order_phone_required");
+
+    if ($pickupPointCode) {
+        $pickupPointForm = '
+           <fieldset class="order-delivery-form__fieldset order-delivery-form__pickup-points">
+              <legend>Point de retrait</legend>
+              ' . $pickupPoint->name . ' ('.$pickupPoint->postalCode.')
+              <a href="' . $pickupPointSelectUrl . '" class="btn btn-info">Modifier</a>
+              <input type="hidden" name="pickup_point_code" value="' . $pickupPointCode . '">
+            </fieldset>
+        ';
+    }
 
     $content .= '
     <form id="orderForm" method="post" class="order-delivery-form fieldset check ' . $form_class . '">
@@ -583,6 +624,8 @@ return function (
                 />
             </div>
          </fieldset>
+         
+         ' . $pickupPointForm . '
          
          <fieldset class="order-delivery-form__fieldset">
             <legend>Commentaires</legend>
