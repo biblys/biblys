@@ -8,6 +8,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
+use DansMaCulotte\MondialRelay\DeliveryChoice;
 use Model\StockQuery;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
@@ -87,17 +88,12 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
     }
 
     if (!empty($o["order_address2"])) $o["order_address2"] = $o["order_address2"] . '<br />';
-    $content .= '<h4>Coordonnées</h4>';
-
-    $content .= ' 
-        <p>
-            ' . $o["order_title"] . ' ' . $o["order_firstname"] . ' ' . $o["order_lastname"] . '<br />
-        </p>
-    ';
 
     if ($order->get("shipping_mode") === "normal" || $order->get("shipping_mode") === "suivi") {
         $content .= '
+            <h4>Adresse de livraison</h4>
             <p>
+                ' . $o["order_firstname"] . ' ' . $o["order_lastname"] . '<br />
                 ' . $o["order_address1"] . '<br />
                 ' . $o["order_address2"] . '
                 ' . $o["order_postalcode"] . ' ' . $o["order_city"] . '<br />
@@ -107,7 +103,39 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
     } elseif ($order->get("shipping_mode") === "retrait") {
         $content .= '<p>Retrait en magasin</p>';
     } elseif ($order->get("shipping_mode") === "mondial-relay") {
-        $content .= '<p>Point Mondial Relay n° '.$order->get("mondial_relay_pickup_point_code").'</p>';
+        if ($config->isMondialRelayEnabled()) {
+        $content .= '<p></p>';
+
+            $delivery = new DeliveryChoice([
+                "site_id" => $config->get("mondial_relay.code_enseigne"),
+                "site_key" => $config->get("mondial_relay.private_key"),
+            ]);
+            $pickupPoint = $delivery->findPickupPointByCode(
+                country: 'FR',
+                code: $order->get("mondial_relay_pickup_point_code")
+            );
+            $content .= '
+                <h4>Adresse de livraison</h4>
+                <p>            
+                    ' . $o["order_firstname"] . ' ' . $o["order_lastname"] . '<br />
+                    Point Mondial Relay n° '.$order->get("mondial_relay_pickup_point_code").'<br>
+                    <strong>'.$pickupPoint->name.'</strong><br />
+                    '.$pickupPoint->address.'<br />
+                    '.$pickupPoint->postalCode.' '.$pickupPoint->city.'
+                </p>
+            ';
+        }
+
+        $content .= '
+            <h4>Adresse de facturation</h4>
+            <p>
+                ' . $o["order_firstname"] . ' ' . $o["order_lastname"] . '<br />
+                ' . $o["order_address1"] . '<br />
+                ' . $o["order_address2"] . '
+                ' . $o["order_postalcode"] . ' ' . $o["order_city"] . '<br />
+                ' . $country . '
+            </p>
+        ';
     }
 
     $content .= '<p><a href="mailto:' . $o["order_email"] . '">' . $o["order_email"] . '</a></p>';
