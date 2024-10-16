@@ -141,16 +141,17 @@ class OrderDeliveryHelpers
     /**
      * @throws PropelException
      */
-    public static function getCountryInput(Cart $cart, ?int $countryId): string
+    public static function getCountryInput(Cart $cart, int $countryId): string
     {
         $com = new CountryManager();
         if (CartHelpers::cartNeedsShipping($cart)) {
-            if (!is_int($countryId)) {
-                throw new BadRequestHttpException("country_id parameter is required when cart needs shipping");
+            if ($countryId === 0) {
+                throw new BadRequestHttpException("The country_id parameter is required when cart needs shipping.");
             }
+
             $country = $com->getById($countryId);
             if (!$country) {
-                trigger_error('Pays incorrect');
+                throw new BadRequestHttpException("The country_id parameter must match an existing country.");
             }
             $countryInput = '
             <input type="text" class="order-delivery-form__input" value="' . $country->get('name') . '" readonly>
