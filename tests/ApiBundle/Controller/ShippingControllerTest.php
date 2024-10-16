@@ -312,15 +312,15 @@ class ShippingControllerTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $shippingFee = ModelFactory::createShippingFee([
-            "fee" => 560,
-            "mode" => "Colissimo",
-            "type" => "suivi",
-            "info" => "Expedition sous 72h",
-            "site_id" => $site->getId(),
-            "max_weight" => 2000,
-            "max_amount" => 10000,
-        ]);
+        $shippingFee = ModelFactory::createShippingFee(
+            site: $site,
+            type: "suivi",
+            mode: "Colissimo",
+            info: "Expedition sous 72h",
+            fee: 560,
+            maxWeight: 2000,
+            maxAmount: 10000
+        );
         $country = ModelFactory::createCountry();
         $controller = new ShippingController();
         $request = new Request();
@@ -405,17 +405,18 @@ class ShippingControllerTest extends TestCase
     {
         // given
         $config = new Config();
-        $shippingFee = ModelFactory::createShippingFee([
-            "mode" => "Colissimo",
-            "type" => "Type C",
-            "zone" => "Z2",
-            "max_weight" => 1,
-            "min_amount" => 2,
-            "max_amount" => 3,
-            "max_articles" => 4,
-            "fee" => 90,
-            "info" => "A shipping fee",
-        ]);
+        $country = ModelFactory::createCountry(zone: "Z2");
+        $shippingFee = ModelFactory::createShippingFee(
+            type: "Type C",
+            country: $country,
+            mode: "Colissimo",
+            info: "A shipping fee",
+            fee: 90,
+            maxWeight: 1,
+            minAmount: 2,
+            maxAmount: 3,
+            maxArticles: 4
+        );
         $shippingFee->save();
         $controller = new ShippingController();
 

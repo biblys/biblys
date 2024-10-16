@@ -166,11 +166,15 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createCountry($name = "France"): Country
+    public static function createCountry(
+        string $name = "France",
+        string $zone = "F",
+    ): Country
     {
         $country = new Country();
         $country->setName($name);
         $country->setCode("FR");
+        $country->setShippingZone($zone);
         $country->save();
 
         return $country;
@@ -401,19 +405,30 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createShippingFee(array $attributes = []): ShippingFee
+    public static function createShippingFee(
+        Site    $site = null,
+        string  $type = "normal",
+        Country $country = null,
+        string  $mode = "Lettre verte",
+        string  $info = null,
+        int     $fee = 100,
+        int     $maxWeight = 1000,
+        int     $minAmount = 0,
+        int     $maxAmount = 2000,
+        int     $maxArticles = 10,
+    ): ShippingFee
     {
         $shippingFee = new ShippingFee();
-        $shippingFee->setSiteId($attributes["site_id"] ?? 1);
-        $shippingFee->setZone($attributes["zone"] ?? "ALL");
-        $shippingFee->setType($attributes["type"] ?? "normal");
-        $shippingFee->setMode($attributes["mode"] ?? "Colissimo");
-        $shippingFee->setFee($attributes["fee"] ?? 560);
-        $shippingFee->setMinAmount($attributes["min_amount"] ?? 0);
-        $shippingFee->setMaxWeight($attributes["max_weight"] ?? 1000);
-        $shippingFee->setMaxAmount($attributes["max_amount"] ?? 1000);
-        $shippingFee->setMaxArticles($attributes["max_articles"] ?? 10);
-        $shippingFee->setInfo($attributes["info"] ?? null);
+        $shippingFee->setSiteId($site?->getId() ?? 1);
+        $shippingFee->setZone($country?->getShippingZone() ?? "ALL");
+        $shippingFee->setType($type);
+        $shippingFee->setMode($mode);
+        $shippingFee->setFee($fee);
+        $shippingFee->setMinAmount($minAmount);
+        $shippingFee->setMaxWeight($maxWeight);
+        $shippingFee->setMaxAmount($maxAmount);
+        $shippingFee->setMaxArticles($maxArticles);
+        $shippingFee->setInfo($info);
         $shippingFee->save();
 
         return $shippingFee;
