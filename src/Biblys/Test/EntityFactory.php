@@ -110,21 +110,26 @@ class EntityFactory
      */
     public static function createOrder(
         User     $user = null,
+        string   $firstName = "Marie",
+        string   $lastName = "Golade",
         string   $orderEmail = "customer@example.net",
         int      $shippingId = 0,
+        string   $mondialRelayPickupPointCode = null,
         DateTime $paymentDate = null,
     ): Order
     {
         $om = new OrderManager();
         $order = $om->create([
             "order_email" => $orderEmail,
-            "order_firstname" => "Alec",
+            "order_firstname" => $firstName,
+            "order_lastname" => $lastName,
             "reward_id" => $attributes["reward_id"] ?? null,
         ]);
 
         $country = self::createCountry();
         $order->set("country_id", $country->get("id"));
         $order->set("order_shipping", $shippingId);
+        $order->set("order_mondial_relay_pickup_point_code", $mondialRelayPickupPointCode);
         $order->set("order_payment_date", $paymentDate?->format("Y-m-d H:i:s"));
 
         $order->set("user_id", $user?->getId() ?? null);
@@ -158,12 +163,15 @@ class EntityFactory
     /**
      * @throws Exception
      */
-    public static function createShipping(
+    public
+    static function createShipping(
+        string $type = "normal",
         string $mode = "Lettre verte",
         int    $fee = 100,
     ): Shipping
     {
         $shipping = ModelFactory::createShippingFee(
+            type: $type,
             mode: $mode,
             fee: $fee,
         );
