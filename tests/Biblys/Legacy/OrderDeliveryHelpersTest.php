@@ -4,6 +4,7 @@
 
 namespace Biblys\Legacy;
 
+use Biblys\Data\ArticleType;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Exception\OrderDetailsValidationException;
 use Biblys\Service\CurrentSite;
@@ -22,6 +23,7 @@ use OrderManager;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 require_once(__DIR__."/../../setUp.php");
@@ -747,5 +749,73 @@ class OrderDeliveryHelpersTest extends TestCase
 
         // then
         $this->expectNotToPerformAssertions();
+    }
+
+    /**
+     * #getCountryInput
+     */
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetCountryInput()
+    {
+        $cart = ModelFactory::createCart();
+        $article = ModelFactory::createArticle();
+        ModelFactory::createStockItem(article: $article, cart: $cart);
+        $country = ModelFactory::createCountry(name: "Le Pays du jamais");
+
+        // when
+        $countryInput = OrderDeliveryHelpers::getCountryInput($cart, $country->getId());
+
+        // then
+        $this->assertEquals(
+            '
+            <input type="text" class="order-delivery-form__input" value="Le Pays du jamais" readonly>
+            <input type="hidden" name="country_id" value="'.$country->getId().'">
+            <a class="btn btn-light" href="/pages/cart">modifier</a>
+        ',
+            $countryInput
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetCountryInputWith0AsCountryId()
+    {
+        $cart = ModelFactory::createCart();
+        $article = ModelFactory::createArticle();
+        ModelFactory::createStockItem(article: $article, cart: $cart);
+
+        // when
+        $error = Helpers::runAndCatchException(fn() =>
+        OrderDeliveryHelpers::getCountryInput($cart, countryId: 0)
+        );
+
+        // then
+        $this->assertInstanceOf(BadRequestHttpException::class, $error);
+        $this->assertEquals("The country_id parameter is required when cart needs shipping.", $error->getMessage());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetCountryInputWithUnknownCountry()
+    {
+        $cart = ModelFactory::createCart();
+        $article = ModelFactory::createArticle();
+        ModelFactory::createStockItem(article: $article, cart: $cart);
+
+        // when
+        $error = Helpers::runAndCatchException(fn() =>
+            OrderDeliveryHelpers::getCountryInput($cart, countryId: 999)
+        );
+
+        // then
+        $this->assertInstanceOf(BadRequestHttpException::class, $error);
+        $this->assertEquals("The country_id parameter must match an existing country.", $error->getMessage());
     }
 }
