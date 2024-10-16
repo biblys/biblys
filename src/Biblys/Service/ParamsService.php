@@ -48,11 +48,12 @@ abstract class ParamsService
 
     protected function _ensureSpecificationsAreEnforced(array $params, array $specs): array
     {
+
         foreach ($specs as $param => $rules) {
 
+            $isOptional = isset($rules["default"]);
             if (!isset($params[$param])) {
-                $isRequired = !isset($rules["default"]);
-                if ($isRequired) {
+                if (!$isOptional) {
                     throw new BadRequestHttpException("Parameter '$param' is required");
                 }
 
@@ -98,6 +99,11 @@ abstract class ParamsService
                 }
 
                 if ($rule === "mb_min_length") {
+                    $ruleShouldBeIgnoredBecauseDefaultValueIsUsed = $isOptional && $value === "";
+                    if ($ruleShouldBeIgnoredBecauseDefaultValueIsUsed) {
+                        continue;
+                    }
+                    
                     if (mb_strlen($value) < $ruleValue) {
                         throw new BadRequestHttpException(
                             "Parameter '$param' must be at least $ruleValue characters long"
