@@ -223,7 +223,7 @@ class OrderDeliveryHelpersTest extends TestCase
         $cm->addStock($cart, $copy);
         $order = EntityFactory::createOrder();
         $om->hydrateFromCart($order, $cart);
-        $shipping = EntityFactory::createShipping();
+        $shipping = EntityFactory::createShipping(mode: "Colissimo", fee: 560);
         $termsPage = ModelFactory::createPage();
 
         $mailBody = '
@@ -408,7 +408,7 @@ class OrderDeliveryHelpersTest extends TestCase
         $cm->addStock($cart, $copy);
         $order = EntityFactory::createOrder();
         $om->hydrateFromCart($order, $cart);
-        $shipping = EntityFactory::createShipping();
+        $shipping = EntityFactory::createShipping(mode: "Colissimo", fee: 560);
         $termsPage = ModelFactory::createPage();
 
         $mailBody = '

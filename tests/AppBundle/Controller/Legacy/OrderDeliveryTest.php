@@ -39,7 +39,7 @@ class OrderDeliveryTest extends TestCase
         $cart = ModelFactory::createCart(site: $site);
         $article = ModelFactory::createArticle();
         ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
-        $shipping = ModelFactory::createShippingFee(["type" => "suivi"]);
+        $shipping = ModelFactory::createShippingFee(type: "suivi");
         $_POST["order_email"] = "customer@biblys.fr";
         $_POST["order_firstname"] = "Barnabé";
         $_POST["order_lastname"] = "Famagouste";
@@ -271,7 +271,7 @@ class OrderDeliveryTest extends TestCase
         ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
         $country = ModelFactory::createCountry();
 
-        $shipping = ModelFactory::createShippingFee(["type" => "suivi"]);
+        $shipping = ModelFactory::createShippingFee(type: "suivi");
         $_POST = [
             "order_email" => "customer@biblys.fr",
             "order_firstname" => "Barnabé",
