@@ -74,7 +74,7 @@ return function (Request $request, CurrentSite $currentSite): JsonResponse
         $term = $request->query->get('term');
         if ($_GET["type"] == "articles") {
             $i = 0;
-            $articles = $am->search($term);
+            $articles = $am->search($term, ["limit" => 100]);
             foreach ($articles as $article) {
                 $a = $article;
                 $j[$i]["label"] = $a["article_title"] . ' (' . $a["article_collection"] . ')';
@@ -92,7 +92,7 @@ return function (Request $request, CurrentSite $currentSite): JsonResponse
                 $req .= "`people_name` LIKE '%" . $q . "%'";
             }
             $people = EntityManager::prepareAndExecute(
-                "SELECT `people_id`, `people_name` FROM `people` WHERE " . $req . " ORDER BY `people_alpha`",
+                "SELECT `people_id`, `people_name` FROM `people` WHERE " . $req . " ORDER BY `people_alpha` LIMIT 100",
                 [],
             );
             while ($p = $people->fetch(PDO::FETCH_ASSOC)) {
@@ -111,7 +111,7 @@ return function (Request $request, CurrentSite $currentSite): JsonResponse
                 $req .= "`publisher_name` LIKE '%" . $q . "%'";
             }
             $publishers = EntityManager::prepareAndExecute(
-                "SELECT `publisher_id`, `publisher_name` FROM `publishers` WHERE " . $req . " ORDER BY `publisher_name_alphabetic`",
+                "SELECT `publisher_id`, `publisher_name` FROM `publishers` WHERE " . $req . " ORDER BY `publisher_name_alphabetic` LIMIT 100",
                 [],
             );
             while ($p = $publishers->fetch(PDO::FETCH_ASSOC)) {
@@ -132,7 +132,7 @@ return function (Request $request, CurrentSite $currentSite): JsonResponse
             $events = EntityManager::prepareAndExecute(
                 "SELECT `event_id`, `event_title` FROM `events` WHERE " . $req . " AND `site_id` = '"
                 . $currentSite->getId()
-                . "' ORDER BY `event_title`",
+                . "' ORDER BY `event_title` LIMIT 100",
                 [],
             );
             while ($e = $events->fetch(PDO::FETCH_ASSOC)) {
@@ -153,7 +153,7 @@ return function (Request $request, CurrentSite $currentSite): JsonResponse
             $posts = EntityManager::prepareAndExecute(
                 "SELECT `post_id`, `post_title` FROM `posts` WHERE " . $req . " AND `site_id` = '"
                 . $currentSite->getId()
-                . "' ORDER BY `post_title`",
+                . "' ORDER BY `post_title` LIMIT 100",
                 [],
             );
             while ($p = $posts->fetch(PDO::FETCH_ASSOC)) {
