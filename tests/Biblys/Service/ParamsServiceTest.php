@@ -263,6 +263,29 @@ class ParamsServiceTest extends TestCase
         $this->assertEquals("les", $q);
     }
 
+    public function testLengthIsIgnoredIfParameterIsOptional()
+    {
+        // given
+        $request = new Request();
+        $request->query->set("q", "");
+
+        $specs = [
+            "q" => [
+                "type" => "string",
+                "mb_min_length" => 3,
+                "default" => "",
+            ],
+        ];
+        $queryParamsService = new GenericParamsService($request);
+        $queryParamsService->parse($specs);
+
+        // when
+        $q = $queryParamsService->get("q");
+
+        // then
+        $this->assertEquals("", $q);
+    }
+
     /** "mb_max_length" rule */
 
     public function testLengthIsLongerThanMaximumLength()
