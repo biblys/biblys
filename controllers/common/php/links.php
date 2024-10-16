@@ -163,7 +163,7 @@ if ($eventId) {
         ';
 }
 
-$content .= '<script type="text/javascript" src="/common/js/adm_links.js?v2"></script>';
+$content .= '<script type="text/javascript" src="/common/js/adm_links.js?v3"></script>';
 
 $request->attributes->set("page_title", $pageTitle);
 return new Response($content);

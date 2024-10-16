@@ -1,15 +1,14 @@
-<?php /** @noinspection PhpUnhandledExceptionInspection */
+<?php
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-
 /**
  * @throws Exception
  */
-function controller(Request $request, CurrentSite $currentSite): JsonResponse
+return function (Request $request, CurrentSite $currentSite): JsonResponse
 {
     $j = array();
     $req = null;
@@ -167,9 +166,4 @@ function controller(Request $request, CurrentSite $currentSite): JsonResponse
     }
 
     return new JsonResponse($j);
-}
-
-/** @var CurrentSite $currentSite */
-/** @var Request $request */
-$response = controller($request, $currentSite);
-$response->send();
+};
