@@ -89,7 +89,8 @@ class BrevoMailingList implements MailingListInterface
         }
 
         $listId = $this->config->get("mailing.list_id");
-        return in_array($listId, $contact["listIds"]);
+        $listIds = $contact["listIds"] ?? [];
+        return in_array($listId, $listIds);
     }
 
     /**
