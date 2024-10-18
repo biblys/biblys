@@ -13,7 +13,11 @@ use Collection;
 use CollectionManager;
 use Country;
 use CountryManager;
+use Entity;
 use Exception;
+use Gallery;
+use GalleryManager;
+use MediaFile;
 use Model\ArticleQuery;
 use Model\PeopleQuery;
 use Model\User;
@@ -280,5 +284,39 @@ class EntityFactory
         $article = ArticleQuery::create()->findPk($article->get("id"));
         $contributor = PeopleQuery::create()->findPk($contributor->get("id"));
         ModelFactory::createContribution($article, $contributor);
+    }
+
+    /**
+     * @param $title
+     * @return Entity|bool
+     * @throws PropelException
+     */
+    public static function createGallery(
+        string $title = "Galerie",
+        string $mediaDir = "galerie"
+    ): Entity|bool
+    {
+        $gallery = ModelFactory::createGallery(title: $title, mediaDir: $mediaDir);
+
+        return new Gallery([
+            "gallery_id" => $gallery->getId(),
+            "gallery_title" => $gallery->getTitle(),
+            "gallery_media_dir" => $gallery->getMediaDir(),
+        ]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createMediaFile(string $directory = "medias"): MediaFile
+    {
+        $mediaFile = ModelFactory::createMediaFile(directory: $directory);
+
+        return new MediaFile([
+            "media_id" => $mediaFile->getId(),
+            "media_dir" => $mediaFile->getDir(),
+            "media_file" => $mediaFile->getFile(),
+            "media_ext" => $mediaFile->getExt(),
+        ]);
     }
 }
