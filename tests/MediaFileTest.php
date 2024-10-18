@@ -61,6 +61,25 @@ class MediaFileTest extends PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test getting media file url
+     */
+    public function testGetUrl()
+    {
+        $globalSite = LegacyCodeHelper::getGlobalSite();
+
+        $mfm = new MediaFileManager();
+        $media = $mfm->create([
+            'media_dir' => 'dir',
+            'media_file' => 'file',
+            'media_ext' => 'ext'
+        ]);
+
+        $globalSite->set('site_name', 'site');
+
+        $this->assertEquals($media->getUrl(), '/site/media/dir/file.ext');
+    }
+
+    /**
      * Test deleting a copy
      */
     public function testDelete()
