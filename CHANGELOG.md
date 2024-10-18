@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.86.3 (DEV)
+
+### Corrections
+
+- L'affichage d'une gallerie pouvait déclencher une erreur. C'est corrigé.
+
+
 ## 2.86.2 (16 octobre 2024)
 
 ### Corrections
