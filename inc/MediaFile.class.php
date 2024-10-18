@@ -1,9 +1,22 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
+
 class MediaFile extends Entity
 {
     protected $prefix = 'media';
     public $trackChange = false;
+
+    /**
+     * @throws Exception
+     */
+    public function getUrl(): string
+    {
+        $globalSite = LegacyCodeHelper::getGlobalSite();
+
+        return '/' . $globalSite->get('name') . '/media/' . $this->get('dir') . '/' . $this->get('file')
+            . '.' . $this->get('ext');
+    }
 }
 
 class MediaFileManager extends EntityManager

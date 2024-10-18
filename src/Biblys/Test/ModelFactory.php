@@ -12,6 +12,7 @@ use Model\AuthenticationMethod;
 use Model\Customer;
 use Model\Event;
 use Model\File;
+use Model\Gallery;
 use Model\Image;
 use Model\Invitation;
 use Model\BookCollection;
@@ -838,12 +839,14 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createMediaFile(
-        Site $site = null,
-        int  $fileSize = 100,
+        Site   $site = null,
+        string $directory = "medias",
+        int    $fileSize = 100,
     ): MediaFile
     {
         $mediaFile = new MediaFile();
         $mediaFile->setSiteId($site ? $site->getId() : self::createSite()->getId());
+        $mediaFile->setDir($directory);
         $mediaFile->setFileSize($fileSize);
         $mediaFile->save();
 
@@ -872,6 +875,25 @@ class ModelFactory
         $event->save();
 
         return $event;
+    }
+
+    /**
+     * @param string $mediaDir
+     * @param $title = "Galerie"
+     * @return Gallery
+     * @throws PropelException
+     */
+    public static function createGallery(
+        string $title = "Galerie",
+        string $mediaDir = "galerie"
+    ): Gallery
+    {
+        $gallery = new Gallery();
+        $gallery->setTitle($title);
+        $gallery->setMediaDir($mediaDir);
+        $gallery->save();
+
+        return $gallery;
     }
 
 }
