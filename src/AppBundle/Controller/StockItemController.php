@@ -77,10 +77,10 @@ class StockItemController extends Controller
      * @throws Exception
      */
     public function addToCartAction(
-        Request $request,
+        Request     $request,
         CurrentUser $currentUser,
-        Session $session,
-        $stock_id
+        Session     $session,
+                    $stock_id
     ): RedirectResponse
     {
         // to be implemented: non-admin users adding stockitems to their own carts
@@ -106,14 +106,14 @@ class StockItemController extends Controller
         try {
             $cm->addStock($cart, $stock);
             $cm->updateFromStock($cart);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $error = true;
             $session->getFlashBag()->add('error', $e->getMessage());
         }
 
         if (!$error) {
             $article = $stock->getArticle();
-            $session->getFlashBag()->add('success', $article->get('title').' a été ajouté au panier.');
+            $session->getFlashBag()->add('success', $article->get('title') . ' a été ajouté au panier.');
         }
 
         return new RedirectResponse("/pages/cart?cart_id={$cart->get("id")}");
@@ -126,8 +126,8 @@ class StockItemController extends Controller
      */
     public function cancelReturnAction(
         CurrentUser $currentUser,
-        Session $session,
-        $stockId
+        Session     $session,
+                    $stockId
     ): RedirectResponse
     {
         $currentUser->authAdmin();
@@ -214,10 +214,10 @@ class StockItemController extends Controller
      * @throws PropelException
      */
     public function deleteAction(
-        CurrentSite $currentSite,
-        ImagesService $imagesService,
+        CurrentSite          $currentSite,
+        ImagesService        $imagesService,
         FlashMessagesService $flashMessages,
-        int $stockId
+        int                  $stockId
     ): RedirectResponse
     {
         $stockItem = StockQuery::create()->filterBySite($currentSite->getSite())->findPk($stockId);
