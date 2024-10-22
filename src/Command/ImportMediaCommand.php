@@ -85,7 +85,7 @@ class ImportMediaCommand extends Command
         foreach ($mediaSubDirectories as $imagesDirectoryFiles) {
             foreach ($imagesDirectoryFiles as $imageFile) {
                 $filePath = $imageFile->getRealPath();
-                $re = '/(.*)\/(.*)\/(.*).([a-z]{3,4})$/m';
+                $re = '/(.*)\/(.*)\/(.*)\.(.*)$/m';
 
                 preg_match_all($re, $filePath, $matches, PREG_SET_ORDER);
 

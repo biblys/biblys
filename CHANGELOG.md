@@ -7,6 +7,8 @@
 - L'affichage d'une galerie pouvait déclencher une erreur. C'est corrigé.
 - L'ajout d'un média pouvait échouer si le dossier parent contenait des
   tirets ("-") dans son nom. Maintenant, ça marche.
+- L'import de média pouvait échouer si le nom du fichier comportait une
+  extension inhabituelle. Ça n'arrivera plus.
 
 ## 2.86.2 (16 octobre 2024)
 
