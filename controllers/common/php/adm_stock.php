@@ -1,6 +1,7 @@
 <?php
 
 use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Images\ImagesService;
@@ -397,7 +398,7 @@ return function (
     $articleModel = $am->getById($article->getId());
     $a = $articleModel;
 
-    $articleUrl = \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate(
+    $articleUrl = LegacyCodeHelper::getGlobalUrlGenerator()->generate(
         'article_show',
         [
             'slug' => $articleModel->get('url'),
@@ -683,7 +684,7 @@ return function (
     if ($stockEntity->isReturned()) {
         $cancelReturnLink = '
         <a class="btn btn-primary"
-            href="' . \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate(
+            href="' . LegacyCodeHelper::getGlobalUrlGenerator()->generate(
                 'stock_cancel_return',
                 ['stockId' => $stockEntity->get('id')]
             ) . '">
@@ -692,11 +693,24 @@ return function (
     ';
     }
 
+    $cancelLostButton = null;
+    if ($stockEntity->isLost()) {
+        $cancelLostButton = '
+        <a class="btn btn-primary btn"
+            href="' . LegacyCodeHelper::getGlobalUrlGenerator()->generate(
+                'stock_cancel_lost',
+                ['stockId' => $stockEntity->get('id')]
+            ) . '">
+            Marquer comme retrouvé et remettre en vente
+        </a>
+    ';
+    }
+
     $nextYear = (new DateTime("next year"))->format("Y");
     $content .= '
 
     <div class="buttons">
-        ' . $removeLink . ' ' . $cancelReturnLink . '
+        ' . $removeLink . ' ' . $cancelReturnLink . ' ' . $cancelLostButton . '
     </div>
 
     <form enctype="multipart/form-data" method="post" action="/pages/adm_stock" class="fieldset">
@@ -866,6 +880,7 @@ return function (
         <br />
         <label for="stock_lost_date">Perdu le :</label>
         <input readonly type="text" name="stock_lost_date" id="stock_lost_date" value="' . (isset($stockEntity['stock_lost_date']) ? $stockEntity['stock_lost_date'] : null) . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" />
+        ' . $cancelLostButton . '
         <br />
     </fieldset>
 ';
@@ -908,7 +923,7 @@ return function (
         }, $carts->getArrayCopy());
 
         $content .= '
-            <form method="post" action="' . \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('stock_add_to_cart', ['stock_id' => $stockEntity->get('id')]) . '" class="fieldset form-inline">
+            <form method="post" action="' . LegacyCodeHelper::getGlobalUrlGenerator()->generate('stock_add_to_cart', ['stock_id' => $stockEntity->get('id')]) . '" class="fieldset form-inline">
                 <fieldset>
                     <legend>Ajouter à un panier</legend>
                         <p class="text-center">
@@ -924,7 +939,7 @@ return function (
     }
 
     if ($stock) {
-        $deleteUrl = \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate("stock_item_delete", ["stockId" => $stock->getId()]);
+        $deleteUrl = LegacyCodeHelper::getGlobalUrlGenerator()->generate("stock_item_delete", ["stockId" => $stock->getId()]);
         $content .= '
             <form action="'. $deleteUrl .'" method="post" class="text-center">
               <button type="submit" class="btn btn-danger" data-confirm="Voulez-vous vraiment supprimer définitivement cet exemplaire ?">
