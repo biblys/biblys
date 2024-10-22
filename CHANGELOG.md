@@ -6,6 +6,8 @@
 
 - Une nouvelle commande `images:export` permet d'exporter les images de
   couverture des articles d'une collection précise.
+- Sur la page d'édition d'un exemplaire, un nouveau bouton permet de marquer un
+  exemplaire perdu comme retrouvé.
 
 ## 2.86.3 (23 octobre 2024)
 
