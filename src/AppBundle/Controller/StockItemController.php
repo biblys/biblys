@@ -149,7 +149,35 @@ class StockItemController extends Controller
             $session->getFlashBag()->add('error', $e->getMessage());
         }
 
-        return new RedirectResponse('/pages/adm_stock?id='.$stock->get('id'));
+        return new RedirectResponse('/pages/adm_stock?id=' . $stock->get('id'));
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function cancelLostAction(
+        CurrentUser          $currentUser,
+        CurrentSite          $currentSite,
+        FlashMessagesService $flashMessages,
+        int                  $stockId
+    ): RedirectResponse
+    {
+        $currentUser->authAdmin();
+
+        $stockItem = StockQuery::create()->filterBySite($currentSite->getSite())->findPk($stockId);
+        if (!$stockItem) {
+            throw new NotFoundException("Stock $stockId not found");
+        }
+
+        $stockItem->setLostDate(null);
+        $stockItem->save();
+
+        $flashMessages->add(
+            "success",
+            "L'exemplaire n° $stockId a été marqué comme retrouvé."
+        );
+
+        return new RedirectResponse("/pages/adm_stock?id=$stockId");
     }
 
     /**

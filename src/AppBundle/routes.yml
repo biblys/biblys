@@ -659,6 +659,10 @@ stock_cancel_return:
   path: /admin/stock/{stockId}/cancel-return
   controller: AppBundle\Controller\StockItemController::cancelReturnAction
 
+stock_cancel_lost:
+  path: /admin/stock/{stockId}/cancel-lost
+  controller: AppBundle\Controller\StockItemController::cancelLostAction
+
 stock_edit_free_price:
   path: /stock/{stockId}/edit-free-price
   controller: AppBundle\Controller\StockItemController::editFreePriceAction
