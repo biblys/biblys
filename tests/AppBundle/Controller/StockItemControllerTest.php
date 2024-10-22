@@ -8,6 +8,7 @@ use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
+use DateTime;
 use Exception;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -127,5 +128,42 @@ class StockItemControllerTest extends TestCase
         $this->assertInstanceOf(NotFoundHttpException::class, $exception);
         $this->assertEquals("Stock item ".$stockItemFromOtherSite->getId()." not found", $exception->getMessage());
         $this->assertFalse($stockItemFromOtherSite->isDeleted(), "should not have deleted the stock item");
+    }
+
+    /**
+     * #StockItemController->cancelLostAction
+     */
+
+
+    /**
+     * @throws PropelException
+     */
+    public function testCancelLostAction()
+    {
+        // given
+        $controller = new StockItemController();
+        $site = ModelFactory::createSite();
+        $stockItem = ModelFactory::createStockItem(site: $site, lostDate: new DateTime());
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->expects("getSite")->andReturn($site);
+
+        $flashMessages = Mockery::mock(FlashMessagesService::class);
+        $flashMessages->expects("add")->with(
+            "success",
+            "L'exemplaire n° ".$stockItem->getId()." a été marqué comme retrouvé."
+        );
+
+
+        // when
+        $response = $controller->cancelLostAction($currentUser, $currentSite, $flashMessages, $stockItem->getId());
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/pages/adm_stock?id={$stockItem->getId()}", $response->getTargetUrl());
+        $this->assertFalse($stockItem->isLost(), "should have canceled the lost status");
     }
 }
