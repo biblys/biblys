@@ -3,6 +3,7 @@
 namespace Model;
 
 use Model\Base\Stock as BaseStock;
+use Propel\Runtime\Exception\PropelException;
 
 /**
  * Skeleton subclass for representing a row from the 'stock' table.
@@ -27,5 +28,13 @@ class Stock extends BaseStock
         }
 
         return true;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function isLost(): bool
+    {
+        return $this->getLostDate() !== null;
     }
 }
