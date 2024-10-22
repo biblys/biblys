@@ -20,12 +20,12 @@ return function (
     FlashMessagesService $flashMessagesService,
 ): Response {
 
-    $currentDirectory = $request->query->getAlnum("dir");
+    $currentDirectory = $request->query->get("dir");
     if ($currentDirectory === '/') {
         $currentDirectory = null;
     }
 
-    $postNewDir = $request->request->getAlnum("new_dir");
+    $postNewDir = $request->request->get("new_dir");
     if (!empty($postNewDir)) {
         return _createMediaDirectory($postNewDir, $flashMessagesService);
     }

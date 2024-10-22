@@ -4,8 +4,9 @@
 
 ### Corrections
 
-- L'affichage d'une gallerie pouvait déclencher une erreur. C'est corrigé.
-
+- L'affichage d'une galerie pouvait déclencher une erreur. C'est corrigé.
+- L'ajout d'un média pouvait échouer si le dossier parent contenait des
+  tirets ("-") dans son nom. Maintenant, ça marche.
 
 ## 2.86.2 (16 octobre 2024)
 
