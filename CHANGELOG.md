@@ -9,6 +9,8 @@
   tirets ("-") dans son nom. Maintenant, ça marche.
 - L'import de média pouvait échouer si le nom du fichier comportait une
   extension inhabituelle. Ça n'arrivera plus.
+- Les dossiers et fichiers sont désormais triés par ordre alphabétique sur
+  la page "Gestion des médias".
 
 ## 2.86.2 (16 octobre 2024)
 

@@ -300,6 +300,7 @@ function _displayMediaDirectory(CurrentSite $currentSite, string $currentDirecto
     $mediaFiles = MediaFileQuery::create()
         ->filterBySiteId($currentSite->getId())
         ->filterByDir($currentDirectory)
+        ->orderByFile()
         ->find();
 
     foreach ($mediaFiles as $file) {
@@ -360,6 +361,7 @@ function _displayMediaDirectories(CurrentSite $currentSite, Request $request): R
         ->withColumn('SUM(`media_file_size`)', 'size')
         ->select(['name', 'size'])
         ->groupByDir()
+        ->orderByDir()
         ->find();
 
     $request->attributes->set("page_title", "Médias");
