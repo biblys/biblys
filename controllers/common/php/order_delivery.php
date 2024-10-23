@@ -114,7 +114,7 @@ return function (
     $shippingFee = $shipping ? $shipping->get("fee") : 0;
     $shippingType = $shipping?->get("type");
 
-    $pickupPointCode = "";
+    $pickupPointForm = "";
     if ($shippingType === "mondial-relay") {
         $pickupPointSelectUrl = $urlGenerator->generate("shipping_select_pickup_point", [
             "country_id" => $countryId,
@@ -131,6 +131,15 @@ return function (
             "site_key" => $config->get("mondial_relay.private_key"),
         ]);
         $pickupPoint = $delivery->findPickupPointByCode('FR', $pickupPointCode);
+
+        $pickupPointForm = '
+           <fieldset class="order-delivery-form__fieldset order-delivery-form__pickup-points">
+              <legend>Point de retrait</legend>
+              ' . $pickupPoint->name . ' ('.$pickupPoint->postalCode.')
+              <a href="' . $pickupPointSelectUrl . '" class="btn btn-info">Modifier</a>
+              <input type="hidden" name="pickup_point_code" value="' . $pickupPointCode . '">
+            </fieldset>
+        ';
     }
 
     // Add shipping to order total amount
@@ -525,17 +534,6 @@ return function (
     }
 
     $isPhoneRequired = $currentSite->getOption("order_phone_required");
-
-    if ($pickupPointCode) {
-        $pickupPointForm = '
-           <fieldset class="order-delivery-form__fieldset order-delivery-form__pickup-points">
-              <legend>Point de retrait</legend>
-              ' . $pickupPoint->name . ' ('.$pickupPoint->postalCode.')
-              <a href="' . $pickupPointSelectUrl . '" class="btn btn-info">Modifier</a>
-              <input type="hidden" name="pickup_point_code" value="' . $pickupPointCode . '">
-            </fieldset>
-        ';
-    }
 
     $content .= '
     <form id="orderForm" method="post" class="order-delivery-form fieldset check ' . $form_class . '">
