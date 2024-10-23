@@ -24,7 +24,7 @@ class Media
     {
         $this->config = Config::load();
 
-        if (in_array($type, ["article", "stock", "post"])) {
+        if (in_array($type, ["article", "stock", "post", "publisher"])) {
             trigger_deprecation(
                 "biblys",
                 "2.83.0",
