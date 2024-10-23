@@ -129,12 +129,7 @@ class ImagesService
      */
     public function imageExistsFor(Article|Stock|Post|Publisher $model): bool
     {
-        return match (get_class($model)) {
-            Article::class => ImageQuery::create()->filterByArticle($model)->exists(),
-            Stock::class => ImageQuery::create()->filterByStockItem($model)->exists(),
-            Post::class => ImageQuery::create()->filterByPost($model)->exists(),
-            Publisher::class => ImageQuery::create()->filterByPublisher($model)->exists(),
-        };
+        return ImageQuery::create()->filterByModel($model)->exists();
     }
 
     /**
@@ -173,22 +168,7 @@ class ImagesService
      */
     private function _getImageFor(Article|Stock|Post|Publisher $model): ImageForModel
     {
-        if ($model instanceof Stock) {
-            $image = ImageQuery::create()->filterByStockItem($model)->findOne();
-            return new ImageForModel($this->config, $image);
-        }
-
-        if ($model instanceof Post) {
-            $image = ImageQuery::create()->filterByPost($model)->findOne();
-            return new ImageForModel($this->config, $image);
-        }
-
-        if ($model instanceof Publisher) {
-            $image = ImageQuery::create()->filterByPublisher($model)->findOne();
-            return new ImageForModel($this->config, $image);
-        }
-
-        $image = ImageQuery::create()->filterByArticle($model)->findOne();
+        $image = ImageQuery::create()->filterByModel($model)->findOne();
         return new ImageForModel($this->config, $image);
     }
 
