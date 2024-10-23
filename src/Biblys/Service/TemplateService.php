@@ -278,19 +278,6 @@ class TemplateService
             return $imagesService->imageExistsFor($model);
         });
 
-        $filters[] = new TwigFilter('hasCover', function (Article $article) use($imagesService) {
-            return $imagesService->imageExistsFor($article);
-        });
-
-        $filters[] = new TwigFilter('coverUrl',
-            function (Article $article, array $options = []) use ($imagesService) {
-                $width = $options[0] ?? null;
-                $height = $options[1] ?? null;
-                return $imagesService->getImageUrlFor($article, width: $width, height: $height);
-            },
-            ['is_variadic' => true]
-        );
-
         $filters[] = new TwigFilter('imageUrl',
             function (Article|Stock|Post $model, array $options = []) use ($imagesService) {
                 $width = $options[0] ?? null;
@@ -331,6 +318,32 @@ class TemplateService
         $filters[] = new TwigFilter('isbn', function ($ean) {
             return Isbn::convertToIsbn13($ean);
         });
+
+        /** Deprecated filters */
+
+        $filters[] = new TwigFilter('hasCover', function (Article $article) use ($imagesService) {
+            trigger_deprecation(
+                "biblys/biblys",
+                "2.87.0",
+                "Twig filer hasCover is deprecated. Use method hasImage instead.",
+            );
+            return $imagesService->imageExistsFor($article);
+        });
+
+        $filters[] = new TwigFilter('coverUrl',
+            function (Article $article, array $options = []) use ($imagesService) {
+                trigger_deprecation(
+                    "biblys/biblys",
+                    "2.87.0",
+                    "Twig filter coverUrl is deprecated. Use method imageUrl instead.",
+                );
+                $width = $options[0] ?? null;
+                $height = $options[1] ?? null;
+                return $imagesService->getImageUrlFor($article, width: $width, height: $height);
+            },
+            ['is_variadic' => true]
+        );
+
         return $filters;
     }
 }
