@@ -67,6 +67,9 @@ class ArticleControllerTest extends TestCase
         $templateService
             ->shouldReceive("renderResponse")
             ->andReturn(new Response("Citoyens de demain"));
+        $imagesService = Mockery::mock(ImagesService::class);
+        $imagesService->shouldReceive("imageExistsFor")->andReturn(false);
+
         $controller = new ArticleController();
 
         // when
@@ -78,6 +81,7 @@ class ArticleControllerTest extends TestCase
             loggerService: $loggerService,
             metaTags: $metaTagsService,
             templateService: $templateService,
+            imagesService: $imagesService,
             slug: $article->getSlug(),
         );
 

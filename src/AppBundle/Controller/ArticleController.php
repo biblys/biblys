@@ -72,16 +72,20 @@ class ArticleController extends Controller
         LoggerService   $loggerService,
         MetaTagsService $metaTags,
         TemplateService $templateService,
-                        $slug
+        ImagesService   $imagesService,
+        string          $slug
     ): RedirectResponse|Response
     {
         $am = new ArticleManager();
+        /** @var Article $article */
         $article = $am->get(['article_url' => $slug]);
 
         if (!$article) {
             $request->attributes->set('ArticleNotFound', true);
             throw new NotFoundException("Article $slug not found.");
         }
+
+        $articleModel = $article->getModel();
 
         $use_old_controller = $currentSiteService->getOption('use_old_article_controller');
         if ($use_old_controller) {
@@ -104,8 +108,8 @@ class ArticleController extends Controller
                 $urlGenerator->generate('article_show', ['slug' => $article->get('url')]),
             'description' => truncate(strip_tags($summary), '500', '...', true),
         ];
-        if ($article->hasCover()) {
-            $opengraphTags['image'] = $article->getCoverUrl();
+        if ($imagesService->imageExistsFor($articleModel)) {
+            $opengraphTags['image'] = $imagesService->getImageUrlFor($articleModel);
         }
         if ($article->has('ean')) {
             $opengraphTags['isbn'] = $article->get('ean');
@@ -123,8 +127,8 @@ class ArticleController extends Controller
             'title' => $article->get('title'),
             'description' => truncate(strip_tags($summary), '500', '...', true),
         ];
-        if ($article->hasCover()) {
-            $twitterCardsTags['image'] = $article->getCoverUrl();
+        if ($imagesService->imageExistsFor($articleModel)) {
+            $twitterCardsTags['image'] = $imagesService->getImageUrlFor($articleModel);
             $twitterCardsTags['image:alt'] = $article->get('title');
         }
         $this->setTwitterCardsTags($twitterCardsTags);
