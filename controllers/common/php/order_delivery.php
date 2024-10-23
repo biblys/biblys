@@ -327,7 +327,7 @@ return function (
     if (!$currentUser->isAuthentified()) {
         $content .= "
         <h2>Vos coordonnées</h2>
-        <p><a href=\"$loginUrl\" class=\"btn btn-primary\">Connectez-vous</a> ou <a href=\"$loginUrl\" class=\"btn btn-success\">inscrivez-vous</a> pour enregistrer vos coordonnées et commander plus rapidement.</p>
+        <p><a href=\"$loginUrl\" class=\"btn btn-primary\" rel='nofollow'>Connectez-vous</a> ou <a href=\"$loginUrl\" class=\"btn btn-success\" rel='nofollow'>inscrivez-vous</a> pour enregistrer vos coordonnées et commander plus rapidement.</p>
         <br />
         <button id=\"show_orderForm\" class=\"showThis btn btn-warning\">Je souhaite commander sans utiliser de compte</button>
         <br /><br />

@@ -243,7 +243,7 @@ return function (
             <p class="warning">
                 Attention : ' . "vous n'êtes pas connecté" . '. Si vous quittez le site, votre
                 panier ne sera pas sauvegardé.
-                <a href="' . $loginUrl . '">Connectez-vous</a> 
+                <a href="' . $loginUrl . '" rel="nofollow">Connectez-vous</a> 
                 pour sauvegarder votre panier.
             </p><br />';
         }

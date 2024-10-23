@@ -46,10 +46,10 @@ class LegacyController extends Controller
         $_PAGE_TYPE = substr($_PAGE, 0, 4);
 
         if ($_PAGE_TYPE == "adm_" && !$currentUser->isAdmin() && !$currentUser->hasPublisherRight()) {
-            json_error(0, "Cette action est réservée aux administrateurs (" . $_PAGE . "). Veuillez vous <a href='" . $loginUrl . "'>identifier</a>.");
+            json_error(0, "Cette action est réservée aux administrateurs (" . $_PAGE . "). Veuillez vous <a href='" . $loginUrl . "' rel='nofollow'>identifier</a>.");
         }
         if ($_PAGE_TYPE == "log_" and !$currentUser->isAuthentified()) {
-            json_error(0, "Action impossible. Veuillez vous <a href='" . $loginUrl . "'>identifier</a>.");
+            json_error(0, "Action impossible. Veuillez vous <a href='" . $loginUrl . "' rel='nofollow'>identifier</a>.");
         }
 
         $_RESULT = null;
