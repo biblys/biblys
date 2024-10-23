@@ -10,6 +10,7 @@ use Model\Image;
 use Model\ImageQuery;
 use Model\Map\ImageTableMap;
 use Model\Post;
+use Model\Publisher;
 use Model\Stock;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Propel;
@@ -28,12 +29,15 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    public function addImageFor(Article|Stock|Post $model, string $imagePath): void
+    public function addImageFor(Article|Stock|Post|Publisher $model, string $imagePath): void
     {
         match (get_class($model)) {
             Article::class => $this->_addImage($imagePath, type: "cover", typeDirectory: "book", article: $model),
             Stock::class => $this->_addImage($imagePath, type: "photo", typeDirectory: "stock", stockItem: $model),
             Post::class => $this->_addImage($imagePath, type: "illustration", typeDirectory: "post", post: $model),
+            Publisher::class => $this->_addImage(
+                $imagePath, type: "logo", typeDirectory: "publisher", fileExtension: ".png", publisher: $model
+            ),
         };
     }
 
@@ -41,15 +45,17 @@ class ImagesService
      * @throws PropelException
      */
     private function _addImage(
-        string  $imagePath,
-        string  $type,
-        string  $typeDirectory,
-        Article $article = null,
-        Stock   $stockItem = null,
-        Post    $post = null,
+        string    $imagePath,
+        string    $type,
+        string    $typeDirectory,
+        string    $fileExtension = ".jpg",
+        Article   $article = null,
+        Stock     $stockItem = null,
+        Post      $post = null,
+        Publisher $publisher = null,
     ): void
     {
-        $model = $article ?? $stockItem ?? $post;
+        $model = $article ?? $stockItem ?? $post ?? $publisher;
 
         $imageDirectory = str_pad(
             string: substr(string: $model->getId(), offset: -2, length: 2),
@@ -77,8 +83,9 @@ class ImagesService
         $imageModel->setArticleId($article?->getId());
         $imageModel->setStockItemId($stockItem?->getId());
         $imageModel->setPostId($post?->getId());
+        $imageModel->setPublisherId($publisher?->getId());
         $imageModel->setFilepath("$typeDirectory/$imageDirectory/");
-        $imageModel->setFilename("{$model->getId()}.jpg");
+        $imageModel->setFilename("{$model->getId()}$fileExtension");
         $imageModel->setMediatype(mime_content_type($imagePath));
         $imageModel->setFilesize(filesize($imagePath));
         $imageModel->setWidth($width);
@@ -100,7 +107,7 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    public function deleteImageFor(Article|Stock|Post $article): void
+    public function deleteImageFor(Article|Stock|Post|Publisher $article): void
     {
         $db = Propel::getWriteConnection(ImageTableMap::DATABASE_NAME);
         $db->beginTransaction();
@@ -120,12 +127,13 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    public function imageExistsFor(Article|Stock|Post $model): bool
+    public function imageExistsFor(Article|Stock|Post|Publisher $model): bool
     {
         return match (get_class($model)) {
             Article::class => ImageQuery::create()->filterByArticle($model)->exists(),
             Stock::class => ImageQuery::create()->filterByStockItem($model)->exists(),
             Post::class => ImageQuery::create()->filterByPost($model)->exists(),
+            Publisher::class => ImageQuery::create()->filterByPublisher($model)->exists(),
         };
     }
 
@@ -133,9 +141,9 @@ class ImagesService
      * @throws PropelException
      */
     public function getImageUrlFor(
-        Article|Stock|Post $model,
-        int                $width = null,
-        int                $height = null
+        Article|Stock|Post|Publisher $model,
+        int                          $width = null,
+        int                          $height = null
     ):
     ?string
     {
@@ -163,7 +171,7 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    private function _getImageFor(Article|Stock|Post $model): ImageForModel
+    private function _getImageFor(Article|Stock|Post|Publisher $model): ImageForModel
     {
         if ($model instanceof Stock) {
             $image = ImageQuery::create()->filterByStockItem($model)->findOne();
@@ -172,6 +180,11 @@ class ImagesService
 
         if ($model instanceof Post) {
             $image = ImageQuery::create()->filterByPost($model)->findOne();
+            return new ImageForModel($this->config, $image);
+        }
+
+        if ($model instanceof Publisher) {
+            $image = ImageQuery::create()->filterByPublisher($model)->findOne();
             return new ImageForModel($this->config, $image);
         }
 
