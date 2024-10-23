@@ -808,15 +808,16 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createImage(
-        Article $article = null,
-        Stock   $stockItem = null,
-        Post    $post = null,
-        Site    $site = null,
-        string  $type = null,
-        string  $filePath = "/images/",
-        string  $fileName = "image.jpg",
-        int     $fileSize = 100,
-        int     $version = 1,
+        Article   $article = null,
+        Stock     $stockItem = null,
+        Post      $post = null,
+        Publisher $publisher = null,
+        Site      $site = null,
+        string    $type = null,
+        string    $filePath = "/images/",
+        string    $fileName = "image.jpg",
+        int       $fileSize = 100,
+        int       $version = 1,
     ): Image
     {
         $image = new Image();
@@ -824,6 +825,7 @@ class ModelFactory
         $image->setArticle($article);
         $image->setStockItem($stockItem);
         $image->setPost($post);
+        $image->setPublisher($publisher);
         $image->setSite($site);
         $image->setFilePath($filePath);
         $image->setFileName($fileName);
