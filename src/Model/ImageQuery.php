@@ -3,6 +3,7 @@
 namespace Model;
 
 use Model\Base\ImageQuery as BaseImageQuery;
+use Propel\Runtime\Exception\PropelException;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'images' table.
@@ -15,5 +16,17 @@ use Model\Base\ImageQuery as BaseImageQuery;
  */
 class ImageQuery extends BaseImageQuery
 {
-
+    /**
+     * @throws PropelException
+     */
+    public function filterByModel(Article|Stock|Post|Publisher $model): ImageQuery
+    {
+        return match (get_class($model)) {
+            Article::class => $this->filterByArticle($model),
+            Stock::class => $this->filterByStockItem($model),
+            Post::class => $this->filterByPost($model),
+            Publisher::class => $this->filterByPublisher($model),
+            default => $this,
+        };
+    }
 }
