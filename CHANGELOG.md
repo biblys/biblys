@@ -2,6 +2,15 @@
 
 ## 2.87.0 (DEV)
 
+#### Expédition avec Mondial Relay
+
+- Biblys permet maintenant aux client·es de sélectionner un point de retrait
+  Mondial Relay pour leur commande.
+- La page de la commande affiche désormais le point de retrait sélectionné, s'il
+  y a lieu.
+- La page de gestion de frais de port permet de définir des tranches tarifaires
+  pour l'expédition Mondial Relay.
+
 ### Améliorations
 
 - Une nouvelle commande `images:export` permet d'exporter les images de
