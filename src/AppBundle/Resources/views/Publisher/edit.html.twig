@@ -13,6 +13,10 @@
     </a>
   </h1>
 
+  {% if publisher.model|hasImage %}
+    <img src="{{ publisher.model|imageUrl }}" alt="Logo {{ publisher.name }}">
+  {% endif %}
+
   {% if error %}
     <p class="alert alert-danger">{{ error }}</p>
   {% endif %}

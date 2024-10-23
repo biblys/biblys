@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use ArticleManager;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\Images\ImagesService;
 use Biblys\Service\Pagination;
 use Biblys\Service\TemplateService;
 use CollectionManager;
@@ -152,6 +153,7 @@ class PublisherController extends Controller
         Request         $request,
         CurrentUser     $currentUser,
         UrlGenerator    $urlGenerator,
+        ImagesService   $imagesService,
         TemplateService $templateService,
         int             $id
     ): Response
@@ -160,6 +162,7 @@ class PublisherController extends Controller
 
         $pm = new PublisherManager();
 
+        /** @var Publisher $publisher */
         $publisher = $pm->get(['publisher_id' => $id]);
         if (!$publisher) {
             throw new NotFoundException("Publisher $id not found.");
@@ -195,6 +198,7 @@ class PublisherController extends Controller
                 $updated = $pm->update($updated);
 
                 if ($data['logo'] !== null) {
+                    $imagesService->addImageFor($publisher->getModel(), $data['logo']);
                     $updated->addLogo($data['logo']);
                 }
             } catch (Exception $e) {

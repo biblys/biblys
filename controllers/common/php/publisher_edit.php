@@ -3,7 +3,9 @@
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\Images\ImagesService;
 use Biblys\Service\Slug\SlugService;
+use Model\PublisherQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +16,12 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 /**
  * @throws PropelException
  */
-return function (Request $request, CurrentSite $currentSite, CurrentUser $currentUser): Response|RedirectResponse
+return function (
+    Request $request,
+    CurrentSite $currentSite,
+    CurrentUser $currentUser,
+    ImagesService $imagesService,
+): Response|RedirectResponse
 {
     $_SQL = LegacyCodeHelper::getGlobalDatabaseConnection();
 
@@ -31,12 +38,14 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
         throw new AccessDeniedHttpException('Accès réservé aux administrateurs et aux éditeurs.');
     }
 
-    /** @var Publisher $publisher */
-    $publisher = $pm->getById($publisherId);
-    $p = $publisher;
-    if (!$publisher) {
-        throw new ResourceNotFoundException('Publisher id not defined');
+    /** @var Publisher $publisherEntity */
+    $publisherEntity = $pm->getById($publisherId);
+    $p = $publisherEntity;
+    if (!$publisherEntity) {
+        throw new ResourceNotFoundException("Publisher id not defined");
     }
+
+    $publisher = PublisherQuery::create()->findPk($publisherId);
 
     if ($request->getMethod() == "POST") {
         $url_p = array();
@@ -47,16 +56,17 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
         $_FIELDS = array();
 
         // Logo
-        $logo = new Media('publisher', $publisher->get("id"));
         if (!empty($_FILES["publisher_logo_upload"]["tmp_name"])) {
             if ($_FILES["publisher_logo_upload"]["type"] == "image/png") {
-                if ($logo->exists()) $logo->delete();
-                $logo->upload($_FILES["publisher_logo_upload"]["tmp_name"]);
+                if ($imagesService->imageExistsFor($publisher)) {
+                    $imagesService->deleteImageFor($publisher);
+                }
+                $imagesService->addImageFor($publisher, $_FILES["publisher_logo_upload"]["tmp_name"]);
                 $url_p['logo_uploaded'] = 1;
                 $_FIELDS[] = 'logo ajouté';
             } else $url_p['warning'] = 'Le logo n\'a pas pu être ajouté : l\'image doit être au format PNG.';
         } elseif (isset($_POST["publisher_logo_delete"])) {
-            $logo->delete();
+            $imagesService->deleteImageFor($publisher);
             unset($_POST["publisher_logo_delete"]);
             $_FIELDS[] = 'logo supprimé';
             $url_p['logo_deleted'] = 1;
@@ -88,7 +98,7 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
         }
 
         $updating = $_SQL->prepare("SELECT * FROM `publishers` WHERE `publisher_id` = :publisher_id LIMIT 1");
-        $updating->bindValue('publisher_id', $publisher->get("id"), PDO::PARAM_INT);
+        $updating->bindValue('publisher_id', $publisherEntity->get("id"), PDO::PARAM_INT);
         $updating->execute() or error($updating->errorInfo());
         if ($u = $updating->fetch(PDO::FETCH_ASSOC)) {
             foreach ($_POST as $key => $val) {
@@ -122,7 +132,7 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
             }
 
             // Requête de mise à jour
-            $params['publisher_id'] = $publisher->get("id");
+            $params['publisher_id'] = $publisherEntity->get("id");
             $update_query = "UPDATE `publishers` SET " . $_UPDATE . ", `publisher_update` = NOW() WHERE `publisher_id` = :publisher_id";
             try {
                 $query = $_SQL->prepare($update_query);
@@ -139,7 +149,7 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
             // Mise à jour des articles et collections liés
             if ($update_children) {
 
-                $collections = $cm->getAll(array('publisher_id' => $publisher->get("id")));
+                $collections = $cm->getAll(array('publisher_id' => $publisherEntity->get("id")));
                 $url_p['collections_updated'] = 0;
                 foreach ($collections as $collection) {
                     $collection->set('publisher_name', $_POST['publisher_name']);
@@ -148,7 +158,7 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
                     $url_p['collections_updated']++;
                 }
 
-                $articles = $am->getAll(array('publisher_id' => $publisher->get('id')));
+                $articles = $am->getAll(array('publisher_id' => $publisherEntity->get('id')));
                 $url_p['articles_updated'] = 0;
                 foreach ($articles as $article) {
                     $article->set('article_publisher', $_POST['publisher_name']);
@@ -161,37 +171,36 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
         }
 
         if ($currentUser->isAdmin()) {
-            $url_p['id'] = $publisher->get("id");
+            $url_p['id'] = $publisherEntity->get("id");
         }
         $urlQueryString = http_build_query($url_p);
         return new RedirectResponse("/pages/publisher_edit?$urlQueryString");
     }
 
     // Logo
-    $logo = new Media('publisher', $p['publisher_id']);
-    if ($logo->exists()) {
+    if ($imagesService->imageExistsFor($publisher)) {
         $publisher_logo_upload = '<input type="file" id="publisher_logo_upload" name="publisher_logo_upload" accept="image/png" class="hidden"> <label class="after button" for="publisher_logo_upload">Remplacer</label> <input type="checkbox" id="publisher_logo_delete" name="publisher_logo_delete" value="1" /> <label for="publisher_logo_delete" class="after">Supprimer</label>';
-        $publisher_logo = '<a href="' . $logo->getUrl() . '"><img src="' . $logo->getUrl(['size' => 'h100']) . '" alt="Logo" class="floatR"></a>';
+        $publisher_logo = '<a href="' . $imagesService->getImageUrlFor($publisher) . '" rel="lightbox"><img height="100" src="' . $imagesService->getImageUrlFor($publisher, height: 100) . '" alt="Logo" class="floatR"></a>';
     } else {
-        $publisher_logo = '<input type="file" id="publisher_logo_upload" accept="image/png" name="publisher_logo_upload">';
-        $publisher_logo_upload = NULL;
+        $publisher_logo_upload = '<input type="file" id="publisher_logo_upload" accept="image/png" name="publisher_logo_upload">';
+        $publisher_logo = NULL;
     }
 
     $sel = array("article_pubdate" => NULL, "article_title_alphabetic" => NULL, "article_authors_alphabetic" => NULL, "normal" => NULL, "fixes" => NULL, "suivi" => NULL, "offerts" => NULL);
 
-// Options de tri
+    // Options de tri
     $sel[$p["publisher_order_by"]] = ' selected';
     $order_options = '
-    <option' . $sel["article_pubdate"] . ' value="article_pubdate">Date de parution</option>
-    <option' . $sel["article_title_alphabetic"] . ' value="article_title_alphabetic">Titre</option>
-    <option' . $sel["article_authors_alphabetic"] . ' value="article_authors_alphabetic">Auteur</option>
-';
+        <option' . $sel["article_pubdate"] . ' value="article_pubdate">Date de parution</option>
+        <option' . $sel["article_title_alphabetic"] . ' value="article_title_alphabetic">Titre</option>
+        <option' . $sel["article_authors_alphabetic"] . ' value="article_authors_alphabetic">Auteur</option>
+    ';
 
-// VPC
+    // VPC
     if ($p['publisher_vpc'] == 1) $publisher_vpc_checked = ' checked'; else $publisher_vpc_checked = NULL;
     $sel[$p["publisher_shipping_mode"]] = ' selected';
 
-    $request->attributes->set("page_title", "Modifier l'éditeur {$publisher->get("name")}");
+    $request->attributes->set("page_title", "Modifier l'éditeur {$publisherEntity->get("name")}");
 
     $content = '<h1><i class="fa fa-institution"></i> ' . 'Modifier <a href="/editeur/' . $p["publisher_url"] . '">' . $p["publisher_name"] . '</a>' . '</h1>';
 
@@ -308,12 +317,9 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
                 <input type="text" name="publisher_distributeur" id="publisher_distributeur" value="' . $p["publisher_distributeur"] . '" class="long"> <img src="/common/icons/info.svg" alt="" role="presentation" width=16 class="va-middle" title="Si éditeur autodiffusé, laisser vide.">
                 <br /><br />
                 <label for="publisher_specialities">Spécialités :</label>
-                <textarea name="publisher_specialities" id="publisher_specialities" class="small">' . $publisher->get("specialities") . '</textarea>
+                <textarea name="publisher_specialities" id="publisher_specialities" class="small">' . $publisherEntity->get("specialities") . '</textarea>
             </fieldset>
-    ';
-
-        if ($currentSite->getSite()->getPublisherId() == 11) {
-            $content .= '
+            
             <fieldset>
                 <legend>Options</legend>
                 <label for="publisher_order_by">Tri du catalogue par :</label>
@@ -337,50 +343,47 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
                 <legend>Présentation</legend>
                 <textarea id="publisher_desc" name="publisher_desc" class="wysiwyg">' . $p["publisher_desc"] . '</textarea>
             </fieldset>
-                <fieldset>
-                    <legend>Présentation courte pour le catalogue</legend>
-                    <p>Cette présentation courte (500 caractères maximum) sera utilisée pour le catalogue papier de L\'Autre Livre imprimé à l\'occasion du salon. Si vous laissez ce champ vide, les 500 premiers caractères de votre présentation seront utilisés à la place.</p>
-                    <textarea id="publisher_desc_short" name="publisher_desc_short" class="xxl" maxlength=512>' . $p["publisher_desc_short"] . '</textarea>
-                </fieldset>
-                <fieldset>
-                    <legend>Vente par correspondance</legend>
+            <fieldset>
+                <legend>Présentation courte pour le catalogue</legend>
+                <p>Cette présentation courte (500 caractères maximum) sera utilisée pour le catalogue papier de L\'Autre Livre imprimé à l\'occasion du salon. Si vous laissez ce champ vide, les 500 premiers caractères de votre présentation seront utilisés à la place.</p>
+                <textarea id="publisher_desc_short" name="publisher_desc_short" class="xxl" maxlength=512>' . $p["publisher_desc_short"] . '</textarea>
+            </fieldset>
+            <fieldset>
+                <legend>Vente par correspondance</legend>
 
-                    <p class="center">
-                        <input type="checkbox" name="publisher_vpc" id="publisher_vpc" value="1"' . $publisher_vpc_checked . '>
-                        <label for="publisher_vpc" class="after">Activer la VPC pour ' . $p['publisher_name'] . ' sur lautrelivre.fr</label>
-                    </p>
+                <p class="center">
+                    <input type="checkbox" name="publisher_vpc" id="publisher_vpc" value="1"' . $publisher_vpc_checked . '>
+                    <label for="publisher_vpc" class="after">Activer la VPC pour ' . $p['publisher_name'] . ' sur lautrelivre.fr</label>
+                </p>
 
-                    <p>
-                        <label for="publisher_paypal">Identifiant Paypal :</label>
-                        <input type="text" name="publisher_paypal" id="publisher_paypal" value="' . $p['publisher_paypal'] . '">
-                        <img src="/common/icons/info.svg" width=16 alt="Paypal" title="Vous pouvez obtenir votre identifiant de compte marchand en vous rendant sur paypal.com puis dans Préférences > Mes coordonnées > Identifiant de compte marchand.">
-                    </p>
+                <p>
+                    <label for="publisher_paypal">Identifiant Paypal :</label>
+                    <input type="text" name="publisher_paypal" id="publisher_paypal" value="' . $p['publisher_paypal'] . '">
+                    <img src="/common/icons/info.svg" width=16 alt="Paypal" title="Vous pouvez obtenir votre identifiant de compte marchand en vous rendant sur paypal.com puis dans Préférences > Mes coordonnées > Identifiant de compte marchand.">
+                </p>
 
-                    <p>
-                        <label for="publisher_shipping_mode">Frais de port :</label>
-                        <select name="publisher_shipping_mode" id="publisher_shipping_mode">
-                            <option value="offerts"' . $sel['offerts'] . '>Offerts par l\'éditeur</option>
-                            <option value="normal"' . $sel['normal'] . '>Calculés au tarif Lettre Verte / Livres et brochures</option>
-                            <option value="suivi"' . $sel['suivi'] . '>Calculés au tarif Colissimo</option>
-                            <option value="fixes"' . $sel['fixes'] . '>Participation au frais (précisez le montant ci-dessous)</option>
-                        </select>
-                    </p>
+                <p>
+                    <label for="publisher_shipping_mode">Frais de port :</label>
+                    <select name="publisher_shipping_mode" id="publisher_shipping_mode">
+                        <option value="offerts"' . $sel['offerts'] . '>Offerts par l\'éditeur</option>
+                        <option value="normal"' . $sel['normal'] . '>Calculés au tarif Lettre Verte / Livres et brochures</option>
+                        <option value="suivi"' . $sel['suivi'] . '>Calculés au tarif Colissimo</option>
+                        <option value="fixes"' . $sel['fixes'] . '>Participation au frais (précisez le montant ci-dessous)</option>
+                    </select>
+                </p>
 
-                    <p>
-                        <label for="publisher_shipping_fee">Montant de la PAF :</label>
-                        <input type="number" name="publisher_shipping_fee" id="publisher_shipping_fee" value="' . $p['publisher_shipping_fee'] . '" class="short"> centimes (par titre)
-                        <img src="/common/icons/info.svg" width=16 alt="Participation" title="Si vous avez choisi le mode de calcul des frais de port &laquo;&nbsp;Participation aux frais&nbsp;&raquo;, indiquez ici, en centimes, le montant de la participation par titre. Ex : pour 1,00&nbsp;€ de port par titre, entrez &laquo;&nbsp;100&raquo;&nbsp; : pour cinq titres, le port facturé au client sera de 5,00&nbsp;€.">
-                    </p>
+                <p>
+                    <label for="publisher_shipping_fee">Montant de la PAF :</label>
+                    <input type="number" name="publisher_shipping_fee" id="publisher_shipping_fee" value="' . $p['publisher_shipping_fee'] . '" class="short"> centimes (par titre)
+                    <img src="/common/icons/info.svg" width=16 alt="Participation" title="Si vous avez choisi le mode de calcul des frais de port &laquo;&nbsp;Participation aux frais&nbsp;&raquo;, indiquez ici, en centimes, le montant de la participation par titre. Ex : pour 1,00&nbsp;€ de port par titre, entrez &laquo;&nbsp;100&raquo;&nbsp; : pour cinq titres, le port facturé au client sera de 5,00&nbsp;€.">
+                </p>
 
-                    <br>
-                    <p class="center"><a href="/pages/doc_adherents_vpc">Mode d\'emploi de la vente par correspondance</a></p>
-
-                </fieldset>
+                <br>
+                <p class="center"><a href="/pages/doc_adherents_vpc">Mode d\'emploi de la vente par correspondance</a></p>
+            </fieldset>
         ';
-        }
-        $content .= '
-    ';
     }
+
     $content .= '
         <fieldset class="center">
             <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
@@ -434,14 +437,14 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
         $delSupplier = $request->query->get('del_supplier');
         if ($addSupplier) {
             $lm->create([
-                'publisher_id' => $publisher->get('id'),
+                'publisher_id' => $publisherEntity->get('id'),
                 'site_id' => $currentSite->getId(),
                 'supplier_id' => $addSupplier
             ]);
-            return new RedirectResponse("/pages/publisher_edit?id=" . $publisher->get('id') . "#suppliers");
+            return new RedirectResponse("/pages/publisher_edit?id=" . $publisherEntity->get('id') . "#suppliers");
         } elseif (isset($_GET["del_supplier"])) {
             $link = $lm->get([
-                'publisher_id' => $publisher->get('id'),
+                'publisher_id' => $publisherEntity->get('id'),
                 'site_id' => $currentSite->getId(),
                 'supplier_id' => $delSupplier
             ]);
@@ -450,12 +453,12 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
         }
 
         // Fournisseurs actuels
-        $suppliers = $publisher->getSuppliers();
-        $currentSuppliers = array_map(function ($supplier) use ($publisher) {
+        $suppliers = $publisherEntity->getSuppliers();
+        $currentSuppliers = array_map(function ($supplier) use ($publisherEntity) {
             return '
             <li>
-                <a href="/pages/publisher_edit?id=' . $publisher->get('id') . '&del_supplier=' . $supplier->get('id') . '" 
-                    data-confirm="Voulez-vous vraiment SUPPRIMER le lien entre l\'éditeur ' . $publisher->get('name') . ' et le fournisseur ' . $supplier->get('name') . '">
+                <a href="/pages/publisher_edit?id=' . $publisherEntity->get('id') . '&del_supplier=' . $supplier->get('id') . '" 
+                    data-confirm="Voulez-vous vraiment SUPPRIMER le lien entre l\'éditeur ' . $publisherEntity->get('name') . ' et le fournisseur ' . $supplier->get('name') . '">
                     <span class="fa fa-trash-o"></span> 
                     ' . $supplier->get('name') . '
                 </a>
@@ -464,9 +467,9 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
         }, $suppliers);
 
         $all_suppliers = $sm->getAll(array(), array('order' => 'supplier_name'));
-        $all_suppliers = array_map(function ($supplier) use ($publisher) {
+        $all_suppliers = array_map(function ($supplier) use ($publisherEntity) {
 
-            return '<option value="/pages/publisher_edit?id=' . $publisher->get('id') . '&add_supplier=' . $supplier->get('id') . '">' . $supplier->get('name') . '</option>';
+            return '<option value="/pages/publisher_edit?id=' . $publisherEntity->get('id') . '&add_supplier=' . $supplier->get('id') . '">' . $supplier->get('name') . '</option>';
 
         }, $all_suppliers);
 
