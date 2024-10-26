@@ -4,6 +4,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @throws Exception
@@ -68,7 +69,11 @@ return function (Request $request, CurrentSite $currentSite): JsonResponse
     } elseif (isset($_GET["del"])) {
         $linkId = $request->query->get('link_id');
         $link = $lm->getById($linkId);
-        $lm->delete($link);
+
+        if ($link) {
+            $lm->delete($link);
+        }
+
         $j["ok"] = 1;
     } elseif (isset($_GET['type'])) {
         $term = $request->query->get('term');
