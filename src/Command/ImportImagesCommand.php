@@ -11,6 +11,8 @@ use Model\ArticleQuery;
 use Model\ImageQuery;
 use Model\Post;
 use Model\PostQuery;
+use Model\Publisher;
+use Model\PublisherQuery;
 use Model\Stock;
 use Model\StockQuery;
 use Propel\Runtime\Exception\PropelException;
@@ -105,7 +107,7 @@ class ImportImagesCommand extends Command
         foreach ($imagesSubDirectories as $imagesDirectoryFiles) {
             foreach ($imagesDirectoryFiles as $imageFile) {
                 $filePath = $imageFile->getRealPath();
-                preg_match_all("/$sourceDirectory\\/\\d{2}\\/(\\d+)\\.jpg/m", $filePath, $matches);
+                preg_match_all("/$sourceDirectory\\/\\d{2}\\/(\\d+)\\.(jpg|png)/m", $filePath, $matches);
                 $modelId = $matches[1][0];
                 $model = $this->_getModelQuery($modelType)->findPk($modelId);
 
@@ -172,12 +174,13 @@ class ImportImagesCommand extends Command
     /**
      * @throws Exception
      */
-    private function _getModelQuery(string $modelType): ArticleQuery|StockQuery|PostQuery
+    private function _getModelQuery(string $modelType): ArticleQuery|StockQuery|PostQuery|PublisherQuery
     {
         return match ($modelType) {
             "article" => ArticleQuery::create(),
             "stock" => StockQuery::create(),
             "post" => PostQuery::create(),
+            "publisher" => PublisherQuery::create(),
             default => throw new Exception("Unsupported model type $modelType"),
         };
     }
@@ -186,11 +189,12 @@ class ImportImagesCommand extends Command
      * @throws PropelException
      * @throws Exception
      */
-    private function _getModelTitle(Article|Stock|Post $model, string $modelType): string
+    private function _getModelTitle(Article|Stock|Post|Publisher $model, string $modelType): string
     {
         return match ($modelType) {
             "article", "post" => $model->getTitle(),
             "stock" => $model->getArticle()->getTitle(),
+            "publisher" => $model->getName(),
             default => throw new Exception("Unsupported model type $modelType"),
         };
     }
