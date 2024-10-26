@@ -151,4 +151,21 @@ class PublisherTest extends PHPUnit\Framework\TestCase
         $publisher = $pm->getById($publisher->get('id'));
         $this->assertFalse($publisher);
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetModel(): void
+    {
+        // given
+        $pm = new PublisherManager();
+        /** @var Publisher $publisher */
+        $publisher = $pm->create(["publisher_name" => "Un éditeur modèle"]);
+
+        // when
+        $model = $publisher->getModel();
+
+        // then
+        $this->assertEquals("UN ÉDITEUR MODÈLE", $model->getName());
+    }
 }

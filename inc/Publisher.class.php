@@ -18,6 +18,16 @@ class Publisher extends Entity
         ]);
     }
 
+    public function getModel(): \Model\Publisher
+    {
+        $publisher = new \Model\Publisher();
+        $publisher->setId($this->get('id'));
+        $publisher->setName($this->get('name'));
+        $publisher->setUrl($this->get('url'));
+
+        return $publisher;
+    }
+
     public function hasLogo(): bool
     {
         $media = new Media("publisher", $this->get("id"));
