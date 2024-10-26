@@ -2,6 +2,15 @@
 
 ## 3.0.0 (DEV)
 
+### Licence libre
+
+Biblys est désormais un logiciel libre !  
+En savoir plus :
+https://blog.biblys.fr/posts/biblys-est-desormais-un-logiciel-libre
+
+- Ajout d'une licence AGPL-3.0.
+- Ajout d'en-têtes de licence à chaque fichier du code source.
+
 #### Expédition avec Mondial Relay
 
 - Biblys permet maintenant aux client·es de sélectionner un point de retrait
@@ -11,7 +20,13 @@
 - La page de gestion de frais de port permet de définir des tranches tarifaires
   pour l'expédition Mondial Relay.
 
-### Améliorations
+Pour configurer Mondial Relay :
+https://docs.biblys.fr/configurer/mondial-relay/
+
+Le développement de cette fonctionnalité a été en partie financée par
+les Éditions du Bélial'.
+
+### Autres améliorations
 
 - Les images (couvertures d'articles, photos d'exemplaires, illustrations de
   billets de blog, logo d'éditeurs, portraits de contributeur·ices,
