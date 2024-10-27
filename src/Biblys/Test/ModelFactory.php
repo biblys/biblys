@@ -812,6 +812,7 @@ class ModelFactory
         Stock     $stockItem = null,
         Post      $post = null,
         Publisher $publisher = null,
+        People    $contributor = null,
         Site      $site = null,
         string    $type = null,
         string    $filePath = "/images/",
@@ -826,6 +827,7 @@ class ModelFactory
         $image->setStockItem($stockItem);
         $image->setPost($post);
         $image->setPublisher($publisher);
+        $image->setContributor($contributor);
         $image->setSite($site);
         $image->setFilePath($filePath);
         $image->setFileName($fileName);
