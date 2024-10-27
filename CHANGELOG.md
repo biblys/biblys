@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 2.87.0 (DEV)
+## 3.1.0 (DEV)
 
 #### Expédition avec Mondial Relay
 
@@ -13,10 +13,25 @@
 
 ### Améliorations
 
+- Les images (couvertures d'articles, photos d'exemplaires, illustrations de
+  billets de blog, logo d'éditeurs) peuvent désormais être au format PNG ou WebP
+  en plus de JPEG.
+- La page "Espace disque" affiche désormais la taille occupée par les logos
+  d'éditeurs.
+- La commande `images:import` gère désormais les logos d'éditeurs.
 - Une nouvelle commande `images:export` permet d'exporter les images de
   couverture des articles d'une collection précise.
 - Sur la page d'édition d'un exemplaire, un nouveau bouton permet de marquer un
   exemplaire perdu comme retrouvé.
+
+### Instructions de mise à jour
+
+Après avoir l'installation de cette version, les logos d'éditeurs doivent être
+importés avec la commande :
+
+```shell
+composer images:import post
+```
 
 ## 2.86.3 (23 octobre 2024)
 
@@ -84,7 +99,7 @@ composer media:import
 #### 3. Importer les illustrations de billets de blog
 
 ```shell
-composer media:import post
+composer images:import post
 ```
 
 ## 2.85.2 (20 septembre 2024)
