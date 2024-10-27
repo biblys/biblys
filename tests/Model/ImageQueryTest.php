@@ -75,4 +75,20 @@ class ImageQueryTest extends TestCase
         $this->assertEquals($image->getPublisher(), $publisher);
     }
 
+    /**
+     * @throws PropelException
+     */
+    public function testFilterByModelWithContributor(): void
+    {
+        // given
+        $contributor = ModelFactory::createContributor();
+        ModelFactory::createImage(contributor: $contributor);
+
+        // when
+        $image = ImageQuery::create()->filterByModel($contributor)->findOne();
+
+        // then
+        $this->assertEquals($image->getContributor(), $contributor);
+    }
+
 }
