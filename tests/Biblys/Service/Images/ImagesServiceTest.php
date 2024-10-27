@@ -18,11 +18,48 @@ use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 require_once __DIR__ . "/../../../setUp.php";
 
 class ImagesServiceTest extends TestCase
 {
+    /**
+     * Generic
+     */
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAddImageForWithUnsupportedFormat(): void
+    {
+        // given
+        $article = new Article();
+        $article->setId(1984);
+        $site = ModelFactory::createSite();
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects("copy");
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        // when
+        $exception = Helpers::runAndCatchException(
+            fn () => $service->addImageFor($article, __DIR__ . "/image.gif")
+        );
+
+        // then
+        $this->assertInstanceOf(BadRequestHttpException::class, $exception);
+        $this->assertEquals(
+            "Le format image/gif n'est pas supporté. Essayez avec JPEG, PNG ou WebP.",
+            $exception->getMessage()
+        );
+        $image = ImageQuery::create()->findOneByArticleId($article->getId());
+        $this->assertNull($image);
+    }
+
     /** Article **/
 
     /** ImagesService->addImageFor (article) */
@@ -351,7 +388,7 @@ class ImagesServiceTest extends TestCase
         $service = new ImagesService($config, $currentSite, $filesystem);
 
         // when
-        $service->addImageFor($stockItem, __DIR__ . "/image.jpeg");
+        $service->addImageFor($stockItem, __DIR__ . "/image.png");
 
         // then
         $image = ImageQuery::create()->filterByStockItem($stockItem)->findOne();
@@ -359,10 +396,10 @@ class ImagesServiceTest extends TestCase
         $this->assertEquals($site, $image->getSite());
         $this->assertEquals("photo", $image->getType());
         $this->assertEquals("stock/84/", $image->getFilepath());
-        $this->assertEquals("1984.jpg", $image->getFilename());
+        $this->assertEquals("1984.png", $image->getFilename());
         $this->assertEquals(1, $image->getVersion());
-        $this->assertEquals("image/jpeg", $image->getMediatype());
-        $this->assertEquals(14788, $image->getFilesize());
+        $this->assertEquals("image/png", $image->getMediatype());
+        $this->assertEquals(114907, $image->getFilesize());
         $this->assertEquals(200, $image->getWidth());
         $this->assertEquals(300, $image->getHeight());
         $filesystem->shouldHaveReceived("copy");
@@ -578,7 +615,7 @@ class ImagesServiceTest extends TestCase
         $service = new ImagesService($config, $currentSite, $filesystem);
 
         // when
-        $service->addImageFor($post, __DIR__ . "/image.jpeg");
+        $service->addImageFor($post, __DIR__ . "/image.webp");
 
         // then
         $image = ImageQuery::create()->filterByPost($post)->findOne();
@@ -586,10 +623,10 @@ class ImagesServiceTest extends TestCase
         $this->assertEquals($site, $image->getSite());
         $this->assertEquals("illustration", $image->getType());
         $this->assertEquals("post/84/", $image->getFilepath());
-        $this->assertEquals("1984.jpg", $image->getFilename());
+        $this->assertEquals("1984.webp", $image->getFilename());
         $this->assertEquals(1, $image->getVersion());
-        $this->assertEquals("image/jpeg", $image->getMediatype());
-        $this->assertEquals(14788, $image->getFilesize());
+        $this->assertEquals("image/webp", $image->getMediatype());
+        $this->assertEquals(12556, $image->getFilesize());
         $this->assertEquals(200, $image->getWidth());
         $this->assertEquals(300, $image->getHeight());
         $filesystem->shouldHaveReceived("copy");
@@ -813,7 +850,7 @@ class ImagesServiceTest extends TestCase
         $this->assertEquals($site, $image->getSite());
         $this->assertEquals("logo", $image->getType());
         $this->assertEquals("publisher/84/", $image->getFilepath());
-        $this->assertEquals("1984.png", $image->getFilename());
+        $this->assertEquals("1984.jpg", $image->getFilename());
         $this->assertEquals(1, $image->getVersion());
         $this->assertEquals("image/jpeg", $image->getMediatype());
         $this->assertEquals(14788, $image->getFilesize());
@@ -850,7 +887,7 @@ class ImagesServiceTest extends TestCase
         $this->assertInstanceOf(Image::class, $updatedImage);
         $this->assertEquals($createdImage->getId(), $updatedImage->getId());
         $this->assertEquals("publisher/85/", $updatedImage->getFilepath());
-        $this->assertEquals("1985.png", $updatedImage->getFilename());
+        $this->assertEquals("1985.jpg", $updatedImage->getFilename());
         $this->assertEquals(2, $updatedImage->getVersion());
         $this->assertEquals("image/jpeg", $updatedImage->getMediatype());
         $this->assertEquals(4410, $updatedImage->getFilesize());

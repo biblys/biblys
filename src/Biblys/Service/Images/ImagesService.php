@@ -15,6 +15,7 @@ use Model\Stock;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Propel;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ImagesService
 {
@@ -35,9 +36,7 @@ class ImagesService
             Article::class => $this->_addImage($imagePath, type: "cover", typeDirectory: "book", article: $model),
             Stock::class => $this->_addImage($imagePath, type: "photo", typeDirectory: "stock", stockItem: $model),
             Post::class => $this->_addImage($imagePath, type: "illustration", typeDirectory: "post", post: $model),
-            Publisher::class => $this->_addImage(
-                $imagePath, type: "logo", typeDirectory: "publisher", fileExtension: ".png", publisher: $model
-            ),
+            Publisher::class => $this->_addImage($imagePath, type: "logo", typeDirectory: "publisher", publisher: $model),
         };
     }
 
@@ -48,7 +47,6 @@ class ImagesService
         string    $imagePath,
         string    $type,
         string    $typeDirectory,
-        string    $fileExtension = ".jpg",
         Article   $article = null,
         Stock     $stockItem = null,
         Post      $post = null,
@@ -78,6 +76,14 @@ class ImagesService
             $image->setModel($imageModel);
         }
 
+        $mediaType = mime_content_type($imagePath);
+        $fileExtension = match ($mediaType) {
+            "image/jpeg" => ".jpg",
+            "image/png" => ".png",
+            "image/webp" => ".webp",
+            default => throw new BadRequestHttpException("Le format $mediaType n'est pas supporté. Essayez avec JPEG, PNG ou WebP."),
+        };
+
         $imageModel->setSite($this->currentSite->getSite());
         $imageModel->setType($type);
         $imageModel->setArticleId($article?->getId());
@@ -86,7 +92,7 @@ class ImagesService
         $imageModel->setPublisherId($publisher?->getId());
         $imageModel->setFilepath("$typeDirectory/$imageDirectory/");
         $imageModel->setFilename("{$model->getId()}$fileExtension");
-        $imageModel->setMediatype(mime_content_type($imagePath));
+        $imageModel->setMediatype($mediaType);
         $imageModel->setFilesize(filesize($imagePath));
         $imageModel->setWidth($width);
         $imageModel->setHeight($height);
