@@ -74,24 +74,6 @@ class People extends Entity
     }
 
     /**
-     * Save uploaded file as contributor's photo
-     * @param UploadedFile $file a file that was uploaded
-     * @return Media             the contributor's saved Media
-     * @throws Exception
-     */
-    public function addPhoto(UploadedFile $file): Media
-    {
-        if ($file->getMimeType() !== 'image/jpeg') {
-            throw new Exception('La photo doit être au format JPEG.');
-        }
-
-        $photo = new Media('people', $this->get('id'));
-        $photo->upload($file->getRealPath());
-
-        return $photo;
-    }
-
-    /**
      * Get twitter url from Twitter username prop
      * @return String Twitter url
      */
