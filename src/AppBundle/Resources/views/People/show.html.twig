@@ -22,8 +22,8 @@
     </div>
 
     <div class="contributor__informations">
-      {% if people|hasImage %}
-        <img src="{{ people|imageUrl }}" alt="Photo de {{ people.name }}" class="contributor__photo" />
+      {% if people.model|hasImage %}
+        <img src="{{ people.model|imageUrl }}" alt="Photo de {{ people.name }}" class="contributor__photo" />
       {% endif %}
 
       {% if people.has('bio') %}
