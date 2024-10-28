@@ -26,6 +26,14 @@ class Event extends Entity
         parent::__construct($data);
     }
 
+    public function getModel(): \Model\Event
+    {
+        $model = new \Model\Event();
+        $model->setId($this->get('id'));
+
+        return $model;
+    }
+
     public function hasIllustration(): bool
     {
         return false;
