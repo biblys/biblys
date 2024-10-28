@@ -56,6 +56,24 @@ class ImageForModelTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
+    public function testGetUrlWithDefaultBaseUrl()
+    {
+        // given
+        $config = new Config();
+        $model = ModelFactory::createImage(filePath: "/directory/", fileName: "image.jpeg");
+        $image = new ImageForModel($config, $model);
+
+        // when
+        $path = $image->getUrl(null, null);
+
+        // then
+        $this->assertEquals("/images/directory/image.jpeg", $path);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
     public function testGetUrlWithVersion()
     {
         // given
