@@ -12,10 +12,11 @@
     </p>
   </header>
 
-  {% if event.hasIllustration() %}
+  {% if event.model|hasImage %}
     <div class="event-illustration">
-      <img src="{{ event.illustration.url }}"
-           class="event-illustration-image" {% if event.has('illustration_legend') %} alt="{{ event.illustration_legend }}" {% endif %}>
+      <img src="{{ event.model|imageUrl }}" class="event-illustration-image"
+        {% if event.has('illustration_legend') %} alt="{{ event.illustration_legend }}" {% endif %}
+      >
     </div>
   {% endif %}
 
