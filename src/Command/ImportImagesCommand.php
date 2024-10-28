@@ -9,6 +9,8 @@ use Exception;
 use Model\Article;
 use Model\ArticleQuery;
 use Model\Base\People;
+use Model\Event;
+use Model\EventQuery;
 use Model\ImageQuery;
 use Model\PeopleQuery;
 use Model\Post;
@@ -148,15 +150,9 @@ class ImportImagesCommand extends Command
 
                 $this->imagesService->addImageFor($model, $filePath);
 
-                if ($modelType === "stock") {
-                    $image = ImageQuery::create()->filterByStockItem($model)->findOne();
-                    $image->setSite($model->getSite());
-                    $image->save();
-                }
-
-                if ($modelType === "post") {
-                    $image = ImageQuery::create()->filterByPost($model)->findOne();
-                    $image->setSite($model->getSite());
+                if ($modelType === "stock" || $modelType === "post" || $modelType === "event") {
+                    $image = ImageQuery::create()->filterByModel($model)->findOne();
+                    $image->setSiteId($model->getSiteId());
                     $image->save();
                 }
 
@@ -176,7 +172,9 @@ class ImportImagesCommand extends Command
     /**
      * @throws Exception
      */
-    private function _getModelQuery(string $modelType): ArticleQuery|StockQuery|PostQuery|PublisherQuery|PeopleQuery
+    private function _getModelQuery(
+        string $modelType
+    ): ArticleQuery|StockQuery|PostQuery|PublisherQuery|PeopleQuery|EventQuery
     {
         return match ($modelType) {
             "article" => ArticleQuery::create(),
@@ -184,6 +182,7 @@ class ImportImagesCommand extends Command
             "post" => PostQuery::create(),
             "publisher" => PublisherQuery::create(),
             "people" => PeopleQuery::create(),
+            "event" => EventQuery::create(),
             default => throw new Exception("Unsupported model type $modelType"),
         };
     }
@@ -192,10 +191,10 @@ class ImportImagesCommand extends Command
      * @throws PropelException
      * @throws Exception
      */
-    private function _getModelTitle(Article|Stock|Post|Publisher|People $model, string $modelType): string
+    private function _getModelTitle(Article|Stock|Post|Publisher|People|Event $model, string $modelType): string
     {
         return match ($modelType) {
-            "article", "post" => $model->getTitle(),
+            "article", "post", "event" => $model->getTitle(),
             "stock" => $model->getArticle()->getTitle(),
             "publisher", "people" => $model->getName(),
             default => throw new Exception("Unsupported model type $modelType"),
