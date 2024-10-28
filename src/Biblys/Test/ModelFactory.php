@@ -813,6 +813,7 @@ class ModelFactory
         Post      $post = null,
         Publisher $publisher = null,
         People    $contributor = null,
+        Event     $event = null,
         Site      $site = null,
         string    $type = null,
         string    $filePath = "/images/",
@@ -828,6 +829,7 @@ class ModelFactory
         $image->setPost($post);
         $image->setPublisher($publisher);
         $image->setContributor($contributor);
+        $image->setEvent($event);
         $image->setSite($site);
         $image->setFilePath($filePath);
         $image->setFileName($fileName);
