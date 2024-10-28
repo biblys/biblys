@@ -3,6 +3,7 @@
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\Images\ImagesService;
 use Model\PeopleQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,6 +20,7 @@ return function (
     CurrentSite  $currentSite,
     CurrentUser  $currentUser,
     UrlGenerator $urlGenerator,
+    ImagesService $imagesService,
 ): Response|RedirectResponse
 {
     $content = "";
@@ -29,7 +31,7 @@ return function (
     if (!$peopleEntity) {
         throw new ResourceNotFoundException('No people found for url ' . htmlentities($peopleSlug));
     }
-    
+
     $people = PeopleQuery::create()->findPk($peopleEntity->get("id"));
 
     $use_old_controller = $currentSite->getOption("use_old_people_controller");
@@ -47,11 +49,6 @@ return function (
     <meta property="og:locale" content="fr_FR"/>
     <meta property="og:site_name" content="' . $currentSite->getSite()->getName() . '"/>
 ';
-
-    $photo = new Media("people", $people->getId());
-    if ($photo->exists()) {
-        $_OPENGRAPH .= '<meta property="og:image" content="' . $photo->getUrl() . '" />';
-    }
 
     if ($currentUser->isAdmin()) {
         $content .= '
@@ -113,10 +110,12 @@ return function (
     <div id="people" class="clearfix">
         <div id="people-photo">
 ';
-    $photo = new Media("people", $people->getId());
-    if ($photo->exists()) {
-        $content .= '<img src="' . $photo->getUrl(["size" => "w200"]) . '" alt="' . $people->getName() . '" class="frame" />';
+
+    if ($imagesService->imageExistsFor($people)) {
+        $_OPENGRAPH .= '<meta property="og:image" content="' . $imagesService->getImageUrlFor($people) . '" />';
+        $content .= '<img src="' . $imagesService->getImageUrlFor($people, width: 200) . '" alt="' . $people->getName() . '" class="frame" />';
     }
+
     $content .= '<p class="center">' . $flag . ' ' . $dates . '</p>';
     if (!empty($p["people_site"])) {
         $content .= '<p><a href="' . $p["people_site"] . '" rel="nofollow" target="_blank">Site officiel</a></p>';

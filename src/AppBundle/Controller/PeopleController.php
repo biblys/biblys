@@ -5,10 +5,12 @@ namespace AppBundle\Controller;
 use ArticleManager;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\Images\ImagesService;
 use Biblys\Service\Pagination;
 use Biblys\Service\QueryParamsService;
 use Exception;
 use Framework\Controller;
+use People;
 use PeopleManager;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -112,10 +114,11 @@ class PeopleController extends Controller
      * @throws Exception
      */
     public function editAction(
-        Request      $request,
-        UrlGenerator $urlGenerator,
-        CurrentUser  $currentUser,
-        int          $id,
+        Request       $request,
+        UrlGenerator  $urlGenerator,
+        CurrentUser   $currentUser,
+        ImagesService $imagesService,
+        int           $id,
     ): RedirectResponse|Response
     {
         $currentUser->authAdmin();
@@ -175,11 +178,11 @@ class PeopleController extends Controller
                 ->set('people_twitter', $data['twitter']);
 
             try {
+                /** @var People $updated */
                 $updated = $pm->update($updated);
 
-                // If photo file is present
-                if ($data['photo'] !== null) {
-                    $updated->addPhoto($data['photo']);
+                if ($data["photo"] !== null) {
+                    $imagesService->addImageFor($updated->getModel(), $data["photo"]->getPathname());
                 }
             } catch (Exception $e) {
                 $error = $e->getMessage();
