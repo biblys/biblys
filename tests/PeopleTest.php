@@ -5,6 +5,7 @@
 */
 
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Test\EntityFactory;
 
 require_once "setUp.php";
 
@@ -206,5 +207,21 @@ class PeopleTest extends PHPUnit\Framework\TestCase
         $people = $pm->getById($people->get('id'));
 
         $this->assertFalse($people);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetModel(): void
+    {
+        // given
+        $entity = EntityFactory::createPeople();
+
+        // when
+        $model = $entity->getModel();
+
+        // then
+        $this->assertInstanceOf(\Model\People::class, $model);
+        $this->assertEquals($model->getId(), $entity->get('id'));
     }
 }
