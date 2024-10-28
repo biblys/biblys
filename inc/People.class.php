@@ -32,12 +32,18 @@ class People extends Entity
     }
 
     /**
-     * Returns true if author's photo exists
-     * @return bool
+     * @throws Exception
+     * @deprecated People->hasPhoto is deprecated. Use ImagesService->imageExistsFor instead.
      */
     public function hasPhoto(): bool
     {
-        $photo = $this->getPhoto();
+        trigger_deprecation(
+            "biblys",
+            "3.0.0",
+            "Using People->hasPhoto is deprecated. Use ImagesService->imageExistsFor instead"
+        );
+
+        $photo = $this->getPhoto(ignoreDeprecation: true);
 
         if ($photo->exists()) {
             return true;
@@ -47,11 +53,19 @@ class People extends Entity
     }
 
     /**
-     * Get people photo
-     * @return Media the media object for the photo, or false
+     * @throws Exception
+     * @deprecated People->getPhoto is deprecated. Use ImagesService->getImageUrlFor instead.
      */
-    public function getPhoto(): Media
+    public function getPhoto(bool $ignoreDeprecation = false): Media
     {
+        if (!$ignoreDeprecation) {
+            trigger_deprecation(
+                "biblys",
+                "3.0.0",
+                "Using People->getPhoto is deprecated. Use ImagesService->getImageUrlFor instead"
+            );
+        }
+
         if (!isset($this->photo)) {
             $this->photo = new Media('people', $this->get('id'));
         }
