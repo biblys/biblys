@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 3.1.0 (DEV)
+## 3.0.0 (DEV)
 
 #### Expédition avec Mondial Relay
 
@@ -14,11 +14,11 @@
 ### Améliorations
 
 - Les images (couvertures d'articles, photos d'exemplaires, illustrations de
-  billets de blog, logo d'éditeurs) peuvent désormais être au format PNG ou WebP
-  en plus de JPEG.
+  billets de blog, logo d'éditeurs, portraits de contribeur·ices) peuvent
+  désormais être au format PNG ou WebP en plus de JPEG.
 - La page "Espace disque" affiche désormais la taille occupée par les logos
-  d'éditeurs.
-- La commande `images:import` gère désormais les logos d'éditeurs.
+  d'éditeurs et les portraits de contributeur·ices.
+- La commande `images:import` gère désormais les portraits de contributeur·ices.
 - Une nouvelle commande `images:export` permet d'exporter les images de
   couverture des articles d'une collection précise.
 - Sur la page d'édition d'un exemplaire, un nouveau bouton permet de marquer un
@@ -26,11 +26,12 @@
 
 ### Instructions de mise à jour
 
-Après avoir l'installation de cette version, les logos d'éditeurs doivent être
-importés avec la commande :
+Après avoir procédé à l'installation de cette version, les logos d'éditeurs et
+les portraits de contributeur·ices doivent être importés avec les commandes :
 
 ```shell
 composer images:import post
+composer images:import people
 ```
 
 ## 2.86.3 (23 octobre 2024)
