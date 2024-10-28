@@ -58,6 +58,11 @@ class MaintenanceController extends Controller
 
         $articles = $articlesQuery->find()->getData()[0];
 
+        $contributors = ImageQuery::create()
+            ->filterByType("portrait")
+            ->withColumn("COUNT(`id`)", "count")
+            ->withColumn("SUM(`fileSize`)", "size")
+            ->select(["count", "size"])->find()->getData()[0];
 
         $publishers = ImageQuery::create()
             ->filterByType("logo")
@@ -106,12 +111,14 @@ class MaintenanceController extends Controller
             ->getData()[0];
 
         $totalCount = $articles["count"]
+            + $contributors["count"]
             + $publishers["count"]
             + $stockItems["count"]
             + $postIllustrations["count"]
             + $mediaFiles["count"]
             + $downloadableFiles["count"];
         $totalSize = $articles["size"]
+            + $contributors["size"]
             + $publishers["size"]
             + $stockItems["size"]
             + $postIllustrations["size"]
@@ -121,6 +128,8 @@ class MaintenanceController extends Controller
         return $templateService->renderResponse("AppBundle:Maintenance:disk-usage.html.twig", [
             "articlesCount" => $articles["count"],
             "articlesSize" => $this->_convertToGigabytes($articles["size"]),
+            "contributorsCount" => $contributors["count"],
+            "contributorsSize" => $this->_convertToGigabytes($contributors["size"]),
             "publishersCount" => $publishers["count"],
             "publishersSize" => $this->_convertToGigabytes($publishers["size"]),
             "stockItemsCount" => $stockItems["count"],

@@ -35,6 +35,7 @@ class MaintenanceControllerTest extends TestCase
         ModelFactory::createImage(type: 'other', fileSize: 99999999);
         ModelFactory::createImage(site: $site, type: 'illustration', fileSize: 99999999);
         ModelFactory::createImage(site: $site, type: 'logo', fileSize: 99999999);
+        ModelFactory::createImage(site: $site, type: 'portrait', fileSize: 99999999);
         ModelFactory::createMediaFile(site: $site, fileSize: 99999999);
 
         $currentUser = Mockery::mock(CurrentUser::class);
@@ -56,6 +57,8 @@ class MaintenanceControllerTest extends TestCase
             ->with("AppBundle:Maintenance:disk-usage.html.twig", [
                 "articlesCount" => 1,
                 "articlesSize" => 0.093,
+                "contributorsCount" => 1,
+                "contributorsSize" => 0.093,
                 "publishersCount" => 1,
                 "publishersSize" => 0.093,
                 "stockItemsCount" => 1,
@@ -66,8 +69,8 @@ class MaintenanceControllerTest extends TestCase
                 "downloadableFilesSize" => 0.0,
                 "mediaFilesCount" => 1,
                 "mediaFilesSize" => 0.093,
-                "totalCount" => 5,
-                "totalSize" => 0.466,
+                "totalCount" => 6,
+                "totalSize" => 0.559,
             ]);
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals("response", $response->getContent());
@@ -110,6 +113,8 @@ class MaintenanceControllerTest extends TestCase
             ->with("AppBundle:Maintenance:disk-usage.html.twig", [
                 "articlesCount" => 1,
                 "articlesSize" => 0.093,
+                "contributorsCount" => 1,
+                "contributorsSize" => 0.093,
                 "publishersCount" => 1,
                 "publishersSize" => 0.093,
                 "postIllustrationsCount" => 0,
@@ -120,8 +125,8 @@ class MaintenanceControllerTest extends TestCase
                 "stockItemsSize" => 0,
                 "mediaFilesCount" => 0,
                 "mediaFilesSize" => 0,
-                "totalCount" => 3,
-                "totalSize" => 0.279,
+                "totalCount" => 4,
+                "totalSize" => 0.373,
             ]);
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals("response", $response->getContent());
