@@ -10,6 +10,7 @@ use Cart;
 use Exception;
 use Framework\TemplateLoader;
 use Model\Article;
+use Model\Event;
 use Model\People;
 use Model\Post;
 use Model\Publisher;
@@ -277,11 +278,11 @@ class TemplateService
         $imagesService = new ImagesService($config, $currentSite, new Filesystem());
 
         $filters[] = new TwigFilter('hasImage',
-            fn (Article|Stock|Post|Publisher|People $model) => $imagesService->imageExistsFor($model)
+            fn (Article|Stock|Post|Publisher|People|Event $model) => $imagesService->imageExistsFor($model)
         );
 
         $filters[] = new TwigFilter('imageUrl',
-            fn (Article|Stock|Post|Publisher|People $model, array $options = []) =>
+            fn (Article|Stock|Post|Publisher|People|Event $model, array $options = []) =>
                 $imagesService->getImageUrlFor(
                     model: $model,
                     width: $options[0] ?? null,
