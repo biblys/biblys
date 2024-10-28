@@ -8,6 +8,17 @@ class People extends Entity
 {
     protected $prefix = 'people';
 
+    public function getModel(): \Model\People
+    {
+        $model = new \Model\People();
+        $model->setId($this->get("id"));
+        $model->setFirstName($this->get("first_name"));
+        $model->setLastName($this->get("last_name"));
+        $model->setName($this->get("name"));
+
+        return $model;
+    }
+
     /**
      * Returns concatenated first (if exists) and last name
      * @return String people's full name
