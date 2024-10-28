@@ -45,7 +45,7 @@ class ImageForModel
     {
         $imageModel = $this->getModel();
 
-        $baseUrl = rtrim($this->config->get("images.base_url"), "/");
+        $baseUrl = rtrim($this->config->getImagesBaseUrl(), "/");
         $filePath = trim($imageModel->getFilepath(), "/");
         $fileName = trim($imageModel->getFilename(), "/");
         $url = "$baseUrl/$filePath/$fileName";
