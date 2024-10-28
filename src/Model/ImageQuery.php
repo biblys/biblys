@@ -19,7 +19,7 @@ class ImageQuery extends BaseImageQuery
     /**
      * @throws PropelException
      */
-    public function filterByModel(Article|Stock|Post|Publisher|People $model): ImageQuery
+    public function filterByModel(Article|Stock|Post|Publisher|People|Event $model): ImageQuery
     {
         return match (get_class($model)) {
             Article::class => $this->filterByArticle($model),
@@ -27,6 +27,7 @@ class ImageQuery extends BaseImageQuery
             Post::class => $this->filterByPost($model),
             Publisher::class => $this->filterByPublisher($model),
             People::class => $this->filterByContributor($model),
+            Event::class => $this->filterByEvent($model),
             default => $this,
         };
     }

@@ -91,4 +91,21 @@ class ImageQueryTest extends TestCase
         $this->assertEquals($image->getContributor(), $contributor);
     }
 
+
+    /**
+     * @throws PropelException
+     */
+    public function testFilterByModelWithEvent(): void
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $event = ModelFactory::createEvent($site);
+        ModelFactory::createImage(event: $event);
+
+        // when
+        $image = ImageQuery::create()->filterByModel($event)->findOne();
+
+        // then
+        $this->assertEquals($image->getEvent(), $event);
+    }
 }
