@@ -14,7 +14,6 @@ class Media
     private string $_directoryPath;
     private ?string $_path = null;
     private bool $_exists = false;
-    private array $_dimensions;
     private Config $config;
 
     /**
@@ -57,96 +56,6 @@ class Media
         // Exists
         if (realpath($this->path()) !== false) {
             $this->setExists(true);
-        }
-    }
-
-    /**
-     * Upload a new file
-     */
-    public function upload($file): bool
-    {
-        // If file already exists, delete it
-        if ($this->exists()) {
-            $this->delete();
-        }
-
-        // If directory do not already exists create it
-        if (!is_dir($this->directoryPath())) {
-            mkdir($this->directoryPath(), 0777, true);
-        }
-
-        // Copy file from temp upload path
-        if (copy($file, $this->path())) {
-            $this->update();
-            return true;
-        }
-
-        return false;
-    }
-
-    public function getDimensions(): array
-    {
-        if (!isset($this->_dimensions)) {
-            $size = getimagesize($this->path());
-            $this->_dimensions = [
-                'height' => $size[1],
-                'width' => $size[0],
-            ];
-        }
-
-        return $this->_dimensions;
-    }
-
-    public function getOrientation(): string
-    {
-        $dimensions = $this->getDimensions();
-        $height = $dimensions['height'];
-        $width = $dimensions['width'];
-        $ratio = $width / $height;
-
-        if ($ratio > 1) {
-            return 'landscape';
-        }
-
-        return 'portrait';
-    }
-
-    /**
-     * Fix image orientation based on exif
-     *
-     * @param string $file file path to image to fix
-     */
-    public function fixImageOrientation(string $file): void
-    {
-
-        // Skip if image is not jpeg
-        $mimeType = mime_content_type($file);
-        if ($mimeType !== 'image/jpeg') {
-            return;
-        }
-
-        $image = imagecreatefromjpeg($file);
-
-        $exif = exif_read_data($file);
-        if (!empty($exif['Orientation'])) {
-            switch ($exif['Orientation']) {
-                case 3:
-                    $image = imagerotate($image, 180, 0);
-                    break;
-
-                case 6:
-                    $image = imagerotate($image, -90, 0);
-                    break;
-
-                case 8:
-                    $image = imagerotate($image, 90, 0);
-                    break;
-            }
-        }
-
-        if ($image) {
-            imagejpeg($image, $file);
-            imagedestroy($image);
         }
     }
 
