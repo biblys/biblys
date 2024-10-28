@@ -18,20 +18,18 @@ class Media
     private Config $config;
 
     /**
+     * @deprecated Using Media class is deprecated. Use ImagesService instead.
      * @throws Exception
      */
     public function __construct($type, $id)
     {
         $this->config = Config::load();
 
-        if (in_array($type, ["article", "stock", "post", "publisher", "people"])) {
-            trigger_deprecation(
-                "biblys",
-                "2.83.0",
-                "Using Media with '$type' type is deprecated." .
-                "Use ImagesService->getImageFor instead"
-            );
-        }
+        trigger_deprecation(
+            "biblys",
+            "3.0.0",
+            "Using Media class is deprecated. Use ImagesService instead."
+        );
 
         $this->setDomain('media'); // domaine par défaut
 
