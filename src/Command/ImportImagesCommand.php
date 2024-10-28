@@ -8,7 +8,9 @@ use Biblys\Service\LoggerService;
 use Exception;
 use Model\Article;
 use Model\ArticleQuery;
+use Model\Base\People;
 use Model\ImageQuery;
+use Model\PeopleQuery;
 use Model\Post;
 use Model\PostQuery;
 use Model\Publisher;
@@ -174,13 +176,14 @@ class ImportImagesCommand extends Command
     /**
      * @throws Exception
      */
-    private function _getModelQuery(string $modelType): ArticleQuery|StockQuery|PostQuery|PublisherQuery
+    private function _getModelQuery(string $modelType): ArticleQuery|StockQuery|PostQuery|PublisherQuery|PeopleQuery
     {
         return match ($modelType) {
             "article" => ArticleQuery::create(),
             "stock" => StockQuery::create(),
             "post" => PostQuery::create(),
             "publisher" => PublisherQuery::create(),
+            "people" => PeopleQuery::create(),
             default => throw new Exception("Unsupported model type $modelType"),
         };
     }
@@ -189,12 +192,12 @@ class ImportImagesCommand extends Command
      * @throws PropelException
      * @throws Exception
      */
-    private function _getModelTitle(Article|Stock|Post|Publisher $model, string $modelType): string
+    private function _getModelTitle(Article|Stock|Post|Publisher|People $model, string $modelType): string
     {
         return match ($modelType) {
             "article", "post" => $model->getTitle(),
             "stock" => $model->getArticle()->getTitle(),
-            "publisher" => $model->getName(),
+            "publisher", "people" => $model->getName(),
             default => throw new Exception("Unsupported model type $modelType"),
         };
     }
