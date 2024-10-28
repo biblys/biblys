@@ -9,6 +9,7 @@ use Biblys\Test\ModelFactory;
 use Exception;
 use Mockery;
 use Model\Article;
+use Model\Event;
 use Model\Image;
 use Model\ImageQuery;
 use Model\People;
@@ -818,6 +819,234 @@ class ImagesServiceTest extends TestCase
 
         // then
         $deletedImage = ImageQuery::create()->filterByPost($post)->findOne();
+        $this->assertNull($deletedImage);
+        $filesystem->shouldHaveReceived("remove");
+    }
+
+    /** Event **/
+
+    /** ImagesService->addImageFor (event) */
+
+    /**
+     * @throws PropelException
+     */
+    public function testAddImageForCreatesImageWithEvent(): void
+    {
+        // given
+        $event = new Event();
+        $event->setId(1984);
+        $site = ModelFactory::createSite();
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects('copy');
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        // when
+        $service->addImageFor($event, __DIR__ . "/image.webp");
+
+        // then
+        $image = ImageQuery::create()->filterByEvent($event)->findOne();
+        $this->assertInstanceOf(Image::class, $image);
+        $this->assertEquals($site, $image->getSite());
+        $this->assertEquals("illustration", $image->getType());
+        $this->assertEquals("event/84/", $image->getFilepath());
+        $this->assertEquals("1984.webp", $image->getFilename());
+        $this->assertEquals(1, $image->getVersion());
+        $this->assertEquals("image/webp", $image->getMediatype());
+        $this->assertEquals(12556, $image->getFilesize());
+        $this->assertEquals(200, $image->getWidth());
+        $this->assertEquals(300, $image->getHeight());
+        $filesystem->shouldHaveReceived("copy");
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testAddImageForCreatesUpdatesImageWithEvent(): void
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $event = ModelFactory::createEvent(site: $site);
+        $event->setId(1985);
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects("copy");
+        $filesystem->expects("remove");
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        $service->addImageFor($event, __DIR__ . "/image.jpeg");
+        $createdImage = ImageQuery::create()->filterByEvent($event)->findOne();
+
+        // when
+        $service->addImageFor($event, __DIR__ . "/image2.jpeg");
+
+        // then
+        $updatedImage = ImageQuery::create()->filterByEvent($event)->findOne();
+        $this->assertInstanceOf(Image::class, $updatedImage);
+        $this->assertEquals($createdImage->getId(), $updatedImage->getId());
+        $this->assertEquals("event/85/", $updatedImage->getFilepath());
+        $this->assertEquals("1985.jpg", $updatedImage->getFilename());
+        $this->assertEquals(2, $updatedImage->getVersion());
+        $this->assertEquals("image/jpeg", $updatedImage->getMediatype());
+        $this->assertEquals(4410, $updatedImage->getFilesize());
+        $this->assertEquals(100, $updatedImage->getWidth());
+        $this->assertEquals(150, $updatedImage->getHeight());
+        $filesystem->shouldHaveReceived("remove");
+        $filesystem->shouldHaveReceived("copy");
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testAddImageForIfFileCopyFailsWithEvent(): void
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $event = ModelFactory::createEvent(site: $site);
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects("copy")->andThrow(new FileNotFoundException());
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        // when
+        $exception = Helpers::runAndCatchException(function () use ($service, $event) {
+            $service->addImageFor($event, __DIR__ . "/image.jpeg");
+        });
+
+        // then
+        $this->assertInstanceOf(FileNotFoundException::class, $exception);
+        $image = ImageQuery::create()->filterByEvent($event)->findOne();
+        $this->assertNull($image);
+    }
+
+    /** ImagesService->imageExistsFor (event) */
+
+    /**
+     * @throws PropelException
+     */
+    public function testImageExistsForReturnsTrueWithEvent()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $event = ModelFactory::createEvent(site: $site);
+        ModelFactory::createImage(event: $event);
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        // when
+        $hasCover = $service->imageExistsFor($event);
+
+        // then
+        $this->assertTrue($hasCover);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testImageExistsForReturnsFalseWithEvent()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $event = ModelFactory::createEvent(site: $site);
+
+        $currentSite = new CurrentSite($site);
+        $config = new Config();
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $currentSite ,$filesystem);
+
+        // when
+        $hasCover = $service->imageExistsFor($event);
+
+        // then
+        $this->assertFalse($hasCover);
+    }
+
+    /** ImagesService->getImageUrlFor (event) */
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetImageUrlForIfItDoesNotExistWithEvent(): void
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $event = ModelFactory::createEvent(site: $site);
+
+        $config = new Config(["images" => ["path" => "/images/"]]);
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+
+        // when
+        $coverUrl = $service->getImageUrlFor($event);
+
+        // then
+        $this->assertNull($coverUrl);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetImageUrlForIfItExistsWithEvent(): void
+    {
+        // given
+        $site = ModelFactory::createSite();
+
+        $config = new Config(["images" => ["base_url" => "/images/"]]);
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        $event = ModelFactory::createEvent(site: $site);
+        ModelFactory::createImage(
+            event: $event,
+            filePath: "book/covers/",
+            fileName: "book-cover.jpeg",
+        );
+
+        // when
+        $coverUrl = $service->getImageUrlFor($event);
+
+        // then
+        $this->assertEquals("/images/book/covers/book-cover.jpeg", $coverUrl);
+    }
+
+    /** ImagesService->deleteImageFor (event) */
+
+    /**
+     * @throws PropelException
+     */
+    public function testDeleteImageForDeletesImageWithEvent(): void
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $event = ModelFactory::createEvent(site: $site);
+        ModelFactory::createImage(event: $event);
+        $site = ModelFactory::createSite();
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects("remove");
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        // when
+        $service->deleteImageFor($event);
+
+        // then
+        $deletedImage = ImageQuery::create()->filterByEvent($event)->findOne();
         $this->assertNull($deletedImage);
         $filesystem->shouldHaveReceived("remove");
     }

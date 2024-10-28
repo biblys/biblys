@@ -6,6 +6,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Exception;
 use Model\Article;
+use Model\Event;
 use Model\Image;
 use Model\ImageQuery;
 use Model\Map\ImageTableMap;
@@ -31,7 +32,7 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    public function addImageFor(Article|Stock|Post|Publisher|People $model, string $imagePath): void
+    public function addImageFor(Article|Stock|Post|Publisher|People|Event $model, string $imagePath): void
     {
         match (get_class($model)) {
             Article::class => $this->_addImage($imagePath, type: "cover", typeDirectory: "book", article: $model),
@@ -39,6 +40,7 @@ class ImagesService
             Post::class => $this->_addImage($imagePath, type: "illustration", typeDirectory: "post", post: $model),
             Publisher::class => $this->_addImage($imagePath, type: "logo", typeDirectory: "publisher", publisher: $model),
             People::class => $this->_addImage($imagePath, type: "portrait", typeDirectory: "people", contributor: $model),
+            Event::class => $this->_addImage($imagePath, type: "illustration", typeDirectory: "event", event: $model),
         };
     }
 
@@ -54,9 +56,10 @@ class ImagesService
         Post      $post = null,
         Publisher $publisher = null,
         People    $contributor = null,
+        Event     $event = null,
     ): void
     {
-        $model = $article ?? $stockItem ?? $post ?? $publisher ?? $contributor;
+        $model = $article ?? $stockItem ?? $post ?? $publisher ?? $contributor ?? $event;
 
         $imageDirectory = str_pad(
             string: substr(string: $model->getId(), offset: -2, length: 2),
@@ -94,6 +97,7 @@ class ImagesService
         $imageModel->setPostId($post?->getId());
         $imageModel->setPublisherId($publisher?->getId());
         $imageModel->setContributorId($contributor?->getId());
+        $imageModel->setEventId($event?->getId());
         $imageModel->setFilepath("$typeDirectory/$imageDirectory/");
         $imageModel->setFilename("{$model->getId()}$fileExtension");
         $imageModel->setMediatype($mediaType);
@@ -117,7 +121,7 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    public function deleteImageFor(Article|Stock|Post|Publisher|People $model): void
+    public function deleteImageFor(Article|Stock|Post|Publisher|People|Event $model): void
     {
         $db = Propel::getWriteConnection(ImageTableMap::DATABASE_NAME);
         $db->beginTransaction();
@@ -137,7 +141,7 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    public function imageExistsFor(Article|Stock|Post|Publisher|People $model): bool
+    public function imageExistsFor(Article|Stock|Post|Publisher|People|Event $model): bool
     {
         return ImageQuery::create()->filterByModel($model)->exists();
     }
@@ -146,7 +150,7 @@ class ImagesService
      * @throws PropelException
      */
     public function getImageUrlFor(
-        Article|Stock|Post|Publisher|People $model,
+        Article|Stock|Post|Publisher|People|Event $model,
         int                                 $width = null,
         int                                 $height = null
     ):
@@ -176,7 +180,7 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    private function _getImageFor(Article|Stock|Post|Publisher|People $model): ImageForModel
+    private function _getImageFor(Article|Stock|Post|Publisher|People|Event $model): ImageForModel
     {
         $image = ImageQuery::create()->filterByModel($model)->findOne();
         return new ImageForModel($this->config, $image);
