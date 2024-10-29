@@ -85,12 +85,12 @@ class ImagesService
 
         $imageModel->setSite($this->currentSite->getSite());
         $imageModel->setType($type);
-        $imageModel->setArticleId($article?->getId());
-        $imageModel->setStockItemId($stockItem?->getId());
-        $imageModel->setPostId($post?->getId());
-        $imageModel->setPublisherId($publisher?->getId());
-        $imageModel->setContributorId($contributor?->getId());
-        $imageModel->setEventId($event?->getId());
+        $imageModel->setArticle($article);
+        $imageModel->setStockItem($stockItem);
+        $imageModel->setPost($post);
+        $imageModel->setPublisher($publisher);
+        $imageModel->setContributor($contributor);
+        $imageModel->setEvent($event);
         $imageModel->setFilepath("$directory/{$model->getId()}/");
         $imageModel->setFilename("$type.$fileExtension");
         $imageModel->setMediatype($mediaType);
