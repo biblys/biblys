@@ -14,11 +14,13 @@
 ### Améliorations
 
 - Les images (couvertures d'articles, photos d'exemplaires, illustrations de
-  billets de blog, logo d'éditeurs, portraits de contribeur·ices) peuvent
-  désormais être au format PNG ou WebP en plus de JPEG.
+  billets de blog, logo d'éditeurs, portraits de contributeur·ices,
+  illustrations d'évènements) peuvent désormais être au format PNG ou WebP.
 - La page "Espace disque" affiche désormais la taille occupée par les logos
-  d'éditeurs et les portraits de contributeur·ices.
-- La commande `images:import` gère désormais les portraits de contributeur·ices.
+  d'éditeurs, les portraits de contributeur·ices et les illustrations
+  d'évènements.
+- La commande `images:import` gère désormais les logos d'éditeurs, les portraits
+  de contributeur·ices et les illustrations d'évènements.
 - Une nouvelle commande `images:export` permet d'exporter les images de
   couverture des articles d'une collection précise.
 - Sur la page d'édition d'un exemplaire, un nouveau bouton permet de marquer un
@@ -32,6 +34,7 @@ les portraits de contributeur·ices doivent être importés avec les commandes :
 ```shell
 composer images:import post
 composer images:import people
+composer images:import event
 ```
 
 ## 2.86.3 (23 octobre 2024)
