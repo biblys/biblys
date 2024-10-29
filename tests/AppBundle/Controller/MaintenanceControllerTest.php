@@ -33,7 +33,12 @@ class MaintenanceControllerTest extends TestCase
         ModelFactory::createImage(type: 'cover', fileSize: 99999999);
         ModelFactory::createImage(site: $site, type: 'photo', fileSize: 99999999);
         ModelFactory::createImage(type: 'other', fileSize: 99999999);
-        ModelFactory::createImage(site: $site, type: 'illustration', fileSize: 99999999);
+        ModelFactory::createImage(
+            post: ModelFactory::createPost(site: $site), site: $site, type: 'illustration', fileSize: 99999999
+        );
+        ModelFactory::createImage(
+            event: ModelFactory::createEvent(site: $site), site: $site, type: 'illustration', fileSize: 99999999
+        );
         ModelFactory::createImage(site: $site, type: 'logo', fileSize: 99999999);
         ModelFactory::createImage(site: $site, type: 'portrait', fileSize: 99999999);
         ModelFactory::createMediaFile(site: $site, fileSize: 99999999);
@@ -65,12 +70,14 @@ class MaintenanceControllerTest extends TestCase
                 "stockItemsSize" => 0.093,
                 "postIllustrationsCount" => 1,
                 "postIllustrationsSize" => 0.093,
+                "eventIllustrationsCount" => 1,
+                "eventIllustrationsSize" => 0.093,
                 "downloadableFilesCount" => 0,
                 "downloadableFilesSize" => 0.0,
                 "mediaFilesCount" => 1,
                 "mediaFilesSize" => 0.093,
-                "totalCount" => 6,
-                "totalSize" => 0.559,
+                "totalCount" => 7,
+                "totalSize" => 0.652,
             ]);
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals("response", $response->getContent());
@@ -119,6 +126,8 @@ class MaintenanceControllerTest extends TestCase
                 "publishersSize" => 0.093,
                 "postIllustrationsCount" => 0,
                 "postIllustrationsSize" => 0,
+                "eventIllustrationsCount" => 0,
+                "eventIllustrationsSize" => 0,
                 "downloadableFilesCount" => 1,
                 "downloadableFilesSize" => 0.093,
                 "stockItemsCount" => 0,

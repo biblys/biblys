@@ -9,6 +9,7 @@ use Framework\Controller;
 use Model\FileQuery;
 use Model\ImageQuery;
 use Model\MediaFileQuery;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -95,6 +96,17 @@ class MaintenanceController extends Controller
 
         $postIllustrations = ImageQuery::create()
             ->filterByType("illustration")
+            ->filterByPostId(null, Criteria::ISNOTNULL)
+            ->filterBySite($currentSite->getSite())
+            ->withColumn('COUNT(`id`)', 'count')
+            ->withColumn('SUM(`fileSize`)', 'size')
+            ->select(['count', 'size'])
+            ->find()
+            ->getData()[0];
+
+        $eventIllustrations = ImageQuery::create()
+            ->filterByType("illustration")
+            ->filterByEventId(null, Criteria::ISNOTNULL)
             ->filterBySite($currentSite->getSite())
             ->withColumn('COUNT(`id`)', 'count')
             ->withColumn('SUM(`fileSize`)', 'size')
@@ -115,6 +127,7 @@ class MaintenanceController extends Controller
             + $publishers["count"]
             + $stockItems["count"]
             + $postIllustrations["count"]
+            + $eventIllustrations["count"]
             + $mediaFiles["count"]
             + $downloadableFiles["count"];
         $totalSize = $articles["size"]
@@ -122,6 +135,7 @@ class MaintenanceController extends Controller
             + $publishers["size"]
             + $stockItems["size"]
             + $postIllustrations["size"]
+            + $eventIllustrations["size"]
             + $mediaFiles["size"]
             + $downloadableFiles["size"];
 
@@ -136,6 +150,8 @@ class MaintenanceController extends Controller
             "stockItemsSize" => $this->_convertToGigabytes($stockItems["size"]),
             "postIllustrationsCount" => $postIllustrations["count"],
             "postIllustrationsSize" => $this->_convertToGigabytes($postIllustrations["size"]),
+            "eventIllustrationsCount" => $eventIllustrations["count"],
+            "eventIllustrationsSize" => $this->_convertToGigabytes($eventIllustrations["size"]),
             "downloadableFilesCount" => $downloadableFiles["count"],
             "downloadableFilesSize" => $this->_convertToGigabytes($downloadableFiles["size"]),
             "mediaFilesCount" => $mediaFiles["count"],
