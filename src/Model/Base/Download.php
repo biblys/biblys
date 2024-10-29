@@ -6,6 +6,8 @@ use \DateTime;
 use \Exception;
 use \PDO;
 use Model\DownloadQuery as ChildDownloadQuery;
+use Model\Site as ChildSite;
+use Model\SiteQuery as ChildSiteQuery;
 use Model\User as ChildUser;
 use Model\UserQuery as ChildUserQuery;
 use Model\Map\DownloadTableMap;
@@ -71,6 +73,13 @@ abstract class Download implements ActiveRecordInterface
      * @var        string
      */
     protected $download_id;
+
+    /**
+     * The value for the site_id field.
+     *
+     * @var        int|null
+     */
+    protected $site_id;
 
     /**
      * The value for the file_id field.
@@ -148,6 +157,11 @@ abstract class Download implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $download_updated;
+
+    /**
+     * @var        ChildSite
+     */
+    protected $aSite;
 
     /**
      * @var        ChildUser
@@ -399,6 +413,16 @@ abstract class Download implements ActiveRecordInterface
     }
 
     /**
+     * Get the [site_id] column value.
+     *
+     * @return int|null
+     */
+    public function getSiteId()
+    {
+        return $this->site_id;
+    }
+
+    /**
      * Get the [file_id] column value.
      *
      * @return int|null
@@ -559,6 +583,30 @@ abstract class Download implements ActiveRecordInterface
         if ($this->download_id !== $v) {
             $this->download_id = $v;
             $this->modifiedColumns[DownloadTableMap::COL_DOWNLOAD_ID] = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [site_id] column.
+     *
+     * @param int|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setSiteId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->site_id !== $v) {
+            $this->site_id = $v;
+            $this->modifiedColumns[DownloadTableMap::COL_SITE_ID] = true;
+        }
+
+        if ($this->aSite !== null && $this->aSite->getId() !== $v) {
+            $this->aSite = null;
         }
 
         return $this;
@@ -827,43 +875,46 @@ abstract class Download implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : DownloadTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->download_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : DownloadTableMap::translateFieldName('FileId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : DownloadTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->site_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : DownloadTableMap::translateFieldName('FileId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->file_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : DownloadTableMap::translateFieldName('ArticleId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : DownloadTableMap::translateFieldName('ArticleId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->article_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : DownloadTableMap::translateFieldName('BookId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : DownloadTableMap::translateFieldName('BookId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->book_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : DownloadTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : DownloadTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->axys_account_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : DownloadTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : DownloadTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : DownloadTableMap::translateFieldName('Filetype', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : DownloadTableMap::translateFieldName('Filetype', TableMap::TYPE_PHPNAME, $indexType)];
             $this->download_filetype = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : DownloadTableMap::translateFieldName('Version', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : DownloadTableMap::translateFieldName('Version', TableMap::TYPE_PHPNAME, $indexType)];
             $this->download_version = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : DownloadTableMap::translateFieldName('Ip', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : DownloadTableMap::translateFieldName('Ip', TableMap::TYPE_PHPNAME, $indexType)];
             $this->download_ip = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : DownloadTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : DownloadTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->download_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : DownloadTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : DownloadTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->download_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : DownloadTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : DownloadTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -876,7 +927,7 @@ abstract class Download implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 12; // 12 = DownloadTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 13; // 13 = DownloadTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Download'), 0, $e);
@@ -899,6 +950,9 @@ abstract class Download implements ActiveRecordInterface
      */
     public function ensureConsistency(): void
     {
+        if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
+            $this->aSite = null;
+        }
         if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
             $this->aUser = null;
         }
@@ -941,6 +995,7 @@ abstract class Download implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aSite = null;
             $this->aUser = null;
         } // if (deep)
     }
@@ -1063,6 +1118,13 @@ abstract class Download implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aSite !== null) {
+                if ($this->aSite->isModified() || $this->aSite->isNew()) {
+                    $affectedRows += $this->aSite->save($con);
+                }
+                $this->setSite($this->aSite);
+            }
+
             if ($this->aUser !== null) {
                 if ($this->aUser->isModified() || $this->aUser->isNew()) {
                     $affectedRows += $this->aUser->save($con);
@@ -1110,6 +1172,9 @@ abstract class Download implements ActiveRecordInterface
         if ($this->isColumnModified(DownloadTableMap::COL_DOWNLOAD_ID)) {
             $modifiedColumns[':p' . $index++]  = 'download_id';
         }
+        if ($this->isColumnModified(DownloadTableMap::COL_SITE_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'site_id';
+        }
         if ($this->isColumnModified(DownloadTableMap::COL_FILE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'file_id';
         }
@@ -1156,6 +1221,10 @@ abstract class Download implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'download_id':
                         $stmt->bindValue($identifier, $this->download_id, PDO::PARAM_INT);
+
+                        break;
+                    case 'site_id':
+                        $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
 
                         break;
                     case 'file_id':
@@ -1268,36 +1337,39 @@ abstract class Download implements ActiveRecordInterface
                 return $this->getId();
 
             case 1:
-                return $this->getFileId();
+                return $this->getSiteId();
 
             case 2:
-                return $this->getArticleId();
+                return $this->getFileId();
 
             case 3:
-                return $this->getBookId();
+                return $this->getArticleId();
 
             case 4:
-                return $this->getAxysAccountId();
+                return $this->getBookId();
 
             case 5:
-                return $this->getUserId();
+                return $this->getAxysAccountId();
 
             case 6:
-                return $this->getFiletype();
+                return $this->getUserId();
 
             case 7:
-                return $this->getVersion();
+                return $this->getFiletype();
 
             case 8:
-                return $this->getIp();
+                return $this->getVersion();
 
             case 9:
-                return $this->getDate();
+                return $this->getIp();
 
             case 10:
-                return $this->getCreatedAt();
+                return $this->getDate();
 
             case 11:
+                return $this->getCreatedAt();
+
+            case 12:
                 return $this->getUpdatedAt();
 
             default:
@@ -1329,22 +1401,19 @@ abstract class Download implements ActiveRecordInterface
         $keys = DownloadTableMap::getFieldNames($keyType);
         $result = [
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getFileId(),
-            $keys[2] => $this->getArticleId(),
-            $keys[3] => $this->getBookId(),
-            $keys[4] => $this->getAxysAccountId(),
-            $keys[5] => $this->getUserId(),
-            $keys[6] => $this->getFiletype(),
-            $keys[7] => $this->getVersion(),
-            $keys[8] => $this->getIp(),
-            $keys[9] => $this->getDate(),
-            $keys[10] => $this->getCreatedAt(),
-            $keys[11] => $this->getUpdatedAt(),
+            $keys[1] => $this->getSiteId(),
+            $keys[2] => $this->getFileId(),
+            $keys[3] => $this->getArticleId(),
+            $keys[4] => $this->getBookId(),
+            $keys[5] => $this->getAxysAccountId(),
+            $keys[6] => $this->getUserId(),
+            $keys[7] => $this->getFiletype(),
+            $keys[8] => $this->getVersion(),
+            $keys[9] => $this->getIp(),
+            $keys[10] => $this->getDate(),
+            $keys[11] => $this->getCreatedAt(),
+            $keys[12] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[9]] instanceof \DateTimeInterface) {
-            $result[$keys[9]] = $result[$keys[9]]->format('Y-m-d H:i:s.u');
-        }
-
         if ($result[$keys[10]] instanceof \DateTimeInterface) {
             $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
         }
@@ -1353,12 +1422,31 @@ abstract class Download implements ActiveRecordInterface
             $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
         }
 
+        if ($result[$keys[12]] instanceof \DateTimeInterface) {
+            $result[$keys[12]] = $result[$keys[12]]->format('Y-m-d H:i:s.u');
+        }
+
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aSite) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'site';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'sites';
+                        break;
+                    default:
+                        $key = 'Site';
+                }
+
+                $result[$key] = $this->aSite->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aUser) {
 
                 switch ($keyType) {
@@ -1414,36 +1502,39 @@ abstract class Download implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setFileId($value);
+                $this->setSiteId($value);
                 break;
             case 2:
-                $this->setArticleId($value);
+                $this->setFileId($value);
                 break;
             case 3:
-                $this->setBookId($value);
+                $this->setArticleId($value);
                 break;
             case 4:
-                $this->setAxysAccountId($value);
+                $this->setBookId($value);
                 break;
             case 5:
-                $this->setUserId($value);
+                $this->setAxysAccountId($value);
                 break;
             case 6:
-                $this->setFiletype($value);
+                $this->setUserId($value);
                 break;
             case 7:
-                $this->setVersion($value);
+                $this->setFiletype($value);
                 break;
             case 8:
-                $this->setIp($value);
+                $this->setVersion($value);
                 break;
             case 9:
-                $this->setDate($value);
+                $this->setIp($value);
                 break;
             case 10:
-                $this->setCreatedAt($value);
+                $this->setDate($value);
                 break;
             case 11:
+                $this->setCreatedAt($value);
+                break;
+            case 12:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1476,37 +1567,40 @@ abstract class Download implements ActiveRecordInterface
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setFileId($arr[$keys[1]]);
+            $this->setSiteId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setArticleId($arr[$keys[2]]);
+            $this->setFileId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setBookId($arr[$keys[3]]);
+            $this->setArticleId($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setAxysAccountId($arr[$keys[4]]);
+            $this->setBookId($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setUserId($arr[$keys[5]]);
+            $this->setAxysAccountId($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setFiletype($arr[$keys[6]]);
+            $this->setUserId($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setVersion($arr[$keys[7]]);
+            $this->setFiletype($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setIp($arr[$keys[8]]);
+            $this->setVersion($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setDate($arr[$keys[9]]);
+            $this->setIp($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setCreatedAt($arr[$keys[10]]);
+            $this->setDate($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setUpdatedAt($arr[$keys[11]]);
+            $this->setCreatedAt($arr[$keys[11]]);
+        }
+        if (array_key_exists($keys[12], $arr)) {
+            $this->setUpdatedAt($arr[$keys[12]]);
         }
 
         return $this;
@@ -1553,6 +1647,9 @@ abstract class Download implements ActiveRecordInterface
 
         if ($this->isColumnModified(DownloadTableMap::COL_DOWNLOAD_ID)) {
             $criteria->add(DownloadTableMap::COL_DOWNLOAD_ID, $this->download_id);
+        }
+        if ($this->isColumnModified(DownloadTableMap::COL_SITE_ID)) {
+            $criteria->add(DownloadTableMap::COL_SITE_ID, $this->site_id);
         }
         if ($this->isColumnModified(DownloadTableMap::COL_FILE_ID)) {
             $criteria->add(DownloadTableMap::COL_FILE_ID, $this->file_id);
@@ -1675,6 +1772,7 @@ abstract class Download implements ActiveRecordInterface
      */
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
+        $copyObj->setSiteId($this->getSiteId());
         $copyObj->setFileId($this->getFileId());
         $copyObj->setArticleId($this->getArticleId());
         $copyObj->setBookId($this->getBookId());
@@ -1712,6 +1810,57 @@ abstract class Download implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
+    }
+
+    /**
+     * Declares an association between this object and a ChildSite object.
+     *
+     * @param ChildSite|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setSite(ChildSite $v = null)
+    {
+        if ($v === null) {
+            $this->setSiteId(NULL);
+        } else {
+            $this->setSiteId($v->getId());
+        }
+
+        $this->aSite = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildSite object, it will not be re-added.
+        if ($v !== null) {
+            $v->addDownload($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildSite object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildSite|null The associated ChildSite object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getSite(?ConnectionInterface $con = null)
+    {
+        if ($this->aSite === null && ($this->site_id != 0)) {
+            $this->aSite = ChildSiteQuery::create()->findPk($this->site_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSite->addDownloads($this);
+             */
+        }
+
+        return $this->aSite;
     }
 
     /**
@@ -1774,10 +1923,14 @@ abstract class Download implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aSite) {
+            $this->aSite->removeDownload($this);
+        }
         if (null !== $this->aUser) {
             $this->aUser->removeDownload($this);
         }
         $this->download_id = null;
+        $this->site_id = null;
         $this->file_id = null;
         $this->article_id = null;
         $this->book_id = null;
@@ -1812,6 +1965,7 @@ abstract class Download implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
+        $this->aSite = null;
         $this->aUser = null;
         return $this;
     }

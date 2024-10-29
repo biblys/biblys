@@ -20,6 +20,7 @@ use Propel\Runtime\Exception\PropelException;
  * Base class that represents a query for the `files` table.
  *
  * @method     ChildFileQuery orderById($order = Criteria::ASC) Order by the file_id column
+ * @method     ChildFileQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
  * @method     ChildFileQuery orderByArticleId($order = Criteria::ASC) Order by the article_id column
  * @method     ChildFileQuery orderByAxysAccountId($order = Criteria::ASC) Order by the axys_account_id column
  * @method     ChildFileQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
@@ -36,6 +37,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFileQuery orderByCreatedAt($order = Criteria::ASC) Order by the file_created column
  *
  * @method     ChildFileQuery groupById() Group by the file_id column
+ * @method     ChildFileQuery groupBySiteId() Group by the site_id column
  * @method     ChildFileQuery groupByArticleId() Group by the article_id column
  * @method     ChildFileQuery groupByAxysAccountId() Group by the axys_account_id column
  * @method     ChildFileQuery groupByUserId() Group by the user_id column
@@ -59,6 +61,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFileQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildFileQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
+ * @method     ChildFileQuery leftJoinSite($relationAlias = null) Adds a LEFT JOIN clause to the query using the Site relation
+ * @method     ChildFileQuery rightJoinSite($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Site relation
+ * @method     ChildFileQuery innerJoinSite($relationAlias = null) Adds a INNER JOIN clause to the query using the Site relation
+ *
+ * @method     ChildFileQuery joinWithSite($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Site relation
+ *
+ * @method     ChildFileQuery leftJoinWithSite() Adds a LEFT JOIN clause and with to the query using the Site relation
+ * @method     ChildFileQuery rightJoinWithSite() Adds a RIGHT JOIN clause and with to the query using the Site relation
+ * @method     ChildFileQuery innerJoinWithSite() Adds a INNER JOIN clause and with to the query using the Site relation
+ *
  * @method     ChildFileQuery leftJoinArticle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Article relation
  * @method     ChildFileQuery rightJoinArticle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Article relation
  * @method     ChildFileQuery innerJoinArticle($relationAlias = null) Adds a INNER JOIN clause to the query using the Article relation
@@ -79,12 +91,13 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFileQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
  * @method     ChildFileQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
  *
- * @method     \Model\ArticleQuery|\Model\UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\SiteQuery|\Model\ArticleQuery|\Model\UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildFile|null findOne(?ConnectionInterface $con = null) Return the first ChildFile matching the query
  * @method     ChildFile findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildFile matching the query, or a new ChildFile object populated from the query conditions when no match is found
  *
  * @method     ChildFile|null findOneById(int $file_id) Return the first ChildFile filtered by the file_id column
+ * @method     ChildFile|null findOneBySiteId(int $site_id) Return the first ChildFile filtered by the site_id column
  * @method     ChildFile|null findOneByArticleId(int $article_id) Return the first ChildFile filtered by the article_id column
  * @method     ChildFile|null findOneByAxysAccountId(int $axys_account_id) Return the first ChildFile filtered by the axys_account_id column
  * @method     ChildFile|null findOneByUserId(int $user_id) Return the first ChildFile filtered by the user_id column
@@ -104,6 +117,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFile requireOne(?ConnectionInterface $con = null) Return the first ChildFile matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildFile requireOneById(int $file_id) Return the first ChildFile filtered by the file_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildFile requireOneBySiteId(int $site_id) Return the first ChildFile filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildFile requireOneByArticleId(int $article_id) Return the first ChildFile filtered by the article_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildFile requireOneByAxysAccountId(int $axys_account_id) Return the first ChildFile filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildFile requireOneByUserId(int $user_id) Return the first ChildFile filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -124,6 +138,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildFile[]|Collection findById(int|array<int> $file_id) Return ChildFile objects filtered by the file_id column
  * @psalm-method Collection&\Traversable<ChildFile> findById(int|array<int> $file_id) Return ChildFile objects filtered by the file_id column
+ * @method     ChildFile[]|Collection findBySiteId(int|array<int> $site_id) Return ChildFile objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildFile> findBySiteId(int|array<int> $site_id) Return ChildFile objects filtered by the site_id column
  * @method     ChildFile[]|Collection findByArticleId(int|array<int> $article_id) Return ChildFile objects filtered by the article_id column
  * @psalm-method Collection&\Traversable<ChildFile> findByArticleId(int|array<int> $article_id) Return ChildFile objects filtered by the article_id column
  * @method     ChildFile[]|Collection findByAxysAccountId(int|array<int> $axys_account_id) Return ChildFile objects filtered by the axys_account_id column
@@ -251,7 +267,7 @@ abstract class FileQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT file_id, article_id, axys_account_id, user_id, file_title, file_type, file_access, file_version, file_hash, file_size, file_ean, file_inserted, file_uploaded, file_updated, file_created FROM files WHERE file_id = :p0';
+        $sql = 'SELECT file_id, site_id, article_id, axys_account_id, user_id, file_title, file_type, file_access, file_version, file_hash, file_size, file_ean, file_inserted, file_uploaded, file_updated, file_created FROM files WHERE file_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -384,6 +400,51 @@ abstract class FileQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(FileTableMap::COL_FILE_ID, $id, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the site_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterBySiteId(1234); // WHERE site_id = 1234
+     * $query->filterBySiteId(array(12, 34)); // WHERE site_id IN (12, 34)
+     * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
+     * </code>
+     *
+     * @see       filterBySite()
+     *
+     * @param mixed $siteId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
+    {
+        if (is_array($siteId)) {
+            $useMinMax = false;
+            if (isset($siteId['min'])) {
+                $this->addUsingAlias(FileTableMap::COL_SITE_ID, $siteId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($siteId['max'])) {
+                $this->addUsingAlias(FileTableMap::COL_SITE_ID, $siteId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(FileTableMap::COL_SITE_ID, $siteId, $comparison);
 
         return $this;
     }
@@ -926,6 +987,181 @@ abstract class FileQuery extends ModelCriteria
         $this->addUsingAlias(FileTableMap::COL_FILE_CREATED, $createdAt, $comparison);
 
         return $this;
+    }
+
+    /**
+     * Filter the query by a related \Model\Site object
+     *
+     * @param \Model\Site|ObjectCollection $site The related object(s) to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterBySite($site, ?string $comparison = null)
+    {
+        if ($site instanceof \Model\Site) {
+            return $this
+                ->addUsingAlias(FileTableMap::COL_SITE_ID, $site->getId(), $comparison);
+        } elseif ($site instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            $this
+                ->addUsingAlias(FileTableMap::COL_SITE_ID, $site->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
+        } else {
+            throw new PropelException('filterBySite() only accepts arguments of type \Model\Site or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Site relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinSite(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Site');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Site');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Site relation Site object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\SiteQuery A secondary query class using the current class as primary query
+     */
+    public function useSiteQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinSite($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Site', '\Model\SiteQuery');
+    }
+
+    /**
+     * Use the Site relation Site object
+     *
+     * @param callable(\Model\SiteQuery):\Model\SiteQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withSiteQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useSiteQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Site table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\SiteQuery The inner query object of the EXISTS statement
+     */
+    public function useSiteExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Site table for a NOT EXISTS query.
+     *
+     * @see useSiteExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SiteQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useSiteNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Site table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\SiteQuery The inner query object of the IN statement
+     */
+    public function useInSiteQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useInQuery('Site', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Site table for a NOT IN query.
+     *
+     * @see useSiteInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SiteQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInSiteQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useInQuery('Site', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
     }
 
     /**

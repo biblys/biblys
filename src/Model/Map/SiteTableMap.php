@@ -713,6 +713,20 @@ class SiteTableMap extends TableMap
     1 => ':site_id',
   ),
 ), null, null, 'Customers', false);
+        $this->addRelation('Download', '\\Model\\Download', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, 'Downloads', false);
+        $this->addRelation('File', '\\Model\\File', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, 'Files', false);
         $this->addRelation('Image', '\\Model\\Image', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
