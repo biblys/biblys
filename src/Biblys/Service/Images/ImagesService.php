@@ -35,12 +35,12 @@ class ImagesService
     public function addImageFor(Article|Stock|Post|Publisher|People|Event $model, string $imagePath): void
     {
         match (get_class($model)) {
-            Article::class => $this->_addImage($imagePath, type: "cover", typeDirectory: "book", article: $model),
-            Stock::class => $this->_addImage($imagePath, type: "photo", typeDirectory: "stock", stockItem: $model),
-            Post::class => $this->_addImage($imagePath, type: "illustration", typeDirectory: "post", post: $model),
-            Publisher::class => $this->_addImage($imagePath, type: "logo", typeDirectory: "publisher", publisher: $model),
-            People::class => $this->_addImage($imagePath, type: "portrait", typeDirectory: "people", contributor: $model),
-            Event::class => $this->_addImage($imagePath, type: "illustration", typeDirectory: "event", event: $model),
+            Article::class => $this->_addImage($imagePath, type: "cover", directory: "articles", article: $model),
+            Stock::class => $this->_addImage($imagePath, type: "photo", directory: "stockitems", stockItem: $model),
+            Post::class => $this->_addImage($imagePath, type: "illustration", directory: "posts", post: $model),
+            Publisher::class => $this->_addImage($imagePath, type: "logo", directory: "publishers", publisher: $model),
+            People::class => $this->_addImage($imagePath, type: "portrait", directory: "contributors", contributor: $model),
+            Event::class => $this->_addImage($imagePath, type: "illustration", directory: "events", event: $model),
         };
     }
 
@@ -50,7 +50,7 @@ class ImagesService
     private function _addImage(
         string    $imagePath,
         string    $type,
-        string    $typeDirectory,
+        string    $directory,
         Article   $article = null,
         Stock     $stockItem = null,
         Post      $post = null,
@@ -60,13 +60,6 @@ class ImagesService
     ): void
     {
         $model = $article ?? $stockItem ?? $post ?? $publisher ?? $contributor ?? $event;
-
-        $imageDirectory = str_pad(
-            string: substr(string: $model->getId(), offset: -2, length: 2),
-            length: 2,
-            pad_string: '0',
-            pad_type: STR_PAD_LEFT
-        );
 
         $imageDimensions = getimagesize($imagePath);
         list($width, $height) = $imageDimensions;
@@ -84,9 +77,9 @@ class ImagesService
 
         $mediaType = mime_content_type($imagePath);
         $fileExtension = match ($mediaType) {
-            "image/jpeg" => ".jpg",
-            "image/png" => ".png",
-            "image/webp" => ".webp",
+            "image/jpeg" => "jpg",
+            "image/png" => "png",
+            "image/webp" => "webp",
             default => throw new BadRequestHttpException("Le format $mediaType n'est pas supporté. Essayez avec JPEG, PNG ou WebP."),
         };
 
@@ -98,8 +91,8 @@ class ImagesService
         $imageModel->setPublisherId($publisher?->getId());
         $imageModel->setContributorId($contributor?->getId());
         $imageModel->setEventId($event?->getId());
-        $imageModel->setFilepath("$typeDirectory/$imageDirectory/");
-        $imageModel->setFilename("{$model->getId()}$fileExtension");
+        $imageModel->setFilepath("$directory/{$model->getId()}/");
+        $imageModel->setFilename("$type.$fileExtension");
         $imageModel->setMediatype($mediaType);
         $imageModel->setFilesize(filesize($imagePath));
         $imageModel->setWidth($width);
