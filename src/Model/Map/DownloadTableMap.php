@@ -63,7 +63,7 @@ class DownloadTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 12;
+    public const NUM_COLUMNS = 13;
 
     /**
      * The number of lazy-loaded columns
@@ -73,12 +73,17 @@ class DownloadTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 12;
+    public const NUM_HYDRATE_COLUMNS = 13;
 
     /**
      * the column name for the download_id field
      */
     public const COL_DOWNLOAD_ID = 'downloads.download_id';
+
+    /**
+     * the column name for the site_id field
+     */
+    public const COL_SITE_ID = 'downloads.site_id';
 
     /**
      * the column name for the file_id field
@@ -149,11 +154,11 @@ class DownloadTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'FileId', 'ArticleId', 'BookId', 'AxysAccountId', 'UserId', 'Filetype', 'Version', 'Ip', 'Date', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'fileId', 'articleId', 'bookId', 'axysAccountId', 'userId', 'filetype', 'version', 'ip', 'date', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [DownloadTableMap::COL_DOWNLOAD_ID, DownloadTableMap::COL_FILE_ID, DownloadTableMap::COL_ARTICLE_ID, DownloadTableMap::COL_BOOK_ID, DownloadTableMap::COL_AXYS_ACCOUNT_ID, DownloadTableMap::COL_USER_ID, DownloadTableMap::COL_DOWNLOAD_FILETYPE, DownloadTableMap::COL_DOWNLOAD_VERSION, DownloadTableMap::COL_DOWNLOAD_IP, DownloadTableMap::COL_DOWNLOAD_DATE, DownloadTableMap::COL_DOWNLOAD_CREATED, DownloadTableMap::COL_DOWNLOAD_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['download_id', 'file_id', 'article_id', 'book_id', 'axys_account_id', 'user_id', 'download_filetype', 'download_version', 'download_ip', 'download_date', 'download_created', 'download_updated', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ]
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'FileId', 'ArticleId', 'BookId', 'AxysAccountId', 'UserId', 'Filetype', 'Version', 'Ip', 'Date', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'fileId', 'articleId', 'bookId', 'axysAccountId', 'userId', 'filetype', 'version', 'ip', 'date', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [DownloadTableMap::COL_DOWNLOAD_ID, DownloadTableMap::COL_SITE_ID, DownloadTableMap::COL_FILE_ID, DownloadTableMap::COL_ARTICLE_ID, DownloadTableMap::COL_BOOK_ID, DownloadTableMap::COL_AXYS_ACCOUNT_ID, DownloadTableMap::COL_USER_ID, DownloadTableMap::COL_DOWNLOAD_FILETYPE, DownloadTableMap::COL_DOWNLOAD_VERSION, DownloadTableMap::COL_DOWNLOAD_IP, DownloadTableMap::COL_DOWNLOAD_DATE, DownloadTableMap::COL_DOWNLOAD_CREATED, DownloadTableMap::COL_DOWNLOAD_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['download_id', 'site_id', 'file_id', 'article_id', 'book_id', 'axys_account_id', 'user_id', 'download_filetype', 'download_version', 'download_ip', 'download_date', 'download_created', 'download_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, ]
     ];
 
     /**
@@ -165,11 +170,11 @@ class DownloadTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'FileId' => 1, 'ArticleId' => 2, 'BookId' => 3, 'AxysAccountId' => 4, 'UserId' => 5, 'Filetype' => 6, 'Version' => 7, 'Ip' => 8, 'Date' => 9, 'CreatedAt' => 10, 'UpdatedAt' => 11, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'fileId' => 1, 'articleId' => 2, 'bookId' => 3, 'axysAccountId' => 4, 'userId' => 5, 'filetype' => 6, 'version' => 7, 'ip' => 8, 'date' => 9, 'createdAt' => 10, 'updatedAt' => 11, ],
-        self::TYPE_COLNAME       => [DownloadTableMap::COL_DOWNLOAD_ID => 0, DownloadTableMap::COL_FILE_ID => 1, DownloadTableMap::COL_ARTICLE_ID => 2, DownloadTableMap::COL_BOOK_ID => 3, DownloadTableMap::COL_AXYS_ACCOUNT_ID => 4, DownloadTableMap::COL_USER_ID => 5, DownloadTableMap::COL_DOWNLOAD_FILETYPE => 6, DownloadTableMap::COL_DOWNLOAD_VERSION => 7, DownloadTableMap::COL_DOWNLOAD_IP => 8, DownloadTableMap::COL_DOWNLOAD_DATE => 9, DownloadTableMap::COL_DOWNLOAD_CREATED => 10, DownloadTableMap::COL_DOWNLOAD_UPDATED => 11, ],
-        self::TYPE_FIELDNAME     => ['download_id' => 0, 'file_id' => 1, 'article_id' => 2, 'book_id' => 3, 'axys_account_id' => 4, 'user_id' => 5, 'download_filetype' => 6, 'download_version' => 7, 'download_ip' => 8, 'download_date' => 9, 'download_created' => 10, 'download_updated' => 11, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'FileId' => 2, 'ArticleId' => 3, 'BookId' => 4, 'AxysAccountId' => 5, 'UserId' => 6, 'Filetype' => 7, 'Version' => 8, 'Ip' => 9, 'Date' => 10, 'CreatedAt' => 11, 'UpdatedAt' => 12, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'fileId' => 2, 'articleId' => 3, 'bookId' => 4, 'axysAccountId' => 5, 'userId' => 6, 'filetype' => 7, 'version' => 8, 'ip' => 9, 'date' => 10, 'createdAt' => 11, 'updatedAt' => 12, ],
+        self::TYPE_COLNAME       => [DownloadTableMap::COL_DOWNLOAD_ID => 0, DownloadTableMap::COL_SITE_ID => 1, DownloadTableMap::COL_FILE_ID => 2, DownloadTableMap::COL_ARTICLE_ID => 3, DownloadTableMap::COL_BOOK_ID => 4, DownloadTableMap::COL_AXYS_ACCOUNT_ID => 5, DownloadTableMap::COL_USER_ID => 6, DownloadTableMap::COL_DOWNLOAD_FILETYPE => 7, DownloadTableMap::COL_DOWNLOAD_VERSION => 8, DownloadTableMap::COL_DOWNLOAD_IP => 9, DownloadTableMap::COL_DOWNLOAD_DATE => 10, DownloadTableMap::COL_DOWNLOAD_CREATED => 11, DownloadTableMap::COL_DOWNLOAD_UPDATED => 12, ],
+        self::TYPE_FIELDNAME     => ['download_id' => 0, 'site_id' => 1, 'file_id' => 2, 'article_id' => 3, 'book_id' => 4, 'axys_account_id' => 5, 'user_id' => 6, 'download_filetype' => 7, 'download_version' => 8, 'download_ip' => 9, 'download_date' => 10, 'download_created' => 11, 'download_updated' => 12, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, ]
     ];
 
     /**
@@ -186,6 +191,14 @@ class DownloadTableMap extends TableMap
         'COL_DOWNLOAD_ID' => 'DOWNLOAD_ID',
         'download_id' => 'DOWNLOAD_ID',
         'downloads.download_id' => 'DOWNLOAD_ID',
+        'SiteId' => 'SITE_ID',
+        'Download.SiteId' => 'SITE_ID',
+        'siteId' => 'SITE_ID',
+        'download.siteId' => 'SITE_ID',
+        'DownloadTableMap::COL_SITE_ID' => 'SITE_ID',
+        'COL_SITE_ID' => 'SITE_ID',
+        'site_id' => 'SITE_ID',
+        'downloads.site_id' => 'SITE_ID',
         'FileId' => 'FILE_ID',
         'Download.FileId' => 'FILE_ID',
         'fileId' => 'FILE_ID',
@@ -294,6 +307,7 @@ class DownloadTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('download_id', 'Id', 'BIGINT', true, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addColumn('file_id', 'FileId', 'INTEGER', false, null, null);
         $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, null, null);
         $this->addColumn('book_id', 'BookId', 'INTEGER', false, null, null);
@@ -314,6 +328,13 @@ class DownloadTableMap extends TableMap
      */
     public function buildRelations(): void
     {
+        $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, null, false);
         $this->addRelation('User', '\\Model\\User', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
@@ -479,6 +500,7 @@ class DownloadTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(DownloadTableMap::COL_DOWNLOAD_ID);
+            $criteria->addSelectColumn(DownloadTableMap::COL_SITE_ID);
             $criteria->addSelectColumn(DownloadTableMap::COL_FILE_ID);
             $criteria->addSelectColumn(DownloadTableMap::COL_ARTICLE_ID);
             $criteria->addSelectColumn(DownloadTableMap::COL_BOOK_ID);
@@ -492,6 +514,7 @@ class DownloadTableMap extends TableMap
             $criteria->addSelectColumn(DownloadTableMap::COL_DOWNLOAD_UPDATED);
         } else {
             $criteria->addSelectColumn($alias . '.download_id');
+            $criteria->addSelectColumn($alias . '.site_id');
             $criteria->addSelectColumn($alias . '.file_id');
             $criteria->addSelectColumn($alias . '.article_id');
             $criteria->addSelectColumn($alias . '.book_id');
@@ -522,6 +545,7 @@ class DownloadTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(DownloadTableMap::COL_DOWNLOAD_ID);
+            $criteria->removeSelectColumn(DownloadTableMap::COL_SITE_ID);
             $criteria->removeSelectColumn(DownloadTableMap::COL_FILE_ID);
             $criteria->removeSelectColumn(DownloadTableMap::COL_ARTICLE_ID);
             $criteria->removeSelectColumn(DownloadTableMap::COL_BOOK_ID);
@@ -535,6 +559,7 @@ class DownloadTableMap extends TableMap
             $criteria->removeSelectColumn(DownloadTableMap::COL_DOWNLOAD_UPDATED);
         } else {
             $criteria->removeSelectColumn($alias . '.download_id');
+            $criteria->removeSelectColumn($alias . '.site_id');
             $criteria->removeSelectColumn($alias . '.file_id');
             $criteria->removeSelectColumn($alias . '.article_id');
             $criteria->removeSelectColumn($alias . '.book_id');

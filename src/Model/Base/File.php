@@ -8,6 +8,8 @@ use \PDO;
 use Model\Article as ChildArticle;
 use Model\ArticleQuery as ChildArticleQuery;
 use Model\FileQuery as ChildFileQuery;
+use Model\Site as ChildSite;
+use Model\SiteQuery as ChildSiteQuery;
 use Model\User as ChildUser;
 use Model\UserQuery as ChildUserQuery;
 use Model\Map\FileTableMap;
@@ -73,6 +75,13 @@ abstract class File implements ActiveRecordInterface
      * @var        int
      */
     protected $file_id;
+
+    /**
+     * The value for the site_id field.
+     *
+     * @var        int|null
+     */
+    protected $site_id;
 
     /**
      * The value for the article_id field.
@@ -174,6 +183,11 @@ abstract class File implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $file_created;
+
+    /**
+     * @var        ChildSite
+     */
+    protected $aSite;
 
     /**
      * @var        ChildArticle
@@ -445,6 +459,16 @@ abstract class File implements ActiveRecordInterface
     }
 
     /**
+     * Get the [site_id] column value.
+     *
+     * @return int|null
+     */
+    public function getSiteId()
+    {
+        return $this->site_id;
+    }
+
+    /**
      * Get the [article_id] column value.
      *
      * @return int|null
@@ -657,6 +681,30 @@ abstract class File implements ActiveRecordInterface
         if ($this->file_id !== $v) {
             $this->file_id = $v;
             $this->modifiedColumns[FileTableMap::COL_FILE_ID] = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [site_id] column.
+     *
+     * @param int|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setSiteId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->site_id !== $v) {
+            $this->site_id = $v;
+            $this->modifiedColumns[FileTableMap::COL_SITE_ID] = true;
+        }
+
+        if ($this->aSite !== null && $this->aSite->getId() !== $v) {
+            $this->aSite = null;
         }
 
         return $this;
@@ -1009,55 +1057,58 @@ abstract class File implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : FileTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->file_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : FileTableMap::translateFieldName('ArticleId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : FileTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->site_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : FileTableMap::translateFieldName('ArticleId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->article_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : FileTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : FileTableMap::translateFieldName('AxysAccountId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->axys_account_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : FileTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : FileTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : FileTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : FileTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
             $this->file_title = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : FileTableMap::translateFieldName('Type', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : FileTableMap::translateFieldName('Type', TableMap::TYPE_PHPNAME, $indexType)];
             $this->file_type = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : FileTableMap::translateFieldName('Access', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : FileTableMap::translateFieldName('Access', TableMap::TYPE_PHPNAME, $indexType)];
             $this->file_access = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : FileTableMap::translateFieldName('Version', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : FileTableMap::translateFieldName('Version', TableMap::TYPE_PHPNAME, $indexType)];
             $this->file_version = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : FileTableMap::translateFieldName('Hash', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : FileTableMap::translateFieldName('Hash', TableMap::TYPE_PHPNAME, $indexType)];
             $this->file_hash = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : FileTableMap::translateFieldName('Size', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : FileTableMap::translateFieldName('Size', TableMap::TYPE_PHPNAME, $indexType)];
             $this->file_size = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : FileTableMap::translateFieldName('Ean', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : FileTableMap::translateFieldName('Ean', TableMap::TYPE_PHPNAME, $indexType)];
             $this->file_ean = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : FileTableMap::translateFieldName('Inserted', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : FileTableMap::translateFieldName('Inserted', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->file_inserted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : FileTableMap::translateFieldName('Uploaded', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : FileTableMap::translateFieldName('Uploaded', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->file_uploaded = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : FileTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : FileTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->file_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : FileTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : FileTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -1070,7 +1121,7 @@ abstract class File implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 15; // 15 = FileTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 16; // 16 = FileTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\File'), 0, $e);
@@ -1093,6 +1144,9 @@ abstract class File implements ActiveRecordInterface
      */
     public function ensureConsistency(): void
     {
+        if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
+            $this->aSite = null;
+        }
         if ($this->aArticle !== null && $this->article_id !== $this->aArticle->getId()) {
             $this->aArticle = null;
         }
@@ -1138,6 +1192,7 @@ abstract class File implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aSite = null;
             $this->aArticle = null;
             $this->aUser = null;
         } // if (deep)
@@ -1261,6 +1316,13 @@ abstract class File implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aSite !== null) {
+                if ($this->aSite->isModified() || $this->aSite->isNew()) {
+                    $affectedRows += $this->aSite->save($con);
+                }
+                $this->setSite($this->aSite);
+            }
+
             if ($this->aArticle !== null) {
                 if ($this->aArticle->isModified() || $this->aArticle->isNew()) {
                     $affectedRows += $this->aArticle->save($con);
@@ -1314,6 +1376,9 @@ abstract class File implements ActiveRecordInterface
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(FileTableMap::COL_FILE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'file_id';
+        }
+        if ($this->isColumnModified(FileTableMap::COL_SITE_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'site_id';
         }
         if ($this->isColumnModified(FileTableMap::COL_ARTICLE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'article_id';
@@ -1370,6 +1435,10 @@ abstract class File implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'file_id':
                         $stmt->bindValue($identifier, $this->file_id, PDO::PARAM_INT);
+
+                        break;
+                    case 'site_id':
+                        $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
 
                         break;
                     case 'article_id':
@@ -1494,45 +1563,48 @@ abstract class File implements ActiveRecordInterface
                 return $this->getId();
 
             case 1:
-                return $this->getArticleId();
+                return $this->getSiteId();
 
             case 2:
-                return $this->getAxysAccountId();
+                return $this->getArticleId();
 
             case 3:
-                return $this->getUserId();
+                return $this->getAxysAccountId();
 
             case 4:
-                return $this->getTitle();
+                return $this->getUserId();
 
             case 5:
-                return $this->getType();
+                return $this->getTitle();
 
             case 6:
-                return $this->getAccess();
+                return $this->getType();
 
             case 7:
-                return $this->getVersion();
+                return $this->getAccess();
 
             case 8:
-                return $this->getHash();
+                return $this->getVersion();
 
             case 9:
-                return $this->getSize();
+                return $this->getHash();
 
             case 10:
-                return $this->getEan();
+                return $this->getSize();
 
             case 11:
-                return $this->getInserted();
+                return $this->getEan();
 
             case 12:
-                return $this->getUploaded();
+                return $this->getInserted();
 
             case 13:
-                return $this->getUpdatedAt();
+                return $this->getUploaded();
 
             case 14:
+                return $this->getUpdatedAt();
+
+            case 15:
                 return $this->getCreatedAt();
 
             default:
@@ -1564,25 +1636,22 @@ abstract class File implements ActiveRecordInterface
         $keys = FileTableMap::getFieldNames($keyType);
         $result = [
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getArticleId(),
-            $keys[2] => $this->getAxysAccountId(),
-            $keys[3] => $this->getUserId(),
-            $keys[4] => $this->getTitle(),
-            $keys[5] => $this->getType(),
-            $keys[6] => $this->getAccess(),
-            $keys[7] => $this->getVersion(),
-            $keys[8] => $this->getHash(),
-            $keys[9] => $this->getSize(),
-            $keys[10] => $this->getEan(),
-            $keys[11] => $this->getInserted(),
-            $keys[12] => $this->getUploaded(),
-            $keys[13] => $this->getUpdatedAt(),
-            $keys[14] => $this->getCreatedAt(),
+            $keys[1] => $this->getSiteId(),
+            $keys[2] => $this->getArticleId(),
+            $keys[3] => $this->getAxysAccountId(),
+            $keys[4] => $this->getUserId(),
+            $keys[5] => $this->getTitle(),
+            $keys[6] => $this->getType(),
+            $keys[7] => $this->getAccess(),
+            $keys[8] => $this->getVersion(),
+            $keys[9] => $this->getHash(),
+            $keys[10] => $this->getSize(),
+            $keys[11] => $this->getEan(),
+            $keys[12] => $this->getInserted(),
+            $keys[13] => $this->getUploaded(),
+            $keys[14] => $this->getUpdatedAt(),
+            $keys[15] => $this->getCreatedAt(),
         ];
-        if ($result[$keys[11]] instanceof \DateTimeInterface) {
-            $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
-        }
-
         if ($result[$keys[12]] instanceof \DateTimeInterface) {
             $result[$keys[12]] = $result[$keys[12]]->format('Y-m-d H:i:s.u');
         }
@@ -1595,12 +1664,31 @@ abstract class File implements ActiveRecordInterface
             $result[$keys[14]] = $result[$keys[14]]->format('Y-m-d H:i:s.u');
         }
 
+        if ($result[$keys[15]] instanceof \DateTimeInterface) {
+            $result[$keys[15]] = $result[$keys[15]]->format('Y-m-d H:i:s.u');
+        }
+
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aSite) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'site';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'sites';
+                        break;
+                    default:
+                        $key = 'Site';
+                }
+
+                $result[$key] = $this->aSite->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aArticle) {
 
                 switch ($keyType) {
@@ -1671,45 +1759,48 @@ abstract class File implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setArticleId($value);
+                $this->setSiteId($value);
                 break;
             case 2:
-                $this->setAxysAccountId($value);
+                $this->setArticleId($value);
                 break;
             case 3:
-                $this->setUserId($value);
+                $this->setAxysAccountId($value);
                 break;
             case 4:
-                $this->setTitle($value);
+                $this->setUserId($value);
                 break;
             case 5:
-                $this->setType($value);
+                $this->setTitle($value);
                 break;
             case 6:
-                $this->setAccess($value);
+                $this->setType($value);
                 break;
             case 7:
-                $this->setVersion($value);
+                $this->setAccess($value);
                 break;
             case 8:
-                $this->setHash($value);
+                $this->setVersion($value);
                 break;
             case 9:
-                $this->setSize($value);
+                $this->setHash($value);
                 break;
             case 10:
-                $this->setEan($value);
+                $this->setSize($value);
                 break;
             case 11:
-                $this->setInserted($value);
+                $this->setEan($value);
                 break;
             case 12:
-                $this->setUploaded($value);
+                $this->setInserted($value);
                 break;
             case 13:
-                $this->setUpdatedAt($value);
+                $this->setUploaded($value);
                 break;
             case 14:
+                $this->setUpdatedAt($value);
+                break;
+            case 15:
                 $this->setCreatedAt($value);
                 break;
         } // switch()
@@ -1742,46 +1833,49 @@ abstract class File implements ActiveRecordInterface
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setArticleId($arr[$keys[1]]);
+            $this->setSiteId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setAxysAccountId($arr[$keys[2]]);
+            $this->setArticleId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setUserId($arr[$keys[3]]);
+            $this->setAxysAccountId($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setTitle($arr[$keys[4]]);
+            $this->setUserId($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setType($arr[$keys[5]]);
+            $this->setTitle($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setAccess($arr[$keys[6]]);
+            $this->setType($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setVersion($arr[$keys[7]]);
+            $this->setAccess($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setHash($arr[$keys[8]]);
+            $this->setVersion($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setSize($arr[$keys[9]]);
+            $this->setHash($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setEan($arr[$keys[10]]);
+            $this->setSize($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setInserted($arr[$keys[11]]);
+            $this->setEan($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setUploaded($arr[$keys[12]]);
+            $this->setInserted($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
-            $this->setUpdatedAt($arr[$keys[13]]);
+            $this->setUploaded($arr[$keys[13]]);
         }
         if (array_key_exists($keys[14], $arr)) {
-            $this->setCreatedAt($arr[$keys[14]]);
+            $this->setUpdatedAt($arr[$keys[14]]);
+        }
+        if (array_key_exists($keys[15], $arr)) {
+            $this->setCreatedAt($arr[$keys[15]]);
         }
 
         return $this;
@@ -1828,6 +1922,9 @@ abstract class File implements ActiveRecordInterface
 
         if ($this->isColumnModified(FileTableMap::COL_FILE_ID)) {
             $criteria->add(FileTableMap::COL_FILE_ID, $this->file_id);
+        }
+        if ($this->isColumnModified(FileTableMap::COL_SITE_ID)) {
+            $criteria->add(FileTableMap::COL_SITE_ID, $this->site_id);
         }
         if ($this->isColumnModified(FileTableMap::COL_ARTICLE_ID)) {
             $criteria->add(FileTableMap::COL_ARTICLE_ID, $this->article_id);
@@ -1959,6 +2056,7 @@ abstract class File implements ActiveRecordInterface
      */
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
+        $copyObj->setSiteId($this->getSiteId());
         $copyObj->setArticleId($this->getArticleId());
         $copyObj->setAxysAccountId($this->getAxysAccountId());
         $copyObj->setUserId($this->getUserId());
@@ -1999,6 +2097,57 @@ abstract class File implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
+    }
+
+    /**
+     * Declares an association between this object and a ChildSite object.
+     *
+     * @param ChildSite|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setSite(ChildSite $v = null)
+    {
+        if ($v === null) {
+            $this->setSiteId(NULL);
+        } else {
+            $this->setSiteId($v->getId());
+        }
+
+        $this->aSite = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildSite object, it will not be re-added.
+        if ($v !== null) {
+            $v->addFile($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildSite object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildSite|null The associated ChildSite object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getSite(?ConnectionInterface $con = null)
+    {
+        if ($this->aSite === null && ($this->site_id != 0)) {
+            $this->aSite = ChildSiteQuery::create()->findPk($this->site_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSite->addFiles($this);
+             */
+        }
+
+        return $this->aSite;
     }
 
     /**
@@ -2112,6 +2261,9 @@ abstract class File implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aSite) {
+            $this->aSite->removeFile($this);
+        }
         if (null !== $this->aArticle) {
             $this->aArticle->removeFile($this);
         }
@@ -2119,6 +2271,7 @@ abstract class File implements ActiveRecordInterface
             $this->aUser->removeFile($this);
         }
         $this->file_id = null;
+        $this->site_id = null;
         $this->article_id = null;
         $this->axys_account_id = null;
         $this->user_id = null;
@@ -2157,6 +2310,7 @@ abstract class File implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
+        $this->aSite = null;
         $this->aArticle = null;
         $this->aUser = null;
         return $this;
