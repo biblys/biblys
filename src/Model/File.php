@@ -23,4 +23,9 @@ class File extends BaseFile
     {
         return FileType::getByMediaType($this->getType());
     }
+
+    public function getFullPath(): string
+    {
+        return __DIR__ . "/../../content/downloadable/{$this->getArticleId()}/{$this->getHash()}";
+    }
 }
