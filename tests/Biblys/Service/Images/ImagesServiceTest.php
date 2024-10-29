@@ -37,8 +37,7 @@ class ImagesServiceTest extends TestCase
     public function testAddImageForWithUnsupportedFormat(): void
     {
         // given
-        $article = new Article();
-        $article->setId(1984);
+        $article = ModelFactory::createArticle();
         $site = ModelFactory::createSite();
 
         $config = new Config();
@@ -72,8 +71,7 @@ class ImagesServiceTest extends TestCase
     public function testAddImageForCreatesImageWithArticle(): void
     {
         // given
-        $article = new Article();
-        $article->setId(1984);
+        $article = ModelFactory::createArticle();
         $site = ModelFactory::createSite();
 
         $config = new Config();
@@ -90,7 +88,7 @@ class ImagesServiceTest extends TestCase
         $this->assertInstanceOf(Image::class, $image);
         $this->assertEquals($site, $image->getSite());
         $this->assertEquals("cover", $image->getType());
-        $this->assertEquals("articles/1984/", $image->getFilepath());
+        $this->assertEquals("articles/{$article->getId()}/", $image->getFilepath());
         $this->assertEquals("cover.jpg", $image->getFilename());
         $this->assertEquals(1, $image->getVersion());
         $this->assertEquals("image/jpeg", $image->getMediatype());
@@ -108,7 +106,6 @@ class ImagesServiceTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $article = ModelFactory::createArticle();
-        $article->setId(1985);
 
         $config = new Config();
         $currentSite = new CurrentSite($site);
@@ -127,7 +124,7 @@ class ImagesServiceTest extends TestCase
         $updatedImage = ImageQuery::create()->findOneByArticleId($article->getId());
         $this->assertInstanceOf(Image::class, $updatedImage);
         $this->assertEquals($createdImage->getId(), $updatedImage->getId());
-        $this->assertEquals("articles/1985/", $updatedImage->getFilepath());
+        $this->assertEquals("articles/{$article->getId()}/", $updatedImage->getFilepath());
         $this->assertEquals("cover.jpg", $updatedImage->getFilename());
         $this->assertEquals(2, $updatedImage->getVersion());
         $this->assertEquals("image/jpeg", $updatedImage->getMediatype());
@@ -379,8 +376,7 @@ class ImagesServiceTest extends TestCase
     public function testAddImageForCreatesImageWithStockItem(): void
     {
         // given
-        $stockItem = new Stock();
-        $stockItem->setId(1984);
+        $stockItem = ModelFactory::createStockItem();
         $site = ModelFactory::createSite();
 
         $config = new Config();
@@ -397,7 +393,7 @@ class ImagesServiceTest extends TestCase
         $this->assertInstanceOf(Image::class, $image);
         $this->assertEquals($site, $image->getSite());
         $this->assertEquals("photo", $image->getType());
-        $this->assertEquals("stockitems/1984/", $image->getFilepath());
+        $this->assertEquals("stockitems/{$stockItem->getId()}/", $image->getFilepath());
         $this->assertEquals("photo.png", $image->getFilename());
         $this->assertEquals(1, $image->getVersion());
         $this->assertEquals("image/png", $image->getMediatype());
@@ -415,7 +411,6 @@ class ImagesServiceTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $stockItem = ModelFactory::createStockItem();
-        $stockItem->setId(1985);
 
         $config = new Config();
         $currentSite = new CurrentSite($site);
@@ -434,7 +429,7 @@ class ImagesServiceTest extends TestCase
         $updatedImage = ImageQuery::create()->filterByStockItem($stockItem)->findOne();
         $this->assertInstanceOf(Image::class, $updatedImage);
         $this->assertEquals($createdImage->getId(), $updatedImage->getId());
-        $this->assertEquals("stockitems/1985/", $updatedImage->getFilepath());
+        $this->assertEquals("stockitems/{$stockItem->getId()}/", $updatedImage->getFilepath());
         $this->assertEquals("photo.jpg", $updatedImage->getFilename());
         $this->assertEquals(2, $updatedImage->getVersion());
         $this->assertEquals("image/jpeg", $updatedImage->getMediatype());
@@ -606,8 +601,7 @@ class ImagesServiceTest extends TestCase
     public function testAddImageForCreatesImageWithPost(): void
     {
         // given
-        $post = new Post();
-        $post->setId(1984);
+        $post = ModelFactory::createPost();
         $site = ModelFactory::createSite();
 
         $config = new Config();
@@ -624,7 +618,7 @@ class ImagesServiceTest extends TestCase
         $this->assertInstanceOf(Image::class, $image);
         $this->assertEquals($site, $image->getSite());
         $this->assertEquals("illustration", $image->getType());
-        $this->assertEquals("posts/1984/", $image->getFilepath());
+        $this->assertEquals("posts/{$post->getId()}/", $image->getFilepath());
         $this->assertEquals("illustration.webp", $image->getFilename());
         $this->assertEquals(1, $image->getVersion());
         $this->assertEquals("image/webp", $image->getMediatype());
@@ -642,7 +636,6 @@ class ImagesServiceTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $post = ModelFactory::createPost();
-        $post->setId(1985);
 
         $config = new Config();
         $currentSite = new CurrentSite($site);
@@ -661,7 +654,7 @@ class ImagesServiceTest extends TestCase
         $updatedImage = ImageQuery::create()->filterByPost($post)->findOne();
         $this->assertInstanceOf(Image::class, $updatedImage);
         $this->assertEquals($createdImage->getId(), $updatedImage->getId());
-        $this->assertEquals("posts/1985/", $updatedImage->getFilepath());
+        $this->assertEquals("posts/{$post->getId()}/", $updatedImage->getFilepath());
         $this->assertEquals("illustration.jpg", $updatedImage->getFilename());
         $this->assertEquals(2, $updatedImage->getVersion());
         $this->assertEquals("image/jpeg", $updatedImage->getMediatype());
@@ -833,9 +826,8 @@ class ImagesServiceTest extends TestCase
     public function testAddImageForCreatesImageWithEvent(): void
     {
         // given
-        $event = new Event();
-        $event->setId(1984);
         $site = ModelFactory::createSite();
+        $event = ModelFactory::createEvent(site: $site);
 
         $config = new Config();
         $currentSite = new CurrentSite($site);
@@ -851,7 +843,7 @@ class ImagesServiceTest extends TestCase
         $this->assertInstanceOf(Image::class, $image);
         $this->assertEquals($site, $image->getSite());
         $this->assertEquals("illustration", $image->getType());
-        $this->assertEquals("events/1984/", $image->getFilepath());
+        $this->assertEquals("events/{$event->getId()}/", $image->getFilepath());
         $this->assertEquals("illustration.webp", $image->getFilename());
         $this->assertEquals(1, $image->getVersion());
         $this->assertEquals("image/webp", $image->getMediatype());
@@ -869,7 +861,6 @@ class ImagesServiceTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $event = ModelFactory::createEvent(site: $site);
-        $event->setId(1985);
 
         $config = new Config();
         $currentSite = new CurrentSite($site);
@@ -888,7 +879,7 @@ class ImagesServiceTest extends TestCase
         $updatedImage = ImageQuery::create()->filterByEvent($event)->findOne();
         $this->assertInstanceOf(Image::class, $updatedImage);
         $this->assertEquals($createdImage->getId(), $updatedImage->getId());
-        $this->assertEquals("events/1985/", $updatedImage->getFilepath());
+        $this->assertEquals("events/{$event->getId()}/", $updatedImage->getFilepath());
         $this->assertEquals("illustration.jpg", $updatedImage->getFilename());
         $this->assertEquals(2, $updatedImage->getVersion());
         $this->assertEquals("image/jpeg", $updatedImage->getMediatype());
@@ -1061,8 +1052,7 @@ class ImagesServiceTest extends TestCase
     public function testAddImageForCreatesImageWithPublisher(): void
     {
         // given
-        $publisher = new Publisher();
-        $publisher->setId(1984);
+        $publisher = ModelFactory::createPublisher();
         $site = ModelFactory::createSite();
 
         $config = new Config();
@@ -1079,7 +1069,7 @@ class ImagesServiceTest extends TestCase
         $this->assertInstanceOf(Image::class, $image);
         $this->assertEquals($site, $image->getSite());
         $this->assertEquals("logo", $image->getType());
-        $this->assertEquals("publishers/1984/", $image->getFilepath());
+        $this->assertEquals("publishers/{$publisher->getId()}/", $image->getFilepath());
         $this->assertEquals("logo.jpg", $image->getFilename());
         $this->assertEquals(1, $image->getVersion());
         $this->assertEquals("image/jpeg", $image->getMediatype());
@@ -1097,7 +1087,6 @@ class ImagesServiceTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $publisher = ModelFactory::createPublisher();
-        $publisher->setId(1985);
 
         $config = new Config();
         $currentSite = new CurrentSite($site);
@@ -1116,7 +1105,7 @@ class ImagesServiceTest extends TestCase
         $updatedImage = ImageQuery::create()->findOneByPublisherId($publisher->getId());
         $this->assertInstanceOf(Image::class, $updatedImage);
         $this->assertEquals($createdImage->getId(), $updatedImage->getId());
-        $this->assertEquals("publishers/1985/", $updatedImage->getFilepath());
+        $this->assertEquals("publishers/{$publisher->getId()}/", $updatedImage->getFilepath());
         $this->assertEquals("logo.jpg", $updatedImage->getFilename());
         $this->assertEquals(2, $updatedImage->getVersion());
         $this->assertEquals("image/jpeg", $updatedImage->getMediatype());
@@ -1288,8 +1277,7 @@ class ImagesServiceTest extends TestCase
     public function testAddImageForCreatesImageWithContributor(): void
     {
         // given
-        $contributor = new People();
-        $contributor->setId(1984);
+        $contributor = ModelFactory::createContributor();
         $site = ModelFactory::createSite();
 
         $config = new Config();
@@ -1306,7 +1294,7 @@ class ImagesServiceTest extends TestCase
         $this->assertInstanceOf(Image::class, $image);
         $this->assertEquals($site, $image->getSite());
         $this->assertEquals("portrait", $image->getType());
-        $this->assertEquals("contributors/1984/", $image->getFilepath());
+        $this->assertEquals("contributors/{$contributor->getId()}/", $image->getFilepath());
         $this->assertEquals("portrait.jpg", $image->getFilename());
         $this->assertEquals(1, $image->getVersion());
         $this->assertEquals("image/jpeg", $image->getMediatype());
@@ -1324,7 +1312,6 @@ class ImagesServiceTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $contributor = ModelFactory::createContributor();
-        $contributor->setId(1985);
 
         $config = new Config();
         $currentSite = new CurrentSite($site);
@@ -1343,7 +1330,7 @@ class ImagesServiceTest extends TestCase
         $updatedImage = ImageQuery::create()->findOneByContributorId($contributor->getId());
         $this->assertInstanceOf(Image::class, $updatedImage);
         $this->assertEquals($createdImage->getId(), $updatedImage->getId());
-        $this->assertEquals("contributors/1985/", $updatedImage->getFilepath());
+        $this->assertEquals("contributors/{$contributor->getId()}/", $updatedImage->getFilepath());
         $this->assertEquals("portrait.jpg", $updatedImage->getFilename());
         $this->assertEquals(2, $updatedImage->getVersion());
         $this->assertEquals("image/jpeg", $updatedImage->getMediatype());
