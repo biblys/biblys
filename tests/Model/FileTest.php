@@ -18,4 +18,18 @@ class FileTest extends TestCase
         // then
         $this->assertEquals("ePub", $type->getName());
     }
+
+    public function testGetFullPath(): void
+    {
+        // given
+        $file = new File();
+        $file->setArticleId(1234);
+        $file->setHash("abcd");
+
+        // when
+        $path = $file->getFullPath();
+
+        // then
+        $this->assertStringEndsWith("/content/downloadable/1234/abcd", $path);
+    }
 }
