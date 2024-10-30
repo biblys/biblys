@@ -26,7 +26,8 @@
     "images:import": "bin/console images:import",
     "images:export": "bin/console images:export",
     "images:optimize": "bin/console images:optimize",
-    "media:import": "bin/console media:import"
+    "media:import": "bin/console media:import",
+    "files:migrate": "bin/console files:migrate"
   },
   "require": {
     "php": "~8.1",
