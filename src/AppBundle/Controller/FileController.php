@@ -7,6 +7,7 @@ use Exception;
 use File;
 use FileManager;
 use Framework\Controller;
+use Model\FileQuery;
 use StockManager;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,15 +24,17 @@ class FileController extends Controller
         $fm = new FileManager();
         $sm = new StockManager();
 
-        /** @var File $file */
-        $file = $fm->getById($id);
-        if (!$file) {
+        /** @var File $fileEntity */
+        $fileEntity = $fm->getById($id);
+        if (!$fileEntity) {
             throw new NotFoundException("File $id not found.");
         }
 
+        $file = FileQuery::create()->findPk($fileEntity->get("id"));
+
         // Check download right
         try {
-            $file->canBeDownloadedBy($currentUser);
+            $fileEntity->canBeDownloadedBy($currentUser);
         } catch (AccessDeniedHttpException $exception) {
             throw $exception;
         } catch (Exception $exception) {
@@ -49,10 +52,10 @@ class FileController extends Controller
 
         // If file access is restricted
         $copy = false;
-        if ($file->get('access') == 1) {
+        if ($fileEntity->get('access') == 1) {
             // Find related copy
             $copy = $sm->get([
-                'article_id' => $file->get('article_id'),
+                'article_id' => $fileEntity->get('article_id'),
                 'user_id' => $currentUser->getUser()->getId(),
             ]);
             if (!$copy) {
@@ -61,7 +64,7 @@ class FileController extends Controller
         }
 
         // Increment download count
-        $file->addDownloadBy($currentUser);
+        $fileEntity->addDownloadBy($currentUser);
 
         // Remove updated marker on copy if necessary
         if ($copy && $copy->get('file_updated')) {
@@ -70,21 +73,22 @@ class FileController extends Controller
         }
 
         $filesystem = new FileSystem();
-        if (!$filesystem->exists($file->getPath())) {
+        $filePath = $file->getFullPath();
+        if (!$filesystem->exists($filePath)) {
             throw new NotFoundException("No content found for file $id.");
         }
 
-        $fileContent = file_get_contents($file->getPath());
+        $fileContent = file_get_contents($filePath);
 
         $response = new Response();
 
         // Force download only if non-public file
-        if ($file->get('access') == 1) {
-            $response->headers->set('Content-Disposition', 'attachment; filename='.$file->getName());
+        if ($fileEntity->get('access') == 1) {
+            $response->headers->set('Content-Disposition', 'attachment; filename='.$fileEntity->getName());
         }
 
-        $response->headers->set('Content-Type', $file->get('type'));
-        $response->headers->set('Content-Transfer-Encoding', $file->get('type'));
+        $response->headers->set('Content-Type', $fileEntity->get('type'));
+        $response->headers->set('Content-Transfer-Encoding', $fileEntity->get('type'));
         $response->headers->set('Pragma', 'no-cache');
         $response->headers->set('Cache-Control', 'must-revalidate, post-check=0, pre-check=0, public');
         $response->headers->set('Expires', '0');
