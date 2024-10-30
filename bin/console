@@ -17,6 +17,7 @@ use Command\CreateSeedsCommand;
 use Command\ExportImagesCommand;
 use Command\ImportImagesCommand;
 use Command\ImportMediaCommand;
+use Command\MigrateFilesCommand;
 use Command\OptimizeImagesCommand;
 use Command\ResetDatabaseCommand;
 use Symfony\Component\Console\Application;
@@ -37,6 +38,7 @@ try {
     $application->add(new ExportImagesCommand($imagesServices));
     $application->add(new OptimizeImagesCommand($config, $filesystem));
     $application->add(new ImportMediaCommand($currentSite, $filesystem));
+    $application->add(new MigrateFilesCommand($filesystem));
 } catch (InvalidSiteIdException) {
 }
 
