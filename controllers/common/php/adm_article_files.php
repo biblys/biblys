@@ -102,12 +102,9 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
         $file->setSize($size);
         $file->setUploaded(date('Y-m-d H:i:s'));
 
-        $filePath = $fileEntity->getDir().$file->getHash();
-        if (copy($uploadedFile["tmp_name"], $filePath)) {
-            $file->save();
-        } else {
-            throw new Exception('Copy error');
-        }
+        $fileSystem = new FileSystem();
+        $fileSystem->copy($uploadedFile["tmp_name"], $file->getFullPath());
+        $file->save();
 
         /** @var File $fileEntity */
         $fileEntity = $fm->getById($file->getId());
