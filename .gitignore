@@ -28,6 +28,7 @@ node_modules
 .phpunit.result.cache
 data/*
 .yarn
+content/downloadable
 
 # IDE config files
 .idea
