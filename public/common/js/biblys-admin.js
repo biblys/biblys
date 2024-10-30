@@ -182,7 +182,7 @@ function reloadAdminEvents() {
         dataType: 'json',
         success: function(r) {
           if (r.error) {
-            _alert('Erreur : ' + r.error);
+            _alert('Erreur : ' + r.error.message);
           } else if (r.success) {
             $('#dlfile_' + file_id).hide();
             notify(r.success);
@@ -215,7 +215,7 @@ function reloadAdminEvents() {
         dataType: 'json',
         success: function(r) {
           if (r.error) {
-            _alert('Erreur : ' + r.error);
+            _alert('Erreur : ' + r.error.message);
           } else if (r.success) {
             notify(r.success);
           }
@@ -277,7 +277,7 @@ function reloadAdminEvents() {
       xhr.onload = function() {
         var r = JSON.parse(xhr.response);
         if (r.error) {
-          _alert('Erreur : ' + r.error);
+          _alert('Erreur : ' + r.error.message);
         } else if (r.success) {
           $('#dlfile_' + file_id).replaceWith(r.new_line);
           notify(r.success);
