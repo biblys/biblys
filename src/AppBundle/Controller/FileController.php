@@ -8,6 +8,7 @@ use File;
 use FileManager;
 use Framework\Controller;
 use StockManager;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
@@ -68,6 +69,13 @@ class FileController extends Controller
             $sm->update($copy);
         }
 
+        $filesystem = new FileSystem();
+        if (!$filesystem->exists($file->getPath())) {
+            throw new NotFoundException("No content found for file $id.");
+        }
+
+        $fileContent = file_get_contents($file->getPath());
+
         $response = new Response();
 
         // Force download only if non-public file
@@ -81,7 +89,7 @@ class FileController extends Controller
         $response->headers->set('Cache-Control', 'must-revalidate, post-check=0, pre-check=0, public');
         $response->headers->set('Expires', '0');
 
-        $response->setContent(file_get_contents($file->getPath()));
+        $response->setContent($fileContent);
 
         $response->send();
         die();
