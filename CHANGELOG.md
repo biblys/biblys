@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 3.0.0 (DEV)
+## 3.0.0 (30 octobre 2024)
 
 ### Licence libre
 
@@ -11,7 +11,7 @@ https://blog.biblys.fr/posts/biblys-est-desormais-un-logiciel-libre
 - Ajout d'une licence AGPL-3.0.
 - Ajout d'en-têtes de licence à chaque fichier du code source.
 
-#### Expédition avec Mondial Relay
+### Expédition avec Mondial Relay
 
 - Biblys permet maintenant aux client·es de sélectionner un point de retrait
   Mondial Relay pour leur commande.
