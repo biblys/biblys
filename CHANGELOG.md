@@ -25,11 +25,26 @@
   couverture des articles d'une collection précise.
 - Sur la page d'édition d'un exemplaire, un nouveau bouton permet de marquer un
   exemplaire perdu comme retrouvé.
+- Une commande `files:migrate` a été ajoutée pour migrer les fichiers de
+  téléchargement des articles vers le nouveau répertoire.
 
 ### Instructions de mise à jour
 
-Après avoir procédé à l'installation de cette version, les logos d'éditeurs et
-les portraits de contributeur·ices doivent être importés avec les commandes :
+Après avoir procédé à l'installation de cette version…
+
+#### 1. Jouer les migrations
+
+```shell
+composer propel migrate
+```
+
+#### 2. Migrer les fichiers téléchargeables
+
+```shell
+composer files:migrate
+```
+
+#### 3. Importer les logos d'éditeurs, portraits de contributeur·ices et illustrations d'évènements
 
 ```shell
 composer images:import post
