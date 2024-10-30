@@ -4,6 +4,7 @@ use Biblys\Isbn\Isbn as Isbn;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Model\FileQuery;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,6 +42,8 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
 
     if ($action === "delete") {
         try {
+            $fileSystem = new FileSystem();
+            $fileSystem->remove($file->getFullPath());
             $file->delete();
         } catch (Exception $e) {
             error($e);
