@@ -71,7 +71,7 @@ composer files:migrate
 #### 3. Importer les logos d'éditeurs, portraits de contributeur·ices et illustrations d'évènements
 
 ```shell
-composer images:import post
+composer images:import publisher
 composer images:import people
 composer images:import event
 ```
