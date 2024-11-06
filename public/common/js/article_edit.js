@@ -311,7 +311,7 @@ function reloadArticleAdminEvents(scope) {
   $('.deleteLink').click(function () {
     var link_id = $(this).data('link_id');
     $('#link_' + link_id).fadeTo('fast', 0.5);
-    $.get('/x/adm_links', {
+    $.get('/pages/adm_links', {
       del: 1,
       link_id: link_id
     }, function (res) {
@@ -608,7 +608,7 @@ $(document).ready(function () {
     minLength: 3,
     delay: 250,
     select: function (event, ui) {
-      $.post('/x/adm_links', {
+      $.post('/pages/adm_links', {
         element_type: 'bundle',
         element_id: $('#article_id').val(),
         linkto_type: 'article',

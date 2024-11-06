@@ -6,6 +6,8 @@ Corrections
 
 - Certaines illustrations de billet de blog pouvaient ne pas s'afficher. C'est
   corrigé.
+- L'ajout d'un livre dans un lot pouvait échouer sans erreur. Maintenant, ça
+  marche.
 
 ## 3.0.0 (30 octobre 2024)
 

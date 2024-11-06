@@ -117,10 +117,6 @@ legacy_x_adm_images:
   path: /x/adm_images
   controller: ApiBundle\Controller\LegacyController::defaultAction
 
-legacy_x_adm_links:
-  path: /x/adm_links
-  controller: ApiBundle\Controller\LegacyController::defaultAction
-
 legacy_x_adm_reorder:
   path: /x/adm_reorder
   controller: ApiBundle\Controller\LegacyController::defaultAction
