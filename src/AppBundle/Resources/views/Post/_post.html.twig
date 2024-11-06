@@ -14,9 +14,9 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #}
 
-{% if post.hasIllustration() %}
+{% if post.model|hasImage() %}
   <div class="post-illustration">
-    <img src="{{ post.illustrationUrl }}" class="post-illustration-image" {% if post.has('illustration_legend') %} alt="{{ post.illustration_legend }}" {% endif %}>
+    <img src="{{ post.model|imageUrl }}" class="post-illustration-image" {% if post.has('illustration_legend') %} alt="{{ post.illustration_legend }}" {% endif %}>
   </div>
 {% endif %}
 

@@ -16,4 +16,4 @@
  */
 
 
-const BIBLYS_VERSION = "3.0.0";
+const BIBLYS_VERSION = "3.0.1-dev";

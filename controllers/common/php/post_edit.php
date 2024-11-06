@@ -169,7 +169,8 @@ return function (
         if ($imagesService->imageExistsFor($post)) {
             $postIllustrationUpload = '
                 <div class="text-center">
-                    ' . $postEntity->getIllustrationTag(height: 300) . '<br />
+                    <img src="'.$imagesService->getImageUrlFor($post, height: 300).'" height="300" alt="">
+                    <br />
                     <input type="checkbox" value=1 name="post_illustration_delete" id="illustration_delete" />
                     <label for="illustration_delete">Supprimer</label>
                 </div>

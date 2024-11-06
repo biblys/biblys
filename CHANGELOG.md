@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.0.1 (DEV)
+
+Corrections
+
+- Certaines illustrations de billet de blog pouvaient ne pas s'afficher. C'est
+  corrigé.
+
 ## 3.0.0 (30 octobre 2024)
 
 ### Licence libre
