@@ -54,9 +54,12 @@ use Symfony\Component\Routing\RequestContext;
 
 $container = new ContainerBuilder();
 
+$routes = RouteLoader::load();
+
+
 $container->register("context", RequestContext::class);
 $container->register("matcher", UrlMatcher::class)
-    ->setArguments(["%routes%", new Reference("context")]);
+    ->setArguments([$routes, new Reference("context")]);
 $container->register("request_stack", RequestStack::class);
 
 $container->register("controller_resolver", ControllerResolver::class);
@@ -104,9 +107,7 @@ $container->register("config", Config::class);
 $container->register("biblys_cloud", CloudService::class)
     ->setArguments([new Reference("config")]);
 
-$routes = RouteLoader::load();
-$container->setParameter("routes", $routes);
 $container->register("url_generator", UrlGenerator::class)
-    ->setArguments(["%routes%", new Reference("context")]);
+    ->setArguments([$routes, new Reference("context")]);
 
 return $container;

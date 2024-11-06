@@ -43,7 +43,6 @@ class RequestListenerTest extends TestCase
         $request = Request::createFromGlobals();
         $container = include __DIR__."/../../src/container.php";
         $routes = RouteLoader::load();
-        $container->setParameter("routes", $routes);
 
         // when
         $response = $container->get("framework")->handle($request);
