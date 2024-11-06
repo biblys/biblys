@@ -164,7 +164,16 @@ class ImportImagesCommand extends Command
                     continue;
                 }
 
-                $this->imagesService->addImageFor($model, $filePath);
+                try {
+
+                    $this->imagesService->addImageFor($model, $filePath);
+                } catch (Exception $exception) {
+                    $errorMessage = "Failed to import file $filePath: {$exception->getMessage()}";
+                    $output->writeln(["", $errorMessage]);
+                    $loggerService->log("images-import", "error", $errorMessage);
+                    $skippedFilesCount++;
+                    $progress->advance();
+                }
 
                 if ($modelType === "stock" || $modelType === "post" || $modelType === "event") {
                     $image = ImageQuery::create()->filterByModel($model)->findOne();
