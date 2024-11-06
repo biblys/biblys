@@ -85,7 +85,8 @@
     "ext-fileinfo": "*",
     "spatie/image": "^2.2",
     "sentry/sentry": "^4.9",
-    "dansmaculotte/mondialrelay-php": "^1.4"
+    "dansmaculotte/mondialrelay-php": "^1.4",
+    "spomky-labs/aes-key-wrap": "^7.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~10",
