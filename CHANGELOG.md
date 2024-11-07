@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 3.0.2 (DEV)
+
+Corrections
+
+- Le choix d'un mode d'expédition pouvait échouer sans erreur. C'est corrigé.
+
 ## 3.0.1 (6 novembre 2024)
 
 Corrections
