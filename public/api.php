@@ -36,7 +36,6 @@ Biblys\Database\Connection::initPropel($config);
 $routes = RouteLoader::load();
 
 $container = include __DIR__."/../src/container.php";
-$container->setParameter("routes", $routes);
 $container->register("listener.error", ErrorListener::class)
     ->setArguments(["ApiBundle\Controller\ErrorController::exception"]);
 $container->getDefinition("dispatcher")
