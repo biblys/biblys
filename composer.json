@@ -26,6 +26,7 @@
     "images:import": "bin/console images:import",
     "images:export": "bin/console images:export",
     "images:optimize": "bin/console images:optimize",
+    "images:migrate": "bin/console images:migrate",
     "media:import": "bin/console media:import",
     "files:migrate": "bin/console files:migrate"
   },

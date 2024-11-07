@@ -175,7 +175,7 @@ class ImagesService
     /**
      * @throws PropelException
      */
-    public function getImagePathFor(Article $article): ?string
+    public function getImagePathFor(Article|Stock|Post|Publisher|People|Event $article): ?string
     {
         $image = $this->_getImageFor($article);
         if (!$image->exists()) {
