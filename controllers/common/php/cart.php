@@ -300,11 +300,11 @@ return function (
                     $s["cover"] = null;
                     $stockItemPhotoUrl = $imagesService->getImageUrlFor($stockItem, height: 60);
                     $stockItemPhotoThumbnailUrl = $imagesService->getImageUrlFor($stockItem, height: 60);
-                    $articleCoverUrl = $imagesService->getImageUrlFor($articleModel, height: 100);
+                    $articleCoverUrl = $imagesService->getImageUrlFor($articleModel, height: 60);
                     if ($stockItemPhotoUrl) {
                         $s["cover"] = '<a href="' . $stockItemPhotoUrl . '" rel="lightbox"><img src="' . $stockItemPhotoThumbnailUrl . '" alt="' . $s["article_title"] . '" height="60" /></a>';
                     } elseif ($articleCoverUrl) {
-                        $s["cover"] = '<img src="' . $articleCoverUrl . '" alt="' . $articleEntity->get('title') . '" /></a>';
+                        $s["cover"] = '<img src="' . $articleCoverUrl . '" alt="' . $articleEntity->get('title') . '" height="60" /></a>';
                     }
 
                     $content .= '
