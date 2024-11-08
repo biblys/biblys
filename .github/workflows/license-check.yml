@@ -1,0 +1,59 @@
+name: License header check
+
+on:
+  push:
+    branches: [ "main", "dev" ]
+  pull_request:
+    branches: [ "main", "dev" ]
+
+jobs:
+  license-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.21
+
+      - name: Install NWA
+        run: go install github.com/B1NARY-GR0UP/nwa@v0.4.0
+
+      - name: Check license headers in .php files
+        run: |
+          nwa check \
+            --copyright "Clément Latzarus" \
+            --license agpl-3.0-only \
+            --skip "vendor/**" \
+            --skip "src/Model/Base/*.php" \
+            --skip "src/Model/Map/*.php" \
+            --skip "src/Biblys/Database/loadDatabase.php" \
+            "**/*.php"
+
+      - name: Check license headers in .js files
+        run: |
+          nwa check \
+            --copyright "Clément Latzarus" \
+            --license agpl-3.0-only \
+            --skip "node_modules/**" \
+            "assets/**/*.js" \
+            "public/assets/js/*.js" \
+            "public/common/js/*.js"
+
+      - name: Check license headers in .twig files
+        run: |
+          nwa check \
+            --copyright "Clément Latzarus" \
+            --license agpl-3.0-only \
+            --skip "app/**" \
+            "src/**/*.twig"
+
+      - name: Check license headers in .css files
+        run: |
+          nwa check \
+            --copyright "Clément Latzarus" \
+            --license agpl-3.0-only \
+            --skip "app/**" \
+            "assets/**/*.css" \
+            "public/common/css/*.css"
