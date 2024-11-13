@@ -31,5 +31,26 @@ use Model\Base\Order as BaseOrder;
  */
 class Order extends BaseOrder
 {
+    public function getTrackingLink(): string
+    {
+        $trackingNumber = $this->getTrackNumber();
 
+        if (!$trackingNumber) {
+            return "";
+        }
+
+        if ($this->getShippingMode() === "suivi") {
+            return "https://www.laposte.fr/outils/suivre-vos-envois?code=$trackingNumber";
+        }
+
+        if ($this->getShippingMode() === "mondial-relay") {
+            return sprintf(
+                "https://www.mondialrelay.fr/suivi-de-colis?numeroExpedition=%s&codePostal=%s",
+                $trackingNumber,
+                $this->getPostalcode()
+            );
+        }
+
+        return "";
+    }
 }
