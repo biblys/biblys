@@ -1,5 +1,13 @@
 # Historique des modifications
 
+### 3.1.0 (dev)
+
+Améliorations
+
+- Lors d'une expédition avec Mondial Relay, le lien de suivi est désormais
+  affiché sur la page de la commande et inclus dans le courriel de confirmation
+  d'expédition.
+
 ## 3.0.3 (DEV)
 
 Corrections
