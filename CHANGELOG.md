@@ -5,6 +5,8 @@
 Corrections
 
 - Le choix d'un mode d'expédition pouvait échouer sans erreur. C'est corrigé.
+- Les champs d'ajout d'image n'autorisait que certains formats. Ils autorisent
+  désormais tous JPEG, PNG ou WebP.
 
 ## 3.0.1 (6 novembre 2024)
 

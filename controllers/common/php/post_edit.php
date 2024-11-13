@@ -144,7 +144,7 @@ return function (
 
     $postIllustrationUpload = '
         <label for="post_illustration">Image :</label>
-        <input type="file" id="post_illustration_upload" name="post_illustration_upload" accept="image/jpeg" />
+        <input type="file" id="post_illustration_upload" name="post_illustration_upload" accept="image/jpeg, image/png, image/webp" />
     ';
 
     if ($postEntity) {

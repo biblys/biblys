@@ -195,10 +195,10 @@ return function (
 
     // Logo
     if ($imagesService->imageExistsFor($publisher)) {
-        $publisher_logo_upload = '<input type="file" id="publisher_logo_upload" name="publisher_logo_upload" accept="image/png" class="hidden"> <label class="after button" for="publisher_logo_upload">Remplacer</label> <input type="checkbox" id="publisher_logo_delete" name="publisher_logo_delete" value="1" /> <label for="publisher_logo_delete" class="after">Supprimer</label>';
+        $publisher_logo_upload = '<input type="file" id="publisher_logo_upload" name="publisher_logo_upload" accept="image/jpeg, image/png, image/webp" class="hidden"> <label class="after button" for="publisher_logo_upload">Remplacer</label> <input type="checkbox" id="publisher_logo_delete" name="publisher_logo_delete" value="1" /> <label for="publisher_logo_delete" class="after">Supprimer</label>';
         $publisher_logo = '<a href="' . $imagesService->getImageUrlFor($publisher) . '" rel="lightbox"><img height="100" src="' . $imagesService->getImageUrlFor($publisher, height: 100) . '" alt="Logo" class="floatR"></a>';
     } else {
-        $publisher_logo_upload = '<input type="file" id="publisher_logo_upload" accept="image/png" name="publisher_logo_upload">';
+        $publisher_logo_upload = '<input type="file" id="publisher_logo_upload" accept="image/jpeg, image/png, image/webp" name="publisher_logo_upload">';
         $publisher_logo = NULL;
     }
 

@@ -786,7 +786,7 @@ return function (
             <br /><br />
 
             <label for="upload_photo">Photo :</label>
-            <input type="file" accept="image/jpeg" id="upload_photo" name="upload_photo" />
+            <input type="file" accept="image/jpeg, image/png, image/webp" id="upload_photo" name="upload_photo" />
             <br /><br />
 
             ' . $tva . $remises . '
