@@ -18,6 +18,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\LoggerService;
@@ -41,6 +42,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Twig\Error\LoaderError;
@@ -153,42 +155,53 @@ class OrderController extends Controller
     }
 
     /**
+     * @throws InvalidEmailAddressException
+     * @throws TransportExceptionInterface
      * @throws Exception
      */
     public function updateAction(Request $request, $id, $action): JsonResponse
     {
-        $om = new OrderManager();
-        $order = $om->getById($id);
         $notice = "";
 
+
+        /** @var Order $orderEntity */
+        $om = new OrderManager();
+        $orderEntity = $om->getById($id);
+
+        /** @var \Model\Base\Order $order */
+        $order = OrderQuery::create()->findPk($id);
+
         if ($action == 'payed') {
-            $amount = $order->get('amount_tobepaid');
+            $amount = $orderEntity->get('amount_tobepaid');
             $payment_mode = $request->request->get('payment_mode');
-            $om->addPayment($order, $payment_mode, $amount);
-            $notice = 'La commande n°&nbsp;'.$order->get('id').' de '.$order->get('firstname').' '.$order->get('lastname').' a été marquée comme payée.';
+            $om->addPayment($orderEntity, $payment_mode, $amount);
+            $notice = 'La commande n°&nbsp;'.$orderEntity->get('id').' de '.$orderEntity->get('firstname').' '.$orderEntity->get('lastname').' a été marquée comme payée.';
         }
 
         if ($action == 'shipped') {
-            $tracking_number = $request->request->get('tracking_number');
-            if (strlen($tracking_number) > 16) {
+            $trackingNumber = $request->request->get("tracking_number");
+            if (strlen($trackingNumber) > 16) {
                 throw new BadRequestHttpException("Le numéro de suivi ne peut pas dépasser 16 caractères.");
             }
 
-            $om->markAsShipped($order, $tracking_number);
-            $notice = 'La commande n°&nbsp;'.$order->get('id').' de '.$order->get('firstname').' '.$order->get('lastname').' a été marquée comme expédiée.';
+            $order->setTrackNumber($trackingNumber);
+            $orderEntity->set("tracking_number", $trackingNumber);
+
+            $om->markAsShipped($orderEntity, $order->getTrackingLink());
+            $notice = 'La commande n°&nbsp;'.$orderEntity->get('id').' de '.$orderEntity->get('firstname').' '.$orderEntity->get('lastname').' a été marquée comme expédiée.';
         }
 
         if ($action == 'followup') {
-            $om->followUp($order);
-            $notice = 'Le client '.$order->get('firstname').' '.$order->get('lastname').' a été relancée pour la commande n°&nbsp;'.$order->get('id').'.';
+            $om->followUp($orderEntity);
+            $notice = 'Le client '.$orderEntity->get('firstname').' '.$orderEntity->get('lastname').' a été relancée pour la commande n°&nbsp;'.$orderEntity->get('id').'.';
         } elseif ($action == 'cancel') {
-            $om->cancel($order);
-            $notice = 'La commande n°&nbsp;'.$order->get('id').' de '.$order->get('firstname').' '.$order->get('lastname').' a été annulée.';
+            $om->cancel($orderEntity);
+            $notice = 'La commande n°&nbsp;'.$orderEntity->get('id').' de '.$orderEntity->get('firstname').' '.$orderEntity->get('lastname').' a été annulée.';
         }
 
         return new JsonResponse([
             'notice' => $notice,
-            'order' => $this->_jsonOrder($order),
+            'order' => $this->_jsonOrder($orderEntity),
         ]);
     }
 

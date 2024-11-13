@@ -16,6 +16,8 @@
  */
 
 
+use Biblys\Data\ArticleType;
+use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
@@ -970,10 +972,10 @@ class OrderManager extends EntityManager
 
     /**
      * Mark the order as shipped and warn customer by mail
-     * @param  Order  $order           the order to mark
-     * @param  String $trackingNumber a tracking number
+     * @throws TransportExceptionInterface
+     * @throws InvalidEmailAddressException
      */
-    public function markAsShipped(Order $order, $trackingNumber = null)
+    public function markAsShipped(Order $order, $trackingLink = null): void
     {
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
@@ -982,8 +984,8 @@ class OrderManager extends EntityManager
         // Save shipping date
         $order->set('order_shipping_date', date('Y-m-d H:i:s'));
 
-        if ($trackingNumber) {
-            $order->set('order_track_number', $trackingNumber);
+        if ($trackingLink) {
+            $order->set("order_track_number", $order->get("track_number"));
         }
 
         $message = null;
@@ -1010,12 +1012,11 @@ class OrderManager extends EntityManager
             }
 
             $message .= '<p>'.$shippedMessage.'</p>';
-            if ($trackingNumber) {
+            if ($trackingLink) {
                 $message .= '
-                    <p>N° de suivi : '.$trackingNumber.'</p>
                     <p>
-                        Vous pouvez suivre l\'envoi de votre colis sur le site de La Poste :<br>
-                        http://www.coliposte.net/particulier/suivi_particulier.jsp?colispart='.$trackingNumber.'
+                        Pour suivre l’envoi, rendez-vous sur :<br />
+                        <a href="'.$trackingLink.'">'.$trackingLink.'</a>
                     </p>
                 ';
             }
