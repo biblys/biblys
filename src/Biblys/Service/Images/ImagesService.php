@@ -84,7 +84,6 @@ class ImagesService
         if ($image->exists()) {
             $imageModel = $image->getModel();
             $imageModel->setVersion($imageModel->getVersion() + 1);
-            $this->filesystem->remove($image->getFilePath());
         } else {
             $imageModel = new Image();
             $imageModel->setVersion(1);
