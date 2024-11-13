@@ -1,0 +1,129 @@
+<?php
+/*
+ * Copyright (C) 2024 Clément Latzarus
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+
+namespace ApiBundle\Controller;
+
+use Biblys\Exception\InvalidConfigurationException;
+use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
+use Biblys\Service\QueryParamsService;
+use Framework\Controller;
+use League\Csv\CannotInsertRecord;
+use League\Csv\Exception;
+use League\Csv\Writer;
+use Model\OrderQuery;
+use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\Response;
+
+class OrderController extends Controller
+{
+    /**
+     * @throws PropelException
+     * @throws CannotInsertRecord
+     * @throws Exception
+     * @throws InvalidConfigurationException
+     */
+    public function exportAction(
+        CurrentUser        $currentUser,
+        CurrentSite        $currentSite,
+        Config             $config,
+        QueryParamsService $queryParams,
+    ): Response
+    {
+        $currentUser->authAdmin();
+
+        $queryParams->parse([
+            "status" => ["type" => "numeric", "default" => 0],
+            "payment" => ["type" => "string"],
+            "shipping" => ["type" => "string"],
+            "query" => ["type" => "string"],
+        ]);
+
+        $orderQuery = OrderQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByCancelDate(null, Criteria::ISNULL);
+
+        if ($queryParams->getInteger("status") === 2) {
+            $orderQuery
+                ->filterByPaymentDate(null, Criteria::ISNOTNULL)
+                ->filterByShippingDate(null, Criteria::ISNULL);
+        }
+
+        if ($queryParams->get("shipping")) {
+            $orderQuery->joinWithShippingFee()
+                ->useShippingFeeQuery()
+                ->filterByType($queryParams->get("shipping"))
+                ->endUse();
+        }
+
+        $csv = Writer::createFromString();
+        $csv->setDelimiter(';');
+
+        $collectPointId = $config->get("mondial_relay.id_relais_collecte");
+        if (!$collectPointId) {
+            throw new InvalidConfigurationException(
+                "L'option de configuration mondial_relay.id_relais_collecte doit être renseignée."
+            );
+        }
+
+        $shippingPackagingWeight = $currentSite->getOption("shipping_packaging_weight");
+        $orders = $orderQuery->find();
+        foreach ($orders as $order) {
+            $orderWeight = $order->getTotalWeight() + $shippingPackagingWeight;
+            $record = [
+                $order->getCustomerId(),                                         # A - Numéro de client (F)
+                $order->getId(),                                                 # B - Numéro de commande (F)
+                trim("{$order->getFirstname()} {$order->getLastname()}"), # C - Adresse de livraison (Nom du client final) (O)
+                "",                                                              # D - Adresse de livraison (Complément du nom) (F)
+                $order->getAddress1(),                                           # E - Adresse du destinataire (Numéro + Rue) (O)
+                $order->getAddress2(),                                           # F - Adresse du destinataire (Complément d'adresse) (F)
+                $order->getCity(),                                               # G - Ville du destinataire (O)
+                $order->getPostalcode(),                                         # H - Code Postal du destinataire (O)
+                $order->getCountry()->getCode(),                                 # I - Pays du destinataire (O)
+                $order->getPhone(),                                              # J - Téléphone fixe du destinataire (F)
+                "",                                                              # K - Téléphone cellulaire (F)
+                $order->getEmail(),                                              # L - Adresse e-mail du destinataire (F)
+                "R",                                                             # M - Type Collect (R = Relais)
+                $collectPointId,                                                 # N - Id Relais Collecte
+                "FR",                                                            # O - Code Pays Collecte
+                "R",                                                             # P - Type Livraison (R = Relais)
+                $order->getMondialRelayPickupPointCode(),                        # Q - Id Relais de Livraison
+                "FR",                                                            # R - Code Pays du Relais de Livraison (FR = France)
+                "24R",                                                           # S - Mode de livraison (24R = Point Relais)
+                "FR",                                                            # T - Code Langue du Destinataire
+                "1",                                                             # U - Nombre de colis
+                $orderWeight,                                        # V - Poids en grammes
+            ];
+            $recordWithEmptyFields = array_merge($record, array_fill(0, 22, ""));
+            $csv->insertOne($recordWithEmptyFields);
+        }
+
+        $csvAsString = $csv->toString();
+        $csvWithoutQuotes = str_replace('"', '', $csvAsString);
+
+        return new Response(
+            content: $csvWithoutQuotes,
+            headers: [
+                "Content-Type" => "text/csv",
+                "Content-Disposition" => "attachment; filename=\"commandes.csv\"",
+            ]
+        );
+    }
+}

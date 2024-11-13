@@ -37,6 +37,13 @@ api_contribution_delete:
   methods: DELETE
   controller: ApiBundle\Controller\ContributionController::delete
 
+# Orders
+
+api_orders_export:
+  methods: GET
+  path: /api/admin/orders/export
+  controller: ApiBundle\Controller\OrderController::exportAction
+
 # Shipping
 
 api_shipping:
