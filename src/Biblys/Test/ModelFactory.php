@@ -25,6 +25,7 @@ use Model\Alert;
 use Model\Article;
 use Model\ArticleCategory;
 use Model\AuthenticationMethod;
+use Model\CountryQuery;
 use Model\Customer;
 use Model\Event;
 use Model\File;
@@ -261,12 +262,25 @@ class ModelFactory
     public static function createOrder(
         Site        $site = null,
         User        $user = null,
+        Customer    $customer = null,
         ShippingFee $shippingFee = null,
         string      $axysAccountId = null,
         string      $slug = null,
+        string      $firstName = "Silas",
+        string      $lastName = "Coade",
+        string      $address1 = "1 rue de la Fissure",
+        string      $address2 = "Appartement 2",
+        string      $postalCode = "33000",
+        string      $city = "Bordeaux",
+        Country     $country = null,
+        string      $phone = "0601020304",
+        string      $email = "silas.coade@example.net",
+        string      $mondialRelayPickupPointCode = null,
     ): Order
     {
+        $customer = $customer ?? ModelFactory::createCustomer($site, $user);
         $shipping = $shippingFee ?? ModelFactory::createShippingFee();
+        $country = $country ?? CountryQuery::create()->findOneByCode("FR");
 
         $order = new Order();
         $order->setSite($site ?? ModelFactory::createSite());
@@ -275,6 +289,18 @@ class ModelFactory
         $order->setType("web");
         $order->setAxysAccountId($axysAccountId);
         $order->setSlug($slug ?? "order-slug");
+        $order->setCustomerId($customer->getId());
+        $order->setFirstname($firstName);
+        $order->setLastname($lastName);
+        $order->setAddress1($address1);
+        $order->setAddress2($address2);
+        $order->setPostalcode($postalCode);
+        $order->setCity($city);
+        $order->setCountryId($country->getId());
+        $order->setPhone($phone);
+        $order->setEmail($email);
+        $order->setMondialRelayPickupPointCode($mondialRelayPickupPointCode);
+
         $order->save();
 
         return $order;
