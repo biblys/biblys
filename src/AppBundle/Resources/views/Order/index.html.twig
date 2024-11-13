@@ -24,6 +24,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
   <h1><span class="fa fa-dropbox"></span> Commandes web</h1>
 
+  <a href="{{ path('api_orders_export') }}">Exporter</a>
+
   <form id="showOrders" class="fieldset form-horizontal">
     <fieldset>
       <legend>Filtres</legend>
@@ -32,7 +34,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <label for="order_status" class="col-sm-2 control-label">Statut</label>
         <div class="col-sm-10">
           <select id="order_status" class="form-control">
-            <option value="">Tout</option>
+            <option value="0">Tout</option>
             <option value="1"{{ app.request.get('status') == 1 ? ' selected' }}>&Agrave; payer</option>
             <option value="2"{{ app.request.get('status') == 2 ? ' selected' }}>&Agrave; expédier</option>
             <option value="3"{{ app.request.get('status') == 3 ? ' selected' }}>&Agrave; mettre à dispo.</option>
