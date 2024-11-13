@@ -5,8 +5,11 @@
 Corrections
 
 - Le choix d'un mode d'expédition pouvait échouer sans erreur. C'est corrigé.
-- Les champs d'ajout d'image n'autorisait que certains formats. Ils autorisent
+- Les champs d'ajout d'image n'autorisaient que certains formats. Ils autorisent
   désormais tous JPEG, PNG ou WebP.
+- La contrainte du nombre d'articles dans une commande pour une tranche
+  tarifaire de frais de port n'était pas prise en compte. C'est maintenant le
+  cas.
 
 ## 3.0.1 (6 novembre 2024)
 

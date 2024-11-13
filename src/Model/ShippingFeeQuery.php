@@ -41,18 +41,15 @@ class ShippingFeeQuery extends BaseShippingFeeQuery
     }
 
     /**
-     * @param CurrentSite $currentSite
-     * @param Country $country
-     * @param int $weight
-     * @param int $amount
      * @return ShippingFee[]
      * @throws Exception
      */
-    public static function getForCountryWeightAndAmount(
+    public static function getForCountryAndWeightAndAmountAndArticleCount(
         CurrentSite $currentSite,
         Country $country,
         int $weight,
-        int $amount
+        int $amount,
+        int $articleCount
     ): array
     {
         $weightIncludingWrapping = $weight * 1.05;
@@ -64,14 +61,14 @@ class ShippingFeeQuery extends BaseShippingFeeQuery
         $shippingTypes = ['magasin', 'normal', 'suivi', 'mondial-relay'];
 
         $feesForEachTypes = array_map(
-            function ($type) use ($fees, $zone, $weightIncludingWrapping, $amount, $currentSite) {
+            function ($type) use ($fees, $zone, $weightIncludingWrapping, $amount, $currentSite, $articleCount) {
                 foreach ($fees as $fee) {
                     // Keeps only fees for current type
                     if ($fee->getType() !== $type) {
                         continue;
                     }
 
-                    // Keep only shipping without article
+                    // Keep only shipping without an article
                     if ($fee->getArticleId()) {
                         continue;
                     }
@@ -93,6 +90,11 @@ class ShippingFeeQuery extends BaseShippingFeeQuery
 
                     // Keep only fees for which order's amount is lesser than max amount
                     if ($fee->getMaxAmount() !== null && $amount > $fee->getMaxAmount()) {
+                        continue;
+                    }
+
+                    // Keep only fees for which order's article count is lesser than max articles
+                    if ($fee->getMaxArticles() !== null && $articleCount > $fee->getMaxArticles()) {
                         continue;
                     }
 

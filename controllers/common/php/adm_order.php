@@ -188,15 +188,18 @@ return function (Request $request, CurrentSite $currentSite): Response|RedirectR
         return '<option value="' . $country->get('id') . '"' . ($country == $order->get('country') ? ' selected' : null) . '>' . $country->get('name') . '</option>';
     }, $countries);
 
+    $stockItemCount = \Model\StockQuery::create()->filterByOrderId($order->get('id'))->count();
+
     $feesList = [];
     $country = $order->get("country");
     if ($country instanceof Country) {
         $countryModel = CountryQuery::create()->findPk($country->get("id"));
-        $fees = ShippingFeeQuery::getForCountryWeightAndAmount(
+        $fees = ShippingFeeQuery::getForCountryAndWeightAndAmountAndArticleCount(
             $currentSite,
             $countryModel,
             $order->getTotalWeight(),
             $order->get('amount'),
+            articleCount: $stockItemCount,
         );
         $feesList = array_map(function ($fee) {
             return '<option value="' . $fee->getId() . '">' . $fee->getMode() . ' [' . currency($fee->getFee(), true) . ']</option>';

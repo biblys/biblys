@@ -33,7 +33,7 @@ class ShippingFeeQueryTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
-    public function testGetForCountryAmountAndWeight()
+    public function testGetForCountryAndAmountAndWeightAndArticleCount()
     {
         // given
         $site = ModelFactory::createSite();
@@ -47,17 +47,58 @@ class ShippingFeeQueryTest extends TestCase
         $currentSite = new CurrentSite($site);
 
         // when
-        list(, $feeNormal) = ShippingFeeQuery::getForCountryWeightAndAmount(
+        list(, $feeNormal) = ShippingFeeQuery::getForCountryAndWeightAndAmountAndArticleCount(
             $currentSite,
             $country,
             $orderWeight,
-            $orderAmount
+            $orderAmount,
+            articleCount: 1
         );
 
         // then
         $this->assertEquals(
             $feeNormal,
             $fee
+        );
+    }
+
+    /**
+     * Test getting fees
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetForWithArticleCountConstraint()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $country = ModelFactory::createCountry();
+        ModelFactory::createShippingFee(
+            site: $site,
+            country: $country,
+            maxArticles: 1
+        );
+        $feeForTwoArticles = ModelFactory::createShippingFee(
+            site: $site,
+            country: $country,
+            maxArticles: 2
+        );
+        $orderWeight = 500;
+        $orderAmount = 1500;
+        $currentSite = new CurrentSite($site);
+
+        // when
+        list(, $returnedFee) = ShippingFeeQuery::getForCountryAndWeightAndAmountAndArticleCount(
+            $currentSite,
+            $country,
+            $orderWeight,
+            $orderAmount,
+            articleCount: 2
+        );
+
+        // then
+        $this->assertEquals(
+            $returnedFee,
+            $feeForTwoArticles
         );
     }
 }

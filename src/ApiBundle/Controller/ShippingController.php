@@ -21,6 +21,7 @@ namespace ApiBundle\Controller;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\InvalidSiteIdException;
 use Exception;
 use Framework\Controller;
 use Model\CountryQuery;
@@ -131,6 +132,7 @@ class ShippingController extends Controller
 
     /**
      * @route GET /api/shipping/{id}
+     * @throws InvalidSiteIdException
      */
     public function get(Config $config, int $id): JsonResponse
     {
@@ -160,11 +162,13 @@ class ShippingController extends Controller
 
         $orderWeight = $request->query->get("order_weight", 0);
         $orderAmount = $request->query->get("order_amount", 0);
-        $fees = ShippingFeeQuery::getForCountryWeightAndAmount(
+        $articleCount = $request->query->get("article_count", 0);
+        $fees = ShippingFeeQuery::getForCountryAndWeightAndAmountAndArticleCount(
             $currentSite,
             $country,
             $orderWeight,
-            $orderAmount
+            $orderAmount,
+            $articleCount
         );
         $serializedFees = array_values(array_map(function ($fee) {
                 return [
@@ -251,9 +255,7 @@ class ShippingController extends Controller
     }
 
     /**
-     * @param Config $config
-     * @param int $id
-     * @return ShippingFee
+     * @throws InvalidSiteIdException
      */
     private static function _getFeeFromId(Config $config, int $id): ShippingFee
     {

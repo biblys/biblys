@@ -335,7 +335,8 @@ class ShippingControllerTest extends TestCase
             info: "Expedition sous 72h",
             fee: 560,
             maxWeight: 2000,
-            maxAmount: 10000
+            maxAmount: 10000,
+            maxArticles: 5,
         );
         $country = ModelFactory::createCountry();
         $controller = new ShippingController();
@@ -343,6 +344,7 @@ class ShippingControllerTest extends TestCase
         $request->query->set("country_id", $country->getId());
         $request->query->set("order_weight", "500");
         $request->query->set("order_amount", "2000");
+        $request->query->set("article_count", "2");
         $currentSite = new CurrentSite($site);
 
         // when

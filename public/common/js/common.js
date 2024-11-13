@@ -799,7 +799,8 @@ function reloadEvents(scope) {
 
     const orderWeightInput = document.querySelector('#order_weight');
     const orderAmountInput = document.querySelector('#order_amount');
-    const query = `country_id=${countryId}&order_weight=${orderWeightInput.value}&order_amount=${orderAmountInput.value}`;
+    const articleCountInput = document.querySelector('#article_count');
+    const query = `country_id=${countryId}&order_weight=${orderWeightInput.value}&order_amount=${orderAmountInput.value}&article_count=${articleCountInput.value}`;
 
     const response = await fetch(`/api/shipping/search?${query}`);
     const json = await response.json();
