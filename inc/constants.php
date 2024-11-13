@@ -15,5 +15,4 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
-const BIBLYS_VERSION = "3.0.2-dev";
+const BIBLYS_VERSION = "3.0.2-dev.1";

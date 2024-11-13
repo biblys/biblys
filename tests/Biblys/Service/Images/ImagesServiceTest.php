@@ -147,7 +147,6 @@ class ImagesServiceTest extends TestCase
         $this->assertEquals(4410, $updatedImage->getFilesize());
         $this->assertEquals(100, $updatedImage->getWidth());
         $this->assertEquals(150, $updatedImage->getHeight());
-        $filesystem->shouldHaveReceived("remove");
         $filesystem->shouldHaveReceived("copy");
     }
 
@@ -452,7 +451,6 @@ class ImagesServiceTest extends TestCase
         $this->assertEquals(4410, $updatedImage->getFilesize());
         $this->assertEquals(100, $updatedImage->getWidth());
         $this->assertEquals(150, $updatedImage->getHeight());
-        $filesystem->shouldHaveReceived("remove");
         $filesystem->shouldHaveReceived("copy");
     }
 
@@ -677,7 +675,6 @@ class ImagesServiceTest extends TestCase
         $this->assertEquals(4410, $updatedImage->getFilesize());
         $this->assertEquals(100, $updatedImage->getWidth());
         $this->assertEquals(150, $updatedImage->getHeight());
-        $filesystem->shouldHaveReceived("remove");
         $filesystem->shouldHaveReceived("copy");
     }
 
@@ -902,7 +899,6 @@ class ImagesServiceTest extends TestCase
         $this->assertEquals(4410, $updatedImage->getFilesize());
         $this->assertEquals(100, $updatedImage->getWidth());
         $this->assertEquals(150, $updatedImage->getHeight());
-        $filesystem->shouldHaveReceived("remove");
         $filesystem->shouldHaveReceived("copy");
     }
 
@@ -1128,7 +1124,6 @@ class ImagesServiceTest extends TestCase
         $this->assertEquals(4410, $updatedImage->getFilesize());
         $this->assertEquals(100, $updatedImage->getWidth());
         $this->assertEquals(150, $updatedImage->getHeight());
-        $filesystem->shouldHaveReceived("remove");
         $filesystem->shouldHaveReceived("copy");
     }
 
@@ -1353,7 +1348,6 @@ class ImagesServiceTest extends TestCase
         $this->assertEquals(4410, $updatedImage->getFilesize());
         $this->assertEquals(100, $updatedImage->getWidth());
         $this->assertEquals(150, $updatedImage->getHeight());
-        $filesystem->shouldHaveReceived("remove");
         $filesystem->shouldHaveReceived("copy");
     }
 

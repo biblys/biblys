@@ -157,11 +157,16 @@ class ImportImagesCommand extends Command
                 $modelTitle = $this->_getModelTitle($model, $modelType);
 
                 if ($this->imagesService->imageExistsFor($model)) {
-                    $progress->setMessage("Skipped already imported image for $modelType $modelId ($modelTitle)");
-                    $loggerService->log("images-import", "info", "Ignored already imported image for $modelType $modelId ($modelTitle)");
-                    $progress->advance();
-                    $skippedFilesCount++;
-                    continue;
+                    $fileExistsForImage = file_exists($this->imagesService->getImagePathFor($model));
+                    if ($fileExistsForImage) {
+                        $progress->setMessage("Skipped already imported image for $modelType $modelId ($modelTitle)");
+                        $loggerService->log("images-import", "info", "Skipped already imported image for $modelType $modelId ($modelTitle)");
+                        $progress->advance();
+                        $skippedFilesCount++;
+                        continue;
+                    }
+
+                    $loggerService->log("images-import", "info", "Reimporting missing file image for $modelType $modelId ($modelTitle)");
                 }
 
                 try {
@@ -173,6 +178,7 @@ class ImportImagesCommand extends Command
                     $loggerService->log("images-import", "error", $errorMessage);
                     $skippedFilesCount++;
                     $progress->advance();
+                    continue;
                 }
 
                 if ($modelType === "stock" || $modelType === "post" || $modelType === "event") {
@@ -218,11 +224,13 @@ class ImportImagesCommand extends Command
      */
     private function _getModelTitle(Article|Stock|Post|Publisher|People|Event $model, string $modelType): string
     {
-        return match ($modelType) {
+        $title = match ($modelType) {
             "article", "post", "event" => $model->getTitle(),
             "stock" => $model->getArticle()->getTitle(),
             "publisher", "people" => $model->getName(),
             default => throw new Exception("Unsupported model type $modelType"),
         };
+
+        return $title !== null ? $title : "Titre inconnu";
     }
 }
