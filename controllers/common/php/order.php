@@ -25,6 +25,7 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
 use DansMaCulotte\MondialRelay\DeliveryChoice;
+use Model\OrderQuery;
 use Model\StockQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,6 +56,8 @@ return function (
     if (!$orderEntity) {
         throw new NotFoundException("Order $orderUrl not found.");
     }
+
+    $order = OrderQuery::create()->findPk($orderEntity->get('id'));
 
     $o = $orderEntity;
     $content = '';
@@ -191,17 +194,16 @@ return function (
         else $buttons .= '<a href="/invoice/' . $o["order_url"] . '" class="btn btn-default"><i class="fa fa-print"></i> Imprimer une facture</a> ';
 
         $currentSite = $currentSiteService->getSite();
-        if ($o["order_shipping_date"]) {
-            if ($o["order_track_number"]) {
-                $content .= '
-                    <p class="center">
-                        Numéro de suivi : 
-                        <a href="https://www.laposte.fr/outils/suivre-vos-envois?code=' . $o["order_track_number"] . '">
-                            ' . $o["order_track_number"] . '
-                        </a>
-                    </p><br />
-                ';
-            }
+        $trackingLink = $order->getTrackingLink();
+        if ($trackingLink) {
+            $content .= '
+                <p class="text-center">
+                    Numéro de suivi : ' . $o["order_track_number"] . '
+                    <a href="'.$trackingLink.'" class="btn btn-primary">
+                      Suivre l’envoi
+                    </a>
+                </p><br />
+            ';
         }
 
         $content .= $buttons;
