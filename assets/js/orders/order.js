@@ -153,8 +153,10 @@ export default class Order {
         icon.attr('class', 'fa fa-spinner fa-spin');
 
         // Ask for tracking number
-        if (self.data.shipping_mode == 'suivi' && action == 'shipped') {
-          tracking_number = prompt('Numéro de suivi ?');
+        const shippingModeUsesTracking = self.data.shipping_mode === 'suivi' || self.data.shipping_mode === 'mondial-relay';
+        debugger;
+        if (shippingModeUsesTracking && action === 'shipped') {
+          tracking_number = window.prompt('Numéro de suivi ?');
           if (tracking_number === null) {
             new Notification(
               'La commande n\'a pas été marquée comme expédiée.', { type: 'warning' });
