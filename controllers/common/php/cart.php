@@ -415,7 +415,7 @@ return function (
 
                 <input type="hidden" id="order_weight" value="' . $Poids . '">
                 <input type="hidden" id="order_amount" value="' . $Total . '">
-                <input type="hidden" id="articles_num" value="' . $Articles . '">
+                <input type="hidden" id="article_count" value="' . $Articles . '">
 
                 <table class="table">
                     <thead>

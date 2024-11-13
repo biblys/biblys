@@ -431,7 +431,7 @@ class ModelFactory
         int     $maxWeight = 1000,
         int     $minAmount = 0,
         int     $maxAmount = 2000,
-        int     $maxArticles = 10,
+        int     $maxArticles = 10
     ): ShippingFee
     {
         $shippingFee = new ShippingFee();
