@@ -58,7 +58,6 @@ class MigrateFilesCommand extends Command
         $filesToMigrate = FileQuery::create()
             ->filterBySiteId(null, Criteria::ISNULL)
             ->leftJoinWithArticle()
-            ->limit(10)
             ->find();
 
         $progressBar = new ProgressBar($output, $filesToMigrate->count());
