@@ -57,7 +57,7 @@ class MainControllerTest extends TestCase
      * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
-     * @throws Exception
+     * @throws Exception|\PHPUnit\Framework\MockObject\Exception
      */
     public function testHomeWithDefaultTemplate()
     {
@@ -109,7 +109,7 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws Exception
+     * @throws Exception|\PHPUnit\Framework\MockObject\Exception
      */
     public function testHomeAsStaticPage()
     {
@@ -170,7 +170,7 @@ class MainControllerTest extends TestCase
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws TransportExceptionInterface
-     * @throws Exception
+     * @throws Exception|\PHPUnit\Framework\MockObject\Exception
      */
     public function testContact()
     {
@@ -204,6 +204,8 @@ class MainControllerTest extends TestCase
             $currentUserService,
             $templateService,
             $mailer,
+            $config,
+            $currentSiteService,
         );
 
         // then
@@ -224,7 +226,7 @@ class MainControllerTest extends TestCase
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws TransportExceptionInterface
-     * @throws Exception
+     * @throws Exception|\PHPUnit\Framework\MockObject\Exception
      */
     public function testContactWithTooShortSubject()
     {
@@ -258,6 +260,8 @@ class MainControllerTest extends TestCase
             $currentUserService,
             $templateService,
             $mailer,
+            $config,
+            $currentSiteService,
         );
 
         // then
@@ -278,7 +282,7 @@ class MainControllerTest extends TestCase
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws TransportExceptionInterface
-     * @throws Exception
+     * @throws Exception|\PHPUnit\Framework\MockObject\Exception
      */
     public function testContactWithTooShortBody()
     {
@@ -312,6 +316,8 @@ class MainControllerTest extends TestCase
             $currentUserService,
             $templateService,
             $mailer,
+            $config,
+            $currentSiteService,
         );
 
         // then
@@ -332,7 +338,7 @@ class MainControllerTest extends TestCase
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws TransportExceptionInterface
-     * @throws Exception
+     * @throws Exception|\PHPUnit\Framework\MockObject\Exception
      */
     public function testContactWithFilledHoneyPotField()
     {
@@ -366,6 +372,8 @@ class MainControllerTest extends TestCase
             $currentUserService,
             $templateService,
             $mailer,
+            $config,
+            $currentSiteService,
         );
 
         // then
@@ -383,7 +391,7 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws GuzzleException
+     * @throws GuzzleException|\PHPUnit\Framework\MockObject\Exception
      */
     public function testAdmin()
     {
@@ -425,7 +433,7 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws GuzzleException
+     * @throws GuzzleException|\PHPUnit\Framework\MockObject\Exception
      */
     public function testAdminWithHotNews()
     {
@@ -457,7 +465,7 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws GuzzleException
+     * @throws GuzzleException|\PHPUnit\Framework\MockObject\Exception
      */
     public function testAdminWithHotNewsMarkedAsRead()
     {
@@ -489,7 +497,7 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws GuzzleException
+     * @throws GuzzleException|\PHPUnit\Framework\MockObject\Exception
      */
     public function testAdminWithoutCloudSubscription()
     {
@@ -526,7 +534,7 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws GuzzleException
+     * @throws GuzzleException|\PHPUnit\Framework\MockObject\Exception
      */
     public function testAdminWithUnpaidCloudSubscription()
     {
@@ -572,7 +580,7 @@ class MainControllerTest extends TestCase
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
-     * @throws SyntaxError
+     * @throws SyntaxError|\PHPUnit\Framework\MockObject\Exception
      */
     public function testAdminShortcuts()
     {
@@ -603,7 +611,7 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws GuzzleException
+     * @throws GuzzleException|\PHPUnit\Framework\MockObject\Exception
      */
     public function testAdminCloud() {
         // given
@@ -641,7 +649,7 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws GuzzleException
+     * @throws GuzzleException|\PHPUnit\Framework\MockObject\Exception
      */
     public function testAdminCloudWithSubscription() {
         // given
@@ -681,7 +689,7 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws GuzzleException
+     * @throws GuzzleException|\PHPUnit\Framework\MockObject\Exception
      */
     public function testAdminCloudWithUnpaidSubscription() {
         // given
@@ -705,7 +713,7 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws GuzzleException
+     * @throws GuzzleException|\PHPUnit\Framework\MockObject\Exception
      */
     public function testAdminWithEbooks()
     {
@@ -735,7 +743,7 @@ class MainControllerTest extends TestCase
     /**
      * @throws PropelException
      * @throws GuzzleException
-     * @throws Exception
+     * @throws Exception|\PHPUnit\Framework\MockObject\Exception
      */
     public function testAdminWithSmtpAlert()
     {
@@ -763,7 +771,7 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws GuzzleException
-     * @throws PropelException
+     * @throws PropelException|\PHPUnit\Framework\MockObject\Exception
      */
     public function testAdminCloudPortal()
     {
@@ -795,7 +803,7 @@ class MainControllerTest extends TestCase
     }
 
     /**
-     * @throws PropelException
+     * @throws PropelException|\PHPUnit\Framework\MockObject\Exception
      */
     public function testHotNewsMarkAsRead()
     {

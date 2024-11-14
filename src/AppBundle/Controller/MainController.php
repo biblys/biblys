@@ -38,6 +38,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use OrderManager;
 use PostManager;
 use Propel\Runtime\Exception\PropelException;
+use Rayon;
 use RayonManager;
 use ReCaptcha\ReCaptcha as ReCaptcha;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -73,19 +74,17 @@ class MainController extends Controller
         MetaTagsService $metaTagsService,
     ): Response
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        $opengraph = ['title' => $currentSite->getTitle()];
+        $twitterCards = ['title' => $currentSite->getTitle()];
 
-        $opengraph = ['title' => $globalSite->get('title')];
-        $twitterCards = ['title' => $globalSite->get('title')];
-
-        $preview_image = $globalSite->getOpt('home_preview_image');
-        if ($preview_image) {
-            $opengraph['image'] = $preview_image;
-            $twitterCards['image'] = $preview_image;
-            $twitterCards['image:alt'] = $globalSite->get('title');
+        $previewImage = $currentSite->getOption("home_preview_image");
+        if ($previewImage) {
+            $opengraph['image'] = $previewImage;
+            $twitterCards['image'] = $previewImage;
+            $twitterCards['image:alt'] = $currentSite->getTitle();
         }
 
-        $preview_text = $globalSite->getOpt('home_preview_text');
+        $preview_text = $currentSite->getOption("home_preview_text");
         if ($preview_text) {
             $opengraph['description'] = $preview_text;
             $twitterCards['description'] = $preview_text;
@@ -98,7 +97,7 @@ class MainController extends Controller
         if ($homeOption) {
             // Custom Twig template
             if ($homeOption == 'custom') {
-                return $this->render('AppBundle:Main:home.html.twig');
+                return $templateService->renderResponse("AppBundle:Main:home.html.twig");
 
             // Display articles
             } elseif ($homeOption == 'articles') {
@@ -116,7 +115,7 @@ class MainController extends Controller
                     'offset' => $pagination->getOffset(),
                 ]);
 
-                return $this->render('AppBundle:Main:home-articles.html.twig', [
+                return $templateService->renderResponse("AppBundle:Main:home-articles.html.twig", [
                     'articles' => $articles,
                     'pages' => $pagination,
                 ]);
@@ -127,7 +126,7 @@ class MainController extends Controller
 
                 $posts = $pm->getAll(['post_status' => 1, 'post_date' => '<= '.date('Y-m-d H:i:s')], ['limit' => 10, 'order' => 'post_date', 'sort' => 'desc']);
 
-                return $this->render('AppBundle:Main:home-posts.html.twig', ['posts' => $posts]);
+                return $templateService->renderResponse("AppBundle:Main:home-posts.html.twig", ['posts' => $posts]);
 
             // Display ten last posts in a category
             } elseif (preg_match('/post_category:(\\d+)/', $homeOption, $matches)) {
@@ -135,19 +134,21 @@ class MainController extends Controller
 
                 $posts = $pm->getAll(['category_id' => $matches[1], 'post_status' => 1, 'post_date' => '<= '.date('Y-m-d H:i:s')], ['limit' => 10, 'order' => 'post_date', 'sort' => 'desc']);
 
-                return $this->render('AppBundle:Main:home-posts.html.twig', ['posts' => $posts]);
+                return $templateService->renderResponse("AppBundle:Main:home-posts.html.twig", ['posts' => $posts]);
 
             // Display a rayon
             } elseif (preg_match('/rayon:(\\d+)/', $homeOption, $matches)) {
                 $rm = new RayonManager();
 
                 $rayonId = $matches[1];
+
+                /** @var Rayon $rayon */
                 $rayon = $rm->getById($rayonId);
                 if (!$rayon) {
                     throw new ResourceNotFoundException("Rayon $rayonId not found.");
                 }
 
-                return $this->render('AppBundle:Main:home-rayon.html.twig', [
+                return $templateService->renderResponse("AppBundle:Main:home-rayon.html.twig", [
                     'rayon' => $rayon,
                     'articles' => $rayon->getArticles(),
                 ]);
@@ -181,7 +182,7 @@ class MainController extends Controller
         }
 
         // Default home page
-        return $this->render('AppBundle:Main:home.html.twig');
+        return $templateService->renderResponse("AppBundle:Main:home.html.twig");
     }
 
     /**
@@ -194,11 +195,11 @@ class MainController extends Controller
         Request $request,
         CurrentUser $currentUserService,
         TemplateService $templateService,
-        Mailer $mailer): Response
+        Mailer $mailer,
+        Config $config,
+        CurrentSite $currentSite,
+    ): Response
     {
-        $config = \Biblys\Legacy\LegacyCodeHelper::getGlobalConfig();;
-        $globalSite = LegacyCodeHelper::getGlobalSite();
-
         $name = $request->request->get('name');
         $email = $request->request->get('email');
         $subject = $request->request->get('subject') ?
@@ -256,11 +257,12 @@ class MainController extends Controller
                     throw new ContactPageException("Le message n'a pas pu être envoyé.");
                 }
 
+                $contactEmail = $currentSite->getOption("site_contact");
                 $mailer->send(
-                    $globalSite->get('site_contact'),
+                    $contactEmail,
                     $subject,
                     nl2br($message),
-                    [$globalSite->get('site_contact') => $name],
+                    [$contactEmail => $name],
                     ['reply-to' => $email]
                 );
                 $success = true;
