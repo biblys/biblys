@@ -18,6 +18,7 @@
 
 namespace Model;
 
+use Biblys\Exception\CannotDeleteShippingFeeUsedByOrders;
 use Model\Base\ShippingFee as BaseShippingFee;
 use Propel\Runtime\Connection\ConnectionInterface;
 
@@ -50,8 +51,23 @@ class ShippingFee extends BaseShippingFee
         return false;
     }
 
+    /**
+     * @throws CannotDeleteShippingFeeUsedByOrders
+     */
     public function preDelete(?ConnectionInterface $con = null): bool
     {
+        $orderUsingThisShippingFee = OrderQuery::create()
+            ->filterByShippingId($this->getId())
+            ->count();
+
+        if ($orderUsingThisShippingFee > 0) {
+            throw new CannotDeleteShippingFeeUsedByOrders(
+                "Vous ne pouvez pas supprimer cette tranche de frais de port car " .
+                "elle est utilisée par $orderUsingThisShippingFee commande(s), " .
+                "mais vous pouvez l'archiver."
+            );
+        }
+
         return parent::preDelete($con);
     }
 }
