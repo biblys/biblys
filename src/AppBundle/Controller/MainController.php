@@ -257,7 +257,7 @@ class MainController extends Controller
                     throw new ContactPageException("Le message n'a pas pu être envoyé.");
                 }
 
-                $contactEmail = $currentSite->getOption("site_contact");
+                $contactEmail = $currentSite->getSite()->getContact();
                 $mailer->send(
                     $contactEmail,
                     $subject,
