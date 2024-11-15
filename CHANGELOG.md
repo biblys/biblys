@@ -8,6 +8,16 @@ Améliorations
   affiché sur la page de la commande et inclus dans le courriel de confirmation
   d'expédition.
 
+### Instructions de mise à jour
+
+Après avoir procédé à l'installation de cette version…
+
+#### Jouer les migrations
+
+```shell
+composer propel migrate
+```
+
 ## 3.0.3 (DEV)
 
 Corrections
