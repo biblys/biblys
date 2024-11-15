@@ -187,7 +187,9 @@ class MainControllerTest extends TestCase
         $currentUserService = $this->createMock(CurrentUser::class);
         $currentUserService->method("isAuthentified")->willReturn(false);
         $config = Config::load();
+        $site = ModelFactory::createSite();
         $currentSiteService = $this->createMock(CurrentSite::class);
+        $currentSiteService->method("getSite")->willReturn($site);
         $metaTagsService = $this->createMock(MetaTagsService::class);
         $templateService = new TemplateService(
             config: $config,
