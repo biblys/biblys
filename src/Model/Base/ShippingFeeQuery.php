@@ -10,7 +10,9 @@ use Model\Map\ShippingFeeTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
+use Propel\Runtime\ActiveQuery\ModelJoin;
 use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -32,6 +34,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingFeeQuery orderByInfo($order = Criteria::ASC) Order by the shipping_info column
  * @method     ChildShippingFeeQuery orderByCreatedAt($order = Criteria::ASC) Order by the shipping_created column
  * @method     ChildShippingFeeQuery orderByUpdatedAt($order = Criteria::ASC) Order by the shipping_updated column
+ * @method     ChildShippingFeeQuery orderByArchivedAt($order = Criteria::ASC) Order by the shipping_archived_at column
  *
  * @method     ChildShippingFeeQuery groupById() Group by the shipping_id column
  * @method     ChildShippingFeeQuery groupBySiteId() Group by the site_id column
@@ -48,6 +51,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingFeeQuery groupByInfo() Group by the shipping_info column
  * @method     ChildShippingFeeQuery groupByCreatedAt() Group by the shipping_created column
  * @method     ChildShippingFeeQuery groupByUpdatedAt() Group by the shipping_updated column
+ * @method     ChildShippingFeeQuery groupByArchivedAt() Group by the shipping_archived_at column
  *
  * @method     ChildShippingFeeQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildShippingFeeQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -56,6 +60,18 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingFeeQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
  * @method     ChildShippingFeeQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildShippingFeeQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ *
+ * @method     ChildShippingFeeQuery leftJoinOrder($relationAlias = null) Adds a LEFT JOIN clause to the query using the Order relation
+ * @method     ChildShippingFeeQuery rightJoinOrder($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Order relation
+ * @method     ChildShippingFeeQuery innerJoinOrder($relationAlias = null) Adds a INNER JOIN clause to the query using the Order relation
+ *
+ * @method     ChildShippingFeeQuery joinWithOrder($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Order relation
+ *
+ * @method     ChildShippingFeeQuery leftJoinWithOrder() Adds a LEFT JOIN clause and with to the query using the Order relation
+ * @method     ChildShippingFeeQuery rightJoinWithOrder() Adds a RIGHT JOIN clause and with to the query using the Order relation
+ * @method     ChildShippingFeeQuery innerJoinWithOrder() Adds a INNER JOIN clause and with to the query using the Order relation
+ *
+ * @method     \Model\OrderQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildShippingFee|null findOne(?ConnectionInterface $con = null) Return the first ChildShippingFee matching the query
  * @method     ChildShippingFee findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildShippingFee matching the query, or a new ChildShippingFee object populated from the query conditions when no match is found
@@ -75,6 +91,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingFee|null findOneByInfo(string $shipping_info) Return the first ChildShippingFee filtered by the shipping_info column
  * @method     ChildShippingFee|null findOneByCreatedAt(string $shipping_created) Return the first ChildShippingFee filtered by the shipping_created column
  * @method     ChildShippingFee|null findOneByUpdatedAt(string $shipping_updated) Return the first ChildShippingFee filtered by the shipping_updated column
+ * @method     ChildShippingFee|null findOneByArchivedAt(string $shipping_archived_at) Return the first ChildShippingFee filtered by the shipping_archived_at column
  *
  * @method     ChildShippingFee requirePk($key, ?ConnectionInterface $con = null) Return the ChildShippingFee by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingFee requireOne(?ConnectionInterface $con = null) Return the first ChildShippingFee matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -94,6 +111,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingFee requireOneByInfo(string $shipping_info) Return the first ChildShippingFee filtered by the shipping_info column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingFee requireOneByCreatedAt(string $shipping_created) Return the first ChildShippingFee filtered by the shipping_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingFee requireOneByUpdatedAt(string $shipping_updated) Return the first ChildShippingFee filtered by the shipping_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingFee requireOneByArchivedAt(string $shipping_archived_at) Return the first ChildShippingFee filtered by the shipping_archived_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildShippingFee[]|Collection find(?ConnectionInterface $con = null) Return ChildShippingFee objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildShippingFee> find(?ConnectionInterface $con = null) Return ChildShippingFee objects based on current ModelCriteria
@@ -128,6 +146,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildShippingFee> findByCreatedAt(string|array<string> $shipping_created) Return ChildShippingFee objects filtered by the shipping_created column
  * @method     ChildShippingFee[]|Collection findByUpdatedAt(string|array<string> $shipping_updated) Return ChildShippingFee objects filtered by the shipping_updated column
  * @psalm-method Collection&\Traversable<ChildShippingFee> findByUpdatedAt(string|array<string> $shipping_updated) Return ChildShippingFee objects filtered by the shipping_updated column
+ * @method     ChildShippingFee[]|Collection findByArchivedAt(string|array<string> $shipping_archived_at) Return ChildShippingFee objects filtered by the shipping_archived_at column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByArchivedAt(string|array<string> $shipping_archived_at) Return ChildShippingFee objects filtered by the shipping_archived_at column
  *
  * @method     ChildShippingFee[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildShippingFee> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -227,7 +247,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT shipping_id, site_id, article_id, shipping_mode, shipping_type, shipping_zone, shipping_min_weight, shipping_max_weight, shipping_max_articles, shipping_min_amount, shipping_max_amount, shipping_fee, shipping_info, shipping_created, shipping_updated FROM shipping WHERE shipping_id = :p0';
+        $sql = 'SELECT shipping_id, site_id, article_id, shipping_mode, shipping_type, shipping_zone, shipping_min_weight, shipping_max_weight, shipping_max_articles, shipping_min_amount, shipping_max_amount, shipping_fee, shipping_info, shipping_created, shipping_updated, shipping_archived_at FROM shipping WHERE shipping_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -908,6 +928,256 @@ abstract class ShippingFeeQuery extends ModelCriteria
         $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_UPDATED, $updatedAt, $comparison);
 
         return $this;
+    }
+
+    /**
+     * Filter the query on the shipping_archived_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByArchivedAt('2011-03-14'); // WHERE shipping_archived_at = '2011-03-14'
+     * $query->filterByArchivedAt('now'); // WHERE shipping_archived_at = '2011-03-14'
+     * $query->filterByArchivedAt(array('max' => 'yesterday')); // WHERE shipping_archived_at > '2011-03-13'
+     * </code>
+     *
+     * @param mixed $archivedAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByArchivedAt($archivedAt = null, ?string $comparison = null)
+    {
+        if (is_array($archivedAt)) {
+            $useMinMax = false;
+            if (isset($archivedAt['min'])) {
+                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ARCHIVED_AT, $archivedAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($archivedAt['max'])) {
+                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ARCHIVED_AT, $archivedAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ARCHIVED_AT, $archivedAt, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query by a related \Model\Order object
+     *
+     * @param \Model\Order|ObjectCollection $order the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByOrder($order, ?string $comparison = null)
+    {
+        if ($order instanceof \Model\Order) {
+            $this
+                ->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ID, $order->getShippingId(), $comparison);
+
+            return $this;
+        } elseif ($order instanceof ObjectCollection) {
+            $this
+                ->useOrderQuery()
+                ->filterByPrimaryKeys($order->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByOrder() only accepts arguments of type \Model\Order or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Order relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinOrder(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Order');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Order');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Order relation Order object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\OrderQuery A secondary query class using the current class as primary query
+     */
+    public function useOrderQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinOrder($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Order', '\Model\OrderQuery');
+    }
+
+    /**
+     * Use the Order relation Order object
+     *
+     * @param callable(\Model\OrderQuery):\Model\OrderQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withOrderQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useOrderQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+/*
+ * Copyright (C) 2024 Clément Latzarus
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+
+    /**
+     * Use the relation to Order table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\OrderQuery The inner query object of the EXISTS statement
+     */
+    public function useOrderExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\OrderQuery */
+        $q = $this->useExistsQuery('Order', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Order table for a NOT EXISTS query.
+     *
+     * @see useOrderExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\OrderQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useOrderNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\OrderQuery */
+        $q = $this->useExistsQuery('Order', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+/*
+ * Copyright (C) 2024 Clément Latzarus
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+
+    /**
+     * Use the relation to Order table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\OrderQuery The inner query object of the IN statement
+     */
+    public function useInOrderQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\OrderQuery */
+        $q = $this->useInQuery('Order', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Order table for a NOT IN query.
+     *
+     * @see useOrderInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\OrderQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInOrderQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\OrderQuery */
+        $q = $this->useInQuery('Order', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
     }
 
     /**
