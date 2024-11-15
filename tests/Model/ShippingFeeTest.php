@@ -18,11 +18,21 @@
 
 namespace Model;
 
+use Biblys\Exception\CannotDeleteShippingFeeUsedByOrders;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
+use Exception;
 use PHPUnit\Framework\TestCase;
+use Propel\Runtime\Exception\PropelException;
+
+require_once __DIR__."/../setUp.php";
 
 class ShippingFeeTest extends TestCase
 {
+
+    /**
+     * isCompliantWithFrenchLaw
+     */
 
     public function testIsCompliantWithFrenchLawForLowAmountAndFreeShipping()
     {
@@ -79,5 +89,47 @@ class ShippingFeeTest extends TestCase
 
         // then
         $this->assertTrue($isCompliant);
+    }
+
+    /**
+     * delete
+     */
+
+    /**
+     * @throws PropelException
+     */
+    public function testDeleteWithoutRelatedOrders(): void
+    {
+        // given
+        $shippingFee = ModelFactory::createShippingFee();
+
+        // when
+        $shippingFee->delete();
+
+        // then
+        $this->assertTrue($shippingFee->isDeleted());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testDeleteWithRelatedOrders(): void
+    {
+        // given
+        $shippingFee = ModelFactory::createShippingFee();
+        ModelFactory::createOrder(shippingFee: $shippingFee);
+
+        // when
+        $exception = Helpers::runAndCatchException(fn() => $shippingFee->delete());
+
+        // then
+        $this->assertInstanceOf(CannotDeleteShippingFeeUsedByOrders::class, $exception);
+        $this->assertEquals(
+            "Vous ne pouvez pas supprimer cette tranche de frais de port ".
+            "car elle est utilisée par 1 commande(s), mais vous pouvez l'archiver.",
+            $exception->getMessage()
+        );
+        $this->assertFalse($shippingFee->isDeleted());
     }
 }

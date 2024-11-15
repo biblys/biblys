@@ -257,15 +257,19 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createOrder(
-        Site   $site = null,
-        User   $user = null,
-        string $axysAccountId = null,
-        string $slug = null,
+        Site        $site = null,
+        User        $user = null,
+        ShippingFee $shippingFee = null,
+        string      $axysAccountId = null,
+        string      $slug = null,
     ): Order
     {
+        $shipping = $shippingFee ?? ModelFactory::createShippingFee();
+
         $order = new Order();
         $order->setSite($site ?? ModelFactory::createSite());
         $order->setUser($user);
+        $order->setShippingId($shipping->getId());
         $order->setType("web");
         $order->setAxysAccountId($axysAccountId);
         $order->setSlug($slug ?? "order-slug");
