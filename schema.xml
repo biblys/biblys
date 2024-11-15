@@ -917,6 +917,9 @@
     <column name="order_discount" phpName="Discount" type="INTEGER" sqlType="int unsigned"/>
     <column name="order_amount_tobepaid" phpName="AmountTobepaid" type="INTEGER" defaultValue="0"/>
     <column name="shipping_id" phpName="ShippingId" type="INTEGER"/>
+    <foreign-key foreignTable="shipping" skipSql="true">
+      <reference local="shipping_id" foreign="shipping_id"/>
+    </foreign-key>
     <column name="country_id" phpName="CountryId" type="INTEGER"/>
     <column name="order_shipping" phpName="Shipping" type="INTEGER" defaultValue="0"/>
     <column name="order_shipping_mode" phpName="ShippingMode" type="VARCHAR" size="32"/>
