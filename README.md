@@ -82,6 +82,8 @@ docker run -it -v ${PWD}:/src ghcr.io/b1nary-gr0up/nwa:main add \
   --copyright "Clément Latzarus" \
   --license agpl-3.0-only \
   --skip "vendor/**" \
+  --skip "src/Model/Base/*.php" \
+  --skip "src/Model/Map/*.php" \
   **/*.php
 ```
 
