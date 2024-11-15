@@ -5,13 +5,18 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\Order as ChildOrder;
+use Model\OrderQuery as ChildOrderQuery;
+use Model\ShippingFee as ChildShippingFee;
 use Model\ShippingFeeQuery as ChildShippingFeeQuery;
+use Model\Map\OrderTableMap;
 use Model\Map\ShippingFeeTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
@@ -167,6 +172,20 @@ abstract class ShippingFee implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $shipping_updated;
+
+    /**
+     * The value for the shipping_archived_at field.
+     *
+     * @var        DateTime|null
+     */
+    protected $shipping_archived_at;
+
+    /**
+     * @var        ObjectCollection|ChildOrder[] Collection to store aggregation of ChildOrder objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildOrder> Collection to store aggregation of ChildOrder objects.
+     */
+    protected $collOrders;
+    protected $collOrdersPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -584,6 +603,28 @@ abstract class ShippingFee implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [shipping_archived_at] column value.
+     *
+     *
+     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
+     *   If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00.
+     *
+     * @throws \Propel\Runtime\Exception\PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
+     */
+    public function getArchivedAt($format = null)
+    {
+        if ($format === null) {
+            return $this->shipping_archived_at;
+        } else {
+            return $this->shipping_archived_at instanceof \DateTimeInterface ? $this->shipping_archived_at->format($format) : null;
+        }
+    }
+
+    /**
      * Set the value of [shipping_id] column.
      *
      * @param int $v New value
@@ -884,6 +925,26 @@ abstract class ShippingFee implements ActiveRecordInterface
     }
 
     /**
+     * Sets the value of [shipping_archived_at] column to a normalized version of the date/time value specified.
+     *
+     * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this The current object (for fluent API support)
+     */
+    public function setArchivedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->shipping_archived_at !== null || $dt !== null) {
+            if ($this->shipping_archived_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->shipping_archived_at->format("Y-m-d H:i:s.u")) {
+                $this->shipping_archived_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[ShippingFeeTableMap::COL_SHIPPING_ARCHIVED_AT] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    }
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -970,6 +1031,12 @@ abstract class ShippingFee implements ActiveRecordInterface
             }
             $this->shipping_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : ShippingFeeTableMap::translateFieldName('ArchivedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->shipping_archived_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
             $this->resetModified();
             $this->setNew(false);
 
@@ -977,7 +1044,7 @@ abstract class ShippingFee implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 15; // 15 = ShippingFeeTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 16; // 16 = ShippingFeeTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\ShippingFee'), 0, $e);
@@ -1038,6 +1105,8 @@ abstract class ShippingFee implements ActiveRecordInterface
         $this->hydrate($row, 0, true, $dataFetcher->getIndexType()); // rehydrate
 
         if ($deep) {  // also de-associate any related objects?
+
+            $this->collOrders = null;
 
         } // if (deep)
     }
@@ -1166,6 +1235,24 @@ abstract class ShippingFee implements ActiveRecordInterface
                 $this->resetModified();
             }
 
+            if ($this->ordersScheduledForDeletion !== null) {
+                if (!$this->ordersScheduledForDeletion->isEmpty()) {
+                    foreach ($this->ordersScheduledForDeletion as $order) {
+                        // need to save related object because we set the relation to null
+                        $order->save($con);
+                    }
+                    $this->ordersScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collOrders !== null) {
+                foreach ($this->collOrders as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             $this->alreadyInSave = false;
 
         }
@@ -1237,6 +1324,9 @@ abstract class ShippingFee implements ActiveRecordInterface
         if ($this->isColumnModified(ShippingFeeTableMap::COL_SHIPPING_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'shipping_updated';
         }
+        if ($this->isColumnModified(ShippingFeeTableMap::COL_SHIPPING_ARCHIVED_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'shipping_archived_at';
+        }
 
         $sql = sprintf(
             'INSERT INTO shipping (%s) VALUES (%s)',
@@ -1306,6 +1396,10 @@ abstract class ShippingFee implements ActiveRecordInterface
                         break;
                     case 'shipping_updated':
                         $stmt->bindValue($identifier, $this->shipping_updated ? $this->shipping_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
+                        break;
+                    case 'shipping_archived_at':
+                        $stmt->bindValue($identifier, $this->shipping_archived_at ? $this->shipping_archived_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
 
                         break;
                 }
@@ -1415,6 +1509,9 @@ abstract class ShippingFee implements ActiveRecordInterface
             case 14:
                 return $this->getUpdatedAt();
 
+            case 15:
+                return $this->getArchivedAt();
+
             default:
                 return null;
         } // switch()
@@ -1431,10 +1528,11 @@ abstract class ShippingFee implements ActiveRecordInterface
      *                    Defaults to TableMap::TYPE_PHPNAME.
      * @param bool $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
      * @param array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param bool $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array An associative array containing the field names (as keys) and field values
      */
-    public function toArray(string $keyType = TableMap::TYPE_PHPNAME, bool $includeLazyLoadColumns = true, array $alreadyDumpedObjects = []): array
+    public function toArray(string $keyType = TableMap::TYPE_PHPNAME, bool $includeLazyLoadColumns = true, array $alreadyDumpedObjects = [], bool $includeForeignObjects = false): array
     {
         if (isset($alreadyDumpedObjects['ShippingFee'][$this->hashCode()])) {
             return ['*RECURSION*'];
@@ -1457,6 +1555,7 @@ abstract class ShippingFee implements ActiveRecordInterface
             $keys[12] => $this->getInfo(),
             $keys[13] => $this->getCreatedAt(),
             $keys[14] => $this->getUpdatedAt(),
+            $keys[15] => $this->getArchivedAt(),
         ];
         if ($result[$keys[13]] instanceof \DateTimeInterface) {
             $result[$keys[13]] = $result[$keys[13]]->format('Y-m-d H:i:s.u');
@@ -1466,11 +1565,32 @@ abstract class ShippingFee implements ActiveRecordInterface
             $result[$keys[14]] = $result[$keys[14]]->format('Y-m-d H:i:s.u');
         }
 
+        if ($result[$keys[15]] instanceof \DateTimeInterface) {
+            $result[$keys[15]] = $result[$keys[15]]->format('Y-m-d H:i:s.u');
+        }
+
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->collOrders) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'orders';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'orderss';
+                        break;
+                    default:
+                        $key = 'Orders';
+                }
+
+                $result[$key] = $this->collOrders->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+        }
 
         return $result;
     }
@@ -1551,6 +1671,9 @@ abstract class ShippingFee implements ActiveRecordInterface
             case 14:
                 $this->setUpdatedAt($value);
                 break;
+            case 15:
+                $this->setArchivedAt($value);
+                break;
         } // switch()
 
         return $this;
@@ -1621,6 +1744,9 @@ abstract class ShippingFee implements ActiveRecordInterface
         }
         if (array_key_exists($keys[14], $arr)) {
             $this->setUpdatedAt($arr[$keys[14]]);
+        }
+        if (array_key_exists($keys[15], $arr)) {
+            $this->setArchivedAt($arr[$keys[15]]);
         }
 
         return $this;
@@ -1709,6 +1835,9 @@ abstract class ShippingFee implements ActiveRecordInterface
         }
         if ($this->isColumnModified(ShippingFeeTableMap::COL_SHIPPING_UPDATED)) {
             $criteria->add(ShippingFeeTableMap::COL_SHIPPING_UPDATED, $this->shipping_updated);
+        }
+        if ($this->isColumnModified(ShippingFeeTableMap::COL_SHIPPING_ARCHIVED_AT)) {
+            $criteria->add(ShippingFeeTableMap::COL_SHIPPING_ARCHIVED_AT, $this->shipping_archived_at);
         }
 
         return $criteria;
@@ -1812,6 +1941,21 @@ abstract class ShippingFee implements ActiveRecordInterface
         $copyObj->setInfo($this->getInfo());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
+        $copyObj->setArchivedAt($this->getArchivedAt());
+
+        if ($deepCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+
+            foreach ($this->getOrders() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addOrder($relObj->copy($deepCopy));
+                }
+            }
+
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1840,6 +1984,314 @@ abstract class ShippingFee implements ActiveRecordInterface
         return $copyObj;
     }
 
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName): void
+    {
+        if ('Order' === $relationName) {
+            $this->initOrders();
+            return;
+        }
+    }
+
+    /**
+     * Clears out the collOrders collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addOrders()
+     */
+    public function clearOrders()
+    {
+        $this->collOrders = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collOrders collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialOrders($v = true): void
+    {
+        $this->collOrdersPartial = $v;
+    }
+
+    /**
+     * Initializes the collOrders collection.
+     *
+     * By default this just sets the collOrders collection to an empty array (like clearcollOrders());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initOrders(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collOrders && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = OrderTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collOrders = new $collectionClassName;
+        $this->collOrders->setModel('\Model\Order');
+    }
+
+    /**
+     * Gets an array of ChildOrder objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildShippingFee is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildOrder[] List of ChildOrder objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildOrder> List of ChildOrder objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getOrders(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collOrdersPartial && !$this->isNew();
+        if (null === $this->collOrders || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collOrders) {
+                    $this->initOrders();
+                } else {
+                    $collectionClassName = OrderTableMap::getTableMap()->getCollectionClassName();
+
+                    $collOrders = new $collectionClassName;
+                    $collOrders->setModel('\Model\Order');
+
+                    return $collOrders;
+                }
+            } else {
+                $collOrders = ChildOrderQuery::create(null, $criteria)
+                    ->filterByShippingFee($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collOrdersPartial && count($collOrders)) {
+                        $this->initOrders(false);
+
+                        foreach ($collOrders as $obj) {
+                            if (false == $this->collOrders->contains($obj)) {
+                                $this->collOrders->append($obj);
+                            }
+                        }
+
+                        $this->collOrdersPartial = true;
+                    }
+
+                    return $collOrders;
+                }
+
+                if ($partial && $this->collOrders) {
+                    foreach ($this->collOrders as $obj) {
+                        if ($obj->isNew()) {
+                            $collOrders[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collOrders = $collOrders;
+                $this->collOrdersPartial = false;
+            }
+        }
+
+        return $this->collOrders;
+    }
+
+    /**
+     * Sets a collection of ChildOrder objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $orders A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setOrders(Collection $orders, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildOrder[] $ordersToDelete */
+        $ordersToDelete = $this->getOrders(new Criteria(), $con)->diff($orders);
+
+
+        $this->ordersScheduledForDeletion = $ordersToDelete;
+
+        foreach ($ordersToDelete as $orderRemoved) {
+            $orderRemoved->setShippingFee(null);
+        }
+
+        $this->collOrders = null;
+        foreach ($orders as $order) {
+            $this->addOrder($order);
+        }
+
+        $this->collOrders = $orders;
+        $this->collOrdersPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Order objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related Order objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countOrders(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collOrdersPartial && !$this->isNew();
+        if (null === $this->collOrders || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collOrders) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getOrders());
+            }
+
+            $query = ChildOrderQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByShippingFee($this)
+                ->count($con);
+        }
+
+        return count($this->collOrders);
+    }
+
+    /**
+     * Method called to associate a ChildOrder object to this object
+     * through the ChildOrder foreign key attribute.
+     *
+     * @param ChildOrder $l ChildOrder
+     * @return $this The current object (for fluent API support)
+     */
+    public function addOrder(ChildOrder $l)
+    {
+        if ($this->collOrders === null) {
+            $this->initOrders();
+            $this->collOrdersPartial = true;
+        }
+
+        if (!$this->collOrders->contains($l)) {
+            $this->doAddOrder($l);
+
+            if ($this->ordersScheduledForDeletion and $this->ordersScheduledForDeletion->contains($l)) {
+                $this->ordersScheduledForDeletion->remove($this->ordersScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildOrder $order The ChildOrder object to add.
+     */
+    protected function doAddOrder(ChildOrder $order): void
+    {
+        $this->collOrders[]= $order;
+        $order->setShippingFee($this);
+    }
+
+    /**
+     * @param ChildOrder $order The ChildOrder object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeOrder(ChildOrder $order)
+    {
+        if ($this->getOrders()->contains($order)) {
+            $pos = $this->collOrders->search($order);
+            $this->collOrders->remove($pos);
+            if (null === $this->ordersScheduledForDeletion) {
+                $this->ordersScheduledForDeletion = clone $this->collOrders;
+                $this->ordersScheduledForDeletion->clear();
+            }
+            $this->ordersScheduledForDeletion[]= $order;
+            $order->setShippingFee(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this ShippingFee is new, it will return
+     * an empty collection; or if this ShippingFee has previously
+     * been saved, it will retrieve related Orders from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in ShippingFee.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildOrder[] List of ChildOrder objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildOrder}> List of ChildOrder objects
+     */
+    public function getOrdersJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildOrderQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getOrders($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this ShippingFee is new, it will return
+     * an empty collection; or if this ShippingFee has previously
+     * been saved, it will retrieve related Orders from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in ShippingFee.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildOrder[] List of ChildOrder objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildOrder}> List of ChildOrder objects
+     */
+    public function getOrdersJoinSite(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildOrderQuery::create(null, $criteria);
+        $query->joinWith('Site', $joinBehavior);
+
+        return $this->getOrders($query, $con);
+    }
+
     /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
@@ -1864,6 +2316,7 @@ abstract class ShippingFee implements ActiveRecordInterface
         $this->shipping_info = null;
         $this->shipping_created = null;
         $this->shipping_updated = null;
+        $this->shipping_archived_at = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1885,8 +2338,14 @@ abstract class ShippingFee implements ActiveRecordInterface
     public function clearAllReferences(bool $deep = false)
     {
         if ($deep) {
+            if ($this->collOrders) {
+                foreach ($this->collOrders as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
+        $this->collOrders = null;
         return $this;
     }
 
@@ -1913,6 +2372,22 @@ abstract class ShippingFee implements ActiveRecordInterface
 
         return $this;
     }
+/*
+ * Copyright (C) 2024 Clément Latzarus
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 
     /**
      * Code to be run before persisting the object
@@ -1989,6 +2464,22 @@ abstract class ShippingFee implements ActiveRecordInterface
     public function postDelete(?ConnectionInterface $con = null): void
     {
             }
+
+/*
+ * Copyright (C) 2024 Clément Latzarus
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 
     /**
