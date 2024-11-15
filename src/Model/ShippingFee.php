@@ -19,6 +19,7 @@
 namespace Model;
 
 use Model\Base\ShippingFee as BaseShippingFee;
+use Propel\Runtime\Connection\ConnectionInterface;
 
 /**
  * Skeleton subclass for representing a row from the 'shipping' table.
@@ -47,5 +48,10 @@ class ShippingFee extends BaseShippingFee
         }
 
         return false;
+    }
+
+    public function preDelete(?ConnectionInterface $con = null): bool
+    {
+        return parent::preDelete($con);
     }
 }
