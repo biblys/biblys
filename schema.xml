@@ -1353,6 +1353,7 @@
     <column name="shipping_info" phpName="Info" type="VARCHAR" size="512"/>
     <column name="shipping_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="shipping_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="shipping_archived_at" phpName="ArchivedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="shipping_created" />
       <parameter name="update_column" value="shipping_updated" />

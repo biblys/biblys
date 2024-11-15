@@ -193,6 +193,13 @@ abstract class ShippingFee implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildOrder[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildOrder>
+     */
+    protected $ordersScheduledForDeletion = null;
+
+    /**
      * Initializes internal state of Model\Base\ShippingFee object.
      */
     public function __construct()
