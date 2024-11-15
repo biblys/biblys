@@ -67,6 +67,7 @@ class MainControllerTest extends TestCase
         $site = EntityFactory::createSite();
         $config = new Config();
         $config->set("site", $site->get("site_id"));
+        $config->set("environment", "test");
         $mailer = Mockery::mock(Mailer::class);
         $session = new Session();
         $currentSite = CurrentSite::buildFromConfig($config);
