@@ -167,6 +167,11 @@ class ShippingFeeTableMap extends TableMap
     public const COL_SHIPPING_UPDATED = 'shipping.shipping_updated';
 
     /**
+     * the column name for the shipping_archived_at field
+     */
+    public const COL_SHIPPING_ARCHIVED_AT = 'shipping.shipping_archived_at';
+
+    /**
      * The default string format for model objects of the related table
      */
     public const DEFAULT_STRING_FORMAT = 'YAML';
