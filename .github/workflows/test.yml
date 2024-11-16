@@ -1,11 +1,11 @@
-name: Tests
+name: Test
 
 on: push
 
 jobs:
-  build:
+  test:
 
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
@@ -31,9 +31,9 @@ jobs:
     - name: Validate composer.json and composer.lock
       run: composer validate
 
-    - uses: "ramsey/composer-install@v1"
+    - uses: ramsey/composer-install@v1
       with:
-        dependency-versions: "highest"
+        dependency-versions: highest
 
     - name: Run test suite
       run: composer test
