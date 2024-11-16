@@ -435,7 +435,8 @@ class ModelFactory
         int     $maxWeight = 1000,
         int     $minAmount = 0,
         int     $maxAmount = 2000,
-        int     $maxArticles = 10
+        int     $maxArticles = 10,
+        bool    $isArchived = false,
     ): ShippingFee
     {
         $shippingFee = new ShippingFee();
@@ -449,6 +450,7 @@ class ModelFactory
         $shippingFee->setMaxAmount($maxAmount);
         $shippingFee->setMaxArticles($maxArticles);
         $shippingFee->setInfo($info);
+        $shippingFee->setArchivedAt($isArchived ? new DateTime() : null);
         $shippingFee->save();
 
         return $shippingFee;
