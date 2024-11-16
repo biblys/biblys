@@ -118,6 +118,17 @@ class Article extends BaseArticle
             ->find();
     }
 
+    /**
+     * @throws PropelException
+     */
+    public function isInABundle(): bool
+    {
+        return LinkQuery::create()
+            ->filterByArticle($this)
+            ->filterByBundleId(null, Criteria::ISNOTNULL)
+            ->exists();
+    }
+
     public function isWatermarkable(): bool
     {
         return $this->getLemoninkMasterId() !== null;
