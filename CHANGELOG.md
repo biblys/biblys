@@ -7,6 +7,10 @@ Améliorations
 - Lors d'une expédition avec Mondial Relay, le lien de suivi est désormais
   affiché sur la page de la commande et inclus dans le courriel de confirmation
   d'expédition.
+- Il est désormais possible d'archiver des tranches de frais de port, afin
+  qu'elle ne soit plus proposée lors de la création de nouvelles commandes.
+- Il n'est plus possible de supprimer une tranche de frais de port si elle est
+  utilisée par au moins une commande.
 
 ### Instructions de mise à jour
 
