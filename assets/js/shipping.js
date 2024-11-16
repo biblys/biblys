@@ -126,8 +126,15 @@ export default class Shipping {
         <span class="fa fa-pencil pointer" aria-label="modifier la tranche"></span>
       </span>`
     );
-    icon.addEventListener('click', () => this.showRangeEditForm(range, tr));
+    icon.addEventListener('click', () => this.onRangeEditButtonClick(range, tr));
     return icon;
+  }
+
+  onRangeEditButtonClick(range, tr) {
+    const confirm = window.confirm(`Modifier une tranche existante peut impacter les commandes en cours. Il est recommandé de créer une nouvelle tranche et d'archiver l'ancienne plutôt que de modifier une tranche existante. Voulez-vous vraiment modifier la tranche ${range.mode}?`);
+    if (confirm) {
+      this.showRangeEditForm(range, tr);
+    }
   }
 
   renderArchiveIcon(range) {
