@@ -92,7 +92,24 @@ class ShippingFeeTest extends TestCase
         $this->assertTrue($isCompliant);
     }
 
+    /**
+     * archive
+     */
 
+    /**
+     * @throws PropelException
+     */
+    public function testArchive()
+    {
+        // given
+        $shippingFee = new ShippingFee();
+
+        // when
+        $shippingFee->archive();
+
+        // then
+        $this->assertNotNull($shippingFee->getArchivedAt());
+    }
 
     /** isArchived */
 
