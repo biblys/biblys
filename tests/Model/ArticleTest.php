@@ -235,6 +235,26 @@ class ArticleTest extends TestCase
         $this->assertTrue($isInABundle);
     }
 
+    /** getContainingArticleBundles */
+
+    /**
+     * @throws PropelException
+     */
+
+    public function testGetBundles(): void
+    {
+        // given
+        $bundle = ModelFactory::createArticle();
+        $articleInBundle = ModelFactory::createArticle();
+        ModelFactory::createLink(article: $articleInBundle, bundleArticle: $bundle);
+
+        // when
+        $containingArticleBundles = $articleInBundle->getBundles();
+
+        // then
+        $this->assertContains($bundle, $containingArticleBundles);
+    }
+
     /** delete */
 
     public function testDeleteSucceedsIfArticleHasNoStock(): void

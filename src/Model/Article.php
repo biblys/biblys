@@ -129,6 +129,21 @@ class Article extends BaseArticle
             ->exists();
     }
 
+    /**
+     * @throws PropelException
+     */
+    public function getBundles(): Collection
+    {
+        $linksId = LinkQuery::create()
+            ->select(["bundle_id"])
+            ->filterByArticle($this)
+            ->filterByBundleId(null, Criteria::ISNOTNULL)
+            ->find()
+            ->getArrayCopy();
+
+        return ArticleQuery::create()->filterById($linksId)->find();
+    }
+
     public function isWatermarkable(): bool
     {
         return $this->getLemoninkMasterId() !== null;

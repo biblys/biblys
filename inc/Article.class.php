@@ -1135,6 +1135,14 @@ class Article extends Entity
         return $this->getModel()->isInABundle();
     }
 
+    /**
+     * @throws Exception
+     */
+    public function getBundles(): \Propel\Runtime\Collection\Collection
+    {
+        return $this->getModel()->getBundles();
+    }
+
 }
 
 class ArticleManager extends EntityManager
