@@ -178,7 +178,9 @@ class ArticleTest extends TestCase
         $this->assertTrue($isBundle);
     }
 
-    /** getArticlesFromBundle
+    /** getArticlesFromBundle */
+
+    /**
      * @throws PropelException
      */
 
@@ -197,6 +199,40 @@ class ArticleTest extends TestCase
         // then
         $this->assertContains($articleInBundle1, $articlesFromBundle);
         $this->assertContains($articleInBundle2, $articlesFromBundle);
+    }
+
+    /** isInABundle */
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsInABundleReturnsFalse(): void
+    {
+        // given
+        $article = ModelFactory::createArticle();
+
+        // when
+        $isInABundle = $article->isInABundle();
+
+        // then
+        $this->assertFalse($isInABundle);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsInABundleReturnsTrue(): void
+    {
+        // given
+        $bundle = ModelFactory::createArticle();
+        $articleInBundle = ModelFactory::createArticle();
+        ModelFactory::createLink(article: $articleInBundle, bundleArticle: $bundle);
+
+        // when
+        $isInABundle = $articleInBundle->isInABundle();
+
+        // then
+        $this->assertTrue($isInABundle);
     }
 
     /** delete */
