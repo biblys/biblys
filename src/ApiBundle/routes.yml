@@ -54,6 +54,11 @@ api_shipping_update:
   methods: PUT
   controller: ApiBundle\Controller\ShippingController::updateAction
 
+api_shipping_archive:
+  path: /api/admin/shipping/{id}/archive
+  methods: POST
+  controller: ApiBundle\Controller\ShippingController::archiveAction
+
 api_shipping_delete:
   path: /api/admin/shipping/{id}
   methods: DELETE
