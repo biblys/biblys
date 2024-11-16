@@ -60,6 +60,11 @@ table td.min-cell {
   white-space: nowrap;
 }
 
+table td.action-buttons {
+  display: flex;
+  gap: 4px;
+}
+
 text-mini {
   font-size: 0.8em;
 }
