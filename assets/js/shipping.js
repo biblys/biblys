@@ -49,6 +49,11 @@ export default class Shipping {
     return fetch('/api/admin/shipping', { headers: { Accept: 'application/json' } })
       .then(response => response.json())
       .then(data => {
+
+        if (data.error) {
+          throw data.error.message;
+        }
+
         this.setLoadingState(false);
         this.fees = data;
         this.render();
@@ -297,8 +302,14 @@ export default class Shipping {
       credentials: 'same-origin',
       headers: { Accept: 'application/json' }
     })
-      .then(() => {
+      .then(response => response.json())
+      .then((data) => {
         loader.remove();
+
+        if (data.error) {
+          throw data.error.message;
+        }
+
         new Biblys.Notification(`La tranche <strong>${range.mode}</strong> a bien été supprimée.`, {
           type: 'success'
         });
