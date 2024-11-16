@@ -243,11 +243,13 @@ class ModelFactory
     public static function createLink(
         Article         $article = null,
         ArticleCategory $articleCategory = null,
+        Article         $bundleArticle = null,
     ): Link
     {
         $link = new Link();
         $link->setArticle($article);
         $link->setArticleCategory($articleCategory);
+        $link->setBundleId($bundleArticle?->getId());
         $link->save();
 
         return $link;

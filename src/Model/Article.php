@@ -25,6 +25,7 @@ use Exception;
 use Model\Base\Article as BaseArticle;
 use Model\StockQuery as ChildStockQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -105,6 +106,16 @@ class Article extends BaseArticle
         }
 
         return false;
+    }
+
+    public function getArticlesFromBundle(): Collection
+    {
+        return ArticleQuery::create()
+            ->joinWithLink()
+            ->useLinkQuery()
+                ->filterByBundleId($this->getId())
+            ->endUse()
+            ->find();
     }
 
     public function isWatermarkable(): bool
