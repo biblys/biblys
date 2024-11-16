@@ -73,6 +73,10 @@ class ShippingControllerTest extends TestCase
         $shippingFee5->setZone("Z1");
         $shippingFee5->setFee(90);
         $shippingFee5->save();
+        $archivedShippingFee = new ShippingFee();
+        $archivedShippingFee->setSiteId(1);
+        $archivedShippingFee->archive();
+        $archivedShippingFee->save();
         $otherSiteShippingFee = new ShippingFee();
         $otherSiteShippingFee->setSiteId(2);
         $otherSiteShippingFee->save();
