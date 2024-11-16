@@ -100,6 +100,10 @@ class Article extends BaseArticle
 
     public function isBundle(): bool
     {
+        if ($this->getTypeId() === ArticleType::BUNDLE) {
+            return true;
+        }
+
         return false;
     }
 

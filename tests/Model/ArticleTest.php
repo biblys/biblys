@@ -18,6 +18,7 @@
 
 namespace Model;
 
+use Biblys\Data\ArticleType;
 use Biblys\Exception\CannotDeleteArticleWithStock;
 use Biblys\Test\ModelFactory;
 use DateTime;
@@ -147,6 +148,34 @@ class ArticleTest extends TestCase
 
         // then
         $this->assertFalse($isWatermarkable);
+    }
+
+    /** isBundle */
+
+    public function testIsBundleReturnsFalse(): void
+    {
+        // given
+        $article = new Article();
+        $article->setTypeId(ArticleType::BOOK);
+
+        // when
+        $isBundle = $article->isBundle();
+
+        // then
+        $this->assertFalse($isBundle);
+    }
+
+    public function testIsBundleReturnsTrue(): void
+    {
+        // given
+        $article = new Article();
+        $article->setTypeId(ArticleType::BUNDLE);
+
+        // when
+        $isBundle = $article->isBundle();
+
+        // then
+        $this->assertTrue($isBundle);
     }
 
     /** delete */
