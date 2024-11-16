@@ -27,6 +27,7 @@ use Framework\Controller;
 use Model\CountryQuery;
 use Model\ShippingFee;
 use Model\ShippingFeeQuery;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -49,6 +50,7 @@ class ShippingController extends Controller
 
         $currentSite = CurrentSite::buildFromConfig($config);
         $allFees = ShippingFeeQuery::createForSite($currentSite)
+            ->filterByArchivedAt(null, Criteria::ISNULL)
             ->orderByType()
             ->orderByZone()
             ->orderByFee()
