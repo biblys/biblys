@@ -113,6 +113,31 @@ class ShippingController extends Controller
     /**
      * @route DELETE /api/admin/shipping/{id}
      *
+     * @throws Exception
+     */
+    public function archiveAction(
+        CurrentUser $currentUser,
+        int $id
+    ): JsonResponse
+    {
+        $currentUser->authAdmin();
+
+        $fee = ShippingFeeQuery::create()->findPk($id);
+        if (!$fee) {
+            throw new ResourceNotFoundException(
+                sprintf("Cannot find shipping fee with id %s", $id)
+            );
+        }
+
+        $fee->archive();
+        $fee->save();
+
+        return new JsonResponse(null, 204);
+    }
+
+    /**
+     * @route DELETE /api/admin/shipping/{id}
+     *
      * @throws PropelException
      * @throws Exception
      */
