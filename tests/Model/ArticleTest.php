@@ -29,7 +29,7 @@ require_once __DIR__."/../setUp.php";
 
 class ArticleTest extends TestCase
 {
-    /** Article->isPublished */
+    /** isPublished */
 
     /**
      * @throws PropelException
@@ -73,6 +73,8 @@ class ArticleTest extends TestCase
         $this->assertFalse($isPublished);
     }
 
+    /** addContributor */
+
     /**
      * @throws Exception
      */
@@ -94,6 +96,8 @@ class ArticleTest extends TestCase
             ->findOne();
         $this->assertNotNull($role, "role should have been created");
     }
+
+    /** countAvailableStockForSite */
 
     /**
      * @throws PropelException
@@ -117,9 +121,7 @@ class ArticleTest extends TestCase
         $this->assertEquals(1, $count);
     }
 
-    /**
-     * #isWatermarkable
-     */
+    /** isWatermarkable */
 
     public function testIsWatermarkableWithMasterIdReturnsTrue(): void
     {
@@ -146,6 +148,8 @@ class ArticleTest extends TestCase
         // then
         $this->assertFalse($isWatermarkable);
     }
+
+    /** delete */
 
     public function testDeleteSucceedsIfArticleHasNoStock(): void
     {
