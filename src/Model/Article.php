@@ -98,6 +98,11 @@ class Article extends BaseArticle
         return ArticleType::getById($this->getTypeId());
     }
 
+    public function isBundle(): bool
+    {
+        return false;
+    }
+
     public function isWatermarkable(): bool
     {
         return $this->getLemoninkMasterId() !== null;
