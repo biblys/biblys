@@ -21,6 +21,7 @@ namespace Model;
 use Biblys\Exception\CannotDeleteShippingFeeUsedByOrders;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
+use DateTime;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -89,6 +90,42 @@ class ShippingFeeTest extends TestCase
 
         // then
         $this->assertTrue($isCompliant);
+    }
+
+
+
+    /** isArchived */
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsArchived()
+    {
+        // given
+        $shippingFee = new ShippingFee();
+        $shippingFee->setArchivedAt(new DateTime());
+
+        // when
+        $isArchived = $shippingFee->isArchived();
+
+        // then
+        $this->assertTrue($isArchived);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsNotArchived()
+    {
+        // given
+        $shippingFee = new ShippingFee();
+        $shippingFee->setArchivedAt(null);
+
+        // when
+        $isArchived = $shippingFee->isArchived();
+
+        // then
+        $this->assertFalse($isArchived);
     }
 
     /**
