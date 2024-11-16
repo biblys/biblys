@@ -62,7 +62,13 @@ class ShippingFeeQuery extends BaseShippingFeeQuery
 
         $feesForEachTypes = array_map(
             function ($type) use ($fees, $zone, $weightIncludingWrapping, $amount, $currentSite, $articleCount) {
+                /** @var ShippingFee $fee */
                 foreach ($fees as $fee) {
+                    // Keeps only active fees
+                    if ($fee->isArchived()) {
+                        continue;
+                    }
+
                     // Keeps only fees for current type
                     if ($fee->getType() !== $type) {
                         continue;
