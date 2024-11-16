@@ -19,6 +19,7 @@
 namespace Model;
 
 use Biblys\Exception\CannotDeleteShippingFeeUsedByOrders;
+use DateTime;
 use Model\Base\ShippingFee as BaseShippingFee;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -50,6 +51,11 @@ class ShippingFee extends BaseShippingFee
         }
 
         return false;
+    }
+
+    public function archive(): void
+    {
+        $this->setArchivedAt(new DateTime());
     }
 
     /**
