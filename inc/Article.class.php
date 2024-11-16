@@ -115,6 +115,7 @@ class Article extends Entity
     {
         $model = new \Model\Article();
         $model->setId($this->get("id"));
+        $model->setTypeId($this->get("type_id"));
 
         return $model;
     }
