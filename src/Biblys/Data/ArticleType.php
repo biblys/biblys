@@ -32,6 +32,7 @@ class ArticleType
     public const BOOK = 1;
     public const EBOOK = 2;
     public const EAUDIOBOOK = 11;
+    public const BUNDLE = 8;
 
     public function setId($id): void
     {
