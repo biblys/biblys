@@ -24,12 +24,11 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
-require_once __DIR__."/../setUp.php";
+require_once __DIR__ . "/../setUp.php";
 
 class ShippingFeeQueryTest extends TestCase
 {
     /**
-     * Test getting fees
      * @throws PropelException
      * @throws Exception
      */
@@ -63,7 +62,6 @@ class ShippingFeeQueryTest extends TestCase
     }
 
     /**
-     * Test getting fees
      * @throws PropelException
      * @throws Exception
      */
@@ -100,5 +98,34 @@ class ShippingFeeQueryTest extends TestCase
             $returnedFee,
             $feeForTwoArticles
         );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetForDoesNotReturnArchivedFees()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $country = ModelFactory::createCountry();
+        $archivedFee = ModelFactory::createShippingFee(site: $site, country: $country, isArchived: true);
+        $activeFee = ModelFactory::createShippingFee(site: $site, country: $country);
+        $orderWeight = 500;
+        $orderAmount = 1500;
+        $currentSite = new CurrentSite($site);
+
+        // when
+        $returnedFees = ShippingFeeQuery::getForCountryAndWeightAndAmountAndArticleCount(
+            $currentSite,
+            $country,
+            $orderWeight,
+            $orderAmount,
+            articleCount: 1
+        );
+
+        // then
+        $this->assertContains($activeFee, $returnedFees);
+        $this->assertNotContains($archivedFee, $returnedFees);
     }
 }
