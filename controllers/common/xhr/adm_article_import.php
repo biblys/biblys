@@ -94,15 +94,15 @@ if ($_GET["mode"] == "search") { // Mode recherche
     if (!empty($_GET["noosfere_id"])) { // Importation de fiche noosfere
         $n = noosfere($_GET["noosfere_id"], 'noosfere_id');
         $n = $n[0];
-        if (!empty($n["article_ean"])) { // Infos complementaires d'Amazon si EAN
+        if (!empty($n["article_ean"])) { // Infos complémentaires d'Amazon si EAN
             if (!empty($a)) {
-                foreach ($a as $key => $val) { // Champ a recuperer d'Amazon uniquement si vide chez noosfere
+                foreach ($a as $key => $val) { // Champ à récupérer d'Amazon uniquement si vide chez noosfere
                     if (empty($n[$key])) {
                         $n[$key] = $val;
                     }
                 }
             }
-            // Champ a recuperer en priorite chez Amazon
+            // Champ à récupérer en priorité chez Amazon
             if (isset($a["article_pubdate"])) {
                 $n["article_pubdate"] = $a["article_pubdate"];
             }
@@ -227,6 +227,5 @@ if ($_GET["mode"] == "search") { // Mode recherche
         }
     }
 
-    // Resultat en json
     echo str_replace("\u0092", "\u2019", json_encode($x));
 }
