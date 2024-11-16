@@ -114,6 +114,7 @@ export default class Shipping {
     `);
     const actionsCell = createElementFromHTML('<td class="action-buttons"></td>');
     actionsCell.appendChild(this.renderEditIcon(range, tr));
+    actionsCell.appendChild(this.renderArchiveIcon(range, tr));
     actionsCell.appendChild(this.renderDeleteIcon(range));
     tr.appendChild(actionsCell);
     return tr;
@@ -126,6 +127,16 @@ export default class Shipping {
       </span>`
     );
     icon.addEventListener('click', () => this.showRangeEditForm(range, tr));
+    return icon;
+  }
+
+  renderArchiveIcon(range) {
+    const icon = createElementFromHTML(
+      `<span class="btn btn-warning btn-sm">
+        <span class="fa fa-archive pointer" aria-label="Archiver la tranche"></span>
+      </span>`
+    );
+    icon.addEventListener('click', () => this.archiveRange(range));
     return icon;
   }
 
@@ -290,6 +301,29 @@ export default class Shipping {
     return form;
   }
 
+  archiveRange(range) {
+    const confirm = window.confirm(`Voulez-vous vraiment archiver la tranche ${range.mode}?`);
+    if (!confirm) {
+      return;
+    }
+
+    const loader = new Biblys.Notification('Archivage en cours…', { loader: true, sticky: true });
+    fetch(`/api/admin/shipping/${range.id}/archive`, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { Accept: 'application/json' }
+    })
+      .then((response) => this._handleEmptyResponse(loader, response))
+      .then(() => {
+        new Biblys.Notification(`La tranche <strong>${range.mode}</strong> a bien été archivée.`, {
+          type: 'success'
+        });
+        this.fees = this.fees.filter(fee => fee.id !== range.id);
+        this.render();
+      })
+      .catch(window._alert);
+  }
+
   deleteRange(range) {
     const confirm = window.confirm(`Voulez-vous vraiment supprimer la tranche ${range.mode}?`);
     if (!confirm) {
@@ -302,14 +336,8 @@ export default class Shipping {
       credentials: 'same-origin',
       headers: { Accept: 'application/json' }
     })
-      .then(response => response.json())
-      .then((data) => {
-        loader.remove();
-
-        if (data.error) {
-          throw data.error.message;
-        }
-
+      .then((response) => this._handleEmptyResponse(loader, response))
+      .then(() => {
         new Biblys.Notification(`La tranche <strong>${range.mode}</strong> a bien été supprimée.`, {
           type: 'success'
         });
@@ -317,6 +345,21 @@ export default class Shipping {
         this.render();
       })
       .catch(window._alert);
+  }
+
+  async _handleEmptyResponse(loader, response) {
+    loader.remove();
+
+    if (response.status === 204) {
+      return;
+    }
+
+    const data = await response.json();
+    if (data.error) {
+      throw data.error.message;
+    }
+
+    throw new Error('Une erreur est survenue.');
   }
 
   showRangeEditForm(range, tr) {
