@@ -1107,6 +1107,26 @@ class Article extends Entity
         return $this->has("article_editing_user");
     }
 
+    /**
+     * METHODS FROM MODEL
+     */
+
+    /**
+     * @throws Exception
+     */
+    public function isBundle(): bool
+    {
+        return $this->getModel()->isBundle();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getArticlesFromBundle(): \Propel\Runtime\Collection\Collection
+    {
+        return $this->getModel()->getArticlesFromBundle();
+    }
+
 }
 
 class ArticleManager extends EntityManager
