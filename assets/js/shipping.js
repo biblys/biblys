@@ -112,7 +112,7 @@ export default class Shipping {
         <td class="right">${window.currency(parseInt(range.fee) / 100)}</td>
       </tr>
     `);
-    const actionsCell = createElementFromHTML('<td></td>');
+    const actionsCell = createElementFromHTML('<td class="action-buttons"></td>');
     actionsCell.appendChild(this.renderEditIcon(range, tr));
     actionsCell.appendChild(this.renderDeleteIcon(range));
     tr.appendChild(actionsCell);
@@ -122,7 +122,7 @@ export default class Shipping {
   renderEditIcon(range, tr) {
     const icon = createElementFromHTML(
       `<span class="btn btn-primary btn-sm">
-        <span class="fa fa-pencil pointer" title="modifier la tranche"></span>
+        <span class="fa fa-pencil pointer" aria-label="modifier la tranche"></span>
       </span>`
     );
     icon.addEventListener('click', () => this.showRangeEditForm(range, tr));
@@ -131,8 +131,8 @@ export default class Shipping {
 
   renderDeleteIcon(range) {
     const icon = createElementFromHTML(
-      `<span class="btn btn-primary btn-sm">
-        <span class="fa fa-trash pointer" title="Supprimer la tranche"></span>
+      `<span class="btn btn-danger btn-sm">
+        <span class="fa fa-trash pointer" aria-label="Supprimer la tranche"></span>
       </span>`
     );
     icon.addEventListener('click', () => this.deleteRange(range));
