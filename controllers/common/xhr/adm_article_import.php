@@ -165,41 +165,14 @@ if ($_GET["mode"] == "search") { // Mode recherche
                 $c['people_noosfere_id'] = null;
             }
 
-            $people = EntityManager::prepareAndExecute(
-                "SELECT `people_id`, `people_name` FROM `people`
-                WHERE
-                    `people_noosfere_id` = :people_noosfere_id OR
-                    `people_name` = :people_name OR
-                    `people_url` = :people_url
-                ORDER BY `people_noosfere_id` DESC LIMIT 1",
-                [
-                    'people_noosfere_id' => $c['people_noosfere_id'],
-                    'people_name' => $c['people_name'],
-                    'people_url' => $slugService->slugify($c["people_name"]),
-                ]
+            $contributor = Noosfere::getOrCreateContributor(
+                noosfereContributorId: $c["people_noosfere_id"],
+                noosfereContributorFirstName: $c["people_first_name"],
+                noosfereContributorLastName: $c["people_last_name"],
             );
 
-            if ($p = $people->fetch(PDO::FETCH_ASSOC)) {
-                $contributor = $pom->getById($p['people_id']);
-                $x["article_people"][$k]["people_name"] = $p["people_name"];
-                $x["article_people"][$k]["people_id"] = $p["people_id"];
-                if (!empty($c["people_noosfere_id"])) {
-                    $contributor->set('people_noosfere_id', $c['people_noosfere_id']);
-                    $pom->update($contributor);
-                }
-            } elseif (!empty($c["people_noosfere_id"])) { // Si le contributeur n'existe pas, mais qu'on a un id noosfere, on la cree
-                $c["people_url"] = $slugService->slugify($c["people_name"]);
-                /** @var People $contributor */
-                $contributor = $pom->create(
-                    [
-                        'people_first_name' => $c['people_first_name'],
-                        'people_last_name' => $c['people_last_name'],
-                        'people_noosfere_id' => $c['people_noosfere_id'],
-                    ]
-                );
-                $x["article_people"][$k]["people_id"] = $contributor->get('id');
-                $x["article_people"][$k]["people_name"] = $contributor->getName();
-            }
+            $x["article_people"][$k]["people_id"] = $contributor->get('id');
+            $x["article_people"][$k]["people_name"] = $contributor->getName();
 
             // S'il manque des infos, on n'ajoute pas le contributeur au livre
             if (empty($x["article_people"][$k]["people_id"])

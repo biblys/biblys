@@ -22,12 +22,16 @@ use Biblys\Contributor\Job;
 use Biblys\Contributor\UnknownJobException;
 use Biblys\Exception\EntityAlreadyExistsException;
 use Biblys\Isbn\Isbn as Isbn;
+use Biblys\Isbn\IsbnParsingException;
 use Biblys\Service\Slug\SlugService;
 use Collection;
 use CollectionManager;
 use Exception;
 use Model\BookCollectionQuery;
+use Model\PeopleQuery;
 use Model\PublisherQuery;
+use People;
+use PeopleManager;
 use Publisher;
 use PublisherManager;
 use SimpleXMLElement;
@@ -260,6 +264,58 @@ class Noosfere
         return $collection;
     }
 
+    /**
+     * @throws Exception
+     */
+    public static function getOrCreateContributor(
+        int       $noosfereContributorId,
+        string    $noosfereContributorFirstName,
+        string    $noosfereContributorLastName,
+    ): People
+    {
+        $slugService = new SlugService();
+        $pm = new PeopleManager();
+
+        $noosfereContributorName = trim("$noosfereContributorFirstName $noosfereContributorLastName");
+
+        $contributorSlug = $slugService->slugify($noosfereContributorName);
+        $existingContributor = PeopleQuery::create()
+            ->filterByNoosfereId($noosfereContributorId)
+            ->_or()
+            ->filterByUrl($contributorSlug)
+            ->findOne();
+
+        if ($existingContributor) {
+            /** @var People $contributorEntity */
+            $contributorEntity = $pm->getById($existingContributor->getId());
+
+            if (!$contributorEntity->has("people_noosfere_id") && !empty($noosfereContributorId)) {
+                $contributorEntity->set("people_noosfere_id", $noosfereContributorId);
+                $pm->update($contributorEntity);
+            }
+        }
+
+        if (!$existingContributor) {
+            $contributorParams = [
+                "people_first_name" => $noosfereContributorFirstName,
+                "people_last_name" => $noosfereContributorLastName,
+                "people_noosfere_id" => $noosfereContributorId,
+            ];
+
+            try {
+                /** @var Collection $contributorEntity */
+                $contributorEntity = $pm->create($contributorParams);
+            } catch (EntityAlreadyExistsException $exception) {
+                throw new ConflictHttpException($exception->getMessage(), $exception);
+            }
+        }
+
+        return $contributorEntity;
+    }
+
+    /**
+     * @throws IsbnParsingException
+     */
     public static function buildArticlesFromXml(SimpleXMLElement|null $xml): array
     {
         if ($xml === null) {
