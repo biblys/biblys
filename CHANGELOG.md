@@ -1,8 +1,8 @@
 # Historique des modifications
 
-### 3.1.0 (dev)
+## 3.1.0 (dev)
 
-Améliorations
+### Améliorations
 
 - Lors d'une expédition avec Mondial Relay, le lien de suivi est désormais
   affiché sur la page de la commande et inclus dans le courriel de confirmation
@@ -11,6 +11,10 @@ Améliorations
   qu'elle ne soit plus proposée lors de la création de nouvelles commandes.
 - Il n'est plus possible de supprimer une tranche de frais de port si elle est
   utilisée par au moins une commande.
+- De nouvelles méthodes `isBundle`, `isInABundle`, `getArticlesFromBundle` et
+  `getBundles` ont été ajoutées à la classe `Article` pour faciliter l'affichage
+  des lots d'articles (voir
+  la [documentation](https://docs.biblys.fr/personnaliser/entites/article/#article-de-type-lot)).
 
 ### Instructions de mise à jour
 
