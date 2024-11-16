@@ -1,5 +1,13 @@
 # Historique des modifications
 
+## 3.0.3 (DEV)
+
+Corrections
+
+- L'import d'un article pouvait échouer si l'un·e de ses contributeur·ices
+  existaient déjà avec un nom dont la graphie était légèrement différente. C'est
+  corrigé.
+
 ## 3.0.2 (13 novembre 2024)
 
 Corrections
