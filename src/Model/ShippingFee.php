@@ -21,6 +21,7 @@ namespace Model;
 use Biblys\Exception\CannotDeleteShippingFeeUsedByOrders;
 use Model\Base\ShippingFee as BaseShippingFee;
 use Propel\Runtime\Connection\ConnectionInterface;
+use Propel\Runtime\Exception\PropelException;
 
 /**
  * Skeleton subclass for representing a row from the 'shipping' table.
@@ -49,6 +50,14 @@ class ShippingFee extends BaseShippingFee
         }
 
         return false;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function isArchived(): bool
+    {
+        return $this->getArchivedAt() !== null;
     }
 
     /**
