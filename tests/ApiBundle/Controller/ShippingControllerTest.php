@@ -274,6 +274,33 @@ class ShippingControllerTest extends TestCase
 
     /**
      * @throws PropelException
+     * @throws Exception
+     */
+    public function testArchiveAction(): void
+    {
+        // given
+        $controller = new ShippingController();
+        $shippingFee = ModelFactory::createShippingFee();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
+
+        // when
+        $response = $controller->archiveAction($currentUser, $shippingFee->getId());
+
+        // then
+        $this->assertEquals(
+            204,
+            $response->getStatusCode(),
+            "it should respond with http 204"
+        );
+        $this->assertTrue(
+            $shippingFee->isArchived(),
+            "it should archive the shipping fee"
+        );
+    }
+
+    /**
+     * @throws PropelException
      */
     public function testDeleteAction()
     {
