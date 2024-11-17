@@ -56,11 +56,18 @@ class OptimizeImagesCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
+        $loggerService = new LoggerService();
+
         $targetDimension = 2000;
         $images = ImageQuery::create()
             ->filterByWidth($targetDimension, Criteria::GREATER_THAN)
             ->orderByFilesize(Criteria::DESC)
             ->find();
+
+        $logMessage = "Found {$images->count()} images to optimize";
+        $output->writeln($logMessage);
+        $loggerService->log("images-import", "info", $logMessage);
+
         $progressBar = new ProgressBar($output, $images->count());
         $progressBar->setFormat("%current%/%max% [%bar%] %percent:3s%% (%remaining:6s%) %message%");
         $progressBar->start();
@@ -81,7 +88,9 @@ class OptimizeImagesCommand extends Command
 
             $oldSizeInMB = round(filesize($imageForModel->getFilePath()) / 1024 / 1024, 2);
 
-            $loggerService = new LoggerService();
+            $logMessage = "Optimizing image {$image->getId()} ($oldSizeInMB MB)… ";
+            $output->writeln($logMessage);
+            $loggerService->log("images-import", "info", $logMessage);
 
             try {
                 $optimizedImagePath = sys_get_temp_dir() . "/optimized-image";
@@ -105,7 +114,7 @@ class OptimizeImagesCommand extends Command
 
             $this->filesystem->remove($optimizedImagePath);
 
-            $successMessage = "Optimized {$image->getType()}: {$image->getFilename()} ($oldSizeInMB Mo > $newSizeInMB Mo)";
+            $successMessage = "Optimized image {$image->getId()} ({$image->getType()}): $oldSizeInMB Mo > $newSizeInMB Mo";
             $loggerService->log("images-optimize", "info", $successMessage);
             $progressBar->setMessage($successMessage);
 
@@ -116,7 +125,9 @@ class OptimizeImagesCommand extends Command
         }
 
         $progressBar->finish();
-        $output->writeln("\n$optimizedImages images optimized, $skippedImages images skipped, $spaceSaved Mo saved");
+        $logMessage = "\n$optimizedImages images optimized, $skippedImages images skipped, $spaceSaved Mo saved";
+        $output->writeln($logMessage);
+        $loggerService->log("images-import", "info", $logMessage);
 
         return 0;
     }
