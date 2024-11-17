@@ -36,7 +36,7 @@ try {
     $imagesServices = new ImagesService($config, $currentSite, $filesystem);
     $application->add(new ImportImagesCommand($config, $filesystem, $imagesServices));
     $application->add(new ExportImagesCommand($imagesServices));
-    $application->add(new OptimizeImagesCommand($config, $filesystem));
+    $application->add(new OptimizeImagesCommand($config, $filesystem, $imagesServices));
     $application->add(new ImportMediaCommand($currentSite, $filesystem));
     $application->add(new MigrateFilesCommand($filesystem));
 } catch (InvalidSiteIdException) {
