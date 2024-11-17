@@ -81,20 +81,30 @@ class OptimizeImagesCommand extends Command
 
             $oldSizeInMB = round(filesize($imageForModel->getFilePath()) / 1024 / 1024, 2);
 
-            $optimizedImagePath = sys_get_temp_dir() . "/optimized-image";
-            Image::load($imageForModel->getFilePath())
-                ->width($targetDimension)
-                ->height($targetDimension)
-                ->save($optimizedImagePath);
-            $newSizeInMB = round(filesize($optimizedImagePath) / 1024 / 1024, 2);
+            $loggerService = new LoggerService();
 
-            $target = $image->getArticle() ?? $image->getStockItem() ?? $image->getPost() ?? $image->getPublisher() ??
-                $image->getContributor() ?? $image->getEvent();
-            $this->imagesService->addImageFor($target, $optimizedImagePath);
+            try {
+                $optimizedImagePath = sys_get_temp_dir() . "/optimized-image";
+                Image::load($imageForModel->getFilePath())
+                    ->width($targetDimension)
+                    ->height($targetDimension)
+                    ->save($optimizedImagePath);
+                $newSizeInMB = round(filesize($optimizedImagePath) / 1024 / 1024, 2);
+
+                $target = $image->getArticle() ?? $image->getStockItem() ?? $image->getPost() ?? $image->getPublisher() ??
+                    $image->getContributor() ?? $image->getEvent();
+                $this->imagesService->addImageFor($target, $optimizedImagePath);
+            } catch (Exception $exception) {
+                $errorMessage = "Failed to optimize image {$image->getId()}: {$exception->getMessage()}";
+                $output->writeln(["", $errorMessage]);
+                $loggerService->log("images-import", "error", $errorMessage);
+                $skippedImages++;
+                $progressBar->advance();
+                continue;
+            }
 
             $this->filesystem->remove($optimizedImagePath);
 
-            $loggerService = new LoggerService();
             $successMessage = "Optimized {$image->getType()}: {$image->getFilename()} ($oldSizeInMB Mo > $newSizeInMB Mo)";
             $loggerService->log("images-optimize", "info", $successMessage);
             $progressBar->setMessage($successMessage);
