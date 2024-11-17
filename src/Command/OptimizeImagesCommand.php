@@ -20,6 +20,7 @@ namespace Command;
 
 use Biblys\Service\Config;
 use Biblys\Service\Images\ImageForModel;
+use Biblys\Service\Images\ImagesService;
 use Biblys\Service\LoggerService;
 use Exception;
 use Model\ImageQuery;
@@ -38,6 +39,7 @@ class OptimizeImagesCommand extends Command
     public function __construct(
         private readonly Config        $config,
         private readonly Filesystem    $filesystem,
+        private readonly ImagesService $imagesService,
         string                         $name = null,
     )
     {
@@ -79,12 +81,16 @@ class OptimizeImagesCommand extends Command
 
             $oldSizeInMB = round(filesize($imageForModel->getFilePath()) / 1024 / 1024, 2);
 
-            $optimizedImagePath = "{$imageForModel->getFilePath()}-optimized.jpg";
+            $optimizedImagePath = sys_get_temp_dir() . "/optimized-image";
             Image::load($imageForModel->getFilePath())
                 ->width($targetDimension)
                 ->height($targetDimension)
                 ->save($optimizedImagePath);
             $newSizeInMB = round(filesize($optimizedImagePath) / 1024 / 1024, 2);
+
+            $target = $image->getArticle() ?? $image->getStockItem() ?? $image->getPost() ?? $image->getPublisher() ??
+                $image->getContributor() ?? $image->getEvent();
+            $this->imagesService->addImageFor($target, $optimizedImagePath);
 
             $this->filesystem->remove($optimizedImagePath);
 
