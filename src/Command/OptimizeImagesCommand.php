@@ -56,11 +56,18 @@ class OptimizeImagesCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
+        $loggerService = new LoggerService();
+
         $targetDimension = 2000;
         $images = ImageQuery::create()
             ->filterByWidth($targetDimension, Criteria::GREATER_THAN)
             ->orderByFilesize(Criteria::DESC)
             ->find();
+
+        $logMessage = "Found {$images->count()} images to optimize";
+        $output->writeln($logMessage);
+        $loggerService->log("images-optimize", "info", $logMessage);
+
         $progressBar = new ProgressBar($output, $images->count());
         $progressBar->setFormat("%current%/%max% [%bar%] %percent:3s%% (%remaining:6s%) %message%");
         $progressBar->start();
@@ -71,9 +78,22 @@ class OptimizeImagesCommand extends Command
 
         foreach ($images as $image) {
             $imageForModel = new ImageForModel($this->config, $image);
+            $target = $image->getArticle() ?? $image->getStockItem() ?? $image->getPost() ?? $image->getPublisher() ??
+                $image->getContributor() ?? $image->getEvent();
+
+            if (!$target) {
+                $logMessage = "Skipping image {$image->getId()} with no nonexistent model {$image->getType()}";
+                $loggerService->log("images-optimize", "info", $logMessage);
+                $progressBar->setMessage($logMessage);
+                $progressBar->advance();
+                $skippedImages++;
+                continue;
+            }
 
             if (!file_exists($imageForModel->getFilePath())) {
-                $progressBar->setMessage("Skipping not found {$image->getType()}: {$image->getFilename()}");
+                $logMessage = "Skipping not found {$image->getType()}: {$image->getFilename()}";
+                $loggerService->log("images-optimize", "info", $logMessage);
+                $progressBar->setMessage($logMessage);
                 $progressBar->advance();
                 $skippedImages++;
                 continue;
@@ -81,7 +101,8 @@ class OptimizeImagesCommand extends Command
 
             $oldSizeInMB = round(filesize($imageForModel->getFilePath()) / 1024 / 1024, 2);
 
-            $loggerService = new LoggerService();
+            $logMessage = "Optimizing image for {$image->getType()} {$target->getId()} ($oldSizeInMB MB)… ";
+            $loggerService->log("images-optimize", "info", $logMessage);
 
             try {
                 $optimizedImagePath = sys_get_temp_dir() . "/optimized-image";
@@ -91,13 +112,12 @@ class OptimizeImagesCommand extends Command
                     ->save($optimizedImagePath);
                 $newSizeInMB = round(filesize($optimizedImagePath) / 1024 / 1024, 2);
 
-                $target = $image->getArticle() ?? $image->getStockItem() ?? $image->getPost() ?? $image->getPublisher() ??
-                    $image->getContributor() ?? $image->getEvent();
+
                 $this->imagesService->addImageFor($target, $optimizedImagePath);
             } catch (Exception $exception) {
                 $errorMessage = "Failed to optimize image {$image->getId()}: {$exception->getMessage()}";
                 $output->writeln(["", $errorMessage]);
-                $loggerService->log("images-import", "error", $errorMessage);
+                $loggerService->log("images-optimize", "error", $errorMessage);
                 $skippedImages++;
                 $progressBar->advance();
                 continue;
@@ -105,7 +125,7 @@ class OptimizeImagesCommand extends Command
 
             $this->filesystem->remove($optimizedImagePath);
 
-            $successMessage = "Optimized {$image->getType()}: {$image->getFilename()} ($oldSizeInMB Mo > $newSizeInMB Mo)";
+            $successMessage = "Optimized image {$image->getId()} ({$image->getType()}): $oldSizeInMB Mo > $newSizeInMB Mo";
             $loggerService->log("images-optimize", "info", $successMessage);
             $progressBar->setMessage($successMessage);
 
@@ -116,7 +136,9 @@ class OptimizeImagesCommand extends Command
         }
 
         $progressBar->finish();
-        $output->writeln("\n$optimizedImages images optimized, $skippedImages images skipped, $spaceSaved Mo saved");
+        $logMessage = "\n$optimizedImages images optimized, $skippedImages images skipped, $spaceSaved Mo saved";
+        $output->writeln($logMessage);
+        $loggerService->log("images-optimize", "info", $logMessage);
 
         return 0;
     }
