@@ -91,8 +91,9 @@ class OpenIDConnectProviderService
         }
 
         try {
-            $issuer = (new IssuerBuilder())
-                ->build('https://axys.me/.well-known/openid-configuration');
+            $baseUri = $this->config->get("axys.base_uri") ?? "https://axys.me/";
+            $wellKnownUrl = "$baseUri.well-known/openid-configuration";
+            $issuer = (new IssuerBuilder())->build($wellKnownUrl);
         } catch(RuntimeException) {
             throw new ServiceUnavailableHttpException("Invalid issuer");
         }
