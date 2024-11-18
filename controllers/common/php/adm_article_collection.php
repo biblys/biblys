@@ -32,11 +32,7 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
  * @throws PropelException
  * @throws Exception
  */
-function admArticleCollectionController(
-    Request $request,
-    CurrentSite $currentSite,
-    CurrentUser $currentUser,
-): Response
+return function (Request $request, CurrentSite $currentSite, CurrentUser $currentUser): Response
 {
     $getTerm = trim($request->query->get('term'));
 
@@ -150,12 +146,4 @@ function admArticleCollectionController(
     }
 
     throw new BadRequestHttpException();
-}
-
-$request = LegacyCodeHelper::getGlobalRequest();
-$config = LegacyCodeHelper::getGlobalConfig();
-$currentSite = CurrentSite::buildFromConfig($config);
-$currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-
-$response = admArticleCollectionController($request, $currentSite, $currentUser);
-$response->send();
+};
