@@ -75,10 +75,6 @@ legacy_x_adm_article_award:
   path: /x/adm_article_award
   controller: ApiBundle\Controller\LegacyController::defaultAction
 
-legacy_x_adm_article_collection:
-  path: /x/adm_article_collection
-  controller: ApiBundle\Controller\LegacyController::defaultAction
-
 legacy_x_adm_article_cycle:
   path: /x/adm_article_cycle
   controller: ApiBundle\Controller\LegacyController::defaultAction
