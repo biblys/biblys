@@ -285,7 +285,7 @@ function reloadArticleAdminEvents(scope) {
   $('#createCollection.event', scope).submit(function (e) {
     e.preventDefault();
     $.post({
-      url: '/x/adm_article_collection',
+      url: '/pages/adm_article_collection',
       data: {
         collection_name: $('#collection_name').val(),
         collection_publisher: $('#collection_publisher').val(),
@@ -302,7 +302,7 @@ function reloadArticleAdminEvents(scope) {
       },
       error: function (data) {
         const { error } = data.responseJSON;
-        _alert(error);
+        _alert(error.message);
       }
     });
   }).removeClass('event');
@@ -418,7 +418,7 @@ $(document).ready(function () {
 
   // Autocomplete collection
   $('#article_collection').autocomplete({
-    source: '/x/adm_article_collection',
+    source: '/pages/adm_article_collection',
     minLength: 3,
     delay: 250,
     select: function (event, ui) {
