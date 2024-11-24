@@ -84,29 +84,30 @@ docker run -it -v ${PWD}:/src ghcr.io/b1nary-gr0up/nwa:main add \
   --skip "vendor/**" \
   --skip "src/Model/Base/*.php" \
   --skip "src/Model/Map/*.php" \
-  **/*.php
+  --skip "src/Biblys/Database/loadDatabase.php" \
+  "**/*.php"
 ```
 
 ```shell
 docker run -it -v ${PWD}:/src ghcr.io/b1nary-gr0up/nwa:main add \
   --copyright "Clément Latzarus" \
   --license agpl-3.0-only \
-  assets/**/*.js \
-  public/assets/js/*.js \
-  public/common/js/*.js
+  "assets/**/*.js" \
+  "public/assets/js/*.js" \
+  "public/common/js/*.js"
 ```
 
 ```shell
 docker run -it -v ${PWD}:/src ghcr.io/b1nary-gr0up/nwa:main add \
   --copyright "Clément Latzarus" \
   --license agpl-3.0-only \
-  **/*.twig
+  "**/*.twig"
 ```
 
 ```shell
 docker run -it -v ${PWD}:/src ghcr.io/b1nary-gr0up/nwa:main add \
   --copyright "Clément Latzarus" \
   --license agpl-3.0-only \
-  assets/**/*.css \
-  public/common/css/*.css
+  "assets/**/*.css" \
+  "public/common/css/*.css"
 ```
