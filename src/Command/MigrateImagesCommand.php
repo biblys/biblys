@@ -103,7 +103,9 @@ class MigrateImagesCommand extends Command
         $this->_migrateImages($loggerService, $output, "post illustrations", $postIllustrations);
 
         $eventIllustrations = $eventIllustrationsQuery->find()->getData();
-        $this->_migrateImages($loggerService, $output, "event illustrations", $eventIllustrations);
+        if (count($eventIllustrations) > 0) {
+            $this->_migrateImages($loggerService, $output, "event illustrations", $eventIllustrations);
+        }
 
         for ($offset = $input->getOption("offset"); $offset < $articleCoversQuery->count(); $offset += 10000) {
             $articleCovers = $this->_createArticleQuery()->limit(10000)->offset($offset)->find()->getData();
