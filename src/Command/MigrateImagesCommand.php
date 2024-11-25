@@ -91,19 +91,29 @@ class MigrateImagesCommand extends Command
         $loggerService = new LoggerService();
 
         $contributorPortraits = $contributorPortraitsQuery->find()->getData();
-        $this->_migrateImages($loggerService, $output, "contributor portraits", $contributorPortraits);
+        if (count($contributorPortraits) > 0) {
+            $this->_migrateImages($loggerService, $output, "contributor portraits", $contributorPortraits);
+        }
 
         $publisherLogos = $publisherLogosQuery->find()->getData();
-        $this->_migrateImages($loggerService, $output, "publisher logos", $publisherLogos);
+        if (count($publisherLogos) > 0) {
+            $this->_migrateImages($loggerService, $output, "publisher logos", $publisherLogos);
+        }
 
         $stockItemsPhotos = $stockItemPhotosQuery->find()->getData();
-        $this->_migrateImages($loggerService, $output, "stock items photos", $stockItemsPhotos);
+        if (count($stockItemsPhotos) > 0) {
+            $this->_migrateImages($loggerService, $output, "stock items photos", $stockItemsPhotos);
+        }
 
         $postIllustrations = $postIllustrationsQuery->find()->getData();
-        $this->_migrateImages($loggerService, $output, "post illustrations", $postIllustrations);
+        if (count($postIllustrations) > 0) {
+            $this->_migrateImages($loggerService, $output, "post illustrations", $postIllustrations);
+        }
 
         $eventIllustrations = $eventIllustrationsQuery->find()->getData();
-        $this->_migrateImages($loggerService, $output, "event illustrations", $eventIllustrations);
+        if (count($eventIllustrations) > 0) {
+            $this->_migrateImages($loggerService, $output, "event illustrations", $eventIllustrations);
+        }
 
         for ($offset = $input->getOption("offset"); $offset < $articleCoversQuery->count(); $offset += 10000) {
             $articleCovers = $this->_createArticleQuery()->limit(10000)->offset($offset)->find()->getData();
