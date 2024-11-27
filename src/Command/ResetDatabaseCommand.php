@@ -44,7 +44,6 @@ class ResetDatabaseCommand extends Command
         $config = Config::load();
         $db = new Database($config->get("db"));
         $db->reset();
-        $db->migrate();
 
         $output->writeln(["Database resetted!"]);
         return 0;
