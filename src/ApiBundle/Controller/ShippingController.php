@@ -189,7 +189,8 @@ class ShippingController extends Controller
             }
         }
 
-        $orderWeight = $request->query->get("order_weight", 0);
+        $shippingPackagingWeight = $currentSite->getOption("shipping_packaging_weight");
+        $orderWeight = $request->query->get("order_weight", 0) + $shippingPackagingWeight;
         $orderAmount = $request->query->get("order_amount", 0);
         $articleCount = $request->query->get("article_count", 0);
         $fees = ShippingFeeQuery::getForCountryAndWeightAndAmountAndArticleCount(
