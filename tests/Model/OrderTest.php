@@ -18,10 +18,17 @@
 
 namespace Model;
 
+use Biblys\Test\ModelFactory;
 use PHPUnit\Framework\TestCase;
+use Propel\Runtime\Exception\PropelException;
+
+require_once __DIR__ . "/../setUp.php";
 
 class OrderTest extends TestCase
 {
+
+    /** getTrackingLink */
+
     public function testGetTrackingLink(): void
     {
         // given
@@ -78,5 +85,24 @@ class OrderTest extends TestCase
             "https://www.mondialrelay.fr/suivi-de-colis?numeroExpedition=1234567890&codePostal=46800",
             $result
         );
+    }
+
+    /** getTotalWeight */
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetTotalWeight(): void
+    {
+        // given
+        $order = ModelFactory::createOrder();
+        ModelFactory::createStockItem(order: $order, weight: 123);
+        ModelFactory::createStockItem(order: $order, weight: 456);
+
+        // when
+        $result = $order->getTotalWeight();
+
+        // then
+        $this->assertEquals(579, $result);
     }
 }

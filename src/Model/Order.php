@@ -19,6 +19,7 @@
 namespace Model;
 
 use Model\Base\Order as BaseOrder;
+use Propel\Runtime\Exception\PropelException;
 
 /**
  * Skeleton subclass for representing a row from the 'orders' table.
@@ -52,5 +53,16 @@ class Order extends BaseOrder
         }
 
         return "";
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function getTotalWeight(): int
+    {
+        $stockItems = $this->getStockItems()->getArrayCopy();
+        return array_reduce($stockItems, function ($totalWeight, $stockItem) {
+            return $totalWeight + $stockItem->getWeight();
+        }, 0);
     }
 }
