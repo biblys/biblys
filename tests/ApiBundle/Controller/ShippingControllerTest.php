@@ -314,7 +314,7 @@ class ShippingControllerTest extends TestCase
             mode: "Colissimo",
             info: "Expedition sous 72h",
             fee: 560,
-            maxWeight: 2000,
+            maxWeight: 600,
             maxAmount: 10000,
             maxArticles: 5,
         );
@@ -326,6 +326,7 @@ class ShippingControllerTest extends TestCase
         $request->query->set("order_amount", "2000");
         $request->query->set("article_count", "2");
         $currentSite = new CurrentSite($site);
+        ModelFactory::createSiteOption($site,"shipping_packaging_weight", "100");
 
         // when
         $response = $controller->search($request, $currentSite);

@@ -93,6 +93,10 @@ class CurrentSite
             return "10";
         }
 
+        if ($key === "shipping_packaging_weight") {
+            return "0";
+        }
+
         return null;
     }
 
