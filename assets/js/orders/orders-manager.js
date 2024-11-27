@@ -24,39 +24,39 @@ export default class OrdersManager {
     this.loadOrders();
 
     // Load filtered orders on form submit
-    $('#showOrders').on('submit', event => this.loadOrders(event));
+    const showOrdersForm = document.getElementById('showOrders');
+    showOrdersForm.addEventListener('submit', (event) => {
+      event.preventDefault();
 
-    var loadMoreOrdersButton = document.getElementById('load-more-orders-button');
+      const action = event.submitter.dataset.action;
+      if (action === 'show') {
+        this.loadOrders();
+      }
+
+      if (action === 'export') {
+        const url = `${window.location.protocol}//${window.location.host}${event.submitter.dataset.export_url}`;
+        window.location.href = this._addParamsToUrl(url).toString();
+      }
+    });
+
+    const loadMoreOrdersButton = document.getElementById('load-more-orders-button');
     loadMoreOrdersButton.addEventListener('click', () => this.loadMoreOrders());
   }
 
-  loadOrders(event, offset) {
-    if (event) {
-      event.preventDefault();
-    }
+  loadOrders(offset = 0) {
 
-    var params = {};
-    params.status = $('#order_status').val();
-    params.payment = $('#order_payment_mode').val();
-    params.shipping = $('#order_shipping_mode').val();
-    params.query = $('#query').val();
-
-    params.offset = typeof offset === 'undefined' ? 0 : offset;
-
-    var loadMoreOrdersButton = document.getElementById('load-more-orders-button');
+    const url = this._addParamsToUrl(document.location);
+    url.searchParams.append('offset', offset);
 
     // If offset = 0, reset table
-    if (params.offset === 0) {
+    if (offset === 0) {
       $('#orders').html('');
     }
 
     // Show loading
     $('#ordersLoading').show();
 
-    // Build url with params
-    var url = new URL(document.location);
-    url.search = new URLSearchParams(params);
-
+    var loadMoreOrdersButton = document.getElementById('load-more-orders-button');
     loadMoreOrdersButton.style.opacity = 0;
 
     // Load orders
@@ -70,7 +70,7 @@ export default class OrdersManager {
         $('#ordersLoading').hide();
 
         if (data.error) {
-          window._alert(data.error);
+          window._alert(data.error.message);
         }
 
         if (data.results > 0) {
@@ -94,7 +94,7 @@ export default class OrdersManager {
           }
         } else {
           $('#orders').html(
-            '<tr><td colspan="9" class="text-center alert-success">Aucune commande à afficher.</td></tr>'
+            '<tr><td colspan="10" class="text-center alert-success">Aucune commande à afficher.</td></tr>'
           );
         }
       });
@@ -103,6 +103,20 @@ export default class OrdersManager {
   loadMoreOrders() {
     var orders = document.querySelectorAll('#orders tr');
     var ordersCount = orders.length;
-    this.loadOrders(null, ordersCount);
+    this.loadOrders(ordersCount);
+  }
+
+  _addParamsToUrl(url) {
+    const params = {
+      status: document.getElementById('order_status').value,
+      payment: document.getElementById('order_payment_mode').value,
+      shipping: document.getElementById('order_shipping_mode').value,
+      query: document.getElementById('query').value
+    };
+
+    const newUrl = new URL(url);
+    newUrl.search = new URLSearchParams(params).toString();
+
+    return newUrl;
   }
 }
