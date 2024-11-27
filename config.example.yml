@@ -142,3 +142,4 @@ smtp:
 #mondial_relay:
 #  code_enseigne: ABCD1234
 #  private_key: abcdefghij
+#  id_relais_collecte: 123456
