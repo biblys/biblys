@@ -1,0 +1,30 @@
+#!/usr/bin/env php
+
+<?php
+
+ini_set("display_errors", 1);
+ini_set("display_startup_errors", 1);
+error_reporting(E_ALL);
+
+require __DIR__ . "/../vendor/autoload.php";
+
+use Biblys\Database\Connection;
+use Biblys\Service\Config;
+use Propel\Runtime\Propel;
+
+$config = Config::load();
+Connection::initPropel($config);
+
+echo "Resetting database… \r\n";
+
+$config = Config::load();
+
+$connection = Propel::getConnection();
+
+$connection->exec(sprintf("DROP DATABASE IF EXISTS `%s`", $config->get("db.base")));
+$connection->exec(sprintf("CREATE DATABASE `%s`", $config->get("db.base")));
+$connection->exec(sprintf("USE `%s`", $config->get("db.base")));
+
+echo "Database was reset. \r\n";
+
+return 0;

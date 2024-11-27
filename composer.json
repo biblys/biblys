@@ -24,7 +24,7 @@
     "propel:build": "vendor/bin/propel model:build --output-dir src --loader-script-dir src/Biblys/Database",
     "propel:diff": "vendor/bin/propel diff",
     "propel:migrate": "vendor/bin/propel migrate",
-    "db:reset": ["bin/console db:reset", "@db:migrate"],
+    "db:reset": "bin/database-reset",
     "db:migrate": "vendor/bin/propel migrate",
     "db:seed": "bin/console db:seed",
     "db:prepare": ["@db:reset", "@db:migrate", "@db:seed"],
