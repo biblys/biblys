@@ -371,6 +371,7 @@ class ModelFactory
         DateTime $sellingDate = null,
         DateTime $returnDate = null,
         DateTime $lostDate = null,
+        int      $weight = null,
         string   $lemoninkTransactionId = null,
         string   $lemoninkTransactionToken = null,
         string   $axysAccountId = null,
@@ -387,6 +388,7 @@ class ModelFactory
         $stock->setSellingDate($sellingDate);
         $stock->setReturnDate($returnDate);
         $stock->setLostDate($lostDate);
+        $stock->setWeight($weight);
         $stock->setLemonInkTransactionId($lemoninkTransactionId);
         $stock->setLemonInkTransactionToken($lemoninkTransactionToken);
         $stock->setAxysAccountId($axysAccountId);
@@ -633,7 +635,7 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createCustomer(
-        Site   $site,
+        Site   $site = null,
         User   $user = null,
         string $axysAccountId = null,
     ): Customer
