@@ -37,7 +37,7 @@ try {
     $imagesService = new ImagesService($config, $currentSite, $filesystem);
     $application->add(new ImportImagesCommand($config, $filesystem, $imagesService));
     $application->add(new ExportImagesCommand($imagesService));
-    $application->add(new OptimizeImagesCommand($config, $filesystem, $imagesServices));
+    $application->add(new OptimizeImagesCommand($config, $filesystem, $imagesService));
     $application->add(new ImportMediaCommand($currentSite, $filesystem));
     $application->add(new MigrateFilesCommand($filesystem));
     $application->add(new MigrateImagesCommand($config, $currentSite, $imagesService));
