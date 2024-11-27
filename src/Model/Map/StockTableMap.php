@@ -719,7 +719,7 @@ class StockTableMap extends TableMap
         $this->addColumn('customer_id', 'CustomerId', 'INTEGER', false, null, null);
         $this->addColumn('wish_id', 'WishId', 'INTEGER', false, null, null);
         $this->addForeignKey('cart_id', 'CartId', 'INTEGER', 'carts', 'cart_id', false, null, null);
-        $this->addColumn('order_id', 'OrderId', 'INTEGER', false, null, null);
+        $this->addForeignKey('order_id', 'OrderId', 'INTEGER', 'orders', 'order_id', false, null, null);
         $this->addColumn('coupon_id', 'CouponId', 'INTEGER', false, null, null);
         $this->addColumn('stock_shop', 'Shop', 'INTEGER', false, null, null);
         $this->addColumn('stock_invoice', 'Invoice', 'VARCHAR', false, 256, null);
@@ -781,6 +781,13 @@ class StockTableMap extends TableMap
   array (
     0 => ':cart_id',
     1 => ':cart_id',
+  ),
+), null, null, null, false);
+        $this->addRelation('Order', '\\Model\\Order', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':order_id',
+    1 => ':order_id',
   ),
 ), null, null, null, false);
         $this->addRelation('Article', '\\Model\\Article', RelationMap::MANY_TO_ONE, array (

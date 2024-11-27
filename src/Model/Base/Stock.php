@@ -11,6 +11,8 @@ use Model\Cart as ChildCart;
 use Model\CartQuery as ChildCartQuery;
 use Model\Image as ChildImage;
 use Model\ImageQuery as ChildImageQuery;
+use Model\Order as ChildOrder;
+use Model\OrderQuery as ChildOrderQuery;
 use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
 use Model\Stock as ChildStock;
@@ -404,6 +406,11 @@ abstract class Stock implements ActiveRecordInterface
      * @var        ChildCart
      */
     protected $aCart;
+
+    /**
+     * @var        ChildOrder
+     */
+    protected $aOrder;
 
     /**
      * @var        ChildArticle
@@ -1519,6 +1526,10 @@ abstract class Stock implements ActiveRecordInterface
             $this->modifiedColumns[StockTableMap::COL_ORDER_ID] = true;
         }
 
+        if ($this->aOrder !== null && $this->aOrder->getId() !== $v) {
+            $this->aOrder = null;
+        }
+
         return $this;
     }
 
@@ -2486,6 +2497,9 @@ abstract class Stock implements ActiveRecordInterface
         if ($this->aCart !== null && $this->cart_id !== $this->aCart->getId()) {
             $this->aCart = null;
         }
+        if ($this->aOrder !== null && $this->order_id !== $this->aOrder->getId()) {
+            $this->aOrder = null;
+        }
     }
 
     /**
@@ -2528,6 +2542,7 @@ abstract class Stock implements ActiveRecordInterface
             $this->aSite = null;
             $this->aUser = null;
             $this->aCart = null;
+            $this->aOrder = null;
             $this->aArticle = null;
             $this->collImages = null;
 
@@ -2671,6 +2686,13 @@ abstract class Stock implements ActiveRecordInterface
                     $affectedRows += $this->aCart->save($con);
                 }
                 $this->setCart($this->aCart);
+            }
+
+            if ($this->aOrder !== null) {
+                if ($this->aOrder->isModified() || $this->aOrder->isNew()) {
+                    $affectedRows += $this->aOrder->save($con);
+                }
+                $this->setOrder($this->aOrder);
             }
 
             if ($this->aArticle !== null) {
@@ -3411,6 +3433,21 @@ abstract class Stock implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aCart->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aOrder) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'order';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'orders';
+                        break;
+                    default:
+                        $key = 'Order';
+                }
+
+                $result[$key] = $this->aOrder->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aArticle) {
 
@@ -4270,6 +4307,57 @@ abstract class Stock implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildOrder object.
+     *
+     * @param ChildOrder|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setOrder(ChildOrder $v = null)
+    {
+        if ($v === null) {
+            $this->setOrderId(NULL);
+        } else {
+            $this->setOrderId($v->getId());
+        }
+
+        $this->aOrder = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildOrder object, it will not be re-added.
+        if ($v !== null) {
+            $v->addStockItem($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildOrder object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildOrder|null The associated ChildOrder object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getOrder(?ConnectionInterface $con = null)
+    {
+        if ($this->aOrder === null && ($this->order_id != 0)) {
+            $this->aOrder = ChildOrderQuery::create()->findPk($this->order_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aOrder->addStockItems($this);
+             */
+        }
+
+        return $this->aOrder;
+    }
+
+    /**
      * Declares an association between this object and a ChildArticle object.
      *
      * @param ChildArticle|null $v
@@ -4750,6 +4838,9 @@ abstract class Stock implements ActiveRecordInterface
         if (null !== $this->aCart) {
             $this->aCart->removeStock($this);
         }
+        if (null !== $this->aOrder) {
+            $this->aOrder->removeStockItem($this);
+        }
         if (null !== $this->aArticle) {
             $this->aArticle->removeStock($this);
         }
@@ -4830,6 +4921,7 @@ abstract class Stock implements ActiveRecordInterface
         $this->aSite = null;
         $this->aUser = null;
         $this->aCart = null;
+        $this->aOrder = null;
         $this->aArticle = null;
         return $this;
     }
