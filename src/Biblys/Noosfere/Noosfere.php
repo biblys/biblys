@@ -268,9 +268,9 @@ class Noosfere
      * @throws Exception
      */
     public static function getOrCreateContributor(
-        int       $noosfereContributorId,
-        string    $noosfereContributorFirstName,
-        string    $noosfereContributorLastName,
+        int     $noosfereContributorId,
+        ?string $noosfereContributorFirstName,
+        ?string $noosfereContributorLastName,
     ): People
     {
         $slugService = new SlugService();
