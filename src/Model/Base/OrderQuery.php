@@ -177,7 +177,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery rightJoinWithPayment() Adds a RIGHT JOIN clause and with to the query using the Payment relation
  * @method     ChildOrderQuery innerJoinWithPayment() Adds a INNER JOIN clause and with to the query using the Payment relation
  *
- * @method     \Model\UserQuery|\Model\ShippingFeeQuery|\Model\CountryQuery|\Model\SiteQuery|\Model\PaymentQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildOrderQuery leftJoinStockItem($relationAlias = null) Adds a LEFT JOIN clause to the query using the StockItem relation
+ * @method     ChildOrderQuery rightJoinStockItem($relationAlias = null) Adds a RIGHT JOIN clause to the query using the StockItem relation
+ * @method     ChildOrderQuery innerJoinStockItem($relationAlias = null) Adds a INNER JOIN clause to the query using the StockItem relation
+ *
+ * @method     ChildOrderQuery joinWithStockItem($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the StockItem relation
+ *
+ * @method     ChildOrderQuery leftJoinWithStockItem() Adds a LEFT JOIN clause and with to the query using the StockItem relation
+ * @method     ChildOrderQuery rightJoinWithStockItem() Adds a RIGHT JOIN clause and with to the query using the StockItem relation
+ * @method     ChildOrderQuery innerJoinWithStockItem() Adds a INNER JOIN clause and with to the query using the StockItem relation
+ *
+ * @method     \Model\UserQuery|\Model\ShippingFeeQuery|\Model\CountryQuery|\Model\SiteQuery|\Model\PaymentQuery|\Model\StockQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildOrder|null findOne(?ConnectionInterface $con = null) Return the first ChildOrder matching the query
  * @method     ChildOrder findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildOrder matching the query, or a new ChildOrder object populated from the query conditions when no match is found
@@ -3282,6 +3292,179 @@ abstract class OrderQuery extends ModelCriteria
     {
         /** @var $q \Model\PaymentQuery */
         $q = $this->useInQuery('Payment', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\Stock object
+     *
+     * @param \Model\Stock|ObjectCollection $stock the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByStockItem($stock, ?string $comparison = null)
+    {
+        if ($stock instanceof \Model\Stock) {
+            $this
+                ->addUsingAlias(OrderTableMap::COL_ORDER_ID, $stock->getOrderId(), $comparison);
+
+            return $this;
+        } elseif ($stock instanceof ObjectCollection) {
+            $this
+                ->useStockItemQuery()
+                ->filterByPrimaryKeys($stock->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByStockItem() only accepts arguments of type \Model\Stock or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the StockItem relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinStockItem(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('StockItem');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'StockItem');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the StockItem relation Stock object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\StockQuery A secondary query class using the current class as primary query
+     */
+    public function useStockItemQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinStockItem($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'StockItem', '\Model\StockQuery');
+    }
+
+    /**
+     * Use the StockItem relation Stock object
+     *
+     * @param callable(\Model\StockQuery):\Model\StockQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withStockItemQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useStockItemQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the StockItem relation to the Stock table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\StockQuery The inner query object of the EXISTS statement
+     */
+    public function useStockItemExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\StockQuery */
+        $q = $this->useExistsQuery('StockItem', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the StockItem relation to the Stock table for a NOT EXISTS query.
+     *
+     * @see useStockItemExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\StockQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useStockItemNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\StockQuery */
+        $q = $this->useExistsQuery('StockItem', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the StockItem relation to the Stock table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\StockQuery The inner query object of the IN statement
+     */
+    public function useInStockItemQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\StockQuery */
+        $q = $this->useInQuery('StockItem', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the StockItem relation to the Stock table for a NOT IN query.
+     *
+     * @see useStockItemInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\StockQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInStockItemQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\StockQuery */
+        $q = $this->useInQuery('StockItem', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 

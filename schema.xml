@@ -1490,6 +1490,9 @@
       <reference local="cart_id" foreign="cart_id"/>
     </foreign-key>
     <column name="order_id" phpName="OrderId" type="INTEGER" sqlType="int unsigned"/>
+    <foreign-key foreignTable="orders" skipSql="true" refPhpName="StockItem">
+      <reference local="order_id" foreign="order_id"/>
+    </foreign-key>
     <column name="coupon_id" phpName="CouponId" type="INTEGER" sqlType="int unsigned"/>
     <column name="stock_shop" phpName="Shop" type="INTEGER" sqlType="int unsigned"/>
     <column name="stock_invoice" phpName="Invoice" type="VARCHAR" size="256"/>

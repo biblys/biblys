@@ -147,6 +147,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockQuery rightJoinWithCart() Adds a RIGHT JOIN clause and with to the query using the Cart relation
  * @method     ChildStockQuery innerJoinWithCart() Adds a INNER JOIN clause and with to the query using the Cart relation
  *
+ * @method     ChildStockQuery leftJoinOrder($relationAlias = null) Adds a LEFT JOIN clause to the query using the Order relation
+ * @method     ChildStockQuery rightJoinOrder($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Order relation
+ * @method     ChildStockQuery innerJoinOrder($relationAlias = null) Adds a INNER JOIN clause to the query using the Order relation
+ *
+ * @method     ChildStockQuery joinWithOrder($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Order relation
+ *
+ * @method     ChildStockQuery leftJoinWithOrder() Adds a LEFT JOIN clause and with to the query using the Order relation
+ * @method     ChildStockQuery rightJoinWithOrder() Adds a RIGHT JOIN clause and with to the query using the Order relation
+ * @method     ChildStockQuery innerJoinWithOrder() Adds a INNER JOIN clause and with to the query using the Order relation
+ *
  * @method     ChildStockQuery leftJoinArticle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Article relation
  * @method     ChildStockQuery rightJoinArticle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Article relation
  * @method     ChildStockQuery innerJoinArticle($relationAlias = null) Adds a INNER JOIN clause to the query using the Article relation
@@ -167,7 +177,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockQuery rightJoinWithImage() Adds a RIGHT JOIN clause and with to the query using the Image relation
  * @method     ChildStockQuery innerJoinWithImage() Adds a INNER JOIN clause and with to the query using the Image relation
  *
- * @method     \Model\SiteQuery|\Model\UserQuery|\Model\CartQuery|\Model\ArticleQuery|\Model\ImageQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\SiteQuery|\Model\UserQuery|\Model\CartQuery|\Model\OrderQuery|\Model\ArticleQuery|\Model\ImageQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildStock|null findOne(?ConnectionInterface $con = null) Return the first ChildStock matching the query
  * @method     ChildStock findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildStock matching the query, or a new ChildStock object populated from the query conditions when no match is found
@@ -996,6 +1006,8 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByOrderId(array(12, 34)); // WHERE order_id IN (12, 34)
      * $query->filterByOrderId(array('min' => 12)); // WHERE order_id > 12
      * </code>
+     *
+     * @see       filterByOrder()
      *
      * @param mixed $orderId The value to use as filter.
      *              Use scalar values for equality.
@@ -2831,6 +2843,181 @@ abstract class StockQuery extends ModelCriteria
     {
         /** @var $q \Model\CartQuery */
         $q = $this->useInQuery('Cart', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\Order object
+     *
+     * @param \Model\Order|ObjectCollection $order The related object(s) to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByOrder($order, ?string $comparison = null)
+    {
+        if ($order instanceof \Model\Order) {
+            return $this
+                ->addUsingAlias(StockTableMap::COL_ORDER_ID, $order->getId(), $comparison);
+        } elseif ($order instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            $this
+                ->addUsingAlias(StockTableMap::COL_ORDER_ID, $order->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
+        } else {
+            throw new PropelException('filterByOrder() only accepts arguments of type \Model\Order or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Order relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinOrder(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Order');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Order');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Order relation Order object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\OrderQuery A secondary query class using the current class as primary query
+     */
+    public function useOrderQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinOrder($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Order', '\Model\OrderQuery');
+    }
+
+    /**
+     * Use the Order relation Order object
+     *
+     * @param callable(\Model\OrderQuery):\Model\OrderQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withOrderQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useOrderQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Order table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\OrderQuery The inner query object of the EXISTS statement
+     */
+    public function useOrderExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\OrderQuery */
+        $q = $this->useExistsQuery('Order', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Order table for a NOT EXISTS query.
+     *
+     * @see useOrderExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\OrderQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useOrderNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\OrderQuery */
+        $q = $this->useExistsQuery('Order', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Order table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\OrderQuery The inner query object of the IN statement
+     */
+    public function useInOrderQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\OrderQuery */
+        $q = $this->useInQuery('Order', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Order table for a NOT IN query.
+     *
+     * @see useOrderInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\OrderQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInOrderQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\OrderQuery */
+        $q = $this->useInQuery('Order', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 
