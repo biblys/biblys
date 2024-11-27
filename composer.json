@@ -3,7 +3,11 @@
   "description": "La solution web tout en un au service de l'édition et de la librairie indépendante",
   "license": "proprietary",
   "scripts": {
-    "test": "PHP_ENV=test vendor/bin/phpunit --stop-on-error --stop-on-failure tests/",
+    "test": [
+      "PHP_ENV=test composer db:reset",
+      "PHP_ENV=test composer db:migrate",
+      "PHP_ENV=test vendor/bin/phpunit --stop-on-error --stop-on-failure tests/"
+    ],
     "test:path": "PHP_ENV=test vendor/bin/phpunit --stop-on-error --stop-on-failure",
     "build": "yarn encore dev",
     "build:watch": "yarn encore dev --watch",
