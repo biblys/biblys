@@ -16,6 +16,7 @@
  */
 
 
+use Biblys\Database\Connection;
 use Biblys\Service\Config;
 use Propel\Runtime\Exception\PropelException;
 
@@ -31,7 +32,9 @@ $_SERVER["SCRIPT_NAME"] = "index.php";
 $_SERVER["REMOTE_ADDR"] = "127.0.0.1";
 
 $config = Config::load();
-setUpTestDatabase($config->get("db"));
+Connection::initPropel($config);
+createFixtures();
+
 require_once __DIR__."/../inc/functions.php";
 $config->set("environment", "test");
 
@@ -49,14 +52,4 @@ function createFixtures(): void
     $site->setContact("contact@biblys.fr");
     $site->setTag("YS");
     $site->save();
-}
-
-/**
- * @throws PropelException
- * @throws Exception
- */
-function setUpTestDatabase($dbConfig)
-{
-    new Biblys\Database\Database($dbConfig);
-    createFixtures();
 }
