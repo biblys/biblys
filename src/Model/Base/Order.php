@@ -5,10 +5,14 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\Country as ChildCountry;
+use Model\CountryQuery as ChildCountryQuery;
 use Model\Order as ChildOrder;
 use Model\OrderQuery as ChildOrderQuery;
 use Model\Payment as ChildPayment;
 use Model\PaymentQuery as ChildPaymentQuery;
+use Model\ShippingFee as ChildShippingFee;
+use Model\ShippingFeeQuery as ChildShippingFeeQuery;
 use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
 use Model\User as ChildUser;
@@ -430,6 +434,16 @@ abstract class Order implements ActiveRecordInterface
      * @var        ChildUser
      */
     protected $aUser;
+
+    /**
+     * @var        ChildShippingFee
+     */
+    protected $aShippingFee;
+
+    /**
+     * @var        ChildCountry
+     */
+    protected $aCountry;
 
     /**
      * @var        ChildSite
@@ -1052,7 +1066,7 @@ abstract class Order implements ActiveRecordInterface
      *
      * @return string|null
      */
-    public function getCountry()
+    public function getCountryName()
     {
         return $this->order_country;
     }
@@ -1590,6 +1604,10 @@ abstract class Order implements ActiveRecordInterface
             $this->modifiedColumns[OrderTableMap::COL_SHIPPING_ID] = true;
         }
 
+        if ($this->aShippingFee !== null && $this->aShippingFee->getId() !== $v) {
+            $this->aShippingFee = null;
+        }
+
         return $this;
     }
 
@@ -1608,6 +1626,10 @@ abstract class Order implements ActiveRecordInterface
         if ($this->country_id !== $v) {
             $this->country_id = $v;
             $this->modifiedColumns[OrderTableMap::COL_COUNTRY_ID] = true;
+        }
+
+        if ($this->aCountry !== null && $this->aCountry->getId() !== $v) {
+            $this->aCountry = null;
         }
 
         return $this;
@@ -1999,7 +2021,7 @@ abstract class Order implements ActiveRecordInterface
      * @param string|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setCountry($v)
+    public function setCountryName($v)
     {
         if ($v !== null) {
             $v = (string) $v;
@@ -2475,7 +2497,7 @@ abstract class Order implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 33 + $startcol : OrderTableMap::translateFieldName('City', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_city = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 34 + $startcol : OrderTableMap::translateFieldName('Country', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 34 + $startcol : OrderTableMap::translateFieldName('CountryName', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_country = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 35 + $startcol : OrderTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
@@ -2583,6 +2605,12 @@ abstract class Order implements ActiveRecordInterface
         if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
             $this->aUser = null;
         }
+        if ($this->aShippingFee !== null && $this->shipping_id !== $this->aShippingFee->getId()) {
+            $this->aShippingFee = null;
+        }
+        if ($this->aCountry !== null && $this->country_id !== $this->aCountry->getId()) {
+            $this->aCountry = null;
+        }
     }
 
     /**
@@ -2623,6 +2651,8 @@ abstract class Order implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aUser = null;
+            $this->aShippingFee = null;
+            $this->aCountry = null;
             $this->aSite = null;
             $this->collPayments = null;
 
@@ -2752,6 +2782,20 @@ abstract class Order implements ActiveRecordInterface
                     $affectedRows += $this->aUser->save($con);
                 }
                 $this->setUser($this->aUser);
+            }
+
+            if ($this->aShippingFee !== null) {
+                if ($this->aShippingFee->isModified() || $this->aShippingFee->isNew()) {
+                    $affectedRows += $this->aShippingFee->save($con);
+                }
+                $this->setShippingFee($this->aShippingFee);
+            }
+
+            if ($this->aCountry !== null) {
+                if ($this->aCountry->isModified() || $this->aCountry->isNew()) {
+                    $affectedRows += $this->aCountry->save($con);
+                }
+                $this->setCountry($this->aCountry);
             }
 
             if ($this->aSite !== null) {
@@ -3335,7 +3379,7 @@ abstract class Order implements ActiveRecordInterface
                 return $this->getCity();
 
             case 34:
-                return $this->getCountry();
+                return $this->getCountryName();
 
             case 35:
                 return $this->getEmail();
@@ -3441,7 +3485,7 @@ abstract class Order implements ActiveRecordInterface
             $keys[31] => $this->getAddress2(),
             $keys[32] => $this->getPostalcode(),
             $keys[33] => $this->getCity(),
-            $keys[34] => $this->getCountry(),
+            $keys[34] => $this->getCountryName(),
             $keys[35] => $this->getEmail(),
             $keys[36] => $this->getPhone(),
             $keys[37] => $this->getComment(),
@@ -3513,6 +3557,36 @@ abstract class Order implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aShippingFee) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'shippingFee';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'shipping';
+                        break;
+                    default:
+                        $key = 'ShippingFee';
+                }
+
+                $result[$key] = $this->aShippingFee->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aCountry) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'country';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'countries';
+                        break;
+                    default:
+                        $key = 'Country';
+                }
+
+                $result[$key] = $this->aCountry->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aSite) {
 
@@ -3683,7 +3757,7 @@ abstract class Order implements ActiveRecordInterface
                 $this->setCity($value);
                 break;
             case 34:
-                $this->setCountry($value);
+                $this->setCountryName($value);
                 break;
             case 35:
                 $this->setEmail($value);
@@ -3856,7 +3930,7 @@ abstract class Order implements ActiveRecordInterface
             $this->setCity($arr[$keys[33]]);
         }
         if (array_key_exists($keys[34], $arr)) {
-            $this->setCountry($arr[$keys[34]]);
+            $this->setCountryName($arr[$keys[34]]);
         }
         if (array_key_exists($keys[35], $arr)) {
             $this->setEmail($arr[$keys[35]]);
@@ -4211,7 +4285,7 @@ abstract class Order implements ActiveRecordInterface
         $copyObj->setAddress2($this->getAddress2());
         $copyObj->setPostalcode($this->getPostalcode());
         $copyObj->setCity($this->getCity());
-        $copyObj->setCountry($this->getCountry());
+        $copyObj->setCountryName($this->getCountryName());
         $copyObj->setEmail($this->getEmail());
         $copyObj->setPhone($this->getPhone());
         $copyObj->setComment($this->getComment());
@@ -4317,6 +4391,108 @@ abstract class Order implements ActiveRecordInterface
         }
 
         return $this->aUser;
+    }
+
+    /**
+     * Declares an association between this object and a ChildShippingFee object.
+     *
+     * @param ChildShippingFee|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setShippingFee(ChildShippingFee $v = null)
+    {
+        if ($v === null) {
+            $this->setShippingId(NULL);
+        } else {
+            $this->setShippingId($v->getId());
+        }
+
+        $this->aShippingFee = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildShippingFee object, it will not be re-added.
+        if ($v !== null) {
+            $v->addOrder($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildShippingFee object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildShippingFee|null The associated ChildShippingFee object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getShippingFee(?ConnectionInterface $con = null)
+    {
+        if ($this->aShippingFee === null && ($this->shipping_id != 0)) {
+            $this->aShippingFee = ChildShippingFeeQuery::create()->findPk($this->shipping_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aShippingFee->addOrders($this);
+             */
+        }
+
+        return $this->aShippingFee;
+    }
+
+    /**
+     * Declares an association between this object and a ChildCountry object.
+     *
+     * @param ChildCountry|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setCountry(ChildCountry $v = null)
+    {
+        if ($v === null) {
+            $this->setCountryId(NULL);
+        } else {
+            $this->setCountryId($v->getId());
+        }
+
+        $this->aCountry = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildCountry object, it will not be re-added.
+        if ($v !== null) {
+            $v->addOrder($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildCountry object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildCountry|null The associated ChildCountry object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getCountry(?ConnectionInterface $con = null)
+    {
+        if ($this->aCountry === null && ($this->country_id != 0)) {
+            $this->aCountry = ChildCountryQuery::create()->findPk($this->country_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aCountry->addOrders($this);
+             */
+        }
+
+        return $this->aCountry;
     }
 
     /**
@@ -4664,6 +4840,12 @@ abstract class Order implements ActiveRecordInterface
         if (null !== $this->aUser) {
             $this->aUser->removeOrder($this);
         }
+        if (null !== $this->aShippingFee) {
+            $this->aShippingFee->removeOrder($this);
+        }
+        if (null !== $this->aCountry) {
+            $this->aCountry->removeOrder($this);
+        }
         if (null !== $this->aSite) {
             $this->aSite->removeOrder($this);
         }
@@ -4747,6 +4929,8 @@ abstract class Order implements ActiveRecordInterface
 
         $this->collPayments = null;
         $this->aUser = null;
+        $this->aShippingFee = null;
+        $this->aCountry = null;
         $this->aSite = null;
         return $this;
     }

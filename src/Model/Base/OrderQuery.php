@@ -53,7 +53,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery orderByAddress2($order = Criteria::ASC) Order by the order_address2 column
  * @method     ChildOrderQuery orderByPostalcode($order = Criteria::ASC) Order by the order_postalcode column
  * @method     ChildOrderQuery orderByCity($order = Criteria::ASC) Order by the order_city column
- * @method     ChildOrderQuery orderByCountry($order = Criteria::ASC) Order by the order_country column
+ * @method     ChildOrderQuery orderByCountryName($order = Criteria::ASC) Order by the order_country column
  * @method     ChildOrderQuery orderByEmail($order = Criteria::ASC) Order by the order_email column
  * @method     ChildOrderQuery orderByPhone($order = Criteria::ASC) Order by the order_phone column
  * @method     ChildOrderQuery orderByComment($order = Criteria::ASC) Order by the order_comment column
@@ -103,7 +103,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery groupByAddress2() Group by the order_address2 column
  * @method     ChildOrderQuery groupByPostalcode() Group by the order_postalcode column
  * @method     ChildOrderQuery groupByCity() Group by the order_city column
- * @method     ChildOrderQuery groupByCountry() Group by the order_country column
+ * @method     ChildOrderQuery groupByCountryName() Group by the order_country column
  * @method     ChildOrderQuery groupByEmail() Group by the order_email column
  * @method     ChildOrderQuery groupByPhone() Group by the order_phone column
  * @method     ChildOrderQuery groupByComment() Group by the order_comment column
@@ -137,6 +137,26 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
  * @method     ChildOrderQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
  *
+ * @method     ChildOrderQuery leftJoinShippingFee($relationAlias = null) Adds a LEFT JOIN clause to the query using the ShippingFee relation
+ * @method     ChildOrderQuery rightJoinShippingFee($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ShippingFee relation
+ * @method     ChildOrderQuery innerJoinShippingFee($relationAlias = null) Adds a INNER JOIN clause to the query using the ShippingFee relation
+ *
+ * @method     ChildOrderQuery joinWithShippingFee($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the ShippingFee relation
+ *
+ * @method     ChildOrderQuery leftJoinWithShippingFee() Adds a LEFT JOIN clause and with to the query using the ShippingFee relation
+ * @method     ChildOrderQuery rightJoinWithShippingFee() Adds a RIGHT JOIN clause and with to the query using the ShippingFee relation
+ * @method     ChildOrderQuery innerJoinWithShippingFee() Adds a INNER JOIN clause and with to the query using the ShippingFee relation
+ *
+ * @method     ChildOrderQuery leftJoinCountry($relationAlias = null) Adds a LEFT JOIN clause to the query using the Country relation
+ * @method     ChildOrderQuery rightJoinCountry($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Country relation
+ * @method     ChildOrderQuery innerJoinCountry($relationAlias = null) Adds a INNER JOIN clause to the query using the Country relation
+ *
+ * @method     ChildOrderQuery joinWithCountry($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Country relation
+ *
+ * @method     ChildOrderQuery leftJoinWithCountry() Adds a LEFT JOIN clause and with to the query using the Country relation
+ * @method     ChildOrderQuery rightJoinWithCountry() Adds a RIGHT JOIN clause and with to the query using the Country relation
+ * @method     ChildOrderQuery innerJoinWithCountry() Adds a INNER JOIN clause and with to the query using the Country relation
+ *
  * @method     ChildOrderQuery leftJoinSite($relationAlias = null) Adds a LEFT JOIN clause to the query using the Site relation
  * @method     ChildOrderQuery rightJoinSite($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Site relation
  * @method     ChildOrderQuery innerJoinSite($relationAlias = null) Adds a INNER JOIN clause to the query using the Site relation
@@ -157,7 +177,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery rightJoinWithPayment() Adds a RIGHT JOIN clause and with to the query using the Payment relation
  * @method     ChildOrderQuery innerJoinWithPayment() Adds a INNER JOIN clause and with to the query using the Payment relation
  *
- * @method     \Model\UserQuery|\Model\SiteQuery|\Model\PaymentQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\UserQuery|\Model\ShippingFeeQuery|\Model\CountryQuery|\Model\SiteQuery|\Model\PaymentQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildOrder|null findOne(?ConnectionInterface $con = null) Return the first ChildOrder matching the query
  * @method     ChildOrder findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildOrder matching the query, or a new ChildOrder object populated from the query conditions when no match is found
@@ -196,7 +216,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder|null findOneByAddress2(string $order_address2) Return the first ChildOrder filtered by the order_address2 column
  * @method     ChildOrder|null findOneByPostalcode(string $order_postalcode) Return the first ChildOrder filtered by the order_postalcode column
  * @method     ChildOrder|null findOneByCity(string $order_city) Return the first ChildOrder filtered by the order_city column
- * @method     ChildOrder|null findOneByCountry(string $order_country) Return the first ChildOrder filtered by the order_country column
+ * @method     ChildOrder|null findOneByCountryName(string $order_country) Return the first ChildOrder filtered by the order_country column
  * @method     ChildOrder|null findOneByEmail(string $order_email) Return the first ChildOrder filtered by the order_email column
  * @method     ChildOrder|null findOneByPhone(string $order_phone) Return the first ChildOrder filtered by the order_phone column
  * @method     ChildOrder|null findOneByComment(string $order_comment) Return the first ChildOrder filtered by the order_comment column
@@ -249,7 +269,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder requireOneByAddress2(string $order_address2) Return the first ChildOrder filtered by the order_address2 column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByPostalcode(string $order_postalcode) Return the first ChildOrder filtered by the order_postalcode column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByCity(string $order_city) Return the first ChildOrder filtered by the order_city column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByCountry(string $order_country) Return the first ChildOrder filtered by the order_country column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildOrder requireOneByCountryName(string $order_country) Return the first ChildOrder filtered by the order_country column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByEmail(string $order_email) Return the first ChildOrder filtered by the order_email column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByPhone(string $order_phone) Return the first ChildOrder filtered by the order_phone column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByComment(string $order_comment) Return the first ChildOrder filtered by the order_comment column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -336,8 +356,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildOrder> findByPostalcode(string|array<string> $order_postalcode) Return ChildOrder objects filtered by the order_postalcode column
  * @method     ChildOrder[]|Collection findByCity(string|array<string> $order_city) Return ChildOrder objects filtered by the order_city column
  * @psalm-method Collection&\Traversable<ChildOrder> findByCity(string|array<string> $order_city) Return ChildOrder objects filtered by the order_city column
- * @method     ChildOrder[]|Collection findByCountry(string|array<string> $order_country) Return ChildOrder objects filtered by the order_country column
- * @psalm-method Collection&\Traversable<ChildOrder> findByCountry(string|array<string> $order_country) Return ChildOrder objects filtered by the order_country column
+ * @method     ChildOrder[]|Collection findByCountryName(string|array<string> $order_country) Return ChildOrder objects filtered by the order_country column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByCountryName(string|array<string> $order_country) Return ChildOrder objects filtered by the order_country column
  * @method     ChildOrder[]|Collection findByEmail(string|array<string> $order_email) Return ChildOrder objects filtered by the order_email column
  * @psalm-method Collection&\Traversable<ChildOrder> findByEmail(string|array<string> $order_email) Return ChildOrder objects filtered by the order_email column
  * @method     ChildOrder[]|Collection findByPhone(string|array<string> $order_phone) Return ChildOrder objects filtered by the order_phone column
@@ -1087,6 +1107,8 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByShippingId(array('min' => 12)); // WHERE shipping_id > 12
      * </code>
      *
+     * @see       filterByShippingFee()
+     *
      * @param mixed $shippingId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
@@ -1129,6 +1151,8 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByCountryId(array(12, 34)); // WHERE country_id IN (12, 34)
      * $query->filterByCountryId(array('min' => 12)); // WHERE country_id > 12
      * </code>
+     *
+     * @see       filterByCountry()
      *
      * @param mixed $countryId The value to use as filter.
      *              Use scalar values for equality.
@@ -1820,25 +1844,25 @@ abstract class OrderQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByCountry('fooValue');   // WHERE order_country = 'fooValue'
-     * $query->filterByCountry('%fooValue%', Criteria::LIKE); // WHERE order_country LIKE '%fooValue%'
-     * $query->filterByCountry(['foo', 'bar']); // WHERE order_country IN ('foo', 'bar')
+     * $query->filterByCountryName('fooValue');   // WHERE order_country = 'fooValue'
+     * $query->filterByCountryName('%fooValue%', Criteria::LIKE); // WHERE order_country LIKE '%fooValue%'
+     * $query->filterByCountryName(['foo', 'bar']); // WHERE order_country IN ('foo', 'bar')
      * </code>
      *
-     * @param string|string[] $country The value to use as filter.
+     * @param string|string[] $countryName The value to use as filter.
      * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByCountry($country = null, ?string $comparison = null)
+    public function filterByCountryName($countryName = null, ?string $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($country)) {
+            if (is_array($countryName)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        $this->addUsingAlias(OrderTableMap::COL_ORDER_COUNTRY, $country, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_COUNTRY, $countryName, $comparison);
 
         return $this;
     }
@@ -2560,6 +2584,356 @@ abstract class OrderQuery extends ModelCriteria
     {
         /** @var $q \Model\UserQuery */
         $q = $this->useInQuery('User', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\ShippingFee object
+     *
+     * @param \Model\ShippingFee|ObjectCollection $shippingFee The related object(s) to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByShippingFee($shippingFee, ?string $comparison = null)
+    {
+        if ($shippingFee instanceof \Model\ShippingFee) {
+            return $this
+                ->addUsingAlias(OrderTableMap::COL_SHIPPING_ID, $shippingFee->getId(), $comparison);
+        } elseif ($shippingFee instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            $this
+                ->addUsingAlias(OrderTableMap::COL_SHIPPING_ID, $shippingFee->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
+        } else {
+            throw new PropelException('filterByShippingFee() only accepts arguments of type \Model\ShippingFee or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ShippingFee relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinShippingFee(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ShippingFee');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ShippingFee');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ShippingFee relation ShippingFee object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\ShippingFeeQuery A secondary query class using the current class as primary query
+     */
+    public function useShippingFeeQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinShippingFee($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ShippingFee', '\Model\ShippingFeeQuery');
+    }
+
+    /**
+     * Use the ShippingFee relation ShippingFee object
+     *
+     * @param callable(\Model\ShippingFeeQuery):\Model\ShippingFeeQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withShippingFeeQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useShippingFeeQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to ShippingFee table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\ShippingFeeQuery The inner query object of the EXISTS statement
+     */
+    public function useShippingFeeExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\ShippingFeeQuery */
+        $q = $this->useExistsQuery('ShippingFee', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to ShippingFee table for a NOT EXISTS query.
+     *
+     * @see useShippingFeeExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\ShippingFeeQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useShippingFeeNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\ShippingFeeQuery */
+        $q = $this->useExistsQuery('ShippingFee', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to ShippingFee table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\ShippingFeeQuery The inner query object of the IN statement
+     */
+    public function useInShippingFeeQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\ShippingFeeQuery */
+        $q = $this->useInQuery('ShippingFee', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to ShippingFee table for a NOT IN query.
+     *
+     * @see useShippingFeeInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\ShippingFeeQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInShippingFeeQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\ShippingFeeQuery */
+        $q = $this->useInQuery('ShippingFee', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\Country object
+     *
+     * @param \Model\Country|ObjectCollection $country The related object(s) to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByCountry($country, ?string $comparison = null)
+    {
+        if ($country instanceof \Model\Country) {
+            return $this
+                ->addUsingAlias(OrderTableMap::COL_COUNTRY_ID, $country->getId(), $comparison);
+        } elseif ($country instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            $this
+                ->addUsingAlias(OrderTableMap::COL_COUNTRY_ID, $country->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
+        } else {
+            throw new PropelException('filterByCountry() only accepts arguments of type \Model\Country or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Country relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinCountry(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Country');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Country');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Country relation Country object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\CountryQuery A secondary query class using the current class as primary query
+     */
+    public function useCountryQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCountry($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Country', '\Model\CountryQuery');
+    }
+
+    /**
+     * Use the Country relation Country object
+     *
+     * @param callable(\Model\CountryQuery):\Model\CountryQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withCountryQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useCountryQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Country table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\CountryQuery The inner query object of the EXISTS statement
+     */
+    public function useCountryExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\CountryQuery */
+        $q = $this->useExistsQuery('Country', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Country table for a NOT EXISTS query.
+     *
+     * @see useCountryExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\CountryQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useCountryNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\CountryQuery */
+        $q = $this->useExistsQuery('Country', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Country table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\CountryQuery The inner query object of the IN statement
+     */
+    public function useInCountryQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\CountryQuery */
+        $q = $this->useInQuery('Country', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Country table for a NOT IN query.
+     *
+     * @see useCountryInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\CountryQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInCountryQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\CountryQuery */
+        $q = $this->useInQuery('Country', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 
