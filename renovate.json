@@ -5,7 +5,7 @@
   ],
   "packageRules": [
     {
-      "managers": ["composer"],
+      "managers": ["composer", "docker-compose", "github-actions"],
       "enabled": true
     },
     {
