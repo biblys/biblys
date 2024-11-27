@@ -109,7 +109,7 @@ class OrderController extends Controller
                 "24R",                                                           # S - Mode de livraison (24R = Point Relais)
                 "FR",                                                            # T - Code Langue du Destinataire
                 "1",                                                             # U - Nombre de colis
-                $orderWeight,                                        # V - Poids en grammes
+                $orderWeight,                                                    # V - Poids en grammes
             ];
             $recordWithEmptyFields = array_merge($record, array_fill(0, 22, ""));
             $csv->insertOne($recordWithEmptyFields);
