@@ -55,16 +55,16 @@
         },
         {
             "name": "biblys/isbn",
-            "version": "3.2.1",
+            "version": "3.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/biblys/isbn.git",
-                "reference": "9136415ab97f5a619bf126eaffeea20f647e2209"
+                "reference": "eb168b8eccee84f9b6d1b2b17864bb9dd1c9b95b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/biblys/isbn/zipball/9136415ab97f5a619bf126eaffeea20f647e2209",
-                "reference": "9136415ab97f5a619bf126eaffeea20f647e2209",
+                "url": "https://api.github.com/repos/biblys/isbn/zipball/eb168b8eccee84f9b6d1b2b17864bb9dd1c9b95b",
+                "reference": "eb168b8eccee84f9b6d1b2b17864bb9dd1c9b95b",
                 "shasum": ""
             },
             "require": {
@@ -102,7 +102,7 @@
             ],
             "support": {
                 "issues": "https://github.com/biblys/isbn/issues",
-                "source": "https://github.com/biblys/isbn/tree/3.2.1"
+                "source": "https://github.com/biblys/isbn/tree/3.2.2"
             },
             "time": "2022-11-26T00:00:00+00:00"
         },
@@ -12385,6 +12385,6 @@
         "ext-curl": "*",
         "ext-fileinfo": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }
