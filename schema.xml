@@ -921,6 +921,9 @@
       <reference local="shipping_id" foreign="shipping_id"/>
     </foreign-key>
     <column name="country_id" phpName="CountryId" type="INTEGER"/>
+    <foreign-key foreignTable="countries" skipSql="true">
+      <reference local="country_id" foreign="country_id"/>
+    </foreign-key>
     <column name="order_shipping" phpName="Shipping" type="INTEGER" defaultValue="0"/>
     <column name="order_shipping_mode" phpName="ShippingMode" type="VARCHAR" size="32"/>
     <column name="order_track_number" phpName="TrackNumber" type="VARCHAR" size="16"/>
@@ -940,7 +943,7 @@
     <column name="order_address2" phpName="Address2" type="LONGVARCHAR"/>
     <column name="order_postalcode" phpName="Postalcode" type="LONGVARCHAR"/>
     <column name="order_city" phpName="City" type="LONGVARCHAR"/>
-    <column name="order_country" phpName="Country" type="VARCHAR" size="64"/>
+    <column name="order_country" phpName="CountryName" type="VARCHAR" size="64"/>
     <column name="order_email" phpName="Email" type="LONGVARCHAR"/>
     <column name="order_phone" phpName="Phone" type="LONGVARCHAR"/>
     <column name="order_comment" phpName="Comment" type="VARCHAR" size="1024"/>
