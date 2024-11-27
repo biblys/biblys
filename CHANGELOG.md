@@ -16,6 +16,11 @@
   des lots d'articles (voir
   la [documentation](https://docs.biblys.fr/personnaliser/entites/article/#article-de-type-lot)).
 
+### Corrections
+
+- L'import depuis nooSFere d'un contributeur sans prénom pouvait déclencher une
+  erreur. C'est corrigé.
+
 ### Instructions de mise à jour
 
 Après avoir procédé à l'installation de cette version…

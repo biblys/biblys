@@ -30,6 +30,60 @@ require_once __DIR__ . "/../../setUp.php";
 class NoosfereTest extends TestCase
 {
 
+    /** getOrCreateContributor */
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetOrCreateContributorWhenContributorExists()
+    {
+        // given
+        $existingContributor = ModelFactory::createContributor(
+            firstName: "Silas",
+            lastName: "Coade",
+            url: "silas-coade",
+        );
+
+        // when
+        $returnedContributor = Noosfere::getOrCreateContributor(
+            0,
+            "Silas",
+            "Coade",
+        );
+
+        // then
+        $this->assertEquals($existingContributor->getId(), $returnedContributor->get("id"));
+    }
+
+    /** getOrCreateContributor */
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetOrCreateContributorWithoutFirstName()
+    {
+        // given
+        $existingContributor = ModelFactory::createContributor(
+            lastName: "Anonyme",
+            url: "anonyme",
+        );
+
+        // when
+        $returnedContributor = Noosfere::getOrCreateContributor(
+            0,
+            null,
+            "Anonyme",
+        );
+
+        // then
+        $this->assertEquals($existingContributor->getId(), $returnedContributor->get("id"));
+    }
+
+
+    /** #getOrCreateCollection */
+
     /**
      * @throws PropelException
      * @throws Exception
@@ -51,6 +105,8 @@ class NoosfereTest extends TestCase
         // then
         $this->assertEquals($existingCollection->getId(), $returnedCollection->get("id"));
     }
+
+    /** #buildArticlesFromXml */
 
     /**
      * @throws Exception
