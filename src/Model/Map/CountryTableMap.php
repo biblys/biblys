@@ -244,6 +244,13 @@ class CountryTableMap extends TableMap
      */
     public function buildRelations(): void
     {
+        $this->addRelation('Order', '\\Model\\Order', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':country_id',
+    1 => ':country_id',
+  ),
+), null, null, 'Orders', false);
     }
 
     /**
