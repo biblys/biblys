@@ -4,6 +4,9 @@
 
 ### Améliorations
 
+- Un bouton "Exporter" a été ajouté sur la page des commandes. Il permet
+  d'exporter la liste des commandes au format CSV, de manière à les importer
+  ensuite dans l'interface Mondial Relay Connect.
 - Lors d'une expédition avec Mondial Relay, le lien de suivi est désormais
   affiché sur la page de la commande et inclus dans le courriel de confirmation
   d'expédition.
@@ -17,6 +20,9 @@
   la [documentation](https://docs.biblys.fr/personnaliser/entites/article/#article-de-type-lot)).
 - Une option de site `shipping_packaging_weight` permet de définir le poids
   d'emballage à ajouter au poids des articles pour le calcul des frais de port.
+- Une option de configuration `mondial_relay.id_point_collecte` a été ajoutée.
+  Elle permet de préciser le point relais dans lequel les colis Mondial Relay
+  sont déposés pour être expédiés.
 
 ### Corrections
 
