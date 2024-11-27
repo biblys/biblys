@@ -57,8 +57,6 @@ function createFixtures(): void
  */
 function setUpTestDatabase($dbConfig)
 {
-    $db = new Biblys\Database\Database($dbConfig);
-    $db->reset();
-    $db->migrate();
+    new Biblys\Database\Database($dbConfig);
     createFixtures();
 }
