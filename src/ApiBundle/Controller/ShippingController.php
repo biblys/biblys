@@ -44,11 +44,13 @@ class ShippingController extends Controller
      *
      * @throws Exception
      */
-    public function indexAction(CurrentUser $currentUser, Config $config): JsonResponse
+    public function indexAction(
+        CurrentSite $currentSite,
+        CurrentUser $currentUser,
+    ): JsonResponse
     {
         $currentUser->authAdmin();
 
-        $currentSite = CurrentSite::buildFromConfig($config);
         $allFees = ShippingFeeQuery::createForSite($currentSite)
             ->filterByArchivedAt(null, Criteria::ISNULL)
             ->orderByType()

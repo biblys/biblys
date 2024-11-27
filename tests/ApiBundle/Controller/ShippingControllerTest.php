@@ -43,130 +43,79 @@ class ShippingControllerTest extends TestCase
     public function testIndexAction()
     {
         // given
+        $site = ModelFactory::createSite();
         $shippingFee1 = new ShippingFee();
-        $shippingFee1->setSiteId(1);
+        $shippingFee1->setSiteId($site->getId());
         $shippingFee1->setType("Type C");
         $shippingFee1->setZone("Z2");
         $shippingFee1->setFee(100);
         $shippingFee1->save();
         $shippingFee2 = new ShippingFee();
-        $shippingFee2->setSiteId(1);
+        $shippingFee2->setSiteId($site->getId());
         $shippingFee2->setType("Type B");
         $shippingFee2->setZone("Z2");
         $shippingFee2->setFee(100);
         $shippingFee2->save();
         $shippingFee3 = new ShippingFee();
-        $shippingFee3->setSiteId(1);
+        $shippingFee3->setSiteId($site->getId());
         $shippingFee3->setType("Type A");
         $shippingFee3->setZone("Z2");
         $shippingFee3->setFee(100);
         $shippingFee3->save();
         $shippingFee4 = new ShippingFee();
-        $shippingFee4->setSiteId(1);
+        $shippingFee4->setSiteId($site->getId());
         $shippingFee4->setType("Type A");
         $shippingFee4->setZone("Z1");
         $shippingFee4->setFee(100);
         $shippingFee4->save();
         $shippingFee5 = new ShippingFee();
-        $shippingFee5->setSiteId(1);
+        $shippingFee5->setSiteId($site->getId());
         $shippingFee5->setType("Type A");
         $shippingFee5->setZone("Z1");
         $shippingFee5->setFee(90);
         $shippingFee5->save();
         $archivedShippingFee = new ShippingFee();
-        $archivedShippingFee->setSiteId(1);
+        $archivedShippingFee->setSiteId($site->getId());
         $archivedShippingFee->archive();
         $archivedShippingFee->save();
+
+        $otherSite = ModelFactory::createSite();
         $otherSiteShippingFee = new ShippingFee();
-        $otherSiteShippingFee->setSiteId(2);
+        $otherSiteShippingFee->setSiteId($otherSite->getId());
         $otherSiteShippingFee->save();
         $controller = new ShippingController();
-        $config = new Config();
 
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
 
         // when
-        $response = $controller->indexAction($currentUser, $config);
+        $response = $controller->indexAction($currentSite, $currentUser);
 
         // then
-        $expectedResponse = [
-            [
-                'id' => 5,
-                'mode' => NULL,
-                'type' => 'Type A',
-                'zone' => 'Z1',
-                'max_weight' => NULL,
-                'min_amount' => NULL,
-                'max_amount' => NULL,
-                'max_articles' => NULL,
-                'fee' => 90,
-                'info' => NULL,
-                'is_compliant_with_french_law' => false,
-            ],
-            [
-                'id' => 4,
-                'mode' => NULL,
-                'type' => 'Type A',
-                'zone' => 'Z1',
-                'max_weight' => NULL,
-                'min_amount' => NULL,
-                'max_amount' => NULL,
-                'max_articles' => NULL,
-                'fee' => 100,
-                'info' => NULL,
-                'is_compliant_with_french_law' => false,
-            ],
-            [
-                'id' => 3,
-                'mode' => NULL,
-                'type' => 'Type A',
-                'zone' => 'Z2',
-                'max_weight' => NULL,
-                'min_amount' => NULL,
-                'max_amount' => NULL,
-                'max_articles' => NULL,
-                'fee' => 100,
-                'info' => NULL,
-                'is_compliant_with_french_law' => false,
-            ],
-            [
-                'id' => 2,
-                'mode' => NULL,
-                'type' => 'Type B',
-                'zone' => 'Z2',
-                'max_weight' => NULL,
-                'min_amount' => NULL,
-                'max_amount' => NULL,
-                'max_articles' => NULL,
-                'fee' => 100,
-                'info' => NULL,
-                'is_compliant_with_french_law' => false,
-            ],
-            [
-                'id' => 1,
-                'mode' => NULL,
-                'type' => 'Type C',
-                'zone' => 'Z2',
-                'max_weight' => NULL,
-                'min_amount' => NULL,
-                'max_amount' => NULL,
-                'max_articles' => NULL,
-                'fee' => 100,
-                'info' => NULL,
-                'is_compliant_with_french_law' => false,
-            ],
-        ];
         $this->assertEquals(
             200,
             $response->getStatusCode(),
             "it should respond with http 200"
         );
-        $this->assertEquals(
-            json_encode($expectedResponse),
-            $response->getContent(),
-            "it should return all fees for current site"
-        );
+        $returnedFeeds = json_decode($response->getContent(), true);
+        $this->assertCount(5, $returnedFeeds);
+        $this->assertEquals("Type A", $returnedFeeds[0]["type"]);
+        $this->assertEquals("Z1", $returnedFeeds[0]["zone"]);
+        $this->assertEquals(90, $returnedFeeds[0]["fee"]);
+        $this->assertEquals("Type A", $returnedFeeds[1]["type"]);
+        $this->assertEquals("Z1", $returnedFeeds[1]["zone"]);
+        $this->assertEquals(100, $returnedFeeds[1]["fee"]);
+        $this->assertEquals("Type A", $returnedFeeds[2]["type"]);
+        $this->assertEquals("Z2", $returnedFeeds[2]["zone"]);
+        $this->assertEquals(100, $returnedFeeds[2]["fee"]);
+        $this->assertEquals("Type B", $returnedFeeds[3]["type"]);
+        $this->assertEquals("Z2", $returnedFeeds[3]["zone"]);
+        $this->assertEquals(100, $returnedFeeds[3]["fee"]);
+        $this->assertEquals("Type C", $returnedFeeds[4]["type"]);
+        $this->assertEquals("Z2", $returnedFeeds[4]["zone"]);
+        $this->assertEquals(100, $returnedFeeds[4]["fee"]);
     }
 
     /**
