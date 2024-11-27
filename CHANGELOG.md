@@ -15,6 +15,8 @@
   `getBundles` ont été ajoutées à la classe `Article` pour faciliter l'affichage
   des lots d'articles (voir
   la [documentation](https://docs.biblys.fr/personnaliser/entites/article/#article-de-type-lot)).
+- Une option de site `shipping_packaging_weight` permet de définir le poids
+  d'emballage à ajouter au poids des articles pour le calcul des frais de port.
 
 ### Corrections
 

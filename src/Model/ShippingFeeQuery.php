@@ -52,7 +52,6 @@ class ShippingFeeQuery extends BaseShippingFeeQuery
         int $articleCount
     ): array
     {
-        $weightIncludingWrapping = $weight * 1.05;
         $zone = $country->getShippingZone();
 
         $query = self::createForSite($currentSite);
@@ -61,7 +60,7 @@ class ShippingFeeQuery extends BaseShippingFeeQuery
         $shippingTypes = ['magasin', 'normal', 'suivi', 'mondial-relay'];
 
         $feesForEachTypes = array_map(
-            function ($type) use ($fees, $zone, $weightIncludingWrapping, $amount, $currentSite, $articleCount) {
+            function ($type) use ($fees, $zone, $weight, $amount, $currentSite, $articleCount) {
                 /** @var ShippingFee $fee */
                 foreach ($fees as $fee) {
                     // Keeps only active fees
@@ -85,7 +84,7 @@ class ShippingFeeQuery extends BaseShippingFeeQuery
                     }
 
                     // Keep only fees for weight higher than order
-                    if ($fee->getMaxWeight() !== null && $fee->getMaxWeight() <= $weightIncludingWrapping) {
+                    if ($fee->getMaxWeight() !== null && $fee->getMaxWeight() < $weight) {
                         continue;
                     }
 
