@@ -867,6 +867,13 @@ class OrderTableMap extends TableMap
     1 => ':order_id',
   ),
 ), null, null, 'Payments', false);
+        $this->addRelation('StockItem', '\\Model\\Stock', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':order_id',
+    1 => ':order_id',
+  ),
+), null, null, 'StockItems', false);
     }
 
     /**

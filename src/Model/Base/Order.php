@@ -15,10 +15,13 @@ use Model\ShippingFee as ChildShippingFee;
 use Model\ShippingFeeQuery as ChildShippingFeeQuery;
 use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
+use Model\Stock as ChildStock;
+use Model\StockQuery as ChildStockQuery;
 use Model\User as ChildUser;
 use Model\UserQuery as ChildUserQuery;
 use Model\Map\OrderTableMap;
 use Model\Map\PaymentTableMap;
+use Model\Map\StockTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -458,6 +461,13 @@ abstract class Order implements ActiveRecordInterface
     protected $collPaymentsPartial;
 
     /**
+     * @var        ObjectCollection|ChildStock[] Collection to store aggregation of ChildStock objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildStock> Collection to store aggregation of ChildStock objects.
+     */
+    protected $collStockItems;
+    protected $collStockItemsPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -471,6 +481,13 @@ abstract class Order implements ActiveRecordInterface
      * @phpstan-var ObjectCollection&\Traversable<ChildPayment>
      */
     protected $paymentsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildStock[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildStock>
+     */
+    protected $stockItemsScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -2656,6 +2673,8 @@ abstract class Order implements ActiveRecordInterface
             $this->aSite = null;
             $this->collPayments = null;
 
+            $this->collStockItems = null;
+
         } // if (deep)
     }
 
@@ -2828,6 +2847,24 @@ abstract class Order implements ActiveRecordInterface
 
             if ($this->collPayments !== null) {
                 foreach ($this->collPayments as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->stockItemsScheduledForDeletion !== null) {
+                if (!$this->stockItemsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->stockItemsScheduledForDeletion as $stockItem) {
+                        // need to save related object because we set the relation to null
+                        $stockItem->save($con);
+                    }
+                    $this->stockItemsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collStockItems !== null) {
+                foreach ($this->collStockItems as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -3618,6 +3655,21 @@ abstract class Order implements ActiveRecordInterface
 
                 $result[$key] = $this->collPayments->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collStockItems) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'stocks';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'stocks';
+                        break;
+                    default:
+                        $key = 'StockItems';
+                }
+
+                $result[$key] = $this->collStockItems->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
         }
 
         return $result;
@@ -4312,6 +4364,12 @@ abstract class Order implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getStockItems() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addStockItem($relObj->copy($deepCopy));
+                }
+            }
+
         } // if ($deepCopy)
 
         if ($makeNew) {
@@ -4559,6 +4617,10 @@ abstract class Order implements ActiveRecordInterface
     {
         if ('Payment' === $relationName) {
             $this->initPayments();
+            return;
+        }
+        if ('StockItem' === $relationName) {
+            $this->initStockItems();
             return;
         }
     }
@@ -4829,6 +4891,349 @@ abstract class Order implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collStockItems collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addStockItems()
+     */
+    public function clearStockItems()
+    {
+        $this->collStockItems = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collStockItems collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialStockItems($v = true): void
+    {
+        $this->collStockItemsPartial = $v;
+    }
+
+    /**
+     * Initializes the collStockItems collection.
+     *
+     * By default this just sets the collStockItems collection to an empty array (like clearcollStockItems());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initStockItems(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collStockItems && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = StockTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collStockItems = new $collectionClassName;
+        $this->collStockItems->setModel('\Model\Stock');
+    }
+
+    /**
+     * Gets an array of ChildStock objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildOrder is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildStock[] List of ChildStock objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildStock> List of ChildStock objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getStockItems(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collStockItemsPartial && !$this->isNew();
+        if (null === $this->collStockItems || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collStockItems) {
+                    $this->initStockItems();
+                } else {
+                    $collectionClassName = StockTableMap::getTableMap()->getCollectionClassName();
+
+                    $collStockItems = new $collectionClassName;
+                    $collStockItems->setModel('\Model\Stock');
+
+                    return $collStockItems;
+                }
+            } else {
+                $collStockItems = ChildStockQuery::create(null, $criteria)
+                    ->filterByOrder($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collStockItemsPartial && count($collStockItems)) {
+                        $this->initStockItems(false);
+
+                        foreach ($collStockItems as $obj) {
+                            if (false == $this->collStockItems->contains($obj)) {
+                                $this->collStockItems->append($obj);
+                            }
+                        }
+
+                        $this->collStockItemsPartial = true;
+                    }
+
+                    return $collStockItems;
+                }
+
+                if ($partial && $this->collStockItems) {
+                    foreach ($this->collStockItems as $obj) {
+                        if ($obj->isNew()) {
+                            $collStockItems[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collStockItems = $collStockItems;
+                $this->collStockItemsPartial = false;
+            }
+        }
+
+        return $this->collStockItems;
+    }
+
+    /**
+     * Sets a collection of ChildStock objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $stockItems A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setStockItems(Collection $stockItems, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildStock[] $stockItemsToDelete */
+        $stockItemsToDelete = $this->getStockItems(new Criteria(), $con)->diff($stockItems);
+
+
+        $this->stockItemsScheduledForDeletion = $stockItemsToDelete;
+
+        foreach ($stockItemsToDelete as $stockItemRemoved) {
+            $stockItemRemoved->setOrder(null);
+        }
+
+        $this->collStockItems = null;
+        foreach ($stockItems as $stockItem) {
+            $this->addStockItem($stockItem);
+        }
+
+        $this->collStockItems = $stockItems;
+        $this->collStockItemsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Stock objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related Stock objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countStockItems(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collStockItemsPartial && !$this->isNew();
+        if (null === $this->collStockItems || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collStockItems) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getStockItems());
+            }
+
+            $query = ChildStockQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByOrder($this)
+                ->count($con);
+        }
+
+        return count($this->collStockItems);
+    }
+
+    /**
+     * Method called to associate a ChildStock object to this object
+     * through the ChildStock foreign key attribute.
+     *
+     * @param ChildStock $l ChildStock
+     * @return $this The current object (for fluent API support)
+     */
+    public function addStockItem(ChildStock $l)
+    {
+        if ($this->collStockItems === null) {
+            $this->initStockItems();
+            $this->collStockItemsPartial = true;
+        }
+
+        if (!$this->collStockItems->contains($l)) {
+            $this->doAddStockItem($l);
+
+            if ($this->stockItemsScheduledForDeletion and $this->stockItemsScheduledForDeletion->contains($l)) {
+                $this->stockItemsScheduledForDeletion->remove($this->stockItemsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildStock $stockItem The ChildStock object to add.
+     */
+    protected function doAddStockItem(ChildStock $stockItem): void
+    {
+        $this->collStockItems[]= $stockItem;
+        $stockItem->setOrder($this);
+    }
+
+    /**
+     * @param ChildStock $stockItem The ChildStock object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeStockItem(ChildStock $stockItem)
+    {
+        if ($this->getStockItems()->contains($stockItem)) {
+            $pos = $this->collStockItems->search($stockItem);
+            $this->collStockItems->remove($pos);
+            if (null === $this->stockItemsScheduledForDeletion) {
+                $this->stockItemsScheduledForDeletion = clone $this->collStockItems;
+                $this->stockItemsScheduledForDeletion->clear();
+            }
+            $this->stockItemsScheduledForDeletion[]= $stockItem;
+            $stockItem->setOrder(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Order is new, it will return
+     * an empty collection; or if this Order has previously
+     * been saved, it will retrieve related StockItems from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Order.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildStock[] List of ChildStock objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildStock}> List of ChildStock objects
+     */
+    public function getStockItemsJoinSite(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildStockQuery::create(null, $criteria);
+        $query->joinWith('Site', $joinBehavior);
+
+        return $this->getStockItems($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Order is new, it will return
+     * an empty collection; or if this Order has previously
+     * been saved, it will retrieve related StockItems from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Order.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildStock[] List of ChildStock objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildStock}> List of ChildStock objects
+     */
+    public function getStockItemsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildStockQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getStockItems($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Order is new, it will return
+     * an empty collection; or if this Order has previously
+     * been saved, it will retrieve related StockItems from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Order.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildStock[] List of ChildStock objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildStock}> List of ChildStock objects
+     */
+    public function getStockItemsJoinCart(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildStockQuery::create(null, $criteria);
+        $query->joinWith('Cart', $joinBehavior);
+
+        return $this->getStockItems($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Order is new, it will return
+     * an empty collection; or if this Order has previously
+     * been saved, it will retrieve related StockItems from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Order.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildStock[] List of ChildStock objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildStock}> List of ChildStock objects
+     */
+    public function getStockItemsJoinArticle(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildStockQuery::create(null, $criteria);
+        $query->joinWith('Article', $joinBehavior);
+
+        return $this->getStockItems($query, $con);
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -4925,9 +5330,15 @@ abstract class Order implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collStockItems) {
+                foreach ($this->collStockItems as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
         $this->collPayments = null;
+        $this->collStockItems = null;
         $this->aUser = null;
         $this->aShippingFee = null;
         $this->aCountry = null;
