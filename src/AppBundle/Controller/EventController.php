@@ -18,57 +18,55 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\Pagination;
+use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
-use EventManager;
 use Framework\Controller;
+use Model\Event;
+use Model\EventQuery;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
 class EventController extends Controller
 {
-    public function indexAction(Request $request): Response
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    public function indexAction(
+        QueryParamsService $queryParams,
+        CurrentSite        $currentSite,
+        TemplateService    $templateService,
+    ): Response
     {
-        $queryParams = [
-            "event_status" => 1,
-            "event_start" => ">= ".date("Y-m-d H:i:s", time() - 60 * 60 * 24)
-        ];
+        $queryParams->parse(["p" => ["type" => "numeric", "default" => 0]]);
 
-        $em = new EventManager();
+        $eventQuery = EventQuery::create()
+            ->filterBySiteId($currentSite->getSite()->getId())
+            ->filterByStatus(1)
+            ->filterByStart(time() - 60 * 60 * 24, Criteria::GREATER_EQUAL);
 
-        // Pagination
-        $page = (int) $request->query->get('p', 0);
-        $totalEventCount = $em->count($queryParams);
-        $eventPerPage = 10;
-        $totalPages = ceil($totalEventCount / $eventPerPage) + 1;
-        $offset = $page * $eventPerPage;
-        $currentPage = $page + 1;
-        $prevPage = $page > 0 ? $page - 1 : false;
-        $nextPage = $page < $totalPages-1 ? $page + 1 : false;
+        $totalEventCount = $eventQuery->count();
+        $page = $queryParams->getInteger("p");
+        $pagination = new Pagination($page, $totalEventCount, limit: 10);
 
-        $events = $em->getAll($queryParams, [
-            "order" => "event_start",
-            "sort" => "asc",
-            "limit" => 10,
-            "offset" => $offset
-        ]);
+        $events = $eventQuery
+            ->orderByStart()
+            ->limit($pagination->getLimit())
+            ->offset($pagination->getOffset())
+            ->find();
 
-        $request->attributes->set("page_title", "Évènements");
-
-        return $this->render('AppBundle:Event:index.html.twig', [
-            'events' => $events,
-            'current_page' => $currentPage,
-            'prev_page' => $prevPage,
-            'next_page' => $nextPage,
-            'total_pages' => $totalPages,
+        return $templateService->renderResponse("AppBundle:Event:index.html.twig", [
+            "events" => $events,
+            "pages" => $pagination
         ]);
     }
 
@@ -79,15 +77,16 @@ class EventController extends Controller
      * @throws LoaderError
      */
     public function showAction(
-        Request $request,
         CurrentUser $currentUser,
         CurrentSite $currentSite,
         TemplateService $templateService,
         string $slug
     ): Response
     {
-        $em = new EventManager();
-        $event = $em->get(["event_url" => $slug, "site_id" => $currentSite->getId()]);
+        $event = EventQuery::create()
+            ->filterByUrl($slug)
+            ->filterBySiteId($currentSite->getSite()->getId())
+            ->findOne();
         if (!$event) {
             throw new NotFoundHttpException("Event $slug not found.");
         }
@@ -97,8 +96,8 @@ class EventController extends Controller
             throw new NotFoundHttpException("Event $slug not published.");
         }
 
-        return $templateService->renderResponse('AppBundle:Event:show.html.twig', [
-            'event' => $event
+        return $templateService->renderResponse("AppBundle:Event:show.html.twig", [
+            "event" => $event
         ]);
     }
 
@@ -108,9 +107,9 @@ class EventController extends Controller
      * @return bool
      * @throws PropelException
      */
-    private function _userCanSeeEvent(mixed $event, CurrentUser $currentUser): bool
+    private function _userCanSeeEvent(Event $event, CurrentUser $currentUser): bool
     {
-        if ($event->get('status') === 1) {
+        if ($event->getStatus() === 1) {
             return true;
         }
 
