@@ -22,33 +22,21 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </a>
     </h1>
     <p class="event-date">Le
-      <time datetime="{{ event.start }}">
+      <time datetime="{{ event.start|date('Y-m-d H:i:s') }}">
         {{ event.start|date('j f Y à Hhi') }}
       </time>
     </p>
   </header>
 
-  {% if event.model|hasImage %}
+  {% if event|hasImage %}
     <div class="event-illustration">
-      <img src="{{ event.model|imageUrl }}" class="event-illustration-image"
-        {% if event.has('illustration_legend') %} alt="{{ event.illustration_legend }}" {% endif %}
-      >
+      <img src="{{ event|imageUrl }}" class="event-illustration-image" alt="" role="presentation" />
     </div>
   {% endif %}
 
-  {% if event.has('desc') %}
+  {% if event.desc %}
     <div class="event-content">
       {{ event.desc|raw }}
-    </div>
-  {% endif %}
-
-  {% if event.articles %}
-    <div class="linked-articles">
-      {% for article in event.articles %}
-        <a href="/{{ article.url }}">
-          <img src="{{ article.getCover('url')|raw }}" alt="{{ article.title }}" class="linked-article">
-        </a>
-      {% endfor %}
     </div>
   {% endif %}
 </article>
