@@ -51,7 +51,7 @@ class EventController extends Controller
 
         $eventQuery = EventQuery::create()
             ->filterBySiteId($currentSite->getSite()->getId())
-            ->filterByStatus(1)
+            ->filterByPublished()
             ->filterByStart(time() - 60 * 60 * 24, Criteria::GREATER_EQUAL);
 
         $totalEventCount = $eventQuery->count();
@@ -85,7 +85,7 @@ class EventController extends Controller
     {
         $event = EventQuery::create()
             ->filterByUrl($slug)
-            ->filterBySiteId($currentSite->getSite()->getId())
+            ->filterBySiteId($currentSite->getId())
             ->findOne();
         if (!$event) {
             throw new NotFoundHttpException("Event $slug not found.");
@@ -109,7 +109,7 @@ class EventController extends Controller
      */
     private function _userCanSeeEvent(Event $event, CurrentUser $currentUser): bool
     {
-        if ($event->getStatus() === 1) {
+        if ($event->isPublished()) {
             return true;
         }
 

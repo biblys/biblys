@@ -31,5 +31,8 @@ use Model\Base\Event as BaseEvent;
  */
 class Event extends BaseEvent
 {
-
+    public function isPublished(): bool
+    {
+        return $this->getStatus() === true;
+    }
 }
