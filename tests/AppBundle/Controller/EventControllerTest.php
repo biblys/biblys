@@ -27,7 +27,6 @@ use Exception;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -52,7 +51,6 @@ class EventControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $event = ModelFactory::createEvent(site: $site);
 
-        $request = Mockery::mock(Request::class);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getUser")->andThrow(new UnauthorizedHttpException(""));
         $currentSite = Mockery::mock(CurrentSite::class);
@@ -61,7 +59,7 @@ class EventControllerTest extends TestCase
         $templateService->shouldReceive("renderResponse")->andReturn(new Response("Event"));
 
         // when
-        $response = $controller->showAction($request, $currentUser, $currentSite, $templateService, $event->getUrl());
+        $response = $controller->showAction($currentUser, $currentSite, $templateService, $event->getUrl());
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -79,7 +77,6 @@ class EventControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $event = ModelFactory::createEvent(site: $site, status: false);
 
-        $request = Mockery::mock(Request::class);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
         $currentSite = Mockery::mock(CurrentSite::class);
@@ -88,7 +85,7 @@ class EventControllerTest extends TestCase
 
         // when
         $error = Helpers::runAndCatchException(fn() =>
-            $controller->showAction($request, $currentUser, $currentSite, $templateService, $event->getUrl())
+            $controller->showAction( $currentUser, $currentSite, $templateService, $event->getUrl())
         );
 
         // then
@@ -106,7 +103,6 @@ class EventControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $event = ModelFactory::createEvent(site: $site, status: false);
 
-        $request = Mockery::mock(Request::class);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("isAuthentified")->andReturn(true);
         $currentUser->shouldReceive("hasPublisherRight")->andReturn(false);
@@ -117,7 +113,7 @@ class EventControllerTest extends TestCase
 
         // when
         $error = Helpers::runAndCatchException(fn() =>
-            $controller->showAction($request, $currentUser, $currentSite, $templateService, $event->getUrl())
+            $controller->showAction($currentUser, $currentSite, $templateService, $event->getUrl())
         );
 
         // then
@@ -136,7 +132,6 @@ class EventControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $event = ModelFactory::createEvent(site: $site, publisher: $publisher, status: false);
 
-        $request = Mockery::mock(Request::class);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("isAuthentified")->andReturn(true);
         $currentUser->shouldReceive("hasPublisherRight")->andReturn(false);
@@ -147,7 +142,7 @@ class EventControllerTest extends TestCase
         $templateService->shouldReceive("renderResponse")->andReturn(new Response("Event"));
 
         // when
-        $response = $controller->showAction($request, $currentUser, $currentSite, $templateService, $event->getUrl());
+        $response = $controller->showAction($currentUser, $currentSite, $templateService, $event->getUrl());
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
