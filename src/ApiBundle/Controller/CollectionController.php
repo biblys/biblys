@@ -19,6 +19,7 @@
 namespace ApiBundle\Controller;
 
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\QueryParamsService;
 use Framework\Controller;
 use Model\BookCollectionQuery;
@@ -30,10 +31,13 @@ class CollectionController extends Controller
 {
 
     public function searchAction(
+        CurrentUser $currentUser,
         CurrentSite $currentSite,
         QueryParamsService $queryParams,
     ): JsonResponse
     {
+        $currentUser->authAdmin();
+
         $queryParams->parse(["term" => ["type" => "string", "mb_min_length" => 3]]);
         $searchQuery = $queryParams->get("term");
 
