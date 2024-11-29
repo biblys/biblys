@@ -63,6 +63,14 @@ require_once __DIR__ . "/../../setUp.php";
 class ArticleControllerTest extends TestCase
 {
     /**
+     * @throws PropelException
+     */
+    public function setUp(): void
+    {
+        ArticleQuery::create()->deleteAll();
+    }
+
+    /**
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
@@ -147,7 +155,7 @@ class ArticleControllerTest extends TestCase
     public function testByIsbn()
     {
         // given
-        EntityFactory::createArticle(["article_ean" => "9781234567895"]);
+        ModelFactory::createArticle(ean: "9781234567897");
         $controller = new ArticleController();
 
         $urlGenerator = $this->createMock(UrlGenerator::class);
@@ -155,7 +163,7 @@ class ArticleControllerTest extends TestCase
             ->willReturn('/a/article');
 
         // when
-        $response = $controller->byIsbn($urlGenerator, "9781234567895");
+        $response = $controller->byIsbn($urlGenerator, "9781234567897");
 
         // then
         $this->assertEquals(
