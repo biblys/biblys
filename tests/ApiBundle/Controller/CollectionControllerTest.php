@@ -19,6 +19,7 @@
 namespace ApiBundle\Controller;
 
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\QueryParamsService;
 use Biblys\Test\ModelFactory;
 use Mockery;
@@ -42,7 +43,7 @@ class CollectionControllerTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function testSearch()
+    public function testSearchForAdmin()
     {
         // given
         $publisher = ModelFactory::createPublisher(name: "Searchable publisher");
@@ -51,6 +52,8 @@ class CollectionControllerTest extends TestCase
         $collection->save();
         $controller = new CollectionController();
 
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("allowsPublisher")->andReturn(true);
         $queryParams = Mockery::mock(QueryParamsService::class);
@@ -58,7 +61,7 @@ class CollectionControllerTest extends TestCase
         $queryParams->expects("get")->with("term")->andReturn("Searchable");
 
         // when
-        $response = $controller->searchAction($currentSite, $queryParams);
+        $response = $controller->searchAction($currentUser, $currentSite, $queryParams);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
