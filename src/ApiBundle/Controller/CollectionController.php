@@ -30,23 +30,31 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class CollectionController extends Controller
 {
 
+    /**
+     * @throws PropelException
+     */
     public function searchAction(
         CurrentUser $currentUser,
         CurrentSite $currentSite,
         QueryParamsService $queryParams,
     ): JsonResponse
     {
-        $currentUser->authAdmin();
+        $currentUser->authPublisher();
 
         $queryParams->parse(["term" => ["type" => "string", "mb_min_length" => 3]]);
         $searchQuery = $queryParams->get("term");
 
-        $collections = BookCollectionQuery::create()
+        $collectionQuery = BookCollectionQuery::create()
             ->filterByName("%$searchQuery%", Criteria::LIKE)
             ->_or()
             ->filterByPublisherName("%$searchQuery%", Criteria::LIKE)
-            ->limit(25)
-            ->find()->getArrayCopy();
+            ->limit(25);
+
+        if ($currentUser->hasPublisherRight()) {
+            $collectionQuery->filterByPublisherId($currentUser->getCurrentRight()->getPublisherId());
+        }
+
+        $collections = $collectionQuery->find()->getArrayCopy();
 
         $json = array_map(/**
          * @throws PropelException
