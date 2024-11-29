@@ -49,10 +49,11 @@ class EventControllerTest extends TestCase
         // givens
         $controller = new EventController();
         $site = ModelFactory::createSite();
-        $event = ModelFactory::createEvent(site: $site);
+        $event = ModelFactory::createEvent(site: $site, isPublished: true);
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getUser")->andThrow(new UnauthorizedHttpException(""));
+        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getId")->andReturn($site->getId());
         $templateService = Mockery::mock(TemplateService::class);
@@ -75,7 +76,7 @@ class EventControllerTest extends TestCase
         // given
         $controller = new EventController();
         $site = ModelFactory::createSite();
-        $event = ModelFactory::createEvent(site: $site, status: false);
+        $event = ModelFactory::createEvent(site: $site, isPublished: false);
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("isAuthentified")->andReturn(false);
@@ -101,7 +102,7 @@ class EventControllerTest extends TestCase
         // given
         $controller = new EventController();
         $site = ModelFactory::createSite();
-        $event = ModelFactory::createEvent(site: $site, status: false);
+        $event = ModelFactory::createEvent(site: $site, isPublished: false);
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("isAuthentified")->andReturn(true);
@@ -130,7 +131,7 @@ class EventControllerTest extends TestCase
         $controller = new EventController();
         $publisher = ModelFactory::createPublisher();
         $site = ModelFactory::createSite();
-        $event = ModelFactory::createEvent(site: $site, publisher: $publisher, status: false);
+        $event = ModelFactory::createEvent(site: $site, publisher: $publisher, isPublished: false);
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("isAuthentified")->andReturn(true);

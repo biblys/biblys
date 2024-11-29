@@ -932,7 +932,7 @@ class ModelFactory
     public static function createEvent(
         Site      $site,
         Publisher $publisher = null,
-        bool      $status = true,
+        bool      $isPublished = true,
     ): Event
     {
         $event = new Event();
@@ -942,7 +942,7 @@ class ModelFactory
         $event->setStart(new DateTime());
         $event->setEnd(new DateTime("+1 day"));
         $event->setLocation("Paris");
-        $event->setStatus($status);
+        $event->setStatus($isPublished);
         $event->setPublisherId($publisher?->getId());
 
         $event->save();

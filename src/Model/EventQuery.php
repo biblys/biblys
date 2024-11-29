@@ -31,5 +31,8 @@ use Model\Base\EventQuery as BaseEventQuery;
  */
 class EventQuery extends BaseEventQuery
 {
-
+    public function filterByPublished(): EventQuery
+    {
+        return $this->filterByStatus(true);
+    }
 }
