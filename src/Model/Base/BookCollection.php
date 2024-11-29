@@ -9,6 +9,8 @@ use Model\Article as ChildArticle;
 use Model\ArticleQuery as ChildArticleQuery;
 use Model\BookCollection as ChildBookCollection;
 use Model\BookCollectionQuery as ChildBookCollectionQuery;
+use Model\Publisher as ChildPublisher;
+use Model\PublisherQuery as ChildPublisherQuery;
 use Model\SpecialOffer as ChildSpecialOffer;
 use Model\SpecialOfferQuery as ChildSpecialOfferQuery;
 use Model\Map\ArticleTableMap;
@@ -198,6 +200,11 @@ abstract class BookCollection implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $collection_updated;
+
+    /**
+     * @var        ChildPublisher
+     */
+    protected $aPublisher;
 
     /**
      * @var        ObjectCollection|ChildArticle[] Collection to store aggregation of ChildArticle objects.
@@ -539,7 +546,7 @@ abstract class BookCollection implements ActiveRecordInterface
      *
      * @return string|null
      */
-    public function getPublisher()
+    public function getPublisherName()
     {
         return $this->collection_publisher;
     }
@@ -789,6 +796,10 @@ abstract class BookCollection implements ActiveRecordInterface
             $this->modifiedColumns[BookCollectionTableMap::COL_PUBLISHER_ID] = true;
         }
 
+        if ($this->aPublisher !== null && $this->aPublisher->getId() !== $v) {
+            $this->aPublisher = null;
+        }
+
         return $this;
     }
 
@@ -858,7 +869,7 @@ abstract class BookCollection implements ActiveRecordInterface
      * @param string|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setPublisher($v)
+    public function setPublisherName($v)
     {
         if ($v !== null) {
             $v = (string) $v;
@@ -1174,7 +1185,7 @@ abstract class BookCollection implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : BookCollectionTableMap::translateFieldName('Url', TableMap::TYPE_PHPNAME, $indexType)];
             $this->collection_url = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : BookCollectionTableMap::translateFieldName('Publisher', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : BookCollectionTableMap::translateFieldName('PublisherName', TableMap::TYPE_PHPNAME, $indexType)];
             $this->collection_publisher = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : BookCollectionTableMap::translateFieldName('Desc', TableMap::TYPE_PHPNAME, $indexType)];
@@ -1252,6 +1263,9 @@ abstract class BookCollection implements ActiveRecordInterface
      */
     public function ensureConsistency(): void
     {
+        if ($this->aPublisher !== null && $this->publisher_id !== $this->aPublisher->getId()) {
+            $this->aPublisher = null;
+        }
     }
 
     /**
@@ -1291,6 +1305,7 @@ abstract class BookCollection implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aPublisher = null;
             $this->collArticles = null;
 
             $this->collSpecialOffers = null;
@@ -1410,6 +1425,18 @@ abstract class BookCollection implements ActiveRecordInterface
         $affectedRows = 0; // initialize var to track total num of affected rows
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
+
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aPublisher !== null) {
+                if ($this->aPublisher->isModified() || $this->aPublisher->isNew()) {
+                    $affectedRows += $this->aPublisher->save($con);
+                }
+                $this->setPublisher($this->aPublisher);
+            }
 
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
@@ -1701,7 +1728,7 @@ abstract class BookCollection implements ActiveRecordInterface
                 return $this->getUrl();
 
             case 6:
-                return $this->getPublisher();
+                return $this->getPublisherName();
 
             case 7:
                 return $this->getDesc();
@@ -1770,7 +1797,7 @@ abstract class BookCollection implements ActiveRecordInterface
             $keys[3] => $this->getPricegridId(),
             $keys[4] => $this->getName(),
             $keys[5] => $this->getUrl(),
-            $keys[6] => $this->getPublisher(),
+            $keys[6] => $this->getPublisherName(),
             $keys[7] => $this->getDesc(),
             $keys[8] => $this->getIgnorenum(),
             $keys[9] => $this->getOrderby(),
@@ -1805,6 +1832,21 @@ abstract class BookCollection implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aPublisher) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'publisher';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'publishers';
+                        break;
+                    default:
+                        $key = 'Publisher';
+                }
+
+                $result[$key] = $this->aPublisher->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->collArticles) {
 
                 switch ($keyType) {
@@ -1890,7 +1932,7 @@ abstract class BookCollection implements ActiveRecordInterface
                 $this->setUrl($value);
                 break;
             case 6:
-                $this->setPublisher($value);
+                $this->setPublisherName($value);
                 break;
             case 7:
                 $this->setDesc($value);
@@ -1970,7 +2012,7 @@ abstract class BookCollection implements ActiveRecordInterface
             $this->setUrl($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setPublisher($arr[$keys[6]]);
+            $this->setPublisherName($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
             $this->setDesc($arr[$keys[7]]);
@@ -2195,7 +2237,7 @@ abstract class BookCollection implements ActiveRecordInterface
         $copyObj->setPricegridId($this->getPricegridId());
         $copyObj->setName($this->getName());
         $copyObj->setUrl($this->getUrl());
-        $copyObj->setPublisher($this->getPublisher());
+        $copyObj->setPublisherName($this->getPublisherName());
         $copyObj->setDesc($this->getDesc());
         $copyObj->setIgnorenum($this->getIgnorenum());
         $copyObj->setOrderby($this->getOrderby());
@@ -2253,6 +2295,57 @@ abstract class BookCollection implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
+    }
+
+    /**
+     * Declares an association between this object and a ChildPublisher object.
+     *
+     * @param ChildPublisher|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setPublisher(ChildPublisher $v = null)
+    {
+        if ($v === null) {
+            $this->setPublisherId(NULL);
+        } else {
+            $this->setPublisherId($v->getId());
+        }
+
+        $this->aPublisher = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildPublisher object, it will not be re-added.
+        if ($v !== null) {
+            $v->addBookCollection($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildPublisher object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildPublisher|null The associated ChildPublisher object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getPublisher(?ConnectionInterface $con = null)
+    {
+        if ($this->aPublisher === null && ($this->publisher_id != 0)) {
+            $this->aPublisher = ChildPublisherQuery::create()->findPk($this->publisher_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aPublisher->addBookCollections($this);
+             */
+        }
+
+        return $this->aPublisher;
     }
 
 
@@ -2841,6 +2934,9 @@ abstract class BookCollection implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aPublisher) {
+            $this->aPublisher->removeBookCollection($this);
+        }
         $this->collection_id = null;
         $this->site_id = null;
         $this->publisher_id = null;
@@ -2895,6 +2991,7 @@ abstract class BookCollection implements ActiveRecordInterface
 
         $this->collArticles = null;
         $this->collSpecialOffers = null;
+        $this->aPublisher = null;
         return $this;
     }
 

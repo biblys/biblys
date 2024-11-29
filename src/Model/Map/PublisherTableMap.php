@@ -685,6 +685,13 @@ class PublisherTableMap extends TableMap
     1 => ':publisher_id',
   ),
 ), null, null, 'Articles', false);
+        $this->addRelation('BookCollection', '\\Model\\BookCollection', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':publisher_id',
+    1 => ':publisher_id',
+  ),
+), null, null, 'BookCollections', false);
         $this->addRelation('Image', '\\Model\\Image', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

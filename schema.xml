@@ -319,10 +319,13 @@
     <column name="collection_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int unsigned"/>
     <column name="publisher_id" phpName="PublisherId" type="INTEGER" sqlType="int unsigned"/>
+    <foreign-key foreignTable="publishers" skipSql="true">
+      <reference local="publisher_id" foreign="publisher_id"/>
+    </foreign-key>
     <column name="pricegrid_id" phpName="PricegridId" type="INTEGER" sqlType="int unsigned"/>
     <column name="collection_name" phpName="Name" type="VARCHAR" size="255"/>
     <column name="collection_url" phpName="Url" type="VARCHAR" size="255"/>
-    <column name="collection_publisher" phpName="Publisher" type="VARCHAR" size="255"/>
+    <column name="collection_publisher" phpName="PublisherName" type="VARCHAR" size="255"/>
     <column name="collection_desc" phpName="Desc" type="LONGVARCHAR"/>
     <column name="collection_ignorenum" phpName="Ignorenum" type="BOOLEAN" size="1"/>
     <column name="collection_orderby" phpName="Orderby" type="LONGVARCHAR"/>

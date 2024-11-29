@@ -179,8 +179,8 @@ class BookCollectionTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'PublisherId', 'PricegridId', 'Name', 'Url', 'Publisher', 'Desc', 'Ignorenum', 'Orderby', 'IncorrectWeights', 'NoosfereId', 'Insert', 'Update', 'Hits', 'Duplicate', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'publisherId', 'pricegridId', 'name', 'url', 'publisher', 'desc', 'ignorenum', 'orderby', 'incorrectWeights', 'noosfereId', 'insert', 'update', 'hits', 'duplicate', 'createdAt', 'updatedAt', ],
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'PublisherId', 'PricegridId', 'Name', 'Url', 'PublisherName', 'Desc', 'Ignorenum', 'Orderby', 'IncorrectWeights', 'NoosfereId', 'Insert', 'Update', 'Hits', 'Duplicate', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'publisherId', 'pricegridId', 'name', 'url', 'publisherName', 'desc', 'ignorenum', 'orderby', 'incorrectWeights', 'noosfereId', 'insert', 'update', 'hits', 'duplicate', 'createdAt', 'updatedAt', ],
         self::TYPE_COLNAME       => [BookCollectionTableMap::COL_COLLECTION_ID, BookCollectionTableMap::COL_SITE_ID, BookCollectionTableMap::COL_PUBLISHER_ID, BookCollectionTableMap::COL_PRICEGRID_ID, BookCollectionTableMap::COL_COLLECTION_NAME, BookCollectionTableMap::COL_COLLECTION_URL, BookCollectionTableMap::COL_COLLECTION_PUBLISHER, BookCollectionTableMap::COL_COLLECTION_DESC, BookCollectionTableMap::COL_COLLECTION_IGNORENUM, BookCollectionTableMap::COL_COLLECTION_ORDERBY, BookCollectionTableMap::COL_COLLECTION_INCORRECT_WEIGHTS, BookCollectionTableMap::COL_COLLECTION_NOOSFERE_ID, BookCollectionTableMap::COL_COLLECTION_INSERT, BookCollectionTableMap::COL_COLLECTION_UPDATE, BookCollectionTableMap::COL_COLLECTION_HITS, BookCollectionTableMap::COL_COLLECTION_DUPLICATE, BookCollectionTableMap::COL_COLLECTION_CREATED, BookCollectionTableMap::COL_COLLECTION_UPDATED, ],
         self::TYPE_FIELDNAME     => ['collection_id', 'site_id', 'publisher_id', 'pricegrid_id', 'collection_name', 'collection_url', 'collection_publisher', 'collection_desc', 'collection_ignorenum', 'collection_orderby', 'collection_incorrect_weights', 'collection_noosfere_id', 'collection_insert', 'collection_update', 'collection_hits', 'collection_duplicate', 'collection_created', 'collection_updated', ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, ]
@@ -195,8 +195,8 @@ class BookCollectionTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'PublisherId' => 2, 'PricegridId' => 3, 'Name' => 4, 'Url' => 5, 'Publisher' => 6, 'Desc' => 7, 'Ignorenum' => 8, 'Orderby' => 9, 'IncorrectWeights' => 10, 'NoosfereId' => 11, 'Insert' => 12, 'Update' => 13, 'Hits' => 14, 'Duplicate' => 15, 'CreatedAt' => 16, 'UpdatedAt' => 17, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'publisherId' => 2, 'pricegridId' => 3, 'name' => 4, 'url' => 5, 'publisher' => 6, 'desc' => 7, 'ignorenum' => 8, 'orderby' => 9, 'incorrectWeights' => 10, 'noosfereId' => 11, 'insert' => 12, 'update' => 13, 'hits' => 14, 'duplicate' => 15, 'createdAt' => 16, 'updatedAt' => 17, ],
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'PublisherId' => 2, 'PricegridId' => 3, 'Name' => 4, 'Url' => 5, 'PublisherName' => 6, 'Desc' => 7, 'Ignorenum' => 8, 'Orderby' => 9, 'IncorrectWeights' => 10, 'NoosfereId' => 11, 'Insert' => 12, 'Update' => 13, 'Hits' => 14, 'Duplicate' => 15, 'CreatedAt' => 16, 'UpdatedAt' => 17, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'publisherId' => 2, 'pricegridId' => 3, 'name' => 4, 'url' => 5, 'publisherName' => 6, 'desc' => 7, 'ignorenum' => 8, 'orderby' => 9, 'incorrectWeights' => 10, 'noosfereId' => 11, 'insert' => 12, 'update' => 13, 'hits' => 14, 'duplicate' => 15, 'createdAt' => 16, 'updatedAt' => 17, ],
         self::TYPE_COLNAME       => [BookCollectionTableMap::COL_COLLECTION_ID => 0, BookCollectionTableMap::COL_SITE_ID => 1, BookCollectionTableMap::COL_PUBLISHER_ID => 2, BookCollectionTableMap::COL_PRICEGRID_ID => 3, BookCollectionTableMap::COL_COLLECTION_NAME => 4, BookCollectionTableMap::COL_COLLECTION_URL => 5, BookCollectionTableMap::COL_COLLECTION_PUBLISHER => 6, BookCollectionTableMap::COL_COLLECTION_DESC => 7, BookCollectionTableMap::COL_COLLECTION_IGNORENUM => 8, BookCollectionTableMap::COL_COLLECTION_ORDERBY => 9, BookCollectionTableMap::COL_COLLECTION_INCORRECT_WEIGHTS => 10, BookCollectionTableMap::COL_COLLECTION_NOOSFERE_ID => 11, BookCollectionTableMap::COL_COLLECTION_INSERT => 12, BookCollectionTableMap::COL_COLLECTION_UPDATE => 13, BookCollectionTableMap::COL_COLLECTION_HITS => 14, BookCollectionTableMap::COL_COLLECTION_DUPLICATE => 15, BookCollectionTableMap::COL_COLLECTION_CREATED => 16, BookCollectionTableMap::COL_COLLECTION_UPDATED => 17, ],
         self::TYPE_FIELDNAME     => ['collection_id' => 0, 'site_id' => 1, 'publisher_id' => 2, 'pricegrid_id' => 3, 'collection_name' => 4, 'collection_url' => 5, 'collection_publisher' => 6, 'collection_desc' => 7, 'collection_ignorenum' => 8, 'collection_orderby' => 9, 'collection_incorrect_weights' => 10, 'collection_noosfere_id' => 11, 'collection_insert' => 12, 'collection_update' => 13, 'collection_hits' => 14, 'collection_duplicate' => 15, 'collection_created' => 16, 'collection_updated' => 17, ],
         self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, ]
@@ -256,10 +256,10 @@ class BookCollectionTableMap extends TableMap
         'COL_COLLECTION_URL' => 'COLLECTION_URL',
         'collection_url' => 'COLLECTION_URL',
         'collections.collection_url' => 'COLLECTION_URL',
-        'Publisher' => 'COLLECTION_PUBLISHER',
-        'BookCollection.Publisher' => 'COLLECTION_PUBLISHER',
-        'publisher' => 'COLLECTION_PUBLISHER',
-        'bookCollection.publisher' => 'COLLECTION_PUBLISHER',
+        'PublisherName' => 'COLLECTION_PUBLISHER',
+        'BookCollection.PublisherName' => 'COLLECTION_PUBLISHER',
+        'publisherName' => 'COLLECTION_PUBLISHER',
+        'bookCollection.publisherName' => 'COLLECTION_PUBLISHER',
         'BookCollectionTableMap::COL_COLLECTION_PUBLISHER' => 'COLLECTION_PUBLISHER',
         'COL_COLLECTION_PUBLISHER' => 'COLLECTION_PUBLISHER',
         'collection_publisher' => 'COLLECTION_PUBLISHER',
@@ -373,11 +373,11 @@ class BookCollectionTableMap extends TableMap
         // columns
         $this->addPrimaryKey('collection_id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
-        $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, null, null);
+        $this->addForeignKey('publisher_id', 'PublisherId', 'INTEGER', 'publishers', 'publisher_id', false, null, null);
         $this->addColumn('pricegrid_id', 'PricegridId', 'INTEGER', false, null, null);
         $this->addColumn('collection_name', 'Name', 'VARCHAR', false, 255, null);
         $this->addColumn('collection_url', 'Url', 'VARCHAR', false, 255, null);
-        $this->addColumn('collection_publisher', 'Publisher', 'VARCHAR', false, 255, null);
+        $this->addColumn('collection_publisher', 'PublisherName', 'VARCHAR', false, 255, null);
         $this->addColumn('collection_desc', 'Desc', 'LONGVARCHAR', false, null, null);
         $this->addColumn('collection_ignorenum', 'Ignorenum', 'BOOLEAN', false, 1, null);
         $this->addColumn('collection_orderby', 'Orderby', 'LONGVARCHAR', false, null, null);
@@ -398,6 +398,13 @@ class BookCollectionTableMap extends TableMap
      */
     public function buildRelations(): void
     {
+        $this->addRelation('Publisher', '\\Model\\Publisher', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':publisher_id',
+    1 => ':publisher_id',
+  ),
+), null, null, null, false);
         $this->addRelation('Article', '\\Model\\Article', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

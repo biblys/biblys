@@ -25,7 +25,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookCollectionQuery orderByPricegridId($order = Criteria::ASC) Order by the pricegrid_id column
  * @method     ChildBookCollectionQuery orderByName($order = Criteria::ASC) Order by the collection_name column
  * @method     ChildBookCollectionQuery orderByUrl($order = Criteria::ASC) Order by the collection_url column
- * @method     ChildBookCollectionQuery orderByPublisher($order = Criteria::ASC) Order by the collection_publisher column
+ * @method     ChildBookCollectionQuery orderByPublisherName($order = Criteria::ASC) Order by the collection_publisher column
  * @method     ChildBookCollectionQuery orderByDesc($order = Criteria::ASC) Order by the collection_desc column
  * @method     ChildBookCollectionQuery orderByIgnorenum($order = Criteria::ASC) Order by the collection_ignorenum column
  * @method     ChildBookCollectionQuery orderByOrderby($order = Criteria::ASC) Order by the collection_orderby column
@@ -44,7 +44,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookCollectionQuery groupByPricegridId() Group by the pricegrid_id column
  * @method     ChildBookCollectionQuery groupByName() Group by the collection_name column
  * @method     ChildBookCollectionQuery groupByUrl() Group by the collection_url column
- * @method     ChildBookCollectionQuery groupByPublisher() Group by the collection_publisher column
+ * @method     ChildBookCollectionQuery groupByPublisherName() Group by the collection_publisher column
  * @method     ChildBookCollectionQuery groupByDesc() Group by the collection_desc column
  * @method     ChildBookCollectionQuery groupByIgnorenum() Group by the collection_ignorenum column
  * @method     ChildBookCollectionQuery groupByOrderby() Group by the collection_orderby column
@@ -64,6 +64,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookCollectionQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
  * @method     ChildBookCollectionQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildBookCollectionQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ *
+ * @method     ChildBookCollectionQuery leftJoinPublisher($relationAlias = null) Adds a LEFT JOIN clause to the query using the Publisher relation
+ * @method     ChildBookCollectionQuery rightJoinPublisher($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Publisher relation
+ * @method     ChildBookCollectionQuery innerJoinPublisher($relationAlias = null) Adds a INNER JOIN clause to the query using the Publisher relation
+ *
+ * @method     ChildBookCollectionQuery joinWithPublisher($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Publisher relation
+ *
+ * @method     ChildBookCollectionQuery leftJoinWithPublisher() Adds a LEFT JOIN clause and with to the query using the Publisher relation
+ * @method     ChildBookCollectionQuery rightJoinWithPublisher() Adds a RIGHT JOIN clause and with to the query using the Publisher relation
+ * @method     ChildBookCollectionQuery innerJoinWithPublisher() Adds a INNER JOIN clause and with to the query using the Publisher relation
  *
  * @method     ChildBookCollectionQuery leftJoinArticle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Article relation
  * @method     ChildBookCollectionQuery rightJoinArticle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Article relation
@@ -85,7 +95,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookCollectionQuery rightJoinWithSpecialOffer() Adds a RIGHT JOIN clause and with to the query using the SpecialOffer relation
  * @method     ChildBookCollectionQuery innerJoinWithSpecialOffer() Adds a INNER JOIN clause and with to the query using the SpecialOffer relation
  *
- * @method     \Model\ArticleQuery|\Model\SpecialOfferQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\PublisherQuery|\Model\ArticleQuery|\Model\SpecialOfferQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildBookCollection|null findOne(?ConnectionInterface $con = null) Return the first ChildBookCollection matching the query
  * @method     ChildBookCollection findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildBookCollection matching the query, or a new ChildBookCollection object populated from the query conditions when no match is found
@@ -96,7 +106,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookCollection|null findOneByPricegridId(int $pricegrid_id) Return the first ChildBookCollection filtered by the pricegrid_id column
  * @method     ChildBookCollection|null findOneByName(string $collection_name) Return the first ChildBookCollection filtered by the collection_name column
  * @method     ChildBookCollection|null findOneByUrl(string $collection_url) Return the first ChildBookCollection filtered by the collection_url column
- * @method     ChildBookCollection|null findOneByPublisher(string $collection_publisher) Return the first ChildBookCollection filtered by the collection_publisher column
+ * @method     ChildBookCollection|null findOneByPublisherName(string $collection_publisher) Return the first ChildBookCollection filtered by the collection_publisher column
  * @method     ChildBookCollection|null findOneByDesc(string $collection_desc) Return the first ChildBookCollection filtered by the collection_desc column
  * @method     ChildBookCollection|null findOneByIgnorenum(boolean $collection_ignorenum) Return the first ChildBookCollection filtered by the collection_ignorenum column
  * @method     ChildBookCollection|null findOneByOrderby(string $collection_orderby) Return the first ChildBookCollection filtered by the collection_orderby column
@@ -118,7 +128,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookCollection requireOneByPricegridId(int $pricegrid_id) Return the first ChildBookCollection filtered by the pricegrid_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildBookCollection requireOneByName(string $collection_name) Return the first ChildBookCollection filtered by the collection_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildBookCollection requireOneByUrl(string $collection_url) Return the first ChildBookCollection filtered by the collection_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildBookCollection requireOneByPublisher(string $collection_publisher) Return the first ChildBookCollection filtered by the collection_publisher column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildBookCollection requireOneByPublisherName(string $collection_publisher) Return the first ChildBookCollection filtered by the collection_publisher column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildBookCollection requireOneByDesc(string $collection_desc) Return the first ChildBookCollection filtered by the collection_desc column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildBookCollection requireOneByIgnorenum(boolean $collection_ignorenum) Return the first ChildBookCollection filtered by the collection_ignorenum column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildBookCollection requireOneByOrderby(string $collection_orderby) Return the first ChildBookCollection filtered by the collection_orderby column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -146,8 +156,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildBookCollection> findByName(string|array<string> $collection_name) Return ChildBookCollection objects filtered by the collection_name column
  * @method     ChildBookCollection[]|Collection findByUrl(string|array<string> $collection_url) Return ChildBookCollection objects filtered by the collection_url column
  * @psalm-method Collection&\Traversable<ChildBookCollection> findByUrl(string|array<string> $collection_url) Return ChildBookCollection objects filtered by the collection_url column
- * @method     ChildBookCollection[]|Collection findByPublisher(string|array<string> $collection_publisher) Return ChildBookCollection objects filtered by the collection_publisher column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findByPublisher(string|array<string> $collection_publisher) Return ChildBookCollection objects filtered by the collection_publisher column
+ * @method     ChildBookCollection[]|Collection findByPublisherName(string|array<string> $collection_publisher) Return ChildBookCollection objects filtered by the collection_publisher column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findByPublisherName(string|array<string> $collection_publisher) Return ChildBookCollection objects filtered by the collection_publisher column
  * @method     ChildBookCollection[]|Collection findByDesc(string|array<string> $collection_desc) Return ChildBookCollection objects filtered by the collection_desc column
  * @psalm-method Collection&\Traversable<ChildBookCollection> findByDesc(string|array<string> $collection_desc) Return ChildBookCollection objects filtered by the collection_desc column
  * @method     ChildBookCollection[]|Collection findByIgnorenum(boolean|array<boolean> $collection_ignorenum) Return ChildBookCollection objects filtered by the collection_ignorenum column
@@ -459,6 +469,8 @@ abstract class BookCollectionQuery extends ModelCriteria
      * $query->filterByPublisherId(array('min' => 12)); // WHERE publisher_id > 12
      * </code>
      *
+     * @see       filterByPublisher()
+     *
      * @param mixed $publisherId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
@@ -596,25 +608,25 @@ abstract class BookCollectionQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByPublisher('fooValue');   // WHERE collection_publisher = 'fooValue'
-     * $query->filterByPublisher('%fooValue%', Criteria::LIKE); // WHERE collection_publisher LIKE '%fooValue%'
-     * $query->filterByPublisher(['foo', 'bar']); // WHERE collection_publisher IN ('foo', 'bar')
+     * $query->filterByPublisherName('fooValue');   // WHERE collection_publisher = 'fooValue'
+     * $query->filterByPublisherName('%fooValue%', Criteria::LIKE); // WHERE collection_publisher LIKE '%fooValue%'
+     * $query->filterByPublisherName(['foo', 'bar']); // WHERE collection_publisher IN ('foo', 'bar')
      * </code>
      *
-     * @param string|string[] $publisher The value to use as filter.
+     * @param string|string[] $publisherName The value to use as filter.
      * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByPublisher($publisher = null, ?string $comparison = null)
+    public function filterByPublisherName($publisherName = null, ?string $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($publisher)) {
+            if (is_array($publisherName)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        $this->addUsingAlias(BookCollectionTableMap::COL_COLLECTION_PUBLISHER, $publisher, $comparison);
+        $this->addUsingAlias(BookCollectionTableMap::COL_COLLECTION_PUBLISHER, $publisherName, $comparison);
 
         return $this;
     }
@@ -1026,6 +1038,181 @@ abstract class BookCollectionQuery extends ModelCriteria
         $this->addUsingAlias(BookCollectionTableMap::COL_COLLECTION_UPDATED, $updatedAt, $comparison);
 
         return $this;
+    }
+
+    /**
+     * Filter the query by a related \Model\Publisher object
+     *
+     * @param \Model\Publisher|ObjectCollection $publisher The related object(s) to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByPublisher($publisher, ?string $comparison = null)
+    {
+        if ($publisher instanceof \Model\Publisher) {
+            return $this
+                ->addUsingAlias(BookCollectionTableMap::COL_PUBLISHER_ID, $publisher->getId(), $comparison);
+        } elseif ($publisher instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            $this
+                ->addUsingAlias(BookCollectionTableMap::COL_PUBLISHER_ID, $publisher->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
+        } else {
+            throw new PropelException('filterByPublisher() only accepts arguments of type \Model\Publisher or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Publisher relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinPublisher(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Publisher');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Publisher');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Publisher relation Publisher object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\PublisherQuery A secondary query class using the current class as primary query
+     */
+    public function usePublisherQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinPublisher($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Publisher', '\Model\PublisherQuery');
+    }
+
+    /**
+     * Use the Publisher relation Publisher object
+     *
+     * @param callable(\Model\PublisherQuery):\Model\PublisherQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withPublisherQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->usePublisherQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Publisher table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\PublisherQuery The inner query object of the EXISTS statement
+     */
+    public function usePublisherExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\PublisherQuery */
+        $q = $this->useExistsQuery('Publisher', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Publisher table for a NOT EXISTS query.
+     *
+     * @see usePublisherExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\PublisherQuery The inner query object of the NOT EXISTS statement
+     */
+    public function usePublisherNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\PublisherQuery */
+        $q = $this->useExistsQuery('Publisher', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Publisher table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\PublisherQuery The inner query object of the IN statement
+     */
+    public function useInPublisherQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\PublisherQuery */
+        $q = $this->useInQuery('Publisher', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Publisher table for a NOT IN query.
+     *
+     * @see usePublisherInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\PublisherQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInPublisherQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\PublisherQuery */
+        $q = $this->useInQuery('Publisher', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
     }
 
     /**
