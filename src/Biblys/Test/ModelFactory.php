@@ -639,8 +639,8 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createRight(
-        ?User     $user,
-        ?Site     $site,
+        ?User     $user = null,
+        ?Site     $site = null,
         Publisher $publisher = null,
         bool      $isAdmin = false,
         string    $axysAccountId = null,

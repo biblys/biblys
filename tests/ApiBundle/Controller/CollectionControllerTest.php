@@ -39,7 +39,6 @@ class CollectionControllerTest extends TestCase
         BookCollectionQuery::create()->deleteAll();
     }
 
-
     /**
      * @throws PropelException
      */
@@ -53,7 +52,8 @@ class CollectionControllerTest extends TestCase
         $controller = new CollectionController();
 
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("authAdmin");
+        $currentUser->expects("authPublisher");
+        $currentUser->expects("hasPublisherRight")->andReturn(false);
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("allowsPublisher")->andReturn(true);
         $queryParams = Mockery::mock(QueryParamsService::class);
@@ -80,5 +80,36 @@ class CollectionControllerTest extends TestCase
     "create": 1
 }]';
         $this->assertJsonStringEqualsJsonString($expectedResponse, $response->getContent());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testSearchForPublisher()
+    {
+        // given
+        $userPublisher = ModelFactory::createPublisher(name: "User publisher");
+        ModelFactory::createCollection(publisher: $userPublisher, name: "User collection");
+        ModelFactory::createCollection(name: "Collection from other user");
+        $publisherRight = ModelFactory::createRight(publisher: $userPublisher);
+        $controller = new CollectionController();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+        $currentUser->expects("hasPublisherRight")->andReturn(true);
+        $currentUser->expects("getCurrentRight")->andReturn($publisherRight);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("allowsPublisher")->andReturn(true);
+        $queryParams = Mockery::mock(QueryParamsService::class);
+        $queryParams->expects("parse")->with(["term" => ["type" => "string", "mb_min_length" => 3]]);
+        $queryParams->expects("get")->with("term")->andReturn("User");
+
+        // when
+        $response = $controller->searchAction($currentUser, $currentSite, $queryParams);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("User collection", $response->getContent());
+        $this->assertStringNotContainsString("Collection from other user", $response->getContent());
     }
 }
