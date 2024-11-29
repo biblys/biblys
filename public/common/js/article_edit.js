@@ -418,7 +418,7 @@ $(document).ready(function () {
 
   // Autocomplete collection
   $('#article_collection').autocomplete({
-    source: '/pages/adm_article_collection',
+    source: '/api/collections/search',
     minLength: 3,
     delay: 250,
     select: function (event, ui) {

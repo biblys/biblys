@@ -15,6 +15,13 @@ api_articles_export:
   path: /api/admin/articles/export
   controller: ApiBundle\Controller\ArticleController::export
 
+# Collections
+
+api_collection_search:
+  methods: GET
+  path: /api/collections/search
+  controller: ApiBundle\Controller\CollectionController::searchAction
+
 # Contribution
 
 api_contribution:
