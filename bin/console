@@ -29,14 +29,18 @@ Connection::initPropel($config);
 $application = new Application();
 $application->add(new CreateSeedsCommand());
 
-$currentSite = CurrentSite::buildFromConfig($config);
-$filesystem = new Filesystem();
-$imagesService = new ImagesService($config, $currentSite, $filesystem);
-$application->add(new ImportImagesCommand($config, $filesystem, $imagesService));
-$application->add(new ExportImagesCommand($imagesService));
-$application->add(new OptimizeImagesCommand($config, $filesystem, $imagesService));
-$application->add(new ImportMediaCommand($currentSite, $filesystem));
-$application->add(new MigrateFilesCommand($filesystem));
-$application->add(new MigrateImagesCommand($config, $currentSite, $imagesService));
+try {
+    $currentSite = CurrentSite::buildFromConfig($config);
+    $filesystem = new Filesystem();
+    $imagesService = new ImagesService($config, $currentSite, $filesystem);
+    $application->add(new ImportImagesCommand($config, $filesystem, $imagesService));
+    $application->add(new ExportImagesCommand($imagesService));
+    $application->add(new OptimizeImagesCommand($config, $filesystem, $imagesService));
+    $application->add(new ImportMediaCommand($currentSite, $filesystem));
+    $application->add(new MigrateFilesCommand($filesystem));
+    $application->add(new MigrateImagesCommand($config, $currentSite, $imagesService));
+} catch (InvalidSiteIdException $e) {
+
+}
 
 $application->run();
