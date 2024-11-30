@@ -19,6 +19,7 @@
 use Biblys\Isbn\Isbn;
 use Biblys\Noosfere\Noosfere;
 use Biblys\Service\Slug\SlugService;
+use Model\PublisherQuery;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 $pm = new PublisherManager();
@@ -123,12 +124,12 @@ if ($_GET["mode"] == "search") { // Mode recherche
     $collection = Noosfere::getOrCreateCollection(
         $x["noosfere_IdCollection"],
         $x["article_collection"],
-        $publisher
+        PublisherQuery::create()->findPk($x["publisher_id"]),
     );
-    $x["collection_id"] = $collection->get('id');
-    $x["article_collection"] = $collection->get("name");
-    $x["article_publisher"] = $collection->get("publisher");
-    $x["pricegrid_id"] = $collection->get("pricegrid_id");
+    $x["collection_id"] = $collection->getId();
+    $x["article_collection"] = $collection->getName();
+    $x["article_publisher"] = $collection->getPublisherName();
+    $x["pricegrid_id"] = $collection->getPricegridId();
 
     // Reconnaissance de cycle
     if (!empty($x["article_cycle"])) {

@@ -20,6 +20,8 @@ namespace Biblys\Noosfere;
 
 use Biblys\Test\ModelFactory;
 use Exception;
+use Model\BookCollection;
+use Model\BookCollectionQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Publisher;
@@ -29,6 +31,14 @@ require_once __DIR__ . "/../../setUp.php";
 
 class NoosfereTest extends TestCase
 {
+
+    /**
+     * @throws PropelException
+     */
+    function setUp(): void
+    {
+        BookCollectionQuery::create()->deleteAll();
+    }
 
     /** getOrCreateContributor */
 
@@ -88,22 +98,71 @@ class NoosfereTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
-    public function testGetOrCreateCollectionWhenCollectionExists()
+    public function testGetOrCreateCollection()
     {
-        // given
-        $publisher = ModelFactory::createPublisher(name: "Imported");
-        $publisherEntity = Publisher::buildFromModel($publisher);
-        $existingCollection = ModelFactory::createCollection(publisher: $publisher, name: "from nooSFere");
+        $publisher = ModelFactory::createPublisher(name: "NOOSFERE");
 
         // when
         $returnedCollection = Noosfere::getOrCreateCollection(
             0,
-            "from nooSFere",
-            $publisherEntity
+            "New collection",
+            $publisher
         );
 
         // then
-        $this->assertEquals($existingCollection->getId(), $returnedCollection->get("id"));
+        $this->assertInstanceOf(BookCollection::class, $returnedCollection);
+        $this->assertNotNull($returnedCollection->getId());
+        $this->assertEquals("New collection", $returnedCollection->getName());
+        $this->assertEquals($publisher->getId(), $returnedCollection->getPublisherId());
+
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetOrCreateCollectionWhenCollectionExistsWithTheSameName()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher(name: "NOOSFERE");
+        $existingCollection = ModelFactory::createCollection(
+            publisher: $publisher, name: "Already exists with name", noosfereId: 123
+        );
+
+        // when
+        $returnedCollection = Noosfere::getOrCreateCollection(
+            456,
+            "Already exists with name",
+            $publisher
+        );
+
+        // then
+        $this->assertInstanceOf(BookCollection::class, $returnedCollection);
+        $this->assertEquals($existingCollection->getId(), $returnedCollection->getId());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetOrCreateCollectionWhenCollectionExistsWithTheSameNoosfereId()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher(name: "NOOSFERE");
+        $existingCollection = ModelFactory::createCollection(
+            publisher: $publisher, name: "Already exists with id", noosfereId: 123
+        );
+
+        // when
+        $returnedCollection = Noosfere::getOrCreateCollection(
+            123,
+            "Already exists with id",
+            $publisher
+        );
+
+        // then
+        $this->assertInstanceOf(BookCollection::class, $returnedCollection);
+        $this->assertEquals($existingCollection->getId(), $returnedCollection->getId());
     }
 
     /** #buildArticlesFromXml */
