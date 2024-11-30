@@ -18,7 +18,13 @@
 
 namespace Model;
 
+use Biblys\Exception\EntityAlreadyExistsException;
+use Biblys\Exception\InvalidEntityException;
+use Biblys\Service\Slug\SlugService;
 use Model\Base\BookCollection as BaseBookCollection;
+use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\Connection\ConnectionInterface;
+use Propel\Runtime\Exception\PropelException;
 
 /**
  * Skeleton subclass for representing a row from the 'collections' table.
@@ -31,5 +37,62 @@ use Model\Base\BookCollection as BaseBookCollection;
  */
 class BookCollection extends BaseBookCollection
 {
+    /**
+     * @throws PropelException
+     * @throws InvalidEntityException
+     * @throws EntityAlreadyExistsException
+     */
+    public function preSave(?ConnectionInterface $con = null): bool
+    {
+        if (!$this->getName()) {
+            throw new InvalidEntityException("La collection doit avoir un nom.");
+        }
 
+        $publisher = $this->getPublisher();
+        if (!$publisher) {
+            throw new InvalidEntityException("La collection doit être associée à un éditeur.");
+        }
+
+        $this->setPublisherName($publisher->getName());
+
+        $slugService = new SlugService();
+        $slug = $slugService->createForBookCollection($this->getName(), $publisher->getName());
+        $this->setUrl($slug);
+
+        $otherCollectionWithTheSameName = BookCollectionQuery::create()
+            ->filterByPublisherId($publisher->getId())
+            ->filterByName($this->getName())
+            ->filterById($this->getId(), Criteria::NOT_EQUAL)
+            ->findOne();
+        if ($otherCollectionWithTheSameName) {
+            throw new EntityAlreadyExistsException(
+                sprintf(
+                    "Il existe déjà une collection avec le nom « %s » (n° %s) chez l'éditeur %s (slug: %s).",
+                    $otherCollectionWithTheSameName->getName(),
+                    $otherCollectionWithTheSameName->getId(),
+                    $publisher->getName(),
+                    $otherCollectionWithTheSameName->getUrl(),
+                )
+            );
+        }
+
+        if ($this->getNoosfereId()) {
+            $otherCollectionWithTheSameNoosfereId = BookCollectionQuery::create()
+                ->filterByNoosfereId($this->getNoosfereId())
+                ->filterById($this->getId(), Criteria::NOT_EQUAL)
+                ->findOne();
+            if ($otherCollectionWithTheSameNoosfereId) {
+                throw new EntityAlreadyExistsException(
+                    sprintf(
+                        "Il existe déjà une collection avec l'identifiant noosfere %s: Collection n° %s (slug: %s).",
+                        $this->getNoosfereId(),
+                        $otherCollectionWithTheSameNoosfereId->getId(),
+                        $otherCollectionWithTheSameNoosfereId->getUrl(),
+                    )
+                );
+            }
+        }
+
+        return parent::preSave($con);
+    }
 }

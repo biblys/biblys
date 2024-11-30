@@ -162,6 +162,7 @@ class ModelFactory
     public static function createCollection(
         Publisher $publisher = null,
         string    $name = "La Blanche",
+        int       $noosfereId = null,
     ): BookCollection
     {
         $slugService = new SlugService();
@@ -175,6 +176,7 @@ class ModelFactory
             $publisher->getName()
         );
         $collection->setUrl($slug);
+        $collection->setNoosfereId($noosfereId);
         $collection->save();
 
         return $collection;

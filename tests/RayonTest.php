@@ -22,6 +22,7 @@
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
+use Propel\Runtime\Exception\PropelException;
 
 require_once "setUp.php";
 
@@ -114,15 +115,14 @@ class RayonTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test adding an article to a rayon
-     * @depends testGet
+     * @throws PropelException
+     * @throws Exception
      */
-    public function testAddArticle(Rayon $rayon)
+    public function testAddArticle()
     {
         // given
-        $rm = new RayonManager();
-        $am = new ArticleManager();
-        $pm = new PeopleManager();
-        $article = EntityFactory::createArticle();
+        $article = EntityFactory::createArticle(title: "Article in rayon");
+        $rayon = EntityFactory::createRayon();
 
         // when
         $rayon->addArticle($article);
@@ -153,7 +153,7 @@ class RayonTest extends PHPUnit\Framework\TestCase
     {
         // given
         $rayon = EntityFactory::createRayon(["rayon_name" => "Combien ?"]);
-        $article = EntityFactory::createArticle();
+        $article = EntityFactory::createArticle(title: "Article to count");
         $rayon->addArticle($article);
 
         // when
