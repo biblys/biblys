@@ -17,6 +17,11 @@ api_articles_export:
 
 # Collections
 
+api_collection_create:
+  methods: POST
+  path: /api/collections
+  controller: ApiBundle\Controller\CollectionController::createAction
+
 api_collection_search:
   methods: GET
   path: /api/collections/search

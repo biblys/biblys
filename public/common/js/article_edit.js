@@ -285,7 +285,7 @@ function reloadArticleAdminEvents(scope) {
   $('#createCollection.event', scope).submit(function (e) {
     e.preventDefault();
     $.post({
-      url: '/pages/adm_article_collection',
+      url: '/api/collections',
       data: {
         collection_name: $('#collection_name').val(),
         collection_publisher: $('#collection_publisher').val(),

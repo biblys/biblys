@@ -18,14 +18,19 @@
 
 namespace ApiBundle\Controller;
 
+use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\QueryParamsService;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
+use Exception;
 use Mockery;
 use Model\BookCollectionQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 require_once __DIR__ . "/../../setUp.php";
 
@@ -38,6 +43,8 @@ class CollectionControllerTest extends TestCase
     {
         BookCollectionQuery::create()->deleteAll();
     }
+
+    /** searchAction */
 
     /**
      * @throws PropelException
@@ -111,5 +118,109 @@ class CollectionControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString("User collection", $response->getContent());
         $this->assertStringNotContainsString("Collection from other user", $response->getContent());
+    }
+
+    /** createAction */
+
+    /**
+     * @throws PropelException
+     */
+    public function testCreateActionAsAdmin()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher(name: "Éditeur de la nouvelle collection");
+
+        $controller = new CollectionController();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+        $bodyParams = Mockery::mock(BodyParamsService::class);
+        $bodyParams->expects("parse")->with([
+            "collection_name" => ["type" => "string"],
+            "collection_publisher" => ["type" => "string"],
+            "collection_publisher_id" => ["type" => "numeric"],
+        ])->andReturn();
+        $bodyParams->expects("get")->with("collection_name")
+            ->andReturn("Nouvelle collection");
+        $bodyParams->expects("get")->with("collection_publisher")
+            ->andReturn($publisher->getName());
+        $bodyParams->expects("get")->with("collection_publisher_id")
+            ->andReturn($publisher->getId());
+
+        // when
+        $response = $controller->createAction($currentUser, $bodyParams);
+
+        // then
+        $this->assertEquals(201, $response->getStatusCode());
+        $json = json_decode($response->getContent(), true);
+        $this->assertArrayHasKey("collection_id", $json);
+        $this->assertEquals("Nouvelle collection", $json["collection_name"]);
+        $this->assertEquals($publisher->getName(), $json["collection_publisher"]);
+        $this->assertEquals($publisher->getId(), $json["collection_publisher_id"]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testCreateActionWithInvalidData()
+    {
+        // given
+        $controller = new CollectionController();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+        $bodyParams = Mockery::mock(BodyParamsService::class);
+        $bodyParams->expects("parse")->with([
+            "collection_name" => ["type" => "string"],
+            "collection_publisher" => ["type" => "string"],
+            "collection_publisher_id" => ["type" => "numeric"],
+        ])->andReturn();
+        $bodyParams->expects("get")->with("collection_name")
+            ->andReturn("Collection existante");
+        $bodyParams->expects("get")->with("collection_publisher")
+            ->andReturn("");
+        $bodyParams->expects("get")->with("collection_publisher_id")
+            ->andReturn(0);
+
+        // when
+        $exception = Helpers::runAndCatchException(fn () => $controller->createAction($currentUser, $bodyParams));
+
+        // then
+        $this->assertInstanceOf(BadRequestHttpException::class, $exception);
+        $this->assertStringContainsString(
+            "La collection doit être associée à un éditeur",
+            $exception->getMessage());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testCreateActionWithAlreadyExistingCollection()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher(name: "Éditeur de la collection existante");
+        ModelFactory::createCollection(publisher: $publisher, name: "Collection existante");
+
+        $controller = new CollectionController();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+        $bodyParams = Mockery::mock(BodyParamsService::class);
+        $bodyParams->expects("parse")->with([
+            "collection_name" => ["type" => "string"],
+            "collection_publisher" => ["type" => "string"],
+            "collection_publisher_id" => ["type" => "numeric"],
+        ])->andReturn();
+        $bodyParams->expects("get")->with("collection_name")
+            ->andReturn("Collection existante");
+        $bodyParams->expects("get")->with("collection_publisher")
+            ->andReturn($publisher->getName());
+        $bodyParams->expects("get")->with("collection_publisher_id")
+            ->andReturn($publisher->getId());
+
+        // when
+        $exception = Helpers::runAndCatchException(fn () => $controller->createAction($currentUser, $bodyParams));
+
+        // then
+        $this->assertInstanceOf(ConflictHttpException::class, $exception);
+        $this->assertStringContainsString("Il existe déjà une collection", $exception->getMessage());
     }
 }

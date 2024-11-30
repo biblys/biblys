@@ -18,14 +18,20 @@
 
 namespace ApiBundle\Controller;
 
+use Biblys\Exception\EntityAlreadyExistsException;
+use Biblys\Exception\InvalidEntityException;
+use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\QueryParamsService;
 use Framework\Controller;
+use Model\BookCollection;
 use Model\BookCollectionQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class CollectionController extends Controller
 {
@@ -78,5 +84,41 @@ class CollectionController extends Controller
         ];
 
         return new JsonResponse($json);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function createAction(
+        CurrentUser $currentUser,
+        BodyParamsService $bodyParams,
+    ): JsonResponse
+    {
+        $currentUser->authPublisher();
+
+        $bodyParams->parse([
+            "collection_name" => ["type" => "string"],
+            "collection_publisher" => ["type" => "string"],
+            "collection_publisher_id" => ["type" => "numeric"],
+        ]);
+
+        $collection = new BookCollection();
+        $collection->setName($bodyParams->get("collection_name"));
+        $collection->setPublisherId($bodyParams->get("collection_publisher_id"));
+
+        try {
+            $collection->save();
+        } catch (InvalidEntityException $exception) {
+            throw new BadRequestHttpException($exception->getMessage());
+        } catch (EntityAlreadyExistsException $exception) {
+            throw new ConflictHttpException($exception->getMessage());
+        }
+
+        return new JsonResponse([
+            "collection_id" => $collection->getId(),
+            "collection_name" => $collection->getName(),
+            "collection_publisher" => $collection->getPublisher()->getName(),
+            "collection_publisher_id" => $collection->getPublisherId(),
+        ], 201);
     }
 }
