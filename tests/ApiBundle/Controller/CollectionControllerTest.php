@@ -133,6 +133,7 @@ class CollectionControllerTest extends TestCase
         $controller = new CollectionController();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authPublisher");
+        $currentUser->expects("isAdmin")->andReturn(true);
         $bodyParams = Mockery::mock(BodyParamsService::class);
         $bodyParams->expects("parse")->with([
             "collection_name" => ["type" => "string"],
@@ -143,7 +144,7 @@ class CollectionControllerTest extends TestCase
             ->andReturn("Nouvelle collection");
         $bodyParams->expects("get")->with("collection_publisher")
             ->andReturn($publisher->getName());
-        $bodyParams->expects("get")->with("collection_publisher_id")
+        $bodyParams->expects("getInteger")->with("collection_publisher_id")
             ->andReturn($publisher->getId());
 
         // when
@@ -167,6 +168,7 @@ class CollectionControllerTest extends TestCase
         $controller = new CollectionController();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authPublisher");
+        $currentUser->expects("isAdmin")->andReturn(true);
         $bodyParams = Mockery::mock(BodyParamsService::class);
         $bodyParams->expects("parse")->with([
             "collection_name" => ["type" => "string"],
@@ -177,7 +179,7 @@ class CollectionControllerTest extends TestCase
             ->andReturn("Collection existante");
         $bodyParams->expects("get")->with("collection_publisher")
             ->andReturn("");
-        $bodyParams->expects("get")->with("collection_publisher_id")
+        $bodyParams->expects("getInteger")->with("collection_publisher_id")
             ->andReturn(0);
 
         // when
@@ -203,6 +205,7 @@ class CollectionControllerTest extends TestCase
         $controller = new CollectionController();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authPublisher");
+        $currentUser->expects("isAdmin")->andReturn(true);
         $bodyParams = Mockery::mock(BodyParamsService::class);
         $bodyParams->expects("parse")->with([
             "collection_name" => ["type" => "string"],
@@ -213,7 +216,7 @@ class CollectionControllerTest extends TestCase
             ->andReturn("Collection existante");
         $bodyParams->expects("get")->with("collection_publisher")
             ->andReturn($publisher->getName());
-        $bodyParams->expects("get")->with("collection_publisher_id")
+        $bodyParams->expects("getInteger")->with("collection_publisher_id")
             ->andReturn($publisher->getId());
 
         // when
@@ -222,5 +225,86 @@ class CollectionControllerTest extends TestCase
         // then
         $this->assertInstanceOf(ConflictHttpException::class, $exception);
         $this->assertStringContainsString("Il existe déjà une collection", $exception->getMessage());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testCreateActionAsPublisher()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher(name: "Éditeur de la nouvelle collection");
+        $publisherRight = ModelFactory::createRight(publisher: $publisher);
+
+        $controller = new CollectionController();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+        $currentUser->expects("isAdmin")->andReturn(false);
+        $currentUser->expects("hasPublisherRight")->andReturn(true);
+        $currentUser->expects("getCurrentRight")->andReturn($publisherRight);
+        $bodyParams = Mockery::mock(BodyParamsService::class);
+        $bodyParams->expects("parse")->with([
+            "collection_name" => ["type" => "string"],
+            "collection_publisher" => ["type" => "string"],
+            "collection_publisher_id" => ["type" => "numeric"],
+        ])->andReturn();
+        $bodyParams->expects("get")->with("collection_name")
+            ->andReturn("Nouvelle collection");
+        $bodyParams->expects("get")->with("collection_publisher")
+            ->andReturn($publisher->getName());
+        $bodyParams->expects("getInteger")->with("collection_publisher_id")
+            ->andReturn($publisher->getId());
+
+        // when
+        $response = $controller->createAction($currentUser, $bodyParams);
+
+        // then
+        $this->assertEquals(201, $response->getStatusCode());
+        $json = json_decode($response->getContent(), true);
+        $this->assertArrayHasKey("collection_id", $json);
+        $this->assertEquals("Nouvelle collection", $json["collection_name"]);
+        $this->assertEquals($publisher->getName(), $json["collection_publisher"]);
+        $this->assertEquals($publisher->getId(), $json["collection_publisher_id"]);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testCreateActionAsPublisherFailsIfPublisherIsNotUsers()
+    {
+        // given
+        $targetPublisher = ModelFactory::createPublisher(name: "Éditeur de la nouvelle collection");
+        $userPublisher = ModelFactory::createPublisher(name: "Éditeur de l'utilisateur");
+        $publisherRight = ModelFactory::createRight(publisher: $userPublisher);
+
+        $controller = new CollectionController();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+        $currentUser->expects("isAdmin")->andReturn(false);
+        $currentUser->expects("hasPublisherRight")->andReturn(true);
+        $currentUser->expects("getCurrentRight")->andReturn($publisherRight);
+        $bodyParams = Mockery::mock(BodyParamsService::class);
+        $bodyParams->expects("parse")->with([
+            "collection_name" => ["type" => "string"],
+            "collection_publisher" => ["type" => "string"],
+            "collection_publisher_id" => ["type" => "numeric"],
+        ])->andReturn();
+        $bodyParams->expects("get")->with("collection_name")
+            ->andReturn("Nouvelle collection");
+        $bodyParams->expects("get")->with("collection_publisher")
+            ->andReturn($targetPublisher->getName());
+        $bodyParams->expects("getInteger")->with("collection_publisher_id")
+            ->andReturn($targetPublisher->getId());
+
+        // when
+        $exception = Helpers::runAndCatchException(fn () => $controller->createAction($currentUser, $bodyParams));
+
+        // then
+        $this->assertInstanceOf(BadRequestHttpException::class, $exception);
+        $this->assertStringContainsString(
+            "Vous n'avez pas le droit de créer une collection pour cet éditeur",
+            $exception->getMessage()
+        );
     }
 }

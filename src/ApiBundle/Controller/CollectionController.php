@@ -102,9 +102,14 @@ class CollectionController extends Controller
             "collection_publisher_id" => ["type" => "numeric"],
         ]);
 
+        $targetPublisherId = $bodyParams->getInteger("collection_publisher_id");
+        if (!($this->_currentUserCanManagePublisher($currentUser, $targetPublisherId))) {
+            throw new BadRequestHttpException("Vous n'avez pas le droit de créer une collection pour cet éditeur.");
+        }
+
         $collection = new BookCollection();
         $collection->setName($bodyParams->get("collection_name"));
-        $collection->setPublisherId($bodyParams->get("collection_publisher_id"));
+        $collection->setPublisherId($targetPublisherId);
 
         try {
             $collection->save();
@@ -120,5 +125,21 @@ class CollectionController extends Controller
             "collection_publisher" => $collection->getPublisher()->getName(),
             "collection_publisher_id" => $collection->getPublisherId(),
         ], 201);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    private function _currentUserCanManagePublisher(CurrentUser $currentUser, int $targetPublisherId): bool
+    {
+        if ($currentUser->isAdmin()) {
+            return true;
+        }
+
+        if (!$currentUser->hasPublisherRight()) {
+            return false;
+        }
+
+        return $currentUser->getCurrentRight()->getPublisherId() === $targetPublisherId;
     }
 }
