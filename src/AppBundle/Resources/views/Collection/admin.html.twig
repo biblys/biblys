@@ -1,0 +1,66 @@
+{#
+Copyright (C) 2024 Clément Latzarus
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Collections
+{% endblock %}
+
+{% block main %}
+  <h1>
+    <span class="fa fa-th-list"></span>
+    Collections ({{ count }})
+  </h1>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Éditeur</th>
+      <th>articles</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for collection in collections %}
+      <tr>
+        <td>
+          <a href="{{ path("collection_show", { slug: collection.url }) }}">
+            {{ collection.name }}
+          </a>
+        </td>
+        <td>
+          <a href="{{ path("publisher_show", { slug: collection.publisher.url }) }}">
+            {{ collection.publisher.name }}
+          </a>
+        </td>
+        <td>
+          {{ collection.articles|length }}
+        </td>
+        <td>
+          <a class="btn btn-primary" href="{{ path("collection_edit", { id: collection.id }) }}" title="Modifier">
+            <span class="fa fa-pencil"></span>
+          </a>
+          <a class="btn btn-danger" href="{{ path("collection_delete", { id: collection.id }) }}" title="Supprimer">
+            <span class="fa fa-trash"></span>
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

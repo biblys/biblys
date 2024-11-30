@@ -24,11 +24,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 return function(
     CurrentUser $currentUser,
     CurrentSite $currentSite,
     Request $request,
+    UrlGenerator $urlGenerator,
     TemplateService $templateService,
 ): Response|RedirectResponse
 {
@@ -59,7 +61,9 @@ return function(
         if ($publisher) {
             $items["Éditeur"][] = array('Fiche d\'identité', '/pages/publisher_edit', 'fa-list-alt');
 
-            $items["Bibliographie"][] = array('Catalogue', '/pages/log_articles', 'fa-books');
+            $items["Bibliographie"][] = array('Catalogue', '/pages/log_articles', 'fa-list');
+            $collectionUrl = $urlGenerator->generate("collection_admin");
+            $items["Bibliographie"][] = array("Collections", $collectionUrl, "fa-th-list");
             $items["Bibliographie"][] = array('Créer un nouveau livre', '/pages/article_edit', 'fa-book');
 
             // L'Autre Livre
@@ -89,7 +93,7 @@ return function(
             $i["link"] = $i[1];
             $i['class'] = null;
             $i['icon_path'] = '/common/icons/' . str_replace("/pages/", "", $i["link"]) . '.svg';
-            if (isset($i[2]) && strstr($i[2], 'fa-')) $i['icon_link'] = '<i class="fa ' . $i[2] . '"></i>';
+            if (isset($i[2]) && strstr($i[2], 'fa-')) $i['icon_link'] = '<span class="fa ' . $i[2] . '"></i>';
             else $i['icon_link'] = NULL;
             $sections .= '
         <p>
@@ -103,7 +107,7 @@ return function(
 
 
     $templateCode = '        
-        <h1><i class="fa fa-dashboard"></i> Tableau de bord</h1>
+        <h1><span class="fa fa-dashboard"></span> Tableau de bord</h1>
     
         <div class="dashboard">
           {{sections|raw}}

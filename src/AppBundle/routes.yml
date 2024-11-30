@@ -236,6 +236,10 @@ collection_show:
   path: /collection/{slug}
   controller: AppBundle\Controller\CollectionController::showAction
 
+collection_admin:
+  path: /admin/collections/
+  controller: AppBundle\Controller\CollectionController::adminAction
+
 collection_edit:
   path: /admin/collection/{id}/edit
   controller: AppBundle\Controller\CollectionController::editAction

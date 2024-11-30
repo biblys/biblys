@@ -206,6 +206,7 @@ class Entry
 
         $entries[] = new Entry('Nouvel article', ['category' => 'catalog', 'url' => '/pages/article_edit', 'icon' => 'book']);
         $entries[] = new Entry('Articles', ['category' => 'catalog', 'path' => 'article_admin_catalog', 'icon' => 'list-alt']);
+        $entries[] = new Entry('Collections', ['category' => 'catalog', 'path' => 'collection_admin', 'icon' => 'th-list']);
         $entries[] = new Entry('Rayons', ['category' => 'catalog', 'path' => 'rayon_index', 'icon' => 'sort-amount-asc']);
         $entries[] = new Entry('Termes de recherche', ['category' => 'catalog', 'path' => 'article_search_terms', 'icon' => 'search', 'subscription' => 'search-terms']);
         $entries[] = new Entry('Codes ISBN', ['category' => 'catalog', 'url' => '/pages/adm_isbn_codes', 'icon' => 'barcode']);

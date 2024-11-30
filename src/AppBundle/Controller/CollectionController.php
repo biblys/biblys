@@ -22,10 +22,12 @@ use ArticleManager;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Pagination;
+use Biblys\Service\TemplateService;
 use CollectionManager;
 use Exception;
 use Framework\Controller;
 use InvalidArgumentException;
+use Model\BookCollectionQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -119,6 +121,39 @@ class CollectionController extends Controller
             'articles' => $articles,
             'pages' => $pagination,
         ]);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function adminAction(
+        CurrentUser     $currentUser,
+        TemplateService $templateService,
+    ): Response
+    {
+        $currentUser->authPublisher();
+
+        $collectionQuery = BookCollectionQuery::create();
+
+        if (!$currentUser->isAdmin()) {
+            $collectionQuery->filterByPublisherId($currentUser->getCurrentRight()->getPublisherId());
+        }
+
+        $count = $collectionQuery->count();
+        $collections = $collectionQuery
+            ->orderByPublisherName()
+            ->orderByName()
+            ->find();
+
+        return $templateService->renderResponse(
+            "AppBundle:Collection:admin.html.twig", [
+                "collections" => $collections,
+                "count" => $count,
+            ]
+        );
     }
 
     /**
