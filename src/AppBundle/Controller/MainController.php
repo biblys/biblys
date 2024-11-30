@@ -337,7 +337,7 @@ class MainController extends Controller
             'updated_alert' => $updatedAlert,
             'smtp_alert' => $smtpAlert,
             'shortcuts' => $shortcuts,
-            'articles' => Entry::generateUrlsForEntries(Entry::findByCategory('articles'), $urlGenerator),
+            'catalog' => Entry::generateUrlsForEntries(Entry::findByCategory('catalog'), $urlGenerator),
             'stock' => Entry::generateUrlsForEntries(Entry::findByCategory('stock'), $urlGenerator),
             'sales' => Entry::generateUrlsForEntries(Entry::findByCategory('sales'), $urlGenerator),
             'ebooks' => $ebooksSection,
