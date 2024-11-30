@@ -17,21 +17,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% extends "layout:base.html.twig" %}
 
 {% block title %}
-  Catalogue
+  Articles
 {% endblock %}
 
 {% block main %}
   <h1>
     <span class="fa fa-list-alt"></span>
-    Catalogue
+    Articles ({{ count }})
   </h1>
 
   <a class="btn btn-primary" href="{{ path("api_articles_export") }}">
     <span class="fa fa-cloud-download"></span>
     Télécharger le catalogue (CSV)
   </a>
-
-  <h2>{{ count }} articles</h2>
 
   <table id="catalog" class="table">
     <thead>
