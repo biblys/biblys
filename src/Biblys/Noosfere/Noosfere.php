@@ -27,6 +27,7 @@ use Biblys\Service\Slug\SlugService;
 use Collection;
 use CollectionManager;
 use Exception;
+use Model\BookCollection;
 use Model\BookCollectionQuery;
 use Model\PeopleQuery;
 use Model\PublisherQuery;
@@ -210,8 +211,8 @@ class Noosfere
     public static function getOrCreateCollection(
         int       $collectionNoosfereId,
         string    $collectionNoosfereName,
-        Publisher $publisher
-    ): Collection
+        \Model\Publisher $publisher
+    ): BookCollection
     {
         $slugService = new SlugService();
         $cm = new CollectionManager();
@@ -222,7 +223,7 @@ class Noosfere
         }
 
         $collectionSlug = $slugService->createForBookCollection(
-            $collectionNoosfereName, $publisher->get("name")
+            $collectionNoosfereName, $publisher->getName()
         );
         $existingCollection = BookCollectionQuery::create()
             ->filterByNoosfereId($collectionNoosfereId)
@@ -231,8 +232,7 @@ class Noosfere
             ->findOne();
 
         if ($existingCollection) {
-            /** @var Collection $collection */
-            $collection = $cm->getById($existingCollection->getId());
+            $collection = BookCollectionQuery::create()->findPk($existingCollection->getId());
 
             if (!$collection) {
                 throw new ConflictHttpException(
@@ -240,22 +240,19 @@ class Noosfere
                 );
             }
 
-            if (!$collection->has('collection_noosfere_id') && !empty($collectionNoosfereId)) {
-                $collection->set('collection_noosfere_id', $collectionNoosfereId);
-                $cm->update($collection);
+            if (!$collection->getNoosfereId() && !empty($collectionNoosfereId)) {
+                $collection->setNoosfereId($collectionNoosfereId);
+                $collection->save();
             }
         }
 
         if (!$existingCollection) {
-            $collectionParams = [
-                "publisher_id" => $publisher->get('id'),
-                "collection_name" => $collectionNoosfereName,
-                "collection_noosfere_id" => $collectionNoosfereId
-            ];
-
             try {
-                /** @var Collection $collection */
-                $collection = $cm->create($collectionParams);
+                $collection = new BookCollection();
+                $collection->setPublisher($publisher);
+                $collection->setName($collectionNoosfereName);
+                $collection->setNoosfereId($collectionNoosfereId);
+                $collection->save();
             } catch (EntityAlreadyExistsException $exception) {
                 throw new ConflictHttpException($exception->getMessage(), $exception);
             }
