@@ -19,6 +19,7 @@
 /** @noinspection PhpPossiblePolymorphicInvocationInspection */
 /** @noinspection PhpUnhandledExceptionInspection */
 
+use Biblys\Data\ArticleType;
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Isbn\IsbnParsingException;
 use Biblys\Service\Config;
@@ -31,7 +32,6 @@ use Model\PublisherQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
-use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,9 +40,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
-/**
- * @throws PropelException
- */
 return function (
     Request      $request,
     CurrentUser  $currentUser,
@@ -90,7 +87,7 @@ return function (
             $_POST['article_submit_and_new'] = null;
         }
 
-        // Precommande
+        // Précommande
         if (empty($_POST['article_preorder'])) {
             $_POST['article_preorder'] = 0;
         }
@@ -101,10 +98,10 @@ return function (
         }
 
         // Link to another edition of the same book
-        $linkto = $request->request->get('article_link_to', false);
-        if ($linkto) {
+        $linkTo = $request->request->get('article_link_to', false);
+        if ($linkTo) {
             unset($_POST['article_link_to']);
-            $other = $am->getById($linkto);
+            $other = $am->getById($linkTo);
 
             // If the other book exists, link to it
             if ($other) {
@@ -115,7 +112,7 @@ return function (
                 } else {
                     // Else, create a new (negative) one
 
-                    // Get the smallest article_item yet and substract one
+                    // Get the smallest article_item yet and subtract one
                     $last_item_article = $am->get(
                         ['article_item' => 'NOT NULL'],
                         ['order' => 'article_item']
@@ -147,9 +144,9 @@ return function (
 
         // Autres ISBN
         if (!empty($_POST['article_ean_others'])) {
-            $eans = array_unique(explode(' ', $_POST['article_ean_others']));
+            $EANs = array_unique(explode(' ', $_POST['article_ean_others']));
             $_POST['article_ean_others'] = null;
-            foreach ($eans as $ean) {
+            foreach ($EANs as $ean) {
                 if (Isbn::isParsable($ean)) {
                     $_POST['article_ean_others'] .= ' ' . Isbn::convertToEan13($ean);
                 }
@@ -157,7 +154,7 @@ return function (
             $_POST['article_ean_others'] = trim($_POST['article_ean_others']);
         }
 
-        // Titre alphabetique
+        // Titre alphabétique
         $_POST['article_title_alphabetic'] = alphabetize($_POST['article_title']);
 
         // Retirer les liens dans article_summary
@@ -194,7 +191,7 @@ return function (
         unset($_POST['article_cover_import']);
         unset($_POST['article_cover_delete']);
 
-        // Set article collection & publisher
+        // Set article collection and publisher
         $collectionId = $request->request->get('collection_id');
         /** @var Collection $collection */
         $collection = $cm->getById($collectionId);
@@ -258,9 +255,7 @@ return function (
             } elseif (isset($redirect_to_new)) {
                 return new RedirectResponse('/pages/article_edit');
             } else {
-                $articleUrl = \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('article_show', [
-                    'slug' => $articleEntity->get('url'),
-                ]);
+                $articleUrl = $urlGenerator->generate('article_show', ['slug' => $articleEntity->get('url')]);
                 return new RedirectResponse($articleUrl);
             }
         } catch (IsbnParsingException $exception) {
@@ -323,12 +318,7 @@ return function (
             $_MODE = 'update';
 
             $articleEntity = $am->getById($a['article_id']);
-            $articleUrl = \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate(
-                'article_show',
-                [
-                    'slug' => $articleEntity->get('url'),
-                ]
-            );
+            $articleUrl = $urlGenerator->generate('article_show', ['slug' => $articleEntity->get('url')]);
 
             $articleCoverUrl = $imagesService->getImageUrlFor($article);
             $articleCover = "";
@@ -384,7 +374,7 @@ return function (
             $default_tags = $currentSite->getOption('default_article_tags');
         }
     } else {
-        // Creer un nouvel article
+        // Créer un nouvel article
         EntityManager::prepareAndExecute(
             'INSERT INTO `articles`(`article_editing_user`, `article_created`) VALUES(:user_id, NOW())',
             ['user_id' => $currentUser->getUser()->getId()]
@@ -401,7 +391,7 @@ return function (
     $article_ean_class = null;
     $article_title_class = null;
 
-    $type_options = \Biblys\Data\ArticleType::getOptions($articleEntity->get('type_id'));
+    $type_options = ArticleType::getOptions($articleEntity->get('type_id'));
 
     if ($a['type_id'] == 2) {
         $article_ean_div_class = 'hidden';
@@ -443,8 +433,8 @@ return function (
     $lang_current_options = '<option value="48">Français</option>'; // Default a la creation de la fiche
     $lang_original_options = '<option value=""></option>'; // Default a la creation de la fiche
     $lgm = new LangManager();
-    $langs = $lgm->getAll();
-    foreach ($langs as $l) {
+    $languages = $lgm->getAll();
+    foreach ($languages as $l) {
         if ($a['article_lang_current'] == $l['lang_id']) {
             $l['lang_current_sel'] = ' selected';
         } else {
@@ -479,7 +469,7 @@ return function (
     ';
     } else {
         $collection = '
-        <input type="text" id="article_collection" class="long changeThis uncomplete" required />
+        <input type="text" id="article_collection" class="long changeThis uncompleted" required />
         <input type="hidden" id="collection_id" name="collection_id" required />
         <input type="hidden" id="pricegrid_id" />
     ';
@@ -494,14 +484,14 @@ return function (
     $bonus_fieldset_class = null;
 
     $createCollectionPublisher = '
-    <input type="text" id="collection_publisher" name="collection_publisher" class="long uncomplete" required>
+    <input type="text" id="collection_publisher" name="collection_publisher" class="long uncompleted" required>
     <input type="hidden" id="collection_publisher_id" name="collection_publisher_id" required>
 ';
     if ($publisher_id) {
         $pub = $pm->getById($publisher_id);
         if ($pub) {
             $createCollectionPublisher = '
-                <input type="text" id="collection_publisher" name="collection_publisher" value="' . $pub->get('name') . '" class="long uncomplete" required readonly>
+                <input type="text" id="collection_publisher" name="collection_publisher" value="' . $pub->get('name') . '" class="long uncompleted" required readonly>
                 <input type="hidden" id="collection_publisher_id" name="collection_publisher_id" value="' . $pub->get('id') . '" required readonly>
             ';
         }
@@ -517,7 +507,7 @@ return function (
     ';
     } else {
         $cycle = '
-        <input type="text" id="article_cycle" name="article_cycle" class="long changeThis uncomplete" />
+        <input type="text" id="article_cycle" name="article_cycle" class="long changeThis uncompleted" />
         <input type="hidden" id="cycle_id" name="cycle_id" />
     ';
     }
@@ -539,7 +529,7 @@ return function (
         $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg, image/png, image/webp" hidden /> <label class="after btn btn-default" for="article_cover_upload">Remplacer</label> <input type="checkbox" id="article_cover_delete" name="article_cover_delete" value="1" /> <label for="article_cover_delete" class="after">Supprimer</label>';
     }
 
-    // ** FICHIERS TELECHARGEABLES ** //
+    // ** FICHIERS TÉLÉCHARGEABLES ** //
 
     // Files
     $fm = new FileManager();
@@ -549,7 +539,7 @@ return function (
         $files_table .= $file->getLine();
     }
 
-    // ** METADONNEES ** //
+    // ** MÉTADONNÉES ** //
 
     $articleCategoryLinks = LinkQuery::create()
         ->filterByArticleId($articleEntity->get('id'))
@@ -572,7 +562,6 @@ return function (
     </li>';
     }
 
-    // Rayons ajoutables
     $rm = new RayonManager();
     $rayons = $rm->getAll([], ['order' => 'rayon_name']);
     $rayons_options = null;
@@ -1114,7 +1103,7 @@ return function (
         <fieldset>
             <legend>Suppression</legend>
             <p class="text-center">
-                <a class="btn btn-danger" href=' . \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('article_delete', ['id' => $articleEntity->get('id')]) . '>
+                <a class="btn btn-danger" href=' . $urlGenerator->generate('article_delete', ['id' => $articleEntity->get('id')]) . '>
                     <span class="fa fa-trash-o"></span>
                     Supprimer définitivement cet article
                 </a>
