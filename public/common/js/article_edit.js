@@ -34,8 +34,8 @@ function handleHttpError(response) {
 
 // Choisir une collection
 function choose_collection(collection_id, collection_name, publisher_id, collection_publisher, pricegrid_id) {
-  $('#article_collection').addClass('pointer').removeClass('uncomplete').attr('readonly', 'readonly').val(collection_name);
-  $('#article_publisher').addClass('pointer').removeClass('uncomplete').attr('readonly', 'readonly').val(collection_publisher);
+  $('#article_collection').addClass('pointer').removeClass('uncompleted').attr('readonly', 'readonly').val(collection_name);
+  $('#article_publisher').addClass('pointer').removeClass('uncompleted').attr('readonly', 'readonly').val(collection_publisher);
   $('#collection_id').val(collection_id);
   $('#publisher_id').val(publisher_id);
   $('#pricegrid_id').val(pricegrid_id);
@@ -53,13 +53,13 @@ function choose_collection(collection_id, collection_name, publisher_id, collect
 
 // Choisir un editeur (creation de collection)
 function choose_publisher(publisher_id, publisher_name) {
-  $('#collection_publisher').addClass('pointer').removeClass('uncomplete').attr('readonly', 'readonly').val(publisher_name);
+  $('#collection_publisher').addClass('pointer').removeClass('uncompleted').attr('readonly', 'readonly').val(publisher_name);
   $('#collection_publisher_id').val(publisher_id);
 }
 
 // Choisir un cycle
 function choose_cycle(cycle_id, cycle_name) {
-  $('#article_cycle').addClass('pointer').removeClass('uncomplete').attr('readonly', 'readonly').val(cycle_name);
+  $('#article_cycle').addClass('pointer').removeClass('uncompleted').attr('readonly', 'readonly').val(cycle_name);
   $('#cycle_id').val(cycle_id);
   $('#article_tome').focus();
 }
@@ -269,14 +269,14 @@ function reloadArticleAdminEvents(scope) {
 
   // Changer les champs collection ou cycle
   $('.changeThis', scope).click(function () {
-    $(this).removeClass('pointer').addClass('uncomplete').removeAttr('readonly').val('').focus();
+    $(this).removeClass('pointer').addClass('uncompleted').removeAttr('readonly').val('').focus();
     $('#' + $(this).attr('id').replace('article_', '') + '_id').val('');
   });
   $('.changeThis', scope).bind('keypress', function (e) {
     var code = (e.keyCode ? e.keyCode : e.which);
     if (code == 13) {
       e.preventDefault();
-      $(this).removeClass('pointer').addClass('uncomplete').removeAttr('readonly').val('').focus();
+      $(this).removeClass('pointer').addClass('uncompleted').removeAttr('readonly').val('').focus();
       $('#' + $(this).attr('id').replace('article_', '') + '_id').val('');
     }
   });
@@ -293,7 +293,7 @@ function reloadArticleAdminEvents(scope) {
       },
       dataType: 'json',
       success: function (res) {
-        $('#article_collection').addClass('pointer').removeClass('uncomplete').attr('readonly', 'readonly').val(res.collection_name);
+        $('#article_collection').addClass('pointer').removeClass('uncompleted').attr('readonly', 'readonly').val(res.collection_name);
         $('#article_publisher').val(res.collection_publisher);
         $('#collection_id').val(res.collection_id);
         $('#publisher_id').val(res.collection_publisher_id);
@@ -401,7 +401,7 @@ $(document).ready(function () {
         if (data.error) {
           _alert(data.error);
         } else {
-          $('#article_people').removeClass('uncomplete').removeAttr('readonly').val('');
+          $('#article_people').removeClass('uncompleted').removeAttr('readonly').val('');
           $('#people_first_name').val('');
           $('#people_last_name').val('');
           $('#create_people').dialog('close');
@@ -512,7 +512,7 @@ $(document).ready(function () {
               return;
             }
 
-            $('#article_cycle').addClass('pointer').removeClass('uncomplete').attr('readonly', 'readonly');
+            $('#article_cycle').addClass('pointer').removeClass('uncompleted').attr('readonly', 'readonly');
             $('#cycle_id').val(data.cycle_id);
             $('#article_tome').focus();
             reloadArticleAdminEvents(this);
