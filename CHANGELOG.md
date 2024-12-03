@@ -30,6 +30,8 @@
 
 - L'import depuis nooSFere d'un contributeur sans prénom pouvait déclencher une
   erreur. C'est corrigé.
+- L'ajout d'une photo à un contributeur pouvait déclencher une erreur. Ce n'est
+  plus le cas.
 
 ### Instructions de mise à jour
 
