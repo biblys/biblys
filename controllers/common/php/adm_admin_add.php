@@ -43,7 +43,9 @@ return function (
         }
 
         try {
-            $user = UserQuery::create()->findOneByEmail($userEmail);
+            $user = UserQuery::create()
+                ->filterBySite($currentSite->getSite())
+                ->findOneByEmail($userEmail);
             if (!$user) {
                 throw new BadRequestHttpException(
                     "L'adresse e-mail doit correspondre à un compte utilisateur existant."
@@ -110,11 +112,10 @@ return function (
     
         <form method="post" class="check">
         <fieldset>
-            <p>
+            <div class="form-group"">
                 <label for="user_email">Adresse e-mail :</label>
-                <input type="email" name="user_email" id="user_email" value="' . ($userEmail ?? null) . '" class="long" required>&nbsp;
-            </p>
-            <br>
+                <input type="email"  class="form-control" name="user_email" id="user_email" value="' . ($userEmail ?? null) . '" required>&nbsp;
+            </div>
             <div class="center">
                 <button class="btn btn-primary" type="submit">Ajouter un administrateur</button>
             </div>
