@@ -26,6 +26,7 @@ use Biblys\Service\Pagination;
 use Biblys\Service\QueryParamsService;
 use Exception;
 use Framework\Controller;
+use Model\PeopleQuery;
 use People;
 use PeopleManager;
 use Propel\Runtime\Exception\PropelException;
@@ -198,9 +199,11 @@ class PeopleController extends Controller
                 $updated = $pm->update($updated);
 
                 if ($data["photo"] !== null) {
-                    $imagesService->addImageFor($updated->getModel(), $data["photo"]->getPathname());
+                    $contributor = PeopleQuery::create()->findPk($updated->get("id"));
+                    $imagesService->addImageFor($contributor, $data["photo"]->getPathname());
                 }
             } catch (Exception $e) {
+                dump($e);
                 $error = $e->getMessage();
             }
 
