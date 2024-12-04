@@ -1710,6 +1710,10 @@ class ArticleManager extends EntityManager
             throw new InvalidEntityException("Le champ Auteurs ne peut pas dépasser 256 caractères.");
         }
 
+        if ($article->has('article_tome') && strlen($article->get('article_tome')) > 8) {
+            throw new InvalidEntityException("Le champ Tome ne peut pas dépasser 8 caractères.");
+        }
+
         // If slug is already used
         $other = $this->get(
             [

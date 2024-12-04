@@ -32,6 +32,9 @@
   erreur. C'est corrigé.
 - L'ajout d'une photo à un contributeur pouvait déclencher une erreur. Ce n'est
   plus le cas.
+- L'ajout d'une chaine de caractère trop longue dans le champ "tome" d'un article
+  pouvait déclencher une erreur. Désormais, c'est une erreur de validation qui
+  sera affichée.
 
 ### Instructions de mise à jour
 
