@@ -78,36 +78,21 @@ composer test
 ## Add AGPL headers to source code files
 
 ```shell
-docker run -it -v ${PWD}:/src ghcr.io/b1nary-gr0up/nwa:main add \
-  --copyright "Clément Latzarus" \
-  --license agpl-3.0-only \
-  --skip "vendor/**" \
-  --skip "src/Model/Base/*.php" \
-  --skip "src/Model/Map/*.php" \
-  --skip "src/Biblys/Database/loadDatabase.php" \
-  "**/*.php"
+composer license:add
 ```
 
 ```shell
-docker run -it -v ${PWD}:/src ghcr.io/b1nary-gr0up/nwa:main add \
-  --copyright "Clément Latzarus" \
-  --license agpl-3.0-only \
-  "assets/**/*.js" \
-  "public/assets/js/*.js" \
-  "public/common/js/*.js"
+composer license:add:php
 ```
 
 ```shell
-docker run -it -v ${PWD}:/src ghcr.io/b1nary-gr0up/nwa:main add \
-  --copyright "Clément Latzarus" \
-  --license agpl-3.0-only \
-  "**/*.twig"
+composer license:add:js
 ```
 
 ```shell
-docker run -it -v ${PWD}:/src ghcr.io/b1nary-gr0up/nwa:main add \
-  --copyright "Clément Latzarus" \
-  --license agpl-3.0-only \
-  "assets/**/*.css" \
-  "public/common/css/*.css"
+composer license:add:twig
+```
+
+```shell
+composer license:add:css
 ```
