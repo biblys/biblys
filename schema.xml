@@ -60,7 +60,7 @@
     <column name="article_publisher" phpName="PublisherName" type="VARCHAR" size="256"/>
     <column name="cycle_id" phpName="CycleId" type="INTEGER" sqlType="int unsigned"/>
     <column name="article_cycle" phpName="Cycle" type="VARCHAR" size="256"/>
-    <column name="article_tome" phpName="Tome" type="VARCHAR" size="8"/>
+    <column name="article_tome" phpName="Tome" type="VARCHAR" size="12"/>
     <column name="article_cover_version" phpName="CoverVersion" type="INTEGER" defaultValue="0"/>
     <column name="article_availability" phpName="Availability" type="TINYINT" sqlType="tinyint unsigned"/>
     <column name="article_availability_dilicom" phpName="AvailabilityDilicom" type="TINYINT" sqlType="tinyint unsigned" defaultValue="1"/>

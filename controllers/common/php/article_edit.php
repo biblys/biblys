@@ -737,7 +737,7 @@ return function (
             <br />
             <label class="floating" for="article_cycle">Cycle :</label>
             ' . $cycle . '
-            t. <input type="text" id="article_tome" name="article_tome" value="' . $a['article_tome'] . '" class="mini" maxlength="8" />
+            t. <input type="text" id="article_tome" name="article_tome" value="' . $a['article_tome'] . '" class="mini" maxlength="12" />
             <br /><br />
 
             <label class="floating" for="article_availability_dilicom">Disponibilité :</label>

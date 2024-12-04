@@ -25,6 +25,8 @@
 - Une option de configuration `mondial_relay.id_point_collecte` a été ajoutée.
   Elle permet de préciser le point relais dans lequel les colis Mondial Relay
   sont déposés pour être expédiés.
+- Le champ "tome" des articles accepte désormais jusqu'à 12 caractères plutôt
+  que 8.
 
 ### Corrections
 
