@@ -288,6 +288,7 @@ class ModelFactory
         $order->setSite($site ?? ModelFactory::createSite());
         $order->setUser($user);
         $order->setShippingId($shipping->getId());
+        $order->setShippingMode($shipping->getType());
         $order->setType("web");
         $order->setAxysAccountId($axysAccountId);
         $order->setSlug($slug ?? "order-slug");
