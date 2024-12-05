@@ -130,6 +130,7 @@ return function (
     $shippingFee = $shipping ? $shipping->get("fee") : 0;
     $shippingType = $shipping?->get("type");
 
+    $pickupPointCode = null;
     $pickupPointForm = "";
     if ($shippingType === "mondial-relay") {
         $pickupPointSelectUrl = $urlGenerator->generate("shipping_select_pickup_point", [
