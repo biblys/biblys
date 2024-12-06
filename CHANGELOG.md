@@ -9,6 +9,9 @@
   C'est corrigé.
 - Les numéros de téléphone étaient mal formatées dans lors de l'export des
   commandes au format CSV. Maintenant, c'est mieux.
+- L'affichage d'une commande associé à un relais Mondial Relay invalide pouvait
+  déclencher une erreur. Désormais, la mention "Point Relais inconnu" sera
+  affichée.
 
 ## 3.1.0 (4 décembre 2024)
 
