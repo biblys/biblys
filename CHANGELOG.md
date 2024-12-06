@@ -7,6 +7,8 @@
 - Le numéro de suivi n'était plus enregistré lors de l'expédition d'une
   commande (mais bien inséré dans le courriel de confirmation d'expédition).
   C'est corrigé.
+- Les numéros de téléphone étaient mal formatées dans lors de l'export des
+  commandes au format CSV. Maintenant, c'est mieux.
 
 ## 3.1.0 (4 décembre 2024)
 

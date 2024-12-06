@@ -52,6 +52,7 @@ class OrderControllerTest extends TestCase
             shippingFee: $shippingFee,
             postalCode: "02330",
             city: "Plymouth",
+            phone: "+33.6-01 02/03;04",
             mondialRelayPickupPointCode: "123456",
         );
         ModelFactory::createStockItem(order: $order, weight: 123);
@@ -88,7 +89,7 @@ class OrderControllerTest extends TestCase
             "Plymouth",                # G - Ville du destinataire (O)
             "02330",                   # H - Code Postal du destinataire (O)
             "FR",                      # I - Pays du destinataire (O)
-            "0601020304",              # J - Téléphone fixe du destinataire (F)
+            "+33601020304",            # J - Téléphone fixe du destinataire (F)
             "",                        # K - Téléphone cellulaire (F)
             "silas.coade@example.net", # L - Adresse e-mail du destinataire (F)
             "R",                       # M - Type Collect (R = Relais)

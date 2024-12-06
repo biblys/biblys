@@ -87,6 +87,9 @@ class OrderController extends Controller
         $orders = $orderQuery->find();
         foreach ($orders as $order) {
             $orderWeight = $order->getTotalWeight() + $shippingPackagingWeight;
+
+            $formattedPhone = preg_replace('/[^\d+]/', '', $order->getPhone());
+
             $record = [
                 $order->getCustomerId(),                                         # A - Numéro de client (F)
                 $order->getId(),                                                 # B - Numéro de commande (F)
@@ -97,7 +100,7 @@ class OrderController extends Controller
                 $order->getCity(),                                               # G - Ville du destinataire (O)
                 $order->getPostalcode(),                                         # H - Code Postal du destinataire (O)
                 $order->getCountry()->getCode(),                                 # I - Pays du destinataire (O)
-                $order->getPhone(),                                              # J - Téléphone fixe du destinataire (F)
+                $formattedPhone,                                                 # J - Téléphone fixe du destinataire (F)
                 "",                                                              # K - Téléphone cellulaire (F)
                 $order->getEmail(),                                              # L - Adresse e-mail du destinataire (F)
                 "R",                                                             # M - Type Collect (R = Relais)
