@@ -1,5 +1,13 @@
 # Historique des modifications
 
+## 3.1.1 (DEV)
+
+### Corrections
+
+- Le numéro de suivi n'était plus enregistré lors de l'expédition d'une
+  commande (mais bien inséré dans le courriel de confirmation d'expédition).
+  C'est corrigé.
+
 ## 3.1.0 (4 décembre 2024)
 
 ### Améliorations
@@ -34,9 +42,9 @@
   erreur. C'est corrigé.
 - L'ajout d'une photo à un contributeur pouvait déclencher une erreur. Ce n'est
   plus le cas.
-- L'ajout d'une chaine de caractère trop longue dans le champ "tome" d'un article
-  pouvait déclencher une erreur. Désormais, c'est une erreur de validation qui
-  sera affichée.
+- L'ajout d'une chaine de caractère trop longue dans le champ "tome" d'un
+  article pouvait déclencher une erreur. Désormais, c'est une erreur de
+  validation qui sera affichée.
 
 ### Instructions de mise à jour
 
