@@ -22,7 +22,6 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\QueryParamsService;
-use Biblys\Service\StringService;
 use Biblys\Test\ModelFactory;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Exception;
@@ -52,6 +51,7 @@ class OrderControllerTest extends TestCase
             site: $site,
             shippingFee: $shippingFee,
             firstName: "Éléonore",
+            lastName: "Champollion",
             postalCode: "02330",
             city: "Plymouth",
             phone: "+33.6-01 02/03;04",
@@ -82,9 +82,9 @@ class OrderControllerTest extends TestCase
         // then
         // https://www.mondialrelay.fr/media/62811/import-de-fichiers-csv-v3.1.pdf
         $record = [
-            $order->getCustomerId(),   # A - Numéro de client (F)
+            "CHAMPOLLI",               # A - Numéro de client (F)
             $order->getId(),           # B - Numéro de commande (F)
-            "ELEONORE COADE",          # C - Adresse de livraison (Nom du client final) (O)
+            "ELEONORE CHAMPOLLION",    # C - Adresse de livraison (Nom du client final) (O)
             "",                        # D - Adresse de livraison (Complément du nom) (F)
             "1 RUE DE LA FISSURE",     # E - Adresse du destinataire (Numéro + Rue) (O)
             "APPARTEMENT 2",           # F - Adresse du destinataire (Complément d'adresse) (F)
