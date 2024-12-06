@@ -84,7 +84,7 @@ class OrderControllerTest extends TestCase
         $record = [
             "CHAMPOLLI",               # A - Numéro de client (F)
             $order->getId(),           # B - Numéro de commande (F)
-            "ELEONORE CHAMPOLLION",    # C - Adresse de livraison (Nom du client final) (O)
+            "CHAMPOLLION ELEONORE",    # C - Adresse de livraison (Nom du client final) (O)
             "",                        # D - Adresse de livraison (Complément du nom) (F)
             "1 RUE DE LA FISSURE",     # E - Adresse du destinataire (Numéro + Rue) (O)
             "APPARTEMENT 2",           # F - Adresse du destinataire (Complément d'adresse) (F)
