@@ -95,7 +95,7 @@ class OrderController extends Controller
             $record = [
                 $customerRef,                                                    # A - Numéro de client (F)
                 $order->getId(),                                                 # B - Numéro de commande (F)
-                trim("{$order->getFirstname()} {$order->getLastname()}"), # C - Adresse de livraison (Nom du client final) (O)
+                trim("{$order->getLastname()} {$order->getFirstname()}"), # C - Adresse de livraison (Nom du client final) (O)
                 "",                                                              # D - Adresse de livraison (Complément du nom) (F)
                 $order->getAddress1(),                                           # E - Adresse du destinataire (Numéro + Rue) (O)
                 $order->getAddress2(),                                           # F - Adresse du destinataire (Complément d'adresse) (F)
