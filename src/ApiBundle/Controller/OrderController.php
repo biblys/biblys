@@ -23,6 +23,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\QueryParamsService;
+use Biblys\Service\StringService;
 use Framework\Controller;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Exception;
@@ -114,7 +115,8 @@ class OrderController extends Controller
                 "1",                                                             # U - Nombre de colis
                 $orderWeight,                                                    # V - Poids en grammes
             ];
-            $recordWithEmptyFields = array_merge($record, array_fill(0, 22, ""));
+            $recordWithNormalizedFields = array_map("self::normalizeForExport", $record);
+            $recordWithEmptyFields = array_merge($recordWithNormalizedFields, array_fill(0, 22, ""));
             $csv->insertOne($recordWithEmptyFields);
         }
 
@@ -128,5 +130,14 @@ class OrderController extends Controller
                 "Content-Disposition" => "attachment; filename=\"commandes.csv\"",
             ]
         );
+    }
+
+    private static function normalizeForExport(?string $string): string
+    {
+        if ($string === null) {
+            return "";
+        }
+
+        return (new StringService($string))->normalize()->uppercase()->get();
     }
 }
