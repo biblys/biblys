@@ -7,8 +7,8 @@
 - Le numéro de suivi n'était plus enregistré lors de l'expédition d'une
   commande (mais bien inséré dans le courriel de confirmation d'expédition).
   C'est corrigé.
-- Les numéros de téléphone étaient mal formatées dans lors de l'export des
-  commandes au format CSV. Maintenant, c'est mieux.
+- Certaines données étaient mal formatées dans lors de l'export des commandes au 
+  format CSV. Maintenant, c'est mieux.
 - L'affichage d'une commande associé à un relais Mondial Relay invalide pouvait
   déclencher une erreur. Désormais, la mention "Point Relais inconnu" sera
   affichée.
