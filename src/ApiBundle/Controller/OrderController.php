@@ -91,8 +91,9 @@ class OrderController extends Controller
 
             $formattedPhone = preg_replace('/[^\d+]/', '', $order->getPhone());
 
+            $customerRef = (new StringService($order->getLastname()))->limit(9)->get();
             $record = [
-                $order->getCustomerId(),                                         # A - Numéro de client (F)
+                $customerRef,                                                    # A - Numéro de client (F)
                 $order->getId(),                                                 # B - Numéro de commande (F)
                 trim("{$order->getFirstname()} {$order->getLastname()}"), # C - Adresse de livraison (Nom du client final) (O)
                 "",                                                              # D - Adresse de livraison (Complément du nom) (F)
