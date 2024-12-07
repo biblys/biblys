@@ -18,39 +18,29 @@
 
 
 use Biblys\Legacy\CartHelpers;
-use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Legacy\OrderDeliveryHelpers;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
-use Biblys\Service\MailingList\Exception\InvalidConfigurationException;
-use Biblys\Service\MailingList\Exception\InvalidEmailAddressException;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\QueryParamsService;
 use DansMaCulotte\MondialRelay\DeliveryChoice;
 use Model\AlertQuery;
 use Model\CountryQuery;
 use Model\CustomerQuery;
+use Model\Map\StockTableMap;
 use Model\PageQuery;
 use Model\StockQuery;
-use Propel\Runtime\Exception\PropelException;
+use Propel\Runtime\Propel;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
-/**
- * @throws \Biblys\Exception\InvalidEmailAddressException
- * @throws InvalidConfigurationException
- * @throws InvalidEmailAddressException
- * @throws PropelException
- * @throws TransportExceptionInterface
- */
 return function (
     Request            $request,
     CurrentSite        $currentSite,
@@ -147,7 +137,7 @@ return function (
         $pickupPointForm = '
            <fieldset class="order-delivery-form__fieldset order-delivery-form__pickup-points">
               <legend>Point de retrait</legend>
-              ' . $pickupPoint->name . ' ('.$pickupPoint->postalCode.')
+              ' . $pickupPoint->name . ' (' . $pickupPoint->postalCode . ')
               <a href="' . $pickupPointSelectUrl . '" class="btn btn-info">Modifier</a>
               <input type="hidden" name="pickup_point_code" value="' . $pickupPointCode . '">
             </fieldset>
@@ -178,6 +168,9 @@ return function (
         }
 
         if ($error === null) {
+            $db = Propel::getServiceContainer()->getWriteConnection(StockTableMap::DATABASE_NAME);
+            $db->beginTransaction();
+
             /* MAILING */
             $newsletter_checked = $request->request->get('newsletter', false);
             $orderEmail = $request->request->get('order_email');
@@ -185,188 +178,195 @@ return function (
                 $mailingList->addContact($orderEmail, true);
             }
 
-            /* GET ORDER */
+            try {
 
-            // If there is an ongoing order, get it
-            if ($isUpdatingAnExistingOrder) {
-                $order = $orderInProgress;
-            }
-            // Else, create a new order
-            else {
-                $order = new \Model\Order();
-                $order->setSite($currentSite->getSite());
-            }
+                /* GET ORDER */
 
-            /* CUSTOMER */
-
-            $existingCustomer = CustomerQuery::create()->findOneByEmail($orderEmail);
-            if ($currentUser->isAuthentified()) {
-                $order->setUser($currentUser->getUser());
-                $existingCustomer = CustomerQuery::create()->findOneByUserId($currentUser->getUser()->getId());
-            }
-
-            if (!$existingCustomer) {
-                $firstName = $request->request->get("order_firstname");
-                $lastName = $request->request->get("order_lastname");
-
-                $newCustomer = new \Model\Customer();
-                $newCustomer->setEmail($orderEmail);
-                $newCustomer->setFirstName($firstName);
-                $newCustomer->setLastName($lastName);
-                $newCustomer->save();
-                $existingCustomer = $newCustomer;
-            }
-
-            $order->setCustomerId($existingCustomer->getId());
-
-            /* COUNTRY */
-            $countryId = $request->request->get("country_id");
-            $country = CountryQuery::create()->findPk($countryId);
-            if (!$country) {
-                throw new BadRequestHttpException("Pays inconnu.");
-            }
-
-            // General order info
-
-            $order->setInsert(date('Y-m-d H:i:s'));
-            $order->setType('web');
-            $order->setAmount($totalPrice);
-            $order->setAmountTobepaid($total);
-            $order->setCountry($country);
-
-            if ($shipping) {
-                $order->setShippingId($shipping->get("id"));
-                $order->setShippingMode($shippingType);
-                $order->setShippingCost($shippingFee);
-            }
-
-            $pickupPointCode = $request->request->get("pickup_point_code", "");
-            if ($pickupPointCode) {
-                $order->setMondialRelayPickupPointCode($pickupPointCode);
-            }
-
-            $comment = $request->request->get('comment', false);
-            if ($comment) {
-                $order->setComment($comment);
-            }
-
-            if (isset($shipping)) {
-                $order->setShippingId($shipping->get('id'));
-            }
-
-            $order->setCountryId($request->request->get("country_id"));
-            $order->setFirstname($request->request->get("order_firstname"));
-            $order->setLastname($request->request->get("order_lastname"));
-            $order->setAddress1($request->request->get("order_address1"));
-            $order->setAddress2($request->request->get("order_address2"));
-            $order->setPostalcode($request->request->get("order_postalcode"));
-            $order->setCity($request->request->get("order_city"));
-            $order->setEmail($request->request->get("order_email"));
-            $order->setPhone($request->request->get("order_phone"));
-            $order->setComment($request->request->get("order_comment"));
-
-            // Persist order
-            $order->save();
-
-            // Save customer country
-            $existingCustomer->setCountryId($countryId);
-            $existingCustomer->save();
-
-            // Get cart content
-            $cartStockItems = StockQuery::create()
-                ->filterByCartId($cart->getId())->find();
-
-            // Add each copy to the order
-            /** @var \Model\Stock $stockItem */
-            $orderCampaignId = null;
-            foreach ($cartStockItems as $stockItem) {
-                /** @var Stock $stockItemEntity */
-                $stockItemEntity = $stockItemManager->getById($stockItem->getId());
-                if (!$stockItemEntity->isAvailable()) {
-                    throw new Exception("Exemplaire {$stockItem->getId()} indisponible.");
+                // If there is an ongoing order, get it
+                if ($isUpdatingAnExistingOrder) {
+                    $order = $orderInProgress;
+                } // Else, create a new order
+                else {
+                    $order = new \Model\Order();
+                    $order->setSite($currentSite->getSite());
                 }
 
-                $stockItem->setOrder($order);
-                $stockItem->setSellingDate(new DateTime());
-                $stockItem->setCartId(null);
-                $stockItem->setCartDate(null);
+                /* CUSTOMER */
 
-                // Tax
-                $stockItemEntity = $stockItemManager->getById($stockItem->getId());
-                $rate = $stockItemManager->getTaxRate($stockItemEntity);
-                $price = $stockItem->getSellingPrice();
-
-                $coefficient = 1 + ($rate / 100);
-                $priceWithoutTax = round($price / $coefficient);
-                $tax = $price - $priceWithoutTax;
-
-                $stockItem->setTvaRate($rate);
-                $stockItem->setSellingPriceHt($priceWithoutTax);
-                $stockItem->setSellingPriceTva($tax);
-
-                if ($stockItem->getCampaignId()) {
-                    $orderCampaignId = $stockItem->getCampaignId();
+                $existingCustomer = CustomerQuery::create()->findOneByEmail($orderEmail);
+                if ($currentUser->isAuthentified()) {
+                    $order->setUser($currentUser->getUser());
+                    $existingCustomer = CustomerQuery::create()->findOneByUserId($currentUser->getUser()->getId());
                 }
 
-                // Customer
-                $stockItem->setCustomerId($existingCustomer->getId());
+                if (!$existingCustomer) {
+                    $firstName = $request->request->get("order_firstname");
+                    $lastName = $request->request->get("order_lastname");
 
-                $stockItem->save();
-            }
-
-            // Reset cart
-            $cart->setAmount(0);
-            $cart->setCount(0);
-            $cart->save();
-
-            // Update order from copies
-            $amount = array_reduce(
-                $order->getStockItems()->getArrayCopy(),
-                fn ($carry, $stockItem) => $carry + $stockItem->getSellingPrice(),
-                initial: 0);
-            $order->setAmount($amount);
-
-            if ($orderCampaignId) {
-                $crowdfundingCampaignManager = new CFCampaignManager();
-                $crowdfundingRewardManager = new CFRewardManager();
-
-                $campaign = $crowdfundingCampaignManager->getById($orderCampaignId);
-                $crowdfundingCampaignManager->updateFromSales($campaign);
-                $rewards = $crowdfundingRewardManager->getAll([
-                    "campaign_id" => $campaign->get("id"),
-                    "reward_limited" => 1
-                ]);
-                foreach ($rewards as $reward) {
-                    $crowdfundingRewardManager->updateQuantity($reward);
+                    $newCustomer = new \Model\Customer();
+                    $newCustomer->setEmail($orderEmail);
+                    $newCustomer->setFirstName($firstName);
+                    $newCustomer->setLastName($lastName);
+                    $newCustomer->save($db);
+                    $existingCustomer = $newCustomer;
                 }
-            }
 
-            $termsPageId = $currentSite->getOption("cgv_page");
-            $termsPage = PageQuery::create()->findPk($termsPageId);
+                $order->setCustomerId($existingCustomer->getId());
 
-            $order->save();
-
-            // Delete alerts for purchased articles
-            if ($currentSite->hasOptionEnabled("alerts") && $currentUser->isAuthentified()) {
-                foreach ($order->getStockItems() as $stockItem) {
-                    $alert = AlertQuery::create()
-                        ->filterByUser($currentUser->getUser())
-                        ->filterByArticleId($stockItem->getArticleId());
-
-                    // If it exists, delete it
-                    $alert?->delete();
+                /* COUNTRY */
+                $countryId = $request->request->get("country_id");
+                $country = CountryQuery::create()->findPk($countryId);
+                if (!$country) {
+                    throw new BadRequestHttpException("Pays inconnu.");
                 }
+
+                // General order info
+
+                $order->setInsert(date('Y-m-d H:i:s'));
+                $order->setType('web');
+                $order->setAmount($totalPrice);
+                $order->setAmountTobepaid($total);
+                $order->setCountry($country);
+
+                if ($shipping) {
+                    $order->setShippingId($shipping->get("id"));
+                    $order->setShippingMode($shippingType);
+                    $order->setShippingCost($shippingFee);
+                }
+
+                $pickupPointCode = $request->request->get("pickup_point_code", "");
+                if ($pickupPointCode) {
+                    $order->setMondialRelayPickupPointCode($pickupPointCode);
+                }
+
+                $comment = $request->request->get('comment', false);
+                if ($comment) {
+                    $order->setComment($comment);
+                }
+
+                if (isset($shipping)) {
+                    $order->setShippingId($shipping->get('id'));
+                }
+
+                $order->setCountryId($request->request->get("country_id"));
+                $order->setFirstname($request->request->get("order_firstname"));
+                $order->setLastname($request->request->get("order_lastname"));
+                $order->setAddress1($request->request->get("order_address1"));
+                $order->setAddress2($request->request->get("order_address2"));
+                $order->setPostalcode($request->request->get("order_postalcode"));
+                $order->setCity($request->request->get("order_city"));
+                $order->setEmail($request->request->get("order_email"));
+                $order->setPhone($request->request->get("order_phone"));
+                $order->setComment($request->request->get("order_comment"));
+
+                // Persist order
+                $order->save($db);
+
+                // Save customer country
+                $existingCustomer->setCountryId($countryId);
+                $existingCustomer->save($db);
+
+                // Get cart content
+                $cartStockItems = StockQuery::create()
+                    ->filterByCartId($cart->getId())->find();
+
+                // Add each copy to the order
+                /** @var \Model\Stock $stockItem */
+                $orderCampaignId = null;
+                foreach ($cartStockItems as $stockItem) {
+                    /** @var Stock $stockItemEntity */
+                    $stockItemEntity = $stockItemManager->getById($stockItem->getId());
+                    if (!$stockItemEntity->isAvailable()) {
+                        throw new Exception("Exemplaire {$stockItem->getId()} indisponible.");
+                    }
+
+                    $stockItem->setOrder($order);
+                    $stockItem->setSellingDate(new DateTime());
+                    $stockItem->setCartId(null);
+                    $stockItem->setCartDate(null);
+
+                    // Tax
+                    $stockItemEntity = $stockItemManager->getById($stockItem->getId());
+                    $rate = $stockItemManager->getTaxRate($stockItemEntity);
+                    $price = $stockItem->getSellingPrice();
+
+                    $coefficient = 1 + ($rate / 100);
+                    $priceWithoutTax = round($price / $coefficient);
+                    $tax = $price - $priceWithoutTax;
+
+                    $stockItem->setTvaRate($rate);
+                    $stockItem->setSellingPriceHt($priceWithoutTax);
+                    $stockItem->setSellingPriceTva($tax);
+
+                    if ($stockItem->getCampaignId()) {
+                        $orderCampaignId = $stockItem->getCampaignId();
+                    }
+
+                    // Customer
+                    $stockItem->setCustomerId($existingCustomer->getId());
+
+                    $stockItem->save($db);
+                }
+
+                // Reset cart
+                $cart->setAmount(0);
+                $cart->setCount(0);
+                $cart->save($db);
+
+                // Update order from copies
+                $amount = array_reduce(
+                    $order->getStockItems()->getArrayCopy(),
+                    fn($carry, $stockItem) => $carry + $stockItem->getSellingPrice(),
+                    initial: 0);
+                $order->setAmount($amount);
+
+                if ($orderCampaignId) {
+                    $crowdfundingCampaignManager = new CFCampaignManager();
+                    $crowdfundingRewardManager = new CFRewardManager();
+
+                    $campaign = $crowdfundingCampaignManager->getById($orderCampaignId);
+                    $crowdfundingCampaignManager->updateFromSales($campaign);
+                    $rewards = $crowdfundingRewardManager->getAll([
+                        "campaign_id" => $campaign->get("id"),
+                        "reward_limited" => 1
+                    ]);
+                    foreach ($rewards as $reward) {
+                        $crowdfundingRewardManager->updateQuantity($reward);
+                    }
+                }
+
+                $termsPageId = $currentSite->getOption("cgv_page");
+                $termsPage = PageQuery::create()->findPk($termsPageId);
+
+                $order->save($db);
+
+                // Delete alerts for purchased articles
+                if ($currentSite->hasOptionEnabled("alerts") && $currentUser->isAuthentified()) {
+                    foreach ($order->getStockItems() as $stockItem) {
+                        $alert = AlertQuery::create()
+                            ->filterByUser($currentUser->getUser())
+                            ->filterByArticleId($stockItem->getArticleId());
+
+                        // If it exists, delete it
+                        $alert?->delete();
+                    }
+                }
+
+                /** @var Order $orderEntity */
+                OrderDeliveryHelpers::sendOrderConfirmationMail(
+                    $order,
+                    $shipping,
+                    $mailer,
+                    $currentSite,
+                    $isUpdatingAnExistingOrder,
+                    $termsPage
+                );
+            } catch (Exception $exception) {
+                $db->rollBack();
+                throw $exception;
             }
 
-            /** @var Order $orderEntity */
-            OrderDeliveryHelpers::sendOrderConfirmationMail(
-                $order,
-                $shipping,
-                $mailer,
-                $currentSite,
-                $isUpdatingAnExistingOrder,
-                $termsPage
-            );
+            $db->commit();
 
             $orderSlug = $order->getSlug();
             if ($isUpdatingAnExistingOrder) {
@@ -412,7 +412,7 @@ return function (
         ';
     }
 
-    if (LegacyCodeHelper::getGlobalSite()["site_shipping_fee"] == 'fr') {
+    if ($currentSite->getSite()->getShippingFee() === "fr") {
         $content .= '
                 <tr>
                     <td class="right">Poids : </td>
@@ -471,9 +471,9 @@ return function (
         $checked = null;
         $showCheckbox = true;
 
-        if (LegacyCodeHelper::getGlobalVisitor()->isLogged()
+        if ($currentUser->isAuthentified()
             && $mailingListService->isConfigured()
-            && $mailingList->hasContact(LegacyCodeHelper::getGlobalVisitor()->get("email"))) {
+            && $mailingList->hasContact($currentUser->getUser()->getEmail())) {
             $showCheckbox = false;
         }
 
@@ -564,7 +564,7 @@ return function (
         );
 
         // Prefill order email with user email
-        $orderEntity->set('order_email', LegacyCodeHelper::getGlobalVisitor()->get('email'));
+        $orderEntity->set('order_email', $currentUser->getUser()->getEmail());
     }
 
     if ($previousOrder) {
