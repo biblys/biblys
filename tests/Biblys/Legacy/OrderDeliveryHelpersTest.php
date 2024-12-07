@@ -20,7 +20,6 @@
 
 namespace Biblys\Legacy;
 
-use Biblys\Data\ArticleType;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Exception\OrderDetailsValidationException;
 use Biblys\Service\CurrentSite;
@@ -34,7 +33,9 @@ use Entity\Exception\CartException;
 use Exception;
 use Mockery;
 use Model\Article;
+use Model\ArticleQuery;
 use Model\Cart;
+use Model\OrderQuery;
 use OrderManager;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -46,6 +47,15 @@ require_once(__DIR__."/../../setUp.php");
 
 class OrderDeliveryHelpersTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     */
+    protected function setUp(): void
+    {
+        ArticleQuery::create()->deleteAll();
+        OrderQuery::create()->deleteAll();
+    }
+
     /**
      * @throws OrderDetailsValidationException
      * @throws Exception
@@ -332,7 +342,7 @@ class OrderDeliveryHelpersTest extends TestCase
 
         // when
         OrderDeliveryHelpers::sendOrderConfirmationMail(
-            $order,
+            OrderQuery::create()->findPk($order->get("id")),
             $shipping,
             $mailer,
             $currentSite,
@@ -458,7 +468,7 @@ class OrderDeliveryHelpersTest extends TestCase
 
         // when
         OrderDeliveryHelpers::sendOrderConfirmationMail(
-            $order,
+            OrderQuery::create()->findPk($order->get("id")),
             $shipping,
             $mailer,
             $currentSite,
@@ -516,7 +526,7 @@ class OrderDeliveryHelpersTest extends TestCase
 
         // when
         OrderDeliveryHelpers::sendOrderConfirmationMail(
-            $order,
+            OrderQuery::create()->findPk($order->get("id")),
             $shipping,
             $mailer,
             $currentSite,
@@ -644,7 +654,7 @@ class OrderDeliveryHelpersTest extends TestCase
 
         // when
         OrderDeliveryHelpers::sendOrderConfirmationMail(
-            $order,
+            OrderQuery::create()->findPk($order->get("id")),
             $shipping,
             $mailer,
             $currentSite,
