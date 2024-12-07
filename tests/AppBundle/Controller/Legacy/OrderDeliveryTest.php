@@ -59,6 +59,7 @@ class OrderDeliveryTest extends TestCase
         $_POST["order_email"] = "customer@biblys.fr";
         $_POST["order_firstname"] = "Barnabé";
         $_POST["order_lastname"] = "Famagouste";
+        $_POST["country_id"] = 1;
         $country = ModelFactory::createCountry();
 
         $queryParamsService = Mockery::mock(QueryParamsService::class);

@@ -1,4 +1,5 @@
-<?php /** @noinspection PhpDeprecationInspection */
+<?php
+
 /*
  * Copyright (C) 2024 Clément Latzarus
  *
@@ -29,8 +30,11 @@ use Biblys\Service\MailingList\Exception\InvalidEmailAddressException;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\QueryParamsService;
 use DansMaCulotte\MondialRelay\DeliveryChoice;
+use Model\AlertQuery;
+use Model\CountryQuery;
 use Model\CustomerQuery;
 use Model\PageQuery;
+use Model\StockQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,7 +60,8 @@ return function (
     QueryParamsService $queryParamsService,
     Config             $config,
 ): Response|RedirectResponse {
-    global $_SQL;
+    $orderManager = new OrderManager();
+    $stockItemManager = new StockManager();
 
     $queryParamsService->parse([
         "country_id" => ["type" => "numeric", "default" => 0],
@@ -76,15 +81,6 @@ return function (
     if (!$cart) {
         return new Response('<p class="error">Le panier n\'existe pas</p>');
     }
-    /** @var Cart $cartEntity */
-    $cartManager = new CartManager();
-    $cartEntity = $cartManager->getAll([
-        "cart_id" => $cart->getId(),
-        "site_id" => $currentSite->getSite()->getId(),
-    ])[0];
-
-    $com = new CountryManager();
-    $om = new OrderManager();
 
     $content = "";
     $isUpdatingAnExistingOrder = false;
@@ -95,18 +91,17 @@ return function (
     $currentUrl = $currentUrlService->getRelativeUrl();
     $loginUrl = $urlGenerator->generate("user_login", ["return_url" => $currentUrl]);
 
-    $orderInProgress = OrderDeliveryHelpers::getOrderInProgressForVisitor($currentUser);
+    $orderInProgress = OrderDeliveryHelpers::getOrderInProgressForVisitor($currentUser, $currentSite);
     if ($orderInProgress) {
-        $copies = $orderInProgress->getCopies();
-        foreach ($copies as $copy) {
-            $totalWeight += $copy->get('weight');
-            $totalPrice += $copy->get('selling_price');
+        $stockItems = $orderInProgress->getStockItems();
+        foreach ($stockItems as $stockItem) {
+            $totalWeight += $stockItem->getWeight();
+            $totalPrice += $stockItem->getSellingPrice();
         }
         $isUpdatingAnExistingOrder = true;
     }
 
-    $stockManager = new StockManager();
-    $stock = $stockManager->getAll([
+    $stock = $stockItemManager->getAll([
         'cart_id' => $cart->getId(),
         'site_id' => $currentSite->getSite()->getId(),
     ]);
@@ -183,8 +178,6 @@ return function (
         }
 
         if ($error === null) {
-            $_SQL->beginTransaction();
-
             /* MAILING */
             $newsletter_checked = $request->request->get('newsletter', false);
             $orderEmail = $request->request->get('order_email');
@@ -197,18 +190,19 @@ return function (
             // If there is an ongoing order, get it
             if ($isUpdatingAnExistingOrder) {
                 $order = $orderInProgress;
-            } // Else, create a new order
+            }
+            // Else, create a new order
             else {
-                $order = $om->create();
+                $order = new \Model\Order();
+                $order->setSite($currentSite->getSite());
             }
 
             /* CUSTOMER */
 
             $existingCustomer = CustomerQuery::create()->findOneByEmail($orderEmail);
             if ($currentUser->isAuthentified()) {
-                $currentUserId = $currentUser->getUser()->getId();
-                $order->set('user_id', $currentUserId);
-                $existingCustomer = CustomerQuery::create()->findOneByUserId($currentUserId);
+                $order->setUser($currentUser->getUser());
+                $existingCustomer = CustomerQuery::create()->findOneByUserId($currentUser->getUser()->getId());
             }
 
             if (!$existingCustomer) {
@@ -223,66 +217,150 @@ return function (
                 $existingCustomer = $newCustomer;
             }
 
-            $order->set('customer_id', $existingCustomer->getId());
+            $order->setCustomerId($existingCustomer->getId());
 
             /* COUNTRY */
-            $countryId = $request->request->get('country_id');
-            $country = $com->getById($countryId);
+            $countryId = $request->request->get("country_id");
+            $country = CountryQuery::create()->findPk($countryId);
             if (!$country) {
                 throw new BadRequestHttpException("Pays inconnu.");
             }
 
             // General order info
-            $order->set('order_insert', date('Y-m-d H:i:s'))
-                ->set('order_type', 'web')
-                ->set('order_amount', $totalPrice)
-                ->set('order_amount_tobepaid', $total)
-                ->set('country', $country);
+
+            $order->setInsert(date('Y-m-d H:i:s'));
+            $order->setType('web');
+            $order->setAmount($totalPrice);
+            $order->setAmountTobepaid($total);
+            $order->setCountry($country);
 
             if ($shipping) {
-                $order->set('order_shipping_mode', $shippingType)
-                    ->set('order_shipping', $shippingFee);
+                $order->setShippingId($shipping->get("id"));
+                $order->setShippingMode($shippingType);
+                $order->setShippingCost($shippingFee);
             }
 
             $pickupPointCode = $request->request->get("pickup_point_code", "");
             if ($pickupPointCode) {
-                $order->set('mondial_relay_pickup_point_code', $pickupPointCode);
+                $order->setMondialRelayPickupPointCode($pickupPointCode);
             }
 
             $comment = $request->request->get('comment', false);
             if ($comment) {
-                $order->set('order_comment', $comment);
+                $order->setComment($comment);
             }
 
             if (isset($shipping)) {
-                $order->set('shipping_id', $shipping->get('id'));
+                $order->setShippingId($shipping->get('id'));
             }
 
-            $order->set("country_id", $_POST["country_id"]);
-            $order->set("order_firstname", $_POST["order_firstname"]);
-            $order->set("order_lastname", $_POST["order_lastname"]);
-            $order->set("order_address1", $_POST["order_address1"]);
-            $order->set("order_address2", $_POST["order_address2"]);
-            $order->set("order_postalcode", $_POST["order_postalcode"]);
-            $order->set("order_city", $_POST["order_city"]);
-            $order->set("order_email", $_POST["order_email"]);
-            $order->set("order_phone", $_POST["order_phone"]);
-            $order->set("order_comment", $_POST["order_comment"]);
+            $order->setCountryId($request->request->get("country_id"));
+            $order->setFirstname($request->request->get("order_firstname"));
+            $order->setLastname($request->request->get("order_lastname"));
+            $order->setAddress1($request->request->get("order_address1"));
+            $order->setAddress2($request->request->get("order_address2"));
+            $order->setPostalcode($request->request->get("order_postalcode"));
+            $order->setCity($request->request->get("order_city"));
+            $order->setEmail($request->request->get("order_email"));
+            $order->setPhone($request->request->get("order_phone"));
+            $order->setComment($request->request->get("order_comment"));
 
             // Persist order
-            $om->update($order);
+            $order->save();
 
             // Save customer country
             $existingCustomer->setCountryId($countryId);
             $existingCustomer->save();
 
-            // Hydrate order from cart
-            $updatedOrder = $om->hydrateFromCart($order, $cartEntity);
+            // Get cart content
+            $cartStockItems = StockQuery::create()
+                ->filterByCartId($cart->getId())->find();
+
+            // Add each copy to the order
+            /** @var \Model\Stock $stockItem */
+            $orderCampaignId = null;
+            foreach ($cartStockItems as $stockItem) {
+                /** @var Stock $stockItemEntity */
+                $stockItemEntity = $stockItemManager->getById($stockItem->getId());
+                if (!$stockItemEntity->isAvailable()) {
+                    throw new Exception("Exemplaire {$stockItem->getId()} indisponible.");
+                }
+
+                $stockItem->setOrder($order);
+                $stockItem->setSellingDate(new DateTime());
+                $stockItem->setCartId(null);
+                $stockItem->setCartDate(null);
+
+                // Tax
+                $stockItemEntity = $stockItemManager->getById($stockItem->getId());
+                $rate = $stockItemManager->getTaxRate($stockItemEntity);
+                $price = $stockItem->getSellingPrice();
+
+                $coefficient = 1 + ($rate / 100);
+                $priceWithoutTax = round($price / $coefficient);
+                $tax = $price - $priceWithoutTax;
+
+                $stockItem->setTvaRate($rate);
+                $stockItem->setSellingPriceHt($priceWithoutTax);
+                $stockItem->setSellingPriceTva($tax);
+
+                if ($stockItem->getCampaignId()) {
+                    $orderCampaignId = $stockItem->getCampaignId();
+                }
+
+                // Customer
+                $stockItem->setCustomerId($existingCustomer->getId());
+
+                $stockItem->save();
+            }
+
+            // Reset cart
+            $cart->setAmount(0);
+            $cart->setCount(0);
+            $cart->save();
+
+            // Update order from copies
+            $amount = array_reduce(
+                $order->getStockItems()->getArrayCopy(),
+                fn ($carry, $stockItem) => $carry + $stockItem->getSellingPrice(),
+                initial: 0);
+            $order->setAmount($amount);
+
+            if ($orderCampaignId) {
+                $crowdfundingCampaignManager = new CFCampaignManager();
+                $crowdfundingRewardManager = new CFRewardManager();
+
+                $campaign = $crowdfundingCampaignManager->getById($orderCampaignId);
+                $crowdfundingCampaignManager->updateFromSales($campaign);
+                $rewards = $crowdfundingRewardManager->getAll([
+                    "campaign_id" => $campaign->get("id"),
+                    "reward_limited" => 1
+                ]);
+                foreach ($rewards as $reward) {
+                    $crowdfundingRewardManager->updateQuantity($reward);
+                }
+            }
 
             $termsPageId = $currentSite->getOption("cgv_page");
             $termsPage = PageQuery::create()->findPk($termsPageId);
+
+            $order->save();
+
+            // Delete alerts for purchased articles
+            if ($currentSite->hasOptionEnabled("alerts") && $currentUser->isAuthentified()) {
+                foreach ($order->getStockItems() as $stockItem) {
+                    $alert = AlertQuery::create()
+                        ->filterByUser($currentUser->getUser())
+                        ->filterByArticleId($stockItem->getArticleId());
+
+                    // If it exists, delete it
+                    $alert?->delete();
+                }
+            }
+
+            /** @var Order $orderEntity */
             OrderDeliveryHelpers::sendOrderConfirmationMail(
-                $updatedOrder,
+                $order,
                 $shipping,
                 $mailer,
                 $currentSite,
@@ -290,21 +368,14 @@ return function (
                 $termsPage
             );
 
-            // Delete alerts for purchased articles
-            if ($currentSite->hasOptionEnabled("alerts")) {
-                $order->deleteRelatedAlerts($currentUser);
-            }
-
-            $_SQL->commit();
-
-            $orderUrl = $order->get("url");
+            $orderSlug = $order->getSlug();
             if ($isUpdatingAnExistingOrder) {
-                $redirectUrl = "/order/$orderUrl?updated=1";
+                $redirectUrl = "/order/$orderSlug?updated=1";
             } else {
-                $redirectUrl = "/order/$orderUrl?created=1";
+                $redirectUrl = "/order/$orderSlug?created=1";
             }
 
-//            return new RedirectResponse($redirectUrl, 301);
+            return new RedirectResponse($redirectUrl, 301);
         }
     }
 
@@ -428,8 +499,8 @@ return function (
     $cgv_page = $currentSite->getOption("cgv_page");
     $cgv_checkbox = '<input type="hidden" name="cgv_checkbox" value=1>';
     if ($cgv_page) {
-        $pm = new PageManager();
-        $termsPage = $pm->getById($cgv_page);
+        $pageManager = new PageManager();
+        $termsPage = $pageManager->getById($cgv_page);
         if ($termsPage) {
             $cgv_checkbox = '
             <p class="checkbox order-delivery-form__checkbox">
@@ -480,13 +551,11 @@ return function (
     ';
     }
 
-    $order = new Order([]);
+    $orderEntity = new Order([]);
 
     $previousOrder = null;
-
-    if (LegacyCodeHelper::getGlobalVisitor()->isLogged()) {
-        $om = new OrderManager();
-        $previousOrder = $om->get(
+    if ($currentUser->isAuthentified()) {
+        $previousOrder = $orderManager->get(
             [
                 'user_id' => $currentUser->getUser()->getId(),
                 'order_cancel_date' => 'NULL',
@@ -495,7 +564,7 @@ return function (
         );
 
         // Prefill order email with user email
-        $order->set('order_email', LegacyCodeHelper::getGlobalVisitor()->get('email'));
+        $orderEntity->set('order_email', LegacyCodeHelper::getGlobalVisitor()->get('email'));
     }
 
     if ($previousOrder) {
@@ -527,29 +596,29 @@ return function (
     ';
 
         if ($queryParamsService->getInteger("reuse") === 1) {
-            $order->set('title', $previousOrder->get('title'));
-            $order->set('firstname', $previousOrder->get('firstname'));
-            $order->set('lastname', $previousOrder->get('lastname'));
-            $order->set('address1', $previousOrder->get('address1'));
-            $order->set('address2', $previousOrder->get('address2'));
-            $order->set('postalcode', $previousOrder->get('postalcode'));
-            $order->set('city', $previousOrder->get('city'));
-            $order->set('email', $previousOrder->get('email'));
-            $order->set('phone', $previousOrder->get('phone'));
+            $orderEntity->set('title', $previousOrder->get('title'));
+            $orderEntity->set('firstname', $previousOrder->get('firstname'));
+            $orderEntity->set('lastname', $previousOrder->get('lastname'));
+            $orderEntity->set('address1', $previousOrder->get('address1'));
+            $orderEntity->set('address2', $previousOrder->get('address2'));
+            $orderEntity->set('postalcode', $previousOrder->get('postalcode'));
+            $orderEntity->set('city', $previousOrder->get('city'));
+            $orderEntity->set('email', $previousOrder->get('email'));
+            $orderEntity->set('phone', $previousOrder->get('phone'));
         }
     }
 
     if ($request->getMethod() === "POST") {
-        $order->set('title', $request->request->get('order_title'));
-        $order->set('firstname', $request->request->get('order_firstname'));
-        $order->set('lastname', $request->request->get('order_lastname'));
-        $order->set('address1', $request->request->get('order_address1'));
-        $order->set('address2', $request->request->get('order_address2'));
-        $order->set('postalcode', $request->request->get('order_postalcode'));
-        $order->set('city', $request->request->get('order_city'));
-        $order->set('email', $request->request->get('order_email'));
-        $order->set('phone', $request->request->get('order_phone'));
-        $order->set('comment', $request->request->get('order_comment'));
+        $orderEntity->set('title', $request->request->get('order_title'));
+        $orderEntity->set('firstname', $request->request->get('order_firstname'));
+        $orderEntity->set('lastname', $request->request->get('order_lastname'));
+        $orderEntity->set('address1', $request->request->get('order_address1'));
+        $orderEntity->set('address2', $request->request->get('order_address2'));
+        $orderEntity->set('postalcode', $request->request->get('order_postalcode'));
+        $orderEntity->set('city', $request->request->get('order_city'));
+        $orderEntity->set('email', $request->request->get('order_email'));
+        $orderEntity->set('phone', $request->request->get('order_phone'));
+        $orderEntity->set('comment', $request->request->get('order_comment'));
     }
 
     $isPhoneRequired = $currentSite->getOption("order_phone_required");
@@ -575,7 +644,7 @@ return function (
                     Prénom
                     <span class="required-field-indicator">*</span>
                 </label>
-                <input type="text" name="order_firstname" id="order_firstname" value="' . $order->get('firstname') . '" class="order-delivery-form__input" required />
+                <input type="text" name="order_firstname" id="order_firstname" value="' . $orderEntity->get('firstname') . '" class="order-delivery-form__input" required />
             </div>
 
             <div class="order-delivery-form__field order-delivery-form__field--half">
@@ -583,7 +652,7 @@ return function (
                     Nom de famille
                     <span class="required-field-indicator">*</span>
                 </label>
-                <input type="text" name="order_lastname" id="order_lastname" value="' . $order->get('lastname') . '" class="order-delivery-form__input" style="text-transform : uppercase;" required />
+                <input type="text" name="order_lastname" id="order_lastname" value="' . $orderEntity->get('lastname') . '" class="order-delivery-form__input" style="text-transform : uppercase;" required />
             </div>
 
             <div class="order-delivery-form__field">
@@ -591,7 +660,7 @@ return function (
                     Numéro et nom de rue
                     <span class="required-field-indicator">*</span>
                 </label>
-                <input type="text" name="order_address1" id="order_address1" value="' . $order->get('address1') . '" class="order-delivery-form__input" required />
+                <input type="text" name="order_address1" id="order_address1" value="' . $orderEntity->get('address1') . '" class="order-delivery-form__input" required />
             </div>
 
             <div class="order-delivery-form__field">
@@ -599,7 +668,7 @@ return function (
                     Complément d\'adresse
                     <small>(bât., BP, lieu-dit, etc.)</small>
                 </label>
-                <input type="text" name="order_address2" id="order_address2" value="' . $order->get('address2') . '" class="order-delivery-form__input" />
+                <input type="text" name="order_address2" id="order_address2" value="' . $orderEntity->get('address2') . '" class="order-delivery-form__input" />
             </div>
 
             <div class="order-delivery-form__field order-delivery-form__field--half">
@@ -607,7 +676,7 @@ return function (
                     Code postal
                     <span class="required-field-indicator">*</span>
                 </label>
-                <input type="text" name="order_postalcode" id="order_postalcode" value="' . $order->get('postalcode') . '" class="order-delivery-form__input" required />
+                <input type="text" name="order_postalcode" id="order_postalcode" value="' . $orderEntity->get('postalcode') . '" class="order-delivery-form__input" required />
             </div>
 
             <div class="order-delivery-form__field order-delivery-form__field--half">
@@ -615,7 +684,7 @@ return function (
                     Ville
                      <span class="required-field-indicator">*</span>
                 </label>
-                <input type="text" name="order_city" id="order_city" value="' . $order->get('city') . '" class="order-delivery-form__input" required />
+                <input type="text" name="order_city" id="order_city" value="' . $orderEntity->get('city') . '" class="order-delivery-form__input" required />
             </div>
 
             <div class="order-delivery-form__field">
@@ -623,7 +692,7 @@ return function (
                     Adresse e-mail
                      <span class="required-field-indicator">*</span>
                 </label>
-                <input type="email" name="order_email" id="order_email" value="' . $order->get('email') . '" class="order-delivery-form__input" required />
+                <input type="email" name="order_email" id="order_email" value="' . $orderEntity->get('email') . '" class="order-delivery-form__input" required />
             </div>
 
             <div class="order-delivery-form__field">
@@ -635,7 +704,7 @@ return function (
                     type="text" 
                     name="order_phone" 
                     id="order_phone" 
-                    value="' . $order->get('phone') . '" 
+                    value="' . $orderEntity->get('phone') . '" 
                     class="order-delivery-form__input"
                     ' . ($isPhoneRequired ? 'required' : '') . '
                 />
@@ -648,7 +717,7 @@ return function (
             <legend>Commentaires</legend>
             <p><small>À l\'intention du préparateur de la commande</small></p>
             <div class="order-delivery-form__field">
-                <textarea name="order_comment" maxlength="1024" class="order-delivery-form__textarea" id="order_comment" rows=5>' . $order->get('comment') . '</textarea>
+                <textarea name="order_comment" maxlength="1024" class="order-delivery-form__textarea" id="order_comment" rows=5>' . $orderEntity->get('comment') . '</textarea>
             </div>
          </fieldset>
          
