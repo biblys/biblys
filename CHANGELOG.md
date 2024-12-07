@@ -14,6 +14,9 @@
 - L'affichage d'une commande associé à un relais Mondial Relay invalide pouvait
   déclencher une erreur. Désormais, la mention "Point Relais inconnu" sera
   affichée.
+- Une erreur survenant pendant l'enregistrement d'une commande pouvait résulter
+  en une commande incomplète. Désormais, la commande est annulée si une erreur
+  survient.
 
 ## 3.1.0 (4 décembre 2024)
 
