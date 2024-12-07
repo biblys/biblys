@@ -22,6 +22,8 @@ use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\LoggerService;
+use Biblys\Service\Mailer;
+use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Controller;
 use Model\OrderQuery;
@@ -48,6 +50,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundExc
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use Usecase\MarkOrderAsShippedUsecase;
 
 class OrderController extends Controller
 {
@@ -159,10 +162,16 @@ class OrderController extends Controller
      * @throws TransportExceptionInterface
      * @throws Exception
      */
-    public function updateAction(Request $request, $id, $action): JsonResponse
+    public function updateAction(
+        Request         $request,
+        CurrentSite     $currentSite,
+        TemplateService $templateService,
+        Mailer          $mailer,
+                        $id,
+                        $action
+    ): JsonResponse
     {
         $notice = "";
-
 
         /** @var Order $orderEntity */
         $om = new OrderManager();
@@ -184,10 +193,9 @@ class OrderController extends Controller
                 throw new BadRequestHttpException("Le numéro de suivi ne peut pas dépasser 16 caractères.");
             }
 
-            $order->setTrackNumber($trackingNumber);
-            $orderEntity->set("tracking_number", $trackingNumber);
+            $usecase = new MarkOrderAsShippedUsecase($currentSite, $templateService, $mailer);
+            $usecase->execute($order, $trackingNumber);
 
-            $om->markAsShipped($orderEntity, $order->getTrackingLink());
             $notice = 'La commande n°&nbsp;'.$orderEntity->get('id').' de '.$orderEntity->get('firstname').' '.$orderEntity->get('lastname').' a été marquée comme expédiée.';
         }
 

@@ -70,6 +70,7 @@ class Helpers
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->expects("getTitle")->andReturn("Éditions Paronymie");
         $currentSite->expects("getOption")->andReturn(null);
+        $currentSite->expects("getSite")->andReturn(ModelFactory::createSite());
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("isAuthentified")->andReturn(false);
         $currentUser->expects("isAdmin")->andReturn(false);

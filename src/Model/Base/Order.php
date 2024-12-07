@@ -893,7 +893,7 @@ abstract class Order implements ActiveRecordInterface
      *
      * @return int|null
      */
-    public function getShipping()
+    public function getShippingCost()
     {
         return $this->order_shipping;
     }
@@ -1658,7 +1658,7 @@ abstract class Order implements ActiveRecordInterface
      * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setShipping($v)
+    public function setShippingCost($v)
     {
         if ($v !== null) {
             $v = (int) $v;
@@ -2457,7 +2457,7 @@ abstract class Order implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : OrderTableMap::translateFieldName('CountryId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->country_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : OrderTableMap::translateFieldName('Shipping', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : OrderTableMap::translateFieldName('ShippingCost', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_shipping = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : OrderTableMap::translateFieldName('ShippingMode', TableMap::TYPE_PHPNAME, $indexType)];
@@ -3359,7 +3359,7 @@ abstract class Order implements ActiveRecordInterface
                 return $this->getCountryId();
 
             case 15:
-                return $this->getShipping();
+                return $this->getShippingCost();
 
             case 16:
                 return $this->getShippingMode();
@@ -3503,7 +3503,7 @@ abstract class Order implements ActiveRecordInterface
             $keys[12] => $this->getAmountTobepaid(),
             $keys[13] => $this->getShippingId(),
             $keys[14] => $this->getCountryId(),
-            $keys[15] => $this->getShipping(),
+            $keys[15] => $this->getShippingCost(),
             $keys[16] => $this->getShippingMode(),
             $keys[17] => $this->getTrackNumber(),
             $keys[18] => $this->getMondialRelayPickupPointCode(),
@@ -3752,7 +3752,7 @@ abstract class Order implements ActiveRecordInterface
                 $this->setCountryId($value);
                 break;
             case 15:
-                $this->setShipping($value);
+                $this->setShippingCost($value);
                 break;
             case 16:
                 $this->setShippingMode($value);
@@ -3925,7 +3925,7 @@ abstract class Order implements ActiveRecordInterface
             $this->setCountryId($arr[$keys[14]]);
         }
         if (array_key_exists($keys[15], $arr)) {
-            $this->setShipping($arr[$keys[15]]);
+            $this->setShippingCost($arr[$keys[15]]);
         }
         if (array_key_exists($keys[16], $arr)) {
             $this->setShippingMode($arr[$keys[16]]);
@@ -4318,7 +4318,7 @@ abstract class Order implements ActiveRecordInterface
         $copyObj->setAmountTobepaid($this->getAmountTobepaid());
         $copyObj->setShippingId($this->getShippingId());
         $copyObj->setCountryId($this->getCountryId());
-        $copyObj->setShipping($this->getShipping());
+        $copyObj->setShippingCost($this->getShippingCost());
         $copyObj->setShippingMode($this->getShippingMode());
         $copyObj->setTrackNumber($this->getTrackNumber());
         $copyObj->setMondialRelayPickupPointCode($this->getMondialRelayPickupPointCode());
