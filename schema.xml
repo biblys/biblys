@@ -927,7 +927,7 @@
     <foreign-key foreignTable="countries" skipSql="true">
       <reference local="country_id" foreign="country_id"/>
     </foreign-key>
-    <column name="order_shipping" phpName="Shipping" type="INTEGER" defaultValue="0"/>
+    <column name="order_shipping" phpName="ShippingCost" type="INTEGER" defaultValue="0"/>
     <column name="order_shipping_mode" phpName="ShippingMode" type="VARCHAR" size="32"/>
     <column name="order_track_number" phpName="TrackNumber" type="VARCHAR" size="16"/>
     <column name="mondial_relay_pickup_point_code" phpName="MondialRelayPickupPointCode" type="VARCHAR" size="16"/>
