@@ -258,14 +258,16 @@ return function (
                 $order->set('shipping_id', $shipping->get('id'));
             }
 
-            // Update order info from form
-            foreach ($_POST as $key => $val) {
-                if ($key === "cgv_checkbox" || $key === "newsletter") {
-                    continue;
-                }
-
-                $order->set($key, $val);
-            }
+            $order->set("country_id", $_POST["country_id"]);
+            $order->set("order_firstname", $_POST["order_firstname"]);
+            $order->set("order_lastname", $_POST["order_lastname"]);
+            $order->set("order_address1", $_POST["order_address1"]);
+            $order->set("order_address2", $_POST["order_address2"]);
+            $order->set("order_postalcode", $_POST["order_postalcode"]);
+            $order->set("order_city", $_POST["order_city"]);
+            $order->set("order_email", $_POST["order_email"]);
+            $order->set("order_phone", $_POST["order_phone"]);
+            $order->set("order_comment", $_POST["order_comment"]);
 
             // Persist order
             $om->update($order);
@@ -302,7 +304,7 @@ return function (
                 $redirectUrl = "/order/$orderUrl?created=1";
             }
 
-            return new RedirectResponse($redirectUrl, 301);
+//            return new RedirectResponse($redirectUrl, 301);
         }
     }
 
