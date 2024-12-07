@@ -20,7 +20,6 @@
 
 namespace Biblys\Legacy;
 
-use Article;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Exception\OrderDetailsValidationException;
 use Biblys\Service\CurrentSite;
@@ -33,14 +32,16 @@ use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use Entity\Exception\CartException;
 use Exception;
+use Model\Article;
 use Model\Cart;
+use Model\Order;
+use Model\OrderQuery;
 use Model\Page;
 use Model\SpecialOffer;
 use Model\SpecialOfferQuery;
 use Model\Stock;
 use Model\StockQuery;
-use Order;
-use OrderManager;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Shipping;
 use ShippingManager;
@@ -138,20 +139,23 @@ class OrderDeliveryHelpers
         }
     }
 
-    public static function getOrderInProgressForVisitor(CurrentUser $currentUser): mixed
+    /**
+     * @throws PropelException
+     */
+    public static function getOrderInProgressForVisitor(CurrentUser $currentUser, CurrentSite $currentSite): ?Order
     {
         if (!$currentUser->isAuthentified()) {
             return null;
         }
 
-        $om = new OrderManager();
-        return $om->get([
-            'order_type' => 'web',
-            'user_id' => $currentUser->getUser()->getId(),
-            'order_payment_date' => 'NULL',
-            'order_shipping_date' => 'NULL',
-            'order_cancel_date' => 'NULL'
-        ]);
+        return OrderQuery::create()
+            ->filterByType('web')
+            ->filterBySite($currentSite->getSite())
+            ->filterByUser($currentUser->getUser())
+            ->filterByPaymentDate(null, Criteria::ISNULL)
+            ->filterByShippingDate(null, Criteria::ISNULL)
+            ->filterByCancelDate(null, Criteria::ISNULL)
+            ->findOne();
     }
 
     /**
@@ -230,7 +234,7 @@ class OrderDeliveryHelpers
     ): void
     {
         $site = $currentSite->getSite();
-        $mailSubject = "Commande n° {$order->get("id")}";
+        $mailSubject = "Commande n° {$order->getId()}";
         if ($isUpdatingAnExistingOrder) {
             $mailSubject .= ' (mise à jour)';
         }
@@ -240,46 +244,57 @@ class OrderDeliveryHelpers
             $confirmationSentence = '<p>votre commande a été mise à jour.</p>';
         }
 
-        $copiesInOrder = $order->getCopies();
-        $numberOfCopiesInOrder = count($copiesInOrder);
-        $articlesInOrder = array_map(function ($copy) {
+        $copiesInOrder = $order->getStockItems();
+        $numberOfCopiesInOrder = $copiesInOrder->count();
+        /** @var Stock[] $stockItems */
+        $stockItems = $copiesInOrder->getArrayCopy();
+        $articlesInOrder = array_map(function (Stock $copy) {
             $location = null;
             $condition = null;
             $pubYear = null;
 
-            if ($copy->has('stockage')) {
-                $location = "<br />Emplacement : " . $copy->get('stockage');
+            if ($copy->getStockage()) {
+                $location = "<br />Emplacement : " . $copy->getStockage();
             }
 
-            if ($copy->has('condition')) {
-                $condition = $copy->get('condition') . ' | ';
+            if ($copy->getCondition()) {
+                $condition = $copy->getCondition() . ' | ';
             }
 
-            if ($copy->has('pub_year')) {
-                $pubYear = ', ' . $copy->get('pub_year');
+            if ($copy->getPubYear()) {
+                $pubYear = ', ' . $copy->getPubYear();
             }
 
             /** @var Article $article */
-            $article = $copy->get('article');
+            $article = $copy->getArticle();
             return '
                 <p>
-                    <a href="http://' . $_SERVER['HTTP_HOST'] . '/' . $article->get('url') . '">' . $article->get('title') . '</a> 
-                    (' . $article->get("collection")->get("name") . numero($article->get('number')) . ')<br>
-                    de ' . authors($article->get("authors")) . '<br>
-                    ' . $article->get("collection")->get("name") . $pubYear . '<br>
-                    ' . $condition . currency($copy->get('selling_price') / 100) . '
+                    <a href="http://' . $_SERVER['HTTP_HOST'] . '/' . $article->getUrl() . '">' . $article->getTitle() . '</a> 
+                    (' . $article->getBookCollection()->getName() . numero($article->getNumber()) . ')<br>
+                    de ' . authors($article->getAuthors()) . '<br>
+                    ' . $article->getBookCollection()->getName(). $pubYear . '<br>
+                    ' . $condition . currency($copy->getSellingPrice() / 100) . '
                     ' . $location . '
                 </p>
             ';
-        }, $copiesInOrder);
+        }, $stockItems);
 
         $shippingLine = 'Frais de port offerts<br>';
         if (!empty($shipping)) {
             $shippingLine = "Frais de port : " . currency($shipping->get("fee") / 100) . " (" . $shipping->get("mode") . ")<br>";
         }
 
+        $orderContainsDownloadable = false;
+        foreach ($order->getStockItems() as $stockItem) {
+            $article = $stockItem->getArticle();
+            $articleIsDownloadable = $article->getTypeId() === 2 || $article->getTypeId() === 10 || $article->getTypeId() === 11;
+            if ($articleIsDownloadable) {
+                $orderContainsDownloadable = true;
+            }
+        }
+
         $orderEbooks = null;
-        if ($order->containsDownloadable()) {
+        if ($orderContainsDownloadable) {
             $orderEbooks = '
                 <p>
                     Après paiement de votre commande, vous pourrez télécharger les articles numériques de votre commande depuis
@@ -295,25 +310,25 @@ class OrderDeliveryHelpers
         }
 
         $shippingAddress = '<p>
-                        ' . $order->get('title') . ' ' . $order->get('firstname') . ' ' . $order->get('lastname') . '<br />
-                        ' . $order->get('address1') . '<br />
-                        ' . ($order->has('address2') ? $order->get('address2') . '<br>' : null) . '
-                        ' . $order->get('postalcode') . ' ' . $order->get('city') . '<br />
-                        ' . $order->getCountryName() . '
+                        ' . $order->getTitle() . ' ' . $order->getFirstname() . ' ' . $order->getLastname() . '<br />
+                        ' . $order->getAddress1() . '<br />
+                        ' . ($order->getAddress2() ? $order->getAddress2() . '<br>' : null) . '
+                        ' . $order->getPostalcode() . ' ' . $order->getCity() . '<br />
+                        ' . $order->getCountry()->getName() . '
                     </p>';
 
-        $orderUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/order/' . $order->get('url');
+        $orderUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/order/' . $order->getSlug();
         if ($shipping && $shipping->get("type") === "mondial-relay") {
             $shippingAddress = '<p>
-                        ' . $order->get("firstname") . ' ' . $order->get("lastname") . '<br />
-                        Point Mondial Relay n° '.$order->get("mondial_relay_pickup_point_code").'
+                        ' . $order->getFirstname() . ' ' . $order->getLastname() . '<br />
+                        Point Mondial Relay n° '.$order->getMondialRelayPickupPointCode().'
                         <a href="' . $orderUrl . '">Plus d’infos</a>
                     </p>';
         }
 
         $mailComment = null;
-        if ($order->has('comment')) {
-            $mailComment = '<p><strong>Commentaire du client :</strong></p><p>' . nl2br($order->get('comment')) . '</p>';
+        if ($order->getComment()) {
+            $mailComment = '<p><strong>Commentaire du client :</strong></p><p>' . nl2br($order->getComment()) . '</p>';
         }
 
         $termsLink = null;
@@ -338,11 +353,11 @@ class OrderDeliveryHelpers
                     </style>
                 </head>
                 <body>
-                    <p>Bonjour ' . $order->get('firstname') . ',</p>
+                    <p>Bonjour ' . $order->getFirstname() . ',</p>
 
                     ' . $confirmationSentence . '
 
-                    <p><strong><a href="http://' . $_SERVER['HTTP_HOST'] . '/order/' . $order->get('url') . '">Commande n&deg; ' . $order->get('order_id') . '</a></strong></p>
+                    <p><strong><a href="http://' . $_SERVER['HTTP_HOST'] . '/order/' . $order->getSlug() . '">Commande n&deg; ' . $order->getId() . '</a></strong></p>
 
                     <p><strong>' . $numberOfCopiesInOrder . ' article' . s($numberOfCopiesInOrder) . '</strong></p>
 
@@ -351,7 +366,7 @@ class OrderDeliveryHelpers
                     <p>
                         ------------------------------<br />
                         ' . $shippingLine . '
-                        Total : ' . currency($order->getTotal() / 100) . '
+                        Total : ' . currency($order->getTotalAmount() / 100) . '
                     </p>
 
                     ' . $orderEbooks . '
@@ -375,11 +390,11 @@ class OrderDeliveryHelpers
         ';
 
         // Send email to customer from site
-        $mailer->send($order->get('email'), $mailSubject, $mailBody);
+        $mailer->send($order->getEmail(), $mailSubject, $mailBody);
 
         // Send email to site contact address
-        $from = [$site->getContact() => trim($order->get('firstname') . ' ' . $order->get('lastname'))];
-        $replyTo = $order->get('email');
+        $from = [$site->getContact() => trim($order->getFirstname() . ' ' . $order->getLastname())];
+        $replyTo = $order->getEmail();
         $mailSubject = trim($currentSite->getOption("order_mail_subject_prefix") . " " . $mailSubject);
         $mailer->send($site->getContact(), $mailSubject, $mailBody, $from, ['reply-to' => $replyTo]);
     }
@@ -402,7 +417,7 @@ class OrderDeliveryHelpers
         $privatelyPrintedItems = StockQuery::create()
             ->filterByCart($cart)
             ->useArticleQuery()
-            ->filterByAvailabilityDilicom(\Model\Article::$AVAILABILITY_PRIVATELY_PRINTED)
+            ->filterByAvailabilityDilicom(Article::$AVAILABILITY_PRIVATELY_PRINTED)
             ->endUse()
             ->find();
 
@@ -442,7 +457,7 @@ class OrderDeliveryHelpers
     {
         $cartItems = $cart->getStocks()->getArrayCopy();
         $itemsInTargetCollectionCount = array_reduce($cartItems, function ($total, $copy) use ($specialOffer) {
-            /** @var \Model\Article $article */
+            /** @var Article $article */
             $article = $copy->getArticle();
 
             if ($article === $specialOffer->getFreeArticle()) {
