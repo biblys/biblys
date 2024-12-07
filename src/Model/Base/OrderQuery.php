@@ -34,7 +34,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery orderByAmountTobepaid($order = Criteria::ASC) Order by the order_amount_tobepaid column
  * @method     ChildOrderQuery orderByShippingId($order = Criteria::ASC) Order by the shipping_id column
  * @method     ChildOrderQuery orderByCountryId($order = Criteria::ASC) Order by the country_id column
- * @method     ChildOrderQuery orderByShipping($order = Criteria::ASC) Order by the order_shipping column
+ * @method     ChildOrderQuery orderByShippingCost($order = Criteria::ASC) Order by the order_shipping column
  * @method     ChildOrderQuery orderByShippingMode($order = Criteria::ASC) Order by the order_shipping_mode column
  * @method     ChildOrderQuery orderByTrackNumber($order = Criteria::ASC) Order by the order_track_number column
  * @method     ChildOrderQuery orderByMondialRelayPickupPointCode($order = Criteria::ASC) Order by the mondial_relay_pickup_point_code column
@@ -84,7 +84,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery groupByAmountTobepaid() Group by the order_amount_tobepaid column
  * @method     ChildOrderQuery groupByShippingId() Group by the shipping_id column
  * @method     ChildOrderQuery groupByCountryId() Group by the country_id column
- * @method     ChildOrderQuery groupByShipping() Group by the order_shipping column
+ * @method     ChildOrderQuery groupByShippingCost() Group by the order_shipping column
  * @method     ChildOrderQuery groupByShippingMode() Group by the order_shipping_mode column
  * @method     ChildOrderQuery groupByTrackNumber() Group by the order_track_number column
  * @method     ChildOrderQuery groupByMondialRelayPickupPointCode() Group by the mondial_relay_pickup_point_code column
@@ -207,7 +207,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder|null findOneByAmountTobepaid(int $order_amount_tobepaid) Return the first ChildOrder filtered by the order_amount_tobepaid column
  * @method     ChildOrder|null findOneByShippingId(int $shipping_id) Return the first ChildOrder filtered by the shipping_id column
  * @method     ChildOrder|null findOneByCountryId(int $country_id) Return the first ChildOrder filtered by the country_id column
- * @method     ChildOrder|null findOneByShipping(int $order_shipping) Return the first ChildOrder filtered by the order_shipping column
+ * @method     ChildOrder|null findOneByShippingCost(int $order_shipping) Return the first ChildOrder filtered by the order_shipping column
  * @method     ChildOrder|null findOneByShippingMode(string $order_shipping_mode) Return the first ChildOrder filtered by the order_shipping_mode column
  * @method     ChildOrder|null findOneByTrackNumber(string $order_track_number) Return the first ChildOrder filtered by the order_track_number column
  * @method     ChildOrder|null findOneByMondialRelayPickupPointCode(string $mondial_relay_pickup_point_code) Return the first ChildOrder filtered by the mondial_relay_pickup_point_code column
@@ -260,7 +260,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder requireOneByAmountTobepaid(int $order_amount_tobepaid) Return the first ChildOrder filtered by the order_amount_tobepaid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByShippingId(int $shipping_id) Return the first ChildOrder filtered by the shipping_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByCountryId(int $country_id) Return the first ChildOrder filtered by the country_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByShipping(int $order_shipping) Return the first ChildOrder filtered by the order_shipping column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildOrder requireOneByShippingCost(int $order_shipping) Return the first ChildOrder filtered by the order_shipping column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByShippingMode(string $order_shipping_mode) Return the first ChildOrder filtered by the order_shipping_mode column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByTrackNumber(string $order_track_number) Return the first ChildOrder filtered by the order_track_number column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByMondialRelayPickupPointCode(string $mondial_relay_pickup_point_code) Return the first ChildOrder filtered by the mondial_relay_pickup_point_code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -328,8 +328,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildOrder> findByShippingId(int|array<int> $shipping_id) Return ChildOrder objects filtered by the shipping_id column
  * @method     ChildOrder[]|Collection findByCountryId(int|array<int> $country_id) Return ChildOrder objects filtered by the country_id column
  * @psalm-method Collection&\Traversable<ChildOrder> findByCountryId(int|array<int> $country_id) Return ChildOrder objects filtered by the country_id column
- * @method     ChildOrder[]|Collection findByShipping(int|array<int> $order_shipping) Return ChildOrder objects filtered by the order_shipping column
- * @psalm-method Collection&\Traversable<ChildOrder> findByShipping(int|array<int> $order_shipping) Return ChildOrder objects filtered by the order_shipping column
+ * @method     ChildOrder[]|Collection findByShippingCost(int|array<int> $order_shipping) Return ChildOrder objects filtered by the order_shipping column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByShippingCost(int|array<int> $order_shipping) Return ChildOrder objects filtered by the order_shipping column
  * @method     ChildOrder[]|Collection findByShippingMode(string|array<string> $order_shipping_mode) Return ChildOrder objects filtered by the order_shipping_mode column
  * @psalm-method Collection&\Traversable<ChildOrder> findByShippingMode(string|array<string> $order_shipping_mode) Return ChildOrder objects filtered by the order_shipping_mode column
  * @method     ChildOrder[]|Collection findByTrackNumber(string|array<string> $order_track_number) Return ChildOrder objects filtered by the order_track_number column
@@ -1202,12 +1202,12 @@ abstract class OrderQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByShipping(1234); // WHERE order_shipping = 1234
-     * $query->filterByShipping(array(12, 34)); // WHERE order_shipping IN (12, 34)
-     * $query->filterByShipping(array('min' => 12)); // WHERE order_shipping > 12
+     * $query->filterByShippingCost(1234); // WHERE order_shipping = 1234
+     * $query->filterByShippingCost(array(12, 34)); // WHERE order_shipping IN (12, 34)
+     * $query->filterByShippingCost(array('min' => 12)); // WHERE order_shipping > 12
      * </code>
      *
-     * @param mixed $shipping The value to use as filter.
+     * @param mixed $shippingCost The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -1215,16 +1215,16 @@ abstract class OrderQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByShipping($shipping = null, ?string $comparison = null)
+    public function filterByShippingCost($shippingCost = null, ?string $comparison = null)
     {
-        if (is_array($shipping)) {
+        if (is_array($shippingCost)) {
             $useMinMax = false;
-            if (isset($shipping['min'])) {
-                $this->addUsingAlias(OrderTableMap::COL_ORDER_SHIPPING, $shipping['min'], Criteria::GREATER_EQUAL);
+            if (isset($shippingCost['min'])) {
+                $this->addUsingAlias(OrderTableMap::COL_ORDER_SHIPPING, $shippingCost['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($shipping['max'])) {
-                $this->addUsingAlias(OrderTableMap::COL_ORDER_SHIPPING, $shipping['max'], Criteria::LESS_EQUAL);
+            if (isset($shippingCost['max'])) {
+                $this->addUsingAlias(OrderTableMap::COL_ORDER_SHIPPING, $shippingCost['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -1235,7 +1235,7 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(OrderTableMap::COL_ORDER_SHIPPING, $shipping, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_SHIPPING, $shippingCost, $comparison);
 
         return $this;
     }
