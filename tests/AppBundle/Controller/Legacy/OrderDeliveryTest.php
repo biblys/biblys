@@ -24,9 +24,12 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Service\QueryParamsService;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use EntityManager;
 use Mockery;
+use Model\OrderQuery;
+use Model\StockQuery;
 use OrderManager;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -353,6 +356,86 @@ class OrderDeliveryTest extends TestCase
             $response,
             "it should redirect after order validation"
         );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     * @throws \Exception
+     */
+    public function testOrderCreationIsRevertIfMailerFails()
+    {
+        // given
+        $controller = require __DIR__ . "/../../../../controllers/common/php/order_delivery.php";
+
+        $site = ModelFactory::createSite();
+        $siteManager = new SiteManager();
+        $GLOBALS["LEGACY_CURRENT_SITE"] = $siteManager->getById($site->getId());
+        $cart = ModelFactory::createCart(site: $site, count: 1);
+        $article = ModelFactory::createArticle(title: "Livre commandé");
+        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
+        $country = ModelFactory::createCountry();
+
+        $shipping = ModelFactory::createShippingFee(type: "suivi");
+        $_POST = [
+            "order_email" => "customer@biblys.fr",
+            "order_firstname" => "Barnabé",
+            "order_lastname" => "Famagouste"
+        ];
+
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->shouldReceive("parse");
+        $queryParamsService->shouldReceive("getInteger")->with("country_id")
+            ->andReturn($country->getId());
+        $queryParamsService->shouldReceive("getInteger")->with("shipping_id")
+            ->andReturn($shipping->getId());
+
+        $request = new Request();
+        $request->setMethod("POST");
+        $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
+        $request->query->set("page", "order_delivery");
+        $request->query->set("country_id", $country->getId());
+        $request->query->set("shipping_id", $shipping->getId());
+        $request->request->set("order_firstname", "Barnabé");
+        $request->request->set("order_lastname", "Famagouste");
+        $request->request->set("order_address1", "123 rue des Peupliers");
+        $request->request->set("order_postalcode", "69009");
+        $request->request->set("order_city", "Lyon");
+        $request->request->set("order_email", "customer@biblys.fr");
+        $request->request->set("country_id", $country->getId());
+        $request->request->set("cgv_checkbox", 1);
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")->andReturn(null);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("hasOptionEnabled")->andReturn(false);
+
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+
+        $mailer = $this->createMock(Mailer::class);
+        $mailer->expects($this->once())
+            ->method('send')
+            ->willThrowException(new \Exception("Mail not sent"));
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getCart")->andReturn($cart);
+        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+
+        $config = new Config();
+
+        // when
+        $exception = Helpers::runAndCatchException(function() use ($controller, $request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config) {
+            $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config);
+        });
+
+        // then
+        $this->assertEquals("Mail not sent", $exception->getMessage(), "Exception should be thrown");
+        $ordersCount = OrderQuery::create()->filterBySiteId($site->getId())->count();
+        $this->assertEquals(0, $ordersCount, "Order should not be created");
+        $customersCount = OrderQuery::create()->filterBySiteId($site->getId())->count();
+        $this->assertEquals(0, $customersCount, "Customer should not be created");
+        $stockItemInCart = StockQuery::create()->filterByCart($cart)->exists();
+        $this->assertTrue($stockItemInCart, "Stock item should still be in cart");
     }
 
     public function tearDown(): void
