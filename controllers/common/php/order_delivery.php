@@ -26,6 +26,7 @@ use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\QueryParamsService;
+use Biblys\Service\StringService;
 use DansMaCulotte\MondialRelay\DeliveryChoice;
 use Model\AlertQuery;
 use Model\CountryQuery;
@@ -189,6 +190,8 @@ return function (
                 else {
                     $order = new \Model\Order();
                     $order->setSite($currentSite->getSite());
+                    $orderSlug = StringService::random();
+                    $order->setSlug($orderSlug);
                 }
 
                 /* CUSTOMER */

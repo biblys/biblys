@@ -122,6 +122,11 @@ class OrderDeliveryTest extends TestCase
             $order->get("shipping_mode"),
             "it should set order's shipping mode"
         );
+        $this->assertEquals(
+            16,
+            strlen($order->get("url")),
+            "it should set order's slug"
+        );
     }
 
     /**
