@@ -71,7 +71,7 @@ class Helpers
         $currentSite->expects("getTitle")->andReturn("Éditions Paronymie");
         $currentSite->expects("getOption")->andReturn(null);
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("isAuthentified")->andReturn(false);
+        $currentUser->expects("isAuthenticated")->andReturn(false);
         $currentUser->expects("isAdmin")->andReturn(false);
         $currentUser->expects("hasPublisherRight")->andReturn(false);
         $metaTags = Mockery::mock(MetaTagsService::class);

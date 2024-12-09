@@ -109,7 +109,7 @@ class PostController extends Controller
         }
 
         $userCanSeeUnpublishedPost = false;
-        if ($currentUser->isAuthentified()) {
+        if ($currentUser->isAuthenticated()) {
             $userIsPostAuthor = $post->getUser() === $currentUser->getUser();
             $userCanSeeUnpublishedPost = $userIsPostAuthor || $currentUser->isAdmin();
         }
