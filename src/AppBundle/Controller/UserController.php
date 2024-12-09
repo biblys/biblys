@@ -120,7 +120,7 @@ class UserController extends Controller
         Config             $config
     ): Response
     {
-        if ($currentUser->isAuthentified()) {
+        if ($currentUser->isAuthenticated()) {
             return new RedirectResponse("/");
         }
 

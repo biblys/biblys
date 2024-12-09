@@ -140,7 +140,7 @@ class OrderDeliveryHelpers
 
     public static function getOrderInProgressForVisitor(CurrentUser $currentUser): mixed
     {
-        if (!$currentUser->isAuthentified()) {
+        if (!$currentUser->isAuthenticated()) {
             return null;
         }
 

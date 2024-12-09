@@ -130,7 +130,7 @@ class UserControllerTest extends TestCase
         // given
         $userController = new UserController();
         $currentUser = $this->createMock(CurrentUser::class);
-        $currentUser->method("isAuthentified")->willReturn(false);
+        $currentUser->method("isAuthenticated")->willReturn(false);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator
             ->method("generate")
@@ -163,7 +163,7 @@ class UserControllerTest extends TestCase
         // given
         $userController = new UserController();
         $currentUser = $this->createMock(CurrentUser::class);
-        $currentUser->method("isAuthentified")->willReturn(false);
+        $currentUser->method("isAuthenticated")->willReturn(false);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator
             ->method("generate")
@@ -197,7 +197,7 @@ class UserControllerTest extends TestCase
         $userController = new UserController();
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = $this->createMock(CurrentUser::class);
-        $currentUser->method("isAuthentified")->willReturn(false);
+        $currentUser->method("isAuthenticated")->willReturn(false);
         $urlGenerator
             ->method("generate")
             ->with("openid_axys", ["return_url" => "url_to_return_to"])
@@ -228,7 +228,7 @@ class UserControllerTest extends TestCase
         // given
         $userController = new UserController();
         $currentUser = $this->createMock(CurrentUser::class);
-        $currentUser->method("isAuthentified")->willReturn(true);
+        $currentUser->method("isAuthenticated")->willReturn(true);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator
             ->method("generate")

@@ -204,7 +204,7 @@ return function (
             /* CUSTOMER */
 
             $existingCustomer = CustomerQuery::create()->findOneByEmail($orderEmail);
-            if ($currentUser->isAuthentified()) {
+            if ($currentUser->isAuthenticated()) {
                 $currentUserId = $currentUser->getUser()->getId();
                 $order->set('user_id', $currentUserId);
                 $existingCustomer = CustomerQuery::create()->findOneByUserId($currentUserId);
@@ -376,7 +376,7 @@ return function (
     }
 
     $form_class = null;
-    if (!$currentUser->isAuthentified()) {
+    if (!$currentUser->isAuthenticated()) {
         $content .= "
         <h2>Vos coordonnées</h2>
         <p><a href=\"$loginUrl\" class=\"btn btn-primary\" rel='nofollow'>Connectez-vous</a> ou <a href=\"$loginUrl\" class=\"btn btn-success\" rel='nofollow'>inscrivez-vous</a> pour enregistrer vos coordonnées et commander plus rapidement.</p>
