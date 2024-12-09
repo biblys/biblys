@@ -28,6 +28,7 @@ class ArticleType
     private string $_tax;
     private bool $_isDownloadable = false;
     private bool $_isPhysical = false;
+    private bool $_isService = false;
 
     public const BOOK = 1;
     public const EBOOK = 2;
@@ -95,6 +96,16 @@ class ArticleType
     public function isPhysical(): bool
     {
         return $this->_isPhysical;
+    }
+
+    public function isService(): bool
+    {
+        return $this->_isService;
+    }
+
+    public function setIsService(bool $isService): void
+    {
+        $this->_isService = $isService;
     }
 
     /**
