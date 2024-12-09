@@ -1216,8 +1216,8 @@
   <table name="redirections" idMethod="native" phpName="Redirection">
     <column name="redirection_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int unsigned"/>
-    <column name="redirection_old" phpName="Old" type="VARCHAR" size="256"/>
-    <column name="redirection_new" phpName="New" type="VARCHAR" size="256"/>
+    <column name="redirection_old" phpName="OldUrl" type="VARCHAR" size="256"/>
+    <column name="redirection_new" phpName="NewUrl" type="VARCHAR" size="256"/>
     <column name="redirection_hits" phpName="Hits" type="INTEGER" defaultValue="0"/>
     <column name="redirection_date" phpName="Date" type="TIMESTAMP"/>
     <column name="redirection_created" phpName="CreatedAt" type="TIMESTAMP"/>
