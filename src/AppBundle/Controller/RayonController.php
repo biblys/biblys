@@ -26,7 +26,6 @@ use Biblys\Service\CurrentUser;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use Propel\Runtime\Exception\PropelException;
 use Rayon;
 use RayonManager;
@@ -45,7 +44,6 @@ class RayonController extends Controller
 {
     /**
      * @throws SyntaxError
-     * @throws AuthException
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
@@ -110,7 +108,6 @@ class RayonController extends Controller
 
     /**
      * @throws SyntaxError
-     * @throws AuthException
      * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
@@ -156,7 +153,6 @@ class RayonController extends Controller
 
     /**
      * @throws SyntaxError
-     * @throws AuthException
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
@@ -207,7 +203,6 @@ class RayonController extends Controller
     }
 
     /**
-     * @throws AuthException
      * @throws Exception
      */
     public function deleteAction(
@@ -234,7 +229,6 @@ class RayonController extends Controller
      * Adding an Article to a Rayon
      * /rayon/:id/add.
      *
-     * @throws AuthException
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
@@ -323,7 +317,6 @@ class RayonController extends Controller
     /**
      * Display all articles in a Rayon.
      *
-     * @throws AuthException
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
@@ -354,7 +347,6 @@ class RayonController extends Controller
 
     /**
      * Remove an article from a Rayon.
-     * @throws AuthException
      * @throws PropelException
      * @throws Exception
      */

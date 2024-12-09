@@ -23,7 +23,6 @@ use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentUser;
 use Exception;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use InventoryItemManager;
 use InventoryManager;
 use PDO;

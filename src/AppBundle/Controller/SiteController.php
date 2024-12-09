@@ -24,7 +24,6 @@ use Biblys\Service\CurrentUser;
 use Exception;
 use Framework\Controller;
 
-use Framework\Exception\AuthException;
 use Model\OptionQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -90,7 +89,6 @@ class SiteController extends Controller
 
     /**
      * @throws SyntaxError
-     * @throws AuthException
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError

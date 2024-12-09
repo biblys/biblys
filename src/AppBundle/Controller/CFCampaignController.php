@@ -25,7 +25,6 @@ use CFCampaignManager;
 use CFRewardManager;
 use Exception;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -79,7 +78,6 @@ class CFCampaignController extends Controller
 
     /**
      * @throws SyntaxError
-     * @throws AuthException
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
@@ -101,7 +99,6 @@ class CFCampaignController extends Controller
 
     /**
      * @throws SyntaxError
-     * @throws AuthException
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
@@ -142,7 +139,6 @@ class CFCampaignController extends Controller
 
     /**
      * @throws SyntaxError
-     * @throws AuthException
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
@@ -185,7 +181,6 @@ class CFCampaignController extends Controller
     }
 
     /**
-     * @throws AuthException
      * @throws Exception
      */
     public function refreshAction(CurrentUser $currentUser, $id): RedirectResponse

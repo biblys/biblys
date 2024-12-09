@@ -23,7 +23,6 @@ use Biblys\Service\CurrentUser;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use DateTime;
-use Framework\Exception\AuthException;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -42,7 +41,6 @@ class PaymentControllerTest extends TestCase
      * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
-     * @throws AuthException
      */
     public function testIndex()
     {
@@ -90,7 +88,6 @@ class PaymentControllerTest extends TestCase
      * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
-     * @throws AuthException
      */
     public function testIndexWithModeFilter()
     {
@@ -128,7 +125,6 @@ class PaymentControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws RuntimeError
      * @throws LoaderError
      * @throws SyntaxError
