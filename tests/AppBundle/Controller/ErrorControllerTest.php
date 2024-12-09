@@ -25,6 +25,7 @@ use Biblys\Test\ModelFactory;
 use Biblys\Service\TemplateService;
 use Exception;
 use Mockery;
+use Model\RedirectionQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,6 +49,14 @@ require_once __DIR__ . "/../../setUp.php";
 class ErrorControllerTest extends TestCase
 {
     /**
+     * @throws PropelException
+     */
+    protected function setUp(): void
+    {
+        RedirectionQuery::create()->deleteAll();
+    }
+
+    /**
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
@@ -61,6 +70,7 @@ class ErrorControllerTest extends TestCase
         $exception = new ResourceNotFoundException("Page not found");
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("publisher_filter")->andReturn(null);
+        $currentSite->shouldReceive("getSite")->andReturn(ModelFactory::createSite());
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService
@@ -215,6 +225,7 @@ class ErrorControllerTest extends TestCase
         $request->headers->set("Accept", "application/json");
         $exception = new ResourceNotFoundException("Page not found");
         $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn(ModelFactory::createSite());
         $currentSite->shouldReceive("getOption")->with("publisher_filter")->andReturn(null);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $templateService = Mockery::mock(TemplateService::class);
@@ -248,6 +259,57 @@ class ErrorControllerTest extends TestCase
             "it should return a JsonResponse"
         );
     }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function testHandlePageNotFoundWithRedirection()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        ModelFactory::createRedirection(site: $site, oldUrl: "/old-url", newUrl: "/new-url");
+
+        $controller = new ErrorController();
+        $request = new Request();
+        $exception = new ResourceNotFoundException("Page not found");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->expects("getSite")->andReturn($site);
+        $currentSite->shouldReceive("getOption")->with("publisher_filter")->andReturn(null);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->once()
+            ->andReturn(new Response("Page not found"));
+        $config = Mockery::mock(Config::class);
+        $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $currentUrlService->shouldReceive("getRelativeUrl")->andReturn("/old-url");
+        $session = Mockery::mock(Session::class);
+
+        // when
+        $response = $controller->exception(
+            $request,
+            $config,
+            $currentSite,
+            $currentUrlService,
+            $urlGenerator,
+            $session,
+            $templateService,
+            $exception
+        );
+
+        // then
+        $this->assertEquals(301, $response->getStatusCode(), "responds with HTTP status 301");
+        $this->assertEquals(
+            "/new-url",
+            $response->headers->get("Location"),
+            "redirects to the new url"
+        );
+    }
+
 
     /**
      * @throws LoaderError

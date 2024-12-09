@@ -27,6 +27,7 @@ use Exception;
 use Framework\Controller;
 use Model\ArticleQuery;
 use Model\PeopleQuery;
+use Model\RedirectionQuery;
 use Propel\Runtime\Exception\PropelException;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -183,11 +184,16 @@ class ErrorController extends Controller
             return new RedirectResponse($contributorUrl, 301);
         }
 
+        $redirection = RedirectionQuery::create()
+            ->filterBySiteId($currentSite->getSite()->getId())
+            ->findOneByOldUrl($currentUrl);
+        if ($redirection) {
+            return new RedirectResponse($redirection->getNewUrl(), 301);
+        }
+
         if ($request->headers->get("Accept") === "application/json") {
             return $this->_toJsonErrorResponse($exception, 404);
         }
-
-        $request->attributes->set("page_title", "Erreur 404");
 
         $response = $templateService->renderResponse("AppBundle:Error:404.html.twig", [
             "exception" => $exception,
