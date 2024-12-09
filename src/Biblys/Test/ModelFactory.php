@@ -46,6 +46,7 @@ use Model\Payment;
 use Model\People;
 use Model\Post;
 use Model\Publisher;
+use Model\Redirection;
 use Model\Right;
 use Model\Role;
 use Model\Session;
@@ -969,6 +970,25 @@ class ModelFactory
         $gallery->save();
 
         return $gallery;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createRedirection(
+        Site $site,
+        string $oldUrl,
+        string $newUrl,
+    ): Redirection
+    {
+        $redirection = new Redirection();
+
+        $redirection->setSiteId($site->getId());
+        $redirection->setOldUrl($oldUrl);
+        $redirection->setNewUrl($newUrl);
+        $redirection->save();
+
+        return $redirection;
     }
 
 }
