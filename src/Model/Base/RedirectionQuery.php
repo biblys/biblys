@@ -19,8 +19,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildRedirectionQuery orderById($order = Criteria::ASC) Order by the redirection_id column
  * @method     ChildRedirectionQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
- * @method     ChildRedirectionQuery orderByOld($order = Criteria::ASC) Order by the redirection_old column
- * @method     ChildRedirectionQuery orderByNew($order = Criteria::ASC) Order by the redirection_new column
+ * @method     ChildRedirectionQuery orderByOldUrl($order = Criteria::ASC) Order by the redirection_old column
+ * @method     ChildRedirectionQuery orderByNewUrl($order = Criteria::ASC) Order by the redirection_new column
  * @method     ChildRedirectionQuery orderByHits($order = Criteria::ASC) Order by the redirection_hits column
  * @method     ChildRedirectionQuery orderByDate($order = Criteria::ASC) Order by the redirection_date column
  * @method     ChildRedirectionQuery orderByCreatedAt($order = Criteria::ASC) Order by the redirection_created column
@@ -28,8 +28,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildRedirectionQuery groupById() Group by the redirection_id column
  * @method     ChildRedirectionQuery groupBySiteId() Group by the site_id column
- * @method     ChildRedirectionQuery groupByOld() Group by the redirection_old column
- * @method     ChildRedirectionQuery groupByNew() Group by the redirection_new column
+ * @method     ChildRedirectionQuery groupByOldUrl() Group by the redirection_old column
+ * @method     ChildRedirectionQuery groupByNewUrl() Group by the redirection_new column
  * @method     ChildRedirectionQuery groupByHits() Group by the redirection_hits column
  * @method     ChildRedirectionQuery groupByDate() Group by the redirection_date column
  * @method     ChildRedirectionQuery groupByCreatedAt() Group by the redirection_created column
@@ -48,8 +48,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildRedirection|null findOneById(int $redirection_id) Return the first ChildRedirection filtered by the redirection_id column
  * @method     ChildRedirection|null findOneBySiteId(int $site_id) Return the first ChildRedirection filtered by the site_id column
- * @method     ChildRedirection|null findOneByOld(string $redirection_old) Return the first ChildRedirection filtered by the redirection_old column
- * @method     ChildRedirection|null findOneByNew(string $redirection_new) Return the first ChildRedirection filtered by the redirection_new column
+ * @method     ChildRedirection|null findOneByOldUrl(string $redirection_old) Return the first ChildRedirection filtered by the redirection_old column
+ * @method     ChildRedirection|null findOneByNewUrl(string $redirection_new) Return the first ChildRedirection filtered by the redirection_new column
  * @method     ChildRedirection|null findOneByHits(int $redirection_hits) Return the first ChildRedirection filtered by the redirection_hits column
  * @method     ChildRedirection|null findOneByDate(string $redirection_date) Return the first ChildRedirection filtered by the redirection_date column
  * @method     ChildRedirection|null findOneByCreatedAt(string $redirection_created) Return the first ChildRedirection filtered by the redirection_created column
@@ -60,8 +60,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildRedirection requireOneById(int $redirection_id) Return the first ChildRedirection filtered by the redirection_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRedirection requireOneBySiteId(int $site_id) Return the first ChildRedirection filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRedirection requireOneByOld(string $redirection_old) Return the first ChildRedirection filtered by the redirection_old column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRedirection requireOneByNew(string $redirection_new) Return the first ChildRedirection filtered by the redirection_new column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRedirection requireOneByOldUrl(string $redirection_old) Return the first ChildRedirection filtered by the redirection_old column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRedirection requireOneByNewUrl(string $redirection_new) Return the first ChildRedirection filtered by the redirection_new column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRedirection requireOneByHits(int $redirection_hits) Return the first ChildRedirection filtered by the redirection_hits column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRedirection requireOneByDate(string $redirection_date) Return the first ChildRedirection filtered by the redirection_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRedirection requireOneByCreatedAt(string $redirection_created) Return the first ChildRedirection filtered by the redirection_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -74,10 +74,10 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildRedirection> findById(int|array<int> $redirection_id) Return ChildRedirection objects filtered by the redirection_id column
  * @method     ChildRedirection[]|Collection findBySiteId(int|array<int> $site_id) Return ChildRedirection objects filtered by the site_id column
  * @psalm-method Collection&\Traversable<ChildRedirection> findBySiteId(int|array<int> $site_id) Return ChildRedirection objects filtered by the site_id column
- * @method     ChildRedirection[]|Collection findByOld(string|array<string> $redirection_old) Return ChildRedirection objects filtered by the redirection_old column
- * @psalm-method Collection&\Traversable<ChildRedirection> findByOld(string|array<string> $redirection_old) Return ChildRedirection objects filtered by the redirection_old column
- * @method     ChildRedirection[]|Collection findByNew(string|array<string> $redirection_new) Return ChildRedirection objects filtered by the redirection_new column
- * @psalm-method Collection&\Traversable<ChildRedirection> findByNew(string|array<string> $redirection_new) Return ChildRedirection objects filtered by the redirection_new column
+ * @method     ChildRedirection[]|Collection findByOldUrl(string|array<string> $redirection_old) Return ChildRedirection objects filtered by the redirection_old column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findByOldUrl(string|array<string> $redirection_old) Return ChildRedirection objects filtered by the redirection_old column
+ * @method     ChildRedirection[]|Collection findByNewUrl(string|array<string> $redirection_new) Return ChildRedirection objects filtered by the redirection_new column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findByNewUrl(string|array<string> $redirection_new) Return ChildRedirection objects filtered by the redirection_new column
  * @method     ChildRedirection[]|Collection findByHits(int|array<int> $redirection_hits) Return ChildRedirection objects filtered by the redirection_hits column
  * @psalm-method Collection&\Traversable<ChildRedirection> findByHits(int|array<int> $redirection_hits) Return ChildRedirection objects filtered by the redirection_hits column
  * @method     ChildRedirection[]|Collection findByDate(string|array<string> $redirection_date) Return ChildRedirection objects filtered by the redirection_date column
@@ -370,25 +370,25 @@ abstract class RedirectionQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByOld('fooValue');   // WHERE redirection_old = 'fooValue'
-     * $query->filterByOld('%fooValue%', Criteria::LIKE); // WHERE redirection_old LIKE '%fooValue%'
-     * $query->filterByOld(['foo', 'bar']); // WHERE redirection_old IN ('foo', 'bar')
+     * $query->filterByOldUrl('fooValue');   // WHERE redirection_old = 'fooValue'
+     * $query->filterByOldUrl('%fooValue%', Criteria::LIKE); // WHERE redirection_old LIKE '%fooValue%'
+     * $query->filterByOldUrl(['foo', 'bar']); // WHERE redirection_old IN ('foo', 'bar')
      * </code>
      *
-     * @param string|string[] $old The value to use as filter.
+     * @param string|string[] $oldUrl The value to use as filter.
      * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByOld($old = null, ?string $comparison = null)
+    public function filterByOldUrl($oldUrl = null, ?string $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($old)) {
+            if (is_array($oldUrl)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_OLD, $old, $comparison);
+        $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_OLD, $oldUrl, $comparison);
 
         return $this;
     }
@@ -398,25 +398,25 @@ abstract class RedirectionQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByNew('fooValue');   // WHERE redirection_new = 'fooValue'
-     * $query->filterByNew('%fooValue%', Criteria::LIKE); // WHERE redirection_new LIKE '%fooValue%'
-     * $query->filterByNew(['foo', 'bar']); // WHERE redirection_new IN ('foo', 'bar')
+     * $query->filterByNewUrl('fooValue');   // WHERE redirection_new = 'fooValue'
+     * $query->filterByNewUrl('%fooValue%', Criteria::LIKE); // WHERE redirection_new LIKE '%fooValue%'
+     * $query->filterByNewUrl(['foo', 'bar']); // WHERE redirection_new IN ('foo', 'bar')
      * </code>
      *
-     * @param string|string[] $new The value to use as filter.
+     * @param string|string[] $newUrl The value to use as filter.
      * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByNew($new = null, ?string $comparison = null)
+    public function filterByNewUrl($newUrl = null, ?string $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($new)) {
+            if (is_array($newUrl)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_NEW, $new, $comparison);
+        $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_NEW, $newUrl, $comparison);
 
         return $this;
     }
