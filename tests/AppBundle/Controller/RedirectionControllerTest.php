@@ -114,4 +114,47 @@ class RedirectionControllerTest extends TestCase
             ->exists();
         $this->assertTrue($redirectionWasCreated);
     }
+
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     * @throws \Exception
+     */
+    public function testCreateActionWithExistingUrl()
+    {
+        // given
+        $controller = new RedirectionController();
+
+        $site = ModelFactory::createSite();
+        $redirection = ModelFactory::createRedirection(site: $site, oldUrl: "/old-url", newUrl: "/new-url");
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method("authAdmin");
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("getId")->willReturn($site->getId());
+        $bodyParamsService = Mockery::mock(BodyParamsService::class);
+        $bodyParamsService->expects("parse");
+        $bodyParamsService->expects("get")->with("old_url")->andReturn("/old-url");
+        $bodyParamsService->expects("get")->with("new_url")->andReturn("/other-new-url");
+        $flashMessageService = Mockery::mock(FlashMessagesService::class);
+        $flashMessageService
+            ->expects("add")
+            ->with("success", 'La redirection de « /old-url » vers « /other-new-url » a été créée.');
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->with("redirection_index")->andReturn("/redirections");
+
+        // when
+        $response = $controller->createAction(
+            $currentUser,
+            $currentSite,
+            $bodyParamsService,
+            $flashMessageService,
+            $urlGenerator
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $redirection->reload();
+        $this->assertEquals("/other-new-url", $redirection->getNewUrl());
+    }
 }
