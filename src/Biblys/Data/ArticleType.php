@@ -194,6 +194,7 @@ class ArticleType
         $type->setTax('STANDARD');
         $type->setPhysical(false);
         $type->setDownloadable(false);
+        $type->setIsService(true);
         $types[] = $type;
 
         $type = new ArticleType();
