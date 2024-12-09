@@ -18,7 +18,9 @@
 
 namespace Model;
 
+use Biblys\Exception\InvalidEntityException;
 use Model\Base\Redirection as BaseRedirection;
+use Propel\Runtime\Connection\ConnectionInterface;
 
 /**
  * Skeleton subclass for representing a row from the 'redirections' table.
@@ -32,4 +34,23 @@ use Model\Base\Redirection as BaseRedirection;
 class Redirection extends BaseRedirection
 {
 
+    /**
+     * @throws InvalidEntityException
+     */
+    public function preSave(?ConnectionInterface $con = null): bool
+    {
+        if (!str_starts_with($this->getOldUrl(), "/")) {
+            throw new InvalidEntityException("L'ancienne URL doit commencer par un slash (/).");
+        }
+
+        if (!str_starts_with($this->getNewUrl(), "/")) {
+            throw new InvalidEntityException("La nouvelle URL doit commencer par un slash (/).");
+        }
+
+        if ($this->getOldUrl() === $this->getNewUrl()) {
+            throw new InvalidEntityException("L'ancienne URL et la nouvelle URL doivent être différentes.");
+        }
+
+        return parent::preSave($con);
+    }
 }
