@@ -67,7 +67,7 @@ class ErrorController extends Controller
         CurrentUrlService $currentUrlService,
         UrlGenerator      $urlGenerator,
         Session           $session,
-        TemplateService $templateService,
+        TemplateService   $templateService,
         Exception         $exception
     ): Response
     {
@@ -77,7 +77,9 @@ class ErrorController extends Controller
             is_a($exception, ResourceNotFoundException::class)
             || is_a($exception, InvalidParameterException::class)
             || is_a($exception, NotFoundHttpException::class)) {
-            return $this->handlePageNotFound($request, $currentSite, $urlGenerator, $templateService, $exception);
+            return $this->handlePageNotFound(
+                $request, $currentSite, $urlGenerator, $templateService, $currentUrlService, $exception
+            );
         }
 
         if (is_a($exception, BadRequestHttpException::class)) {
@@ -155,11 +157,11 @@ class ErrorController extends Controller
         Request                                                                   $request,
         CurrentSite                                                               $currentSite,
         UrlGenerator                                                              $urlGenerator,
-        TemplateService $templateService,
+        TemplateService                                                           $templateService,
+        CurrentUrlService                                                         $currentUrlService,
         NotFoundHttpException|ResourceNotFoundException|InvalidParameterException $exception,
     ): Response
     {
-        $currentUrlService = new CurrentUrlService($request);
         $currentUrl = $currentUrlService->getRelativeUrl();
         $currentUrlWithoutFirstSlash = ltrim($currentUrl, "/");
 
@@ -204,9 +206,9 @@ class ErrorController extends Controller
      * @throws SyntaxError
      */
     private function handleServerError(
-        Request   $request,
+        Request         $request,
         TemplateService $templateService,
-        Exception $exception
+        Exception       $exception
     ): Response
     {
         $currentUrl = $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
