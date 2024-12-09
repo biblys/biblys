@@ -48,9 +48,10 @@ require_once __DIR__ . "/../../setUp.php";
 class ErrorControllerTest extends TestCase
 {
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function testHandlePageNotFound()
     {
@@ -202,9 +203,10 @@ class ErrorControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function testHandlePageNotFoundAsJson()
     {
@@ -248,9 +250,10 @@ class ErrorControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function testHandleBadRequest()
     {
@@ -296,9 +299,10 @@ class ErrorControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function testHandleUnauthorized()
     {
@@ -354,9 +358,10 @@ class ErrorControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function testHandleAccessDenied()
     {
@@ -401,9 +406,10 @@ class ErrorControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function testMethodNotAllowedAsJson()
     {
@@ -451,9 +457,10 @@ class ErrorControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function testHandleConflictAsJson()
     {
@@ -501,9 +508,10 @@ class ErrorControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function testHandleServerError()
     {
@@ -544,9 +552,10 @@ class ErrorControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function testHandleServerErrorAsJson()
     {
@@ -594,9 +603,10 @@ class ErrorControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function testHandleServerErrorAsJsonInProductionEnvironment()
     {
@@ -643,9 +653,10 @@ class ErrorControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function testHandleServiceUnavailable()
     {
