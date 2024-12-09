@@ -165,6 +165,17 @@ return function (
                     ' . $country . '
                 </p>
             ';
+        } else {
+            $content .= '
+                <h4>Coordonnées</h4>
+                <p>
+                    ' . $o["order_firstname"] . ' ' . $o["order_lastname"] . '<br />
+                    ' . $o["order_address1"] . '<br />
+                    ' . $o["order_address2"] . '
+                    ' . $o["order_postalcode"] . ' ' . $o["order_city"] . '<br />
+                    ' . $country . '
+                </p>
+            ';
         }
 
         $content .= '<p><a href="mailto:' . $o["order_email"] . '">' . $o["order_email"] . '</a></p>';
