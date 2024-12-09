@@ -26,13 +26,14 @@ class LoggerServiceTest extends TestCase
     public function testLog()
     {
         // given
+        $loggerService = new LoggerService();
         $logFilePath = __DIR__ . "/../../../app/logs/errors.log";
         if (file_exists($logFilePath)) {
             unlink($logFilePath);
         }
 
         // when
-        Log::error("ERROR", "An error occured");
+        $loggerService->log("errors", "ERROR", "An error occurred");
 
         // then
         $this->assertTrue(
@@ -40,7 +41,7 @@ class LoggerServiceTest extends TestCase
             "it should create log file"
         );
         $this->assertStringContainsString(
-            "An error occured",
+            "An error occurred",
             file_get_contents($logFilePath),
             "it should write log file"
         );
@@ -49,13 +50,15 @@ class LoggerServiceTest extends TestCase
     public function testLogForCriticalError()
     {
         // given
+        $loggerService = new LoggerService();
         $logFilePath = __DIR__ . "/../../../app/logs/errors.log";
         if (file_exists($logFilePath)) {
             unlink($logFilePath);
         }
 
         // when
-        Log::error("CRITICAL ERROR", "A critical error occured");
+        $loggerService->log("errors", "CRITICAL ERROR", "A critical error occurred");
+
 
         // then
         $this->assertTrue(
@@ -63,7 +66,7 @@ class LoggerServiceTest extends TestCase
             "it should create log file"
         );
         $this->assertStringContainsString(
-            "A critical error occured",
+            "A critical error occurred",
             file_get_contents($logFilePath),
             "it should write log file"
         );
