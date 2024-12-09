@@ -311,9 +311,9 @@ class CartHelpers
                     </p>
                     <p>
                         <strong>
-                            Offert pour ' . $targetQuantity . ' titres de la collection 
+                            Offert pour ' . $targetQuantity . ' titre'.s($targetQuantity).' de la collection 
                             <a href="' . $collectionUrl . '">' . $targetCollection->getName() . '</a> 
-                            achetés&nbsp;!<br />
+                            acheté'.s($targetQuantity).'&nbsp;!<br />
                             <small>' . $sentence . '</small>
                         </strong>
                     </p>
