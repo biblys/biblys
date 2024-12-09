@@ -584,6 +584,13 @@ rayon_remove:
     rayon_id: \d+
     article_id: \d+
 
+# Redirections
+
+redirection_index:
+  methods: GET
+  path: /admin/redirections
+  controller: AppBundle\Controller\RedirectionController::indexAction
+
 # Shipping
 
 shipping_admin:

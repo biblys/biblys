@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 3.2.0 (DEV)
+
+### Améliorations
+
+- Un outil de gestion des redirections a été ajouté à l'administration.
+
 ## 3.1.2 (18 décembre 2024)
 
 ### Corrections
