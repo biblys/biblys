@@ -69,6 +69,7 @@ class ErrorControllerTest extends TestCase
             ->andReturn(new Response("Page not found"));
         $config = Mockery::mock(Config::class);
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $currentUrlService->shouldReceive("getRelativeUrl")->andReturn("/current");
         $session = Mockery::mock(Session::class);
 
         // when
@@ -104,8 +105,6 @@ class ErrorControllerTest extends TestCase
         $controller = new ErrorController();
 
         $request = Mockery::mock(Request::class);
-        $request->shouldReceive("getBaseUrl")->andReturn("");
-        $request->shouldReceive("getPathInfo")->andReturn("/author/article_404");
         $exception = new ResourceNotFoundException("Page not found");
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("publisher_filter")->andReturn(null);
@@ -120,6 +119,7 @@ class ErrorControllerTest extends TestCase
             ->andReturn(new Response("Page not found"));
         $config = Mockery::mock(Config::class);
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $currentUrlService->shouldReceive("getRelativeUrl")->andReturn("/author/article_404");
         $session = Mockery::mock(Session::class);
 
         // when
@@ -160,8 +160,6 @@ class ErrorControllerTest extends TestCase
         $controller = new ErrorController();
 
         $request = Mockery::mock(Request::class);
-        $request->shouldReceive("getBaseUrl")->andReturn("");
-        $request->shouldReceive("getPathInfo")->andReturn("/great-author/");
         $exception = new ResourceNotFoundException("Page not found");
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("publisher_filter")->andReturn(null);
@@ -176,6 +174,7 @@ class ErrorControllerTest extends TestCase
             ->andReturn(new Response("Page not found"));
         $config = Mockery::mock(Config::class);
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $currentUrlService->shouldReceive("getRelativeUrl")->andReturn("/great-author/");
         $session = Mockery::mock(Session::class);
 
         // when
@@ -222,6 +221,7 @@ class ErrorControllerTest extends TestCase
         $config = Mockery::mock(Config::class);
         $config->shouldReceive("get")->with("environment")->andReturn("prod");
         $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $currentUrlService->shouldReceive("getRelativeUrl")->andReturn("/current");
         $session = Mockery::mock(Session::class);
 
         // when
