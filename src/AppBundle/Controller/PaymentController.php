@@ -25,7 +25,6 @@ use Biblys\Service\Pagination;
 use DateTime;
 use Exception;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use InvalidArgumentException;
 use Model\Payment;
 use Model\PaymentQuery;
@@ -48,7 +47,6 @@ class PaymentController extends Controller
 {
     /**
      * @route GET /admin/payments
-     * @throws AuthException
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws PropelException

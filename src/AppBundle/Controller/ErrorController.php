@@ -25,7 +25,6 @@ use Biblys\Service\Log;
 use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use Model\ArticleQuery;
 use Model\PeopleQuery;
 use ReflectionClass;
@@ -83,10 +82,7 @@ class ErrorController extends Controller
             return $this->handleBadRequest($request, $templateService, $exception);
         }
 
-        if (
-            is_a($exception, UnauthorizedHttpException::class) ||
-            is_a($exception, AuthException::class)
-        ) {
+        if (is_a($exception, UnauthorizedHttpException::class)) {
             $session->getFlashBag()->add(
                 "info",
                 "Vous devez vous connecter pour continuer."
@@ -271,10 +267,10 @@ class ErrorController extends Controller
      * @throws SyntaxError
      */
     private function _customTemplateHandler(
-        int                         $statusCode,
-        Request                     $request,
+        int             $statusCode,
+        Request         $request,
         TemplateService $templateService,
-        HttpException|AuthException $exception
+        HttpException   $exception
     ): Response
     {
         if (

@@ -25,7 +25,6 @@ use CronJobManager;
 use EntityManager;
 use Exception;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use PDO;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -93,7 +92,6 @@ class CronsController extends Controller
     /**
      * GET /crons/{slug}/jobs
      * Generic controller to display job logs of a cron task.
-     * @throws AuthException
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
@@ -138,7 +136,6 @@ class CronsController extends Controller
      * A test cron task.
      * @param Request $request
      * @return JsonResponse
-     * @throws AuthException
      * @throws Exception
      */
     public function testAction(Request $request): JsonResponse
@@ -173,7 +170,6 @@ class CronsController extends Controller
      * Export to Place des Libraires cron task.
      * @param Request $request
      * @return JsonResponse
-     * @throws AuthException
      * @throws Exception
      */
     public function exportPdlAction(Request $request): JsonResponse
