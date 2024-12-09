@@ -18,13 +18,18 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\FlashMessagesService;
 use Biblys\Service\TemplateService;
 use Framework\Controller;
+use Model\Redirection;
 use Model\RedirectionQuery;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -53,5 +58,35 @@ class RedirectionController extends Controller
             "AppBundle:Redirection:index.html.twig",
             ["redirections" => $redirections]
         );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function createAction(
+        CurrentUser $currentUser,
+        CurrentSite $currentSite,
+        BodyParamsService $bodyParamsService,
+        FlashMessagesService $flashMessagesService,
+        UrlGenerator $urlGenerator
+    ): RedirectResponse
+    {
+        $currentUser->authAdmin();
+
+        $bodyParamsService->parse([
+            "old_url" => ["type" => "string"],
+            "new_url" => ["type" => "string"]
+        ]);
+
+        $redirection = new Redirection();
+        $redirection->setSiteId($currentSite->getId());
+        $redirection->setOldUrl($bodyParamsService->get("old_url"));
+        $redirection->setNewUrl($bodyParamsService->get("new_url"));
+        $redirection->save();
+
+        $flashMessagesService->add("success", "La redirection de « {$redirection->getOldUrl()} » vers « {$redirection->getNewUrl()} » a été créée.");
+
+        $redirectionsUrl = $urlGenerator->generate("redirection_index");
+        return new RedirectResponse($redirectionsUrl, 302);
     }
 }

@@ -591,6 +591,11 @@ redirection_index:
   path: /admin/redirections
   controller: AppBundle\Controller\RedirectionController::indexAction
 
+redirection_create:
+  methods: POST
+  path: /admin/redirections
+  controller: AppBundle\Controller\RedirectionController::createAction
+
 # Shipping
 
 shipping_admin:
