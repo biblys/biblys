@@ -24,7 +24,6 @@ use Biblys\Service\CurrentUrlService;
 use Biblys\Test\ModelFactory;
 use Biblys\Service\TemplateService;
 use Exception;
-use Framework\Exception\AuthException;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -398,65 +397,6 @@ class ErrorControllerTest extends TestCase
             "Accès refusé",
             $response->getContent(),
             "returns the error title"
-        );
-    }
-
-    /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws LoaderError
-     */
-    public function testHandleLegacyAuthException()
-    {
-        // given
-        $controller = new ErrorController();
-        $request = new Request();
-        $exception = new AuthException("Unauthorized");
-        $currentSite = Mockery::mock(CurrentSite::class);
-        $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $templateService = Mockery::mock(TemplateService::class);
-        $templateService
-            ->shouldReceive("renderResponse")
-            ->once()
-            ->andReturn(new Response("Erreur d'authentification"));
-        $urlGenerator->shouldReceive("generate")
-            ->with("user_login", [
-                "return_url" => "/current",
-            ])
-            ->andReturn("/user/login?return_url=/current");
-        $config = Mockery::mock(Config::class);
-        $config->shouldReceive("environment")->andReturn("prod");
-        $currentUrlService = Mockery::mock(CurrentUrlService::class);
-        $currentUrlService->shouldReceive("getRelativeUrl")
-            ->andReturn("/current");
-        $session = Mockery::mock(Session::class);
-        $flashBag = Mockery::mock(FlashBag::class);
-        $flashBag->shouldReceive("add")
-            ->with("info", "Vous devez vous connecter pour continuer.");
-        $session = Mockery::mock(Session::class);
-        $session->shouldReceive("getFlashBag")->andReturn($flashBag);
-
-        // when
-        $response = $controller->exception(
-            $request,
-            $config,
-            $currentSite,
-            $currentUrlService,
-            $urlGenerator,
-            $session,
-            $templateService,
-            $exception
-        );
-
-        // then
-        $this->assertEquals(
-            302,
-            $response->getStatusCode(),
-            "it should response with HTTP status 302"
-        );
-        $this->assertEquals(
-            "/user/login?return_url=/current",
-            $response->headers->get("Location"),
         );
     }
 
