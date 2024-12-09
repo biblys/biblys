@@ -96,7 +96,7 @@ class OrderDeliveryTest extends TestCase
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getCart")->andReturn($cart);
-        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
         $currentUser->shouldReceive("getUser")->andReturn(null);
 
         $config = new Config();
@@ -183,7 +183,7 @@ class OrderDeliveryTest extends TestCase
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getCart")->andReturn($cart);
-        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
 
         $config = new Config();
 
@@ -260,7 +260,7 @@ class OrderDeliveryTest extends TestCase
         $cart = ModelFactory::createCart(site: $site);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getCart")->andReturn($cart);
-        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
 
         $config = new Config();
 
@@ -348,7 +348,7 @@ class OrderDeliveryTest extends TestCase
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getCart")->andReturn($cart);
-        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
 
         $config = new Config();
 

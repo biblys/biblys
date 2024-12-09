@@ -330,7 +330,7 @@ class CartManager extends EntityManager
             throw new Exception('Cet exemplaire n’a pas de poids et ne peut être ajouté au panier. Merci de nous contacter.');
         }
 
-        if ($currentUser->isAuthentified()) {
+        if ($currentUser->isAuthenticated()) {
             $wishForArticle = WishQuery::create()
                 ->filterByArticleId($stock->get('article_id'))
                 ->filterByUserId($currentUser->getUser()->getId())

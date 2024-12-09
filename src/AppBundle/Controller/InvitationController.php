@@ -224,7 +224,7 @@ class InvitationController extends Controller
         string          $code
     ): Response
     {
-        if (!$currentUser->isAuthentified()) {
+        if (!$currentUser->isAuthenticated()) {
             return $templateService->renderResponse(
                 "AppBundle:Invitation:show-for-anonymous-user.html.twig",
             );

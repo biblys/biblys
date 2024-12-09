@@ -274,7 +274,7 @@ return function (
 
     $orderInProgress = null;
     if (isset($Articles) && $Articles > 0) {
-        if (!$currentUser->isAuthentified()) {
+        if (!$currentUser->isAuthenticated()) {
             $content .= '
             <p class="warning">
                 Attention : ' . "vous n'êtes pas connecté" . '. Si vous quittez le site, votre
@@ -285,7 +285,7 @@ return function (
         }
 
         // Deja une commande en cours ?
-        if ($currentUser->isAuthentified()) {
+        if ($currentUser->isAuthenticated()) {
             $orderInProgress = OrderQuery::create()
                 ->filterByUser($currentUser->getUser())
                 ->filterBySite($currentSite->getSite())
@@ -408,7 +408,7 @@ return function (
             }, $countries);
             $default_destination = $com->get(["country_name" => "France"]);
 
-            if ($currentUser->isAuthentified()) {
+            if ($currentUser->isAuthenticated()) {
                 $customer = $currentUser->getOrCreateCustomer();
                 $country_id = $customer->getCountryId();
                 $country = $com->getById($country_id);
@@ -480,7 +480,7 @@ return function (
 
         if ($salesDisabled) {
             $content .= '<p class="alert alert-warning">La vente en ligne est temporairement désactivée sur ce site.</p>';
-        } elseif ($downloadable && !$currentUser->isAuthentified()) {
+        } elseif ($downloadable && !$currentUser->isAuthenticated()) {
             $content .= '<br />'
                 . '<div class="center">'
                 . '<p class="warning">Votre panier contient au moins un livre numérique. Vous devez vous <a href="' . $loginUrl . '">identifier</a> pour continuer.</p>'
@@ -488,7 +488,7 @@ return function (
                 . '</div>';
 
             // If cart contains crowdfunding rewards and user not logged
-        } elseif (!empty($crowdfunding) && !$currentUser->isAuthentified()) {
+        } elseif (!empty($crowdfunding) && !$currentUser->isAuthenticated()) {
             $content .= '<br>'
                 . '<div class="center">'
                 . '<p class="warning">Votre panier contient au moins une contrepartie de financement participatif.<br>Vous devez vous <a href="' . $loginUrl . '">identifier</a> pour continuer.</p>'

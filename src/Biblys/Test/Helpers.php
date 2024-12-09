@@ -72,7 +72,7 @@ class Helpers
         $currentSite->expects("getOption")->andReturn(null);
         $currentSite->expects("getSite")->andReturn(ModelFactory::createSite());
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("isAuthentified")->andReturn(false);
+        $currentUser->expects("isAuthenticated")->andReturn(false);
         $currentUser->expects("isAdmin")->andReturn(false);
         $currentUser->expects("hasPublisherRight")->andReturn(false);
         $metaTags = Mockery::mock(MetaTagsService::class);

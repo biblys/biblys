@@ -127,7 +127,7 @@ class CurrentUser
         $this->token = null;
     }
 
-    public function isAuthentified(): bool
+    public function isAuthenticated(): bool
     {
         if ($this->user) {
             return true;
@@ -137,11 +137,26 @@ class CurrentUser
     }
 
     /**
+     * @deprecated CurrentUser->isAuthentified() is deprecated. Use CurrentUser->isAuthenticated() instead.
+     */
+    public function isAuthentified(): bool
+    {
+        trigger_deprecation(
+            "biblys/biblys",
+            "3.2.0",
+            "CurrentUser->isAuthentified() is deprecated. Use CurrentUser->isAuthenticated() instead.
+        ");
+
+        return $this->isAuthenticated();
+    }
+
+    /**
      * @throws PropelException
+     * @throws Exception
      */
     public function isAdmin(): bool
     {
-        if (!$this->isAuthentified()) {
+        if (!$this->isAuthenticated()) {
             return false;
         }
 
@@ -177,7 +192,7 @@ class CurrentUser
      */
     public function hasRightForPublisher(Publisher $publisher): bool
     {
-        if (!$this->isAuthentified()) {
+        if (!$this->isAuthenticated()) {
             return false;
         }
 
@@ -198,7 +213,7 @@ class CurrentUser
      */
     public function hasPublisherRight(): bool
     {
-        if (!$this->isAuthentified()) {
+        if (!$this->isAuthenticated()) {
             return false;
         }
 
@@ -265,7 +280,7 @@ class CurrentUser
         if (!$this->cartWasFetched) {
             $cartQuery = CartQuery::create()->filterBySite($this->getCurrentSite()->getSite());
 
-            if ($this->isAuthentified()) {
+            if ($this->isAuthenticated()) {
                 $cartQuery = $cartQuery->filterByUser($this->user);
             } else {
                 $cartQuery = $cartQuery->filterByUid($this->token);
@@ -291,7 +306,7 @@ class CurrentUser
             $cart->setSite($this->getCurrentSite()->getSite());
             $cart->setType("web");
 
-            if ($this->isAuthentified()) {
+            if ($this->isAuthenticated()) {
                 $cart->setUser($this->user);
             } else {
                 $cart->setUid($this->token);
@@ -373,13 +388,13 @@ class CurrentUser
 
     public function authUser(): void
     {
-        if (!$this->isAuthentified()) {
+        if (!$this->isAuthenticated()) {
             throw new UnauthorizedHttpException("","Identification requise.");
         }
     }
 
     /**
-     * @throws AccessDeniedHttpException
+     * @throws PropelException
      */
     public function authAdmin(
         $errorMessage = "Accès réservé aux administrateurs.",
@@ -466,7 +481,7 @@ class CurrentUser
      */
     public function hasArticleInWishlist(Article $article): bool
     {
-        if (!$this->isAuthentified()) {
+        if (!$this->isAuthenticated()) {
             return false;
         }
 
@@ -485,7 +500,7 @@ class CurrentUser
      */
     public function hasAlertForArticle(Article $article): bool
     {
-        if (!$this->isAuthentified()) {
+        if (!$this->isAuthenticated()) {
             return false;
         }
 
@@ -526,7 +541,7 @@ class CurrentUser
      */
     public function hasPurchasedArticle(Article $article): bool
     {
-        if (!$this->isAuthentified()) {
+        if (!$this->isAuthenticated()) {
             return false;
         }
 

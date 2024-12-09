@@ -512,7 +512,7 @@ class Order extends Entity
      */
     public function deleteRelatedAlerts(CurrentUser $currentUser)
     {
-        if (!$currentUser->isAuthentified()) {
+        if (!$currentUser->isAuthenticated()) {
             return;
         }
 

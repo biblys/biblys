@@ -371,7 +371,7 @@ return function (
         </p>
       ';
 
-    } elseif (!$currentUserService->isAuthentified()) {
+    } elseif (!$currentUserService->isAuthenticated()) {
         throw new UnauthorizedHttpException("", "Vous n'avez pas le droit d'accéder à cette page.");
     } else {
         throw new AccessDeniedHttpException("Vous n'avez pas le droit d'accéder à cette page.");
@@ -387,7 +387,7 @@ function _isAnonymousOrder(Order $order): bool
 
 function _orderBelongsToVisitor(Order $order, CurrentUser $currentUser): bool
 {
-    if (!$currentUser->isAuthentified()) {
+    if (!$currentUser->isAuthenticated()) {
         return false;
     }
 
