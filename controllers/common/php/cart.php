@@ -90,11 +90,14 @@ return function (
 
     $cartPhysicalItems = [];
     $cartDownloadableItems = [];
+    $cartServiceItems = [];
 
     foreach ($stocks as $stockEntity) {
         $stockItem = StockQuery::create()->findPk($stockEntity->get("id"));
         /** @var Article $articleEntity */
         $articleEntity = $stockEntity->get('article');
+
+        /** @var \Model\Article $article */
         $article = ArticleQuery::create()->findPk($stockEntity->get("article_id"));
         $type = $articleEntity->getType();
 
@@ -200,6 +203,10 @@ return function (
             $cartDownloadableItems[] = $cartLine;
         }
 
+        if ($article->isService()) {
+            $cartServiceItems[] = $cartLine;
+        }
+
         if ($OneArticle == 0) {
             $OneArticle = $articleEntity->get('id');
         } elseif ($OneArticle != $articleEntity->get('id')) {
@@ -244,6 +251,19 @@ return function (
             <thead>
                 <tr>
                   <th colspan="100">Articles numériques à télécharger</th>
+                </tr>
+            </thead>
+            <tbody>
+                ' . implode($cartDownloadableItems) . '
+            </tbody>
+        ';
+    }
+
+    if (count($cartServiceItems) > 0) {
+        $content .= '
+            <thead>
+                <tr>
+                  <th colspan="100">Abonnements</th>
                 </tr>
             </thead>
             <tbody>

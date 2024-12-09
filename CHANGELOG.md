@@ -17,6 +17,8 @@
 - Une erreur survenant pendant l'enregistrement d'une commande pouvait résulter
   en une commande incomplète. Désormais, la commande est annulée si une erreur
   survient.
+- Les articles de type "service" comme les abonnements pouvaient ne pas
+  apparaître dans le panier. Ils apparaissent désormais dans une section dédiée.
 
 ## 3.1.0 (4 décembre 2024)
 
