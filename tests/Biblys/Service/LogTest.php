@@ -32,13 +32,13 @@ class LogTest extends PHPUnit\Framework\TestCase
     public function testLog()
     {
         // given
-        $logFilePath = biblysPath() . "app/logs/errors.log";
+        $logFilePath = biblysPath() . "app/logs/sql.log";
         if (file_exists($logFilePath)) {
             unlink($logFilePath);
         }
 
         // when
-        Log::error("ERROR", "An error occured");
+        Log::sql("ERROR", "An error occured");
 
         // then
         $this->assertTrue(
@@ -55,13 +55,13 @@ class LogTest extends PHPUnit\Framework\TestCase
     public function testLogForCriticalError()
     {
         // given
-        $logFilePath = biblysPath() . "app/logs/errors.log";
+        $logFilePath = biblysPath() . "app/logs/sql.log";
         if (file_exists($logFilePath)) {
             unlink($logFilePath);
         }
 
         // when
-        Log::error("CRITICAL ERROR", "A critical error occured");
+        Log::sql("CRITICAL ERROR", "A critical error occured");
 
         // then
         $this->assertTrue(

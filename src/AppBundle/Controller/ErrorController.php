@@ -21,12 +21,13 @@ namespace AppBundle\Controller;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
-use Biblys\Service\Log;
+use Biblys\Service\LoggerService;
 use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Controller;
 use Model\ArticleQuery;
 use Model\PeopleQuery;
+use Propel\Runtime\Exception\PropelException;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -55,6 +56,7 @@ class ErrorController extends Controller
 
     /**
      * @throws LoaderError
+     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      */
@@ -147,6 +149,7 @@ class ErrorController extends Controller
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws PropelException
      */
     private function handlePageNotFound(
         Request                                                                   $request,
@@ -208,7 +211,8 @@ class ErrorController extends Controller
     {
         $currentUrl = $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 
-        Log::error("ERROR", $exception->getMessage(), [
+        $loggerService = new LoggerService();
+        $loggerService->log("errors", "ERROR", $exception->getMessage(), [
             "URL" => $currentUrl,
             "File" => $exception->getFile(),
             "Line" => $exception->getLine(),
