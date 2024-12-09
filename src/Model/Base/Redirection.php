@@ -392,7 +392,7 @@ abstract class Redirection implements ActiveRecordInterface
      *
      * @return string|null
      */
-    public function getOld()
+    public function getOldUrl()
     {
         return $this->redirection_old;
     }
@@ -402,7 +402,7 @@ abstract class Redirection implements ActiveRecordInterface
      *
      * @return string|null
      */
-    public function getNew()
+    public function getNewUrl()
     {
         return $this->redirection_new;
     }
@@ -529,7 +529,7 @@ abstract class Redirection implements ActiveRecordInterface
      * @param string|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setOld($v)
+    public function setOldUrl($v)
     {
         if ($v !== null) {
             $v = (string) $v;
@@ -549,7 +549,7 @@ abstract class Redirection implements ActiveRecordInterface
      * @param string|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setNew($v)
+    public function setNewUrl($v)
     {
         if ($v !== null) {
             $v = (string) $v;
@@ -689,10 +689,10 @@ abstract class Redirection implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : RedirectionTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RedirectionTableMap::translateFieldName('Old', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RedirectionTableMap::translateFieldName('OldUrl', TableMap::TYPE_PHPNAME, $indexType)];
             $this->redirection_old = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : RedirectionTableMap::translateFieldName('New', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : RedirectionTableMap::translateFieldName('NewUrl', TableMap::TYPE_PHPNAME, $indexType)];
             $this->redirection_new = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : RedirectionTableMap::translateFieldName('Hits', TableMap::TYPE_PHPNAME, $indexType)];
@@ -1074,10 +1074,10 @@ abstract class Redirection implements ActiveRecordInterface
                 return $this->getSiteId();
 
             case 2:
-                return $this->getOld();
+                return $this->getOldUrl();
 
             case 3:
-                return $this->getNew();
+                return $this->getNewUrl();
 
             case 4:
                 return $this->getHits();
@@ -1120,8 +1120,8 @@ abstract class Redirection implements ActiveRecordInterface
         $result = [
             $keys[0] => $this->getId(),
             $keys[1] => $this->getSiteId(),
-            $keys[2] => $this->getOld(),
-            $keys[3] => $this->getNew(),
+            $keys[2] => $this->getOldUrl(),
+            $keys[3] => $this->getNewUrl(),
             $keys[4] => $this->getHits(),
             $keys[5] => $this->getDate(),
             $keys[6] => $this->getCreatedAt(),
@@ -1186,10 +1186,10 @@ abstract class Redirection implements ActiveRecordInterface
                 $this->setSiteId($value);
                 break;
             case 2:
-                $this->setOld($value);
+                $this->setOldUrl($value);
                 break;
             case 3:
-                $this->setNew($value);
+                $this->setNewUrl($value);
                 break;
             case 4:
                 $this->setHits($value);
@@ -1236,10 +1236,10 @@ abstract class Redirection implements ActiveRecordInterface
             $this->setSiteId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setOld($arr[$keys[2]]);
+            $this->setOldUrl($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setNew($arr[$keys[3]]);
+            $this->setNewUrl($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
             $this->setHits($arr[$keys[4]]);
@@ -1409,8 +1409,8 @@ abstract class Redirection implements ActiveRecordInterface
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
         $copyObj->setSiteId($this->getSiteId());
-        $copyObj->setOld($this->getOld());
-        $copyObj->setNew($this->getNew());
+        $copyObj->setOldUrl($this->getOldUrl());
+        $copyObj->setNewUrl($this->getNewUrl());
         $copyObj->setHits($this->getHits());
         $copyObj->setDate($this->getDate());
         $copyObj->setCreatedAt($this->getCreatedAt());
