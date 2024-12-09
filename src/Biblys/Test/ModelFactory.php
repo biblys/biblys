@@ -49,6 +49,7 @@ use Model\People;
 use Model\PeopleQuery;
 use Model\Post;
 use Model\Publisher;
+use Model\Redirection;
 use Model\PublisherQuery;
 use Model\Right;
 use Model\Role;
@@ -1006,6 +1007,25 @@ class ModelFactory
         $gallery->save();
 
         return $gallery;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createRedirection(
+        Site $site,
+        string $oldUrl,
+        string $newUrl,
+    ): Redirection
+    {
+        $redirection = new Redirection();
+
+        $redirection->setSiteId($site->getId());
+        $redirection->setOldUrl($oldUrl);
+        $redirection->setNewUrl($newUrl);
+        $redirection->save();
+
+        return $redirection;
     }
 
 }
