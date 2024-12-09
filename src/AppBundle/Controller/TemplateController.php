@@ -23,7 +23,6 @@ use Biblys\Service\CurrentUser;
 use Biblys\Template\Template;
 use Exception;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,7 +38,6 @@ class TemplateController extends Controller
 {
     /**
      * GET /admin/templates.
-     * @throws AuthException
      * @throws PropelException
      * @throws LoaderError
      * @throws RuntimeError
@@ -59,7 +57,6 @@ class TemplateController extends Controller
 
     /**
      * GET/POST /admin/templates/:slug/edit.
-     * @throws AuthException
      * @throws Exception
      */
     public function editAction(Request $request, CurrentUser $currentUser, $slug): Response
@@ -84,7 +81,6 @@ class TemplateController extends Controller
 
     /**
      * GET /admin/templates/:slug/delete.
-     * @throws AuthException
      * @throws Exception
      */
     public function deleteAction(
