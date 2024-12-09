@@ -77,4 +77,18 @@ class StringServiceTest extends TestCase
         // then
         $this->assertEquals("Anticon", $result);
     }
+
+    /** generateRandom */
+
+    public function testGenerateRandom()
+    {
+        // given
+        $length = 16;
+
+        // when
+        $result = StringService::random($length);
+
+        // then
+        $this->assertEquals($length, strlen($result));
+    }
 }

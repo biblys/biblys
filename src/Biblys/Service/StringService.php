@@ -61,4 +61,11 @@ class StringService
 
         return $this;
     }
+
+    public static function random($length = 16): string
+    {
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $randomString = bin2hex(random_bytes($length));
+        return (new StringService($randomString))->limit(16)->get();
+    }
 }
