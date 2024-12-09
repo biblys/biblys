@@ -52,6 +52,7 @@ class RedirectionController extends Controller
 
         $redirections = RedirectionQuery::create()
             ->filterBySiteId($currentSite->getId())
+            ->orderByOldUrl()
             ->find();
 
         return $templateService->renderResponse(
@@ -78,9 +79,19 @@ class RedirectionController extends Controller
             "new_url" => ["type" => "string"]
         ]);
 
-        $redirection = new Redirection();
-        $redirection->setSiteId($currentSite->getId());
-        $redirection->setOldUrl($bodyParamsService->get("old_url"));
+        $existingRedirectionForOldUrl = RedirectionQuery::create()
+            ->filterBySiteId($currentSite->getId())
+            ->filterByOldUrl($bodyParamsService->get("old_url"))
+            ->findOne();
+
+        if (!$existingRedirectionForOldUrl) {
+            $redirection = new Redirection();
+            $redirection->setSiteId($currentSite->getId());
+            $redirection->setOldUrl($bodyParamsService->get("old_url"));
+        } else {
+            $redirection = $existingRedirectionForOldUrl;
+        }
+
         $redirection->setNewUrl($bodyParamsService->get("new_url"));
         $redirection->save();
 
