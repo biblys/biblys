@@ -21,15 +21,6 @@ namespace Biblys\Service;
 class Log
 {
     /**
-     * @deprecated Legacy Log service is deprecated. Use LoggerService->log("errors", …) instead.
-     */
-    public static function error(string $level, string $message, array $context = []): void
-    {
-        $logger = new LoggerService();
-        $logger->log('errors', $level, $message, $context);
-    }
-
-    /**
      * @deprecated Legacy Log service is deprecated. Use LoggerService->log("sql", …) instead.
      */
     public static function sql(string $level, string $message, array $context = []): void
