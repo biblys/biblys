@@ -474,7 +474,7 @@ class InvitationControllerTest extends TestCase
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $user = ModelFactory::createUser();
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("isAuthentified")->andReturn(true);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(true);
         $currentUser->shouldReceive("getUser")->andReturn($user);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->shouldReceive("renderResponse")
@@ -511,7 +511,7 @@ class InvitationControllerTest extends TestCase
         $controller = new InvitationController();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService
             ->shouldReceive("renderResponse")

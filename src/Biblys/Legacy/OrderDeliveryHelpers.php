@@ -144,7 +144,7 @@ class OrderDeliveryHelpers
      */
     public static function getOrderInProgressForVisitor(CurrentUser $currentUser, CurrentSite $currentSite): ?Order
     {
-        if (!$currentUser->isAuthentified()) {
+        if (!$currentUser->isAuthenticated()) {
             return null;
         }
 

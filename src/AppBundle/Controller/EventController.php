@@ -113,7 +113,7 @@ class EventController extends Controller
             return true;
         }
 
-        if (!$currentUser->isAuthentified()) {
+        if (!$currentUser->isAuthenticated()) {
             return false;
         }
 

@@ -53,7 +53,7 @@ class EventControllerTest extends TestCase
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getUser")->andThrow(new UnauthorizedHttpException(""));
-        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getId")->andReturn($site->getId());
         $templateService = Mockery::mock(TemplateService::class);
@@ -79,7 +79,7 @@ class EventControllerTest extends TestCase
         $event = ModelFactory::createEvent(site: $site, isPublished: false);
 
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getId")->andReturn($site->getId());
         $templateService = Mockery::mock(TemplateService::class);
@@ -105,7 +105,7 @@ class EventControllerTest extends TestCase
         $event = ModelFactory::createEvent(site: $site, isPublished: false);
 
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("isAuthentified")->andReturn(true);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(true);
         $currentUser->shouldReceive("hasPublisherRight")->andReturn(false);
         $currentUser->shouldReceive("isAdmin")->andReturn(false);
         $currentSite = Mockery::mock(CurrentSite::class);
@@ -134,7 +134,7 @@ class EventControllerTest extends TestCase
         $event = ModelFactory::createEvent(site: $site, publisher: $publisher, isPublished: false);
 
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("isAuthentified")->andReturn(true);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(true);
         $currentUser->shouldReceive("hasPublisherRight")->andReturn(false);
         $currentUser->shouldReceive("isAdmin")->andReturn(true);
         $currentSite = Mockery::mock(CurrentSite::class);

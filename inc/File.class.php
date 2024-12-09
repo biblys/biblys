@@ -38,7 +38,7 @@ class File extends Entity
         // Private file
 
         // Visitor must be logged
-        if (!$currentUser->isAuthentified()) {
+        if (!$currentUser->isAuthenticated()) {
             throw new AccessDeniedHttpException("Vous n'êtes pas identifié.");
         }
 
@@ -87,7 +87,7 @@ class File extends Entity
         $download->set('download_version', $this->get('version'));
         $download->set('download_ip', $request->getClientIp());
 
-        if ($currentUser->isAuthentified()) {
+        if ($currentUser->isAuthenticated()) {
             $download->set('user_id', $currentUser->getUser()->getId());
         }
 

@@ -300,7 +300,7 @@ class CurrentUserTest extends TestCase
 
         // then
         $this->assertTrue(
-            $currentUser->isAuthentified(),
+            $currentUser->isAuthenticated(),
             "it returns true if user is authentified"
         );
     }
@@ -315,7 +315,7 @@ class CurrentUserTest extends TestCase
 
         // then
         $this->assertFalse(
-            $currentUser->isAuthentified(),
+            $currentUser->isAuthenticated(),
             "it returns false if user is unauthentified"
         );
     }
