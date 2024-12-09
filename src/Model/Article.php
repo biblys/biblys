@@ -162,4 +162,13 @@ class Article extends BaseArticle
 
         return true;
     }
+
+    public function isService(): bool
+    {
+        if ($this->getType()->isService()) {
+            return true;
+        }
+
+        return false;
+    }
 }
