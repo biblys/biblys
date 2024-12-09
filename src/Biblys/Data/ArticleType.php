@@ -28,11 +28,27 @@ class ArticleType
     private string $_tax;
     private bool $_isDownloadable = false;
     private bool $_isPhysical = false;
+    private bool $_isService = false;
 
     public const BOOK = 1;
     public const EBOOK = 2;
-    public const EAUDIOBOOK = 11;
+    public const CD = 3;
+    public const DVD = 4;
+    public const GAME = 5;
+    public const GOODIES = 6;
+    public const DROUILLE = 7;
+
     public const BUNDLE = 8;
+    public const COMICS = 9;
+    public const SUBSCRIPTION = 10;
+    public const EAUDIOBOOK = 11;
+    public const CODE_CARD = 12;
+    public const PERIODICAL = 13;
+    public const ROLEPLAY = 14;
+    public const CARDS = 15;
+
+
+
 
     public function setId($id): void
     {
@@ -97,6 +113,16 @@ class ArticleType
         return $this->_isPhysical;
     }
 
+    public function isService(): bool
+    {
+        return $this->_isService;
+    }
+
+    public function setIsService(bool $isService): void
+    {
+        $this->_isService = $isService;
+    }
+
     /**
      * Return all types
      * @return ArticleType[] an array containing all Types
@@ -122,7 +148,7 @@ class ArticleType
         $types[] = $type;
 
         $type = new ArticleType();
-        $type->setId(3);
+        $type->setId(self::CD);
         $type->setName('CD');
         $type->setTax('CD');
         $type->setPhysical(true);
@@ -130,7 +156,7 @@ class ArticleType
         $types[] = $type;
 
         $type = new ArticleType();
-        $type->setId(4);
+        $type->setId(self::DVD);
         $type->setName('DVD');
         $type->setTax('DVD');
         $type->setPhysical(true);
@@ -138,7 +164,7 @@ class ArticleType
         $types[] = $type;
 
         $type = new ArticleType();
-        $type->setId(5);
+        $type->setId(self::GAME);
         $type->setName('Jeu');
         $type->setTax('STANDARD');
         $type->setPhysical(true);
@@ -146,7 +172,7 @@ class ArticleType
         $types[] = $type;
 
         $type = new ArticleType();
-        $type->setId(6);
+        $type->setId(self::GOODIES);
         $type->setName('Goodies');
         $type->setTax('STANDARD');
         $type->setPhysical(true);
@@ -154,7 +180,7 @@ class ArticleType
         $types[] = $type;
 
         $type = new ArticleType();
-        $type->setId(7);
+        $type->setId(self::DROUILLE);
         $type->setName('Drouille');
         $type->setTax('BOOK');
         $type->setPhysical(true);
@@ -162,7 +188,7 @@ class ArticleType
         $types[] = $type;
 
         $type = new ArticleType();
-        $type->setId(8);
+        $type->setId(self::BUNDLE);
         $type->setName('Lot');
         $type->setTax('BOOK');
         $type->setPhysical(true);
@@ -170,7 +196,7 @@ class ArticleType
         $types[] = $type;
 
         $type = new ArticleType();
-        $type->setId(9);
+        $type->setId(self::COMICS);
         $type->setName('BD');
         $type->setTax('BOOK');
         $type->setPhysical(true);
@@ -178,11 +204,12 @@ class ArticleType
         $types[] = $type;
 
         $type = new ArticleType();
-        $type->setId(10);
+        $type->setId(self::SUBSCRIPTION);
         $type->setName('Abonnement');
         $type->setTax('STANDARD');
         $type->setPhysical(false);
         $type->setDownloadable(false);
+        $type->setIsService(true);
         $types[] = $type;
 
         $type = new ArticleType();
@@ -194,7 +221,7 @@ class ArticleType
         $types[] = $type;
 
         $type = new ArticleType();
-        $type->setId(12);
+        $type->setId(self::CODE_CARD);
         $type->setName('Carte à code');
         $type->setTax('EBOOK');
         $type->setPhysical(true);
@@ -202,7 +229,7 @@ class ArticleType
         $types[] = $type;
 
         $type = new ArticleType();
-        $type->setId(13);
+        $type->setId(self::PERIODICAL);
         $type->setName('Périodique');
         $type->setTax('PERIODICAL');
         $type->setPhysical(true);
@@ -210,7 +237,7 @@ class ArticleType
         $types[] = $type;
 
         $type = new ArticleType();
-        $type->setId(14);
+        $type->setId(self::ROLEPLAY);
         $type->setName('Jeu de rôle');
         $type->setTax('BOOK');
         $type->setPhysical(true);
@@ -218,7 +245,7 @@ class ArticleType
         $types[] = $type;
 
         $type = new ArticleType();
-        $type->setId(15);
+        $type->setId(self::CARDS);
         $type->setName('Carterie');
         $type->setTax('STANDARD');
         $type->setPhysical(true);

@@ -1,5 +1,25 @@
 # Historique des modifications
 
+## 3.1.1 (DEV)
+
+### Corrections
+
+- Le numéro de suivi n'était plus enregistré lors de l'expédition d'une
+  commande (mais bien inséré dans le courriel de confirmation d'expédition).
+  C'est corrigé.
+- Certaines données étaient mal formatées dans lors de l'export des commandes au
+  format CSV. Maintenant, c'est mieux.
+- Le nom de famille est utilisé plutôt que le numéro client comme référence
+  client lors de l'import en CSV.
+- L'affichage d'une commande associé à un relais Mondial Relay invalide pouvait
+  déclencher une erreur. Désormais, la mention "Point Relais inconnu" sera
+  affichée.
+- Une erreur survenant pendant l'enregistrement d'une commande pouvait résulter
+  en une commande incomplète. Désormais, la commande est annulée si une erreur
+  survient.
+- Les articles de type "service" comme les abonnements pouvaient ne pas
+  apparaître dans le panier. Ils apparaissent désormais dans une section dédiée.
+
 ## 3.1.0 (4 décembre 2024)
 
 ### Améliorations
@@ -34,9 +54,9 @@
   erreur. C'est corrigé.
 - L'ajout d'une photo à un contributeur pouvait déclencher une erreur. Ce n'est
   plus le cas.
-- L'ajout d'une chaine de caractère trop longue dans le champ "tome" d'un article
-  pouvait déclencher une erreur. Désormais, c'est une erreur de validation qui
-  sera affichée.
+- L'ajout d'une chaine de caractère trop longue dans le champ "tome" d'un
+  article pouvait déclencher une erreur. Désormais, c'est une erreur de
+  validation qui sera affichée.
 
 ### Instructions de mise à jour
 

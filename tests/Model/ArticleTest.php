@@ -150,6 +150,34 @@ class ArticleTest extends TestCase
         $this->assertFalse($isWatermarkable);
     }
 
+    /** isService */
+
+    public function testIsServiceReturnsFalse(): void
+    {
+        // given
+        $article = new Article();
+        $article->setTypeId(ArticleType::BOOK);
+
+        // when
+        $isService = $article->isService();
+
+        // then
+        $this->assertFalse($isService);
+    }
+
+    public function testIsServiceReturnsTrue(): void
+    {
+        // given
+        $article = new Article();
+        $article->setTypeId(ArticleType::SUBSCRIPTION);
+
+        // when
+        $isService = $article->isService();
+
+        // then
+        $this->assertTrue($isService);
+    }
+
     /** isBundle */
 
     public function testIsBundleReturnsFalse(): void

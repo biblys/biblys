@@ -1,0 +1,57 @@
+{#
+Copyright (C) 2024 Clément Latzarus
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+{% extends "layout:email-layout.html.twig" %}
+
+{% block subject %}
+  {{ subject }}
+{% endblock %}
+
+{% block preview %}
+{% endblock %}
+
+{% block content %}
+  <h1>C'est parti !</h1>
+
+  <p>{{ message }}</p>
+
+  {% if tracking_link %}
+    <p>
+      Vous pouvez suivre votre colis en cliquant sur le lien suivant :<br />
+      <a href="{{ tracking_link }}" target="_blank">Suivre mon colis</a>
+    </p>
+  {% endif %}
+
+  {% if display_pickup_notice %}
+    <p>Retrouvez les coordonnées et horaires d'ouverture du magasin sur notre site.</p>
+  {% endif %}
+
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+    <tbody>
+    <tr>
+      <td align="center">
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+          <tbody>
+          <tr>
+            <td><a href="{{ order_url }}" target="_blank">Voir ma commande</a></td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+{% endblock %}

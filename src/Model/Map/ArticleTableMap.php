@@ -1182,7 +1182,7 @@ class ArticleTableMap extends TableMap
         $this->addColumn('article_publisher', 'PublisherName', 'VARCHAR', false, 256, null);
         $this->addColumn('cycle_id', 'CycleId', 'INTEGER', false, null, null);
         $this->addColumn('article_cycle', 'Cycle', 'VARCHAR', false, 256, null);
-        $this->addColumn('article_tome', 'Tome', 'VARCHAR', false, 8, null);
+        $this->addColumn('article_tome', 'Tome', 'VARCHAR', false, 12, null);
         $this->addColumn('article_cover_version', 'CoverVersion', 'INTEGER', false, null, 0);
         $this->addColumn('article_availability', 'Availability', 'TINYINT', false, null, null);
         $this->addColumn('article_availability_dilicom', 'AvailabilityDilicom', 'TINYINT', false, null, 1);

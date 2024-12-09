@@ -58,6 +58,18 @@ class Order extends BaseOrder
     /**
      * @throws PropelException
      */
+    public function getTotalAmount(): int
+    {
+        $stockItems = $this->getStockItems()->getArrayCopy();
+        /** @var Stock $stockItem */
+        return array_reduce($stockItems, function ($carry, $stockItem) {
+            return $carry + $stockItem->getSellingPrice();
+        }, 0);
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function getTotalWeight(): int
     {
         $stockItems = $this->getStockItems()->getArrayCopy();

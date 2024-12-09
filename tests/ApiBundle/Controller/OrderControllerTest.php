@@ -50,8 +50,11 @@ class OrderControllerTest extends TestCase
         $order = ModelFactory::createOrder(
             site: $site,
             shippingFee: $shippingFee,
+            firstName: "Éléonore",
+            lastName: "Champollion",
             postalCode: "02330",
             city: "Plymouth",
+            phone: "+33.6-01 02/03;04",
             mondialRelayPickupPointCode: "123456",
         );
         ModelFactory::createStockItem(order: $order, weight: 123);
@@ -79,18 +82,18 @@ class OrderControllerTest extends TestCase
         // then
         // https://www.mondialrelay.fr/media/62811/import-de-fichiers-csv-v3.1.pdf
         $record = [
-            $order->getCustomerId(),   # A - Numéro de client (F)
+            "CHAMPOLLI",               # A - Numéro de client (F)
             $order->getId(),           # B - Numéro de commande (F)
-            "Silas Coade",             # C - Adresse de livraison (Nom du client final) (O)
+            "CHAMPOLLION ELEONORE",    # C - Adresse de livraison (Nom du client final) (O)
             "",                        # D - Adresse de livraison (Complément du nom) (F)
-            "1 rue de la Fissure",     # E - Adresse du destinataire (Numéro + Rue) (O)
-            "Appartement 2",           # F - Adresse du destinataire (Complément d'adresse) (F)
-            "Plymouth",                # G - Ville du destinataire (O)
+            "1 RUE DE LA FISSURE",     # E - Adresse du destinataire (Numéro + Rue) (O)
+            "APPARTEMENT 2",           # F - Adresse du destinataire (Complément d'adresse) (F)
+            "PLYMOUTH",                # G - Ville du destinataire (O)
             "02330",                   # H - Code Postal du destinataire (O)
             "FR",                      # I - Pays du destinataire (O)
-            "0601020304",              # J - Téléphone fixe du destinataire (F)
+            "+33601020304",            # J - Téléphone fixe du destinataire (F)
             "",                        # K - Téléphone cellulaire (F)
-            "silas.coade@example.net", # L - Adresse e-mail du destinataire (F)
+            "SILAS.COADE@EXAMPLE.NET", # L - Adresse e-mail du destinataire (F)
             "R",                       # M - Type Collect (R = Relais)
             "654321",                  # N - Id Relais Collecte
             "FR",                      # O - Code Pays Collecte

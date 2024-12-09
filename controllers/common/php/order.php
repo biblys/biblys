@@ -135,24 +135,39 @@ return function (
                     "site_id" => $config->get("mondial_relay.code_enseigne"),
                     "site_key" => $config->get("mondial_relay.private_key"),
                 ]);
-                $pickupPoint = $delivery->findPickupPointByCode(
-                    country: 'FR',
-                    code: $orderEntity->get("mondial_relay_pickup_point_code")
-                );
-                $content .= '
-                    <h4>Adresse de livraison</h4>
-                    <p>            
-                        ' . $o["order_firstname"] . ' ' . $o["order_lastname"] . '<br />
-                        Point Mondial Relay n° ' . $orderEntity->get("mondial_relay_pickup_point_code") . '<br>
-                        <strong>' . $pickupPoint->name . '</strong><br />
-                        ' . $pickupPoint->address . '<br />
-                        ' . $pickupPoint->postalCode . ' ' . $pickupPoint->city . '
-                    </p>
-                ';
+                try {
+                    $pickupPoint = $delivery->findPickupPointByCode(
+                        country: 'FR',
+                        code: $orderEntity->get("mondial_relay_pickup_point_code")
+                    );
+                    $content .= '
+                        <h4>Adresse de livraison</h4>
+                        <p>            
+                            ' . $o["order_firstname"] . ' ' . $o["order_lastname"] . '<br />
+                            Point Mondial Relay n° ' . $orderEntity->get("mondial_relay_pickup_point_code") . '<br>
+                            <strong>' . $pickupPoint->name . '</strong><br />
+                            ' . $pickupPoint->address . '<br />
+                            ' . $pickupPoint->postalCode . ' ' . $pickupPoint->city . '
+                        </p>
+                    ';
+                } catch (\DansMaCulotte\MondialRelay\Exceptions\Exception) {
+                    $content .= '<p>Point Mondial Relay inconnu (n° '.$orderEntity->get("mondial_relay_pickup_point_code").').</p>';
+                }
             }
 
             $content .= '
                 <h4>Adresse de facturation</h4>
+                <p>
+                    ' . $o["order_firstname"] . ' ' . $o["order_lastname"] . '<br />
+                    ' . $o["order_address1"] . '<br />
+                    ' . $o["order_address2"] . '
+                    ' . $o["order_postalcode"] . ' ' . $o["order_city"] . '<br />
+                    ' . $country . '
+                </p>
+            ';
+        } else {
+            $content .= '
+                <h4>Coordonnées</h4>
                 <p>
                     ' . $o["order_firstname"] . ' ' . $o["order_lastname"] . '<br />
                     ' . $o["order_address1"] . '<br />
