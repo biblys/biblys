@@ -69,7 +69,7 @@ class CartTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
-        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
         $currentUser->shouldReceive("isAdmin")->andReturn(false);
         $imagesService = Mockery::mock(ImagesService::class);
         $imagesService->expects("imageExistsFor")->andReturn(true);
@@ -145,7 +145,7 @@ class CartTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
-        $currentUser->shouldReceive("isAuthentified")->andReturn(true);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(true);
         $currentUser->shouldReceive("getUser")->andReturn($user);
         $currentUser->shouldReceive("getOrCreateCustomer")->andReturn($customer);
         $currentUser->shouldReceive("isAdmin")->andReturn(false);
@@ -241,7 +241,7 @@ class CartTest extends TestCase
         $request = new Request();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("isAdmin")->andReturn(false);
-        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
         $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
         $config = new Config();
         $imagesService = Mockery::mock(ImagesService::class);
@@ -322,7 +322,7 @@ class CartTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
         $currentUser->shouldReceive("isAdmin")->andReturn(false);
-        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
         $config = new Config();
         $imagesService = Mockery::mock(ImagesService::class);
         $imagesService->expects("imageExistsFor")->andReturn(true);
@@ -406,7 +406,7 @@ class CartTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
         $currentUser->shouldReceive("isAdmin")->andReturn(false);
-        $currentUser->shouldReceive("isAuthentified")->andReturn(false);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
         $config = Mockery::mock(Config::class);
         $config->shouldReceive("getImagesPath")->with()->andReturn(null);
         $config->shouldReceive("getImagesBaseUrl")->with()->andReturn(null);

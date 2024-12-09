@@ -217,7 +217,7 @@ class MainController extends Controller
         $recaptcha = false;
         $recaptcha_config = $config->get('recaptcha');
         $recaptcha_sitekey = false;
-        if ($recaptcha_config && isset($recaptcha_config['secret']) && isset($recaptcha_config['sitekey']) && !$currentUserService->isAuthentified()) {
+        if ($recaptcha_config && isset($recaptcha_config['secret']) && isset($recaptcha_config['sitekey']) && !$currentUserService->isAuthenticated()) {
             $recaptcha = new Recaptcha($recaptcha_config['secret']);
             $recaptcha_sitekey = $recaptcha_config['sitekey'];
         }

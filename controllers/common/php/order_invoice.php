@@ -206,7 +206,7 @@ function _isAnonymousOrder(Order $order): bool
 
 function _orderBelongsToVisitor(Order $order, CurrentUser $currentUser): bool
 {
-    if (!$currentUser->isAuthentified()) {
+    if (!$currentUser->isAuthenticated()) {
         return false;
     }
 

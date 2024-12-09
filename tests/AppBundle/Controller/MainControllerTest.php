@@ -186,7 +186,7 @@ class MainControllerTest extends TestCase
         $request->request->set("message", "WHAT THE F*CK IS HAPPENING?!");
         $request->request->set("phone", "");
         $currentUserService = $this->createMock(CurrentUser::class);
-        $currentUserService->method("isAuthentified")->willReturn(false);
+        $currentUserService->method("isAuthenticated")->willReturn(false);
         $config = Config::load();
         $site = ModelFactory::createSite();
         $currentSiteService = $this->createMock(CurrentSite::class);
@@ -244,7 +244,7 @@ class MainControllerTest extends TestCase
         $request->request->set("message", "WHATTHEF******CK");
         $request->request->set("phone", "WHATTHEF");
         $currentUserService = $this->createMock(CurrentUser::class);
-        $currentUserService->method("isAuthentified")->willReturn(false);
+        $currentUserService->method("isAuthenticated")->willReturn(false);
         $config = Config::load();
         $currentSiteService = $this->createMock(CurrentSite::class);
         $metaTagsService = $this->createMock(MetaTagsService::class);
@@ -300,7 +300,7 @@ class MainControllerTest extends TestCase
         $request->request->set("message", "WHATTHEF");
         $request->request->set("phone", "WHATTHEF");
         $currentUserService = $this->createMock(CurrentUser::class);
-        $currentUserService->method("isAuthentified")->willReturn(false);
+        $currentUserService->method("isAuthenticated")->willReturn(false);
         $config = Config::load();
         $currentSiteService = $this->createMock(CurrentSite::class);
         $metaTagsService = $this->createMock(MetaTagsService::class);
@@ -356,7 +356,7 @@ class MainControllerTest extends TestCase
         $request->request->set("message", "WHAT THE F*CK");
         $request->request->set("phone", "+33.1.23.45.67.89");
         $currentUserService = $this->createMock(CurrentUser::class);
-        $currentUserService->method("isAuthentified")->willReturn(false);
+        $currentUserService->method("isAuthenticated")->willReturn(false);
         $config = Config::load();
         $currentSiteService = $this->createMock(CurrentSite::class);
         $metaTagsService = $this->createMock(MetaTagsService::class);
