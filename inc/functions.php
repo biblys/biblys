@@ -20,6 +20,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Slug\SlugService;
+use Biblys\Service\StringService;
 use JetBrains\PhpStorm\NoReturn;
 use Propel\Runtime\Exception\PropelException;
 use Rollbar\Rollbar;
@@ -487,10 +488,18 @@ function makeurl($x): string
     return $slugService->slugify($x);
 }
 
-// Retirer l'article déterminant avec un titre
+/**
+ * @deprecated alphabetize is deprecated. Use StringService->alphabetize instead
+ */
 function alphabetize($text): array|string|null
 {
-    return preg_replace("#^(L'|l'|Le |le |LE |La |la |LA |Les |les |LES )(.*)#", '$2, $1', $text);
+    trigger_deprecation(
+        "biblys/biblys",
+        "3.1.1",
+        "alphabetize is deprecated. Use StringService->alphabetize instead",
+    );
+
+    return (new StringService($text))->alphabetize()->get();
 }
 
 // Unité de taille
