@@ -445,6 +445,7 @@ class Noosfere
                                 $entry_people .= ' &amp; ';
                             }
                             $entry_people .= trim($Intervenant->Prenom . " " . $Intervenant->Nom);
+
                             if ($Intervenant['TypeIntervention'] == "Auteur" and $Intervenant->Nom != "REVUE" and $Intervenant->Nom != "COLLECTIF" and $Intervenant->Nom != "ANONYME" and $Intervenant->Nom != "(non mentionnÃ©)") {
                                 $people[$p]['people_first_name'] = null;
                                 if (!empty($Intervenant->Prenom)) {
@@ -469,17 +470,6 @@ class Noosfere
                     $a["article_contents"] .= '</li>';
                 }
                 $a["article_contents"] .= '</ul>';
-            }
-
-            if ($a["article_authors"] === null) {
-                $people = [[
-                    "people_first_name" => null,
-                    "people_last_name" => "ANONYME",
-                    "people_name" => "ANONYME",
-                    "people_role" => "Auteur",
-                    "people_noosfere_id" => null,
-                ]];
-                $a["article_authors"] = "ANONYME";
             }
 
             // ISBN

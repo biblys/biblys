@@ -305,14 +305,6 @@ XML;
         $articles = Noosfere::buildArticlesFromXml($xml);
 
         // then
-        $this->assertEquals("ANONYME", $articles[0]["article_authors"]);
-        $this->assertEquals(
-            [
-                "people_first_name" => null,
-                "people_last_name" => "ANONYME",
-                "people_name" => "ANONYME",
-                "people_role" => "Auteur",
-                "people_noosfere_id" => null,
-            ], $articles[0]["article_people"][0]);
+        $this->assertEquals(null, $articles[0]["article_authors"]);
     }
 }

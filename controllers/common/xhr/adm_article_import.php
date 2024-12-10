@@ -59,13 +59,16 @@ if ($_GET["mode"] == "search") { // Mode recherche
                 $isbn = '<br />ISBN : ' . Isbn::convertToIsbn13($a["article_ean"]);
             }
 
+            $authors = is_string($a["article_authors"])
+                ? "de ".truncate($a["article_authors"], 65, '...', true, true)
+                : "(Aucun·e auteur·ice)";
             $result = '
                 <div data-ean="'.$a["article_ean"].'" data-asin="'.(isset($a["article_asin"]) ? $a['article_asin'] : null).'" data-noosfere_id="'.$a["article_noosfere_id"].'" class="article-thumb article-import pointer">
                     <img src="'.$a["article_cover_import"].'" height="85" class="article-thumb-cover" alt="Image de couverture" />
                     <div class="article-thumb-data">
                         <h3>'.$a["article_title"]. '</h3>
                         <p>
-                            de '.truncate($a["article_authors"], 65, '...', true, true).'<br />
+                            '.$authors.'<br />
                             coll. '.$a["article_collection"].' '.numero($a["article_number"]).' ('.$a["article_publisher"]. ')<br />
                             ' . $isbn . '
                         </p>
