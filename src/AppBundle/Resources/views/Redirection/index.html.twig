@@ -38,6 +38,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <td><a href="{{ redirection.oldUrl }}">{{ redirection.oldUrl }}</a></td>
         <td><a href="{{ redirection.newUrl }}">{{ redirection.newUrl }}</a></td>
         <td>
+          <form method="post" action="{{ path('redirection_delete', { id: redirection.id }) }}">
+            <button
+              type="submit"
+              class="btn btn-sm btn-danger"
+              data-confirm="Voulez-vous vraiment SUPPRIMER la redirection de « {{ redirection.oldUrl }} »  vers « {{ redirection.newUrl}} »  ?"
+            >
+              <i class="fa fa-trash-o"></i>
+            </button>
+          </form>
+        </td>
       </tr>
     {% endfor %}
   </table>
