@@ -1,0 +1,24 @@
+
+<form class="form-inline" action="{{ path("redirection_create") }}" method="post">
+  <div class="form-group">
+    <label for="old_url">Ancienne URL :</label>
+    <input type="text" class="form-control" id="old_url" name="old_url">
+  </div>
+  <div class="panel-body">
+    <form class="form-inline" action="{{ path("redirection_create") }}" method="post">
+      <div class="form-group">
+        <label for="old_url">Ancienne URL :</label>
+        <input type="text" class="form-control" id="old_url" name="old_url"
+          {% if old_url is defined %}
+            value="{{ old_url }}"
+          {% endif %}
+        />
+      </div>
+      <div class="form-group">
+        <label for="new_url">Nouvelle URL :</label>
+        <input type="text" class="form-control" id="new_url" name="new_url">
+      </div>
+      <button type="submit" class="btn btn-default">Ajouter</button>
+    </form>
+  </div>
+</div>
