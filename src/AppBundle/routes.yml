@@ -596,6 +596,14 @@ redirection_create:
   path: /admin/redirections
   controller: AppBundle\Controller\RedirectionController::createAction
 
+
+redirection_delete:
+  methods: POST
+  path: /admin/redirections/{id}/delete
+  controller: AppBundle\Controller\RedirectionController::deleteAction
+  requirements:
+    id: \d+
+
 # Shipping
 
 shipping_admin:
