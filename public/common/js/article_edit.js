@@ -26,7 +26,7 @@ if (typeof Biblys === 'undefined') {
 
 function handleHttpError(response) {
   if (response.error) {
-    throw new Error(response.error);
+    throw new Error(response.error.message);
   }
 
   return response;
