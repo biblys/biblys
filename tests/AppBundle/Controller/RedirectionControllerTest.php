@@ -22,6 +22,7 @@ use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
+use Biblys\Service\QueryParamsService;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Mockery;
@@ -156,5 +157,47 @@ class RedirectionControllerTest extends TestCase
         $this->assertEquals(302, $response->getStatusCode());
         $redirection->reload();
         $this->assertEquals("/other-new-url", $redirection->getNewUrl());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     * @throws \Exception
+     */
+    public function testDeleteAction()
+    {
+        // given
+        $controller = new RedirectionController();
+        $site = ModelFactory::createSite();
+        $redirection = ModelFactory::createRedirection(site: $site, oldUrl: "/old-url", newUrl: "/new-url");
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method("authAdmin");
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("getId")->willReturn($site->getId());
+        $flashMessageService = Mockery::mock(FlashMessagesService::class);
+        $flashMessageService
+            ->expects("add")
+            ->with("success", 'La redirection de « /old-url » vers « /new-url » a bien été supprimée.');
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->with("redirection_index")->andReturn("/redirections");
+
+        // when
+        $response = $controller->deleteAction(
+            $currentUser,
+            $currentSite,
+            $flashMessageService,
+            $urlGenerator,
+            $redirection->getId(),
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $redirectionWasDeleted = !RedirectionQuery::create()
+            ->filterBySiteId($site->getId())
+            ->filterByOldUrl("/old-url")
+            ->filterByNewUrl("/new-url")
+            ->exists();
+        $this->assertTrue($redirectionWasDeleted);
     }
 }

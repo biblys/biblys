@@ -22,6 +22,7 @@ use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
+use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use Framework\Controller;
 use Model\Redirection;
@@ -96,6 +97,35 @@ class RedirectionController extends Controller
         $redirection->save();
 
         $flashMessagesService->add("success", "La redirection de « {$redirection->getOldUrl()} » vers « {$redirection->getNewUrl()} » a été créée.");
+
+        $redirectionsUrl = $urlGenerator->generate("redirection_index");
+        return new RedirectResponse($redirectionsUrl, 302);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function deleteAction(
+        CurrentUser          $currentUser,
+        CurrentSite          $currentSite,
+        FlashMessagesService $flashMessages,
+        UrlGenerator         $urlGenerator,
+        int $id
+    ): RedirectResponse
+    {
+        $currentUser->authAdmin();
+
+        $redirection = RedirectionQuery::create()
+            ->filterBySiteId($currentSite->getId())
+            ->filterById($id)
+            ->findOne();
+        if ($redirection) {
+            $redirection->delete();
+            $flashMessages->add(
+                "success",
+                "La redirection de « {$redirection->getOldUrl()} » vers « {$redirection->getNewUrl()} » a bien été supprimée."
+            );
+        }
 
         $redirectionsUrl = $urlGenerator->generate("redirection_index");
         return new RedirectResponse($redirectionsUrl, 302);
