@@ -26,6 +26,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <p>Cette page n'existe pas !</p>
 
   {% if app.currentUser.isAdmin %}
+
+    {% include "AppBundle:Redirection:_createForm.html.twig" with { old_url: current_url } %}
+
+    <h2>Détails sur l'erreur</h2>
+
     <p class="alert alert-danger">
       <strong>{{ exceptionClass }}</strong><br/>
       {{ exception.message }}

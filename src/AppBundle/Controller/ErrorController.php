@@ -198,6 +198,7 @@ class ErrorController extends Controller
         $response = $templateService->renderResponse("AppBundle:Error:404.html.twig", [
             "exception" => $exception,
             "exceptionClass" => get_class($exception),
+            "current_url" => $currentUrl,
         ]);
         $response->setStatusCode(404);
 
