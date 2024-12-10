@@ -62,6 +62,18 @@ class StringService
         return $this;
     }
 
+    public function alphabetize(): self
+    {
+        $alphabetized = trim(preg_replace(
+            "#^(L'|l'|Le |le |LE |La |la |LA |Les |les |LES )(.*)#",
+            '$2, $1',
+            $this->string
+        ));
+        $this->string = new UnicodeString($alphabetized);
+
+        return $this;
+    }
+
     public static function random($length = 16): string
     {
         /** @noinspection PhpUnhandledExceptionInspection */

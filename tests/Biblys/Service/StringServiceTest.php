@@ -64,7 +64,7 @@ class StringServiceTest extends TestCase
         $this->assertEquals("un seul être vous manque et tout est dépeuplé", $result);
     }
 
-    /** uppercase */
+    /** limit */
 
     public function testLimit()
     {
@@ -76,6 +76,20 @@ class StringServiceTest extends TestCase
 
         // then
         $this->assertEquals("Anticon", $result);
+    }
+
+    /** alphabetize */
+
+    public function testAlphabetize()
+    {
+        // given
+        $string = new StringService("Le Château des Mimou");
+
+        // when
+        $result = $string->alphabetize()->get();
+
+        // then
+        $this->assertEquals("Château des Mimou, Le", $result);
     }
 
     /** generateRandom */
