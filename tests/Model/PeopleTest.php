@@ -18,10 +18,25 @@
 
 namespace Model;
 
+use Biblys\Exception\EntityAlreadyExistsException;
+use Biblys\Exception\InvalidEntityException;
+use Biblys\Test\Helpers;
+use Biblys\Test\ModelFactory;
+use Exception;
 use PHPUnit\Framework\TestCase;
+use Propel\Runtime\Exception\PropelException;
 
 class PeopleTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     */
+    protected function setUp(): void
+    {
+        PeopleQuery::create()->deleteAll();
+    }
+
+
     /** getFullName */
 
     public function testGetFullName()
@@ -80,5 +95,98 @@ class PeopleTest extends TestCase
 
         // then
         $this->assertEquals("Y", $alphabeticalName);
+    }
+
+    /** save */
+
+    /**
+     * @throws PropelException
+     */
+    public function testSavesPreprocessesAndCreatesNewContributor()
+    {
+        // given
+        $people = new People();
+        $people->setFirstName("Mnémosyne");
+        $people->setLastName("Pachidermata");
+
+        // when
+        $people->save();
+
+        // then
+        $this->assertNotNull($people->getId());
+        $this->assertEquals("mnemosyne-pachidermata", $people->getUrl());
+    }
+
+
+    /**
+     * @throws PropelException
+     */
+    public function testSavesPreprocessesAndUpdatesExistingContributor()
+    {
+        // given
+        $people = ModelFactory::createContributor(firstName: "Mnémosyne", lastName: "Pachidermata");
+
+        // when
+        $people->save();
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSavesFailsIfLastNameIsMissing()
+    {
+        // given
+        $people = new People();
+        $people->setFirstName("Mnémosyne");
+
+        // when
+        $exception = Helpers::runAndCatchException(fn() => $people->save());
+
+        // then
+        $this->assertInstanceOf(InvalidEntityException::class, $exception);
+        $this->assertEquals("Le contributeur doit avoir un nom.", $exception->getMessage());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSavesFailsIfWebsiteUrlIsInvalid()
+    {
+        // given
+        $people = new People();
+        $people->setLastName("Pachidermata");
+        $people->setSite("www.example.com");
+
+        // when
+        $exception = Helpers::runAndCatchException(fn() => $people->save());
+
+        // then
+        $this->assertInstanceOf(InvalidEntityException::class, $exception);
+        $this->assertEquals("L'adresse du site web doit être une URL valide.", $exception->getMessage());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSavesFailsIfContributorAlreadyExists()
+    {
+        // given
+        ModelFactory::createContributor(firstName: "Mnémosyne", lastName: "Pachidermata");
+        $people = new People();
+        $people->setFirstName("Mnémosyne");
+        $people->setLastName("Pachidermata");
+
+        // when
+        $exception = Helpers::runAndCatchException(fn() => $people->save());
+
+        // then
+        $this->assertInstanceOf(EntityAlreadyExistsException::class, $exception);
+        $this->assertEquals(
+            "Il existe déjà un contributeur avec le nom Mnémosyne Pachidermata.",
+            $exception->getMessage()
+        );
     }
 }

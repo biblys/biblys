@@ -18,8 +18,11 @@
 
 namespace Model;
 
-use Biblys\Service\StringService;
+use Biblys\Exception\EntityAlreadyExistsException;
+use Biblys\Exception\InvalidEntityException;
+use Biblys\Service\Slug\SlugService;
 use Model\Base\People as BasePeople;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Connection\ConnectionInterface;
 
 /**
@@ -69,5 +72,40 @@ class People extends BasePeople
     public function getAlphabeticalName(): string
     {
         return trim($this->getLastName()." ".$this->getFirstName());
+    }
+
+    /**
+     * @throws InvalidEntityException
+     * @throws EntityAlreadyExistsException
+     */
+    public function preSave(?ConnectionInterface $con = null): bool
+    {
+        if ($this->getLastName() === null) {
+            throw new InvalidEntityException("Le contributeur doit avoir un nom.");
+        }
+
+        if ($this->getSite() && filter_var($this->getSite(), FILTER_VALIDATE_URL) === false) {
+            throw new InvalidEntityException("L'adresse du site web doit être une URL valide.");
+        }
+
+        $slugService = new SlugService();
+        $this->setUrl($slugService->slugify($this->getFullName()));
+
+        /** Writing deprecated columns for backward compatibility */
+        $this->setName($this->getFullName());
+        $this->setAlpha($this->getAlphabeticalName());
+
+        $peopleQuery = PeopleQuery::create()->filterByUrl($this->getUrl());
+        if (!$this->isNew()) {
+            $peopleQuery->filterById($this->getId(), Criteria::NOT_EQUAL);
+        }
+        $otherContributorWithTheSameName = $peopleQuery->exists();
+        if ($otherContributorWithTheSameName) {
+            throw new EntityAlreadyExistsException(
+                "Il existe déjà un contributeur avec le nom {$this->getFullName()}."
+            );
+        }
+
+        return true;
     }
 }
