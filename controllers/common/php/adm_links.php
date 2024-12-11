@@ -113,7 +113,8 @@ return function (Request $request, CurrentSite $currentSite): JsonResponse
                 $req .= "`people_name` LIKE '%" . $q . "%'";
             }
             $people = EntityManager::prepareAndExecute(
-                "SELECT `people_id`, `people_name` FROM `people` WHERE " . $req . " ORDER BY `people_alpha` LIMIT 100",
+                "SELECT `people_id`, `people_name` FROM `people` WHERE " . $req . " 
+                ORDER BY `people_last_name`, `people_first_name` LIMIT 100",
                 [],
             );
             while ($p = $people->fetch(PDO::FETCH_ASSOC)) {
