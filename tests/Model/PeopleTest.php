@@ -22,6 +22,8 @@ use PHPUnit\Framework\TestCase;
 
 class PeopleTest extends TestCase
 {
+    /** getFullName */
+
     public function testGetFullName()
     {
         // given
@@ -48,5 +50,35 @@ class PeopleTest extends TestCase
 
         // then
         $this->assertEquals("Y", $fullName);
+    }
+
+    /** getAlphabeticalName */
+
+    public function testGetAlphabeticalName()
+    {
+        // given
+        $people = new People();
+        $people->setFirstName("Mnémosyne");
+        $people->setLastName("Pachidermata");
+
+        // when
+        $alphabeticalName = $people->getAlphabeticalName();
+
+        // then
+        $this->assertEquals("Pachidermata Mnémosyne", $alphabeticalName);
+    }
+
+    public function testGetAlphabeticalNameWithoutFirstName()
+    {
+        // given
+        $people = new People();
+        $people->setFirstName("");
+        $people->setLastName("Y");
+
+        // when
+        $alphabeticalName = $people->getAlphabeticalName();
+
+        // then
+        $this->assertEquals("Y", $alphabeticalName);
     }
 }
