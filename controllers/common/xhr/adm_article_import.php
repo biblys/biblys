@@ -121,8 +121,8 @@ if ($_GET["mode"] == "search") { // Mode recherche
     }
 
     $publisher = Noosfere::getOrCreatePublisher($x["noosfere_IdEditeur"], $x["article_publisher"]);
-    $x["publisher_id"] = $publisher->get("id");
-    $x["article_publisher"] = $publisher->get("name");
+    $x["publisher_id"] = $publisher->getId();
+    $x["article_publisher"] = $publisher->getName();
 
     $collection = Noosfere::getOrCreateCollection(
         $x["noosfere_IdCollection"],

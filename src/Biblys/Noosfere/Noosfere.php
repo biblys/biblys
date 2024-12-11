@@ -25,16 +25,14 @@ use Biblys\Isbn\Isbn as Isbn;
 use Biblys\Isbn\IsbnParsingException;
 use Biblys\Service\Slug\SlugService;
 use Collection;
-use CollectionManager;
 use Exception;
 use Model\BookCollection;
 use Model\BookCollectionQuery;
 use Model\PeopleQuery;
+use Model\Publisher;
 use Model\PublisherQuery;
 use People;
 use PeopleManager;
-use Publisher;
-use PublisherManager;
 use SimpleXMLElement;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
@@ -174,7 +172,6 @@ class Noosfere
         string $publisherNoosfereName,
     ): Publisher
     {
-        $pm = new PublisherManager();
         $slugService = new SlugService();
 
         $publisher = null;
@@ -184,22 +181,19 @@ class Noosfere
             ->_or()
             ->filterByUrl($slugService->slugify($publisherNoosfereName))
             ->findOne();
-
         if ($existingPublisher) {
-            /** @var Publisher $publisher */
-            $publisher = $pm->getById($existingPublisher->getId());
-            if (!empty($publisherNoosfereId)) {
-                $publisher->set('publisher_noosfere_id', $publisherNoosfereId);
-                $pm->update($publisher);
+            if (!$existingPublisher->getNoosfereId()) {
+                $existingPublisher->setNoosfereId($publisherNoosfereId);
+                $existingPublisher->save();
             }
+            $publisher = $existingPublisher;
         }
 
         if (!$publisher) {
-            /** @var Publisher $publisher */
-            $publisher = $pm->create([
-                "publisher_name" => $publisherNoosfereName,
-                "publisher_noosfere_id" => $publisherNoosfereId
-            ]);
+            $publisher = new Publisher();
+            $publisher->setName($publisherNoosfereName);
+            $publisher->setNoosfereId($publisherNoosfereId);
+            $publisher->save();
         }
 
         return $publisher;
@@ -211,11 +205,10 @@ class Noosfere
     public static function getOrCreateCollection(
         int       $collectionNoosfereId,
         string    $collectionNoosfereName,
-        \Model\Publisher $publisher
+        Publisher $publisher
     ): BookCollection
     {
         $slugService = new SlugService();
-        $cm = new CollectionManager();
 
         $correctId = self::getCorrectIdFor($collectionNoosfereId);
         if ($correctId) {
