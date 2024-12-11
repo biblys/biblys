@@ -60,7 +60,7 @@ function admArticlePeopleController(Request $request): JsonResponse
 
         $people = LegacyCodeHelper::getGlobalDatabaseConnection()->prepare(
             "SELECT `people_id`, `people_name` FROM `people` 
-        WHERE " . $req . " ORDER BY `people_alpha`"
+        WHERE " . $req . " ORDER BY `people_last_name`, `people_first_name`"
         );
         $people->execute($params);
         while ($p = $people->fetch(PDO::FETCH_ASSOC)) {
