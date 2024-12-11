@@ -83,9 +83,9 @@ class PublisherTest extends PHPUnit\Framework\TestCase
         $updatedPublisher = $pm->getById($this->publisher->get('id'));
 
         $this->assertTrue($updatedPublisher->has('updated'));
-        $this->assertEquals($updatedPublisher->get('name'), 'LES ÉDITIONS PUBLITOU');
-        $this->assertEquals($updatedPublisher->get('url'), 'les-editions-publitou');
-        $this->assertEquals($updatedPublisher->get('name_alphabetic'), 'ÉDITIONS PUBLITOU, LES ');
+        $this->assertEquals('LES ÉDITIONS PUBLITOU', $updatedPublisher->get('name'));
+        $this->assertEquals('les-editions-publitou', $updatedPublisher->get('url'));
+        $this->assertEquals('ÉDITIONS PUBLITOU, LES', $updatedPublisher->get('name_alphabetic'));
     }
 
     /**
@@ -96,7 +96,7 @@ class PublisherTest extends PHPUnit\Framework\TestCase
         $pm = new PublisherManager();
         $am = new ArticleManager();
 
-        $this->publisher = $pm->create(["publisher_name" => "Les Éditions Paronymie"]);
+        $this->publisher = $pm->create(["publisher_name" => "Les Éditions Paronymie avec articles"]);
         $article = $am->create([
             "article_title" => "Sous-sol",
             "publisher_id" => $this->publisher->get('id'),
@@ -115,7 +115,7 @@ class PublisherTest extends PHPUnit\Framework\TestCase
         $pm = new PublisherManager();
         $am = new ArticleManager();
 
-        $this->publisher = $pm->create(["publisher_name" => "Les Éditions Paronymie"]);
+        $this->publisher = $pm->create(["publisher_name" => "Les Éditions Paronymie pour compter"]);
         $article = $am->create([
             "article_title" => "Sous-sol",
             "publisher_id" => $this->publisher->get('id'),
@@ -160,7 +160,7 @@ class PublisherTest extends PHPUnit\Framework\TestCase
     public function testDelete()
     {
         $pm = new PublisherManager();
-        $publisher = $pm->create(["publisher_name" => "Les Éditions Paronymie"]);
+        $publisher = $pm->create(["publisher_name" => "Les Éditions Paronymie à supprimer"]);
 
         $pm->delete($publisher);
 

@@ -763,8 +763,8 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
         // given
         $pm = new PublisherManager();
-        $publisherFiltered = $pm->create(["publisher_name" => "Éditeur filtré"]);
-        $publisherAllowed = $pm->create(["publisher_name" => "Éditeur autorisé"]);
+        $publisherFiltered = $pm->create(["publisher_name" => "Un éditeur filtré"]);
+        $publisherAllowed = $pm->create(["publisher_name" => "Un éditeur autorisé"]);
         $GLOBALS["LEGACY_CURRENT_SITE"] = EntityFactory::createSite();
         $GLOBALS["LEGACY_CURRENT_SITE"]->setOpt("publisher_filter", $publisherAllowed->get("id"));
         $am = new ArticleManager();

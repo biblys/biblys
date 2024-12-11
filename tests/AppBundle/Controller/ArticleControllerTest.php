@@ -1117,20 +1117,21 @@ class ArticleControllerTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
-    public function testUnexistingArticle()
+    public function testWatermarkingArticleFromAnotherSite()
     {
         // given
         $controller = new ArticleController();
 
-        $article = ModelFactory::createArticle();
-        $otherPublisher = ModelFactory::createPublisher();
+        $currentSitePublisher = ModelFactory::createPublisher(name: "CET EDITEUR");
+        $otherPublisher = ModelFactory::createPublisher(name: "AUTRE EDITEUR");
+        $article = ModelFactory::createArticle(publisher: $otherPublisher);
 
         $watermarkingService = Mockery::mock(WatermarkingService::class);
         $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")
             ->with("publisher_filter")
-            ->andReturn($otherPublisher->getId());
+            ->andReturn($currentSitePublisher->getId());
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authUser");
         $urlGenerator = Mockery::mock(UrlGenerator::class);

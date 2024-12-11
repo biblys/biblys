@@ -523,8 +523,8 @@ class CurrentUserTest extends TestCase
     public function testHasPublisherRightForOtherPublisher()
     {
         // given
-        $userPublisher = ModelFactory::createPublisher();
-        $otherPublisher = ModelFactory::createPublisher();
+        $userPublisher = ModelFactory::createPublisher(name: "YES");
+        $otherPublisher = ModelFactory::createPublisher(name: "NO");
         $user = ModelFactory::createPublisherUser(publisher: $userPublisher);
         $currentUser = new CurrentUser($user, "token");
 

@@ -75,10 +75,10 @@ class CollectionControllerTest extends TestCase
     public function testAdminActionAsPublisher()
     {
         // given
-        $userPublisher = ModelFactory::createPublisher();
+        $userPublisher = ModelFactory::createPublisher(name: "CET UTILISATEUR");
         ModelFactory::createCollection(publisher: $userPublisher, name: "Collection utilisateur");
         $publisherRight = ModelFactory::createRight(publisher: $userPublisher);
-        $otherPublisher = ModelFactory::createPublisher();
+        $otherPublisher = ModelFactory::createPublisher(name: "AUTRE UTILISATEUR");
         ModelFactory::createCollection(publisher: $otherPublisher, name: "Collection autre utilisateur");
 
         $controller = new CollectionController();

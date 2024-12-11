@@ -19,12 +19,14 @@
 namespace Biblys\Test;
 
 use Biblys\Data\ArticleType;
+use Biblys\Exception\EntityAlreadyExistsException;
 use Biblys\Service\Slug\SlugService;
 use DateTime;
 use Model\Alert;
 use Model\Article;
 use Model\ArticleCategory;
 use Model\AuthenticationMethod;
+use Model\BookCollectionQuery;
 use Model\CountryQuery;
 use Model\Customer;
 use Model\Event;
@@ -44,8 +46,10 @@ use Model\Order;
 use Model\Page;
 use Model\Payment;
 use Model\People;
+use Model\PeopleQuery;
 use Model\Post;
 use Model\Publisher;
+use Model\PublisherQuery;
 use Model\Right;
 use Model\Role;
 use Model\Session;
@@ -171,13 +175,20 @@ class ModelFactory
 
         $collection = new BookCollection();
         $collection->setName($name);
+
         $publisher = $publisher ?? self::createPublisher();
         $collection->setPublisherId($publisher->getId());
         $slug = $slugService->createForBookCollection(
             $collection->getName(),
             $publisher->getName()
         );
-        $collection->setUrl($slug);
+
+        try {
+            $collection->save();
+        } catch (EntityAlreadyExistsException) {
+            $collection = BookCollectionQuery::create()->findOneByUrl($slug);
+        }
+
         $collection->setNoosfereId($noosfereId);
         $collection->save();
 
@@ -360,8 +371,15 @@ class ModelFactory
         $people = new People();
         $people->setFirstName($attributes["first_name"] ?? "Lili");
         $people->setLastName($attributes["last_name"] ?? "Raton");
+        $slug = (new SlugService())->slugify($people->getFullName());
+
+        try {
+            $people->save();
+        } catch (EntityAlreadyExistsException) {
+            $people = PeopleQuery::create()->findOneByUrl($slug);
+        }
+
         $people->setGender($attributes["gender"] ?? "N");
-        $people->setUrl($attributes["slug"] ?? "slug");
         $people->save();
 
         return $people;
@@ -381,8 +399,14 @@ class ModelFactory
         $contributor = new People();
         $contributor->setFirstName($firstName);
         $contributor->setLastName($lastName);
-        $fullName = trim($contributor->getFirstName() . " " . $contributor->getLastName());
-        $contributor->setName($fullName);
+        $slug = (new SlugService())->slugify($contributor->getFullName());
+
+        try {
+            $contributor->save();
+        } catch (EntityAlreadyExistsException) {
+            $contributor = PeopleQuery::create()->findOneByUrl($slug);
+        }
+
         $contributor->setGender($gender);
         $contributor->setNoosfereId($noosfereId);
         $contributor->save();
@@ -861,9 +885,9 @@ class ModelFactory
         $specialOffer = new SpecialOffer();
         $specialOffer->setSite($site);
         $specialOffer->setName($name);
+        $specialOffer->setFreeArticle($freeArticle ?? ModelFactory::createArticle());
         $specialOffer->setTargetCollection($targetCollection ?? self::createCollection());
         $specialOffer->setTargetQuantity($targetQuantity);
-        $specialOffer->setFreeArticle($freeArticle ?? ModelFactory::createArticle());
         $specialOffer->setStartDate($startDate);
         $specialOffer->setEndDate($endDate);
         $specialOffer->save();

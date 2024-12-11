@@ -290,8 +290,8 @@ class CurrentSiteTest extends TestCase
     public function testAllowsPublisherWithOtherIdInFilter()
     {
         // given
-        $publisher = ModelFactory::createPublisher();
-        $otherPublisher = ModelFactory::createPublisher();
+        $publisher = ModelFactory::createPublisher(name: "IN FILTER");
+        $otherPublisher = ModelFactory::createPublisher(name: "NOT IN FILTER");
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $currentSite->setOption("publisher_filter", $otherPublisher->getId());
