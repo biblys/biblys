@@ -18,6 +18,7 @@
 
 namespace Model;
 
+use Biblys\Contributor\UnknownJobException;
 use Biblys\Exception\EntityAlreadyExistsException;
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Test\Helpers;
@@ -34,6 +35,7 @@ class PeopleTest extends TestCase
     protected function setUp(): void
     {
         PeopleQuery::create()->deleteAll();
+        PublisherQuery::create()->deleteAll();
     }
 
 
@@ -95,6 +97,28 @@ class PeopleTest extends TestCase
 
         // then
         $this->assertEquals("Y", $alphabeticalName);
+    }
+
+    /** getArticles */
+
+    /**
+     * @throws PropelException
+     * @throws UnknownJobException
+     * @throws Exception
+     */
+    public function testGetArticles()
+    {
+        // given
+        $people = ModelFactory::createContributor();
+        $article = ModelFactory::createArticle();
+        $article->addContributor($people, \Biblys\Contributor\Job::getById(Job::AUTHOR));
+
+        // when
+        $articles = $people->getArticles();
+
+        // then
+        $this->assertCount(1, $articles);
+        $this->assertEquals($article->getId(), $articles[0]->getId());
     }
 
     /** save */

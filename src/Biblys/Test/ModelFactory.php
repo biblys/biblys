@@ -98,7 +98,7 @@ class ModelFactory
         $article->setPublisherId($publisher->getId());
         $article->setPublisherName($publisher->getName());
 
-        $collection = $collection ?? self::createCollection();
+        $collection = $collection ?? self::createCollection(publisher: $publisher);
         $article->setCollectionId($collection->getId());
         $article->setCollectionName($collection->getName());
 
