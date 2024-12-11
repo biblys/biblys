@@ -221,24 +221,19 @@ function reloadArticleAdminEvents(scope) {
       },
       success: function (data) {
         notification.remove();
-        let res;
-        try {
-          res = jQuery.parseJSON(data);
-        } catch (error) {
-          _alert(`Erreur du serveur: ${data}`);
-        }
-        if (res.error) {
+
+        if (data.error) {
           overlay('hide');
-          _alert(res.error);
+          _alert(data.error);
         } else {
-          $.each(res, function (key, val) {
+          $.each(data, function (key, val) {
             if (key != 'article_collection') $('#' + key).val(val);
           });
-          if (res.collection_id) choose_collection(res.collection_id, res.article_collection, res.publisher_id, res.article_publisher, res.pricegrid_id);
-          if (res.cycle_id) choose_cycle(res.cycle_id, res.article_cycle);
-          if (res.article_people !== undefined && res.article_people != null) {
+          if (data.collection_id) choose_collection(data.collection_id, data.article_collection, data.publisher_id, data.article_publisher, data.pricegrid_id);
+          if (data.cycle_id) choose_cycle(data.cycle_id, data.article_cycle);
+          if (data.article_people !== undefined && data.article_people != null) {
             // var count = res.article_people.length;
-            $.each(res.article_people, function (pkey, pval) {
+            $.each(data.article_people, function (pkey, pval) {
               overlay('Importation en cours...');
               _addContribution(pval.people_id, pval.job_id);
             });

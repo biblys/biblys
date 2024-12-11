@@ -227,5 +227,6 @@ if ($_GET["mode"] == "search") { // Mode recherche
         }
     }
 
-    echo str_replace("\u0092", "\u2019", json_encode($x));
+    $response = new JsonResponse($x);
+    $response->send();
 }
