@@ -47,10 +47,27 @@ class NoosfereTest extends TestCase
     /** getOrCreateContributor */
 
     /**
+     * @throws Exception
+     */
+    public function testGetOrCreateContributor()
+    {
+        // when
+        $returnedContributor = Noosfere::getOrCreateContributor(
+            184,
+            "Silas",
+            "Coade",
+        );
+
+        // then
+        $this->assertInstanceOf(\People::class, $returnedContributor);
+        $this->assertNotNull($returnedContributor->get("id"));
+    }
+
+    /**
      * @throws PropelException
      * @throws Exception
      */
-    public function testGetOrCreateContributorWhenContributorExists()
+    public function testGetOrCreateContributorWhenContributorExistsWithTheSameName()
     {
         // given
         $existingContributor = ModelFactory::createContributor(
@@ -64,6 +81,31 @@ class NoosfereTest extends TestCase
             0,
             "Silas",
             "Coade",
+        );
+
+        // then
+        $this->assertEquals($existingContributor->getId(), $returnedContributor->get("id"));
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetOrCreateContributorWhenContributorExistsNoosfereId()
+    {
+        // given
+        $existingContributor = ModelFactory::createContributor(
+            firstName: "Silas",
+            lastName: "Coade",
+            url: "silas-coade",
+            noosfereId: 123,
+        );
+
+        // when
+        $returnedContributor = Noosfere::getOrCreateContributor(
+            123,
+            "Silas",
+            "Coaad",
         );
 
         // then

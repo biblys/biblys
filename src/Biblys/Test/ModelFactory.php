@@ -373,6 +373,7 @@ class ModelFactory
         string $lastName = "Raton",
         string $gender = "N",
         string $url = "lili-raton",
+        string $noosfereId = null,
     ): People
     {
         $contributor = new People();
@@ -381,7 +382,7 @@ class ModelFactory
         $fullName = trim($contributor->getFirstName() . " " . $contributor->getLastName());
         $contributor->setName($fullName);
         $contributor->setGender($gender);
-        $contributor->setUrl($url);
+        $contributor->setNoosfereId($noosfereId);
         $contributor->save();
 
         return $contributor;
