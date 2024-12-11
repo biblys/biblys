@@ -74,6 +74,7 @@ class ModelFactory
         int            $price = 999,
         int            $typeId = ArticleType::BOOK,
         string         $keywords = null,
+        DateTime       $keywordsGeneratedAt = null,
         string         $lemoninkMasterId = null,
         Publisher      $publisher = null,
         BookCollection $collection = null,
@@ -88,6 +89,7 @@ class ModelFactory
         $article->setUrl($url);
         $article->setPrice($price);
         $article->setKeywords($keywords ?? $title);
+        $article->setKeywordsGenerated($keywordsGeneratedAt);
         $article->setTypeId($typeId);
         $article->setLemonInkMasterId($lemoninkMasterId);
         $article->setPriceEditable($isPriceEditable);
