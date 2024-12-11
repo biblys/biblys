@@ -495,11 +495,13 @@ class ModelFactory
     public static function createPublisher(
         string $name = "Les Éditions Paronymie",
         string $url = "les-editions-paronymie.com",
+        string $noosfereId = null,
     ): Publisher
     {
         $publisher = new Publisher();
         $publisher->setName($name);
         $publisher->setUrl($url);
+        $publisher->setNoosfereId($noosfereId);
         $publisher->save();
 
         return $publisher;

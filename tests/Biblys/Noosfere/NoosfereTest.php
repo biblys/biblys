@@ -22,6 +22,8 @@ use Biblys\Test\ModelFactory;
 use Exception;
 use Model\BookCollection;
 use Model\BookCollectionQuery;
+use Model\PeopleQuery;
+use Model\PublisherQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Publisher;
@@ -37,6 +39,8 @@ class NoosfereTest extends TestCase
      */
     function setUp(): void
     {
+        PeopleQuery::create()->deleteAll();
+        PublisherQuery::create()->deleteAll();
         BookCollectionQuery::create()->deleteAll();
     }
 
@@ -91,6 +95,65 @@ class NoosfereTest extends TestCase
         $this->assertEquals($existingContributor->getId(), $returnedContributor->get("id"));
     }
 
+    /** #getOrCreatePublisher */
+
+    /**
+     * @throws Exception
+     */
+    public function testGetOrCreatePublisher()
+    {
+        // when
+        $createdPublisher = Noosfere::getOrCreatePublisher(
+            115,
+            "NOOSFERE EDITIONS",
+        );
+
+        // then
+        $this->assertInstanceOf(\Model\Publisher::class, $createdPublisher);
+        $this->assertNotNull($createdPublisher->getId());
+        $this->assertEquals("NOOSFERE EDITIONS", $createdPublisher->getName());
+        $this->assertEquals(115, $createdPublisher->getNoosfereId());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetOrCreatePublisherWhenPublisherExistsWithTheSameName()
+    {
+        // given
+        $existingPublisher = ModelFactory::createPublisher(name: "EDIT'[EUR]", noosfereId: 123);
+
+        // when
+        $returnedPublisher = Noosfere::getOrCreatePublisher(
+            456,
+            "EDIT'[EUR]",
+        );
+
+        // then
+        $this->assertInstanceOf(\Model\Publisher::class, $returnedPublisher);
+        $this->assertEquals($existingPublisher->getId(), $returnedPublisher->getId());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetOrCreatePublisherWhenPublisherExistsWithTheSameNoosfereId(): void
+    {
+        // given
+        $existingPublisher = ModelFactory::createPublisher(name: "EDIT'[EUR]", noosfereId: 123);
+
+        // when
+        $returnedPublisher = Noosfere::getOrCreatePublisher(
+            123,
+            "EDIT'[EUR]",
+        );
+
+        // then
+        $this->assertInstanceOf(\Model\Publisher::class, $returnedPublisher);
+        $this->assertEquals($existingPublisher->getId(), $returnedPublisher->getId());
+    }
 
     /** #getOrCreateCollection */
 
