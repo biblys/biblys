@@ -123,4 +123,16 @@ class People extends BasePeople
 
         return true;
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function postSave(?ConnectionInterface $con = null): void
+    {
+        /** @var Article $article */
+        foreach ($this->getArticles() as $article) {
+            $article->setKeywordsGenerated(null);
+            $article->save();
+        }
+    }
 }

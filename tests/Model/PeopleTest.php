@@ -23,6 +23,7 @@ use Biblys\Exception\EntityAlreadyExistsException;
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
+use DateTime;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -141,7 +142,6 @@ class PeopleTest extends TestCase
         $this->assertEquals("mnemosyne-pachidermata", $people->getUrl());
     }
 
-
     /**
      * @throws PropelException
      */
@@ -155,6 +155,25 @@ class PeopleTest extends TestCase
 
         // then
         $this->expectNotToPerformAssertions();
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testSavesMarkRelatedArticlesToBeUpdated()
+    {
+        // given
+        $people = ModelFactory::createContributor(firstName: "Mnémosyne", lastName: "Pachidermata");
+        $article = ModelFactory::createArticle(keywordsGeneratedAt: new DateTime());
+        $article->addContributor($people, \Biblys\Contributor\Job::getById(Job::AUTHOR));
+
+        // when
+        $people->save();
+
+        // then
+        $article->reload();
+        $this->assertNull($article->getKeywordsGenerated());
     }
 
     /**
