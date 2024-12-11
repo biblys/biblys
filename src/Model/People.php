@@ -31,6 +31,19 @@ use Model\Base\People as BasePeople;
  */
 class People extends BasePeople
 {
+    /**
+     * @deprecated People->getName is deprecated, use People->getFullName instead.
+     */
+    public function getName(): string
+    {
+        trigger_deprecation(
+            "biblys/biblys",
+            "3.1.1",
+            "People->getName is deprecated, use People->getFullName instead."
+        );
+
+        return $this->getFullName();
+    }
 
     public function getFullName(): string
     {
