@@ -23,7 +23,9 @@ use Biblys\Exception\InvalidEntityException;
 use Biblys\Service\Slug\SlugService;
 use Model\Base\People as BasePeople;
 use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
+use Propel\Runtime\Exception\PropelException;
 
 /**
  * Skeleton subclass for representing a row from the 'people' table.
@@ -72,6 +74,19 @@ class People extends BasePeople
     public function getAlphabeticalName(): string
     {
         return trim($this->getLastName()." ".$this->getFirstName());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function getArticles(): Collection
+    {
+        return ArticleQuery::create()
+            ->joinWithRole()
+            ->useRoleQuery()
+                ->filterByPeople($this)
+            ->endUse()
+            ->find();
     }
 
     /**
