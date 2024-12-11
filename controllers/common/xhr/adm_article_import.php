@@ -18,7 +18,10 @@
 
 use Biblys\Isbn\Isbn;
 use Biblys\Noosfere\Noosfere;
+use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Slug\SlugService;
+use Model\PeopleQuery;
 use Model\PublisherQuery;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -156,6 +159,7 @@ if ($_GET["mode"] == "search") { // Mode recherche
 
     // Reconnaissance des contributeurs
     unset($x["article_authors"]);
+    $authorsCount = 0;
     if (!empty($x["article_people"])) {
         $x["article_people"] = array_unique($x["article_people"], SORT_REGULAR);
         foreach ($x["article_people"] as $k => $c) {
@@ -163,6 +167,9 @@ if ($_GET["mode"] == "search") { // Mode recherche
             if (!empty($c["people_role"])) {
                 $job = Noosfere::getJobFromNoosfereName($c["people_role"]);
                 $x["article_people"][$k]["job_id"] = $job->getId();
+                if ($job->getId() === 1) {
+                    $authorsCount++;
+                }
             }
 
             if (empty($c['people_noosfere_id'])) {
@@ -186,6 +193,22 @@ if ($_GET["mode"] == "search") { // Mode recherche
                 unset($x["article_people"][$k]);
             }
         }
+    }
+
+    $config = Config::load();
+    $currentSite = CurrentSite::buildFromConfig($config);
+    $anonymousAuthorId = $currentSite->getOption("anonymous_author_id");
+    if ($authorsCount === 0 && $anonymousAuthorId) {
+        $anonymousAuthor = PeopleQuery::create()->findPk($anonymousAuthorId);
+        $x["article_people"][] = [
+            "people_id" => $anonymousAuthor->getId(),
+            "people_first_name" => $anonymousAuthor->getFirstName(),
+            "people_last_name" => $anonymousAuthor->getLastName(),
+            "people_name" => $anonymousAuthor->getFullName(),
+            "people_role" => "Auteur",
+            "people_noosfere_id" => null,
+            "job_id" => 1,
+        ];
     }
 
     // Reconnaissance des catégories
