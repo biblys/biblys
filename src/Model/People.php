@@ -18,7 +18,9 @@
 
 namespace Model;
 
+use Biblys\Service\StringService;
 use Model\Base\People as BasePeople;
+use Propel\Runtime\Connection\ConnectionInterface;
 
 /**
  * Skeleton subclass for representing a row from the 'people' table.
@@ -45,8 +47,27 @@ class People extends BasePeople
         return $this->getFullName();
     }
 
+    /**
+     * @deprecated People->getAlpha is deprecated, use People->getAlphabeticalName instead.
+     */
+    public function getAlpha(): string
+    {
+        trigger_deprecation(
+            "biblys/biblys",
+            "3.1.1",
+            "People->getAlpha is deprecated, use People->getAlphabeticalName instead."
+        );
+
+        return $this->getFullName();
+    }
+
     public function getFullName(): string
     {
         return trim($this->getFirstName()." ".$this->getLastName());
+    }
+
+    public function getAlphabeticalName(): string
+    {
+        return trim($this->getLastName()." ".$this->getFirstName());
     }
 }
