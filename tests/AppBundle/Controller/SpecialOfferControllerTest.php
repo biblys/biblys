@@ -121,8 +121,8 @@ class SpecialOfferControllerTest extends TestCase
         $specialOfferController = new SpecialOfferController();
 
         $site = ModelFactory::createSite();
-        $publisher = ModelFactory::createPublisher();
-        $collection = ModelFactory::createCollection(publisher: $publisher);
+        $publisher = ModelFactory::createPublisher(name: "Offre spéciale");
+        $collection = ModelFactory::createCollection(publisher: $publisher, name: "Offre spéciale");
         $article = ModelFactory::createArticle(publisher: $publisher, collection: $collection);
         $offer = ModelFactory::createSpecialOffer(site: $site, targetCollection: $collection, freeArticle: $article);
 

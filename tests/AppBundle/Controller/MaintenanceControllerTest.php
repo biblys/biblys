@@ -110,9 +110,11 @@ class MaintenanceControllerTest extends TestCase
         // given
         $controller = new MaintenanceController();
 
-        $articleFromCurrentSite = ModelFactory::createArticle();
+        $publisherFromCurrentSite = ModelFactory::createPublisher(name: "Éditeur du site actuel");
+        $articleFromCurrentSite = ModelFactory::createArticle(title: "Article du site actuel", publisher: $publisherFromCurrentSite);
         ModelFactory::createImage(article: $articleFromCurrentSite, type: 'cover', fileSize: 99999999);
-        $articleFromOtherSite = ModelFactory::createArticle();
+        $publisherFromOtherSite = ModelFactory::createPublisher(name: "Éditeur d'un autre site");
+        $articleFromOtherSite = ModelFactory::createArticle(title: "Article d'un autre site", publisher: $publisherFromOtherSite);
         ModelFactory::createImage(article: $articleFromOtherSite, type: 'cover', fileSize: 99999999);
         $site = ModelFactory::createSite();
         ModelFactory::createDownloadableFile(article: $articleFromCurrentSite, fileSize: 99999999);
@@ -121,7 +123,7 @@ class MaintenanceControllerTest extends TestCase
         $currentUser->expects("authAdmin")->andReturns();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->expects("getSite")->andReturns($site);
-        $currentSite->expects("getOption")->andReturns($articleFromCurrentSite->getPublisherId());
+        $currentSite->expects("getOption")->andReturns($publisherFromCurrentSite->getId());
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("renderResponse")->andReturns(new Response("response"));
 

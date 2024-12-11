@@ -55,9 +55,9 @@ class ArticleQueryTest extends TestCase
     public function testFilterForSiteReturnsOnlyAllowedPublishers()
     {
         // given
-        $sitePublisher = ModelFactory::createPublisher();
+        $sitePublisher = ModelFactory::createPublisher(name: "Allowed publisher");
         $articleForSitePublisher = ModelFactory::createArticle(publisher: $sitePublisher);
-        $siteOtherPublisher = ModelFactory::createPublisher();
+        $siteOtherPublisher = ModelFactory::createPublisher(name: "Not allowed publisher");
         $articleForOtherSitePublisher = ModelFactory::createArticle(publisher: $siteOtherPublisher);
         $publisherFromOtherSite = ModelFactory::createPublisher();
         $articleForOtherPublisher = ModelFactory::createArticle(publisher: $publisherFromOtherSite);

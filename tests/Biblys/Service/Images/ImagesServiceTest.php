@@ -24,14 +24,8 @@ use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Exception;
 use Mockery;
-use Model\Article;
-use Model\Event;
 use Model\Image;
 use Model\ImageQuery;
-use Model\People;
-use Model\Post;
-use Model\Publisher;
-use Model\Stock;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
@@ -42,6 +36,14 @@ require_once __DIR__ . "/../../../setUp.php";
 
 class ImagesServiceTest extends TestCase
 {
+    /**j
+     * @throws PropelException
+     */
+    protected function setUp(): void
+    {
+        ImageQuery::create()->deleteAll();
+    }
+
     /**
      * Generic
      */

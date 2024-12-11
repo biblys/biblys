@@ -156,7 +156,7 @@ class ErrorControllerTest extends TestCase
     public function testHandlePageNotFoundMatchingAContributorUrl()
     {
         // given
-        ModelFactory::createContributor(url: "great-author");
+        ModelFactory::createContributor(firstName: "Great", lastName: "Author");
         $controller = new ErrorController();
 
         $request = Mockery::mock(Request::class);

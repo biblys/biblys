@@ -121,10 +121,7 @@ class NoosfereTest extends TestCase
     public function testGetOrCreateContributorWithoutFirstName()
     {
         // given
-        $existingContributor = ModelFactory::createContributor(
-            lastName: "Anonyme",
-            url: "anonyme",
-        );
+        $existingContributor = ModelFactory::createContributor(firstName:"", lastName: "Anonyme");
 
         // when
         $returnedContributor = Noosfere::getOrCreateContributor(
