@@ -142,11 +142,7 @@ return function (
         }
     }
 
-    $postIllustrationUpload = '
-        <label for="post_illustration">Image :</label>
-        <input type="file" id="post_illustration_upload" name="post_illustration_upload" accept="image/jpeg, image/png, image/webp" />
-    ';
-
+    $existingPostIllustration = '';
     if ($postEntity) {
         $post = PostQuery::create()->findPk($postEntity->get('id'));
         $p = $postEntity;
@@ -167,7 +163,7 @@ return function (
 
         // Illustration
         if ($imagesService->imageExistsFor($post)) {
-            $postIllustrationUpload = '
+            $existingPostIllustration = '
                 <div class="text-center">
                     <img src="'.$imagesService->getImageUrlFor($post, height: 300).'" height="300" alt="">
                     <br />
@@ -270,9 +266,13 @@ return function (
         </fieldset>
         <fieldset>
             <legend>Illustration</legend>
-            <p>
-                ' . $postIllustrationUpload . '
-            </p>
+              <div class="form-group">
+                '.$existingPostIllustration.'
+              
+                <label for="post_illustration_upload">Image</label>
+                <input type="file" id="post_illustration_upload" name="post_illustration_upload" accept="image/jpeg, image/png, image/webp">
+                <p class="help-block">Image au format JPEG, PNG ou WebP affichée en prévisualisation sur les réseaux sociaux.</p>
+              </div>
             <p>
                 <label class="floating" for="post_illustration_legend">Texte alternatif :</label>
                 <input type="text" name="post_illustration_legend" id="post_illustration_legend" value="' . ($p['post_illustration_legend'] ?? null) . '" maxlength=64 class="long" />
