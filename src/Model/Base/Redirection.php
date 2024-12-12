@@ -107,6 +107,13 @@ abstract class Redirection implements ActiveRecordInterface
     protected $redirection_date;
 
     /**
+     * The value for the last_used_at field.
+     *
+     * @var        DateTime|null
+     */
+    protected $last_used_at;
+
+    /**
      * The value for the redirection_created field.
      *
      * @var        DateTime|null
@@ -440,6 +447,28 @@ abstract class Redirection implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [last_used_at] column value.
+     *
+     *
+     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
+     *   If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00.
+     *
+     * @throws \Propel\Runtime\Exception\PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
+     */
+    public function getLastUsedAt($format = null)
+    {
+        if ($format === null) {
+            return $this->last_used_at;
+        } else {
+            return $this->last_used_at instanceof \DateTimeInterface ? $this->last_used_at->format($format) : null;
+        }
+    }
+
+    /**
      * Get the [optionally formatted] temporal [redirection_created] column value.
      *
      *
@@ -604,6 +633,26 @@ abstract class Redirection implements ActiveRecordInterface
     }
 
     /**
+     * Sets the value of [last_used_at] column to a normalized version of the date/time value specified.
+     *
+     * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this The current object (for fluent API support)
+     */
+    public function setLastUsedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->last_used_at !== null || $dt !== null) {
+            if ($this->last_used_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->last_used_at->format("Y-m-d H:i:s.u")) {
+                $this->last_used_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[RedirectionTableMap::COL_LAST_USED_AT] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    }
+
+    /**
      * Sets the value of [redirection_created] column to a normalized version of the date/time value specified.
      *
      * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
@@ -704,13 +753,19 @@ abstract class Redirection implements ActiveRecordInterface
             }
             $this->redirection_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : RedirectionTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : RedirectionTableMap::translateFieldName('LastUsedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->last_used_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : RedirectionTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->redirection_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : RedirectionTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : RedirectionTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -723,7 +778,7 @@ abstract class Redirection implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 8; // 8 = RedirectionTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = RedirectionTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Redirection'), 0, $e);
@@ -956,6 +1011,9 @@ abstract class Redirection implements ActiveRecordInterface
         if ($this->isColumnModified(RedirectionTableMap::COL_REDIRECTION_DATE)) {
             $modifiedColumns[':p' . $index++]  = 'redirection_date';
         }
+        if ($this->isColumnModified(RedirectionTableMap::COL_LAST_USED_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'last_used_at';
+        }
         if ($this->isColumnModified(RedirectionTableMap::COL_REDIRECTION_CREATED)) {
             $modifiedColumns[':p' . $index++]  = 'redirection_created';
         }
@@ -995,6 +1053,10 @@ abstract class Redirection implements ActiveRecordInterface
                         break;
                     case 'redirection_date':
                         $stmt->bindValue($identifier, $this->redirection_date ? $this->redirection_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
+                        break;
+                    case 'last_used_at':
+                        $stmt->bindValue($identifier, $this->last_used_at ? $this->last_used_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
 
                         break;
                     case 'redirection_created':
@@ -1086,9 +1148,12 @@ abstract class Redirection implements ActiveRecordInterface
                 return $this->getDate();
 
             case 6:
-                return $this->getCreatedAt();
+                return $this->getLastUsedAt();
 
             case 7:
+                return $this->getCreatedAt();
+
+            case 8:
                 return $this->getUpdatedAt();
 
             default:
@@ -1124,8 +1189,9 @@ abstract class Redirection implements ActiveRecordInterface
             $keys[3] => $this->getNewUrl(),
             $keys[4] => $this->getHits(),
             $keys[5] => $this->getDate(),
-            $keys[6] => $this->getCreatedAt(),
-            $keys[7] => $this->getUpdatedAt(),
+            $keys[6] => $this->getLastUsedAt(),
+            $keys[7] => $this->getCreatedAt(),
+            $keys[8] => $this->getUpdatedAt(),
         ];
         if ($result[$keys[5]] instanceof \DateTimeInterface) {
             $result[$keys[5]] = $result[$keys[5]]->format('Y-m-d H:i:s.u');
@@ -1137,6 +1203,10 @@ abstract class Redirection implements ActiveRecordInterface
 
         if ($result[$keys[7]] instanceof \DateTimeInterface) {
             $result[$keys[7]] = $result[$keys[7]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[8]] instanceof \DateTimeInterface) {
+            $result[$keys[8]] = $result[$keys[8]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1198,9 +1268,12 @@ abstract class Redirection implements ActiveRecordInterface
                 $this->setDate($value);
                 break;
             case 6:
-                $this->setCreatedAt($value);
+                $this->setLastUsedAt($value);
                 break;
             case 7:
+                $this->setCreatedAt($value);
+                break;
+            case 8:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1248,10 +1321,13 @@ abstract class Redirection implements ActiveRecordInterface
             $this->setDate($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setCreatedAt($arr[$keys[6]]);
+            $this->setLastUsedAt($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setUpdatedAt($arr[$keys[7]]);
+            $this->setCreatedAt($arr[$keys[7]]);
+        }
+        if (array_key_exists($keys[8], $arr)) {
+            $this->setUpdatedAt($arr[$keys[8]]);
         }
 
         return $this;
@@ -1313,6 +1389,9 @@ abstract class Redirection implements ActiveRecordInterface
         }
         if ($this->isColumnModified(RedirectionTableMap::COL_REDIRECTION_DATE)) {
             $criteria->add(RedirectionTableMap::COL_REDIRECTION_DATE, $this->redirection_date);
+        }
+        if ($this->isColumnModified(RedirectionTableMap::COL_LAST_USED_AT)) {
+            $criteria->add(RedirectionTableMap::COL_LAST_USED_AT, $this->last_used_at);
         }
         if ($this->isColumnModified(RedirectionTableMap::COL_REDIRECTION_CREATED)) {
             $criteria->add(RedirectionTableMap::COL_REDIRECTION_CREATED, $this->redirection_created);
@@ -1413,6 +1492,7 @@ abstract class Redirection implements ActiveRecordInterface
         $copyObj->setNewUrl($this->getNewUrl());
         $copyObj->setHits($this->getHits());
         $copyObj->setDate($this->getDate());
+        $copyObj->setLastUsedAt($this->getLastUsedAt());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         if ($makeNew) {
@@ -1458,6 +1538,7 @@ abstract class Redirection implements ActiveRecordInterface
         $this->redirection_new = null;
         $this->redirection_hits = null;
         $this->redirection_date = null;
+        $this->last_used_at = null;
         $this->redirection_created = null;
         $this->redirection_updated = null;
         $this->alreadyInSave = false;

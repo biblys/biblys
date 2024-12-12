@@ -63,7 +63,7 @@ class RedirectionTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 8;
+    public const NUM_COLUMNS = 9;
 
     /**
      * The number of lazy-loaded columns
@@ -73,7 +73,7 @@ class RedirectionTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 8;
+    public const NUM_HYDRATE_COLUMNS = 9;
 
     /**
      * the column name for the redirection_id field
@@ -106,6 +106,11 @@ class RedirectionTableMap extends TableMap
     public const COL_REDIRECTION_DATE = 'redirections.redirection_date';
 
     /**
+     * the column name for the last_used_at field
+     */
+    public const COL_LAST_USED_AT = 'redirections.last_used_at';
+
+    /**
      * the column name for the redirection_created field
      */
     public const COL_REDIRECTION_CREATED = 'redirections.redirection_created';
@@ -129,11 +134,11 @@ class RedirectionTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'OldUrl', 'NewUrl', 'Hits', 'Date', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'oldUrl', 'newUrl', 'hits', 'date', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [RedirectionTableMap::COL_REDIRECTION_ID, RedirectionTableMap::COL_SITE_ID, RedirectionTableMap::COL_REDIRECTION_OLD, RedirectionTableMap::COL_REDIRECTION_NEW, RedirectionTableMap::COL_REDIRECTION_HITS, RedirectionTableMap::COL_REDIRECTION_DATE, RedirectionTableMap::COL_REDIRECTION_CREATED, RedirectionTableMap::COL_REDIRECTION_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['redirection_id', 'site_id', 'redirection_old', 'redirection_new', 'redirection_hits', 'redirection_date', 'redirection_created', 'redirection_updated', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, ]
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'OldUrl', 'NewUrl', 'Hits', 'Date', 'LastUsedAt', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'oldUrl', 'newUrl', 'hits', 'date', 'lastUsedAt', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [RedirectionTableMap::COL_REDIRECTION_ID, RedirectionTableMap::COL_SITE_ID, RedirectionTableMap::COL_REDIRECTION_OLD, RedirectionTableMap::COL_REDIRECTION_NEW, RedirectionTableMap::COL_REDIRECTION_HITS, RedirectionTableMap::COL_REDIRECTION_DATE, RedirectionTableMap::COL_LAST_USED_AT, RedirectionTableMap::COL_REDIRECTION_CREATED, RedirectionTableMap::COL_REDIRECTION_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['redirection_id', 'site_id', 'redirection_old', 'redirection_new', 'redirection_hits', 'redirection_date', 'last_used_at', 'redirection_created', 'redirection_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, ]
     ];
 
     /**
@@ -145,11 +150,11 @@ class RedirectionTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'OldUrl' => 2, 'NewUrl' => 3, 'Hits' => 4, 'Date' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'oldUrl' => 2, 'newUrl' => 3, 'hits' => 4, 'date' => 5, 'createdAt' => 6, 'updatedAt' => 7, ],
-        self::TYPE_COLNAME       => [RedirectionTableMap::COL_REDIRECTION_ID => 0, RedirectionTableMap::COL_SITE_ID => 1, RedirectionTableMap::COL_REDIRECTION_OLD => 2, RedirectionTableMap::COL_REDIRECTION_NEW => 3, RedirectionTableMap::COL_REDIRECTION_HITS => 4, RedirectionTableMap::COL_REDIRECTION_DATE => 5, RedirectionTableMap::COL_REDIRECTION_CREATED => 6, RedirectionTableMap::COL_REDIRECTION_UPDATED => 7, ],
-        self::TYPE_FIELDNAME     => ['redirection_id' => 0, 'site_id' => 1, 'redirection_old' => 2, 'redirection_new' => 3, 'redirection_hits' => 4, 'redirection_date' => 5, 'redirection_created' => 6, 'redirection_updated' => 7, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'OldUrl' => 2, 'NewUrl' => 3, 'Hits' => 4, 'Date' => 5, 'LastUsedAt' => 6, 'CreatedAt' => 7, 'UpdatedAt' => 8, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'oldUrl' => 2, 'newUrl' => 3, 'hits' => 4, 'date' => 5, 'lastUsedAt' => 6, 'createdAt' => 7, 'updatedAt' => 8, ],
+        self::TYPE_COLNAME       => [RedirectionTableMap::COL_REDIRECTION_ID => 0, RedirectionTableMap::COL_SITE_ID => 1, RedirectionTableMap::COL_REDIRECTION_OLD => 2, RedirectionTableMap::COL_REDIRECTION_NEW => 3, RedirectionTableMap::COL_REDIRECTION_HITS => 4, RedirectionTableMap::COL_REDIRECTION_DATE => 5, RedirectionTableMap::COL_LAST_USED_AT => 6, RedirectionTableMap::COL_REDIRECTION_CREATED => 7, RedirectionTableMap::COL_REDIRECTION_UPDATED => 8, ],
+        self::TYPE_FIELDNAME     => ['redirection_id' => 0, 'site_id' => 1, 'redirection_old' => 2, 'redirection_new' => 3, 'redirection_hits' => 4, 'redirection_date' => 5, 'last_used_at' => 6, 'redirection_created' => 7, 'redirection_updated' => 8, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, ]
     ];
 
     /**
@@ -206,6 +211,14 @@ class RedirectionTableMap extends TableMap
         'COL_REDIRECTION_DATE' => 'REDIRECTION_DATE',
         'redirection_date' => 'REDIRECTION_DATE',
         'redirections.redirection_date' => 'REDIRECTION_DATE',
+        'LastUsedAt' => 'LAST_USED_AT',
+        'Redirection.LastUsedAt' => 'LAST_USED_AT',
+        'lastUsedAt' => 'LAST_USED_AT',
+        'redirection.lastUsedAt' => 'LAST_USED_AT',
+        'RedirectionTableMap::COL_LAST_USED_AT' => 'LAST_USED_AT',
+        'COL_LAST_USED_AT' => 'LAST_USED_AT',
+        'last_used_at' => 'LAST_USED_AT',
+        'redirections.last_used_at' => 'LAST_USED_AT',
         'CreatedAt' => 'REDIRECTION_CREATED',
         'Redirection.CreatedAt' => 'REDIRECTION_CREATED',
         'createdAt' => 'REDIRECTION_CREATED',
@@ -247,6 +260,7 @@ class RedirectionTableMap extends TableMap
         $this->addColumn('redirection_new', 'NewUrl', 'VARCHAR', false, 256, null);
         $this->addColumn('redirection_hits', 'Hits', 'INTEGER', false, null, 0);
         $this->addColumn('redirection_date', 'Date', 'TIMESTAMP', false, null, null);
+        $this->addColumn('last_used_at', 'LastUsedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('redirection_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('redirection_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     }
@@ -421,6 +435,7 @@ class RedirectionTableMap extends TableMap
             $criteria->addSelectColumn(RedirectionTableMap::COL_REDIRECTION_NEW);
             $criteria->addSelectColumn(RedirectionTableMap::COL_REDIRECTION_HITS);
             $criteria->addSelectColumn(RedirectionTableMap::COL_REDIRECTION_DATE);
+            $criteria->addSelectColumn(RedirectionTableMap::COL_LAST_USED_AT);
             $criteria->addSelectColumn(RedirectionTableMap::COL_REDIRECTION_CREATED);
             $criteria->addSelectColumn(RedirectionTableMap::COL_REDIRECTION_UPDATED);
         } else {
@@ -430,6 +445,7 @@ class RedirectionTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.redirection_new');
             $criteria->addSelectColumn($alias . '.redirection_hits');
             $criteria->addSelectColumn($alias . '.redirection_date');
+            $criteria->addSelectColumn($alias . '.last_used_at');
             $criteria->addSelectColumn($alias . '.redirection_created');
             $criteria->addSelectColumn($alias . '.redirection_updated');
         }
@@ -456,6 +472,7 @@ class RedirectionTableMap extends TableMap
             $criteria->removeSelectColumn(RedirectionTableMap::COL_REDIRECTION_NEW);
             $criteria->removeSelectColumn(RedirectionTableMap::COL_REDIRECTION_HITS);
             $criteria->removeSelectColumn(RedirectionTableMap::COL_REDIRECTION_DATE);
+            $criteria->removeSelectColumn(RedirectionTableMap::COL_LAST_USED_AT);
             $criteria->removeSelectColumn(RedirectionTableMap::COL_REDIRECTION_CREATED);
             $criteria->removeSelectColumn(RedirectionTableMap::COL_REDIRECTION_UPDATED);
         } else {
@@ -465,6 +482,7 @@ class RedirectionTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.redirection_new');
             $criteria->removeSelectColumn($alias . '.redirection_hits');
             $criteria->removeSelectColumn($alias . '.redirection_date');
+            $criteria->removeSelectColumn($alias . '.last_used_at');
             $criteria->removeSelectColumn($alias . '.redirection_created');
             $criteria->removeSelectColumn($alias . '.redirection_updated');
         }
