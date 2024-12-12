@@ -61,7 +61,11 @@ class OrderController extends Controller
      * @throws LoaderError
      * @throws Exception
      */
-    public function indexAction(Request $request, CurrentUser $currentUser): JsonResponse|Response
+    public function indexAction(
+        Request $request,
+        CurrentUser $currentUser,
+        TemplateService $templateService,
+    ): JsonResponse|Response
     {
         $currentUser->authAdmin();
 
@@ -131,7 +135,7 @@ class OrderController extends Controller
         // Index view
         $request->attributes->set("page_title", "Commandes web");
 
-        return $this->render('AppBundle:Order:index.html.twig');
+        return $templateService->renderResponse("AppBundle:Order:index.html.twig");
     }
 
     /**
