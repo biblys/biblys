@@ -80,7 +80,12 @@ class Config
             return __DIR__ . "/../../../tests/config-for-tests.yml";
         }
 
-        return __DIR__ . "/../../../app/config.yml";
+        $legacyFilePath = __DIR__ . "/../../../app/config.yml";
+        if (file_exists($legacyFilePath)) {
+            return $legacyFilePath;
+        }
+
+        return __DIR__ . "/../../../config.yml";
     }
 
     private static function _getDefaultValueForPath($path): ?string
