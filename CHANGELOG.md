@@ -4,7 +4,10 @@
 
 ### Corrections
 
-- Le bouton d'export des commandes pouvait apparaître même si le mode d'expédition Mondial Relay n'était pas activé. C'est corrigé.
+- Le bouton d'export des commandes pouvait apparaître même si le mode 
+  d'expédition Mondial Relay n'était pas activé. C'est corrigé.
+- Il n'était pas possible de remplacer une illustration de billet de blog sans 
+  supprimer au préalable. C'est désormais possible.
 
 ## 3.1.1 (11 décembre 2024)
 
