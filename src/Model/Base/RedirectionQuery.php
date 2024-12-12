@@ -23,6 +23,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRedirectionQuery orderByNewUrl($order = Criteria::ASC) Order by the redirection_new column
  * @method     ChildRedirectionQuery orderByHits($order = Criteria::ASC) Order by the redirection_hits column
  * @method     ChildRedirectionQuery orderByDate($order = Criteria::ASC) Order by the redirection_date column
+ * @method     ChildRedirectionQuery orderByLastUsedAt($order = Criteria::ASC) Order by the last_used_at column
  * @method     ChildRedirectionQuery orderByCreatedAt($order = Criteria::ASC) Order by the redirection_created column
  * @method     ChildRedirectionQuery orderByUpdatedAt($order = Criteria::ASC) Order by the redirection_updated column
  *
@@ -32,6 +33,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRedirectionQuery groupByNewUrl() Group by the redirection_new column
  * @method     ChildRedirectionQuery groupByHits() Group by the redirection_hits column
  * @method     ChildRedirectionQuery groupByDate() Group by the redirection_date column
+ * @method     ChildRedirectionQuery groupByLastUsedAt() Group by the last_used_at column
  * @method     ChildRedirectionQuery groupByCreatedAt() Group by the redirection_created column
  * @method     ChildRedirectionQuery groupByUpdatedAt() Group by the redirection_updated column
  *
@@ -52,6 +54,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRedirection|null findOneByNewUrl(string $redirection_new) Return the first ChildRedirection filtered by the redirection_new column
  * @method     ChildRedirection|null findOneByHits(int $redirection_hits) Return the first ChildRedirection filtered by the redirection_hits column
  * @method     ChildRedirection|null findOneByDate(string $redirection_date) Return the first ChildRedirection filtered by the redirection_date column
+ * @method     ChildRedirection|null findOneByLastUsedAt(string $last_used_at) Return the first ChildRedirection filtered by the last_used_at column
  * @method     ChildRedirection|null findOneByCreatedAt(string $redirection_created) Return the first ChildRedirection filtered by the redirection_created column
  * @method     ChildRedirection|null findOneByUpdatedAt(string $redirection_updated) Return the first ChildRedirection filtered by the redirection_updated column
  *
@@ -64,6 +67,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRedirection requireOneByNewUrl(string $redirection_new) Return the first ChildRedirection filtered by the redirection_new column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRedirection requireOneByHits(int $redirection_hits) Return the first ChildRedirection filtered by the redirection_hits column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRedirection requireOneByDate(string $redirection_date) Return the first ChildRedirection filtered by the redirection_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRedirection requireOneByLastUsedAt(string $last_used_at) Return the first ChildRedirection filtered by the last_used_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRedirection requireOneByCreatedAt(string $redirection_created) Return the first ChildRedirection filtered by the redirection_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRedirection requireOneByUpdatedAt(string $redirection_updated) Return the first ChildRedirection filtered by the redirection_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -82,6 +86,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildRedirection> findByHits(int|array<int> $redirection_hits) Return ChildRedirection objects filtered by the redirection_hits column
  * @method     ChildRedirection[]|Collection findByDate(string|array<string> $redirection_date) Return ChildRedirection objects filtered by the redirection_date column
  * @psalm-method Collection&\Traversable<ChildRedirection> findByDate(string|array<string> $redirection_date) Return ChildRedirection objects filtered by the redirection_date column
+ * @method     ChildRedirection[]|Collection findByLastUsedAt(string|array<string> $last_used_at) Return ChildRedirection objects filtered by the last_used_at column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findByLastUsedAt(string|array<string> $last_used_at) Return ChildRedirection objects filtered by the last_used_at column
  * @method     ChildRedirection[]|Collection findByCreatedAt(string|array<string> $redirection_created) Return ChildRedirection objects filtered by the redirection_created column
  * @psalm-method Collection&\Traversable<ChildRedirection> findByCreatedAt(string|array<string> $redirection_created) Return ChildRedirection objects filtered by the redirection_created column
  * @method     ChildRedirection[]|Collection findByUpdatedAt(string|array<string> $redirection_updated) Return ChildRedirection objects filtered by the redirection_updated column
@@ -185,7 +191,7 @@ abstract class RedirectionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT redirection_id, site_id, redirection_old, redirection_new, redirection_hits, redirection_date, redirection_created, redirection_updated FROM redirections WHERE redirection_id = :p0';
+        $sql = 'SELECT redirection_id, site_id, redirection_old, redirection_new, redirection_hits, redirection_date, last_used_at, redirection_created, redirection_updated FROM redirections WHERE redirection_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -505,6 +511,51 @@ abstract class RedirectionQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_DATE, $date, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the last_used_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByLastUsedAt('2011-03-14'); // WHERE last_used_at = '2011-03-14'
+     * $query->filterByLastUsedAt('now'); // WHERE last_used_at = '2011-03-14'
+     * $query->filterByLastUsedAt(array('max' => 'yesterday')); // WHERE last_used_at > '2011-03-13'
+     * </code>
+     *
+     * @param mixed $lastUsedAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByLastUsedAt($lastUsedAt = null, ?string $comparison = null)
+    {
+        if (is_array($lastUsedAt)) {
+            $useMinMax = false;
+            if (isset($lastUsedAt['min'])) {
+                $this->addUsingAlias(RedirectionTableMap::COL_LAST_USED_AT, $lastUsedAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($lastUsedAt['max'])) {
+                $this->addUsingAlias(RedirectionTableMap::COL_LAST_USED_AT, $lastUsedAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(RedirectionTableMap::COL_LAST_USED_AT, $lastUsedAt, $comparison);
 
         return $this;
     }
