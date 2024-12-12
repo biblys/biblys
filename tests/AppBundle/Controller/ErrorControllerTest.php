@@ -270,7 +270,7 @@ class ErrorControllerTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        ModelFactory::createRedirection(site: $site, oldUrl: "/old-url", newUrl: "/new-url");
+        $redirection = ModelFactory::createRedirection(site: $site, oldUrl: "/old-url", newUrl: "/new-url");
 
         $controller = new ErrorController();
         $request = new Request();
@@ -303,11 +303,8 @@ class ErrorControllerTest extends TestCase
 
         // then
         $this->assertEquals(301, $response->getStatusCode(), "responds with HTTP status 301");
-        $this->assertEquals(
-            "/new-url",
-            $response->headers->get("Location"),
-            "redirects to the new url"
-        );
+        $this->assertEquals("/new-url", $response->headers->get("Location"));
+        $this->assertNotNull($redirection->getLastUsedAt());
     }
 
 

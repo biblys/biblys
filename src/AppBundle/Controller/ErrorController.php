@@ -23,6 +23,7 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
 use Biblys\Service\LoggerService;
 use Biblys\Service\TemplateService;
+use DateTime;
 use Exception;
 use Framework\Controller;
 use Model\ArticleQuery;
@@ -188,6 +189,8 @@ class ErrorController extends Controller
             ->filterBySiteId($currentSite->getSite()->getId())
             ->findOneByOldUrl($currentUrl);
         if ($redirection) {
+            $redirection->setLastUsedAt(new DateTime());
+            $redirection->save();
             return new RedirectResponse($redirection->getNewUrl(), 301);
         }
 
