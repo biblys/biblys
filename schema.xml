@@ -1220,6 +1220,7 @@
     <column name="redirection_new" phpName="NewUrl" type="VARCHAR" size="256"/>
     <column name="redirection_hits" phpName="Hits" type="INTEGER" defaultValue="0"/>
     <column name="redirection_date" phpName="Date" type="TIMESTAMP"/>
+    <column name="last_used_at" phpName="LastUsedAt" type="TIMESTAMP"/>
     <column name="redirection_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="redirection_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
