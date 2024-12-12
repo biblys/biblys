@@ -274,10 +274,9 @@ return function (
                 ' . $postIllustrationUpload . '
             </p>
             <p>
-                <label class="floating" for="post_illustration_legend">Légende :</label>
+                <label class="floating" for="post_illustration_legend">Texte alternatif :</label>
                 <input type="text" name="post_illustration_legend" id="post_illustration_legend" value="' . ($p['post_illustration_legend'] ?? null) . '" maxlength=64 class="long" />
             </p>
-            <p>Cette image (au format JPEG) sera utilisée comme vignette pour les aperçus du billet sur le site ou sur les réseaux sociaux. Taille minimale conseillée pour Facebook : 1200 x 627 pixels.</p>
         </fieldset>
         <fieldset>
             <legend>Contenu</legend>
