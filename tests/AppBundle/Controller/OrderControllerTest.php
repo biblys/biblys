@@ -18,6 +18,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Test\Helpers;
@@ -51,13 +52,44 @@ class OrderControllerTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authAdmin");
         $templateService = Helpers::getTemplateService();
+        $config = Mockery::mock(Config::class);
+        $config->expects("isMondialRelayEnabled")->andReturn(false);
 
         // when
-        $response = $controller->indexAction($request, $currentUser, $templateService);
+        $response = $controller->indexAction($request, $currentUser, $config, $templateService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString("Commandes web", $response->getContent());
+        $this->assertStringNotContainsString("Exporter pour Mondial Relay", $response->getContent());
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testIndexActionWithMondialRelayEnabled(): void
+    {
+        // given
+        $controller = new OrderController();
+        $request = new Request();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+        $templateService = Helpers::getTemplateService();
+        $config = Mockery::mock(Config::class);
+        $config->expects("isMondialRelayEnabled")->andReturn(true);
+
+        // when
+        $response = $controller->indexAction($request, $currentUser, $config, $templateService);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Commandes web", $response->getContent());
+        $this->assertStringContainsString("Exporter pour Mondial Relay", $response->getContent());
     }
 
     /**

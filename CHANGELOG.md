@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 3.1.2 (DEV)
+
+### Corrections
+
+- Le bouton d'export des commandes pouvait apparaître même si le mode d'expédition Mondial Relay n'était pas activé. C'est corrigé.
+
 ## 3.1.1 (11 décembre 2024)
 
 ### Corrections

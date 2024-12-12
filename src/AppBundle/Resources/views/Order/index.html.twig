@@ -72,12 +72,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
           <button type="submit" class="btn btn-primary" data-action="show">Afficher les commandes</button>
-          <button type="submit" class="btn btn-info" data-action="export" data-export_url="{{
-            path('api_orders_export')
-          }}">
-            <span class="fa fa-cloud-download"></span>
-            Exporter en CSV
-          </button>
+
+          {% if display_export_button %}
+            <button type="submit" class="btn btn-info" data-action="export" data-export_url="{{
+              path('api_orders_export')
+            }}">
+              <span class="fa fa-cloud-download"></span>
+              Exporter pour Mondial Relay
+            </button>
+          {% endif %}
         </div>
       </div>
 
