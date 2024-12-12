@@ -17,7 +17,6 @@
 
 
 use Biblys\Data\ArticleType;
-use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Images\ImagesService;
 use Propel\Runtime\Exception\PropelException;
@@ -100,9 +99,7 @@ return function (
     }
 
     $types = ArticleType::getAll();
-    $types_options = array_map(function ($type) {
-        $request = LegacyCodeHelper::getGlobalRequest();
-
+    $types_options = array_map(function ($type) use($request) {
         return '<option value="' . $type->getId() . '"' . ($type->getId() == $request->query->get('type_id', 0) ? ' selected' : null) . '>' . $type->getName() . '</option>';
     }, $types);
 
@@ -212,7 +209,6 @@ return function (
     </form>
 ';
 
-// Build query
     $req = null;
     if (isset($_GET['stock_created'])) {
         $req .= " AND `stock_created` LIKE '" . $_GET['stock_created'] . "%' ";
@@ -345,19 +341,21 @@ return function (
             /** @var Stock $stock */
             $stock = $sm->getById($x['stock_id']);
 
-            $x['copyButton'] = '
+            $copyButton = '
                 <a href="/pages/adm_stock?copy=' . $x['stock_id'] . '">
                     <span class="fa fa-clone fa-lg black" aria-label="Dupliquer"
                         title="Dupliquer"></span>
                 </a>
             ';
-            $x['returnButton'] = '
+
+            $returnButton = '
                 <a href="/pages/adm_stock?return=' . $x['stock_id'] . '">
                     <span class="fa fa-undo fa-lg black" aria-label="Retourner"
                         title="Retourner"></span>
                 </a>
             ';
-            $x['lostButton'] = '
+
+            $lostButton = '
                 <a href="/pages/adm_stock?lost=' . $x['stock_id'] . '">
                     <span class="fa fa-question fa-lg black"
                         aria-label="Marquer comme perdu"
@@ -374,7 +372,7 @@ return function (
             if ($x['stock_return_date']) { // Retourné
                 $x['led'] = 'square_orange';
                 $x['status'] = 'Retourné&nbsp;le<br />' . _date($x['stock_return_date'], 'd/m/Y');
-                unset($x['returnButton'], $x['soldButton']);
+                unset($returnButton, $soldButton);
                 ++$retours;
             } elseif ($x['stock_selling_date']) { // Vendu
                 $x['led'] = 'square_blue';
@@ -387,7 +385,7 @@ return function (
                     $x['status'] .= '<span class="fa fa- fa-lg" aria-label="Vendu en ligne" title="Vendu en ligne" />';
                 }
 
-                $x['soldButton'] = null;
+                $soldButton = null;
                 ++$ventes;
             } elseif ($x['stock_cart_date']) { // En panier
                 $x['led'] = 'square_gray';
@@ -396,7 +394,7 @@ return function (
             } elseif ($x['stock_lost_date']) { // Perdu
                 $x['led'] = 'square_purple';
                 $x['status'] = 'Perdu le<br />' . _date($x['stock_lost_date'], 'd/m/Y');
-                $x['lostButton'] = '';
+                $lostButton = '';
                 ++$perdus;
             } else { // En stock
                 $x['led'] = 'square_green';
@@ -412,10 +410,10 @@ return function (
                 <tr id="stock_' . $x['stock_id'] . '">
                     <td>
                         <a href="/pages/adm_stock?id=' . $x['stock_id'] . '">' . $x['stock_id'] . '</a><br />
-                        ' . $x['copyButton'] . '
-                        ' . ($x['soldButton'] ?? null) . '
-                        ' . ($x['returnButton'] ?? null) . '
-                        ' . $x['lostButton'] . '
+                        ' . $copyButton . '
+                        ' . ($soldButton ?? null) . '
+                        ' . ($returnButton ?? null) . '
+                        ' . $lostButton . '
                         <span class="fa fa-trash fa-lg deleteStock pointer"
                             aria-label="Supprimer"
                             data-stock_id="' . $x['stock_id'] . '"
