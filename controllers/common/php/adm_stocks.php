@@ -30,11 +30,10 @@ use Symfony\Component\HttpFoundation\Response;
  * @throws PropelException
  */
 return function (
-    Request $request,
-    CurrentSite $currentSite,
+    Request       $request,
+    CurrentSite   $currentSite,
     ImagesService $imagesService
-): Response|RedirectResponse
-{
+): Response|RedirectResponse {
     $lm = new ListeManager();
     $sm = new StockManager();
 
@@ -347,30 +346,30 @@ return function (
             $stock = $sm->getById($x['stock_id']);
 
             $x['copyButton'] = '
-            <a href="/pages/adm_stock?copy=' . $x['stock_id'] . '">
-                <span class="fa fa-clone fa-lg black" aria-label="Dupliquer"
-                    title="Dupliquer"></span>
-            </a>
-        ';
+                <a href="/pages/adm_stock?copy=' . $x['stock_id'] . '">
+                    <span class="fa fa-clone fa-lg black" aria-label="Dupliquer"
+                        title="Dupliquer"></span>
+                </a>
+            ';
             $x['returnButton'] = '
-            <a href="/pages/adm_stock?return=' . $x['stock_id'] . '">
-                <span class="fa fa-undo fa-lg black" aria-label="Retourner"
-                    title="Retourner"></span>
-            </a>
-        ';
+                <a href="/pages/adm_stock?return=' . $x['stock_id'] . '">
+                    <span class="fa fa-undo fa-lg black" aria-label="Retourner"
+                        title="Retourner"></span>
+                </a>
+            ';
             $x['lostButton'] = '
-            <a href="/pages/adm_stock?lost=' . $x['stock_id'] . '">
-                <span class="fa fa-question fa-lg black"
-                    aria-label="Marquer comme perdu"
-                    title="Marquer comme perdu">
-                </span>
-            </a>
-        ';
+                <a href="/pages/adm_stock?lost=' . $x['stock_id'] . '">
+                    <span class="fa fa-question fa-lg black"
+                        aria-label="Marquer comme perdu"
+                        title="Marquer comme perdu">
+                    </span>
+                </a>
+            ';
             $x['soldButton'] = '
-            <a href="/pages/adm_stock?sold=' . $x['stock_id'] . '">
-                <span class="fa fa-shopping-bag fa-lg black" title="Vendu en magasin" />
-            </a>
-        ';
+                <a href="/pages/adm_stock?sold=' . $x['stock_id'] . '">
+                    <span class="fa fa-shopping-bag fa-lg black" title="Vendu en magasin" />
+                </a>
+            ';
 
             if ($x['stock_return_date']) { // Retourné
                 $x['led'] = 'square_orange';
