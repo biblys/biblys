@@ -363,11 +363,15 @@ return function (
                     </span>
                 </a>
             ';
-            $x['soldButton'] = '
-                <a href="/pages/adm_stock?sold=' . $x['stock_id'] . '">
-                    <span class="fa fa-shopping-bag fa-lg black" title="Vendu en magasin" />
-                </a>
-            ';
+
+            if ($currentSite->getOption("fake_shop_customer")) {
+                $soldButton = '
+                    <a href="/pages/adm_stock?sold=' . $x['stock_id'] . '">
+                        <span class="fa fa-shopping-bag fa-lg black" title="Vendu en magasin" />
+                    </a>
+                ';
+            }
+
 
             if ($x['stock_return_date']) { // Retourné
                 $x['led'] = 'square_orange';
