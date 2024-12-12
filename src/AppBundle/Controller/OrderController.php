@@ -19,6 +19,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\LoggerService;
@@ -62,8 +63,9 @@ class OrderController extends Controller
      * @throws Exception
      */
     public function indexAction(
-        Request $request,
-        CurrentUser $currentUser,
+        Request         $request,
+        CurrentUser     $currentUser,
+        Config          $config,
         TemplateService $templateService,
     ): JsonResponse|Response
     {
@@ -90,19 +92,16 @@ class OrderController extends Controller
                 $where['order_cancel_date'] = 'NOT NULL';
             }
 
-            // Payment filter
             $payment = $request->query->get('payment', false);
             if ($payment) {
                 $where['order_payment_mode'] = $payment;
             }
 
-            // Shipping filter
             $shipping = $request->query->get('shipping', false);
             if ($shipping) {
                 $where['order_shipping_mode'] = $shipping;
             }
 
-            // Options
             $offset = $request->query->get('offset', 0);
             $options = [
                 'limit' => 100,
@@ -111,7 +110,6 @@ class OrderController extends Controller
                 'sort' => 'desc',
             ];
 
-            // Query filter
             $query = $request->query->get('query', false);
             if ($query) {
                 $orders = $om->search($query, $where, $options);
@@ -132,10 +130,11 @@ class OrderController extends Controller
             return new JsonResponse($response);
         }
 
-        // Index view
         $request->attributes->set("page_title", "Commandes web");
 
-        return $templateService->renderResponse("AppBundle:Order:index.html.twig");
+        return $templateService->renderResponse("AppBundle:Order:index.html.twig", [
+            "display_export_button" => $config->isMondialRelayEnabled(),
+        ]);
     }
 
     /**
