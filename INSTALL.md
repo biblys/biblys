@@ -37,7 +37,7 @@ composer run theme:refresh
 ### 4. Copy the configuration file
 
 ```shell
-cp config.example.yml app/config.yml
+cp config.example.yml config.yml
 ```
 
 ### 5. Add database credentials to config file
@@ -88,7 +88,7 @@ Generate a 32-chars long random string, e.g. with openssl:
 openssl rand -hex 16
 ```
 
-and add it to `app/config.yml` file:
+and add it to `config.yml` file:
 
 ```yaml
 authentication:
