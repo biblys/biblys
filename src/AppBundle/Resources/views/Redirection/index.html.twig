@@ -31,12 +31,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     <tr>
       <th>Ancienne URL</th>
       <th>Nouvelle URL</th>
+      <th>Dernier accès</th>
     </tr>
     </thead>
     {% for redirection in redirections %}
       <tr>
         <td><a href="{{ redirection.oldUrl }}">{{ redirection.oldUrl }}</a></td>
         <td><a href="{{ redirection.newUrl }}">{{ redirection.newUrl }}</a></td>
+        <td>{{ redirection.lastUsedAt|date('d/m/Y') }}</td>
         <td>
           <form method="post" action="{{ path('redirection_delete', { id: redirection.id }) }}">
             <button
