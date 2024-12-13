@@ -41,6 +41,7 @@ use Exception;
 use LemonInk\Models\Transaction;
 use Mockery;
 use Model\ArticleQuery;
+use Model\PublisherQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Psr\Http\Client\ClientExceptionInterface;
@@ -68,6 +69,7 @@ class ArticleControllerTest extends TestCase
     public function setUp(): void
     {
         ArticleQuery::create()->deleteAll();
+        PublisherQuery::create()->deleteAll();
     }
 
     /** adminCatalogAction  */
@@ -77,12 +79,15 @@ class ArticleControllerTest extends TestCase
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
     public function testAdminCatalogAction(): void
     {
         // given
         $controller = new ArticleController();
         $site = ModelFactory::createSite();
+        ModelFactory::createArticle(title: "Article du catalogue");
+        ModelFactory::createArticle(title: "");
 
         $request = new Request();
         $currentUser = Mockery::mock(CurrentUser::class);
@@ -90,12 +95,15 @@ class ArticleControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->expects("getOption")->andReturn(null);
         $currentSite->expects("getSite")->andReturn($site);
+        $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->adminCatalog($request, $currentSite, $currentUser);
+        $response = $controller->adminCatalog($request, $currentSite, $currentUser, $templateService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Article du catalogue", $response->getContent());
+        $this->assertStringContainsString("Article sans titre", $response->getContent());
     }
 
     /** show */

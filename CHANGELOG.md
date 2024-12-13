@@ -4,10 +4,13 @@
 
 ### Corrections
 
-- Le bouton d'export des commandes pouvait apparaître même si le mode 
+- Le bouton d'export des commandes pouvait apparaître même si le mode
   d'expédition Mondial Relay n'était pas activé. C'est corrigé.
-- Il n'était pas possible de remplacer une illustration de billet de blog sans 
+- Il n'était pas possible de remplacer une illustration de billet de blog sans
   supprimer au préalable. C'est désormais possible.
+- Les articles sans titres provoquaient l'affichage d'une ligne vide sur la
+  page "Catalogue" de l'administration. Désormais, la mention "Article sans
+  titre" est affichée.
 
 ## 3.1.1 (11 décembre 2024)
 
