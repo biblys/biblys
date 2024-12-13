@@ -34,6 +34,7 @@
     "images:migrate": "bin/console images:migrate",
     "media:import": "bin/console media:import",
     "files:migrate": "bin/console files:migrate",
+    "images:clean": "bin/console images:clean",
     "license:add": ["@license:add:php", "@license:add:js", "@license:add:css", "@license:add:twig"],
     "license:add:php": "docker run -it -v ${PWD}:/src ghcr.io/b1nary-gr0up/nwa:main add --copyright \"Clément Latzarus\" --license agpl-3.0-only --skip \"vendor/**\" --skip \"src/Model/Base/*.php\" --skip \"src/Model/Map/*.php\" --skip \"src/Biblys/Database/loadDatabase.php\" \"**/*.php\"",
     "license:add:js": "docker run -it -v ${PWD}:/src ghcr.io/b1nary-gr0up/nwa:main add --copyright \"Clément Latzarus\" --license agpl-3.0-only \"assets/**/*.js\" \"public/assets/js/*.js\" \"public/common/js/*.js\"",
