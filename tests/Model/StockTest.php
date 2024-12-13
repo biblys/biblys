@@ -18,16 +18,22 @@
 
 namespace Model;
 
+use Biblys\Exception\CannotDeleteEntityWithImage;
+use Biblys\Test\Helpers;
+use Biblys\Test\ModelFactory;
 use DateTime;
+use Exception;
 use PHPUnit\Framework\TestCase;
+use Propel\Runtime\Exception\PropelException;
 
 class StockTest extends TestCase
 {
 
-    /**
-     * # isLost
-     */
+    /** isLost */
 
+    /**
+     * @throws PropelException
+     */
     public function testIsLostReturnsFalse(): void
     {
         // given
@@ -40,6 +46,9 @@ class StockTest extends TestCase
         $this->assertFalse($isLost);
     }
 
+    /**
+     * @throws PropelException
+     */
     public function testIsLostReturnsTrue(): void
     {
         // given
@@ -97,5 +106,40 @@ class StockTest extends TestCase
 
         // then
         $this->assertFalse($isWatermarked);
+    }
+
+    /** delete */
+
+    /**
+     * @throws PropelException
+     */
+    public function testDeleteSucceedsIfNoImage()
+    {
+        // given
+        $stockItem = ModelFactory::createStockItem();
+
+        // when
+        $stockItem->delete();
+
+        // then
+        $this->assertFalse(StockQuery::create()->filterById($stockItem->getId())->exists());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testDeleteFailsIfImageExists()
+    {
+        // given
+        $stockItem = ModelFactory::createStockItem();
+        ModelFactory::createImage(stockItem: $stockItem);
+
+        // when
+        $exception = Helpers::runAndCatchException(fn() => $stockItem->delete());
+
+        // then
+        $this->assertInstanceOf(CannotDeleteEntityWithImage::class, $exception);
+        $this->assertTrue(StockQuery::create()->filterById($stockItem->getId())->exists());
     }
 }
