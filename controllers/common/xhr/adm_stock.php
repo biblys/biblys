@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
+
 /*
  * Copyright (C) 2024 Clément Latzarus
  *
@@ -16,14 +17,25 @@
  */
 
 
+use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
+use Biblys\Service\Images\ImagesService;
+use Model\StockQuery;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+
+$config = Config::load();
+$currentSite = CurrentSite::buildFromConfig($config);
+$filesystem = new Filesystem();
+$imagesService = new ImagesService($config, $currentSite, $filesystem);
 
 $sm = new StockManager();
 $am = new ArticleManager();
 
+/** @var Request $request */
 $action = $request->query->get("action");
-
 $stockId = $request->request->get("stock_id");
 
 if ($action === "delete") {
@@ -32,7 +44,11 @@ if ($action === "delete") {
         throw new BadRequestHttpException("Exemplaire $stockId introuvable.");
     }
 
-    $sm->delete($item);
+    $stockItem = StockQuery::create()->findPk($stockId);
+    if ($imagesService->imageExistsFor($stockItem)) {
+        $imagesService->deleteImageFor($stockItem);
+    }
+    $stockItem->delete();
 
     $response = new JsonResponse($item->getArticle()->countItemsByAvailability());
 } elseif ($action === "update") {
