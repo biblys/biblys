@@ -52,10 +52,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           {{ article.ean }}
         </td>
         <td>
-          <a href="/a/{{ article.url }}">
-            {{ article.title }}
-          </a><br/>
-          <small>{{ article.authors|authors }}</small>
+          {% if article.title %}
+            <a href="/a/{{ article.url }}">
+              {{ article.title }}
+            </a><br/>
+            <small>{{ article.authors|authors }}</small>
+          {% else %}
+            <a href="/pages/article_edit?id={{ article.id }}">
+              <em>Article sans titre</em>
+            </a>
+          {% endif %}
         </td>
         <td>
           {{ article.collectionName }}<br>

@@ -710,6 +710,7 @@ class ArticleController extends Controller
         Request $request,
         CurrentSite $currentSite,
         CurrentUser $currentUser,
+        TemplateService $templateService,
     ): Response
     {
         $currentUser->authAdmin();
@@ -732,7 +733,7 @@ class ArticleController extends Controller
             ->offset($pagination->getOffset())
             ->find();
 
-        return $this->render("AppBundle:Article:articleAdminCatalog.html.twig", [
+        return $templateService->renderResponse("AppBundle:Article:articleAdminCatalog.html.twig", [
             "articles" => $articles,
             "count" => $count,
             "site" => $currentSite->getSite(),
