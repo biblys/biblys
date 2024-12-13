@@ -70,6 +70,8 @@ class ArticleControllerTest extends TestCase
         ArticleQuery::create()->deleteAll();
     }
 
+    /** show */
+
     /**
      * @throws LoaderError
      * @throws PropelException
@@ -122,6 +124,8 @@ class ArticleControllerTest extends TestCase
         );
     }
 
+    /** updatePublisherStock */
+
     /**
      * @throws Exception
      */
@@ -148,6 +152,8 @@ class ArticleControllerTest extends TestCase
             "it should update article publisher stock"
         );
     }
+
+    /** byIsbn */
 
     /**
      * @throws Exception
@@ -208,6 +214,8 @@ class ArticleControllerTest extends TestCase
         $controller->byIsbn($urlGenerator, "9781233456789");
     }
 
+    /** addTags */
+
     /**
      * @throws PropelException
      * @throws Exception
@@ -233,6 +241,8 @@ class ArticleControllerTest extends TestCase
             "it should return HTTP 200"
         );
     }
+
+    /** addRayon */
 
     /**
      * @throws PropelException
@@ -269,7 +279,7 @@ class ArticleControllerTest extends TestCase
         );
     }
 
-    /** ArticleController->deleteAction */
+    /** deleteAction */
 
     /**
      * @throws LoaderError
@@ -605,7 +615,6 @@ class ArticleControllerTest extends TestCase
         );
     }
 
-
     /**
      * @throws RuntimeError
      * @throws SyntaxError
@@ -748,6 +757,8 @@ class ArticleControllerTest extends TestCase
         );
     }
 
+    /** checkIsbn */
+
     /**
      * @throws PropelException
      */
@@ -789,6 +800,8 @@ class ArticleControllerTest extends TestCase
             "should respond with 200"
         );
     }
+
+    /** freeDownloadAction */
 
     /**
      * @throws SyntaxError
@@ -945,6 +958,8 @@ class ArticleControllerTest extends TestCase
         $this->assertEquals("/user_library", $response->getTargetUrl(), "redirects to elibrary");
     }
 
+    /** downloadWithWatermarkAction */
+
     /**
      * @throws PropelException
      * @throws LoaderError
@@ -1074,9 +1089,7 @@ class ArticleControllerTest extends TestCase
         );
     }
 
-    /**
-     * #watermarkAction
-     */
+    /** watermarkAction */
 
     /**
      * @throws PropelException
