@@ -101,11 +101,12 @@ class ArticleControllerTest extends TestCase
     /** show */
 
     /**
+     * @throws ClientExceptionInterface
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws ClientExceptionInterface
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testShow()
     {
@@ -184,7 +185,8 @@ class ArticleControllerTest extends TestCase
     /** byIsbn */
 
     /**
-     * @throws Exception
+     * @throws PropelException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testByIsbn()
     {
@@ -212,6 +214,9 @@ class ArticleControllerTest extends TestCase
         );
     }
 
+    /**
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testByIsbnWithInvalidEan()
     {
         // then
@@ -227,6 +232,9 @@ class ArticleControllerTest extends TestCase
         $controller->byIsbn($urlGenerator, "7908026792240");
     }
 
+    /**
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testByIsbnWithUnexistingArticle()
     {
         // then
@@ -274,7 +282,7 @@ class ArticleControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAddRayonActionForPublisher()
     {
@@ -314,6 +322,7 @@ class ArticleControllerTest extends TestCase
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testDeleteAction()
     {
@@ -355,6 +364,7 @@ class ArticleControllerTest extends TestCase
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testDeleteActionDeletesArticle()
     {
@@ -401,6 +411,7 @@ class ArticleControllerTest extends TestCase
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testDeleteActionDeletesArticleWithCover()
     {
@@ -446,6 +457,7 @@ class ArticleControllerTest extends TestCase
 
     /**
      * @throws PropelException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      * @throws Exception
      */
     public function testDeleteActionDeletesArticleWhenCoverFileDeletionFails()
@@ -495,6 +507,7 @@ class ArticleControllerTest extends TestCase
 
     /**
      * @throws PropelException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      * @throws Exception
      */
     public function testDeleteActionIsImpossibleIfArticleHasStock()
@@ -548,10 +561,11 @@ class ArticleControllerTest extends TestCase
     /** ArticleController->searchAction */
 
     /**
-     * @throws RuntimeError
-     * @throws SyntaxError
      * @throws LoaderError
      * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testSearchAction()
     {
@@ -596,10 +610,11 @@ class ArticleControllerTest extends TestCase
     }
 
     /**
-     * @throws RuntimeError
-     * @throws SyntaxError
      * @throws LoaderError
      * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testSearchActionWithSortOption()
     {
@@ -644,10 +659,11 @@ class ArticleControllerTest extends TestCase
     }
 
     /**
-     * @throws RuntimeError
-     * @throws SyntaxError
      * @throws LoaderError
      * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testSearchActionWithIllegalSortOption()
     {
@@ -832,11 +848,12 @@ class ArticleControllerTest extends TestCase
     /** freeDownloadAction */
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws PropelException
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      * @throws TransportExceptionInterface
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testFreeDownloadAction()
     {
@@ -878,11 +895,12 @@ class ArticleControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws PropelException
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      * @throws TransportExceptionInterface
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testFreeDownloadActionWithNewsletterPrompt()
     {
@@ -935,16 +953,17 @@ class ArticleControllerTest extends TestCase
         $this->assertStringContainsString(
             "Je souhaite recevoir la newsletter pour être tenu·e",
             $response->getContent(),
-            "includes newletter prompt"
+            "includes newsletter prompt"
         );
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws PropelException
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      * @throws TransportExceptionInterface
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testFreeDownloadActionWhileAlreadyInLibrary()
     {
@@ -983,7 +1002,7 @@ class ArticleControllerTest extends TestCase
 
         // then
         $this->assertEquals(302, $response->getStatusCode(), "returns HTTP 302");
-        $this->assertEquals("/user_library", $response->getTargetUrl(), "redirects to elibrary");
+        $this->assertEquals("/user_library", $response->getTargetUrl(), "redirects to e-library");
     }
 
     /** downloadWithWatermarkAction */
