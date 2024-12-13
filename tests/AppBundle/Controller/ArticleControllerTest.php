@@ -70,6 +70,34 @@ class ArticleControllerTest extends TestCase
         ArticleQuery::create()->deleteAll();
     }
 
+    /** adminCatalogAction  */
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function testAdminCatalogAction(): void
+    {
+        // given
+        $controller = new ArticleController();
+        $site = ModelFactory::createSite();
+
+        $request = new Request();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->expects("getOption")->andReturn(null);
+        $currentSite->expects("getSite")->andReturn($site);
+
+        // when
+        $response = $controller->adminCatalog($request, $currentSite, $currentUser);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
     /** show */
 
     /**
