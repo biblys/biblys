@@ -18,7 +18,9 @@
 
 namespace Model;
 
+use Biblys\Exception\CannotDeleteEntityWithImage;
 use Model\Base\Stock as BaseStock;
+use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
@@ -52,5 +54,19 @@ class Stock extends BaseStock
     public function isLost(): bool
     {
         return $this->getLostDate() !== null;
+    }
+
+    /**
+     * @throws PropelException
+     * @throws CannotDeleteEntityWithImage
+     */
+    public function preDelete(?ConnectionInterface $con = null): bool
+    {
+        $imageExists = ImageQuery::create()->filterByStockItem($this)->exists();
+        if ($imageExists) {
+            throw new CannotDeleteEntityWithImage("Impossible de supprimer l'exemplaire car il a une photo associée.");
+        }
+
+        return true;
     }
 }
