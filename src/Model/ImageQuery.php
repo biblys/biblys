@@ -37,13 +37,21 @@ class ImageQuery extends BaseImageQuery
      */
     public function filterByModel(Article|Stock|Post|Publisher|People|Event $model): ImageQuery
     {
-        return match (get_class($model)) {
-            Article::class => $this->filterByArticle($model),
-            Stock::class => $this->filterByStockItem($model),
-            Post::class => $this->filterByPost($model),
-            Publisher::class => $this->filterByPublisher($model),
-            People::class => $this->filterByContributor($model),
-            Event::class => $this->filterByEvent($model),
+        return $this->filterByModelId(get_class($model), $model->getId());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function filterByModelId(string $modelType, int $modelId): ImageQuery
+    {
+        return match ($modelType) {
+            Article::class => $this->filterByArticleId($modelId),
+            Stock::class => $this->filterByStockItemId($modelId),
+            Post::class => $this->filterByPostId($modelId),
+            Publisher::class => $this->filterByPublisherId($modelId),
+            People::class => $this->filterByContributorId($modelId),
+            Event::class => $this->filterByEventId($modelId),
             default => $this,
         };
     }
