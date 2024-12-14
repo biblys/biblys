@@ -14,20 +14,4 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #}
 
-{% if pages is defined and pages.total > 1 %}
-
-  <p class="items-pagination text-center">
-    {% if pages.previous > -1 %}
-      <a href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ pages.previous }}" class="btn btn-default btn-sm">
-        <span class="fa fa-chevron-circle-left"></span>
-      </a> &nbsp;
-    {% endif %}
-    Page {{ pages.current }} sur {{ pages.total }}
-    {% if pages.next %}
-      &nbsp; <a href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ pages.next }}" class="btn btn-default btn-sm">
-        <span class="fa fa-chevron-circle-right"></span>
-      </a>
-    {% endif %}
-  </p>
-
-{% endif %}
+{% include "AppBundle:Utils:_pagination.html.twig" %}
