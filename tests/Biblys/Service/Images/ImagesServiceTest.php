@@ -24,6 +24,7 @@ use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Exception;
 use Mockery;
+use Model\Article;
 use Model\Image;
 use Model\ImageQuery;
 use PHPUnit\Framework\TestCase;
@@ -77,6 +78,31 @@ class ImagesServiceTest extends TestCase
         );
         $image = ImageQuery::create()->findOneByArticleId($article->getId());
         $this->assertNull($image);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testDeleteImageByModelId(): void
+    {
+        // given
+        $article = ModelFactory::createArticle();
+        ModelFactory::createImage(article: $article);
+        $site = ModelFactory::createSite();
+
+        $config = new Config();
+        $currentSite = new CurrentSite($site);
+        $filesystem = Mockery::mock(Filesystem::class);
+        $filesystem->expects("remove");
+        $service = new ImagesService($config, $currentSite, $filesystem);
+
+        // when
+        $service->deleteImageByModelId(Article::class, $article->getId());
+
+        // then
+        $deletedImage = ImageQuery::create()->findOneByArticleId($article->getId());
+        $this->assertNull($deletedImage);
+        $filesystem->shouldHaveReceived("remove");
     }
 
     /** Article **/
