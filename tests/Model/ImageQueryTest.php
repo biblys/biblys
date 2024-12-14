@@ -26,6 +26,7 @@ require_once __DIR__ . "/../setUp.php";
 
 class ImageQueryTest extends TestCase
 {
+    /** filterByModel */
 
     /**
      * @throws PropelException
@@ -107,7 +108,6 @@ class ImageQueryTest extends TestCase
         $this->assertEquals($image->getContributor(), $contributor);
     }
 
-
     /**
      * @throws PropelException
      */
@@ -123,5 +123,23 @@ class ImageQueryTest extends TestCase
 
         // then
         $this->assertEquals($image->getEvent(), $event);
+    }
+
+    /** filterByModelId */
+
+    /**
+     * @throws PropelException
+     */
+    public function testFilterByModelId(): void
+    {
+        // given
+        $article = ModelFactory::createArticle();
+        ModelFactory::createImage(article: $article);
+
+        // when
+        $image = ImageQuery::create()->filterByModelId(Article::class, $article->getId())->findOne();
+
+        // then
+        $this->assertEquals($image->getArticle(), $article);
     }
 }
