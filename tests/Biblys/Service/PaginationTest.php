@@ -64,20 +64,27 @@ class PaginationTest extends TestCase
         $this->assertEquals(3, $this->pagination->getTotal());
     }
 
-    public function getOffset()
+    public function getOffset(): void
     {
         $this->assertEquals(10, $this->pagination->getOffset());
     }
 
-    public function getLimit()
+    public function getLimit(): void
     {
         $this->assertEquals(10, $this->pagination->getLimit());
     }
 
-    public function getPrevious()
+    public function getPrevious(): void
     {
         $this->assertEquals(0, $this->pagination->getPrevious());
     }
+
+    public function getNext(): void
+    {
+        $this->assertEquals(2, $this->pagination->getNext());
+    }
+
+    /** getPreviousQuery */
 
     public function testGetPreviousQueryForFirstPage()
     {
@@ -105,10 +112,7 @@ class PaginationTest extends TestCase
         $this->assertEquals("?date=2013-05-22&p=1", $pagination->getPreviousQuery());
     }
 
-    public function getNext()
-    {
-        $this->assertEquals(2, $this->pagination->getNext());
-    }
+    /** getNextQuery */
 
     public function testGetNextQuery()
     {
@@ -134,5 +138,44 @@ class PaginationTest extends TestCase
         $pagination = new Pagination(3, 25, 10);
         $pagination->setQueryParams(["date" => "2013-05-22"]);
         $this->assertEquals("?date=2013-05-22&p=0", $pagination->getNextQuery());
+    }
+
+    /** getQueryForPageNumber */
+
+    public function testGetQueryForPageNumber()
+    {
+        // given
+        $pagination = new Pagination(1, 25, 10);
+
+        // when
+        $queryForPageNumber = $pagination->getQueryForPageNumber(2);
+
+        // then
+        $this->assertEquals("?p=1", $queryForPageNumber);
+    }
+
+    public function testGetQueryForPageNumberForFirstPage()
+    {
+        // given
+        $pagination = new Pagination(1, 25, 10);
+
+        // when
+        $queryForPageNumber = $pagination->getQueryForPageNumber(1);
+
+        // then
+        $this->assertEquals("?p=0", $queryForPageNumber);
+    }
+
+    public function testGetQueryForPageNumberWithParams()
+    {
+        // given
+        $pagination = new Pagination(1, 25, 10);
+        $pagination->setQueryParams(["date" => "2013-05-22"]);
+
+        // when
+        $queryForPageNumber = $pagination->getQueryForPageNumber(2);
+
+        // then
+        $this->assertEquals("?date=2013-05-22&p=1", $queryForPageNumber);
     }
 }
