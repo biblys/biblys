@@ -16,10 +16,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 {% if pages is defined and pages.total > 1 %}
 
+	{% set url = app.currentUrl.relativeUrl %}
+
 	<p class="articles-pagination text-center">
 
 		{% if pages.previous > -1 %}
-			<a href="{{ pages.previousQuery }}" class="btn btn-default btn-sm pagination-button button-prev">
+			<a href="{{ url }}{{ pages.previousQuery }}" class="btn btn-default btn-sm pagination-button button-prev">
 				<span class="icon fa fa-chevron-circle-left"></span>
 			</a>
 			&nbsp;
@@ -29,13 +31,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 			{% if pages.current == pageNumber %}
 				<span class="pagination-page pagination-page-current">{{ pageNumber }}</span>
 			{% else %}
-				<a href="{{ pages.queryForPageNumber(pageNumber) }}" class="pagination-page">{{ pageNumber }}</a>
+				<a href="{{ url }}{{ pages.queryForPageNumber(pageNumber) }}" class="pagination-page">{{ pageNumber }}</a>
 			{% endif %}
 		{% endfor %}
 
 		{% if pages.next %}
 			&nbsp;
-			<a href="{{ pages.nextQuery }}" class="btn btn-default btn-sm pagination-button button-next">
+			<a href="{{ url }}{{ pages.nextQuery }}" class="btn btn-default btn-sm pagination-button button-next">
 				<span class="icon fa fa-chevron-circle-right"></span>
 			</a>
 		{% endif %}

@@ -102,8 +102,8 @@ class Pagination
     {
         $params = $this->getQueryParams();
 
-        if ($pageIndex !== null) {
-            $params['p'] = $pageIndex;
+        if ($pageIndex !== null && $pageIndex > 0) {
+            $params["p"] = $pageIndex;
         }
 
         if (count($params) === 0) {

@@ -16,12 +16,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 {% if pages is defined and pages.total > 1 %}
 
+  {% set url = app.currentUrl.relativeUrl %}
+
   <nav class="Pagination text-center" aria-label="Page navigation">
     <ul class="pagination">
       {% if pages.previous > -1 %}
         <li class="Pagination__previous">
           <a
-            href="{{ pages.previousQuery }}"
+            href="{{ url }}{{ pages.previousQuery }}"
             aria-label="Précédent"
           >
             <span aria-hidden="true">&laquo;</span>
@@ -36,7 +38,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           </li>
         {% else %}
           <li class="Pagination__page">
-            <a href="{{ pages.queryForPageNumber(pageNumber) }}" class="pagination-page">{{ pageNumber }}</a>
+            <a href="{{ url }}{{ pages.queryForPageNumber(pageNumber) }}" class="pagination-page">{{ pageNumber }}</a>
           </li>
         {% endif %}
       {% endfor %}
@@ -44,7 +46,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       {% if pages.next %}
         <li class="Pagination__next">
           <a
-            href="{{ pages.nextQuery }}"
+            href="{{ url }}{{ pages.nextQuery }}"
             aria-label="Suivant"
           >
             <span aria-hidden="true">&raquo;</span>
