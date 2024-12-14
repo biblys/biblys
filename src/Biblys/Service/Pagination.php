@@ -92,13 +92,13 @@ class Pagination
         return $this->queryParams;
     }
 
-    public function getQueryForPageNumber(int $pageNumber): ?string
+    public function getQueryForPageNumber(int $pageNumber): string
     {
         $pageIndex = $pageNumber - 1;
         return $this->getQueryForPageIndex($pageIndex);
     }
 
-    public function getQueryForPageIndex(?int $pageIndex = null): ?string
+    public function getQueryForPageIndex(?int $pageIndex = null): string
     {
         $params = $this->getQueryParams();
 
@@ -107,19 +107,19 @@ class Pagination
         }
 
         if (count($params) === 0) {
-            return null;
+            return "";
         }
 
         return "?".http_build_query($params);
     }
 
-    public function getPreviousQuery(): ?string
+    public function getPreviousQuery(): string
     {
         $previousPageNumber = $this->getPrevious();
         return $this->getQueryForPageIndex($previousPageNumber);
     }
 
-    public function getNextQuery(): ?string
+    public function getNextQuery(): string
     {
         $nextPageNumber = $this->getNext();
         return $this->getQueryForPageIndex($nextPageNumber);
