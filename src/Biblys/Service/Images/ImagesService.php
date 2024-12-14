@@ -131,11 +131,18 @@ class ImagesService
      */
     public function deleteImageFor(Article|Stock|Post|Publisher|People|Event $model): void
     {
+        $this->deleteImageByModelId(get_class($model), $model->getId());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function deleteImageByModelId(string $modelType, int $modelId): void
+    {
         $db = Propel::getWriteConnection(ImageTableMap::DATABASE_NAME);
         $db->beginTransaction();
-
         try {
-            $image = $this->_getImageFor($model);
+            $image = $this->_getImageByModelId($modelType, $modelId);
             $imageModel = $image->getModel();
             $imageModel->delete($db);
             $this->filesystem->remove($image->getFilePath());
@@ -190,7 +197,15 @@ class ImagesService
      */
     private function _getImageFor(Article|Stock|Post|Publisher|People|Event $model): ImageForModel
     {
-        $image = ImageQuery::create()->filterByModel($model)->findOne();
+        return $this->_getImageByModelId(get_class($model), $model->getId());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    private function _getImageByModelId(string $modelType, int $modelId): ImageForModel
+    {
+        $image = ImageQuery::create()->filterByModelId($modelType, $modelId)->findOne();
         return new ImageForModel($this->config, $image);
     }
 
