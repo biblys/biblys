@@ -221,8 +221,10 @@ class Post extends Entity
     public function getPrevPost()
     {
         $pm = new PostManager();
-        return $pm->get(
-            ['post_date' => '< ' . $this->get('date')],
+        return $pm->get([
+            "post_status" => 1,
+            "post_date" => "< {$this->get('date')}"
+        ],
             ['order' => 'post_date', 'sort' => 'desc']
         );
     }
@@ -234,7 +236,10 @@ class Post extends Entity
     public function getNextPost()
     {
         $pm = new PostManager();
-        return $pm->get(['post_date' => '> ' . $this->get('date')]);
+        return $pm->get([
+            "post_status" => 1,
+            "post_date" => "> {$this->get('date')}"
+        ]);
     }
 }
 
