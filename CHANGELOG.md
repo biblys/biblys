@@ -11,6 +11,9 @@
 - Les articles sans titres provoquaient l'affichage d'une ligne vide sur la
   page "Catalogue" de l'administration. Désormais, la mention "Article sans
   titre" est affichée.
+- Les liens "billet précédent" et "billet suivant" pouvaient pointer vers des
+  billets hors-ligne. Désormais, ils pointent uniquement vers des billets
+  publiés.
 
 ## 3.1.1 (11 décembre 2024)
 
