@@ -261,7 +261,7 @@ class CartHelpers
         $sentence = '<span class="text-info"><span class="fa fa-plus-circle"></span> Ajoutez encore ' .
             $missingItems . ' titre' . s($missingItems) . ' 
             à votre panier pour en profiter.</span>';
-        $cartButton = '<button class="btn btn-default" disabled>Ajouter au panier</button>';
+        $cartButton = '<button class="btn btn-outline-secondary" disabled>Ajouter au panier</button>';
 
 
         if ($missingItems <= 0) {

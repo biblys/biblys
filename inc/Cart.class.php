@@ -137,7 +137,7 @@ class Cart extends Entity
         return '<a
                 href="/pages/cart"
                 rel="nofollow"
-                class="btn btn-default btn-sm' . $class . '">' .
+                class="btn btn-outline-secondary btn-sm' . $class . '">' .
             $icon . ' ' .
             $content .
             '</a>';

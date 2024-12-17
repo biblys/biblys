@@ -162,8 +162,8 @@ table.checkable tbody tr {
 .admin-table a.btn:hover {
   color: white;
 }
-.admin-table a.btn-default,
-.admin-table a.btn-default:hover {
+.admin-table a.btn-outline-secondary,
+.admin-table a.btn-outline-secondary:hover {
   color: black;
 }
 

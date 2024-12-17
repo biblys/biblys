@@ -19,7 +19,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 	<p class="contacts-pagination text-center">
 
 		{% if pagination.previous > -1 %}
-			<a href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ pagination.previous }}" class="btn btn-default btn-sm">
+			<a href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ pagination.previous }}" class="btn btn-outline-secondary btn-sm">
 				<span class="fa fa-chevron-circle-left"></span>
 			</a>
 			&nbsp;
@@ -35,7 +35,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 		{% if pagination.next %}
 			&nbsp;
-			<a href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ pagination.next }}" class="btn btn-default btn-sm">
+			<a href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ pagination.next }}" class="btn btn-outline-secondary btn-sm">
 				<span class="fa fa-chevron-circle-right"></span>
 			</a>
 		{% endif %}

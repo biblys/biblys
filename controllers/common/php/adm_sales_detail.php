@@ -207,7 +207,7 @@ $_ECHO .= '
                 <input type="hidden" name="filename" value="ventes_'. LegacyCodeHelper::getGlobalSite()['site_name'].'_'.$_GET["date1"].'_'.$_GET["date2"].'">
                 <input type="hidden" name="header" value="'.htmlentities(json_encode($header)).'">
                 <input type="hidden" name="data" value="'.htmlentities(json_encode($export)).'">
-                <button class="btn btn-default" type="submit">Télécharger au format CSV</button>
+                <button class="btn btn-outline-secondary" type="submit">Télécharger au format CSV</button>
             </fieldset>
         </form>
         <h2>'.$total_sales.' vente'.s($total_sales).'</h2><br>

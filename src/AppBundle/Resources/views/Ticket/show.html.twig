@@ -29,7 +29,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   {% include 'AppBundle:Ticket:_deprecation_warning.html.twig' %}
 
   <p>
-    <a href="{{ path('ticket_index') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i> Retour</a>
+    <a href="{{ path('ticket_index') }}" class="btn btn-outline-secondary"><i class="fa fa-arrow-left"></i> Retour</a>
   </p>
 
   {% if not ticket.has('resolved') %}
