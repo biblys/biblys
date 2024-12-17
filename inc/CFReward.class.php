@@ -19,6 +19,7 @@
 class CFReward extends Entity
     {
         protected $prefix = 'reward';
+        private CFCampaign $campaign;
 
         /**
          * Returns true if reward is unlimited or has quantity
@@ -40,7 +41,9 @@ class CFReward extends Entity
         {
             if (!isset($this->campaign)) {
                 $cm = new CFCampaignManager();
-                $this->campaign = $cm->getById($this->get('campaign_id'));
+                /** @var CFCampaign $campaign */
+                $campaign = $cm->getById($this->get('campaign_id'));
+                $this->campaign = $campaign;
             }
             return $this->campaign;
         }

@@ -72,20 +72,20 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createArticle(
-        string         $title = "Article",
-        array          $authors = [],
-        string         $ean = "9781234567890",
-        string         $url = "author/article",
-        int            $price = 999,
-        int            $typeId = ArticleType::BOOK,
-        string         $keywords = null,
-        DateTime       $keywordsGeneratedAt = null,
-        string         $lemoninkMasterId = null,
-        Publisher      $publisher = null,
-        BookCollection $collection = null,
-        bool           $isPriceEditable = false,
-        DateTime       $publicationDate = null,
-        int            $availabilityDilicom = 1,
+        string          $title = "Article",
+        array           $authors = [],
+        string          $ean = "9781234567890",
+        string          $url = "author/article",
+        int             $price = 999,
+        int             $typeId = ArticleType::BOOK,
+        ?string         $keywords = null,
+        ?DateTime       $keywordsGeneratedAt = null,
+        ?string         $lemoninkMasterId = null,
+        ?Publisher      $publisher = null,
+        ?BookCollection $collection = null,
+        bool            $isPriceEditable = false,
+        ?DateTime       $publicationDate = null,
+        int             $availabilityDilicom = 1,
     ): Article
     {
         $article = new Article();
@@ -141,13 +141,13 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createCart(
-        Site   $site = null,
-        User   $user = null,
-        int    $axysAccountId = null,
-        int    $sellerId = null,
-        string $uniqueId = null,
-        int    $amount = 0,
-        int    $count = 0,
+        ?Site   $site = null,
+        ?User   $user = null,
+        ?int    $axysAccountId = null,
+        ?int    $sellerId = null,
+        ?string $uniqueId = null,
+        int     $amount = 0,
+        int     $count = 0,
     ): Cart
     {
         $cart = new Cart();
@@ -167,9 +167,9 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createCollection(
-        Publisher $publisher = null,
-        string    $name = "La Blanche",
-        int       $noosfereId = null,
+        ?Publisher $publisher = null,
+        string     $name = "La Blanche",
+        ?int       $noosfereId = null,
     ): BookCollection
     {
         $slugService = new SlugService();
@@ -258,9 +258,9 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createLink(
-        Article         $article = null,
-        ArticleCategory $articleCategory = null,
-        Article         $bundleArticle = null,
+        ?Article         $article = null,
+        ?ArticleCategory $articleCategory = null,
+        ?Article         $bundleArticle = null,
     ): Link
     {
         $link = new Link();
@@ -276,22 +276,22 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createOrder(
-        Site        $site = null,
-        User        $user = null,
-        Customer    $customer = null,
-        ShippingFee $shippingFee = null,
-        string      $axysAccountId = null,
-        string      $slug = null,
-        string      $firstName = "Silas",
-        string      $lastName = "Coade",
-        string      $address1 = "1 rue de la Fissure",
-        string      $address2 = "Appartement 2",
-        string      $postalCode = "33000",
-        string      $city = "Bordeaux",
-        Country     $country = null,
-        string      $phone = "0601020304",
+        ?Site        $site = null,
+        ?User        $user = null,
+        ?Customer    $customer = null,
+        ?ShippingFee $shippingFee = null,
+        ?string      $axysAccountId = null,
+        ?string      $slug = null,
+        string       $firstName = "Silas",
+        string       $lastName = "Coade",
+        string       $address1 = "1 rue de la Fissure",
+        string       $address2 = "Appartement 2",
+        string       $postalCode = "33000",
+        string       $city = "Bordeaux",
+        ?Country     $country = null,
+        string       $phone = "0601020304",
         string      $email = "silas.coade@example.net",
-        string      $mondialRelayPickupPointCode = null,
+        ?string     $mondialRelayPickupPointCode = null,
     ): Order
     {
         $customer = $customer ?? ModelFactory::createCustomer($site, $user);
@@ -419,19 +419,19 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createStockItem(
-        ?Site    $site = null,
-        ?Article $article = null,
-        ?User    $user = null,
-        ?Cart    $cart = null,
-        Order    $order = null,
-        int      $sellingPrice = 0,
-        DateTime $sellingDate = null,
-        DateTime $returnDate = null,
-        DateTime $lostDate = null,
-        int      $weight = null,
-        string   $lemoninkTransactionId = null,
-        string   $lemoninkTransactionToken = null,
-        string   $axysAccountId = null,
+        ?Site     $site = null,
+        ?Article  $article = null,
+        ?User     $user = null,
+        ?Cart     $cart = null,
+        ?Order    $order = null,
+        int       $sellingPrice = 0,
+        ?DateTime $sellingDate = null,
+        ?DateTime $returnDate = null,
+        ?DateTime $lostDate = null,
+        ?int      $weight = null,
+        ?string   $lemoninkTransactionId = null,
+        ?string   $lemoninkTransactionToken = null,
+        ?string   $axysAccountId = null,
     ): Stock
     {
         $stock = new Stock();
@@ -457,7 +457,7 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createUserSession(User $user = null): Session
+    public static function createUserSession(?User $user = null): Session
     {
         $user = $user ?? ModelFactory::createUser();
 
@@ -487,17 +487,17 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createShippingFee(
-        Site    $site = null,
-        string  $type = "normal",
-        Country $country = null,
-        string  $mode = "Lettre verte",
-        string  $info = null,
-        int     $fee = 100,
-        int     $maxWeight = 1000,
-        int     $minAmount = 0,
-        int     $maxAmount = 2000,
-        int     $maxArticles = 10,
-        bool    $isArchived = false,
+        ?Site    $site = null,
+        string   $type = "normal",
+        ?Country $country = null,
+        string   $mode = "Lettre verte",
+        ?string  $info = null,
+        int      $fee = 100,
+        int      $maxWeight = 1000,
+        int      $minAmount = 0,
+        int      $maxAmount = 2000,
+        int      $maxArticles = 10,
+        bool     $isArchived = false,
     ): ShippingFee
     {
         $shippingFee = new ShippingFee();
@@ -578,13 +578,13 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createInvitation(
-        Site     $site = null,
-        array    $articles = [],
-        string   $email = "invited-user@biblys.fr",
-        string   $code = "ABCD1234",
-        bool     $allowsPreDownload = false,
-        DateTime $expiresAt = null,
-        DateTime $consumedAt = null,
+        ?Site     $site = null,
+        array     $articles = [],
+        string    $email = "invited-user@biblys.fr",
+        string    $code = "ABCD1234",
+        bool      $allowsPreDownload = false,
+        ?DateTime $expiresAt = null,
+        ?DateTime $consumedAt = null,
     ): Invitation
     {
 
@@ -613,7 +613,7 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createUser(
-        Site   $site = null,
+        ?Site  $site = null,
         string $email = "user@biblys.fr",
     ): User
     {
@@ -629,8 +629,8 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createAuthenticationMethod(
-        Site   $site = null,
-        User   $user = null,
+        ?Site  $site = null,
+        ?User  $user = null,
         string $identityProvider = "axys",
         string $externalId = "AXYS1234",
     ): AuthenticationMethod
@@ -648,7 +648,7 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createAdminUser(Site $site = null): User
+    public static function createAdminUser(?Site $site = null): User
     {
         $site = $site ?? self::createSite();
 
@@ -662,8 +662,8 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createPublisherUser(
-        Site      $site = null,
-        Publisher $publisher = null,
+        ?Site      $site = null,
+        ?Publisher $publisher = null,
     ): User
     {
         $site = $site ?? self::createSite();
@@ -679,11 +679,11 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createRight(
-        ?User     $user = null,
-        ?Site     $site = null,
-        Publisher $publisher = null,
-        bool      $isAdmin = false,
-        string    $axysAccountId = null,
+        ?User      $user = null,
+        ?Site      $site = null,
+        ?Publisher $publisher = null,
+        bool       $isAdmin = false,
+        ?string    $axysAccountId = null,
     ): Right
     {
         $right = new Right();
@@ -701,9 +701,9 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createCustomer(
-        Site   $site = null,
-        User   $user = null,
-        string $axysAccountId = null,
+        ?Site   $site = null,
+        ?User   $user = null,
+        ?string $axysAccountId = null,
     ): Customer
     {
         $customer = new Customer();
@@ -720,8 +720,8 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createStockItemList(
-        Site   $site,
-        string $axysAccountId = null,
+        Site    $site,
+        ?string $axysAccountId = null,
     ): StockItemList
     {
         $stockItemList = new StockItemList();
@@ -738,7 +738,7 @@ class ModelFactory
      */
     public static function createUserOption(
         Site   $site,
-        string $axysAccountId = null
+        ?string $axysAccountId = null
     ): Option
     {
         $option = new Option();
@@ -754,11 +754,11 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createPost(
-        Site     $site = null,
+        ?Site    $site = null,
         string   $title = "Une actualité",
         bool     $status = Post::STATUS_ONLINE,
         DateTime $date = new DateTime(),
-        string   $axysAccountId = null,
+        ?string  $axysAccountId = null,
     ): Post
     {
         $slugService = new SlugService();
@@ -783,7 +783,7 @@ class ModelFactory
      */
     public static function createSubscription(
         Site   $site,
-        string $axysAccountId = null
+        ?string $axysAccountId = null
     ): Subscription
     {
         $subscription = new Subscription();
@@ -799,10 +799,10 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createAlert(
-        Site    $site = null,
-        User    $user = null,
-        Article $article = null,
-        string  $axysAccountId = null): Alert
+        ?Site    $site = null,
+        ?User    $user = null,
+        ?Article $article = null,
+        ?string  $axysAccountId = null): Alert
     {
         $alert = new Alert();
 
@@ -818,7 +818,7 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createVote(string $axysAccountId = null): Vote
+    public static function createVote(?string $axysAccountId = null): Vote
     {
         $vote = new Vote();
 
@@ -832,9 +832,9 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createWishlist(
-        Site   $site = null,
-        User   $user = null,
-        string $axysAccountId = null,
+        ?Site   $site = null,
+        ?User   $user = null,
+        ?string $axysAccountId = null,
     ): Wishlist
     {
         $wishlist = new Wishlist();
@@ -851,9 +851,9 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createWish(
-        Wishlist $wishlist = null,
-        Article  $article = null,
-        string   $axysAccountId = null,
+        ?Wishlist $wishlist = null,
+        ?Article  $article = null,
+        ?string   $axysAccountId = null,
     ): Wish
     {
         $wish = new Wish();
@@ -874,13 +874,13 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createSpecialOffer(
-        Site           $site,
-        string         $name = "Offre spéciale",
-        BookCollection $targetCollection = null,
-        Article        $freeArticle = null,
-        int            $targetQuantity = 2,
-        DateTime       $startDate = new DateTime("- 1 day"),
-        DateTime       $endDate = new DateTime("+ 1 day"),
+        Site            $site,
+        string          $name = "Offre spéciale",
+        ?BookCollection $targetCollection = null,
+        ?Article        $freeArticle = null,
+        int             $targetQuantity = 2,
+        DateTime        $startDate = new DateTime("- 1 day"),
+        DateTime        $endDate = new DateTime("+ 1 day"),
     ): SpecialOffer
     {
         $specialOffer = new SpecialOffer();
@@ -900,18 +900,18 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createImage(
-        Article   $article = null,
-        Stock     $stockItem = null,
-        Post      $post = null,
-        Publisher $publisher = null,
-        People    $contributor = null,
-        Event     $event = null,
-        Site      $site = null,
-        string    $type = null,
-        string    $filePath = "/images/",
-        string    $fileName = "image.jpg",
-        int       $fileSize = 100,
-        int       $version = 1,
+        ?Article   $article = null,
+        ?Stock     $stockItem = null,
+        ?Post      $post = null,
+        ?Publisher $publisher = null,
+        ?People    $contributor = null,
+        ?Event     $event = null,
+        ?Site      $site = null,
+        ?string    $type = null,
+        string     $filePath = "/images/",
+        string     $fileName = "image.jpg",
+        int        $fileSize = 100,
+        int        $version = 1,
     ): Image
     {
         $image = new Image();
@@ -936,8 +936,8 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createDownloadableFile(
-        Article $article = null,
-        int     $fileSize = 100,
+        ?Article $article = null,
+        int      $fileSize = 100,
     ): File
     {
         $file = new File();
@@ -952,7 +952,7 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createMediaFile(
-        Site   $site = null,
+        ?Site  $site = null,
         string $directory = "medias",
         int    $fileSize = 100,
     ): MediaFile
@@ -970,9 +970,9 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createEvent(
-        Site      $site,
-        Publisher $publisher = null,
-        bool      $isPublished = true,
+        Site       $site,
+        ?Publisher $publisher = null,
+        bool       $isPublished = true,
     ): Event
     {
         $event = new Event();
