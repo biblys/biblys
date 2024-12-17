@@ -67,7 +67,7 @@ if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) $mode = 'admin';
                     <input type="hidden" name="filename" value="dedicaces-'.date('Y').'">
                     <input type="hidden" name="header" value="'.htmlentities(json_encode($export_header)).'">
                     <input type="hidden" name="data" value="'.htmlentities(json_encode($export)).'">
-                    <button class="btn btn-default" type="submit"><i class="fa fa-download"></i> Télécharger au format CSV</button>
+                    <button class="btn btn-outline-secondary" type="submit"><i class="fa fa-download"></i> Télécharger au format CSV</button>
                 </p>
             </fieldset>
 		</form>

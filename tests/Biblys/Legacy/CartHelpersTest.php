@@ -187,7 +187,7 @@ class CartHelpersTest extends TestCase
         $this->assertStringContainsString("Collection cible", $notice);
         $this->assertStringContainsString("Ajoutez encore 2 titres", $notice);
         $this->assertStringContainsString(
-            '<button class="btn btn-default" disabled>Ajouter au panier</button>',
+            '<button class="btn btn-outline-secondary" disabled>Ajouter au panier</button>',
             $notice
         );
     }

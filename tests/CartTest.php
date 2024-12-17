@@ -150,11 +150,11 @@ class CartTest extends PHPUnit\Framework\TestCase
         $this->assertEquals(Cart::buildOneLine(0, 0), '<a
                 href="/pages/cart"
                 rel="nofollow"
-                class="btn btn-default btn-sm empty"><span class="fa fa-shopping-cart"></span> Panier vide</a>');
+                class="btn btn-outline-secondary btn-sm empty"><span class="fa fa-shopping-cart"></span> Panier vide</a>');
         $this->assertEquals(Cart::buildOneLine(10, 10000), '<a
                 href="/pages/cart"
                 rel="nofollow"
-                class="btn btn-default btn-sm not-empty"><span class="fa fa-shopping-cart"></span> 10 articles (100,00&nbsp;&euro;)</a>');
+                class="btn btn-outline-secondary btn-sm not-empty"><span class="fa fa-shopping-cart"></span> 10 articles (100,00&nbsp;&euro;)</a>');
     }
 
     /**
