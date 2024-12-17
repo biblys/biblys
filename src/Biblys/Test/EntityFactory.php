@@ -59,9 +59,9 @@ class EntityFactory
      * @throws PropelException
      */
     public static function createArticle(
-        array  $attributes = [],
-        array  $authors = null,
-        string $title = null,
+        array   $attributes = [],
+        ?array  $authors = null,
+        ?string $title = null,
     ): Article
     {
         $am = new ArticleManager();
@@ -125,13 +125,13 @@ class EntityFactory
      * @throws Exception
      */
     public static function createOrder(
-        User     $user = null,
-        string   $firstName = "Marie",
-        string   $lastName = "Golade",
-        string   $orderEmail = "customer@example.net",
-        int      $shippingId = 0,
-        string   $mondialRelayPickupPointCode = null,
-        DateTime $paymentDate = null,
+        ?User     $user = null,
+        string    $firstName = "Marie",
+        string    $lastName = "Golade",
+        string    $orderEmail = "customer@example.net",
+        int       $shippingId = 0,
+        ?string   $mondialRelayPickupPointCode = null,
+        ?DateTime $paymentDate = null,
     ): Order
     {
         $om = new OrderManager();

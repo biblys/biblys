@@ -32,7 +32,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class AddArticleToUserLibraryUsecase
 {
-    public function __construct(private readonly Mailer $mailer)
+    public function __construct(private Mailer $mailer)
     {
     }
 
@@ -46,7 +46,7 @@ class AddArticleToUserLibraryUsecase
         CurrentSite  $currentSite,
         UrlGenerator $urlGenerator,
         User         $user,
-        Article      $article = null,
+        ?Article     $article = null,
         array        $items = [],
         bool         $allowsPreDownload = false,
         bool         $sendEmail = false,
@@ -97,15 +97,15 @@ class AddArticleToUserLibraryUsecase
         }
 
         if ($sendEmail) {
-            $elibraryUrl = $urlGenerator->generate("user_library");
+            $eLibraryUrl = $urlGenerator->generate("user_library");
             $subject = 'De nouveaux livres numériques disponibles dans votre bibliothèque.';
             $message = '
                     <p>Bonjour,</p>
-                    <p>Les livres numériques suivants ont été ajoutés à <a href="' . $elibraryUrl . '">votre bibliothèque numérique</a> :</p>
+                    <p>Les livres numériques suivants ont été ajoutés à <a href="' . $eLibraryUrl . '">votre bibliothèque numérique</a> :</p>
                     <ul><li>' . implode('</li><li>', $addedArticleTitles) . '</li></ul>
                     <p>Vous pouvez les télécharger à volonté depuis notre site, dans tous les formats disponibles. Vous pourrez également profiter gratuitement des mises à jour de ces fichiers si de nouvelles versions sont proposées.</p>
                     <p>Vous trouverez également dans votre bibliothèque numérique de l\'aide pour télécharger et lire ces fichiers. En cas de difficulté, n\'hésitez pas à nous solliciter en répondant à ce message.</p>
-                    <p><a href="' . $elibraryUrl . '"><strong>Accéder à votre bibliothèque numérique</strong></a></p>
+                    <p><a href="' . $eLibraryUrl . '"><strong>Accéder à votre bibliothèque numérique</strong></a></p>
                     <p>NB : Ces fichiers vous sont volontairement proposés sans dispositif de gestion des droits numériques (DRM ou GDN). Nous vous invitons à les transmettre à vos proches si vous souhaitez les leur faire découvrir, comme vous le feriez avec un livre papier, mais nous vous prions de ne pas les diffuser plus largement, par respect pour l\'auteur et l\'éditeur.</p>
                 ';
             $this->mailer->send($user->getEmail(), $subject, $message);

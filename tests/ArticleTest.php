@@ -21,7 +21,6 @@
 */
 
 use Biblys\Exception\ArticleAlreadyInRayonException;
-use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
@@ -32,6 +31,8 @@ require_once "setUp.php";
 
 class ArticleTest extends PHPUnit\Framework\TestCase
 {
+    private ArticleManager $m;
+
     public function setUp(): void
     {
         $this->m = new ArticleManager();
@@ -164,6 +165,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
             $article->get("keywords")
         );
 
+        /** @var Article $articleWithoutJoins */
         $articleWithoutJoins = $this->m->create([
             "article_collection" => "Présence du futur",
             "publisher_id" => 1000,
@@ -637,6 +639,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     public function testSetPublisher(Article $article)
     {
         $pm = new PublisherManager();
+        /** @var Publisher $publisher */
         $publisher = $pm->create(['publisher_name' => 'The Publisher']);
 
         $article->setPublisher($publisher);
@@ -664,6 +667,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
             'publisher_id' => $publisher->get('id')
         ]);
 
+        /** @var Collection $collection */
         $article->setCollection($collection);
 
         $this->assertEquals($article->get('collection_id'), $collection->get('id'));
@@ -791,7 +795,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $pm = new PublisherManager();
         $publisherAllowed = $pm->create(["publisher_name" => "Éditeur inexistant"]);
         $sm = new SiteManager();
-        $GLOBALS["LEGACY_CURRENT_SITE"] = $sm->create([]);
+        $GLOBALS["LEGACY_CURRENT_SITE"] = $sm->create();
         $GLOBALS["LEGACY_CURRENT_SITE"]->setOpt("publisher_filter", $publisherAllowed->get("id"));
         $am = new ArticleManager();
 
