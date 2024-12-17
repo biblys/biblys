@@ -14,6 +14,8 @@
 - Les liens "billet précédent" et "billet suivant" pouvaient pointer vers des
   billets hors-ligne. Désormais, ils pointent uniquement vers des billets
   publiés.
+- La création d'une demande de paiement Stripe pouvait échouer si le commande
+  contenait un article gratuit. Maintenant, ça marche.
 
 ## 3.1.1 (11 décembre 2024)
 
