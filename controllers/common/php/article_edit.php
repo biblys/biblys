@@ -349,7 +349,7 @@ return function (
                     </div>
                 </a>
         ';
-            $import_default = '<div class="center"><a class="btn btn-default reimport event">Réimporter la fiche depuis la base externe...</a></div>';
+            $import_default = '<div class="center"><a class="btn btn-outline-secondary reimport event">Réimporter la fiche depuis la base externe...</a></div>';
         } else {
             $request->attributes->set("page_title", "Créer un nouvel article");
             $_MODE = 'insert';
@@ -526,7 +526,7 @@ return function (
     // Couverture
     $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg, image/png, image/webp" />';
     if ($imagesService->imageExistsFor($article)) {
-        $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg, image/png, image/webp" hidden /> <label class="after btn btn-default" for="article_cover_upload">Remplacer</label> <input type="checkbox" id="article_cover_delete" name="article_cover_delete" value="1" /> <label for="article_cover_delete" class="after">Supprimer</label>';
+        $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg, image/png, image/webp" hidden /> <label class="after btn btn-outline-secondary" for="article_cover_upload">Remplacer</label> <input type="checkbox" id="article_cover_delete" name="article_cover_delete" value="1" /> <label for="article_cover_delete" class="after">Supprimer</label>';
     }
 
     // ** FICHIERS TÉLÉCHARGEABLES ** //
@@ -1016,7 +1016,7 @@ return function (
             </ul>
             <div class="center">
                 <br />
-                <a id="addAward" class="btn btn-default">
+                <a id="addAward" class="btn btn-outline-secondary">
                     Ajouter une récompense
                 </a>
             </div>
