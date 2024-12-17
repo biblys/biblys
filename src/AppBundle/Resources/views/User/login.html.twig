@@ -23,35 +23,33 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% block main %}
   <h1>Connexion</h1>
 
-  <div class="text-center">
-    <form class="form-inline" method="post" action="{{ path("user_send_login_email") }}">
-      <input type="hidden" name="return_url" value="{{ returnUrl }}"/>
-      <input type="text" name="username" class="login-username-field" aria-label="Ne pas remplir" />
-      <input
-        class="form-control"
-        type="email"
-        name="email"
-        aria-label="Votre adresse e-mail"
-        placeholder="Votre adresse e-mail…"
-        required
-      />
-      <button class="btn btn-primary" type="submit">
-        <span class="fa fa-envelope"></span>
-        S'identifier par e-mail
-      </button>
-    </form>
+  <form class="form-inline mb-3" method="post" action="{{ path("user_send_login_email") }}">
+    <input type="hidden" name="return_url" value="{{ returnUrl }}" />
+    <input type="text" name="username" class="login-username-field" aria-label="Ne pas remplir" />
+    <input
+      class="form-control mr-1"
+      type="email"
+      name="email"
+      aria-label="Votre adresse e-mail"
+      placeholder="Votre adresse e-mail…"
+      required
+    />
+    <button class="btn btn-primary" type="submit">
+      <span class="fa fa-envelope"></span>
+      S'identifier par e-mail
+    </button>
+  </form>
 
-    {% if loginWithAxysUrl %}
-      <p>ou</p>
+  {% if loginWithAxysUrl %}
+    <p>ou</p>
 
-      <p>
-        <a href="{{ loginWithAxysUrl }}" rel="nofollow" class="btn btn-primary">
-          <img src="/assets/images/axys.svg" alt="" role="presentation" width="16" height="16"/>
-          Se connecter avec Axys
-        </a>
-      </p>
-    {% endif %}
-  </div>
+    <p>
+      <a href="{{ loginWithAxysUrl }}" rel="nofollow" class="btn btn-primary">
+        <img src="/assets/images/axys.svg" alt="" role="presentation" width="16" height="16" />
+        Se connecter avec Axys
+      </a>
+    </p>
+  {% endif %}
 
   <p><strong>Pas encore de compte ?</strong></p>
 
