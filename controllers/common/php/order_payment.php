@@ -139,7 +139,7 @@ return function (Request $request, Config $config, CurrentSite $currentSite): Re
                     </p>
                     <br />
                     <p class="noprint">
-                        <a href="/payment/' . $order->get('url') . '" class="btn btn-default">» Choisir un autre mode de paiement</a>
+                        <a href="/payment/' . $order->get('url') . '" class="btn btn-outline-secondary">» Choisir un autre mode de paiement</a>
                     </p>
     
                     <h2>Bon de commande n° ' . $order->get('id') . '</h2>
