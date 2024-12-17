@@ -30,6 +30,11 @@ require_once "setUp.php";
 
 class CartTest extends PHPUnit\Framework\TestCase
 {
+    /** @var Cart[] */
+    private array $carts;
+    /** @var Stock[] */
+    private array $stocks;
+    private ?Article $article;
 
     public function setUp(): void
     {

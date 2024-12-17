@@ -21,14 +21,18 @@
 */
 
 use Biblys\Legacy\LegacyCodeHelper;
+use Model\PublisherQuery;
 
 require_once "setUp.php";
 
 class PublisherTest extends PHPUnit\Framework\TestCase
 {
+    private ?Publisher $publisher;
+
     public function setUp(): void
     {
         $this->publisher = null;
+        PublisherQuery::create()->deleteAll();
     }
 
     public function tearDown(): void
@@ -50,7 +54,9 @@ class PublisherTest extends PHPUnit\Framework\TestCase
 
         $pm = new PublisherManager();
 
-        $this->publisher = $pm->create(['publisher_name' => 'Un éditeur']);
+        /** @var Publisher $publisher */
+        $publisher = $pm->create(['publisher_name' => 'Un éditeur']);
+        $this->publisher = $publisher;
 
         $this->assertInstanceOf('Publisher', $this->publisher);
         $this->assertEquals($this->publisher->get('name'), 'UN ÉDITEUR');
@@ -62,7 +68,9 @@ class PublisherTest extends PHPUnit\Framework\TestCase
     public function testGet()
     {
         $pm = new PublisherManager();
-        $this->publisher = $pm->create(['publisher_name' => 'Un éditeur']);
+        /** @var Publisher $publisher */
+        $publisher = $pm->create(['publisher_name' => 'Un éditeur']);
+        $this->publisher = $publisher;
 
         $gotPublisher = $pm->getById($this->publisher->get('id'));
 
@@ -75,7 +83,9 @@ class PublisherTest extends PHPUnit\Framework\TestCase
     public function testUpdate()
     {
         $pm = new PublisherManager();
-        $this->publisher = $pm->create(['publisher_name' => 'Un éditeur']);
+        /** @var Publisher $publisher */
+        $publisher = $pm->create(['publisher_name' => 'Un éditeur']);
+        $this->publisher = $publisher;
 
         $this->publisher->set('publisher_name', 'Les éditions Publitou');
         $pm->update($this->publisher);
@@ -96,7 +106,9 @@ class PublisherTest extends PHPUnit\Framework\TestCase
         $pm = new PublisherManager();
         $am = new ArticleManager();
 
-        $this->publisher = $pm->create(["publisher_name" => "Les Éditions Paronymie avec articles"]);
+        /** @var Publisher $publisher */
+        $publisher = $pm->create(["publisher_name" => "Les Éditions Paronymie avec articles"]);
+        $this->publisher = $publisher;
         $article = $am->create([
             "article_title" => "Sous-sol",
             "publisher_id" => $this->publisher->get('id'),
@@ -115,7 +127,9 @@ class PublisherTest extends PHPUnit\Framework\TestCase
         $pm = new PublisherManager();
         $am = new ArticleManager();
 
-        $this->publisher = $pm->create(["publisher_name" => "Les Éditions Paronymie pour compter"]);
+        /** @var Publisher $publisher */
+        $publisher = $pm->create(["publisher_name" => "Les Éditions Paronymie pour compter"]);
+        $this->publisher = $publisher;
         $article = $am->create([
             "article_title" => "Sous-sol",
             "publisher_id" => $this->publisher->get('id'),
@@ -150,8 +164,10 @@ class PublisherTest extends PHPUnit\Framework\TestCase
 
         $pm = new PublisherManager();
 
-        $this->publisher = $pm->create(['publisher_name' => 'Les éditions Publitou']);
-        $pm->create(['publisher_name' => 'Les éditions Publitou']);
+        /** @var Publisher $publisher */
+        $publisher = $pm->create(['publisher_name' => 'Les éditions Publitou']);
+        $publisher = $pm->create(['publisher_name' => 'Les éditions Publitou']);
+        $this->publisher = $publisher;
     }
 
     /**

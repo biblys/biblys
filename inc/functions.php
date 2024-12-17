@@ -133,7 +133,7 @@ try {
 $config = Config::load();
 Biblys\Database\Connection::initPropel($config);
 
-function authors(?string $nameString, string $mode = null): ?string
+function authors(?string $nameString, ?string $mode = null): ?string
 {
     
     if ($nameString === null) {
