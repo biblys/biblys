@@ -428,7 +428,7 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
             Afficher :
 
             <div id="listFilter" class="btn-group">
-                <button class="btn btn-default btn-sm" data-toggle="dropdown">
+                <button class="btn btn-outline-secondary btn-sm" data-toggle="dropdown">
                     <i class="fa fa-square"></i>&nbsp; tous les livres <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
@@ -444,7 +444,7 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
             Trier par :
 
             <div id="listSort" class="btn-group">
-                <button class="btn btn-default btn-sm" data-toggle="dropdown">
+                <button class="btn btn-outline-secondary btn-sm" data-toggle="dropdown">
                     date d\'ajout au stock <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">

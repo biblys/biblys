@@ -206,7 +206,7 @@ return function (
 
         // Paiement
         if (!$o["order_payment_date"]) $buttons .= '<a href="/payment/' . $o["order_url"] . '" class="btn btn-primary"><i class="fa fa-money"></i>&nbsp; Payer la commande (' . currency($o["order_amount_tobepaid"] / 100) . ')</a> ';
-        else $buttons .= '<a href="/invoice/' . $o["order_url"] . '" class="btn btn-default"><i class="fa fa-print"></i> Imprimer une facture</a> ';
+        else $buttons .= '<a href="/invoice/' . $o["order_url"] . '" class="btn btn-outline-secondary"><i class="fa fa-print"></i> Imprimer une facture</a> ';
 
         $currentSite = $currentSiteService->getSite();
         $trackingLink = $order->getTrackingLink();
@@ -261,7 +261,7 @@ return function (
                         foreach ($files as $f) {
                             $a['dl_links'] .= ' <a href="' . $f->getUrl() . '" title="' . $f->get('version') . ' | ' . file_size($f->get('size')) . ' | ' . $f->getType('name') . '"><img src="' . $f->getType('icon') . '" width=16 alt="Télécharger"> ' . $f->get('title') . '</a> &nbsp;';
                         }
-                        $a['dl_links'] = '<div class="btn btn-default"><i class="fa fa-cloud-download"></i> &nbsp; ' . $a['dl_links'] . '</a>';
+                        $a['dl_links'] = '<div class="btn btn-outline-secondary"><i class="fa fa-cloud-download"></i> &nbsp; ' . $a['dl_links'] . '</a>';
                     }
                 } else {
                     $a['dl_links'] = '<p class="alert alert-info">Téléchargement possible à partir du ' . _date($article->get('pubdate'), 'd/m') . '.</p>';

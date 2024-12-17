@@ -484,7 +484,7 @@ return function (
             $content .= '<br />'
                 . '<div class="center">'
                 . '<p class="warning">Votre panier contient au moins un livre numérique. Vous devez vous <a href="' . $loginUrl . '">identifier</a> pour continuer.</p>'
-                . '<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
+                . '<button type="button" disabled class="btn btn-outline-secondary">Finaliser la commande</button>'
                 . '</div>';
 
             // If cart contains crowdfunding rewards and user not logged
@@ -492,7 +492,7 @@ return function (
             $content .= '<br>'
                 . '<div class="center">'
                 . '<p class="warning">Votre panier contient au moins une contrepartie de financement participatif.<br>Vous devez vous <a href="' . $loginUrl . '">identifier</a> pour continuer.</p>'
-                . '<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
+                . '<button type="button" disabled class="btn btn-outline-secondary">Finaliser la commande</button>'
                 . '</div>';
         } elseif ($orderInProgress) {
             $content .= '<div class="center"><button type="submit" class="btn btn-primary" id="continue">Ajouter à la commande en cours</button></div>';

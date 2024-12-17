@@ -327,7 +327,7 @@ class CartControllerTest extends TestCase
             '<a
                 href="/pages/cart"
                 rel="nofollow"
-                class="btn btn-default btn-sm empty"><span class="fa fa-shopping-cart"></span> Panier vide</a>',
+                class="btn btn-outline-secondary btn-sm empty"><span class="fa fa-shopping-cart"></span> Panier vide</a>',
             json_decode($response->getContent())->summary,
             "it should return cart summary"
         );
@@ -360,7 +360,7 @@ class CartControllerTest extends TestCase
             '<a
                 href="/pages/cart"
                 rel="nofollow"
-                class="btn btn-default btn-sm not-empty"><span class="fa fa-shopping-cart"></span> 1 article (5,00&nbsp;&euro;)</a>',
+                class="btn btn-outline-secondary btn-sm not-empty"><span class="fa fa-shopping-cart"></span> 1 article (5,00&nbsp;&euro;)</a>',
             json_decode($response->getContent())->summary,
             "it should return cart summary"
         );

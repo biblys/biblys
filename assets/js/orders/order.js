@@ -104,7 +104,7 @@ export default class Order {
           '</td>' +
           '<td><a href="/invoice/' +
           self.data.url +
-          '" class="btn btn-xs btn-default" title="Imprimer la facture" ><i class="fa fa-print"></i></a></td>' +
+          '" class="btn btn-xs btn-outline-secondary" title="Imprimer la facture" ><i class="fa fa-print"></i></a></td>' +
           '<td>' +
           (self.data.payment_mode
             ? '<img src="/assets/icons/payment_' +
