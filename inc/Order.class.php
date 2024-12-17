@@ -373,7 +373,7 @@ class Order extends Entity
             $product = Product::create(["name" => $copy->get("article")->get("title")]);
             $price = \Stripe\Price::create([
                 "product" => $product->id,
-                "unit_amount" => $copy->get("selling_price"),
+                "unit_amount" => $copy->get("selling_price") ?? 0,
                 "currency" => "EUR",
             ]);
             return [ "quantity" => 1, "price" => $price->id ];
