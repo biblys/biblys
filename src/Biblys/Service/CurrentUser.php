@@ -411,7 +411,7 @@ class CurrentUser
      * @throws AccessDeniedHttpException
      * @throws PropelException
      */
-    public function authPublisher(Publisher $publisher = null): void
+    public function authPublisher(?Publisher $publisher = null): void
     {
         $this->authUser();
 

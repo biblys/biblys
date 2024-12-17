@@ -24,6 +24,7 @@ class Post extends Entity
     protected $prefix = 'post';
     private ?Media $illustration = null;
     private ?Publisher $publisher = null;
+    private bool $illustrationExists;
 
     /**
      * @throws PropelException

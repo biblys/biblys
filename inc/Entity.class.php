@@ -221,6 +221,7 @@ class EntityManager
     protected $siteAgnostic = true;
     protected $_entityProperties = [];
     protected string $idField;
+    private Mailer $mailer;
 
     public function __construct()
     {

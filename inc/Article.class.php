@@ -73,6 +73,10 @@ class Article extends Entity
         12 => "Carte à code",
         13 => "Périodique"
     ];
+    private array $files;
+    private array $otherContributors;
+    private array $authors;
+    private array $contributors;
 
     public function __construct($data, $withJoins = true)
     {

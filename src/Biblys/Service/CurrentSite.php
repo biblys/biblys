@@ -70,7 +70,7 @@ class CurrentSite
     /**
      * @throws PropelException
      */
-    public function getOption(string $key, string $defaultValue = null): ?string
+    public function getOption(string $key, ?string $defaultValue = null): ?string
     {
         $option = OptionQuery::create()
             ->filterBySite($this->site)

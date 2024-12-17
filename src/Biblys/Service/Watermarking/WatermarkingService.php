@@ -18,7 +18,6 @@
 
 namespace Biblys\Service\Watermarking;
 
-use Biblys\Service\Config;
 use LemonInk\Client;
 use LemonInk\Models\Transaction;
 
@@ -28,6 +27,7 @@ use LemonInk\Models\Transaction;
 class WatermarkingService
 {
     private bool $isConfigured = false;
+    private Client $client;
 
     public function __construct(Client $client, bool $isConfigured)
     {
