@@ -344,7 +344,7 @@ return function (
                 $order->save($db);
 
                 // Delete alerts for purchased articles
-                if ($currentSite->hasOptionEnabled("alerts") && $currentUser->isAuthentified()) {
+                if ($currentSite->hasOptionEnabled("alerts") && $currentUser->isAuthenticated()) {
                     foreach ($order->getStockItems() as $stockItem) {
                         $alert = AlertQuery::create()
                             ->filterByUser($currentUser->getUser())
@@ -474,7 +474,7 @@ return function (
         $checked = null;
         $showCheckbox = true;
 
-        if ($currentUser->isAuthentified()
+        if ($currentUser->isAuthenticated()
             && $mailingListService->isConfigured()
             && $mailingList->hasContact($currentUser->getUser()->getEmail())) {
             $showCheckbox = false;
@@ -557,7 +557,7 @@ return function (
     $orderEntity = new Order([]);
 
     $previousOrder = null;
-    if ($currentUser->isAuthentified()) {
+    if ($currentUser->isAuthenticated()) {
         $previousOrder = $orderManager->get(
             [
                 'user_id' => $currentUser->getUser()->getId(),
