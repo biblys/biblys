@@ -21,7 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 		{% if pages.previous > -1 %}
 			<a
 				href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ pages.previous }}"
-				class="btn btn-default btn-sm pagination-button button-prev"
+				class="btn btn-outline-secondary btn-sm pagination-button button-prev"
 			>
 				<span class="icon fa fa-chevron-circle-left"></span>
 			</a>
@@ -43,7 +43,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 			&nbsp;
 			<a
 				href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ pages.next }}"
-				class="btn btn-default btn-sm pagination-button button-next"
+				class="btn btn-outline-secondary btn-sm pagination-button button-next"
 			>
 				<span class="icon fa fa-chevron-circle-right"></span>
 			</a>

@@ -440,7 +440,7 @@ $content = '
                 </p>
 
                 <p class="center">
-                    <button type="submit" class="btn btn-default">Afficher le chiffre d\'affaire</button>
+                    <button type="submit" class="btn btn-outline-secondary">Afficher le chiffre d\'affaire</button>
                 </p>
 
             </fieldset>

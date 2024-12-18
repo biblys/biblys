@@ -24,7 +24,7 @@ export default class EntitySearchField {
     // For each entity search field
     var field = jQuery(element),
       entity = field.attr('data-entity_search'),
-      changeButton = jQuery('<button class="btn btn-default" disabled>Modifier</button>'),
+      changeButton = jQuery('<button class="btn btn-outline-secondary" disabled>Modifier</button>'),
       submitButton = field.closest('form').find('button[type=submit]'),
       idField = jQuery('<input type="hidden" name="' + entity.toLowerCase() + '_id">');
 
