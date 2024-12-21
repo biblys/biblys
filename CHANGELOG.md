@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.1.3 (DEV)
+
+### Corrections
+
+- Le lien pour aller à la page d'un article depuis la bibliothèque numérique
+  n'était pas bon. C'est corrigé.
+
 ## 3.1.2 (18 décembre 2024)
 
 ### Corrections

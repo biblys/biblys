@@ -70,7 +70,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             {% endif %}
           </td>
           <td style="max-width: 50%">
-            <a href="{{ item.article.url }}">{{ item.article.title }}</a>
+            <a href="{{ path("article_show", { slug: item.article.url }) }}">
+              {{ item.article.title }}
+            </a>
             <br>{{ item.article.authors }}
           </td>
           <td class="center align-middle" style="width: 125px;">
