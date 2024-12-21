@@ -74,8 +74,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       {% endfor %}
     </div>
     <div class="col-md-4 text-center">
-      {% if article.hasCover() %}
-        {{ article.getCoverTag({ class:"cover", size:"w300", rel: "lightbox" })|raw }}
+      {% if article.model|hasImage %}
+        {% include "AppBundle:Article:_cover.html.twig" with {
+          article: article.model,
+          class: "cover",
+          rel: "lightbox",
+          width: 300
+        } %}
       {% endif %}
     </div>
   </div>
