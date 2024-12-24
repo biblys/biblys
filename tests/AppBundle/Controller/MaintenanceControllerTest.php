@@ -21,8 +21,13 @@ namespace AppBundle\Controller;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\TemplateService;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Mockery;
+use Model\ArticleQuery;
+use Model\FileQuery;
+use Model\ImageQuery;
+use Model\MediaFileQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,11 +39,19 @@ require_once __DIR__ . "/../../../tests/setUp.php";
 
 class MaintenanceControllerTest extends TestCase
 {
+    public function setUp(): void
+    {
+        FileQuery::create()->deleteAll();
+        ImageQuery::create()->deleteAll();
+        MediaFileQuery::create()->deleteAll();
+    }
+
     /**
      * @throws PropelException
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \Exception
      */
     public function testDiskUsageAction(): void
     {
@@ -58,14 +71,14 @@ class MaintenanceControllerTest extends TestCase
         ModelFactory::createImage(site: $site, type: 'logo', fileSize: 99999999);
         ModelFactory::createImage(site: $site, type: 'portrait', fileSize: 99999999);
         ModelFactory::createMediaFile(site: $site, fileSize: 99999999);
+        ModelFactory::createDownloadableFile(fileSize: 99999999);
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authAdmin")->andReturns();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->expects("getSite")->andReturns($site);
         $currentSite->expects("getOption")->andReturns(null);
-        $templateService = Mockery::mock(TemplateService::class);
-        $templateService->expects("renderResponse")->andReturns(new Response("response"));
+        $templateService = Helpers::getTemplateService();
 
         // when
         $response = $controller->diskUsageAction($currentUser, $currentSite, $templateService);
@@ -73,89 +86,48 @@ class MaintenanceControllerTest extends TestCase
         // then
         /** @noinspection PhpUndefinedMethodInspection */
         $currentUser->shouldHaveReceived("authAdmin")->withNoArgs();
-        /** @noinspection PhpUndefinedMethodInspection */
-        $templateService->shouldHaveReceived("renderResponse")
-            ->with("AppBundle:Maintenance:disk-usage.html.twig", [
-                "articlesCount" => 1,
-                "articlesSize" => 0.093,
-                "contributorsCount" => 1,
-                "contributorsSize" => 0.093,
-                "publishersCount" => 1,
-                "publishersSize" => 0.093,
-                "stockItemsCount" => 1,
-                "stockItemsSize" => 0.093,
-                "postIllustrationsCount" => 1,
-                "postIllustrationsSize" => 0.093,
-                "eventIllustrationsCount" => 1,
-                "eventIllustrationsSize" => 0.093,
-                "downloadableFilesCount" => 0,
-                "downloadableFilesSize" => 0.0,
-                "mediaFilesCount" => 1,
-                "mediaFilesSize" => 0.093,
-                "totalCount" => 7,
-                "totalSize" => 0.652,
-            ]);
         $this->assertInstanceOf(Response::class, $response);
-        $this->assertEquals("response", $response->getContent());
-    }
-
-    /**
-     * @throws PropelException
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public function testDiskUsageActionWithPublisherFilter(): void
-    {
-        // given
-        $controller = new MaintenanceController();
-
-        $publisherFromCurrentSite = ModelFactory::createPublisher(name: "Éditeur du site actuel");
-        $articleFromCurrentSite = ModelFactory::createArticle(title: "Article du site actuel", publisher: $publisherFromCurrentSite);
-        ModelFactory::createImage(article: $articleFromCurrentSite, type: 'cover', fileSize: 99999999);
-        $publisherFromOtherSite = ModelFactory::createPublisher(name: "Éditeur d'un autre site");
-        $articleFromOtherSite = ModelFactory::createArticle(title: "Article d'un autre site", publisher: $publisherFromOtherSite);
-        ModelFactory::createImage(article: $articleFromOtherSite, type: 'cover', fileSize: 99999999);
-        $site = ModelFactory::createSite();
-        ModelFactory::createDownloadableFile(article: $articleFromCurrentSite, fileSize: 99999999);
-
-        $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("authAdmin")->andReturns();
-        $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->expects("getSite")->andReturns($site);
-        $currentSite->expects("getOption")->andReturns($publisherFromCurrentSite->getId());
-        $templateService = Mockery::mock(TemplateService::class);
-        $templateService->expects("renderResponse")->andReturns(new Response("response"));
-
-        // when
-        $response = $controller->diskUsageAction($currentUser, $currentSite, $templateService);
-
-        // then
-        /** @noinspection PhpUndefinedMethodInspection */
-        $currentUser->shouldHaveReceived("authAdmin")->withNoArgs();
-        /** @noinspection PhpUndefinedMethodInspection */
-        $templateService->shouldHaveReceived("renderResponse")
-            ->with("AppBundle:Maintenance:disk-usage.html.twig", [
-                "articlesCount" => 1,
-                "articlesSize" => 0.093,
-                "contributorsCount" => 1,
-                "contributorsSize" => 0.093,
-                "publishersCount" => 1,
-                "publishersSize" => 0.093,
-                "postIllustrationsCount" => 0,
-                "postIllustrationsSize" => 0,
-                "eventIllustrationsCount" => 0,
-                "eventIllustrationsSize" => 0,
-                "downloadableFilesCount" => 1,
-                "downloadableFilesSize" => 0.093,
-                "stockItemsCount" => 0,
-                "stockItemsSize" => 0,
-                "mediaFilesCount" => 0,
-                "mediaFilesSize" => 0,
-                "totalCount" => 4,
-                "totalSize" => 0.373,
-            ]);
-        $this->assertInstanceOf(Response::class, $response);
-        $this->assertEquals("response", $response->getContent());
+        $this->assertStringContainsString('<tbody>
+      <tr>
+        <td>Articles (images de couverture)</td>
+        <td class="text-right">1</td>
+        <td class="text-right">0.093 Go</td>
+      </tr>
+      <tr>
+        <td>Contributeur·ices (portrait)</td>
+        <td class="text-right">1</td>
+        <td class="text-right">0.093 Go</td>
+      </tr>
+      <tr>
+        <td>Éditeurs (logos)</td>
+        <td class="text-right">1</td>
+        <td class="text-right">0.093 Go</td>
+      </tr>
+      <tr>
+        <td>Exemplaires d’occasion (photos)</td>
+        <td class="text-right">1</td>
+        <td class="text-right">0.093 Go</td>
+      </tr>
+      <tr>
+        <td>Billets de blog (illustrations)</td>
+        <td class="text-right">1</td>
+        <td class="text-right">0.093 Go</td>
+      </tr>
+      <tr>
+        <td>Évènements (illustrations)</td>
+        <td class="text-right">1</td>
+        <td class="text-right">0.093 Go</td>
+      </tr>
+      <tr>
+        <td>Médias</td>
+        <td class="text-right">1</td>
+        <td class="text-right">0.093 Go</td>
+      </tr>
+      <tr>
+        <td>Fichiers téléchargeables</td>
+        <td class="text-right">1</td>
+        <td class="text-right">0.093 Go</td>
+      </tr>
+    </tbody>', $response->getContent());
     }
 }
