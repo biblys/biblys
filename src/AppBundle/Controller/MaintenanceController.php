@@ -56,22 +56,11 @@ class MaintenanceController extends Controller
     {
         $currentUser->authAdmin();
 
-        $publisherFilter = $currentSite->getOption("publisher_filter");
-
         $articlesQuery = ImageQuery::create()
             ->filterByType("cover")
             ->withColumn('COUNT(`id`)', 'count')
             ->withColumn('SUM(`fileSize`)', 'size')
             ->select(['count', 'size']);
-
-        if ($publisherFilter) {
-            $allowedPublisherIds = explode(",", $publisherFilter);
-            $articlesQuery = $articlesQuery
-                ->joinWithArticle()
-                ->useArticleQuery()
-                    ->filterByPublisherId($allowedPublisherIds)
-                ->endUse();
-        }
 
         $articles = $articlesQuery->find()->getData()[0];
 
@@ -87,19 +76,12 @@ class MaintenanceController extends Controller
             ->withColumn("SUM(`fileSize`)", "size")
             ->select(["count", "size"])->find()->getData()[0];
 
-        $downloadableFiles = ["count" => 0, "size" => 0];
-        if ($publisherFilter) {
-            $downloadableFiles = FileQuery::create()
-                ->withColumn('COUNT(`file_id`)', 'count')
-                ->withColumn('SUM(`file_size`)', 'size')
-                ->select(['count', 'size'])
-                ->joinWithArticle()
-                ->useArticleQuery()
-                    ->filterByPublisherId($allowedPublisherIds)
-                ->endUse()
-                ->find()
-                ->getData()[0];
-        }
+        $downloadableFiles = FileQuery::create()
+            ->withColumn('COUNT(`file_id`)', 'count')
+            ->withColumn('SUM(`file_size`)', 'size')
+            ->select(['count', 'size'])
+            ->find()
+            ->getData()[0];
 
         $stockItems = ImageQuery::create()
             ->filterByType("photo")

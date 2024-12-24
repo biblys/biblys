@@ -941,7 +941,7 @@ class ModelFactory
     ): File
     {
         $file = new File();
-        $file->setArticleId($article->getId());
+        $file->setArticleId($article?->getId() ?? self::createArticle()->getId());
         $file->setSize($fileSize);
         $file->save();
 
