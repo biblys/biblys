@@ -295,14 +295,13 @@ class ModelFactory
     ): Order
     {
         $customer = $customer ?? ModelFactory::createCustomer($site, $user);
-        $shipping = $shippingFee ?? ModelFactory::createShippingFee();
         $country = $country ?? CountryQuery::create()->findOneByCode("FR");
 
         $order = new Order();
         $order->setSite($site ?? ModelFactory::createSite());
         $order->setUser($user);
-        $order->setShippingId($shipping->getId());
-        $order->setShippingMode($shipping->getType());
+        $order->setShippingId($shippingFee?->getId());
+        $order->setShippingMode($shippingFee?->getType());
         $order->setType("web");
         $order->setAxysAccountId($axysAccountId);
         $order->setSlug($slug ?? "order-slug");
