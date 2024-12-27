@@ -17,11 +17,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% extends "layout:base.html.twig" %}
 
 {% block title %}
-  Abonnement Biblys Cloud
+  Abonnement Biblys
 {% endblock %}
 
 {% block main %}
-  <h1>Abonnement Biblys Cloud</h1>
+  <h1>
+    <span class="fa fa-leaf"></span>
+    Abonnement Biblys
+  </h1>
 
   {% if subscription %}
     {% if domains %}
@@ -33,12 +36,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     {% endif %}
 
     <a href="{{ path('main_admin_cloud_portal', { return_url: app.currentUrl.absoluteUrl }) }}" class="btn btn-primary">
-      <span class="fa fa-cloud"></span>
+      <span class="fa fa-gears"></span>&nbsp;
       Gérer mon abonnement
     </a>
 
   {% else %}
-    <p>Aucun abonnement Biblys Cloud en cours.</p>
+    <p>Aucun abonnement Biblys en cours.</p>
   {% endif %}
 {% endblock %}
 

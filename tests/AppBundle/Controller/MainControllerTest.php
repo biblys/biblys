@@ -568,7 +568,7 @@ class MainControllerTest extends TestCase
             "returns HTTP 200"
         );
         $this->assertStringContainsString(
-            "Votre abonnement Biblys Cloud a expiré.",
+            "Votre abonnement Biblys a expiré.",
             $response->getContent(),
             "displays the warning"
         );
@@ -639,12 +639,12 @@ class MainControllerTest extends TestCase
             "it should return HTTP 200"
         );
         $this->assertStringContainsString(
-            "Abonnement Biblys Cloud",
+            "Abonnement Biblys",
             $response->getContent(),
             "it should display the title"
         );
         $this->assertStringContainsString(
-            "Aucun abonnement Biblys Cloud en cours",
+            "Aucun abonnement Biblys en cours",
             $response->getContent(),
             "it should display the invite"
         );
@@ -679,7 +679,7 @@ class MainControllerTest extends TestCase
             "it should return HTTP 200"
         );
         $this->assertStringContainsString(
-            "Abonnement Biblys Cloud",
+            "Abonnement Biblys",
             $response->getContent(),
             "it should display the title"
         );

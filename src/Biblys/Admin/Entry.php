@@ -262,7 +262,7 @@ class Entry
         $entries[] = new Entry('Améliorer Biblys', ['category' => 'biblys', 'url' => 'https://ameliorer.biblys.fr', 'icon' => 'lightbulb-o']);
         $cloud = new CloudService($config, new Client());
         if ($cloud->isConfigured()) {
-            $entries[] = new Entry('Abonnement Cloud', ['category' => 'biblys', 'path' => 'main_admin_cloud', 'icon' => 'cloud']);
+            $entries[] = new Entry('Abonnement Biblys', ['category' => 'biblys', 'path' => 'main_admin_cloud', 'icon' => 'leaf']);
         }
         $entries[] = new Entry('Documentation', ['category' => 'biblys', 'url' => 'https://docs.biblys.fr/', 'icon' => 'book']);
         $entries[] = new Entry('Mises à jour', ['category' => 'biblys', 'url' => 'https://github.com/biblys/biblys/releases/', 'icon' => 'cloud-download']);

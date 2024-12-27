@@ -477,8 +477,6 @@ class MainController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $request->attributes->set("page_title", "Abonnement Biblys Cloud");
-
         return $this->render("AppBundle:Main:adminCloud.html.twig", [
             "domains" => $cloudConfig["domains"] ?? [],
             "subscription" => $cloud->getSubscription(),
