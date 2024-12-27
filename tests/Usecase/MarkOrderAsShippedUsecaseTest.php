@@ -30,6 +30,8 @@ use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
+require_once __DIR__ . "/../setUp.php";
+
 class MarkOrderAsShippedUsecaseTest extends TestCase
 {
 
@@ -43,7 +45,8 @@ class MarkOrderAsShippedUsecaseTest extends TestCase
     public function testExecute()
     {
         // given
-        $order = ModelFactory::createOrder(email: "customer@paronymie.fr");
+        $shipping = ModelFactory::createShippingFee();
+        $order = ModelFactory::createOrder(shippingFee: $shipping, email: "customer@paronymie.fr");
         $site = ModelFactory::createSite(domain: "paronymie-expeditions.fr");
 
         $currentSite = Mockery::mock(CurrentSite::class);
@@ -81,7 +84,8 @@ class MarkOrderAsShippedUsecaseTest extends TestCase
     public function testExecuteWithCustomShippingMessage()
     {
         // given
-        $order = ModelFactory::createOrder(email: "customer@paronymie.fr");
+        $shipping = ModelFactory::createShippingFee();
+        $order = ModelFactory::createOrder(shippingFee: $shipping, email: "customer@paronymie.fr");
         $site = ModelFactory::createSite();
 
         $currentSite = Mockery::mock(CurrentSite::class);
