@@ -26,6 +26,7 @@ use Exception;
 use Model\ImageQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
+use Propel\Runtime\Propel;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
@@ -65,6 +66,8 @@ class MigrateImagesCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
+        Propel::disableInstancePooling();
+
         $contributorPortraitsQuery = ImageQuery::create()->select(["id"])->filterByType("portrait");
         $publisherLogosQuery = ImageQuery::create()->select(["id"])->filterByType("logo");
         $stockItemPhotosQuery = ImageQuery::create()->select(["id"])->filterByType("photo")->filterBySite($this->currentSite->getSite());
