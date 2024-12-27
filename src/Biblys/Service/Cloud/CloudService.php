@@ -88,7 +88,7 @@ class CloudService
     private function _query(string $endpointUrl): array
     {
         if (!$this->isConfigured()) {
-            throw new Exception("Biblys Cloud n'est pas configuré.");
+            throw new Exception("L'abonnement Biblys n'est pas configuré.");
         }
 
         $baseUrl = $this->config->get("cloud.base_url") ?: "https://cloud.biblys.fr";
