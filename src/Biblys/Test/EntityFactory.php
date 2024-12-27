@@ -145,6 +145,7 @@ class EntityFactory
         $country = self::createCountry();
         $order->set("country_id", $country->get("id"));
         $order->set("order_shipping", $shippingId);
+        $order->set("shipping_id", $shippingId);
         $order->set("mondial_relay_pickup_point_code", $mondialRelayPickupPointCode);
         $order->set("order_payment_date", $paymentDate?->format("Y-m-d H:i:s"));
 

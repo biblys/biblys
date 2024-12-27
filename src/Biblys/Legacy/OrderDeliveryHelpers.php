@@ -366,7 +366,7 @@ class OrderDeliveryHelpers
                     <p>
                         ------------------------------<br />
                         ' . $shippingLine . '
-                        Total : ' . currency($order->getTotalAmount() / 100) . '
+                        Total : ' . currency($order->getTotalAmountWithShipping() / 100) . '
                     </p>
 
                     ' . $orderEbooks . '
