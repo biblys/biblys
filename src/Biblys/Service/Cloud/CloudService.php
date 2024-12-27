@@ -91,7 +91,7 @@ class CloudService
             throw new Exception("Biblys Cloud n'est pas configuré.");
         }
 
-        $baseUrl = $this->config->get("cloud.base_url") ?: "https://biblys.cloud";
+        $baseUrl = $this->config->get("cloud.base_url") ?: "https://cloud.biblys.fr";
         $requestUrl = "$baseUrl/api$endpointUrl";
 
         $response = $this->httpClient->request("GET", $requestUrl, [

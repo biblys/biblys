@@ -88,7 +88,7 @@ class CloudServiceTest extends TestCase
             ->with()
             ->andReturn($body);
         $httpClient->shouldReceive("request")
-            ->with("GET", "https://biblys.cloud/api/stripe/subscription", [
+            ->with("GET", "https://cloud.biblys.fr/api/stripe/subscription", [
                 "auth" => ["PUBLIC", "SECRET"],
             ])->andReturn($response);
 
