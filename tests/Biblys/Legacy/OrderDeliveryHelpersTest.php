@@ -249,9 +249,9 @@ class OrderDeliveryHelpersTest extends TestCase
         ]);
         $copy = EntityFactory::createStock(["article_id" => $article->get("id")]);
         $cm->addStock($cart, $copy);
-        $order = EntityFactory::createOrder();
-        $om->hydrateFromCart($order, $cart);
         $shipping = EntityFactory::createShipping(mode: "Colissimo", fee: 560);
+        $order = EntityFactory::createOrder(shippingId: $shipping->get("id"));
+        $om->hydrateFromCart($order, $cart);
         $termsPage = ModelFactory::createPage();
 
         $mailBody = '
@@ -288,7 +288,7 @@ class OrderDeliveryHelpersTest extends TestCase
                     <p>
                         ------------------------------<br />
                         Frais de port : 5,60&nbsp;&euro; (Colissimo)<br>
-                        Total : 18,99&nbsp;&euro;
+                        Total : 24,59&nbsp;&euro;
                     </p>
 
                     
@@ -377,9 +377,9 @@ class OrderDeliveryHelpersTest extends TestCase
         ]);
         $copy = EntityFactory::createStock(["article_id" => $article->get("id")]);
         $cm->addStock($cart, $copy);
-        $order = EntityFactory::createOrder(firstName: "Rondial", lastName: "Melay",  mondialRelayPickupPointCode: "001234");
-        $om->hydrateFromCart($order, $cart);
         $shipping = EntityFactory::createShipping(type: "mondial-relay", mode: "Mondial Relay", fee: 999);
+        $order = EntityFactory::createOrder(firstName: "Rondial", lastName: "Melay", shippingId: $shipping->get("id"), mondialRelayPickupPointCode: "001234");
+        $om->hydrateFromCart($order, $cart);
         $termsPage = ModelFactory::createPage();
 
         $mailBody = '
@@ -416,7 +416,7 @@ class OrderDeliveryHelpersTest extends TestCase
                     <p>
                         ------------------------------<br />
                         Frais de port : 9,99&nbsp;&euro; (Mondial Relay)<br>
-                        Total : 18,99&nbsp;&euro;
+                        Total : 28,98&nbsp;&euro;
                     </p>
 
                     
@@ -560,9 +560,9 @@ class OrderDeliveryHelpersTest extends TestCase
         ]);
         $copy = EntityFactory::createStock(["article_id" => $article->get("id")]);
         $cm->addStock($cart, $copy);
-        $order = EntityFactory::createOrder();
-        $om->hydrateFromCart($order, $cart);
         $shipping = EntityFactory::createShipping(mode: "Colissimo", fee: 560);
+        $order = EntityFactory::createOrder(shippingId: $shipping->get("id"));
+        $om->hydrateFromCart($order, $cart);
         $termsPage = ModelFactory::createPage();
 
         $mailBody = '
@@ -599,7 +599,7 @@ class OrderDeliveryHelpersTest extends TestCase
                     <p>
                         ------------------------------<br />
                         Frais de port : 5,60&nbsp;&euro; (Colissimo)<br>
-                        Total : 18,99&nbsp;&euro;
+                        Total : 24,59&nbsp;&euro;
                     </p>
 
                     

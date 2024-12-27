@@ -4,7 +4,13 @@
 
 ### Améliorations
 
+- Biblys supporte désormais PHP 8.4
 - Un outil de gestion des redirections a été ajouté à l'administration.
+
+### Corrections
+
+- Le total affiché dans le courriel de confirmation de commande n'incluait pas
+  les frais de port. C'est corrigé.
 
 ## 3.1.3 (26 décembre 2024)
 
