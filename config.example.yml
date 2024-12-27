@@ -19,14 +19,14 @@ site: 1
 #  enabled: true
 #  title: Une opération de maintenance est en cours.
 #  message: Merci de réessayer d'ici quelques instants.
-#  link: https://status.biblys.cloud
+#  link: https://status.biblys.fr
 
 #cloud:
 #  cdn: false
 #  public_key: cus_abcd1234
 #  secret_key: abcd1234
 #  domains: paronymie.fr
-#  base_url: https://biblys.cloud
+#  base_url: https://biblys.fr
 #  hot_news:
 #    message: Hello world!
 #    link: https://www.biblys.fr/
@@ -100,7 +100,6 @@ smtp:
 ## Matomo Analytics tracker
 ## https://matomo.org
 #  domain: biblys.matomo.cloud
-#  secondary_domain: analytics.biblys.cloud
 #  site_id: 1
 #  login: biblys
 #  md5pass: abcd1234efgh5678
