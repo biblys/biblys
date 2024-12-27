@@ -124,4 +124,41 @@ class OrderTest extends TestCase
         // then
         $this->assertEquals(579, $result);
     }
+
+    /** getTotalAmountWithShipping */
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetTotalAmountWithShipping(): void
+    {
+        // given
+        $shippingFee = ModelFactory::createShippingFee(fee: 789);
+        $order = ModelFactory::createOrder(shippingFee: $shippingFee);
+        ModelFactory::createStockItem(order: $order, sellingPrice: 123);
+        ModelFactory::createStockItem(order: $order, sellingPrice: 456);
+
+        // when
+        $result = $order->getTotalAmountWithShipping();
+
+        // then
+        $this->assertEquals(1368, $result);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetTotalAmountWithShippingWithoutShipping(): void
+    {
+        // given
+        $order = ModelFactory::createOrder();
+        ModelFactory::createStockItem(order: $order, sellingPrice: 123);
+        ModelFactory::createStockItem(order: $order, sellingPrice: 456);
+
+        // when
+        $result = $order->getTotalAmountWithShipping();
+
+        // then
+        $this->assertEquals(579, $result);
+    }
 }

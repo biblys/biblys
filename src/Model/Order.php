@@ -70,6 +70,15 @@ class Order extends BaseOrder
     /**
      * @throws PropelException
      */
+    public function getTotalAmountWithShipping(): int
+    {
+        $shippingCost = $this->getShippingFee()?->getFee() ?? 0;
+        return $this->getTotalAmount() + $shippingCost;
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function getTotalWeight(): int
     {
         $stockItems = $this->getStockItems()->getArrayCopy();
