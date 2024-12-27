@@ -105,4 +105,23 @@ class OrderTest extends TestCase
         // then
         $this->assertEquals(579, $result);
     }
+
+    /** getTotalAmount */
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetTotalAmount(): void
+    {
+        // given
+        $order = ModelFactory::createOrder();
+        ModelFactory::createStockItem(order: $order, sellingPrice: 123);
+        ModelFactory::createStockItem(order: $order, sellingPrice: 456);
+
+        // when
+        $result = $order->getTotalAmount();
+
+        // then
+        $this->assertEquals(579, $result);
+    }
 }
