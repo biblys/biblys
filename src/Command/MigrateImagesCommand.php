@@ -23,7 +23,6 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Service\LoggerService;
 use Exception;
-use Model\Image;
 use Model\ImageQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
@@ -66,14 +65,16 @@ class MigrateImagesCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $contributorPortraitsQuery = ImageQuery::create()->filterByType("portrait");
-        $publisherLogosQuery = ImageQuery::create()->filterByType("logo");
-        $stockItemPhotosQuery = ImageQuery::create()->filterByType("photo")->filterBySite($this->currentSite->getSite());
+        $contributorPortraitsQuery = ImageQuery::create()->select(["id"])->filterByType("portrait");
+        $publisherLogosQuery = ImageQuery::create()->select(["id"])->filterByType("logo");
+        $stockItemPhotosQuery = ImageQuery::create()->select(["id"])->filterByType("photo")->filterBySite($this->currentSite->getSite());
         $postIllustrationsQuery = ImageQuery::create()
+            ->select(["id"])
             ->filterByType("illustration")
             ->filterByPostId(null, Criteria::ISNOTNULL)
             ->filterBySite($this->currentSite->getSite());
         $eventIllustrationsQuery = ImageQuery::create()
+            ->select(["id"])
             ->filterByType("illustration")
             ->filterByEventId(null, Criteria::ISNOTNULL)
             ->filterBySite($this->currentSite->getSite());
@@ -115,8 +116,8 @@ class MigrateImagesCommand extends Command
             $this->_migrateImages($loggerService, $output, "event illustrations", $eventIllustrations);
         }
 
-        for ($offset = $input->getOption("offset"); $offset < $articleCoversQuery->count(); $offset += 10000) {
-            $articleCovers = $this->_createArticleQuery()->limit(10000)->offset($offset)->find()->getData();
+        $articleCovers = $articleCoversQuery->find()->getData();
+        if (count($articleCovers) > 0) {
             $this->_migrateImages($loggerService, $output, "article covers", $articleCovers);
         }
 
@@ -128,7 +129,7 @@ class MigrateImagesCommand extends Command
     }
 
     /**
-     * @param Image[] $imagesToMigrate
+     * @param int[] $imagesToMigrateIds
      * @throws PropelException
      * @throws Exception
      */
@@ -136,13 +137,13 @@ class MigrateImagesCommand extends Command
         LoggerService   $loggerService,
         OutputInterface $output,
         string          $imageType,
-        array           $imagesToMigrate
+        array           $imagesToMigrateIds
     ): void
     {
         $mediaPath = $this->config->get("media_path");
         $oldBasePath = realpath(__DIR__ . "/../../" . $mediaPath);
 
-        $imageCount = count($imagesToMigrate);
+        $imageCount = count($imagesToMigrateIds);
         $output->writeln("Migrating " . $imageCount . " $imageType");
 
         $progressBar = new ProgressBar($output, $imageCount);
@@ -154,7 +155,8 @@ class MigrateImagesCommand extends Command
 
         $fileSystem = new Filesystem();
 
-        foreach ($imagesToMigrate as $image) {
+        foreach ($imagesToMigrateIds as $imageId) {
+            $image = ImageQuery::create()->findPk($imageId);
 
             $filePath = $image->getFilepath() . $image->getFilename();
             $model = $image->getArticle() ?? $image->getStockItem() ?? $image->getPost() ?? $image->getPublisher()
@@ -214,7 +216,7 @@ class MigrateImagesCommand extends Command
     private function _createArticleQuery(): ImageQuery
     {
         $publisherFilter = $this->currentSite->getOption("publisher_filter");
-        $articleCoversQuery = ImageQuery::create()->filterByType("cover");
+        $articleCoversQuery = ImageQuery::create()->select(["id"])->filterByType("cover");
 
         if ($publisherFilter) {
             $allowedPublisherIds = explode(",", $publisherFilter);
