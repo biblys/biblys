@@ -213,6 +213,82 @@ class OrderDeliveryTest extends TestCase
     /**
      * @throws PropelException
      * @throws Exception
+     */
+    public function testValidatingAnOrderWithoutShippingFeeWhenOneIsRequiredRedirectsToCart()
+    {
+        // given
+        $controller = require __DIR__ . "/../../../../controllers/common/php/order_delivery.php";
+
+        $site = ModelFactory::createSite();
+        $siteManager = new SiteManager();
+        $GLOBALS["LEGACY_CURRENT_SITE"] = $siteManager->getById($site->getId());
+        $cart = ModelFactory::createCart(site: $site);
+        $article = ModelFactory::createArticle();
+        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
+        $country = ModelFactory::createCountry();
+
+        $_POST["order_email"] = "e-customer@biblys.fr";
+        $_POST["order_firstname"] = "Barnabé";
+        $_POST["order_lastname"] = "Famagouste";
+
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->shouldReceive("parse");
+        $queryParamsService->shouldReceive("getInteger")->with("country_id")
+            ->andReturn($country->getId());
+        $queryParamsService->shouldReceive("getInteger")->with("shipping_id")
+            ->andReturn(0);
+
+        $request = new Request();
+        $request->setMethod("POST");
+        $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
+        $request->query->set("page", "order_delivery");
+        $request->request->set("order_firstname", "Barnabé");
+        $request->request->set("order_lastname", "Famagouste");
+        $request->request->set("order_address1", "123 rue des Peupliers");
+        $request->request->set("order_postalcode", "69009");
+        $request->request->set("order_city", "Lyon");
+        $request->request->set("order_email", "e-customer@biblys.fr");
+        $request->request->set("country_id", $country->getId());
+        $request->request->set("cgv_checkbox", 1);
+        $request->request->set("downloadable_articles_checkbox", "1");
+
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->shouldReceive("send")->andReturn(true);
+
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")->andReturn(null);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("hasOptionEnabled")->andReturn(false);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getCart")->andReturn($cart);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+
+        $config = new Config();
+
+        // when
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config);
+
+        // then
+        $om = new OrderManager();
+        $order = $om->get(["order_email" => "e-customer@biblys.fr"]);
+        $this->assertInstanceOf(
+            "Symfony\Component\HttpFoundation\RedirectResponse",
+            $response,
+            "it should redirect after order validation"
+        );
+        $this->assertEquals(
+            "/pages/cart",
+            $response->headers->get("Location"),
+            "it should redirect to the correct url"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
      * @throws \Exception
      */
     public function testValidatingAnOrderWithAnEmptyCart()

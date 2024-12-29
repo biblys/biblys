@@ -111,7 +111,13 @@ return function (
     $countryInput = OrderDeliveryHelpers::getCountryInput($cart, $countryId);
 
     $shippingId = $queryParamsService->getInteger("shipping_id");
-    $shipping = OrderDeliveryHelpers::calculateShippingFees($cart, $shippingId);
+    try {
+        $shipping = OrderDeliveryHelpers::calculateShippingFees($cart, $shippingId);
+    } catch (BadRequestHttpException) {
+        return new RedirectResponse("/pages/cart");
+    }
+
+
     $shippingMode = $shipping ? $shipping->get("mode") : "";
     $shippingFee = $shipping ? $shipping->get("fee") : 0;
     $shippingType = $shipping?->get("type");

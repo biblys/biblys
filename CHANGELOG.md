@@ -11,6 +11,9 @@
 
 - Le total affiché dans le courriel de confirmation de commande n'incluait pas
   les frais de port. C'est corrigé.
+- La validation d'une commande sans frais de port pouvait déclencher une erreur
+  serveur. Désormais, l'utilisateur·ice sera redirigé vers le panier où il
+  pourra sélectionner un mode d'expédition.
 
 ## 3.1.3 (26 décembre 2024)
 

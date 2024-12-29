@@ -209,7 +209,7 @@ class OrderDeliveryHelpers
             /** @var Shipping $shipping */
             $shipping = $shm->getById($shippingIdFromRequest);
             if (!$shipping) {
-                trigger_error("Frais de port incorrect.");
+                throw new BadRequestHttpException("Frais de port incorrect.");
             }
 
             return $shipping;
