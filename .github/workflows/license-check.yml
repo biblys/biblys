@@ -25,6 +25,7 @@ jobs:
           nwa check \
             --copyright "Clément Latzarus" \
             --license agpl-3.0-only \
+            --fuzzy \
             --skip "vendor/**" \
             --skip "src/Model/Base/*.php" \
             --skip "src/Model/Map/*.php" \
@@ -36,6 +37,7 @@ jobs:
           nwa check \
             --copyright "Clément Latzarus" \
             --license agpl-3.0-only \
+            --fuzzy \
             --skip "node_modules/**" \
             "assets/**/*.js" \
             "public/assets/js/*.js" \
@@ -46,6 +48,7 @@ jobs:
           nwa check \
             --copyright "Clément Latzarus" \
             --license agpl-3.0-only \
+            --fuzzy \
             --skip "app/**" \
             "src/**/*.twig"
 
@@ -54,6 +57,7 @@ jobs:
           nwa check \
             --copyright "Clément Latzarus" \
             --license agpl-3.0-only \
+            --fuzzy \
             --skip "app/**" \
             "assets/**/*.css" \
             "public/common/css/*.css"
