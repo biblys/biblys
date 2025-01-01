@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 3.2.0 (DEV)
+## 3.2.0 (1er janvier 2025)
 
 ### Améliorations
 
