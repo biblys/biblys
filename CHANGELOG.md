@@ -15,6 +15,16 @@
   serveur. Désormais, l'utilisateur·ice sera redirigé vers le panier où il
   pourra sélectionner un mode d'expédition.
 
+### Instructions de mise à jour
+
+Après avoir procédé à l'installation de cette version…
+
+#### Jouer les migrations
+
+```shell
+composer propel migrate
+```
+
 ## 3.1.3 (26 décembre 2024)
 
 ### Corrections
