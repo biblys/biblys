@@ -8,6 +8,10 @@ maintenance_disk_usage:
   path: /admin/disk-usage
   controller: AppBundle\Controller\MaintenanceController::diskUsageAction
 
+maintenance_cache:
+  path: /admin/cache
+  controller: AppBundle\Controller\MaintenanceController::cacheAction
+
 # Main
 
 main_home:
