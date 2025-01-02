@@ -29,6 +29,7 @@ node_modules
 data/*
 .yarn
 content/downloadable
+content/cache
 
 # IDE config files
 .idea
