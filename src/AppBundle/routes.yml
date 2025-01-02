@@ -12,6 +12,10 @@ maintenance_cache:
   path: /admin/cache
   controller: AppBundle\Controller\MaintenanceController::cacheAction
 
+maintenance_cache_empty:
+  path: /admin/cache/empty
+  controller: AppBundle\Controller\MaintenanceController::emptyCacheAction
+
 # Main
 
 main_home:
