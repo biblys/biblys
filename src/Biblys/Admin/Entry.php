@@ -257,6 +257,7 @@ class Entry
         $entries[] = new Entry('Redirections', ['category' => 'site', 'path' => 'redirection_index', 'icon' => 'compass']);
         $entries[] = new Entry('Valeurs par défaut', ['category' => 'site', 'path' => 'site_default_values', 'icon' => 'pencil-square-o']);
         $entries[] = new Entry('Éditeur de thème', ['category' => 'site', 'path' => 'template_index', 'icon' => 'code']);
+        $entries[] = new Entry('Cache', ['category' => 'site', 'path' => 'maintenance_cache', 'icon' => 'server']);
         $entries[] = new Entry('Tâches planifiées', ['category' => 'site', 'path' => 'crons_tasks', 'icon' => 'clock-o']);
 
         $entries[] = new Entry('Améliorer Biblys', ['category' => 'biblys', 'url' => 'https://ameliorer.biblys.fr', 'icon' => 'lightbulb-o']);

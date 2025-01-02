@@ -163,4 +163,17 @@ class MaintenanceController extends Controller
     {
         return number_format($bytes / 1073741824, 3);
     }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function cacheAction(CurrentUser $currentUser, TemplateService $templateService): Response
+    {
+        $currentUser->authAdmin();
+
+        return $templateService->renderResponse("AppBundle:Maintenance:cache.html.twig");
+    }
 }
