@@ -1,0 +1,39 @@
+{#
+Copyright (C) 2025 Clément Latzarus
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+{% extends "layout:admin.html.twig" %}
+
+{% block title %}
+  Cache
+{% endblock %}
+
+{% block main %}
+  <h1><span class="fa fa-server"></span> Cache</h1>
+
+  <p class="alert alert-info">
+    <span class="fa fa-info-circle"></span>
+    Purger le cache est une opération sans danger,
+    qui peut uniquement causer des ralentissements temporaires,
+    mais qui peut aussi permettre de résoudre des problèmes d'affichage non actualisés.
+  </p>
+
+  <form action="{{ path("maintenance_cache_empty") }}" method="post">
+    <button type="submit" class="btn btn-danger">
+      <span class="fa fa-trash"></span>&nbsp;
+      Purger le cache
+    </button>
+  </form>
+{% endblock %}
