@@ -18,8 +18,10 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\CacheService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\FlashMessagesService;
 use Biblys\Service\TemplateService;
 use Framework\Controller;
 use Model\FileQuery;
@@ -28,7 +30,9 @@ use Model\MediaFileQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -175,5 +179,24 @@ class MaintenanceController extends Controller
         $currentUser->authAdmin();
 
         return $templateService->renderResponse("AppBundle:Maintenance:cache.html.twig");
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function emptyCacheAction(
+        CurrentUser $currentUser,
+        CacheService $cacheService,
+        FlashMessagesService $flashMessagesService,
+        UrlGenerator $urlGenerator,
+    ): RedirectResponse
+    {
+        $currentUser->authAdmin();
+
+        $cacheService->clear();
+
+        $flashMessagesService->add("success", "Le cache a été vidé.");
+        $cacheAdminUrl = $urlGenerator->generate("maintenance_cache");
+        return new RedirectResponse($cacheAdminUrl);
     }
 }
