@@ -18,8 +18,10 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\CacheService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\FlashMessagesService;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Exception;
@@ -30,6 +32,7 @@ use Model\MediaFileQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -164,12 +167,17 @@ class MaintenanceControllerTest extends TestCase
         $currentUser->expects("authAdmin")->andReturns();
         $cacheService = Mockery::mock(CacheService::class);
         $cacheService->expects("clear")->andReturns();
+        $flashMessagesService = Mockery::mock(FlashMessagesService::class);
+        $flashMessagesService->expects("add")->with("success", "Le cache a été vidé.")->andReturns();
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->with("maintenance_cache")->andReturns("/cache");
 
         // when
-        $response = $controller->emptyCacheAction($currentUser, $cacheService);
+        $response = $controller->emptyCacheAction($currentUser, $cacheService, $flashMessagesService, $urlGenerator);
 
         // then
         $cacheService->shouldHaveReceived("clear");
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/cache", $response->getTargetUrl());
     }
 }
