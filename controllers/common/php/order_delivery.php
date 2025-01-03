@@ -329,21 +329,6 @@ return function (
                     initial: 0);
                 $order->setAmount($amount);
 
-                if ($orderCampaignId) {
-                    $crowdfundingCampaignManager = new CFCampaignManager();
-                    $crowdfundingRewardManager = new CFRewardManager();
-
-                    $campaign = $crowdfundingCampaignManager->getById($orderCampaignId);
-                    $crowdfundingCampaignManager->updateFromSales($campaign);
-                    $rewards = $crowdfundingRewardManager->getAll([
-                        "campaign_id" => $campaign->get("id"),
-                        "reward_limited" => 1
-                    ]);
-                    foreach ($rewards as $reward) {
-                        $crowdfundingRewardManager->updateQuantity($reward);
-                    }
-                }
-
                 $termsPageId = $currentSite->getOption("cgv_page");
                 $termsPage = PageQuery::create()->findPk($termsPageId);
 
@@ -382,6 +367,21 @@ return function (
                 $redirectUrl = "/order/$orderSlug?updated=1";
             } else {
                 $redirectUrl = "/order/$orderSlug?created=1";
+            }
+
+            if ($orderCampaignId) {
+                $crowdfundingCampaignManager = new CFCampaignManager();
+                $crowdfundingRewardManager = new CFRewardManager();
+
+                $campaign = $crowdfundingCampaignManager->getById($orderCampaignId);
+                $crowdfundingCampaignManager->updateFromSales($campaign);
+                $rewards = $crowdfundingRewardManager->getAll([
+                    "campaign_id" => $campaign->get("id"),
+                    "reward_limited" => 1
+                ]);
+                foreach ($rewards as $reward) {
+                    $crowdfundingRewardManager->updateQuantity($reward);
+                }
             }
 
             return new RedirectResponse($redirectUrl, 301);
