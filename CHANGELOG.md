@@ -6,6 +6,9 @@
 
 - Lorsqu'une commande était marquée comme expédiée depuis la page de gestion des
   commandes, l'affichage de son statut n'était pas mis à jour. C'est corrigé.
+- Lors de l'enregistrement d'une commande contenant des contreparties de
+  financement participatif, la campagne correspondante n'était pas mise à jour.
+  C'est maintenant le cas.
 
 ## 3.2.0 (1er janvier 2025)
 
