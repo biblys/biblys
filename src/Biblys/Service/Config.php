@@ -171,4 +171,17 @@ class Config
     {
         return $this->get("images.base_url") ?? "/images/";
     }
+
+    public function isCacheEnabled(): bool
+    {
+        if ($this->get("cache.driver") === "filesystem") {
+            return true;
+        }
+
+        if ($this->get("cache.driver") === "apc") {
+            return true;
+        }
+
+        return false;
+    }
 }

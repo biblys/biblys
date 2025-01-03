@@ -276,4 +276,51 @@ class ConfigTest extends PHPUnit\Framework\TestCase
         // then
         $this->assertEquals("/images/", $baseUrl);
     }
+
+    /** isCacheEnabled */
+
+    /**
+     * @throws Exception
+     */
+    public function testIsCacheEnabledReturnsFalseWithNoConfig(): void
+    {
+        // given
+        $config = new Config();
+
+        // when
+        $isEnabled = $config->isCacheEnabled();
+
+        // then
+        $this->assertFalse($isEnabled);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testIsCacheEnabledReturnsTrueForFilesystemConfig(): void
+    {
+        // given
+        $config = new Config(["cache" => ["driver" => "filesystem"]]);
+
+        // when
+        $isEnabled = $config->isCacheEnabled();
+
+        // then
+        $this->assertTrue($isEnabled);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testIsCacheEnabledReturnsTrueForApcConfig(): void
+    {
+        // given
+        $config = new Config(["cache" => ["driver" => "apc"]]);
+
+        // when
+        $isEnabled = $config->isCacheEnabled();
+
+        // then
+        $this->assertTrue($isEnabled);
+    }
 }
