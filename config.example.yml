@@ -51,6 +51,10 @@ smtp:
 ## Set HTTP Strict Transport Security to 6 months
 #hsts: true
 
+cache:
+  driver: filesystem # filesystem|apc
+  ttl: 86400
+
 #images:
 #  path: public/images/
 #  base_url: /images/
