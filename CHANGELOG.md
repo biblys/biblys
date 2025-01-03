@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.2.1 (DEV)
+
+### Corrections
+
+- Lorsqu'une commande était marquée comme expédiée depuis la page de gestion des
+  commandes, l'affichage de son statut n'était pas mis à jour. C'est corrigé.
+
 ## 3.2.0 (1er janvier 2025)
 
 ### Améliorations
