@@ -210,6 +210,8 @@ class OrderController extends Controller
             $notice = 'La commande n°&nbsp;'.$orderEntity->get('id').' de '.$orderEntity->get('firstname').' '.$orderEntity->get('lastname').' a été annulée.';
         }
 
+        /** @var Order $orderEntity */
+        $orderEntity = $om->reload($orderEntity);
         return new JsonResponse([
             'notice' => $notice,
             'order' => $this->_jsonOrder($orderEntity),
