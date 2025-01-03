@@ -154,7 +154,6 @@ export default class Order {
 
         // Ask for tracking number
         const shippingModeUsesTracking = self.data.shipping_mode === 'suivi' || self.data.shipping_mode === 'mondial-relay';
-        debugger;
         if (shippingModeUsesTracking && action === 'shipped') {
           tracking_number = window.prompt('Numéro de suivi ?');
           if (tracking_number === null) {
