@@ -18,19 +18,21 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\CacheService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
-use Biblys\Service\TemplateService;
+use Biblys\Service\FlashMessagesService;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
+use Exception;
 use Mockery;
-use Model\ArticleQuery;
 use Model\FileQuery;
 use Model\ImageQuery;
 use Model\MediaFileQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -39,6 +41,9 @@ require_once __DIR__ . "/../../../tests/setUp.php";
 
 class MaintenanceControllerTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     */
     public function setUp(): void
     {
         FileQuery::create()->deleteAll();
@@ -51,7 +56,7 @@ class MaintenanceControllerTest extends TestCase
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \Exception
+     * @throws Exception
      */
     public function testDiskUsageAction(): void
     {
@@ -129,5 +134,50 @@ class MaintenanceControllerTest extends TestCase
         <td class="text-right">0.093 Go</td>
       </tr>
     </tbody>', $response->getContent());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testCacheAction(): void
+    {
+        // given
+        $controller = new MaintenanceController();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin")->andReturns();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->cacheAction($currentUser, $templateService);
+
+        // then
+        $this->assertStringContainsString("Cache", $response->getContent());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testEmptyCacheAction(): void
+    {
+        // given
+        $controller = new MaintenanceController();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin")->andReturns();
+        $cacheService = Mockery::mock(CacheService::class);
+        $cacheService->expects("clear")->andReturns();
+        $flashMessagesService = Mockery::mock(FlashMessagesService::class);
+        $flashMessagesService->expects("add")->with("success", "Le cache a été vidé.")->andReturns();
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->with("maintenance_cache")->andReturns("/cache");
+
+        // when
+        $response = $controller->emptyCacheAction($currentUser, $cacheService, $flashMessagesService, $urlGenerator);
+
+        // then
+        $cacheService->shouldHaveReceived("clear");
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/cache", $response->getTargetUrl());
     }
 }
