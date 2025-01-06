@@ -71,7 +71,6 @@ class SpecialOfferController extends Controller
      * @throws Exception
      */
     public function editAction(
-        CurrentSite $currentSite,
         CurrentUser $currentUser,
         TemplateService $templateService,
         int $id,
@@ -80,7 +79,6 @@ class SpecialOfferController extends Controller
         $currentUser->authAdmin();
 
         $offer = SpecialOfferQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->findOneById($id);
 
         if (!$offer) {
@@ -88,13 +86,11 @@ class SpecialOfferController extends Controller
         }
 
         $collections = BookCollectionQuery::create()
-            ->filterByPublisherId($currentSite->getOption("publisher_filter"))
             ->orderByName()
             ->find();
 
         $articles = ArticleQuery::create()
             ->select(["id", "titleAlphabetic"])
-            ->filterByPublisherId($currentSite->getOption("publisher_filter"))
             ->orderByTitleAlphabetic()
             ->find();
 

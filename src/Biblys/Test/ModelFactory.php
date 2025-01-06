@@ -21,6 +21,7 @@ namespace Biblys\Test;
 use Biblys\Data\ArticleType;
 use Biblys\Exception\EntityAlreadyExistsException;
 use Biblys\Service\Slug\SlugService;
+use Biblys\Service\StringService;
 use DateTime;
 use Model\Alert;
 use Model\Article;
@@ -88,8 +89,11 @@ class ModelFactory
         int             $availabilityDilicom = 1,
     ): Article
     {
+        $alphabeticalTitle = (new StringService($title))->alphabetize();
+
         $article = new Article();
         $article->setTitle($title);
+        $article->setTitleAlphabetic($alphabeticalTitle->get());
         $article->setEan($ean);
         $article->setUrl($url);
         $article->setPrice($price);
