@@ -21,9 +21,10 @@ namespace AppBundle\Controller;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\TemplateService;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
+use Exception;
 use Mockery;
-use Model\ArticleQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -102,7 +103,6 @@ class SpecialOfferControllerTest extends TestCase
 
         // when
         $specialOfferController->editAction(
-            $currentSite,
             $currentUser,
             $templateService,
             999
@@ -114,6 +114,7 @@ class SpecialOfferControllerTest extends TestCase
      * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
+     * @throws Exception
      */
     public function testEditActionReturns200(): void
     {
@@ -121,42 +122,28 @@ class SpecialOfferControllerTest extends TestCase
         $specialOfferController = new SpecialOfferController();
 
         $site = ModelFactory::createSite();
-        $publisher = ModelFactory::createPublisher(name: "Offre spéciale");
-        $collection = ModelFactory::createCollection(publisher: $publisher, name: "Offre spéciale");
-        $article = ModelFactory::createArticle(publisher: $publisher, collection: $collection);
+        $publisher = ModelFactory::createPublisher();
+        $collection = ModelFactory::createCollection(publisher: $publisher, name: "Collection spéciale");
+        $article = ModelFactory::createArticle(title: "Livre spécial", publisher: $publisher, collection: $collection);
         $offer = ModelFactory::createSpecialOffer(site: $site, targetCollection: $collection, freeArticle: $article);
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
-        $currentSite->shouldReceive("getOption")->with("publisher_filter")
-            ->andReturn($publisher->getId());
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->andReturn();
-
-        $givenResponse = new Response();
-        $expectedArticle = ArticleQuery::create()
-            ->select(["id", "titleAlphabetic"])
-            ->findPk($article->getId());
-        $templateService = Mockery::mock(TemplateService::class);
-        $templateService
-            ->shouldReceive("renderResponse")
-            ->with("AppBundle:SpecialOffer:edit.html.twig", [
-                "collections" => [$collection],
-                "articles" => [$expectedArticle],
-                "offer" => $offer
-            ])
-            ->andReturn($givenResponse);
+        $templateService = Helpers::getTemplateService();
 
         // when
         $response = $specialOfferController->editAction(
-            $currentSite,
             $currentUser,
             $templateService,
             id: $offer->getId(),
         );
 
         // then
-        $this->assertEquals($response, $givenResponse);
+        $this->assertStringContainsString("Modifier « Offre spéciale »", $response->getContent());
+        $this->assertStringContainsString("Collection spéciale", $response->getContent());
+        $this->assertStringContainsString("Livre spécial", $response->getContent());
     }
 
     /* UPDATE ACTION */

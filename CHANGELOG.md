@@ -9,6 +9,8 @@
 - Lors de l'enregistrement d'une commande contenant des contreparties de
   financement participatif, la campagne correspondante n'était pas mise à jour.
   C'est maintenant le cas.
+- Sur la page de gestion d'une offre spéciale, les collections et les articles
+  pouvaient ne pas apparaître. Maintenant, ça marche.
 
 ## 3.2.0 (1er janvier 2025)
 
