@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2918b05c17164dc5859bedcd8b5519cb",
+    "content-hash": "01a32254dd51bcbf2a35a16f2154d8a2",
     "packages": [
         {
             "name": "biblys/eurotax",
@@ -748,16 +748,16 @@
         },
         {
             "name": "getbrevo/brevo-php",
-            "version": "v2.0.3",
+            "version": "v2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getbrevo/brevo-php.git",
-                "reference": "ab712970ba7d67180356b26734e2f921befc6f26"
+                "reference": "f4741eece5eacb96192417b06080abf43f47c44e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getbrevo/brevo-php/zipball/ab712970ba7d67180356b26734e2f921befc6f26",
-                "reference": "ab712970ba7d67180356b26734e2f921befc6f26",
+                "url": "https://api.github.com/repos/getbrevo/brevo-php/zipball/f4741eece5eacb96192417b06080abf43f47c44e",
+                "reference": "f4741eece5eacb96192417b06080abf43f47c44e",
                 "shasum": ""
             },
             "require": {
@@ -805,9 +805,9 @@
             ],
             "support": {
                 "issues": "https://github.com/getbrevo/brevo-php/issues",
-                "source": "https://github.com/getbrevo/brevo-php/tree/v2.0.3"
+                "source": "https://github.com/getbrevo/brevo-php/tree/v2.0.4"
             },
-            "time": "2024-10-03T10:21:59+00:00"
+            "time": "2025-01-16T07:38:38+00:00"
         },
         {
             "name": "gitonomy/gitlib",
