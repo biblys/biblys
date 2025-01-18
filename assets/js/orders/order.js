@@ -48,32 +48,32 @@ export default class Order {
 
     self.getRow = function() {
       var shippedButton =
-          '<button title="Marquer comme expédiée" data-action="shipped" class="btn btn-xs btn-success"><i class="fa fa-dropbox"></i></button>',
-        payedButton =
-          '<div class="btn-group">' +
-          '<button title="Marquer comme payée" type="button" class="btn btn-xs btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
-          '<i class="fa fa-money"></i>' +
-          '</button>' +
-          '<ul class="dropdown-menu">' +
-          '<li><a class="pointer" data-action="payed" data-mode="card">Carte bancaire</a></li>' +
-          '<li><a class="pointer" data-action="payed" data-mode="cheque">Chèque</a></li>' +
-          '<li><a class="pointer" data-action="payed" data-mode="cash">Espèces</a></li>' +
-          '<li><a class="pointer" data-action="payed" data-mode="paypal">Paypal</a></li>' +
-          '<li><a class="pointer" data-action="payed" data-mode="payplug">Payplug</a></li>' +
-          '<li><a class="pointer" data-action="payed" data-mode="transfer">Virement</a></li>' +
-          '<li><a class="pointer" data-action="payed" data-mode="exchange">Échange</a></li>' +
-          '</ul>' +
-          '</div>',
+          '<button title="Marquer comme expédiée" data-action="shipped" class="btn btn-sm btn-success"><i class="fa fa-dropbox"></i></button>',
+        payedButton = `
+          <div class="dropdown">
+            <button class="btn btn-sm btn-success dropdown-toggle" title="Marquée comme payée" type="button" data-toggle="dropdown" aria-expanded="false">
+              <span class="fa fa-money"></span>
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item pointer" data-action="payed" data-mode="card">Carte bancaire</a>
+              <a class="dropdown-item pointer" data-action="payed" data-mode="cheque">Chèque</a>
+              <a class="dropdown-item pointer" data-action="payed" data-mode="cash">Espèces</a>
+              <a class="dropdown-item pointer" data-action="payed" data-mode="paypal">Paypal</a>
+              <a class="dropdown-item pointer" data-action="payed" data-mode="payplug">Payplug</a>
+              <a class="dropdown-item pointer" data-action="payed" data-mode="transfer">Virement</a>
+              <a class="dropdown-item pointer" data-action="payed" data-mode="exchange">Échange</a>
+            </div>
+          </div>`,
         followupButton = '';
 
       if (self.pick) {
         shippedButton =
-          '<button title="Marquer comme à dispo. en magasin" data-action="shipped" class="btn btn-xs btn-success"><i class="fa fa-shopping-bag"></i></button>';
+          '<button title="Marquer comme à dispo. en magasin" data-action="shipped" class="btn btn-sm btn-success"><i class="fa fa-shopping-bag"></i></button>';
       }
 
       if (self.overdued) {
         followupButton =
-          ' <button title="Relancer" data-action="followup" class="btn btn-xs btn-warning"><i class="fa fa-warning"></i></button>';
+          ' <button title="Relancer" data-action="followup" class="btn btn-sm btn-warning"><i class="fa fa-warning"></i></button>';
       }
 
       // Render row
@@ -104,7 +104,7 @@ export default class Order {
           '</td>' +
           '<td><a href="/invoice/' +
           self.data.url +
-          '" class="btn btn-xs btn-outline-secondary" title="Imprimer la facture" ><i class="fa fa-print"></i></a></td>' +
+          '" class="btn btn-sm btn-light" title="Imprimer la facture" ><i class="fa fa-print"></i></a></td>' +
           '<td>' +
           (self.data.payment_mode
             ? '<img src="/assets/icons/payment_' +
@@ -117,12 +117,12 @@ export default class Order {
             : '') +
           '</td>' +
           '<td>' +
-          (self.payed ? formatDate(self.payed_at, 'short') : payedButton + followupButton) +
+          (self.payed ? formatDate(self.payed_at, 'short') : '<div class="btn-group">' + payedButton + followupButton + '</div>') +
           '</td>' +
           '<td>' +
           (self.shipped ? formatDate(self.shipped_at, 'short') : shippedButton) +
           '</td>' +
-          '<td><button title="Annuler la commande" data-action="cancel" class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i></button></td>' +
+          '<td><button title="Annuler la commande" data-action="cancel" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button></td>' +
           '</tr>'
       );
 
@@ -256,7 +256,7 @@ export default class Order {
       if (self.data.shipping_date === null) {
         self.shipped = false;
         self.icon = 'fa-dropbox';
-        self.class = ' bg-success';
+        self.class = ' table-success';
         self.tooltip = 'À expédier';
 
         // Order to pick
@@ -273,7 +273,7 @@ export default class Order {
       if (self.data.payment_date === null) {
         self.payed = false;
         self.icon = 'fa-money';
-        self.class = ' bg-warning';
+        self.class = ' table-warning';
         self.tooltip = 'À payer';
       } else {
         self.payed_at = parseMysqlDate(self.data.payment_date);
@@ -284,7 +284,7 @@ export default class Order {
       if (!self.payed && elapsed_since_payment > 4) {
         self.overdued = true;
         self.icon = 'fa-warning';
-        self.class = ' bg-danger';
+        self.class = ' table-danger';
         self.tooltip = 'À relancer';
 
         // Already sent followup
