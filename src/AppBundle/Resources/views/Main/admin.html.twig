@@ -28,7 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     <div class="alert alert-success">
       <span class="fa fa-check-circle"></span>
       Biblys a été mis à jour (v. {{ version }}) !
-      <a class="btn btn-success btn-xs pull-right" href="https://github.com/biblys/biblys/releases/">
+      <a class="btn btn-success btn-sm pull-right" href="https://github.com/biblys/biblys/releases/">
         En savoir plus
       </a>
     </div>
@@ -49,7 +49,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         {{ hot_news.message }}
       </a>
       <form action="{{ path("main_admin_hot_news_mark_as_read") }}" method="post" class="pull-right">
-        <button type="submit" class="btn btn-primary btn-xs">
+        <button type="submit" class="btn btn-primary btn-sm">
           <span class="fa fa-close"></span> Fermer
         </button>
       </form>
@@ -65,7 +65,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   {% else %}
     <p>
       Utilisez les raccourcis pour accéder rapidement aux outils de l'administration que vous utilisez le plus souvent depuis n'importe quelle page de votre site Biblys.<br>
-      Pour commencer, cliquez sur <a href="{{ path('main_admin_shortcuts') }}" class="btn btn-xs btn-primary">gérer les raccourcis</a>
+      Pour commencer, cliquez sur <a href="{{ path('main_admin_shortcuts') }}" class="btn btn-sm btn-primary">gérer les raccourcis</a>
     </p>
   {% endif %}
 

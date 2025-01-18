@@ -555,7 +555,7 @@ return function (
         }
 
         $currentArticleCategories .= '<li>
-        <a class="btn btn-danger btn-xs" data-remove_link=' . $articleCategoryLink->getId() . '>
+        <a class="btn btn-danger btn-sm" data-remove_link=' . $articleCategoryLink->getId() . '>
             <span class="fa fa-remove" title="Supprimer le rayon"></span>
         </a> 
         ' . $articleCategory->getName() . '
@@ -589,7 +589,7 @@ return function (
     );
     $the_tags = null;
     while ($t = $tags->fetch(PDO::FETCH_ASSOC)) {
-        $the_tags .= '<li><a class="btn btn-danger btn-xs" data-remove_link="' . $t['link_id'] . '"><span class="fa fa-remove"></span></a> ' . $t['tag_name'] . '</li>';
+        $the_tags .= '<li><a class="btn btn-danger btn-sm" data-remove_link="' . $t['link_id'] . '"><span class="fa fa-remove"></span></a> ' . $t['tag_name'] . '</li>';
     }
 
     // Recompenses

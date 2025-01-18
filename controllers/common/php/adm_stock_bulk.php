@@ -159,42 +159,42 @@ $lm = new ListeManager();
             }
 
             $_ECHO .= '                
-                    <form action="/pages/adm_stock_bulk?list_id='.$list->get('id').'" method="post" class="form-horizontal fieldset" role="form">
+                    <form action="/pages/adm_stock_bulk?list_id='.$list->get('id').'" method="post" class="fieldset" role="form">
                         
                         <fieldset>
                             <legend>Champs à modifier pour TOUS les exemplaires</legend>
                             <p class="alert alert-info">Les champs renseignés seront modifiés pour chaque exemplaire de la liste. Si le champ est laissé vide sur cette page, le contenu original sera conservé.</p>
                         
-                            <div class="form-group">
-                                <label for="stock_invoice" class="col-sm-3 control-label">Lot / Facture :</label>
+                            <div class="form-group row">
+                                <label for="stock_invoice" class="col-sm-3 col-form-label">Lot / Facture :</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" id="stock_invoice" name="stock_invoice" value="'.$request->request->get('stock_invoice').'">
                                 </div>
                             </div>
                             
-                            <div class="form-group">
-                                <label for="stock_stockage" class="col-sm-3 control-label">Emplacement :</label>
+                            <div class="form-group row">
+                                <label for="stock_stockage" class="col-sm-3 col-form-label">Emplacement :</label>
                                 <div class="col-sm-9">
                                     <input id="stock_stockage" name="stock_stockage" type="text" class="form-control" value="'.$request->request->get('stock_stockage').'">
                                 </div>
                             </div>
                             
-                            <div class="form-group">
-                                <label for="stock_purchase_price" class="col-sm-3 control-label">Prix d\'achat :</label>
+                            <div class="form-group row">
+                                <label for="stock_purchase_price" class="col-sm-3 col-form-label">Prix d\'achat :</label>
                                 <div class="col-sm-9">
                                     <input id="stock_purchase_price" name="stock_purchase_price" type="number" class="short" value="'.$request->request->get('stock_purchase_price').'"> centimes
                                 </div>
                             </div>
                             
-                            <div class="form-group">
-                                <label for="stock_selling_price" class="col-sm-3 control-label">Prix de vente :</label>
+                            <div class="form-group row">
+                                <label for="stock_selling_price" class="col-sm-3 col-form-label">Prix de vente :</label>
                                 <div class="col-sm-9">
                                     <input id="stock_selling_price" name="stock_selling_price" type="number" class="short" value="'.$request->request->get('stock_selling_price').'"> centimes
                                 </div>
                             </div>
                             
-                            <div class="form-group">
-                                <label for="stock_purchase_date" class="col-sm-3 control-label">Date d\'achat :</label>
+                            <div class="form-group row">
+                                <label for="stock_purchase_date" class="col-sm-3 col-form-label">Date d\'achat :</label>
                                 <div class="col-sm-9">
                                     <input id="stock_purchase_date" name="stock_purchase_date" type="date" class="form-control long" value="'.$request->request->get('stock_purchase_date').'">
                                 </div>
@@ -205,21 +205,21 @@ $lm = new ListeManager();
                             <legend>Actions à appliquer à TOUS les exemplaires</legend>
                             <p class="alert alert-info">Pour chaque champ renseigné, l\'action sera appliquée à chaque exemplaire de la liste. Si le champ est laissé vide, aucune action ne sera appliquée.</p>
                         
-                            <div class="form-group">
-                                <label for="add_to_cart" class="col-sm-5 control-label">Ajouter au panier n° :</label>
+                            <div class="form-group row">
+                                <label for="add_to_cart" class="col-sm-5 col-form-label">Ajouter au panier n° :</label>
                                 <div class="col-sm-7">
                                     <input id="add_to_cart" name="add_to_cart" type="number" class="form-control short" value="'.$request->request->get('add_to_cart').'">
                                 </div>
                             </div>
                             
-                            <div class="form-group">
-                                <label for="price_promo" class="col-sm-5 control-label">Appliquer une réduction de (%) :</label>
+                            <div class="form-group row">
+                                <label for="price_promo" class="col-sm-5 col-form-label">Appliquer une réduction de (%) :</label>
                                 <div class="col-sm-7">
                                     <input id="price_promo" name="price_promo" type="number" class="form-control short" value="'.$request->request->get('price_promo').'">
                                 </div>
                             </div>
                 			
-                			<div class="form-group">
+                			<div class="form-group row">
                 				<div class="col-sm-offset-5 col-sm-7">
                 					<div class="checkbox">
                 						<label class="after">
