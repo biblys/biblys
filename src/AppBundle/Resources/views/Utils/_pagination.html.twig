@@ -18,44 +18,87 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
   {% set url = app.currentUrl.relativeUrl %}
 
-  <nav class="Pagination text-center" aria-label="Page navigation">
-    <ul class="pagination  justify-content-center">
-      {% if pages.previous > -1 %}
-        <li class="Pagination__previous page-item">
-          <a
-            href="{{ url }}{{ pages.previousQuery }}"
-            aria-label="Précédent"
-            class="page-link"
-          >
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
-      {% endif %}
-
-      {% for pageNumber in 1..pages.total %}
-        {% if pages.current == pageNumber %}
-          <li class="Pagination__page Pagination__page--current active page-item">
-            <span class="pagination-page pagination-page-current page-link">{{ pageNumber }}</span>
-          </li>
-        {% else %}
-          <li class="Pagination__page page-item">
-            <a href="{{ url }}{{ pages.queryForPageNumber(pageNumber) }}" class="page-link">{{ pageNumber }}</a>
+  {% if pages.total <= 10 %}
+    <nav class="Pagination text-center" aria-label="Page navigation">
+      <ul class="pagination  justify-content-center">
+        {% if pages.previous > -1 %}
+          <li class="Pagination__previous page-item">
+            <a
+              href="{{ url }}{{ pages.previousQuery }}"
+              aria-label="Précédent"
+              class="page-link"
+            >
+              <span aria-hidden="true">&laquo;</span>
+            </a>
           </li>
         {% endif %}
-      {% endfor %}
+
+        {% for pageNumber in 1..pages.total %}
+          {% if pages.current == pageNumber %}
+            <li class="Pagination__page Pagination__page--current active page-item">
+              <span class="pagination-page pagination-page-current page-link">{{ pageNumber }}</span>
+            </li>
+          {% else %}
+            <li class="Pagination__page page-item">
+              <a href="{{ url }}{{ pages.queryForPageNumber(pageNumber) }}" class="page-link">{{ pageNumber }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+
+        {% if pages.next %}
+          <li class="Pagination__next page-item">
+            <a
+              href="{{ url }}{{ pages.nextQuery }}"
+              aria-label="Suivant"
+              class="page-link"
+            >
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% else %}
+
+    <nav class="Pagination Pagination--with-menu">
+      {% if pages.previous > -1 %}
+        <a
+          href="{{ url }}{{ pages.previousQuery }}"
+          aria-label="Aller à la page précédente"
+          class="btn btn-outline-primary"
+          disabled={{ pages.previous == -1 }}
+        >
+          &laquo; Précédent
+        </a>
+      {% endif %}
+
+      <form class="form-inline" action="{{ url }}">
+        <div class="Pagination__page-selector form-group text-center">
+          <label for="target-page">Page</label>
+          <select name="p" class="form-control" id="target-page" aria-label="Aller à la page">
+            {% for pageNumber in 1..pages.total %}
+              {% if pages.current == pageNumber %}
+                <option value={{ pageNumber - 1 }} selected>{{ pageNumber }}</option>
+              {% else %}
+                <option value={{ pageNumber - 1 }}>{{ pageNumber }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+          sur {{ pages.total }}
+          <button type="submit" class="btn btn-primary">Aller</button>
+        </div>
+      </form>
 
       {% if pages.next %}
-        <li class="Pagination__next page-item">
-          <a
-            href="{{ url }}{{ pages.nextQuery }}"
-            aria-label="Suivant"
-            class="page-link"
-          >
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
+        <a
+          href="{{ url }}{{ pages.nextQuery }}"
+          aria-label="Aller à la page suivante"
+          class="btn btn-outline-primary"
+        >
+          Suivant &raquo;
+        </a>
       {% endif %}
-    </ul>
-  </nav>
+    </nav>
+  {% endif %}
 
 {% endif %}
