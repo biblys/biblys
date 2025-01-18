@@ -18,11 +18,14 @@
 
 namespace Biblys\Service\Cloud;
 
+use Biblys\Exception\InvalidConfigurationException;
+use Biblys\Service\CacheService;
 use Biblys\Service\Config;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\ServerException;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class CloudService
 {
@@ -30,11 +33,16 @@ class CloudService
     private bool $subscriptionFetched = false;
     private ?CloudSubscription $subscription = null;
     private Client $httpClient;
+    private CacheService $cacheService;
 
+    /**
+     * @throws InvalidConfigurationException
+     */
     public function __construct(Config $config, Client $httpClient)
     {
         $this->config = $config;
         $this->httpClient = $httpClient;
+        $this->cacheService = new CacheService($config);
     }
 
     /**
@@ -50,17 +58,22 @@ class CloudService
 
     /**
      * @throws GuzzleException
+     * @throws InvalidArgumentException
      */
     public function getSubscription(): ?CloudSubscription
     {
         if (!$this->subscriptionFetched) {
             try {
-                $subscription = $this->_query("/stripe/subscription");
-                $this->subscriptionFetched = true;
+                $subscriptionResponse = $this->cacheService->get("cloud_subscription");
+                if (!$subscriptionResponse) {
+                    $subscriptionResponse = $this->_query("/stripe/subscription");
+                    $this->cacheService->set("cloud_subscription", $subscriptionResponse);
+                }
 
-                if (isset($subscription["id"])) {
+                $this->subscriptionFetched = true;
+                if (isset($subscriptionResponse["id"])) {
                     $this->subscription = new CloudSubscription(
-                        status: $subscription["status"],
+                        status: $subscriptionResponse["status"],
                     );
                 }
             } catch (ServerException) {
