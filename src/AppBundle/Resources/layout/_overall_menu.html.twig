@@ -14,7 +14,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #}
 
-<div class="OverallMenu overall-menu">
+<div class="OverallMenu overall-menu position-sticky sticky-top">
   {% if app.currentUser.isAuthenticated and app.currentUser.isAdmin %}
     <div class="OverallMenu__admin-section">
       <a class="OverallMenu__entry" href="{{ path("main_admin") }}">
