@@ -1,0 +1,51 @@
+{#
+Copyright (C) 2024 Clément Latzarus
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+<html lang="fr">
+  <head>
+    {{ app.metaTags|raw }}
+    <title>
+      {% block title %}{% endblock %} | Administration | {{ app.currentSite.title }}</title>
+    {% include "layout:_assets_css.html.twig" %}
+  </head>
+  <body>
+    {% include "layout:_overall_menu.html.twig" %}
+
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light position-sticky" style="top: 48px">
+        <a class="navbar-brand" href="{{ path("main_admin") }}">
+          Administration {{ app.currentSite.title }}
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto"></ul>
+          <a href="/" class="btn btn-outline-danger my-2 my-sm-0" type="submit">Quitter</a>
+        </div>
+      </nav>
+
+      {% include "layout:_flash_messages.html.twig" %}
+
+      <main class="mt-4">
+        {% block main %}{% endblock %}
+      </main>
+    </div>
+
+    {% include "layout:_assets_js.html.twig" %}
+  </body>
+</html>

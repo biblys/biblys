@@ -4,6 +4,9 @@
 
 ### Améliorations
 
+- Les pages d'administration s'affichent désormais dans un espace dédié
+  indépendant de l'habillage graphique du site afin d'en faciliter
+  l'utilisation.
 - Le composant de pagination affiche désormais un menu plutôt qu'une liste de
   liens lorsqu'il y a plus de 10 pages.
 
