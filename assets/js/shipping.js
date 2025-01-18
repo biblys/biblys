@@ -220,12 +220,12 @@ export default class Shipping {
       <input type="hidden" id="id" name="id" value="${id}">
 
       <div class="form-group">
-        <label class="control-label label-inline" for="mode">Intitulé :</label>
+        <label class="col-form-label label-inline" for="mode">Intitulé :</label>
         <input type="text" id="mode" name="mode" class="form-control" value="${mode}" required>
       </div>
 
       <div class="form-group">
-        <label class="control-label label-inline" for="mode">Type d'envoi :</label>
+        <label class="col-form-label label-inline" for="mode">Type d'envoi :</label>
         <select id="type" name="type" class="form-control" required>
           <option value="normal" ${type === 'normal' ? 'selected' : ''}>Normal</option>
           <option value="suivi" ${type === 'suivi' ? 'selected' : ''}>Suivi avec numéro</option>
@@ -235,7 +235,7 @@ export default class Shipping {
       </div>
 
       <div class="form-group">
-        <label class="control-label label-inline" for="zone">Zone :</label>
+        <label class="col-form-label label-inline" for="zone">Zone :</label>
         <select id="zone" name="zone" class="form-control" required>
           <option value="ALL" ${zone === 'ALL' ? 'selected' : ''}>ALL : Monde</option>
           <option value="F" ${zone === 'F' ? 'selected' : ''}>F : France</option>
@@ -265,34 +265,34 @@ export default class Shipping {
         </p>
 
         <div class="form-group">
-          <label class="control-label label-inline" for="max_weight">… a un poids (en grammes) inférieur ou égal à :</label>
+          <label class="col-form-label label-inline" for="max_weight">… a un poids (en grammes) inférieur ou égal à :</label>
           <input type="number" min="1" step="1" id="max_weight" name="max_weight" class="form-control" value="${max_weight}">
         </div>
 
         <div class="form-group">
-          <label class="control-label label-inline" for="min_amount">… a un montant (en centimes) supérieur ou égal à :</label>
+          <label class="col-form-label label-inline" for="min_amount">… a un montant (en centimes) supérieur ou égal à :</label>
           <input type="number" min="1" step="1" id="min_amount" name="min_amount" class="form-control" value="${min_amount}">
         </div>
 
         <div class="form-group">
-          <label class="control-label label-inline" for="max_amount">… a un montant (en centimes) inférieur ou égal à :</label>
+          <label class="col-form-label label-inline" for="max_amount">… a un montant (en centimes) inférieur ou égal à :</label>
           <input type="number" min="1" step="1" id="max_amount" name="max_amount" class="form-control" value="${max_amount}">
         </div>
 
         <div class="form-group">
-          <label class="control-label label-inline" for="max_articles">… a un nombre d'exemplaires inférieur ou égal à :</label>
+          <label class="col-form-label label-inline" for="max_articles">… a un nombre d'exemplaires inférieur ou égal à :</label>
           <input type="number" min="1" step="1" id="max_articles" name="max_articles" class="form-control" value="${max_articles}">
         </div>
 
       </fieldset>
 
       <div class="form-group">
-        <label class="control-label label-inline" for="fee">Montant (en centimes) :</label>
+        <label class="col-form-label label-inline" for="fee">Montant (en centimes) :</label>
         <input type="number" min="0" step="1" id="fee" name="fee" class="form-control" value="${fee}" required>
       </div>
 
       <div class="form-group">
-        <label class="control-label label-inline" for="info">Commentaire (affiché au client lorsqu'il choisit ce mode) :</label>
+        <label class="col-form-label label-inline" for="info">Commentaire (affiché au client lorsqu'il choisit ce mode) :</label>
         <input type="text" id="info" name="info" class="form-control" value="${info === null ? '' : info}">
       </div>
 

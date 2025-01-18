@@ -161,7 +161,7 @@ return function (
                     <input type="hidden" name="stock_id" value="' . $stockEntity->get('id') . '">
                     Modifier le montant :
                         <input type="number" name="new_price" min="' . ($articleEntity->get('price') / 100) . '" value="' . ($stockEntity->get('selling_price') / 100) . '" step=10 class="nano" required> &euro;
-                    <button type="submit" class="btn btn-info btn-xs">OK</button>
+                    <button type="submit" class="btn btn-info btn-sm">OK</button>
                 </fieldset>
             </form>
         ';

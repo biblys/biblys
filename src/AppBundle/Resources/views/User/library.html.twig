@@ -93,19 +93,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                     &nbsp; Télécharger &nbsp;
                     <span class="caret"></span>
                   </button>
-                  <ul class="dropdown-menu">
+                  <div class="dropdown-menu">
                     {% for file in item.downloadable_files %}
-                      <li>
                         <a
+                          class="dropdown-item"
                           href="{{ path('file_download', { id: file.id, format: 'ext' }) }}"
                           title="v{{ file.version}} | {{ file.size }} octets | {{ file.fileType.name }}"
                           aria-label="Télécharger {{ file.fileType.name }}"
                         >
                           <img src="{{ file.fileType.icon }}" width=16 alt="Télécharger"> {{ file.fileType.name }}
                         </a>
-                      </li>
                     {% endfor %}
-                  </ul>
+                  </div>
                 </div>
               {% endif %}
             {% else %}

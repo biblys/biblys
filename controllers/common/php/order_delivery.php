@@ -488,19 +488,19 @@ return function (
 
         if ($showCheckbox) {
             $newsletter_checkbox = '
-            <p class="checkbox order-delivery-form__checkbox">
-                <label class="after">
-                    <input type="checkbox" name="newsletter" value="1" ' . $checked . ' >
+                <div class="form-check">
+                  <input name="newsletter" class="form-check-input" type="checkbox" value="1" id="newsletter"  ' . $checked . '>
+                  <label class="form-check-label" for="newsletter">
                     Je souhaite recevoir la newsletter <small>(facultatif)</small><br>
-                    <small>
-                        En cochant cette case, vous acceptez de recevoir par
-                        courriel notre newsletter. Vous comprenez que vous pouvez
-                        vous désabonner de ces communications en cliquant sur le
-                        lien de désabonnement inséré à la fin de ces courriels.
-                    </small>
-                </label>
-            </p>
-        ';
+                        <small>
+                            En cochant cette case, vous acceptez de recevoir par
+                            courriel notre newsletter. Vous comprenez que vous pouvez
+                            vous désabonner de ces communications en cliquant sur le
+                            lien de désabonnement inséré à la fin de ces courriels.
+                        </small>
+                  </label>
+                </div>
+            ';
         }
     }
 
@@ -512,10 +512,10 @@ return function (
         $termsPage = $pageManager->getById($cgv_page);
         if ($termsPage) {
             $cgv_checkbox = '
-            <p class="checkbox order-delivery-form__checkbox">
-                <label class="after">
-                    <input type="checkbox" name="cgv_checkbox" value=1 required>
-                    J\'accepte les 
+                <div class="form-check">
+                  <input name="cgv_checkbox" class="form-check-input" type="checkbox" value="1" id="gcv_checkbox" required>
+                  <label class="form-check-label" for="cgv_checkbox">
+                     J\'accepte les 
                     <a href="/pages/' . $termsPage->get('url') . '">Conditions Générales de Vente</a>
                     <small class="required-field-indicator">(obligatoire)</small><br />
                     <small>
@@ -525,18 +525,18 @@ return function (
                         </a>
                         et vous déclarez les accepter sans réserve.
                     </small>
-                </label>
-            </p>
-        ';
+                  </label>
+                </div>
+          ';
         }
     }
 
     $downloadableArticlesCheckbox = "";
     if ($cart->containsDownloadableArticles()) {
         $downloadableArticlesCheckbox = '
-            <p class="checkbox order-delivery-form__checkbox">
-                <label class="after">
-                    <input type="checkbox" name="downloadable_articles_checkbox" value=1 required>
+            <div class="form-check">
+                  <input  name="downloadable_articles_checkbox" class="form-check-input" type="checkbox" value="1" id="downloadable_articles_checkbox" required>
+                  <label class="form-check-label" for="downloadable_articles_checkbox">
                     J’accepte les conditions spécifiques au numérique
                     <small class="required-field-indicator">(obligatoire)</small><br />
                     <small>
@@ -544,8 +544,8 @@ return function (
                         des articles numériques téléchargeables et que vous renoncez à votre droit
                         de rétraction sur ces articles dès le premier téléchargement.
                     </small>
-                </label>
-            </p>
+                  </label>
+                </div>
         ';
     }
 

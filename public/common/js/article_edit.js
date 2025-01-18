@@ -693,7 +693,7 @@ document.addEventListener('DOMContentLoaded', function () {
       result.links.forEach(function (link) {
 
         var button = document.createElement('a');
-        button.className = 'btn btn-danger btn-xs';
+        button.className = 'btn btn-danger btn-sm';
         button.dataset['remove_link'] = link.id;
         button.innerHTML = '<span class="fa fa-remove"></a>';
         button.addEventListener('click', removeLink);
@@ -749,7 +749,7 @@ document.addEventListener('DOMContentLoaded', function () {
         rayonsList = document.querySelector('#rayons');
 
       var button = document.createElement('a');
-      button.className = 'btn btn-danger btn-xs';
+      button.className = 'btn btn-danger btn-sm';
       button.dataset['remove_link'] = result.id;
       button.innerHTML = '<span class="fa fa-remove"></a>';
       button.addEventListener('click', removeLink);
@@ -952,7 +952,7 @@ function _addContributorLine({
       <select class="contribution-role-selector" data-contribution_id="${contributionId}">
       </select>
       <a 
-          class="btn btn-danger btn-xs contribution-delete-button" 
+          class="btn btn-danger btn-sm contribution-delete-button" 
           data-contribution_id="${contributionId}"
       >
           <span class="fa fa-remove"></span>
