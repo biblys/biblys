@@ -69,10 +69,6 @@ article_deleted:
   path: /admin/articles/deleted
   controller: AppBundle\Controller\ArticleController::deletedAction
 
-article_deletions:
-  path: /admin/articles/deletions
-  controller: AppBundle\Controller\ArticleController::deletionsAction
-
 article_tags_add:
   path: /admin/articles/{id}/tags/add
   controller: AppBundle\Controller\ArticleController::addTagsAction
