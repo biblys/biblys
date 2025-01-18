@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.3.0 (DEV)
+
+### Améliorations
+
+- Le composant de pagination affiche désormais un menu plutôt qu'une liste de
+  liens lorsqu'il y a plus de 10 pages.
+
 ## 3.2.1 (8 janvier 2025)
 
 ### Corrections
@@ -129,7 +136,7 @@ Après avoir procédé à l'installation de cette version…
 composer propel migrate
 ```
 
-## 3.0.3 (DEV)
+## 3.0.3 (20 novembre 2024)
 
 Corrections
 

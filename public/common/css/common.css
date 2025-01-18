@@ -1524,3 +1524,19 @@ table.unfold tbody {
 .login-username-field {
   display: none;
 }
+
+/* Pagination */
+
+.Pagination--with-menu {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.Pagination__page-selector {
+  align-items: center;
+  display: inline-flex;
+  gap: 8px;
+}
