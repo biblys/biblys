@@ -93,7 +93,7 @@ jQuery(document).ready(function() {
   listLoading = false;
 
   // Modifier le filtre
-  jQuery('#listFilter li').click( function() {
+  jQuery('#listFilter a').click( function() {
     const articleListElement = jQuery('#articleList');
     const label = jQuery(this).html().replace('<a>', '').replace('</a>', '');
     const filter = jQuery(this).data('filter');
@@ -109,7 +109,7 @@ jQuery(document).ready(function() {
   });
 
   // Modifier l'ordre de tri
-  jQuery('#listSort li').click( function() {
+  jQuery('#listSort a').click( function() {
     const label = jQuery(this).html().replace('<a>', '').replace('</a>', '');
     const sort = jQuery(this).data('sort');
     const order = jQuery(this).data('order');
@@ -119,12 +119,12 @@ jQuery(document).ready(function() {
   });
 
   // Option par défaut
-  jQuery('#listFilter li[data-selected=true]').each( function() {
+  jQuery('#listFilter a[data-selected=true]').each( function() {
     const label = jQuery(this).html();
     jQuery('#listFilterButton').html(label+' <img src="/common/icons/dropdown.svg" width=8 alt="">');
     jQuery(this).data('selected','false');
   });
-  jQuery('#listSort li[data-selected=true]').each( function() {
+  jQuery('#listSort a[data-selected=true]').each( function() {
     const label = jQuery(this).html();
     jQuery('#listSortButton').html(label+' <img src="/common/icons/dropdown.svg" width=8 alt="">');
     jQuery(this).data('selected','false');

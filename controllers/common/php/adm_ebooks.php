@@ -137,12 +137,12 @@ while ($l = $ventes->fetch(PDO::FETCH_ASSOC)) {
 $content = '<h1><span class="fa fa-book"></span> Ventes numériques</h1>';
 
 $content .= '
-        <form class="fieldset form-horizontal" role="form">
+        <form class="fieldset" role="form">
             <fieldset>
                 <legend>Filter les ventes</legend>
 
-                <div class="form-group">
-                    <label for="people_id" class="col-sm-3 control-label">Par auteur :</label>
+                <div class="form-group row">
+                    <label for="people_id" class="col-sm-3 col-form-label">Par auteur :</label>
                     <div class="col-sm-9">
                         <select name="people_id" id="people_id" class="form-control">
                             <option value="0">Tous</option>
@@ -151,8 +151,8 @@ $content .= '
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="article_id" class="col-sm-3 control-label">Par titre :</label>
+                <div class="form-group row">
+                    <label for="article_id" class="col-sm-3 col-form-label">Par titre :</label>
                     <div class="col-sm-9">
                         <select name="article_id" id="article_id" class="form-control">
                             <option value="0">Tous</option>
@@ -161,15 +161,15 @@ $content .= '
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="date1" class="col-sm-3 control-label">Du :</label>
+                <div class="form-group row">
+                    <label for="date1" class="col-sm-3 col-form-label">Du :</label>
                     <div class="col-sm-9">
                         <input type="date" class="date" id="date1" name="date1" value="' . ($_GET["date1"] ?? null) . '">
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="date2" class="col-sm-3 control-label">Au :</label>
+                <div class="form-group row">
+                    <label for="date2" class="col-sm-3 col-form-label">Au :</label>
                     <div class="col-sm-9">
                         <input type="date" class="date" id="date2" name="date2" value="' . ($_GET["date2"] ?? null) . '">
                     </div>

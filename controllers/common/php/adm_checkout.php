@@ -287,7 +287,7 @@ return function (
             <td class="right">' . $shopCart->get('cart_count') . '</td>
             <td class="right">' . currency($shopCart->get('cart_amount') / 100) . '</td>
             <td class="center">
-                <a href="/pages/adm_checkout?cart_id=' . $shopCart->get('cart_id') . '&vacuum_cart=1" data-confirm="Voulez-vous vraiment VIDER ce panier et remettre ' . $shopCart->get('cart_count') . ' exemplaire' . s($shopCart->get('cart_count')) . ' en vente ?" title="Vider le panier et remettre ' . $shopCart->get('cart_count') . ' exemplaire' . s($shopCart->get('cart_count')) . ' en vente." class="btn btn-danger btn-xs">
+                <a href="/pages/adm_checkout?cart_id=' . $shopCart->get('cart_id') . '&vacuum_cart=1" data-confirm="Voulez-vous vraiment VIDER ce panier et remettre ' . $shopCart->get('cart_count') . ' exemplaire' . s($shopCart->get('cart_count')) . ' en vente ?" title="Vider le panier et remettre ' . $shopCart->get('cart_count') . ' exemplaire' . s($shopCart->get('cart_count')) . ' en vente." class="btn btn-danger btn-sm">
                     <i class="fa fa-trash-o"></i>
                 </a>
             </td>

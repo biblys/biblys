@@ -131,7 +131,7 @@ if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin() && !LegacyCodeHelper::getGl
 			<h1><i class="fa fa-pencil"></i> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
             <p>'.$buttons.'</p>
 
-			<form id="signing" method="post" class="form-horizontal fieldset">
+			<form id="signing" method="post" class="fieldset">
 				<fieldset>
 					<legend>Informations</legend>
 					

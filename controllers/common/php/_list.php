@@ -427,40 +427,40 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
 
             Afficher :
 
-            <div id="listFilter" class="btn-group">
-                <button class="btn btn-outline-secondary btn-sm" data-toggle="dropdown">
+            <span id="listFilter" class="dropdown">
+                <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-square"></i>&nbsp; tous les livres <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu">
-                    <li class="pointer" data-filter="all' .$sel['all'].'"><a><i class="fa fa-square black"></i>&nbsp; tous les livres</a></li>
-                    <li class="pointer" data-filter="neuf"'.$sel['neuf'].'><a><i class="fa fa-square green"></i>&nbsp; livres neufs</a></li>
-                    <li class="pointer" data-filter="occasion"'.$sel['occasion'].'><a><i class="fa fa-square orange"></i>&nbsp; livres d\'occasion</a></li>
-                    <li class="pointer" data-filter="indisp"'.$sel['indisp'].'><a><i class="fa fa-square red"></i>&nbsp; pas en stock</a></li>
-                </ul>
-            </div>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item pointer" data-filter="all' .$sel['all'].'"><i class="fa fa-square black"></i>&nbsp; tous les livres</a>
+                    <a class="dropdown-item pointer" data-filter="neuf"'.$sel['neuf'].'><i class="fa fa-square green"></i>&nbsp; livres neufs</a>
+                    <a class="dropdown-item pointer" data-filter="occasion"'.$sel['occasion'].'><i class="fa fa-square orange"></i>&nbsp; livres d\'occasion</a>
+                    <a class="dropdown-item pointer" data-filter="indisp"'.$sel['indisp'].'><i class="fa fa-square red"></i>&nbsp; pas en stock</a>
+                </div>
+            </span>
 
             &nbsp;
 
             Trier par :
 
-            <div id="listSort" class="btn-group">
-                <button class="btn btn-outline-secondary btn-sm" data-toggle="dropdown">
+            <span id="listSort" class="dropdown">
+                <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
                     date d\'ajout au stock <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu">
-                    <li class="pointer" data-sort="article_title_alphabetic" data-order=0'.$sel['article_title_alphabetic0'].'><a>titre</a></li>
-                    <li class="pointer" data-sort="article_authors_alphabetic" data-order=0'.$sel['article_authors_alphabetic0'].'><a>auteur</a></li>
-                    <li class="pointer" data-sort="article_collection" data-order=0'.$sel['article_collection0'].'><a>collection</a></li>
-                    <li class="pointer" data-sort="article_number" data-order=0'.$sel['article_number0'].'><a>numéro de collection</a></li>
-                    <li class="pointer" data-sort="article_cycle" data-order=0'.$sel['article_cycle0'].'><a>série</a></li>
-                    <li class="pointer" data-sort="article_tome" data-order=0'.$sel['article_tome0'].'><a>numéro de volume</a></li>
-                    <li class="pointer" data-sort="article_pubdate" data-order=1'.$sel['article_pubdate1'].'><a>date de parution</a></li>
-                    <li class="pointer" data-sort="stock_purchase_date" data-order=1'.$sel['stock_purchase_date1'].'><a>date d\'ajout au stock</a></li>
-                    <li class="pointer" data-sort="best_price" data-order=0'.$sel['best_price0'].'><a>prix, du - cher au + cher</a></li>
-                    <li class="pointer" data-sort="best_price" data-order=1'.$sel['best_price1'].'><a>prix, du + cher au - cher</a></li>
-                    <li class="pointer" data-sort="random" data-order=0'.$sel['random0'].'><a>ordre aléatoire</a></li>
-                </ul>
-            </div>
+                <div class="dropdown-menu">
+                    <a class="pointer dropdown-item" data-sort="article_title_alphabetic" data-order=0'.$sel['article_title_alphabetic0'].'>titre</a>
+                    <a class="pointer dropdown-item" data-sort="article_authors_alphabetic" data-order=0'.$sel['article_authors_alphabetic0'].'>auteur</a>
+                    <a class="pointer dropdown-item" data-sort="article_collection" data-order=0'.$sel['article_collection0'].'>collection</a>
+                    <a class="pointer dropdown-item" data-sort="article_number" data-order=0'.$sel['article_number0'].'>numéro de collection</a>
+                    <a class="pointer dropdown-item" data-sort="article_cycle" data-order=0'.$sel['article_cycle0'].'>série</a>
+                    <a class="pointer dropdown-item" data-sort="article_tome" data-order=0'.$sel['article_tome0'].'>numéro de volume</a>
+                    <a class="pointer dropdown-item" data-sort="article_pubdate" data-order=1'.$sel['article_pubdate1'].'>date de parution</a>
+                    <a class="pointer dropdown-item" data-sort="stock_purchase_date" data-order=1'.$sel['stock_purchase_date1'].'>date d\'ajout au stock</a>
+                    <a class="pointer dropdown-item" data-sort="best_price" data-order=0'.$sel['best_price0'].'>prix, du - cher au + cher</a>
+                    <a class="pointer dropdown-item" data-sort="best_price" data-order=1'.$sel['best_price1'].'>prix, du + cher au - cher</a>
+                    <a class="pointer dropdown-item" data-sort="random" data-order=0'.$sel['random0'].'>ordre aléatoire</a>
+                </div>
+            </span>
 
             &nbsp;<input type="search" id="listSearch" placeholder="Filtrer la liste...">
 
