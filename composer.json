@@ -99,7 +99,8 @@
     "dansmaculotte/mondialrelay-php": "^1.4",
     "spomky-labs/aes-key-wrap": "^7.0",
     "matthiasmullie/scrapbook": "^1.5",
-    "psr/simple-cache": "^3.0"
+    "psr/simple-cache": "^3.0",
+    "laminas/laminas-feed": "^2.23"
   },
   "require-dev": {
     "phpunit/phpunit": "~10",
