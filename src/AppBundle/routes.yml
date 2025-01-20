@@ -291,6 +291,12 @@ event_show:
   path: /evenements/{slug}
   controller: AppBundle\Controller\EventController::showAction
 
+# Feeds
+
+feed_blog:
+  path: /feeds/blog.rss.xml
+  controller: AppBundle\Controller\FeedController::blogAction
+
 # File
 
 file_download:
