@@ -24,15 +24,13 @@ use Biblys\Exception\EntityAlreadyExistsException;
 use Biblys\Isbn\Isbn as Isbn;
 use Biblys\Isbn\IsbnParsingException;
 use Biblys\Service\Slug\SlugService;
-use Collection;
 use Exception;
 use Model\BookCollection;
 use Model\BookCollectionQuery;
+use Model\People;
 use Model\PeopleQuery;
 use Model\Publisher;
 use Model\PublisherQuery;
-use People;
-use PeopleManager;
 use SimpleXMLElement;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
@@ -246,7 +244,7 @@ class Noosfere
                 $collection->setName($collectionNoosfereName);
                 $collection->setNoosfereId($collectionNoosfereId);
                 $collection->save();
-            } catch (EntityAlreadyExistsException $exception) {
+            } /** @noinspection PhpRedundantCatchClauseInspection */ catch (EntityAlreadyExistsException $exception) {
                 throw new ConflictHttpException($exception->getMessage(), $exception);
             }
         }
@@ -264,7 +262,6 @@ class Noosfere
     ): People
     {
         $slugService = new SlugService();
-        $pm = new PeopleManager();
 
         $noosfereContributorName = trim("$noosfereContributorFirstName $noosfereContributorLastName");
 
@@ -276,31 +273,26 @@ class Noosfere
             ->findOne();
 
         if ($existingContributor) {
-            /** @var People $contributorEntity */
-            $contributorEntity = $pm->getById($existingContributor->getId());
-
-            if (!$contributorEntity->has("people_noosfere_id") && !empty($noosfereContributorId)) {
-                $contributorEntity->set("people_noosfere_id", $noosfereContributorId);
-                $pm->update($contributorEntity);
+            if (!$existingContributor->getNoosfereId() && !empty($noosfereContributorId)) {
+                $existingContributor->setNoosfereId($noosfereContributorId);
+                $existingContributor->save();
             }
+
+            return $existingContributor;
         }
 
-        if (!$existingContributor) {
-            $contributorParams = [
-                "people_first_name" => $noosfereContributorFirstName,
-                "people_last_name" => $noosfereContributorLastName,
-                "people_noosfere_id" => $noosfereContributorId,
-            ];
+        try {
+            $newContributor = new People();
+            $newContributor->setFirstName($noosfereContributorFirstName);
+            $newContributor->setLastName($noosfereContributorLastName);
+            $newContributor->setNoosfereId($noosfereContributorId);
 
-            try {
-                /** @var Collection $contributorEntity */
-                $contributorEntity = $pm->create($contributorParams);
-            } catch (EntityAlreadyExistsException $exception) {
-                throw new ConflictHttpException($exception->getMessage(), $exception);
-            }
+            $newContributor->save();
+        } /** @noinspection PhpRedundantCatchClauseInspection */ catch (EntityAlreadyExistsException $exception) {
+            throw new ConflictHttpException($exception->getMessage(), $exception);
         }
 
-        return $contributorEntity;
+        return $newContributor;
     }
 
     /**

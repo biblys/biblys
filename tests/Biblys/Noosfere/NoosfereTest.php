@@ -22,11 +22,12 @@ use Biblys\Test\ModelFactory;
 use Exception;
 use Model\BookCollection;
 use Model\BookCollectionQuery;
+use Model\People;
 use Model\PeopleQuery;
+use Model\Publisher;
 use Model\PublisherQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
-use Publisher;
 use SimpleXMLElement;
 
 require_once __DIR__ . "/../../setUp.php";
@@ -59,8 +60,8 @@ class NoosfereTest extends TestCase
         );
 
         // then
-        $this->assertInstanceOf(\People::class, $returnedContributor);
-        $this->assertNotNull($returnedContributor->get("id"));
+        $this->assertInstanceOf(People::class, $returnedContributor);
+        $this->assertNotNull($returnedContributor->getId());
     }
 
     /**
@@ -84,7 +85,7 @@ class NoosfereTest extends TestCase
         );
 
         // then
-        $this->assertEquals($existingContributor->getId(), $returnedContributor->get("id"));
+        $this->assertEquals($existingContributor->getId(), $returnedContributor->getId());
     }
 
     /**
@@ -109,7 +110,7 @@ class NoosfereTest extends TestCase
         );
 
         // then
-        $this->assertEquals($existingContributor->getId(), $returnedContributor->get("id"));
+        $this->assertEquals($existingContributor->getId(), $returnedContributor->getId());
     }
 
     /** getOrCreateContributor */
@@ -131,7 +132,7 @@ class NoosfereTest extends TestCase
         );
 
         // then
-        $this->assertEquals($existingContributor->getId(), $returnedContributor->get("id"));
+        $this->assertEquals($existingContributor->getId(), $returnedContributor->getId());
     }
 
     /** #getOrCreatePublisher */
@@ -148,7 +149,7 @@ class NoosfereTest extends TestCase
         );
 
         // then
-        $this->assertInstanceOf(\Model\Publisher::class, $createdPublisher);
+        $this->assertInstanceOf(Publisher::class, $createdPublisher);
         $this->assertNotNull($createdPublisher->getId());
         $this->assertEquals("NOOSFERE EDITIONS", $createdPublisher->getName());
         $this->assertEquals(115, $createdPublisher->getNoosfereId());
@@ -170,7 +171,7 @@ class NoosfereTest extends TestCase
         );
 
         // then
-        $this->assertInstanceOf(\Model\Publisher::class, $returnedPublisher);
+        $this->assertInstanceOf(Publisher::class, $returnedPublisher);
         $this->assertEquals($existingPublisher->getId(), $returnedPublisher->getId());
     }
 
@@ -190,7 +191,7 @@ class NoosfereTest extends TestCase
         );
 
         // then
-        $this->assertInstanceOf(\Model\Publisher::class, $returnedPublisher);
+        $this->assertInstanceOf(Publisher::class, $returnedPublisher);
         $this->assertEquals($existingPublisher->getId(), $returnedPublisher->getId());
     }
 
