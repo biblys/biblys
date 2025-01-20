@@ -599,7 +599,7 @@ $(document).ready(function () {
 
   // Ajouter au lot
   $('#addToBundle').autocomplete({
-    source: '/x/adm_articles?v=2',
+    source: '/pages/adm_article_search',
     minLength: 3,
     delay: 250,
     select: function (event, ui) {
