@@ -182,8 +182,8 @@ if ($_GET["mode"] == "search") { // Mode recherche
                 noosfereContributorLastName: $c["people_last_name"],
             );
 
-            $x["article_people"][$k]["people_id"] = $contributor->get('id');
-            $x["article_people"][$k]["people_name"] = $contributor->getName();
+            $x["article_people"][$k]["people_id"] = $contributor->getId();
+            $x["article_people"][$k]["people_name"] = $contributor->getFullName();
 
             // S'il manque des infos, on n'ajoute pas le contributeur au livre
             if (empty($x["article_people"][$k]["people_id"])
