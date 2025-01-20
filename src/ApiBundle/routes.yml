@@ -127,12 +127,6 @@ legacy_x_adm_customers:
   path: /x/adm_customers
   controller: ApiBundle\Controller\LegacyController::defaultAction
 
-legacy_x_adm_articles:
-  path: /x/adm_articles
-  controller: ApiBundle\Controller\LegacyController::defaultAction
-  defaults:
-    page: adm_articles
-
 legacy_x_adm_images:
   path: /x/adm_images
   controller: ApiBundle\Controller\LegacyController::defaultAction
