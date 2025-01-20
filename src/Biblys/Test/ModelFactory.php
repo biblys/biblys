@@ -776,6 +776,7 @@ class ModelFactory
         $post->setUrl($slugService->slugify($title));
         $post->setStatus($status);
         $post->setDate($date);
+        $post->setContent("Un contenu d'actualité qui va vous étonner.");
         $post->setCreatedAt(new DateTime());
         $post->setUpdatedAt(new DateTime());
         $post->setAxysAccountId($axysAccountId);
