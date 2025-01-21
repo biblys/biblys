@@ -107,10 +107,6 @@ legacy_x_adm_article_duplicate_check:
   path: /x/adm_article_duplicate_check
   controller: ApiBundle\Controller\LegacyController::defaultAction
 
-legacy_x_adm_article_import:
-  path: /x/adm_article_import
-  controller: ApiBundle\Controller\LegacyController::defaultAction
-
 legacy_x_adm_article_people:
   path: /x/adm_article_people
   controller: ApiBundle\Controller\LegacyController::defaultAction
