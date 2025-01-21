@@ -9,6 +9,8 @@
   l'utilisation.
 - Le composant de pagination affiche désormais un menu plutôt qu'une liste de
   liens lorsqu'il y a plus de 10 pages.
+- La recherche nooSFere requiert maintenant un terme de recherche d'au moins
+  trois caractères.
 
 ## 3.2.1 (8 janvier 2025)
 
