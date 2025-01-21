@@ -19,13 +19,16 @@
 use Biblys\Isbn\Isbn;
 use Biblys\Isbn\IsbnParsingException;
 use Biblys\Noosfere\Noosfere;
+use Biblys\Service\QueryParamsService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @throws IsbnParsingException
  */
-return function(): JsonResponse
+return function(QueryParamsService $queryParams): JsonResponse
 {
+    $queryParams->parse(["q" => ["type" => "string", "mb_min_length" => 3]]);
+
     $r = null;
     $noosfere = new Noosfere();
 
