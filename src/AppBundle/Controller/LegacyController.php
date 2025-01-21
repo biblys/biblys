@@ -16,7 +16,6 @@
  */
 
 
-
 namespace AppBundle\Controller;
 
 use Biblys\Legacy\LegacyCodeHelper;
@@ -61,8 +60,10 @@ class LegacyController extends Controller
 
         $pageQueryParam = $request->get('page', 'home');
 
+        $wrapperTemplate = "AppBundle:Legacy:default.html.twig";
         $pagePrefix = substr($pageQueryParam, 0, 4);
         if ($pagePrefix == 'adm_') {
+            $wrapperTemplate = "AppBundle:Legacy:default-admin.html.twig";
             $currentUser->authAdmin();
         }
         if ($pagePrefix == 'pub_') {
@@ -132,7 +133,7 @@ class LegacyController extends Controller
             $request->attributes->set("page_title", $GLOBALS["_PAGE_TITLE"]);
         }
 
-        return $templateService->renderResponse("AppBundle:Legacy:default.html.twig", [
+        return $templateService->renderResponse($wrapperTemplate, [
             "title" => $request->attributes->get("page_title"),
             "content" => $response->getContent(),
         ]);
