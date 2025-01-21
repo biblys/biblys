@@ -76,7 +76,7 @@ function article_search() {
     field.addClass('loadingOrange');
     var notification = new Biblys.Notification('Recherche de <em>' + field.val() + '</em> dans les bases externes...', { sticky: true, loader: true });
 
-    fetch('/x/adm_article_import?mode=search&q=' + field.val(), {
+    fetch('/pages/adm_noosfere_search?q=' + field.val(), {
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
@@ -212,7 +212,7 @@ function reloadArticleAdminEvents(scope) {
       { sticky: true, loader: true }
     );
     $.ajax({
-      url: '/x/adm_article_import',
+      url: '/pages/adm_noosfere_import',
       data: {
         mode: 'import',
         ean: $(this).data('ean'),

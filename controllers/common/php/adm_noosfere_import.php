@@ -1,4 +1,5 @@
 <?php /** @noinspection PhpUnhandledExceptionInspection */
+
 /*
  * Copyright (C) 2024 Clément Latzarus
  *
@@ -15,8 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
-use Biblys\Isbn\Isbn;
 use Biblys\Noosfere\Noosfere;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
@@ -25,81 +24,15 @@ use Model\PeopleQuery;
 use Model\PublisherQuery;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-$pm = new PublisherManager();
-$cm = new CollectionManager();
-$pom = new PeopleManager();
-
-$slugService = new SlugService();
-
-// IMPORT NOOSFERE
-function noosfere($query, $mode = null): array
+return function(): JsonResponse
 {
-    $noosfere = new Noosfere();
-    $xml = $noosfere->search($query, $mode);
-    return Noosfere::buildArticlesFromXml($xml);
-}
+    $slugService = new SlugService();
 
-if ($_GET["mode"] == "search") { // Mode recherche
-    $r = null;
-    $articles_noosfere = noosfere($_GET["q"]); // ne fonctionne plus le 16 avril 2015
-
-    // If query param is an EAN, try as an ISBN-10
-    $query = $_GET["q"];
-    if (count($articles_noosfere) === 0 && Isbn::isParsable($query)) {
-        $isbn10 = Isbn::convertToIsbn10($query);
-        $articleNoosfereIsbn10 = noosfere($isbn10);
-        $articles_noosfere = (array_merge($articles_noosfere, $articleNoosfereIsbn10));
-    }
-
-    $results = 0;
-    $additional_results = null;
-    $r .= '<div id="results" class="hidden">';
-    if ($articles_noosfere) {
-        foreach ($articles_noosfere as $a) {
-
-            $isbn = null;
-            if ($a["article_ean"]) {
-                $isbn = '<br />ISBN : ' . Isbn::convertToIsbn13($a["article_ean"]);
-            }
-
-            $authors = is_string($a["article_authors"])
-                ? "de ".truncate($a["article_authors"], 65, '...', true, true)
-                : "(Aucun·e auteur·ice)";
-            $result = '
-                <div data-ean="'.$a["article_ean"].'" data-asin="'.(isset($a["article_asin"]) ? $a['article_asin'] : null).'" data-noosfere_id="'.$a["article_noosfere_id"].'" class="article-thumb article-import pointer">
-                    <img src="'.$a["article_cover_import"].'" height="85" class="article-thumb-cover" alt="Image de couverture" />
-                    <div class="article-thumb-data">
-                        <h3>'.$a["article_title"]. '</h3>
-                        <p>
-                            '.$authors.'<br />
-                            coll. '.$a["article_collection"].' '.numero($a["article_number"]).' ('.$a["article_publisher"]. ')<br />
-                            ' . $isbn . '
-                        </p>
-                    </div>
-                </div>
-            ';
-            if ($results < 3) {
-                $r .= $result;
-            } else {
-                $additional_results .= $result;
-            }
-            $results++;
-        }
-    }
-    $r .= '</div>';
-    if (empty($results)) {
-        $r .= '<p class="center">Aucun résultat dans les bases externes.</p>';
-    }
-    if (isset($additional_results)) {
-        $r .= '<div id="additionalResults" class="hidden">'.$additional_results.'</div><h3 id="showAllResults" class="toggleThis center pointer">Afficher plus de résultats...</h3>';
-    }
-
-    $response = new JsonResponse(['result' => $r]);
-    $response->send();
-} elseif ($_GET["mode"] == "import") { // Mode import
     $x = [];
     if (!empty($_GET["noosfere_id"])) { // Importation de fiche noosfere
-        $n = noosfere($_GET["noosfere_id"], 'noosfere_id');
+        $noosfere = new Noosfere();
+        $xml = $noosfere->search($_GET["noosfere_id"], 'noosfere_id');
+        $n = Noosfere::buildArticlesFromXml($xml);
         $n = $n[0];
         if (!empty($n["article_ean"])) { // Infos complémentaires d'Amazon si EAN
             if (!empty($a)) {
@@ -125,7 +58,6 @@ if ($_GET["mode"] == "search") { // Mode recherche
 
     $publisher = Noosfere::getOrCreatePublisher($x["noosfere_IdEditeur"], $x["article_publisher"]);
     $x["publisher_id"] = $publisher->getId();
-    $x["article_publisher"] = $publisher->getName();
 
     $collection = Noosfere::getOrCreateCollection(
         $x["noosfere_IdCollection"],
@@ -213,6 +145,7 @@ if ($_GET["mode"] == "search") { // Mode recherche
 
     // Reconnaissance des catégories
     if (isset($x["pricegrid_id"]) && isset($x["article_price"])) {
+        /** @noinspection SqlResolve */
         $prices = EntityManager::prepareAndExecute(
             "SELECT `price_cat` FROM `prices`
             WHERE `price_amount` = :price_amount AND
@@ -227,6 +160,5 @@ if ($_GET["mode"] == "search") { // Mode recherche
         }
     }
 
-    $response = new JsonResponse($x);
-    $response->send();
-}
+    return new JsonResponse($x);
+};
