@@ -76,7 +76,9 @@ function article_search() {
     field.addClass('loadingOrange');
     var notification = new Biblys.Notification('Recherche de <em>' + field.val() + '</em> dans les bases externes...', { sticky: true, loader: true });
 
-    fetch('/pages/adm_noosfere_search?q=' + field.val(), {
+    const searchUrl = new URL('/pages/adm_noosfere_search', window.location.origin);
+    searchUrl.searchParams.append('q', field.val());
+    fetch(searchUrl, {
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
