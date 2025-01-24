@@ -108,7 +108,7 @@ return function (
 
         $content .= '
 
-			<div class="pull-right">
+			<div class="float-right">
 				<a href="/pages/log_wishlist?id=' . $wishlist->get('id') . '" class="btn btn-info">
 					<i class="fa fa-cog"></i> Modifier
 				</a>

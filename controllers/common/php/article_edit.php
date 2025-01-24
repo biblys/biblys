@@ -783,7 +783,7 @@ return function (
         </fieldset>
 
         <fieldset id="Contributeurs">
-            <a href="https://docs.biblys.fr/administrer/catalogue/fiche-article/#contributeurs" target="_blank" class="pull-right">Besoin d\'aide ?</a>
+            <a href="https://docs.biblys.fr/administrer/catalogue/fiche-article/#contributeurs" target="_blank" class="float-right">Besoin d\'aide ?</a>
             <legend>Contributions</legend>
             <div id="people_list"></div>
             <br /><br />

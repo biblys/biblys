@@ -128,7 +128,7 @@ return function (
 
         $content .= '
 
-        <div class="pull-right">
+        <div class="float-right">
             <h3>' . $order->get('title') . ' ' . $order->get('firstname') . ' ' . $order->get('lastname') . '</h3>
             <p>
                 ' . $order->get('address1') . '<br>
