@@ -859,6 +859,9 @@ Biblys.Subscription.prototype = {
     if (!badge) {
       badge = document.createElement('span');
       badge.classList.add('icon-badge');
+      badge.classList.add('badge');
+      badge.classList.add('badge-pill');
+      badge.classList.add('badge-danger');
       this.element.appendChild(badge);
     }
 

@@ -52,16 +52,6 @@ ul.admin-entries li {
   margin: 5px 0;
 }
 
-.admin-entries .icon-badge {
-  background: red;
-  border-radius: 20px;
-  color: white;
-  font-size: 10px;
-  margin-left: 5px;
-  padding: 2px 8px 2px 8px;
-  position: absolute;
-}
-
 /* ADMIN SHORTCUTS */
 
 .admin-shortcuts {
@@ -95,12 +85,7 @@ ul.admin-entries li {
 }
 
 .admin-shortcuts .icon-badge {
-  background: red;
-  border-radius: 20px;
-  color: white;
-  font-size: 10px;
   margin-left: 5px;
-  padding: 2px 8px 2px 8px;
   left: 50px;
   top: -10px;
   position: absolute;
