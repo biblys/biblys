@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2024 Clément Latzarus
+ * Copyright (C) 2025 Clément Latzarus
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
@@ -16,31 +16,56 @@
  */
 
 
+namespace AppBundle\Controller;
+
+use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Mailer;
 use Biblys\Service\TemplateService;
+use Framework\Controller;
+use Model\Right;
 use Model\RightQuery;
 use Model\UserQuery;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
-return function (
-    Request         $request,
-    CurrentSite     $currentSite,
-    TemplateService $templateService,
-    Mailer          $mailer,
-    HttpSession     $session,
-): Response|RedirectResponse
+class AdminsController extends Controller
 {
-    if ($request->getMethod() === "POST") {
+    /**
+     * @throws LoaderError
+     * @throws SyntaxError
+     * @throws RuntimeError
+     */
+    public function newAction(TemplateService $templateService): Response
+    {
+        return $templateService->renderResponse("AppBundle:Admins:new.html.twig");
+    }
 
-        $userEmail = $request->request->get("user_email");
-        if ($userEmail === null) {
-            throw new BadRequestHttpException("Le champ Adresse e-mail est obligatoire.");
-        }
+    /**
+     * @throws InvalidEmailAddressException
+     * @throws PropelException
+     * @throws TransportExceptionInterface
+     */
+    public function createAction(
+        BodyParamsService $bodyParams,
+        CurrentSite $currentSite,
+        UrlGenerator $urlGenerator,
+        FlashMessagesService $flashMessages,
+        Mailer $mailer
+    ): RedirectResponse
+    {
+
+        $bodyParams->parse(["user_email" => ["type" => "string"]]);
+        $userEmail = $bodyParams->get("user_email");
 
         try {
             $user = UserQuery::create()
@@ -58,11 +83,12 @@ return function (
                 throw new BadRequestHttpException("L'utilisateur $userEmail a déjà un accès administrateur.");
             }
         } catch (BadRequestHttpException $exception) {
-            $session->getFlashBag()->add("error", $exception->getMessage());
-            return new RedirectResponse("/pages/adm_admin_add");
+            $adminAddUrl = $urlGenerator->generate("admins_new");
+            $flashMessages->add("error", $exception->getMessage());
+            return new RedirectResponse($adminAddUrl);
         }
 
-        $right = new \Model\Right();
+        $right = new Right();
         $right->setUser($user);
         $right->setSite($currentSite->getSite());
         $right->setIsAdmin(true);
@@ -84,44 +110,8 @@ return function (
         ';
 
         $mailer->send(to: $user->getEmail(), subject: $subject, body: $message);
-
-        $session->getFlashBag()->add(
-            "success",
-            "Un accès administrateur a été ajouté pour le compte $userEmail."
-        );
+        $flashMessages->add("success", "Un accès administrateur a été ajouté pour le compte $userEmail.");
 
         return new RedirectResponse("/pages/adm_admins");
     }
-
-    $request->attributes->set("page_title", "Ajouter un administrateur");
-
-    $template = '
-    <h2><span class="fa fa-user-plus"></span> Ajouter un administrateur</h2>
-
-    <p class="alert alert-warning">
-        <span class="fa fa-warning"></span>&nbsp;
-        L\'utilisateur obtiendra tous les droits d\'administration sur le site.
-    </p>
-
-    <p class="alert alert-info">
-            <span class="fa fa-info-circle"></span>&nbsp;
-            L\'adresse e-mail doit correspondre à un compte utilisateur existant.
-            Si ce n\'est pas le cas, invitez le futur administrateur à créer au préalable
-            un compte utilisateur et à vous communiquer l\'adresse e-mail utilisée.
-        </p>
-    
-        <form method="post" class="check">
-        <fieldset>
-            <div class="form-group"">
-                <label for="user_email">Adresse e-mail :</label>
-                <input type="email"  class="form-control" name="user_email" id="user_email" value="' . ($userEmail ?? null) . '" required>&nbsp;
-            </div>
-            <div class="center">
-                <button class="btn btn-primary" type="submit">Ajouter un administrateur</button>
-            </div>
-        </fieldset>
-    </form>
-';
-
-    return $templateService->renderResponseFromString($template);
-};
+}
