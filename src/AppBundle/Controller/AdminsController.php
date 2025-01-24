@@ -21,6 +21,7 @@ namespace AppBundle\Controller;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Mailer;
 use Biblys\Service\TemplateService;
@@ -44,9 +45,12 @@ class AdminsController extends Controller
      * @throws LoaderError
      * @throws SyntaxError
      * @throws RuntimeError
+     * @throws PropelException
      */
-    public function newAction(TemplateService $templateService): Response
+    public function newAction(CurrentUser $currentUser , TemplateService $templateService): Response
     {
+        $currentUser->authAdmin();
+
         return $templateService->renderResponse("AppBundle:Admins:new.html.twig");
     }
 
@@ -60,6 +64,7 @@ class AdminsController extends Controller
      */
     public function createAction(
         BodyParamsService $bodyParams,
+        CurrentUser $currentUser,
         CurrentSite $currentSite,
         UrlGenerator $urlGenerator,
         FlashMessagesService $flashMessages,
@@ -67,6 +72,7 @@ class AdminsController extends Controller
         TemplateService $templateService,
     ): RedirectResponse
     {
+        $currentUser->authAdmin();
 
         $bodyParams->parse(["user_email" => ["type" => "string"]]);
         $userEmail = $bodyParams->get("user_email");
