@@ -13,6 +13,8 @@
   trois caractères.
 - Une alerte de sécurité est envoyée par courriel à tous les admins lorsqu'un·e
   nouvel·le admin est ajouté·e.
+- Une alerte de sécurité est envoyée par courriel à tous les admins lorsqu'un·e
+  nouvel·le admin est ajouté·e.
 
 ## 3.2.1 (8 janvier 2025)
 
