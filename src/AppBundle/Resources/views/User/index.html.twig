@@ -32,6 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <th>Id</th>
         <th>Utilisateur·ice</th>
         <th>Dernière connexion</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -44,7 +45,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <td>
           {{ user.email }}
           {% for method in user.authenticationMethods %}
-            <span class="label label-success">
+            <span class="badge badge-pill badge-success">
               {{ method.identityProvider }}
             </span>
           {% endfor %}
