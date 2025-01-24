@@ -11,6 +11,8 @@
   liens lorsqu'il y a plus de 10 pages.
 - La recherche nooSFere requiert maintenant un terme de recherche d'au moins
   trois caractères.
+- Une alerte de sécurité est envoyée par courriel à tous les admins lorsqu'un·e
+  nouvel·le admin est ajouté·e.
 
 ## 3.2.1 (8 janvier 2025)
 

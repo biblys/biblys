@@ -651,11 +651,14 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createAdminUser(?Site $site = null): User
+    public static function createAdminUser(
+        ?Site $site = null,
+        string $email = null,
+    ): User
     {
         $site = $site ?? self::createSite();
 
-        $user = self::createUser($site);
+        $user = self::createUser(site: $site, email: $email);
         self::createRight(user: $user, site: $site, isAdmin: true);
 
         return $user;
