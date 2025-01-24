@@ -20,6 +20,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Mailer;
 use Biblys\Test\Helpers;
@@ -58,10 +59,12 @@ class AdminsControllerTest extends TestCase
     {
         // given
         $controller = new AdminsController();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once();
         $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->newAction($templateService);
+        $response = $controller->newAction($currentUser, $templateService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -85,6 +88,8 @@ class AdminsControllerTest extends TestCase
         $bodyParams = Mockery::mock(BodyParamsService::class);
         $bodyParams->shouldReceive("parse")->with(["user_email" => ["type" => "string"]]);
         $bodyParams->shouldReceive("get")->with("user_email")->andReturn("new-admin@example.org");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
@@ -99,7 +104,7 @@ class AdminsControllerTest extends TestCase
         $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->createAction($bodyParams, $currentSite, $urlGenerator, $flashMessages, $mailer, $templateService);
+        $response = $controller->createAction($bodyParams, $currentUser, $currentSite, $urlGenerator, $flashMessages, $mailer, $templateService);
 
         // then
         $this->assertInstanceOf(RedirectResponse::class, $response);
