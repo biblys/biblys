@@ -53,6 +53,18 @@ main_admin_hot_news_mark_as_read:
   path: /admin/hot-news/mark-as-read
   controller: AppBundle\Controller\MainController::hotNewsMarkAsRead
 
+# Administrators
+
+admins_new:
+  methods: GET
+  path: /admin/admins/new
+  controller: AppBundle\Controller\AdminsController::newAction
+
+admins_create:
+  methods: POST
+  path: /admin/admins
+  controller: AppBundle\Controller\AdminsController::createAction
+
 # Article
 
 article_show:

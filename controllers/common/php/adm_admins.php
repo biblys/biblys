@@ -22,6 +22,7 @@ use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
  * @throws InvalidDateFormatException
@@ -30,7 +31,8 @@ use Symfony\Component\HttpFoundation\Response;
 return function (
     Request $request,
     CurrentSite $currentSite,
-    \Symfony\Component\HttpFoundation\Session\Session $session
+    \Symfony\Component\HttpFoundation\Session\Session $session,
+    UrlGenerator $urlGenerator
 ): Response|RedirectResponse
 {
     $request->attributes->set("page_title", "Admininistrateur·trice·s");
@@ -85,15 +87,16 @@ return function (
         ';
     }
 
+    $addAdminUrl = $urlGenerator->generate("admins_new");
     $content = '
         <h1><span class="fa fa-users"></span> Administrateur·trice·s</h1>
     
         ' . ($message ?? null) . '<br>
     
         <div class="center">
-            <a href="/pages/adm_admin_add" class="btn btn-primary">
+            <a href="'.$addAdminUrl.'" class="btn btn-primary">
                 <span class="fa fa-user-plus"></span> &nbsp;
-                    Ajouter un administrateur
+                Ajouter un·e admin
             </a>
         </div>
         <br>
