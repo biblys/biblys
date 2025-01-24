@@ -460,7 +460,7 @@ return function (
                 </td>
                 <td class="right">
 
-                    <span class="pull-left">
+                    <span class="float-left">
                         <i class="fa fa-map-marker"></i> ' . $stock->get('stockage') . '
                     </span>
 
@@ -471,7 +471,7 @@ return function (
 
                     ' . _date($x['stock_purchase_date'], 'd/m/Y') . '<br />
 
-                    <span class="pull-left">
+                    <span class="float-left">
                             <input type="checkbox" class="changeBool" data-field="stock_depot" data-stock_id="' . $stock->get('id') . '" id="stock_depot_' . $stock->get('id') . '"' . ($stock->has('depot') ? ' checked' : null) . '>
                         <label for="stock_depot_' . $stock->get('id') . '" class="after">Dépôt</label>
                     </span>
