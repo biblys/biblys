@@ -26,7 +26,9 @@ use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Exception;
 use Mockery;
+use Model\RightQuery;
 use PHPUnit\Framework\TestCase;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -36,7 +38,15 @@ use Twig\Error\SyntaxError;
 
 class AdminsControllerTest extends TestCase
 {
-    /* Add */
+    /**
+     * @throws PropelException
+     */
+    protected function setUp(): void
+    {
+        RightQuery::create()->deleteAll();
+    }
+
+    /* addAction */
 
     /**
      * @throws SyntaxError
@@ -57,7 +67,7 @@ class AdminsControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-    /* Create */
+    /* createAction */
 
     /**
      * @throws Exception
@@ -68,11 +78,13 @@ class AdminsControllerTest extends TestCase
         // given
         $controller = new AdminsController();
         $site = ModelFactory::createSite();
-        ModelFactory::createUser(site: $site, email: "user@example.org");
+
+        ModelFactory::createAdminUser(site: $site, email: "already-admin@example.org");
+        ModelFactory::createUser(site: $site, email: "new-admin@example.org");
 
         $bodyParams = Mockery::mock(BodyParamsService::class);
         $bodyParams->shouldReceive("parse")->with(["user_email" => ["type" => "string"]]);
-        $bodyParams->shouldReceive("get")->with("user_email")->andReturn("user@example.org");
+        $bodyParams->shouldReceive("get")->with("user_email")->andReturn("new-admin@example.org");
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
@@ -80,13 +92,14 @@ class AdminsControllerTest extends TestCase
         $flashMessages = Mockery::mock(FlashMessagesService::class);
         $flashMessages->shouldReceive("add")->with(
             "success",
-            "Un accès administrateur a été ajouté pour le compte user@example.org."
+            "Un accès administrateur a été ajouté pour le compte new-admin@example.org."
         );
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->shouldReceive("send")->once();
+        $mailer->shouldReceive("send")->twice();
+        $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->createAction($bodyParams, $currentSite, $urlGenerator, $flashMessages, $mailer);
+        $response = $controller->createAction($bodyParams, $currentSite, $urlGenerator, $flashMessages, $mailer, $templateService);
 
         // then
         $this->assertInstanceOf(RedirectResponse::class, $response);

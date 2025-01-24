@@ -52,7 +52,10 @@ class AdminsController extends Controller
 
     /**
      * @throws InvalidEmailAddressException
+     * @throws LoaderError
      * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      * @throws TransportExceptionInterface
      */
     public function createAction(
@@ -60,7 +63,8 @@ class AdminsController extends Controller
         CurrentSite $currentSite,
         UrlGenerator $urlGenerator,
         FlashMessagesService $flashMessages,
-        Mailer $mailer
+        Mailer $mailer,
+        TemplateService $templateService,
     ): RedirectResponse
     {
 
@@ -110,8 +114,26 @@ class AdminsController extends Controller
         ';
 
         $mailer->send(to: $user->getEmail(), subject: $subject, body: $message);
-        $flashMessages->add("success", "Un accès administrateur a été ajouté pour le compte $userEmail.");
 
+        $admins = RightQuery::create()
+            ->filterByIsAdmin(true)
+            ->joinWithUser()
+            ->find();
+        $adminsPageUrl = "https://{$currentSite->getSite()->getDomain()}/pages/adm_admins";
+        $alertEmailBody = $templateService->render("AppBundle:Admins:admin-added-alert_email.html.twig", [
+            "email" => $userEmail,
+            "adminsPageUrl" => $adminsPageUrl,
+        ]);
+        foreach ($admins as $admin) {
+            $adminEmail = $admin->getUser()->getEmail();
+            $mailer->send(
+                to: $adminEmail,
+                subject: "Alerte de sécurité : nouvel·le admin ajouté·e",
+                body: $alertEmailBody
+            );
+        }
+
+        $flashMessages->add("success", "Un accès administrateur a été ajouté pour le compte $userEmail.");
         return new RedirectResponse("/pages/adm_admins");
     }
 }
