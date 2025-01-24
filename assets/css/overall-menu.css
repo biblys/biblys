@@ -55,18 +55,13 @@
 }
 
 .OverallMenu .icon-badge {
-  background: red;
-  border-radius: 20px;
-  color: white;
-  display: inline-block;
   font-size: 10px;
-  padding: 0 6px 0 6px;
   position: absolute;
   transform: translate(-50%, -50%);
   transition: opacity 400ms;
   z-index: 10;
-  bottom: -11px;
-  right: -12px;
+  bottom: 0;
+  right: -14px;
 }
 
 @media(min-width: 768px) {
