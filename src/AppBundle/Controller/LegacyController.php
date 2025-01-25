@@ -73,6 +73,10 @@ class LegacyController extends Controller
             $currentUser->authUser();
         }
 
+        if ($pageQueryParam == "article_edit") {
+            $wrapperTemplate = "AppBundle:Legacy:default-admin.html.twig";
+        }
+
         $routeParams = $request->attributes->get("_route_params", []);
         LegacyCodeHelper::saveRouteParams($routeParams);
 
