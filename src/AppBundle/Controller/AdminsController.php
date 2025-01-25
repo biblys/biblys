@@ -29,6 +29,7 @@ use Framework\Controller;
 use Model\Right;
 use Model\RightQuery;
 use Model\UserQuery;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,7 +52,14 @@ class AdminsController extends Controller
     {
         $currentUser->authAdmin();
 
-        return $templateService->renderResponse("AppBundle:Admins:new.html.twig");
+        $users = UserQuery::create()
+            ->orderByCreatedAt(Criteria::DESC)
+            ->limit(1000)
+            ->find();
+
+        return $templateService->renderResponse("AppBundle:Admins:new.html.twig", [
+            "users" => $users,
+        ]);
     }
 
     /**
