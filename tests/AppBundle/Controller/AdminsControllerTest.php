@@ -59,6 +59,8 @@ class AdminsControllerTest extends TestCase
     {
         // given
         $controller = new AdminsController();
+        ModelFactory::createUser(email: "admin-to-add@example.org");
+
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once();
         $templateService = Helpers::getTemplateService();
@@ -68,6 +70,7 @@ class AdminsControllerTest extends TestCase
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("admin-to-add@example.org", $response->getContent());
     }
 
     /* createAction */
