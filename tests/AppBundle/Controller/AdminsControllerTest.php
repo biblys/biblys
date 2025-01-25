@@ -28,6 +28,7 @@ use Biblys\Test\ModelFactory;
 use Exception;
 use Mockery;
 use Model\RightQuery;
+use Model\UserQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -79,14 +80,14 @@ class AdminsControllerTest extends TestCase
      * @throws Exception
      * @throws TransportExceptionInterface
      */
-    public function testCreateAction(): void
+    public function testCreateActionForExistingUser(): void
     {
         // given
         $controller = new AdminsController();
         $site = ModelFactory::createSite();
 
         ModelFactory::createAdminUser(site: $site, email: "already-admin@example.org");
-        ModelFactory::createUser(site: $site, email: "new-admin@example.org");
+        $user = ModelFactory::createUser(site: $site, email: "new-admin@example.org");
 
         $bodyParams = Mockery::mock(BodyParamsService::class);
         $bodyParams->shouldReceive("parse")->with(["user_email" => ["type" => "string"]]);
@@ -96,7 +97,7 @@ class AdminsControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->shouldReceive("generate")->with("admins_new")->andReturn("/admin/admins");
+        $urlGenerator->shouldReceive("generate");
         $flashMessages = Mockery::mock(FlashMessagesService::class);
         $flashMessages->shouldReceive("add")->with(
             "success",
@@ -111,5 +112,41 @@ class AdminsControllerTest extends TestCase
 
         // then
         $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertTrue(RightQuery::create()->isUserAdmin($user));
+    }
+
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testCreateActionForNewUser(): void
+    {
+        // given
+        $controller = new AdminsController();
+        $site = ModelFactory::createSite();
+
+        $bodyParams = Mockery::mock(BodyParamsService::class);
+        $bodyParams->shouldReceive("parse")->with(["user_email" => ["type" => "string"]]);
+        $bodyParams->shouldReceive("get")->with("user_email")->andReturn("new-user@example.org");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate");
+        $flashMessages = Mockery::mock(FlashMessagesService::class);
+        $flashMessages->shouldReceive("add")->twice();
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->shouldReceive("send")->twice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->createAction($bodyParams, $currentUser, $currentSite, $urlGenerator, $flashMessages, $mailer, $templateService);
+
+        // then
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $user = UserQuery::create()->findOneByEmail("new-user@example.org");
+        $this->assertNotNull($user);
+        $this->assertTrue(RightQuery::create()->isUserAdmin($user));
     }
 }
