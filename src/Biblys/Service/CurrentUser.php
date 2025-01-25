@@ -162,7 +162,7 @@ class CurrentUser
 
         $site = $this->getCurrentSite()->getSite();
 
-        return RightQuery::create()->isUserAdminForSite($this->user, $site);
+        return RightQuery::create()->isUserAdmin($this->user, $site);
     }
 
     /**

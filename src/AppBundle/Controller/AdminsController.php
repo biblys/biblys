@@ -99,7 +99,7 @@ class AdminsController extends Controller
             }
 
             $isUserAlreadyAdmin = RightQuery::create()
-                ->isUserAdminForSite($user, $currentSite->getSite());
+                ->isUserAdmin($user, $currentSite->getSite());
             if ($isUserAlreadyAdmin) {
                 throw new BadRequestHttpException("L'utilisateur $userEmail a déjà un accès administrateur.");
             }
