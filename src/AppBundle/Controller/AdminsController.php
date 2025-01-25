@@ -28,6 +28,7 @@ use Biblys\Service\TemplateService;
 use Framework\Controller;
 use Model\Right;
 use Model\RightQuery;
+use Model\User;
 use Model\UserQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
@@ -90,9 +91,10 @@ class AdminsController extends Controller
                 ->filterBySite($currentSite->getSite())
                 ->findOneByEmail($userEmail);
             if (!$user) {
-                throw new BadRequestHttpException(
-                    "L'adresse e-mail doit correspondre à un compte utilisateur existant."
-                );
+                $user = new User();
+                $user->setEmail($userEmail);
+                $user->setSite($currentSite->getSite());
+                $flashMessages->add("info", "Un compte utilisateur a été créé pour $userEmail.");
             }
 
             $isUserAlreadyAdmin = RightQuery::create()
@@ -121,9 +123,7 @@ class AdminsController extends Controller
             . $currentSite->getSite()->getTitle() . '</a>.
             </p>
             <p>
-                Vos identifiants de connexion sont votre adresse e-mail (' . $user->getEmail() . ') 
-                et le mot de passe que vous avez défini au moment de la création de votre compte 
-                (vous pourrez demander à en recevoir un nouveau si besoin).
+                Vous pourrez vous connecter sur le site à l’aide de votre adresse e-mail ' . $user->getEmail() . '.
             </p>
         ';
 
