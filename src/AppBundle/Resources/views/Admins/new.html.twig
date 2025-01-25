@@ -35,15 +35,21 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     un compte utilisateur et à vous communiquer l’adresse e-mail utilisée.
   </p>
 
-  <form action="{{ path("admins_create") }}" method="post" class="check">
-    <fieldset>
-      <div class="form-group">
-      <label for="user_email">Adresse e-mail :</label>
-      <input type="email"  class="form-control" name="user_email" id="user_email" required>&nbsp;
+  <form action="{{ path("admins_create") }}" method="post" class="form-inline">
+    <label class="sr-only" for="inlineFormInputGroupUsername2">Adresse e-mail</label>
+    <div class="input-group mb-2 mr-sm-2">
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="user_email">Adresse e-mail</label>
       </div>
-      <div class="center">
-        <button class="btn btn-primary" type="submit">Ajouter un·e admin</button>
-      </div>
-    </fieldset>
+
+      <input type="email" id="user_email" class="form-control" name="user_email" placeholder="admin@paronymie.fr" list="user_emails" required>
+      <datalist id="user_emails">
+        {% for user in users %}
+        <option value="{{ user.email }}">
+          {% endfor %}
+      </datalist>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">Ajouter un·e admin</button>
   </form>
 {% endblock %}
