@@ -617,7 +617,7 @@ class ModelFactory
      */
     public static function createUser(
         ?Site  $site = null,
-        string $email = "user@biblys.fr",
+        ?string $email = "user@biblys.fr",
     ): User
     {
         $user = new User();
@@ -653,7 +653,7 @@ class ModelFactory
      */
     public static function createAdminUser(
         ?Site $site = null,
-        string $email = null,
+        ?string $email = null,
     ): User
     {
         $site = $site ?? self::createSite();
