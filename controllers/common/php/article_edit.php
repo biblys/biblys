@@ -424,9 +424,9 @@ return function (
     }
 
     // Preorder
-    $preorder = null;
-    if ($articleEntity->get('preorder') == 1) {
-        $preorder = 'checked';
+    $preorderChecked = null;
+    if ($articleEntity->get("preorder") == 1) {
+        $preorderChecked = "checked";
     }
 
     // Langues
@@ -744,11 +744,15 @@ return function (
             <select id="article_availability_dilicom" name="article_availability_dilicom" required>
                 ' . implode($availability_options) . '
             </select>
-            <span' . (!$currentSite->getOption('virtual_stock') ? ' style="display: none;"' : null) . '>
-                <input type="checkbox" name="article_preorder" id="article_preorder" value="1" ' . $preorder . ' />
-                <label class="floating" for="article_preorder" class="after">Précommande</label>
-            </span>
-            <br /><br />
+            <br />
+            
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="1" id="article_preorder" name="article_preorder" '.$preorderChecked.'>
+              <label class="form-check-label" for="article_preorder">
+                Précommande
+              </label>
+            </div>
+            <br />
 
             <div id="article_category_div" class="' . $category_field_class . '">
                 <label class="floating" for="article_category">Catégorie :</label>
