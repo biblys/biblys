@@ -37,6 +37,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -114,20 +115,16 @@ class AdminsController extends Controller
         $right->setIsAdmin(true);
         $right->save();
 
-        $subject = "Votre accès admin au site {$currentSite->getSite()->getTitle()}";
-        $message = '
-            <p>Bonjour,</p>
-            <p>
-                Votre accès admin a été créé sur le site 
-                <a href="https://' . $currentSite->getSite()->getDomain() . '/">'
-            . $currentSite->getSite()->getTitle() . '</a>.
-            </p>
-            <p>
-                Vous pourrez vous connecter sur le site à l’aide de votre adresse e-mail ' . $user->getEmail() . '.
-            </p>
-        ';
-
-        $mailer->send(to: $user->getEmail(), subject: $subject, body: $message);
+        $adminUrl = $urlGenerator->generate("main_admin", [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $adminEmailBody = $templateService->render("AppBundle:Admins:admin-welcome_email.html.twig", [
+            "email" => $userEmail,
+            "adminUrl" => $adminUrl,
+        ]);
+        $mailer->send(
+            to: $user->getEmail(),
+            subject: "Votre accès admin au site {$currentSite->getSite()->getTitle()}",
+            body: $adminEmailBody
+        );
 
         $admins = RightQuery::create()
             ->filterByIsAdmin(true)
