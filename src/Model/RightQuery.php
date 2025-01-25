@@ -35,11 +35,10 @@ class RightQuery extends BaseRightQuery
     /**
      * @throws PropelException
      */
-    public function isUserAdminForSite(User $user, Site $site): bool
+    public function isUserAdmin(User $user): bool
     {
         $adminRight = RightQuery::create()
             ->filterByUser($user)
-            ->filterBySite($site)
             ->filterByIsAdmin(true)
             ->findOne();
 

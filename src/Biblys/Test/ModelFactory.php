@@ -659,7 +659,7 @@ class ModelFactory
         $site = $site ?? self::createSite();
 
         $user = self::createUser(site: $site, email: $email);
-        self::createRight(user: $user, site: $site, isAdmin: true);
+        self::createRight(user: $user, isAdmin: true);
 
         return $user;
     }
