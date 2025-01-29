@@ -50,12 +50,20 @@ require_once __DIR__ . "/../../setUp.php";
 
 class InvitationControllerTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     */
+    protected function setUp(): void
+    {
+        InvitationQuery::create()->deleteAll();
+    }
 
     /**
      * @throws CannotInsertRecord
      * @throws PropelException
      * @throws TransportExceptionInterface
      * @throws \League\Csv\Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testCreateAction()
     {
@@ -71,8 +79,6 @@ class InvitationControllerTest extends TestCase
         $request->request->set("mode", "download");
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $currentSite->setOption("publisher_filter", $publisher->getId());
-        $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
@@ -108,6 +114,7 @@ class InvitationControllerTest extends TestCase
      * @throws PropelException
      * @throws TransportExceptionInterface
      * @throws \League\Csv\Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testCreateActionWithInvalidEmail()
     {
@@ -132,8 +139,6 @@ class InvitationControllerTest extends TestCase
 
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $currentSite->setOption("publisher_filter", $publisher->getId());
-        $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldReceive("send")
             ->with("first-valid@example.org", "Téléchargez « Sent Book » en numérique", "Invitation");
@@ -177,6 +182,7 @@ class InvitationControllerTest extends TestCase
      * @throws PropelException
      * @throws TransportExceptionInterface
      * @throws \League\Csv\Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testCreateActionWithManualMode()
     {
@@ -196,8 +202,6 @@ class InvitationControllerTest extends TestCase
         $request->request->set("mode", "manual");
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $currentSite->setOption("publisher_filter", $publisher->getId());
-        $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
@@ -234,6 +238,7 @@ class InvitationControllerTest extends TestCase
      * @throws PropelException
      * @throws TransportExceptionInterface
      * @throws \League\Csv\Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testCreateActionWithSendMode()
     {
@@ -253,8 +258,6 @@ class InvitationControllerTest extends TestCase
         $request->request->set("mode", "send");
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $currentSite->setOption("publisher_filter", $publisher->getId());
-        $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
@@ -291,6 +294,7 @@ class InvitationControllerTest extends TestCase
      * @throws PropelException
      * @throws TransportExceptionInterface
      * @throws \League\Csv\Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testCreateActionWithDownloadMode()
     {
@@ -310,8 +314,6 @@ class InvitationControllerTest extends TestCase
         $request->request->set("mode", "download");
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $currentSite->setOption("publisher_filter", $publisher->getId());
-        $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
@@ -347,6 +349,7 @@ class InvitationControllerTest extends TestCase
      * @throws PropelException
      * @throws TransportExceptionInterface
      * @throws \League\Csv\Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testCreateActionWithAllowsPredownload()
     {
@@ -363,8 +366,6 @@ class InvitationControllerTest extends TestCase
         $request->request->set("allows_pre_download", "1");
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $currentSite->setOption("publisher_filter", $publisher->getId());
-        $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
@@ -400,6 +401,7 @@ class InvitationControllerTest extends TestCase
      * @throws PropelException
      * @throws TransportExceptionInterface
      * @throws \League\Csv\Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testCreateActionForMultipleArticles()
     {
@@ -417,8 +419,6 @@ class InvitationControllerTest extends TestCase
         $request->request->set("mode", "send");
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $currentSite->setOption("publisher_filter", $publisher->getId());
-        $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $session = $this->createMock(Session::class);
         $session->method("getFlashBag")->willReturn($flashBag);
         $templateService = $this->createMock(TemplateService::class);
@@ -470,8 +470,6 @@ class InvitationControllerTest extends TestCase
         );
 
         $currentSite = new CurrentSite($site);
-        $currentSite->setOption("publisher_filter", $publisher->getId());
-        $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $user = ModelFactory::createUser();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("isAuthenticated")->andReturn(true);
@@ -537,6 +535,7 @@ class InvitationControllerTest extends TestCase
 
     /**
      * @throws PropelException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testConsumeActionForNonexistingInvitation()
     {
@@ -561,7 +560,7 @@ class InvitationControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testConsumeActionForAlreadyConsumedInvitation()
     {
@@ -592,7 +591,7 @@ class InvitationControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testConsumeActionForExpiredInvitation()
     {
@@ -623,85 +622,7 @@ class InvitationControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws Exception
-     */
-    public function testConsumeActionForPublisherMissingInFilter()
-    {
-        // then
-        $this->expectException(BadRequestHttpException::class);
-        $this->expectExceptionMessage(
-            "Ce site n'est pas autorisé à distribuer les articles de Éditeur filtré."
-        );
-
-        // given
-        $site = ModelFactory::createSite();
-        $validPublisher = ModelFactory::createPublisher(name: "Éditeur autorisé");
-        $validArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK, publisher: $validPublisher);
-        $invalidPublisher = ModelFactory::createPublisher(name: "Éditeur filtré");
-        $invalidArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK, publisher: $invalidPublisher);
-        ModelFactory::createInvitation(
-            site: $site, articles: [$validArticle, $invalidArticle], email: "UNAUTHPU", code: "UNAUTHPU"
-        );
-        $currentSite = new CurrentSite($site);
-        $currentSite->setOption("publisher_filter", $validPublisher->getId());
-        $currentSite->setOption("downloadable_publishers", $validPublisher->getId());
-
-        $controller = new InvitationController();
-        $request = RequestFactory::createAuthRequest();
-        $request->request->set("code", "UNAUTHPU");
-        $currentUser = $this->createMock(CurrentUser::class);
-        $session = $this->createMock(Session::class);
-        $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->shouldReceive("generate")->andReturn("/user_library_url");
-
-        // when
-        $controller->consumeAction(
-            request: $request, currentSite: $currentSite, currentUser: $currentUser, session: $session, urlGenerator: $urlGenerator
-        );
-    }
-
-    /**
-     * @throws PropelException
-     * @throws Exception
-     */
-    public function testConsumeActionForNonDownloadablePublisher()
-    {
-        // then
-        $this->expectException(BadRequestHttpException::class);
-        $this->expectExceptionMessage(
-            "Le téléchargement des articles de Éditeur non autorisé n'est pas autorisé sur ce site."
-        );
-
-        // given
-        $site = ModelFactory::createSite();
-        $validPublisher = ModelFactory::createPublisher(name: "Éditeur autorisé");
-        $validArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK, publisher: $validPublisher);
-        $invalidPublisher = ModelFactory::createPublisher(name: "Éditeur non autorisé");
-        $invalidArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK, publisher: $invalidPublisher);
-        ModelFactory::createInvitation(
-            site: $site, articles: [$validArticle, $invalidArticle], email: "NONDOPUB", code: "NONDOPUB"
-        );
-        $currentSite = new CurrentSite($site);
-        $currentSite->setOption("publisher_filter", "{$validPublisher->getId()},{$invalidPublisher->getId()}");
-        $currentSite->setOption("downloadable_publishers", $validPublisher->getId());
-
-        $controller = new InvitationController();
-        $request = RequestFactory::createAuthRequest();
-        $request->request->set("code", "NONDOPUB");
-        $currentUser = $this->createMock(CurrentUser::class);
-        $session = $this->createMock(Session::class);
-        $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->shouldReceive("generate")->andReturn("/user_library_url");
-
-        // when
-        $controller->consumeAction(
-            request: $request, currentSite: $currentSite, currentUser: $currentUser, session: $session, urlGenerator: $urlGenerator
-        );
-    }
-
-    /**
-     * @throws PropelException
-     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testConsumeActionForNonDownloadableArticle()
     {
@@ -718,8 +639,6 @@ class InvitationControllerTest extends TestCase
             site: $site, articles: [$validArticle, $invalidArticle], email: "PAPERBOO", code: "PAPERBOO"
         );
         $publisherIds = "{$validArticle->getPublisherId()},{$invalidArticle->getPublisherId()}";
-        $currentSite->setOption("publisher_filter", $publisherIds);
-        $currentSite->setOption("downloadable_publishers", $publisherIds);
 
         $controller = new InvitationController();
         $request = RequestFactory::createAuthRequest();
@@ -735,6 +654,7 @@ class InvitationControllerTest extends TestCase
 
     /**
      * @throws PropelException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testConsumeAction()
     {
@@ -746,8 +666,6 @@ class InvitationControllerTest extends TestCase
             site: $site, articles: [$article], email: "ALLRIGHT", code: "ALLRIGHT"
         );
         $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
-        $currentSite->setOption("publisher_filter", $publisherId);
-        $currentSite->setOption("downloadable_publishers", $publisherId);
         $user = ModelFactory::createUser();
 
         $controller = new InvitationController();
@@ -799,8 +717,6 @@ class InvitationControllerTest extends TestCase
             site: $site, articles: [$validArticle, $articleInLibrary], code: "ELIBRARY"
         );
         $publisherIds = "{$validArticle->getPublisherId()},{$articleInLibrary->getPublisherId()}";
-        $currentSite->setOption("publisher_filter", $publisherIds);
-        $currentSite->setOption("downloadable_publishers", $publisherIds);
         ModelFactory::createStockItem(site: $site, article: $articleInLibrary, user: $user);
         $flashBag = Mockery::mock(FlashBag::class);
         $flashBag->shouldReceive("add")
@@ -840,6 +756,7 @@ class InvitationControllerTest extends TestCase
 
     /**
      * @throws PropelException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testConsumeActionWithAllowsPreDownloadOption()
     {
@@ -852,8 +769,6 @@ class InvitationControllerTest extends TestCase
             allowsPreDownload: true
         );
         $publisherId = $invitation->getArticles()->getFirst()->getPublisherId();
-        $currentSite->setOption("publisher_filter", $publisherId);
-        $currentSite->setOption("downloadable_publishers", $publisherId);
         $user = ModelFactory::createUser();
 
         $controller = new InvitationController();
@@ -911,8 +826,6 @@ class InvitationControllerTest extends TestCase
             site: $site, articles: [$article1, $article2, $article3],
             email: "multiple@example.org", code: "ALLRIGHT"
         );
-        $currentSite->setOption("publisher_filter", $publisher->getId());
-        $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $user = ModelFactory::createUser();
 
         $controller = new InvitationController();
@@ -1003,6 +916,7 @@ class InvitationControllerTest extends TestCase
 
     /**
      * @throws PropelException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testDeleteAction()
     {
