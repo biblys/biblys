@@ -377,22 +377,6 @@ class InvitationController extends Controller
             throw new BadRequestHttpException("L'article n'existe pas.");
         }
 
-        $publisherFilterOption = $currentSite->getOption("publisher_filter") ?? "";
-        $publisherFilterIds = explode(",", $publisherFilterOption);
-        if (!in_array($article->getPublisherId(), $publisherFilterIds)) {
-            throw new BadRequestHttpException(
-                "Ce site n'est pas autorisé à distribuer les articles de {$article->getPublisher()->getName()}."
-            );
-        }
-
-        $downloadablePublishersOption = $currentSite->getOption("downloadable_publishers") ?? "";
-        $downloadablePublishersId = explode(",", $downloadablePublishersOption);
-        if (!in_array($article->getPublisherId(), $downloadablePublishersId)) {
-            throw new BadRequestHttpException(
-                "Le téléchargement des articles de {$article->getPublisher()->getName()} n'est pas autorisé sur ce site."
-            );
-        }
-
         if ($article->getType()->isDownloadable() === false) {
             throw new BadRequestHttpException("L'article {$article->getTitle()} n'est pas téléchargeable.");
         }
