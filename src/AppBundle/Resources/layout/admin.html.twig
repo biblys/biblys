@@ -18,7 +18,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <head>
     {{ app.metaTags|raw }}
     <title>
-      {% block title %}{% endblock %} | Administration | {{ app.currentSite.title }}</title>
+      {% block title %}{% endblock %} | Administration | {{ app.currentSite.title }}
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     {% include "layout:_assets_css.html.twig" %}
   </head>
   <body>
