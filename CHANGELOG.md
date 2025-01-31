@@ -16,6 +16,19 @@
 - Une alerte de sécurité est envoyée par courriel à tous les admins lorsqu'un·e
   nouvel·le admin est ajouté·e.
 
+### Instructions de mise à jour
+
+#### Bootstrap 4
+
+Biblys utilise désormais la version de Boostrap 4 contre la version 3
+auparavant. Pour mettre à jour votre thème, vous pouvez vous référer à la page
+https://getbootstrap.com/docs/4.0/migration/.
+
+Notamment, remplacer :
+- `btn-xs` par `btn-sm`
+- `hidden-print` par `d-print-none`
+- les `navbar` : https://getbootstrap.com/docs/4.0/migration/#navbar
+
 ## 3.2.1 (8 janvier 2025)
 
 ### Corrections
