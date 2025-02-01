@@ -15,6 +15,8 @@
   nouvel·le admin est ajouté·e.
 - Une alerte de sécurité est envoyée par courriel à tous les admins lorsqu'un·e
   nouvel·le admin est ajouté·e.
+- Des boutons pour modifier les contreparties ont été ajoutées sur la page d'une
+  campagne de financement participatif.
 
 ### Instructions de mise à jour
 

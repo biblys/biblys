@@ -21,119 +21,128 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% endblock %}
 
 {% block main %}
-    {% if app.currentUser.isAdmin() %}
-        <div class="admin">
-            <p>Campagne n° {{ campaign.id }}</p>
-            <p><a href="{{ path('cf_campaign_edit', { id: campaign.id }) }}">modifier</a></p>
-            <p><a href="{{ path('cf_campaign_refresh', { id: campaign.id }) }}">actualiser</a></p>
-            <p><a href="{{ path('cf_reward_list', { campaign_id: campaign.id }) }}">contreparties</a></p>
-        </div>
-    {% endif %}
-
-    <h1>{{ campaign.title }}</h1>
-
-    <p class="text-center visible-xs">
-      <a class="btn btn-outline-secondary" href="#rewards">
-        <span class="fa fa-arrow-down"></span>
-        Aller aux contreparties
-      </a>
-    </p>
-
-    <div class="row">
-
-        <div class="col-sm-8 crowdfunding-presentation" id="presentation">
-            {% if campaign.has('description') %}
-                {{ campaign.description|raw }}
-            {% endif %}
-        </div>
-        <div class="col-sm-4 crowdfunding-aside" id="rewards">
-            <div>
-                <p>
-                    <span class="big">{{ campaign.has('backers') ? campaign.backers : 0 }}</span><br>
-                    contributeurs
-                </p>
-                <p>
-                    <span class="big">{{ campaign.has('pledged') ? campaign.pledged|price('EUR', 0)|raw : '0 €' }}</span> collectés<br>
-                    sur un objectif de <strong>{{ campaign.goal|price('EUR', 0)|raw }}</strong>
-                </p>
-
-                {% if campaign.isInProgress() %}
-                  <p>
-                      <span class="big">{{ campaign.getTimeLeft() }}</span><br>
-                      restants pour participer
-                  </p>
-                {% elseif campaign.hasEnded() %}
-                  <p>Campagne terminée<br>le {{ campaign.ends|date('j f Y') }}</p>
-                {% elseif not campaign.hasStarted() %}
-                  <p>Participez à partir du<br>{{ campaign.starts|date('j f Y') }}</p>
-                {% endif %}
-
-                <div class="progress" class="text-center">
-                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="{{ campaign.getProgress() }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ campaign.getProgress() }}%;">
-                        <span style="display: inline-block; width:50px;">{{ campaign.getProgress() }}&nbsp;%</span>
-                    </div>
-                </div>
-
-                <div class="text-center">
-                    {{ share_buttons(url('cf_campaign_show', { 'slug': campaign.url }))|raw }}
-                </div>
-            </div>
-
-            <p class="text-center visible-xs">
-              <a class="btn btn-outline-secondary" href="#">
-                <span class="fa fa-arrow-up"></span>
-                Revenir en haut
-              </a>
-            </p>
-
-            <div class="text-center">
-
-                <p>Choisissez votre contrepartie</p>
-
-                {% for reward in rewards %}
-
-                    <article{% if reward.has('highlighted') %} class="highlighted"{% endif %}>
-                        {% if reward.has('price') %}
-                          <p class="price">Pour {{ reward.price|price('EUR')|raw }}</p>
-                        {% endif %}
-                        {% if reward.has('image') %}
-                          <a href="{{ reward.image }}" rel="lightbox">
-                            <img src="{{ reward.image }}" alt="{{ reward.content|striptags }}" class="reward-image">
-                          </a>
-                        {% endif %}
-                        <p>
-                            {{ reward.content|raw }}
-                        </p>
-                        <p>
-                            {% if reward.has('backers') %}
-                              {{ reward.backers }} {{ 'contributeur'|pluralize(reward.backers) }}
-                            {% else %}
-                              0 contributeur
-                            {% endif %}
-                        </p>
-                        <p>
-                            {% if reward.isLimited() %}
-                              {% if reward.has('quantity') %}
-                                {{ reward.quantity }} {{ 'disponible'|pluralize(reward.quantity) }}
-                              {% else %}
-                                <span class="red">Épuisé !</span>
-                              {% endif %}
-                            {% else %}
-                              Illimité
-                            {% endif %}
-                        </p>
-                        {% if campaign.isInProgress() and reward.isAvailable() %}
-                            <p class="text-right">
-                                <button class="btn btn-primary btn-sm add_to_cart event with-text" data-type="reward" data-id="{{ reward.id }}">
-                                    <i class="fa fa-shopping-cart"></i> Contribuer
-                                </button>
-                            </p>
-                        {% endif %}
-                    </article>
-
-                {% endfor %}
-            </div>
-
-        </div>
+  {% if app.currentUser.isAdmin %}
+    <div class="admin">
+      <p>Campagne n° {{ campaign.id }}</p>
+      <p><a href="{{ path('cf_campaign_edit', { id: campaign.id }) }}">modifier</a></p>
+      <p><a href="{{ path('cf_campaign_refresh', { id: campaign.id }) }}">actualiser</a></p>
+      <p><a href="{{ path('cf_reward_list', { campaign_id: campaign.id }) }}">contreparties</a></p>
     </div>
+  {% endif %}
+
+  <h1>{{ campaign.title }}</h1>
+
+  <p class="text-center visible-xs">
+    <a class="btn btn-outline-secondary" href="#rewards">
+      <span class="fa fa-arrow-down"></span>
+      Aller aux contreparties
+    </a>
+  </p>
+
+  <div class="row">
+
+    <div class="col-sm-8 crowdfunding-presentation" id="presentation">
+      {% if campaign.has('description') %}
+        {{ campaign.description|raw }}
+      {% endif %}
+    </div>
+    <div class="col-sm-4 crowdfunding-aside" id="rewards">
+      <div>
+        <p>
+          <span class="big">{{ campaign.has('backers') ? campaign.backers : 0 }}</span><br>
+          contributeurs
+        </p>
+        <p>
+          <span class="big">{{ campaign.has('pledged') ? campaign.pledged|price('EUR', 0)|raw : '0 €' }}</span>
+          collectés<br>
+          sur un objectif de <strong>{{ campaign.goal|price('EUR', 0)|raw }}</strong>
+        </p>
+
+        {% if campaign.isInProgress() %}
+          <p>
+            <span class="big">{{ campaign.getTimeLeft() }}</span><br>
+            restants pour participer
+          </p>
+        {% elseif campaign.hasEnded() %}
+          <p>Campagne terminée<br>le {{ campaign.ends|date('j f Y') }}</p>
+        {% elseif not campaign.hasStarted() %}
+          <p>Participez à partir du<br>{{ campaign.starts|date('j f Y') }}</p>
+        {% endif %}
+
+        <div class="progress" class="text-center">
+          <div class="progress-bar progress-bar-striped active" role="progressbar"
+               aria-valuenow="{{ campaign.getProgress() }}" aria-valuemin="0" aria-valuemax="100"
+               style="width: {{ campaign.getProgress() }}%;">
+            <span style="display: inline-block; width:50px;">{{ campaign.getProgress() }}&nbsp;%</span>
+          </div>
+        </div>
+
+        <div class="text-center">
+          {{ share_buttons(url('cf_campaign_show', { 'slug': campaign.url }))|raw }}
+        </div>
+      </div>
+
+      <p class="text-center visible-xs">
+        <a class="btn btn-outline-secondary" href="#">
+          <span class="fa fa-arrow-up"></span>
+          Revenir en haut
+        </a>
+      </p>
+
+      <div class="text-center">
+
+        <p>Choisissez votre contrepartie</p>
+
+        {% for reward in rewards %}
+
+          <article{% if reward.has('highlighted') %} class="highlighted"{% endif %}>
+            {% if reward.has('price') %}
+              <p class="price">Pour {{ reward.price|price('EUR')|raw }}</p>
+            {% endif %}
+            {% if reward.has('image') %}
+              <a href="{{ reward.image }}" rel="lightbox">
+                <img src="{{ reward.image }}" alt="{{ reward.content|striptags }}" class="reward-image">
+              </a>
+            {% endif %}
+            <p>
+              {{ reward.content|raw }}
+            </p>
+            <p>
+              {% if reward.has('backers') %}
+                {{ reward.backers }} {{ 'contributeur'|pluralize(reward.backers) }}
+              {% else %}
+                0 contributeur
+              {% endif %}
+            </p>
+            <p>
+              {% if reward.isLimited %}
+                {% if reward.has('quantity') %}
+                  {{ reward.quantity }} {{ 'disponible'|pluralize(reward.quantity) }}
+                {% else %}
+                  <span class="red">Épuisé !</span>
+                {% endif %}
+              {% else %}
+                Illimité
+              {% endif %}
+            </p>
+            <p class="text-right">
+              {% if app.currentUser.isAdmin %}
+                <a href="{{ path('cf_reward_edit', { id: reward.id }) }}" class="btn btn-secondary btn-sm">
+                  <span class="fa fa-pencil"></span>
+                </a>
+              {% endif %}
+              {% if campaign.isInProgress and reward.isAvailable %}
+                <button class="btn btn-primary btn-sm add_to_cart event with-text" data-type="reward"
+                        data-id="{{ reward.id }}">
+                  <span class="fa fa-shopping-cart"></span> Contribuer
+                </button>
+              {% endif %}
+            </p>
+          </article>
+
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
 {% endblock %}
