@@ -26,6 +26,10 @@ use CFRewardManager;
 use Exception;
 use Framework\Controller;
 
+use Model\CrowdfundingCampaign;
+use Model\CrowdfundingCampaignQuery;
+use Model\CrowfundingRewardQuery;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -47,24 +51,23 @@ class CFRewardController extends Controller
      * @throws PropelException
      * @throws Exception
      */
-    public function listAction(Request $request, CurrentUser $currentUser, $campaign_id): Response
+    public function listAction(CurrentUser $currentUser, $campaign_id): Response
     {
         $currentUser->authAdmin();
 
-        $cfcm = new CFCampaignManager();
-        $campaign = $cfcm->getById($campaign_id);
+        $campaign = CrowdfundingCampaignQuery::create()->findPk($campaign_id);
         if (!$campaign) {
             throw new NotFoundException("Campaign $campaign_id not found.");
         }
 
-        $request->attributes->set("page_title", "Contreparties de {$campaign->get("title")}");
-
-        $cfrm = new CFRewardManager();
-        $rewards = $cfrm->getAll(["campaign_id" => $campaign->get('id')]);
+        $rewards = CrowfundingRewardQuery::create()
+            ->filterByCampaignId($campaign->getId())
+            ->orderByHighlighted(Criteria::DESC)
+            ->orderByPrice();
 
         return $this->render('AppBundle:CFReward:list.html.twig', [
-            'campaign' => $campaign,
-            'rewards' => $rewards
+            "campaign" => $campaign,
+            "rewards" => $rewards
         ]);
     }
 
