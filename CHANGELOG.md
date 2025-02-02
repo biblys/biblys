@@ -18,6 +18,12 @@
 - Des boutons pour modifier les contreparties ont été ajoutées sur la page d'une
   campagne de financement participatif.
 
+### Corrections
+
+- Lorsqu'une contrepartie de financement participatif était modifiée pour ne
+  plus être en avant, elle pouvait apparaître en fin de liste plutôt qu'à sa
+  place. C'est corrigé.
+
 ### Instructions de mise à jour
 
 #### Bootstrap 4
@@ -27,6 +33,7 @@ auparavant. Pour mettre à jour votre thème, vous pouvez vous référer à la p
 https://getbootstrap.com/docs/4.0/migration/.
 
 Notamment, remplacer :
+
 - `btn-xs` par `btn-sm`
 - `hidden-print` par `d-print-none`
 - les `navbar` : https://getbootstrap.com/docs/4.0/migration/#navbar

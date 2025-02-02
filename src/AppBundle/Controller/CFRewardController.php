@@ -108,7 +108,7 @@ class CFRewardController extends Controller
                 ->set("reward_articles", $request->request->get("articles"))
                 ->set("reward_limited", $request->request->get("limited"))
                 ->set("reward_image", $request->request->get("image"))
-                ->set("reward_highlighted", $request->request->get("highlighted"));
+                ->set("reward_highlighted", $request->request->getInt("highlighted"));
             $cfrm->update($reward);
 
             // Update quantity from stock
