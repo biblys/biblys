@@ -103,7 +103,7 @@
     "laminas/laminas-feed": "^2.23"
   },
   "require-dev": {
-    "phpunit/phpunit": "~10",
+    "phpunit/phpunit": "~11",
     "roave/security-advisories": "dev-master",
     "mockery/mockery": "^1.6"
   },
