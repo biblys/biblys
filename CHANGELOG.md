@@ -4,6 +4,8 @@
 
 ### Améliorations
 
+- Un flux RSS des billets de blog est désormais disponible à l'adresse
+  `/feeds/blog.rss.xml`.
 - Les pages d'administration s'affichent désormais dans un espace dédié
   indépendant de l'habillage graphique du site afin d'en faciliter
   l'utilisation.
