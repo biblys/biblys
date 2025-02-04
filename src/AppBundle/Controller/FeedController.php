@@ -52,7 +52,10 @@ class FeedController extends Controller
         $feed->setDescription("Les derniers billets du blog");
         $feed->setLink("https://{$currentSite->getSite()->getDomain()}");
         $feed->setFeedLink($currentUrl->getAbsoluteUrl(), "rss");
-        $feed->setDateModified($posts->getFirst()->getDate());
+
+        if ($posts->count() > 0) {
+            $feed->setDateModified($posts->getFirst()->getDate());
+        }
 
         /** @var Post $post */
         foreach ($posts as $post) {
