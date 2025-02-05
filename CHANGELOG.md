@@ -25,6 +25,8 @@
 - Lorsqu'une contrepartie de financement participatif était modifiée pour ne
   plus être en avant, elle pouvait apparaître en fin de liste plutôt qu'à sa
   place. C'est corrigé.
+- Un billet hors-ligne pouvait être accessible via son URL. Ce n'est plus le
+  cas.
 
 ### Instructions de mise à jour
 
