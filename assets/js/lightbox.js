@@ -14,71 +14,61 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import $ from 'jquery';
-
+// noinspection JSUnusedGlobalSymbols
 export default class Lightbox {
   constructor(elem) {
-    this.link = $(elem);
-    this.image = this.link.find('img');
+    this.link = elem;
+    this.image = this.link.querySelector('img');
 
-    if (this.image[0].complete) {
+    if (this.image.complete) {
       this.init();
     } else {
-      this.image.load(
-        function() {
-          this.init();
-        }.bind(this)
-      );
+      this.image.addEventListener('load', () => {
+        this.init();
+      });
     }
   }
 
   init() {
     this.addEvents();
     this.animationSpeed = 200;
-    this.link.css({ cursor: 'zoom-in' });
+    this.link.style.cursor = 'zoom-in';
     this.displayed = false;
-    this.imageRatio = this.image.width() / this.image.height();
+    this.imageRatio = this.image.width / this.image.height;
   }
 
   addEvents() {
-    this.link.on(
-      'click',
-      function(event) {
-        event.preventDefault();
-        this.openLightbox();
-      }.bind(this)
-    );
+    this.link.addEventListener('click', (event) => {
+      event.preventDefault();
+      this.openLightbox();
+    });
 
-    $(window).on(
-      'resize',
-      function() {
-        if (!this.displayed) {
-          return;
-        }
-        this.resizeLightbox();
-      }.bind(this)
-    );
+    window.addEventListener('resize', () => {
+      if (!this.displayed) {
+        return;
+      }
+      this.resizeLightbox();
+    });
   }
 
   getLightbox() {
-    // Create lightbox if necessary
-    if (typeof this.lightbox === 'undefined') {
+    if (!this.lightbox) {
       this.lightbox = new Image();
-      this.lightbox.src = this.link.attr('href');
+      this.lightbox.src = this.link.getAttribute('href');
       this.lightbox.style.cursor = 'zoom-out';
-      this.getOverlay().append(this.lightbox);
+      this.getOverlay().appendChild(this.lightbox);
     }
 
-    return $(this.lightbox);
+    return this.lightbox;
   }
 
   getLightboxDimensions() {
-    var windowHeight = $(window).height(),
-      windowWidth = $(window).width(),
-      targetHeight = windowHeight * 0.95,
-      targetWidth = targetHeight * this.imageRatio,
-      targetTop = windowHeight * 0.025,
-      targetLeft = windowWidth / 2 - targetWidth / 2;
+    const windowHeight = window.innerHeight;
+    const windowWidth = window.innerWidth;
+    let targetHeight = windowHeight * 0.95;
+    let targetWidth = targetHeight * this.imageRatio;
+    let targetTop = windowHeight * 0.025;
+    let targetLeft = windowWidth / 2 - targetWidth / 2;
 
     if (targetWidth > windowWidth * 0.95) {
       targetWidth = windowWidth * 0.95;
@@ -96,89 +86,75 @@ export default class Lightbox {
   }
 
   resizeLightbox() {
-    var target = this.getLightboxDimensions();
-    this.getLightbox().animate(
-      {
-        top: target.top,
-        left: target.left,
-        height: target.height,
-        width: target.width
-      },
-      this.animationSpeed
-    );
+    const target = this.getLightboxDimensions();
+    Object.assign(this.getLightbox().style, {
+      top: `${target.top}px`,
+      left: `${target.left}px`,
+      height: `${target.height}px`,
+      width: `${target.width}px`,
+      transition: `all ${this.animationSpeed}ms`
+    });
   }
 
   openLightbox() {
-    var element = this.image,
-      lightbox = this.getLightbox(),
-      startTop =
-        element.offset().top - $(document).scrollTop() + parseInt(element.css('border-top-width')),
-      startLeft =
-        element.offset().left -
-        $(document).scrollLeft() +
-        parseInt(element.css('border-left-width')),
-      target = this.getLightboxDimensions();
+    const element = this.image;
+    const lightbox = this.getLightbox();
+    const startTop = element.getBoundingClientRect().top + window.scrollY;
+    const startLeft = element.getBoundingClientRect().left + window.scrollX;
+    const target = this.getLightboxDimensions();
 
     this.showOverlay();
-    lightbox.css({
+    Object.assign(lightbox.style, {
       border: '10px solid white',
       position: 'absolute',
-      top: startTop,
-      left: startLeft,
-      width: element.width(),
-      height: element.height()
+      top: `${startTop}px`,
+      left: `${startLeft}px`,
+      width: `${element.width}px`,
+      height: `${element.height}px`,
+      transition: `all ${this.animationSpeed * 1.5}ms`
     });
-    element.css('opacity', 0);
+    element.style.opacity = 0;
 
-    lightbox.animate(
-      {
-        top: target.top,
-        left: target.left,
-        height: target.height,
-        width: target.width
-      },
-      this.animationSpeed * 1.5
-    );
+    requestAnimationFrame(() => {
+      Object.assign(lightbox.style, {
+        top: `${target.top}px`,
+        left: `${target.left}px`,
+        height: `${target.height}px`,
+        width: `${target.width}px`
+      });
+    });
 
     this.displayed = true;
   }
 
   closeLightbox() {
-    var element = this.image,
-      clone = this.getLightbox(),
-      targetHeight = element.outerHeight(),
-      targetWidth = element.outerWidth(),
-      targetTop = element.offset().top - $(document).scrollTop(),
-      targetLeft = element.offset().left - $(document).scrollLeft(),
-      targetBorderWidth = element.css('border-width'),
-      targetBorderColor = element.css('border-color');
+    const element = this.image;
+    const lightbox = this.getLightbox();
+    const targetHeight = element.offsetHeight;
+    const targetWidth = element.offsetWidth;
+    const targetTop = element.getBoundingClientRect().top + window.scrollY;
+    const targetLeft = element.getBoundingClientRect().left + window.scrollX;
 
     this.hideOverlay();
-    clone
-      .animate(
-        {
-          borderWidth: targetBorderWidth,
-          borderColor: targetBorderColor,
-          top: targetTop,
-          left: targetLeft,
-          height: targetHeight,
-          width: targetWidth
-        },
-        this.animationSpeed * 1.25
-      )
-      .promise()
-      .done(function() {
-        element.css('opacity', 1);
-      });
+    Object.assign(lightbox.style, {
+      top: `${targetTop}px`,
+      left: `${targetLeft}px`,
+      height: `${targetHeight}px`,
+      width: `${targetWidth}px`,
+      transition: `all ${this.animationSpeed * 1.25}ms`
+    });
+
+    lightbox.addEventListener('transitionend', () => {
+      element.style.opacity = 1;
+    }, { once: true });
 
     this.displayed = false;
   }
 
   getOverlay() {
-    // Create overlay if necessary
-    if (typeof this.overlay === 'undefined') {
-      this.overlay = $('<div></div>');
-      this.overlay.css({
+    if (!this.overlay) {
+      this.overlay = document.createElement('div');
+      Object.assign(this.overlay.style, {
         position: 'fixed',
         display: 'none',
         top: 0,
@@ -188,25 +164,26 @@ export default class Lightbox {
         height: '100%',
         zIndex: '10000'
       });
-      this.overlay.appendTo('body');
-      this.overlay.on(
-        'click',
-        function() {
-          this.closeLightbox();
-        }.bind(this)
-      );
+      document.body.appendChild(this.overlay);
+      this.overlay.addEventListener('click', () => {
+        this.closeLightbox();
+      });
     }
 
     return this.overlay;
   }
 
   showOverlay() {
-    var overlay = this.getOverlay();
-    overlay.fadeIn(this.animationSpeed);
+    this.overlay.style.display = 'block';
+    this.overlay.style.transition = `opacity ${this.animationSpeed}ms`;
+    this.overlay.style.opacity = '1';
   }
 
   hideOverlay() {
-    var overlay = this.getOverlay();
-    overlay.fadeOut(this.animationSpeed * 3.5);
+    this.overlay.style.transition = `opacity ${this.animationSpeed * 3.5}ms`;
+    this.overlay.style.opacity = '0';
+    this.overlay.addEventListener('transitionend', () => {
+      this.overlay.style.display = 'none';
+    }, { once: true });
   }
 }

@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 3.3.1 (DEV)
+
+### Corrections
+
+- L'affichage plein écran d'une photo depuis la page de gestion d'un exemplaire était décalé. C'est corrigé.
+
 ## 3.3.0 (5 février 2025)
 
 ### Améliorations
