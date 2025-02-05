@@ -114,8 +114,7 @@ class PostController extends Controller
             $userCanSeeUnpublishedPost = $userIsPostAuthor || $currentUser->isAdmin();
         }
 
-        $postIsOffline = $post->getStatus() === Post::STATUS_OFFLINE;
-        if ($postIsOffline && !$userCanSeeUnpublishedPost) {
+        if (!$post->isPublished() && !$userCanSeeUnpublishedPost) {
             throw new NotFoundException("Post $slug is currently offline.");
         }
 
