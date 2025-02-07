@@ -685,6 +685,27 @@ class CurrentUserTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
+    public function testGetCartWithoutToken()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $request = new Request();
+        ModelFactory::createCart(site: ModelFactory::createSite(), user: ModelFactory::createUser());
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // when
+        $returnedCart = $currentUser->getCart();
+
+        // then
+        $this->assertNull($returnedCart);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
     public function testGetCartForAnonymousUser()
     {
         // given
