@@ -155,9 +155,15 @@ class ModelFactory
     ): Cart
     {
         $cart = new Cart();
-        $cart->setUid($uniqueId ?? "cart-uid");
         $cart->setSite($site ?? self::createSite());
-        $cart->setUser($user);
+
+        if ($user) {
+            $cart->setUser($user);
+            $cart->setUid(null);
+        } else {
+            $cart->setUid($uniqueId ?? "cart-uid");
+        }
+
         $cart->setAxysAccountId($axysAccountId);
         $cart->setSellerId($sellerId); // axys_account_id
         $cart->setAmount($amount);

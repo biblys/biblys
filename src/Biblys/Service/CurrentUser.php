@@ -278,12 +278,13 @@ class CurrentUser
     public function getCart(): ?Cart
     {
         if (!$this->cartWasFetched) {
+            /** @var CartQuery $cartQuery */
             $cartQuery = CartQuery::create()->filterBySite($this->getCurrentSite()->getSite());
 
             if ($this->isAuthenticated()) {
-                $cartQuery = $cartQuery->filterByUser($this->user);
+                $cartQuery = $cartQuery->filterByUser($this->user)->filterByUid(null, Criteria::ISNULL);
             } else {
-                $cartQuery = $cartQuery->filterByUid($this->token);
+                $cartQuery = $cartQuery->filterByUid($this->token)->filterByUserId(null, Criteria::ISNULL);
             }
 
             $this->fetchedCart = $cartQuery->findOne();
