@@ -20,6 +20,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\MetaTagsService;
 use CFCampaign;
 use CFCampaignManager;
 use CFRewardManager;
@@ -42,7 +43,7 @@ class CFCampaignController extends Controller
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function showAction(Request $request, $slug): Response
+    public function showAction(Request $request, MetaTagsService $metaTagsService, $slug): Response
     {
         
         $globalSite = LegacyCodeHelper::getGlobalSite();
@@ -54,6 +55,10 @@ class CFCampaignController extends Controller
         }
 
         $request->attributes->set("page_title", $campaign->get("title"));
+
+        $metaTagsService->setTitle('Financement participatif : '.$campaign->get('title'));
+        $metaTagsService->setImage($campaign->get('image'));
+
         $this->setOpengraphTags([
             'type' => 'website',
             'title' => 'Financement participatif : '.$campaign->get('title'),

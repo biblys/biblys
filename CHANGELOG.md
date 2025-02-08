@@ -8,6 +8,8 @@
   était décalé. C'est corrigé.
 - L'affichage plein écran d'une image ne fonctionnait plus depuis la page de
   commande. C'est corrigé.
+- L'image de prévisualisation pour les réseaux sociaux ne s'affichaient plus
+  sur les pages de campagnes de financement participatif. C'est corrigé.
 
 ## 3.3.0 (5 février 2025)
 
