@@ -239,14 +239,17 @@ return function (
             $a = $article;
 
             // Image
-            $cover = null;
-            $stockItemPhotoUrl = $imagesService->getImageUrlFor($stockItem, height: 60);
-            $articleCoverUrl = $imagesService->getImageUrlFor($articleModel, height: 60);
-            if ($stockItemPhotoUrl) {
-                $cover = '<img src="' . $stockItemPhotoUrl . '" alt="' . $articleModel->getTitle() . '" height="60" />';
-            } elseif ($articleCoverUrl) {
-                $cover = '<img src="' . $articleCoverUrl . '" alt="' . $articleModel->getTitle() . '" /></a>';
-            }
+            $stockItemImageUrl = $imagesService->getImageUrlFor($stockItem);
+            $stockItemThumbnailUrl = $imagesService->getImageUrlFor($stockItem, height: 100);
+            $articleImageUrl = $imagesService->getImageUrlFor($articleModel);
+            $articleThumbnailUrl = $imagesService->getImageUrlFor($articleModel, height: 100);
+            $imageUrl = $stockItemImageUrl ?: $articleImageUrl;
+            $thumbnailUrl = $stockItemThumbnailUrl ?: $articleThumbnailUrl;
+            $cover = $thumbnailUrl ? '
+                <a href="'.$imageUrl.'" rel="lightbox">
+                    <img src="' . $thumbnailUrl . '" alt="' . $articleModel->getTitle() . '" height="100" />
+                </a>
+            ' : null;
 
             if ($a["article_pubdate"] > $o["order_insert"]) $a["article_title"] .= ' (précommande)';
 
