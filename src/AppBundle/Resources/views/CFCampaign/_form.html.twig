@@ -16,34 +16,50 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 <form class="fieldset" method="post">
-    <fieldset>
-        <p>
-            <label for="title" class="after">Titre :</label>
-            <input type="text" value="{{ (campaign.has('title')) ? campaign.title }}" id="title" name="title" class="form-control" maxlength=128 required>
-        </p>
-        <p>
-            <label for="goal" class="after">Objectif (en euros) :</label>
-            <input type="number" step=0.01 value="{{ (campaign.has('goal')) ? campaign.goal|price }}" id="goal" name="goal" class="form-control" required>
-        </p>
-        <p>
-            <label for="starts" class="after">Date de début (à 00:00) :</label>
-            <input type="date" value="{{ (campaign.has('starts')) ? campaign.starts }}" id="starts" name="starts" class="form-control" required>
-        </p>
-        <p>
-            <label for="ends" class="after">Date de fin (à 23:59) :</label>
-            <input type="date" value="{{ (campaign.has('ends')) ? campaign.ends }}" id="ends" name="ends" class="form-control" required>
-        </p>
-        <p>
-            <label for="image" class="after">URL de l'image :</label>
-            <input type="url" value="{{ (campaign.has('image')) ? campaign.image }}" id="image" name="image" class="form-control">
-        </p>
-    </fieldset>
+  <fieldset class="form-group">
+    <div class="form-group">
+      <label for="title" class="after">Titre :</label>
+      <input type="text" value="{{ (campaign.has('title')) ? campaign.title }}" id="title" name="title"
+             class="form-control" maxlength="128" required>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label for="goal" class="after">Objectif (en euros) :</label>
+        <input type="number" step="0.01" value="{{ (campaign.has('goal')) ? campaign.goal|price }}" id="goal"
+               name="goal"
+               class="form-control" required>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="starts" class="after">Date de début (à 00:00) :</label>
+        <input type="date" value="{{ (campaign.has('starts')) ? campaign.starts }}" id="starts" name="starts"
+               class="form-control" required>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="ends" class="after">Date de fin (à 23:59) :</label>
+        <input type="date" value="{{ (campaign.has('ends')) ? campaign.ends }}" id="ends" name="ends"
+               class="form-control" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="image" class="after">URL de l'image de prévisualisation :</label>
+      <input type="url" value="{{ (campaign.has('image')) ? campaign.image }}" id="image" name="image"
+             placeholder="https://…" class="form-control" aria-describedby="image-help-text">
+      <small id="image-help-text" class="form-text text-muted">
+        Image à utiliser pour l'aperçu lors du partage de la campagne sur les réseaux sociaux.
+        Format recommandé : 1200 x 630 pixels.
+      </small>
+    </div>
+  </fieldset>
 
-    <fieldset>
-        <textarea id="description" name="description" class="wysiwyg">{{ (campaign.has('description')) ? campaign.description }}</textarea>
-    </fieldset>
+  <fieldset class="form-group">
+    <div class="form-group">
+      <label for="description" class="after">Description :</label>
+      <textarea id="description" name="description"
+                class="form-control wysiwyg">{{ (campaign.has('description')) ? campaign.description }}</textarea>
+    </div>
+  </fieldset>
 
-    <fieldset class="text-center">
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
-    </fieldset>
+  <fieldset class="form-group text-center">
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+  </fieldset>
 </form>
