@@ -45,7 +45,7 @@ class CFCampaignController extends Controller
      */
     public function showAction(Request $request, MetaTagsService $metaTagsService, $slug): Response
     {
-        
+
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $cfcm = new CFCampaignManager();
@@ -56,13 +56,15 @@ class CFCampaignController extends Controller
 
         $request->attributes->set("page_title", $campaign->get("title"));
 
-        $metaTagsService->setTitle('Financement participatif : '.$campaign->get('title'));
-        $metaTagsService->setImage($campaign->get('image'));
+        $metaTagsService->setTitle("Financement participatif : " . $campaign->get('title'));
+        if ($campaign->has("image")) {
+            $metaTagsService->setImage($campaign->get('image'));
+        }
 
         $this->setOpengraphTags([
             'type' => 'website',
-            'title' => 'Financement participatif : '.$campaign->get('title'),
-            'url' => 'https://'.$globalSite->get('domain').
+            'title' => 'Financement participatif : ' . $campaign->get('title'),
+            'url' => 'https://' . $globalSite->get('domain') .
                 \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('cf_campaign_show', ['slug' => $campaign->get('url')]),
             'description' => truncate(strip_tags($campaign->get('description')), '500', '...', true),
             'locale' => 'fr_FR',
