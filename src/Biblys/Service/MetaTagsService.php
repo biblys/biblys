@@ -24,10 +24,13 @@ use Opengraph\Writer;
 class MetaTagsService
 {
     private Writer $writer;
+    private CurrentSite $currentSite;
+    private static array $tags = [];
 
-    public function __construct(Writer $writer)
+    public function __construct(Writer $writer, CurrentSite $currentSite)
     {
         $this->writer = $writer;
+        $this->currentSite = $currentSite;
     }
 
     public function setTitle(string $title): void
@@ -40,6 +43,17 @@ class MetaTagsService
         $this->writer->append(Opengraph::OG_IMAGE, $string);
     }
 
+    public function setUrl(string $url): void
+    {
+        $domain = $this->currentSite->getSite()->getDomain();
+        if (!str_starts_with($url, "http")) {
+            $url = "https://$domain$url";
+        }
+
+        $this->writer->append(Opengraph::OG_URL, $url);
+        MetaTagsService::$tags[] = "<link rel=\"canonical\" href=\"$url\" />";
+    }
+
     public function disallowSeoIndexing(): void
     {
         $this->writer->append("robots", "noindex");
@@ -47,6 +61,6 @@ class MetaTagsService
 
     public function dump(): string
     {
-        return $this->writer->render();
+        return $this->writer->render() . join("\n", MetaTagsService::$tags);
     }
 }
