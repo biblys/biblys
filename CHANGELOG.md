@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 3.4.0 (DEV)
+
+### Améliorations
+
+- La déclaration des urls canoniques des pages a été améliorée.
+
 ## 3.3.2 (26 février 2025)
 
 ### Corrections

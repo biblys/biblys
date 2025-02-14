@@ -50,7 +50,7 @@ class TemplateServiceValueResolver implements ArgumentValueResolverInterface
         $config = Config::load();
         $currentSiteService = CurrentSite::buildFromConfig($config);
         $currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
-        $metaTagsService = new MetaTagsService(new Writer());
+        $metaTagsService = new MetaTagsService(new Writer(), $currentSiteService);
         yield new TemplateService(
             config: $config,
             currentSiteService: $currentSiteService,
