@@ -60,7 +60,7 @@ class Controller
         $request = Request::createFromGlobals();
         $currentSiteService = CurrentSite::buildFromConfig($config);
         $currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
-        $metaTagsService = new MetaTagsService(new Writer());
+        $metaTagsService = new MetaTagsService(new Writer(), $currentSiteService);
         $templateService = new TemplateService(
             config: $config,
             currentSiteService: $currentSiteService,

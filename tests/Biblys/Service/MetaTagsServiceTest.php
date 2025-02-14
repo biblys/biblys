@@ -18,19 +18,53 @@
 
 namespace Biblys\Service;
 
+use Biblys\Test\ModelFactory;
 use Opengraph\Writer;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Propel\Runtime\Exception\PropelException;
 
 class MetaTagsServiceTest extends TestCase
 {
+
+    /**
+     * @throws Exception
+     * @throws PropelException
+     */
+    public function testSetUrl()
+    {
+        // given
+        $site = ModelFactory::createSite(domain: "example.org");
+        $currentSite = new CurrentSite($site);
+
+        $writer = $this->createMock(Writer::class);
+        $writer->expects($this->once())
+            ->method("append")
+            ->with($this->equalTo("og:url"), $this->equalTo("https://example.org/pages/about"));
+        $metaTagsService = new MetaTagsService($writer, $currentSite);
+
+        // when
+        $metaTagsService->setUrl("/pages/about");
+
+        // then
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @throws Exception
+     * @throws PropelException
+     */
     public function testSetTitle()
     {
         // given
+        $site = ModelFactory::createSite(domain: "example.org");
+        $currentSite = new CurrentSite($site);
+
         $writer = $this->createMock(Writer::class);
         $writer->expects($this->once())
             ->method("append")
             ->with($this->equalTo("og:title"), $this->equalTo("Hello World"));
-        $metaTagsService = new MetaTagsService($writer);
+        $metaTagsService = new MetaTagsService($writer, $currentSite);
 
         // when
         $metaTagsService->setTitle("Hello World");
@@ -38,14 +72,22 @@ class MetaTagsServiceTest extends TestCase
         // then
         $this->assertTrue(true);
     }
+
+    /**
+     * @throws Exception
+     * @throws PropelException
+     */
     public function testSetImage()
     {
         // given
+        $site = ModelFactory::createSite(domain: "example.org");
+        $currentSite = new CurrentSite($site);
+
         $writer = $this->createMock(Writer::class);
         $writer->expects($this->once())
             ->method("append")
             ->with($this->equalTo("og:image"), $this->equalTo("cover.jpg"));
-        $metaTagsService = new MetaTagsService($writer);
+        $metaTagsService = new MetaTagsService($writer, $currentSite);
 
         // when
         $metaTagsService->setImage("cover.jpg");
@@ -54,14 +96,21 @@ class MetaTagsServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
+    /**
+     * @throws Exception
+     * @throws PropelException
+     */
     public function testDisallowSeoIndexing()
     {
         // given
+        $site = ModelFactory::createSite(domain: "example.org");
+        $currentSite = new CurrentSite($site);
+
         $writer = $this->createMock(Writer::class);
         $writer->expects($this->once())
             ->method("append")
             ->with($this->equalTo("robots"), $this->equalTo("noindex"));
-        $metaTagsService = new MetaTagsService($writer);
+        $metaTagsService = new MetaTagsService($writer, $currentSite);
 
         // when
         $metaTagsService->disallowSeoIndexing();
@@ -70,20 +119,30 @@ class MetaTagsServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
     public function testDump()
     {
         // given
         $writer = $this->createMock(Writer::class);
+        $site = ModelFactory::createSite(domain: "example.org");
+        $currentSite = new CurrentSite($site);
+
         $writer->expects($this->once())
             ->method("render")
             ->with()
             ->willReturn("tags");
-        $metaTagsService = new MetaTagsService($writer);
+        $metaTagsService = new MetaTagsService($writer, $currentSite);
+        $metaTagsService->setUrl("/pages/about");
 
         // when
-        $result = $metaTagsService->dump();
+        $dumper = new MetaTagsService($writer, $currentSite);
+        $result = $dumper->dump();
 
         // then
-        $this->assertEquals("tags", $result);
+        $this->assertStringContainsString("tags", $result);
+        $this->assertStringContainsString('<link rel="canonical" href="https://example.org/pages/about" />', $result);
     }
 }
