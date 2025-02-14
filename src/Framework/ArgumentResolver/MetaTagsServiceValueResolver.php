@@ -18,6 +18,8 @@
 
 namespace Framework\ArgumentResolver;
 
+use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\MetaTagsService;
 use Exception;
 use Generator;
@@ -44,6 +46,8 @@ class MetaTagsServiceValueResolver implements ArgumentValueResolverInterface
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
         $writer = new Writer();
-        yield new MetaTagsService($writer);
+        $config = Config::load();
+        $currentSite = CurrentSite::buildFromConfig($config);
+        yield new MetaTagsService($writer, $currentSite);
     }
 }
