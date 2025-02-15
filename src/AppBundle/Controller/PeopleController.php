@@ -22,6 +22,7 @@ use ArticleManager;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
+use Biblys\Service\MetaTagsService;
 use Biblys\Service\Pagination;
 use Biblys\Service\QueryParamsService;
 use Exception;
@@ -77,7 +78,10 @@ class PeopleController extends Controller
      */
     public function showAction(
         QueryParamsService $queryParams,
-                           $slug
+        MetaTagsService $metaTagsService,
+        ImagesService $imagesService,
+        UrlGenerator $urlGenerator,
+        string $slug
     ): RedirectResponse|Response
     {
         $globalSite = LegacyCodeHelper::getGlobalSite();
@@ -113,6 +117,13 @@ class PeopleController extends Controller
         // TODO: use meta tag or header instead?
         if (count($articles) === 0) {
             throw new NotFoundException("There are no article associated with people $slug");
+        }
+
+        $metaTagsService->setTitle($people->get("name"));
+        $metaTagsService->setUrl($urlGenerator->generate("people_show", ["slug" => $people->get("url")]));
+        $peopleModel = $people->getModel();
+        if ($imagesService->imageExistsFor($peopleModel)) {
+            $metaTagsService->setImage($imagesService->getImageUrlFor($peopleModel));
         }
 
         return $this->render('AppBundle:People:show.html.twig', [
