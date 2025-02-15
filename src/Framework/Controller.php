@@ -90,9 +90,16 @@ class Controller
 
     /**
      * @throws Exception
+     * @deprecated Controller->setOpengraphTags is deprecated. Use MetaTagsService instead.
      */
     public function setOpengraphTags($tags = []): void
     {
+        trigger_deprecation(
+            "biblys/biblys",
+            "3.4.0",
+            "Controller->setOpengraphTags is deprecated. Use MetaTagsService instead."
+        );
+
         $request = LegacyCodeHelper::getGlobalRequest();
 
         if (!isset($tags['type'])) {
