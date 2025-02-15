@@ -86,11 +86,11 @@ class MetaTagsServiceTest extends TestCase
         $writer = $this->createMock(Writer::class);
         $writer->expects($this->once())
             ->method("append")
-            ->with($this->equalTo("og:image"), $this->equalTo("cover.jpg"));
+            ->with($this->equalTo("og:image"), $this->equalTo("https://example.org/cover.jpg"));
         $metaTagsService = new MetaTagsService($writer, $currentSite);
 
         // when
-        $metaTagsService->setImage("cover.jpg");
+        $metaTagsService->setImage("/cover.jpg");
 
         // then
         $this->assertTrue(true);
