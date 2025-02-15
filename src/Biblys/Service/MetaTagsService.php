@@ -38,18 +38,15 @@ class MetaTagsService
         $this->writer->append(Opengraph::OG_TITLE, $title);
     }
 
-    public function setImage(string $string): void
+    public function setImage(string $url): void
     {
-        $this->writer->append(Opengraph::OG_IMAGE, $string);
+        $url = $this->_ensureUrlIsAbsolute($url);
+        $this->writer->append(Opengraph::OG_IMAGE, $url);
     }
 
     public function setUrl(string $url): void
     {
-        $domain = $this->currentSite->getSite()->getDomain();
-        if (!str_starts_with($url, "http")) {
-            $url = "https://$domain$url";
-        }
-
+        $url = $this->_ensureUrlIsAbsolute($url);
         $this->writer->append(Opengraph::OG_URL, $url);
         MetaTagsService::$tags[] = "<link rel=\"canonical\" href=\"$url\" />";
     }
@@ -62,5 +59,18 @@ class MetaTagsService
     public function dump(): string
     {
         return $this->writer->render() . join("\n", MetaTagsService::$tags);
+    }
+
+    /**
+     * @param string $url
+     * @return string
+     */
+    private function _ensureUrlIsAbsolute(string $url): string
+    {
+        $domain = $this->currentSite->getSite()->getDomain();
+        if (!str_starts_with($url, "http")) {
+            $url = "https://$domain$url";
+        }
+        return $url;
     }
 }
