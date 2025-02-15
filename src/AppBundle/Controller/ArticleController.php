@@ -101,7 +101,7 @@ class ArticleController extends Controller
             throw new NotFoundException("Article $slug not found.");
         }
 
-        $articleModel = $article->getModel();
+        $articleModel = ArticleQuery::create()->findPk($article->get("id"));
 
         $use_old_controller = $currentSiteService->getOption('use_old_article_controller');
         if ($use_old_controller) {
@@ -115,17 +115,18 @@ class ArticleController extends Controller
             $article->get('publisher')->get('name').')'
         );
 
-        // Opengraph tags
+        // Meta tags
+        $metaTags->setTitle($articleModel->getTitle());
+        $metaTags->setUrl($urlGenerator->generate("article_show", ["slug" => $articleModel->getUrl()]));
+
         $summary = $article->get('summary') ?: "";
         $opengraphTags = [
             'type' => 'book',
-            'title' => $article->get('title'),
-            'url' => $request->getScheme().'://'.$request->getHost().
-                $urlGenerator->generate('article_show', ['slug' => $article->get('url')]),
             'description' => truncate(strip_tags($summary), '500', '...', true),
         ];
         if ($imagesService->imageExistsFor($articleModel)) {
             $opengraphTags['image'] = $imagesService->getImageUrlFor($articleModel);
+            $metaTags->setImage($opengraphTags["image"]);
         }
         if ($article->has('ean')) {
             $opengraphTags['isbn'] = $article->get('ean');
@@ -160,9 +161,6 @@ class ArticleController extends Controller
                 numberOfSuggestions: 5,
             );
         }
-
-        $articleModel = ArticleQuery::create()->findPk($article->get("id"));
-        $metaTags->setTitle($articleModel->getTitle());
 
         return $templateService->renderResponse("AppBundle:Article:show.html.twig", [
             "article" => $article,
