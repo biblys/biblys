@@ -38,8 +38,9 @@ https://getbootstrap.com/docs/4.0/migration/.
 
 Notamment, remplacer :
 
+- `btn-default` par `btn-light`
 - `btn-xs` par `btn-sm`
-- `hidden-print` par `d-print-none`
+- `hidden-*` par `d-*-none`
 - les `navbar` : https://getbootstrap.com/docs/4.0/migration/#navbar
 
 ## 3.2.1 (8 janvier 2025)
