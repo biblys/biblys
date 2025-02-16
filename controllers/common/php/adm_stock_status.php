@@ -387,7 +387,7 @@ if (empty($_GET["date"])) $_GET["date"] = date("Y-m-d");
 	$_ECHO .= '
 
 		<h1><span class="fa fa-bar-chart"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
-		<form class="fieldset hidden-print">
+		<form class="fieldset d-print-none">
 			<fieldset>
 				<legend>Options</legend>
 
