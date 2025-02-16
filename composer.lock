@@ -4012,22 +4012,22 @@
         },
         {
             "name": "rollbar/rollbar",
-            "version": "v4.0.2",
+            "version": "v4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rollbar/rollbar-php.git",
-                "reference": "6966a4c97c170298108f5e5b543c2710658f8fe0"
+                "reference": "3dc630adbaa1fc85fb6c97aba5bd71f4893745e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rollbar/rollbar-php/zipball/6966a4c97c170298108f5e5b543c2710658f8fe0",
-                "reference": "6966a4c97c170298108f5e5b543c2710658f8fe0",
+                "url": "https://api.github.com/repos/rollbar/rollbar-php/zipball/3dc630adbaa1fc85fb6c97aba5bd71f4893745e0",
+                "reference": "3dc630adbaa1fc85fb6c97aba5bd71f4893745e0",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "monolog/monolog": "^2 || ^3",
-                "php": ">=8.0.0 <9.0",
+                "php": ">=8.1.0 <9.0",
                 "psr/log": "^1 || ^2 || ^3"
             },
             "require-dev": {
@@ -4069,9 +4069,9 @@
             "support": {
                 "email": "support@rollbar.com",
                 "issues": "https://github.com/rollbar/rollbar-php/issues",
-                "source": "https://github.com/rollbar/rollbar-php/tree/v4.0.2"
+                "source": "https://github.com/rollbar/rollbar-php/tree/v4.1.0"
             },
-            "time": "2023-12-22T21:40:31+00:00"
+            "time": "2025-02-16T19:30:06+00:00"
         },
         {
             "name": "sentry/sentry",
