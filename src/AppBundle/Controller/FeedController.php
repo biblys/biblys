@@ -59,11 +59,15 @@ class FeedController extends Controller
 
         /** @var Post $post */
         foreach ($posts as $post) {
+            if (empty($post->getContent())) {
+                continue;
+            }
+
             $entry = $feed->createEntry();
             $entry->setTitle($post->getTitle());
             $entry->setLink($urlGenerator->generate("post_show", ["slug" => $post->getUrl()], UrlGeneratorInterface::ABSOLUTE_URL));
             $entry->setDateCreated($post->getDate());
-            $entry->setContent($post->getContent());
+            $entry->setContent($post->getContent() ?? "Pas de contenu");
             $feed->addEntry($entry);
         }
 

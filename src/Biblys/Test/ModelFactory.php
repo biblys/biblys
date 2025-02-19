@@ -771,6 +771,7 @@ class ModelFactory
         bool     $status = Post::STATUS_ONLINE,
         DateTime $date = new DateTime(),
         ?string  $axysAccountId = null,
+        ?string  $content = "Un contenu d'actualité qui va vous étonner.",
     ): Post
     {
         $slugService = new SlugService();
@@ -782,7 +783,7 @@ class ModelFactory
         $post->setUrl($slugService->slugify($title));
         $post->setStatus($status);
         $post->setDate($date);
-        $post->setContent("Un contenu d'actualité qui va vous étonner.");
+        $post->setContent($content);
         $post->setCreatedAt(new DateTime());
         $post->setUpdatedAt(new DateTime());
         $post->setAxysAccountId($axysAccountId);

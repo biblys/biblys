@@ -127,4 +127,45 @@ XML
 XML
             , $response->getContent());
     }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testBlogActionWithEmptyPosts()
+    {
+        // given
+        $controller = new FeedController();
+        $site = ModelFactory::createSite();
+
+        ModelFactory::createPost(date: new DateTime("2019-04-28 02:42:00"), content: "");
+
+        $currentSite = new CurrentSite($site);
+        $currentUrl = $this->createMock(CurrentUrlService::class);
+        $currentUrl->method("getAbsoluteUrl")->willReturn("https://example.com/feed");
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")->willReturn("https://example.com/post/1");
+
+        // when
+        $response = $controller->blogAction($currentSite, $currentUrl, $urlGenerator);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("application/rss+xml", $response->headers->get("Content-Type"));
+        $this->assertEquals(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Éditions Paronymie</title>
+    <description>Les derniers billets du blog</description>
+    <pubDate>Sun, 28 Apr 2019 02:42:00 +0000</pubDate>
+    <generator>Laminas_Feed_Writer 2 (https://getlaminas.org)</generator>
+    <link>https://paronymie.fr</link>
+    <atom:link rel="self" type="application/rss+xml" href="https://example.com/feed"/>
+  </channel>
+</rss>
+
+XML
+            , $response->getContent());
+    }
 }
