@@ -133,9 +133,10 @@ class PublisherController extends Controller
         // Pagination
         $page = (int)$request->query->get('p', 0);
         $totalCount = $am->count(['publisher_id' => $publisher->get('id')]);
+        $articlesPerPage = $currentSite->getOption("articles_per_page", 10);
 
         try {
-            $pagination = new Pagination($page, $totalCount);
+            $pagination = new Pagination($page, $totalCount, $articlesPerPage);
         } catch (InvalidArgumentException $exception) {
             throw new BadRequestHttpException($exception->getMessage());
         }

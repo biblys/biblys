@@ -247,11 +247,12 @@ class ArticleController extends Controller
             $request->attributes->set("page_title", "Recherche de ".$query);
             $page = (int) $queryParamsService->get("p");
             $queryParams = ["q" => $query, "in-stock" => $inStockFilter, "sort" => $sort];
+            $articlesPerPage = $currentSite->getOption("articles_per_page", 10);
 
             if ($inStockFilter) {
                 $count = $am->countSearchResultsForAvailableStock($query, $currentSite);
                 try {
-                    $pagination = new Pagination($page, $count);
+                    $pagination = new Pagination($page, $count, $articlesPerPage);
                 } catch (InvalidArgumentException $exception) {
                     throw new BadRequestHttpException($exception->getMessage());
                 }
@@ -265,7 +266,7 @@ class ArticleController extends Controller
             } else {
                 $count = $am->countSearchResults($query);
                 try {
-                    $pagination = new Pagination($page, $count);
+                    $pagination = new Pagination($page, $count, $articlesPerPage);
                 } catch (InvalidArgumentException $exception) {
                     throw new BadRequestHttpException($exception->getMessage());
                 }

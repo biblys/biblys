@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 3.3.1 (DEV)
+## 3.3.1 (19 février 2025)
 
 ### Corrections
 
@@ -10,6 +10,8 @@
   commande. C'est corrigé.
 - L'image de prévisualisation pour les réseaux sociaux ne s'affichaient plus
   sur les pages de campagnes de financement participatif. C'est corrigé.
+- L'option `articles_per_page` n'était pas pris en compte sur la page de
+  résultats de recherche et la page d'un éditeur. C'est maintenant le cas.
 
 ## 3.3.0 (5 février 2025)
 
