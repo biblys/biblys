@@ -585,6 +585,7 @@ class ArticleControllerTest extends TestCase
         $controller = new ArticleController();
         $request = new Request();
         $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("getOption")->willReturn("10");
         $queryParams = Mockery::mock(QueryParamsService::class);
         $queryParams->shouldReceive("parse")->andReturn();
         $queryParams->shouldReceive("get")->with("q")->andReturn("Résultat de recherche");
@@ -634,6 +635,7 @@ class ArticleControllerTest extends TestCase
         $controller = new ArticleController();
         $request = new Request();
         $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("getOption")->willReturn("10");
         $queryParams = Mockery::mock(QueryParamsService::class);
         $queryParams->shouldReceive("parse")->andReturn();
         $queryParams->shouldReceive("get")->with("q")->andReturn("Résultat de recherche trié");
