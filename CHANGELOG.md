@@ -61,7 +61,6 @@ Notamment, remplacer :
 
 - `btn-default` par `btn-light`
 - `btn-xs` par `btn-sm`
-- `btn-default` par `btn-light`
 - `hidden-*` par `d-*-none`
 - les `navbar` : https://getbootstrap.com/docs/4.0/migration/#navbar
 
