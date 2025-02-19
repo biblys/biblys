@@ -1,5 +1,13 @@
 # Historique des modifications
 
+## 3.3.2 (DEV)
+
+### Corrections
+
+- Le flux RSS des actualités pouvait déclencher une erreur si un billet
+  d'actualité n'avait pas de contenu. Désormais, les billets sans contenu sont
+  ignorés lors de la génération du flux.
+
 ## 3.3.1 (19 février 2025)
 
 ### Corrections
