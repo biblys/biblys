@@ -53,10 +53,14 @@ class Post extends Entity
         parent::__construct($data);
     }
 
+    /**
+     * @throws DateMalformedStringException
+     */
     public function getModel(): \Model\Post
     {
         $model = new \Model\Post();
         $model->setId($this->get("id"));
+        $model->setDate(new DateTime($this->get("date")));
 
         return $model;
     }
@@ -218,29 +222,21 @@ class Post extends Entity
     /**
      * Returns previous post from current post's date
      * @noinspection PhpUnused
+     * @throws PropelException
      */
-    public function getPrevPost()
+    public function getPrevPost(): ?\Model\Post
     {
-        $pm = new PostManager();
-        return $pm->get([
-            "post_status" => 1,
-            "post_date" => "< {$this->get('date')}"
-        ],
-            ['order' => 'post_date', 'sort' => 'desc']
-        );
+        return $this->getModel()->getPreviousPost();
     }
 
     /**
      * Returns next post from current post's date
      * @noinspection PhpUnused
+     * @throws PropelException
      */
-    public function getNextPost()
+    public function getNextPost(): ?\Model\Post
     {
-        $pm = new PostManager();
-        return $pm->get([
-            "post_status" => 1,
-            "post_date" => "> {$this->get('date')}"
-        ]);
+        return $this->getModel()->getNextPost();
     }
 }
 
