@@ -19,6 +19,8 @@
 namespace Model;
 
 use Model\Base\Post as BasePost;
+use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\Exception\PropelException;
 
 /**
  * Skeleton subclass for representing a row from the 'posts' table.
@@ -38,5 +40,29 @@ class Post extends BasePost
     public function isPublished(): bool
     {
         return !!$this->getStatus();
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function getNextPost(): ?Post
+    {
+        return PostQuery::create()
+            ->filterByStatus(self::STATUS_ONLINE)
+            ->filterByDate($this->getDate(), Criteria::GREATER_THAN)
+            ->orderByCreatedAt()
+            ->findOne();
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function getPreviousPost(): ?Post
+    {
+        return PostQuery::create()
+            ->filterByStatus(self::STATUS_ONLINE)
+            ->filterByDate($this->getDate(), Criteria::LESS_THAN)
+            ->orderByCreatedAt(Criteria::DESC)
+            ->findOne();
     }
 }
