@@ -55,16 +55,16 @@
         },
         {
             "name": "biblys/isbn",
-            "version": "3.2.11",
+            "version": "3.2.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/biblys/isbn.git",
-                "reference": "11107d157b56e3adb04fd4ddc4742e6107affc1a"
+                "reference": "2c21897612fad6d9733e470ef79ecfe258809d6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/biblys/isbn/zipball/11107d157b56e3adb04fd4ddc4742e6107affc1a",
-                "reference": "11107d157b56e3adb04fd4ddc4742e6107affc1a",
+                "url": "https://api.github.com/repos/biblys/isbn/zipball/2c21897612fad6d9733e470ef79ecfe258809d6b",
+                "reference": "2c21897612fad6d9733e470ef79ecfe258809d6b",
                 "shasum": ""
             },
             "require": {
@@ -74,7 +74,7 @@
                 "ext-json": "*",
                 "ext-simplexml": "*",
                 "guzzlehttp/guzzle": "^7.0",
-                "phpunit/phpunit": "^6 || ^7 || ^8 || ^11"
+                "phpunit/phpunit": "^6 || ^7 || ^8 || ^11 || ^12"
             },
             "type": "library",
             "autoload": {
@@ -102,7 +102,7 @@
             ],
             "support": {
                 "issues": "https://github.com/biblys/isbn/issues",
-                "source": "https://github.com/biblys/isbn/tree/3.2.11"
+                "source": "https://github.com/biblys/isbn/tree/3.2.12"
             },
             "funding": [
                 {
