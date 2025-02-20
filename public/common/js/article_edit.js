@@ -872,7 +872,7 @@ function _addContribution(peopleId, jobId) {
     return response.json();
   }).then(function (data) {
     if (data.error) {
-      return _alert(data.error);
+      return _alert(data.error.message);
     }
 
     _addContributorLine(data.contributor);
