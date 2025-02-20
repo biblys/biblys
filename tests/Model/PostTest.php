@@ -18,10 +18,22 @@
 
 namespace Model;
 
+use Biblys\Test\ModelFactory;
+use DateTime;
 use PHPUnit\Framework\TestCase;
+use Propel\Runtime\Exception\PropelException;
 
 class PostTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     */
+    public function setUp(): void
+    {
+        PostQuery::create()->deleteAll();
+    }
+
+    /** isPublished */
 
     public function testIsOnlineReturnsFalseByDefault()
     {
@@ -60,4 +72,55 @@ class PostTest extends TestCase
         // then
         $this->assertTrue($isOnline);
     }
+
+    /** getNextPost */
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetNextPostReturnsNextPost()
+    {
+        // given
+        $previousPost = ModelFactory::createPost(date: new DateTime("2025-01-01"));
+        $previousPostButUnpublished = ModelFactory::createPost(status: Post::STATUS_OFFLINE, date: new DateTime("2025-01-02"));
+        $post = ModelFactory::createPost(date: new DateTime("2025-01-03"));
+        $nextPostButUnpublished = ModelFactory::createPost(status: Post::STATUS_OFFLINE, date: new DateTime("2025-01-04"));
+        $nextPost = ModelFactory::createPost(date: new DateTime("2025-01-05"));
+
+        // when
+        $returnedPost = $post->getNextPost();
+
+        // then
+        $this->assertNotEquals($previousPost, $returnedPost);
+        $this->assertNotEquals($previousPostButUnpublished, $returnedPost);
+        $this->assertNotEquals($post, $returnedPost);
+        $this->assertNotEquals($nextPostButUnpublished, $returnedPost);
+        $this->assertEquals($nextPost, $returnedPost);
+    }
+
+    /** getPreviousPost */
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetPreviousPostReturnsPreviousPost()
+    {
+        // given
+        $previousPost = ModelFactory::createPost(date: new DateTime("2025-01-01"));
+        $previousPostButUnpublished = ModelFactory::createPost(status: Post::STATUS_OFFLINE, date: new DateTime("2025-01-02"));
+        $post = ModelFactory::createPost(date: new DateTime("2025-01-03"));
+        $nextPostButUnpublished = ModelFactory::createPost(status: Post::STATUS_OFFLINE, date: new DateTime("2025-01-04"));
+        $nextPost = ModelFactory::createPost(date: new DateTime("2025-01-05"));
+
+        // when
+        $returnedPost = $post->getPreviousPost();
+
+        // then
+        $this->assertNotEquals($nextPost, $returnedPost);
+        $this->assertNotEquals($nextPostButUnpublished, $returnedPost);
+        $this->assertNotEquals($post, $returnedPost);
+        $this->assertNotEquals($previousPostButUnpublished, $returnedPost);
+        $this->assertEquals($previousPost, $returnedPost);
+    }
+
 }
