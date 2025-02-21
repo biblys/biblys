@@ -23,13 +23,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% block main %}
   <h1>Recherche</h1>
 
+
   {% if not query %}
     <form class="search-form">
-      <div class="form-group">
-        <input type="search" class="form-control search-form-input" name="q" value="{{ query }}" placeholder="Titre, auteur, mot-clé, ISBN...">
-      </div>
-      <div class="form-group text-center">
-        <button type="submit" class="btn btn-primary search-form-button">Rechercher</button>
+      <div class="input-group">
+        <input
+          aria-label="Champ de recherche"
+          type="search"
+          class="form-control search-form-input mt-0"
+          name="q"
+          value="{{ query }}"
+          placeholder="Titre, auteur, mot-clé, ISBN..."
+        >
+        <div class="input-group-append">
+          <button type="submit" class="btn btn-primary search-form-button" aria-label="Rechercher">
+            <span class="fa fa-search"></span>
+          </button>
+        </div>
       </div>
     </form>
   {% else %}
@@ -48,7 +58,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <div>
         Trier par
         <select name="sort">
-          {%  for option in sortOptions %}
+          {% for option in sortOptions %}
             <option
               value="{{ option.criteria }}|{{ option.order }}"
               {% if option.criteria == sortCriteria and option.order == sortOrder %}

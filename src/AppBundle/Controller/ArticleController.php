@@ -188,7 +188,7 @@ class ArticleController extends Controller
         $am = new ArticleManager();
 
         $queryParamsService->parse([
-            "q" => ["type" => "string", "mb_min_length" => 3, "mb_max_length" => 255],
+            "q" => ["type" => "string", "mb_min_length" => 3, "mb_max_length" => 255, "default" => ""],
             "in-stock" => ["type" => "string", "default" => "0"],
             "sort" => ["type" => "string", "default" => "pubdate|desc"],
             "p" => ["type" => "string", "default" => 0]
