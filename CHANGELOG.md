@@ -5,6 +5,9 @@
 ### Améliorations
 
 - La déclaration des urls canoniques des pages a été améliorée.
+- Un lien d'accès à la page de recherche a été ajouté dans le menu de navigation
+  rapide.
+- La présentation des options sur la page de recherche a été améliorée.
 
 ## 3.3.2 (26 février 2025)
 
