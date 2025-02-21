@@ -191,7 +191,8 @@ class ArticleController extends Controller
             "q" => ["type" => "string", "mb_min_length" => 3, "mb_max_length" => 255, "default" => ""],
             "in-stock" => ["type" => "string", "default" => "0"],
             "sort" => ["type" => "string", "default" => "pubdate|desc"],
-            "p" => ["type" => "string", "default" => 0]
+            "p" => ["type" => "string", "default" => 0],
+            "autofocus" => ["type" => "numeric", "default" => 0],
         ]);
 
         $query = $queryParamsService->get("q");
@@ -287,6 +288,7 @@ class ArticleController extends Controller
             "sortOptions" => $sortOptions,
             "sortCriteria" => $sortCriteria,
             "sortOrder" => $sortOrder,
+            "autofocus" => $queryParamsService->getInteger("autofocus"),
         ]);
     }
 

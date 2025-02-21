@@ -592,6 +592,7 @@ class ArticleControllerTest extends TestCase
         $queryParams->shouldReceive("get")->with("in-stock")->andReturn("0");
         $queryParams->shouldReceive("get")->with("sort")->andReturn("pubdate|desc");
         $queryParams->shouldReceive("get")->with("p")->andReturn("0");
+        $queryParams->shouldReceive("getInteger")->with("autofocus")->andReturn(0);
         $templateService = Helpers::getTemplateService();
 
         // when
@@ -608,11 +609,8 @@ class ArticleControllerTest extends TestCase
             $response->getStatusCode(),
             "returns HTTP 200"
         );
-        $this->assertStringContainsString(
-            "Rechercher",
-            $response->getContent(),
-            "return search button"
-        );
+        $this->assertStringContainsString("Rechercher", $response->getContent(), "contains search button");
+        $this->assertStringContainsString("autofocus", $response->getContent(), "contains search field with autofocus");
     }
 
     /**
@@ -639,6 +637,7 @@ class ArticleControllerTest extends TestCase
         $queryParams->shouldReceive("get")->with("in-stock")->andReturn("0");
         $queryParams->shouldReceive("get")->with("sort")->andReturn("pubdate|desc");
         $queryParams->shouldReceive("get")->with("p")->andReturn("0");
+        $queryParams->shouldReceive("getInteger")->with("autofocus")->andReturn(0);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService
             ->shouldReceive("renderResponse")
@@ -689,6 +688,7 @@ class ArticleControllerTest extends TestCase
         $queryParams->shouldReceive("get")->with("in-stock")->andReturn("0");
         $queryParams->shouldReceive("get")->with("sort")->andReturn("pubdate|desc");
         $queryParams->shouldReceive("get")->with("p")->andReturn("0");
+        $queryParams->shouldReceive("getInteger")->with("autofocus")->andReturn(0);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService
             ->shouldReceive("renderResponse")
@@ -741,6 +741,7 @@ class ArticleControllerTest extends TestCase
         $queryParams->shouldReceive("get")->with("in-stock")->andReturn("0");
         $queryParams->shouldReceive("get")->with("sort")->andReturn("1AND+1%3D1+ORDERBY%281%2C2%2C3%2C4%2C5%29+--%3B|desc");
         $queryParams->shouldReceive("get")->with("p")->andReturn("0");
+        $queryParams->shouldReceive("getInteger")->with("autofocus")->andReturn(0);
 
         // then
         $this->expectException(BadRequestHttpException::class);
@@ -785,6 +786,7 @@ class ArticleControllerTest extends TestCase
         $queryParams->shouldReceive("get")->with("in-stock")->andReturn("1");
         $queryParams->shouldReceive("get")->with("sort")->andReturn("pubdate|desc");
         $queryParams->shouldReceive("get")->with("p")->andReturn("0");
+        $queryParams->shouldReceive("getInteger")->with("autofocus")->andReturn(0);
 
         // when
         $response = $controller->searchAction(
@@ -832,6 +834,7 @@ class ArticleControllerTest extends TestCase
         $queryParams->shouldReceive("get")->with("in-stock")->andReturn("1");
         $queryParams->shouldReceive("get")->with("sort")->andReturn("pubdate|asc");
         $queryParams->shouldReceive("get")->with("p")->andReturn("0");
+        $queryParams->shouldReceive("getInteger")->with("autofocus")->andReturn(0);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService
             ->shouldReceive("renderResponse")

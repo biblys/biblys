@@ -33,6 +33,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         value="{{ query }}"
         placeholder="Titre, auteur, mot-clé, ISBN..."
         required
+        {% if autofocus %}autofocus{% endif %}
       >
       <div class="input-group-append">
         <button type="submit" class="btn btn-primary search-form-button" aria-label="Rechercher">
