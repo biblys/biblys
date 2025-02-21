@@ -23,27 +23,27 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% block main %}
   <h1>Recherche</h1>
 
-
-  {% if not query %}
-    <form class="search-form">
-      <div class="input-group">
-        <input
-          aria-label="Champ de recherche"
-          type="search"
-          class="form-control search-form-input mt-0"
-          name="q"
-          value="{{ query }}"
-          placeholder="Titre, auteur, mot-clé, ISBN..."
-        >
-        <div class="input-group-append">
-          <button type="submit" class="btn btn-primary search-form-button" aria-label="Rechercher">
-            <span class="fa fa-search"></span>
-          </button>
-        </div>
+  <form class="search-form">
+    <div class="input-group">
+      <input
+        aria-label="Champ de recherche"
+        type="search"
+        class="form-control search-form-input mt-0"
+        name="q"
+        value="{{ query }}"
+        placeholder="Titre, auteur, mot-clé, ISBN..."
+        required
+      >
+      <div class="input-group-append">
+        <button type="submit" class="btn btn-primary search-form-button" aria-label="Rechercher">
+          <span class="fa fa-search"></span>
+        </button>
       </div>
-    </form>
-  {% else %}
-    <p>
+    </div>
+  </form>
+
+  {% if query %}
+    <h2 class="mt-4">
       {% if count == 0 %}
         Aucun résultat
       {% elseif count == 1 %}
@@ -51,36 +51,33 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       {% else %}
         {{ count }} résultats
       {% endif %}
-      pour &laquo; {{ query }} &raquo;
-    </p>
+    </h2>
 
-    <form>
-      <div>
-        Trier par
-        <select name="sort">
-          {% for option in sortOptions %}
-            <option
-              value="{{ option.criteria }}|{{ option.order }}"
-              {% if option.criteria == sortCriteria and option.order == sortOrder %}
-                selected
-              {% endif %}
-            >
-              {{ option.label }}
-            </option>
-          {% endfor %}
-        </select>
-      </div>
+    <form class="form-inline">
+      <label class="my-1 mr-2" for="search-results-sort">Trier par</label>
+      <select name="sort" class="custom-select my-1 mr-sm-2" id="search-results-sort">
+        {% for option in sortOptions %}
+          <option
+            value="{{ option.criteria }}|{{ option.order }}"
+            {% if option.criteria == sortCriteria and option.order == sortOrder %}
+              selected
+            {% endif %}
+          >
+            {{ option.label }}
+          </option>
+        {% endfor %}
+      </select>
 
       {% if app.currentSite.getOption("virtual_stock") != 1 %}
-        <div>
-          <input type="checkbox" value="1" id="filter-in-stock" name="in-stock" {{ inStockFilterChecked }} />
-          <label class="after" for="filter-in-stock">Articles en stock uniquement</label>
+        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+          <input type="checkbox" class="custom-control-input" id="filter-in-stock" value="1" name="in-stock" {{ inStockFilterChecked }}>
+          <label class="custom-control-label" for="filter-in-stock">Articles en stock uniquement</label>
         </div>
       {% endif %}
 
       <input type="hidden" name="q" value="{{ query }}" />
 
-      <button class="btn btn-sm btn-primary" type="submit">Actualiser</button>
+      <button type="submit" class="btn btn-primary my-1">Actualiser</button>
     </form>
 
     {% include 'AppBundle:Article:_list.html.twig' %}
