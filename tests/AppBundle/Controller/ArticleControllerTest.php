@@ -574,6 +574,53 @@ class ArticleControllerTest extends TestCase
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws \PHPUnit\Framework\MockObject\Exception
+     * @throws Exception
+     */
+    public function testSearchActionWithoutQuery()
+    {
+        // given
+        ModelFactory::createArticle(
+            title: "Résultat de recherche",
+            authors: [ModelFactory::createContributor()],
+        );
+        $controller = new ArticleController();
+        $request = new Request();
+        $currentSite = $this->createMock(CurrentSite::class);
+        $queryParams = Mockery::mock(QueryParamsService::class);
+        $queryParams->shouldReceive("parse")->andReturn();
+        $queryParams->shouldReceive("get")->with("q")->andReturn("");
+        $queryParams->shouldReceive("get")->with("in-stock")->andReturn("0");
+        $queryParams->shouldReceive("get")->with("sort")->andReturn("pubdate|desc");
+        $queryParams->shouldReceive("get")->with("p")->andReturn("0");
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->searchAction(
+            $request,
+            $currentSite,
+            $queryParams,
+            $templateService
+        );
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "returns HTTP 200"
+        );
+        $this->assertStringContainsString(
+            "Rechercher",
+            $response->getContent(),
+            "return search button"
+        );
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testSearchAction()
     {
