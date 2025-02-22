@@ -189,6 +189,11 @@ XML
             publicationDate: new DateTime("2013-05-22 21:59:00"),
             summary: "<p>Ce livre paraît aujourd'hui.</p>",
         );
+        ModelFactory::createArticle(
+            title: "Un article sans quatrième",
+            publicationDate: new DateTime("2013-05-22 21:58:00"),
+            summary: ""
+        );
         ModelFactory::createArticle(title: "Un article à paraître", publicationDate: new DateTime("+1 day"));
 
         $currentSite = new CurrentSite($site);

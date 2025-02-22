@@ -105,6 +105,10 @@ class FeedController extends Controller
 
         /** @var Article $article */
         foreach ($articles as $article) {
+            if (empty($article->getSummary())) {
+                continue;
+            }
+
             $entry = $feed->createEntry();
             $entry->setTitle($article->getTitle());
             $entry->setLink($urlGenerator->generate("article_show", ["slug" => $article->getUrl()], UrlGeneratorInterface::ABSOLUTE_URL));
