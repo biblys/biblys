@@ -61,30 +61,28 @@ class UserControllerTest extends TestCase
      * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
+     * @throws Exception
      */
     public function testIndexAction()
     {
         // given
         $controller = new UserController();
-        $site = ModelFactory::createSite();
-        $users = [
-            ModelFactory::createUser(site: $site),
-            ModelFactory::createUser(site: $site),
-        ];
-        $currentSite = new CurrentSite($site);
+
+        ModelFactory::createUser(email: "an-email-user@example.org");
+        $ssoUser = ModelFactory::createUser(email: "a-sso-user@example.org");
+        $authMethod = ModelFactory::createAuthenticationMethod(user: $ssoUser);
+
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive('authAdmin')->andReturns();
-        $templateService = Mockery::mock(TemplateService::class);
-        $templateService->shouldReceive("renderResponse")
-            ->with("AppBundle:User:index.html.twig", [
-                "users" => $users
-            ])->andReturn(new Response());
+        $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->indexAction($currentSite, $currentUser, $templateService);
+        $response = $controller->indexAction($currentUser, $templateService);
 
         // then
         $this->assertEquals("200", $response->getStatusCode());
+        $this->assertStringContainsString("an-email-user@example.org", $response->getContent());
+        $this->assertStringContainsString("axys", $response->getContent());
     }
 
     /**
