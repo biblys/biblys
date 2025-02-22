@@ -35,6 +35,7 @@ use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use DateTime;
 use Exception;
+use InvalidDateFormatException;
 use Mockery;
 use Model\SessionQuery;
 use Model\UserQuery;
@@ -1155,6 +1156,42 @@ class UserControllerTest extends TestCase
 
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals("/user/account", $response->getTargetUrl());
+    }
+
+    /* UserController->ordersAction */
+
+    /**
+     * @throws InvalidDateFormatException
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testOrdersAction()
+    {
+        // given
+        $controller = new UserController();
+
+        $user = ModelFactory::createUser();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authUser")->andReturns();
+        $currentUser->shouldReceive("getUser")->andReturn($user);
+        $templateService = Helpers::getTemplateService();
+
+        $order = ModelFactory::createOrder(user: $user);
+
+        // when
+        $response = $controller->ordersAction($currentUser, $templateService);
+
+        // then
+        $this->assertEquals(
+            "200",
+            $response->getStatusCode(),
+            "responds with status code 200"
+        );
+        $this->assertStringContainsString(
+            $order->getId(),
+            $response->getContent(),
+            "displays the order"
+        );
     }
 
     /* UserController->libraryAction */

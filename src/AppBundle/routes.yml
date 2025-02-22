@@ -807,6 +807,11 @@ user_update_email:
   path: /user/update-email
   controller: AppBundle\Controller\UserController::updateEmailAction
 
+user_orders:
+  methods: GET
+  path: /user/orders
+  controller: AppBundle\Controller\UserController::ordersAction
+
 user_library:
   methods: GET
   path: /user/library

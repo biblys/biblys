@@ -37,6 +37,7 @@ use Framework\Controller;
 use Model\AuthenticationMethodQuery;
 use Model\File;
 use Model\FileQuery;
+use Model\OrderQuery;
 use Model\Session;
 use Model\StockQuery;
 use Model\User;
@@ -485,6 +486,27 @@ class UserController extends Controller
 
         $userAccountUrl = $urlGenerator->generate("user_account");
         return new RedirectResponse($userAccountUrl);
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function ordersAction(
+        CurrentUser $currentUser,
+        TemplateService $templateService,
+    ): Response
+    {
+        $currentUser->authUser();
+
+        $orders = OrderQuery::create()
+            ->filterByType('web')
+            ->filterByUserId($currentUser->getUser()->getId())
+            ->orderByInsert('desc')
+            ->find();
+
+        return $templateService->renderResponse("AppBundle:User:orders.html.twig", ["orders" => $orders]);
     }
 
     /**
