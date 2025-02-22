@@ -16,6 +16,22 @@
 - Les billets de blog avec une date de parution dans le futur n'apparaissent
   plus dans le flux RSS.
 
+### Instructions de mise à jour
+
+#### Font Awesome 6
+
+Biblys utilise désormais la version de Font Awesome 6 contre la version 4
+auparavant. Si votre thème utilise des icônes Font Awesome 4, vous devrez en
+mettre à jour certaines en suivant les instructions de la page :
+https://docs.fontawesome.com/web/setup/upgrade/upgrade-from-v4.
+
+Notamment, remplacer :
+- `fa fa-facebook-square` par `fa-brands fa-square-facebook`
+- `fa fa-twitter-square` par `fa-brands fa-square-x-twitter`
+- `fa fa-instagram` par `fa-brands fa-square-instagram`
+- `fa fa-envelope` par `fa-solid fa-square-envelope`
+- `fa fa-rss-square` par `fa-solid fa-square-rss`
+
 ## 3.3.1 (19 février 2025)
 
 ### Corrections
