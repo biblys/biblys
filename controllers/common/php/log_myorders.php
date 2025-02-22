@@ -18,22 +18,19 @@
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
+use Model\OrderQuery;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @throws InvalidDateFormatException
- */
-return function(Request $request, Config $config, CurrentUser $currentUserService): Response
+return function(Request $request, Config $config, CurrentUser $currentUser): Response
 {
-    $om = new OrderManager();
-    $orders = $om->getAll([
-        'order_type' => 'web',
-        'user_id' => $currentUserService->getUser()->getId(),
-    ], [
-        'order' => 'order_insert',
-        'sort' => 'desc'
-    ]);
+    $currentUser->authUser();
+
+    $orders = OrderQuery::create()
+        ->filterByType('web')
+        ->filterByUserId($currentUser->getUser()->getId())
+        ->orderByInsert('desc')
+        ->find();
 
     $content = '
         <h1><i class="fa fa-box"></i> Mes commandes</h1>
@@ -50,39 +47,37 @@ return function(Request $request, Config $config, CurrentUser $currentUserServic
             <tbody>
     ';
 
+    /** @var \Model\Order $order */
     foreach ($orders as $order) {
-        $o = $order;
 
-        if ($o["order_payment_date"]) {
-            $o["order_payment"] = _date($o["order_payment_date"], 'd/m/Y');
-        } else {
-            $o["order_payment"] = '<a href="/payment/' . $o["order_url"] . '">En attente</a>';
+        $paymentStatus = "<a href=\"/payment/{$order->getSlug()}\">En attente</a>";
+        if ($order->getPaymentDate()) {
+            $paymentStatus = _date($order->getPaymentDate(), 'd/m/Y');
         }
 
-        if ($o["order_shipping_date"]) {
-            $o["order_shipping_status"] = _date($o["order_shipping_date"], 'd/m/Y');
-        } else {
-            $o["order_shipping_status"] = "En attente";
+        $shippingStatus = "En attente";
+        if ($order->getShippingDate()) {
+            $shippingStatus = _date($order->getShippingDate(), 'd/m/Y');
         }
 
-        if ($o["order_cancel_date"]) {
+        if ($order->getCancelDate()) {
             $content .= '
-            <tr>
-                <td class="center"><a href="/order/' . $o["order_url"] . '">' . $o["order_id"] . '</a></td>
-                <td class="center">' . _date($o["order_insert"], 'd/m/Y') . '</td>
-                <td class="center" colspan=3>Annulée le ' . _date($o["order_cancel_date"], 'd/m/Y') . '</td>
-            </tr>
-        ';
+                <tr>
+                    <td class="center"><a href="/order/' . $order->getSlug() . '">' . $order->getId() . '</a></td>
+                    <td class="center">' . _date($order->getCreatedAt(), 'd/m/Y') . '</td>
+                    <td class="center" colspan=3>Annulée le ' . _date($order->getCancelDate(), 'd/m/Y') . '</td>
+                </tr>
+            ';
         } else {
             $content .= '
-            <tr>
-                <td class="center"><a href="/order/' . $o["order_url"] . '">' . $o["order_id"] . '</a></td>
-                <td class="center">' . _date($o["order_insert"], 'd/m/Y') . '</td>
-                <td class="center">' . $o["order_payment"] . '</td>
-                <td class="center">' . $o["order_shipping_status"] . '</td>
-                <td class="center">' . price($o["order_amount"] + $o["order_shipping"], 'EUR') . '</td>
-            </tr>
-        ';
+                <tr>
+                    <td class="center"><a href="/order/' . $order->getSlug() . '">' . $order->getId() . '</a></td>
+                    <td class="center">' . _date($order->getCreatedAt(), 'd/m/Y') . '</td>
+                    <td class="center">' . $paymentStatus . '</td>
+                    <td class="center">' . $shippingStatus . '</td>
+                    <td class="center">' . currency($order->getTotalAmountWithShipping(), true) . '</td>
+                </tr>
+            ';
         }
     }
 
