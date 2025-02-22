@@ -87,6 +87,7 @@ class ModelFactory
         bool            $isPriceEditable = false,
         ?DateTime       $publicationDate = null,
         int             $availabilityDilicom = 1,
+        string          $summary = "<p>Quatrième de couverture</p>",
     ): Article
     {
         $alphabeticalTitle = (new StringService($title))->alphabetize();
@@ -104,6 +105,7 @@ class ModelFactory
         $article->setPriceEditable($isPriceEditable);
         $article->setPubdate($publicationDate);
         $article->setAvailabilityDilicom($availabilityDilicom);
+        $article->setSummary($summary);
 
         $publisher = $publisher ?? self::createPublisher();
         $article->setPublisherId($publisher->getId());

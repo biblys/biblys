@@ -4,10 +4,17 @@
 
 ### Améliorations
 
+- Un flux RSS des articles du catalogue est désormais disponible à l'adresse
+  `/feeds/catalogue.rss.xml`.
 - La déclaration des urls canoniques des pages a été améliorée.
 - Un lien d'accès à la page de recherche a été ajouté dans le menu de navigation
   rapide.
 - La présentation des options sur la page de recherche a été améliorée.
+
+### Corrections
+
+- Les billets de blog avec une date de parution dans le futur n'apparaissent
+  plus dans le flux RSS.
 
 ## 3.3.2 (26 février 2025)
 
