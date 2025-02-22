@@ -1112,7 +1112,7 @@ return function (
             <legend>Suppression</legend>
             <p class="text-center">
                 <a class="btn btn-danger" href=' . $urlGenerator->generate('article_delete', ['id' => $articleEntity->get('id')]) . '>
-                    <span class="fa fa-trash-o"></span>
+                    <span class="fa fa-trash-can"></span>
                     Supprimer définitivement cet article
                 </a>
             </p>

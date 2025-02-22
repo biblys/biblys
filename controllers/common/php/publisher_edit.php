@@ -475,7 +475,7 @@ return function (
             <li>
                 <a href="/pages/publisher_edit?id=' . $publisherEntity->get('id') . '&del_supplier=' . $supplier->get('id') . '" 
                     data-confirm="Voulez-vous vraiment SUPPRIMER le lien entre l\'éditeur ' . $publisherEntity->get('name') . ' et le fournisseur ' . $supplier->get('name') . '">
-                    <span class="fa fa-trash-o"></span> 
+                    <span class="fa fa-trash-can"></span> 
                     ' . $supplier->get('name') . '
                 </a>
             </li>

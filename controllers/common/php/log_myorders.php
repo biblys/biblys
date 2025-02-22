@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 $om = new OrderManager();
 
-$content = "<h2>Mes commandes</h2>";
+$content = '<h1><i class="fa fa-box"></i> Mes commandes</h1>';
 
 $request = Request::createFromGlobals();
 $config = Config::load();
@@ -41,7 +41,7 @@ $content .= '
     <table class="table">
         <thead>
             <tr class="center">
-                <th>Ref.</th>
+                <th>Numéro</th>
                 <th>Date</th>
                 <th>Paiement</th>
                 <th>Expédition</th>

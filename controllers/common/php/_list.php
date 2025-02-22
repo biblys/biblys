@@ -332,7 +332,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     }
 
     // Wishlist button
-    $wish_icon = 'fa-heart-o';
+    $wish_icon = 'fa-heart';
     $wish_text = 'Ajouter <em>'.$x['article_title'].'</em> à vos envies';
     if ($currentUser->hasArticleInWishlist($articleModel)) {
         $wish_icon = 'fa-heart red';
@@ -347,7 +347,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     ';
 
     // Alert button
-    $alert_icon = 'fa-bell-o';
+    $alert_icon = 'fa-bell';
     $alert_text = 'Créer une alerte pour <em>'.$x['article_title'].'</em>';
     if ($currentUser->hasAlertForArticle($articleModel)) {
         $alert_icon = 'fa-bell orange';

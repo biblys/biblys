@@ -21,13 +21,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% endblock %}
 
 {% block main %}
-  <h1>Invitations de téléchargement</h1>
+  <h1>
+    <i class="fa-solid fa-paper-plane"></i>
+    Invitations de téléchargement
+  </h1>
 
-  <p>
+  <div class="btn-group my-4">
     <a href="{{ path('invitation_new') }}" class="btn btn-primary">
       <span class="fa fa-plus-circle"></span>
       Créer
     </a>
+  </div>
 
   <table class="table table-striped">
     <thead>
@@ -57,7 +61,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             {% if invitation.isConsumed %}
               <span class="fa fa-check" title="Utilisée le {{ invitation.consumedAt|date('d/m/Y') }}"></span>
             {% elseif invitation.hasExpired %}
-              <span class="fa fa-clock-o" title="Expirée le {{ invitation.expiresAt|date('d/m/Y') }}"></span>
+              <span class="fa fa-clock" title="Expirée le {{ invitation.expiresAt|date('d/m/Y') }}"></span>
             {% else %}
               <span class="fa fa-hourglass" title="En attente"></span>
             {% endif %}
@@ -79,7 +83,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                   <span class="fa fa-copy"></span>
                 </button>
                 <button title="Supprimer l'invitation" type="submit" class="btn btn-sm btn-danger">
-                  <span class="fa fa-trash"></span>
+                  <span class="fa fa-trash-can"></span>
                 </button>
               </div>
             </form>

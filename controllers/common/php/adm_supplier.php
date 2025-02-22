@@ -121,8 +121,8 @@ $_ECHO .='
 			</p>
 		</fieldset>
 		<fieldset class="center">
-			<button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Enregistrer le fournisseur</button>
-			<a href="/pages/adm_supplier?id='.$supplier->get('id').'&delete" class="btn btn-danger" data-confirm="Voulez-vous vraiment SUPPRIMER le fournisseur '.$supplier->get('name').' ?"><i class="fa fa-trash-o"></i> Supprimer</a>
+			<button type="submit" class="btn btn-primary"><i class="fa fa-floppy-disk"></i> Enregistrer le fournisseur</button>
+			<a href="/pages/adm_supplier?id='.$supplier->get('id').'&delete" class="btn btn-danger" data-confirm="Voulez-vous vraiment SUPPRIMER le fournisseur '.$supplier->get('name').' ?"><i class="fa fa-trash-can"></i> Supprimer</a>
 		</fieldset>
 	</form>
 ';

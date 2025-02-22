@@ -418,7 +418,7 @@ return function (
                         ' . ($soldButton ?? null) . '
                         ' . ($returnButton ?? null) . '
                         ' . $lostButton . '
-                        <span class="fa fa-trash fa-lg deleteStock pointer"
+                        <span class="fa fa-trash-can fa-lg deleteStock pointer"
                             aria-label="Supprimer"
                             data-stock_id="' . $x['stock_id'] . '"
                             data-article_id="' . $x['article_id'] . '"
