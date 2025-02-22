@@ -23,6 +23,8 @@ use Biblys\Service\CurrentUrlService;
 use DateTime;
 use Framework\Controller;
 use Laminas\Feed\Writer\Feed;
+use Model\Article;
+use Model\ArticleQuery;
 use Model\Post;
 use Model\PostQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -66,6 +68,44 @@ class FeedController extends Controller
             $entry->setLink($urlGenerator->generate("post_show", ["slug" => $post->getUrl()], UrlGeneratorInterface::ABSOLUTE_URL));
             $entry->setDateCreated($post->getDate());
             $entry->setContent($post->getContent());
+            $feed->addEntry($entry);
+        }
+
+        return new Response($feed->export("rss"), 200, ["Content-Type" => "application/rss+xml"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function catalogAction(
+        CurrentSite $currentSite,
+        CurrentUrlService $currentUrl,
+        UrlGenerator $urlGenerator,
+    ): Response
+    {
+        $feed = new Feed();
+        $feed->setTitle($currentSite->getTitle());
+        $feed->setDescription("Les derniers articles du catalogue");
+        $feed->setLink("https://{$currentSite->getSite()->getDomain()}");
+        $feed->setFeedLink($currentUrl->getAbsoluteUrl(), "rss");
+
+        $articles = ArticleQuery::create()
+            ->filterByPubdate(new DateTime("now"), Criteria::LESS_EQUAL)
+            ->orderByPubdate(Criteria::DESC)
+            ->limit(15)
+            ->find();
+
+        if ($articles->count() > 0) {
+            $feed->setDateModified($articles->getFirst()->getPubdate());
+        }
+
+        /** @var Article $article */
+        foreach ($articles as $article) {
+            $entry = $feed->createEntry();
+            $entry->setTitle($article->getTitle());
+            $entry->setLink($urlGenerator->generate("article_show", ["slug" => $article->getUrl()], UrlGeneratorInterface::ABSOLUTE_URL));
+            $entry->setDateCreated($article->getPubdate());
+            $entry->setContent($article->getSummary());
             $feed->addEntry($entry);
         }
 
