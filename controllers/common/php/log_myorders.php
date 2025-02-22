@@ -21,75 +21,75 @@ use Biblys\Service\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-$om = new OrderManager();
+/**
+ * @throws InvalidDateFormatException
+ */
+return function(Request $request, Config $config, CurrentUser $currentUserService): Response
+{
+    $om = new OrderManager();
+    $orders = $om->getAll([
+        'order_type' => 'web',
+        'user_id' => $currentUserService->getUser()->getId(),
+    ], [
+        'order' => 'order_insert',
+        'sort' => 'desc'
+    ]);
 
-$content = '<h1><i class="fa fa-box"></i> Mes commandes</h1>';
+    $content = '
+        <h1><i class="fa fa-box"></i> Mes commandes</h1>
+        <table class="table mt-4">
+            <thead>
+                <tr class="center">
+                    <th>Numéro</th>
+                    <th>Date</th>
+                    <th>Paiement</th>
+                    <th>Expédition</th>
+                    <th>Montant</th>
+                </tr>
+            </thead>
+            <tbody>
+    ';
 
-$request = Request::createFromGlobals();
-$config = Config::load();
-$currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
+    foreach ($orders as $order) {
+        $o = $order;
 
-$orders = $om->getAll([
-    'order_type' => 'web',
-    'user_id' => $currentUserService->getUser()->getId(),
-], [
-    'order' => 'order_insert',
-    'sort' => 'desc'
-]);
+        if ($o["order_payment_date"]) {
+            $o["order_payment"] = _date($o["order_payment_date"], 'd/m/Y');
+        } else {
+            $o["order_payment"] = '<a href="/payment/' . $o["order_url"] . '">En attente</a>';
+        }
 
-$content .= '
-    <table class="table">
-        <thead>
-            <tr class="center">
-                <th>Numéro</th>
-                <th>Date</th>
-                <th>Paiement</th>
-                <th>Expédition</th>
-                <th>Montant</th>
-            </tr>
-        </thead>
-        <tbody>
-';
+        if ($o["order_shipping_date"]) {
+            $o["order_shipping_status"] = _date($o["order_shipping_date"], 'd/m/Y');
+        } else {
+            $o["order_shipping_status"] = "En attente";
+        }
 
-foreach ($orders as $order) {
-    $o = $order;
-
-    if ($o["order_payment_date"]) {
-        $o["order_payment"] = _date($o["order_payment_date"], 'd/m/Y');
-    } else {
-        $o["order_payment"] = '<a href="/payment/'.$o["order_url"].'">En attente</a>';
-    }
-    
-    if ($o["order_shipping_date"]) {
-        $o["order_shipping_status"] = _date($o["order_shipping_date"], 'd/m/Y');
-    } else {
-        $o["order_shipping_status"] = "En attente";
-    }
-    
-    if ($o["order_cancel_date"]) {
-        $content .= '
+        if ($o["order_cancel_date"]) {
+            $content .= '
             <tr>
-                <td class="center"><a href="/order/'.$o["order_url"].'">'.$o["order_id"].'</a></td>
-                <td class="center">'._date($o["order_insert"], 'd/m/Y').'</td>
-                <td class="center" colspan=3>Annulée le '._date($o["order_cancel_date"], 'd/m/Y').'</td>
+                <td class="center"><a href="/order/' . $o["order_url"] . '">' . $o["order_id"] . '</a></td>
+                <td class="center">' . _date($o["order_insert"], 'd/m/Y') . '</td>
+                <td class="center" colspan=3>Annulée le ' . _date($o["order_cancel_date"], 'd/m/Y') . '</td>
             </tr>
         ';
-    } else {
-        $content .= '
+        } else {
+            $content .= '
             <tr>
-                <td class="center"><a href="/order/'.$o["order_url"].'">'.$o["order_id"].'</a></td>
-                <td class="center">'._date($o["order_insert"], 'd/m/Y').'</td>
-                <td class="center">'.$o["order_payment"].'</td>
-                <td class="center">'.$o["order_shipping_status"].'</td>
-                <td class="center">'.price($o["order_amount"]+$o["order_shipping"], 'EUR').'</td>
+                <td class="center"><a href="/order/' . $o["order_url"] . '">' . $o["order_id"] . '</a></td>
+                <td class="center">' . _date($o["order_insert"], 'd/m/Y') . '</td>
+                <td class="center">' . $o["order_payment"] . '</td>
+                <td class="center">' . $o["order_shipping_status"] . '</td>
+                <td class="center">' . price($o["order_amount"] + $o["order_shipping"], 'EUR') . '</td>
             </tr>
         ';
+        }
     }
-}
 
-$content .= '
-        </tbody>
-    </table>
-';
+    $content .= '
+            </tbody>
+        </table>
+    ';
 
-return new Response($content);
+    return new Response($content);
+};
