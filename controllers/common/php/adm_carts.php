@@ -63,7 +63,7 @@ return function (Request $request, Session $session, CurrentSite $currentSite): 
             class="btn btn-warning"
             data-confirm="Voulez-vous vraiment vider les paniers de clients inconnus antérieurs au ' . _date($datelimite, 'd/m/Y H:i') . ' ?"
         >
-            <i class="fa fa-trash-o"></i> Vider les paniers obsolètes
+            <i class="fa fa-trash-can"></i> Vider les paniers obsolètes
         </a>
     </p><br>
 
@@ -140,7 +140,7 @@ return function (Request $request, Session $session, CurrentSite $currentSite): 
                     class="btn btn-danger btn-sm"
                     data-confirm="Voulez-vous vraiment vider le panier n° ' . $c["cart_id"] . ' ?"
                 >
-                    <i class="fa fa-trash-o"> Vider</i>
+                    <i class="fa fa-trash-can"> Vider</i>
                 </a>
             </td>
         <tr>

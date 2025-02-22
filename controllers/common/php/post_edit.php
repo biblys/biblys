@@ -189,7 +189,7 @@ return function (
     }
 
     $content .= '
-        <h1><i class="fa fa-newspaper-o"></i> ' . $pageTitle . '</h1>
+        <h1><i class="fa fa-newspaper"></i> ' . $pageTitle . '</h1>
     
         <form method="post" class="check fieldset" enctype="multipart/form-data">
             <fieldset>
@@ -290,7 +290,7 @@ return function (
         $content .= '
             <a class="btn btn-danger" data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?"
                 href="' . $urlGenerator->generate('post_delete', ['id' => $postEntity->get('id')]) . '">
-                <span class="fa fa-trash-o"></span>
+                <span class="fa fa-trash-can"></span>
                 Supprimer le billet
             </a>
         ';

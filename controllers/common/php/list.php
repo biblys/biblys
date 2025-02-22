@@ -173,7 +173,7 @@ return function (
                         <td class="text-right">' . price($a['total'], 'EUR') . '</td>
                         <td class="center" style="width: 75px;">
                             <a href="/pages/adm_stock?id=' . $a['stock_id'] . '" title="Modifier l\'exemplaire"><i class="fa fa-lg fa-edit black"></i></a>
-                            <i class="fa fa-trash-o fa-lg" class="pointer" title="Retirer de la liste" onClick="delFromList(' . $a['link_id'] . ')"></i>
+                            <i class="fa fa-trash-can fa-lg" class="pointer" title="Retirer de la liste" onClick="delFromList(' . $a['link_id'] . ')"></i>
                         </td>
                     </tr>
                 ';
@@ -214,8 +214,8 @@ return function (
                         <button class="btn btn-primary" type="submit" title="Télécharger la liste au format CSV"><i class="fa fa-cloud-download"></i> télécharger</button>
                         <a href="/list/' . $list->get('url') . '?regroup=1" class="btn btn-info" title="Regrouper les exemplaire par article"><i class="fa fa-compress"></i> regrouper</a>
                         <a href="/pages/adm_stock_bulk?list_id=' . $list->get('id') . '" class="btn btn-success" title="Éditer chaque exemplaire de la liste"><i class="fa fa-edit"></i> éditer tout</a>
-                        <a href="/list/' . $list->get('url') . '?action=return" class="btn btn-warning" data-confirm="Voulez-vous vraiment RETOURNER tous les exemplaires de la liste ?" title="Retourner tous les exemplaires de la liste"><i class="fa fa-hand-o-left"></i> retourner</a>
-                        <a href="/list/' . $list->get('url') . '?action=delete" class="btn btn-danger" data-confirm="Voulez-vous vraiment VIDER et SUPPRIMER cette liste ?" title="Supprimer la liste"><i class="fa fa-trash-o"></i> supprimer</a>
+                        <a href="/list/' . $list->get('url') . '?action=return" class="btn btn-warning" data-confirm="Voulez-vous vraiment RETOURNER tous les exemplaires de la liste ?" title="Retourner tous les exemplaires de la liste"><i class="fa fa-hand-point-left"></i> retourner</a>
+                        <a href="/list/' . $list->get('url') . '?action=delete" class="btn btn-danger" data-confirm="Voulez-vous vraiment VIDER et SUPPRIMER cette liste ?" title="Supprimer la liste"><i class="fa fa-trash-can"></i> supprimer</a>
                     </fieldset>
                 </form>
                 <br>
@@ -252,8 +252,8 @@ return function (
                         <button class="btn btn-primary" type="submit" title="Télécharger la liste au format CSV"><i class="fa fa-cloud-download"></i> télécharger</button>
                         <a href="/list/' . $list->get('url') . '?regroup=1" class="btn btn-info" title="Regrouper les exemplaire par article"><i class="fa fa-compress"></i> regrouper</a>
                         <a href="/pages/adm_stock_bulk?list_id=' . $list->get('id') . '" class="btn btn-success" title="Éditer chaque exemplaire de la liste"><i class="fa fa-edit"></i> éditer tout</a>
-                        <a href="/list/' . $list->get('url') . '?action=return" class="btn btn-warning" data-confirm="Voulez-vous vraiment RETOURNER tous les exemplaires de la liste ?" title="Retourner tous les exemplaires de la liste"><i class="fa fa-hand-o-left"></i> retourner</a>
-                        <a href="/list/' . $list->get('url') . '?action=delete" class="btn btn-danger" data-confirm="Voulez-vous vraiment VIDER et SUPPRIMER cette liste ?" title="Supprimer la liste"><i class="fa fa-trash-o"></i> supprimer</a>
+                        <a href="/list/' . $list->get('url') . '?action=return" class="btn btn-warning" data-confirm="Voulez-vous vraiment RETOURNER tous les exemplaires de la liste ?" title="Retourner tous les exemplaires de la liste"><i class="fa fa-hand-point-left"></i> retourner</a>
+                        <a href="/list/' . $list->get('url') . '?action=delete" class="btn btn-danger" data-confirm="Voulez-vous vraiment VIDER et SUPPRIMER cette liste ?" title="Supprimer la liste"><i class="fa fa-trash-can"></i> supprimer</a>
                     </fieldset>
                 </form>
             ';

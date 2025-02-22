@@ -97,7 +97,7 @@ while($p = $posts->fetch(PDO::FETCH_ASSOC)) {
                     <span class="fa fa-edit fa-lg"></span>
                 </a>
                 <a href="'.\Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('post_delete', ['id' => $p['post_id']]).'" title="Supprimer" data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?">
-                    <span class="fa fa-trash-o fa-lg">
+                    <span class="fa fa-trash-can fa-lg">
                     </span>
                 </a>
             </td>
@@ -107,10 +107,10 @@ while($p = $posts->fetch(PDO::FETCH_ASSOC)) {
 
 $request->attributes->set("page_title", "Gestion des billets");
 $content = '
-    <h1><span class="fa fa-newspaper-o"></span> Gestion des billets</h1>
+    <h1><span class="fa fa-newspaper"></span> Gestion des billets</h1>
 
     <p class="buttonset">
-        <a href="/pages/'.$rank.'post" class="btn btn-primary"><i class="fa fa-newspaper-o"></i> Nouveau billet</a></a>
+        <a href="/pages/'.$rank.'post" class="btn btn-primary"><i class="fa fa-newspaper"></i> Nouveau billet</a></a>
         '.$the_categories.'
     </p>
 

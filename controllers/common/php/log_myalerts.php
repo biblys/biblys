@@ -124,7 +124,11 @@ return function (
             <td class="right">' . $a["alert_pub_year"] . '</td>
             <td class="right">' . $a["price"] . '</td>
             <td class="center">' . $a["alert_condition"] . '</td>
-            <td class="center"><a href="?del=' . $a["alert_id"] . '"><img src="/common/icons/delete_16.png" alt="Supprimer" title="Supprimer cette alerte" data-confirm="Voulez-vous vraiment SUPPRIMER cette alerte ?" /></a></td>
+            <td class="center">
+              <a class="btn btn-sm btn-danger" href="?del=' . $a["alert_id"] . '" title="Supprimer cette alerte" data-confirm="Voulez-vous vraiment SUPPRIMER cette alerte ?">
+                <i class="fa-regular fa-trash-can"></i>
+              </a>
+          </td>
         </tr>
     ';
 
@@ -132,7 +136,7 @@ return function (
 
     $content .= '
     <h2>
-        <span class="fa fa-bell-o"></span>
+        <i class="fa-regular fa-bell"></i>
         Mes alertes
     </h2>
 

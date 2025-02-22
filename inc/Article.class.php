@@ -898,7 +898,7 @@ class Article extends Entity
     {
         $text = $options['text'] ?? 'Ajouter à vos envies';
 
-        $button = '<i class="fa fa-heart-o"></i>&nbsp;' . $text;
+        $button = '<i class="fa-regular fa-heart"></i>&nbsp;' . $text;
         $classes = ' btn btn-outline-secondary';
 
 

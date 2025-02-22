@@ -79,7 +79,7 @@ return function (
                             data-confirm="Voulez-vous vraiment SUPPRIMER l\'accès administrateur de ' . $user->getEmail() . '"
                         >
                             <input type="hidden" name="user_id" value="' . $user->getId() . '">
-                            <span class="fa fa-trash-o"></span>
+                            <span class="fa fa-trash-can"></span>
                         </button>
                     </form>
                 </td>

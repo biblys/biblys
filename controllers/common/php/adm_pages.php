@@ -30,7 +30,7 @@ $content = null;
 $content .= '
     <h1><span class="fa fa-file"></span> Gestion des pages</h1>
 
-    <p class="buttonset"><a href="/pages/adm_page" class="btn btn-primary"><i class="fa fa-file-o"></i> Nouvelle page</a></p>
+    <p class="buttonset"><a href="/pages/adm_page" class="btn btn-primary"><i class="fa fa-file"></i> Nouvelle page</a></p>
 
     <table class="table">
 
@@ -54,7 +54,7 @@ foreach ($pages as $page) {
             <td><a href="'.$staticPageUrl.'">'.$p["page_title"].'</a></td>
             <td class="right nowrap">
                 <a href="/pages/adm_page?id='.$p["page_id"].'" class="button" title="Éditer"><i class="fa fa-edit fa-lg"></i></a>
-                <a href="/pages/adm_page?del='.$p["page_id"].'" class="button" title="Supprimer" data-confirm="Êtes-vous sûr de vouloir supprimer la page '.$p["page_title"].' ?"><i class="fa fa-trash-o fa-lg"></i></a>
+                <a href="/pages/adm_page?del='.$p["page_id"].'" class="button" title="Supprimer" data-confirm="Êtes-vous sûr de vouloir supprimer la page '.$p["page_title"].' ?"><i class="fa fa-trash-can fa-lg"></i></a>
             </td>
         </tr>
     ';

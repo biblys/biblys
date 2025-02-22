@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 if (LegacyCodeHelper::getGlobalVisitor()->isAdmin() || LegacyCodeHelper::getGlobalVisitor()->isPublisher() || LegacyCodeHelper::getGlobalVisitor()->isBookshop() || LegacyCodeHelper::getGlobalVisitor()->isLibrary()) $mode = 'admin';
 else trigger_error('Vous n\'avez pas le droit d\'accéder à cette page.', E_USER_ERROR);
 
-$buttons = '<button type="submit" form="event" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Enregistrer</button>';
+$buttons = '<button type="submit" form="event" class="btn btn-primary"><i class="fa fa-floppy-disk"></i> Enregistrer</button>';
 
 $em = new EventManager();
 
@@ -46,7 +46,7 @@ if (isset($_GET['id']))
     if ($e = $em->get(array('event_id' => $_GET['id'], 'site_id' => $globalSite->get("id"))))
     {
         $pageTitle = 'Modifier <a href="/evenements/'.$e['event_url'].'">'.$e['event_title'].'</a>';
-        $buttons .= ' <button type="submit" form="event" formaction="?delete" class="btn btn-danger" formnovalidate data-confirm="Voulez-vous vraiment supprimer cet évènement ?"><i class="fa fa-trash-o"></i> Supprimer</button>';
+        $buttons .= ' <button type="submit" form="event" formaction="?delete" class="btn btn-danger" formnovalidate data-confirm="Voulez-vous vraiment supprimer cet évènement ?"><i class="fa fa-trash-can"></i> Supprimer</button>';
     }
     else trigger_error('Cet évènement n\'existe pas.', E_USER_ERROR);
 }

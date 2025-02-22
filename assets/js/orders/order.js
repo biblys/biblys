@@ -48,11 +48,11 @@ export default class Order {
 
     self.getRow = function() {
       var shippedButton =
-          '<button title="Marquer comme expédiée" data-action="shipped" class="btn btn-sm btn-success"><i class="fa fa-dropbox"></i></button>',
+          '<button title="Marquer comme expédiée" data-action="shipped" class="btn btn-sm btn-success"><i class="fa-solid fa-box"></i></button>',
         payedButton = `
           <div class="dropdown">
             <button class="btn btn-sm btn-success dropdown-toggle" title="Marquée comme payée" type="button" data-toggle="dropdown" aria-expanded="false">
-              <span class="fa fa-money"></span>
+              <span class="fa-regular fa-money-bill-1"></span>
             </button>
             <div class="dropdown-menu">
               <a class="dropdown-item pointer" data-action="payed" data-mode="card">Carte bancaire</a>
@@ -122,7 +122,7 @@ export default class Order {
           '<td>' +
           (self.shipped ? formatDate(self.shipped_at, 'short') : shippedButton) +
           '</td>' +
-          '<td><button title="Annuler la commande" data-action="cancel" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button></td>' +
+          '<td><button title="Annuler la commande" data-action="cancel" class="btn btn-sm btn-danger"><i class="fa fa-trash-can"></i></button></td>' +
           '</tr>'
       );
 
@@ -244,7 +244,7 @@ export default class Order {
       if (self.data.cancel_date !== null) {
         self.canceled = true;
         self.canceled_at = parseMysqlDate(self.data.cancel_date);
-        self.icon = 'fa-trash-o';
+        self.icon = 'fa-trash-can';
         self.class = 'canceled';
         self.tooltip = 'Annulée';
         self.shipped = false;
@@ -292,7 +292,7 @@ export default class Order {
           self.followed_up_at = parseMysqlDate(self.data.followup_date);
           var elapsed_since_followup = diffDate(new Date(), self.followed_up_at);
           self.overdued = false;
-          self.icon = 'fa-clock-o';
+          self.icon = 'fa-clock';
           self.class = '';
           self.tooltip = 'Relancée il y a ' + elapsed_since_followup + ' jours';
         }

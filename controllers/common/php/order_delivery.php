@@ -587,7 +587,7 @@ return function (
         $content .= '
         <div class="previous-order">
             <p>
-                <span class="fa fa-lightbulb-o"></span>
+                <i class="fa-regular fa-lightbulb"></i>
                 Vous pouvez préremplir le formulaire avec les coordonnées
                 utilisées lors de votre précédente commande
                 (n°&nbsp;' . $previousOrder->get('id') . ').

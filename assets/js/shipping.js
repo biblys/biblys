@@ -150,7 +150,7 @@ export default class Shipping {
   renderDeleteIcon(range) {
     const icon = createElementFromHTML(
       `<span class="btn btn-danger btn-sm">
-        <span class="fa fa-trash pointer" aria-label="Supprimer la tranche"></span>
+        <span class="fa fa-trash-can pointer" aria-label="Supprimer la tranche"></span>
       </span>`
     );
     icon.addEventListener('click', () => this.deleteRange(range));

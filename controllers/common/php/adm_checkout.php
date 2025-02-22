@@ -288,7 +288,7 @@ return function (
             <td class="right">' . currency($shopCart->get('cart_amount') / 100) . '</td>
             <td class="center">
                 <a href="/pages/adm_checkout?cart_id=' . $shopCart->get('cart_id') . '&vacuum_cart=1" data-confirm="Voulez-vous vraiment VIDER ce panier et remettre ' . $shopCart->get('cart_count') . ' exemplaire' . s($shopCart->get('cart_count')) . ' en vente ?" title="Vider le panier et remettre ' . $shopCart->get('cart_count') . ' exemplaire' . s($shopCart->get('cart_count')) . ' en vente." class="btn btn-danger btn-sm">
-                    <i class="fa fa-trash-o"></i>
+                    <i class="fa fa-trash-can"></i>
                 </a>
             </td>
         </tr>
@@ -336,7 +336,10 @@ return function (
     }
 
     $content .= '
-    <h1><span class="fa fa-money"></span> Caisse</h1>
+    <h1>
+      <i class="fa-solid fa-cash-register"></i>
+      Caisse
+    </h1>
 
     ' . $alert . '
 

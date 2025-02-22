@@ -20,7 +20,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 
 if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin() && !LegacyCodeHelper::getGlobalVisitor()->isPublisher()) trigger_error('Vous n\'avez pas le droit d\'accéder à cette page.', E_USER_ERROR);
 
-    $buttons = '<button type="submit" form="signing" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Enregistrer</button>';
+    $buttons = '<button type="submit" form="signing" class="btn btn-primary"><i class="fa fa-floppy-disk"></i> Enregistrer</button>';
     
     $sm = new SigningManager();
     $pm = new PeopleManager();
@@ -32,7 +32,7 @@ if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin() && !LegacyCodeHelper::getGl
 		{
             if (LegacyCodeHelper::getGlobalVisitor()->isPublisher() && $s->get('publisher_id') != LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id') && !LegacyCodeHelper::getGlobalVisitor()->isAdmin()) trigger_error("Vous n'avez pas le droit de modifier cette dédicace");
             \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Modifier la dédicace');
-            $buttons .= ' <button type="submit" form="signing" formaction="?delete" class="btn btn-danger" formnovalidate data-confirm="Voulez-vous vraiment SUPPRIMER cette dédicace ?"><i class="fa fa-trash-o"></i> Supprimer</button>';
+            $buttons .= ' <button type="submit" form="signing" formaction="?delete" class="btn btn-danger" formnovalidate data-confirm="Voulez-vous vraiment SUPPRIMER cette dédicace ?"><i class="fa fa-trash-can"></i> Supprimer</button>';
 		}
 		else trigger_error('Cette dédicace n\'existe pas.', E_USER_ERROR);
 	}
