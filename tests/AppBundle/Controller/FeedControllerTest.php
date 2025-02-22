@@ -88,8 +88,9 @@ XML
         $controller = new FeedController();
         $site = ModelFactory::createSite();
 
-        ModelFactory::createPost(date: new DateTime("2019-04-28 02:42:00"));
-        ModelFactory::createPost(status: 0);
+        ModelFactory::createPost(title: "Une actualité dans le flux", date: new DateTime("2019-04-28 02:42:00"));
+        ModelFactory::createPost(title: "Une actualité non publiée", status: 0);
+        ModelFactory::createPost(title: "Une actualité du futur", date: new DateTime("+1 day"));
 
         $currentSite = new CurrentSite($site);
         $currentUrl = $this->createMock(CurrentUrlService::class);
@@ -114,7 +115,7 @@ XML
     <link>https://paronymie.fr</link>
     <atom:link rel="self" type="application/rss+xml" href="https://example.com/feed"/>
     <item>
-      <title>Une actualité</title>
+      <title>Une actualité dans le flux</title>
       <pubDate>Sun, 28 Apr 2019 02:42:00 +0000</pubDate>
       <link>https://example.com/post/1</link>
       <guid>https://example.com/post/1</guid>
