@@ -297,6 +297,10 @@ feed_blog:
   path: /feeds/blog.rss.xml
   controller: AppBundle\Controller\FeedController::blogAction
 
+feed_catalog:
+  path: /feeds/catalog.rss.xml
+  controller: AppBundle\Controller\FeedController::catalogAction
+
 # File
 
 file_download:

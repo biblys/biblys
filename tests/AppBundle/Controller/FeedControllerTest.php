@@ -22,6 +22,8 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
 use Biblys\Test\ModelFactory;
 use DateTime;
+use Model\ArticleQuery;
+use Model\BookCollectionQuery;
 use Model\PostQuery;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -32,12 +34,16 @@ require_once __DIR__ . "/../../setUp.php";
 
 class FeedControllerTest extends TestCase
 {
+    /** blog */
+
     /**
      * @throws PropelException
      */
     protected function setUp(): void
     {
         PostQuery::create()->deleteAll();
+        ArticleQuery::create()->deleteAll();
+        BookCollectionQuery::create()->deleteAll();
     }
 
     /**
@@ -120,6 +126,99 @@ XML
       <link>https://example.com/post/1</link>
       <guid>https://example.com/post/1</guid>
       <content:encoded><![CDATA[Un contenu d'actualité qui va vous étonner.]]></content:encoded>
+      <slash:comments>0</slash:comments>
+    </item>
+  </channel>
+</rss>
+
+XML
+            , $response->getContent());
+    }
+
+    /** articles */
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testArticlesActionWithoutArticles()
+    {
+        // given
+        $controller = new FeedController();
+        $site = ModelFactory::createSite();
+
+        $currentSite = new CurrentSite($site);
+        $currentUrl = $this->createMock(CurrentUrlService::class);
+        $currentUrl->method("getAbsoluteUrl")->willReturn("https://example.com/feed");
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+
+        // when
+        $response = $controller->catalogAction($currentSite, $currentUrl, $urlGenerator);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("application/rss+xml", $response->headers->get("Content-Type"));
+        $this->assertEquals(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Éditions Paronymie</title>
+    <description>Les derniers articles du catalogue</description>
+    <generator>Laminas_Feed_Writer 2 (https://getlaminas.org)</generator>
+    <link>https://paronymie.fr</link>
+    <atom:link rel="self" type="application/rss+xml" href="https://example.com/feed"/>
+  </channel>
+</rss>
+
+XML
+            , $response->getContent());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testArticlesActionWithArticles()
+    {
+        // given
+        $controller = new FeedController();
+        $site = ModelFactory::createSite();
+
+        ModelFactory::createArticle(
+            title: "Un article dans le flux",
+            publicationDate: new DateTime("2013-05-22 21:59:00"),
+            summary: "<p>Ce livre paraît aujourd'hui.</p>",
+        );
+        ModelFactory::createArticle(title: "Un article à paraître", publicationDate: new DateTime("+1 day"));
+
+        $currentSite = new CurrentSite($site);
+        $currentUrl = $this->createMock(CurrentUrlService::class);
+        $currentUrl->method("getAbsoluteUrl")->willReturn("https://example.com/feed");
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")->willReturn("https://example.com/post/1");
+
+        // when
+        $response = $controller->catalogAction($currentSite, $currentUrl, $urlGenerator);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("application/rss+xml", $response->headers->get("Content-Type"));
+        $this->assertEquals(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
+  <channel>
+    <title>Éditions Paronymie</title>
+    <description>Les derniers articles du catalogue</description>
+    <pubDate>Wed, 22 May 2013 21:59:00 +0000</pubDate>
+    <generator>Laminas_Feed_Writer 2 (https://getlaminas.org)</generator>
+    <link>https://paronymie.fr</link>
+    <atom:link rel="self" type="application/rss+xml" href="https://example.com/feed"/>
+    <item>
+      <title>Un article dans le flux</title>
+      <pubDate>Wed, 22 May 2013 21:59:00 +0000</pubDate>
+      <link>https://example.com/post/1</link>
+      <guid>https://example.com/post/1</guid>
+      <content:encoded><![CDATA[<p>Ce livre paraît aujourd'hui.</p>]]></content:encoded>
       <slash:comments>0</slash:comments>
     </item>
   </channel>
