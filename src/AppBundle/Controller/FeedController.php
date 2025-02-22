@@ -20,6 +20,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
+use DateTime;
 use Framework\Controller;
 use Laminas\Feed\Writer\Feed;
 use Model\Post;
@@ -43,6 +44,7 @@ class FeedController extends Controller
     {
         $posts = PostQuery::create()
             ->filterByStatus(1)
+            ->filterByDate(new DateTime("now"), Criteria::LESS_EQUAL)
             ->orderByDate(Criteria::DESC)
             ->limit(15)
             ->find();
