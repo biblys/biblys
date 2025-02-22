@@ -1,0 +1,69 @@
+{#
+Copyright (C) 2025 Clément Latzarus
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Mes commandes
+{% endblock %}
+
+{% block main %}
+  <h1><i class="fa fa-box"></i> Mes commandes</h1>
+  <table class="table mt-4">
+    <thead>
+    <tr class="center">
+      <th>Numéro</th>
+      <th>Date</th>
+      <th>Paiement</th>
+      <th>Expédition</th>
+      <th>Montant</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for order in orders %}
+      <tr class="{% if order.cancelDate %}table-danger{% elseif not order.shippingDate %}table-info{% endif %}">
+        <td class="text-center">
+          <a href="/order/{{ order.slug }}">{{ order.id }}</a>
+        </td>
+        <td class="text-center">{{ order.createdAt|date('d/m/Y') }}</td>
+
+        {% if order.cancelDate %}
+          <td class="text-right" colspan=3>
+            Annulée le {{ order.cancelDate|date('d/m/Y') }}
+          </td>
+        {% else %}
+          <td class="center">
+            {% if order.paymentDate %}
+              {{ order.paymentDate|date('d/m/Y') }}
+            {% else %}
+              En attente
+            {% endif %}
+          </td>
+          <td class="center">
+            {% if order.shippingDate %}
+              {{ order.shippingDate|date('d/m/Y') }}
+            {% else %}
+              En attente
+            {% endif %}
+          </td>
+          <td class="center">{{ order.totalAmountWithShipping|currency(true)|raw }}</td>
+        {% endif %}
+
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
