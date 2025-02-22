@@ -208,15 +208,15 @@ function _displayMediaFile(string $getDir, CurrentSite $currentSite, string $fil
         
         <ol class="breadcrumb">
           <li>
-            <span class="fa fa-folder-o"></span> 
+            <span class="fa fa-folder"></span> 
             <a href="/pages/adm_media?CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">media</a>
           </li>
           <li>
-            <span class="fa fa-folder-open-o"></span>
+            <span class="fa fa-folder-open"></span>
             <a href="/pages/adm_media?dir=' . $getDir . '&CKEditorFuncNum=' . $CKEditorFuncNum . '">' . $getDir . '</a>
           </li>
           <li class="active">
-            <span class="fa fa-file-o"></span> ' . $getFile . '
+            <span class="fa fa-file"></span> ' . $getFile . '
           </li>
         </ol>       
     ';
@@ -296,11 +296,11 @@ function _displayMediaDirectory(CurrentSite $currentSite, string $currentDirecto
        
         <ol class="breadcrumb">
           <li>
-            <span class="fa fa-folder-o"></span> 
+            <span class="fa fa-folder"></span> 
             <a href="/pages/adm_media?CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">media</a>
           </li>
           <li class="active">
-            <span class="fa fa-folder-open-o"></span> ' . $currentDirectory . '
+            <span class="fa fa-folder-open"></span> ' . $currentDirectory . '
           </li>
         </ol>
         
@@ -385,7 +385,7 @@ function _displayMediaDirectories(CurrentSite $currentSite, Request $request): R
         <h1><span class="fa fa-image"></span> Médias</h1>
         <ol class="breadcrumb">
           <li class="active">
-            <span class="fa fa-folder-open-o"></span> media
+            <span class="fa fa-folder-open"></span> media
           </li>
         </ol>
 

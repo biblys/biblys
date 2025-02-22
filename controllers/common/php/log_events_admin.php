@@ -78,7 +78,7 @@ if (isset($_GET['success'])) $alert = '<p class="success">'.$_GET['success'].'</
 $content = '
     <h1><span class="fa fa-calendar"></span>Gestion des évènements</h1>
     <p class="buttonset">
-        <a href="/pages/event_edit" class="btn btn-primary"><i class="fa fa-calendar-o"></i> Nouveau</a>
+        <a href="/pages/event_edit" class="btn btn-primary"><i class="fa fa-calendar"></i> Nouveau</a>
     </p>
     <br>
 

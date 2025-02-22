@@ -34,7 +34,7 @@
 }
 
 .OverallMenu__entry {
-  align-items: center;
+  align-items: start;
   display: inline-flex;
   flex-direction: row;
   gap: 4px;
@@ -46,8 +46,9 @@
   margin-right: 12px;
 }
 
-.OverallMenu__entry .fa {
-  font-size: 20px;
+.OverallMenu__entry .fa,
+.OverallMenu__entry__icon {
+  font-size: 1.25rem;
 }
 
 .OverallMenu__entry__label {

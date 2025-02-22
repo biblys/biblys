@@ -28,23 +28,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
   <div class="OverallMenu__user-section">
     <a href="/articles/search?autofocus=1" class="OverallMenu__entry OverallMenu__entry--search">
-      <span class="fa fa-search"></span>
+      <i class="OverallMenu__entry__icon fa-solid fa-magnifying-glass"></i>
       <span class="OverallMenu__entry__label">Recherche</span>
     </a>
 
     <a href="/pages/cart" class="OverallMenu__entry OverallMenu__entry--cart">
-      <span class="fa fa-shopping-basket"></span>
+      <i class="OverallMenu__entry__icon fa-solid fa-basket-shopping"></i>
       <span class="OverallMenu__entry__label">Mon panier</span>
     </a>
 
     {% if not app.currentUser.isAuthenticated %}
       <a class="OverallMenu__entry" rel="nofollow" href="{{ path("user_login", { return_url: app.currentUrl.relativeUrl }) }}">
-        <span class="fa fa-user-circle-o"></span>
+        <i class="OverallMenu__entry__icon fa-regular fa-circle-user"></i>
         Connexion
       </a>
     {% else %}
       <a class="OverallMenu__entry" href="{{ path("user_account") }}">
-        <span class="fa fa-user-circle"></span>
+        <i class="OverallMenu__entry__icon fa-solid fa-circle-user"></i>
         Mon compte
       </a>
     {% endif %}

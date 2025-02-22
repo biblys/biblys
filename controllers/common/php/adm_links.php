@@ -55,7 +55,7 @@ return function (Request $request, CurrentSite $currentSite): JsonResponse
             $article = $am->getById($linkToId);
             if ($article) {
                 $a = $article;
-                $j["link"] = '<li id="link_' . $link_id . '" class="new" style="display: none;"><span data-link_id="' . $link_id . '" class="fa fa-trash-o deleteLink pointer"></span> <a href="/' . $a["article_url"] . '">' . $a["article_title"] . '</a> de ' . $a["article_authors"] . ' (' . $a["article_collection"] . ')</li>';
+                $j["link"] = '<li id="link_' . $link_id . '" class="new" style="display: none;"><span data-link_id="' . $link_id . '" class="fa fa-trash-can deleteLink pointer"></span> <a href="/' . $a["article_url"] . '">' . $a["article_title"] . '</a> de ' . $a["article_authors"] . ' (' . $a["article_collection"] . ')</li>';
             }
         } elseif ($_POST["linkto_type"] == "people") {
             $people = $pm->getById($linkToId);

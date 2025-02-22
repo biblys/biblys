@@ -179,7 +179,7 @@ return function (Request $request, CurrentSite $currentSite): Response|RedirectR
     }
 
     $buttons = '<button type="submit" class="btn btn-primary" form="order"><i class="fa fa-save"></i> Enregistrer</button>
-        <a href="/pages/adm_order?order_id=' . $order->get('id') . '&delete=1" class="btn btn-warning" data-confirm="Voulez-vous vraiment ANNULER cette ' . $order_type . ' ?"><i class="fa fa-trash"></i> Annuler</a>';
+        <a href="/pages/adm_order?order_id=' . $order->get('id') . '&delete=1" class="btn btn-warning" data-confirm="Voulez-vous vraiment ANNULER cette ' . $order_type . ' ?"><i class="fa fa-trash-can"></i> Annuler</a>';
 
     $cm = new CountryManager();
     $countries = $cm->getAll();
