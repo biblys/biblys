@@ -34,7 +34,7 @@ if ($request->getMethod() === "POST") {
     $awardId = $award->get("id");
     $awardHTML = '
         <li id="award_'.$awardId.'" class="newAward" style="display: none;">
-            <span class="fa fa-trash-o pointer deleteAward" 
+            <span class="fa fa-trash-can pointer deleteAward" 
                 data-award_id="'.$awardId.'"></span>
             '.$_POST["award_name"].' '.$_POST["award_year"].' 
             ('.$_POST["award_category"].')

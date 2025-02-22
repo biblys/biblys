@@ -221,24 +221,24 @@ class Entry
         $entries[] = new Entry('États des stocks', ['category' => 'stock', 'url' => '/pages/adm_stock_status', 'icon' => 'bar-chart']);
 
         $entries[] = new Entry('Clients', ['category' => 'sales', 'url' => '/pages/adm_customers', 'icon' => 'address-card']);
-        $entries[] = new Entry('Caisse', ['category' => 'sales', 'url' => '/pages/adm_checkout', 'icon' => 'money']);
+        $entries[] = new Entry('Caisse', ['category' => 'sales', 'url' => '/pages/adm_checkout', 'icon' => 'cash-register']);
         $entries[] = new Entry('Ventes', ['category' => 'sales', 'url' => '/pages/adm_orders_shop', 'icon' => 'line-chart']);
-        $entries[] = new Entry('Commandes', ['category' => 'sales', 'path' => 'order_index', 'icon' => 'dropbox', 'taskCount' => $orders, 'subscription' => 'orders']);
+        $entries[] = new Entry('Commandes', ['category' => 'sales', 'path' => 'order_index', 'icon' => 'box', 'taskCount' => $orders, 'subscription' => 'orders']);
         $entries[] = new Entry('Paniers', ['category' => 'sales', 'url' => '/pages/adm_carts', 'icon' => 'shopping-basket', 'subscription' => 'carts']);
         $entries[] = new Entry('Paiements', ['category' => 'sales', 'path' => 'payments_index', 'icon' => 'credit-card']);
         $entries[] = new Entry('Frais de port', ['category' => 'sales', 'path' => 'shipping_admin', 'icon' => 'envelope']);
-        $entries[] = new Entry('Financement particip.', ['category' => 'sales', 'path' => 'cf_campaign_list', 'icon' => 'money']);
+        $entries[] = new Entry('Financement particip.', ['category' => 'sales', 'path' => 'cf_campaign_list', 'icon' => 'coins']);
 
         $entries[] = new Entry('Ventes numériques', ['category' => 'ebooks', 'url' => '/pages/adm_ebooks', 'icon' => 'book']);
-        $entries[] = new Entry('Invitations de téléchargement', ['category' => 'ebooks', 'path' => 'invitation_list', 'icon' => 'send']);
+        $entries[] = new Entry('Invitations de téléchargement', ['category' => 'ebooks', 'path' => 'invitation_list', 'icon' => 'paper-plane']);
 
         $entries[] = new Entry('Pages', ['category' => 'content', 'url' => '/pages/adm_pages', 'icon' => 'file']);
-        $entries[] = new Entry('Billets', ['category' => 'content', 'url' => '/pages/adm_posts', 'icon' => 'newspaper-o']);
+        $entries[] = new Entry('Billets', ['category' => 'content', 'url' => '/pages/adm_posts', 'icon' => 'newspaper']);
         $entries[] = new Entry('Évènements', ['category' => 'content', 'url' => '/pages/log_events_admin', 'icon' => 'calendar']);
         $entries[] = new Entry('Médias', ['category' => 'content', 'url' => '/pages/adm_media', 'icon' => 'image']);
         $entries[] = new Entry('Liste de contacts', ['category' => 'content', 'path' => 'mailing_contacts', 'icon' => 'address-book']);
 
-        $entries[] = new Entry('Chiffre d\'affaires', ['category' => 'stats', 'url' => '/pages/adm_revenue', 'icon' => 'money']);
+        $entries[] = new Entry('Chiffre d\'affaires', ['category' => 'stats', 'url' => '/pages/adm_revenue', 'icon' => 'money-bills']);
         $entries[] = new Entry('Best-sellers', ['category' => 'stats', 'url' => '/pages/adm_stats_best-sellers', 'icon' => 'sort-amount-desc']);
         $entries[] = new Entry('C.A. par fournisseur', ['category' => 'stats', 'path' => 'stats_suppliers', 'icon' => 'truck']);
         $entries[] = new Entry('C.A. par facture', ['category' => 'stats', 'url' => '/pages/adm_stats_invoices', 'icon' => 'file']);
@@ -255,10 +255,10 @@ class Entry
         $entries[] = new Entry('Espace disque', ['category' => 'site', 'path' => 'maintenance_disk_usage', 'icon' => 'database']);
         $entries[] = new Entry('Options', ['category' => 'site', 'path' => 'site_options', 'icon' => 'cogs']);
         $entries[] = new Entry('Redirections', ['category' => 'site', 'path' => 'redirection_index', 'icon' => 'compass']);
-        $entries[] = new Entry('Valeurs par défaut', ['category' => 'site', 'path' => 'site_default_values', 'icon' => 'pencil-square-o']);
+        $entries[] = new Entry('Valeurs par défaut', ['category' => 'site', 'path' => 'site_default_values', 'icon' => 'pen-to-square']);
         $entries[] = new Entry('Éditeur de thème', ['category' => 'site', 'path' => 'template_index', 'icon' => 'code']);
         $entries[] = new Entry('Cache', ['category' => 'site', 'path' => 'maintenance_cache', 'icon' => 'server']);
-        $entries[] = new Entry('Tâches planifiées', ['category' => 'site', 'path' => 'crons_tasks', 'icon' => 'clock-o']);
+        $entries[] = new Entry('Tâches planifiées', ['category' => 'site', 'path' => 'crons_tasks', 'icon' => 'clock']);
 
         $cloud = new CloudService($config, new Client());
         if ($cloud->isConfigured()) {

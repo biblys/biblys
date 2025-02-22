@@ -906,11 +906,7 @@ function reloadEvents(scope) {
   // Create & delete alert
   $('[data-alert].event')
     .click(async function () {
-
-      const buttonIcon = $(this).find('i.fa');
-      buttonIcon
-        .removeClass('fa-bell-o fa-bell orange')
-        .addClass('fa-spin fa-spinner');
+      const buttonIcon = $(this).find('i');
 
       const articleId = this.getAttribute('data-alert');
       const response = await fetch(`/pages/log_myalerts`, {
@@ -923,20 +919,18 @@ function reloadEvents(scope) {
       });
       const data = await response.json();
 
-      buttonIcon.removeClass('fa-spin fa-spinner')
+      buttonIcon.removeClass('fa-solid fa-regular orange');
 
       if (data.error) {
         _alert(data.error);
       } else if (data.created) {
-        buttonIcon
-          .addClass('fa-bell orange');
+        buttonIcon.addClass('fa-solid orange');
         new Biblys.Notification(
           `L'article a bien été ajouté à <a href="/pages/log_myalerts">vos alertes</a>.`,
           {type: 'success'}
         );
       } else if (data.deleted) {
-        buttonIcon
-          .addClass('fa-bell-o');
+        buttonIcon.addClass('fa-regular');
         new Biblys.Notification(
           `L'article a bien été retiré de <a href="/pages/log_myalerts">vos alertes</a>.`,
           {type: 'success'}
@@ -951,10 +945,7 @@ function reloadEvents(scope) {
   $('[data-wish].event')
     .click(function() {
       const button = $(this);
-      button
-        .find('.fa')
-        .removeClass('fa-heart-o fa-heart red')
-        .addClass('fa-spin fa-spinner');
+      const icon = button.find('i');
 
       fetch('/pages/log_mywishes', {
         method: 'post',
@@ -968,23 +959,15 @@ function reloadEvents(scope) {
           return response.json();
         })
         .then(function(data) {
+          icon.removeClass('fa-regular fa-solid red');
           if (data.error) {
             _alert(data.error);
-            button
-              .find('.fa')
-              .removeClass('fa-spin fa-spinner')
-              .addClass('fa-heart-o');
+            icon.addClass('fa-regular');
           } else if (data.created) {
-            button
-              .find('.fa')
-              .removeClass('fa-spin fa-spinner')
-              .addClass('fa-heart red');
+            icon.addClass('fa-solid red');
             new Biblys.Notification(data.message, { type: 'success' });
           } else if (data.deleted) {
-            button
-              .find('.fa')
-              .removeClass('fa-spin fa-spinner')
-              .addClass('fa-heart-o');
+            icon.addClass('fa-regular');
             new Biblys.Notification(data.message, { type: 'success' });
           }
         });

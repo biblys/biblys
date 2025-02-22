@@ -71,7 +71,7 @@ if ($pageId && $page) {
 $request->attributes->set("page_title", $pageTitle);
 
 $content .= '
-    <h1><i class="fa fa-file-o"></i> '.$pageTitle.'</h1>
+    <h1><i class="fa fa-file"></i> '.$pageTitle.'</h1>
     <form method="post" class="check fieldset">
         <fieldset>
             <legend>Informations</legend>

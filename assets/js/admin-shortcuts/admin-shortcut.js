@@ -41,7 +41,7 @@ export default class Shortcut {
     // Create delete button
     var deleteButton = document.createElement('p');
     deleteButton.innerHTML =
-      '<button class="btn btn-sm btn-danger"><span class="fa fa-trash-o"></span></button>';
+      '<button class="btn btn-sm btn-danger"><span class="fa fa-trash-can"></span></button>';
     this.element.appendChild(deleteButton);
 
     // Add delete event on button

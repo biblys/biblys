@@ -68,7 +68,7 @@ return function(
 
             // L'Autre Livre
             if ($currentSite->getId() == 11) {
-                $items['Contenu'][] = array('Billets', '/pages/pub_posts', 'fa-newspaper-o');
+                $items['Contenu'][] = array('Billets', '/pages/pub_posts', 'fa-newspaper');
                 $items['Contenu'][] = array('Évènements', '/pages/log_events_admin', 'fa-calendar');
                 $items['Contenu'][] = array('Dédicaces', '/pages/log_signings_admin', 'fa-pencil');
 
