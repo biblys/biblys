@@ -65,7 +65,6 @@ class UserController extends Controller
      * @throws Exception
      */
     public function indexAction(
-        CurrentSite     $currentSite,
         CurrentUser     $currentUser,
         TemplateService $templateService,
     ): Response
@@ -73,7 +72,6 @@ class UserController extends Controller
         $currentUser->authAdmin();
 
         $users = UserQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->leftJoinWithAuthenticationMethod()
             ->orderByEmail()
             ->find();
