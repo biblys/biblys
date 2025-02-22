@@ -14,7 +14,6 @@
   "dependencies": {
     "jquery": "~1",
     "jquery-ui": "~1.11.4",
-    "font-awesome": "~4",
     "tooltipster": "~3.3.0",
     "ckeditor": "~4.5.7",
     "ace-builds": "~1.2.3",
