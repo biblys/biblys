@@ -31,10 +31,6 @@ class Right extends Entity
             // Publisher (OneToMany)
             $pm = new PublisherManager();
             if (isset($data['publisher_id'])) $data['publisher'] = $pm->get(array('publisher_id' => $data['publisher_id']));
-            
-            // Library (OneToMany)
-            $lm = new LibraryManager();
-            if (isset($data['library_id'])) $data['library'] = $lm->get(array('library_id' => $data['library_id']));
         }
     
         parent::__construct($data);
