@@ -17,7 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% extends "layout:admin.html.twig" %}
 
 {% block title %}
-  Utilisateur·trice·s
+  Utilisateur·ices
 {% endblock %}
 
 {% block main %}
@@ -71,13 +71,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           {% endfor %}
         </td>
         <td>{{ user.lastLoggedAt|date('d/m/Y H:i') }}</td>
-        <td>
+        <td class="text-right">
           <a
             href="{{ path('user_show', { id: user.id }) }}"
             class="btn btn-info"
+            title="Afficher {{ user.email }}"
           >
             <span class="fa fa-eye"></span>
           </a>
+          <form method="post" action="{{ path("user_delete", { id: user.id }) }}" class="d-inline">
+            <button type="submit" class="btn btn-danger" title="Supprimer {{ user.email }}">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </form>
         </td>
       </tr>
     {% endfor %}
