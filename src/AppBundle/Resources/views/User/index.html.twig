@@ -23,10 +23,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% block main %}
   <h1>
     <span class="fa fa-user"></span>
-    Utilisateur·ices ({{ users|length }})
+    Utilisateur·ices ({{ userCount }})
   </h1>
 
-  <table class="table">
+  <table class="table mt-5">
     <thead>
       <tr>
         <th>Id</th>
@@ -63,4 +63,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     {% endfor %}
     </tbody>
   </table>
+
+  {% include "AppBundle:Utils:_pagination.html.twig" %}
 {% endblock %}
