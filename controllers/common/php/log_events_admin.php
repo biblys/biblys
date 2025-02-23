@@ -25,8 +25,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) $mode = 'admin';
 elseif (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $mode = 'publisher';
-elseif (LegacyCodeHelper::getGlobalVisitor()->isBookshop()) $mode = 'bookshop';
-elseif (LegacyCodeHelper::getGlobalVisitor()->isLibrary()) $mode = 'library';
 else throw new AccessDeniedHttpException('Accès non autorisé');
 
 /** @var Request $request */

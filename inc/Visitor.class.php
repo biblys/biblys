@@ -104,30 +104,6 @@ class Visitor
     }
 
     /**
-     * @throws Exception
-     */
-    public function isBookshop(): bool
-    {
-        $right = $this->getCurrentRight();
-        if ($right->has('bookshop_id')) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function isLibrary(): bool
-    {
-        $right = $this->getCurrentRight();
-        if ($right->has('library_id')) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * @deprecated Visitor->hasInCart is deprecated.
      *             Use CurrentUser->hasArticleInCart or ->hasStockItemInCart
      * @throws PropelException
