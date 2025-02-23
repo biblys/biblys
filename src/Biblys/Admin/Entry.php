@@ -247,8 +247,8 @@ class Entry
         $entries[] = new Entry('Exemplaires perdus', ['category' => 'stats', 'path' => 'stats_lost', 'icon' => 'compass']);
 
         // Site
-        $entries[] = new Entry('Utilisateur·trice·s', ['category' => 'site', 'path' => 'user_index', 'icon' => 'user']);
-        $entries[] = new Entry('Administrateur·trice·s', ['category' => 'site', 'url' => '/pages/adm_admins', 'icon' => 'users']);
+        $entries[] = new Entry('Utilisateur·ices', ['category' => 'site', 'path' => 'user_index', 'icon' => 'users']);
+        $entries[] = new Entry('Administrateur·ices', ['category' => 'site', 'url' => '/pages/adm_admins', 'icon' => 'crown']);
 
         $entries = self::_addAnalyticsLinks($config, $entries);
 
