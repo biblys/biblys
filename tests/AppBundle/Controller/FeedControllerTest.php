@@ -20,6 +20,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use DateTime;
 use Model\ArticleQuery;
@@ -34,7 +35,6 @@ require_once __DIR__ . "/../../setUp.php";
 
 class FeedControllerTest extends TestCase
 {
-    /** blog */
 
     /**
      * @throws PropelException
@@ -45,6 +45,31 @@ class FeedControllerTest extends TestCase
         ArticleQuery::create()->deleteAll();
         BookCollectionQuery::create()->deleteAll();
     }
+
+    /** index */
+
+    /**
+     * @throws PropelException
+     * @throws \Exception
+     */
+    public function testIndex(): void
+    {
+        // given
+        $controller = new FeedController();
+
+        $site = ModelFactory::createSite(domain: "example.org");
+        $currentSite = new CurrentSite($site);
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->indexAction($currentSite, $templateService);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Les flux RSS de example.org", $response->getContent());
+    }
+
+    /** blog */
 
     /**
      * @throws PropelException
