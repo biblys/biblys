@@ -66,18 +66,31 @@ class UserController extends Controller
      */
     public function indexAction(
         CurrentUser     $currentUser,
+        QueryParamsService $queryParams,
         TemplateService $templateService,
     ): Response
     {
         $currentUser->authAdmin();
 
-        $users = UserQuery::create()
-            ->leftJoinWithAuthenticationMethod()
+        $queryParams->parse([
+            "p" => ["type" => "numeric", "default" => 0],
+        ]);
+
+        $userQuery = UserQuery::create();
+        $userCount = $userQuery->count();
+
+        $pages = new Pagination(currentPageIndex: $queryParams->getInteger("p"), itemCount: $userCount, limit: 100);
+
+        $users = $userQuery
             ->orderByEmail()
+            ->offset($pages->getOffset())
+            ->limit($pages->getLimit())
             ->find();
 
         return $templateService->renderResponse("AppBundle:User:index.html.twig", [
+            "userCount" => $userCount,
             "users" => $users->getData(),
+            "pages" => $pages,
         ]);
     }
 

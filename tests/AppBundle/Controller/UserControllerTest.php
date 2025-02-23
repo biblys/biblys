@@ -74,10 +74,13 @@ class UserControllerTest extends TestCase
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive('authAdmin')->andReturns();
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->expects("parse")->andReturns();
+        $queryParamsService->expects("getInteger")->with("p")->andReturn(0);
         $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->indexAction($currentUser, $templateService);
+        $response = $controller->indexAction($currentUser, $queryParamsService,$templateService);
 
         // then
         $this->assertEquals("200", $response->getStatusCode());
