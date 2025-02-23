@@ -75,11 +75,10 @@ return function (
                     <form method="post">
                         <button
                             class="btn btn-sm btn-danger" 
-                            title="supprimer" 
-                            data-confirm="Voulez-vous vraiment SUPPRIMER l\'accès administrateur de ' . $user->getEmail() . '"
+                            data-confirm="Voulez-vous vraiment RÉVOQUER l\'accès admin de ' . $user->getEmail() . '"
                         >
                             <input type="hidden" name="user_id" value="' . $user->getId() . '">
-                            <span class="fa fa-trash-can"></span>
+                            <span class="fa fa-trash-can"></span> Révoquer
                         </button>
                     </form>
                 </td>
@@ -89,23 +88,25 @@ return function (
 
     $addAdminUrl = $urlGenerator->generate("admins_new");
     $content = '
-        <h1><span class="fa fa-users"></span> Administrateur·trice·s</h1>
+        <h1>
+          <i class="fa-solid fa-crown"></i>
+          Administrateur·trice·s
+        </h1>
     
-        ' . ($message ?? null) . '<br>
+        ' . ($message ?? null) . '
     
-        <div class="center">
+        <div class="button-group mt-4">
             <a href="'.$addAdminUrl.'" class="btn btn-primary">
                 <span class="fa fa-user-plus"></span> &nbsp;
                 Ajouter un·e admin
             </a>
         </div>
-        <br>
     
-        <table class="table">
+        <table class="table mt-4">
             <thead>
                 <tr>
                     <th></th>
-                    <th class="left">Utilisateur</th>
+                    <th class="left">Utilisateur·ice</th>
                     <th>Dernière connexion</th>
                     <th></th>
                 </tr>
