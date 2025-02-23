@@ -26,7 +26,27 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     Utilisateur·ices ({{ userCount }})
   </h1>
 
-  <table class="table mt-5">
+  <form class="mt-4" action="{{ path('user_index') }}" method="get">
+    <div class="input-group">
+      <input
+        aria-label="Rechercher un utilisateur par e-mail"
+        type="search"
+        class="form-control search-form-input mt-0"
+        name="q"
+        placeholder="Rechercher par e-mail…"
+        required
+        minlength="3"
+        value="{{ query }}"
+      >
+      <div class="input-group-append">
+        <button type="submit" class="btn btn-primary search-form-button" aria-label="Rechercher">
+          <span class="fa fa-search"></span>
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <table class="table mt-4">
     <thead>
       <tr>
         <th>Id</th>

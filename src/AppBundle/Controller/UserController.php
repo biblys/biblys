@@ -74,12 +74,19 @@ class UserController extends Controller
 
         $queryParams->parse([
             "p" => ["type" => "numeric", "default" => 0],
+            "q" => ["type" => "string", "default" => ""],
         ]);
 
         $userQuery = UserQuery::create();
         $userCount = $userQuery->count();
 
+        if ($queryParams->get("q") !== "") {
+            $userQuery->filterByEmail("%" . $queryParams->get("q") . "%", Criteria::LIKE);
+            $userCount = $userQuery->count();
+        }
+
         $pages = new Pagination(currentPageIndex: $queryParams->getInteger("p"), itemCount: $userCount, limit: 100);
+        $pages->setQueryParams(["q" => $queryParams->get("q")]);
 
         $users = $userQuery
             ->orderByEmail()
@@ -91,6 +98,7 @@ class UserController extends Controller
             "userCount" => $userCount,
             "users" => $users->getData(),
             "pages" => $pages,
+            "query" => $queryParams->get("q"),
         ]);
     }
 
