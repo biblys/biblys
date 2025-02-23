@@ -63,7 +63,7 @@ class RightTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 11;
+    public const NUM_COLUMNS = 10;
 
     /**
      * The number of lazy-loaded columns
@@ -73,7 +73,7 @@ class RightTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 11;
+    public const NUM_HYDRATE_COLUMNS = 10;
 
     /**
      * the column name for the right_id field
@@ -111,11 +111,6 @@ class RightTableMap extends TableMap
     public const COL_PUBLISHER_ID = 'rights.publisher_id';
 
     /**
-     * the column name for the library_id field
-     */
-    public const COL_LIBRARY_ID = 'rights.library_id';
-
-    /**
      * the column name for the right_current field
      */
     public const COL_RIGHT_CURRENT = 'rights.right_current';
@@ -144,11 +139,11 @@ class RightTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'Uid', 'AxysAccountId', 'UserId', 'SiteId', 'isAdmin', 'PublisherId', 'LibraryId', 'Current', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'uid', 'axysAccountId', 'userId', 'siteId', 'isAdmin', 'publisherId', 'libraryId', 'current', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [RightTableMap::COL_RIGHT_ID, RightTableMap::COL_RIGHT_UID, RightTableMap::COL_AXYS_ACCOUNT_ID, RightTableMap::COL_USER_ID, RightTableMap::COL_SITE_ID, RightTableMap::COL_IS_ADMIN, RightTableMap::COL_PUBLISHER_ID, RightTableMap::COL_LIBRARY_ID, RightTableMap::COL_RIGHT_CURRENT, RightTableMap::COL_RIGHT_CREATED, RightTableMap::COL_RIGHT_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['right_id', 'right_uid', 'axys_account_id', 'user_id', 'site_id', 'is_admin', 'publisher_id', 'library_id', 'right_current', 'right_created', 'right_updated', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ]
+        self::TYPE_PHPNAME       => ['Id', 'Uid', 'AxysAccountId', 'UserId', 'SiteId', 'isAdmin', 'PublisherId', 'Current', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'uid', 'axysAccountId', 'userId', 'siteId', 'isAdmin', 'publisherId', 'current', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [RightTableMap::COL_RIGHT_ID, RightTableMap::COL_RIGHT_UID, RightTableMap::COL_AXYS_ACCOUNT_ID, RightTableMap::COL_USER_ID, RightTableMap::COL_SITE_ID, RightTableMap::COL_IS_ADMIN, RightTableMap::COL_PUBLISHER_ID, RightTableMap::COL_RIGHT_CURRENT, RightTableMap::COL_RIGHT_CREATED, RightTableMap::COL_RIGHT_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['right_id', 'right_uid', 'axys_account_id', 'user_id', 'site_id', 'is_admin', 'publisher_id', 'right_current', 'right_created', 'right_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
     ];
 
     /**
@@ -160,11 +155,11 @@ class RightTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'Uid' => 1, 'AxysAccountId' => 2, 'UserId' => 3, 'SiteId' => 4, 'isAdmin' => 5, 'PublisherId' => 6, 'LibraryId' => 7, 'Current' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'uid' => 1, 'axysAccountId' => 2, 'userId' => 3, 'siteId' => 4, 'isAdmin' => 5, 'publisherId' => 6, 'libraryId' => 7, 'current' => 8, 'createdAt' => 9, 'updatedAt' => 10, ],
-        self::TYPE_COLNAME       => [RightTableMap::COL_RIGHT_ID => 0, RightTableMap::COL_RIGHT_UID => 1, RightTableMap::COL_AXYS_ACCOUNT_ID => 2, RightTableMap::COL_USER_ID => 3, RightTableMap::COL_SITE_ID => 4, RightTableMap::COL_IS_ADMIN => 5, RightTableMap::COL_PUBLISHER_ID => 6, RightTableMap::COL_LIBRARY_ID => 7, RightTableMap::COL_RIGHT_CURRENT => 8, RightTableMap::COL_RIGHT_CREATED => 9, RightTableMap::COL_RIGHT_UPDATED => 10, ],
-        self::TYPE_FIELDNAME     => ['right_id' => 0, 'right_uid' => 1, 'axys_account_id' => 2, 'user_id' => 3, 'site_id' => 4, 'is_admin' => 5, 'publisher_id' => 6, 'library_id' => 7, 'right_current' => 8, 'right_created' => 9, 'right_updated' => 10, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'Uid' => 1, 'AxysAccountId' => 2, 'UserId' => 3, 'SiteId' => 4, 'isAdmin' => 5, 'PublisherId' => 6, 'Current' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'uid' => 1, 'axysAccountId' => 2, 'userId' => 3, 'siteId' => 4, 'isAdmin' => 5, 'publisherId' => 6, 'current' => 7, 'createdAt' => 8, 'updatedAt' => 9, ],
+        self::TYPE_COLNAME       => [RightTableMap::COL_RIGHT_ID => 0, RightTableMap::COL_RIGHT_UID => 1, RightTableMap::COL_AXYS_ACCOUNT_ID => 2, RightTableMap::COL_USER_ID => 3, RightTableMap::COL_SITE_ID => 4, RightTableMap::COL_IS_ADMIN => 5, RightTableMap::COL_PUBLISHER_ID => 6, RightTableMap::COL_RIGHT_CURRENT => 7, RightTableMap::COL_RIGHT_CREATED => 8, RightTableMap::COL_RIGHT_UPDATED => 9, ],
+        self::TYPE_FIELDNAME     => ['right_id' => 0, 'right_uid' => 1, 'axys_account_id' => 2, 'user_id' => 3, 'site_id' => 4, 'is_admin' => 5, 'publisher_id' => 6, 'right_current' => 7, 'right_created' => 8, 'right_updated' => 9, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
     ];
 
     /**
@@ -228,14 +223,6 @@ class RightTableMap extends TableMap
         'COL_PUBLISHER_ID' => 'PUBLISHER_ID',
         'publisher_id' => 'PUBLISHER_ID',
         'rights.publisher_id' => 'PUBLISHER_ID',
-        'LibraryId' => 'LIBRARY_ID',
-        'Right.LibraryId' => 'LIBRARY_ID',
-        'libraryId' => 'LIBRARY_ID',
-        'right.libraryId' => 'LIBRARY_ID',
-        'RightTableMap::COL_LIBRARY_ID' => 'LIBRARY_ID',
-        'COL_LIBRARY_ID' => 'LIBRARY_ID',
-        'library_id' => 'LIBRARY_ID',
-        'rights.library_id' => 'LIBRARY_ID',
         'Current' => 'RIGHT_CURRENT',
         'Right.Current' => 'RIGHT_CURRENT',
         'current' => 'RIGHT_CURRENT',
@@ -286,7 +273,6 @@ class RightTableMap extends TableMap
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addColumn('is_admin', 'isAdmin', 'BOOLEAN', false, 1, false);
         $this->addForeignKey('publisher_id', 'PublisherId', 'INTEGER', 'publishers', 'publisher_id', false, null, null);
-        $this->addColumn('library_id', 'LibraryId', 'INTEGER', false, null, null);
         $this->addColumn('right_current', 'Current', 'BOOLEAN', false, 1, false);
         $this->addColumn('right_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('right_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
@@ -484,7 +470,6 @@ class RightTableMap extends TableMap
             $criteria->addSelectColumn(RightTableMap::COL_SITE_ID);
             $criteria->addSelectColumn(RightTableMap::COL_IS_ADMIN);
             $criteria->addSelectColumn(RightTableMap::COL_PUBLISHER_ID);
-            $criteria->addSelectColumn(RightTableMap::COL_LIBRARY_ID);
             $criteria->addSelectColumn(RightTableMap::COL_RIGHT_CURRENT);
             $criteria->addSelectColumn(RightTableMap::COL_RIGHT_CREATED);
             $criteria->addSelectColumn(RightTableMap::COL_RIGHT_UPDATED);
@@ -496,7 +481,6 @@ class RightTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.site_id');
             $criteria->addSelectColumn($alias . '.is_admin');
             $criteria->addSelectColumn($alias . '.publisher_id');
-            $criteria->addSelectColumn($alias . '.library_id');
             $criteria->addSelectColumn($alias . '.right_current');
             $criteria->addSelectColumn($alias . '.right_created');
             $criteria->addSelectColumn($alias . '.right_updated');
@@ -525,7 +509,6 @@ class RightTableMap extends TableMap
             $criteria->removeSelectColumn(RightTableMap::COL_SITE_ID);
             $criteria->removeSelectColumn(RightTableMap::COL_IS_ADMIN);
             $criteria->removeSelectColumn(RightTableMap::COL_PUBLISHER_ID);
-            $criteria->removeSelectColumn(RightTableMap::COL_LIBRARY_ID);
             $criteria->removeSelectColumn(RightTableMap::COL_RIGHT_CURRENT);
             $criteria->removeSelectColumn(RightTableMap::COL_RIGHT_CREATED);
             $criteria->removeSelectColumn(RightTableMap::COL_RIGHT_UPDATED);
@@ -537,7 +520,6 @@ class RightTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.site_id');
             $criteria->removeSelectColumn($alias . '.is_admin');
             $criteria->removeSelectColumn($alias . '.publisher_id');
-            $criteria->removeSelectColumn($alias . '.library_id');
             $criteria->removeSelectColumn($alias . '.right_current');
             $criteria->removeSelectColumn($alias . '.right_created');
             $criteria->removeSelectColumn($alias . '.right_updated');

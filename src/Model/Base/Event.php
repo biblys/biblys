@@ -90,13 +90,6 @@ abstract class Event implements ActiveRecordInterface
     protected $publisher_id;
 
     /**
-     * The value for the library_id field.
-     *
-     * @var        int|null
-     */
-    protected $library_id;
-
-    /**
      * The value for the event_url field.
      *
      * @var        string|null
@@ -493,16 +486,6 @@ abstract class Event implements ActiveRecordInterface
     }
 
     /**
-     * Get the [library_id] column value.
-     *
-     * @return int|null
-     */
-    public function getLibraryId()
-    {
-        return $this->library_id;
-    }
-
-    /**
      * Get the [event_url] column value.
      *
      * @return string|null
@@ -811,26 +794,6 @@ abstract class Event implements ActiveRecordInterface
         if ($this->publisher_id !== $v) {
             $this->publisher_id = $v;
             $this->modifiedColumns[EventTableMap::COL_PUBLISHER_ID] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [library_id] column.
-     *
-     * @param int|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setLibraryId($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->library_id !== $v) {
-            $this->library_id = $v;
-            $this->modifiedColumns[EventTableMap::COL_LIBRARY_ID] = true;
         }
 
         return $this;
@@ -1197,70 +1160,67 @@ abstract class Event implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : EventTableMap::translateFieldName('PublisherId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->publisher_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : EventTableMap::translateFieldName('LibraryId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->library_id = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : EventTableMap::translateFieldName('Url', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : EventTableMap::translateFieldName('Url', TableMap::TYPE_PHPNAME, $indexType)];
             $this->event_url = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : EventTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : EventTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
             $this->event_title = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : EventTableMap::translateFieldName('Subtitle', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : EventTableMap::translateFieldName('Subtitle', TableMap::TYPE_PHPNAME, $indexType)];
             $this->event_subtitle = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : EventTableMap::translateFieldName('Desc', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : EventTableMap::translateFieldName('Desc', TableMap::TYPE_PHPNAME, $indexType)];
             $this->event_desc = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : EventTableMap::translateFieldName('Location', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : EventTableMap::translateFieldName('Location', TableMap::TYPE_PHPNAME, $indexType)];
             $this->event_location = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : EventTableMap::translateFieldName('IllustrationLegend', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : EventTableMap::translateFieldName('IllustrationLegend', TableMap::TYPE_PHPNAME, $indexType)];
             $this->event_illustration_legend = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : EventTableMap::translateFieldName('Highlighted', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : EventTableMap::translateFieldName('Highlighted', TableMap::TYPE_PHPNAME, $indexType)];
             $this->event_highlighted = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : EventTableMap::translateFieldName('Start', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : EventTableMap::translateFieldName('Start', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->event_start = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : EventTableMap::translateFieldName('End', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : EventTableMap::translateFieldName('End', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->event_end = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : EventTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : EventTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->event_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : EventTableMap::translateFieldName('Status', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : EventTableMap::translateFieldName('Status', TableMap::TYPE_PHPNAME, $indexType)];
             $this->event_status = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : EventTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : EventTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->event_insert_ = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : EventTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : EventTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->event_update_ = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : EventTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : EventTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->event_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 18 + $startcol : EventTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : EventTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -1273,7 +1233,7 @@ abstract class Event implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 19; // 19 = EventTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 18; // 18 = EventTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Event'), 0, $e);
@@ -1517,9 +1477,6 @@ abstract class Event implements ActiveRecordInterface
         if ($this->isColumnModified(EventTableMap::COL_PUBLISHER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'publisher_id';
         }
-        if ($this->isColumnModified(EventTableMap::COL_LIBRARY_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'library_id';
-        }
         if ($this->isColumnModified(EventTableMap::COL_EVENT_URL)) {
             $modifiedColumns[':p' . $index++]  = 'event_url';
         }
@@ -1586,10 +1543,6 @@ abstract class Event implements ActiveRecordInterface
                         break;
                     case 'publisher_id':
                         $stmt->bindValue($identifier, $this->publisher_id, PDO::PARAM_INT);
-
-                        break;
-                    case 'library_id':
-                        $stmt->bindValue($identifier, $this->library_id, PDO::PARAM_INT);
 
                         break;
                     case 'event_url':
@@ -1724,51 +1677,48 @@ abstract class Event implements ActiveRecordInterface
                 return $this->getPublisherId();
 
             case 3:
-                return $this->getLibraryId();
-
-            case 4:
                 return $this->getUrl();
 
-            case 5:
+            case 4:
                 return $this->getTitle();
 
-            case 6:
+            case 5:
                 return $this->getSubtitle();
 
-            case 7:
+            case 6:
                 return $this->getDesc();
 
-            case 8:
+            case 7:
                 return $this->getLocation();
 
-            case 9:
+            case 8:
                 return $this->getIllustrationLegend();
 
-            case 10:
+            case 9:
                 return $this->getHighlighted();
 
-            case 11:
+            case 10:
                 return $this->getStart();
 
-            case 12:
+            case 11:
                 return $this->getEnd();
 
-            case 13:
+            case 12:
                 return $this->getDate();
 
-            case 14:
+            case 13:
                 return $this->getStatus();
 
-            case 15:
+            case 14:
                 return $this->getInsert();
 
-            case 16:
+            case 15:
                 return $this->getUpdate();
 
-            case 17:
+            case 16:
                 return $this->getCreatedAt();
 
-            case 18:
+            case 17:
                 return $this->getUpdatedAt();
 
             default:
@@ -1802,23 +1752,26 @@ abstract class Event implements ActiveRecordInterface
             $keys[0] => $this->getId(),
             $keys[1] => $this->getSiteId(),
             $keys[2] => $this->getPublisherId(),
-            $keys[3] => $this->getLibraryId(),
-            $keys[4] => $this->getUrl(),
-            $keys[5] => $this->getTitle(),
-            $keys[6] => $this->getSubtitle(),
-            $keys[7] => $this->getDesc(),
-            $keys[8] => $this->getLocation(),
-            $keys[9] => $this->getIllustrationLegend(),
-            $keys[10] => $this->getHighlighted(),
-            $keys[11] => $this->getStart(),
-            $keys[12] => $this->getEnd(),
-            $keys[13] => $this->getDate(),
-            $keys[14] => $this->getStatus(),
-            $keys[15] => $this->getInsert(),
-            $keys[16] => $this->getUpdate(),
-            $keys[17] => $this->getCreatedAt(),
-            $keys[18] => $this->getUpdatedAt(),
+            $keys[3] => $this->getUrl(),
+            $keys[4] => $this->getTitle(),
+            $keys[5] => $this->getSubtitle(),
+            $keys[6] => $this->getDesc(),
+            $keys[7] => $this->getLocation(),
+            $keys[8] => $this->getIllustrationLegend(),
+            $keys[9] => $this->getHighlighted(),
+            $keys[10] => $this->getStart(),
+            $keys[11] => $this->getEnd(),
+            $keys[12] => $this->getDate(),
+            $keys[13] => $this->getStatus(),
+            $keys[14] => $this->getInsert(),
+            $keys[15] => $this->getUpdate(),
+            $keys[16] => $this->getCreatedAt(),
+            $keys[17] => $this->getUpdatedAt(),
         ];
+        if ($result[$keys[10]] instanceof \DateTimeInterface) {
+            $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
+        }
+
         if ($result[$keys[11]] instanceof \DateTimeInterface) {
             $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
         }
@@ -1827,8 +1780,8 @@ abstract class Event implements ActiveRecordInterface
             $result[$keys[12]] = $result[$keys[12]]->format('Y-m-d H:i:s.u');
         }
 
-        if ($result[$keys[13]] instanceof \DateTimeInterface) {
-            $result[$keys[13]] = $result[$keys[13]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[14]] instanceof \DateTimeInterface) {
+            $result[$keys[14]] = $result[$keys[14]]->format('Y-m-d H:i:s.u');
         }
 
         if ($result[$keys[15]] instanceof \DateTimeInterface) {
@@ -1841,10 +1794,6 @@ abstract class Event implements ActiveRecordInterface
 
         if ($result[$keys[17]] instanceof \DateTimeInterface) {
             $result[$keys[17]] = $result[$keys[17]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[18]] instanceof \DateTimeInterface) {
-            $result[$keys[18]] = $result[$keys[18]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1914,51 +1863,48 @@ abstract class Event implements ActiveRecordInterface
                 $this->setPublisherId($value);
                 break;
             case 3:
-                $this->setLibraryId($value);
-                break;
-            case 4:
                 $this->setUrl($value);
                 break;
-            case 5:
+            case 4:
                 $this->setTitle($value);
                 break;
-            case 6:
+            case 5:
                 $this->setSubtitle($value);
                 break;
-            case 7:
+            case 6:
                 $this->setDesc($value);
                 break;
-            case 8:
+            case 7:
                 $this->setLocation($value);
                 break;
-            case 9:
+            case 8:
                 $this->setIllustrationLegend($value);
                 break;
-            case 10:
+            case 9:
                 $this->setHighlighted($value);
                 break;
-            case 11:
+            case 10:
                 $this->setStart($value);
                 break;
-            case 12:
+            case 11:
                 $this->setEnd($value);
                 break;
-            case 13:
+            case 12:
                 $this->setDate($value);
                 break;
-            case 14:
+            case 13:
                 $this->setStatus($value);
                 break;
-            case 15:
+            case 14:
                 $this->setInsert($value);
                 break;
-            case 16:
+            case 15:
                 $this->setUpdate($value);
                 break;
-            case 17:
+            case 16:
                 $this->setCreatedAt($value);
                 break;
-            case 18:
+            case 17:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1997,52 +1943,49 @@ abstract class Event implements ActiveRecordInterface
             $this->setPublisherId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setLibraryId($arr[$keys[3]]);
+            $this->setUrl($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setUrl($arr[$keys[4]]);
+            $this->setTitle($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setTitle($arr[$keys[5]]);
+            $this->setSubtitle($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setSubtitle($arr[$keys[6]]);
+            $this->setDesc($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setDesc($arr[$keys[7]]);
+            $this->setLocation($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setLocation($arr[$keys[8]]);
+            $this->setIllustrationLegend($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setIllustrationLegend($arr[$keys[9]]);
+            $this->setHighlighted($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setHighlighted($arr[$keys[10]]);
+            $this->setStart($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setStart($arr[$keys[11]]);
+            $this->setEnd($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setEnd($arr[$keys[12]]);
+            $this->setDate($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
-            $this->setDate($arr[$keys[13]]);
+            $this->setStatus($arr[$keys[13]]);
         }
         if (array_key_exists($keys[14], $arr)) {
-            $this->setStatus($arr[$keys[14]]);
+            $this->setInsert($arr[$keys[14]]);
         }
         if (array_key_exists($keys[15], $arr)) {
-            $this->setInsert($arr[$keys[15]]);
+            $this->setUpdate($arr[$keys[15]]);
         }
         if (array_key_exists($keys[16], $arr)) {
-            $this->setUpdate($arr[$keys[16]]);
+            $this->setCreatedAt($arr[$keys[16]]);
         }
         if (array_key_exists($keys[17], $arr)) {
-            $this->setCreatedAt($arr[$keys[17]]);
-        }
-        if (array_key_exists($keys[18], $arr)) {
-            $this->setUpdatedAt($arr[$keys[18]]);
+            $this->setUpdatedAt($arr[$keys[17]]);
         }
 
         return $this;
@@ -2095,9 +2038,6 @@ abstract class Event implements ActiveRecordInterface
         }
         if ($this->isColumnModified(EventTableMap::COL_PUBLISHER_ID)) {
             $criteria->add(EventTableMap::COL_PUBLISHER_ID, $this->publisher_id);
-        }
-        if ($this->isColumnModified(EventTableMap::COL_LIBRARY_ID)) {
-            $criteria->add(EventTableMap::COL_LIBRARY_ID, $this->library_id);
         }
         if ($this->isColumnModified(EventTableMap::COL_EVENT_URL)) {
             $criteria->add(EventTableMap::COL_EVENT_URL, $this->event_url);
@@ -2234,7 +2174,6 @@ abstract class Event implements ActiveRecordInterface
     {
         $copyObj->setSiteId($this->getSiteId());
         $copyObj->setPublisherId($this->getPublisherId());
-        $copyObj->setLibraryId($this->getLibraryId());
         $copyObj->setUrl($this->getUrl());
         $copyObj->setTitle($this->getTitle());
         $copyObj->setSubtitle($this->getSubtitle());
@@ -2716,7 +2655,6 @@ abstract class Event implements ActiveRecordInterface
         $this->event_id = null;
         $this->site_id = null;
         $this->publisher_id = null;
-        $this->library_id = null;
         $this->event_url = null;
         $this->event_title = null;
         $this->event_subtitle = null;

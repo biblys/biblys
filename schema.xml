@@ -467,7 +467,6 @@
     <column name="event_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int unsigned"/>
     <column name="publisher_id" phpName="PublisherId" type="INTEGER"/>
-    <column name="library_id" phpName="LibraryId" type="INTEGER" sqlType="int unsigned"/>
     <column name="event_url" phpName="Url" type="VARCHAR" size="128"/>
     <column name="event_title" phpName="Title" type="LONGVARCHAR"/>
     <column name="event_subtitle" phpName="Subtitle" type="LONGVARCHAR"/>
@@ -681,39 +680,6 @@
       <parameter name="create_column" value="lang_created" />
       <parameter name="update_column" value="lang_updated" />
     </behavior>
-    <vendor type="mysql">
-      <parameter name="Engine" value="MyISAM"/>
-    </vendor>
-  </table>
-  <table name="libraries" idMethod="native" phpName="Library">
-    <column name="library_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="library_name" phpName="Name" type="VARCHAR" size="255"/>
-    <column name="library_name_alphabetic" phpName="NameAlphabetic" type="VARCHAR" size="256"/>
-    <column name="library_url" phpName="Url" type="VARCHAR" size="128"/>
-    <column name="library_representative" phpName="Representative" type="VARCHAR" size="256"/>
-    <column name="library_address" phpName="Address" type="VARCHAR" size="256"/>
-    <column name="library_postal_code" phpName="PostalCode" type="VARCHAR" size="8"/>
-    <column name="library_city" phpName="City" type="VARCHAR" size="128"/>
-    <column name="library_country" phpName="Country" type="VARCHAR" size="128"/>
-    <column name="library_phone" phpName="Phone" type="VARCHAR" size="16"/>
-    <column name="library_fax" phpName="Fax" type="VARCHAR" size="16"/>
-    <column name="library_website" phpName="Website" type="VARCHAR" size="128"/>
-    <column name="library_email" phpName="Email" type="VARCHAR" size="128"/>
-    <column name="library_facebook" phpName="Facebook" type="VARCHAR" size="128"/>
-    <column name="library_twitter" phpName="Twitter" type="VARCHAR" size="15"/>
-    <column name="library_creation_year" phpName="CreationYear" type="VARCHAR" size="4"/>
-    <column name="library_specialities" phpName="Specialities" type="VARCHAR" size="256"/>
-    <column name="library_readings" phpName="Readings" type="VARCHAR" size="512"/>
-    <column name="library_desc" phpName="Desc" type="LONGVARCHAR"/>
-    <column name="library_created" phpName="CreatedAt" type="TIMESTAMP" defaultExpr="CURRENT_TIMESTAMP"/>
-    <column name="library_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <behavior name="timestampable">
-      <parameter name="create_column" value="library_created" />
-      <parameter name="update_column" value="library_updated" />
-    </behavior>
-    <unique name="publisher_url">
-      <unique-column name="library_url"/>
-    </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="MyISAM"/>
     </vendor>
@@ -1219,7 +1185,6 @@
     <foreign-key foreignTable="publishers" skipSql="true">
       <reference local="publisher_id" foreign="publisher_id"/>
     </foreign-key>
-    <column name="library_id" phpName="LibraryId" type="INTEGER" sqlType="int unsigned"/>
     <column name="right_current" phpName="Current" type="BOOLEAN" size="1" defaultValue="false"/>
     <column name="right_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="right_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
@@ -1538,7 +1503,6 @@
       <reference local="user_id" foreign="id"/>
     </foreign-key>
     <column name="publisher_id" phpName="PublisherId" type="INTEGER" sqlType="int unsigned"/>
-    <column name="library_id" phpName="LibraryId" type="INTEGER" sqlType="int unsigned"/>
     <column name="subscription_type" phpName="Type" type="VARCHAR" size="16"/>
     <column name="subscription_email" phpName="Email" type="VARCHAR" size="256"/>
     <column name="subscription_ends" phpName="Ends" type="SMALLINT"/>

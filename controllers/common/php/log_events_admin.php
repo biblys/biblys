@@ -39,8 +39,6 @@ $where = array('events`.`site_id' => $globalSite->get("id"));
 if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin())
 {
     if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $where = array_merge($where, array('events`.`publisher_id' => LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id')));
-    if (LegacyCodeHelper::getGlobalVisitor()->isBookshop()) $where = array_merge($where, array('events`.`bookshop_id' => LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('bookshop_id')));
-    if (LegacyCodeHelper::getGlobalVisitor()->isLibrary()) $where = array_merge($where, array('events`.`library_id' => LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('library_id')));
 }
 
 $events = $em->getAll(
@@ -48,8 +46,6 @@ $events = $em->getAll(
         array('order' => 'event_start', 'sort' => 'desc',
             'left-join' => array(
                 array('table' => 'publishers', 'key' => 'publisher_id'),
-                array('table' => 'bookshops', 'key' => 'bookshop_id'),
-                array('table' => 'libraries', 'key' => 'library_id')
             )
         )
 );
