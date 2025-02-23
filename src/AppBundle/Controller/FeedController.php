@@ -20,6 +20,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
+use Biblys\Service\TemplateService;
 use DateTime;
 use Framework\Controller;
 use Laminas\Feed\Writer\Feed;
@@ -32,9 +33,24 @@ use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class FeedController extends Controller
 {
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function indexAction(CurrentSite $currentSite, TemplateService $templateService): Response
+    {
+        return $templateService->renderResponse("AppBundle:Feed:index.html.twig", [
+            "domain" => $currentSite->getSite()->getDomain(),
+        ]);
+    }
+
     /**
      * @throws PropelException
      */

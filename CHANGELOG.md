@@ -4,8 +4,9 @@
 
 ### Améliorations
 
+- Une page référençant les différents flux RSS a été ajoutée.
 - Un flux RSS des articles du catalogue est désormais disponible à l'adresse
-  `/feeds/catalogue.rss.xml`.
+  `/feeds/catalog.rss.xml`.
 - La déclaration des urls canoniques des pages a été améliorée.
 - Un lien d'accès à la page de recherche a été ajouté dans le menu de navigation
   rapide.

@@ -293,6 +293,10 @@ event_show:
 
 # Feeds
 
+feed_index:
+  path: /feeds/
+  controller: AppBundle\Controller\FeedController::indexAction
+
 feed_blog:
   path: /feeds/blog.rss.xml
   controller: AppBundle\Controller\FeedController::blogAction
