@@ -22,7 +22,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventQuery orderById($order = Criteria::ASC) Order by the event_id column
  * @method     ChildEventQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
  * @method     ChildEventQuery orderByPublisherId($order = Criteria::ASC) Order by the publisher_id column
- * @method     ChildEventQuery orderByLibraryId($order = Criteria::ASC) Order by the library_id column
  * @method     ChildEventQuery orderByUrl($order = Criteria::ASC) Order by the event_url column
  * @method     ChildEventQuery orderByTitle($order = Criteria::ASC) Order by the event_title column
  * @method     ChildEventQuery orderBySubtitle($order = Criteria::ASC) Order by the event_subtitle column
@@ -42,7 +41,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventQuery groupById() Group by the event_id column
  * @method     ChildEventQuery groupBySiteId() Group by the site_id column
  * @method     ChildEventQuery groupByPublisherId() Group by the publisher_id column
- * @method     ChildEventQuery groupByLibraryId() Group by the library_id column
  * @method     ChildEventQuery groupByUrl() Group by the event_url column
  * @method     ChildEventQuery groupByTitle() Group by the event_title column
  * @method     ChildEventQuery groupBySubtitle() Group by the event_subtitle column
@@ -85,7 +83,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEvent|null findOneById(int $event_id) Return the first ChildEvent filtered by the event_id column
  * @method     ChildEvent|null findOneBySiteId(int $site_id) Return the first ChildEvent filtered by the site_id column
  * @method     ChildEvent|null findOneByPublisherId(int $publisher_id) Return the first ChildEvent filtered by the publisher_id column
- * @method     ChildEvent|null findOneByLibraryId(int $library_id) Return the first ChildEvent filtered by the library_id column
  * @method     ChildEvent|null findOneByUrl(string $event_url) Return the first ChildEvent filtered by the event_url column
  * @method     ChildEvent|null findOneByTitle(string $event_title) Return the first ChildEvent filtered by the event_title column
  * @method     ChildEvent|null findOneBySubtitle(string $event_subtitle) Return the first ChildEvent filtered by the event_subtitle column
@@ -108,7 +105,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEvent requireOneById(int $event_id) Return the first ChildEvent filtered by the event_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEvent requireOneBySiteId(int $site_id) Return the first ChildEvent filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEvent requireOneByPublisherId(int $publisher_id) Return the first ChildEvent filtered by the publisher_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEvent requireOneByLibraryId(int $library_id) Return the first ChildEvent filtered by the library_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEvent requireOneByUrl(string $event_url) Return the first ChildEvent filtered by the event_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEvent requireOneByTitle(string $event_title) Return the first ChildEvent filtered by the event_title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEvent requireOneBySubtitle(string $event_subtitle) Return the first ChildEvent filtered by the event_subtitle column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -134,8 +130,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildEvent> findBySiteId(int|array<int> $site_id) Return ChildEvent objects filtered by the site_id column
  * @method     ChildEvent[]|Collection findByPublisherId(int|array<int> $publisher_id) Return ChildEvent objects filtered by the publisher_id column
  * @psalm-method Collection&\Traversable<ChildEvent> findByPublisherId(int|array<int> $publisher_id) Return ChildEvent objects filtered by the publisher_id column
- * @method     ChildEvent[]|Collection findByLibraryId(int|array<int> $library_id) Return ChildEvent objects filtered by the library_id column
- * @psalm-method Collection&\Traversable<ChildEvent> findByLibraryId(int|array<int> $library_id) Return ChildEvent objects filtered by the library_id column
  * @method     ChildEvent[]|Collection findByUrl(string|array<string> $event_url) Return ChildEvent objects filtered by the event_url column
  * @psalm-method Collection&\Traversable<ChildEvent> findByUrl(string|array<string> $event_url) Return ChildEvent objects filtered by the event_url column
  * @method     ChildEvent[]|Collection findByTitle(string|array<string> $event_title) Return ChildEvent objects filtered by the event_title column
@@ -265,7 +259,7 @@ abstract class EventQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT event_id, site_id, publisher_id, library_id, event_url, event_title, event_subtitle, event_desc, event_location, event_illustration_legend, event_highlighted, event_start, event_end, event_date, event_status, event_insert_, event_update_, event_created, event_updated FROM events WHERE event_id = :p0';
+        $sql = 'SELECT event_id, site_id, publisher_id, event_url, event_title, event_subtitle, event_desc, event_location, event_illustration_legend, event_highlighted, event_start, event_end, event_date, event_status, event_insert_, event_update_, event_created, event_updated FROM events WHERE event_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -484,49 +478,6 @@ abstract class EventQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(EventTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the library_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByLibraryId(1234); // WHERE library_id = 1234
-     * $query->filterByLibraryId(array(12, 34)); // WHERE library_id IN (12, 34)
-     * $query->filterByLibraryId(array('min' => 12)); // WHERE library_id > 12
-     * </code>
-     *
-     * @param mixed $libraryId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByLibraryId($libraryId = null, ?string $comparison = null)
-    {
-        if (is_array($libraryId)) {
-            $useMinMax = false;
-            if (isset($libraryId['min'])) {
-                $this->addUsingAlias(EventTableMap::COL_LIBRARY_ID, $libraryId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($libraryId['max'])) {
-                $this->addUsingAlias(EventTableMap::COL_LIBRARY_ID, $libraryId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(EventTableMap::COL_LIBRARY_ID, $libraryId, $comparison);
 
         return $this;
     }
