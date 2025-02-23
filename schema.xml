@@ -165,41 +165,6 @@
       <parameter name="Engine" value="MyISAM"/>
     </vendor>
   </table>
-  <table name="bookshops" idMethod="native" phpName="Bookshop">
-    <column name="bookshop_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="bookshop_name" phpName="Name" type="VARCHAR" size="255"/>
-    <column name="bookshop_name_alphabetic" phpName="NameAlphabetic" type="VARCHAR" size="256"/>
-    <column name="bookshop_url" phpName="Url" type="VARCHAR" size="128"/>
-    <column name="bookshop_representative" phpName="Representative" type="VARCHAR" size="256"/>
-    <column name="bookshop_address" phpName="Address" type="VARCHAR" size="256"/>
-    <column name="bookshop_postal_code" phpName="PostalCode" type="VARCHAR" size="8"/>
-    <column name="bookshop_city" phpName="City" type="VARCHAR" size="128"/>
-    <column name="bookshop_country" phpName="Country" type="VARCHAR" size="128"/>
-    <column name="bookshop_phone" phpName="Phone" type="VARCHAR" size="16"/>
-    <column name="bookshop_fax" phpName="Fax" type="VARCHAR" size="16"/>
-    <column name="bookshop_website" phpName="Website" type="VARCHAR" size="128"/>
-    <column name="bookshop_email" phpName="Email" type="VARCHAR" size="128"/>
-    <column name="bookshop_facebook" phpName="Facebook" type="VARCHAR" size="32"/>
-    <column name="bookshop_twitter" phpName="Twitter" type="VARCHAR" size="15"/>
-    <column name="bookshop_legal_form" phpName="LegalForm" type="VARCHAR" size="128"/>
-    <column name="bookshop_creation_year" phpName="CreationYear" type="VARCHAR" size="4"/>
-    <column name="bookshop_specialities" phpName="Specialities" type="VARCHAR" size="256"/>
-    <column name="bookshop_membership" phpName="Membership" type="VARCHAR" size="512"/>
-    <column name="bookshop_motto" phpName="Motto" type="VARCHAR" size="128"/>
-    <column name="bookshop_desc" phpName="Desc" type="LONGVARCHAR"/>
-    <column name="bookshop_created" phpName="CreatedAt" type="TIMESTAMP" defaultExpr="CURRENT_TIMESTAMP"/>
-    <column name="bookshop_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <behavior name="timestampable">
-      <parameter name="create_column" value="bookshop_created" />
-      <parameter name="update_column" value="bookshop_updated" />
-    </behavior>
-    <unique name="publisher_url">
-      <unique-column name="bookshop_url"/>
-    </unique>
-    <vendor type="mysql">
-      <parameter name="Engine" value="MyISAM"/>
-    </vendor>
-  </table>
   <table name="carts" idMethod="native" phpName="Cart">
     <column name="cart_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="cart_uid" phpName="Uid" type="VARCHAR" size="32"/>
@@ -502,7 +467,6 @@
     <column name="event_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int unsigned"/>
     <column name="publisher_id" phpName="PublisherId" type="INTEGER"/>
-    <column name="bookshop_id" phpName="BookshopId" type="INTEGER" sqlType="int unsigned"/>
     <column name="library_id" phpName="LibraryId" type="INTEGER" sqlType="int unsigned"/>
     <column name="event_url" phpName="Url" type="VARCHAR" size="128"/>
     <column name="event_title" phpName="Title" type="LONGVARCHAR"/>
@@ -1255,7 +1219,6 @@
     <foreign-key foreignTable="publishers" skipSql="true">
       <reference local="publisher_id" foreign="publisher_id"/>
     </foreign-key>
-    <column name="bookshop_id" phpName="BookshopId" type="INTEGER" sqlType="int unsigned"/>
     <column name="library_id" phpName="LibraryId" type="INTEGER" sqlType="int unsigned"/>
     <column name="right_current" phpName="Current" type="BOOLEAN" size="1" defaultValue="false"/>
     <column name="right_created" phpName="CreatedAt" type="TIMESTAMP"/>
@@ -1422,8 +1385,6 @@
     <column name="site_payment_paypal" phpName="PaymentPaypal" type="VARCHAR" size="32"/>
     <column name="site_payment_payplug" phpName="PaymentPayplug" type="BOOLEAN" size="1" defaultValue="false"/>
     <column name="site_payment_transfer" phpName="PaymentTransfer" type="BOOLEAN" size="1"/>
-    <column name="site_bookshop" phpName="Bookshop" type="BOOLEAN" size="1" defaultValue="false"/>
-    <column name="site_bookshop_id" phpName="BookshopId" type="INTEGER" sqlType="int unsigned"/>
     <column name="site_publisher" phpName="Publisher" type="BOOLEAN" size="1"/>
     <column name="site_publisher_stock" phpName="PublisherStock" type="BOOLEAN" size="1" defaultValue="false"/>
     <column name="publisher_id" phpName="PublisherId" type="INTEGER" sqlType="int unsigned"/>
@@ -1577,7 +1538,6 @@
       <reference local="user_id" foreign="id"/>
     </foreign-key>
     <column name="publisher_id" phpName="PublisherId" type="INTEGER" sqlType="int unsigned"/>
-    <column name="bookshop_id" phpName="BookshopId" type="INTEGER" sqlType="int unsigned"/>
     <column name="library_id" phpName="LibraryId" type="INTEGER" sqlType="int unsigned"/>
     <column name="subscription_type" phpName="Type" type="VARCHAR" size="16"/>
     <column name="subscription_email" phpName="Email" type="VARCHAR" size="256"/>

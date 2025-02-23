@@ -120,13 +120,6 @@ abstract class Right implements ActiveRecordInterface
     protected $publisher_id;
 
     /**
-     * The value for the bookshop_id field.
-     *
-     * @var        int|null
-     */
-    protected $bookshop_id;
-
-    /**
      * The value for the library_id field.
      *
      * @var        int|null
@@ -499,16 +492,6 @@ abstract class Right implements ActiveRecordInterface
     }
 
     /**
-     * Get the [bookshop_id] column value.
-     *
-     * @return int|null
-     */
-    public function getBookshopId()
-    {
-        return $this->bookshop_id;
-    }
-
-    /**
      * Get the [library_id] column value.
      *
      * @return int|null
@@ -743,26 +726,6 @@ abstract class Right implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [bookshop_id] column.
-     *
-     * @param int|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setBookshopId($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->bookshop_id !== $v) {
-            $this->bookshop_id = $v;
-            $this->modifiedColumns[RightTableMap::COL_BOOKSHOP_ID] = true;
-        }
-
-        return $this;
-    }
-
-    /**
      * Set the value of [library_id] column.
      *
      * @param int|null $v New value
@@ -915,22 +878,19 @@ abstract class Right implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : RightTableMap::translateFieldName('PublisherId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->publisher_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : RightTableMap::translateFieldName('BookshopId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->bookshop_id = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : RightTableMap::translateFieldName('LibraryId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : RightTableMap::translateFieldName('LibraryId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->library_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : RightTableMap::translateFieldName('Current', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : RightTableMap::translateFieldName('Current', TableMap::TYPE_PHPNAME, $indexType)];
             $this->right_current = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : RightTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : RightTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->right_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : RightTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : RightTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -943,7 +903,7 @@ abstract class Right implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 12; // 12 = RightTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 11; // 11 = RightTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Right'), 0, $e);
@@ -1217,9 +1177,6 @@ abstract class Right implements ActiveRecordInterface
         if ($this->isColumnModified(RightTableMap::COL_PUBLISHER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'publisher_id';
         }
-        if ($this->isColumnModified(RightTableMap::COL_BOOKSHOP_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'bookshop_id';
-        }
         if ($this->isColumnModified(RightTableMap::COL_LIBRARY_ID)) {
             $modifiedColumns[':p' . $index++]  = 'library_id';
         }
@@ -1269,10 +1226,6 @@ abstract class Right implements ActiveRecordInterface
                         break;
                     case 'publisher_id':
                         $stmt->bindValue($identifier, $this->publisher_id, PDO::PARAM_INT);
-
-                        break;
-                    case 'bookshop_id':
-                        $stmt->bindValue($identifier, $this->bookshop_id, PDO::PARAM_INT);
 
                         break;
                     case 'library_id':
@@ -1375,18 +1328,15 @@ abstract class Right implements ActiveRecordInterface
                 return $this->getPublisherId();
 
             case 7:
-                return $this->getBookshopId();
-
-            case 8:
                 return $this->getLibraryId();
 
-            case 9:
+            case 8:
                 return $this->getCurrent();
 
-            case 10:
+            case 9:
                 return $this->getCreatedAt();
 
-            case 11:
+            case 10:
                 return $this->getUpdatedAt();
 
             default:
@@ -1424,18 +1374,17 @@ abstract class Right implements ActiveRecordInterface
             $keys[4] => $this->getSiteId(),
             $keys[5] => $this->getisAdmin(),
             $keys[6] => $this->getPublisherId(),
-            $keys[7] => $this->getBookshopId(),
-            $keys[8] => $this->getLibraryId(),
-            $keys[9] => $this->getCurrent(),
-            $keys[10] => $this->getCreatedAt(),
-            $keys[11] => $this->getUpdatedAt(),
+            $keys[7] => $this->getLibraryId(),
+            $keys[8] => $this->getCurrent(),
+            $keys[9] => $this->getCreatedAt(),
+            $keys[10] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[10]] instanceof \DateTimeInterface) {
-            $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[9]] instanceof \DateTimeInterface) {
+            $result[$keys[9]] = $result[$keys[9]]->format('Y-m-d H:i:s.u');
         }
 
-        if ($result[$keys[11]] instanceof \DateTimeInterface) {
-            $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[10]] instanceof \DateTimeInterface) {
+            $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1547,18 +1496,15 @@ abstract class Right implements ActiveRecordInterface
                 $this->setPublisherId($value);
                 break;
             case 7:
-                $this->setBookshopId($value);
-                break;
-            case 8:
                 $this->setLibraryId($value);
                 break;
-            case 9:
+            case 8:
                 $this->setCurrent($value);
                 break;
-            case 10:
+            case 9:
                 $this->setCreatedAt($value);
                 break;
-            case 11:
+            case 10:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1609,19 +1555,16 @@ abstract class Right implements ActiveRecordInterface
             $this->setPublisherId($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setBookshopId($arr[$keys[7]]);
+            $this->setLibraryId($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setLibraryId($arr[$keys[8]]);
+            $this->setCurrent($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setCurrent($arr[$keys[9]]);
+            $this->setCreatedAt($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setCreatedAt($arr[$keys[10]]);
-        }
-        if (array_key_exists($keys[11], $arr)) {
-            $this->setUpdatedAt($arr[$keys[11]]);
+            $this->setUpdatedAt($arr[$keys[10]]);
         }
 
         return $this;
@@ -1686,9 +1629,6 @@ abstract class Right implements ActiveRecordInterface
         }
         if ($this->isColumnModified(RightTableMap::COL_PUBLISHER_ID)) {
             $criteria->add(RightTableMap::COL_PUBLISHER_ID, $this->publisher_id);
-        }
-        if ($this->isColumnModified(RightTableMap::COL_BOOKSHOP_ID)) {
-            $criteria->add(RightTableMap::COL_BOOKSHOP_ID, $this->bookshop_id);
         }
         if ($this->isColumnModified(RightTableMap::COL_LIBRARY_ID)) {
             $criteria->add(RightTableMap::COL_LIBRARY_ID, $this->library_id);
@@ -1796,7 +1736,6 @@ abstract class Right implements ActiveRecordInterface
         $copyObj->setSiteId($this->getSiteId());
         $copyObj->setisAdmin($this->getisAdmin());
         $copyObj->setPublisherId($this->getPublisherId());
-        $copyObj->setBookshopId($this->getBookshopId());
         $copyObj->setLibraryId($this->getLibraryId());
         $copyObj->setCurrent($this->getCurrent());
         $copyObj->setCreatedAt($this->getCreatedAt());
@@ -2007,7 +1946,6 @@ abstract class Right implements ActiveRecordInterface
         $this->site_id = null;
         $this->is_admin = null;
         $this->publisher_id = null;
-        $this->bookshop_id = null;
         $this->library_id = null;
         $this->right_current = null;
         $this->right_created = null;
