@@ -752,7 +752,8 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createUserOption(
-        Site   $site,
+        ?Site   $site = null,
+        ?User   $user = null,
         ?string $axysAccountId = null
     ): Option
     {
@@ -760,6 +761,7 @@ class ModelFactory
 
         $option->setSite($site);
         $option->setAxysAccountId($axysAccountId);
+        $option->setUser($user);
         $option->save();
 
         return $option;
@@ -773,6 +775,7 @@ class ModelFactory
         string   $title = "Une actualité",
         bool     $status = Post::STATUS_ONLINE,
         DateTime $date = new DateTime(),
+        ?User     $user = null,
         ?string  $axysAccountId = null,
         ?string  $content = "Un contenu d'actualité qui va vous étonner.",
     ): Post
@@ -789,6 +792,7 @@ class ModelFactory
         $post->setContent($content);
         $post->setCreatedAt(new DateTime());
         $post->setUpdatedAt(new DateTime());
+        $post->setUser($user);
         $post->setAxysAccountId($axysAccountId);
         $post->save();
 
@@ -835,11 +839,15 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createVote(?string $axysAccountId = null): Vote
+    public static function createVote(
+        ?string $axysAccountId = null,
+        ?User    $user = null,
+    ): Vote
     {
         $vote = new Vote();
 
         $vote->setAxysAccountId($axysAccountId);
+        $vote->setUser($user);
         $vote->save();
 
         return $vote;
