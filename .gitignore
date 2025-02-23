@@ -1,5 +1,4 @@
 *.sql
-!db-schema.sql
 *.phar
 sitemap.xml*
 vendor/
