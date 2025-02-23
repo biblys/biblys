@@ -18,7 +18,9 @@
 
 namespace Model;
 
+use Biblys\Exception\CannotDeleteUser;
 use Model\Base\User as BaseUser;
+use Propel\Runtime\Connection\ConnectionInterface;
 
 /**
  * Skeleton subclass for representing a row from the 'users' table.
@@ -31,5 +33,34 @@ use Model\Base\User as BaseUser;
  */
 class User extends BaseUser
 {
+    /**
+     * @throws CannotDeleteUser
+     */
+    private function checkRelatedEntities(
+        OrderQuery|StockQuery|CustomerQuery|DownloadQuery|PostQuery $query,
+        string                                                      $userEmail,
+        string                                                      $modelName,
+    ): void
+    {
+        $count = $query->filterByUserId($this->getId())->count();
+
+        if ($count > 0) {
+            throw new CannotDeleteUser("Impossible de supprimer le compte $userEmail car il a $modelName.");
+        }
+    }
+
+    /**
+     * @throws CannotDeleteUser
+     */
+    public function preDelete(?ConnectionInterface $con = null): bool
+    {
+        $this->checkRelatedEntities(OrderQuery::create(), $this->getEmail(), "des commandes");
+        $this->checkRelatedEntities(StockQuery::create(), $this->getEmail(), "des livres dans sa bibliothèque numérique");
+        $this->checkRelatedEntities(CustomerQuery::create(), $this->getEmail(), "un compte client");
+        $this->checkRelatedEntities(DownloadQuery::create(), $this->getEmail(), "des téléchargements");
+        $this->checkRelatedEntities(PostQuery::create(), $this->getEmail(), "des billets de blog");
+
+        return parent::preDelete($con);
+    }
 
 }
