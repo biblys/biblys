@@ -26,7 +26,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     Utilisateur·ice n° {{ user.id }}
   </h1>
 
-  <table class="table table-striped mt-5">
+  <div class="button-group mt-4" data-confirm="Voulez-vous vraiment SUPPRIMER cet utilisateur·ice ? Cette action est irréversible.">
+    <form method="post" action="{{ path("user_delete", { id: user.id }) }}">
+      <button type="submit" class="btn btn-danger">
+        <i class="fa-solid fa-trash-can"></i>
+        Supprimer
+      </button>
+    </form>
+  </div>
+
+  <table class="table table-striped mt-4">
     <tr>
       <td>Adresse e-mail</td>
       <td>{{ user.email }}</td>

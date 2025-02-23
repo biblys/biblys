@@ -18,6 +18,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Exception\CannotDeleteUser;
 use Biblys\Exception\InvalidConfigurationException;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\BodyParamsService;
@@ -55,6 +56,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use Usecase\DeleteUserUsecase;
 
 class UserController extends Controller
 {
@@ -65,9 +67,9 @@ class UserController extends Controller
      * @throws Exception
      */
     public function indexAction(
-        CurrentUser     $currentUser,
+        CurrentUser        $currentUser,
         QueryParamsService $queryParams,
-        TemplateService $templateService,
+        TemplateService    $templateService,
     ): Response
     {
         $currentUser->authAdmin();
@@ -112,7 +114,7 @@ class UserController extends Controller
         CurrentSite     $currentSite,
         CurrentUser     $currentUser,
         TemplateService $templateService,
-        int $id,
+        int             $id,
     ): Response
     {
         $currentUser->authAdmin();
@@ -124,6 +126,36 @@ class UserController extends Controller
         return $templateService->renderResponse("AppBundle:User:show.html.twig", [
             "user" => $user,
         ]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function deleteAction(
+        CurrentUser          $currentUser,
+        UrlGenerator         $urlGenerator,
+        FlashMessagesService $flashMessages,
+        int                  $id
+    ): RedirectResponse
+    {
+        $currentUser->authAdmin();
+
+        $user = UserQuery::create()->findPk($id);
+        if ($user) {
+            try {
+                $usecase = new DeleteUserUsecase();
+                $usecase->execute($user);
+            } catch (CannotDeleteUser $exception) {
+                $flashMessages->add("error", $exception->getMessage());
+                $userPageUrl = $urlGenerator->generate("user_show", ["id" => $id]);
+                return new RedirectResponse($userPageUrl);
+            }
+        }
+
+        $flashMessages->add("success", "L'utilisateur {$user->getEmail()} a bien été supprimé.");
+
+        $usersPageUrl = $urlGenerator->generate("user_index");
+        return new RedirectResponse($usersPageUrl);
     }
 
 
@@ -513,7 +545,7 @@ class UserController extends Controller
      * @throws SyntaxError
      */
     public function ordersAction(
-        CurrentUser $currentUser,
+        CurrentUser     $currentUser,
         TemplateService $templateService,
     ): Response
     {
