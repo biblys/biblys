@@ -149,6 +149,66 @@ class UserControllerTest extends TestCase
     }
 
     /**
+     * @throws PropelException
+     */
+    public function testDeleteAction(): void
+    {
+        // given
+        $controller = new UserController();
+
+        $userToDelete = ModelFactory::createUser(email: "user-to-delete@example.org");
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->andReturns();
+        $flashMessages = Mockery::mock(FlashMessagesService::class);
+        $flashMessages->expects("add")->with(
+            "success",
+            "L'utilisateur user-to-delete@example.org a bien été supprimé."
+        );
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->with("user_index")->andReturn("/admin/users");
+
+        // when
+        $response = $controller->deleteAction($currentUser, $urlGenerator, $flashMessages, $userToDelete->getId());
+
+        // then
+        $this->assertEquals("302", $response->getStatusCode());
+        $this->assertEquals("/admin/users", $response->getTargetUrl());
+        $this->assertTrue($userToDelete->isDeleted());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testDeleteActionDisplayErrorWhenDeletionFails(): void
+    {
+        // given
+        $controller = new UserController();
+
+        $userToDelete = ModelFactory::createUser(email: "user-with-orders@example.org");
+        ModelFactory::createOrder(user: $userToDelete);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->andReturns();
+        $flashMessages = Mockery::mock(FlashMessagesService::class);
+        $flashMessages->expects("add")->with(
+            "error",
+            "Impossible de supprimer le compte user-with-orders@example.org car il a des commandes."
+        );
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->with("user_show", ["id" => $userToDelete->getId()])
+            ->andReturn("/users/123");
+
+        // when
+        $response = $controller->deleteAction($currentUser, $urlGenerator, $flashMessages, $userToDelete->getId());
+
+        // then
+        $this->assertEquals("302", $response->getStatusCode());
+        $this->assertEquals("/users/123", $response->getTargetUrl());
+        $this->assertFalse($userToDelete->isDeleted());
+    }
+
+    /**
      * #login
      */
 

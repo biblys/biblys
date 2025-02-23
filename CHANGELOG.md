@@ -7,12 +7,13 @@
 - Une page référençant les différents flux RSS a été ajoutée.
 - Un flux RSS des articles du catalogue est désormais disponible à l'adresse
   `/feeds/catalog.rss.xml`.
+- Il est désormais possible de supprimer un utilisateur.
+- La page d'administration des utilisateurs dispose maintenant d'un champ de 
+  recherche et est paginée au-delà de 100 résultats.
 - La déclaration des urls canoniques des pages a été améliorée.
 - Un lien d'accès à la page de recherche a été ajouté dans le menu de navigation
   rapide.
 - La présentation des options sur la page de recherche a été améliorée.
-- La page d'administration des utilisateurs dispose maintenant d'un champ de 
-  recherche et est paginée au-delà de 100 résultats.
 
 ### Corrections
 

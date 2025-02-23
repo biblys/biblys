@@ -774,6 +774,13 @@ user_show:
   requirements:
         id: \d+
 
+user_delete:
+  path: /admin/users/{id}/delete
+  controller: AppBundle\Controller\UserController::deleteAction
+  methods: POST
+  requirements:
+    id: \d+
+
 user_login:
   path: /user/login
   controller: AppBundle\Controller\UserController::login
