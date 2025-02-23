@@ -26,7 +26,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRightQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
  * @method     ChildRightQuery orderByisAdmin($order = Criteria::ASC) Order by the is_admin column
  * @method     ChildRightQuery orderByPublisherId($order = Criteria::ASC) Order by the publisher_id column
- * @method     ChildRightQuery orderByLibraryId($order = Criteria::ASC) Order by the library_id column
  * @method     ChildRightQuery orderByCurrent($order = Criteria::ASC) Order by the right_current column
  * @method     ChildRightQuery orderByCreatedAt($order = Criteria::ASC) Order by the right_created column
  * @method     ChildRightQuery orderByUpdatedAt($order = Criteria::ASC) Order by the right_updated column
@@ -38,7 +37,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRightQuery groupBySiteId() Group by the site_id column
  * @method     ChildRightQuery groupByisAdmin() Group by the is_admin column
  * @method     ChildRightQuery groupByPublisherId() Group by the publisher_id column
- * @method     ChildRightQuery groupByLibraryId() Group by the library_id column
  * @method     ChildRightQuery groupByCurrent() Group by the right_current column
  * @method     ChildRightQuery groupByCreatedAt() Group by the right_created column
  * @method     ChildRightQuery groupByUpdatedAt() Group by the right_updated column
@@ -93,7 +91,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRight|null findOneBySiteId(int $site_id) Return the first ChildRight filtered by the site_id column
  * @method     ChildRight|null findOneByisAdmin(boolean $is_admin) Return the first ChildRight filtered by the is_admin column
  * @method     ChildRight|null findOneByPublisherId(int $publisher_id) Return the first ChildRight filtered by the publisher_id column
- * @method     ChildRight|null findOneByLibraryId(int $library_id) Return the first ChildRight filtered by the library_id column
  * @method     ChildRight|null findOneByCurrent(boolean $right_current) Return the first ChildRight filtered by the right_current column
  * @method     ChildRight|null findOneByCreatedAt(string $right_created) Return the first ChildRight filtered by the right_created column
  * @method     ChildRight|null findOneByUpdatedAt(string $right_updated) Return the first ChildRight filtered by the right_updated column
@@ -108,7 +105,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRight requireOneBySiteId(int $site_id) Return the first ChildRight filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRight requireOneByisAdmin(boolean $is_admin) Return the first ChildRight filtered by the is_admin column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRight requireOneByPublisherId(int $publisher_id) Return the first ChildRight filtered by the publisher_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRight requireOneByLibraryId(int $library_id) Return the first ChildRight filtered by the library_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRight requireOneByCurrent(boolean $right_current) Return the first ChildRight filtered by the right_current column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRight requireOneByCreatedAt(string $right_created) Return the first ChildRight filtered by the right_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRight requireOneByUpdatedAt(string $right_updated) Return the first ChildRight filtered by the right_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -130,8 +126,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildRight> findByisAdmin(boolean|array<boolean> $is_admin) Return ChildRight objects filtered by the is_admin column
  * @method     ChildRight[]|Collection findByPublisherId(int|array<int> $publisher_id) Return ChildRight objects filtered by the publisher_id column
  * @psalm-method Collection&\Traversable<ChildRight> findByPublisherId(int|array<int> $publisher_id) Return ChildRight objects filtered by the publisher_id column
- * @method     ChildRight[]|Collection findByLibraryId(int|array<int> $library_id) Return ChildRight objects filtered by the library_id column
- * @psalm-method Collection&\Traversable<ChildRight> findByLibraryId(int|array<int> $library_id) Return ChildRight objects filtered by the library_id column
  * @method     ChildRight[]|Collection findByCurrent(boolean|array<boolean> $right_current) Return ChildRight objects filtered by the right_current column
  * @psalm-method Collection&\Traversable<ChildRight> findByCurrent(boolean|array<boolean> $right_current) Return ChildRight objects filtered by the right_current column
  * @method     ChildRight[]|Collection findByCreatedAt(string|array<string> $right_created) Return ChildRight objects filtered by the right_created column
@@ -237,7 +231,7 @@ abstract class RightQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT right_id, right_uid, axys_account_id, user_id, site_id, is_admin, publisher_id, library_id, right_current, right_created, right_updated FROM rights WHERE right_id = :p0';
+        $sql = 'SELECT right_id, right_uid, axys_account_id, user_id, site_id, is_admin, publisher_id, right_current, right_created, right_updated FROM rights WHERE right_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -605,49 +599,6 @@ abstract class RightQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(RightTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the library_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByLibraryId(1234); // WHERE library_id = 1234
-     * $query->filterByLibraryId(array(12, 34)); // WHERE library_id IN (12, 34)
-     * $query->filterByLibraryId(array('min' => 12)); // WHERE library_id > 12
-     * </code>
-     *
-     * @param mixed $libraryId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByLibraryId($libraryId = null, ?string $comparison = null)
-    {
-        if (is_array($libraryId)) {
-            $useMinMax = false;
-            if (isset($libraryId['min'])) {
-                $this->addUsingAlias(RightTableMap::COL_LIBRARY_ID, $libraryId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($libraryId['max'])) {
-                $this->addUsingAlias(RightTableMap::COL_LIBRARY_ID, $libraryId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(RightTableMap::COL_LIBRARY_ID, $libraryId, $comparison);
 
         return $this;
     }

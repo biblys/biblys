@@ -63,7 +63,7 @@ class EventTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 19;
+    public const NUM_COLUMNS = 18;
 
     /**
      * The number of lazy-loaded columns
@@ -73,7 +73,7 @@ class EventTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 19;
+    public const NUM_HYDRATE_COLUMNS = 18;
 
     /**
      * the column name for the event_id field
@@ -89,11 +89,6 @@ class EventTableMap extends TableMap
      * the column name for the publisher_id field
      */
     public const COL_PUBLISHER_ID = 'events.publisher_id';
-
-    /**
-     * the column name for the library_id field
-     */
-    public const COL_LIBRARY_ID = 'events.library_id';
 
     /**
      * the column name for the event_url field
@@ -184,11 +179,11 @@ class EventTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'PublisherId', 'LibraryId', 'Url', 'Title', 'Subtitle', 'Desc', 'Location', 'IllustrationLegend', 'Highlighted', 'Start', 'End', 'Date', 'Status', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'publisherId', 'libraryId', 'url', 'title', 'subtitle', 'desc', 'location', 'illustrationLegend', 'highlighted', 'start', 'end', 'date', 'status', 'insert', 'update', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [EventTableMap::COL_EVENT_ID, EventTableMap::COL_SITE_ID, EventTableMap::COL_PUBLISHER_ID, EventTableMap::COL_LIBRARY_ID, EventTableMap::COL_EVENT_URL, EventTableMap::COL_EVENT_TITLE, EventTableMap::COL_EVENT_SUBTITLE, EventTableMap::COL_EVENT_DESC, EventTableMap::COL_EVENT_LOCATION, EventTableMap::COL_EVENT_ILLUSTRATION_LEGEND, EventTableMap::COL_EVENT_HIGHLIGHTED, EventTableMap::COL_EVENT_START, EventTableMap::COL_EVENT_END, EventTableMap::COL_EVENT_DATE, EventTableMap::COL_EVENT_STATUS, EventTableMap::COL_EVENT_INSERT_, EventTableMap::COL_EVENT_UPDATE_, EventTableMap::COL_EVENT_CREATED, EventTableMap::COL_EVENT_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['event_id', 'site_id', 'publisher_id', 'library_id', 'event_url', 'event_title', 'event_subtitle', 'event_desc', 'event_location', 'event_illustration_legend', 'event_highlighted', 'event_start', 'event_end', 'event_date', 'event_status', 'event_insert_', 'event_update_', 'event_created', 'event_updated', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, ]
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'PublisherId', 'Url', 'Title', 'Subtitle', 'Desc', 'Location', 'IllustrationLegend', 'Highlighted', 'Start', 'End', 'Date', 'Status', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'publisherId', 'url', 'title', 'subtitle', 'desc', 'location', 'illustrationLegend', 'highlighted', 'start', 'end', 'date', 'status', 'insert', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [EventTableMap::COL_EVENT_ID, EventTableMap::COL_SITE_ID, EventTableMap::COL_PUBLISHER_ID, EventTableMap::COL_EVENT_URL, EventTableMap::COL_EVENT_TITLE, EventTableMap::COL_EVENT_SUBTITLE, EventTableMap::COL_EVENT_DESC, EventTableMap::COL_EVENT_LOCATION, EventTableMap::COL_EVENT_ILLUSTRATION_LEGEND, EventTableMap::COL_EVENT_HIGHLIGHTED, EventTableMap::COL_EVENT_START, EventTableMap::COL_EVENT_END, EventTableMap::COL_EVENT_DATE, EventTableMap::COL_EVENT_STATUS, EventTableMap::COL_EVENT_INSERT_, EventTableMap::COL_EVENT_UPDATE_, EventTableMap::COL_EVENT_CREATED, EventTableMap::COL_EVENT_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['event_id', 'site_id', 'publisher_id', 'event_url', 'event_title', 'event_subtitle', 'event_desc', 'event_location', 'event_illustration_legend', 'event_highlighted', 'event_start', 'event_end', 'event_date', 'event_status', 'event_insert_', 'event_update_', 'event_created', 'event_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, ]
     ];
 
     /**
@@ -200,11 +195,11 @@ class EventTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'PublisherId' => 2, 'LibraryId' => 3, 'Url' => 4, 'Title' => 5, 'Subtitle' => 6, 'Desc' => 7, 'Location' => 8, 'IllustrationLegend' => 9, 'Highlighted' => 10, 'Start' => 11, 'End' => 12, 'Date' => 13, 'Status' => 14, 'Insert' => 15, 'Update' => 16, 'CreatedAt' => 17, 'UpdatedAt' => 18, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'publisherId' => 2, 'libraryId' => 3, 'url' => 4, 'title' => 5, 'subtitle' => 6, 'desc' => 7, 'location' => 8, 'illustrationLegend' => 9, 'highlighted' => 10, 'start' => 11, 'end' => 12, 'date' => 13, 'status' => 14, 'insert' => 15, 'update' => 16, 'createdAt' => 17, 'updatedAt' => 18, ],
-        self::TYPE_COLNAME       => [EventTableMap::COL_EVENT_ID => 0, EventTableMap::COL_SITE_ID => 1, EventTableMap::COL_PUBLISHER_ID => 2, EventTableMap::COL_LIBRARY_ID => 3, EventTableMap::COL_EVENT_URL => 4, EventTableMap::COL_EVENT_TITLE => 5, EventTableMap::COL_EVENT_SUBTITLE => 6, EventTableMap::COL_EVENT_DESC => 7, EventTableMap::COL_EVENT_LOCATION => 8, EventTableMap::COL_EVENT_ILLUSTRATION_LEGEND => 9, EventTableMap::COL_EVENT_HIGHLIGHTED => 10, EventTableMap::COL_EVENT_START => 11, EventTableMap::COL_EVENT_END => 12, EventTableMap::COL_EVENT_DATE => 13, EventTableMap::COL_EVENT_STATUS => 14, EventTableMap::COL_EVENT_INSERT_ => 15, EventTableMap::COL_EVENT_UPDATE_ => 16, EventTableMap::COL_EVENT_CREATED => 17, EventTableMap::COL_EVENT_UPDATED => 18, ],
-        self::TYPE_FIELDNAME     => ['event_id' => 0, 'site_id' => 1, 'publisher_id' => 2, 'library_id' => 3, 'event_url' => 4, 'event_title' => 5, 'event_subtitle' => 6, 'event_desc' => 7, 'event_location' => 8, 'event_illustration_legend' => 9, 'event_highlighted' => 10, 'event_start' => 11, 'event_end' => 12, 'event_date' => 13, 'event_status' => 14, 'event_insert_' => 15, 'event_update_' => 16, 'event_created' => 17, 'event_updated' => 18, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'PublisherId' => 2, 'Url' => 3, 'Title' => 4, 'Subtitle' => 5, 'Desc' => 6, 'Location' => 7, 'IllustrationLegend' => 8, 'Highlighted' => 9, 'Start' => 10, 'End' => 11, 'Date' => 12, 'Status' => 13, 'Insert' => 14, 'Update' => 15, 'CreatedAt' => 16, 'UpdatedAt' => 17, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'publisherId' => 2, 'url' => 3, 'title' => 4, 'subtitle' => 5, 'desc' => 6, 'location' => 7, 'illustrationLegend' => 8, 'highlighted' => 9, 'start' => 10, 'end' => 11, 'date' => 12, 'status' => 13, 'insert' => 14, 'update' => 15, 'createdAt' => 16, 'updatedAt' => 17, ],
+        self::TYPE_COLNAME       => [EventTableMap::COL_EVENT_ID => 0, EventTableMap::COL_SITE_ID => 1, EventTableMap::COL_PUBLISHER_ID => 2, EventTableMap::COL_EVENT_URL => 3, EventTableMap::COL_EVENT_TITLE => 4, EventTableMap::COL_EVENT_SUBTITLE => 5, EventTableMap::COL_EVENT_DESC => 6, EventTableMap::COL_EVENT_LOCATION => 7, EventTableMap::COL_EVENT_ILLUSTRATION_LEGEND => 8, EventTableMap::COL_EVENT_HIGHLIGHTED => 9, EventTableMap::COL_EVENT_START => 10, EventTableMap::COL_EVENT_END => 11, EventTableMap::COL_EVENT_DATE => 12, EventTableMap::COL_EVENT_STATUS => 13, EventTableMap::COL_EVENT_INSERT_ => 14, EventTableMap::COL_EVENT_UPDATE_ => 15, EventTableMap::COL_EVENT_CREATED => 16, EventTableMap::COL_EVENT_UPDATED => 17, ],
+        self::TYPE_FIELDNAME     => ['event_id' => 0, 'site_id' => 1, 'publisher_id' => 2, 'event_url' => 3, 'event_title' => 4, 'event_subtitle' => 5, 'event_desc' => 6, 'event_location' => 7, 'event_illustration_legend' => 8, 'event_highlighted' => 9, 'event_start' => 10, 'event_end' => 11, 'event_date' => 12, 'event_status' => 13, 'event_insert_' => 14, 'event_update_' => 15, 'event_created' => 16, 'event_updated' => 17, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, ]
     ];
 
     /**
@@ -237,14 +232,6 @@ class EventTableMap extends TableMap
         'COL_PUBLISHER_ID' => 'PUBLISHER_ID',
         'publisher_id' => 'PUBLISHER_ID',
         'events.publisher_id' => 'PUBLISHER_ID',
-        'LibraryId' => 'LIBRARY_ID',
-        'Event.LibraryId' => 'LIBRARY_ID',
-        'libraryId' => 'LIBRARY_ID',
-        'event.libraryId' => 'LIBRARY_ID',
-        'EventTableMap::COL_LIBRARY_ID' => 'LIBRARY_ID',
-        'COL_LIBRARY_ID' => 'LIBRARY_ID',
-        'library_id' => 'LIBRARY_ID',
-        'events.library_id' => 'LIBRARY_ID',
         'Url' => 'EVENT_URL',
         'Event.Url' => 'EVENT_URL',
         'url' => 'EVENT_URL',
@@ -387,7 +374,6 @@ class EventTableMap extends TableMap
         $this->addPrimaryKey('event_id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
         $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, null, null);
-        $this->addColumn('library_id', 'LibraryId', 'INTEGER', false, null, null);
         $this->addColumn('event_url', 'Url', 'VARCHAR', false, 128, null);
         $this->addColumn('event_title', 'Title', 'LONGVARCHAR', false, null, null);
         $this->addColumn('event_subtitle', 'Subtitle', 'LONGVARCHAR', false, null, null);
@@ -579,7 +565,6 @@ class EventTableMap extends TableMap
             $criteria->addSelectColumn(EventTableMap::COL_EVENT_ID);
             $criteria->addSelectColumn(EventTableMap::COL_SITE_ID);
             $criteria->addSelectColumn(EventTableMap::COL_PUBLISHER_ID);
-            $criteria->addSelectColumn(EventTableMap::COL_LIBRARY_ID);
             $criteria->addSelectColumn(EventTableMap::COL_EVENT_URL);
             $criteria->addSelectColumn(EventTableMap::COL_EVENT_TITLE);
             $criteria->addSelectColumn(EventTableMap::COL_EVENT_SUBTITLE);
@@ -599,7 +584,6 @@ class EventTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.event_id');
             $criteria->addSelectColumn($alias . '.site_id');
             $criteria->addSelectColumn($alias . '.publisher_id');
-            $criteria->addSelectColumn($alias . '.library_id');
             $criteria->addSelectColumn($alias . '.event_url');
             $criteria->addSelectColumn($alias . '.event_title');
             $criteria->addSelectColumn($alias . '.event_subtitle');
@@ -636,7 +620,6 @@ class EventTableMap extends TableMap
             $criteria->removeSelectColumn(EventTableMap::COL_EVENT_ID);
             $criteria->removeSelectColumn(EventTableMap::COL_SITE_ID);
             $criteria->removeSelectColumn(EventTableMap::COL_PUBLISHER_ID);
-            $criteria->removeSelectColumn(EventTableMap::COL_LIBRARY_ID);
             $criteria->removeSelectColumn(EventTableMap::COL_EVENT_URL);
             $criteria->removeSelectColumn(EventTableMap::COL_EVENT_TITLE);
             $criteria->removeSelectColumn(EventTableMap::COL_EVENT_SUBTITLE);
@@ -656,7 +639,6 @@ class EventTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.event_id');
             $criteria->removeSelectColumn($alias . '.site_id');
             $criteria->removeSelectColumn($alias . '.publisher_id');
-            $criteria->removeSelectColumn($alias . '.library_id');
             $criteria->removeSelectColumn($alias . '.event_url');
             $criteria->removeSelectColumn($alias . '.event_title');
             $criteria->removeSelectColumn($alias . '.event_subtitle');
