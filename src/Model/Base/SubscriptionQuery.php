@@ -24,7 +24,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSubscriptionQuery orderByAxysAccountId($order = Criteria::ASC) Order by the axys_account_id column
  * @method     ChildSubscriptionQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
  * @method     ChildSubscriptionQuery orderByPublisherId($order = Criteria::ASC) Order by the publisher_id column
- * @method     ChildSubscriptionQuery orderByBookshopId($order = Criteria::ASC) Order by the bookshop_id column
  * @method     ChildSubscriptionQuery orderByLibraryId($order = Criteria::ASC) Order by the library_id column
  * @method     ChildSubscriptionQuery orderByType($order = Criteria::ASC) Order by the subscription_type column
  * @method     ChildSubscriptionQuery orderByEmail($order = Criteria::ASC) Order by the subscription_email column
@@ -40,7 +39,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSubscriptionQuery groupByAxysAccountId() Group by the axys_account_id column
  * @method     ChildSubscriptionQuery groupByUserId() Group by the user_id column
  * @method     ChildSubscriptionQuery groupByPublisherId() Group by the publisher_id column
- * @method     ChildSubscriptionQuery groupByBookshopId() Group by the bookshop_id column
  * @method     ChildSubscriptionQuery groupByLibraryId() Group by the library_id column
  * @method     ChildSubscriptionQuery groupByType() Group by the subscription_type column
  * @method     ChildSubscriptionQuery groupByEmail() Group by the subscription_email column
@@ -89,7 +87,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSubscription|null findOneByAxysAccountId(int $axys_account_id) Return the first ChildSubscription filtered by the axys_account_id column
  * @method     ChildSubscription|null findOneByUserId(int $user_id) Return the first ChildSubscription filtered by the user_id column
  * @method     ChildSubscription|null findOneByPublisherId(int $publisher_id) Return the first ChildSubscription filtered by the publisher_id column
- * @method     ChildSubscription|null findOneByBookshopId(int $bookshop_id) Return the first ChildSubscription filtered by the bookshop_id column
  * @method     ChildSubscription|null findOneByLibraryId(int $library_id) Return the first ChildSubscription filtered by the library_id column
  * @method     ChildSubscription|null findOneByType(string $subscription_type) Return the first ChildSubscription filtered by the subscription_type column
  * @method     ChildSubscription|null findOneByEmail(string $subscription_email) Return the first ChildSubscription filtered by the subscription_email column
@@ -108,7 +105,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSubscription requireOneByAxysAccountId(int $axys_account_id) Return the first ChildSubscription filtered by the axys_account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSubscription requireOneByUserId(int $user_id) Return the first ChildSubscription filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSubscription requireOneByPublisherId(int $publisher_id) Return the first ChildSubscription filtered by the publisher_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildSubscription requireOneByBookshopId(int $bookshop_id) Return the first ChildSubscription filtered by the bookshop_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSubscription requireOneByLibraryId(int $library_id) Return the first ChildSubscription filtered by the library_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSubscription requireOneByType(string $subscription_type) Return the first ChildSubscription filtered by the subscription_type column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSubscription requireOneByEmail(string $subscription_email) Return the first ChildSubscription filtered by the subscription_email column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -132,8 +128,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildSubscription> findByUserId(int|array<int> $user_id) Return ChildSubscription objects filtered by the user_id column
  * @method     ChildSubscription[]|Collection findByPublisherId(int|array<int> $publisher_id) Return ChildSubscription objects filtered by the publisher_id column
  * @psalm-method Collection&\Traversable<ChildSubscription> findByPublisherId(int|array<int> $publisher_id) Return ChildSubscription objects filtered by the publisher_id column
- * @method     ChildSubscription[]|Collection findByBookshopId(int|array<int> $bookshop_id) Return ChildSubscription objects filtered by the bookshop_id column
- * @psalm-method Collection&\Traversable<ChildSubscription> findByBookshopId(int|array<int> $bookshop_id) Return ChildSubscription objects filtered by the bookshop_id column
  * @method     ChildSubscription[]|Collection findByLibraryId(int|array<int> $library_id) Return ChildSubscription objects filtered by the library_id column
  * @psalm-method Collection&\Traversable<ChildSubscription> findByLibraryId(int|array<int> $library_id) Return ChildSubscription objects filtered by the library_id column
  * @method     ChildSubscription[]|Collection findByType(string|array<string> $subscription_type) Return ChildSubscription objects filtered by the subscription_type column
@@ -251,7 +245,7 @@ abstract class SubscriptionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT subscription_id, site_id, axys_account_id, user_id, publisher_id, bookshop_id, library_id, subscription_type, subscription_email, subscription_ends, subscription_option, subscription_insert, subscription_update, subscription_created, subscription_updated FROM subscriptions WHERE subscription_id = :p0';
+        $sql = 'SELECT subscription_id, site_id, axys_account_id, user_id, publisher_id, library_id, subscription_type, subscription_email, subscription_ends, subscription_option, subscription_insert, subscription_update, subscription_created, subscription_updated FROM subscriptions WHERE subscription_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -560,49 +554,6 @@ abstract class SubscriptionQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(SubscriptionTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the bookshop_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByBookshopId(1234); // WHERE bookshop_id = 1234
-     * $query->filterByBookshopId(array(12, 34)); // WHERE bookshop_id IN (12, 34)
-     * $query->filterByBookshopId(array('min' => 12)); // WHERE bookshop_id > 12
-     * </code>
-     *
-     * @param mixed $bookshopId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByBookshopId($bookshopId = null, ?string $comparison = null)
-    {
-        if (is_array($bookshopId)) {
-            $useMinMax = false;
-            if (isset($bookshopId['min'])) {
-                $this->addUsingAlias(SubscriptionTableMap::COL_BOOKSHOP_ID, $bookshopId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($bookshopId['max'])) {
-                $this->addUsingAlias(SubscriptionTableMap::COL_BOOKSHOP_ID, $bookshopId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(SubscriptionTableMap::COL_BOOKSHOP_ID, $bookshopId, $comparison);
 
         return $this;
     }

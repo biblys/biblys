@@ -43,8 +43,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery orderByPaymentPaypal($order = Criteria::ASC) Order by the site_payment_paypal column
  * @method     ChildSiteQuery orderByPaymentPayplug($order = Criteria::ASC) Order by the site_payment_payplug column
  * @method     ChildSiteQuery orderByPaymentTransfer($order = Criteria::ASC) Order by the site_payment_transfer column
- * @method     ChildSiteQuery orderByBookshop($order = Criteria::ASC) Order by the site_bookshop column
- * @method     ChildSiteQuery orderByBookshopId($order = Criteria::ASC) Order by the site_bookshop_id column
  * @method     ChildSiteQuery orderByPublisher($order = Criteria::ASC) Order by the site_publisher column
  * @method     ChildSiteQuery orderByPublisherStock($order = Criteria::ASC) Order by the site_publisher_stock column
  * @method     ChildSiteQuery orderByPublisherId($order = Criteria::ASC) Order by the publisher_id column
@@ -82,8 +80,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery groupByPaymentPaypal() Group by the site_payment_paypal column
  * @method     ChildSiteQuery groupByPaymentPayplug() Group by the site_payment_payplug column
  * @method     ChildSiteQuery groupByPaymentTransfer() Group by the site_payment_transfer column
- * @method     ChildSiteQuery groupByBookshop() Group by the site_bookshop column
- * @method     ChildSiteQuery groupByBookshopId() Group by the site_bookshop_id column
  * @method     ChildSiteQuery groupByPublisher() Group by the site_publisher column
  * @method     ChildSiteQuery groupByPublisherStock() Group by the site_publisher_stock column
  * @method     ChildSiteQuery groupByPublisherId() Group by the publisher_id column
@@ -384,8 +380,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSite|null findOneByPaymentPaypal(string $site_payment_paypal) Return the first ChildSite filtered by the site_payment_paypal column
  * @method     ChildSite|null findOneByPaymentPayplug(boolean $site_payment_payplug) Return the first ChildSite filtered by the site_payment_payplug column
  * @method     ChildSite|null findOneByPaymentTransfer(boolean $site_payment_transfer) Return the first ChildSite filtered by the site_payment_transfer column
- * @method     ChildSite|null findOneByBookshop(boolean $site_bookshop) Return the first ChildSite filtered by the site_bookshop column
- * @method     ChildSite|null findOneByBookshopId(int $site_bookshop_id) Return the first ChildSite filtered by the site_bookshop_id column
  * @method     ChildSite|null findOneByPublisher(boolean $site_publisher) Return the first ChildSite filtered by the site_publisher column
  * @method     ChildSite|null findOneByPublisherStock(boolean $site_publisher_stock) Return the first ChildSite filtered by the site_publisher_stock column
  * @method     ChildSite|null findOneByPublisherId(int $publisher_id) Return the first ChildSite filtered by the publisher_id column
@@ -426,8 +420,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSite requireOneByPaymentPaypal(string $site_payment_paypal) Return the first ChildSite filtered by the site_payment_paypal column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByPaymentPayplug(boolean $site_payment_payplug) Return the first ChildSite filtered by the site_payment_payplug column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByPaymentTransfer(boolean $site_payment_transfer) Return the first ChildSite filtered by the site_payment_transfer column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildSite requireOneByBookshop(boolean $site_bookshop) Return the first ChildSite filtered by the site_bookshop column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildSite requireOneByBookshopId(int $site_bookshop_id) Return the first ChildSite filtered by the site_bookshop_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByPublisher(boolean $site_publisher) Return the first ChildSite filtered by the site_publisher column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByPublisherStock(boolean $site_publisher_stock) Return the first ChildSite filtered by the site_publisher_stock column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByPublisherId(int $publisher_id) Return the first ChildSite filtered by the publisher_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -492,10 +484,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildSite> findByPaymentPayplug(boolean|array<boolean> $site_payment_payplug) Return ChildSite objects filtered by the site_payment_payplug column
  * @method     ChildSite[]|Collection findByPaymentTransfer(boolean|array<boolean> $site_payment_transfer) Return ChildSite objects filtered by the site_payment_transfer column
  * @psalm-method Collection&\Traversable<ChildSite> findByPaymentTransfer(boolean|array<boolean> $site_payment_transfer) Return ChildSite objects filtered by the site_payment_transfer column
- * @method     ChildSite[]|Collection findByBookshop(boolean|array<boolean> $site_bookshop) Return ChildSite objects filtered by the site_bookshop column
- * @psalm-method Collection&\Traversable<ChildSite> findByBookshop(boolean|array<boolean> $site_bookshop) Return ChildSite objects filtered by the site_bookshop column
- * @method     ChildSite[]|Collection findByBookshopId(int|array<int> $site_bookshop_id) Return ChildSite objects filtered by the site_bookshop_id column
- * @psalm-method Collection&\Traversable<ChildSite> findByBookshopId(int|array<int> $site_bookshop_id) Return ChildSite objects filtered by the site_bookshop_id column
  * @method     ChildSite[]|Collection findByPublisher(boolean|array<boolean> $site_publisher) Return ChildSite objects filtered by the site_publisher column
  * @psalm-method Collection&\Traversable<ChildSite> findByPublisher(boolean|array<boolean> $site_publisher) Return ChildSite objects filtered by the site_publisher column
  * @method     ChildSite[]|Collection findByPublisherStock(boolean|array<boolean> $site_publisher_stock) Return ChildSite objects filtered by the site_publisher_stock column
@@ -619,7 +607,7 @@ abstract class SiteQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT site_id, site_name, site_pass, site_title, site_domain, site_version, site_tag, site_flag, site_contact, site_address, site_tva, site_html_renderer, site_axys, site_noosfere, site_amazon, site_event_id, site_event_date, site_shop, site_vpc, site_shipping_fee, site_payment_cheque, site_payment_paypal, site_payment_payplug, site_payment_transfer, site_bookshop, site_bookshop_id, site_publisher, site_publisher_stock, publisher_id, site_ebook_bundle, site_fb_page_id, site_fb_page_token, site_analytics_id, site_piwik_id, site_sitemap_updated, site_monitoring, site_created, site_updated FROM sites WHERE site_id = :p0';
+        $sql = 'SELECT site_id, site_name, site_pass, site_title, site_domain, site_version, site_tag, site_flag, site_contact, site_address, site_tva, site_html_renderer, site_axys, site_noosfere, site_amazon, site_event_id, site_event_date, site_shop, site_vpc, site_shipping_fee, site_payment_cheque, site_payment_paypal, site_payment_payplug, site_payment_transfer, site_publisher, site_publisher_stock, publisher_id, site_ebook_bundle, site_fb_page_id, site_fb_page_token, site_analytics_id, site_piwik_id, site_sitemap_updated, site_monitoring, site_created, site_updated FROM sites WHERE site_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1435,78 +1423,6 @@ abstract class SiteQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(SiteTableMap::COL_SITE_PAYMENT_TRANSFER, $paymentTransfer, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the site_bookshop column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByBookshop(true); // WHERE site_bookshop = true
-     * $query->filterByBookshop('yes'); // WHERE site_bookshop = true
-     * </code>
-     *
-     * @param bool|string $bookshop The value to use as filter.
-     *              Non-boolean arguments are converted using the following rules:
-     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByBookshop($bookshop = null, ?string $comparison = null)
-    {
-        if (is_string($bookshop)) {
-            $bookshop = in_array(strtolower($bookshop), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
-        }
-
-        $this->addUsingAlias(SiteTableMap::COL_SITE_BOOKSHOP, $bookshop, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the site_bookshop_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByBookshopId(1234); // WHERE site_bookshop_id = 1234
-     * $query->filterByBookshopId(array(12, 34)); // WHERE site_bookshop_id IN (12, 34)
-     * $query->filterByBookshopId(array('min' => 12)); // WHERE site_bookshop_id > 12
-     * </code>
-     *
-     * @param mixed $bookshopId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByBookshopId($bookshopId = null, ?string $comparison = null)
-    {
-        if (is_array($bookshopId)) {
-            $useMinMax = false;
-            if (isset($bookshopId['min'])) {
-                $this->addUsingAlias(SiteTableMap::COL_SITE_BOOKSHOP_ID, $bookshopId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($bookshopId['max'])) {
-                $this->addUsingAlias(SiteTableMap::COL_SITE_BOOKSHOP_ID, $bookshopId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(SiteTableMap::COL_SITE_BOOKSHOP_ID, $bookshopId, $comparison);
 
         return $this;
     }

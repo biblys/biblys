@@ -103,13 +103,6 @@ abstract class Subscription implements ActiveRecordInterface
     protected $publisher_id;
 
     /**
-     * The value for the bookshop_id field.
-     *
-     * @var        int|null
-     */
-    protected $bookshop_id;
-
-    /**
      * The value for the library_id field.
      *
      * @var        int|null
@@ -481,16 +474,6 @@ abstract class Subscription implements ActiveRecordInterface
     }
 
     /**
-     * Get the [bookshop_id] column value.
-     *
-     * @return int|null
-     */
-    public function getBookshopId()
-    {
-        return $this->bookshop_id;
-    }
-
-    /**
      * Get the [library_id] column value.
      *
      * @return int|null
@@ -747,26 +730,6 @@ abstract class Subscription implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [bookshop_id] column.
-     *
-     * @param int|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setBookshopId($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->bookshop_id !== $v) {
-            $this->bookshop_id = $v;
-            $this->modifiedColumns[SubscriptionTableMap::COL_BOOKSHOP_ID] = true;
-        }
-
-        return $this;
-    }
-
-    /**
      * Set the value of [library_id] column.
      *
      * @param int|null $v New value
@@ -1009,43 +972,40 @@ abstract class Subscription implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : SubscriptionTableMap::translateFieldName('PublisherId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->publisher_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : SubscriptionTableMap::translateFieldName('BookshopId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->bookshop_id = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : SubscriptionTableMap::translateFieldName('LibraryId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : SubscriptionTableMap::translateFieldName('LibraryId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->library_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : SubscriptionTableMap::translateFieldName('Type', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : SubscriptionTableMap::translateFieldName('Type', TableMap::TYPE_PHPNAME, $indexType)];
             $this->subscription_type = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : SubscriptionTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : SubscriptionTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
             $this->subscription_email = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : SubscriptionTableMap::translateFieldName('Ends', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : SubscriptionTableMap::translateFieldName('Ends', TableMap::TYPE_PHPNAME, $indexType)];
             $this->subscription_ends = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : SubscriptionTableMap::translateFieldName('Option', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : SubscriptionTableMap::translateFieldName('Option', TableMap::TYPE_PHPNAME, $indexType)];
             $this->subscription_option = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : SubscriptionTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : SubscriptionTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->subscription_insert = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : SubscriptionTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : SubscriptionTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->subscription_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : SubscriptionTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : SubscriptionTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->subscription_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : SubscriptionTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : SubscriptionTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -1058,7 +1018,7 @@ abstract class Subscription implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 15; // 15 = SubscriptionTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 14; // 14 = SubscriptionTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Subscription'), 0, $e);
@@ -1315,9 +1275,6 @@ abstract class Subscription implements ActiveRecordInterface
         if ($this->isColumnModified(SubscriptionTableMap::COL_PUBLISHER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'publisher_id';
         }
-        if ($this->isColumnModified(SubscriptionTableMap::COL_BOOKSHOP_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'bookshop_id';
-        }
         if ($this->isColumnModified(SubscriptionTableMap::COL_LIBRARY_ID)) {
             $modifiedColumns[':p' . $index++]  = 'library_id';
         }
@@ -1374,10 +1331,6 @@ abstract class Subscription implements ActiveRecordInterface
                         break;
                     case 'publisher_id':
                         $stmt->bindValue($identifier, $this->publisher_id, PDO::PARAM_INT);
-
-                        break;
-                    case 'bookshop_id':
-                        $stmt->bindValue($identifier, $this->bookshop_id, PDO::PARAM_INT);
 
                         break;
                     case 'library_id':
@@ -1494,33 +1447,30 @@ abstract class Subscription implements ActiveRecordInterface
                 return $this->getPublisherId();
 
             case 5:
-                return $this->getBookshopId();
-
-            case 6:
                 return $this->getLibraryId();
 
-            case 7:
+            case 6:
                 return $this->getType();
 
-            case 8:
+            case 7:
                 return $this->getEmail();
 
-            case 9:
+            case 8:
                 return $this->getEnds();
 
-            case 10:
+            case 9:
                 return $this->getOption();
 
-            case 11:
+            case 10:
                 return $this->getInsert();
 
-            case 12:
+            case 11:
                 return $this->getUpdate();
 
-            case 13:
+            case 12:
                 return $this->getCreatedAt();
 
-            case 14:
+            case 13:
                 return $this->getUpdatedAt();
 
             default:
@@ -1556,17 +1506,20 @@ abstract class Subscription implements ActiveRecordInterface
             $keys[2] => $this->getAxysAccountId(),
             $keys[3] => $this->getUserId(),
             $keys[4] => $this->getPublisherId(),
-            $keys[5] => $this->getBookshopId(),
-            $keys[6] => $this->getLibraryId(),
-            $keys[7] => $this->getType(),
-            $keys[8] => $this->getEmail(),
-            $keys[9] => $this->getEnds(),
-            $keys[10] => $this->getOption(),
-            $keys[11] => $this->getInsert(),
-            $keys[12] => $this->getUpdate(),
-            $keys[13] => $this->getCreatedAt(),
-            $keys[14] => $this->getUpdatedAt(),
+            $keys[5] => $this->getLibraryId(),
+            $keys[6] => $this->getType(),
+            $keys[7] => $this->getEmail(),
+            $keys[8] => $this->getEnds(),
+            $keys[9] => $this->getOption(),
+            $keys[10] => $this->getInsert(),
+            $keys[11] => $this->getUpdate(),
+            $keys[12] => $this->getCreatedAt(),
+            $keys[13] => $this->getUpdatedAt(),
         ];
+        if ($result[$keys[10]] instanceof \DateTimeInterface) {
+            $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
+        }
+
         if ($result[$keys[11]] instanceof \DateTimeInterface) {
             $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
         }
@@ -1577,10 +1530,6 @@ abstract class Subscription implements ActiveRecordInterface
 
         if ($result[$keys[13]] instanceof \DateTimeInterface) {
             $result[$keys[13]] = $result[$keys[13]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[14]] instanceof \DateTimeInterface) {
-            $result[$keys[14]] = $result[$keys[14]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1671,33 +1620,30 @@ abstract class Subscription implements ActiveRecordInterface
                 $this->setPublisherId($value);
                 break;
             case 5:
-                $this->setBookshopId($value);
-                break;
-            case 6:
                 $this->setLibraryId($value);
                 break;
-            case 7:
+            case 6:
                 $this->setType($value);
                 break;
-            case 8:
+            case 7:
                 $this->setEmail($value);
                 break;
-            case 9:
+            case 8:
                 $this->setEnds($value);
                 break;
-            case 10:
+            case 9:
                 $this->setOption($value);
                 break;
-            case 11:
+            case 10:
                 $this->setInsert($value);
                 break;
-            case 12:
+            case 11:
                 $this->setUpdate($value);
                 break;
-            case 13:
+            case 12:
                 $this->setCreatedAt($value);
                 break;
-            case 14:
+            case 13:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1742,34 +1688,31 @@ abstract class Subscription implements ActiveRecordInterface
             $this->setPublisherId($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setBookshopId($arr[$keys[5]]);
+            $this->setLibraryId($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setLibraryId($arr[$keys[6]]);
+            $this->setType($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setType($arr[$keys[7]]);
+            $this->setEmail($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setEmail($arr[$keys[8]]);
+            $this->setEnds($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setEnds($arr[$keys[9]]);
+            $this->setOption($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setOption($arr[$keys[10]]);
+            $this->setInsert($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setInsert($arr[$keys[11]]);
+            $this->setUpdate($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setUpdate($arr[$keys[12]]);
+            $this->setCreatedAt($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
-            $this->setCreatedAt($arr[$keys[13]]);
-        }
-        if (array_key_exists($keys[14], $arr)) {
-            $this->setUpdatedAt($arr[$keys[14]]);
+            $this->setUpdatedAt($arr[$keys[13]]);
         }
 
         return $this;
@@ -1828,9 +1771,6 @@ abstract class Subscription implements ActiveRecordInterface
         }
         if ($this->isColumnModified(SubscriptionTableMap::COL_PUBLISHER_ID)) {
             $criteria->add(SubscriptionTableMap::COL_PUBLISHER_ID, $this->publisher_id);
-        }
-        if ($this->isColumnModified(SubscriptionTableMap::COL_BOOKSHOP_ID)) {
-            $criteria->add(SubscriptionTableMap::COL_BOOKSHOP_ID, $this->bookshop_id);
         }
         if ($this->isColumnModified(SubscriptionTableMap::COL_LIBRARY_ID)) {
             $criteria->add(SubscriptionTableMap::COL_LIBRARY_ID, $this->library_id);
@@ -1951,7 +1891,6 @@ abstract class Subscription implements ActiveRecordInterface
         $copyObj->setAxysAccountId($this->getAxysAccountId());
         $copyObj->setUserId($this->getUserId());
         $copyObj->setPublisherId($this->getPublisherId());
-        $copyObj->setBookshopId($this->getBookshopId());
         $copyObj->setLibraryId($this->getLibraryId());
         $copyObj->setType($this->getType());
         $copyObj->setEmail($this->getEmail());
@@ -2111,7 +2050,6 @@ abstract class Subscription implements ActiveRecordInterface
         $this->axys_account_id = null;
         $this->user_id = null;
         $this->publisher_id = null;
-        $this->bookshop_id = null;
         $this->library_id = null;
         $this->subscription_type = null;
         $this->subscription_email = null;

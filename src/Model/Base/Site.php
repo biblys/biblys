@@ -318,21 +318,6 @@ abstract class Site implements ActiveRecordInterface
     protected $site_payment_transfer;
 
     /**
-     * The value for the site_bookshop field.
-     *
-     * Note: this column has a database default value of: false
-     * @var        boolean|null
-     */
-    protected $site_bookshop;
-
-    /**
-     * The value for the site_bookshop_id field.
-     *
-     * @var        int|null
-     */
-    protected $site_bookshop_id;
-
-    /**
      * The value for the site_publisher field.
      *
      * @var        boolean|null
@@ -793,7 +778,6 @@ abstract class Site implements ActiveRecordInterface
         $this->site_axys = true;
         $this->site_payment_cheque = true;
         $this->site_payment_payplug = false;
-        $this->site_bookshop = false;
         $this->site_publisher_stock = false;
         $this->site_monitoring = true;
     }
@@ -1354,36 +1338,6 @@ abstract class Site implements ActiveRecordInterface
     public function isPaymentTransfer()
     {
         return $this->getPaymentTransfer();
-    }
-
-    /**
-     * Get the [site_bookshop] column value.
-     *
-     * @return boolean|null
-     */
-    public function getBookshop()
-    {
-        return $this->site_bookshop;
-    }
-
-    /**
-     * Get the [site_bookshop] column value.
-     *
-     * @return boolean|null
-     */
-    public function isBookshop()
-    {
-        return $this->getBookshop();
-    }
-
-    /**
-     * Get the [site_bookshop_id] column value.
-     *
-     * @return int|null
-     */
-    public function getBookshopId()
-    {
-        return $this->site_bookshop_id;
     }
 
     /**
@@ -2125,54 +2079,6 @@ abstract class Site implements ActiveRecordInterface
     }
 
     /**
-     * Sets the value of the [site_bookshop] column.
-     * Non-boolean arguments are converted using the following rules:
-     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
-     * @param bool|integer|string|null $v The new value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setBookshop($v)
-    {
-        if ($v !== null) {
-            if (is_string($v)) {
-                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-            } else {
-                $v = (boolean) $v;
-            }
-        }
-
-        if ($this->site_bookshop !== $v) {
-            $this->site_bookshop = $v;
-            $this->modifiedColumns[SiteTableMap::COL_SITE_BOOKSHOP] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [site_bookshop_id] column.
-     *
-     * @param int|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setBookshopId($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->site_bookshop_id !== $v) {
-            $this->site_bookshop_id = $v;
-            $this->modifiedColumns[SiteTableMap::COL_SITE_BOOKSHOP_ID] = true;
-        }
-
-        return $this;
-    }
-
-    /**
      * Sets the value of the [site_publisher] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
@@ -2482,10 +2388,6 @@ abstract class Site implements ActiveRecordInterface
                 return false;
             }
 
-            if ($this->site_bookshop !== false) {
-                return false;
-            }
-
             if ($this->site_publisher_stock !== false) {
                 return false;
             }
@@ -2592,52 +2494,46 @@ abstract class Site implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 23 + $startcol : SiteTableMap::translateFieldName('PaymentTransfer', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_payment_transfer = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 24 + $startcol : SiteTableMap::translateFieldName('Bookshop', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->site_bookshop = (null !== $col) ? (boolean) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 25 + $startcol : SiteTableMap::translateFieldName('BookshopId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->site_bookshop_id = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 26 + $startcol : SiteTableMap::translateFieldName('Publisher', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 24 + $startcol : SiteTableMap::translateFieldName('Publisher', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_publisher = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 27 + $startcol : SiteTableMap::translateFieldName('PublisherStock', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 25 + $startcol : SiteTableMap::translateFieldName('PublisherStock', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_publisher_stock = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 28 + $startcol : SiteTableMap::translateFieldName('PublisherId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 26 + $startcol : SiteTableMap::translateFieldName('PublisherId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->publisher_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 29 + $startcol : SiteTableMap::translateFieldName('EbookBundle', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 27 + $startcol : SiteTableMap::translateFieldName('EbookBundle', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_ebook_bundle = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 30 + $startcol : SiteTableMap::translateFieldName('FbPageId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 28 + $startcol : SiteTableMap::translateFieldName('FbPageId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_fb_page_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 31 + $startcol : SiteTableMap::translateFieldName('FbPageToken', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 29 + $startcol : SiteTableMap::translateFieldName('FbPageToken', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_fb_page_token = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 32 + $startcol : SiteTableMap::translateFieldName('AnalyticsId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 30 + $startcol : SiteTableMap::translateFieldName('AnalyticsId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_analytics_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 33 + $startcol : SiteTableMap::translateFieldName('PiwikId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 31 + $startcol : SiteTableMap::translateFieldName('PiwikId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_piwik_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 34 + $startcol : SiteTableMap::translateFieldName('SitemapUpdated', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 32 + $startcol : SiteTableMap::translateFieldName('SitemapUpdated', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->site_sitemap_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 35 + $startcol : SiteTableMap::translateFieldName('Monitoring', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 33 + $startcol : SiteTableMap::translateFieldName('Monitoring', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_monitoring = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 36 + $startcol : SiteTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 34 + $startcol : SiteTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->site_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 37 + $startcol : SiteTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 35 + $startcol : SiteTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -2650,7 +2546,7 @@ abstract class Site implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 38; // 38 = SiteTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 36; // 36 = SiteTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Site'), 0, $e);
@@ -3433,12 +3329,6 @@ abstract class Site implements ActiveRecordInterface
         if ($this->isColumnModified(SiteTableMap::COL_SITE_PAYMENT_TRANSFER)) {
             $modifiedColumns[':p' . $index++]  = 'site_payment_transfer';
         }
-        if ($this->isColumnModified(SiteTableMap::COL_SITE_BOOKSHOP)) {
-            $modifiedColumns[':p' . $index++]  = 'site_bookshop';
-        }
-        if ($this->isColumnModified(SiteTableMap::COL_SITE_BOOKSHOP_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'site_bookshop_id';
-        }
         if ($this->isColumnModified(SiteTableMap::COL_SITE_PUBLISHER)) {
             $modifiedColumns[':p' . $index++]  = 'site_publisher';
         }
@@ -3580,14 +3470,6 @@ abstract class Site implements ActiveRecordInterface
                         break;
                     case 'site_payment_transfer':
                         $stmt->bindValue($identifier, (int) $this->site_payment_transfer, PDO::PARAM_INT);
-
-                        break;
-                    case 'site_bookshop':
-                        $stmt->bindValue($identifier, (int) $this->site_bookshop, PDO::PARAM_INT);
-
-                        break;
-                    case 'site_bookshop_id':
-                        $stmt->bindValue($identifier, $this->site_bookshop_id, PDO::PARAM_INT);
 
                         break;
                     case 'site_publisher':
@@ -3773,45 +3655,39 @@ abstract class Site implements ActiveRecordInterface
                 return $this->getPaymentTransfer();
 
             case 24:
-                return $this->getBookshop();
-
-            case 25:
-                return $this->getBookshopId();
-
-            case 26:
                 return $this->getPublisher();
 
-            case 27:
+            case 25:
                 return $this->getPublisherStock();
 
-            case 28:
+            case 26:
                 return $this->getPublisherId();
 
-            case 29:
+            case 27:
                 return $this->getEbookBundle();
 
-            case 30:
+            case 28:
                 return $this->getFbPageId();
 
-            case 31:
+            case 29:
                 return $this->getFbPageToken();
 
-            case 32:
+            case 30:
                 return $this->getAnalyticsId();
 
-            case 33:
+            case 31:
                 return $this->getPiwikId();
 
-            case 34:
+            case 32:
                 return $this->getSitemapUpdated();
 
-            case 35:
+            case 33:
                 return $this->getMonitoring();
 
-            case 36:
+            case 34:
                 return $this->getCreatedAt();
 
-            case 37:
+            case 35:
                 return $this->getUpdatedAt();
 
             default:
@@ -3866,31 +3742,29 @@ abstract class Site implements ActiveRecordInterface
             $keys[21] => $this->getPaymentPaypal(),
             $keys[22] => $this->getPaymentPayplug(),
             $keys[23] => $this->getPaymentTransfer(),
-            $keys[24] => $this->getBookshop(),
-            $keys[25] => $this->getBookshopId(),
-            $keys[26] => $this->getPublisher(),
-            $keys[27] => $this->getPublisherStock(),
-            $keys[28] => $this->getPublisherId(),
-            $keys[29] => $this->getEbookBundle(),
-            $keys[30] => $this->getFbPageId(),
-            $keys[31] => $this->getFbPageToken(),
-            $keys[32] => $this->getAnalyticsId(),
-            $keys[33] => $this->getPiwikId(),
-            $keys[34] => $this->getSitemapUpdated(),
-            $keys[35] => $this->getMonitoring(),
-            $keys[36] => $this->getCreatedAt(),
-            $keys[37] => $this->getUpdatedAt(),
+            $keys[24] => $this->getPublisher(),
+            $keys[25] => $this->getPublisherStock(),
+            $keys[26] => $this->getPublisherId(),
+            $keys[27] => $this->getEbookBundle(),
+            $keys[28] => $this->getFbPageId(),
+            $keys[29] => $this->getFbPageToken(),
+            $keys[30] => $this->getAnalyticsId(),
+            $keys[31] => $this->getPiwikId(),
+            $keys[32] => $this->getSitemapUpdated(),
+            $keys[33] => $this->getMonitoring(),
+            $keys[34] => $this->getCreatedAt(),
+            $keys[35] => $this->getUpdatedAt(),
         ];
+        if ($result[$keys[32]] instanceof \DateTimeInterface) {
+            $result[$keys[32]] = $result[$keys[32]]->format('Y-m-d H:i:s.u');
+        }
+
         if ($result[$keys[34]] instanceof \DateTimeInterface) {
             $result[$keys[34]] = $result[$keys[34]]->format('Y-m-d H:i:s.u');
         }
 
-        if ($result[$keys[36]] instanceof \DateTimeInterface) {
-            $result[$keys[36]] = $result[$keys[36]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[37]] instanceof \DateTimeInterface) {
-            $result[$keys[37]] = $result[$keys[37]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[35]] instanceof \DateTimeInterface) {
+            $result[$keys[35]] = $result[$keys[35]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -4383,45 +4257,39 @@ abstract class Site implements ActiveRecordInterface
                 $this->setPaymentTransfer($value);
                 break;
             case 24:
-                $this->setBookshop($value);
-                break;
-            case 25:
-                $this->setBookshopId($value);
-                break;
-            case 26:
                 $this->setPublisher($value);
                 break;
-            case 27:
+            case 25:
                 $this->setPublisherStock($value);
                 break;
-            case 28:
+            case 26:
                 $this->setPublisherId($value);
                 break;
-            case 29:
+            case 27:
                 $this->setEbookBundle($value);
                 break;
-            case 30:
+            case 28:
                 $this->setFbPageId($value);
                 break;
-            case 31:
+            case 29:
                 $this->setFbPageToken($value);
                 break;
-            case 32:
+            case 30:
                 $this->setAnalyticsId($value);
                 break;
-            case 33:
+            case 31:
                 $this->setPiwikId($value);
                 break;
-            case 34:
+            case 32:
                 $this->setSitemapUpdated($value);
                 break;
-            case 35:
+            case 33:
                 $this->setMonitoring($value);
                 break;
-            case 36:
+            case 34:
                 $this->setCreatedAt($value);
                 break;
-            case 37:
+            case 35:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -4523,46 +4391,40 @@ abstract class Site implements ActiveRecordInterface
             $this->setPaymentTransfer($arr[$keys[23]]);
         }
         if (array_key_exists($keys[24], $arr)) {
-            $this->setBookshop($arr[$keys[24]]);
+            $this->setPublisher($arr[$keys[24]]);
         }
         if (array_key_exists($keys[25], $arr)) {
-            $this->setBookshopId($arr[$keys[25]]);
+            $this->setPublisherStock($arr[$keys[25]]);
         }
         if (array_key_exists($keys[26], $arr)) {
-            $this->setPublisher($arr[$keys[26]]);
+            $this->setPublisherId($arr[$keys[26]]);
         }
         if (array_key_exists($keys[27], $arr)) {
-            $this->setPublisherStock($arr[$keys[27]]);
+            $this->setEbookBundle($arr[$keys[27]]);
         }
         if (array_key_exists($keys[28], $arr)) {
-            $this->setPublisherId($arr[$keys[28]]);
+            $this->setFbPageId($arr[$keys[28]]);
         }
         if (array_key_exists($keys[29], $arr)) {
-            $this->setEbookBundle($arr[$keys[29]]);
+            $this->setFbPageToken($arr[$keys[29]]);
         }
         if (array_key_exists($keys[30], $arr)) {
-            $this->setFbPageId($arr[$keys[30]]);
+            $this->setAnalyticsId($arr[$keys[30]]);
         }
         if (array_key_exists($keys[31], $arr)) {
-            $this->setFbPageToken($arr[$keys[31]]);
+            $this->setPiwikId($arr[$keys[31]]);
         }
         if (array_key_exists($keys[32], $arr)) {
-            $this->setAnalyticsId($arr[$keys[32]]);
+            $this->setSitemapUpdated($arr[$keys[32]]);
         }
         if (array_key_exists($keys[33], $arr)) {
-            $this->setPiwikId($arr[$keys[33]]);
+            $this->setMonitoring($arr[$keys[33]]);
         }
         if (array_key_exists($keys[34], $arr)) {
-            $this->setSitemapUpdated($arr[$keys[34]]);
+            $this->setCreatedAt($arr[$keys[34]]);
         }
         if (array_key_exists($keys[35], $arr)) {
-            $this->setMonitoring($arr[$keys[35]]);
-        }
-        if (array_key_exists($keys[36], $arr)) {
-            $this->setCreatedAt($arr[$keys[36]]);
-        }
-        if (array_key_exists($keys[37], $arr)) {
-            $this->setUpdatedAt($arr[$keys[37]]);
+            $this->setUpdatedAt($arr[$keys[35]]);
         }
 
         return $this;
@@ -4678,12 +4540,6 @@ abstract class Site implements ActiveRecordInterface
         }
         if ($this->isColumnModified(SiteTableMap::COL_SITE_PAYMENT_TRANSFER)) {
             $criteria->add(SiteTableMap::COL_SITE_PAYMENT_TRANSFER, $this->site_payment_transfer);
-        }
-        if ($this->isColumnModified(SiteTableMap::COL_SITE_BOOKSHOP)) {
-            $criteria->add(SiteTableMap::COL_SITE_BOOKSHOP, $this->site_bookshop);
-        }
-        if ($this->isColumnModified(SiteTableMap::COL_SITE_BOOKSHOP_ID)) {
-            $criteria->add(SiteTableMap::COL_SITE_BOOKSHOP_ID, $this->site_bookshop_id);
         }
         if ($this->isColumnModified(SiteTableMap::COL_SITE_PUBLISHER)) {
             $criteria->add(SiteTableMap::COL_SITE_PUBLISHER, $this->site_publisher);
@@ -4832,8 +4688,6 @@ abstract class Site implements ActiveRecordInterface
         $copyObj->setPaymentPaypal($this->getPaymentPaypal());
         $copyObj->setPaymentPayplug($this->getPaymentPayplug());
         $copyObj->setPaymentTransfer($this->getPaymentTransfer());
-        $copyObj->setBookshop($this->getBookshop());
-        $copyObj->setBookshopId($this->getBookshopId());
         $copyObj->setPublisher($this->getPublisher());
         $copyObj->setPublisherStock($this->getPublisherStock());
         $copyObj->setPublisherId($this->getPublisherId());
@@ -12037,8 +11891,6 @@ abstract class Site implements ActiveRecordInterface
         $this->site_payment_paypal = null;
         $this->site_payment_payplug = null;
         $this->site_payment_transfer = null;
-        $this->site_bookshop = null;
-        $this->site_bookshop_id = null;
         $this->site_publisher = null;
         $this->site_publisher_stock = null;
         $this->publisher_id = null;
