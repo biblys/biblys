@@ -19,7 +19,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   {% set url = app.currentUrl.relativeUrl %}
 
   {% if pages.total <= 10 %}
-    <nav class="Pagination text-center" aria-label="Page navigation">
+    <nav class="Pagination text-center mt-2 mb-4" aria-label="Page navigation">
       <ul class="pagination  justify-content-center">
         {% if pages.previous > -1 %}
           <li class="Pagination__previous page-item">
@@ -60,7 +60,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     </nav>
   {% else %}
 
-    <nav class="Pagination Pagination--with-menu">
+    <nav class="Pagination Pagination--with-menu mt-2 mb-4">
       {% if pages.previous > -1 %}
         <a
           href="{{ url }}{{ pages.previousQuery }}"
@@ -72,7 +72,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         </a>
       {% endif %}
 
-      <form class="form-inline" action="{{ url }}">
+      <form class="form-inline mb-0" action="{{ url }}">
         <div class="Pagination__page-selector form-group text-center">
           <label for="target-page">Page</label>
           <select name="p" class="form-control" id="target-page" aria-label="Aller à la page">
