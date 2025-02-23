@@ -10,7 +10,8 @@
 - Un lien d'accès à la page de recherche a été ajouté dans le menu de navigation
   rapide.
 - La présentation des options sur la page de recherche a été améliorée.
-- La page d'administration des utilisateurs est désormais paginée.
+- La page d'administration des utilisateurs dispose maintenant d'un champ de 
+  recherche et est paginée au-delà de 100 résultats.
 
 ### Corrections
 

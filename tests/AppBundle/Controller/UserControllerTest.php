@@ -70,13 +70,14 @@ class UserControllerTest extends TestCase
 
         ModelFactory::createUser(email: "an-email-user@example.org");
         $ssoUser = ModelFactory::createUser(email: "a-sso-user@example.org");
-        $authMethod = ModelFactory::createAuthenticationMethod(user: $ssoUser);
+        ModelFactory::createAuthenticationMethod(user: $ssoUser);
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive('authAdmin')->andReturns();
         $queryParamsService = Mockery::mock(QueryParamsService::class);
         $queryParamsService->expects("parse")->andReturns();
         $queryParamsService->expects("getInteger")->with("p")->andReturn(0);
+        $queryParamsService->expects("get")->with("q")->andReturn("");
         $templateService = Helpers::getTemplateService();
 
         // when
@@ -86,6 +87,37 @@ class UserControllerTest extends TestCase
         $this->assertEquals("200", $response->getStatusCode());
         $this->assertStringContainsString("an-email-user@example.org", $response->getContent());
         $this->assertStringContainsString("axys", $response->getContent());
+    }
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testIndexActionWithSearchQuery()
+    {
+        // given
+        $controller = new UserController();
+
+        ModelFactory::createUser(email: "the-user-i-m-looking-for@example.org");
+        ModelFactory::createUser(email: "another-user@example.org");
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive('authAdmin')->andReturns();
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->expects("parse")->andReturns();
+        $queryParamsService->expects("getInteger")->with("p")->andReturn(0);
+        $queryParamsService->expects("get")->with("q")->andReturn("looking-for");
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->indexAction($currentUser, $queryParamsService,$templateService);
+
+        // then
+        $this->assertEquals("200", $response->getStatusCode());
+        $this->assertStringContainsString("the-user-i-m-looking-for@example.org", $response->getContent());
+        $this->assertStringNotContainsString("another-user@example.org", $response->getContent());
     }
 
     /**
