@@ -30,6 +30,7 @@ use Model\AuthenticationMethod;
 use Model\BookCollectionQuery;
 use Model\CountryQuery;
 use Model\Customer;
+use Model\Download;
 use Model\Event;
 use Model\File;
 use Model\Gallery;
@@ -1042,6 +1043,18 @@ class ModelFactory
         $redirection->save();
 
         return $redirection;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createDownload(User $user): Download
+    {
+        $download = new Download();
+        $download->setUser($user);
+        $download->save();
+
+        return $download;
     }
 
 }
