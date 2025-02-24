@@ -14,13 +14,23 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #}
 
-<a
-  class="btn btn-primary{% if text is not defined %} btn-sm{% endif %} cart-button add_to_cart event"
+<button
+  class="btn btn-primary cart-button add_to_cart event"
   data-type="article"
   data-id="{{ article.id }}"
+  {% if hideLabel is defined %}
+    aria-label="{{ article.model.cartButtonLabel }}"
+    title="{{ article.model.cartButtonLabel }}"
+  {% endif %}}
 >
-  <span class="fa fa-shopping-cart"></span>
-  {% if text is defined %}
-    <span class="cart-button-text">{{ text }}</span>
+  <span class="fa-solid fa-shopping-basket"></span>
+  {% if hideLabel is not defined %}
+    <span class="cart-button-text">
+      {% if label is defined %}
+        {{ label }}
+      {% else %}
+        {{ article.model.cartButtonLabel }}
+      {% endif %}
+    </span>
   {% endif %}
-</a>
+</button>
