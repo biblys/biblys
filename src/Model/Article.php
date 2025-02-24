@@ -171,4 +171,16 @@ class Article extends BaseArticle
 
         return false;
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function getCartButtonLabel(): string
+    {
+        if ($this->getPubdate() > new DateTime("now")) {
+            return "Précommander";
+        }
+
+        return "Ajouter au panier";
+    }
 }

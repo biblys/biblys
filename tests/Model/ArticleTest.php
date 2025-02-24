@@ -314,4 +314,38 @@ class ArticleTest extends TestCase
         // then
         $this->assertInstanceOf(CannotDeleteArticleWithStock::class, $thrownException);
     }
+
+    /** getCartButtonLabel */
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetCartButtonLabelForPublishedArticle(): void
+    {
+        // given
+        $article = new Article();
+
+        // when
+        $label = $article->getCartButtonLabel();
+
+        // then
+        $this->assertEquals("Ajouter au panier", $label);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetCartButtonLabelForComingSoonArticle(): void
+    {
+        // given
+        $article = new Article();
+        $article->setPubdate(new DateTime("tomorrow"));
+
+        // when
+        $label = $article->getCartButtonLabel();
+
+        // then
+        $this->assertEquals("Précommander", $label);
+    }
+
 }
