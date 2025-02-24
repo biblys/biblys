@@ -46,6 +46,7 @@ class AdminsControllerTest extends TestCase
     protected function setUp(): void
     {
         RightQuery::create()->deleteAll();
+        UserQuery::create()->deleteAll();
     }
 
     /* addAction */
@@ -147,6 +148,44 @@ class AdminsControllerTest extends TestCase
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $user = UserQuery::create()->findOneByEmail("new-user@example.org");
         $this->assertNotNull($user);
+        $this->assertTrue(RightQuery::create()->isUserAdmin($user));
+    }
+
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testCreateActionFailsIfAdminAlreadyExists(): void
+    {
+        // given
+        $controller = new AdminsController();
+        $site = ModelFactory::createSite();
+
+        $user = ModelFactory::createAdminUser(site: $site, email: "already-admin@example.org");
+
+        $bodyParams = Mockery::mock(BodyParamsService::class);
+        $bodyParams->shouldReceive("parse")->with(["user_email" => ["type" => "string"]]);
+        $bodyParams->shouldReceive("get")->with("user_email")->andReturn("already-admin@example.org");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("http://example.org");
+        $flashMessages = Mockery::mock(FlashMessagesService::class);
+        $flashMessages->shouldReceive("add")->with(
+            "error",
+            "L'utilisateur already-admin@example.org a déjà un accès administrateur."
+        );
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->shouldReceive("send")->twice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->createAction($bodyParams, $currentUser, $currentSite, $urlGenerator, $flashMessages, $mailer, $templateService);
+
+        // then
+        $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertTrue(RightQuery::create()->isUserAdmin($user));
     }
 }
