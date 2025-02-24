@@ -98,8 +98,7 @@ class AdminsController extends Controller
                 $flashMessages->add("info", "Un compte utilisateur a été créé pour $userEmail.");
             }
 
-            $isUserAlreadyAdmin = RightQuery::create()
-                ->isUserAdmin($user, $currentSite->getSite());
+            $isUserAlreadyAdmin = RightQuery::create()->isUserAdmin($user);
             if ($isUserAlreadyAdmin) {
                 throw new BadRequestHttpException("L'utilisateur $userEmail a déjà un accès administrateur.");
             }
