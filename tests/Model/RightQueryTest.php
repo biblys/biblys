@@ -41,7 +41,7 @@ class RightQueryTest extends TestCase
         $site = ModelFactory::createSite();
 
         // when
-        $isAdmin = RightQuery::create()->isUserAdmin($user, $site);
+        $isAdmin = RightQuery::create()->isUserAdmin($user);
 
         // then
         $this->assertFalse($isAdmin);
@@ -57,7 +57,7 @@ class RightQueryTest extends TestCase
         $user = ModelFactory::createPublisherUser(site: $site);
 
         // when
-        $isAdmin = RightQuery::create()->isUserAdmin($user, $site);
+        $isAdmin = RightQuery::create()->isUserAdmin($user);
 
         // then
         $this->assertFalse($isAdmin);
@@ -73,7 +73,7 @@ class RightQueryTest extends TestCase
         $user = ModelFactory::createAdminUser(site: $site);
 
         // when
-        $isAdmin = RightQuery::create()->isUserAdmin($user, $site);
+        $isAdmin = RightQuery::create()->isUserAdmin($user);
 
         // then
         $this->assertTrue($isAdmin);
