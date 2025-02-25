@@ -27,6 +27,7 @@ use Biblys\Service\Images\ImagesService;
 use Model\ArticleCategory;
 use Model\ArticleCategoryQuery;
 use Model\ArticleQuery;
+use Model\BookCollectionQuery;
 use Model\LinkQuery;
 use Model\PublisherQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -191,14 +192,14 @@ return function (
         unset($_POST['article_cover_import']);
         unset($_POST['article_cover_delete']);
 
-        // Set article collection and publisher
         $collectionId = $request->request->get('collection_id');
-        /** @var Collection $collection */
-        $collection = $cm->getById($collectionId);
-        if (!$collection) {
-            throw new Exception('Collection unknown');
-        }
-        $articleEntity->setCollection($collection);
+        $collection = BookCollectionQuery::create()->findPk($collectionId);
+        $articleEntity->set("collection_id", $collection->getId());
+        $articleEntity->set("collection", $collection->getName());
+
+        $publisher = PublisherQuery::create()->findPk($collection->getPublisherId());
+        $articleEntity->set("publisher_id", $publisher->getId());
+        $articleEntity->set("publisher", $publisher->getName());
 
         // VALIDATION
         foreach ($_POST as $key => $val) {

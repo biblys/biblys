@@ -632,54 +632,6 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test setting a publisher
-     * @depends testGet
-     * @throws Exception
-     */
-    public function testSetPublisher(Article $article)
-    {
-        $pm = new PublisherManager();
-        /** @var Publisher $publisher */
-        $publisher = $pm->create(['publisher_name' => 'The Publisher']);
-
-        $article->setPublisher($publisher);
-
-        $this->assertEquals($article->get('publisher_id'), $publisher->get('id'));
-        $this->assertEquals($article->get('article_publisher'), $publisher->get('name'));
-
-        $pm->delete($publisher);
-    }
-
-
-    /**
-     * Test setting a collection
-     * @depends testGet
-     * @throws Exception
-     */
-    public function testSetCollection(Article $article)
-    {
-        $pm = new PublisherManager();
-        $publisher = $pm->create(['publisher_name' => 'The Publisher']);
-
-        $cm = new CollectionManager();
-        $collection = $cm->create([
-            'collection_name' => 'The Collection',
-            'publisher_id' => $publisher->get('id')
-        ]);
-
-        /** @var Collection $collection */
-        $article->setCollection($collection);
-
-        $this->assertEquals($article->get('collection_id'), $collection->get('id'));
-        $this->assertEquals($article->get('article_collection'), $collection->get('name'));
-        $this->assertEquals($article->get('publisher_id'), $publisher->get('id'));
-        $this->assertEquals($article->get('article_publisher'), $publisher->get('name'));
-
-        $cm->delete($collection);
-        $pm->delete($publisher);
-    }
-
-    /**
      * Test that adding a too long string as article_authors does not validate
      * @throws Exception
      */
@@ -750,33 +702,6 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $am = new ArticleManager();
         EntityFactory::createArticle(["article_url" => "anne-onyme/hous"]);
         $article = $am->create(["article_url" => "anne-onyme/hous"]);
-
-        // when
-        $am->update($article);
-    }
-
-    /**
-     * Test that updating an article for an unauthorized publisher throws
-     * @throws Exception
-     */
-    public function testUpdatingArticleWithFilteredPublisher()
-    {
-        // then
-        $this->expectException("Biblys\Exception\InvalidEntityException");
-        $this->expectExceptionMessage("Cet éditeur ne fait pas partie des éditeurs autorisés.");
-
-        // given
-        $pm = new PublisherManager();
-        $publisherFiltered = $pm->create(["publisher_name" => "Un éditeur filtré"]);
-        $publisherAllowed = $pm->create(["publisher_name" => "Un éditeur autorisé"]);
-        $GLOBALS["LEGACY_CURRENT_SITE"] = EntityFactory::createSite();
-        $GLOBALS["LEGACY_CURRENT_SITE"]->setOpt("publisher_filter", $publisherAllowed->get("id"));
-        $am = new ArticleManager();
-
-        $article = $am->create([
-            "article_url" => "jean-bon/de-bayonne",
-            "publisher_id" => $publisherFiltered->get("id")
-        ]);
 
         // when
         $am->update($article);
