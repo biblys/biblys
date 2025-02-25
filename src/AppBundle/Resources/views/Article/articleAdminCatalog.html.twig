@@ -26,10 +26,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     Articles ({{ count }})
   </h1>
 
-  <a class="btn btn-primary" href="{{ path("api_articles_export") }}">
-    <span class="fa fa-cloud-download"></span>
-    Télécharger le catalogue (CSV)
-  </a>
+  <div class="my-4">
+    <a class="btn btn-success" href="/pages/article_edit">
+      <span class="fa-solid fa-square-plus"></span>
+      Nouveau
+    </a>
+    <a class="btn btn-info" href="{{ path("api_articles_export") }}">
+      <span class="fa fa-cloud-download"></span>
+      Télécharger le catalogue (.csv)
+    </a>
+  </div>
 
   <table id="catalog" class="table">
     <thead>
