@@ -7,6 +7,8 @@
 - Le flux RSS des actualités pouvait déclencher une erreur si un billet
   d'actualité n'avait pas de contenu. Désormais, les billets sans contenu sont
   ignorés lors de la génération du flux.
+- La création d'un article attribué à un éditeur hors du filtre éditeur pouvait
+  provoquer une erreur. C'est corrigé.
 
 ## 3.3.1 (19 février 2025)
 
