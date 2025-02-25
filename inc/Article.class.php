@@ -1019,22 +1019,6 @@ class Article extends Entity
         return $tax->getTaxRate();
     }
 
-    public function setPublisher(Publisher $publisher): Article
-    {
-        $this->set('publisher_id', $publisher->get('id'));
-        $this->set('article_publisher', $publisher->get('name'));
-
-        return $this;
-    }
-
-    public function setCollection(Collection $collection): Article
-    {
-        $this->set('collection_id', $collection->get('id'));
-        $this->set('article_collection', $collection->get('name'));
-
-        return $this->setPublisher($collection->getPublisher());
-    }
-
     /**
      * Get article's formatted age min and max
      * @throws Exception
@@ -1727,10 +1711,6 @@ class ArticleManager extends EntityManager
         );
         if ($other) {
             throw new InvalidEntityException('Il existe déjà un article avec l\'url ' . $article->get('url'));
-        }
-
-        if ($article->has("publisher_id") && !$this->site->allowsPublisherWithId($article->get("publisher_id"))) {
-            throw new InvalidEntityException("Cet éditeur ne fait pas partie des éditeurs autorisés.");
         }
     }
 
