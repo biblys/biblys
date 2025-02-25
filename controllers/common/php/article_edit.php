@@ -256,6 +256,12 @@ return function (
             } elseif (isset($redirect_to_new)) {
                 return new RedirectResponse('/pages/article_edit');
             } else {
+
+                $shouldUseLegacyArticleController = $currentSite->getOption("use_old_article_controller");
+                if ($shouldUseLegacyArticleController) {
+                    return new RedirectResponse("/legacy/a/".$articleEntity->get("url"));
+                }
+
                 $articleUrl = $urlGenerator->generate('article_show', ['slug' => $articleEntity->get('url')]);
                 return new RedirectResponse($articleUrl);
             }
