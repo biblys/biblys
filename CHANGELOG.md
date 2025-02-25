@@ -9,6 +9,8 @@
   ignorés lors de la génération du flux.
 - La création d'un article attribué à un éditeur hors du filtre éditeur pouvait
   provoquer une erreur. C'est corrigé.
+- Lors de l'import d'un article depuis nooSFere, les prix en euros n'étaient pas
+  importés. Maintenant, ils le sont.
 
 ## 3.3.1 (19 février 2025)
 
