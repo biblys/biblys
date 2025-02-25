@@ -768,7 +768,7 @@ return function (
             </div>
             <p>
                 <label class="floating" for="article_price">Prix :</label>
-                <input type="number" step="1" id="article_price" name="article_price" value="' . $a['article_price'] . '" class="mini" required ' . $article_price_readonly . ' data-html="true" data-toggle="popover" data-trigger="focus" data-content="Entrez le prix de l\'article en centimes. Par exemple, pour article à 14,00 €, entrez <strong>1400</strong> ; pour un article à 8,50 €, entrez <strong>850</strong>."> centimes
+                <input type="number" step="1" id="article_price" name="article_price" value="' . $a['article_price'] . '" class="short" required ' . $article_price_readonly . ' data-html="true" data-toggle="popover" data-trigger="focus" data-content="Entrez le prix de l\'article en centimes. Par exemple, pour article à 14,00 €, entrez <strong>1400</strong> ; pour un article à 8,50 €, entrez <strong>850</strong>."> centimes
             </p>
             <p>
                 <label class="floating" for="article_price_editable">Prix libre :</label>

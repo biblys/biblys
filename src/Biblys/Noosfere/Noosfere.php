@@ -464,16 +464,8 @@ class Noosfere
             }
 
             // Prix
-            $categorie = (string)$n->Categorie;
-            $price = null;
-            if (preg_match("/(\d+,?\d*) FF$/", $categorie, $matches)) {
-                $price = $matches[1];
-                $price = str_replace(",", ".", $price);
-                $price = round((float)$price / 6.55957 * 100);
-            } elseif ($price !== null) {
-                $price = str_replace(",", ".", $price);
-                $price = (float)$price * 100;
-            }
+            $category = (string) $n->Categorie;
+            $price = self::parsePriceFromCategory($category);
             $a["article_price"] = $price;
 
             $a["article_people"] = $people;
@@ -484,5 +476,20 @@ class Noosfere
         }
 
         return $articles;
+    }
+
+    public static function parsePriceFromCategory(string $category): int
+    {
+        if (str_ends_with($category, " FF")) {
+            return 0;
+        }
+
+        if (preg_match("/^(\d+,?\d*) /", $category, $matches)) {
+            $priceString = $matches[1];
+            $priceFloat = (float) str_replace(",", ".", $priceString);
+            return round($priceFloat * 100);
+        }
+
+        return "0";
     }
 }

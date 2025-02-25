@@ -294,7 +294,7 @@ class NoosfereTest extends TestCase
 <TitreBase>Un long voyage</TitreBase>
 <Titre>Un long voyage</Titre>
 <TitreOriginal/>
-<Categorie>19 €</Categorie>
+<Categorie>19,90 €</Categorie>
 <Reference/>
 <ParutionOriginale/>
 <Editeur IdEditeur="2078945151">AUX FORGES DE VULCAIN</Editeur>
@@ -348,7 +348,7 @@ XML;
                 "article_copyright" => "",
                 "article_authors" => "Claire DUVIVIER",
                 "article_ean" => "9782373050806",
-                "article_price" => null,
+                "article_price" => 1990,
                 "article_people" => [
                     [
                         "people_first_name" => "Claire",
@@ -409,5 +409,43 @@ XML;
 
         // then
         $this->assertEquals(null, $articles[0]["article_authors"]);
+    }
+
+    /** parsePriceFromCategory */
+
+    public function testParsePriceFromCategory(): void
+    {
+        // given
+        $category = "19 €";
+
+        // when
+        $price = Noosfere::parsePriceFromCategory($category);
+
+        // then
+        $this->assertEquals(1900, $price);
+    }
+
+    public function testParsePriceFromCategoryWithCents(): void
+    {
+        // given
+        $category = "15,90 €";
+
+        // when
+        $price = Noosfere::parsePriceFromCategory($category);
+
+        // then
+        $this->assertEquals(1590, $price);
+    }
+
+    public function testParsePriceFromCategoryWithFrancs(): void
+    {
+        // given
+        $category = "99,99 FF";
+
+        // when
+        $price = Noosfere::parsePriceFromCategory($category);
+
+        // then
+        $this->assertEquals(0, $price);
     }
 }
