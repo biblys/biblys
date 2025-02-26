@@ -23,6 +23,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Data\ArticleType;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentUser;
 use Biblys\Test\ModelFactory;
@@ -37,6 +38,8 @@ require_once __DIR__."/../../setUp.php";
 
 class CartControllerTest extends TestCase
 {
+    /** addArticle */
+
     /**
      * @throws PropelException
      * @throws Exception
@@ -123,6 +126,33 @@ class CartControllerTest extends TestCase
     }
 
     /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAddArticleForDownloadableArticle()
+    {
+        // given
+        $controller = new CartController();
+
+        $article = ModelFactory::createArticle(price: 499, typeId: ArticleType::EBOOK);
+        $cart = ModelFactory::createCart();
+        $request = new Request();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
+
+        // when
+        $response = $controller->addArticleAction($request, $currentUser, $article->getId());
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals(1, $cart->getCount());
+        $this->assertEquals(499, $cart->getAmount());
+    }
+
+    /** addStock */
+
+    /**
      * @throws Exception
      */
     public function testAddStockCopy()
@@ -159,6 +189,8 @@ class CartControllerTest extends TestCase
             "it should have updated cart article count"
         );
     }
+
+    /** addCrowdfundingReward */
 
     /**
      * @throws PropelException
@@ -202,6 +234,8 @@ class CartControllerTest extends TestCase
             "it should have updated cart article count"
         );
     }
+
+    /** removeStock */
 
     /**
      * @throws Exception
@@ -299,6 +333,8 @@ class CartControllerTest extends TestCase
             "it should have updated cart article count"
         );
     }
+
+    /** getSummary */
 
     /**
      * @throws Exception
