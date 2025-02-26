@@ -482,20 +482,16 @@ return function (
     ';
     }
 
-    // Current publisher id (from site or from rights)
-    $publisher_id = $currentSite->getSite()->getPublisherId();
-    if (!$publisher_id && !$currentUser->isAdmin() && $currentUser->hasPublisherRight()) {
-        $publisher_id = $currentUser->getCurrentRight()->getPublisherId();
-    }
-
     $bonus_fieldset_class = null;
 
     $createCollectionPublisher = '
-    <input type="text" id="collection_publisher" name="collection_publisher" class="long uncompleted" required>
-    <input type="hidden" id="collection_publisher_id" name="collection_publisher_id" required>
-';
-    if ($publisher_id) {
-        $pub = $pm->getById($publisher_id);
+        <input type="text" id="collection_publisher" name="collection_publisher" class="long uncompleted" required>
+        <input type="hidden" id="collection_publisher_id" name="collection_publisher_id" required>
+    ';
+
+    if ($currentUser->hasPublisherRight()) {
+        $currentUserPublisherId = $currentUser->getCurrentRight()->getPublisherId();
+        $pub = $pm->getById($currentUserPublisherId);
         if ($pub) {
             $createCollectionPublisher = '
                 <input type="text" id="collection_publisher" name="collection_publisher" value="' . $pub->get('name') . '" class="long uncompleted" required readonly>
