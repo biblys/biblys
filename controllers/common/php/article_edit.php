@@ -24,6 +24,7 @@ use Biblys\Exception\InvalidEntityException;
 use Biblys\Isbn\IsbnParsingException;
 use Biblys\Service\Config;
 use Biblys\Service\Images\ImagesService;
+use Biblys\Service\StringService;
 use Model\ArticleCategory;
 use Model\ArticleCategoryQuery;
 use Model\ArticleQuery;
@@ -52,7 +53,6 @@ return function (
     $am = new ArticleManager();
     $sm = new SiteManager();
     $pm = new PublisherManager();
-    $cm = new CollectionManager();
 
     $currentUser->authPublisher();
 
@@ -156,7 +156,8 @@ return function (
         }
 
         // Titre alphabétique
-        $_POST['article_title_alphabetic'] = alphabetize($_POST['article_title']);
+        $stringService = new StringService($_POST['article_title']);
+        $_POST['article_title_alphabetic'] = $stringService->alphabetize();
 
         // Retirer les liens dans article_summary
         $_POST['article_summary'] = preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', '\\2', $_POST['article_summary']);

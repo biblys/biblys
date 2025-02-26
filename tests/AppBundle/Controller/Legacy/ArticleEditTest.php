@@ -59,6 +59,7 @@ class ArticleEditTest extends TestCase
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $currentSite->shouldReceive("getOption")->andReturn("null");
         $currentUser->shouldReceive("authPublisher")->andReturn(true);
+        $currentUser->shouldReceive("hasPublisherRight")->andReturn(false);
 
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")->andReturn("url");
