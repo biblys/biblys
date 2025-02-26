@@ -51,6 +51,7 @@ class CartController extends Controller
     ): JsonResponse|RedirectResponse
     {
         $am = new ArticleManager();
+
         /** @var Article $article */
         $article = $am->getById($articleId);
         if (!$article) {
@@ -83,6 +84,8 @@ class CartController extends Controller
     public function addStockAction(CurrentUser $currentUser, int $stockId): Response
     {
         $sm = new StockManager();
+
+        /** @var Stock $stock */
         $stock = $sm->getById($stockId);
         if (!$stock) {
             throw new BadRequestHttpException(
@@ -101,13 +104,15 @@ class CartController extends Controller
     }
 
     /**
+     * @throws CartException
      * @throws PropelException
+     * @throws Exception
      */
     public function addCrowdfundingRewardAction(CurrentUser $currentUser, int $rewardId): Response
     {
-        $cfrm = new CFRewardManager();
+        $crowdfundingRewardManager = new CFRewardManager();
         /** @var CFReward $reward */
-        $reward = $cfrm->getById($rewardId);
+        $reward = $crowdfundingRewardManager->getById($rewardId);
         if (!$reward) {
             throw new BadRequestHttpException(
                 "Cannot find reward with id $rewardId"
