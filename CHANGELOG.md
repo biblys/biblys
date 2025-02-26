@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 3.3.2 (DEV)
+## 3.3.2 (26 février 2025)
 
 ### Corrections
 
