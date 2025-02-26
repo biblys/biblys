@@ -29,6 +29,7 @@ use CFRewardManager;
 use Entity\Exception\CartException;
 use Exception;
 use Framework\Controller;
+use Model\ArticleQuery;
 use Propel\Runtime\Exception\PropelException;
 use Stock;
 use StockManager;
@@ -38,6 +39,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+use Usecase\AddDownloadableArticleToCart;
+use Usecase\BusinessRuleException;
 
 class CartController extends Controller
 {
@@ -52,9 +55,9 @@ class CartController extends Controller
     {
         $am = new ArticleManager();
 
-        /** @var Article $article */
-        $article = $am->getById($articleId);
-        if (!$article) {
+        /** @var Article $articleEntity */
+        $articleEntity = $am->getById($articleId);
+        if (!$articleEntity) {
             throw new BadRequestHttpException(
                 "Cannot find article with id $articleId"
             );
@@ -63,12 +66,21 @@ class CartController extends Controller
         try {
             $cm = new CartManager();
             $cart = $currentUser->getOrCreateCart();
-            /** @var Cart $cartEntity */
-            $cartEntity = $cm->getById($cart->getId());
-            $cm->addArticle($cartEntity, $article);
-            $cm->updateFromStock($cartEntity);
+
+            if ($articleEntity->isDownloadable()) {
+                $article = ArticleQuery::create()->findPk($articleId);
+                $usecase = new AddDownloadableArticleToCart();
+                $usecase->execute($article, $cart);
+            } else {
+                /** @var Cart $cartEntity */
+                $cartEntity = $cm->getById($cart->getId());
+                $cm->addArticle($cartEntity, $articleEntity);
+                $cm->updateFromStock($cartEntity);
+            }
         } catch(CartException $exception) {
             throw new ConflictHttpException($exception->getMessage());
+        } catch(BusinessRuleException $exception) {
+            throw new BadRequestHttpException($exception->getMessage());
         }
 
         if (in_array("application/json", $request->getAcceptableContentTypes())) {
