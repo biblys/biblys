@@ -63,7 +63,7 @@ return function (
         }
 
         /** @var \Model\Cart $cart */
-        $cart = CartQuery::create()->filterBySite($currentSite->getSite())->findPk($cartId);
+        $cart = CartQuery::create()->findPk($cartId);
         if (!$cart) {
             throw new NotFoundException(sprintf("Panier %s introuvable.", htmlentities($cartId)));
         }
@@ -85,7 +85,6 @@ return function (
     /** @var Stock[] $stocks */
     $stocks = $sm->getAll([
         'cart_id' => $cart->getId(),
-        'site_id' => $currentSite->getSite()->getId(),
     ], ['order' => 'stock_cart_date']);
 
     $cartPhysicalItems = [];
@@ -306,10 +305,7 @@ return function (
                     <tbody>
             ';
 
-                $copies = $sm->getAll([
-                    'order_id' => $orderInProgress->getId(),
-                    'site_id' => $currentSite->getSite()->getId(),
-                ]);
+                $copies = $sm->getAll(['order_id' => $orderInProgress->getId()]);
                 foreach ($copies as $copy) {
                     $s = $copy;
                     $articleEntity = $copy->getArticle();
