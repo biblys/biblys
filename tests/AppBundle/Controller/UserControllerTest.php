@@ -35,7 +35,6 @@ use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use DateTime;
 use Exception;
-use InvalidDateFormatException;
 use Mockery;
 use Model\SessionQuery;
 use Model\UserQuery;
@@ -317,7 +316,7 @@ class UserControllerTest extends TestCase
      * @throws SyntaxError
      * @throws \PHPUnit\Framework\MockObject\Exception
      */
-    public function testLoginForAuthentifiedUser()
+    public function testLoginForAuthenticatedUser()
     {
         // given
         $userController = new UserController();
@@ -1254,7 +1253,6 @@ class UserControllerTest extends TestCase
     /* UserController->ordersAction */
 
     /**
-     * @throws InvalidDateFormatException
      * @throws PropelException
      * @throws Exception
      */
@@ -1328,7 +1326,6 @@ class UserControllerTest extends TestCase
 
         // when
         $response = $controller->libraryAction(
-            currentSite: $currentSite,
             currentUser: $currentUser,
             queryParams: $queryParams,
             templateService: $templateService,
