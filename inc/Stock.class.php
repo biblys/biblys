@@ -347,31 +347,6 @@ class StockManager extends EntityManager
     protected $table = 'stock';
     protected $object = 'Stock';
 
-    public function create(array $defaults = [])
-    {
-        if (!isset($defaults['site_id'])) {
-            $defaults['site_id'] = $this->site['site_id'];
-        }
-
-        return parent::create($defaults);
-    }
-
-    public function getAll(array $where = [], array $options = [], $withJoins = true)
-    {
-        if (!isset($where['site_id'])) {
-            $where['stock`.`site_id'] = $this->site['site_id'];
-        }
-
-        return parent::getAll($where, $options, $withJoins);
-    }
-
-    public function count(array $where = [])
-    {
-        $where['stock`.`site_id'] = $this->site['site_id'];
-
-        return parent::count($where);
-    }
-
     /**
      * Calculates price without VAT & VAT based on price and tax rate.
      *
