@@ -145,7 +145,7 @@ class UserController extends Controller
             try {
                 $usecase = new DeleteUserUsecase();
                 $usecase->execute($user);
-            } catch (CannotDeleteUser $exception) {
+            } /** @noinspection PhpRedundantCatchClauseInspection */ catch (CannotDeleteUser $exception) {
                 $flashMessages->add("error", $exception->getMessage());
                 $userPageUrl = $urlGenerator->generate("user_show", ["id" => $id]);
                 return new RedirectResponse($userPageUrl);
@@ -454,6 +454,7 @@ class UserController extends Controller
      * @throws InvalidConfigurationException
      * @throws InvalidEmailAddressException
      * @throws LoaderError
+     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws TransportExceptionInterface
@@ -567,7 +568,6 @@ class UserController extends Controller
      * @throws LoaderError
      */
     public function libraryAction(
-        CurrentSite        $currentSite,
         CurrentUser        $currentUser,
         QueryParamsService $queryParams,
         TemplateService    $templateService,
@@ -583,7 +583,6 @@ class UserController extends Controller
         $currentPageIndex = $queryParams->get("p");
 
         $baseQuery = StockQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->filterByUser($currentUser->getUser())
             ->useArticleQuery()
             ->filterByKeywords("%$searchQuery%", Criteria::LIKE)
