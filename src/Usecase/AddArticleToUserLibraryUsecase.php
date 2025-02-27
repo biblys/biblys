@@ -29,10 +29,11 @@ use Model\User;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AddArticleToUserLibraryUsecase
 {
-    public function __construct(private Mailer $mailer)
+    public function __construct(private readonly Mailer $mailer)
     {
     }
 
@@ -97,7 +98,7 @@ class AddArticleToUserLibraryUsecase
         }
 
         if ($sendEmail) {
-            $eLibraryUrl = $urlGenerator->generate("user_library");
+            $eLibraryUrl = $urlGenerator->generate("user_library", referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
             $subject = 'De nouveaux livres numériques disponibles dans votre bibliothèque.';
             $message = '
                     <p>Bonjour,</p>
