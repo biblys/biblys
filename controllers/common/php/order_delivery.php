@@ -94,7 +94,6 @@ return function (
 
     $stock = $stockItemManager->getAll([
         'cart_id' => $cart->getId(),
-        'site_id' => $currentSite->getSite()->getId(),
     ]);
     $numberOfCopiesInCart = count($stock);
 
