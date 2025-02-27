@@ -79,8 +79,7 @@ class CollectionControllerTest extends TestCase
     "collection_publisher": "Searchable publisher",
     "collection_id": '.$collection->getId().',
     "publisher_id": '.$publisher->getId().',
-    "pricegrid_id": 123,
-    "publisher_allowed_on_site": 1
+    "pricegrid_id": 123
 }, {
     "label": "=\u003E Cr\u00e9er : Searchable",
     "value": "Searchable",

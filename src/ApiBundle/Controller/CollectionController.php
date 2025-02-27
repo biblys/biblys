@@ -73,7 +73,6 @@ class CollectionController extends Controller
                 "collection_id" => $collection->getId(),
                 "publisher_id" => $collection->getPublisherId(),
                 "pricegrid_id" => $collection->getPricegridId(),
-                "publisher_allowed_on_site" => $currentSite->allowsPublisher($collection->getPublisher()) ? 1 : 0,
             ];
         }, $collections);
 

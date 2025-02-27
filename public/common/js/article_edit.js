@@ -441,12 +441,7 @@ $(document).ready(function () {
         initPublisherAutocomplete();
         $('#collection_publisher').focus();
       } else { // Selectionner une collection existante
-        if (ui.item.publisher_allowed_on_site === 1) {
-          choose_collection(ui.item.collection_id, ui.item.value, ui.item.publisher_id, ui.item.collection_publisher, ui.item.pricegrid_id);
-          return;
-        }
-
-        _alert('Impossible d\'associer cette collection à un article car l\'éditeur correspondant n\'est pas autorisé sur le site.');
+        choose_collection(ui.item.collection_id, ui.item.value, ui.item.publisher_id, ui.item.collection_publisher, ui.item.pricegrid_id);
       }
     }
   });
@@ -475,12 +470,8 @@ $(document).ready(function () {
               _alert(data.responseJSON.error.message);
             }
           });
-        } else { // Selectionner un editeur existant
-          if (ui.item.allowed_on_site === 1) {
-            choose_publisher(ui.item.publisher_id, ui.item.value, ui.item);
-            return;
-          }
-          _alert('Impossible d\'associer cet éditeur à un article car il n\'est pas autorisé sur le site.');
+        } else {
+          choose_publisher(ui.item.publisher_id, ui.item.value, ui.item);
         }
       }
     });
