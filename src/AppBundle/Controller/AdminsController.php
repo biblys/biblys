@@ -50,7 +50,7 @@ class AdminsController extends Controller
      * @throws RuntimeError
      * @throws PropelException
      */
-    public function newAction(CurrentUser $currentUser , TemplateService $templateService): Response
+    public function newAction(CurrentUser $currentUser, TemplateService $templateService): Response
     {
         $currentUser->authAdmin();
 
@@ -73,13 +73,13 @@ class AdminsController extends Controller
      * @throws TransportExceptionInterface
      */
     public function createAction(
-        BodyParamsService $bodyParams,
-        CurrentUser $currentUser,
-        CurrentSite $currentSite,
-        UrlGenerator $urlGenerator,
+        BodyParamsService    $bodyParams,
+        CurrentUser          $currentUser,
+        CurrentSite          $currentSite,
+        UrlGenerator         $urlGenerator,
         FlashMessagesService $flashMessages,
-        Mailer $mailer,
-        TemplateService $templateService,
+        Mailer               $mailer,
+        TemplateService      $templateService,
     ): RedirectResponse
     {
         $currentUser->authAdmin();
@@ -102,48 +102,48 @@ class AdminsController extends Controller
             if ($isUserAlreadyAdmin) {
                 throw new BadRequestHttpException("L'utilisateur $userEmail a déjà un accès administrateur.");
             }
+
+            $right = new Right();
+            $right->setUser($user);
+            $right->setSite($currentSite->getSite());
+            $right->setIsAdmin(true);
+            $right->save();
+
+            $adminUrl = $urlGenerator->generate("main_admin", [], UrlGeneratorInterface::ABSOLUTE_URL);
+            $adminEmailBody = $templateService->render("AppBundle:Admins:admin-welcome_email.html.twig", [
+                "email" => $userEmail,
+                "adminUrl" => $adminUrl,
+            ]);
+            $mailer->send(
+                to: $user->getEmail(),
+                subject: "Votre accès admin au site {$currentSite->getSite()->getTitle()}",
+                body: $adminEmailBody
+            );
+
+            $admins = RightQuery::create()
+                ->filterByIsAdmin(true)
+                ->joinWithUser()
+                ->find();
+            $adminsPageUrl = "https://{$currentSite->getSite()->getDomain()}/pages/adm_admins";
+            $alertEmailBody = $templateService->render("AppBundle:Admins:admin-added-alert_email.html.twig", [
+                "email" => $userEmail,
+                "adminsPageUrl" => $adminsPageUrl,
+            ]);
+            foreach ($admins as $admin) {
+                $adminEmail = $admin->getUser()->getEmail();
+                $mailer->send(
+                    to: $adminEmail,
+                    subject: "Alerte de sécurité : nouvel·le admin ajouté·e",
+                    body: $alertEmailBody
+                );
+            }
+
+            $flashMessages->add("success", "Un accès administrateur a été ajouté pour le compte $userEmail.");
+            return new RedirectResponse("/pages/adm_admins");
         } catch (BadRequestHttpException $exception) {
             $adminAddUrl = $urlGenerator->generate("admins_new");
             $flashMessages->add("error", $exception->getMessage());
             return new RedirectResponse($adminAddUrl);
         }
-
-        $right = new Right();
-        $right->setUser($user);
-        $right->setSite($currentSite->getSite());
-        $right->setIsAdmin(true);
-        $right->save();
-
-        $adminUrl = $urlGenerator->generate("main_admin", [], UrlGeneratorInterface::ABSOLUTE_URL);
-        $adminEmailBody = $templateService->render("AppBundle:Admins:admin-welcome_email.html.twig", [
-            "email" => $userEmail,
-            "adminUrl" => $adminUrl,
-        ]);
-        $mailer->send(
-            to: $user->getEmail(),
-            subject: "Votre accès admin au site {$currentSite->getSite()->getTitle()}",
-            body: $adminEmailBody
-        );
-
-        $admins = RightQuery::create()
-            ->filterByIsAdmin(true)
-            ->joinWithUser()
-            ->find();
-        $adminsPageUrl = "https://{$currentSite->getSite()->getDomain()}/pages/adm_admins";
-        $alertEmailBody = $templateService->render("AppBundle:Admins:admin-added-alert_email.html.twig", [
-            "email" => $userEmail,
-            "adminsPageUrl" => $adminsPageUrl,
-        ]);
-        foreach ($admins as $admin) {
-            $adminEmail = $admin->getUser()->getEmail();
-            $mailer->send(
-                to: $adminEmail,
-                subject: "Alerte de sécurité : nouvel·le admin ajouté·e",
-                body: $alertEmailBody
-            );
-        }
-
-        $flashMessages->add("success", "Un accès administrateur a été ajouté pour le compte $userEmail.");
-        return new RedirectResponse("/pages/adm_admins");
     }
 }
