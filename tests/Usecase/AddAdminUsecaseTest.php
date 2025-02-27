@@ -1,4 +1,20 @@
 <?php
+/*
+ * Copyright (C) 2025 Clément Latzarus
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 
 namespace Usecase;
 
@@ -14,12 +30,22 @@ use Model\RightQuery;
 use Model\UserQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
+require_once __DIR__ . "/../setUp.php";
+
 class AddAdminUsecaseTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     */
+    protected function setUp(): void
+    {
+        RightQuery::create()->deleteAll();
+        UserQuery::create()->deleteAll();
+    }
+
     /**
      * @throws Exception
      * @throws TransportExceptionInterface

@@ -1,4 +1,20 @@
 <?php
+/*
+ * Copyright (C) 2025 Clément Latzarus
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 
 namespace Usecase;
 
@@ -12,7 +28,6 @@ use Model\RightQuery;
 use Model\User;
 use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Error\LoaderError;
@@ -37,6 +52,7 @@ class AddAdminUsecase
      * @throws LoaderError
      * @throws SyntaxError
      * @throws PropelException
+     * @throws BusinessRuleException
      */
     public function execute(string $userEmail): void
     {
