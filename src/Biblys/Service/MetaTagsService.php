@@ -38,6 +38,12 @@ class MetaTagsService
         $this->writer->append(Opengraph::OG_TITLE, $title);
     }
 
+    public function setDescription(string $description): void
+    {
+        $this->writer->append(Opengraph::OG_DESCRIPTION, $description);
+        $this->writer->append("description", $description);
+    }
+
     public function setImage(string $url): void
     {
         $url = $this->_ensureUrlIsAbsolute($url);
