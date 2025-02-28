@@ -67,8 +67,8 @@ class CartController extends Controller
             $cm = new CartManager();
             $cart = $currentUser->getOrCreateCart();
 
-            if ($articleEntity->isDownloadable()) {
-                $article = ArticleQuery::create()->findPk($articleId);
+            $article = ArticleQuery::create()->findPk($articleId);
+            if ($articleEntity->getType()->isDownloadable()) {
                 $usecase = new AddDownloadableArticleToCart();
                 $usecase->execute($article, $cart);
             } else {

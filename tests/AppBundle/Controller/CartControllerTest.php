@@ -150,6 +150,32 @@ class CartControllerTest extends TestCase
         $this->assertEquals(499, $cart->getAmount());
     }
 
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAddArticleForServiceArticle()
+    {
+        // given
+        $controller = new CartController();
+
+        $article = ModelFactory::createArticle(price: 599, typeId: ArticleType::SUBSCRIPTION);
+        $site = ModelFactory::createSite();
+        ModelFactory::createSiteOption(site: $site, key: "virtual_stock", value: 1);
+        LegacyCodeHelper::setGlobalSite($site);
+        $cart = ModelFactory::createCart(site: $site);
+        $request = new Request();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
+
+        // when
+        $response = $controller->addArticleAction($request, $currentUser, $article->getId());
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+    }
+
     /** addStock */
 
     /**
