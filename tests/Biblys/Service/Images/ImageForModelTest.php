@@ -119,6 +119,6 @@ class ImageForModelTest extends TestCase
         $path = $image->getUrl(1280, 720);
 
         // then
-        $this->assertEquals("//images.weserv.nl/?url=https%3A%2F%2Fexample.org%2Fdirectory%2Fimage.jpeg%3Fv%3D2&w=1280&h=720", $path);
+        $this->assertEquals("https://images.weserv.nl/?url=https%3A%2F%2Fexample.org%2Fdirectory%2Fimage.jpeg%3Fv%3D2&w=1280&h=720", $path);
     }
 }
