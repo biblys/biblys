@@ -122,8 +122,18 @@ class Controller
         $request->attributes->set('opengraph_tags', $tags);
     }
 
+    /**
+     * @throws Exception
+     * @deprecated Controller->setTwitterCardsTags is deprecated. Use MetaTagsService instead.
+     */
     public function setTwitterCardsTags($tags): void
     {
+        trigger_deprecation(
+            "biblys/biblys",
+            "3.4.0",
+            "Controller->setTwitterCardsTags is deprecated. Use MetaTagsService instead."
+        );
+
         $request = LegacyCodeHelper::getGlobalRequest();
 
         if (!isset($tags['card'])) {
