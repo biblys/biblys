@@ -19,6 +19,7 @@
 /** @noinspection DuplicatedCode */
 
 use Biblys\Service\CurrentSite;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -28,6 +29,10 @@ return function (
     CurrentSite $currentSite,
 ): Response
 {
+    if (!$currentSite->hasOptionEnabled("use_legacy_search")) {
+        return new RedirectResponse("/articles/search?q=" . $request->query->get('q'), 301);
+    }
+
     $query = null;
     $terms = null;
     $sql = [];
