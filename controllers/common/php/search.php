@@ -19,6 +19,7 @@
 /** @noinspection DuplicatedCode */
 
 use Biblys\Service\CurrentSite;
+use Biblys\Service\QueryParamsService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,25 +28,26 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 return function (
     Request $request,
     CurrentSite $currentSite,
+    QueryParamsService $queryParams,
 ): Response
 {
+    $queryParams->parse(["q" => ["type" => "string", "mb_min_length" => 3, "mb_max_length" => 64]]);
+    $query = $queryParams->get("q");
+
     if (!$currentSite->hasOptionEnabled("use_legacy_search")) {
-        return new RedirectResponse("/articles/search?q=" . $request->query->get('q'), 301);
+        return new RedirectResponse("/articles/search?q=" . $query, 301);
     }
 
-    $query = null;
     $terms = null;
     $sql = [];
     $_REQ = null;
     $filters = null;
 
-    $input = $request->query->get('q', false);
-
     $useOldArticleController = $currentSite->getOption("use_old_article_controller");
 
     $content = '';
 
-    if (!$input) {
+    if (!$query) {
         $content .= '
         <h1><i class="fa fa-search"></i> Rechercher</h1>
         <form action="/pages/search">
@@ -57,10 +59,10 @@ return function (
             </div>
         </form>
     ';
-    } elseif (strlen($input) < 3) {
+    } elseif (strlen($query) < 3) {
         $content .= '<p class="error">Vous devez entrer un mot-clé d\'au moins trois caractères.</p>';
     } else {
-        $queries = explode(" ", $input);
+        $queries = explode(" ", $query);
 
         foreach ($queries as $q) {
 
