@@ -74,24 +74,16 @@ class MainController extends Controller
         MetaTagsService $metaTagsService,
     ): Response
     {
-        $opengraph = ['title' => $currentSite->getTitle()];
-        $twitterCards = ['title' => $currentSite->getTitle()];
-
+        $metaTagsService->setTitle($currentSite->getTitle());
+        $metaTagsService->setUrl($urlGenerator->generate("main_home"));
         $previewImage = $currentSite->getOption("home_preview_image");
         if ($previewImage) {
-            $opengraph['image'] = $previewImage;
-            $twitterCards['image'] = $previewImage;
-            $twitterCards['image:alt'] = $currentSite->getTitle();
+            $metaTagsService->setImage($previewImage);
         }
-
-        $preview_text = $currentSite->getOption("home_preview_text");
-        if ($preview_text) {
-            $opengraph['description'] = $preview_text;
-            $twitterCards['description'] = $preview_text;
+        $previewText = $currentSite->getOption("home_preview_text");
+        if ($previewText) {
+            $metaTagsService->setDescription($previewText);
         }
-
-        $this->setOpengraphTags($opengraph);
-        $this->setTwitterCardsTags($twitterCards);
 
         $homeOption = $currentSite->getOption("home");
         if ($homeOption) {
