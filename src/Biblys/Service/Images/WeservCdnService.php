@@ -32,6 +32,6 @@ class WeservCdnService implements CdnService
             $weservOptions["h"] = $height;
         }
 
-        return "//images.weserv.nl/?".http_build_query($weservOptions);
+        return "https://images.weserv.nl/?".http_build_query($weservOptions);
     }
 }

@@ -33,7 +33,7 @@ class WeservCdnServiceTest extends TestCase
 
         // then
         $this->assertEquals(
-            "//images.weserv.nl/?url=https%3A%2F%2Fwww.biblys.fr%2Fimages%2F1955.jpg",
+            "https://images.weserv.nl/?url=https%3A%2F%2Fwww.biblys.fr%2Fimages%2F1955.jpg",
             $url,
             "builds url for Weserv CDN",
         );
@@ -50,7 +50,7 @@ class WeservCdnServiceTest extends TestCase
 
         // then
         $this->assertEquals(
-            "//images.weserv.nl/?url=https%3A%2F%2Fwww.biblys.fr%2Fimages%2F1955.jpg&w=512",
+            "https://images.weserv.nl/?url=https%3A%2F%2Fwww.biblys.fr%2Fimages%2F1955.jpg&w=512",
             $url,
             "builds url for Weserv CDN",
         );
@@ -67,7 +67,7 @@ class WeservCdnServiceTest extends TestCase
 
         // then
         $this->assertEquals(
-            "//images.weserv.nl/?url=https%3A%2F%2Fwww.biblys.fr%2Fimages%2F1955.jpg&h=768",
+            "https://images.weserv.nl/?url=https%3A%2F%2Fwww.biblys.fr%2Fimages%2F1955.jpg&h=768",
             $url,
             "builds url for Weserv CDN",
         );
