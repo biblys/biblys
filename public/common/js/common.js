@@ -710,17 +710,18 @@ function reloadEvents(scope) {
       const button = $(this);
       const type = $(this).data('type');
       const id = $(this).data('id');
-      let text_loading = '';
-      let text_success = '';
+      let loadingButtonLabel = '';
+      let successButtonLabel = '';
 
-      if (button.hasClass('with-text')) {
-        (text_loading = 'Ajout...'), (text_success = 'Ajouté !');
+      const buttonLabel = button.text().trim();
+
+      if (buttonLabel) {
+        loadingButtonLabel = 'Ajout...';
+        successButtonLabel = 'Ajouté !';
       }
 
       // Button & cart preview state
-      button
-        .attr('data-loading-text', '<i class="fa fa-spin fa-spinner"></i> ' + text_loading)
-        .button('loading');
+      button.html('<i class="fa-solid fa-spinner fa-spin-pulse"></i> ' + loadingButtonLabel);
       $('#myCart').html('<i class="fa fa-spin fa-spinner"></i> Mise à jour...');
 
       function getCartEndpointUrl(type, id) {
@@ -765,18 +766,14 @@ function reloadEvents(scope) {
           } else {
             // Success button animation
             button.addClass('btn-success');
-            button.html('<span class="fa fa-check-circle"></span> ' + text_success);
+            button.html('<span class="fa fa-check-circle"></span> ' + successButtonLabel);
             window.setTimeout(function() {
               button.removeClass('btn-success').button('reset');
+              button.html('<i class="fa-solid fa-shopping-basket"></i>'+buttonLabel);
             }, 2500);
 
-            if (data.added) {
-              button.find('i.fa').addClass('green');
-            } else {
-              button.find('i.fa').removeClass('green');
-            }
             new Biblys.Notification(
-              `L'article a bien été ajouté au panier<br /><br /><p class="text-center"><a class="btn btn-primary btn-sm" href="/pages/cart"><span class="fa fa-shopping-cart"></span> Voir le panier</a></p>`,
+              `L'article a bien été ajouté au panier<br /><br /><p class="text-center"><a class="btn btn-success btn-sm" href="/pages/cart"><span class="fa fa-shopping-cart"></span> Voir le panier</a></p>`,
               { type: 'success' }
             );
           }
