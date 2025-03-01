@@ -39,7 +39,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Usecase\AddDownloadableArticleToCartUsecase;
+use Usecase\AddIntangibleArticleToCartUsecase;
 use Usecase\BusinessRuleException;
 
 class CartController extends Controller
@@ -67,9 +67,9 @@ class CartController extends Controller
             $cm = new CartManager();
             $cart = $currentUser->getOrCreateCart();
 
-            $article = ArticleQuery::create()->findPk($articleId);
-            if ($articleEntity->getType()->isDownloadable()) {
-                $usecase = new AddDownloadableArticleToCartUsecase();
+            if (!$articleEntity->getType()->isPhysical()) {
+                $article = ArticleQuery::create()->findPk($articleId);
+                $usecase = new AddIntangibleArticleToCartUsecase();
                 $usecase->execute($article, $cart);
             } else {
                 /** @var Cart $cartEntity */
