@@ -417,7 +417,7 @@ class OrderDeliveryHelpers
         $privatelyPrintedItems = StockQuery::create()
             ->filterByCart($cart)
             ->useArticleQuery()
-            ->filterByAvailabilityDilicom(Article::$AVAILABILITY_PRIVATELY_PRINTED)
+            ->filterByAvailabilityDilicom(Article::AVAILABILITY_PRIVATELY_PRINTED)
             ->endUse()
             ->find();
 

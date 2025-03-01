@@ -697,7 +697,7 @@ class OrderDeliveryHelpersTest extends TestCase
         $site = ModelFactory::createSite();
         $cart = ModelFactory::createCart(site: $site);
         $article = ModelFactory::createArticle(
-            title: "HorsCo", availabilityDilicom: Article::$AVAILABILITY_PRIVATELY_PRINTED
+            title: "HorsCo", availabilityDilicom: Article::AVAILABILITY_PRIVATELY_PRINTED
         );
         ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
         $currentSite = new CurrentSite($site);
@@ -730,7 +730,7 @@ class OrderDeliveryHelpersTest extends TestCase
         $freeArticle = ModelFactory::createArticle(
             title: "Trotar",
             collection: $targetCollection,
-            availabilityDilicom: Article::$AVAILABILITY_PRIVATELY_PRINTED,
+            availabilityDilicom: Article::AVAILABILITY_PRIVATELY_PRINTED,
         );
         ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
 
@@ -775,7 +775,7 @@ class OrderDeliveryHelpersTest extends TestCase
         $freeArticle = ModelFactory::createArticle(
             title: "Cékado",
             collection: $targetCollection,
-            availabilityDilicom: Article::$AVAILABILITY_PRIVATELY_PRINTED,
+            availabilityDilicom: Article::AVAILABILITY_PRIVATELY_PRINTED,
         );
         ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
 
@@ -817,7 +817,7 @@ class OrderDeliveryHelpersTest extends TestCase
         $freeArticle = ModelFactory::createArticle(
             title: "Cékado",
             collection: $targetCollection,
-            availabilityDilicom: Article::$AVAILABILITY_PRIVATELY_PRINTED,
+            availabilityDilicom: Article::AVAILABILITY_PRIVATELY_PRINTED,
         );
         ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
         ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
@@ -862,7 +862,7 @@ class OrderDeliveryHelpersTest extends TestCase
         $freeArticle = ModelFactory::createArticle(
             title: "Cékado",
             collection: $targetCollection,
-            availabilityDilicom: Article::$AVAILABILITY_PRIVATELY_PRINTED,
+            availabilityDilicom: Article::AVAILABILITY_PRIVATELY_PRINTED,
         );
         ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
 

@@ -44,13 +44,13 @@ class AddIntangibleArticleToCartUsecase
             );
         }
 
-        if ($article->getPubdate() > new DateTime() && !$article->isPreorder()) {
+        if (!$article->isPublished() && !$article->isPreorder()) {
             throw new BusinessRuleException(
                 "L'article {$article->getTitle()} n'a pas pu être ajouté au panier car il n'est pas encore disponible."
             );
         }
 
-        if ($article->getAvailabilityDilicom() === 6) {
+        if ($article->isOutOfPrint()) {
             throw new BusinessRuleException(
                 "L'article {$article->getTitle()} n'a pas pu être ajouté au panier car il n'est plus disponible."
             );
