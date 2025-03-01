@@ -18,6 +18,7 @@
 
 namespace Usecase;
 
+use Biblys\Exception\ArticleIsUnavailableException;
 use DateTime;
 use Model\Article;
 use Model\Cart;
@@ -44,16 +45,10 @@ class AddIntangibleArticleToCartUsecase
             );
         }
 
-        if (!$article->isPublished() && !$article->isPreorder()) {
-            throw new BusinessRuleException(
-                "L'article {$article->getTitle()} n'a pas pu être ajouté au panier car il n'est pas encore disponible."
-            );
-        }
-
-        if ($article->isOutOfPrint()) {
-            throw new BusinessRuleException(
-                "L'article {$article->getTitle()} n'a pas pu être ajouté au panier car il n'est plus disponible."
-            );
+        try {
+            $article->ensureAvailability();
+        } catch (ArticleIsUnavailableException $exception) {
+            throw new BusinessRuleException("L'article {$article->getTitle()} n'a pas pu être ajouté au panier car il est {$exception->getMessage()}.");
         }
 
         $stockItem = StockQuery::create()
