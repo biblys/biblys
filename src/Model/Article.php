@@ -31,20 +31,71 @@ use Propel\Runtime\Exception\PropelException;
 
 class Article extends BaseArticle
 {
-    public static int $AVAILABILITY_PRIVATELY_PRINTED = 10;
+    const AVAILABILITY_UNKNOWN = 0;
+    const AVAILABILITY_AVAILABLE = 1;
+    const AVAILABILITY_UPCOMING = 2;
+    const AVAILABILITY_REPRINT_IN_PROGRESS = 3;
+    const AVAILABILITY_TEMPORARILY_UNAVAILABLE = 4;
+    const AVAILABILITY_OUT_OF_PRINT = 6;
+    const AVAILABILITY_TO_BE_REISSUED = 8;
+    const AVAILABILITY_SOON_OUT_OF_PRINT = 9;
+
+    const AVAILABILITY_PRIVATELY_PRINTED = 10;
+
+    public function isAvailabilityUnknown(): bool
+    {
+        return $this->getAvailabilityDilicom() === self::AVAILABILITY_UNKNOWN;
+    }
+
+    public function isAvailable(): bool
+    {
+        return $this->getAvailabilityDilicom() === self::AVAILABILITY_AVAILABLE;
+    }
+
+    public function isUpcoming(): bool
+    {
+        return $this->getAvailabilityDilicom() === self::AVAILABILITY_UPCOMING;
+    }
+
+    public function isReprintInProgress(): bool
+    {
+        return $this->getAvailabilityDilicom() === self::AVAILABILITY_REPRINT_IN_PROGRESS;
+    }
+
+    public function isTemporarilyUnavailable(): bool
+    {
+        return $this->getAvailabilityDilicom() === self::AVAILABILITY_TEMPORARILY_UNAVAILABLE;
+    }
+
+    public function isOutOfPrint(): bool
+    {
+        return $this->getAvailabilityDilicom() === self::AVAILABILITY_OUT_OF_PRINT;
+    }
+
+    public function isToBeReissued(): bool
+    {
+        return $this->getAvailabilityDilicom() === self::AVAILABILITY_TO_BE_REISSUED;
+    }
+
+    public function isSoonOutOfPrint(): bool
+    {
+        return $this->getAvailabilityDilicom() === self::AVAILABILITY_SOON_OUT_OF_PRINT;
+    }
+
+    public function isPrivatelyPrinted(): bool
+    {
+        return $this->getAvailabilityDilicom() === self::AVAILABILITY_PRIVATELY_PRINTED;
+    }
 
     /**
+     * Returns true if publication date is in the past
+     *
      * @throws PropelException
      * @throws Exception
      */
     public function isPublished(): bool
     {
         return $this->getPubdate() <= new DateTime();
-    }
-
-    public function isPrivatelyPrinted(): bool
-    {
-        return $this->getAvailabilityDilicom() === self::$AVAILABILITY_PRIVATELY_PRINTED;
     }
 
     /**
