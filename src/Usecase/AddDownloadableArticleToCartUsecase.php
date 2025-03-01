@@ -26,7 +26,7 @@ use Model\StockQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 
-class AddDownloadableArticleToCart
+class AddDownloadableArticleToCartUsecase
 {
     public function __construct()
     {
