@@ -27,7 +27,7 @@ use Model\StockQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
-class AddDownloadableArticleToCartUsecaseTest extends TestCase
+class AddIntangibleArticleToCartUsecaseTest extends TestCase
 {
     /**
      * @throws PropelException
@@ -41,10 +41,10 @@ class AddDownloadableArticleToCartUsecaseTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
-    public function testUsecaseFailsIfArticleIsNotDownloadable()
+    public function testUsecaseFailsIfArticleIsPhysical()
     {
         // given
-        $usecase = new AddDownloadableArticleToCartUsecase();
+        $usecase = new AddIntangibleArticleToCartUsecase();
 
         $article = ModelFactory::createArticle(title: "Livre papier");
         $cart = ModelFactory::createCart();
@@ -55,7 +55,7 @@ class AddDownloadableArticleToCartUsecaseTest extends TestCase
         // when
         $this->assertInstanceOf(BusinessRuleException::class, $exception);
         $this->assertEquals(
-            "L'article Livre papier n'a pas pu être ajouté au panier car il n'est pas téléchargeable.",
+            "L'article Livre papier n'a pas pu être ajouté au panier car il n'est pas intangible.",
             $exception->getMessage()
         );
     }
@@ -67,7 +67,7 @@ class AddDownloadableArticleToCartUsecaseTest extends TestCase
     public function testUsecaseFailsIfArticlePublicationDateIsInTheFuture()
     {
         // given
-        $usecase = new AddDownloadableArticleToCartUsecase();
+        $usecase = new AddIntangibleArticleToCartUsecase();
 
         $article = ModelFactory::createArticle(
             title: "À paraître",
@@ -94,7 +94,7 @@ class AddDownloadableArticleToCartUsecaseTest extends TestCase
     public function testUsecaseFailsIfArticleIsSoldOut()
     {
         // given
-        $usecase = new AddDownloadableArticleToCartUsecase();
+        $usecase = new AddIntangibleArticleToCartUsecase();
 
         $article = ModelFactory::createArticle(typeId: ArticleType::EBOOK, availabilityDilicom: 6);
         $cart = ModelFactory::createCart();
@@ -114,12 +114,36 @@ class AddDownloadableArticleToCartUsecaseTest extends TestCase
      * @throws BusinessRuleException
      * @throws PropelException
      */
-    public function testUsecaseCreatesAndAddStockItemToCart()
+    public function testUsecaseCreatesAndAddStockItemForDownloadableArticleToCart()
     {
         // given
-        $usecase = new AddDownloadableArticleToCartUsecase();
+        $usecase = new AddIntangibleArticleToCartUsecase();
 
         $article = ModelFactory::createArticle(price: 1000, typeId: ArticleType::EBOOK);
+        $cart = ModelFactory::createCart();
+
+        // when
+        $usecase->execute($article, $cart);
+
+        // then
+        $itemInCart = StockQuery::create()->filterByCart($cart)->findOne();
+        $this->assertNotNull($itemInCart);
+        $this->assertEquals($article, $itemInCart->getArticle());
+        $this->assertEquals(1000, $itemInCart->getSellingPrice());
+        $this->assertEquals(1, $cart->getCount());
+        $this->assertEquals(1000, $cart->getAmount());
+    }
+
+    /**
+     * @throws BusinessRuleException
+     * @throws PropelException
+     */
+    public function testUsecaseCreatesAndAddStockItemForServiceArticleToCart()
+    {
+        // given
+        $usecase = new AddIntangibleArticleToCartUsecase();
+
+        $article = ModelFactory::createArticle(price: 1000, typeId: ArticleType::SUBSCRIPTION);
         $cart = ModelFactory::createCart();
 
         // when
@@ -141,7 +165,7 @@ class AddDownloadableArticleToCartUsecaseTest extends TestCase
     public function testUsecaseAddsExistingStockItemToCart()
     {
         // given
-        $usecase = new AddDownloadableArticleToCartUsecase();
+        $usecase = new AddIntangibleArticleToCartUsecase();
 
         $article = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
         $item = ModelFactory::createStockItem(article: $article, sellingPrice: 1000);
@@ -164,7 +188,7 @@ class AddDownloadableArticleToCartUsecaseTest extends TestCase
     public function testUsecaseAddsPreorderableArticleToCart()
     {
         // given
-        $usecase = new AddDownloadableArticleToCartUsecase();
+        $usecase = new AddIntangibleArticleToCartUsecase();
 
         $article = ModelFactory::createArticle(
             title: "À paraître",
@@ -192,7 +216,7 @@ class AddDownloadableArticleToCartUsecaseTest extends TestCase
     public function testUsecaseIgnoresSoldItem()
     {
         // given
-        $usecase = new AddDownloadableArticleToCartUsecase();
+        $usecase = new AddIntangibleArticleToCartUsecase();
 
         $article = ModelFactory::createArticle(price: 1000, typeId: ArticleType::EBOOK);
         $soldItem = ModelFactory::createStockItem(article: $article, sellingDate: new DateTime());

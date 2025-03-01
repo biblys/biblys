@@ -159,11 +159,8 @@ class CartControllerTest extends TestCase
         // given
         $controller = new CartController();
 
-        $article = ModelFactory::createArticle(price: 599, typeId: ArticleType::SUBSCRIPTION);
-        $site = ModelFactory::createSite();
-        ModelFactory::createSiteOption(site: $site, key: "virtual_stock", value: 1);
-        LegacyCodeHelper::setGlobalSite($site);
-        $cart = ModelFactory::createCart(site: $site);
+        $article = ModelFactory::createArticle(price: 699, typeId: ArticleType::SUBSCRIPTION);
+        $cart = ModelFactory::createCart();
         $request = new Request();
 
         $currentUser = Mockery::mock(CurrentUser::class);
@@ -174,6 +171,8 @@ class CartControllerTest extends TestCase
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals(1, $cart->getCount());
+        $this->assertEquals(699, $cart->getAmount());
     }
 
     /** addStock */

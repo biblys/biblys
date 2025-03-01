@@ -26,7 +26,7 @@ use Model\StockQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 
-class AddDownloadableArticleToCartUsecase
+class AddIntangibleArticleToCartUsecase
 {
     public function __construct()
     {
@@ -38,9 +38,9 @@ class AddDownloadableArticleToCartUsecase
      */
     public function execute(Article $article, Cart $cart): void
     {
-        if (!$article->getType()->isDownloadable()) {
+        if ($article->getType()->isPhysical()) {
             throw new BusinessRuleException(
-                "L'article {$article->getTitle()} n'a pas pu être ajouté au panier car il n'est pas téléchargeable."
+                "L'article {$article->getTitle()} n'a pas pu être ajouté au panier car il n'est pas intangible."
             );
         }
 
