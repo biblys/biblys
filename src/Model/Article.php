@@ -19,6 +19,7 @@
 namespace Model;
 
 use Biblys\Data\ArticleType;
+use Biblys\Exception\ArticleIsUnavailableException;
 use Biblys\Exception\CannotDeleteArticleWithStock;
 use DateTime;
 use Exception;
@@ -42,11 +43,6 @@ class Article extends BaseArticle
 
     const AVAILABILITY_PRIVATELY_PRINTED = 10;
 
-    public function isAvailabilityUnknown(): bool
-    {
-        return $this->getAvailabilityDilicom() === self::AVAILABILITY_UNKNOWN;
-    }
-
     public function isAvailable(): bool
     {
         return $this->getAvailabilityDilicom() === self::AVAILABILITY_AVAILABLE;
@@ -57,7 +53,7 @@ class Article extends BaseArticle
         return $this->getAvailabilityDilicom() === self::AVAILABILITY_UPCOMING;
     }
 
-    public function isReprintInProgress(): bool
+    public function isToBeReprinted(): bool
     {
         return $this->getAvailabilityDilicom() === self::AVAILABILITY_REPRINT_IN_PROGRESS;
     }
@@ -85,6 +81,41 @@ class Article extends BaseArticle
     public function isPrivatelyPrinted(): bool
     {
         return $this->getAvailabilityDilicom() === self::AVAILABILITY_PRIVATELY_PRINTED;
+    }
+
+    /**
+     * @throws ArticleIsUnavailableException
+     * @throws PropelException
+     */
+    public function ensureAvailability(): void
+    {
+        if ($this->isUpcoming()) {
+            throw new ArticleIsUnavailableException("à paraître");
+        }
+
+        if ($this->isToBeReprinted()) {
+            throw new ArticleIsUnavailableException("en cours de réimpression");
+        }
+
+        if ($this->isTemporarilyUnavailable()) {
+            throw new ArticleIsUnavailableException("momentanément indisponible");
+        }
+
+        if ($this->isOutOfPrint()) {
+            throw new ArticleIsUnavailableException("épuisé");
+        }
+
+        if ($this->isToBeReissued()) {
+            throw new ArticleIsUnavailableException("à reparaître");
+        }
+
+        if ($this->isPrivatelyPrinted()) {
+            throw new ArticleIsUnavailableException("hors commerce");
+        }
+
+        if (!$this->isPublished() && !$this->isPreorder()) {
+            throw new ArticleIsUnavailableException("à paraître");
+        }
     }
 
     /**

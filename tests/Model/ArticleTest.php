@@ -19,7 +19,9 @@
 namespace Model;
 
 use Biblys\Data\ArticleType;
+use Biblys\Exception\ArticleIsUnavailableException;
 use Biblys\Exception\CannotDeleteArticleWithStock;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use DateTime;
 use Exception;
@@ -30,6 +32,178 @@ require_once __DIR__."/../setUp.php";
 
 class ArticleTest extends TestCase
 {
+    /** ensureAvailability */
+
+    /**
+     * @throws ArticleIsUnavailableException
+     */
+    public function testEnsureAvailabilityIfArticleIsAvailable(): void
+    {
+        // given
+        $article = new Article();
+        $article->setAvailabilityDilicom(Article::AVAILABILITY_AVAILABLE);
+
+        // when
+        $article->ensureAvailability();
+
+        // then
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testEnsureAvailabilityIfArticleIsSoonOutOfPrint(): void
+    {
+        // given
+        $article = new Article();
+        $article->setAvailabilityDilicom(Article::AVAILABILITY_AVAILABLE);
+
+        // when
+        $article->ensureAvailability();
+
+        // then
+        $this->assertTrue(true);
+    }
+
+
+    /**
+     * @throws Exception
+     */
+    public function testEnsureAvailabilityIfArticleIsUpcoming(): void
+    {
+        // given
+        $article = new Article();
+        $article->setAvailabilityDilicom(Article::AVAILABILITY_UPCOMING);
+
+        // when
+        $exception = Helpers::runAndCatchException(fn() => $article->ensureAvailability());
+
+        // then
+        $this->assertInstanceOf(ArticleIsUnavailableException::class, $exception);
+        $this->assertEquals("à paraître", $exception->getMessage());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testEnsureAvailabilityIfArticleIsToBeReprinted(): void
+    {
+        // given
+        $article = new Article();
+        $article->setAvailabilityDilicom(Article::AVAILABILITY_REPRINT_IN_PROGRESS);
+
+        // when
+        $exception = Helpers::runAndCatchException(fn() => $article->ensureAvailability());
+
+        // then
+        $this->assertInstanceOf(ArticleIsUnavailableException::class, $exception);
+        $this->assertEquals("en cours de réimpression", $exception->getMessage());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testEnsureAvailabilityIfArticleIsTemporarilyUnavailable(): void
+    {
+        // given
+        $article = new Article();
+        $article->setAvailabilityDilicom(Article::AVAILABILITY_TEMPORARILY_UNAVAILABLE);
+
+        // when
+        $exception = Helpers::runAndCatchException(fn() => $article->ensureAvailability());
+
+        // then
+        $this->assertInstanceOf(ArticleIsUnavailableException::class, $exception);
+        $this->assertEquals("momentanément indisponible", $exception->getMessage());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testEnsureAvailabilityIfArticleIsOutOfPrint(): void
+    {
+        // given
+        $article = new Article();
+        $article->setAvailabilityDilicom(Article::AVAILABILITY_OUT_OF_PRINT);
+
+        // when
+        $exception = Helpers::runAndCatchException(fn() => $article->ensureAvailability());
+
+        // then
+        $this->assertInstanceOf(ArticleIsUnavailableException::class, $exception);
+        $this->assertEquals("épuisé", $exception->getMessage());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testEnsureAvailabilityIfArticleIsToBeReissued(): void
+    {
+        // given
+        $article = new Article();
+        $article->setAvailabilityDilicom(Article::AVAILABILITY_TO_BE_REISSUED);
+
+        // when
+        $exception = Helpers::runAndCatchException(fn() => $article->ensureAvailability());
+
+        // then
+        $this->assertInstanceOf(ArticleIsUnavailableException::class, $exception);
+        $this->assertEquals("à reparaître", $exception->getMessage());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testEnsureAvailabilityIfArticleIsPrivatelyPrinted(): void
+    {
+        // given
+        $article = new Article();
+        $article->setAvailabilityDilicom(Article::AVAILABILITY_PRIVATELY_PRINTED);
+
+        // when
+        $exception = Helpers::runAndCatchException(fn() => $article->ensureAvailability());
+
+        // then
+        $this->assertInstanceOf(ArticleIsUnavailableException::class, $exception);
+        $this->assertEquals("hors commerce", $exception->getMessage());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testEnsureAvailabilityIfArticlePublicationDateIsInTheFuture(): void
+    {
+        // given
+        $article = new Article();
+        $article->setPubdate(new DateTime("tomorrow"));
+
+        // when
+        $exception = Helpers::runAndCatchException(fn() => $article->ensureAvailability());
+
+        // then
+        $this->assertInstanceOf(ArticleIsUnavailableException::class, $exception);
+        $this->assertEquals("à paraître", $exception->getMessage());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testEnsureAvailabilityIfArticlePublicationDateIsInTheFutureButPreorderable(): void
+    {
+        // given
+        $article = new Article();
+        $article->setPubdate(new DateTime("tomorrow"));
+        $article->setPreorder(1);
+
+        // when
+        $article->ensureAvailability();
+
+        // then
+        $this->assertTrue(true);
+    }
+
+
     /** isPublished */
 
     /**

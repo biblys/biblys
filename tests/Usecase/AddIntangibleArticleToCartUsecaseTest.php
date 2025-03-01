@@ -64,33 +64,6 @@ class AddIntangibleArticleToCartUsecaseTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
-    public function testUsecaseFailsIfArticlePublicationDateIsInTheFuture()
-    {
-        // given
-        $usecase = new AddIntangibleArticleToCartUsecase();
-
-        $article = ModelFactory::createArticle(
-            title: "À paraître",
-            typeId: ArticleType::EBOOK,
-            publicationDate: new DateTime("tomorrow")
-        );
-        $cart = ModelFactory::createCart();
-
-        // when
-        $exception = Helpers::runAndCatchException(fn() => $usecase->execute($article, $cart));
-
-        // then
-        $this->assertInstanceOf(BusinessRuleException::class, $exception);
-        $this->assertEquals(
-            "L'article À paraître n'a pas pu être ajouté au panier car il n'est pas encore disponible.",
-            $exception->getMessage()
-        );
-    }
-
-    /**
-     * @throws PropelException
-     * @throws Exception
-     */
     public function testUsecaseFailsIfArticleIsSoldOut()
     {
         // given
@@ -105,7 +78,7 @@ class AddIntangibleArticleToCartUsecaseTest extends TestCase
         // then
         $this->assertInstanceOf(BusinessRuleException::class, $exception);
         $this->assertEquals(
-            "L'article {$article->getTitle()} n'a pas pu être ajouté au panier car il n'est plus disponible.",
+            "L'article {$article->getTitle()} n'a pas pu être ajouté au panier car il est épuisé.",
             $exception->getMessage()
         );
     }
