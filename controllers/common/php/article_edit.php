@@ -940,11 +940,6 @@ return function (
                 <label for="article_cover_upload">Couverture :</label>
                 ' . $article_cover_upload . '<input type="hidden" id="article_cover_import" name="article_cover_import" placeholder="Adresse de l\'image...">
             </p>
-
-            <p>
-                <label>Version :</label>
-                <input value="' . $articleEntity->get('cover_version') . '" class="mini" disabled />
-            </p>
         </fieldset>
 
         <fieldset>
