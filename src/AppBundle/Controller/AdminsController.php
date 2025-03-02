@@ -98,7 +98,43 @@ class AdminsController extends Controller
                 $templateService,
                 $mailer,
             );
-            $usecase->execute($userEmail);
+            list($userWasCreated, $user) = $usecase->execute($userEmail);
+
+            if ($userWasCreated) {
+                $flashMessages->add("info", "Un compte utilisateur a été créé pour $userEmail.");
+            }
+
+            $adminUrl = $urlGenerator->generate("main_admin", [], UrlGeneratorInterface::ABSOLUTE_URL);
+            $adminEmailBody = $templateService->render("AppBundle:Admins:admin-welcome_email.html.twig", [
+                "email" => $userEmail,
+                "adminUrl" => $adminUrl,
+            ]);
+            $mailer->send(
+                to: $user->getEmail(),
+                subject: "Votre accès admin au site {$currentSite->getSite()->getTitle()}",
+                body: $adminEmailBody
+            );
+
+            $admins = RightQuery::create()
+                ->filterByIsAdmin(true)
+                ->joinWithUser()
+                ->find();
+            $adminsPageUrl = "https://{$currentSite->getSite()->getDomain()}/pages/adm_admins";
+            $alertEmailBody = $templateService->render("AppBundle:Admins:admin-added-alert_email.html.twig", [
+                "email" => $userEmail,
+                "adminsPageUrl" => $adminsPageUrl,
+            ]);
+            foreach ($admins as $admin) {
+                $adminEmail = $admin->getUser()->getEmail();
+                $mailer->send(
+                    to: $adminEmail,
+                    subject: "Alerte de sécurité : nouvel·le admin ajouté·e",
+                    body: $alertEmailBody
+                );
+            }
+
+            $flashMessages->add("success", "Un accès administrateur a été ajouté pour le compte $userEmail.");
+
             return new RedirectResponse("/pages/adm_admins");
         } catch (BusinessRuleException $exception) {
             $adminAddUrl = $urlGenerator->generate("admins_new");
