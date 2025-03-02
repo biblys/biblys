@@ -342,7 +342,7 @@ class CartManager extends EntityManager
             }
         }
 
-        // As a reward in a crowdfunding campaign ?
+        // As a reward in a crowdfunding campaign?
         if ($reward) {
             $stock->set('campaign_id', $reward->get('campaign_id'));
             $stock->set('reward_id', $reward->get('id'));
@@ -382,15 +382,14 @@ class CartManager extends EntityManager
             );
         }
 
-        if ($article->isDownloadable()) {
-            if (!$article->isPurchasable() && !$article->isPrivatelyPrinted())
-            throw new CartException('Cet article est indisponible.');
+        if (!$article->getType()->isPhysical()) {
+            throw new CartException(
+                "L'article {$a->get('article_title')} n'a pas pu être ajouté au panier car il est intangible."
+            );
         }
 
-        // Default : add an available copy to cart
-        $stocks = $article->getAvailableItems('all', [
-            'order' => 'stock_cart_date',
-        ]);
+        // Default: add an available copy to cart
+        $stocks = $article->getAvailableItems('all', ['order' => 'stock_cart_date']);
         if (count($stocks) > 0) {
 
             // For each copy

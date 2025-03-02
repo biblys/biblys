@@ -24,6 +24,7 @@
 use Biblys\Exception\CannotAddStockItemToCartException;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
+use Entity\Exception\CartException;
 use Propel\Runtime\Exception\PropelException;
 
 require_once "setUp.php";
@@ -265,20 +266,20 @@ class CartTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * An unavailable ebook shouldn't be added to cart even if stock available
+     * @throws PropelException
+     * @throws CartException
+     * @throws Exception
      */
-    public function testAddUnavailableEbook()
+    public function testAddingIntangibleArticleToCartFails()
     {
-        $this->expectException("Exception");
-        $this->expectExceptionMessage("Cet article est indisponible.");
+        $this->expectException(CartException::class);
+        $this->expectExceptionMessage("L'article Immatériel n'a pas pu être ajouté au panier car il est intangible.");
 
-        $sm = new StockManager();
         $cm = new CartManager();
 
-        $article = EntityFactory::createArticle(
-            ["type_id" => 2, "article_availability_dilicom" => 6]
-        );
+        $article = EntityFactory::createArticle(["type_id" => 2, "article_availability_dilicom" => 6, "article_title" => "Immatériel"]);
         EntityFactory::createStock(["article_id" => $article->get("id")]);
+        /** @var Cart $cart */
         $cart = $cm->create();
 
         $cm->addArticle($cart, $article);
@@ -307,7 +308,10 @@ class CartTest extends PHPUnit\Framework\TestCase
         );
 
         $downloadable = EntityFactory::createArticle(["type_id" => 2]);
-        $cm->addArticle($cart, $downloadable);
+        $downloadableStockItem = EntityFactory::createStock([
+            "article_id" => $downloadable->get("id"),
+            "cart_id" => $cart->get("id"),
+        ]);
         $this->assertFalse(
             $cart->needsShipping(),
             "Carts with downloadable article don't need shipping"
