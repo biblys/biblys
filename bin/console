@@ -21,6 +21,7 @@ use Command\MigrateFilesCommand;
 use Command\MigrateImagesCommand;
 use Command\OptimizeImagesCommand;
 use Command\CleanImagesCommand;
+use Command\UsersCreateAdminCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -41,6 +42,7 @@ try {
     $application->add(new MigrateFilesCommand($filesystem));
     $application->add(new MigrateImagesCommand($config, $currentSite, $imagesService));
     $application->add(new CleanImagesCommand($currentSite, $imagesService));
+    $application->add(new UsersCreateAdminCommand($currentSite));
 } catch (InvalidSiteIdException $e) {
 
 }

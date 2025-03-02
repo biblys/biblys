@@ -7,6 +7,8 @@
 - Une page référençant les différents flux RSS a été ajoutée.
 - Un flux RSS des articles du catalogue est désormais disponible à l'adresse
   `/feeds/catalog.rss.xml`.
+- Une nouvelle commande `users:create-admin` a été ajouter pour créer depuis la
+  ligne de commande un nouvel utilisateur avec des droits d'admin.
 - Il est désormais possible de supprimer un utilisateur.
 - La page d'administration des utilisateurs dispose maintenant d'un champ de 
   recherche et est paginée au-delà de 100 résultats.
