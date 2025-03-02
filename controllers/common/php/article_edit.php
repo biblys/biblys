@@ -530,7 +530,7 @@ return function (
     // Couverture
     $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg, image/png, image/webp" />';
     if ($imagesService->imageExistsFor($article)) {
-        $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg, image/png, image/webp" hidden /> <label class="after btn btn-outline-secondary" for="article_cover_upload">Remplacer</label> <input type="checkbox" id="article_cover_delete" name="article_cover_delete" value="1" /> <label for="article_cover_delete" class="after">Supprimer</label>';
+        $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg, image/png, image/webp" hidden /> <label class="btn btn-outline-secondary" for="article_cover_upload">Remplacer</label> <input type="checkbox" id="article_cover_delete" name="article_cover_delete" value="1" /> <label for="article_cover_delete" class="after">Supprimer</label>';
     }
 
     // ** FICHIERS TÉLÉCHARGEABLES ** //
