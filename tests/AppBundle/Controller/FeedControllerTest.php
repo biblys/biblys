@@ -97,9 +97,9 @@ class FeedControllerTest extends TestCase
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Éditions Paronymie</title>
+    <title>Éditions Paronymie · Le blog</title>
     <description>Les derniers billets du blog</description>
-    <generator>Laminas_Feed_Writer 2 (https://getlaminas.org)</generator>
+    <generator>Biblys (https://biblys.org)</generator>
     <link>https://paronymie.fr</link>
     <atom:link rel="self" type="application/rss+xml" href="https://example.com/feed"/>
   </channel>
@@ -139,10 +139,10 @@ XML
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
   <channel>
-    <title>Éditions Paronymie</title>
+    <title>Éditions Paronymie · Le blog</title>
     <description>Les derniers billets du blog</description>
     <pubDate>Sun, 28 Apr 2019 02:42:00 +0000</pubDate>
-    <generator>Laminas_Feed_Writer 2 (https://getlaminas.org)</generator>
+    <generator>Biblys (https://biblys.org)</generator>
     <link>https://paronymie.fr</link>
     <atom:link rel="self" type="application/rss+xml" href="https://example.com/feed"/>
     <item>
@@ -187,9 +187,9 @@ XML
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Éditions Paronymie</title>
+    <title>Éditions Paronymie · Les parutions</title>
     <description>Les derniers articles du catalogue</description>
-    <generator>Laminas_Feed_Writer 2 (https://getlaminas.org)</generator>
+    <generator>Biblys (https://biblys.org)</generator>
     <link>https://paronymie.fr</link>
     <atom:link rel="self" type="application/rss+xml" href="https://example.com/feed"/>
   </channel>
@@ -237,10 +237,10 @@ XML
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
   <channel>
-    <title>Éditions Paronymie</title>
+    <title>Éditions Paronymie · Les parutions</title>
     <description>Les derniers articles du catalogue</description>
     <pubDate>Wed, 22 May 2013 21:59:00 +0000</pubDate>
-    <generator>Laminas_Feed_Writer 2 (https://getlaminas.org)</generator>
+    <generator>Biblys (https://biblys.org)</generator>
     <link>https://paronymie.fr</link>
     <atom:link rel="self" type="application/rss+xml" href="https://example.com/feed"/>
     <item>
@@ -286,10 +286,10 @@ XML
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Éditions Paronymie</title>
+    <title>Éditions Paronymie · Le blog</title>
     <description>Les derniers billets du blog</description>
     <pubDate>Sun, 28 Apr 2019 02:42:00 +0000</pubDate>
-    <generator>Laminas_Feed_Writer 2 (https://getlaminas.org)</generator>
+    <generator>Biblys (https://biblys.org)</generator>
     <link>https://paronymie.fr</link>
     <atom:link rel="self" type="application/rss+xml" href="https://example.com/feed"/>
   </channel>
