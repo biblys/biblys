@@ -68,7 +68,8 @@ class FeedController extends Controller
             ->find();
 
         $feed = new Feed();
-        $feed->setTitle($currentSite->getTitle());
+        $feed->setTitle("{$currentSite->getTitle()} · Le blog");
+        $feed->setGenerator("Biblys (https://biblys.org)");
         $feed->setDescription("Les derniers billets du blog");
         $feed->setLink("https://{$currentSite->getSite()->getDomain()}");
         $feed->setFeedLink($currentUrl->getAbsoluteUrl(), "rss");
@@ -104,7 +105,8 @@ class FeedController extends Controller
     ): Response
     {
         $feed = new Feed();
-        $feed->setTitle($currentSite->getTitle());
+        $feed->setTitle("{$currentSite->getTitle()} · Les parutions");
+        $feed->setGenerator("Biblys (https://biblys.org)");
         $feed->setDescription("Les derniers articles du catalogue");
         $feed->setLink("https://{$currentSite->getSite()->getDomain()}");
         $feed->setFeedLink($currentUrl->getAbsoluteUrl(), "rss");
