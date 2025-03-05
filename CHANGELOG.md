@@ -8,6 +8,8 @@
   `/feeds/`.
 - Un flux RSS des articles du catalogue est désormais disponible à l'adresse
   `/feeds/catalog.rss.xml`.
+- Les flux RSS des actualités et des billets de blog affichent désormais des
+  images de prévisualisation lorsqu'elles sont disponibles.
 - Une nouvelle commande `users:create-admin` a été ajouter pour créer depuis la
   ligne de commande un nouvel utilisateur avec des droits d'admin.
 - Il est désormais possible de supprimer un utilisateur.

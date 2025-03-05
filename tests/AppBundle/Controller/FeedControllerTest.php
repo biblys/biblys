@@ -170,8 +170,6 @@ XML
             , $response->getContent());
     }
 
-
-
     /**
      * @throws PropelException
      * @throws Exception
@@ -231,9 +229,11 @@ XML
         $currentUrl = $this->createMock(CurrentUrlService::class);
         $currentUrl->method("getAbsoluteUrl")->willReturn("https://example.com/feed");
         $urlGenerator = $this->createMock(UrlGenerator::class);
+        $imagesService = $this->createMock(ImagesService::class);
+        $imagesService->method("imageExistsFor")->willReturn(false);
 
         // when
-        $response = $controller->catalogAction($currentSite, $currentUrl, $urlGenerator);
+        $response = $controller->catalogAction($currentSite, $currentUrl, $urlGenerator, $imagesService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -281,9 +281,12 @@ XML
         $currentUrl->method("getAbsoluteUrl")->willReturn("https://example.com/feed");
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("https://example.com/post/1");
+        $imagesService = $this->createMock(ImagesService::class);
+        $imagesService->method("imageExistsFor")->willReturn(true);
+        $imagesService->method("getImageUrlFor")->willReturn("/images/articles/1.jpg");
 
         // when
-        $response = $controller->catalogAction($currentSite, $currentUrl, $urlGenerator);
+        $response = $controller->catalogAction($currentSite, $currentUrl, $urlGenerator, $imagesService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -303,7 +306,7 @@ XML
       <pubDate>Wed, 22 May 2013 21:59:00 +0000</pubDate>
       <link>https://example.com/post/1</link>
       <guid>https://example.com/post/1</guid>
-      <content:encoded><![CDATA[<p>Ce livre paraît aujourd'hui.</p>]]></content:encoded>
+      <content:encoded><![CDATA[<img src="/images/articles/1.jpg" alt="" role="presentation" /><p>Ce livre paraît aujourd'hui.</p>]]></content:encoded>
       <slash:comments>0</slash:comments>
     </item>
   </channel>
