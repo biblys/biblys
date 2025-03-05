@@ -111,6 +111,7 @@ HTML;
         CurrentSite $currentSite,
         CurrentUrlService $currentUrl,
         UrlGenerator $urlGenerator,
+        ImagesService $imagesService,
     ): Response
     {
         $feed = new Feed();
@@ -136,11 +137,18 @@ HTML;
                 continue;
             }
 
+            $imageHtml = "";
+            if ($imagesService->imageExistsFor($article)) {
+                $imageHtml = <<<HTML
+<img src="{$imagesService->getImageUrlFor($article)}" alt="" role="presentation" />
+HTML;
+            }
+
             $entry = $feed->createEntry();
             $entry->setTitle($article->getTitle());
             $entry->setLink($urlGenerator->generate("article_show", ["slug" => $article->getUrl()], UrlGeneratorInterface::ABSOLUTE_URL));
             $entry->setDateCreated($article->getPubdate());
-            $entry->setContent($article->getSummary());
+            $entry->setContent($imageHtml.$article->getSummary());
             $feed->addEntry($entry);
         }
 
