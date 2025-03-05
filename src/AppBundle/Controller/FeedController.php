@@ -133,8 +133,9 @@ HTML;
 
         /** @var Article $article */
         foreach ($articles as $article) {
-            if (empty($article->getSummary())) {
-                continue;
+            $summary = $article->getSummary();
+            if (empty($summary)) {
+                $summary = "<p>Pas de texte sur la quatrième de couverture.</p>";
             }
 
             $imageHtml = "";
@@ -148,7 +149,7 @@ HTML;
             $entry->setTitle($article->getTitle());
             $entry->setLink($urlGenerator->generate("article_show", ["slug" => $article->getUrl()], UrlGeneratorInterface::ABSOLUTE_URL));
             $entry->setDateCreated($article->getPubdate());
-            $entry->setContent($imageHtml.$article->getSummary());
+            $entry->setContent($imageHtml.$summary);
             $feed->addEntry($entry);
         }
 
