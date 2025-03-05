@@ -20,6 +20,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
+use Biblys\Service\Images\ImagesService;
 use Biblys\Service\TemplateService;
 use DateTime;
 use Framework\Controller;
@@ -58,6 +59,7 @@ class FeedController extends Controller
         CurrentSite $currentSite,
         CurrentUrlService $currentUrl,
         UrlGenerator $urlGenerator,
+        ImagesService $imagesService,
     ): Response
     {
         $posts = PostQuery::create()
@@ -84,11 +86,18 @@ class FeedController extends Controller
                 continue;
             }
 
+            $imageHtml = "";
+            if ($imagesService->imageExistsFor($post)) {
+                $imageHtml = <<<HTML
+<img src="{$imagesService->getImageUrlFor($post)}" alt="" role="presentation" />
+HTML;
+            }
+
             $entry = $feed->createEntry();
             $entry->setTitle($post->getTitle());
             $entry->setLink($urlGenerator->generate("post_show", ["slug" => $post->getUrl()], UrlGeneratorInterface::ABSOLUTE_URL));
             $entry->setDateCreated($post->getDate());
-            $entry->setContent($post->getContent() ?? "Pas de contenu");
+            $entry->setContent($imageHtml.$post->getContent());
             $feed->addEntry($entry);
         }
 
