@@ -31,7 +31,11 @@ return function (
     QueryParamsService $queryParams,
 ): Response
 {
-    $queryParams->parse(["q" => ["type" => "string", "mb_min_length" => 3, "mb_max_length" => 64]]);
+    $queryParams->parse([
+        "q" => ["type" => "string", "mb_min_length" => 3, "mb_max_length" => 64],
+        "o" => ["type" => "string", "default" => ""],
+        "d" => ["type" => "numeric", "default" => 0],
+    ]);
     $query = $queryParams->get("q");
 
     if (!$currentSite->hasOptionEnabled("use_legacy_search")) {
