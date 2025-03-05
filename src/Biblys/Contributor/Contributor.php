@@ -34,6 +34,11 @@ class Contributor
         $this->_contributionId = $contributionId;
     }
 
+    public function getPeople(): People
+    {
+        return $this->_people;
+    }
+
     public function getJobId(): int
     {
         return $this->_job->getId();
