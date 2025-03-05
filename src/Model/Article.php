@@ -21,6 +21,8 @@ namespace Model;
 use Biblys\Data\ArticleType;
 use Biblys\Exception\ArticleIsUnavailableException;
 use Biblys\Exception\CannotDeleteArticleWithStock;
+use Biblys\Isbn\Isbn;
+use Biblys\Isbn\IsbnParsingException;
 use DateTime;
 use Exception;
 use Model\Base\Article as BaseArticle;
@@ -274,5 +276,13 @@ class Article extends BaseArticle
         }
 
         return ArticleQuery::create()->filterByItem($this->getItem())->find()->getArrayCopy();
+    }
+
+    /**
+     * @throws IsbnParsingException
+     */
+    public function getIsbn(): string
+    {
+        return Isbn::convertToIsbn13($this->getEan());
     }
 }
