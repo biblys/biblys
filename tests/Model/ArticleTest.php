@@ -36,6 +36,7 @@ class ArticleTest extends TestCase
 
     /**
      * @throws ArticleIsUnavailableException
+     * @throws PropelException
      */
     public function testEnsureAvailabilityIfArticleIsAvailable(): void
     {
@@ -222,6 +223,9 @@ class ArticleTest extends TestCase
         $this->assertTrue($isPublished);
     }
 
+    /**
+     * @throws PropelException
+     */
     public function testIsPublishedReturnsTrueForPresentDate()
     {
         // given
@@ -235,6 +239,9 @@ class ArticleTest extends TestCase
         $this->assertTrue($isPublished);
     }
 
+    /**
+     * @throws PropelException
+     */
     public function testIsPublishedReturnsTrueForFutureDate()
     {
         // given
@@ -257,7 +264,7 @@ class ArticleTest extends TestCase
     {
         // given
         $article = new Article();
-        $contributor = ModelFactory::createPeople();
+        $contributor = ModelFactory::createContributor();
         $job = \Biblys\Contributor\Job::getById(\Biblys\Contributor\Job::AUTHOR);
 
         // when
@@ -459,6 +466,9 @@ class ArticleTest extends TestCase
 
     /** delete */
 
+    /**
+     * @throws PropelException
+     */
     public function testDeleteSucceedsIfArticleHasNoStock(): void
     {
         // given
@@ -471,7 +481,10 @@ class ArticleTest extends TestCase
         $this->assertTrue($article->isDeleted());
     }
 
-    public function testDeleteIsImposibleIfArticleHasStock(): void
+    /**
+     * @throws PropelException
+     */
+    public function testDeleteIsImpossibleIfArticleHasStock(): void
     {
         // given
         $article = ModelFactory::createArticle();
@@ -481,7 +494,7 @@ class ArticleTest extends TestCase
         $thrownException = null;
         try {
             $article->delete();
-        } catch (CannotDeleteArticleWithStock $exception) {
+        } /** @noinspection PhpRedundantCatchClauseInspection */ catch (CannotDeleteArticleWithStock $exception) {
             $thrownException = $exception;
         }
 
