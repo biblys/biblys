@@ -119,6 +119,7 @@ class Article extends Entity
     {
         $model = new \Model\Article();
         $model->setId($this->get("id"));
+        $model->setItem($this->get("item"));
         $model->setTypeId($this->get("type_id"));
         $model->setPrice($this->get("price"));
         $model->setPubdate($this->get("pubdate"));
