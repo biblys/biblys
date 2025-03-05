@@ -24,6 +24,7 @@ use Exception;
 use Model\PeopleQuery;
 use People;
 use PHPUnit\Framework\TestCase;
+use Propel\Runtime\Exception\PropelException;
 
 require_once __DIR__."/../../setUp.php";
 
@@ -46,6 +47,30 @@ class ContributorTest extends TestCase
             $people,
             Job::getById(3),
             1
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws UnknownJobException
+     */
+    public function testGetPeople()
+    {
+        // given
+        $people = ModelFactory::createContributor();
+
+        // when
+        $contributor = new Contributor(
+            $people,
+            Job::getById(3),
+            1
+        );
+
+        // then
+        $this->assertEquals(
+            $people,
+            $contributor->getPeople(),
+            "should return the correct people"
         );
     }
 
