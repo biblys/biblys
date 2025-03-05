@@ -77,6 +77,7 @@ class ModelFactory
         string          $title = "Article",
         array           $authors = [],
         string          $ean = "9781234567890",
+        int             $item = null,
         string          $url = "author/article",
         int             $price = 999,
         int             $typeId = ArticleType::BOOK,
@@ -98,6 +99,7 @@ class ModelFactory
         $article->setTitle($title);
         $article->setTitleAlphabetic($alphabeticalTitle->get());
         $article->setEan($ean);
+        $article->setItem($item);
         $article->setUrl($url);
         $article->setPrice($price);
         $article->setKeywords($keywords ?? $title);
