@@ -99,7 +99,7 @@ class FeedControllerTest extends TestCase
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Éditions Paronymie · Le blog</title>
+    <title>Éditions Paronymie · Actualités</title>
     <description>Les derniers billets du blog</description>
     <generator>Biblys (https://biblys.org)</generator>
     <link>https://paronymie.fr</link>
@@ -149,7 +149,7 @@ XML
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
   <channel>
-    <title>Éditions Paronymie · Le blog</title>
+    <title>Éditions Paronymie · Actualités</title>
     <description>Les derniers billets du blog</description>
     <pubDate>Sun, 28 Apr 2019 02:42:00 +0000</pubDate>
     <generator>Biblys (https://biblys.org)</generator>
@@ -200,7 +200,7 @@ XML
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Éditions Paronymie · Le blog</title>
+    <title>Éditions Paronymie · Actualités</title>
     <description>Les derniers billets du blog</description>
     <pubDate>Sun, 28 Apr 2019 02:42:00 +0000</pubDate>
     <generator>Biblys (https://biblys.org)</generator>
@@ -242,7 +242,7 @@ XML
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Éditions Paronymie · Les parutions</title>
+    <title>Éditions Paronymie · Parutions</title>
     <description>Les derniers articles du catalogue</description>
     <generator>Biblys (https://biblys.org)</generator>
     <link>https://paronymie.fr</link>
@@ -295,7 +295,7 @@ XML
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
   <channel>
-    <title>Éditions Paronymie · Les parutions</title>
+    <title>Éditions Paronymie · Parutions</title>
     <description>Les derniers articles du catalogue</description>
     <pubDate>Wed, 22 May 2013 21:59:00 +0000</pubDate>
     <generator>Biblys (https://biblys.org)</generator>
