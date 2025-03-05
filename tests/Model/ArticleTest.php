@@ -32,6 +32,14 @@ require_once __DIR__."/../setUp.php";
 
 class ArticleTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     */
+    public function setUp(): void
+    {
+        ArticleQuery::create()->deleteAll();
+    }
+
     /** ensureAvailability */
 
     /**
@@ -535,4 +543,44 @@ class ArticleTest extends TestCase
         $this->assertEquals("Précommander", $label);
     }
 
+    /** getAllVersions */
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetAllVersions(): void
+    {
+        // given
+        $article = ModelFactory::createArticle(item: 123);
+        $articleWithTheSameItem = ModelFactory::createArticle(item: 123, typeId: ArticleType::EBOOK);
+        $articleWithAnotherItem = ModelFactory::createArticle(item: 124, typeId: ArticleType::EBOOK);
+
+        // when
+        $versions = $article->getVersions();
+
+        // then
+        $this->assertEquals([$article, $articleWithTheSameItem], $versions);
+        $this->assertContains($article, $versions);
+        $this->assertContains($articleWithTheSameItem, $versions);
+        $this->assertNotContains($articleWithAnotherItem, $versions);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetAllVersionsForArticleWithItem(): void
+    {
+        // given
+        $articleWithoutItem = ModelFactory::createArticle();
+        $articleWithItem = ModelFactory::createArticle(item: 456, typeId: ArticleType::EBOOK);
+        $anotherArticleWithoutItem = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
+
+        // when
+        $versions = $articleWithoutItem->getVersions();
+
+        // then
+        $this->assertContains($articleWithoutItem, $versions);
+        $this->assertNotContains($articleWithItem, $versions);
+        $this->assertNotContains($anotherArticleWithoutItem, $versions);
+    }
 }

@@ -264,4 +264,16 @@ class Article extends BaseArticle
 
         return "Ajouter au panier";
     }
+
+    /**
+     * @return Article[]
+     */
+    public function getVersions(): array
+    {
+        if (!$this->getItem()) {
+            return [$this];
+        }
+
+        return ArticleQuery::create()->filterByItem($this->getItem())->find()->getArrayCopy();
+    }
 }
