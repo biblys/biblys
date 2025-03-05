@@ -4,13 +4,14 @@
 
 ### Améliorations
 
-- Une page référençant les différents flux RSS a été ajoutée.
+- Une page référençant les différents flux RSS a été ajoutée à l'adresse
+  `/feeds/`.
 - Un flux RSS des articles du catalogue est désormais disponible à l'adresse
   `/feeds/catalog.rss.xml`.
 - Une nouvelle commande `users:create-admin` a été ajouter pour créer depuis la
   ligne de commande un nouvel utilisateur avec des droits d'admin.
 - Il est désormais possible de supprimer un utilisateur.
-- La page d'administration des utilisateurs dispose maintenant d'un champ de 
+- La page d'administration des utilisateurs dispose maintenant d'un champ de
   recherche et est paginée au-delà de 100 résultats.
 - La déclaration des urls canoniques des pages a été améliorée.
 - Un lien d'accès à la page de recherche a été ajouté dans le menu de navigation
@@ -24,6 +25,12 @@
 
 ### Instructions de mise à jour
 
+#### Jouer les migrations
+
+```shell
+composer propel migrate
+```
+
 #### Font Awesome 6
 
 Biblys utilise désormais la version de Font Awesome 6 contre la version 4
@@ -32,6 +39,7 @@ mettre à jour certaines en suivant les instructions de la page :
 https://docs.fontawesome.com/web/setup/upgrade/upgrade-from-v4.
 
 Notamment, remplacer :
+
 - `fa fa-facebook-square` par `fa-brands fa-square-facebook`
 - `fa fa-twitter-square` par `fa-brands fa-square-x-twitter`
 - `fa fa-instagram` par `fa-brands fa-square-instagram`
