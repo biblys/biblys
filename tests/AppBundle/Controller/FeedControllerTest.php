@@ -219,7 +219,7 @@ XML
      * @throws PropelException
      * @throws Exception
      */
-    public function testArticlesActionWithoutArticles()
+    public function testCatalogActionWithoutArticles()
     {
         // given
         $controller = new FeedController();
@@ -258,7 +258,7 @@ XML
      * @throws PropelException
      * @throws Exception
      */
-    public function testArticlesActionWithArticles()
+    public function testCatalogActionWithArticles()
     {
         // given
         $controller = new FeedController();
@@ -280,7 +280,7 @@ XML
         $currentUrl = $this->createMock(CurrentUrlService::class);
         $currentUrl->method("getAbsoluteUrl")->willReturn("https://example.com/feed");
         $urlGenerator = $this->createMock(UrlGenerator::class);
-        $urlGenerator->method("generate")->willReturn("https://example.com/post/1");
+        $urlGenerator->method("generate")->willReturn("https://example.com/articles/1");
         $imagesService = $this->createMock(ImagesService::class);
         $imagesService->method("imageExistsFor")->willReturn(true);
         $imagesService->method("getImageUrlFor")->willReturn("/images/articles/1.jpg");
@@ -304,9 +304,17 @@ XML
     <item>
       <title>Un article dans le flux</title>
       <pubDate>Wed, 22 May 2013 21:59:00 +0000</pubDate>
-      <link>https://example.com/post/1</link>
-      <guid>https://example.com/post/1</guid>
+      <link>https://example.com/articles/1</link>
+      <guid>https://example.com/articles/1</guid>
       <content:encoded><![CDATA[<img src="/images/articles/1.jpg" alt="" role="presentation" /><p>Ce livre paraît aujourd'hui.</p>]]></content:encoded>
+      <slash:comments>0</slash:comments>
+    </item>
+    <item>
+      <title>Un article sans quatrième</title>
+      <pubDate>Wed, 22 May 2013 21:58:00 +0000</pubDate>
+      <link>https://example.com/articles/1</link>
+      <guid>https://example.com/articles/1</guid>
+      <content:encoded><![CDATA[<img src="/images/articles/1.jpg" alt="" role="presentation" /><p>Pas de texte sur la quatrième de couverture.</p>]]></content:encoded>
       <slash:comments>0</slash:comments>
     </item>
   </channel>
