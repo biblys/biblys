@@ -66,15 +66,14 @@ return function (
     }
     $dates = null;
 
-    $stockDates = EntityManager::prepareAndExecute(
-        "SELECT
-        DATE_FORMAT(`stock_created`, '%Y-%m-%d') as `date`
-    FROM `stock`
-    WHERE `stock`.`site_id` = :site_id AND `stock_created` > SUBDATE(NOW(), INTERVAL 1 MONTH)
-    GROUP BY `date`
-    ORDER BY `date` DESC",
-        ['site_id' => $currentSite->getId()]
-    );
+    $stockDates = EntityManager::prepareAndExecute("
+        SELECT
+            DATE_FORMAT(`stock_created`, '%Y-%m-%d') as `date`
+        FROM `stock`
+        WHERE `stock_created` > SUBDATE(NOW(), INTERVAL 1 MONTH)
+        GROUP BY `date`
+        ORDER BY `date` DESC
+    ", []);
     foreach ($stockDates as $stockDate) {
         if ($_GET['stock_created'] == $stockDate['date']) {
             $stockDate['selected'] = 'selected="selected"';
@@ -284,27 +283,24 @@ return function (
     }
 
     $sql_query = 'SELECT `article_id`, `article_title`, `article_title_alphabetic`, `article_number`, `article_url`, `article_authors`, `article_collection`,
-    `stock_id`, `stock_selling_price`, `stock_purchase_price`, `stock_weight`, `stock_condition`, `stock_pub_year`, `stock_purchase_date`, `stock_invoice`, `stock_selling_date`, `stock_return_date`, `stock_cart_date`, `stock_lost_date`
-    ,`customer_id`, `customer_last_name`, `customer_first_name`, `customer_email`
-    FROM `articles`
-    JOIN `stock` USING(`article_id`)
-    JOIN `sites` USING(`site_id`)
-    LEFT JOIN `customers` USING(`customer_id`)
-    ' . $req . ' AND `stock`.`site_id` = :site_id
-    GROUP BY `stock_id`
-    ORDER BY `stock`.`article_id`, `stock_id` DESC
-    ' . $limit . '
-';
+        `stock_id`, `stock_selling_price`, `stock_purchase_price`, `stock_weight`, `stock_condition`, `stock_pub_year`, `stock_purchase_date`, `stock_invoice`, `stock_selling_date`, `stock_return_date`, `stock_cart_date`, `stock_lost_date`
+        ,`customer_id`, `customer_last_name`, `customer_first_name`, `customer_email`
+        FROM `articles`
+        JOIN `stock` USING(`article_id`)
+        LEFT JOIN `customers` USING(`customer_id`)
+        ' . $req . '
+        GROUP BY `stock_id`
+        ORDER BY `stock`.`article_id`, `stock_id` DESC
+        ' . $limit . '
+    ';
 
-    $sql = EntityManager::prepareAndExecute(
-        $sql_query,
-        ['site_id' => $currentSite->getId()]
-    );
+    $sql = EntityManager::prepareAndExecute($sql_query, []);
     $num = $sql->rowCount();
 
     if (isset($_GET['article_id'])) {
         $content .= '';
     }
+
     $content .= '<h3>' . $num . ' exemplaire' . s($num) . '</h3>';
 
     $article_title = null;

@@ -72,7 +72,7 @@ function listController(
             `stock_id`, `stock_selling_price`, `stock_condition`, `stock_stockage`
         FROM `articles`
         JOIN `stock` USING(`article_id`)
-        WHERE " . $req . " AND `stock`.`site_id` = :site_id
+        WHERE " . $req . "
             AND `stock_selling_date` IS NULL
             AND `stock_return_date` IS NULL
             AND `stock_lost_date` IS NULL
