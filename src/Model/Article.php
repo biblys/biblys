@@ -32,7 +32,6 @@ use Propel\Runtime\Exception\PropelException;
 
 class Article extends BaseArticle
 {
-    const AVAILABILITY_UNKNOWN = 0;
     const AVAILABILITY_AVAILABLE = 1;
     const AVAILABILITY_UPCOMING = 2;
     const AVAILABILITY_REPRINT_IN_PROGRESS = 3;
