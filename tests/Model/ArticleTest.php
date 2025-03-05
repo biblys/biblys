@@ -21,6 +21,7 @@ namespace Model;
 use Biblys\Data\ArticleType;
 use Biblys\Exception\ArticleIsUnavailableException;
 use Biblys\Exception\CannotDeleteArticleWithStock;
+use Biblys\Isbn\IsbnParsingException;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use DateTime;
@@ -582,5 +583,21 @@ class ArticleTest extends TestCase
         $this->assertContains($articleWithoutItem, $versions);
         $this->assertNotContains($articleWithItem, $versions);
         $this->assertNotContains($anotherArticleWithoutItem, $versions);
+    }
+
+    /**
+     * @throws IsbnParsingException
+     */
+    public function testGetIsbn()
+    {
+        // given
+        $article = new Article();
+        $article->setEan("9782123456789");
+
+        // when
+        $isbn = $article->getIsbn();
+
+        // then
+        $this->assertEquals("978-2-12-345678-0", $isbn);
     }
 }
