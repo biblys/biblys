@@ -20,11 +20,14 @@
 * @backupStaticAttributes disabled
 */
 
+use Biblys\Data\ArticleType;
 use Biblys\Exception\ArticleAlreadyInRayonException;
 use Biblys\Service\CurrentSite;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
+use Model\ArticleQuery;
 use Model\PeopleQuery;
+use Model\PublisherQuery;
 use Propel\Runtime\Exception\PropelException;
 
 require_once "setUp.php";
@@ -33,8 +36,14 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 {
     private ArticleManager $m;
 
+    /**
+     * @throws PropelException
+     */
     public function setUp(): void
     {
+        PublisherQuery::create()->deleteAll();
+        ArticleQuery::create()->deleteAll();
+        PeopleQuery::create()->deleteAll();
         $this->m = new ArticleManager();
     }
 
@@ -115,21 +124,23 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test getting a copy
-     * @depends testCreate
+     * @throws PropelException
+     * @throws Exception
+     * @throws Exception
      */
-    public function testGet(Article $article): Article
+    public function testGet()
     {
-        $gotArticle = $this->m->getById($article->get('id'));
+        $article = EntityFactory::createArticle();
+        $returnedArticle = $this->m->getById($article->get('id'));
 
-        $this->assertInstanceOf('Article', $article);
-        $this->assertEquals($article->get('id'), $gotArticle->get('id'));
+        $this->assertInstanceOf('Article', $returnedArticle);
+        $this->assertEquals($article->get('id'), $returnedArticle->get('id'));
 
         return $article;
     }
 
     /**
      * Test updating a copy
-     * @depends testGet
      * @throws Exception
      */
     public function testUpdate()
@@ -153,7 +164,6 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test keywords & links generation
-     * @depends testUpdate
      * @throws Exception
      */
     public function testRefreshMetadata()
@@ -180,10 +190,12 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     /**
      * Test generating cover tag
      * @throws Exception
+     * @noinspection PhpDeprecationInspection
      */
     public function testGetCoverTag()
     {
         $am = new ArticleManager();
+        /** @var Article $article */
         $article = $am->create([
             "article_title" => "Bara Yogoi",
             "publisher_id" => 1,
@@ -215,11 +227,12 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test generating cover url
-     * @depends testUpdate
      * @throws Exception
+     * @noinspection PhpDeprecationInspection
      */
-    public function testGetCoverUrl(Article $article)
+    public function testGetCoverUrl()
     {
+        $article = EntityFactory::createArticle();
         $article->getCover("object")->setExists(true);
         $url = $article->getCoverUrl();
 
@@ -228,10 +241,12 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test if article is available
-     * @depends testUpdate
+     * @throws PropelException
+     * @throws Exception
      */
-    public function testIsAvailable(Article $article)
+    public function testIsAvailable()
     {
+        $article = EntityFactory::createArticle();
         $article->set('article_availability_dilicom', 0);
         $this->assertFalse($article->isAvailable());
 
@@ -241,10 +256,12 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test if article is available
-     * @depends testUpdate
+     * @throws PropelException
+     * @throws Exception
      */
-    public function testIsComingSoon(Article $article)
+    public function testIsComingSoon()
     {
+        $article = EntityFactory::createArticle();
         $article->set('article_availability_dilicom', 1);
         $this->assertFalse($article->isComingSoon());
 
@@ -257,11 +274,13 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test if article is avaiable
-     * @depends testUpdate
+     * Test if article is available
+     * @throws PropelException
+     * @throws Exception
      */
-    public function testIsToBeReprinted(Article $article)
+    public function testIsToBeReprinted()
     {
+        $article = EntityFactory::createArticle();
         $article->set('article_availability_dilicom', 0);
         $this->assertFalse($article->isToBeReprinted());
 
@@ -271,10 +290,13 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test if article is sold out
-     * @depends testUpdate
+     * @throws Exception
+     * @throws Exception
+     * @throws PropelException
      */
-    public function testIsSoldout(Article $article)
+    public function testIsSoldout()
     {
+        $article = EntityFactory::createArticle();
         $article->set('article_availability_dilicom', 0);
         $this->assertFalse($article->isSoldOut());
 
@@ -284,10 +306,13 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test if article is available
-     * @depends testUpdate
+     * @throws Exception
+     * @throws Exception
+     * @throws PropelException
      */
-    public function testIsSoonUnavailable(Article $article)
+    public function testIsSoonUnavailable()
     {
+        $article = EntityFactory::createArticle();
         $article->set('article_availability_dilicom', 0);
         $this->assertFalse($article->isSoonUnavailable());
 
@@ -297,10 +322,13 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test if article is available
-     * @depends testUpdate
+     * @throws Exception
+     * @throws Exception
+     * @throws PropelException
      */
-    public function testIsPrivatelyPrinted(Article $article)
+    public function testIsPrivatelyPrinted()
     {
+        $article = EntityFactory::createArticle();
         $article->set('article_availability_dilicom', 0);
         $this->assertFalse($article->isPrivatelyPrinted());
 
@@ -310,11 +338,11 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test if article is purchasable
-     * @depends testUpdate
      * @throws Exception
      */
-    public function testIsPurchasable(Article $article)
+    public function testIsPurchasable()
     {
+        $article = EntityFactory::createArticle();
         $article->set('article_availability_dilicom', 0);
         $this->assertFalse($article->isPurchasable());
 
@@ -326,10 +354,13 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test if article is purchasable
-     * @depends testUpdate
+     * @throws Exception
+     * @throws Exception
+     * @throws PropelException
      */
-    public function testGetAvailabilityLed(Article $article)
+    public function testGetAvailabilityLed()
     {
+        $article = EntityFactory::createArticle();
         $article->set('article_availability_dilicom', 0);
         $this->assertEquals(
             '<img src="/common/img/square_red.png" title="Épuisé" alt="Épuisé">',
@@ -346,15 +377,15 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test if article is published
-     * @depends testUpdate
      * @throws Exception
      */
-    public function testIsPublished(Article $article)
+    public function testIsPublished()
     {
         $today = new DateTime();
         $yesterday = new DateTime('yesterday');
         $tomorrow = new DateTime('tomorrow');
 
+        $article = EntityFactory::createArticle();
         $article->set('article_pubdate', $today->format('Y-m-d'));
         $this->assertTrue($article->isPublished());
 
@@ -367,10 +398,11 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test if article can be preordered
-     * @depends testUpdate
+     * @throws PropelException
      */
-    public function testIsPreorderable(Article $article)
+    public function testIsPreorderable()
     {
+        $article = EntityFactory::createArticle();
         $this->assertFalse($article->isPreorderable());
 
         $article->set('article_preorder', 1);
@@ -378,11 +410,14 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test if article is of physical type
-     * @depends testUpdate
+     * Test if article is of a physical type
+     * @throws Exception
+     * @throws Exception
+     * @throws PropelException
      */
-    public function testIsPhysical(Article $article)
+    public function testIsPhysical()
     {
+        $article = EntityFactory::createArticle();
         $article->set('type_id', 2);
         $this->assertFalse($article->isPhysical());
 
@@ -392,10 +427,13 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test if article is downloadable (non-physical)
-     * @depends testUpdate
+     * @throws Exception
+     * @throws Exception
+     * @throws PropelException
      */
-    public function testIsDownloadable(Article $article)
+    public function testIsDownloadable()
     {
+        $article = EntityFactory::createArticle();
         $article->set('type_id', 1);
         $this->assertFalse($article->isDownloadable());
 
@@ -405,10 +443,13 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test if article is downloadable (non-physical)
-     * @depends testUpdate
+     * @throws Exception
+     * @throws Exception
+     * @throws PropelException
      */
-    public function testIsFree(Article $article)
+    public function testIsFree()
     {
+        $article = EntityFactory::createArticle();
         $article->set('article_price', 0);
         $this->assertTrue($article->isFree());
 
@@ -418,7 +459,6 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test getting article contributors
-     * @depends testUpdate
      * @throws Exception
      */
     public function testGetContributors()
@@ -439,10 +479,13 @@ class ArticleTest extends PHPUnit\Framework\TestCase
             $contributors,
             "it should return 2 contributors"
         );
+        /** @noinspection PhpUndefinedMethodInspection */
         $this->assertEquals($people1->get('id'), $contributors[0]->get('id'));
+        /** @noinspection PhpUndefinedMethodInspection */
         $this->assertEquals($people2->get('id'), $contributors[1]->get('id'));
 
         $authors = $article->getAuthors();
+        /** @noinspection PhpUndefinedMethodInspection */
         $this->assertEquals($authors[0]->get('id'), $people1->get('id'));
         $this->assertEquals(1, $authors[0]->getJobId());
 
@@ -483,11 +526,11 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     }
 
     /** Test getting article contributors
-     * @depends testUpdate
      * @throws Exception
      */
-    public function testGetDownloadableFiles(Article $article)
+    public function testGetDownloadableFiles()
     {
+        $article = EntityFactory::createArticle();
         $this->assertFalse($article->hasDownloadableFiles());
         $this->assertEmpty($article->getDownloadableFiles());
 
@@ -497,6 +540,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $paid = $fm->create(["file_access" => 1, "article_id" => $article->get('id')]);
         $free = $fm->create(["file_access" => 0, "article_id" => $article->get('id')]);
 
+        /** @var Article $article */
         $article = $am->getById($article->get('id'));
 
         $files = $article->getDownloadableFiles();
@@ -566,13 +610,12 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     }
 
     /** Test getting related awards
-     * @depends testGet
      * @throws Exception
      */
-    public function testGetAwards(Article $article)
+    public function testGetAwards()
     {
         $am = new AwardManager();
-
+        $article = EntityFactory::createArticle();
         $award = $am->create(['award_name' => 'Prix Goncourt', 'article_id' => $article->get('id')]);
 
         $awards = $article->getAwards();
@@ -585,11 +628,13 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test setType and getType methods
+     * @throws Exception
+     * @throws Exception
      */
     public function testSetGetType()
     {
         $article = new Article(["publisher_id" => 1]);
-        $type = \Biblys\Data\ArticleType::getById(1);
+        $type = ArticleType::getById(1);
 
         $article->setType($type);
         $type = $article->getType();
@@ -599,16 +644,16 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test deleting a collection with links
-     * @depends testGet
+     * @throws PropelException
      */
-    public function testBeforeDeleteWithLinks(Article $article)
+    public function testBeforeDeleteWithLinks()
     {
         $this->expectException("Exception");
         $this->expectExceptionMessage("Impossible de supprimer cet article car des éléments y sont liés.");
 
         $am = new ArticleManager();
         $lm = new LinkManager();
-
+        $article = EntityFactory::createArticle();
         $lm->create(['article_id' => $article->get('id')]);
 
         $am->delete($article);
@@ -616,16 +661,16 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test deleting a collection with stock
-     * @depends testGet
+     * @throws PropelException
      */
-    public function testBeforeDeleteWithStock(Article $article)
+    public function testBeforeDeleteWithStock()
     {
         $this->expectException("Exception");
         $this->expectExceptionMessage("Impossible de supprimer cet article car des exemplaires y sont associés.");
 
         $am = new ArticleManager();
         $sm = new StockManager();
-
+        $article = EntityFactory::createArticle();
         $sm->create(['article_id' => $article->get('id')]);
 
         $am->delete($article);
@@ -720,7 +765,10 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $pm = new PublisherManager();
         $publisherAllowed = $pm->create(["publisher_name" => "Éditeur inexistant"]);
         $sm = new SiteManager();
-        $GLOBALS["LEGACY_CURRENT_SITE"] = $sm->create();
+
+        /** @var Site $site */
+        $site = $sm->create();
+        $GLOBALS["LEGACY_CURRENT_SITE"] = $site;
         $GLOBALS["LEGACY_CURRENT_SITE"]->setOpt("publisher_filter", $publisherAllowed->get("id"));
         $am = new ArticleManager();
 
@@ -829,6 +877,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * @throws Exception
+     * @noinspection PhpDeprecationInspection
      */
     public function testHasCoverWithCover()
     {
@@ -845,6 +894,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * @throws Exception
+     * @noinspection PhpDeprecationInspection
      */
     public function testHasCoverWithoutCover()
     {
