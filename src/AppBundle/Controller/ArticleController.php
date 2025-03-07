@@ -249,14 +249,14 @@ class ArticleController extends Controller
             $articlesPerPage = $currentSite->getOption("articles_per_page", 10);
 
             if ($inStockFilter) {
-                $count = $am->countSearchResultsForAvailableStock($query, $currentSite);
+                $count = $am->countSearchResultsForAvailableStock($query);
                 try {
                     $pagination = new Pagination($page, $count, $articlesPerPage);
                 } catch (InvalidArgumentException $exception) {
                     throw new BadRequestHttpException($exception->getMessage());
                 }
                 $pagination->setQueryParams($queryParams);
-                $articles = $am->searchWithAvailableStock($query, $currentSite, [
+                $articles = $am->searchWithAvailableStock($query, [
                     'order' => $selectedSortOptionField,
                     'sort' => $sortOrder,
                     'limit' => $pagination->getLimit(),
@@ -681,7 +681,7 @@ class ArticleController extends Controller
     {
         try {
             $ean = Isbn::convertToEan13($ean);
-        } /** @noinspection PhpRedundantCatchClauseInspection */ catch (IsbnParsingException $exception) {
+        } catch (IsbnParsingException $exception) {
             throw new BadRequestHttpException($exception->getMessage());
         }
 

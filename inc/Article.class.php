@@ -1336,7 +1336,6 @@ class ArticleManager extends EntityManager
      */
     public function _buildSearchQueryForAvailableStock(
         string      $keywords,
-        CurrentSite $currentSite,
         array       $options = []
     ): array
     {
@@ -1372,12 +1371,9 @@ class ArticleManager extends EntityManager
     /**
      * @throws Exception
      */
-    public function countSearchResultsForAvailableStock(
-        string      $keywords,
-        CurrentSite $currentSiteService
-    ): int
+    public function countSearchResultsForAvailableStock(string $keywords): int
     {
-        $queryWithParamsAndOptions = $this->_buildSearchQueryForAvailableStock($keywords, $currentSiteService);
+        $queryWithParamsAndOptions = $this->_buildSearchQueryForAvailableStock($keywords);
 
         $query = "
             SELECT COUNT(DISTINCT(`article_id`)) 
@@ -1404,15 +1400,10 @@ class ArticleManager extends EntityManager
      */
     public function searchWithAvailableStock(
         string      $keywords,
-        CurrentSite $currentSite,
         array       $options = []
     ): array
     {
-        $queryWithParamsAndOptions = $this->_buildSearchQueryForAvailableStock(
-            $keywords,
-            $currentSite,
-            $options
-        );
+        $queryWithParamsAndOptions = $this->_buildSearchQueryForAvailableStock($keywords, $options);
 
         return $this->getQuery(
             $queryWithParamsAndOptions["query"],
