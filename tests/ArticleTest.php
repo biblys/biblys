@@ -22,10 +22,10 @@
 
 use Biblys\Data\ArticleType;
 use Biblys\Exception\ArticleAlreadyInRayonException;
-use Biblys\Service\CurrentSite;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use Model\ArticleQuery;
+use Model\BookCollectionQuery;
 use Model\PeopleQuery;
 use Model\PublisherQuery;
 use Propel\Runtime\Exception\PropelException;
@@ -44,6 +44,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         PublisherQuery::create()->deleteAll();
         ArticleQuery::create()->deleteAll();
         PeopleQuery::create()->deleteAll();
+        BookCollectionQuery::create()->deleteAll();
         $this->m = new ArticleManager();
     }
 
@@ -985,14 +986,10 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         ModelFactory::createStockItem(site: $currentSite, article: $otherArticleWithStockToFound);
         $otherArticleWithStock = ModelFactory::createArticle(keywords: "Sans rapport");
         ModelFactory::createStockItem(site: $currentSite, article: $otherArticleWithStock);
-        $otherSite = ModelFactory::createSite();
-        $articleWithStockFromOtherSite = ModelFactory::createArticle(keywords: "Article à trouver");
-        ModelFactory::createStockItem(site: $otherSite, article: $articleWithStockFromOtherSite);
         $am = new ArticleManager();
-        $currentSiteService = new CurrentSite($currentSite);
 
         // when
-        $count = $am->countSearchResultsForAvailableStock("Article à trouver", $currentSiteService);
+        $count = $am->countSearchResultsForAvailableStock("Article à trouver");
 
         // then
         $this->assertEquals(
@@ -1014,14 +1011,10 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         ModelFactory::createStockItem(site: $currentSite, article: $articleWithStock);
         $otherArticleWithStock = ModelFactory::createArticle(keywords: "Sans rapport");
         ModelFactory::createStockItem(site: $currentSite, article: $otherArticleWithStock);
-        $otherSite = ModelFactory::createSite();
-        $articleWithStockFromOtherSite = ModelFactory::createArticle(keywords: "Article à trouver");
-        ModelFactory::createStockItem(site: $otherSite, article: $articleWithStockFromOtherSite);
         $am = new ArticleManager();
-        $currentSiteService = new CurrentSite($currentSite);
 
         // when
-        $results = $am->searchWithAvailableStock("Article à trouver", $currentSiteService);
+        $results = $am->searchWithAvailableStock("Article à trouver");
 
         // then
         $this->assertCount(1, $results, "returns 1 result");

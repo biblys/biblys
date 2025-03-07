@@ -41,6 +41,7 @@ use Exception;
 use LemonInk\Models\Transaction;
 use Mockery;
 use Model\ArticleQuery;
+use Model\BookCollectionQuery;
 use Model\PublisherQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -70,6 +71,7 @@ class ArticleControllerTest extends TestCase
     {
         ArticleQuery::create()->deleteAll();
         PublisherQuery::create()->deleteAll();
+        BookCollectionQuery::create()->deleteAll();
     }
 
     /** adminCatalogAction  */
