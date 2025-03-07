@@ -21,39 +21,41 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% endblock %}
 
 {% block main %}
-  <h1>Connexion</h1>
+  <div class="container" style="max-width: 420px;">
+    <h1>Connexion</h1>
 
-  <form class="form-inline mb-3" method="post" action="{{ path("user_send_login_email") }}">
-    <input type="hidden" name="return_url" value="{{ returnUrl }}" />
-    <input type="text" name="username" class="login-username-field" aria-label="Ne pas remplir" />
-    <input
-      class="form-control mr-1"
-      type="email"
-      name="email"
-      aria-label="Votre adresse e-mail"
-      placeholder="Votre adresse e-mail…"
-      required
-    />
-    <button class="btn btn-primary" type="submit">
-      <span class="fa fa-envelope"></span>
-      S'identifier par e-mail
-    </button>
-  </form>
+    <form class="my-4 text-center" method="post" action="{{ path("user_send_login_email") }}">
+      <input type="hidden" name="return_url" value="{{ returnUrl }}" />
+      <input type="text" name="username" class="login-username-field" aria-label="Ne pas remplir" />
+      <input
+        class="form-control mb-2"
+        type="email"
+        name="email"
+        aria-label="Votre adresse e-mail"
+        placeholder="Votre adresse e-mail…"
+        required
+      />
+      <button class="btn btn-block btn-primary" type="submit">
+        <span class="fa fa-envelope"></span>
+        S'identifier par e-mail
+      </button>
 
-  {% if loginWithAxysUrl %}
-    <p>ou</p>
+      <p class="alert alert-primary mt-2 text-left">
+        <strong>Pas encore de compte ?</strong>
+        Entrez votre adresse e-mail ci-dessus pour lancer la procédure de création de compte.
+      </p>
 
-    <p>
-      <a href="{{ loginWithAxysUrl }}" rel="nofollow" class="btn btn-primary">
-        <img src="/assets/images/axys.svg" alt="" role="presentation" width="16" height="16" />
-        Se connecter avec Axys
-      </a>
-    </p>
-  {% endif %}
+      {% if loginWithAxysUrl %}
+        <p class="mt-3">ou</p>
 
-  <p><strong>Pas encore de compte ?</strong></p>
+        <p class="mb-0">
+          <a href="{{ loginWithAxysUrl }}" rel="nofollow" class="btn btn-block btn-info">
+            <img src="/assets/images/axys.svg" alt="" role="presentation" width="16" height="16" />
+            Se connecter avec Axys
+          </a>
+        </p>
+      {% endif %}
+    </form>
+  </div>
 
-  <p>
-    Entrez votre adresse e-mail ci-dessus pour lancer la procédure de création de compte.
-  </p>
 {% endblock %}
