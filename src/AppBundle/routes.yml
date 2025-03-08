@@ -645,6 +645,11 @@ shipping_countries:
   path: /admin/shipping/countries
   controller: AppBundle\Controller\ShippingController::countriesAction
 
+shipping_zones:
+  methods: GET
+  path: /admin/shipping/zones
+  controller: AppBundle\Controller\ShippingController::zonesAction
+
 shipping_select_pickup_point:
   path: /shipping/select-pickup-point
   controller: AppBundle\Controller\ShippingController::selectPickupPointAction

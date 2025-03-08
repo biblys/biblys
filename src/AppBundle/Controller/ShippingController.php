@@ -18,6 +18,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Data\ShippingZone;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\QueryParamsService;
@@ -70,6 +71,27 @@ class ShippingController extends Controller
         return $templateService->renderResponse(
             "AppBundle:Shipping:countries.html.twig",
             ["countries" => $countries]
+        );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function zonesAction(
+        CurrentUser $currentUser,
+        TemplateService $templateService,
+    ): Response
+    {
+        $currentUser->authAdmin();
+
+        $zones = ShippingZone::getAll();
+
+        return $templateService->renderResponse(
+            "AppBundle:Shipping:zones.html.twig",
+            ["zones" => $zones]
         );
     }
 
