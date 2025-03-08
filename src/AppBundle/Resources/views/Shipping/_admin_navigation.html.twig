@@ -1,0 +1,19 @@
+<h1>
+  <i class="fa-solid fa-truck"></i>
+  Expédition
+</h1>
+
+<nav>
+  <ul class="nav nav-tabs my-4">
+    <li class="nav-item">
+      <a href="{{ path('shipping_options') }}"
+        {% if active == 'options' %}class="nav-link active" aria-current="page" {% else %}class="nav-link"{% endif %}
+      >Options</a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ path('shipping_countries') }}"
+        {% if active == 'countries' %}class="nav-link active" aria-current="page" {% else %}class="nav-link"{% endif %}
+      >Pays de destination</a>
+    </li>
+  </ul>
+</nav>
