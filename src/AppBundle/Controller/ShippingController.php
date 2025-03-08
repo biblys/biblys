@@ -25,8 +25,8 @@ use Biblys\Service\TemplateService;
 use DansMaCulotte\MondialRelay\DeliveryChoice;
 use Exception;
 use Framework\Controller;
+use Model\CountryQuery;
 use Propel\Runtime\Exception\PropelException;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -43,15 +43,34 @@ class ShippingController extends Controller
      * @throws Exception
      */
     public function optionsAction(
-        Request     $request,
         CurrentUser $currentUser,
+        TemplateService $templateService
     ): Response
     {
         $currentUser->authAdmin();
 
-        $request->attributes->set("page_title", "Expéditions");
+        return $templateService->renderResponse("AppBundle:Shipping:options.html.twig");
+    }
 
-        return $this->render("AppBundle:Shipping:options.html.twig");
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function countriesAction(
+        CurrentUser $currentUser,
+        TemplateService $templateService,
+    ): Response
+    {
+        $currentUser->authAdmin();
+
+        $countries = CountryQuery::create()->find();
+
+        return $templateService->renderResponse(
+            "AppBundle:Shipping:countries.html.twig",
+            ["countries" => $countries]
+        );
     }
 
     /**
