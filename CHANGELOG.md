@@ -5,6 +5,8 @@
 ### Améliorations
 
 - Les "tranches de frais de port" ont été renommées "option d'expédition".
+- Une page "Pays" a été ajoutée à l'administration pour afficher les pays de
+  destination pour l'expédition.
 
 ## 3.4.2 (19 mars 2025)
 
