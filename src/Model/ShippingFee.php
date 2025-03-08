@@ -77,7 +77,7 @@ class ShippingFee extends BaseShippingFee
 
         if ($orderUsingThisShippingFee > 0) {
             throw new CannotDeleteShippingFeeUsedByOrders(
-                "Vous ne pouvez pas supprimer cette tranche de frais de port car " .
+                "Vous ne pouvez pas supprimer cette option d'expédition car " .
                 "elle est utilisée par $orderUsingThisShippingFee commande(s), " .
                 "mais vous pouvez l'archiver."
             );

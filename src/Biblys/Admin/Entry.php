@@ -226,7 +226,7 @@ class Entry
         $entries[] = new Entry('Commandes', ['category' => 'sales', 'path' => 'order_index', 'icon' => 'box', 'taskCount' => $orders, 'subscription' => 'orders']);
         $entries[] = new Entry('Paniers', ['category' => 'sales', 'url' => '/pages/adm_carts', 'icon' => 'shopping-basket', 'subscription' => 'carts']);
         $entries[] = new Entry('Paiements', ['category' => 'sales', 'path' => 'payments_index', 'icon' => 'credit-card']);
-        $entries[] = new Entry('Frais de port', ['category' => 'sales', 'path' => 'shipping_admin', 'icon' => 'envelope']);
+        $entries[] = new Entry('Options d’expédition', ['category' => 'sales', 'path' => 'shipping_options', 'icon' => 'truck']);
         $entries[] = new Entry('Financement particip.', ['category' => 'sales', 'path' => 'cf_campaign_list', 'icon' => 'coins']);
 
         $entries[] = new Entry('Ventes numériques', ['category' => 'ebooks', 'url' => '/pages/adm_ebooks', 'icon' => 'book']);

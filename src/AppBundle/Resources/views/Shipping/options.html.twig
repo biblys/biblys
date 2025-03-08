@@ -17,16 +17,22 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% extends "layout:admin.html.twig" %}
 
 {% block title %}
-  Frais de port
+  Expédition · Options
 {% endblock %}
 
 {% block main %}
 
-  <h1>Gestion des frais de port</h1>
+  <h1>
+    <i class="fa-solid fa-truck"></i>
+    Expédition
+  </h1>
 
-  <div class="buttons">
+  <h2>Options</h2>
+
+  <div class="buttons my-4">
     <button id="add-range" class="btn btn-primary">
-      Ajouter une tranche
+      <i class="fa-solid fa-square-plus"></i>
+      Ajouter une option
     </button>
   </div>
 
@@ -40,6 +46,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <th>Zone</th>
       <th>Conditions</th>
       <th>Montant</th>
+      <th></th>
     </tr>
     </thead>
     <tbody></tbody>
