@@ -31,5 +31,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         {% if active == 'countries' %}class="nav-link active" aria-current="page" {% else %}class="nav-link"{% endif %}
       >Pays de destination</a>
     </li>
+    <li class="nav-item">
+      <a href="{{ path('shipping_zones') }}"
+         {% if active == 'zones' %}class="nav-link active" aria-current="page" {% else %}class="nav-link"{% endif %}
+      >Zones tarifaires</a>
+    </li>
   </ul>
 </nav>
