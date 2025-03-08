@@ -33,7 +33,7 @@ export default class Shipping {
           newRangeForm.innerHTML = '';
           this.fees.push(fee);
           this.render();
-          new Biblys.Notification(`La tranche <strong>${fee.mode}</strong> a bien été ajoutée.`, {
+          new Biblys.Notification(`L'option <strong>${fee.mode}</strong> a bien été ajoutée.`, {
             type: 'success'
           });
         });
@@ -123,7 +123,7 @@ export default class Shipping {
   renderEditIcon(range, tr) {
     const icon = createElementFromHTML(
       `<span class="btn btn-primary btn-sm">
-        <span class="fa fa-pencil pointer" aria-label="modifier la tranche"></span>
+        <span class="fa fa-pencil pointer" aria-label="modifier l'option'"></span>
       </span>`
     );
     icon.addEventListener('click', () => this.onRangeEditButtonClick(range, tr));
@@ -131,7 +131,7 @@ export default class Shipping {
   }
 
   onRangeEditButtonClick(range, tr) {
-    const confirm = window.confirm(`Modifier une tranche existante peut impacter les commandes en cours. Il est recommandé de créer une nouvelle tranche et d'archiver l'ancienne plutôt que de modifier une tranche existante. Voulez-vous vraiment modifier la tranche ${range.mode}?`);
+    const confirm = window.confirm(`Modifier une option existante peut impacter les commandes en cours. Il est recommandé de créer une nouvelle option et d'archiver l'ancienne plutôt que de modifier une option existante. Voulez-vous vraiment modifier l'option ${range.mode}?`);
     if (confirm) {
       this.showRangeEditForm(range, tr);
     }
@@ -140,7 +140,7 @@ export default class Shipping {
   renderArchiveIcon(range) {
     const icon = createElementFromHTML(
       `<span class="btn btn-warning btn-sm">
-        <span class="fa fa-archive pointer" aria-label="Archiver la tranche"></span>
+        <span class="fa fa-archive pointer" aria-label="Archiver l'option"></span>
       </span>`
     );
     icon.addEventListener('click', () => this.archiveRange(range));
@@ -150,7 +150,7 @@ export default class Shipping {
   renderDeleteIcon(range) {
     const icon = createElementFromHTML(
       `<span class="btn btn-danger btn-sm">
-        <span class="fa fa-trash-can pointer" aria-label="Supprimer la tranche"></span>
+        <span class="fa fa-trash-can pointer" aria-label="Supprimer l'option"></span>
       </span>`
     );
     icon.addEventListener('click', () => this.deleteRange(range));
@@ -261,7 +261,7 @@ export default class Shipping {
         <legend>Conditions</legend>
 
         <p>
-          La tranche tarifaire sera proposé au client si la commande :
+          Cette option d'expédition sera proposée au client si la commande :
         </p>
 
         <div class="form-group">
@@ -309,7 +309,7 @@ export default class Shipping {
   }
 
   archiveRange(range) {
-    const confirm = window.confirm(`Voulez-vous vraiment archiver la tranche ${range.mode}?`);
+    const confirm = window.confirm(`Voulez-vous vraiment archiver l'option ${range.mode}?`);
     if (!confirm) {
       return;
     }
@@ -322,7 +322,7 @@ export default class Shipping {
     })
       .then((response) => this._handleEmptyResponse(loader, response))
       .then(() => {
-        new Biblys.Notification(`La tranche <strong>${range.mode}</strong> a bien été archivée.`, {
+        new Biblys.Notification(`L'option <strong>${range.mode}</strong> a bien été archivée.`, {
           type: 'success'
         });
         this.fees = this.fees.filter(fee => fee.id !== range.id);
@@ -332,7 +332,7 @@ export default class Shipping {
   }
 
   deleteRange(range) {
-    const confirm = window.confirm(`Voulez-vous vraiment supprimer la tranche ${range.mode}?`);
+    const confirm = window.confirm(`Voulez-vous vraiment supprimer l'option ${range.mode}?`);
     if (!confirm) {
       return;
     }
@@ -345,7 +345,7 @@ export default class Shipping {
     })
       .then((response) => this._handleEmptyResponse(loader, response))
       .then(() => {
-        new Biblys.Notification(`La tranche <strong>${range.mode}</strong> a bien été supprimée.`, {
+        new Biblys.Notification(`L'option <strong>${range.mode}</strong> a bien été supprimée.`, {
           type: 'success'
         });
         this.fees = this.fees.filter(fee => fee.id !== range.id);
@@ -390,7 +390,7 @@ export default class Shipping {
         this.fees[updatedRangeIndex] = fee;
         this.render();
 
-        new Biblys.Notification(`La tranche <strong>${fee.mode}</strong> a bien été mise à jour.`, {
+        new Biblys.Notification(`L'option <strong>${fee.mode}</strong> a bien été mise à jour.`, {
           type: 'success'
         });
       });

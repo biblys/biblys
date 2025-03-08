@@ -636,9 +636,9 @@ redirection_delete:
 
 # Shipping
 
-shipping_admin:
-  path: /admin/shipping
-  controller: AppBundle\Controller\ShippingController::adminAction
+shipping_options:
+  path: /admin/shipping/options
+  controller: AppBundle\Controller\ShippingController::optionsAction
 
 shipping_select_pickup_point:
   path: /shipping/select-pickup-point
