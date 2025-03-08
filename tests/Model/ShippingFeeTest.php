@@ -180,7 +180,7 @@ class ShippingFeeTest extends TestCase
         // then
         $this->assertInstanceOf(CannotDeleteShippingFeeUsedByOrders::class, $exception);
         $this->assertEquals(
-            "Vous ne pouvez pas supprimer cette tranche de frais de port ".
+            "Vous ne pouvez pas supprimer cette option d'expédition ".
             "car elle est utilisée par 1 commande(s), mais vous pouvez l'archiver.",
             $exception->getMessage()
         );
