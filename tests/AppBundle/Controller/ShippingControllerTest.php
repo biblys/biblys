@@ -74,4 +74,27 @@ class ShippingControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString("France", $response->getContent());
     }
+
+    /**
+     * @throws SyntaxError
+     * @throws Exception
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws \Exception
+     */
+    public function testZonesAction()
+    {
+        // given
+        $controller = new ShippingController();
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->expects($this->once())->method("authAdmin");
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->zonesAction($currentUser, $templateService);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("France", $response->getContent());
+    }
 }
