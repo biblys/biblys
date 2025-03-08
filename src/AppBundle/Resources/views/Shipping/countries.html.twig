@@ -22,21 +22,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 {% block main %}
 
-  <h1>
-    <i class="fa-solid fa-truck"></i>
-    Expédition
-  </h1>
-
-  <nav>
-    <ul class="nav nav-tabs my-4">
-      <li class="nav-item">
-        <a href="{{ path('shipping_options') }}" class="nav-link">Options</a>
-      </li>
-      <li class="nav-item">
-        <a href="{{ path('shipping_countries') }}" class="nav-link active" aria-current="page">Pays</a>
-      </li>
-    </ul>
-  </nav>
+  {% include "AppBundle:Shipping:_admin_navigation.html.twig" with { active: "countries" } %}
 
   <table class="table table-striped">
     <thead>
