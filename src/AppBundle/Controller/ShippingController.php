@@ -42,16 +42,16 @@ class ShippingController extends Controller
      * @throws PropelException
      * @throws Exception
      */
-    public function adminAction(
+    public function optionsAction(
         Request     $request,
         CurrentUser $currentUser,
     ): Response
     {
         $currentUser->authAdmin();
 
-        $request->attributes->set("page_title", "Frais de port");
+        $request->attributes->set("page_title", "Expéditions");
 
-        return $this->render("AppBundle:Shipping:admin.html.twig");
+        return $this->render("AppBundle:Shipping:options.html.twig");
     }
 
     /**
