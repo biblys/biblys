@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 3.5.0 (DEV)
+
+### Améliorations
+
+- Les "tranches de frais de port" ont été renommées "option d'expédition".
+
 ## 3.4.2 (19 mars 2025)
 
 ### Corrections
