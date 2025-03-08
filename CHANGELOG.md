@@ -8,6 +8,12 @@
 - Des pages ont été ajoutées à l'administration pour afficher les pays de
   destination et les différentes zones tarifaires pour l'expédition.
 
+### Corrections
+
+- Les pays suivants n'étaient pas affectés à la bonne zone tarifaire : Andorre,
+  Monaco, Liechtenstein, Saint-Marin, Bulgarie, Croatie, Roumanie, Albanie,
+  Biélorussie, Gibraltar, Macédoine, Moldavie. C'est corrigé.
+
 ## 3.4.3 (31 mars 2025)
 
 ### Corrections
