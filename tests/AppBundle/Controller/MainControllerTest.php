@@ -34,7 +34,6 @@ use Biblys\Service\MetaTagsService;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
-use Biblys\Test\RequestFactory;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -223,8 +222,8 @@ class MainControllerTest extends TestCase
         $request->request->set("email", "angry.customer.666.@biblys.fr");
         $request->request->set("name", "Angry Customer");
         $request->request->set("subject", "NOPE");
-        $request->request->set("message", "WHATTHEF******CK");
-        $request->request->set("phone", "WHATTHEF");
+        $request->request->set("message", "A message long enough to pass the test");
+        $request->request->set("phone", "12345678");
         $currentUserService = $this->createMock(CurrentUser::class);
         $currentUserService->method("isAuthenticated")->willReturn(false);
         $config = Config::load();
@@ -272,8 +271,8 @@ class MainControllerTest extends TestCase
         $request->request->set("email", "angry.customer.666.@biblys.fr");
         $request->request->set("name", "Angry Customer");
         $request->request->set("subject", "I'm very angry");
-        $request->request->set("message", "WHATTHEF");
-        $request->request->set("phone", "WHATTHEF");
+        $request->request->set("message", "Court");
+        $request->request->set("phone", "123456789");
         $currentUserService = $this->createMock(CurrentUser::class);
         $currentUserService->method("isAuthenticated")->willReturn(false);
         $config = Config::load();
@@ -556,7 +555,7 @@ class MainControllerTest extends TestCase
     {
         // given
         $controller = new MainController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $currentUser = Mockery::mock(CurrentUser::class);
@@ -586,7 +585,7 @@ class MainControllerTest extends TestCase
     public function testAdminCloud() {
         // given
         $controller = new MainController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $config = new Config();
         $config->set("cloud", [
             "domains" => ["paronymie.fr"],
@@ -624,7 +623,7 @@ class MainControllerTest extends TestCase
     public function testAdminCloudWithSubscription() {
         // given
         $controller = new MainController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $config = new Config();
         $config->set("cloud", [
             "domains" => ["paronymie.fr"],
@@ -664,7 +663,7 @@ class MainControllerTest extends TestCase
     public function testAdminCloudWithUnpaidSubscription() {
         // given
         $controller = new MainController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $config = $this->createMock(Config::class);
         $config->method("get")->willReturn(true);
         $cloudSubscription = $this->createMock(CloudSubscription::class);
@@ -743,12 +742,12 @@ class MainControllerTest extends TestCase
 
     /**
      * @throws GuzzleException
-     * @throws PropelException|\PHPUnit\Framework\MockObject\Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAdminCloudPortal()
     {
         // given
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $request->query->set("return_url", "return-url");
         $controller = new MainController();
         $cloudService = $this->createMock(CloudService::class);
