@@ -22,6 +22,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
+use Biblys\Service\MetaTagsService;
 use Biblys\Service\Pagination;
 use Biblys\Service\Slug\SlugService;
 use Biblys\Service\TemplateService;
@@ -100,6 +101,7 @@ class PostController extends Controller
         TemplateService $templateService,
         UrlGenerator    $urlGenerator,
         ImagesService   $imagesService,
+        MetaTagsService $metaTagsService,
         string          $slug
     ): Response
     {
@@ -132,24 +134,13 @@ class PostController extends Controller
             $description = truncate(strip_tags($post->getContent()), '500', '...', true);
         }
 
-        $opengraphTags = [
-            "type" => "article",
-            "title" => $post->getTitle(),
-            "url" => "https://" . $request->getHost() .
-                $urlGenerator->generate("post_show", ["slug" => $post->getUrl()]),
-            "description" => $description,
-            "site_name" => $currentSite->getTitle(),
-            "locale" => "fr_FR",
-            "article:published_time" => $post->getDate()->getTimestamp(),
-            "article:modified_time" => $post->getDate()->getTimestamp(),
-        ];
+        $metaTagsService->setTitle($post->getTitle());
+        $metaTagsService->setDescription($description);
+        $metaTagsService->setUrl($urlGenerator->generate("post_show", ["slug" => $post->getUrl()]));
 
-        // Get post illustration for opengraph
         if ($imagesService->imageExistsFor($post)) {
-            $opengraphTags["image"] = $imagesService->getImageUrlFor($post);
+            $metaTagsService->setImage($imagesService->getImageUrlFor($post));
         }
-
-        $this->setOpengraphTags($opengraphTags);
 
         return $templateService->renderResponse('AppBundle:Post:show.html.twig', [
             'post' => \Post::buildFromModel($post)
