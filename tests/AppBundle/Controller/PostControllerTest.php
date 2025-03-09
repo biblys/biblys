@@ -21,6 +21,7 @@ namespace AppBundle\Controller;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
+use Biblys\Service\MetaTagsService;
 use Biblys\Service\TemplateService;
 use Biblys\Test\ModelFactory;
 use DateTime;
@@ -53,7 +54,7 @@ class PostControllerTest extends TestCase
 
         $post = ModelFactory::createPost();
 
-        list($request, $currentSite, $currentUser, $templateService, $urlGenerator, $imagesService) = $this->_buildDependencies($post);
+        list($request, $currentSite, $currentUser, $templateService, $urlGenerator, $imagesService, $metaTagsService) = $this->_buildDependencies($post);
 
         // when
         $response = $controller->showAction(
@@ -63,6 +64,7 @@ class PostControllerTest extends TestCase
             $templateService,
             $urlGenerator,
             $imagesService,
+            $metaTagsService,
             $post->getUrl(),
         );
 
@@ -86,7 +88,7 @@ class PostControllerTest extends TestCase
             status: Post::STATUS_OFFLINE
         );
 
-        list($request, $currentSite, $currentUser, $templateService, $urlGenerator, $imagesService) = $this->_buildDependencies($post);
+        list($request, $currentSite, $currentUser, $templateService, $urlGenerator, $imagesService, $metaTagsService) = $this->_buildDependencies($post);
 
         // then
         $this->expectException(ResourceNotFoundException::class);
@@ -100,6 +102,7 @@ class PostControllerTest extends TestCase
             $templateService,
             $urlGenerator,
             $imagesService,
+            $metaTagsService,
             $post->getUrl(),
         );
     }
@@ -120,7 +123,7 @@ class PostControllerTest extends TestCase
             date: new DateTime("tomorrow"),
         );
 
-        list($request, $currentSite, $currentUser, $templateService, $urlGenerator, $imagesService) = $this->_buildDependencies($post);
+        list($request, $currentSite, $currentUser, $templateService, $urlGenerator, $imagesService, $metaTagsService) = $this->_buildDependencies($post);
 
         // then
         $this->expectException(ResourceNotFoundException::class);
@@ -134,6 +137,7 @@ class PostControllerTest extends TestCase
             $templateService,
             $urlGenerator,
             $imagesService,
+            $metaTagsService,
             $post->getUrl(),
         );
     }
@@ -157,6 +161,10 @@ class PostControllerTest extends TestCase
             ->withArgs(["post_show", ["slug" => $post->getUrl()]]);
         $imagesService = Mockery::mock(ImagesService::class);
         $imagesService->shouldReceive("imageExistsFor");
-        return [$request, $currentSite, $currentUser, $templateService, $urlGenerator, $imagesService];
+        $metaTagsService = Mockery::mock(MetaTagsService::class);
+        $metaTagsService->shouldReceive("setTitle");
+        $metaTagsService->shouldReceive("setDescription");
+        $metaTagsService->shouldReceive("setUrl");
+        return [$request, $currentSite, $currentUser, $templateService, $urlGenerator, $imagesService, $metaTagsService];
     }
 }
