@@ -138,6 +138,7 @@ class TemplateService
             $config,
             $currentUserIsAdmin,
             $currentUserService,
+            $currentSite,
             $request,
         );
         $filters = $this->_getCustomFilters($config, $currentSite);
@@ -188,6 +189,7 @@ class TemplateService
         Config      $config,
         bool        $currentUserIsAdmin,
         CurrentUser $currentUserService,
+        CurrentSite $currentSite,
         Request     $request,
     ): array
     {
@@ -230,10 +232,9 @@ class TemplateService
         );
 
         // return absolute url for a route
-        $functions[] = new TwigFunction('url', function ($route, $vars = []) {
-                        $globalSite = LegacyCodeHelper::getGlobalSite();
-
-            return 'https://' . $globalSite->get('domain') . \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate($route, $vars);
+        $functions[] = new TwigFunction('url', function ($route, $vars = []) use($currentSite) {
+            $siteDomain = $currentSite->getSite()->getDomain();
+            return 'https://' . $siteDomain . LegacyCodeHelper::getGlobalUrlGenerator()->generate($route, $vars);
         });
 
         // returns share buttons for url
