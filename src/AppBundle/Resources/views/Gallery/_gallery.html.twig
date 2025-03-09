@@ -14,17 +14,23 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #}
 
-<div class="biblys-carousel swiper-container">
-  <div class="swiper-wrapper">
+<div id="Gallery_{{ gallery.id }}" class="carousel slide" data-ride="carousel">
+  <div class="carousel-inner">
     {% for media in gallery.medias %}
-      <div class="swiper-slide">
+      <div class="carousel-item {{ loop.first ? "active" }}">
         <a href="{{ media.url }}" class="carousel-slide-link">
-          <img src="" data-src="{{ media.url }}" class="carousel-image swiper-lazy" alt="">
-          <div class="swiper-lazy-preloader"></div>
+          <img src="{{ media.url }}" alt="">
         </a>
       </div>
     {% endfor %}
   </div>
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-button-next"></div>
+
+  <button class="carousel-control-prev" type="button" data-target="#Gallery_{{ gallery.id }}" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Précédent</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-target="#Gallery_{{ gallery.id }}" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Suivant</span>
+  </button>
 </div>
