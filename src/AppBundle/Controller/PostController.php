@@ -21,6 +21,7 @@ namespace AppBundle\Controller;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\Images\ImagesService;
 use Biblys\Service\Pagination;
 use Biblys\Service\Slug\SlugService;
 use Biblys\Service\TemplateService;
@@ -98,6 +99,7 @@ class PostController extends Controller
         CurrentUser     $currentUser,
         TemplateService $templateService,
         UrlGenerator    $urlGenerator,
+        ImagesService   $imagesService,
         string          $slug
     ): Response
     {
@@ -143,19 +145,14 @@ class PostController extends Controller
         ];
 
         // Get post illustration for opengraph
-        $postEntity = \Post::buildFromModel($post);
-        $image = $postEntity->getFirstImageUrl();
-        if ($postEntity->hasIllustration()) {
-            $opengraphTags["image"] = $postEntity->getIllustration()->getUrl();
-        } // Else get first image from post
-        elseif ($image) {
-            $opengraphTags["image"] = $image;
+        if ($imagesService->imageExistsFor($post)) {
+            $opengraphTags["image"] = $imagesService->getImageUrlFor($post);
         }
 
         $this->setOpengraphTags($opengraphTags);
 
         return $templateService->renderResponse('AppBundle:Post:show.html.twig', [
-            'post' => $postEntity
+            'post' => \Post::buildFromModel($post)
         ]);
     }
 
