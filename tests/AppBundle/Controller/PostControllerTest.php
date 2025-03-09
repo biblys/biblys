@@ -20,15 +20,16 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\Images\ImagesService;
 use Biblys\Service\TemplateService;
 use Biblys\Test\ModelFactory;
+use DateTime;
 use Mockery;
 use Model\Post;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
@@ -52,7 +53,7 @@ class PostControllerTest extends TestCase
 
         $post = ModelFactory::createPost();
 
-        list($request, $currentSite, $currentUser, $templateService, $urlGenerator) = $this->_buildDependencies($post);
+        list($request, $currentSite, $currentUser, $templateService, $urlGenerator, $imagesService) = $this->_buildDependencies($post);
 
         // when
         $response = $controller->showAction(
@@ -61,6 +62,7 @@ class PostControllerTest extends TestCase
             $currentUser,
             $templateService,
             $urlGenerator,
+            $imagesService,
             $post->getUrl(),
         );
 
@@ -84,7 +86,7 @@ class PostControllerTest extends TestCase
             status: Post::STATUS_OFFLINE
         );
 
-        list($request, $currentSite, $currentUser, $templateService, $urlGenerator) = $this->_buildDependencies($post);
+        list($request, $currentSite, $currentUser, $templateService, $urlGenerator, $imagesService) = $this->_buildDependencies($post);
 
         // then
         $this->expectException(ResourceNotFoundException::class);
@@ -97,6 +99,7 @@ class PostControllerTest extends TestCase
             $currentUser,
             $templateService,
             $urlGenerator,
+            $imagesService,
             $post->getUrl(),
         );
     }
@@ -114,10 +117,10 @@ class PostControllerTest extends TestCase
 
         $post = ModelFactory::createPost(
             title: "À paraître",
-            date: new \DateTime("tomorrow"),
+            date: new DateTime("tomorrow"),
         );
 
-        list($request, $currentSite, $currentUser, $templateService, $urlGenerator) = $this->_buildDependencies($post);
+        list($request, $currentSite, $currentUser, $templateService, $urlGenerator, $imagesService) = $this->_buildDependencies($post);
 
         // then
         $this->expectException(ResourceNotFoundException::class);
@@ -130,6 +133,7 @@ class PostControllerTest extends TestCase
             $currentUser,
             $templateService,
             $urlGenerator,
+            $imagesService,
             $post->getUrl(),
         );
     }
@@ -151,6 +155,8 @@ class PostControllerTest extends TestCase
             ->andReturn(new Response());
         $urlGenerator->shouldReceive("generate")
             ->withArgs(["post_show", ["slug" => $post->getUrl()]]);
-        return [$request, $currentSite, $currentUser, $templateService, $urlGenerator];
+        $imagesService = Mockery::mock(ImagesService::class);
+        $imagesService->shouldReceive("imageExistsFor");
+        return [$request, $currentSite, $currentUser, $templateService, $urlGenerator, $imagesService];
     }
 }
