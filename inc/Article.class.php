@@ -310,16 +310,18 @@ class Article extends Entity
      * @throws Exception
      * @deprecated Article->getCover is deprecated. Use ImagesService instead.
      */
-    public function getCover($size = null): Media|string|null
+    public function getCover($size = null, $ignoreDeprecation = false): Media|string|null
     {
-        trigger_deprecation(
-            "biblys/biblys",
-            "2.83.0",
-            "Article->getCover is deprecated, use ImagesService instead."
-        );
+        if (!$ignoreDeprecation) {
+            trigger_deprecation(
+                "biblys/biblys",
+                "2.83.0",
+                "Article->getCover is deprecated, use ImagesService instead."
+            );
+        }
 
         if (!isset($this->cover)) {
-            $this->cover = new Media("article", $this->get("id"));
+            $this->cover = new Media("article", $this->get("id"), ignoreDeprecation: true);
         }
 
         if ($size === null) {
@@ -348,10 +350,10 @@ class Article extends Entity
         trigger_deprecation(
             "biblys/biblys",
             "2.83.0",
-            "Article->getCover is deprecated, use ImagesService instead."
+            "Article->hasCover is deprecated, use ImagesService instead."
         );
 
-        $cover = $this->getCover();
+        $cover = $this->getCover(ignoreDeprecation: true);
         return $cover->exists();
     }
 

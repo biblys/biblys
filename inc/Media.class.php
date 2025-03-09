@@ -36,15 +36,17 @@ class Media
      * @deprecated Using Media class is deprecated. Use ImagesService instead.
      * @throws Exception
      */
-    public function __construct($type, $id)
+    public function __construct($type, $id, $ignoreDeprecation = false)
     {
         $this->config = Config::load();
 
-        trigger_deprecation(
-            "biblys",
-            "3.0.0",
-            "Using Media class is deprecated. Use ImagesService instead."
-        );
+        if (!$ignoreDeprecation) {
+            trigger_deprecation(
+                "biblys",
+                "3.0.0",
+                "Using Media class is deprecated. Use ImagesService instead."
+            );
+        }
 
         $this->setDomain('media'); // domaine par défaut
 
