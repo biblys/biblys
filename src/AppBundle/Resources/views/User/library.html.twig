@@ -65,7 +65,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           <td class="center align-middle">
             {% if item.article|hasCover %}
               <a href="{{ path("article_show", { slug: item.article.url }) }}">
-                <img src="{{ item.article|coverUrl }}" height="100" alt="{{ item.article.title }}" />
+                <img src="{{ item.article|imageUrl }}" height="100" alt="{{ item.article.title }}" />
               </a>
             {% endif %}
           </td>
