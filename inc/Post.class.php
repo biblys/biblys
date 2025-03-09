@@ -60,7 +60,7 @@ class Post extends Entity
     {
         $model = new \Model\Post();
         $model->setId($this->get("id"));
-        $model->setDate(new DateTime($this->get("date")));
+        $model->setDate($this->has("date") ? new DateTime($this->get("date")) : null);
 
         return $model;
     }
