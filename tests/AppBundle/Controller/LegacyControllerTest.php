@@ -21,6 +21,7 @@ namespace AppBundle\Controller;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\InvalidSiteIdException;
 use Biblys\Service\Mailer;
 use Biblys\Service\MetaTagsService;
 use Biblys\Service\TemplateService;
@@ -43,6 +44,8 @@ class LegacyControllerTest extends TestCase
 {
     /**
      * @throws PropelException
+     * @throws InvalidSiteIdException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      * @throws Exception
      */
     public function testDefaultAction()
@@ -89,13 +92,14 @@ class LegacyControllerTest extends TestCase
         $this->assertStringContainsString(
             "bientôt",
             $response->getContent(),
-            "renders the bientot template"
+            "renders the bientôt template"
         );
     }
 
     /**
      * @throws PropelException
      * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testDefaultActionRequiringLogin()
     {
@@ -114,13 +118,7 @@ class LegacyControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
         $metaTagsService = $this->createMock(MetaTagsService::class);
-        $templateService = new TemplateService(
-            config: $config,
-            currentSiteService: $currentSite,
-            currentUserService: $currentUser,
-            metaTagsService: $metaTagsService,
-            request: $request,
-        );
+        $templateService = $this->createMock(TemplateService::class);
 
         // when
         $legacyController->defaultAction(
@@ -139,6 +137,7 @@ class LegacyControllerTest extends TestCase
     /**
      * @throws PropelException
      * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testDefaultActionRequiringPublisherRight()
     {
@@ -159,13 +158,7 @@ class LegacyControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
         $metaTagsService = $this->createMock(MetaTagsService::class);
-        $templateService = new TemplateService(
-            config: $config,
-            currentSiteService: $currentSite,
-            currentUserService: $currentUser,
-            metaTagsService: $metaTagsService,
-            request: $request,
-        );
+        $templateService = $this->createMock(TemplateService::class);
 
         // when
         $legacyController->defaultAction(
@@ -184,6 +177,7 @@ class LegacyControllerTest extends TestCase
     /**
      * @throws PropelException
      * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testDefaultActionRequiringAdminRight()
     {
@@ -204,13 +198,7 @@ class LegacyControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
         $metaTagsService = $this->createMock(MetaTagsService::class);
-        $templateService = new TemplateService(
-            config: $config,
-            currentSiteService: $currentSite,
-            currentUserService: $currentUser,
-            metaTagsService: $metaTagsService,
-            request: $request,
-        );
+        $templateService = $this->createMock(TemplateService::class);
 
         // when
         $legacyController->defaultAction(
@@ -229,6 +217,7 @@ class LegacyControllerTest extends TestCase
     /**
      * @throws PropelException
      * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testDefaultActionForStaticPagesLegacyRoute()
     {
@@ -248,13 +237,7 @@ class LegacyControllerTest extends TestCase
             ->willReturn("/page/page-statique");
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
         $metaTagsService = $this->createMock(MetaTagsService::class);
-        $templateService = new TemplateService(
-            config: $config,
-            currentSiteService: $currentSite,
-            currentUserService: $currentUser,
-            metaTagsService: $metaTagsService,
-            request: $request,
-        );
+        $templateService = $this->createMock(TemplateService::class);
 
         // when
         $response = $legacyController->defaultAction(

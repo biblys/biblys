@@ -23,6 +23,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Exception\InvalidConfigurationException;
 use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Cloud\CloudSubscription;
 use Biblys\Service\Config;
@@ -30,8 +31,8 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Service\MetaTagsService;
-use Biblys\Service\TemplateService;
 use Biblys\Test\EntityFactory;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Exception;
@@ -74,13 +75,7 @@ class MainControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
         $metaTagsService = $this->createMock(MetaTagsService::class);
-        $templateService = new TemplateService(
-            config: $config,
-            currentSiteService: $currentSite,
-            currentUserService: $currentUser,
-            metaTagsService: $metaTagsService,
-            request: $request,
-        );
+        $templateService = Helpers::getTemplateService();
 
         // when
         $response = $controller->homeAction(
@@ -132,13 +127,7 @@ class MainControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
         $metaTagsService = $this->createMock(MetaTagsService::class);
-        $templateService = new TemplateService(
-            config: $config,
-            currentSiteService: $currentSite,
-            currentUserService: $currentUser,
-            metaTagsService: $metaTagsService,
-            request: $request,
-        );
+        $templateService = Helpers::getTemplateService();
 
         // when
         $response = $controller->homeAction(
@@ -191,14 +180,7 @@ class MainControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $currentSiteService = $this->createMock(CurrentSite::class);
         $currentSiteService->method("getSite")->willReturn($site);
-        $metaTagsService = $this->createMock(MetaTagsService::class);
-        $templateService = new TemplateService(
-            config: $config,
-            currentSiteService: $currentSiteService,
-            currentUserService: $currentUserService,
-            metaTagsService: $metaTagsService,
-            request: $request,
-        );
+        $templateService = Helpers::getTemplateService();
         $mailer = $this->createMock(Mailer::class);
 
         // when
@@ -247,14 +229,7 @@ class MainControllerTest extends TestCase
         $currentUserService->method("isAuthenticated")->willReturn(false);
         $config = Config::load();
         $currentSiteService = $this->createMock(CurrentSite::class);
-        $metaTagsService = $this->createMock(MetaTagsService::class);
-        $templateService = new TemplateService(
-            config: $config,
-            currentSiteService: $currentSiteService,
-            currentUserService: $currentUserService,
-            metaTagsService: $metaTagsService,
-            request: $request,
-        );
+        $templateService = Helpers::getTemplateService();
         $mailer = $this->createMock(Mailer::class);
 
         // when
@@ -303,14 +278,7 @@ class MainControllerTest extends TestCase
         $currentUserService->method("isAuthenticated")->willReturn(false);
         $config = Config::load();
         $currentSiteService = $this->createMock(CurrentSite::class);
-        $metaTagsService = $this->createMock(MetaTagsService::class);
-        $templateService = new TemplateService(
-            config: $config,
-            currentSiteService: $currentSiteService,
-            currentUserService: $currentUserService,
-            metaTagsService: $metaTagsService,
-            request: $request,
-        );
+        $templateService = Helpers::getTemplateService();
         $mailer = $this->createMock(Mailer::class);
 
         // when
@@ -359,14 +327,7 @@ class MainControllerTest extends TestCase
         $currentUserService->method("isAuthenticated")->willReturn(false);
         $config = Config::load();
         $currentSiteService = $this->createMock(CurrentSite::class);
-        $metaTagsService = $this->createMock(MetaTagsService::class);
-        $templateService = new TemplateService(
-            config: $config,
-            currentSiteService: $currentSiteService,
-            currentUserService: $currentUserService,
-            metaTagsService: $metaTagsService,
-            request: $request,
-        );
+        $templateService = Helpers::getTemplateService();
         $mailer = $this->createMock(Mailer::class);
 
         // when
@@ -393,8 +354,10 @@ class MainControllerTest extends TestCase
     }
 
     /**
+     * @throws GuzzleException
+     * @throws InvalidConfigurationException
      * @throws PropelException
-     * @throws GuzzleException|\PHPUnit\Framework\MockObject\Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAdmin()
     {
@@ -435,8 +398,10 @@ class MainControllerTest extends TestCase
     }
 
     /**
+     * @throws GuzzleException
+     * @throws InvalidConfigurationException
      * @throws PropelException
-     * @throws GuzzleException|\PHPUnit\Framework\MockObject\Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAdminWithHotNews()
     {
@@ -467,8 +432,10 @@ class MainControllerTest extends TestCase
     }
 
     /**
+     * @throws GuzzleException
+     * @throws InvalidConfigurationException
      * @throws PropelException
-     * @throws GuzzleException|\PHPUnit\Framework\MockObject\Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAdminWithHotNewsMarkedAsRead()
     {
@@ -715,8 +682,10 @@ class MainControllerTest extends TestCase
     }
 
     /**
+     * @throws GuzzleException
      * @throws PropelException
-     * @throws GuzzleException|\PHPUnit\Framework\MockObject\Exception
+     * @throws InvalidConfigurationException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAdminWithEbooks()
     {
