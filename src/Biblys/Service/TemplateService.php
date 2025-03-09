@@ -87,6 +87,7 @@ class TemplateService
         return $template->render($vars);
     }
 
+
     /**
      * @throws LoaderError
      * @throws RuntimeError
@@ -104,12 +105,21 @@ class TemplateService
      * @throws PropelException
      * @throws SyntaxError
      */
-    public function renderResponseFromString(string $templateString, array $vars = []): Response
+    private function renderFromString(string $templateString, array $vars): string
     {
         $twig = $this->_getTwigEnvironment();
         $template = $twig->createTemplate($templateString);
-        $rendered = $template->render($vars);
+        return $template->render($vars);
+    }
 
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws SyntaxError
+     */
+    public function renderResponseFromString(string $templateString, array $vars = []): Response
+    {
+        $rendered = $this->renderFromString($templateString, $vars);
         return new Response($rendered);
     }
 
