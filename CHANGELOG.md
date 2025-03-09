@@ -14,6 +14,21 @@
   Monaco, Liechtenstein, Saint-Marin, Bulgarie, Croatie, Roumanie, Albanie,
   Biélorussie, Gibraltar, Macédoine, Moldavie. C'est corrigé.
 
+### Instructions de mise à jour
+
+#### Jouer les migrations
+
+```shell
+composer propel migrate
+```
+
+#### Swiper
+
+La librairie "swiper" a été supprimée. Si votre thème utilise swiper, vous
+devrez l'ajouter manuellement ou utiliser en remplacement le carrousel
+Bootstrap :
+https://getbootstrap.com/docs/4.6/components/carousel/#with-controls
+
 ## 3.4.2 (19 mars 2025)
 
 ### Corrections
