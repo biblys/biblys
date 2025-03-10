@@ -1,5 +1,10 @@
 # Historique des modifications
 
+## 3.4.1 (DEV)
+
+- Les exemplaires en stock ajoutés depuis la mise à jour 3.4.0 pouvaient ne pas
+  apparaître sur certaines pages. C'est corrigé.
+
 ## 3.4.0 (5 mars 2025)
 
 ### Améliorations
