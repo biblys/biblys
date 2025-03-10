@@ -209,7 +209,6 @@ $sql_query = "
     FROM `articles`
     LEFT JOIN `stock` ON 
         `stock`.`article_id` = `articles`.`article_id` AND 
-        `site_id` = :site_id AND 
         `stock_selling_date` IS NULL AND 
         `stock_return_date` IS NULL AND 
         `stock_lost_date` IS NULL".$active_stock_query."
@@ -217,9 +216,7 @@ $sql_query = "
     GROUP BY `articles`.`article_id`";
 
 // Compter le nombre de résultats
-$numQ = EntityManager::prepareAndExecute("SELECT `articles`.`article_id` ".$sql_query, [
-    "site_id" => $currentSite->getId(),
-]);
+$numQ = EntityManager::prepareAndExecute("SELECT `articles`.`article_id` ".$sql_query, []);
 $num = count($numQ->fetchAll());
 
 // Requête de résultat
@@ -255,7 +252,7 @@ $sql = EntityManager::prepareAndExecute("
     ".$sql_query." 
     ".$_REQ_ORDER." 
     ".$_REQ_LIMIT,
-    ["site_id" => $currentSite->getId()]
+    []
 );
 
 $ix = $offset;
