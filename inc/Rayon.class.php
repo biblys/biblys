@@ -22,6 +22,9 @@ class Rayon extends Entity
 {
     protected $prefix = 'rayon';
 
+    /**
+     * @throws Exception
+     */
     public function getArticles()
     {
         if (isset($this->articles)) {
@@ -29,7 +32,7 @@ class Rayon extends Entity
         }
 
         $am = new ArticleManager();
-        return $am->getAllFromRayon($this, false);
+        return $am->getAllFromRayon($this, withJoins: false);
     }
 
     public function countArticles(): int
