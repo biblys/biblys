@@ -333,6 +333,7 @@ class ArticleControllerTest extends TestCase
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws \PHPUnit\Framework\MockObject\Exception
+     * @throws Exception
      */
     public function testDeleteAction()
     {
@@ -340,17 +341,14 @@ class ArticleControllerTest extends TestCase
         $request = new Request();
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentSite = $this->createMock(CurrentSite::class);
-        $article = ModelFactory::createArticle();
+        $article = ModelFactory::createArticle(title: "Article à supprimer");
         $controller = new ArticleController();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser
             ->shouldReceive("authPublisher")
             ->with($article->getPublisher())
             ->andReturn();
-        $templateService = Mockery::mock(TemplateService::class);
-        $templateService
-            ->shouldReceive("renderResponse")
-            ->andReturn(new Response(""));
+        $templateService = Helpers::getTemplateService();
         $imagesService = Mockery::mock(ImagesService::class);
         $imagesService->expects("deleteImageFor");
 
@@ -367,6 +365,55 @@ class ArticleControllerTest extends TestCase
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString(
+            "Oui, supprimer l'article <strong>Article à supprimer</strong>",
+            $response->getContent()
+        );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testDeleteActionWithStockDisplaysError()
+    {
+        // given
+        $request = new Request();
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $article = ModelFactory::createArticle(title: "Article avec du stock");
+        ModelFactory::createStockItem(article: $article);
+        $controller = new ArticleController();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser
+            ->shouldReceive("authPublisher")
+            ->with($article->getPublisher())
+            ->andReturn();
+        $templateService = Helpers::getTemplateService();
+        $imagesService = Mockery::mock(ImagesService::class);
+        $imagesService->expects("deleteImageFor");
+
+        // when
+        $response = $controller->deleteAction(
+            $request,
+            $urlGenerator,
+            $currentSite,
+            $currentUser,
+            $imagesService,
+            $templateService,
+            $article->getId()
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString(
+            "Impossible de supprimer cet article car",
+            $response->getContent()
+        );
     }
 
     /**
