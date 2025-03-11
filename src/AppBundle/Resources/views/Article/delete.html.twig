@@ -17,34 +17,37 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% extends "layout:admin.html.twig" %}
 
 {% block title %}
-    Administration Biblys
+  Administration Biblys
 {% endblock %}
 
 {% block main %}
-    <h1>
-        Suppression de l'article &laquo; {{ article.title }} &raquo;
-    </h1>
+  <h1>
+    Suppression de l'article &laquo; {{ article.title }} &raquo;
+  </h1>
 
+  {% if error %}
+    <p class="alert alert-danger">{{ error }}</p>
+  {% endif %}
 
-    {% if error %}
-
-        <p class="alert alert-danger">{{ error }}</p>
-
-    {% endif %}
-
+  {% if article.stocks.count > 0 %}
+    <p class="alert alert-warning">
+      Impossible de supprimer cet article car
+      <a href="/pages/adm_stocks?article_id={{ article.id }}">il a des exemplaires associés</a>.
+      Supprimez d'abord les exemplaires.
+    </p>
+  {% else %}
     <form method="post" class="fieldset">
-        <fieldset>
-            <p>
-                Êtes-vous sûr·e de vouloir continuer ?
-            </p>
+      <p>
+        Êtes-vous sûr·e de vouloir continuer ?
+      </p>
 
-            <p>
-                <strong>Toute suppression est définitive.</strong>
-            </p>
+      <p>
+        <strong>Toute suppression est définitive.</strong>
+      </p>
 
-            <button type="submit" class="btn btn-danger">
-                Oui, supprimer l'article <strong>{{ article.title }}</strong>
-            </button>
-        </fieldset>
+      <button type="submit" class="btn btn-danger">
+        Oui, supprimer l'article <strong>{{ article.title }}</strong>
+      </button>
     </form>
+  {% endif %}
 {% endblock %}

@@ -397,7 +397,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * @route POST /admin/article/{id}/delete
+     * @route GET/POST /admin/article/{id}/delete
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
@@ -444,9 +444,9 @@ class ArticleController extends Controller
 
         $request->attributes->set("page_title", "Suppression de l'article {$article->getTitle()}");
 
-        return $templateService->renderResponse('AppBundle:Article:delete.html.twig', [
-            'article' => $article,
-            'error' => $error,
+        return $templateService->renderResponse("AppBundle:Article:delete.html.twig", [
+            "article" => $article,
+            "error" => $error,
         ]);
     }
 
