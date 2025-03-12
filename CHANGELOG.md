@@ -1,9 +1,13 @@
 # Historique des modifications
 
-## 3.4.1 (DEV)
+## 3.4.1 (12 mars 2025)
+
+### Corrections
 
 - Les exemplaires en stock ajoutés depuis la mise à jour 3.4.0 pouvaient ne pas
   apparaître sur certaines pages. C'est corrigé.
+- La caisse est désormais désactivée par défaut si la gestion de la TVA est
+  activée, mais elle peut être réactivée temporairement.
 
 ## 3.4.0 (5 mars 2025)
 
