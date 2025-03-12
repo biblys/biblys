@@ -18,11 +18,13 @@
 
 use Biblys\Exception\CannotAddStockItemToCartException;
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Images\ImagesService;
 use Model\UserQuery;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,12 +40,50 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @throws PropelException
  */
 return function (
-    Request       $request,
-    CurrentUser   $currentUser,
-    CurrentSite   $currentSite,
-    ImagesService $imagesService,
+    Request              $request,
+    CurrentUser          $currentUser,
+    CurrentSite          $currentSite,
+    ImagesService        $imagesService,
+    FlashMessagesService $flashMessagesService
 ): Response|JsonResponse|RedirectResponse {
     $_SQL = LegacyCodeHelper::getGlobalDatabaseConnection();
+
+    $request->attributes->set("page_title", "Caisse");
+
+    $enableTemporaryAccess = $request->query->getInt("enable_temporary_access");
+    if ($enableTemporaryAccess === 1) {
+        $redirectResponse = new RedirectResponse("/pages/adm_checkout");
+        $bypassCookie = new Cookie("bypass_cash_register_check", "1", new DateTime("tomorrow"));
+        $redirectResponse->headers->setCookie($bypassCookie);
+        $flashMessagesService->add("info", "La caisse a été réactivée jusqu'à demain.");
+        return $redirectResponse;
+    }
+
+    $bypassCookie = $request->cookies->get("bypass_cash_register_check");
+    if ($currentSite->getSite()->getTva() === "fr" && !$bypassCookie) {
+        return new Response(<<<HTML
+            <div class="alert alert-danger">
+                <p class="alert-heading lead">
+                    <span class="fa-solid fa-circle-xmark"></span>
+                    <strong>La caisse est désactivée, car la gestion de la TVA est activée.</strong><br/>
+                </p>
+                <p>
+                  La loi de finances pour 2025 interdit l'usage d'un logiciel de caisse non certifié pour un 
+                  professionnel assujetti à la TVA. Pour réactiver la caisse, désactivez la gestion de la TVA.
+                </p>
+                <p>
+                    <a class="btn btn-warning" href="https://blog.biblys.org/posts/certification-nf-525-logiciels-de-caisse/" target="_blank">
+                        <i class="fa fa-external-link"></i>
+                        En savoir plus
+                    </a>
+                    <a class="btn btn-danger" href="/pages/adm_checkout?enable_temporary_access=1">
+                        <i class="fa-solid fa-clock"></i>
+                        Réactiver temporairement la caisse
+                    </a>
+                </p>
+            </div>
+        HTML);
+    }
 
     $cm = new CartManager();
 
