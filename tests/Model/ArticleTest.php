@@ -281,16 +281,14 @@ class ArticleTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $otherSite = ModelFactory::createSite();
         $article = ModelFactory::createArticle();
         ModelFactory::createStockItem(site: $site, article: $article);
-        ModelFactory::createStockItem(site: $otherSite, article: $article);
         ModelFactory::createStockItem(site: $site, article: $article, sellingDate: new DateTime());
         ModelFactory::createStockItem(site: $site, article: $article, returnDate: new DateTime());
         ModelFactory::createStockItem(site: $site, article: $article, lostDate: new DateTime());
 
         // when
-        $count = $article->countAvailableStockItemsForSite($site);
+        $count = $article->countAvailableStockItems();
 
         // then
         $this->assertEquals(1, $count);

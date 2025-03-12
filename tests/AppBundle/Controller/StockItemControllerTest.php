@@ -119,34 +119,6 @@ class StockItemControllerTest extends TestCase
     }
 
     /**
-     * @throws PropelException
-     * @throws Exception
-     */
-    public function testDeleteActionReturns404()
-    {
-        // given
-        $controller = new StockItemController();
-        $site = ModelFactory::createSite();
-        $otherSite = ModelFactory::createSite();
-        $stockItemFromOtherSite = ModelFactory::createStockItem(site: $otherSite);
-
-        $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
-        $flashMessages = Mockery::mock(FlashMessagesService::class);
-        $imagesService = Mockery::spy(ImagesService::class);
-
-        // when
-        $exception = Helpers::runAndCatchException(function() use ($controller, $currentSite, $imagesService, $flashMessages, $stockItemFromOtherSite) {
-            $controller->deleteAction($currentSite, $imagesService, $flashMessages, $stockItemFromOtherSite->getId());
-        });
-
-        // then
-        $this->assertInstanceOf(NotFoundHttpException::class, $exception);
-        $this->assertEquals("Stock item ".$stockItemFromOtherSite->getId()." not found", $exception->getMessage());
-        $this->assertFalse($stockItemFromOtherSite->isDeleted(), "should not have deleted the stock item");
-    }
-
-    /**
      * #StockItemController->cancelLostAction
      */
 

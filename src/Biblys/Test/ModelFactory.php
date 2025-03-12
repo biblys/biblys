@@ -449,7 +449,6 @@ class ModelFactory
     ): Stock
     {
         $stock = new Stock();
-        $stock->setSite($site ?? self::createSite());
         $stock->setArticle($article ?? self::createArticle());
         $stock->setUser($user);
         $stock->setCart($cart);

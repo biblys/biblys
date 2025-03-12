@@ -31,5 +31,11 @@ use Model\Base\StockQuery as BaseStockQuery;
  */
 class StockQuery extends BaseStockQuery
 {
-
+    /**
+     * @deprecated Filtering stock items by site is deprecated. Remove method.
+     */
+    public function filterBySite($site, ?string $comparison = null): StockQuery|static
+    {
+        return $this;
+    }
 }

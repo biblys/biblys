@@ -156,7 +156,7 @@ class Article extends BaseArticle
     /**
      * @throws PropelException
      */
-    public function countAvailableStockItemsForSite(Site $site): int
+    public function countAvailableStockItems(): int
     {
         $partial = $this->collStocksPartial && !$this->isNew();
         if (null === $this->collStocks || $partial) {
@@ -166,7 +166,6 @@ class Article extends BaseArticle
 
             return ChildStockQuery::create()
                 ->filterByArticle($this)
-                ->filterBySite($site)
                 ->filterBySellingDate(null, Criteria::ISNULL)
                 ->filterByReturnDate(null, Criteria::ISNULL)
                 ->filterByLostDate(null, Criteria::ISNULL)

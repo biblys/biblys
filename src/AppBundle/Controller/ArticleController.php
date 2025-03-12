@@ -337,7 +337,6 @@ class ArticleController extends Controller
 
         $currentUser = $currentUserService->getUser();
         $currentUserPurchasesForArticle = StockQuery::create()
-            ->filterBySite($currentSiteService->getSite())
             ->filterByUser($currentUser)
             ->filterByArticleId($articleEntity->get("id"))
             ->count();
@@ -737,7 +736,6 @@ class ArticleController extends Controller
         return $templateService->renderResponse("AppBundle:Article:articleAdminCatalog.html.twig", [
             "articles" => $articles,
             "count" => $count,
-            "site" => $currentSite->getSite(),
             "pages" => $pagination,
         ]);
     }
@@ -878,7 +876,6 @@ class ArticleController extends Controller
         }
 
         $libraryItem = StockQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->filterByUser($currentUser->getUser())
             ->filterByArticleId($id)
             ->findOne();
@@ -887,7 +884,6 @@ class ArticleController extends Controller
         }
 
         return StockQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->filterByUser($currentUser->getUser())
             ->filterByArticleId($id)
             ->findOne();

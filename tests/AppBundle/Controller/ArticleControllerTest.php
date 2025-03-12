@@ -819,7 +819,7 @@ class ArticleControllerTest extends TestCase
             title: "Résultat de recherche avec stock",
             authors: [ModelFactory::createContributor()]
         );
-        ModelFactory::createStockItem(site: $site, article: $article);
+        ModelFactory::createStockItem(article: $article);
         user:
         $controller = new ArticleController();
         $request = new Request();
@@ -873,7 +873,7 @@ class ArticleControllerTest extends TestCase
             title: "Résultat de recherche trié avec stock",
             authors: [ModelFactory::createContributor()]
         );
-        ModelFactory::createStockItem(site: $site, article: $article);
+        ModelFactory::createStockItem(article: $article);
         user:
         $controller = new ArticleController();
         $request = new Request();
@@ -1082,9 +1082,8 @@ class ArticleControllerTest extends TestCase
         $article = ModelFactory::createArticle(price: 0, typeId: ArticleType::EBOOK);
         $site = ModelFactory::createSite();
         $user = ModelFactory::createUser();
-        ModelFactory::createStockItem(site: $site, article: $article, user: $user);
+        ModelFactory::createStockItem(article: $article, user: $user);
         $currentSiteService = $this->createMock(CurrentSite::class);
-        $currentSiteService->expects($this->once())->method("getSite")->willReturn($site);
         $currentUserService = $this->createMock(CurrentUser::class);
         $currentUserService->expects($this->once())->method("getUser")->willReturn($user);
         $mailingList = $this->createMock(MailingListInterface::class);
@@ -1121,6 +1120,7 @@ class ArticleControllerTest extends TestCase
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
     public function testDownloadWithWatermarkForWatermarkedItem()
     {
@@ -1128,13 +1128,12 @@ class ArticleControllerTest extends TestCase
         $controller = new ArticleController();
 
         $article = ModelFactory::createArticle(
-            title: "A book about tatoo",
+            title: "A book about tattoo",
             lemoninkMasterId: "zyxwvuts",
         );
         $user = ModelFactory::createUser(email: "i.love.tatoo@biblys.fr");
         $site = ModelFactory::createSite();
-        $stock = ModelFactory::createStockItem(
-            site: $site,
+        ModelFactory::createStockItem(
             article: $article,
             user: $user,
             lemoninkTransactionId: "123456789",
@@ -1149,22 +1148,14 @@ class ArticleControllerTest extends TestCase
         $currentUser->shouldReceive("authUser");
         $currentUser->shouldReceive("getUser")->andReturn($user);
         $watermarkingFile = Mockery::mock(WatermarkedFile::class);
+        $watermarkingFile->shouldReceive("getUrl")->andReturn("tattoo.pdf");
+        $watermarkingFile->shouldReceive("getFormatName")->andReturn("PDF");
         $watermarkingService = Mockery::mock(WatermarkingService::class);
         $watermarkingService->shouldReceive("isConfigured")->andReturn(true);
         $watermarkingService->shouldReceive("getFiles")
             ->with("zyxwvuts", "123456789", "abcdefgh")
             ->andReturn([$watermarkingFile]);
-        $templateService = Mockery::mock(TemplateService::class);
-        $templateService->shouldReceive("renderResponse")
-            ->with("AppBundle:Article:download-with-watermark.html.twig", [
-                "article_id" => $article->getId(),
-                "article_title" => "A book about tatoo",
-                "item_id" => $stock->getId(),
-                "user_email" => "i.love.tatoo@biblys.fr",
-                "isWatermarked" => true,
-                "files" => [$watermarkingFile],
-            ])
-            ->andReturn(new Response());
+        $templateService = Helpers::getTemplateService();
 
         // when
         $response = $controller->downloadWithWatermarkAction(
@@ -1180,6 +1171,13 @@ class ArticleControllerTest extends TestCase
             200,
             $response->getStatusCode(),
             "it should respond with http status 200"
+        );
+        $this->assertStringContainsString(
+            "Attention, vous vous apprêtez à télécharger
+    <strong>A book about tattoo</strong>
+    qui est protégé par tatouage numérique.",
+            $response->getContent(),
+            "it should display the watermarking warning"
         );
     }
 
@@ -1201,7 +1199,6 @@ class ArticleControllerTest extends TestCase
         $user = ModelFactory::createUser(email: "i.hate.tatoo@biblys.fr");
         $site = ModelFactory::createSite();
         $stock = ModelFactory::createStockItem(
-            site: $site,
             article: $article,
             user: $user,
         );
@@ -1421,7 +1418,6 @@ class ArticleControllerTest extends TestCase
         $user = ModelFactory::createUser();
         $site = ModelFactory::createSite();
         $libraryItem = ModelFactory::createStockItem(
-            site: $site,
             article: $article,
             user: $user,
             lemoninkTransactionId: "123456789",
@@ -1475,9 +1471,7 @@ class ArticleControllerTest extends TestCase
         $article = ModelFactory::createArticle(lemoninkMasterId: "youpla");
         $user = ModelFactory::createUser(email: "downloader@example.org");
         $site = ModelFactory::createSite();
-        $libraryItem = ModelFactory::createStockItem(
-            site: $site, article: $article, user: $user
-        );
+        $libraryItem = ModelFactory::createStockItem(article: $article, user: $user);
         $transaction = new Transaction();
         $transaction->setId("123456789");
         $transaction->setToken("abcdefgh");
@@ -1529,9 +1523,7 @@ class ArticleControllerTest extends TestCase
         $article = ModelFactory::createArticle(lemoninkMasterId: "youpla");
         $user = ModelFactory::createUser(email: "downloader@example.org");
         $site = ModelFactory::createSite();
-        $libraryItem = ModelFactory::createStockItem(
-            site: $site, article: $article, user: $user
-        );
+        $libraryItem = ModelFactory::createStockItem(article: $article, user: $user);
         $transaction = new Transaction();
         $transaction->setId("123456789");
         $transaction->setToken("abcdefgh");
