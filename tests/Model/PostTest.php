@@ -35,7 +35,7 @@ class PostTest extends TestCase
 
     /** isPublished */
 
-    public function testIsOnlineReturnsFalseByDefault()
+    public function testIsPublishedReturnsFalseByDefault()
     {
         // given
         $post = new Post();
@@ -47,7 +47,7 @@ class PostTest extends TestCase
         $this->assertFalse($isOnline);
     }
 
-    public function testIsOnlineReturnsFalseIfStatusIsO()
+    public function testIsPublishedReturnsFalseIfStatusIsO()
     {
         // given
         $post = new Post();
@@ -60,7 +60,7 @@ class PostTest extends TestCase
         $this->assertFalse($isOnline);
     }
 
-    public function testIsOnlineReturnsTrueIfStatusIs1()
+    public function testIsPublishedReturnsTrueIfStatusIs1()
     {
         // given
         $post = new Post();
