@@ -200,6 +200,7 @@ return function (
                     class="autocomplete event verylong" 
                     placeholder="Titre, auteur, éditeur, ISBN..." 
                     data-list_id="' . $l['list_id'] . '" 
+                    data-autocomplete-url="/pages/list_xhr"
                     autofocus 
                 />
                 <input type="hidden" id="var1" value="' . $l['list_id'] . '" />
