@@ -73,6 +73,68 @@ class PostTest extends TestCase
         $this->assertTrue($isOnline);
     }
 
+    /** isScheduled */
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsScheduledReturnsFalseByDefault()
+    {
+        // given
+        $post = new Post();
+
+        // when
+        $isScheduled = $post->isScheduled();
+
+        // then
+        $this->assertFalse($isScheduled);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsScheduledReturnsFalseIfDateIsInThePast()
+    {
+        // given
+        $post = ModelFactory::createPost(date: new DateTime("yesterday"));
+
+        // when
+        $isScheduled = $post->isScheduled();
+
+        // then
+        $this->assertFalse($isScheduled);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsScheduledReturnsFalseIfDateIsNow()
+    {
+        // given
+        $post = ModelFactory::createPost(date: new DateTime("now"));
+
+        // when
+        $isScheduled = $post->isScheduled();
+
+        // then
+        $this->assertFalse($isScheduled);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsScheduledReturnsTrueIfDateIsInTheFuture()
+    {
+        // given
+        $post = ModelFactory::createPost(date: new DateTime("tomorrow"));
+
+        // when
+        $isScheduled = $post->isScheduled();
+
+        // then
+        $this->assertTrue($isScheduled);
+    }
+
     /** getNextPost */
 
     /**
