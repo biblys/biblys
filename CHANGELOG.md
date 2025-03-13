@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.4.2 (DEV)
+
+### Corrections
+
+- L'ajout d'un exemplaire à une liste pouvait déclencher une erreur. C'est
+  corrigé.
+
 ## 3.4.1 (12 mars 2025)
 
 ### Corrections
