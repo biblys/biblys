@@ -138,7 +138,3 @@ legacy_x_adm_stock:
 legacy_x_countries:
   path: /x/countries
   controller: ApiBundle\Controller\LegacyController::defaultAction
-
-legacy_x_list:
-  path: /x/list
-  controller: ApiBundle\Controller\LegacyController::defaultAction

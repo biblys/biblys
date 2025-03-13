@@ -305,18 +305,20 @@ function autocomplete(field) {
     return;
   }
 
-  fetch(`/x/${entityToSearch}?query=${searchQuery}`)
+  const searchUrl = field.data('autocomplete-url') ? field.data('autocomplete-url') : `/x/${entityToSearch}`;
+  fetch(`${searchUrl}?query=${searchQuery}`)
     .then((response) => {
       field.removeClass('loading');
       return response.text();
     })
     .then((data) => {
-      if (data.indexOf('ERROR') >= 0) {
-        alert(data.split('>')[1]);
+      const response = JSON.parse(data);
+      if (response.error) {
+        window._alert(response.error.message);
         return;
       }
 
-      field.after('<ul class="autocompleteResults">' + data + '</ul>');
+      field.after('<ul class="autocompleteResults">' + response.content + '</ul>');
     });
 }
 
@@ -356,20 +358,24 @@ function unchoose(field) {
 
 function addToList(x) {
   var list_id = $('#list_id').val();
-  $.post('/x/list', { stock_id: '' + x + '', list_id: '' + list_id + '' }, function(data) {
+  $.post('/pages/list_xhr', { stock_id: '' + x + '', list_id: '' + list_id + '' }, function(data) {
     $('.autocompleteResults').hide();
     $('#list').val('');
-    if (data.indexOf('ERROR') >= 0) alert(data.split('>')[1]);
-    else {
-      $('tbody').prepend(data);
-      reloadEvents();
+
+    if (data.error) {
+      window._alert(data.error.message);
+      return;
     }
+
+    $('tbody').prepend(data.content);
+    reloadEvents();
   });
 }
 
 function addMultipleToList(x) {
-  var s = x.split('-'),
-    i = 0;
+  const s = x.split('-');
+  const i = 0;
+
   setInterval(function() {
     if (i < s.length) {
       addToList(s[i]);
@@ -379,10 +385,14 @@ function addMultipleToList(x) {
 }
 
 function delFromList(x) {
-  var list_id = $('#list_id').val();
-  $.post('/x/list', { del: '' + x + '', list_id: '' + list_id + '' }, function(data) {
-    if (data.indexOf('ERROR') >= 0) alert(data.split('>')[1]);
-    else $('#link_' + x).remove();
+  const list_id = $('#list_id').val();
+  $.post('/pages/list_xhr', { del: '' + x + '', list_id: '' + list_id + '' }, function(data) {
+    if (data.error) {
+      window._alert(data.error.message);
+      return;
+    }
+
+    $('#link_' + x).remove();
   });
 }
 
