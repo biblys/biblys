@@ -34,7 +34,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 function listController(
     Request     $request,
-    CurrentSite $currentSite,
     CurrentUser $currentUser,
     ImagesService $imagesService,
 ): Response
@@ -77,7 +76,6 @@ function listController(
             AND `stock_return_date` IS NULL
             AND `stock_lost_date` IS NULL
     ";
-        $params["site_id"] = $currentSite->getSite()->getId();
 
         // EXEMPLAIRES
         $num = 0;
@@ -221,5 +219,5 @@ $currentSite = CurrentSite::buildFromConfig($config);
 $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 $imagesService = new ImagesService($config, $currentSite, new Filesystem());
 
-$response = listController($request, $currentSite, $currentUser, $imagesService);
+$response = listController($request, $currentUser, $imagesService);
 $response->send();
