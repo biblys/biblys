@@ -18,6 +18,7 @@
 
 namespace Model;
 
+use DateTime;
 use Model\Base\Post as BasePost;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
@@ -40,6 +41,14 @@ class Post extends BasePost
     public function isPublished(): bool
     {
         return !!$this->getStatus();
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function isScheduled(): bool
+    {
+        return $this->getDate() > new DateTime();
     }
 
     /**
