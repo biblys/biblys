@@ -35,6 +35,8 @@ return function (
         "q" => ["type" => "string", "mb_min_length" => 3, "mb_max_length" => 64],
         "o" => ["type" => "string", "default" => ""],
         "d" => ["type" => "numeric", "default" => 0],
+        "_FORMAT" => ["type" => "string", "default" => "html"],
+        "s" => ["type" => "numeric", "default" => 0],
     ]);
     $query = $queryParams->get("q");
 
