@@ -37,7 +37,7 @@ function loadList(start = 0) {
   window.history.pushState(null, 'Title', window.location.pathname+'?q='+query+'&o='+sort+'&d='+order);
 
   // Requête
-  jQuery.get(window.location.pathname+'?_FORMAT=json&q='+query+'&o='+sort+'&d='+order+'&s='+start, function(ws) {
+  const jqXhr = jQuery.get(window.location.pathname+'?_FORMAT=json&q='+query+'&o='+sort+'&d='+order+'&s='+start, function(ws) {
     listLoading = false; // Fin du chargement
     if(ws.error) {
       window._alert('Erreur : impossible d\'afficher les résultats.');
@@ -75,7 +75,15 @@ function loadList(start = 0) {
     }
     jQuery('#search input').removeClass('loading');
   }, 'json');
+  jqXhr.fail(function(response) {
+    const error = response.responseJSON.error.message;
+    listLoading = false; // Fin du chargement
+    jQuery('#loadingTr').remove();
+    jQuery('#search input').removeClass('loading');
+    window._alert(error);
+  });
 }
+
 
 function filterList() {
   const query = jQuery('#listSearch').val();
