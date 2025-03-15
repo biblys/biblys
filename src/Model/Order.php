@@ -32,6 +32,21 @@ use Propel\Runtime\Exception\PropelException;
  */
 class Order extends BaseOrder
 {
+    /**
+     * @throws PropelException
+     */
+    public function isPaid(): bool
+    {
+        return $this->getPaymentDate() !== null;
+    }
+    /**
+     * @throws PropelException
+     */
+    public function isCancelled(): bool
+    {
+        return $this->getCancelDate() !== null;
+    }
+
     public function getTrackingLink(): string
     {
         $trackingNumber = $this->getTrackNumber();
