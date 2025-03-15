@@ -186,8 +186,6 @@ class PeopleController extends Controller
             ])
             ->add('photo', FileType::class, ['label' => 'Photo (JPEG) :', 'required' => false])
             ->add('site', TextType::class, ['label' => 'Site web :', 'required' => false, 'attr' => ['placeholder' => 'http(s)://']])
-            ->add('facebook', TextType::class, ['label' => 'Page Facebook :', 'required' => false, 'attr' => ['placeholder' => 'https://www.facebook.com/...']])
-            ->add('twitter', TextType::class, ['label' => 'Compte Twitter :', 'required' => false, 'attr' => ['placeholder' => '@...']])
             ->add('bio', TextareaType::class, ['label' => false, 'attr' => ['class' => 'wysiwyg']])
             ->getForm();
 
@@ -214,7 +212,6 @@ class PeopleController extends Controller
                     $imagesService->addImageFor($contributor, $data["photo"]->getPathname());
                 }
             } catch (Exception $e) {
-                dump($e);
                 $error = $e->getMessage();
             }
 
