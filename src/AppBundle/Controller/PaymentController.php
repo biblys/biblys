@@ -28,6 +28,7 @@ use DateTime;
 use Exception;
 use Framework\Controller;
 use InvalidArgumentException;
+use Model\OrderQuery;
 use Model\Payment;
 use Model\PaymentQuery;
 use Order;
@@ -42,6 +43,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -197,5 +199,24 @@ class PaymentController extends Controller
         }
 
         return new JsonResponse([]);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function payWithPaypalAction(TemplateService $templateService, $slug): Response
+    {
+        $order = OrderQuery::create()->findOneBySlug($slug);
+        if (!$order) {
+            throw new NotFoundHttpException("Commande non trouvée");
+        }
+
+
+
+        return $templateService->renderResponse(
+            "AppBundle:Payment:pay-with-paypal.html.twig",
+        );
     }
 }
