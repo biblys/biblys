@@ -18,6 +18,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Test\Helpers;
@@ -187,10 +188,13 @@ class PaymentControllerTest extends TestCase
     {
         // given
         $controller = new PaymentController();
+        $config = new Config(["paypal" => ["client_id" => "test", "client_secret" => "test"]]);
         $templateService = Helpers::getTemplateService();
 
         // when
-        $exception = Helpers::runAndCatchException(fn () => $controller->payWithPaypalAction($templateService, "unknown-order"));
+        $exception = Helpers::runAndCatchException(fn () => $controller->paypalPayAction(
+            $config, $templateService, "unknown-order")
+        );
 
         // then
         $this->assertInstanceOf(NotFoundHttpException::class, $exception);
@@ -209,10 +213,11 @@ class PaymentControllerTest extends TestCase
         // given
         $controller = new PaymentController();
         $order = ModelFactory::createOrder(cancelDate: new DateTime());
+        $config = new Config(["paypal" => ["client_id" => "test", "client_secret" => "test"]]);
         $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->payWithPaypalAction($templateService, $order->getSlug());
+        $response = $controller->paypalPayAction($config, $templateService, $order->getSlug());
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
@@ -231,10 +236,11 @@ class PaymentControllerTest extends TestCase
         // given
         $controller = new PaymentController();
         $order = ModelFactory::createOrder(paymentDate: new DateTime());
+        $config = new Config(["paypal" => ["client_id" => "test", "client_secret" => "test"]]);
         $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->payWithPaypalAction($templateService, $order->getSlug());
+        $response = $controller->paypalPayAction($config, $templateService, $order->getSlug());
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
@@ -255,9 +261,10 @@ class PaymentControllerTest extends TestCase
         $order = ModelFactory::createOrder();
 
         $templateService = Helpers::getTemplateService();
+        $config = new Config(["paypal" => ["client_id" => "test", "client_secret" => "test"]]);
 
         // when
-        $response = $controller->payWithPaypalAction($templateService, $order->getSlug());
+        $response = $controller->paypalPayAction($config, $templateService, $order->getSlug());
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
