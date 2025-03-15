@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpIllegalPsrClassPathInspection */
 /*
  * Copyright (C) 2024 Clément Latzarus
  *
@@ -44,6 +44,9 @@ class ConfigTest extends PHPUnit\Framework\TestCase
         $this->assertEquals("a_test", $option);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testConfigFromFile()
     {
         // given
@@ -105,7 +108,7 @@ class ConfigTest extends PHPUnit\Framework\TestCase
         $has = $config->has("has");
 
         // then
-        $this->assertEquals(true, $has, "returns true if config has option for path");
+        $this->assertTrue($has, "returns true if config has option for path");
     }
 
     /**
@@ -120,7 +123,7 @@ class ConfigTest extends PHPUnit\Framework\TestCase
         $has = $config->has("hasn't");
 
         // then
-        $this->assertEquals(false, $has, "returns false if config has no option for path");
+        $this->assertFalse($has, "returns false if config has no option for path");
     }
 
     public function testGetAuthenticationSecretIfTooShort(): void
@@ -208,6 +211,41 @@ class ConfigTest extends PHPUnit\Framework\TestCase
 
         // then
         $isEnabled = $config->isMondialRelayEnabled();
+
+        // then
+        $this->assertTrue($isEnabled);
+    }
+
+    /** isPayPalEnabled */
+
+    /**
+     * @throws Exception
+     */
+    public function testIsPayPalEnabledWhenDisabled(): void
+    {
+        // given
+        $config = new Config([]);
+
+        // then
+        $isEnabled = $config->isPayPalEnabled();
+
+        // then
+        $this->assertFalse($isEnabled);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testIsPayPalEnabledWhenEnabled(): void
+    {
+        // given
+        $config = new Config(["paypal"  => [
+            "client_id" => "abcd",
+            "client_secret" => "1234",
+        ]]);
+
+        // then
+        $isEnabled = $config->isPayPalEnabled();
 
         // then
         $this->assertTrue($isEnabled);
