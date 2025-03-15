@@ -19,6 +19,7 @@
 namespace Model;
 
 use Biblys\Test\ModelFactory;
+use DateTime;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
@@ -26,6 +27,73 @@ require_once __DIR__ . "/../setUp.php";
 
 class OrderTest extends TestCase
 {
+
+    /** isPaid */
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsPaidReturnsFalseForUnpaidOrder(): void
+    {
+        // given
+        $order = new Order();
+
+        // when
+        $result = $order->isPaid();
+
+        // then
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsPaidReturnsFalseForPaidOrder(): void
+    {
+        // given
+        $order = new Order();
+        $order->setPaymentDate(new DateTime());
+
+        // when
+        $result = $order->isPaid();
+
+        // then
+        $this->assertTrue($result);
+    }
+
+    /** isCancelled */
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsCancelledReturnsFalse(): void
+    {
+        // given
+        $order = new Order();
+
+        // when
+        $result = $order->isCancelled();
+
+        // then
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsCancelledReturnsFalseForCancelledOrder(): void
+    {
+        // given
+        $order = new Order();
+        $order->setCancelDate(new DateTime());
+
+        // when
+        $result = $order->isCancelled();
+
+        // then
+        $this->assertTrue($result);
+    }
+
 
     /** getTrackingLink */
 
