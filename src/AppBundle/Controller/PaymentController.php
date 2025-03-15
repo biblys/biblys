@@ -40,6 +40,7 @@ use Stripe\Stripe;
 use Stripe\Webhook;
 use Stripe\Exception\SignatureVerificationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -205,6 +206,7 @@ class PaymentController extends Controller
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
+     * @throws PropelException
      */
     public function payWithPaypalAction(TemplateService $templateService, $slug): Response
     {
@@ -213,7 +215,9 @@ class PaymentController extends Controller
             throw new NotFoundHttpException("Commande non trouvée");
         }
 
-
+        if ($order->isPaid() || $order->isCancelled()) {
+            return new RedirectResponse("/order/{$order->getSlug()}");
+        }
 
         return $templateService->renderResponse(
             "AppBundle:Payment:pay-with-paypal.html.twig",
