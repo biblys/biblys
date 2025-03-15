@@ -162,6 +162,15 @@ class Config
         return false;
     }
 
+    public function isPayPalEnabled(): bool
+    {
+        if ($this->get("paypal.client_id") && $this->get("paypal.client_secret")) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function getImagesPath(): string
     {
         return $this->get("images.path") ?? "public/images/";
