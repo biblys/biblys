@@ -25,6 +25,7 @@ use Biblys\Test\ModelFactory;
 use DateTime;
 use Exception;
 use Mockery;
+use Model\OrderQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,6 +38,14 @@ require_once __DIR__."/../../setUp.php";
 
 class PaymentControllerTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     */
+    public function setUp(): void
+    {
+        OrderQuery::create()->deleteAll();
+    }
+
     /**
      * @throws LoaderError
      * @throws PropelException
@@ -195,11 +204,33 @@ class PaymentControllerTest extends TestCase
      * @throws SyntaxError
      * @throws Exception
      */
+    public function testPayWithCancelledOrder()
+    {
+        // given
+        $controller = new PaymentController();
+        $order = ModelFactory::createOrder(cancelDate: new DateTime());
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->payWithPaypalAction($templateService, $order->getSlug());
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/order/{$order->getSlug()}", $response->headers->get("Location"));
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
+     */
     public function testPayWithAlreadyPayedOrder()
     {
         // given
         $controller = new PaymentController();
-        $order = ModelFactory::createOrder();
+        $order = ModelFactory::createOrder(paymentDate: new DateTime());
         $templateService = Helpers::getTemplateService();
 
         // when
