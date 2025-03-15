@@ -286,6 +286,13 @@ class CycleTableMap extends TableMap
      */
     public function buildRelations(): void
     {
+        $this->addRelation('Article', '\\Model\\Article', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':cycle_id',
+    1 => ':cycle_id',
+  ),
+), null, null, 'Articles', false);
     }
 
     /**
