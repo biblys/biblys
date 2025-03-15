@@ -650,6 +650,13 @@ redirection_delete:
   requirements:
     id: \d+
 
+# Search
+
+search_create_index:
+  methods: GET
+  path: /admin/search/create-index
+  controller: AppBundle\Controller\SearchController::createIndexAction
+
 # Shipping
 
 shipping_options:
