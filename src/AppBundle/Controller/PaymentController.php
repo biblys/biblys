@@ -208,8 +208,12 @@ class PaymentController extends Controller
      * @throws LoaderError
      * @throws PropelException
      */
-    public function payWithPaypalAction(TemplateService $templateService, $slug): Response
+    public function paypalPayAction(Config $config, TemplateService $templateService, string $slug): Response
     {
+        if (!$config->isPayPalEnabled()) {
+            throw new NotFoundHttpException("PayPal n'est pas configuré sur ce site");
+        }
+
         $order = OrderQuery::create()->findOneBySlug($slug);
         if (!$order) {
             throw new NotFoundHttpException("Commande non trouvée");
@@ -220,7 +224,10 @@ class PaymentController extends Controller
         }
 
         return $templateService->renderResponse(
-            "AppBundle:Payment:pay-with-paypal.html.twig",
+            "AppBundle:Payment:pay-with-paypal.html.twig", [
+                "order" => $order,
+                "paypal_client_id" => $config->get("paypal.client_id")
+            ],
         );
     }
 }
