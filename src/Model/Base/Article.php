@@ -9,6 +9,8 @@ use Model\Article as ChildArticle;
 use Model\ArticleQuery as ChildArticleQuery;
 use Model\BookCollection as ChildBookCollection;
 use Model\BookCollectionQuery as ChildBookCollectionQuery;
+use Model\Cycle as ChildCycle;
+use Model\CycleQuery as ChildCycleQuery;
 use Model\File as ChildFile;
 use Model\FileQuery as ChildFileQuery;
 use Model\Image as ChildImage;
@@ -659,6 +661,11 @@ abstract class Article implements ActiveRecordInterface
      * @var        ChildBookCollection
      */
     protected $aBookCollection;
+
+    /**
+     * @var        ChildCycle
+     */
+    protected $aCycle;
 
     /**
      * @var        ObjectCollection|ChildFile[] Collection to store aggregation of ChildFile objects.
@@ -1339,7 +1346,7 @@ abstract class Article implements ActiveRecordInterface
      *
      * @return string|null
      */
-    public function getCycle()
+    public function getCycleName()
     {
         return $this->article_cycle;
     }
@@ -2543,6 +2550,10 @@ abstract class Article implements ActiveRecordInterface
             $this->modifiedColumns[ArticleTableMap::COL_CYCLE_ID] = true;
         }
 
+        if ($this->aCycle !== null && $this->aCycle->getId() !== $v) {
+            $this->aCycle = null;
+        }
+
         return $this;
     }
 
@@ -2552,7 +2563,7 @@ abstract class Article implements ActiveRecordInterface
      * @param string|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setCycle($v)
+    public function setCycleName($v)
     {
         if ($v !== null) {
             $v = (string) $v;
@@ -3712,7 +3723,7 @@ abstract class Article implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 29 + $startcol : ArticleTableMap::translateFieldName('CycleId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->cycle_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 30 + $startcol : ArticleTableMap::translateFieldName('Cycle', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 30 + $startcol : ArticleTableMap::translateFieldName('CycleName', TableMap::TYPE_PHPNAME, $indexType)];
             $this->article_cycle = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 31 + $startcol : ArticleTableMap::translateFieldName('Tome', TableMap::TYPE_PHPNAME, $indexType)];
@@ -3913,6 +3924,9 @@ abstract class Article implements ActiveRecordInterface
         if ($this->aPublisher !== null && $this->publisher_id !== $this->aPublisher->getId()) {
             $this->aPublisher = null;
         }
+        if ($this->aCycle !== null && $this->cycle_id !== $this->aCycle->getId()) {
+            $this->aCycle = null;
+        }
     }
 
     /**
@@ -3954,6 +3968,7 @@ abstract class Article implements ActiveRecordInterface
 
             $this->aPublisher = null;
             $this->aBookCollection = null;
+            $this->aCycle = null;
             $this->collFiles = null;
 
             $this->collImages = null;
@@ -4109,6 +4124,13 @@ abstract class Article implements ActiveRecordInterface
                     $affectedRows += $this->aBookCollection->save($con);
                 }
                 $this->setBookCollection($this->aBookCollection);
+            }
+
+            if ($this->aCycle !== null) {
+                if ($this->aCycle->isModified() || $this->aCycle->isNew()) {
+                    $affectedRows += $this->aCycle->save($con);
+                }
+                $this->setCycle($this->aCycle);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -5011,7 +5033,7 @@ abstract class Article implements ActiveRecordInterface
                 return $this->getCycleId();
 
             case 30:
-                return $this->getCycle();
+                return $this->getCycleName();
 
             case 31:
                 return $this->getTome();
@@ -5212,7 +5234,7 @@ abstract class Article implements ActiveRecordInterface
             $keys[27] => $this->getPublisherId(),
             $keys[28] => $this->getPublisherName(),
             $keys[29] => $this->getCycleId(),
-            $keys[30] => $this->getCycle(),
+            $keys[30] => $this->getCycleName(),
             $keys[31] => $this->getTome(),
             $keys[32] => $this->getCoverVersion(),
             $keys[33] => $this->getAvailability(),
@@ -5324,6 +5346,21 @@ abstract class Article implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aBookCollection->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aCycle) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'cycle';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'cycles';
+                        break;
+                    default:
+                        $key = 'Cycle';
+                }
+
+                $result[$key] = $this->aCycle->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collFiles) {
 
@@ -5557,7 +5594,7 @@ abstract class Article implements ActiveRecordInterface
                 $this->setCycleId($value);
                 break;
             case 30:
-                $this->setCycle($value);
+                $this->setCycleName($value);
                 break;
             case 31:
                 $this->setTome($value);
@@ -5817,7 +5854,7 @@ abstract class Article implements ActiveRecordInterface
             $this->setCycleId($arr[$keys[29]]);
         }
         if (array_key_exists($keys[30], $arr)) {
-            $this->setCycle($arr[$keys[30]]);
+            $this->setCycleName($arr[$keys[30]]);
         }
         if (array_key_exists($keys[31], $arr)) {
             $this->setTome($arr[$keys[31]]);
@@ -6354,7 +6391,7 @@ abstract class Article implements ActiveRecordInterface
         $copyObj->setPublisherId($this->getPublisherId());
         $copyObj->setPublisherName($this->getPublisherName());
         $copyObj->setCycleId($this->getCycleId());
-        $copyObj->setCycle($this->getCycle());
+        $copyObj->setCycleName($this->getCycleName());
         $copyObj->setTome($this->getTome());
         $copyObj->setCoverVersion($this->getCoverVersion());
         $copyObj->setAvailability($this->getAvailability());
@@ -6580,6 +6617,57 @@ abstract class Article implements ActiveRecordInterface
         }
 
         return $this->aBookCollection;
+    }
+
+    /**
+     * Declares an association between this object and a ChildCycle object.
+     *
+     * @param ChildCycle|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setCycle(ChildCycle $v = null)
+    {
+        if ($v === null) {
+            $this->setCycleId(NULL);
+        } else {
+            $this->setCycleId($v->getId());
+        }
+
+        $this->aCycle = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildCycle object, it will not be re-added.
+        if ($v !== null) {
+            $v->addArticle($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildCycle object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildCycle|null The associated ChildCycle object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getCycle(?ConnectionInterface $con = null)
+    {
+        if ($this->aCycle === null && ($this->cycle_id != 0)) {
+            $this->aCycle = ChildCycleQuery::create()->findPk($this->cycle_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aCycle->addArticles($this);
+             */
+        }
+
+        return $this->aCycle;
     }
 
 
@@ -9078,6 +9166,9 @@ abstract class Article implements ActiveRecordInterface
         if (null !== $this->aBookCollection) {
             $this->aBookCollection->removeArticle($this);
         }
+        if (null !== $this->aCycle) {
+            $this->aCycle->removeArticle($this);
+        }
         $this->article_id = null;
         $this->article_item = null;
         $this->article_textid = null;
@@ -9230,6 +9321,7 @@ abstract class Article implements ActiveRecordInterface
         $this->collInvitations = null;
         $this->aPublisher = null;
         $this->aBookCollection = null;
+        $this->aCycle = null;
         return $this;
     }
 

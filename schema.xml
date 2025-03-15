@@ -59,7 +59,7 @@
     <column name="publisher_id" phpName="PublisherId" type="INTEGER"/>
     <column name="article_publisher" phpName="PublisherName" type="VARCHAR" size="256"/>
     <column name="cycle_id" phpName="CycleId" type="INTEGER" sqlType="int unsigned"/>
-    <column name="article_cycle" phpName="Cycle" type="VARCHAR" size="256"/>
+    <column name="article_cycle" phpName="CycleName" type="VARCHAR" size="256"/>
     <column name="article_tome" phpName="Tome" type="VARCHAR" size="12"/>
     <column name="article_cover_version" phpName="CoverVersion" type="INTEGER" defaultValue="0"/>
     <column name="article_availability" phpName="Availability" type="TINYINT" sqlType="tinyint unsigned"/>
@@ -144,6 +144,9 @@
     </foreign-key>
     <foreign-key foreignTable="collections" skipSql="true">
       <reference local="collection_id" foreign="collection_id"/>
+    </foreign-key>
+    <foreign-key foreignTable="cycles" skipSql="true">
+      <reference local="cycle_id" foreign="cycle_id"/>
     </foreign-key>
   </table>
   <table name="awards" idMethod="native" phpName="Award">

@@ -49,7 +49,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery orderByPublisherId($order = Criteria::ASC) Order by the publisher_id column
  * @method     ChildArticleQuery orderByPublisherName($order = Criteria::ASC) Order by the article_publisher column
  * @method     ChildArticleQuery orderByCycleId($order = Criteria::ASC) Order by the cycle_id column
- * @method     ChildArticleQuery orderByCycle($order = Criteria::ASC) Order by the article_cycle column
+ * @method     ChildArticleQuery orderByCycleName($order = Criteria::ASC) Order by the article_cycle column
  * @method     ChildArticleQuery orderByTome($order = Criteria::ASC) Order by the article_tome column
  * @method     ChildArticleQuery orderByCoverVersion($order = Criteria::ASC) Order by the article_cover_version column
  * @method     ChildArticleQuery orderByAvailability($order = Criteria::ASC) Order by the article_availability column
@@ -128,7 +128,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery groupByPublisherId() Group by the publisher_id column
  * @method     ChildArticleQuery groupByPublisherName() Group by the article_publisher column
  * @method     ChildArticleQuery groupByCycleId() Group by the cycle_id column
- * @method     ChildArticleQuery groupByCycle() Group by the article_cycle column
+ * @method     ChildArticleQuery groupByCycleName() Group by the article_cycle column
  * @method     ChildArticleQuery groupByTome() Group by the article_tome column
  * @method     ChildArticleQuery groupByCoverVersion() Group by the article_cover_version column
  * @method     ChildArticleQuery groupByAvailability() Group by the article_availability column
@@ -205,6 +205,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery rightJoinWithBookCollection() Adds a RIGHT JOIN clause and with to the query using the BookCollection relation
  * @method     ChildArticleQuery innerJoinWithBookCollection() Adds a INNER JOIN clause and with to the query using the BookCollection relation
  *
+ * @method     ChildArticleQuery leftJoinCycle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Cycle relation
+ * @method     ChildArticleQuery rightJoinCycle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Cycle relation
+ * @method     ChildArticleQuery innerJoinCycle($relationAlias = null) Adds a INNER JOIN clause to the query using the Cycle relation
+ *
+ * @method     ChildArticleQuery joinWithCycle($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Cycle relation
+ *
+ * @method     ChildArticleQuery leftJoinWithCycle() Adds a LEFT JOIN clause and with to the query using the Cycle relation
+ * @method     ChildArticleQuery rightJoinWithCycle() Adds a RIGHT JOIN clause and with to the query using the Cycle relation
+ * @method     ChildArticleQuery innerJoinWithCycle() Adds a INNER JOIN clause and with to the query using the Cycle relation
+ *
  * @method     ChildArticleQuery leftJoinFile($relationAlias = null) Adds a LEFT JOIN clause to the query using the File relation
  * @method     ChildArticleQuery rightJoinFile($relationAlias = null) Adds a RIGHT JOIN clause to the query using the File relation
  * @method     ChildArticleQuery innerJoinFile($relationAlias = null) Adds a INNER JOIN clause to the query using the File relation
@@ -275,7 +285,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery rightJoinWithStock() Adds a RIGHT JOIN clause and with to the query using the Stock relation
  * @method     ChildArticleQuery innerJoinWithStock() Adds a INNER JOIN clause and with to the query using the Stock relation
  *
- * @method     \Model\PublisherQuery|\Model\BookCollectionQuery|\Model\FileQuery|\Model\ImageQuery|\Model\InvitationsArticlesQuery|\Model\LinkQuery|\Model\RoleQuery|\Model\SpecialOfferQuery|\Model\StockQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\PublisherQuery|\Model\BookCollectionQuery|\Model\CycleQuery|\Model\FileQuery|\Model\ImageQuery|\Model\InvitationsArticlesQuery|\Model\LinkQuery|\Model\RoleQuery|\Model\SpecialOfferQuery|\Model\StockQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildArticle|null findOne(?ConnectionInterface $con = null) Return the first ChildArticle matching the query
  * @method     ChildArticle findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildArticle matching the query, or a new ChildArticle object populated from the query conditions when no match is found
@@ -310,7 +320,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticle|null findOneByPublisherId(int $publisher_id) Return the first ChildArticle filtered by the publisher_id column
  * @method     ChildArticle|null findOneByPublisherName(string $article_publisher) Return the first ChildArticle filtered by the article_publisher column
  * @method     ChildArticle|null findOneByCycleId(int $cycle_id) Return the first ChildArticle filtered by the cycle_id column
- * @method     ChildArticle|null findOneByCycle(string $article_cycle) Return the first ChildArticle filtered by the article_cycle column
+ * @method     ChildArticle|null findOneByCycleName(string $article_cycle) Return the first ChildArticle filtered by the article_cycle column
  * @method     ChildArticle|null findOneByTome(string $article_tome) Return the first ChildArticle filtered by the article_tome column
  * @method     ChildArticle|null findOneByCoverVersion(int $article_cover_version) Return the first ChildArticle filtered by the article_cover_version column
  * @method     ChildArticle|null findOneByAvailability(int $article_availability) Return the first ChildArticle filtered by the article_availability column
@@ -392,7 +402,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticle requireOneByPublisherId(int $publisher_id) Return the first ChildArticle filtered by the publisher_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByPublisherName(string $article_publisher) Return the first ChildArticle filtered by the article_publisher column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByCycleId(int $cycle_id) Return the first ChildArticle filtered by the cycle_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildArticle requireOneByCycle(string $article_cycle) Return the first ChildArticle filtered by the article_cycle column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildArticle requireOneByCycleName(string $article_cycle) Return the first ChildArticle filtered by the article_cycle column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByTome(string $article_tome) Return the first ChildArticle filtered by the article_tome column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByCoverVersion(int $article_cover_version) Return the first ChildArticle filtered by the article_cover_version column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByAvailability(int $article_availability) Return the first ChildArticle filtered by the article_availability column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -504,8 +514,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildArticle> findByPublisherName(string|array<string> $article_publisher) Return ChildArticle objects filtered by the article_publisher column
  * @method     ChildArticle[]|Collection findByCycleId(int|array<int> $cycle_id) Return ChildArticle objects filtered by the cycle_id column
  * @psalm-method Collection&\Traversable<ChildArticle> findByCycleId(int|array<int> $cycle_id) Return ChildArticle objects filtered by the cycle_id column
- * @method     ChildArticle[]|Collection findByCycle(string|array<string> $article_cycle) Return ChildArticle objects filtered by the article_cycle column
- * @psalm-method Collection&\Traversable<ChildArticle> findByCycle(string|array<string> $article_cycle) Return ChildArticle objects filtered by the article_cycle column
+ * @method     ChildArticle[]|Collection findByCycleName(string|array<string> $article_cycle) Return ChildArticle objects filtered by the article_cycle column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByCycleName(string|array<string> $article_cycle) Return ChildArticle objects filtered by the article_cycle column
  * @method     ChildArticle[]|Collection findByTome(string|array<string> $article_tome) Return ChildArticle objects filtered by the article_tome column
  * @psalm-method Collection&\Traversable<ChildArticle> findByTome(string|array<string> $article_tome) Return ChildArticle objects filtered by the article_tome column
  * @method     ChildArticle[]|Collection findByCoverVersion(int|array<int> $article_cover_version) Return ChildArticle objects filtered by the article_cover_version column
@@ -1784,6 +1794,8 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByCycleId(array('min' => 12)); // WHERE cycle_id > 12
      * </code>
      *
+     * @see       filterByCycle()
+     *
      * @param mixed $cycleId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
@@ -1822,25 +1834,25 @@ abstract class ArticleQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByCycle('fooValue');   // WHERE article_cycle = 'fooValue'
-     * $query->filterByCycle('%fooValue%', Criteria::LIKE); // WHERE article_cycle LIKE '%fooValue%'
-     * $query->filterByCycle(['foo', 'bar']); // WHERE article_cycle IN ('foo', 'bar')
+     * $query->filterByCycleName('fooValue');   // WHERE article_cycle = 'fooValue'
+     * $query->filterByCycleName('%fooValue%', Criteria::LIKE); // WHERE article_cycle LIKE '%fooValue%'
+     * $query->filterByCycleName(['foo', 'bar']); // WHERE article_cycle IN ('foo', 'bar')
      * </code>
      *
-     * @param string|string[] $cycle The value to use as filter.
+     * @param string|string[] $cycleName The value to use as filter.
      * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByCycle($cycle = null, ?string $comparison = null)
+    public function filterByCycleName($cycleName = null, ?string $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($cycle)) {
+            if (is_array($cycleName)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_CYCLE, $cycle, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_CYCLE, $cycleName, $comparison);
 
         return $this;
     }
@@ -3901,6 +3913,181 @@ abstract class ArticleQuery extends ModelCriteria
     {
         /** @var $q \Model\BookCollectionQuery */
         $q = $this->useInQuery('BookCollection', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\Cycle object
+     *
+     * @param \Model\Cycle|ObjectCollection $cycle The related object(s) to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByCycle($cycle, ?string $comparison = null)
+    {
+        if ($cycle instanceof \Model\Cycle) {
+            return $this
+                ->addUsingAlias(ArticleTableMap::COL_CYCLE_ID, $cycle->getId(), $comparison);
+        } elseif ($cycle instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            $this
+                ->addUsingAlias(ArticleTableMap::COL_CYCLE_ID, $cycle->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
+        } else {
+            throw new PropelException('filterByCycle() only accepts arguments of type \Model\Cycle or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Cycle relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinCycle(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Cycle');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Cycle');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Cycle relation Cycle object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\CycleQuery A secondary query class using the current class as primary query
+     */
+    public function useCycleQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCycle($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Cycle', '\Model\CycleQuery');
+    }
+
+    /**
+     * Use the Cycle relation Cycle object
+     *
+     * @param callable(\Model\CycleQuery):\Model\CycleQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withCycleQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useCycleQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Cycle table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\CycleQuery The inner query object of the EXISTS statement
+     */
+    public function useCycleExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\CycleQuery */
+        $q = $this->useExistsQuery('Cycle', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Cycle table for a NOT EXISTS query.
+     *
+     * @see useCycleExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\CycleQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useCycleNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\CycleQuery */
+        $q = $this->useExistsQuery('Cycle', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Cycle table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\CycleQuery The inner query object of the IN statement
+     */
+    public function useInCycleQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\CycleQuery */
+        $q = $this->useInQuery('Cycle', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Cycle table for a NOT IN query.
+     *
+     * @see useCycleInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\CycleQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInCycleQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\CycleQuery */
+        $q = $this->useInQuery('Cycle', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 
