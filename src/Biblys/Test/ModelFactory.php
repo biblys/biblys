@@ -309,6 +309,8 @@ class ModelFactory
         string          $phone = "0601020304",
         string      $email = "silas.coade@example.net",
         ?string     $mondialRelayPickupPointCode = null,
+        DateTime    $paymentDate = null,
+        DateTime    $cancelDate = null,
     ): Order
     {
         $customer = $customer ?? ModelFactory::createCustomer($site, $user);
@@ -333,6 +335,8 @@ class ModelFactory
         $order->setPhone($phone);
         $order->setEmail($email);
         $order->setMondialRelayPickupPointCode($mondialRelayPickupPointCode);
+        $order->setPaymentDate($paymentDate);
+        $order->setCancelDate($cancelDate);
 
         $order->save();
 
