@@ -26,8 +26,15 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-return function (Request $request, Config $config, CurrentSite $currentSite): Response|RedirectResponse
+return function (
+    Request $request,
+    Config $config,
+    CurrentSite $currentSite,
+    UrlGenerator $urlGenerator,
+): Response|RedirectResponse
 {
     $om = new OrderManager();
 
@@ -59,7 +66,7 @@ return function (Request $request, Config $config, CurrentSite $currentSite): Re
 
         if ($payment_mode == "paypal" && $paypalIsAvailable) {
 
-            $url = $order->createPaypalPaymentLink();
+            $url = $urlGenerator->generate("payment_paypal_pay", ["slug" => $order->get("url")]);
             return new RedirectResponse($url);
 
         } elseif ($payment_mode == 'payplug' && $payplugIsAvailable) {
@@ -254,14 +261,14 @@ return function (Request $request, Config $config, CurrentSite $currentSite): Re
                 $payment_options .= '
                     <h4 class="radio">
                         <label for="payment_paypal" class="radio">
-                            <input type="radio" name="payment" id="payment_paypal" value="paypal"> 
-                            Paiement en ligne (PayPal)
+                            <input type="radio" name="payment" id="payment_paypal" value="paypal"> PayPal
                         </label>
                     </h4>
                     <p>
-                        Payez en ligne par carte bancaire via le serveur sécurisé SSL de notre partenaire PayPal.
+                        Payez avec votre compte PayPal.<br /> 
                     </p>
-                    <img src="/common/img/paypal_cards.png" alt="PayPal Acceptance Mark" height="50">
+                    <img src="/common/img/paypal_cards.png" alt="Moyens de paiement acceptés par PayPal" height="52">
+                    <br><br>
                 ';
             }
         } else {
@@ -310,10 +317,9 @@ return function (Request $request, Config $config, CurrentSite $currentSite): Re
                         </label>
                     </h4>
                     <p>
-                        Paiement par compte PayPal via le serveur sécurisé de notre partenaire PayPal.<br /> 
-                        Pour une expédition rapide, préférez le paiement par carte bancaire.
+                        Payez avec votre compte PayPal.<br /> 
                     </p>
-                    <img src="/common/img/paypal_cards.png" alt="PayPal Acceptance Mark">
+                    <img src="/common/img/paypal_cards.png" alt="Moyens de paiement acceptés par PayPal" height="52">
                     <br><br>
                 ';
             }
