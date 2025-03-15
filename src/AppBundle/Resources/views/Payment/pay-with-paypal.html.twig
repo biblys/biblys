@@ -31,32 +31,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
   <p id="result-message"></p>
 
-  <script src="https://www.paypal.com/sdk/js?components=buttons&disable-funding=card&client-id={{ paypal_client_id }}"></script>
+  <script src="https://www.paypal.com/sdk/js?components=buttons&disable-funding=card&client-id={{ paypal_client_id }}&currency=EUR"></script>
   <script type="text/javascript">
     async function createOrderCallback() {
       try {
-        const response = await fetch("/api/orders", {
+        const response = await fetch(`{{ path('payment_paypal_create_order', { slug: order.slug }) }}`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          // use the "body" param to optionally pass additional order information
-          // like product ids and quantities
-          body: JSON.stringify({
-            cart: [
-              {
-                id: "YOUR_PRODUCT_ID",
-                quantity: "YOUR_PRODUCT_QUANTITY",
-              },
-            ],
-          }),
+          headers: { "Accept": "application/json", "Content-Type": "application/json" },
         });
-
         const orderData = await response.json();
 
-        if (orderData.id) {
-          return orderData.id;
-        } else {
+        if (!orderData.id) {
           const errorDetail = orderData?.details?.[0];
           const errorMessage = errorDetail
             ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
@@ -64,19 +49,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
           throw new Error(errorMessage);
         }
+
+        return orderData.id;
       } catch (error) {
-        console.error(error);
-        resultMessage(`Could not initiate PayPal Checkout...<br><br>${error}`);
+        window._alert(`Impossible de démarrer la transaction PayPal : ${error}`);
       }
     }
 
     async function onApproveCallback(data, actions) {
       try {
-        const response = await fetch(`/api/orders/${data.orderID}/capture`, {
+        const response = await fetch(`{{ path('payment_paypal_capture', { slug: order.slug }) }}`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Accept": "application/json", "Content-Type": "application/json" },
+          body: JSON.stringify({ paypalOrderId: data.orderID }),
         });
 
         const orderData = await response.json();
@@ -95,11 +80,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           // (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
           // recoverable state, per https://developer.paypal.com/docs/checkout/standard/customize/handle-funding-failures/
           return actions.restart();
-        } else if (
-          errorDetail ||
-          !transaction ||
-          transaction.status === "DECLINED"
-        ) {
+        } else if (errorDetail || !transaction || transaction.status === "DECLINED") {
           // (2) Other non-recoverable errors -> Show a failure message
           let errorMessage;
           if (transaction) {
@@ -111,23 +92,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           }
 
           throw new Error(errorMessage);
-        } else {
-          // (3) Successful transaction -> Show confirmation or thank you message
-          // Or go to another URL:  actions.redirect('thank_you.html');
-          resultMessage(
-            `Transaction ${transaction.status}: ${transaction.id}<br><br>See console for all available details`,
-          );
-          console.log(
-            "Capture result",
-            orderData,
-            JSON.stringify(orderData, null, 2),
-          );
         }
+
+        window.location.href = '{{ path('legacy_order', { url: order.slug }) }}';
       } catch (error) {
-        console.error(error);
-        resultMessage(
-          `Sorry, your transaction could not be processed...<br><br>${error}`,
-        );
+        window._alert(`La transaction PayPal n'a pas aboutie à cause d'une erreur : ${error}`);
       }
     }
 
