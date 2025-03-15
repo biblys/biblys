@@ -23,11 +23,12 @@ use Biblys\Service\CurrentUser;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use DateTime;
+use Exception;
 use Mockery;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -41,8 +42,8 @@ class PaymentControllerTest extends TestCase
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \PHPUnit\Framework\MockObject\Exception
      * @throws Exception
-     * @throws \Exception
      */
     public function testIndex()
     {
@@ -87,12 +88,12 @@ class PaymentControllerTest extends TestCase
     }
 
     /**
-     * @throws Exception
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     * @throws Exception
      */
     public function testIndexWithModeFilter()
     {
@@ -136,7 +137,8 @@ class PaymentControllerTest extends TestCase
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \Exception
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testIndexWithDatesFilter()
     {
@@ -167,4 +169,67 @@ class PaymentControllerTest extends TestCase
         $this->assertStringNotContainsString("30/04/2019", $response->getContent());
     }
 
+    /** payWithPaypal */
+
+    /**
+     * @throws Exception
+     */
+    public function testPayWithPaypalWithUnknownOrder()
+    {
+        // given
+        $controller = new PaymentController();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $exception = Helpers::runAndCatchException(fn () => $controller->payWithPaypalAction($templateService, "unknown-order"));
+
+        // then
+        $this->assertInstanceOf(NotFoundHttpException::class, $exception);
+        $this->assertEquals("Commande non trouvée", $exception->getMessage());
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
+     */
+    public function testPayWithAlreadyPayedOrder()
+    {
+        // given
+        $controller = new PaymentController();
+        $order = ModelFactory::createOrder();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->payWithPaypalAction($templateService, $order->getSlug());
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/order/{$order->getSlug()}", $response->headers->get("Location"));
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
+     */
+    public function testPayWithPaypalAction()
+    {
+        // given
+        $controller = new PaymentController();
+        $order = ModelFactory::createOrder();
+
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->payWithPaypalAction($templateService, $order->getSlug());
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Payer avec PayPal", $response->getContent());
+    }
 }
