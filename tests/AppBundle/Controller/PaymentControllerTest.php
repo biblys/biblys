@@ -20,14 +20,14 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
-use Biblys\Test\RequestFactory;
 use DateTime;
 use Mockery;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -37,10 +37,12 @@ require_once __DIR__."/../../setUp.php";
 class PaymentControllerTest extends TestCase
 {
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
+     * @throws \Exception
      */
     public function testIndex()
     {
@@ -67,9 +69,10 @@ class PaymentControllerTest extends TestCase
         ModelFactory::createPayment(["executed" => null, "mode" => "not executed"], $site);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+        $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->index($request, $currentSite, $currentUser);
+        $response = $controller->index($request, $currentSite, $currentUser, $templateService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -84,10 +87,12 @@ class PaymentControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
+     * @throws Exception
      * @throws LoaderError
      * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws \Exception
      */
     public function testIndexWithModeFilter()
     {
@@ -110,13 +115,14 @@ class PaymentControllerTest extends TestCase
         );
 
         $controller = new PaymentController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $request->query->set("mode", "stripe");
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+        $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->index($request, $currentSite, $currentUser);
+        $response = $controller->index($request, $currentSite, $currentUser, $templateService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -125,10 +131,12 @@ class PaymentControllerTest extends TestCase
     }
 
     /**
-     * @throws RuntimeError
+     * @throws Exception
      * @throws LoaderError
-     * @throws SyntaxError
      * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws \Exception
      */
     public function testIndexWithDatesFilter()
     {
@@ -142,14 +150,15 @@ class PaymentControllerTest extends TestCase
         ModelFactory::createPayment(["executed" => new DateTime("2019-04-30")], $site);
 
         $controller = new PaymentController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request = new Request();
         $request->query->set("start_date", "2019-04-27");
         $request->query->set("end_date", "2019-04-29");
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+        $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->index($request, $currentSite, $currentUser);
+        $response = $controller->index($request, $currentSite, $currentUser, $templateService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
