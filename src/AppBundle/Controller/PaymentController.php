@@ -18,16 +18,19 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
-use Biblys\Service\Log;
+use Biblys\Service\LoggerService;
 use Biblys\Service\Pagination;
+use Biblys\Service\TemplateService;
 use DateTime;
 use Exception;
 use Framework\Controller;
 use InvalidArgumentException;
 use Model\Payment;
 use Model\PaymentQuery;
+use Order;
 use OrderManager;
 use PaymentManager;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -39,6 +42,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -57,6 +61,7 @@ class PaymentController extends Controller
         Request     $request,
         CurrentSite $currentSite,
         CurrentUser $currentUser,
+        TemplateService $templateService,
     ): Response
     {
         $currentUser->authAdmin();
@@ -98,7 +103,7 @@ class PaymentController extends Controller
             return $total + $payment->getAmount();
         }, 0);
 
-        return $this->render(
+        return $templateService->renderResponse(
             "AppBundle:Payment:index.html.twig", [
                 "modes" => Payment::getModes(),
                 "selectedMode" => $modeFilter,
@@ -116,15 +121,15 @@ class PaymentController extends Controller
      * Confirm that a payment has succeeded using order url
      * and redirect
      * @throws SignatureVerificationException
+     * @throws TransportExceptionInterface
      */
-    public function stripeWebhookAction(Request $request): JsonResponse
+    public function stripeWebhookAction(Request $request, Config $config): JsonResponse
     {
-        $config = \Biblys\Legacy\LegacyCodeHelper::getGlobalConfig();;
+        $loggerService = new LoggerService();
 
-        Log::stripe("INFO", 'Receiving new webhook from Stripe…');
+        $loggerService->log("stripe", "INFO", 'Receiving new webhook from Stripe…');
 
         try {
-
             $stripe = $config->get('stripe');
             if (!$stripe) {
                 throw new Exception("Stripe is not configured.");
@@ -156,14 +161,14 @@ class PaymentController extends Controller
             );
 
             if ($event->type !== 'checkout.session.completed') {
-                Log::stripe("INFO", 'Webhook is not of type checkout.session.completed, ignoring.');
+                $loggerService->log("stripe", "INFO", 'Webhook is not of type checkout.session.completed, ignoring.');
                 return new JsonResponse();
             }
 
             // Handle the checkout.session.completed event
             /** @noinspection PhpPossiblePolymorphicInvocationInspection */
             $session = $event->data->object;
-            Log::stripe("INFO", 'Handling Checkout session…', ["id" => $session->id]);
+            $loggerService->log("stripe", "INFO", 'Handling Checkout session…', ["id" => $session->id]);
 
             // Retrieve payment associated with session id
             $pm = new PaymentManager();
@@ -171,22 +176,23 @@ class PaymentController extends Controller
             if (!$payment) {
                 throw new Exception("Could not find a payment associated with this session id");
             }
-            Log::stripe("INFO", 'Associated Payment with session id', ["id" => $payment->get('id')]);
+            $loggerService->log("stripe", "INFO", 'Associated Payment with session id', ["id" => $payment->get('id')]);
 
             // Retrieve order associated with payment
             $om = new OrderManager();
+            /** @var Order $order */
             $order = $om->getById($payment->get('order_id'));
             if (!$order) {
                 throw new Exception("Could not find an order associated with this id");
             }
-            Log::stripe("INFO", 'Associated Order with Payment', ["id" => $order->get('id')]);
+            $loggerService->log("stripe", "INFO", 'Associated Order with Payment', ["id" => $order->get('id')]);
 
             // Add payment to the order
             $om->addPayment($order, $payment);
-            Log::stripe("INFO", 'Payment amount (' . $payment->get('amount') . ') was added to order ' . $order->get('id'));
+            $loggerService->log("stripe", "INFO", 'Payment amount (' . $payment->get('amount') . ') was added to order ' . $order->get('id'));
 
         } catch(Exception $e) {
-            Log::stripe("ERROR", $e->getMessage());
+            $loggerService->log("stripe", "ERROR", $e->getMessage());
             throw $e;
         }
 
