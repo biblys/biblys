@@ -473,6 +473,16 @@ payment_paypal_pay:
   path: /order/{slug}/paypal/pay
   controller: AppBundle\Controller\PaymentController::paypalPayAction
 
+payment_paypal_create_order:
+  methods: POST
+  path: /api/order/{slug}/paypal/create-order
+  controller: ApiBundle\Controller\PaymentController::paypalCreateOrderAction
+
+payment_paypal_capture:
+  methods: POST
+  path: /api/order/{slug}/paypal/capture
+  controller: ApiBundle\Controller\PaymentController::paypalCaptureAction
+
 # Post
 
 post_index:
