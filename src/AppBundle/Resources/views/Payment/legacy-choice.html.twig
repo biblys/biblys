@@ -1,9 +1,25 @@
-<p><a href="{{ path('legacy_order', { url: order.url }) }}">Commande n° {{ order.id }}</a></p>
+{#
+Copyright (C) 2025 Clément Latzarus
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+<p><a href="{{ path('legacy_order', { url: order.slug }) }}">Commande n° {{ order.id }}</a></p>
 <h1>Paiement</h1>
 
 <p class="alert alert-info">
   <i class="fa-solid fa-coins"></i>&nbsp;
-  Montant à régler : {{ order.amount_tobepaid|currency(true)|raw }}.
+  Montant à régler : {{ order.amountTobepaid|currency(true)|raw }}.
 </p>
 
 <h3>Choisissez un mode de paiement</h3>
@@ -23,7 +39,7 @@
       </div>
       <div id="collapse-stripe" class="collapse" aria-labelledby="headingOne" data-parent="#payment-methods-accordion">
         <div class="card-body">
-          {% if order.amount_tobepaid < 50 %}
+          {% if order.amountTobepaid < 50 %}
             <p class="alert alert-warning">
               <span class="fa-solid fa-triangle-exclamation"></span>&nbsp;
               Les commandes dont le montant total est inférieur à 0,50 €<br>
@@ -38,7 +54,7 @@
           <form method="post">
             <input type="hidden" name="payment" value="stripe">
             <button type="submit" class="btn btn-primary"
-                    {% if order.amount_tobepaid < 50 %}disabled{% endif %}
+                    {% if order.amountTobepaid < 50 %}disabled{% endif %}
             >Payer par carte bancaire
             </button>
           </form>
@@ -61,7 +77,7 @@
       <div id="collapse-payplug" class="collapse" aria-labelledby="headingTwo" data-parent="#payment-methods-accordion">
         <div class="card-body">
 
-          {% if order.amount_tobepaid < 50 %}
+          {% if order.amountTobepaid < 50 %}
             <p class="alert alert-warning">
               <span class="fa-solid fa-triangle-exclamation"></span>&nbsp;
               Les commandes dont le montant total est inférieur à 0,50 €<br>
@@ -76,7 +92,7 @@
           <form method="post">
             <input type="hidden" name="payment" value="payplug">
             <button type="submit" class="btn btn-primary"
-                    {% if order.amount_tobepaid < 50 %}disabled{% endif %}
+                    {% if order.amountTobepaid < 50 %}disabled{% endif %}
             >Payer par carte bancaire
             </button>
           </form>
@@ -100,7 +116,7 @@
       <div id="collapse-paypal" class="collapse" aria-labelledby="headingTwo" data-parent="#payment-methods-accordion">
         <div class="card-body">
 
-          {% if order.amount_tobepaid < 100 %}
+          {% if order.amountTobepaid < 100 %}
             <p class="alert alert-warning">
               <i class="fa-solid fa-triangle-exclamation"></i>&nbsp;
               Les commandes dont le montant total est inférieur à 1,00 €<br>
@@ -115,7 +131,7 @@
           <form method="post">
             <input type="hidden" name="payment" value="paypal">
             <button type="submit" class="btn btn-primary"
-                    {% if order.amount_tobepaid < 100 %}disabled{% endif %}
+                    {% if order.amountTobepaid < 100 %}disabled{% endif %}
             >Payer avec un compte PayPal
             </button>
           </form>
