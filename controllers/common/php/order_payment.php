@@ -78,12 +78,7 @@ return function (
         $orderEntity->set("payment_mode", $payment_mode);
         $om->update($orderEntity);
 
-        if ($payment_mode == "paypal" && $paypalIsAvailable) {
-
-            $url = $urlGenerator->generate("payment_paypal_pay", ["slug" => $order->getSlug()]);
-            return new RedirectResponse($url);
-
-        } elseif ($payment_mode == 'payplug' && $payplugIsAvailable) {
+        if ($payment_mode == 'payplug' && $payplugIsAvailable) {
 
             try {
                 $payment = $orderEntity->createPayplugPayment();
@@ -190,6 +185,7 @@ return function (
             "stripeIsAvailable" => $stripeIsAvailable,
             "payplugIsAvailable" => $payplugIsAvailable,
             "paypalIsAvailable" => $paypalIsAvailable,
+            "paypalClientId" => $config->get("paypal.client_id"),
             "transferIsAvailable" => $transferIsAvailable,
             "checkIsAvailable" => $checkIsAvailable,
             "orderWillBeShipped" => $orderWillBeShipped,
