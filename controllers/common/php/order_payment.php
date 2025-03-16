@@ -23,6 +23,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\TemplateService;
+use Model\OrderQuery;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,11 +44,17 @@ return function (
     $content = '<h1>Paiement</h1>';
 
     $orderUrl = LegacyCodeHelper::getRouteParam("url");
-    /** @var Order $order */
-    $order = $om->get(["order_url" => $orderUrl]);
+    $order = OrderQuery::create()->findOneBySlug($orderUrl);
 
-    if (!$order) {
+    /** @var Order $orderEntity */
+    $orderEntity = $om->get(["order_url" => $orderUrl]);
+
+    if (!$orderEntity) {
         throw new NotFoundException("Order $orderUrl not found.");
+    }
+
+    if ($order->isPaid() || $order->isCancelled()) {
+        return new RedirectResponse("/order/{$order->getSlug()}");
     }
 
     $stripeConfig = $config->get('stripe');
@@ -60,7 +67,7 @@ return function (
 
     $nameForCheckPayment = $currentSite->getOption("name_for_check_payment", $currentSite->getTitle());
 
-    $orderWillBeCollected = $order->get('shipping_mode') == "magasin";
+    $orderWillBeCollected = $order->getShippingMode() === "magasin";
     $orderWillBeShipped = !$orderWillBeCollected;
 
     if ($request->getMethod() === "POST") {
@@ -68,18 +75,18 @@ return function (
         $payment_mode = $request->request->get("payment");
 
         // Update order's payment mode
-        $order->set("payment_mode", $payment_mode);
-        $om->update($order);
+        $orderEntity->set("payment_mode", $payment_mode);
+        $om->update($orderEntity);
 
         if ($payment_mode == "paypal" && $paypalIsAvailable) {
 
-            $url = $urlGenerator->generate("payment_paypal_pay", ["slug" => $order->get("url")]);
+            $url = $urlGenerator->generate("payment_paypal_pay", ["slug" => $order->getSlug()]);
             return new RedirectResponse($url);
 
         } elseif ($payment_mode == 'payplug' && $payplugIsAvailable) {
 
             try {
-                $payment = $order->createPayplugPayment();
+                $payment = $orderEntity->createPayplugPayment();
                 return new RedirectResponse($payment->get("url"));
             } catch (Payplug\Exception\BadRequestException $exception) {
                 $error = $exception->getErrorObject();
@@ -94,7 +101,7 @@ return function (
 
         } elseif ($payment_mode == 'stripe' && $stripeIsAvailable) {
 
-            $payment = $order->createStripePayment();
+            $payment = $orderEntity->createStripePayment();
             /** @noinspection JSUnresolvedReference */
             $content .= '
                 <script src="https://js.stripe.com/v3/"></script>
@@ -117,13 +124,13 @@ return function (
                 <ol class="noprint">
                     <li>
                         Effectuez un virement SEPA d‘un montant de 
-                        <strong>' . currency($order->getTotal() / 100) . '</strong> 
+                        <strong>' . currency($order->getTotalAmountWithShipping() / 100) . '</strong> 
                         en précisant le code IBAN <strong>
                         ' . $currentSite->getOption('payment_iban') . '.</strong>
                     </li>
                     <li>
                         Précisez <strong>votre numéro de 
-                        commande</strong> (' . $order->get('id') . ') dans le motif 
+                        commande</strong> (' . $order->getId() . ') dans le motif 
                         du virement.
                     </li>
                 </ol>
@@ -136,14 +143,14 @@ return function (
                     <p>Vous avez choisi de payer votre commande en magasin.</p>
                     <p>Pour payer par chèque, merci d‘établir un chèque à l‘ordre de <strong>' . $nameForCheckPayment . '.</strong></p>
                     <br />
-                    <p class="noprint"><a href="/payment/' . $order->get('url') . '"><span class="button">&laquo; Choisir un autre mode de paiement</span></a></p>
+                    <p class="noprint"><a href="/payment/' . $order->getSlug() . '"><span class="button">&laquo; Choisir un autre mode de paiement</span></a></p>
                 ';
             } else {
                 $content .= '
                     <p class="noprint">Pour régler votre commande par chèque&nbsp;:</p>
                     <ol class="noprint">
-                        <li>Établissez un chèque d‘un montant de <strong>' . currency($order->getTotal() / 100) . '</strong> à l‘ordre de <strong>' . $nameForCheckPayment . '</strong>.</li>
-                        <li>Inscrivez au dos du chèque <strong>votre nom</strong> et <strong>votre numéro de commande</strong> (' . $order->get('id') . ') ou imprimez cette page et joignez-la 
+                        <li>Établissez un chèque d‘un montant de <strong>' . currency($order->getTotalAmountWithShipping() / 100) . '</strong> à l‘ordre de <strong>' . $nameForCheckPayment . '</strong>.</li>
+                        <li>Inscrivez au dos du chèque <strong>votre nom</strong> et <strong>votre numéro de commande</strong> (' . $order->getId() . ') ou imprimez cette page et joignez-la 
                          votre envoi.</li>
                         <li>Envoyez votre chèque à l‘adresse :</li>
                     </ol>
@@ -153,16 +160,16 @@ return function (
                     </p>
                     <br />
                     <p class="noprint">
-                        <a href="/payment/' . $order->get('url') . '" class="btn btn-outline-secondary">» Choisir un autre mode de paiement</a>
+                        <a href="/payment/' . $order->getSlug() . '" class="btn btn-outline-secondary">» Choisir un autre mode de paiement</a>
                     </p>
     
-                    <h2>Bon de commande n° ' . $order->get('id') . '</h2>
+                    <h2>Bon de commande n° ' . $order->getId() . '</h2>
     
                     <p>
-                        ' . $order->get('firstname') . ' ' . $order->get('lastname') . '<br />
-                        ' . $order->get('address1') . ' ' . $order->get('address2') . '<br />
-                        ' . $order->get('postalcode') . ' ' . $order->get('city') . '<br />
-                        ' . ($order->has('country') ? $order->get('country')->get('name') : null) . '<br />
+                        ' . $order->getFirstname() . ' ' . $order->getLastname() . '<br />
+                        ' . $order->getAddress1() . ' ' . $order->getAddress2() . '<br />
+                        ' . $order->getPostalcode() . ' ' . $order->getCity() . '<br />
+                        ' . ($order->getCountry() ? $order->getCountry()->getName() : null) . '<br />
                     </p>
                     <br />
                 ';
