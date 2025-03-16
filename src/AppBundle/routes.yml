@@ -468,11 +468,6 @@ payment_stripe_webhook:
   controller: AppBundle\Controller\PaymentController::stripeWebhookAction
   methods: POST
 
-payment_paypal_pay:
-  methods: GET
-  path: /order/{slug}/paypal/pay
-  controller: AppBundle\Controller\PaymentController::paypalPayAction
-
 payment_paypal_create_order:
   methods: POST
   path: /api/order/{slug}/paypal/create-order
