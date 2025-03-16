@@ -15,7 +15,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
@@ -28,7 +27,6 @@ use DateTime;
 use Exception;
 use Framework\Controller;
 use InvalidArgumentException;
-use Model\OrderQuery;
 use Model\Payment;
 use Model\PaymentQuery;
 use Order;
@@ -40,11 +38,9 @@ use Stripe\Stripe;
 use Stripe\Webhook;
 use Stripe\Exception\SignatureVerificationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -200,34 +196,5 @@ class PaymentController extends Controller
         }
 
         return new JsonResponse([]);
-    }
-
-    /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws LoaderError
-     * @throws PropelException
-     */
-    public function paypalPayAction(Config $config, TemplateService $templateService, string $slug): Response
-    {
-        if (!$config->isPayPalEnabled()) {
-            throw new NotFoundHttpException("PayPal n'est pas configuré sur ce site");
-        }
-
-        $order = OrderQuery::create()->findOneBySlug($slug);
-        if (!$order) {
-            throw new NotFoundHttpException("Commande non trouvée");
-        }
-
-        if ($order->isPaid() || $order->isCancelled()) {
-            return new RedirectResponse("/order/{$order->getSlug()}");
-        }
-
-        return $templateService->renderResponse(
-            "AppBundle:Payment:pay-with-paypal.html.twig", [
-                "order" => $order,
-                "paypal_client_id" => $config->get("paypal.client_id")
-            ],
-        );
     }
 }

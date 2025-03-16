@@ -15,10 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 namespace AppBundle\Controller;
 
-use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Test\Helpers;
@@ -30,7 +28,6 @@ use Model\OrderQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -177,97 +174,5 @@ class PaymentControllerTest extends TestCase
         $this->assertStringContainsString("28/04/2019", $response->getContent());
         $this->assertStringNotContainsString("26/04/2019", $response->getContent());
         $this->assertStringNotContainsString("30/04/2019", $response->getContent());
-    }
-
-    /** payWithPaypal */
-
-    /**
-     * @throws Exception
-     */
-    public function testPayWithPaypalWithUnknownOrder()
-    {
-        // given
-        $controller = new PaymentController();
-        $config = new Config(["paypal" => ["client_id" => "test", "client_secret" => "test"]]);
-        $templateService = Helpers::getTemplateService();
-
-        // when
-        $exception = Helpers::runAndCatchException(fn () => $controller->paypalPayAction(
-            $config, $templateService, "unknown-order")
-        );
-
-        // then
-        $this->assertInstanceOf(NotFoundHttpException::class, $exception);
-        $this->assertEquals("Commande non trouvée", $exception->getMessage());
-    }
-
-    /**
-     * @throws LoaderError
-     * @throws PropelException
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws Exception
-     */
-    public function testPayWithCancelledOrder()
-    {
-        // given
-        $controller = new PaymentController();
-        $order = ModelFactory::createOrder(cancelDate: new DateTime());
-        $config = new Config(["paypal" => ["client_id" => "test", "client_secret" => "test"]]);
-        $templateService = Helpers::getTemplateService();
-
-        // when
-        $response = $controller->paypalPayAction($config, $templateService, $order->getSlug());
-
-        // then
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("/order/{$order->getSlug()}", $response->headers->get("Location"));
-    }
-
-    /**
-     * @throws LoaderError
-     * @throws PropelException
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws Exception
-     */
-    public function testPayWithAlreadyPayedOrder()
-    {
-        // given
-        $controller = new PaymentController();
-        $order = ModelFactory::createOrder(paymentDate: new DateTime());
-        $config = new Config(["paypal" => ["client_id" => "test", "client_secret" => "test"]]);
-        $templateService = Helpers::getTemplateService();
-
-        // when
-        $response = $controller->paypalPayAction($config, $templateService, $order->getSlug());
-
-        // then
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("/order/{$order->getSlug()}", $response->headers->get("Location"));
-    }
-
-    /**
-     * @throws LoaderError
-     * @throws PropelException
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws Exception
-     */
-    public function testPayWithPaypalAction()
-    {
-        // given
-        $controller = new PaymentController();
-        $order = ModelFactory::createOrder();
-
-        $templateService = Helpers::getTemplateService();
-        $config = new Config(["paypal" => ["client_id" => "test", "client_secret" => "test"]]);
-
-        // when
-        $response = $controller->paypalPayAction($config, $templateService, $order->getSlug());
-
-        // then
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringContainsString("Payer avec PayPal", $response->getContent());
     }
 }

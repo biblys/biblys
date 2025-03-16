@@ -124,17 +124,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             </p>
           {% endif %}
 
-          <p>
-            Payez avec votre compte PayPal.
-          </p>
+          <p>Payez avec votre compte PayPal.</p>
 
-          <form method="post">
-            <input type="hidden" name="payment" value="paypal">
-            <button type="submit" class="btn btn-primary"
-                    {% if order.amountTobepaid < 100 %}disabled{% endif %}
-            >Payer avec un compte PayPal
-            </button>
-          </form>
+          {% include "AppBundle:Payment:_paypal-button.html.twig" %}
         </div>
       </div>
     </div>
