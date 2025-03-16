@@ -6,166 +6,188 @@
   Montant à régler : {{ order.amount_tobepaid|currency(true)|raw }}.
 </p>
 
-<div class="card-group">
+<h3>Choisissez un mode de paiement</h3>
+
+<div class="accordion" id="payment-methods-accordion">
 
   {% if stripeIsAvailable %}
-    <div class="card mb-3">
+    <div class="card">
       <div class="card-header">
         <h5 class="radio mb-0">
-          <i class="fa-solid fa-credit-card"></i>&nbsp;
-          Carte bancaire
+          <a href="#collapse-stripe" data-toggle="collapse"
+             data-target="#collapse-stripe" aria-expanded="false" aria-controls="collapse-stripe">
+            <i class="fa-solid fa-credit-card"></i>&nbsp;
+            Carte bancaire
+          </a>
         </h5>
       </div>
-      <div class="card-body">
-        {% if order.amount_tobepaid < 50 %}
-          <p class="alert alert-warning">
-            <span class="fa-solid fa-triangle-exclamation"></span>&nbsp;
-            Les commandes dont le montant total est inférieur à 0,50 €<br>
-            ne peuvent être réglés par carte bancaire.
-          </p>
-        {% endif %}
+      <div id="collapse-stripe" class="collapse" aria-labelledby="headingOne" data-parent="#payment-methods-accordion">
+        <div class="card-body">
+          {% if order.amount_tobepaid < 50 %}
+            <p class="alert alert-warning">
+              <span class="fa-solid fa-triangle-exclamation"></span>&nbsp;
+              Les commandes dont le montant total est inférieur à 0,50 €<br>
+              ne peuvent être réglés par carte bancaire.
+            </p>
+          {% endif %}
 
-        <p class="mb-0">
-          Payez par carte bancaire via le serveur sécurisé de notre partenaire Stripe.
-        </p>
-      </div>
-      <div class="card-footer">
-        <form method="post"
-        <input type="hidden" name="payment" value="stripe">
-        <button type="submit" class="btn btn-primary"
-          {% if order.amount_tobepaid < 50 %}disabled{% endif %}
-        >Payer
-        </button>
-        </form>
+          <p>
+            Payez par carte bancaire via le serveur sécurisé de notre partenaire Stripe.
+          </p>
+
+          <form method="post">
+            <input type="hidden" name="payment" value="stripe">
+            <button type="submit" class="btn btn-primary"
+                    {% if order.amount_tobepaid < 50 %}disabled{% endif %}
+            >Payer par carte bancaire
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   {% endif %}
 
   {% if payplugIsAvailable %}
-    <div class="card mb-3">
+    <div class="card">
       <div class="card-header">
         <h5 class="radio mb-0">
-          <i class="fa-solid fa-credit-card"></i>&nbsp;
-          Carte bancaire
+          <a href="#collapse-payplug" data-toggle="collapse"
+             data-target="#collapse-payplug" aria-expanded="false" aria-controls="collapse-payplug">
+            <i class="fa-solid fa-credit-card"></i>&nbsp;
+            Carte bancaire
+          </a>
         </h5>
       </div>
-      <div class="card-body">
+      <div id="collapse-payplug" class="collapse" aria-labelledby="headingTwo" data-parent="#payment-methods-accordion">
+        <div class="card-body">
 
-        {% if order.amount_tobepaid < 50 %}
-          <p class="alert alert-warning">
-            <span class="fa-solid fa-triangle-exclamation"></span>&nbsp;
-            Les commandes dont le montant total est inférieur à 0,50 €<br>
-            ne peuvent être réglés par carte bancaire.
+          {% if order.amount_tobepaid < 50 %}
+            <p class="alert alert-warning">
+              <span class="fa-solid fa-triangle-exclamation"></span>&nbsp;
+              Les commandes dont le montant total est inférieur à 0,50 €<br>
+              ne peuvent être réglés par carte bancaire.
+            </p>
+          {% endif %}
+
+          <p>
+            Payez par carte bancaire via le serveur sécurisé de notre partenaire PayPlug.
           </p>
-        {% endif %}
 
-        <p class="mb-0">
-          Payez par carte bancaire via le serveur sécurisé de notre partenaire PayPlug.
-        </p>
-      </div>
-      <div class="card-footer">
-
-        <form method="post">
-          <input type="hidden" name="payment" value="payplug">
-          <button type="submit" class="btn btn-primary"
-            {% if order.amount_tobepaid < 50 %}disabled{% endif %}
-          >Payer
-          </button>
-        </form>
+          <form method="post">
+            <input type="hidden" name="payment" value="payplug">
+            <button type="submit" class="btn btn-primary"
+                    {% if order.amount_tobepaid < 50 %}disabled{% endif %}
+            >Payer par carte bancaire
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   {% endif %}
 
   {% if paypalIsAvailable %}
-    <div class="card mb-3">
+    <div class="card">
       <div class="card-header">
         <h5 class="radio mb-0">
-          <i class="fa-brands fa-paypal"></i>&nbsp;
-          <label class="radio mb-0">Compte PayPal</label>
+          <a href="#collapse-paypal" data-toggle="collapse" data-target="#collapse-paypal" aria-expanded="false"
+             aria-controls="collapse-paypal">
+            <i class="fa-brands fa-paypal"></i>&nbsp;
+            Compte PayPal
+          </a>
         </h5>
       </div>
-      <div class="card-body">
 
-        {% if order.amount_tobepaid < 100 %}
-          <p class="alert alert-warning">
-            <i class="fa-solid fa-triangle-exclamation"></i>&nbsp;
-            Les commandes dont le montant total est inférieur à 1,00 €<br>
-            ne peuvent être réglés par carte bancaire ou Paypal.
+      <div id="collapse-paypal" class="collapse" aria-labelledby="headingTwo" data-parent="#payment-methods-accordion">
+        <div class="card-body">
+
+          {% if order.amount_tobepaid < 100 %}
+            <p class="alert alert-warning">
+              <i class="fa-solid fa-triangle-exclamation"></i>&nbsp;
+              Les commandes dont le montant total est inférieur à 1,00 €<br>
+              ne peuvent être réglés par carte bancaire ou Paypal.
+            </p>
+          {% endif %}
+
+          <p>
+            Payez avec votre compte PayPal.
           </p>
-        {% endif %}
 
-        <p class="mb-0">
-          Payez avec votre compte PayPal.
-        </p>
-      </div>
-      <div class="card-footer">
-
-        <form method="post">
-          <input type="hidden" name="payment" value="paypal">
-          <button type="submit" class="btn btn-primary"
-            {% if order.amount_tobepaid < 100 %}disabled{% endif %}
-          >Payer
-          </button>
-        </form>
+          <form method="post">
+            <input type="hidden" name="payment" value="paypal">
+            <button type="submit" class="btn btn-primary"
+                    {% if order.amount_tobepaid < 100 %}disabled{% endif %}
+            >Payer avec un compte PayPal
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   {% endif %}
 
   {% if transferIsAvailable %}
-    <div class="card mb-3">
+    <div class="card">
       <div class="card-header">
         <h5 class="radio mb-0">
-          <i class="fa-solid fa-money-bill-transfer"></i>&nbsp;
-          Virement
-
+          <a href="#collapse-transfer" data-toggle="collapse" data-target="#collapse-transfer" aria-expanded="false"
+             aria-controls="collapse-transfer">
+            <i class="fa-solid fa-money-bill-transfer"></i>&nbsp;
+            Virement
+          </a>
         </h5>
       </div>
-      <div class="card-body">
-        <p class="mb-0">
-          Effectuez un virement vers notre compte.
 
-          {% if orderWillBeShipped %}
-            <br />Votre commande sera expédiée après apparition du virement sur notre relevé de compte.
-          {% endif %}
+      <div id="collapse-transfer" class="collapse" aria-labelledby="headingTwo"
+           data-parent="#payment-methods-accordion">
+        <div class="card-body">
+          <p>
+            Effectuez un virement vers notre compte.
 
-          {% if orderWillBeCollected %}
-            <br />Votre commande sera préparée après apparition du virement sur notre relevé de compte.
-          {% endif %}
-        </p>
-      </div>
-      <div class="card-footer">
-        <form method="post">
-          <input type="hidden" name="payment" value="transfer">
-          <button type="submit" class="btn btn-primary">Payer</button>
-        </form>
+            {% if orderWillBeShipped %}
+              <br />Votre commande sera expédiée après apparition du virement sur notre relevé de compte.
+            {% endif %}
+
+            {% if orderWillBeCollected %}
+              <br />Votre commande sera préparée après apparition du virement sur notre relevé de compte.
+            {% endif %}
+          </p>
+
+          <form method="post">
+            <input type="hidden" name="payment" value="transfer">
+            <button type="submit" class="btn btn-primary">Payer par virement</button>
+          </form>
+        </div>
       </div>
     </div>
   {% endif %}
 
   {% if checkIsAvailable %}
-    <div class="card mb-3">
+    <div class="card">
       <div class="card-header">
         <h5 class="radio mb-0">
-          <i class="fa-solid fa-money-check"></i>&nbsp;
-          Chèque
+          <a href="#collapse-check" data-toggle="collapse" data-target="#collapse-check" aria-expanded="false" aria-controls="collapse-check">
+            <i class="fa-solid fa-money-check"></i>&nbsp;
+            Chèque
+          </a>
         </h5>
       </div>
-      <div class="card-body">
-        <p class="mb-0">
-          {% if orderWillBeShipped %}
-            Envoyez un chèque. Votre commande sera expédiée après encaissement du chèque.
-          {% endif %}
 
-          {% if orderWillBeCollected %}
-            Payez directement en magasin, au moment du retrait de votre commande, par chèque.
-          {% endif %}
-        </p>
-      </div>
-      <div class="card-footer">
-        <form method="post">
-          <input type="hidden" name="payment" value="check">
-          <button type="submit" class="btn btn-primary">Payer</button>
-        </form>
+      <div id="collapse-check" class="collapse" aria-labelledby="headingTwo" data-parent="#payment-methods-accordion">
+        <div class="card-body">
+          <p>
+            {% if orderWillBeShipped %}
+              Envoyez un chèque. Votre commande sera expédiée après encaissement du chèque.
+            {% endif %}
+
+            {% if orderWillBeCollected %}
+              Payez directement en magasin, au moment du retrait de votre commande, par chèque.
+            {% endif %}
+          </p>
+
+          <form method="post">
+            <input type="hidden" name="payment" value="cheque">
+            <button type="submit" class="btn btn-primary">Payer par chèque</button>
+          </form>
+        </div>
       </div>
     </div>
   {% endif %}
