@@ -128,6 +128,7 @@ class PaymentController extends Controller
      */
     private function _createPayPalClient(Config $config): PaypalServerSdkClient
     {
+        $environment = $config->get("paypal.environment") === "sandbox" ? Environment::SANDBOX : Environment::PRODUCTION;
         return PaypalServerSdkClientBuilder::init()
             ->clientCredentialsAuthCredentials(
                 ClientCredentialsAuthCredentialsBuilder::init(
@@ -135,7 +136,7 @@ class PaymentController extends Controller
                     $config->get("paypal.client_secret")
                 )
             )
-            ->environment(Environment::SANDBOX)
+            ->environment($environment)
             ->build();
     }
 }

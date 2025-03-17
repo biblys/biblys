@@ -76,7 +76,7 @@ cache:
 #paypal:
 #  client_id: paypal_id
 #  client_secret: paypal_secret_key
-#  mode: live
+#  environment: production
 
 #payplug:
 #  secret: sk_test_abcd1234
