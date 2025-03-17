@@ -419,10 +419,6 @@ order_index:
   path: /admin/orders/
   controller: AppBundle\Controller\OrderController::indexAction
 
-order_paypal_process:
-  path: /orders/{url}/paypal-process
-  controller: AppBundle\Controller\OrderController::paypalProcessAction
-
 order_payplug_notification:
   path: /orders/{url}/payplug-notification
   controller: AppBundle\Controller\OrderController::payplugNotificationAction
