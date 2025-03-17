@@ -24,6 +24,7 @@ use Biblys\Service\Images\ImagesService;
 use Model\ArticleQuery;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * @throws Exception
@@ -191,7 +192,7 @@ return function (Request $request, CurrentUser $currentUser, ImagesService $imag
                 ';
 
             } else {
-                $content .= 'ERROR > Cet exemplaire est déjà dans la liste !';
+                throw new BadRequestHttpException("Cet exemplaire est déjà dans la liste !");
             }
         }
 
