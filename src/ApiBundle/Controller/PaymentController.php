@@ -19,6 +19,7 @@
 namespace ApiBundle\Controller;
 
 use Biblys\Service\Config;
+use Biblys\Service\LoggerService;
 use Framework\Controller;
 use Model\OrderQuery;
 use Order;
@@ -40,7 +41,11 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class PaymentController extends Controller
 {
-    public function paypalCreateOrderAction(Config $config, string $slug): JsonResponse
+    public function paypalCreateOrderAction(
+        Config $config,
+        LoggerService $logger,
+        string $slug
+    ): JsonResponse
     {
         if (!$config->isPayPalEnabled()) {
             throw new NotFoundHttpException("PayPal n'est pas configuré sur ce site");
@@ -88,13 +93,25 @@ class PaymentController extends Controller
         $apiResponse = $client->getOrdersController()->ordersCreate($orderBody);
         $jsonResponse = json_decode($apiResponse->getBody(), true);
 
+        $logger->log(
+            logger: "paypal",
+            level: "INFO",
+            message: "Created PayPal order for order {$order->getId()}.",
+            context: $jsonResponse,
+        );
+
         return new JsonResponse($jsonResponse, $apiResponse->getStatusCode());
     }
 
     /**
      * @throws TransportExceptionInterface
      */
-    public function paypalCaptureAction(Request $request, Config $config, string $slug): JsonResponse
+    public function paypalCaptureAction(
+        Request $request,
+        Config $config,
+        LoggerService $logger,
+        string $slug
+    ): JsonResponse
     {
         if (!$config->isPayPalEnabled()) {
             throw new NotFoundHttpException("PayPal n'est pas configuré sur ce site");
@@ -110,6 +127,13 @@ class PaymentController extends Controller
         $client = $this->_createPayPalClient($config);
         $apiResponse = $client->getOrdersController()->ordersCapture(["id" => $data->paypalOrderId]);
         $jsonResponse = json_decode($apiResponse->getBody(), true);
+
+        $logger->log(
+            logger: "paypal",
+            level: "INFO",
+            message: "Captured PayPal payment for order {$order->getId()}.",
+            context: $jsonResponse,
+        );
 
         if ($jsonResponse["status"] === "COMPLETED") {
             $paidAmount = $jsonResponse["purchase_units"][0]["payments"]["captures"][0]["amount"]["value"];
