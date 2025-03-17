@@ -357,18 +357,32 @@ function unchoose(field) {
 /* LISTES */
 
 function addToList(x) {
-  var list_id = $('#list_id').val();
-  $.post('/pages/list_xhr', { stock_id: '' + x + '', list_id: '' + list_id + '' }, function(data) {
-    $('.autocompleteResults').hide();
-    $('#list').val('');
+  var list_id = document.getElementById('list_id').value;
+  fetch('/pages/list_xhr', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: new URLSearchParams({ stock_id: x, list_id: list_id })
+  })
+  .then(response => response.json())
+  .then(data => {
+    document.querySelector('.autocompleteResults').style.display = 'none';
+    document.getElementById('list').value = '';
 
     if (data.error) {
-      window._alert(data.error.message);
+      new Biblys.Notification(data.error.message, { type: 'danger' });
       return;
     }
 
-    $('tbody').prepend(data.content);
+    document.querySelector('tbody').insertAdjacentHTML('afterbegin', data.content);
+    new Biblys.Notification('L’exemplaire a été ajouté à la liste', { type: 'success' });
+
     reloadEvents();
+  })
+  .catch(error => {
+    console.error('Error:', error);
   });
 }
 
