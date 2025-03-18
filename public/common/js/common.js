@@ -356,15 +356,15 @@ function unchoose(field) {
 
 /* LISTES */
 
-function addToList(x) {
-  var list_id = document.getElementById('list_id').value;
+function addToList(stockId) {
+  const listId = document.getElementById('list_id').value;
   fetch('/pages/list_xhr', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/x-www-form-urlencoded'
     },
-    body: new URLSearchParams({ stock_id: x, list_id: list_id })
+    body: new URLSearchParams({ stock_id: stockId, list_id: listId })
   })
   .then(response => response.json())
   .then(data => {
@@ -386,13 +386,13 @@ function addToList(x) {
   });
 }
 
-function addMultipleToList(x) {
-  const s = x.split('-');
-  const i = 0;
+function addMultipleToList(stockItemIds) {
+  const stockId = stockItemIds.split('-');
+  let i = 0;
 
   setInterval(function() {
-    if (i < s.length) {
-      addToList(s[i]);
+    if (i < stockId.length) {
+      addToList(stockId[i]);
       i++;
     }
   }, 250);
