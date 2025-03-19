@@ -58,7 +58,7 @@ class MarkOrderAsShippedUsecase
         $mailSubjectSuffix = $this->currentSite->getOption("shipped_mail_subject") ?? "a été expédiée !";
         $mailSubject = "Votre commande $mailSubjectSuffix";
         $mailMessage = $this->currentSite->getOption("shipped_mail_message") ?? "Votre commande n°{$order->getId()} a été expédiée.";
-        $isPickup = $order->getShippingFee()->getType() === "magasin";
+        $isPickup = $order->getShippingOption()->getType() === "magasin";
         if ($isPickup) {
             $mailSubject = "Votre commande est disponible en magasin !";
             $mailMessage = "Votre commande n°{$order->getId()} est disponible en magasin.";

@@ -68,8 +68,8 @@ class OrderController extends Controller
         }
 
         if ($queryParams->get("shipping")) {
-            $orderQuery->joinWithShippingFee()
-                ->useShippingFeeQuery()
+            $orderQuery->joinWithShippingOption()
+                ->useShippingOptionQuery()
                 ->filterByType($queryParams->get("shipping"))
                 ->endUse();
         }

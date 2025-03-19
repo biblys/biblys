@@ -38,7 +38,7 @@ class ShippingFeeTest extends TestCase
     public function testIsCompliantWithFrenchLawForLowAmountAndFreeShipping()
     {
         // given
-        $shippingFee = new ShippingFee();
+        $shippingFee = new ShippingOption();
         $shippingFee->setFee(1);
         $shippingFee->setMinAmount(1000);
 
@@ -52,7 +52,7 @@ class ShippingFeeTest extends TestCase
     public function testIsCompliantWithFrenchLawForLowAmount()
     {
         // given
-        $shippingFee = new ShippingFee();
+        $shippingFee = new ShippingOption();
         $shippingFee->setFee(350);
         $shippingFee->setMinAmount(1000);
 
@@ -66,7 +66,7 @@ class ShippingFeeTest extends TestCase
     public function testIsCompliantWithFrenchLawForFreeShipping()
     {
         // given
-        $shippingFee = new ShippingFee();
+        $shippingFee = new ShippingOption();
         $shippingFee->setFee(1);
         $shippingFee->setMinAmount(3500);
 
@@ -80,7 +80,7 @@ class ShippingFeeTest extends TestCase
     public function testIsCompliantWithFrenchLawForClickAndCollect()
     {
         // given
-        $shippingFee = new ShippingFee();
+        $shippingFee = new ShippingOption();
         $shippingFee->setType('magasin');
         $shippingFee->setFee(0);
         $shippingFee->setMinAmount(0);
@@ -102,7 +102,7 @@ class ShippingFeeTest extends TestCase
     public function testArchive()
     {
         // given
-        $shippingFee = new ShippingFee();
+        $shippingFee = new ShippingOption();
 
         // when
         $shippingFee->archive();
@@ -119,7 +119,7 @@ class ShippingFeeTest extends TestCase
     public function testIsArchived()
     {
         // given
-        $shippingFee = new ShippingFee();
+        $shippingFee = new ShippingOption();
         $shippingFee->setArchivedAt(new DateTime());
 
         // when
@@ -135,7 +135,7 @@ class ShippingFeeTest extends TestCase
     public function testIsNotArchived()
     {
         // given
-        $shippingFee = new ShippingFee();
+        $shippingFee = new ShippingOption();
         $shippingFee->setArchivedAt(null);
 
         // when

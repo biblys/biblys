@@ -1716,10 +1716,10 @@ abstract class Country implements ActiveRecordInterface
      * @return ObjectCollection|ChildOrder[] List of ChildOrder objects
      * @phpstan-return ObjectCollection&\Traversable<ChildOrder}> List of ChildOrder objects
      */
-    public function getOrdersJoinShippingFee(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getOrdersJoinShippingOption(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildOrderQuery::create(null, $criteria);
-        $query->joinWith('ShippingFee', $joinBehavior);
+        $query->joinWith('ShippingOption', $joinBehavior);
 
         return $this->getOrders($query, $con);
     }
