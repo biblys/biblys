@@ -40,7 +40,6 @@ return function (
 {
     $om = new OrderManager();
 
-    $request->attributes->set("page_title", "Commande » Paiement");
     $content = '<h1>Paiement</h1>';
 
     $orderUrl = LegacyCodeHelper::getRouteParam("url");
@@ -112,25 +111,6 @@ return function (
                 <p>Redirection vers la page de paiement…</p>
             ';
 
-        } elseif ($payment_mode == "transfer") {
-
-            $content .= '
-                <p class="noprint">Pour régler votre commande par virement&nbsp;:</p>
-                <ol class="noprint">
-                    <li>
-                        Effectuez un virement SEPA d‘un montant de 
-                        <strong>' . currency($order->getTotalAmountWithShipping() / 100) . '</strong> 
-                        en précisant le code IBAN <strong>
-                        ' . $currentSite->getOption('payment_iban') . '.</strong>
-                    </li>
-                    <li>
-                        Précisez <strong>votre numéro de 
-                        commande</strong> (' . $order->getId() . ') dans le motif 
-                        du virement.
-                    </li>
-                </ol>
-            ';
-
         } elseif ($payment_mode == "cheque") {
 
             if ($orderWillBeCollected) {
@@ -188,6 +168,7 @@ return function (
             "paypalClientId" => $config->get("paypal.client_id"),
             "transferIsAvailable" => $transferIsAvailable,
             "checkIsAvailable" => $checkIsAvailable,
+            "nameForCheckPayment" => $nameForCheckPayment,
             "orderWillBeShipped" => $orderWillBeShipped,
             "orderWillBeCollected" => $orderWillBeCollected,
         ]);
