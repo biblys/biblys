@@ -11,8 +11,8 @@ use Model\Order as ChildOrder;
 use Model\OrderQuery as ChildOrderQuery;
 use Model\Payment as ChildPayment;
 use Model\PaymentQuery as ChildPaymentQuery;
-use Model\ShippingFee as ChildShippingFee;
-use Model\ShippingFeeQuery as ChildShippingFeeQuery;
+use Model\ShippingOption as ChildShippingOption;
+use Model\ShippingOptionQuery as ChildShippingOptionQuery;
 use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
 use Model\Stock as ChildStock;
@@ -439,9 +439,9 @@ abstract class Order implements ActiveRecordInterface
     protected $aUser;
 
     /**
-     * @var        ChildShippingFee
+     * @var        ChildShippingOption
      */
-    protected $aShippingFee;
+    protected $aShippingOption;
 
     /**
      * @var        ChildCountry
@@ -1621,8 +1621,8 @@ abstract class Order implements ActiveRecordInterface
             $this->modifiedColumns[OrderTableMap::COL_SHIPPING_ID] = true;
         }
 
-        if ($this->aShippingFee !== null && $this->aShippingFee->getId() !== $v) {
-            $this->aShippingFee = null;
+        if ($this->aShippingOption !== null && $this->aShippingOption->getId() !== $v) {
+            $this->aShippingOption = null;
         }
 
         return $this;
@@ -2622,8 +2622,8 @@ abstract class Order implements ActiveRecordInterface
         if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
             $this->aUser = null;
         }
-        if ($this->aShippingFee !== null && $this->shipping_id !== $this->aShippingFee->getId()) {
-            $this->aShippingFee = null;
+        if ($this->aShippingOption !== null && $this->shipping_id !== $this->aShippingOption->getId()) {
+            $this->aShippingOption = null;
         }
         if ($this->aCountry !== null && $this->country_id !== $this->aCountry->getId()) {
             $this->aCountry = null;
@@ -2668,7 +2668,7 @@ abstract class Order implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aUser = null;
-            $this->aShippingFee = null;
+            $this->aShippingOption = null;
             $this->aCountry = null;
             $this->aSite = null;
             $this->collPayments = null;
@@ -2803,11 +2803,11 @@ abstract class Order implements ActiveRecordInterface
                 $this->setUser($this->aUser);
             }
 
-            if ($this->aShippingFee !== null) {
-                if ($this->aShippingFee->isModified() || $this->aShippingFee->isNew()) {
-                    $affectedRows += $this->aShippingFee->save($con);
+            if ($this->aShippingOption !== null) {
+                if ($this->aShippingOption->isModified() || $this->aShippingOption->isNew()) {
+                    $affectedRows += $this->aShippingOption->save($con);
                 }
-                $this->setShippingFee($this->aShippingFee);
+                $this->setShippingOption($this->aShippingOption);
             }
 
             if ($this->aCountry !== null) {
@@ -3595,20 +3595,20 @@ abstract class Order implements ActiveRecordInterface
 
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->aShippingFee) {
+            if (null !== $this->aShippingOption) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'shippingFee';
+                        $key = 'shippingOption';
                         break;
                     case TableMap::TYPE_FIELDNAME:
                         $key = 'shipping';
                         break;
                     default:
-                        $key = 'ShippingFee';
+                        $key = 'ShippingOption';
                 }
 
-                $result[$key] = $this->aShippingFee->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aShippingOption->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aCountry) {
 
@@ -4452,13 +4452,13 @@ abstract class Order implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildShippingFee object.
+     * Declares an association between this object and a ChildShippingOption object.
      *
-     * @param ChildShippingFee|null $v
+     * @param ChildShippingOption|null $v
      * @return $this The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function setShippingFee(ChildShippingFee $v = null)
+    public function setShippingOption(ChildShippingOption $v = null)
     {
         if ($v === null) {
             $this->setShippingId(NULL);
@@ -4466,10 +4466,10 @@ abstract class Order implements ActiveRecordInterface
             $this->setShippingId($v->getId());
         }
 
-        $this->aShippingFee = $v;
+        $this->aShippingOption = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildShippingFee object, it will not be re-added.
+        // If this object has already been added to the ChildShippingOption object, it will not be re-added.
         if ($v !== null) {
             $v->addOrder($this);
         }
@@ -4480,26 +4480,26 @@ abstract class Order implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildShippingFee object
+     * Get the associated ChildShippingOption object
      *
      * @param ConnectionInterface $con Optional Connection object.
-     * @return ChildShippingFee|null The associated ChildShippingFee object.
+     * @return ChildShippingOption|null The associated ChildShippingOption object.
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function getShippingFee(?ConnectionInterface $con = null)
+    public function getShippingOption(?ConnectionInterface $con = null)
     {
-        if ($this->aShippingFee === null && ($this->shipping_id != 0)) {
-            $this->aShippingFee = ChildShippingFeeQuery::create()->findPk($this->shipping_id, $con);
+        if ($this->aShippingOption === null && ($this->shipping_id != 0)) {
+            $this->aShippingOption = ChildShippingOptionQuery::create()->findPk($this->shipping_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aShippingFee->addOrders($this);
+                $this->aShippingOption->addOrders($this);
              */
         }
 
-        return $this->aShippingFee;
+        return $this->aShippingOption;
     }
 
     /**
@@ -5245,8 +5245,8 @@ abstract class Order implements ActiveRecordInterface
         if (null !== $this->aUser) {
             $this->aUser->removeOrder($this);
         }
-        if (null !== $this->aShippingFee) {
-            $this->aShippingFee->removeOrder($this);
+        if (null !== $this->aShippingOption) {
+            $this->aShippingOption->removeOrder($this);
         }
         if (null !== $this->aCountry) {
             $this->aCountry->removeOrder($this);
@@ -5340,7 +5340,7 @@ abstract class Order implements ActiveRecordInterface
         $this->collPayments = null;
         $this->collStockItems = null;
         $this->aUser = null;
-        $this->aShippingFee = null;
+        $this->aShippingOption = null;
         $this->aCountry = null;
         $this->aSite = null;
         return $this;

@@ -1272,7 +1272,7 @@
       <reference local="site_id" foreign="site_id"/>
     </foreign-key>
   </table>
-  <table name="shipping" idMethod="native" phpName="ShippingFee">
+  <table name="shipping" idMethod="native" phpName="ShippingOption">
     <column name="shipping_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER"/>
     <column name="article_id" phpName="ArticleId" type="INTEGER" sqlType="int unsigned"/>

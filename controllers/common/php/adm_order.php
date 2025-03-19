@@ -18,7 +18,7 @@
 
 use Biblys\Service\CurrentSite;
 use Model\CountryQuery;
-use Model\ShippingFeeQuery;
+use Model\ShippingOptionQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -194,7 +194,7 @@ return function (Request $request, CurrentSite $currentSite): Response|RedirectR
     $country = $order->get("country");
     if ($country instanceof Country) {
         $countryModel = CountryQuery::create()->findPk($country->get("id"));
-        $fees = ShippingFeeQuery::getForCountryAndWeightAndAmountAndArticleCount(
+        $fees = ShippingOptionQuery::getForCountryAndWeightAndAmountAndArticleCount(
             $currentSite,
             $countryModel,
             $order->getTotalWeight(),

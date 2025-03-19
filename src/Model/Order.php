@@ -72,7 +72,7 @@ class Order extends BaseOrder
      */
     public function getTotalAmountWithShipping(): int
     {
-        $shippingCost = $this->getShippingFee()?->getFee() ?? 0;
+        $shippingCost = $this->getShippingOption()?->getFee() ?? 0;
         return $this->getTotalAmount() + $shippingCost;
     }
 

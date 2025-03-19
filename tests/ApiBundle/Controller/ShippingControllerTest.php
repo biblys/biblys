@@ -25,8 +25,8 @@ use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Exception;
 use Mockery;
-use Model\ShippingFee;
-use Model\ShippingFeeQuery;
+use Model\ShippingOption;
+use Model\ShippingOptionQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,43 +44,43 @@ class ShippingControllerTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $shippingFee1 = new ShippingFee();
+        $shippingFee1 = new ShippingOption();
         $shippingFee1->setSiteId($site->getId());
         $shippingFee1->setType("Type C");
         $shippingFee1->setZone("Z2");
         $shippingFee1->setFee(100);
         $shippingFee1->save();
-        $shippingFee2 = new ShippingFee();
+        $shippingFee2 = new ShippingOption();
         $shippingFee2->setSiteId($site->getId());
         $shippingFee2->setType("Type B");
         $shippingFee2->setZone("Z2");
         $shippingFee2->setFee(100);
         $shippingFee2->save();
-        $shippingFee3 = new ShippingFee();
+        $shippingFee3 = new ShippingOption();
         $shippingFee3->setSiteId($site->getId());
         $shippingFee3->setType("Type A");
         $shippingFee3->setZone("Z2");
         $shippingFee3->setFee(100);
         $shippingFee3->save();
-        $shippingFee4 = new ShippingFee();
+        $shippingFee4 = new ShippingOption();
         $shippingFee4->setSiteId($site->getId());
         $shippingFee4->setType("Type A");
         $shippingFee4->setZone("Z1");
         $shippingFee4->setFee(100);
         $shippingFee4->save();
-        $shippingFee5 = new ShippingFee();
+        $shippingFee5 = new ShippingOption();
         $shippingFee5->setSiteId($site->getId());
         $shippingFee5->setType("Type A");
         $shippingFee5->setZone("Z1");
         $shippingFee5->setFee(90);
         $shippingFee5->save();
-        $archivedShippingFee = new ShippingFee();
+        $archivedShippingFee = new ShippingOption();
         $archivedShippingFee->setSiteId($site->getId());
         $archivedShippingFee->archive();
         $archivedShippingFee->save();
 
         $otherSite = ModelFactory::createSite();
-        $otherSiteShippingFee = new ShippingFee();
+        $otherSiteShippingFee = new ShippingOption();
         $otherSiteShippingFee->setSiteId($otherSite->getId());
         $otherSiteShippingFee->save();
         $controller = new ShippingController();
@@ -150,7 +150,7 @@ class ShippingControllerTest extends TestCase
         $this->assertEquals(76, $fee["max_amount"]);
         $this->assertEquals(90, $fee["max_articles"]);
         $this->assertEquals("Expedition sous 72h", $fee["info"]);
-        $createdFee = ShippingFeeQuery::create()->findPk($fee["id"]);
+        $createdFee = ShippingOptionQuery::create()->findPk($fee["id"]);
         $this->assertEquals(
             1,
             $createdFee->getSiteId(),
