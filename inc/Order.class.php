@@ -121,13 +121,15 @@ class Order extends Entity
     /**
      * Create Payplug payment using PHP SDK
      * @return {string} the link
+     * @throws \Payplug\Exception\ConfigurationNotSetException
      */
     public function createPayplugPayment()
     {
         
         $config = LegacyCodeHelper::getGlobalConfig();
-
         $request = LegacyCodeHelper::getGlobalRequest();
+        $globalSite = LegacyCodeHelper::getGlobalSite();
+        $urlGenerator = LegacyCodeHelper::getGlobalUrlGenerator();
 
         $payplug = $config->get('payplug');
         if (!$payplug) {
@@ -174,14 +176,16 @@ class Order extends Entity
         $shipping["delivery_type"] = "BILLING";
 
         try {
+            $returnUrl = $urlGenerator->generate("legacy_order", ["url" => $this->get("url")]);
+            $cancelUrl = $urlGenerator->generate("payment_pay", ["slug" => $this->get("url")]);
             $response = Payplug\Payment::create([
                 'amount'            => $total_amount,
                 'currency'          => 'EUR',
                 'billing'           => $billing,
                 'shipping'          => $shipping,
                 'hosted_payment'    => [
-                    'return_url'        => 'http://'.$_SERVER["HTTP_HOST"].'/order/'.$this->get('url').'?payed=1',
-                    'cancel_url'        => 'http://'.$_SERVER["HTTP_HOST"].'/payment/'.$this->get('url')
+                    'return_url'        => "https://{$globalSite->get("domain")}$returnUrl",
+                    'cancel_url'        => "https://{$globalSite->get("domain")}$cancelUrl"
                 ],
                 'notification_url'  => $notification_url,
                 'metadata'          => [

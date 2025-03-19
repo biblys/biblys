@@ -459,6 +459,11 @@ payments_index:
   methods: GET
   controller: AppBundle\Controller\PaymentController::index
 
+payment_pay:
+  path: /order/{slug}/pay
+  methods: GET
+  controller: AppBundle\Controller\PaymentController::selectMethodAction
+
 payment_stripe_webhook:
   path: /payment/stripe-webhook
   controller: AppBundle\Controller\PaymentController::stripeWebhookAction
