@@ -7,14 +7,14 @@ use \Exception;
 use \PDO;
 use Model\Country as ChildCountry;
 use Model\CountryQuery as ChildCountryQuery;
-use Model\Order as ChildOrder;
-use Model\OrderQuery as ChildOrderQuery;
+use Model\ShippingOption as ChildShippingOption;
+use Model\ShippingOptionQuery as ChildShippingOptionQuery;
 use Model\ShippingZone as ChildShippingZone;
 use Model\ShippingZoneQuery as ChildShippingZoneQuery;
 use Model\ShippingZonesCountries as ChildShippingZonesCountries;
 use Model\ShippingZonesCountriesQuery as ChildShippingZonesCountriesQuery;
-use Model\Map\CountryTableMap;
-use Model\Map\OrderTableMap;
+use Model\Map\ShippingOptionTableMap;
+use Model\Map\ShippingZoneTableMap;
 use Model\Map\ShippingZonesCountriesTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -31,20 +31,20 @@ use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
 
 /**
- * Base class that represents a row from the 'countries' table.
+ * Base class that represents a row from the 'shipping_zones' table.
  *
  *
  *
  * @package    propel.generator.Model.Base
  */
-abstract class Country implements ActiveRecordInterface
+abstract class ShippingZone implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      *
      * @var string
      */
-    public const TABLE_MAP = '\\Model\\Map\\CountryTableMap';
+    public const TABLE_MAP = '\\Model\\Map\\ShippingZoneTableMap';
 
 
     /**
@@ -74,60 +74,46 @@ abstract class Country implements ActiveRecordInterface
     protected $virtualColumns = [];
 
     /**
-     * The value for the country_id field.
+     * The value for the id field.
      *
      * @var        int
      */
-    protected $country_id;
+    protected $id;
 
     /**
-     * The value for the country_code field.
+     * The value for the name field.
+     *
+     * @var        string
+     */
+    protected $name;
+
+    /**
+     * The value for the description field.
      *
      * @var        string|null
      */
-    protected $country_code;
+    protected $description;
 
     /**
-     * The value for the country_name field.
-     *
-     * @var        string|null
-     */
-    protected $country_name;
-
-    /**
-     * The value for the country_name_en field.
-     *
-     * @var        string|null
-     */
-    protected $country_name_en;
-
-    /**
-     * The value for the shipping_zone field.
-     *
-     * @var        string|null
-     */
-    protected $shipping_zone;
-
-    /**
-     * The value for the country_created field.
+     * The value for the created_at field.
      *
      * @var        DateTime|null
      */
-    protected $country_created;
+    protected $created_at;
 
     /**
-     * The value for the country_updated field.
+     * The value for the updated_at field.
      *
      * @var        DateTime|null
      */
-    protected $country_updated;
+    protected $updated_at;
 
     /**
-     * @var        ObjectCollection|ChildOrder[] Collection to store aggregation of ChildOrder objects.
-     * @phpstan-var ObjectCollection&\Traversable<ChildOrder> Collection to store aggregation of ChildOrder objects.
+     * @var        ObjectCollection|ChildShippingOption[] Collection to store aggregation of ChildShippingOption objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildShippingOption> Collection to store aggregation of ChildShippingOption objects.
      */
-    protected $collOrders;
-    protected $collOrdersPartial;
+    protected $collShippingOptions;
+    protected $collShippingOptionsPartial;
 
     /**
      * @var        ObjectCollection|ChildShippingZonesCountries[] Collection to store aggregation of ChildShippingZonesCountries objects.
@@ -137,15 +123,15 @@ abstract class Country implements ActiveRecordInterface
     protected $collShippingZonesCountriessPartial;
 
     /**
-     * @var        ObjectCollection|ChildShippingZone[] Cross Collection to store aggregation of ChildShippingZone objects.
-     * @phpstan-var ObjectCollection&\Traversable<ChildShippingZone> Cross Collection to store aggregation of ChildShippingZone objects.
+     * @var        ObjectCollection|ChildCountry[] Cross Collection to store aggregation of ChildCountry objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildCountry> Cross Collection to store aggregation of ChildCountry objects.
      */
-    protected $collShippingZones;
+    protected $collCountries;
 
     /**
      * @var bool
      */
-    protected $collShippingZonesPartial;
+    protected $collCountriesPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -157,17 +143,17 @@ abstract class Country implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildShippingZone[]
-     * @phpstan-var ObjectCollection&\Traversable<ChildShippingZone>
+     * @var ObjectCollection|ChildCountry[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildCountry>
      */
-    protected $shippingZonesScheduledForDeletion = null;
+    protected $countriesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildOrder[]
-     * @phpstan-var ObjectCollection&\Traversable<ChildOrder>
+     * @var ObjectCollection|ChildShippingOption[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildShippingOption>
      */
-    protected $ordersScheduledForDeletion = null;
+    protected $shippingOptionsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -177,7 +163,7 @@ abstract class Country implements ActiveRecordInterface
     protected $shippingZonesCountriessScheduledForDeletion = null;
 
     /**
-     * Initializes internal state of Model\Base\Country object.
+     * Initializes internal state of Model\Base\ShippingZone object.
      */
     public function __construct()
     {
@@ -270,9 +256,9 @@ abstract class Country implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Country</code> instance.  If
-     * <code>obj</code> is an instance of <code>Country</code>, delegates to
-     * <code>equals(Country)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>ShippingZone</code> instance.  If
+     * <code>obj</code> is an instance of <code>ShippingZone</code>, delegates to
+     * <code>equals(ShippingZone)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param mixed $obj The object to compare to.
      * @return bool Whether equal to the object specified.
@@ -403,57 +389,37 @@ abstract class Country implements ActiveRecordInterface
     }
 
     /**
-     * Get the [country_id] column value.
+     * Get the [id] column value.
      *
      * @return int
      */
     public function getId()
     {
-        return $this->country_id;
+        return $this->id;
     }
 
     /**
-     * Get the [country_code] column value.
+     * Get the [name] column value.
      *
-     * @return string|null
-     */
-    public function getCode()
-    {
-        return $this->country_code;
-    }
-
-    /**
-     * Get the [country_name] column value.
-     *
-     * @return string|null
+     * @return string
      */
     public function getName()
     {
-        return $this->country_name;
+        return $this->name;
     }
 
     /**
-     * Get the [country_name_en] column value.
+     * Get the [description] column value.
      *
      * @return string|null
      */
-    public function getNameEn()
+    public function getDescription()
     {
-        return $this->country_name_en;
+        return $this->description;
     }
 
     /**
-     * Get the [shipping_zone] column value.
-     *
-     * @return string|null
-     */
-    public function getShippingZoneCode()
-    {
-        return $this->shipping_zone;
-    }
-
-    /**
-     * Get the [optionally formatted] temporal [country_created] column value.
+     * Get the [optionally formatted] temporal [created_at] column value.
      *
      *
      * @param string|null $format The date/time format string (either date()-style or strftime()-style).
@@ -468,14 +434,14 @@ abstract class Country implements ActiveRecordInterface
     public function getCreatedAt($format = null)
     {
         if ($format === null) {
-            return $this->country_created;
+            return $this->created_at;
         } else {
-            return $this->country_created instanceof \DateTimeInterface ? $this->country_created->format($format) : null;
+            return $this->created_at instanceof \DateTimeInterface ? $this->created_at->format($format) : null;
         }
     }
 
     /**
-     * Get the [optionally formatted] temporal [country_updated] column value.
+     * Get the [optionally formatted] temporal [updated_at] column value.
      *
      *
      * @param string|null $format The date/time format string (either date()-style or strftime()-style).
@@ -490,14 +456,14 @@ abstract class Country implements ActiveRecordInterface
     public function getUpdatedAt($format = null)
     {
         if ($format === null) {
-            return $this->country_updated;
+            return $this->updated_at;
         } else {
-            return $this->country_updated instanceof \DateTimeInterface ? $this->country_updated->format($format) : null;
+            return $this->updated_at instanceof \DateTimeInterface ? $this->updated_at->format($format) : null;
         }
     }
 
     /**
-     * Set the value of [country_id] column.
+     * Set the value of [id] column.
      *
      * @param int $v New value
      * @return $this The current object (for fluent API support)
@@ -508,38 +474,18 @@ abstract class Country implements ActiveRecordInterface
             $v = (int) $v;
         }
 
-        if ($this->country_id !== $v) {
-            $this->country_id = $v;
-            $this->modifiedColumns[CountryTableMap::COL_COUNTRY_ID] = true;
+        if ($this->id !== $v) {
+            $this->id = $v;
+            $this->modifiedColumns[ShippingZoneTableMap::COL_ID] = true;
         }
 
         return $this;
     }
 
     /**
-     * Set the value of [country_code] column.
+     * Set the value of [name] column.
      *
-     * @param string|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setCode($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->country_code !== $v) {
-            $this->country_code = $v;
-            $this->modifiedColumns[CountryTableMap::COL_COUNTRY_CODE] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [country_name] column.
-     *
-     * @param string|null $v New value
+     * @param string $v New value
      * @return $this The current object (for fluent API support)
      */
     public function setName($v)
@@ -548,56 +494,36 @@ abstract class Country implements ActiveRecordInterface
             $v = (string) $v;
         }
 
-        if ($this->country_name !== $v) {
-            $this->country_name = $v;
-            $this->modifiedColumns[CountryTableMap::COL_COUNTRY_NAME] = true;
+        if ($this->name !== $v) {
+            $this->name = $v;
+            $this->modifiedColumns[ShippingZoneTableMap::COL_NAME] = true;
         }
 
         return $this;
     }
 
     /**
-     * Set the value of [country_name_en] column.
+     * Set the value of [description] column.
      *
      * @param string|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setNameEn($v)
+    public function setDescription($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->country_name_en !== $v) {
-            $this->country_name_en = $v;
-            $this->modifiedColumns[CountryTableMap::COL_COUNTRY_NAME_EN] = true;
+        if ($this->description !== $v) {
+            $this->description = $v;
+            $this->modifiedColumns[ShippingZoneTableMap::COL_DESCRIPTION] = true;
         }
 
         return $this;
     }
 
     /**
-     * Set the value of [shipping_zone] column.
-     *
-     * @param string|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setShippingZoneCode($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->shipping_zone !== $v) {
-            $this->shipping_zone = $v;
-            $this->modifiedColumns[CountryTableMap::COL_SHIPPING_ZONE] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Sets the value of [country_created] column to a normalized version of the date/time value specified.
+     * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
@@ -606,10 +532,10 @@ abstract class Country implements ActiveRecordInterface
     public function setCreatedAt($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->country_created !== null || $dt !== null) {
-            if ($this->country_created === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->country_created->format("Y-m-d H:i:s.u")) {
-                $this->country_created = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[CountryTableMap::COL_COUNTRY_CREATED] = true;
+        if ($this->created_at !== null || $dt !== null) {
+            if ($this->created_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->created_at->format("Y-m-d H:i:s.u")) {
+                $this->created_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[ShippingZoneTableMap::COL_CREATED_AT] = true;
             }
         } // if either are not null
 
@@ -617,7 +543,7 @@ abstract class Country implements ActiveRecordInterface
     }
 
     /**
-     * Sets the value of [country_updated] column to a normalized version of the date/time value specified.
+     * Sets the value of [updated_at] column to a normalized version of the date/time value specified.
      *
      * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
@@ -626,10 +552,10 @@ abstract class Country implements ActiveRecordInterface
     public function setUpdatedAt($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->country_updated !== null || $dt !== null) {
-            if ($this->country_updated === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->country_updated->format("Y-m-d H:i:s.u")) {
-                $this->country_updated = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[CountryTableMap::COL_COUNTRY_UPDATED] = true;
+        if ($this->updated_at !== null || $dt !== null) {
+            if ($this->updated_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->updated_at->format("Y-m-d H:i:s.u")) {
+                $this->updated_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[ShippingZoneTableMap::COL_UPDATED_AT] = true;
             }
         } // if either are not null
 
@@ -672,32 +598,26 @@ abstract class Country implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : CountryTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->country_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : ShippingZoneTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : CountryTableMap::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->country_code = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : ShippingZoneTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->name = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : CountryTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->country_name = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : ShippingZoneTableMap::translateFieldName('Description', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->description = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : CountryTableMap::translateFieldName('NameEn', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->country_name_en = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : CountryTableMap::translateFieldName('ShippingZoneCode', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->shipping_zone = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : CountryTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : ShippingZoneTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->country_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : CountryTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : ShippingZoneTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->country_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->updated_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
             $this->resetModified();
             $this->setNew(false);
@@ -706,10 +626,10 @@ abstract class Country implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = CountryTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = ShippingZoneTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\Model\\Country'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\Model\\ShippingZone'), 0, $e);
         }
     }
 
@@ -752,13 +672,13 @@ abstract class Country implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(CountryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(ShippingZoneTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildCountryQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildShippingZoneQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -768,11 +688,11 @@ abstract class Country implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->collOrders = null;
+            $this->collShippingOptions = null;
 
             $this->collShippingZonesCountriess = null;
 
-            $this->collShippingZones = null;
+            $this->collCountries = null;
         } // if (deep)
     }
 
@@ -782,8 +702,8 @@ abstract class Country implements ActiveRecordInterface
      * @param ConnectionInterface $con
      * @return void
      * @throws \Propel\Runtime\Exception\PropelException
-     * @see Country::setDeleted()
-     * @see Country::isDeleted()
+     * @see ShippingZone::setDeleted()
+     * @see ShippingZone::isDeleted()
      */
     public function delete(?ConnectionInterface $con = null): void
     {
@@ -792,11 +712,11 @@ abstract class Country implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(CountryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(ShippingZoneTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildCountryQuery::create()
+            $deleteQuery = ChildShippingZoneQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -831,7 +751,7 @@ abstract class Country implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(CountryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(ShippingZoneTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -842,16 +762,16 @@ abstract class Country implements ActiveRecordInterface
                 // timestampable behavior
                 $time = time();
                 $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
-                if (!$this->isColumnModified(CountryTableMap::COL_COUNTRY_CREATED)) {
+                if (!$this->isColumnModified(ShippingZoneTableMap::COL_CREATED_AT)) {
                     $this->setCreatedAt($highPrecision);
                 }
-                if (!$this->isColumnModified(CountryTableMap::COL_COUNTRY_UPDATED)) {
+                if (!$this->isColumnModified(ShippingZoneTableMap::COL_UPDATED_AT)) {
                     $this->setUpdatedAt($highPrecision);
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(CountryTableMap::COL_COUNTRY_UPDATED)) {
+                if ($this->isModified() && !$this->isColumnModified(ShippingZoneTableMap::COL_UPDATED_AT)) {
                     $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
                 }
             }
@@ -863,7 +783,7 @@ abstract class Country implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                CountryTableMap::addInstanceToPool($this);
+                ShippingZoneTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -900,14 +820,14 @@ abstract class Country implements ActiveRecordInterface
                 $this->resetModified();
             }
 
-            if ($this->shippingZonesScheduledForDeletion !== null) {
-                if (!$this->shippingZonesScheduledForDeletion->isEmpty()) {
+            if ($this->countriesScheduledForDeletion !== null) {
+                if (!$this->countriesScheduledForDeletion->isEmpty()) {
                     $pks = [];
-                    foreach ($this->shippingZonesScheduledForDeletion as $entry) {
+                    foreach ($this->countriesScheduledForDeletion as $entry) {
                         $entryPk = [];
 
-                        $entryPk[1] = $this->getId();
-                        $entryPk[0] = $entry->getId();
+                        $entryPk[0] = $this->getId();
+                        $entryPk[1] = $entry->getId();
                         $pks[] = $entryPk;
                     }
 
@@ -915,32 +835,32 @@ abstract class Country implements ActiveRecordInterface
                         ->filterByPrimaryKeys($pks)
                         ->delete($con);
 
-                    $this->shippingZonesScheduledForDeletion = null;
+                    $this->countriesScheduledForDeletion = null;
                 }
 
             }
 
-            if ($this->collShippingZones) {
-                foreach ($this->collShippingZones as $shippingZone) {
-                    if (!$shippingZone->isDeleted() && ($shippingZone->isNew() || $shippingZone->isModified())) {
-                        $shippingZone->save($con);
+            if ($this->collCountries) {
+                foreach ($this->collCountries as $country) {
+                    if (!$country->isDeleted() && ($country->isNew() || $country->isModified())) {
+                        $country->save($con);
                     }
                 }
             }
 
 
-            if ($this->ordersScheduledForDeletion !== null) {
-                if (!$this->ordersScheduledForDeletion->isEmpty()) {
-                    foreach ($this->ordersScheduledForDeletion as $order) {
+            if ($this->shippingOptionsScheduledForDeletion !== null) {
+                if (!$this->shippingOptionsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->shippingOptionsScheduledForDeletion as $shippingOption) {
                         // need to save related object because we set the relation to null
-                        $order->save($con);
+                        $shippingOption->save($con);
                     }
-                    $this->ordersScheduledForDeletion = null;
+                    $this->shippingOptionsScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collOrders !== null) {
-                foreach ($this->collOrders as $referrerFK) {
+            if ($this->collShippingOptions !== null) {
+                foreach ($this->collShippingOptions as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -984,36 +904,30 @@ abstract class Country implements ActiveRecordInterface
         $modifiedColumns = [];
         $index = 0;
 
-        $this->modifiedColumns[CountryTableMap::COL_COUNTRY_ID] = true;
-        if (null !== $this->country_id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . CountryTableMap::COL_COUNTRY_ID . ')');
+        $this->modifiedColumns[ShippingZoneTableMap::COL_ID] = true;
+        if (null !== $this->id) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . ShippingZoneTableMap::COL_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'country_id';
+        if ($this->isColumnModified(ShippingZoneTableMap::COL_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_CODE)) {
-            $modifiedColumns[':p' . $index++]  = 'country_code';
+        if ($this->isColumnModified(ShippingZoneTableMap::COL_NAME)) {
+            $modifiedColumns[':p' . $index++]  = 'name';
         }
-        if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'country_name';
+        if ($this->isColumnModified(ShippingZoneTableMap::COL_DESCRIPTION)) {
+            $modifiedColumns[':p' . $index++]  = 'description';
         }
-        if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_NAME_EN)) {
-            $modifiedColumns[':p' . $index++]  = 'country_name_en';
+        if ($this->isColumnModified(ShippingZoneTableMap::COL_CREATED_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'created_at';
         }
-        if ($this->isColumnModified(CountryTableMap::COL_SHIPPING_ZONE)) {
-            $modifiedColumns[':p' . $index++]  = 'shipping_zone';
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_CREATED)) {
-            $modifiedColumns[':p' . $index++]  = 'country_created';
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_UPDATED)) {
-            $modifiedColumns[':p' . $index++]  = 'country_updated';
+        if ($this->isColumnModified(ShippingZoneTableMap::COL_UPDATED_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'updated_at';
         }
 
         $sql = sprintf(
-            'INSERT INTO countries (%s) VALUES (%s)',
+            'INSERT INTO shipping_zones (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -1022,32 +936,24 @@ abstract class Country implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'country_id':
-                        $stmt->bindValue($identifier, $this->country_id, PDO::PARAM_INT);
+                    case 'id':
+                        $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
 
                         break;
-                    case 'country_code':
-                        $stmt->bindValue($identifier, $this->country_code, PDO::PARAM_STR);
+                    case 'name':
+                        $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
 
                         break;
-                    case 'country_name':
-                        $stmt->bindValue($identifier, $this->country_name, PDO::PARAM_STR);
+                    case 'description':
+                        $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
 
                         break;
-                    case 'country_name_en':
-                        $stmt->bindValue($identifier, $this->country_name_en, PDO::PARAM_STR);
+                    case 'created_at':
+                        $stmt->bindValue($identifier, $this->created_at ? $this->created_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
 
                         break;
-                    case 'shipping_zone':
-                        $stmt->bindValue($identifier, $this->shipping_zone, PDO::PARAM_STR);
-
-                        break;
-                    case 'country_created':
-                        $stmt->bindValue($identifier, $this->country_created ? $this->country_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-
-                        break;
-                    case 'country_updated':
-                        $stmt->bindValue($identifier, $this->country_updated ? $this->country_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                    case 'updated_at':
+                        $stmt->bindValue($identifier, $this->updated_at ? $this->updated_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
 
                         break;
                 }
@@ -1096,7 +1002,7 @@ abstract class Country implements ActiveRecordInterface
      */
     public function getByName(string $name, string $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = CountryTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = ShippingZoneTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1116,21 +1022,15 @@ abstract class Country implements ActiveRecordInterface
                 return $this->getId();
 
             case 1:
-                return $this->getCode();
-
-            case 2:
                 return $this->getName();
 
+            case 2:
+                return $this->getDescription();
+
             case 3:
-                return $this->getNameEn();
-
-            case 4:
-                return $this->getShippingZoneCode();
-
-            case 5:
                 return $this->getCreatedAt();
 
-            case 6:
+            case 4:
                 return $this->getUpdatedAt();
 
             default:
@@ -1155,26 +1055,24 @@ abstract class Country implements ActiveRecordInterface
      */
     public function toArray(string $keyType = TableMap::TYPE_PHPNAME, bool $includeLazyLoadColumns = true, array $alreadyDumpedObjects = [], bool $includeForeignObjects = false): array
     {
-        if (isset($alreadyDumpedObjects['Country'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['ShippingZone'][$this->hashCode()])) {
             return ['*RECURSION*'];
         }
-        $alreadyDumpedObjects['Country'][$this->hashCode()] = true;
-        $keys = CountryTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['ShippingZone'][$this->hashCode()] = true;
+        $keys = ShippingZoneTableMap::getFieldNames($keyType);
         $result = [
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getCode(),
-            $keys[2] => $this->getName(),
-            $keys[3] => $this->getNameEn(),
-            $keys[4] => $this->getShippingZoneCode(),
-            $keys[5] => $this->getCreatedAt(),
-            $keys[6] => $this->getUpdatedAt(),
+            $keys[1] => $this->getName(),
+            $keys[2] => $this->getDescription(),
+            $keys[3] => $this->getCreatedAt(),
+            $keys[4] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[5]] instanceof \DateTimeInterface) {
-            $result[$keys[5]] = $result[$keys[5]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[3]] instanceof \DateTimeInterface) {
+            $result[$keys[3]] = $result[$keys[3]]->format('Y-m-d H:i:s.u');
         }
 
-        if ($result[$keys[6]] instanceof \DateTimeInterface) {
-            $result[$keys[6]] = $result[$keys[6]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[4]] instanceof \DateTimeInterface) {
+            $result[$keys[4]] = $result[$keys[4]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1183,20 +1081,20 @@ abstract class Country implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->collOrders) {
+            if (null !== $this->collShippingOptions) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'orders';
+                        $key = 'shippingOptions';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'orderss';
+                        $key = 'shippings';
                         break;
                     default:
-                        $key = 'Orders';
+                        $key = 'ShippingOptions';
                 }
 
-                $result[$key] = $this->collOrders->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collShippingOptions->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collShippingZonesCountriess) {
 
@@ -1231,7 +1129,7 @@ abstract class Country implements ActiveRecordInterface
      */
     public function setByName(string $name, $value, string $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = CountryTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = ShippingZoneTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
 
@@ -1253,21 +1151,15 @@ abstract class Country implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setCode($value);
-                break;
-            case 2:
                 $this->setName($value);
                 break;
+            case 2:
+                $this->setDescription($value);
+                break;
             case 3:
-                $this->setNameEn($value);
-                break;
-            case 4:
-                $this->setShippingZoneCode($value);
-                break;
-            case 5:
                 $this->setCreatedAt($value);
                 break;
-            case 6:
+            case 4:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1294,28 +1186,22 @@ abstract class Country implements ActiveRecordInterface
      */
     public function fromArray(array $arr, string $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = CountryTableMap::getFieldNames($keyType);
+        $keys = ShippingZoneTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setCode($arr[$keys[1]]);
+            $this->setName($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setName($arr[$keys[2]]);
+            $this->setDescription($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setNameEn($arr[$keys[3]]);
+            $this->setCreatedAt($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setShippingZoneCode($arr[$keys[4]]);
-        }
-        if (array_key_exists($keys[5], $arr)) {
-            $this->setCreatedAt($arr[$keys[5]]);
-        }
-        if (array_key_exists($keys[6], $arr)) {
-            $this->setUpdatedAt($arr[$keys[6]]);
+            $this->setUpdatedAt($arr[$keys[4]]);
         }
 
         return $this;
@@ -1358,28 +1244,22 @@ abstract class Country implements ActiveRecordInterface
      */
     public function buildCriteria(): Criteria
     {
-        $criteria = new Criteria(CountryTableMap::DATABASE_NAME);
+        $criteria = new Criteria(ShippingZoneTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_ID)) {
-            $criteria->add(CountryTableMap::COL_COUNTRY_ID, $this->country_id);
+        if ($this->isColumnModified(ShippingZoneTableMap::COL_ID)) {
+            $criteria->add(ShippingZoneTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_CODE)) {
-            $criteria->add(CountryTableMap::COL_COUNTRY_CODE, $this->country_code);
+        if ($this->isColumnModified(ShippingZoneTableMap::COL_NAME)) {
+            $criteria->add(ShippingZoneTableMap::COL_NAME, $this->name);
         }
-        if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_NAME)) {
-            $criteria->add(CountryTableMap::COL_COUNTRY_NAME, $this->country_name);
+        if ($this->isColumnModified(ShippingZoneTableMap::COL_DESCRIPTION)) {
+            $criteria->add(ShippingZoneTableMap::COL_DESCRIPTION, $this->description);
         }
-        if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_NAME_EN)) {
-            $criteria->add(CountryTableMap::COL_COUNTRY_NAME_EN, $this->country_name_en);
+        if ($this->isColumnModified(ShippingZoneTableMap::COL_CREATED_AT)) {
+            $criteria->add(ShippingZoneTableMap::COL_CREATED_AT, $this->created_at);
         }
-        if ($this->isColumnModified(CountryTableMap::COL_SHIPPING_ZONE)) {
-            $criteria->add(CountryTableMap::COL_SHIPPING_ZONE, $this->shipping_zone);
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_CREATED)) {
-            $criteria->add(CountryTableMap::COL_COUNTRY_CREATED, $this->country_created);
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_UPDATED)) {
-            $criteria->add(CountryTableMap::COL_COUNTRY_UPDATED, $this->country_updated);
+        if ($this->isColumnModified(ShippingZoneTableMap::COL_UPDATED_AT)) {
+            $criteria->add(ShippingZoneTableMap::COL_UPDATED_AT, $this->updated_at);
         }
 
         return $criteria;
@@ -1397,8 +1277,8 @@ abstract class Country implements ActiveRecordInterface
      */
     public function buildPkeyCriteria(): Criteria
     {
-        $criteria = ChildCountryQuery::create();
-        $criteria->add(CountryTableMap::COL_COUNTRY_ID, $this->country_id);
+        $criteria = ChildShippingZoneQuery::create();
+        $criteria->add(ShippingZoneTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -1435,7 +1315,7 @@ abstract class Country implements ActiveRecordInterface
     }
 
     /**
-     * Generic method to set the primary key (country_id column).
+     * Generic method to set the primary key (id column).
      *
      * @param int|null $key Primary key.
      * @return void
@@ -1461,7 +1341,7 @@ abstract class Country implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of \Model\Country (or compatible) type.
+     * @param object $copyObj An object of \Model\ShippingZone (or compatible) type.
      * @param bool $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param bool $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws \Propel\Runtime\Exception\PropelException
@@ -1469,10 +1349,8 @@ abstract class Country implements ActiveRecordInterface
      */
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
-        $copyObj->setCode($this->getCode());
         $copyObj->setName($this->getName());
-        $copyObj->setNameEn($this->getNameEn());
-        $copyObj->setShippingZoneCode($this->getShippingZoneCode());
+        $copyObj->setDescription($this->getDescription());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
 
@@ -1481,9 +1359,9 @@ abstract class Country implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
-            foreach ($this->getOrders() as $relObj) {
+            foreach ($this->getShippingOptions() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addOrder($relObj->copy($deepCopy));
+                    $copyObj->addShippingOption($relObj->copy($deepCopy));
                 }
             }
 
@@ -1510,7 +1388,7 @@ abstract class Country implements ActiveRecordInterface
      * objects.
      *
      * @param bool $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \Model\Country Clone of current object.
+     * @return \Model\ShippingZone Clone of current object.
      * @throws \Propel\Runtime\Exception\PropelException
      */
     public function copy(bool $deepCopy = false)
@@ -1534,8 +1412,8 @@ abstract class Country implements ActiveRecordInterface
      */
     public function initRelation($relationName): void
     {
-        if ('Order' === $relationName) {
-            $this->initOrders();
+        if ('ShippingOption' === $relationName) {
+            $this->initShippingOptions();
             return;
         }
         if ('ShippingZonesCountries' === $relationName) {
@@ -1545,35 +1423,35 @@ abstract class Country implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collOrders collection
+     * Clears out the collShippingOptions collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return $this
-     * @see addOrders()
+     * @see addShippingOptions()
      */
-    public function clearOrders()
+    public function clearShippingOptions()
     {
-        $this->collOrders = null; // important to set this to NULL since that means it is uninitialized
+        $this->collShippingOptions = null; // important to set this to NULL since that means it is uninitialized
 
         return $this;
     }
 
     /**
-     * Reset is the collOrders collection loaded partially.
+     * Reset is the collShippingOptions collection loaded partially.
      *
      * @return void
      */
-    public function resetPartialOrders($v = true): void
+    public function resetPartialShippingOptions($v = true): void
     {
-        $this->collOrdersPartial = $v;
+        $this->collShippingOptionsPartial = $v;
     }
 
     /**
-     * Initializes the collOrders collection.
+     * Initializes the collShippingOptions collection.
      *
-     * By default this just sets the collOrders collection to an empty array (like clearcollOrders());
+     * By default this just sets the collShippingOptions collection to an empty array (like clearcollShippingOptions());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1582,172 +1460,172 @@ abstract class Country implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initOrders(bool $overrideExisting = true): void
+    public function initShippingOptions(bool $overrideExisting = true): void
     {
-        if (null !== $this->collOrders && !$overrideExisting) {
+        if (null !== $this->collShippingOptions && !$overrideExisting) {
             return;
         }
 
-        $collectionClassName = OrderTableMap::getTableMap()->getCollectionClassName();
+        $collectionClassName = ShippingOptionTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collOrders = new $collectionClassName;
-        $this->collOrders->setModel('\Model\Order');
+        $this->collShippingOptions = new $collectionClassName;
+        $this->collShippingOptions->setModel('\Model\ShippingOption');
     }
 
     /**
-     * Gets an array of ChildOrder objects which contain a foreign key that references this object.
+     * Gets an array of ChildShippingOption objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildCountry is new, it will return
+     * If this ChildShippingZone is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildOrder[] List of ChildOrder objects
-     * @phpstan-return ObjectCollection&\Traversable<ChildOrder> List of ChildOrder objects
+     * @return ObjectCollection|ChildShippingOption[] List of ChildShippingOption objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildShippingOption> List of ChildShippingOption objects
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function getOrders(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    public function getShippingOptions(?Criteria $criteria = null, ?ConnectionInterface $con = null)
     {
-        $partial = $this->collOrdersPartial && !$this->isNew();
-        if (null === $this->collOrders || null !== $criteria || $partial) {
+        $partial = $this->collShippingOptionsPartial && !$this->isNew();
+        if (null === $this->collShippingOptions || null !== $criteria || $partial) {
             if ($this->isNew()) {
                 // return empty collection
-                if (null === $this->collOrders) {
-                    $this->initOrders();
+                if (null === $this->collShippingOptions) {
+                    $this->initShippingOptions();
                 } else {
-                    $collectionClassName = OrderTableMap::getTableMap()->getCollectionClassName();
+                    $collectionClassName = ShippingOptionTableMap::getTableMap()->getCollectionClassName();
 
-                    $collOrders = new $collectionClassName;
-                    $collOrders->setModel('\Model\Order');
+                    $collShippingOptions = new $collectionClassName;
+                    $collShippingOptions->setModel('\Model\ShippingOption');
 
-                    return $collOrders;
+                    return $collShippingOptions;
                 }
             } else {
-                $collOrders = ChildOrderQuery::create(null, $criteria)
-                    ->filterByCountry($this)
+                $collShippingOptions = ChildShippingOptionQuery::create(null, $criteria)
+                    ->filterByShippingZone($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collOrdersPartial && count($collOrders)) {
-                        $this->initOrders(false);
+                    if (false !== $this->collShippingOptionsPartial && count($collShippingOptions)) {
+                        $this->initShippingOptions(false);
 
-                        foreach ($collOrders as $obj) {
-                            if (false == $this->collOrders->contains($obj)) {
-                                $this->collOrders->append($obj);
+                        foreach ($collShippingOptions as $obj) {
+                            if (false == $this->collShippingOptions->contains($obj)) {
+                                $this->collShippingOptions->append($obj);
                             }
                         }
 
-                        $this->collOrdersPartial = true;
+                        $this->collShippingOptionsPartial = true;
                     }
 
-                    return $collOrders;
+                    return $collShippingOptions;
                 }
 
-                if ($partial && $this->collOrders) {
-                    foreach ($this->collOrders as $obj) {
+                if ($partial && $this->collShippingOptions) {
+                    foreach ($this->collShippingOptions as $obj) {
                         if ($obj->isNew()) {
-                            $collOrders[] = $obj;
+                            $collShippingOptions[] = $obj;
                         }
                     }
                 }
 
-                $this->collOrders = $collOrders;
-                $this->collOrdersPartial = false;
+                $this->collShippingOptions = $collShippingOptions;
+                $this->collShippingOptionsPartial = false;
             }
         }
 
-        return $this->collOrders;
+        return $this->collShippingOptions;
     }
 
     /**
-     * Sets a collection of ChildOrder objects related by a one-to-many relationship
+     * Sets a collection of ChildShippingOption objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param Collection $orders A Propel collection.
+     * @param Collection $shippingOptions A Propel collection.
      * @param ConnectionInterface $con Optional connection object
      * @return $this The current object (for fluent API support)
      */
-    public function setOrders(Collection $orders, ?ConnectionInterface $con = null)
+    public function setShippingOptions(Collection $shippingOptions, ?ConnectionInterface $con = null)
     {
-        /** @var ChildOrder[] $ordersToDelete */
-        $ordersToDelete = $this->getOrders(new Criteria(), $con)->diff($orders);
+        /** @var ChildShippingOption[] $shippingOptionsToDelete */
+        $shippingOptionsToDelete = $this->getShippingOptions(new Criteria(), $con)->diff($shippingOptions);
 
 
-        $this->ordersScheduledForDeletion = $ordersToDelete;
+        $this->shippingOptionsScheduledForDeletion = $shippingOptionsToDelete;
 
-        foreach ($ordersToDelete as $orderRemoved) {
-            $orderRemoved->setCountry(null);
+        foreach ($shippingOptionsToDelete as $shippingOptionRemoved) {
+            $shippingOptionRemoved->setShippingZone(null);
         }
 
-        $this->collOrders = null;
-        foreach ($orders as $order) {
-            $this->addOrder($order);
+        $this->collShippingOptions = null;
+        foreach ($shippingOptions as $shippingOption) {
+            $this->addShippingOption($shippingOption);
         }
 
-        $this->collOrders = $orders;
-        $this->collOrdersPartial = false;
+        $this->collShippingOptions = $shippingOptions;
+        $this->collShippingOptionsPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related Order objects.
+     * Returns the number of related ShippingOption objects.
      *
      * @param Criteria $criteria
      * @param bool $distinct
      * @param ConnectionInterface $con
-     * @return int Count of related Order objects.
+     * @return int Count of related ShippingOption objects.
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function countOrders(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    public function countShippingOptions(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
     {
-        $partial = $this->collOrdersPartial && !$this->isNew();
-        if (null === $this->collOrders || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collOrders) {
+        $partial = $this->collShippingOptionsPartial && !$this->isNew();
+        if (null === $this->collShippingOptions || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collShippingOptions) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getOrders());
+                return count($this->getShippingOptions());
             }
 
-            $query = ChildOrderQuery::create(null, $criteria);
+            $query = ChildShippingOptionQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
 
             return $query
-                ->filterByCountry($this)
+                ->filterByShippingZone($this)
                 ->count($con);
         }
 
-        return count($this->collOrders);
+        return count($this->collShippingOptions);
     }
 
     /**
-     * Method called to associate a ChildOrder object to this object
-     * through the ChildOrder foreign key attribute.
+     * Method called to associate a ChildShippingOption object to this object
+     * through the ChildShippingOption foreign key attribute.
      *
-     * @param ChildOrder $l ChildOrder
+     * @param ChildShippingOption $l ChildShippingOption
      * @return $this The current object (for fluent API support)
      */
-    public function addOrder(ChildOrder $l)
+    public function addShippingOption(ChildShippingOption $l)
     {
-        if ($this->collOrders === null) {
-            $this->initOrders();
-            $this->collOrdersPartial = true;
+        if ($this->collShippingOptions === null) {
+            $this->initShippingOptions();
+            $this->collShippingOptionsPartial = true;
         }
 
-        if (!$this->collOrders->contains($l)) {
-            $this->doAddOrder($l);
+        if (!$this->collShippingOptions->contains($l)) {
+            $this->doAddShippingOption($l);
 
-            if ($this->ordersScheduledForDeletion and $this->ordersScheduledForDeletion->contains($l)) {
-                $this->ordersScheduledForDeletion->remove($this->ordersScheduledForDeletion->search($l));
+            if ($this->shippingOptionsScheduledForDeletion and $this->shippingOptionsScheduledForDeletion->contains($l)) {
+                $this->shippingOptionsScheduledForDeletion->remove($this->shippingOptionsScheduledForDeletion->search($l));
             }
         }
 
@@ -1755,136 +1633,32 @@ abstract class Country implements ActiveRecordInterface
     }
 
     /**
-     * @param ChildOrder $order The ChildOrder object to add.
+     * @param ChildShippingOption $shippingOption The ChildShippingOption object to add.
      */
-    protected function doAddOrder(ChildOrder $order): void
+    protected function doAddShippingOption(ChildShippingOption $shippingOption): void
     {
-        $this->collOrders[]= $order;
-        $order->setCountry($this);
+        $this->collShippingOptions[]= $shippingOption;
+        $shippingOption->setShippingZone($this);
     }
 
     /**
-     * @param ChildOrder $order The ChildOrder object to remove.
+     * @param ChildShippingOption $shippingOption The ChildShippingOption object to remove.
      * @return $this The current object (for fluent API support)
      */
-    public function removeOrder(ChildOrder $order)
+    public function removeShippingOption(ChildShippingOption $shippingOption)
     {
-        if ($this->getOrders()->contains($order)) {
-            $pos = $this->collOrders->search($order);
-            $this->collOrders->remove($pos);
-            if (null === $this->ordersScheduledForDeletion) {
-                $this->ordersScheduledForDeletion = clone $this->collOrders;
-                $this->ordersScheduledForDeletion->clear();
+        if ($this->getShippingOptions()->contains($shippingOption)) {
+            $pos = $this->collShippingOptions->search($shippingOption);
+            $this->collShippingOptions->remove($pos);
+            if (null === $this->shippingOptionsScheduledForDeletion) {
+                $this->shippingOptionsScheduledForDeletion = clone $this->collShippingOptions;
+                $this->shippingOptionsScheduledForDeletion->clear();
             }
-            $this->ordersScheduledForDeletion[]= $order;
-            $order->setCountry(null);
+            $this->shippingOptionsScheduledForDeletion[]= $shippingOption;
+            $shippingOption->setShippingZone(null);
         }
 
         return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Country is new, it will return
-     * an empty collection; or if this Country has previously
-     * been saved, it will retrieve related Orders from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Country.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param ConnectionInterface $con optional connection object
-     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildOrder[] List of ChildOrder objects
-     * @phpstan-return ObjectCollection&\Traversable<ChildOrder}> List of ChildOrder objects
-     */
-    public function getOrdersJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildOrderQuery::create(null, $criteria);
-        $query->joinWith('User', $joinBehavior);
-
-        return $this->getOrders($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Country is new, it will return
-     * an empty collection; or if this Country has previously
-     * been saved, it will retrieve related Orders from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Country.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param ConnectionInterface $con optional connection object
-     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildOrder[] List of ChildOrder objects
-     * @phpstan-return ObjectCollection&\Traversable<ChildOrder}> List of ChildOrder objects
-     */
-    public function getOrdersJoinCustomer(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildOrderQuery::create(null, $criteria);
-        $query->joinWith('Customer', $joinBehavior);
-
-        return $this->getOrders($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Country is new, it will return
-     * an empty collection; or if this Country has previously
-     * been saved, it will retrieve related Orders from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Country.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param ConnectionInterface $con optional connection object
-     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildOrder[] List of ChildOrder objects
-     * @phpstan-return ObjectCollection&\Traversable<ChildOrder}> List of ChildOrder objects
-     */
-    public function getOrdersJoinShippingOption(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildOrderQuery::create(null, $criteria);
-        $query->joinWith('ShippingOption', $joinBehavior);
-
-        return $this->getOrders($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Country is new, it will return
-     * an empty collection; or if this Country has previously
-     * been saved, it will retrieve related Orders from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Country.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param ConnectionInterface $con optional connection object
-     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildOrder[] List of ChildOrder objects
-     * @phpstan-return ObjectCollection&\Traversable<ChildOrder}> List of ChildOrder objects
-     */
-    public function getOrdersJoinSite(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildOrderQuery::create(null, $criteria);
-        $query->joinWith('Site', $joinBehavior);
-
-        return $this->getOrders($query, $con);
     }
 
     /**
@@ -1943,7 +1717,7 @@ abstract class Country implements ActiveRecordInterface
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildCountry is new, it will return
+     * If this ChildShippingZone is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
@@ -1970,7 +1744,7 @@ abstract class Country implements ActiveRecordInterface
                 }
             } else {
                 $collShippingZonesCountriess = ChildShippingZonesCountriesQuery::create(null, $criteria)
-                    ->filterByCountry($this)
+                    ->filterByShippingZone($this)
                     ->find($con);
 
                 if (null !== $criteria) {
@@ -2027,7 +1801,7 @@ abstract class Country implements ActiveRecordInterface
         $this->shippingZonesCountriessScheduledForDeletion = clone $shippingZonesCountriessToDelete;
 
         foreach ($shippingZonesCountriessToDelete as $shippingZonesCountriesRemoved) {
-            $shippingZonesCountriesRemoved->setCountry(null);
+            $shippingZonesCountriesRemoved->setShippingZone(null);
         }
 
         $this->collShippingZonesCountriess = null;
@@ -2068,7 +1842,7 @@ abstract class Country implements ActiveRecordInterface
             }
 
             return $query
-                ->filterByCountry($this)
+                ->filterByShippingZone($this)
                 ->count($con);
         }
 
@@ -2106,7 +1880,7 @@ abstract class Country implements ActiveRecordInterface
     protected function doAddShippingZonesCountries(ChildShippingZonesCountries $shippingZonesCountries): void
     {
         $this->collShippingZonesCountriess[]= $shippingZonesCountries;
-        $shippingZonesCountries->setCountry($this);
+        $shippingZonesCountries->setShippingZone($this);
     }
 
     /**
@@ -2123,7 +1897,7 @@ abstract class Country implements ActiveRecordInterface
                 $this->shippingZonesCountriessScheduledForDeletion->clear();
             }
             $this->shippingZonesCountriessScheduledForDeletion[]= clone $shippingZonesCountries;
-            $shippingZonesCountries->setCountry(null);
+            $shippingZonesCountries->setShippingZone(null);
         }
 
         return $this;
@@ -2133,13 +1907,13 @@ abstract class Country implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this Country is new, it will return
-     * an empty collection; or if this Country has previously
+     * Otherwise if this ShippingZone is new, it will return
+     * an empty collection; or if this ShippingZone has previously
      * been saved, it will retrieve related ShippingZonesCountriess from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in Country.
+     * actually need in ShippingZone.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param ConnectionInterface $con optional connection object
@@ -2147,193 +1921,193 @@ abstract class Country implements ActiveRecordInterface
      * @return ObjectCollection|ChildShippingZonesCountries[] List of ChildShippingZonesCountries objects
      * @phpstan-return ObjectCollection&\Traversable<ChildShippingZonesCountries}> List of ChildShippingZonesCountries objects
      */
-    public function getShippingZonesCountriessJoinShippingZone(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getShippingZonesCountriessJoinCountry(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildShippingZonesCountriesQuery::create(null, $criteria);
-        $query->joinWith('ShippingZone', $joinBehavior);
+        $query->joinWith('Country', $joinBehavior);
 
         return $this->getShippingZonesCountriess($query, $con);
     }
 
     /**
-     * Clears out the collShippingZones collection
+     * Clears out the collCountries collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addShippingZones()
+     * @see        addCountries()
      */
-    public function clearShippingZones()
+    public function clearCountries()
     {
-        $this->collShippingZones = null; // important to set this to NULL since that means it is uninitialized
+        $this->collCountries = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Initializes the collShippingZones crossRef collection.
+     * Initializes the collCountries crossRef collection.
      *
-     * By default this just sets the collShippingZones collection to an empty collection (like clearShippingZones());
+     * By default this just sets the collCountries collection to an empty collection (like clearCountries());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
      * @return void
      */
-    public function initShippingZones()
+    public function initCountries()
     {
         $collectionClassName = ShippingZonesCountriesTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collShippingZones = new $collectionClassName;
-        $this->collShippingZonesPartial = true;
-        $this->collShippingZones->setModel('\Model\ShippingZone');
+        $this->collCountries = new $collectionClassName;
+        $this->collCountriesPartial = true;
+        $this->collCountries->setModel('\Model\Country');
     }
 
     /**
-     * Checks if the collShippingZones collection is loaded.
+     * Checks if the collCountries collection is loaded.
      *
      * @return bool
      */
-    public function isShippingZonesLoaded(): bool
+    public function isCountriesLoaded(): bool
     {
-        return null !== $this->collShippingZones;
+        return null !== $this->collCountries;
     }
 
     /**
-     * Gets a collection of ChildShippingZone objects related by a many-to-many relationship
+     * Gets a collection of ChildCountry objects related by a many-to-many relationship
      * to the current object by way of the shipping_zones_countries cross-reference table.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildCountry is new, it will return
+     * If this ChildShippingZone is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param Criteria $criteria Optional query object to filter the query
      * @param ConnectionInterface $con Optional connection object
      *
-     * @return ObjectCollection|ChildShippingZone[] List of ChildShippingZone objects
-     * @phpstan-return ObjectCollection&\Traversable<ChildShippingZone> List of ChildShippingZone objects
+     * @return ObjectCollection|ChildCountry[] List of ChildCountry objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildCountry> List of ChildCountry objects
      */
-    public function getShippingZones(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    public function getCountries(?Criteria $criteria = null, ?ConnectionInterface $con = null)
     {
-        $partial = $this->collShippingZonesPartial && !$this->isNew();
-        if (null === $this->collShippingZones || null !== $criteria || $partial) {
+        $partial = $this->collCountriesPartial && !$this->isNew();
+        if (null === $this->collCountries || null !== $criteria || $partial) {
             if ($this->isNew()) {
                 // return empty collection
-                if (null === $this->collShippingZones) {
-                    $this->initShippingZones();
+                if (null === $this->collCountries) {
+                    $this->initCountries();
                 }
             } else {
 
-                $query = ChildShippingZoneQuery::create(null, $criteria)
-                    ->filterByCountry($this);
-                $collShippingZones = $query->find($con);
+                $query = ChildCountryQuery::create(null, $criteria)
+                    ->filterByShippingZone($this);
+                $collCountries = $query->find($con);
                 if (null !== $criteria) {
-                    return $collShippingZones;
+                    return $collCountries;
                 }
 
-                if ($partial && $this->collShippingZones) {
+                if ($partial && $this->collCountries) {
                     //make sure that already added objects gets added to the list of the database.
-                    foreach ($this->collShippingZones as $obj) {
-                        if (!$collShippingZones->contains($obj)) {
-                            $collShippingZones[] = $obj;
+                    foreach ($this->collCountries as $obj) {
+                        if (!$collCountries->contains($obj)) {
+                            $collCountries[] = $obj;
                         }
                     }
                 }
 
-                $this->collShippingZones = $collShippingZones;
-                $this->collShippingZonesPartial = false;
+                $this->collCountries = $collCountries;
+                $this->collCountriesPartial = false;
             }
         }
 
-        return $this->collShippingZones;
+        return $this->collCountries;
     }
 
     /**
-     * Sets a collection of ShippingZone objects related by a many-to-many relationship
+     * Sets a collection of Country objects related by a many-to-many relationship
      * to the current object by way of the shipping_zones_countries cross-reference table.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param Collection $shippingZones A Propel collection.
+     * @param Collection $countries A Propel collection.
      * @param ConnectionInterface $con Optional connection object
      * @return $this The current object (for fluent API support)
      */
-    public function setShippingZones(Collection $shippingZones, ?ConnectionInterface $con = null)
+    public function setCountries(Collection $countries, ?ConnectionInterface $con = null)
     {
-        $this->clearShippingZones();
-        $currentShippingZones = $this->getShippingZones();
+        $this->clearCountries();
+        $currentCountries = $this->getCountries();
 
-        $shippingZonesScheduledForDeletion = $currentShippingZones->diff($shippingZones);
+        $countriesScheduledForDeletion = $currentCountries->diff($countries);
 
-        foreach ($shippingZonesScheduledForDeletion as $toDelete) {
-            $this->removeShippingZone($toDelete);
+        foreach ($countriesScheduledForDeletion as $toDelete) {
+            $this->removeCountry($toDelete);
         }
 
-        foreach ($shippingZones as $shippingZone) {
-            if (!$currentShippingZones->contains($shippingZone)) {
-                $this->doAddShippingZone($shippingZone);
+        foreach ($countries as $country) {
+            if (!$currentCountries->contains($country)) {
+                $this->doAddCountry($country);
             }
         }
 
-        $this->collShippingZonesPartial = false;
-        $this->collShippingZones = $shippingZones;
+        $this->collCountriesPartial = false;
+        $this->collCountries = $countries;
 
         return $this;
     }
 
     /**
-     * Gets the number of ShippingZone objects related by a many-to-many relationship
+     * Gets the number of Country objects related by a many-to-many relationship
      * to the current object by way of the shipping_zones_countries cross-reference table.
      *
      * @param Criteria $criteria Optional query object to filter the query
      * @param bool $distinct Set to true to force count distinct
      * @param ConnectionInterface $con Optional connection object
      *
-     * @return int The number of related ShippingZone objects
+     * @return int The number of related Country objects
      */
-    public function countShippingZones(?Criteria $criteria = null, $distinct = false, ?ConnectionInterface $con = null): int
+    public function countCountries(?Criteria $criteria = null, $distinct = false, ?ConnectionInterface $con = null): int
     {
-        $partial = $this->collShippingZonesPartial && !$this->isNew();
-        if (null === $this->collShippingZones || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collShippingZones) {
+        $partial = $this->collCountriesPartial && !$this->isNew();
+        if (null === $this->collCountries || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCountries) {
                 return 0;
             } else {
 
                 if ($partial && !$criteria) {
-                    return count($this->getShippingZones());
+                    return count($this->getCountries());
                 }
 
-                $query = ChildShippingZoneQuery::create(null, $criteria);
+                $query = ChildCountryQuery::create(null, $criteria);
                 if ($distinct) {
                     $query->distinct();
                 }
 
                 return $query
-                    ->filterByCountry($this)
+                    ->filterByShippingZone($this)
                     ->count($con);
             }
         } else {
-            return count($this->collShippingZones);
+            return count($this->collCountries);
         }
     }
 
     /**
-     * Associate a ChildShippingZone to this object
+     * Associate a ChildCountry to this object
      * through the shipping_zones_countries cross reference table.
      *
-     * @param ChildShippingZone $shippingZone
-     * @return ChildCountry The current object (for fluent API support)
+     * @param ChildCountry $country
+     * @return ChildShippingZone The current object (for fluent API support)
      */
-    public function addShippingZone(ChildShippingZone $shippingZone)
+    public function addCountry(ChildCountry $country)
     {
-        if ($this->collShippingZones === null) {
-            $this->initShippingZones();
+        if ($this->collCountries === null) {
+            $this->initCountries();
         }
 
-        if (!$this->getShippingZones()->contains($shippingZone)) {
+        if (!$this->getCountries()->contains($country)) {
             // only add it if the **same** object is not already associated
-            $this->collShippingZones->push($shippingZone);
-            $this->doAddShippingZone($shippingZone);
+            $this->collCountries->push($country);
+            $this->doAddCountry($country);
         }
 
         return $this;
@@ -2341,58 +2115,58 @@ abstract class Country implements ActiveRecordInterface
 
     /**
      *
-     * @param ChildShippingZone $shippingZone
+     * @param ChildCountry $country
      */
-    protected function doAddShippingZone(ChildShippingZone $shippingZone)
+    protected function doAddCountry(ChildCountry $country)
     {
         $shippingZonesCountries = new ChildShippingZonesCountries();
 
-        $shippingZonesCountries->setShippingZone($shippingZone);
+        $shippingZonesCountries->setCountry($country);
 
-        $shippingZonesCountries->setCountry($this);
+        $shippingZonesCountries->setShippingZone($this);
 
         $this->addShippingZonesCountries($shippingZonesCountries);
 
         // set the back reference to this object directly as using provided method either results
         // in endless loop or in multiple relations
-        if (!$shippingZone->isCountriesLoaded()) {
-            $shippingZone->initCountries();
-            $shippingZone->getCountries()->push($this);
-        } elseif (!$shippingZone->getCountries()->contains($this)) {
-            $shippingZone->getCountries()->push($this);
+        if (!$country->isShippingZonesLoaded()) {
+            $country->initShippingZones();
+            $country->getShippingZones()->push($this);
+        } elseif (!$country->getShippingZones()->contains($this)) {
+            $country->getShippingZones()->push($this);
         }
 
     }
 
     /**
-     * Remove shippingZone of this object
+     * Remove country of this object
      * through the shipping_zones_countries cross reference table.
      *
-     * @param ChildShippingZone $shippingZone
-     * @return ChildCountry The current object (for fluent API support)
+     * @param ChildCountry $country
+     * @return ChildShippingZone The current object (for fluent API support)
      */
-    public function removeShippingZone(ChildShippingZone $shippingZone)
+    public function removeCountry(ChildCountry $country)
     {
-        if ($this->getShippingZones()->contains($shippingZone)) {
+        if ($this->getCountries()->contains($country)) {
             $shippingZonesCountries = new ChildShippingZonesCountries();
-            $shippingZonesCountries->setShippingZone($shippingZone);
-            if ($shippingZone->isCountriesLoaded()) {
+            $shippingZonesCountries->setCountry($country);
+            if ($country->isShippingZonesLoaded()) {
                 //remove the back reference if available
-                $shippingZone->getCountries()->removeObject($this);
+                $country->getShippingZones()->removeObject($this);
             }
 
-            $shippingZonesCountries->setCountry($this);
+            $shippingZonesCountries->setShippingZone($this);
             $this->removeShippingZonesCountries(clone $shippingZonesCountries);
             $shippingZonesCountries->clear();
 
-            $this->collShippingZones->remove($this->collShippingZones->search($shippingZone));
+            $this->collCountries->remove($this->collCountries->search($country));
 
-            if (null === $this->shippingZonesScheduledForDeletion) {
-                $this->shippingZonesScheduledForDeletion = clone $this->collShippingZones;
-                $this->shippingZonesScheduledForDeletion->clear();
+            if (null === $this->countriesScheduledForDeletion) {
+                $this->countriesScheduledForDeletion = clone $this->collCountries;
+                $this->countriesScheduledForDeletion->clear();
             }
 
-            $this->shippingZonesScheduledForDeletion->push($shippingZone);
+            $this->countriesScheduledForDeletion->push($country);
         }
 
 
@@ -2408,13 +2182,11 @@ abstract class Country implements ActiveRecordInterface
      */
     public function clear()
     {
-        $this->country_id = null;
-        $this->country_code = null;
-        $this->country_name = null;
-        $this->country_name_en = null;
-        $this->shipping_zone = null;
-        $this->country_created = null;
-        $this->country_updated = null;
+        $this->id = null;
+        $this->name = null;
+        $this->description = null;
+        $this->created_at = null;
+        $this->updated_at = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -2436,8 +2208,8 @@ abstract class Country implements ActiveRecordInterface
     public function clearAllReferences(bool $deep = false)
     {
         if ($deep) {
-            if ($this->collOrders) {
-                foreach ($this->collOrders as $o) {
+            if ($this->collShippingOptions) {
+                foreach ($this->collShippingOptions as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -2446,16 +2218,16 @@ abstract class Country implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collShippingZones) {
-                foreach ($this->collShippingZones as $o) {
+            if ($this->collCountries) {
+                foreach ($this->collCountries as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
         } // if ($deep)
 
-        $this->collOrders = null;
+        $this->collShippingOptions = null;
         $this->collShippingZonesCountriess = null;
-        $this->collShippingZones = null;
+        $this->collCountries = null;
         return $this;
     }
 
@@ -2466,7 +2238,7 @@ abstract class Country implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(CountryTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(ShippingZoneTableMap::DEFAULT_STRING_FORMAT);
     }
 
     // timestampable behavior
@@ -2478,7 +2250,7 @@ abstract class Country implements ActiveRecordInterface
      */
     public function keepUpdateDateUnchanged()
     {
-        $this->modifiedColumns[CountryTableMap::COL_COUNTRY_UPDATED] = true;
+        $this->modifiedColumns[ShippingZoneTableMap::COL_UPDATED_AT] = true;
 
         return $this;
     }
