@@ -137,15 +137,15 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
  * @method     ChildOrderQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
  *
- * @method     ChildOrderQuery leftJoinShippingFee($relationAlias = null) Adds a LEFT JOIN clause to the query using the ShippingFee relation
- * @method     ChildOrderQuery rightJoinShippingFee($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ShippingFee relation
- * @method     ChildOrderQuery innerJoinShippingFee($relationAlias = null) Adds a INNER JOIN clause to the query using the ShippingFee relation
+ * @method     ChildOrderQuery leftJoinShippingOption($relationAlias = null) Adds a LEFT JOIN clause to the query using the ShippingOption relation
+ * @method     ChildOrderQuery rightJoinShippingOption($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ShippingOption relation
+ * @method     ChildOrderQuery innerJoinShippingOption($relationAlias = null) Adds a INNER JOIN clause to the query using the ShippingOption relation
  *
- * @method     ChildOrderQuery joinWithShippingFee($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the ShippingFee relation
+ * @method     ChildOrderQuery joinWithShippingOption($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the ShippingOption relation
  *
- * @method     ChildOrderQuery leftJoinWithShippingFee() Adds a LEFT JOIN clause and with to the query using the ShippingFee relation
- * @method     ChildOrderQuery rightJoinWithShippingFee() Adds a RIGHT JOIN clause and with to the query using the ShippingFee relation
- * @method     ChildOrderQuery innerJoinWithShippingFee() Adds a INNER JOIN clause and with to the query using the ShippingFee relation
+ * @method     ChildOrderQuery leftJoinWithShippingOption() Adds a LEFT JOIN clause and with to the query using the ShippingOption relation
+ * @method     ChildOrderQuery rightJoinWithShippingOption() Adds a RIGHT JOIN clause and with to the query using the ShippingOption relation
+ * @method     ChildOrderQuery innerJoinWithShippingOption() Adds a INNER JOIN clause and with to the query using the ShippingOption relation
  *
  * @method     ChildOrderQuery leftJoinCountry($relationAlias = null) Adds a LEFT JOIN clause to the query using the Country relation
  * @method     ChildOrderQuery rightJoinCountry($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Country relation
@@ -187,7 +187,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery rightJoinWithStockItem() Adds a RIGHT JOIN clause and with to the query using the StockItem relation
  * @method     ChildOrderQuery innerJoinWithStockItem() Adds a INNER JOIN clause and with to the query using the StockItem relation
  *
- * @method     \Model\UserQuery|\Model\ShippingFeeQuery|\Model\CountryQuery|\Model\SiteQuery|\Model\PaymentQuery|\Model\StockQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\UserQuery|\Model\ShippingOptionQuery|\Model\CountryQuery|\Model\SiteQuery|\Model\PaymentQuery|\Model\StockQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildOrder|null findOne(?ConnectionInterface $con = null) Return the first ChildOrder matching the query
  * @method     ChildOrder findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildOrder matching the query, or a new ChildOrder object populated from the query conditions when no match is found
@@ -1117,7 +1117,7 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByShippingId(array('min' => 12)); // WHERE shipping_id > 12
      * </code>
      *
-     * @see       filterByShippingFee()
+     * @see       filterByShippingOption()
      *
      * @param mixed $shippingId The value to use as filter.
      *              Use scalar values for equality.
@@ -2598,46 +2598,46 @@ abstract class OrderQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \Model\ShippingFee object
+     * Filter the query by a related \Model\ShippingOption object
      *
-     * @param \Model\ShippingFee|ObjectCollection $shippingFee The related object(s) to use as filter
+     * @param \Model\ShippingOption|ObjectCollection $shippingOption The related object(s) to use as filter
      * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByShippingFee($shippingFee, ?string $comparison = null)
+    public function filterByShippingOption($shippingOption, ?string $comparison = null)
     {
-        if ($shippingFee instanceof \Model\ShippingFee) {
+        if ($shippingOption instanceof \Model\ShippingOption) {
             return $this
-                ->addUsingAlias(OrderTableMap::COL_SHIPPING_ID, $shippingFee->getId(), $comparison);
-        } elseif ($shippingFee instanceof ObjectCollection) {
+                ->addUsingAlias(OrderTableMap::COL_SHIPPING_ID, $shippingOption->getId(), $comparison);
+        } elseif ($shippingOption instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             $this
-                ->addUsingAlias(OrderTableMap::COL_SHIPPING_ID, $shippingFee->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(OrderTableMap::COL_SHIPPING_ID, $shippingOption->toKeyValue('PrimaryKey', 'Id'), $comparison);
 
             return $this;
         } else {
-            throw new PropelException('filterByShippingFee() only accepts arguments of type \Model\ShippingFee or Collection');
+            throw new PropelException('filterByShippingOption() only accepts arguments of type \Model\ShippingOption or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the ShippingFee relation
+     * Adds a JOIN clause to the query using the ShippingOption relation
      *
      * @param string|null $relationAlias Optional alias for the relation
      * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this The current query, for fluid interface
      */
-    public function joinShippingFee(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    public function joinShippingOption(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('ShippingFee');
+        $relationMap = $tableMap->getRelation('ShippingOption');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -2652,14 +2652,14 @@ abstract class OrderQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'ShippingFee');
+            $this->addJoinObject($join, 'ShippingOption');
         }
 
         return $this;
     }
 
     /**
-     * Use the ShippingFee relation ShippingFee object
+     * Use the ShippingOption relation ShippingOption object
      *
      * @see useQuery()
      *
@@ -2667,19 +2667,19 @@ abstract class OrderQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \Model\ShippingFeeQuery A secondary query class using the current class as primary query
+     * @return \Model\ShippingOptionQuery A secondary query class using the current class as primary query
      */
-    public function useShippingFeeQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useShippingOptionQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
-            ->joinShippingFee($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'ShippingFee', '\Model\ShippingFeeQuery');
+            ->joinShippingOption($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ShippingOption', '\Model\ShippingOptionQuery');
     }
 
     /**
-     * Use the ShippingFee relation ShippingFee object
+     * Use the ShippingOption relation ShippingOption object
      *
-     * @param callable(\Model\ShippingFeeQuery):\Model\ShippingFeeQuery $callable A function working on the related query
+     * @param callable(\Model\ShippingOptionQuery):\Model\ShippingOptionQuery $callable A function working on the related query
      *
      * @param string|null $relationAlias optional alias for the relation
      *
@@ -2687,12 +2687,12 @@ abstract class OrderQuery extends ModelCriteria
      *
      * @return $this
      */
-    public function withShippingFeeQuery(
+    public function withShippingOptionQuery(
         callable $callable,
         string $relationAlias = null,
         ?string $joinType = Criteria::LEFT_JOIN
     ) {
-        $relatedQuery = $this->useShippingFeeQuery(
+        $relatedQuery = $this->useShippingOptionQuery(
             $relationAlias,
             $joinType
         );
@@ -2703,7 +2703,7 @@ abstract class OrderQuery extends ModelCriteria
     }
 
     /**
-     * Use the relation to ShippingFee table for an EXISTS query.
+     * Use the relation to ShippingOption table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
@@ -2711,34 +2711,34 @@ abstract class OrderQuery extends ModelCriteria
      * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
-     * @return \Model\ShippingFeeQuery The inner query object of the EXISTS statement
+     * @return \Model\ShippingOptionQuery The inner query object of the EXISTS statement
      */
-    public function useShippingFeeExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    public function useShippingOptionExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        /** @var $q \Model\ShippingFeeQuery */
-        $q = $this->useExistsQuery('ShippingFee', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\ShippingOptionQuery */
+        $q = $this->useExistsQuery('ShippingOption', $modelAlias, $queryClass, $typeOfExists);
         return $q;
     }
 
     /**
-     * Use the relation to ShippingFee table for a NOT EXISTS query.
+     * Use the relation to ShippingOption table for a NOT EXISTS query.
      *
-     * @see useShippingFeeExistsQuery()
+     * @see useShippingOptionExistsQuery()
      *
      * @param string|null $modelAlias sets an alias for the nested query
      * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      *
-     * @return \Model\ShippingFeeQuery The inner query object of the NOT EXISTS statement
+     * @return \Model\ShippingOptionQuery The inner query object of the NOT EXISTS statement
      */
-    public function useShippingFeeNotExistsQuery($modelAlias = null, $queryClass = null)
+    public function useShippingOptionNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        /** @var $q \Model\ShippingFeeQuery */
-        $q = $this->useExistsQuery('ShippingFee', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\ShippingOptionQuery */
+        $q = $this->useExistsQuery('ShippingOption', $modelAlias, $queryClass, 'NOT EXISTS');
         return $q;
     }
 
     /**
-     * Use the relation to ShippingFee table for an IN query.
+     * Use the relation to ShippingOption table for an IN query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
      *
@@ -2746,29 +2746,29 @@ abstract class OrderQuery extends ModelCriteria
      * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
      * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
      *
-     * @return \Model\ShippingFeeQuery The inner query object of the IN statement
+     * @return \Model\ShippingOptionQuery The inner query object of the IN statement
      */
-    public function useInShippingFeeQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    public function useInShippingOptionQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
     {
-        /** @var $q \Model\ShippingFeeQuery */
-        $q = $this->useInQuery('ShippingFee', $modelAlias, $queryClass, $typeOfIn);
+        /** @var $q \Model\ShippingOptionQuery */
+        $q = $this->useInQuery('ShippingOption', $modelAlias, $queryClass, $typeOfIn);
         return $q;
     }
 
     /**
-     * Use the relation to ShippingFee table for a NOT IN query.
+     * Use the relation to ShippingOption table for a NOT IN query.
      *
-     * @see useShippingFeeInQuery()
+     * @see useShippingOptionInQuery()
      *
      * @param string|null $modelAlias sets an alias for the nested query
      * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
      *
-     * @return \Model\ShippingFeeQuery The inner query object of the NOT IN statement
+     * @return \Model\ShippingOptionQuery The inner query object of the NOT IN statement
      */
-    public function useNotInShippingFeeQuery($modelAlias = null, $queryClass = null)
+    public function useNotInShippingOptionQuery($modelAlias = null, $queryClass = null)
     {
-        /** @var $q \Model\ShippingFeeQuery */
-        $q = $this->useInQuery('ShippingFee', $modelAlias, $queryClass, 'NOT IN');
+        /** @var $q \Model\ShippingOptionQuery */
+        $q = $this->useInQuery('ShippingOption', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 

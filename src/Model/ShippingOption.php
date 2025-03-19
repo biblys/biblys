@@ -20,7 +20,7 @@ namespace Model;
 
 use Biblys\Exception\CannotDeleteShippingFeeUsedByOrders;
 use DateTime;
-use Model\Base\ShippingFee as BaseShippingFee;
+use Model\Base\ShippingOption as BaseShippingOption;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -33,7 +33,7 @@ use Propel\Runtime\Exception\PropelException;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class ShippingFee extends BaseShippingFee
+class ShippingOption extends BaseShippingOption
 {
 
     public function isCompliantWithFrenchLaw(): bool

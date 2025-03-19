@@ -21,7 +21,7 @@ namespace Command;
 use Biblys\Test\ModelFactory;
 use Model\Publisher;
 use Model\Right;
-use Model\ShippingFee;
+use Model\ShippingOption;
 use Model\Site;
 use Model\User;
 use Propel\Runtime\Exception\PropelException;
@@ -94,7 +94,7 @@ class CreateSeedsCommand extends Command
         $output->writeln(["Inserted user: publisher@paronymie.fr"]);
 
         // Site
-        $shippingFee = new ShippingFee();
+        $shippingFee = new ShippingOption();
         $shippingFee->setSiteId($site->getId());
         $shippingFee->setMode("Expédition France et Monde");
         $shippingFee->setType("normal");

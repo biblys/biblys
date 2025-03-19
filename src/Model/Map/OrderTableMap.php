@@ -839,7 +839,7 @@ class OrderTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, null, false);
-        $this->addRelation('ShippingFee', '\\Model\\ShippingFee', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('ShippingOption', '\\Model\\ShippingOption', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':shipping_id',
