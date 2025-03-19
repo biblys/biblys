@@ -22,7 +22,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   Montant à régler : {{ order.amountTobepaid|currency(true)|raw }}.
 </p>
 
-<h3>Choisissez un mode de paiement</h3>
+<h3>Comment souhaitez-vous régler votre commande ?</h3>
 
 <div class="accordion" id="payment-methods-accordion">
 
@@ -148,21 +148,39 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
            data-parent="#payment-methods-accordion">
         <div class="card-body">
           <p>
-            Effectuez un virement vers notre compte.
+            Pour régler votre commande par virement, effectuez un virement SEPA d’un montant de
+            <strong>{{ order.amountToBePaid|currency(true)|raw }}</strong>
+            en précisant votre numéro de commande (<strong>{{ order.id }}</strong>) dans le motif du virement.
+          </p>
 
+          <form>
+            <label for="code-iban"><strong>Code IBAN</strong></label>
+            <div class="input-group">
+              <input
+                id="code-iban"
+                class="form-control search-form-input mt-0"
+                value="{{ app.currentSite.getOption('payment_iban') }}"
+              >
+              <div class="input-group-append">
+                <button type="button" class="btn btn-info" aria-label="Copier le code IBAN"
+                        onclick="navigator.clipboard.writeText('{{ app.currentSite.getOption('payment_iban') }}');">
+                  <span class="fa-solid fa-copy"></span>
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <p class="alert alert-warning mt-3 mb-0">
             {% if orderWillBeShipped %}
-              <br />Votre commande sera expédiée après apparition du virement sur notre relevé de compte.
+              <i class="fa-solid fa-clock"></i>&nbsp;
+              Votre commande sera expédiée après apparition du virement sur notre relevé de compte.
             {% endif %}
 
             {% if orderWillBeCollected %}
-              <br />Votre commande sera préparée après apparition du virement sur notre relevé de compte.
+              <i class="fa-solid fa-clock"></i>&nbsp;
+              Votre commande sera préparée après apparition du virement sur notre relevé de compte.
             {% endif %}
           </p>
-
-          <form method="post">
-            <input type="hidden" name="payment" value="transfer">
-            <button type="submit" class="btn btn-primary">Payer par virement</button>
-          </form>
         </div>
       </div>
     </div>
@@ -172,7 +190,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     <div class="card">
       <div class="card-header">
         <h5 class="radio mb-0">
-          <a href="#collapse-check" data-toggle="collapse" data-target="#collapse-check" aria-expanded="false" aria-controls="collapse-check">
+          <a href="#collapse-check" data-toggle="collapse" data-target="#collapse-check" aria-expanded="false"
+             aria-controls="collapse-check">
             <i class="fa-solid fa-money-check"></i>&nbsp;
             Chèque
           </a>
@@ -182,19 +201,25 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <div id="collapse-check" class="collapse" aria-labelledby="headingTwo" data-parent="#payment-methods-accordion">
         <div class="card-body">
           <p>
-            {% if orderWillBeShipped %}
-              Envoyez un chèque. Votre commande sera expédiée après encaissement du chèque.
-            {% endif %}
-
-            {% if orderWillBeCollected %}
-              Payez directement en magasin, au moment du retrait de votre commande, par chèque.
-            {% endif %}
+            Pour régler votre commande par chèque, établissez un chèque d’un montant de
+            <strong>{{ order.amountToBePaid|currency(true)|raw }}</strong>
+            à l'ordre de <strong>{{ nameForCheckPayment }}</strong>
+            et inscrivez au dos du chèque votre numéro de commande (<strong>{{ order.id }}</strong>).
           </p>
 
-          <form method="post">
-            <input type="hidden" name="payment" value="cheque">
-            <button type="submit" class="btn btn-primary">Payer par chèque</button>
-          </form>
+          {% if orderWillBeShipped %}
+            <p>
+              Envoyez votre chèque à l’adresse :
+              <strong>
+                {{ app.currentSite.title }} | {{ app.currentSite.site.address }}
+              </strong>
+            </p>
+
+            <p class="alert alert-warning mt-3 mb-0">
+              <i class="fa-solid fa-clock"></i>&nbsp;
+              Votre commande sera expédiée après réception et encaissement de votre chèque.
+            </p>
+          {% endif %}
         </div>
       </div>
     </div>
