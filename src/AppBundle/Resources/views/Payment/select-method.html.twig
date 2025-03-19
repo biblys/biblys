@@ -1,0 +1,236 @@
+{#
+Copyright (C) 2025 Clément Latzarus
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Paiement
+{% endblock %}
+
+{% block main %}
+  <p><a href="{{ path('legacy_order', { url: order.slug }) }}">Commande n° {{ order.id }}</a></p>
+  <h1>Paiement</h1>
+
+  <p class="alert alert-info">
+    <i class="fa-solid fa-coins"></i>&nbsp;
+    Montant à régler : {{ order.amountTobepaid|currency(true)|raw }}.
+  </p>
+
+  <h3>Comment souhaitez-vous régler votre commande ?</h3>
+
+  <div class="accordion" id="payment-methods-accordion">
+
+    {% if stripeIsAvailable %}
+      <div class="card">
+        <div class="card-header">
+          <h5 class="radio mb-0">
+            <a href="#collapse-stripe" data-toggle="collapse"
+               data-target="#collapse-stripe" aria-expanded="false" aria-controls="collapse-stripe">
+              <i class="fa-solid fa-credit-card"></i>&nbsp;
+              Carte bancaire
+            </a>
+          </h5>
+        </div>
+        <div id="collapse-stripe" class="collapse" aria-labelledby="headingOne" data-parent="#payment-methods-accordion">
+          <div class="card-body">
+            {% if order.amountTobepaid < 50 %}
+              <p class="alert alert-warning">
+                <span class="fa-solid fa-triangle-exclamation"></span>&nbsp;
+                Les commandes dont le montant total est inférieur à 0,50 €<br>
+                ne peuvent être réglés par carte bancaire.
+              </p>
+            {% endif %}
+
+            <p>
+              Payez par carte bancaire via le serveur sécurisé de notre partenaire Stripe.
+            </p>
+
+            <form method="post" action="{{ path('legacy_payment', { url: order.slug }) }}">
+              <input type="hidden" name="payment" value="stripe">
+              <button type="submit" class="btn btn-primary"
+                      {% if order.amountTobepaid < 50 %}disabled{% endif %}
+              >Payer par carte bancaire
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if payplugIsAvailable %}
+      <div class="card">
+        <div class="card-header">
+          <h5 class="radio mb-0">
+            <a href="#collapse-payplug" data-toggle="collapse"
+               data-target="#collapse-payplug" aria-expanded="false" aria-controls="collapse-payplug">
+              <i class="fa-solid fa-credit-card"></i>&nbsp;
+              Carte bancaire
+            </a>
+          </h5>
+        </div>
+        <div id="collapse-payplug" class="collapse" aria-labelledby="headingTwo" data-parent="#payment-methods-accordion">
+          <div class="card-body">
+
+            {% if order.amountTobepaid < 50 %}
+              <p class="alert alert-warning">
+                <span class="fa-solid fa-triangle-exclamation"></span>&nbsp;
+                Les commandes dont le montant total est inférieur à 0,50 €<br>
+                ne peuvent être réglés par carte bancaire.
+              </p>
+            {% endif %}
+
+            <p>
+              Payez par carte bancaire via le serveur sécurisé de notre partenaire PayPlug.
+            </p>
+
+            <form method="post" action="{{ path("legacy_payment", { url: order.slug }) }}">
+              <input type="hidden" name="payment" value="payplug">
+              <button type="submit" class="btn btn-primary"
+                      {% if order.amountTobepaid < 50 %}disabled{% endif %}
+              >Payer par carte bancaire
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if paypalIsAvailable %}
+      <div class="card">
+        <div class="card-header">
+          <h5 class="radio mb-0">
+            <a href="#collapse-paypal" data-toggle="collapse" data-target="#collapse-paypal" aria-expanded="false"
+               aria-controls="collapse-paypal">
+              <i class="fa-brands fa-paypal"></i>&nbsp;
+              Compte PayPal
+            </a>
+          </h5>
+        </div>
+
+        <div id="collapse-paypal" class="collapse" aria-labelledby="headingTwo" data-parent="#payment-methods-accordion">
+          <div class="card-body">
+
+            {% if order.amountTobepaid < 100 %}
+              <p class="alert alert-warning">
+                <i class="fa-solid fa-triangle-exclamation"></i>&nbsp;
+                Les commandes dont le montant total est inférieur à 1,00 €<br>
+                ne peuvent être réglés par carte bancaire ou Paypal.
+              </p>
+            {% endif %}
+
+            <p>Payez avec votre compte PayPal.</p>
+
+            {% include "AppBundle:Payment:_paypal-button.html.twig" %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if transferIsAvailable %}
+      <div class="card">
+        <div class="card-header">
+          <h5 class="radio mb-0">
+            <a href="#collapse-transfer" data-toggle="collapse" data-target="#collapse-transfer" aria-expanded="false"
+               aria-controls="collapse-transfer">
+              <i class="fa-solid fa-money-bill-transfer"></i>&nbsp;
+              Virement
+            </a>
+          </h5>
+        </div>
+
+        <div id="collapse-transfer" class="collapse" aria-labelledby="headingTwo"
+             data-parent="#payment-methods-accordion">
+          <div class="card-body">
+            <p>
+              Pour régler votre commande par virement, effectuez un virement SEPA d’un montant de
+              <strong>{{ order.amountToBePaid|currency(true)|raw }}</strong>
+              en précisant votre numéro de commande (<strong>{{ order.id }}</strong>) dans le motif du virement.
+            </p>
+
+            <form>
+              <label for="code-iban"><strong>Code IBAN</strong></label>
+              <div class="input-group">
+                <input
+                  id="code-iban"
+                  class="form-control search-form-input mt-0"
+                  value="{{ paymentIban }}"
+                  readonly
+                >
+                <div class="input-group-append">
+                  <button type="button" class="btn btn-info" aria-label="Copier le code IBAN"
+                          onclick="navigator.clipboard.writeText('{{ paymentIban }}');">
+                    <span class="fa-solid fa-copy"></span>
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <p class="alert alert-warning mt-3 mb-0">
+              {% if orderWillBeShipped %}
+                <i class="fa-solid fa-clock"></i>&nbsp;
+                Votre commande sera expédiée après apparition du virement sur notre relevé de compte.
+              {% endif %}
+
+              {% if orderWillBeCollected %}
+                <i class="fa-solid fa-clock"></i>&nbsp;
+                Votre commande sera préparée après apparition du virement sur notre relevé de compte.
+              {% endif %}
+            </p>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if checkIsAvailable %}
+      <div class="card">
+        <div class="card-header">
+          <h5 class="radio mb-0">
+            <a href="#collapse-check" data-toggle="collapse" data-target="#collapse-check" aria-expanded="false"
+               aria-controls="collapse-check">
+              <i class="fa-solid fa-money-check"></i>&nbsp;
+              Chèque
+            </a>
+          </h5>
+        </div>
+
+        <div id="collapse-check" class="collapse" aria-labelledby="headingTwo" data-parent="#payment-methods-accordion">
+          <div class="card-body">
+            <p>
+              Pour régler votre commande par chèque, établissez un chèque d’un montant de
+              <strong>{{ order.amountToBePaid|currency(true)|raw }}</strong>
+              à l'ordre de <strong>{{ nameForCheckPayment }}</strong>
+              et inscrivez au dos du chèque votre numéro de commande (<strong>{{ order.id }}</strong>).
+            </p>
+
+            {% if orderWillBeShipped %}
+              <p>
+                Envoyez votre chèque à l’adresse :
+                <strong>
+                  {{ app.currentSite.title }} | {{ app.currentSite.site.address }}
+                </strong>
+              </p>
+
+              <p class="alert alert-warning mt-3 mb-0">
+                <i class="fa-solid fa-clock"></i>&nbsp;
+                Votre commande sera expédiée après réception et encaissement de votre chèque.
+              </p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

@@ -27,6 +27,7 @@ use DateTime;
 use Exception;
 use Framework\Controller;
 use InvalidArgumentException;
+use Model\OrderQuery;
 use Model\Payment;
 use Model\PaymentQuery;
 use Order;
@@ -41,6 +42,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -57,9 +59,9 @@ class PaymentController extends Controller
      * @throws Exception
      */
     public function index(
-        Request     $request,
-        CurrentSite $currentSite,
-        CurrentUser $currentUser,
+        Request         $request,
+        CurrentSite     $currentSite,
+        CurrentUser     $currentUser,
         TemplateService $templateService,
     ): Response
     {
@@ -76,15 +78,15 @@ class PaymentController extends Controller
         }
 
         $startDateInput = $request->query->get("start_date");
-        $startDate = $startDateInput ? new DateTime($startDateInput." 00:00:00") : new DateTime("1 month ago");
+        $startDate = $startDateInput ? new DateTime($startDateInput . " 00:00:00") : new DateTime("1 month ago");
         $paymentQuery->filterByExecuted($startDate, Criteria::GREATER_EQUAL);
 
         $endDateInput = $request->query->get("end_date");
-        $endDate = $endDateInput ? new DateTime($endDateInput." 23:59:59") : new DateTime("today 23:59:59");
+        $endDate = $endDateInput ? new DateTime($endDateInput . " 23:59:59") : new DateTime("today 23:59:59");
         $paymentQuery->filterByExecuted($endDate, Criteria::LESS_EQUAL);
 
         try {
-            $pageNumber = (int) $request->query->get("p", 0);
+            $pageNumber = (int)$request->query->get("p", 0);
             $paymentsTotalCount = $paymentQuery->count();
             $paymentsPerPage = 1000;
             $pagination = new Pagination($pageNumber, $paymentsTotalCount, $paymentsPerPage);
@@ -104,14 +106,14 @@ class PaymentController extends Controller
 
         return $templateService->renderResponse(
             "AppBundle:Payment:index.html.twig", [
-                "modes" => Payment::getModes(),
-                "selectedMode" => $modeFilter,
-                "startDate" => $startDate->format("Y-m-d"),
-                "endDate" => $endDate->format("Y-m-d"),
-                "payments" => $payments,
-                "pages" => $pagination,
-                "total" => $total,
-            ]);
+            "modes" => Payment::getModes(),
+            "selectedMode" => $modeFilter,
+            "startDate" => $startDate->format("Y-m-d"),
+            "endDate" => $endDate->format("Y-m-d"),
+            "payments" => $payments,
+            "pages" => $pagination,
+            "total" => $total,
+        ]);
     }
 
     /**
@@ -190,11 +192,48 @@ class PaymentController extends Controller
             $om->addPayment($order, $payment);
             $loggerService->log("stripe", "INFO", 'Payment amount (' . $payment->get('amount') . ') was added to order ' . $order->get('id'));
 
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $loggerService->log("stripe", "ERROR", $e->getMessage());
             throw $e;
         }
 
         return new JsonResponse([]);
+    }
+
+    /**
+     * @route GET /order/{slug}/pay
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function selectMethodAction(
+        Config          $config,
+        CurrentSite     $currentSite,
+        TemplateService $templateService,
+        string          $slug
+    ): Response
+    {
+        $order = OrderQuery::create()->findOneBySlug($slug);
+        if (!$order) {
+            throw new NotFoundHttpException("Commande inconnue");
+        }
+
+        $orderWillBeCollected = $order->getShippingMode() === "magasin";
+        $orderWillBeShipped = !$orderWillBeCollected;
+
+        return $templateService->renderResponse('AppBundle:Payment:select-method.html.twig', [
+            "order" => $order,
+            "stripeIsAvailable" => !!$config->get("stripe"),
+            "payplugIsAvailable" => !!$config->get("payplug"),
+            "paypalIsAvailable" => $config->isPayPalEnabled(),
+            "paypalClientId" => $config->get("paypal.client_id"),
+            "transferIsAvailable" => !!$currentSite->getOption("payment_iban"),
+            "paymentIban" => $currentSite->getOption("payment_iban"),
+            "checkIsAvailable" => !!$currentSite->getOption("payment_check"),
+            "nameForCheckPayment" => $currentSite->getOption("name_for_check_payment"),
+            "orderWillBeShipped" => $orderWillBeShipped,
+            "orderWillBeCollected" => $orderWillBeCollected,
+        ]);
     }
 }

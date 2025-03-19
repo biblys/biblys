@@ -50,7 +50,7 @@ return function(Request $request, Config $config, CurrentUser $currentUser): Res
     /** @var \Model\Order $order */
     foreach ($orders as $order) {
 
-        $paymentStatus = "<a href=\"/payment/{$order->getSlug()}\">En attente</a>";
+        $paymentStatus = "En attente";
         if ($order->getPaymentDate()) {
             $paymentStatus = _date($order->getPaymentDate(), 'd/m/Y');
         }
