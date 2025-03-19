@@ -51,7 +51,7 @@ class ShippingZone
      */
     public function getCountries(): array
     {
-        return CountryQuery::create()->findByShippingZone($this->getCode())->getArrayCopy();
+        return CountryQuery::create()->findByShippingZoneCode($this->getCode())->getArrayCopy();
     }
 
     /**
