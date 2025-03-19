@@ -6,6 +6,8 @@
 
 - L'ajout d'un exemplaire à une liste pouvait déclencher une erreur. C'est
   corrigé.
+- Certaines ventes pouvaient ne pas apparaître sur la page "Ventes par article
+  en stock". C'est maintenant le cas.
 
 ## 3.4.1 (12 mars 2025)
 

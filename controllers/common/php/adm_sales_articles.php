@@ -17,29 +17,26 @@
 
 
 use Biblys\Data\ArticleType;
-use Biblys\Service\CurrentSite;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @throws Exception
  */
-return function (
-    Request $request,
-    CurrentSite $currentSite,
-): Response
+return function (Request $request): Response
 {
     $request->attributes->set("page_title", "Ventes par article en stock");
 
     // FILTRES
-    $last30daysOptions = _getDatesOptions($currentSite->getId(), "%Y-%m-%d", "l j f", "d");
-    $months = _getDatesOptions($currentSite->getId(), "%Y-%m", "F Y", "m");
-    $years = _getDatesOptions($currentSite->getId(), "%Y", "Y", "y");
+    $last30daysOptions = _getDatesOptions("%Y-%m-%d", "l j f", "d");
+    $months = _getDatesOptions("%Y-%m", "F Y", "m");
+    $years = _getDatesOptions("%Y", "Y", "y");
 
     // Affichage par défaut : ventes du jour courant
     if (empty($_GET["date1"]) && empty($_GET["d"]) && empty($_GET["m"]) && empty($_GET["y"])) $_GET["d"] = date("Y-m-d");
 
     // Raccourcis mois ou jour
+    /** @noinspection DuplicatedCode */
     if (!empty($_GET["d"])) {
         $_GET['date1'] = $_GET['d'];
         $_GET['date2'] = $_GET['d'];
@@ -58,6 +55,7 @@ return function (
     }
 
     // REQUÊTE DES VENTES
+    $params = [];
     $_QUERY = null;
 
     // Filtrer par date
@@ -75,7 +73,6 @@ return function (
         $params['type_id'] = $_GET['type_id'];
     }
 
-    $params['site_id'] = $currentSite->getId();
     $stock = EntityManager::prepareAndExecute('SELECT
         `article_title`, `article_url`, `article_authors`, `article_collection`, `article_publisher`,
         COUNT(`stock_id`) AS `stock2`,
@@ -86,7 +83,7 @@ return function (
         SUM(IF(`stock_selling_date` BETWEEN :date_1 AND :date_2, `stock_selling_price`, 0)) AS `revenue`
         FROM `stock` AS `s`
         JOIN `articles` AS `a` ON `a`.`article_id` = `s`.`article_id`
-        WHERE `s`.`site_id` = :site_id' . $_QUERY . '
+        WHERE 1 ' . $_QUERY . '
         GROUP BY `a`.`article_id`
         ORDER BY `sales` DESC', $params);
 
@@ -207,7 +204,6 @@ return function (
  * @throws Exception
  */
 function _getDatesOptions(
-    int $siteId,
     string $queryFormat,
     string $displayFormat,
     string $parameter
@@ -217,13 +213,12 @@ function _getDatesOptions(
     SELECT 
         DATE_FORMAT(`order_payment_date`, :format) AS `date`
     FROM `orders` 
-    WHERE `orders`.`site_id` = :site_id 
-        AND `order_cancel_date` IS null
+    WHERE `order_cancel_date` IS null
         AND `order_payment_date` IS NOT NULL
     GROUP BY `date`
     ORDER BY `date` DESC
     LIMIT 30
-", ["format" => $queryFormat, "site_id" => $siteId]);
+", ["format" => $queryFormat]);
     return array_map(function ($date) use ($displayFormat, $parameter) {
         return '<option value="?'.$parameter.'='.$date["date"].'">'
             ._date($date["date"], $displayFormat).
