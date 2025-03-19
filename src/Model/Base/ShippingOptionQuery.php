@@ -25,6 +25,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingOptionQuery orderByMode($order = Criteria::ASC) Order by the shipping_mode column
  * @method     ChildShippingOptionQuery orderByType($order = Criteria::ASC) Order by the shipping_type column
  * @method     ChildShippingOptionQuery orderByZoneCode($order = Criteria::ASC) Order by the shipping_zone column
+ * @method     ChildShippingOptionQuery orderByShippingZoneId($order = Criteria::ASC) Order by the shipping_zone_id column
  * @method     ChildShippingOptionQuery orderByMinWeight($order = Criteria::ASC) Order by the shipping_min_weight column
  * @method     ChildShippingOptionQuery orderByMaxWeight($order = Criteria::ASC) Order by the shipping_max_weight column
  * @method     ChildShippingOptionQuery orderByMaxArticles($order = Criteria::ASC) Order by the shipping_max_articles column
@@ -42,6 +43,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingOptionQuery groupByMode() Group by the shipping_mode column
  * @method     ChildShippingOptionQuery groupByType() Group by the shipping_type column
  * @method     ChildShippingOptionQuery groupByZoneCode() Group by the shipping_zone column
+ * @method     ChildShippingOptionQuery groupByShippingZoneId() Group by the shipping_zone_id column
  * @method     ChildShippingOptionQuery groupByMinWeight() Group by the shipping_min_weight column
  * @method     ChildShippingOptionQuery groupByMaxWeight() Group by the shipping_max_weight column
  * @method     ChildShippingOptionQuery groupByMaxArticles() Group by the shipping_max_articles column
@@ -61,6 +63,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingOptionQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildShippingOptionQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
+ * @method     ChildShippingOptionQuery leftJoinShippingZone($relationAlias = null) Adds a LEFT JOIN clause to the query using the ShippingZone relation
+ * @method     ChildShippingOptionQuery rightJoinShippingZone($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ShippingZone relation
+ * @method     ChildShippingOptionQuery innerJoinShippingZone($relationAlias = null) Adds a INNER JOIN clause to the query using the ShippingZone relation
+ *
+ * @method     ChildShippingOptionQuery joinWithShippingZone($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the ShippingZone relation
+ *
+ * @method     ChildShippingOptionQuery leftJoinWithShippingZone() Adds a LEFT JOIN clause and with to the query using the ShippingZone relation
+ * @method     ChildShippingOptionQuery rightJoinWithShippingZone() Adds a RIGHT JOIN clause and with to the query using the ShippingZone relation
+ * @method     ChildShippingOptionQuery innerJoinWithShippingZone() Adds a INNER JOIN clause and with to the query using the ShippingZone relation
+ *
  * @method     ChildShippingOptionQuery leftJoinOrder($relationAlias = null) Adds a LEFT JOIN clause to the query using the Order relation
  * @method     ChildShippingOptionQuery rightJoinOrder($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Order relation
  * @method     ChildShippingOptionQuery innerJoinOrder($relationAlias = null) Adds a INNER JOIN clause to the query using the Order relation
@@ -71,7 +83,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingOptionQuery rightJoinWithOrder() Adds a RIGHT JOIN clause and with to the query using the Order relation
  * @method     ChildShippingOptionQuery innerJoinWithOrder() Adds a INNER JOIN clause and with to the query using the Order relation
  *
- * @method     \Model\OrderQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\ShippingZoneQuery|\Model\OrderQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildShippingOption|null findOne(?ConnectionInterface $con = null) Return the first ChildShippingOption matching the query
  * @method     ChildShippingOption findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildShippingOption matching the query, or a new ChildShippingOption object populated from the query conditions when no match is found
@@ -82,6 +94,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingOption|null findOneByMode(string $shipping_mode) Return the first ChildShippingOption filtered by the shipping_mode column
  * @method     ChildShippingOption|null findOneByType(string $shipping_type) Return the first ChildShippingOption filtered by the shipping_type column
  * @method     ChildShippingOption|null findOneByZoneCode(string $shipping_zone) Return the first ChildShippingOption filtered by the shipping_zone column
+ * @method     ChildShippingOption|null findOneByShippingZoneId(int $shipping_zone_id) Return the first ChildShippingOption filtered by the shipping_zone_id column
  * @method     ChildShippingOption|null findOneByMinWeight(int $shipping_min_weight) Return the first ChildShippingOption filtered by the shipping_min_weight column
  * @method     ChildShippingOption|null findOneByMaxWeight(int $shipping_max_weight) Return the first ChildShippingOption filtered by the shipping_max_weight column
  * @method     ChildShippingOption|null findOneByMaxArticles(int $shipping_max_articles) Return the first ChildShippingOption filtered by the shipping_max_articles column
@@ -102,6 +115,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingOption requireOneByMode(string $shipping_mode) Return the first ChildShippingOption filtered by the shipping_mode column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingOption requireOneByType(string $shipping_type) Return the first ChildShippingOption filtered by the shipping_type column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingOption requireOneByZoneCode(string $shipping_zone) Return the first ChildShippingOption filtered by the shipping_zone column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requireOneByShippingZoneId(int $shipping_zone_id) Return the first ChildShippingOption filtered by the shipping_zone_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingOption requireOneByMinWeight(int $shipping_min_weight) Return the first ChildShippingOption filtered by the shipping_min_weight column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingOption requireOneByMaxWeight(int $shipping_max_weight) Return the first ChildShippingOption filtered by the shipping_max_weight column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingOption requireOneByMaxArticles(int $shipping_max_articles) Return the first ChildShippingOption filtered by the shipping_max_articles column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -128,6 +142,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildShippingOption> findByType(string|array<string> $shipping_type) Return ChildShippingOption objects filtered by the shipping_type column
  * @method     ChildShippingOption[]|Collection findByZoneCode(string|array<string> $shipping_zone) Return ChildShippingOption objects filtered by the shipping_zone column
  * @psalm-method Collection&\Traversable<ChildShippingOption> findByZoneCode(string|array<string> $shipping_zone) Return ChildShippingOption objects filtered by the shipping_zone column
+ * @method     ChildShippingOption[]|Collection findByShippingZoneId(int|array<int> $shipping_zone_id) Return ChildShippingOption objects filtered by the shipping_zone_id column
+ * @psalm-method Collection&\Traversable<ChildShippingOption> findByShippingZoneId(int|array<int> $shipping_zone_id) Return ChildShippingOption objects filtered by the shipping_zone_id column
  * @method     ChildShippingOption[]|Collection findByMinWeight(int|array<int> $shipping_min_weight) Return ChildShippingOption objects filtered by the shipping_min_weight column
  * @psalm-method Collection&\Traversable<ChildShippingOption> findByMinWeight(int|array<int> $shipping_min_weight) Return ChildShippingOption objects filtered by the shipping_min_weight column
  * @method     ChildShippingOption[]|Collection findByMaxWeight(int|array<int> $shipping_max_weight) Return ChildShippingOption objects filtered by the shipping_max_weight column
@@ -247,7 +263,7 @@ abstract class ShippingOptionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT shipping_id, site_id, article_id, shipping_mode, shipping_type, shipping_zone, shipping_min_weight, shipping_max_weight, shipping_max_articles, shipping_min_amount, shipping_max_amount, shipping_fee, shipping_info, shipping_created, shipping_updated, shipping_archived_at FROM shipping WHERE shipping_id = :p0';
+        $sql = 'SELECT shipping_id, site_id, article_id, shipping_mode, shipping_type, shipping_zone, shipping_zone_id, shipping_min_weight, shipping_max_weight, shipping_max_articles, shipping_min_amount, shipping_max_amount, shipping_fee, shipping_info, shipping_created, shipping_updated, shipping_archived_at FROM shipping WHERE shipping_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -550,6 +566,51 @@ abstract class ShippingOptionQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ZONE, $zoneCode, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the shipping_zone_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByShippingZoneId(1234); // WHERE shipping_zone_id = 1234
+     * $query->filterByShippingZoneId(array(12, 34)); // WHERE shipping_zone_id IN (12, 34)
+     * $query->filterByShippingZoneId(array('min' => 12)); // WHERE shipping_zone_id > 12
+     * </code>
+     *
+     * @see       filterByShippingZone()
+     *
+     * @param mixed $shippingZoneId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByShippingZoneId($shippingZoneId = null, ?string $comparison = null)
+    {
+        if (is_array($shippingZoneId)) {
+            $useMinMax = false;
+            if (isset($shippingZoneId['min'])) {
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ZONE_ID, $shippingZoneId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($shippingZoneId['max'])) {
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ZONE_ID, $shippingZoneId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ZONE_ID, $shippingZoneId, $comparison);
 
         return $this;
     }
@@ -973,6 +1034,181 @@ abstract class ShippingOptionQuery extends ModelCriteria
         $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ARCHIVED_AT, $archivedAt, $comparison);
 
         return $this;
+    }
+
+    /**
+     * Filter the query by a related \Model\ShippingZone object
+     *
+     * @param \Model\ShippingZone|ObjectCollection $shippingZone The related object(s) to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByShippingZone($shippingZone, ?string $comparison = null)
+    {
+        if ($shippingZone instanceof \Model\ShippingZone) {
+            return $this
+                ->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ZONE_ID, $shippingZone->getId(), $comparison);
+        } elseif ($shippingZone instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            $this
+                ->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ZONE_ID, $shippingZone->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
+        } else {
+            throw new PropelException('filterByShippingZone() only accepts arguments of type \Model\ShippingZone or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ShippingZone relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinShippingZone(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ShippingZone');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ShippingZone');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ShippingZone relation ShippingZone object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\ShippingZoneQuery A secondary query class using the current class as primary query
+     */
+    public function useShippingZoneQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinShippingZone($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ShippingZone', '\Model\ShippingZoneQuery');
+    }
+
+    /**
+     * Use the ShippingZone relation ShippingZone object
+     *
+     * @param callable(\Model\ShippingZoneQuery):\Model\ShippingZoneQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withShippingZoneQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useShippingZoneQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to ShippingZone table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\ShippingZoneQuery The inner query object of the EXISTS statement
+     */
+    public function useShippingZoneExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\ShippingZoneQuery */
+        $q = $this->useExistsQuery('ShippingZone', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to ShippingZone table for a NOT EXISTS query.
+     *
+     * @see useShippingZoneExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\ShippingZoneQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useShippingZoneNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\ShippingZoneQuery */
+        $q = $this->useExistsQuery('ShippingZone', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to ShippingZone table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\ShippingZoneQuery The inner query object of the IN statement
+     */
+    public function useInShippingZoneQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\ShippingZoneQuery */
+        $q = $this->useInQuery('ShippingZone', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to ShippingZone table for a NOT IN query.
+     *
+     * @see useShippingZoneInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\ShippingZoneQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInShippingZoneQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\ShippingZoneQuery */
+        $q = $this->useInQuery('ShippingZone', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
     }
 
     /**

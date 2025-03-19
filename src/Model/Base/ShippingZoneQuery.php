@@ -4,9 +4,9 @@ namespace Model\Base;
 
 use \Exception;
 use \PDO;
-use Model\Country as ChildCountry;
-use Model\CountryQuery as ChildCountryQuery;
-use Model\Map\CountryTableMap;
+use Model\ShippingZone as ChildShippingZone;
+use Model\ShippingZoneQuery as ChildShippingZoneQuery;
+use Model\Map\ShippingZoneTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -17,127 +17,115 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the `countries` table.
+ * Base class that represents a query for the `shipping_zones` table.
  *
- * @method     ChildCountryQuery orderById($order = Criteria::ASC) Order by the country_id column
- * @method     ChildCountryQuery orderByCode($order = Criteria::ASC) Order by the country_code column
- * @method     ChildCountryQuery orderByName($order = Criteria::ASC) Order by the country_name column
- * @method     ChildCountryQuery orderByNameEn($order = Criteria::ASC) Order by the country_name_en column
- * @method     ChildCountryQuery orderByShippingZoneCode($order = Criteria::ASC) Order by the shipping_zone column
- * @method     ChildCountryQuery orderByCreatedAt($order = Criteria::ASC) Order by the country_created column
- * @method     ChildCountryQuery orderByUpdatedAt($order = Criteria::ASC) Order by the country_updated column
+ * @method     ChildShippingZoneQuery orderById($order = Criteria::ASC) Order by the id column
+ * @method     ChildShippingZoneQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method     ChildShippingZoneQuery orderByDescription($order = Criteria::ASC) Order by the description column
+ * @method     ChildShippingZoneQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
+ * @method     ChildShippingZoneQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
- * @method     ChildCountryQuery groupById() Group by the country_id column
- * @method     ChildCountryQuery groupByCode() Group by the country_code column
- * @method     ChildCountryQuery groupByName() Group by the country_name column
- * @method     ChildCountryQuery groupByNameEn() Group by the country_name_en column
- * @method     ChildCountryQuery groupByShippingZoneCode() Group by the shipping_zone column
- * @method     ChildCountryQuery groupByCreatedAt() Group by the country_created column
- * @method     ChildCountryQuery groupByUpdatedAt() Group by the country_updated column
+ * @method     ChildShippingZoneQuery groupById() Group by the id column
+ * @method     ChildShippingZoneQuery groupByName() Group by the name column
+ * @method     ChildShippingZoneQuery groupByDescription() Group by the description column
+ * @method     ChildShippingZoneQuery groupByCreatedAt() Group by the created_at column
+ * @method     ChildShippingZoneQuery groupByUpdatedAt() Group by the updated_at column
  *
- * @method     ChildCountryQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildCountryQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildCountryQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method     ChildShippingZoneQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildShippingZoneQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildShippingZoneQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildCountryQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildCountryQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildCountryQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method     ChildShippingZoneQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method     ChildShippingZoneQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method     ChildShippingZoneQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildCountryQuery leftJoinOrder($relationAlias = null) Adds a LEFT JOIN clause to the query using the Order relation
- * @method     ChildCountryQuery rightJoinOrder($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Order relation
- * @method     ChildCountryQuery innerJoinOrder($relationAlias = null) Adds a INNER JOIN clause to the query using the Order relation
+ * @method     ChildShippingZoneQuery leftJoinShippingOption($relationAlias = null) Adds a LEFT JOIN clause to the query using the ShippingOption relation
+ * @method     ChildShippingZoneQuery rightJoinShippingOption($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ShippingOption relation
+ * @method     ChildShippingZoneQuery innerJoinShippingOption($relationAlias = null) Adds a INNER JOIN clause to the query using the ShippingOption relation
  *
- * @method     ChildCountryQuery joinWithOrder($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Order relation
+ * @method     ChildShippingZoneQuery joinWithShippingOption($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the ShippingOption relation
  *
- * @method     ChildCountryQuery leftJoinWithOrder() Adds a LEFT JOIN clause and with to the query using the Order relation
- * @method     ChildCountryQuery rightJoinWithOrder() Adds a RIGHT JOIN clause and with to the query using the Order relation
- * @method     ChildCountryQuery innerJoinWithOrder() Adds a INNER JOIN clause and with to the query using the Order relation
+ * @method     ChildShippingZoneQuery leftJoinWithShippingOption() Adds a LEFT JOIN clause and with to the query using the ShippingOption relation
+ * @method     ChildShippingZoneQuery rightJoinWithShippingOption() Adds a RIGHT JOIN clause and with to the query using the ShippingOption relation
+ * @method     ChildShippingZoneQuery innerJoinWithShippingOption() Adds a INNER JOIN clause and with to the query using the ShippingOption relation
  *
- * @method     ChildCountryQuery leftJoinShippingZonesCountries($relationAlias = null) Adds a LEFT JOIN clause to the query using the ShippingZonesCountries relation
- * @method     ChildCountryQuery rightJoinShippingZonesCountries($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ShippingZonesCountries relation
- * @method     ChildCountryQuery innerJoinShippingZonesCountries($relationAlias = null) Adds a INNER JOIN clause to the query using the ShippingZonesCountries relation
+ * @method     ChildShippingZoneQuery leftJoinShippingZonesCountries($relationAlias = null) Adds a LEFT JOIN clause to the query using the ShippingZonesCountries relation
+ * @method     ChildShippingZoneQuery rightJoinShippingZonesCountries($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ShippingZonesCountries relation
+ * @method     ChildShippingZoneQuery innerJoinShippingZonesCountries($relationAlias = null) Adds a INNER JOIN clause to the query using the ShippingZonesCountries relation
  *
- * @method     ChildCountryQuery joinWithShippingZonesCountries($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the ShippingZonesCountries relation
+ * @method     ChildShippingZoneQuery joinWithShippingZonesCountries($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the ShippingZonesCountries relation
  *
- * @method     ChildCountryQuery leftJoinWithShippingZonesCountries() Adds a LEFT JOIN clause and with to the query using the ShippingZonesCountries relation
- * @method     ChildCountryQuery rightJoinWithShippingZonesCountries() Adds a RIGHT JOIN clause and with to the query using the ShippingZonesCountries relation
- * @method     ChildCountryQuery innerJoinWithShippingZonesCountries() Adds a INNER JOIN clause and with to the query using the ShippingZonesCountries relation
+ * @method     ChildShippingZoneQuery leftJoinWithShippingZonesCountries() Adds a LEFT JOIN clause and with to the query using the ShippingZonesCountries relation
+ * @method     ChildShippingZoneQuery rightJoinWithShippingZonesCountries() Adds a RIGHT JOIN clause and with to the query using the ShippingZonesCountries relation
+ * @method     ChildShippingZoneQuery innerJoinWithShippingZonesCountries() Adds a INNER JOIN clause and with to the query using the ShippingZonesCountries relation
  *
- * @method     \Model\OrderQuery|\Model\ShippingZonesCountriesQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\ShippingOptionQuery|\Model\ShippingZonesCountriesQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildCountry|null findOne(?ConnectionInterface $con = null) Return the first ChildCountry matching the query
- * @method     ChildCountry findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildCountry matching the query, or a new ChildCountry object populated from the query conditions when no match is found
+ * @method     ChildShippingZone|null findOne(?ConnectionInterface $con = null) Return the first ChildShippingZone matching the query
+ * @method     ChildShippingZone findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildShippingZone matching the query, or a new ChildShippingZone object populated from the query conditions when no match is found
  *
- * @method     ChildCountry|null findOneById(int $country_id) Return the first ChildCountry filtered by the country_id column
- * @method     ChildCountry|null findOneByCode(string $country_code) Return the first ChildCountry filtered by the country_code column
- * @method     ChildCountry|null findOneByName(string $country_name) Return the first ChildCountry filtered by the country_name column
- * @method     ChildCountry|null findOneByNameEn(string $country_name_en) Return the first ChildCountry filtered by the country_name_en column
- * @method     ChildCountry|null findOneByShippingZoneCode(string $shipping_zone) Return the first ChildCountry filtered by the shipping_zone column
- * @method     ChildCountry|null findOneByCreatedAt(string $country_created) Return the first ChildCountry filtered by the country_created column
- * @method     ChildCountry|null findOneByUpdatedAt(string $country_updated) Return the first ChildCountry filtered by the country_updated column
+ * @method     ChildShippingZone|null findOneById(int $id) Return the first ChildShippingZone filtered by the id column
+ * @method     ChildShippingZone|null findOneByName(string $name) Return the first ChildShippingZone filtered by the name column
+ * @method     ChildShippingZone|null findOneByDescription(string $description) Return the first ChildShippingZone filtered by the description column
+ * @method     ChildShippingZone|null findOneByCreatedAt(string $created_at) Return the first ChildShippingZone filtered by the created_at column
+ * @method     ChildShippingZone|null findOneByUpdatedAt(string $updated_at) Return the first ChildShippingZone filtered by the updated_at column
  *
- * @method     ChildCountry requirePk($key, ?ConnectionInterface $con = null) Return the ChildCountry by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCountry requireOne(?ConnectionInterface $con = null) Return the first ChildCountry matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingZone requirePk($key, ?ConnectionInterface $con = null) Return the ChildShippingZone by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingZone requireOne(?ConnectionInterface $con = null) Return the first ChildShippingZone matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildCountry requireOneById(int $country_id) Return the first ChildCountry filtered by the country_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCountry requireOneByCode(string $country_code) Return the first ChildCountry filtered by the country_code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCountry requireOneByName(string $country_name) Return the first ChildCountry filtered by the country_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCountry requireOneByNameEn(string $country_name_en) Return the first ChildCountry filtered by the country_name_en column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCountry requireOneByShippingZoneCode(string $shipping_zone) Return the first ChildCountry filtered by the shipping_zone column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCountry requireOneByCreatedAt(string $country_created) Return the first ChildCountry filtered by the country_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCountry requireOneByUpdatedAt(string $country_updated) Return the first ChildCountry filtered by the country_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingZone requireOneById(int $id) Return the first ChildShippingZone filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingZone requireOneByName(string $name) Return the first ChildShippingZone filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingZone requireOneByDescription(string $description) Return the first ChildShippingZone filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingZone requireOneByCreatedAt(string $created_at) Return the first ChildShippingZone filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingZone requireOneByUpdatedAt(string $updated_at) Return the first ChildShippingZone filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildCountry[]|Collection find(?ConnectionInterface $con = null) Return ChildCountry objects based on current ModelCriteria
- * @psalm-method Collection&\Traversable<ChildCountry> find(?ConnectionInterface $con = null) Return ChildCountry objects based on current ModelCriteria
+ * @method     ChildShippingZone[]|Collection find(?ConnectionInterface $con = null) Return ChildShippingZone objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildShippingZone> find(?ConnectionInterface $con = null) Return ChildShippingZone objects based on current ModelCriteria
  *
- * @method     ChildCountry[]|Collection findById(int|array<int> $country_id) Return ChildCountry objects filtered by the country_id column
- * @psalm-method Collection&\Traversable<ChildCountry> findById(int|array<int> $country_id) Return ChildCountry objects filtered by the country_id column
- * @method     ChildCountry[]|Collection findByCode(string|array<string> $country_code) Return ChildCountry objects filtered by the country_code column
- * @psalm-method Collection&\Traversable<ChildCountry> findByCode(string|array<string> $country_code) Return ChildCountry objects filtered by the country_code column
- * @method     ChildCountry[]|Collection findByName(string|array<string> $country_name) Return ChildCountry objects filtered by the country_name column
- * @psalm-method Collection&\Traversable<ChildCountry> findByName(string|array<string> $country_name) Return ChildCountry objects filtered by the country_name column
- * @method     ChildCountry[]|Collection findByNameEn(string|array<string> $country_name_en) Return ChildCountry objects filtered by the country_name_en column
- * @psalm-method Collection&\Traversable<ChildCountry> findByNameEn(string|array<string> $country_name_en) Return ChildCountry objects filtered by the country_name_en column
- * @method     ChildCountry[]|Collection findByShippingZoneCode(string|array<string> $shipping_zone) Return ChildCountry objects filtered by the shipping_zone column
- * @psalm-method Collection&\Traversable<ChildCountry> findByShippingZoneCode(string|array<string> $shipping_zone) Return ChildCountry objects filtered by the shipping_zone column
- * @method     ChildCountry[]|Collection findByCreatedAt(string|array<string> $country_created) Return ChildCountry objects filtered by the country_created column
- * @psalm-method Collection&\Traversable<ChildCountry> findByCreatedAt(string|array<string> $country_created) Return ChildCountry objects filtered by the country_created column
- * @method     ChildCountry[]|Collection findByUpdatedAt(string|array<string> $country_updated) Return ChildCountry objects filtered by the country_updated column
- * @psalm-method Collection&\Traversable<ChildCountry> findByUpdatedAt(string|array<string> $country_updated) Return ChildCountry objects filtered by the country_updated column
+ * @method     ChildShippingZone[]|Collection findById(int|array<int> $id) Return ChildShippingZone objects filtered by the id column
+ * @psalm-method Collection&\Traversable<ChildShippingZone> findById(int|array<int> $id) Return ChildShippingZone objects filtered by the id column
+ * @method     ChildShippingZone[]|Collection findByName(string|array<string> $name) Return ChildShippingZone objects filtered by the name column
+ * @psalm-method Collection&\Traversable<ChildShippingZone> findByName(string|array<string> $name) Return ChildShippingZone objects filtered by the name column
+ * @method     ChildShippingZone[]|Collection findByDescription(string|array<string> $description) Return ChildShippingZone objects filtered by the description column
+ * @psalm-method Collection&\Traversable<ChildShippingZone> findByDescription(string|array<string> $description) Return ChildShippingZone objects filtered by the description column
+ * @method     ChildShippingZone[]|Collection findByCreatedAt(string|array<string> $created_at) Return ChildShippingZone objects filtered by the created_at column
+ * @psalm-method Collection&\Traversable<ChildShippingZone> findByCreatedAt(string|array<string> $created_at) Return ChildShippingZone objects filtered by the created_at column
+ * @method     ChildShippingZone[]|Collection findByUpdatedAt(string|array<string> $updated_at) Return ChildShippingZone objects filtered by the updated_at column
+ * @psalm-method Collection&\Traversable<ChildShippingZone> findByUpdatedAt(string|array<string> $updated_at) Return ChildShippingZone objects filtered by the updated_at column
  *
- * @method     ChildCountry[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCountry> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildShippingZone[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildShippingZone> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
-abstract class CountryQuery extends ModelCriteria
+abstract class ShippingZoneQuery extends ModelCriteria
 {
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \Model\Base\CountryQuery object.
+     * Initializes internal state of \Model\Base\ShippingZoneQuery object.
      *
      * @param string $dbName The database name
      * @param string $modelName The phpName of a model, e.g. 'Book'
      * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'default', $modelName = '\\Model\\Country', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\Model\\ShippingZone', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new ChildCountryQuery object.
+     * Returns a new ChildShippingZoneQuery object.
      *
      * @param string $modelAlias The alias of a model in the query
      * @param Criteria $criteria Optional Criteria to build the query from
      *
-     * @return ChildCountryQuery
+     * @return ChildShippingZoneQuery
      */
     public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
-        if ($criteria instanceof ChildCountryQuery) {
+        if ($criteria instanceof ChildShippingZoneQuery) {
             return $criteria;
         }
-        $query = new ChildCountryQuery();
+        $query = new ChildShippingZoneQuery();
         if (null !== $modelAlias) {
             $query->setModelAlias($modelAlias);
         }
@@ -160,7 +148,7 @@ abstract class CountryQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
-     * @return ChildCountry|array|mixed the result, formatted by the current formatter
+     * @return ChildShippingZone|array|mixed the result, formatted by the current formatter
      */
     public function findPk($key, ?ConnectionInterface $con = null)
     {
@@ -169,7 +157,7 @@ abstract class CountryQuery extends ModelCriteria
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(CountryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(ShippingZoneTableMap::DATABASE_NAME);
         }
 
         $this->basePreSelect($con);
@@ -182,7 +170,7 @@ abstract class CountryQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = CountryTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
+        if ((null !== ($obj = ShippingZoneTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -199,11 +187,11 @@ abstract class CountryQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildCountry A model object, or null if the key is not found
+     * @return ChildShippingZone A model object, or null if the key is not found
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT country_id, country_code, country_name, country_name_en, shipping_zone, country_created, country_updated FROM countries WHERE country_id = :p0';
+        $sql = 'SELECT id, name, description, created_at, updated_at FROM shipping_zones WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -214,10 +202,10 @@ abstract class CountryQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildCountry $obj */
-            $obj = new ChildCountry();
+            /** @var ChildShippingZone $obj */
+            $obj = new ChildShippingZone();
             $obj->hydrate($row);
-            CountryTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
+            ShippingZoneTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -230,7 +218,7 @@ abstract class CountryQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con A connection object
      *
-     * @return ChildCountry|array|mixed the result, formatted by the current formatter
+     * @return ChildShippingZone|array|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, ConnectionInterface $con)
     {
@@ -277,7 +265,7 @@ abstract class CountryQuery extends ModelCriteria
     public function filterByPrimaryKey($key)
     {
 
-        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(ShippingZoneTableMap::COL_ID, $key, Criteria::EQUAL);
 
         return $this;
     }
@@ -292,19 +280,19 @@ abstract class CountryQuery extends ModelCriteria
     public function filterByPrimaryKeys($keys)
     {
 
-        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(ShippingZoneTableMap::COL_ID, $keys, Criteria::IN);
 
         return $this;
     }
 
     /**
-     * Filter the query on the country_id column
+     * Filter the query on the id column
      *
      * Example usage:
      * <code>
-     * $query->filterById(1234); // WHERE country_id = 1234
-     * $query->filterById(array(12, 34)); // WHERE country_id IN (12, 34)
-     * $query->filterById(array('min' => 12)); // WHERE country_id > 12
+     * $query->filterById(1234); // WHERE id = 1234
+     * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
+     * $query->filterById(array('min' => 12)); // WHERE id > 12
      * </code>
      *
      * @param mixed $id The value to use as filter.
@@ -320,11 +308,11 @@ abstract class CountryQuery extends ModelCriteria
         if (is_array($id)) {
             $useMinMax = false;
             if (isset($id['min'])) {
-                $this->addUsingAlias(CountryTableMap::COL_COUNTRY_ID, $id['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ShippingZoneTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($id['max'])) {
-                $this->addUsingAlias(CountryTableMap::COL_COUNTRY_ID, $id['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ShippingZoneTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -335,47 +323,19 @@ abstract class CountryQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_ID, $id, $comparison);
+        $this->addUsingAlias(ShippingZoneTableMap::COL_ID, $id, $comparison);
 
         return $this;
     }
 
     /**
-     * Filter the query on the country_code column
+     * Filter the query on the name column
      *
      * Example usage:
      * <code>
-     * $query->filterByCode('fooValue');   // WHERE country_code = 'fooValue'
-     * $query->filterByCode('%fooValue%', Criteria::LIKE); // WHERE country_code LIKE '%fooValue%'
-     * $query->filterByCode(['foo', 'bar']); // WHERE country_code IN ('foo', 'bar')
-     * </code>
-     *
-     * @param string|string[] $code The value to use as filter.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByCode($code = null, ?string $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($code)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_CODE, $code, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the country_name column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByName('fooValue');   // WHERE country_name = 'fooValue'
-     * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE country_name LIKE '%fooValue%'
-     * $query->filterByName(['foo', 'bar']); // WHERE country_name IN ('foo', 'bar')
+     * $query->filterByName('fooValue');   // WHERE name = 'fooValue'
+     * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE name LIKE '%fooValue%'
+     * $query->filterByName(['foo', 'bar']); // WHERE name IN ('foo', 'bar')
      * </code>
      *
      * @param string|string[] $name The value to use as filter.
@@ -391,75 +351,47 @@ abstract class CountryQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_NAME, $name, $comparison);
+        $this->addUsingAlias(ShippingZoneTableMap::COL_NAME, $name, $comparison);
 
         return $this;
     }
 
     /**
-     * Filter the query on the country_name_en column
+     * Filter the query on the description column
      *
      * Example usage:
      * <code>
-     * $query->filterByNameEn('fooValue');   // WHERE country_name_en = 'fooValue'
-     * $query->filterByNameEn('%fooValue%', Criteria::LIKE); // WHERE country_name_en LIKE '%fooValue%'
-     * $query->filterByNameEn(['foo', 'bar']); // WHERE country_name_en IN ('foo', 'bar')
+     * $query->filterByDescription('fooValue');   // WHERE description = 'fooValue'
+     * $query->filterByDescription('%fooValue%', Criteria::LIKE); // WHERE description LIKE '%fooValue%'
+     * $query->filterByDescription(['foo', 'bar']); // WHERE description IN ('foo', 'bar')
      * </code>
      *
-     * @param string|string[] $nameEn The value to use as filter.
+     * @param string|string[] $description The value to use as filter.
      * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByNameEn($nameEn = null, ?string $comparison = null)
+    public function filterByDescription($description = null, ?string $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($nameEn)) {
+            if (is_array($description)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_NAME_EN, $nameEn, $comparison);
+        $this->addUsingAlias(ShippingZoneTableMap::COL_DESCRIPTION, $description, $comparison);
 
         return $this;
     }
 
     /**
-     * Filter the query on the shipping_zone column
+     * Filter the query on the created_at column
      *
      * Example usage:
      * <code>
-     * $query->filterByShippingZoneCode('fooValue');   // WHERE shipping_zone = 'fooValue'
-     * $query->filterByShippingZoneCode('%fooValue%', Criteria::LIKE); // WHERE shipping_zone LIKE '%fooValue%'
-     * $query->filterByShippingZoneCode(['foo', 'bar']); // WHERE shipping_zone IN ('foo', 'bar')
-     * </code>
-     *
-     * @param string|string[] $shippingZoneCode The value to use as filter.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByShippingZoneCode($shippingZoneCode = null, ?string $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($shippingZoneCode)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(CountryTableMap::COL_SHIPPING_ZONE, $shippingZoneCode, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the country_created column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByCreatedAt('2011-03-14'); // WHERE country_created = '2011-03-14'
-     * $query->filterByCreatedAt('now'); // WHERE country_created = '2011-03-14'
-     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE country_created > '2011-03-13'
+     * $query->filterByCreatedAt('2011-03-14'); // WHERE created_at = '2011-03-14'
+     * $query->filterByCreatedAt('now'); // WHERE created_at = '2011-03-14'
+     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at > '2011-03-13'
      * </code>
      *
      * @param mixed $createdAt The value to use as filter.
@@ -477,11 +409,11 @@ abstract class CountryQuery extends ModelCriteria
         if (is_array($createdAt)) {
             $useMinMax = false;
             if (isset($createdAt['min'])) {
-                $this->addUsingAlias(CountryTableMap::COL_COUNTRY_CREATED, $createdAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ShippingZoneTableMap::COL_CREATED_AT, $createdAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($createdAt['max'])) {
-                $this->addUsingAlias(CountryTableMap::COL_COUNTRY_CREATED, $createdAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ShippingZoneTableMap::COL_CREATED_AT, $createdAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -492,19 +424,19 @@ abstract class CountryQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(ShippingZoneTableMap::COL_CREATED_AT, $createdAt, $comparison);
 
         return $this;
     }
 
     /**
-     * Filter the query on the country_updated column
+     * Filter the query on the updated_at column
      *
      * Example usage:
      * <code>
-     * $query->filterByUpdatedAt('2011-03-14'); // WHERE country_updated = '2011-03-14'
-     * $query->filterByUpdatedAt('now'); // WHERE country_updated = '2011-03-14'
-     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE country_updated > '2011-03-13'
+     * $query->filterByUpdatedAt('2011-03-14'); // WHERE updated_at = '2011-03-14'
+     * $query->filterByUpdatedAt('now'); // WHERE updated_at = '2011-03-14'
+     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at > '2011-03-13'
      * </code>
      *
      * @param mixed $updatedAt The value to use as filter.
@@ -522,11 +454,11 @@ abstract class CountryQuery extends ModelCriteria
         if (is_array($updatedAt)) {
             $useMinMax = false;
             if (isset($updatedAt['min'])) {
-                $this->addUsingAlias(CountryTableMap::COL_COUNTRY_UPDATED, $updatedAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ShippingZoneTableMap::COL_UPDATED_AT, $updatedAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($updatedAt['max'])) {
-                $this->addUsingAlias(CountryTableMap::COL_COUNTRY_UPDATED, $updatedAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ShippingZoneTableMap::COL_UPDATED_AT, $updatedAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -537,50 +469,50 @@ abstract class CountryQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(ShippingZoneTableMap::COL_UPDATED_AT, $updatedAt, $comparison);
 
         return $this;
     }
 
     /**
-     * Filter the query by a related \Model\Order object
+     * Filter the query by a related \Model\ShippingOption object
      *
-     * @param \Model\Order|ObjectCollection $order the related object to use as filter
+     * @param \Model\ShippingOption|ObjectCollection $shippingOption the related object to use as filter
      * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByOrder($order, ?string $comparison = null)
+    public function filterByShippingOption($shippingOption, ?string $comparison = null)
     {
-        if ($order instanceof \Model\Order) {
+        if ($shippingOption instanceof \Model\ShippingOption) {
             $this
-                ->addUsingAlias(CountryTableMap::COL_COUNTRY_ID, $order->getCountryId(), $comparison);
+                ->addUsingAlias(ShippingZoneTableMap::COL_ID, $shippingOption->getShippingZoneId(), $comparison);
 
             return $this;
-        } elseif ($order instanceof ObjectCollection) {
+        } elseif ($shippingOption instanceof ObjectCollection) {
             $this
-                ->useOrderQuery()
-                ->filterByPrimaryKeys($order->getPrimaryKeys())
+                ->useShippingOptionQuery()
+                ->filterByPrimaryKeys($shippingOption->getPrimaryKeys())
                 ->endUse();
 
             return $this;
         } else {
-            throw new PropelException('filterByOrder() only accepts arguments of type \Model\Order or Collection');
+            throw new PropelException('filterByShippingOption() only accepts arguments of type \Model\ShippingOption or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the Order relation
+     * Adds a JOIN clause to the query using the ShippingOption relation
      *
      * @param string|null $relationAlias Optional alias for the relation
      * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this The current query, for fluid interface
      */
-    public function joinOrder(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    public function joinShippingOption(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Order');
+        $relationMap = $tableMap->getRelation('ShippingOption');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -595,14 +527,14 @@ abstract class CountryQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'Order');
+            $this->addJoinObject($join, 'ShippingOption');
         }
 
         return $this;
     }
 
     /**
-     * Use the Order relation Order object
+     * Use the ShippingOption relation ShippingOption object
      *
      * @see useQuery()
      *
@@ -610,19 +542,19 @@ abstract class CountryQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \Model\OrderQuery A secondary query class using the current class as primary query
+     * @return \Model\ShippingOptionQuery A secondary query class using the current class as primary query
      */
-    public function useOrderQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useShippingOptionQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
-            ->joinOrder($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Order', '\Model\OrderQuery');
+            ->joinShippingOption($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ShippingOption', '\Model\ShippingOptionQuery');
     }
 
     /**
-     * Use the Order relation Order object
+     * Use the ShippingOption relation ShippingOption object
      *
-     * @param callable(\Model\OrderQuery):\Model\OrderQuery $callable A function working on the related query
+     * @param callable(\Model\ShippingOptionQuery):\Model\ShippingOptionQuery $callable A function working on the related query
      *
      * @param string|null $relationAlias optional alias for the relation
      *
@@ -630,12 +562,12 @@ abstract class CountryQuery extends ModelCriteria
      *
      * @return $this
      */
-    public function withOrderQuery(
+    public function withShippingOptionQuery(
         callable $callable,
         string $relationAlias = null,
         ?string $joinType = Criteria::LEFT_JOIN
     ) {
-        $relatedQuery = $this->useOrderQuery(
+        $relatedQuery = $this->useShippingOptionQuery(
             $relationAlias,
             $joinType
         );
@@ -646,7 +578,7 @@ abstract class CountryQuery extends ModelCriteria
     }
 
     /**
-     * Use the relation to Order table for an EXISTS query.
+     * Use the relation to ShippingOption table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
@@ -654,34 +586,34 @@ abstract class CountryQuery extends ModelCriteria
      * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
-     * @return \Model\OrderQuery The inner query object of the EXISTS statement
+     * @return \Model\ShippingOptionQuery The inner query object of the EXISTS statement
      */
-    public function useOrderExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    public function useShippingOptionExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        /** @var $q \Model\OrderQuery */
-        $q = $this->useExistsQuery('Order', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\ShippingOptionQuery */
+        $q = $this->useExistsQuery('ShippingOption', $modelAlias, $queryClass, $typeOfExists);
         return $q;
     }
 
     /**
-     * Use the relation to Order table for a NOT EXISTS query.
+     * Use the relation to ShippingOption table for a NOT EXISTS query.
      *
-     * @see useOrderExistsQuery()
+     * @see useShippingOptionExistsQuery()
      *
      * @param string|null $modelAlias sets an alias for the nested query
      * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      *
-     * @return \Model\OrderQuery The inner query object of the NOT EXISTS statement
+     * @return \Model\ShippingOptionQuery The inner query object of the NOT EXISTS statement
      */
-    public function useOrderNotExistsQuery($modelAlias = null, $queryClass = null)
+    public function useShippingOptionNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        /** @var $q \Model\OrderQuery */
-        $q = $this->useExistsQuery('Order', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\ShippingOptionQuery */
+        $q = $this->useExistsQuery('ShippingOption', $modelAlias, $queryClass, 'NOT EXISTS');
         return $q;
     }
 
     /**
-     * Use the relation to Order table for an IN query.
+     * Use the relation to ShippingOption table for an IN query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
      *
@@ -689,29 +621,29 @@ abstract class CountryQuery extends ModelCriteria
      * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
      * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
      *
-     * @return \Model\OrderQuery The inner query object of the IN statement
+     * @return \Model\ShippingOptionQuery The inner query object of the IN statement
      */
-    public function useInOrderQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    public function useInShippingOptionQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
     {
-        /** @var $q \Model\OrderQuery */
-        $q = $this->useInQuery('Order', $modelAlias, $queryClass, $typeOfIn);
+        /** @var $q \Model\ShippingOptionQuery */
+        $q = $this->useInQuery('ShippingOption', $modelAlias, $queryClass, $typeOfIn);
         return $q;
     }
 
     /**
-     * Use the relation to Order table for a NOT IN query.
+     * Use the relation to ShippingOption table for a NOT IN query.
      *
-     * @see useOrderInQuery()
+     * @see useShippingOptionInQuery()
      *
      * @param string|null $modelAlias sets an alias for the nested query
      * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
      *
-     * @return \Model\OrderQuery The inner query object of the NOT IN statement
+     * @return \Model\ShippingOptionQuery The inner query object of the NOT IN statement
      */
-    public function useNotInOrderQuery($modelAlias = null, $queryClass = null)
+    public function useNotInShippingOptionQuery($modelAlias = null, $queryClass = null)
     {
-        /** @var $q \Model\OrderQuery */
-        $q = $this->useInQuery('Order', $modelAlias, $queryClass, 'NOT IN');
+        /** @var $q \Model\ShippingOptionQuery */
+        $q = $this->useInQuery('ShippingOption', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 
@@ -727,7 +659,7 @@ abstract class CountryQuery extends ModelCriteria
     {
         if ($shippingZonesCountries instanceof \Model\ShippingZonesCountries) {
             $this
-                ->addUsingAlias(CountryTableMap::COL_COUNTRY_ID, $shippingZonesCountries->getCountryId(), $comparison);
+                ->addUsingAlias(ShippingZoneTableMap::COL_ID, $shippingZonesCountries->getShippingZoneId(), $comparison);
 
             return $this;
         } elseif ($shippingZonesCountries instanceof ObjectCollection) {
@@ -889,19 +821,19 @@ abstract class CountryQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related ShippingZone object
+     * Filter the query by a related Country object
      * using the shipping_zones_countries table as cross reference
      *
-     * @param ShippingZone $shippingZone the related object to use as filter
+     * @param Country $country the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL and Criteria::IN for queries
      *
      * @return $this The current query, for fluid interface
      */
-    public function filterByShippingZone($shippingZone, string $comparison = null)
+    public function filterByCountry($country, string $comparison = null)
     {
         $this
             ->useShippingZonesCountriesQuery()
-            ->filterByShippingZone($shippingZone, $comparison)
+            ->filterByCountry($country, $comparison)
             ->endUse();
 
         return $this;
@@ -910,21 +842,21 @@ abstract class CountryQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param ChildCountry $country Object to remove from the list of results
+     * @param ChildShippingZone $shippingZone Object to remove from the list of results
      *
      * @return $this The current query, for fluid interface
      */
-    public function prune($country = null)
+    public function prune($shippingZone = null)
     {
-        if ($country) {
-            $this->addUsingAlias(CountryTableMap::COL_COUNTRY_ID, $country->getId(), Criteria::NOT_EQUAL);
+        if ($shippingZone) {
+            $this->addUsingAlias(ShippingZoneTableMap::COL_ID, $shippingZone->getId(), Criteria::NOT_EQUAL);
         }
 
         return $this;
     }
 
     /**
-     * Deletes all rows from the countries table.
+     * Deletes all rows from the shipping_zones table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
@@ -932,7 +864,7 @@ abstract class CountryQuery extends ModelCriteria
     public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(CountryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(ShippingZoneTableMap::DATABASE_NAME);
         }
 
         // use transaction because $criteria could contain info
@@ -943,8 +875,8 @@ abstract class CountryQuery extends ModelCriteria
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            CountryTableMap::clearInstancePool();
-            CountryTableMap::clearRelatedInstancePool();
+            ShippingZoneTableMap::clearInstancePool();
+            ShippingZoneTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -962,23 +894,23 @@ abstract class CountryQuery extends ModelCriteria
     public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(CountryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(ShippingZoneTableMap::DATABASE_NAME);
         }
 
         $criteria = $this;
 
         // Set the correct dbName
-        $criteria->setDbName(CountryTableMap::DATABASE_NAME);
+        $criteria->setDbName(ShippingZoneTableMap::DATABASE_NAME);
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
 
-            CountryTableMap::removeInstanceFromPool($criteria);
+            ShippingZoneTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
-            CountryTableMap::clearRelatedInstancePool();
+            ShippingZoneTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -995,7 +927,7 @@ abstract class CountryQuery extends ModelCriteria
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(ShippingZoneTableMap::COL_UPDATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
 
         return $this;
     }
@@ -1007,7 +939,7 @@ abstract class CountryQuery extends ModelCriteria
      */
     public function lastUpdatedFirst()
     {
-        $this->addDescendingOrderByColumn(CountryTableMap::COL_COUNTRY_UPDATED);
+        $this->addDescendingOrderByColumn(ShippingZoneTableMap::COL_UPDATED_AT);
 
         return $this;
     }
@@ -1019,7 +951,7 @@ abstract class CountryQuery extends ModelCriteria
      */
     public function firstUpdatedFirst()
     {
-        $this->addAscendingOrderByColumn(CountryTableMap::COL_COUNTRY_UPDATED);
+        $this->addAscendingOrderByColumn(ShippingZoneTableMap::COL_UPDATED_AT);
 
         return $this;
     }
@@ -1031,7 +963,7 @@ abstract class CountryQuery extends ModelCriteria
      */
     public function lastCreatedFirst()
     {
-        $this->addDescendingOrderByColumn(CountryTableMap::COL_COUNTRY_CREATED);
+        $this->addDescendingOrderByColumn(ShippingZoneTableMap::COL_CREATED_AT);
 
         return $this;
     }
@@ -1045,7 +977,7 @@ abstract class CountryQuery extends ModelCriteria
      */
     public function recentlyCreated($nbDays = 7)
     {
-        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(ShippingZoneTableMap::COL_CREATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
 
         return $this;
     }
@@ -1057,7 +989,7 @@ abstract class CountryQuery extends ModelCriteria
      */
     public function firstCreatedFirst()
     {
-        $this->addAscendingOrderByColumn(CountryTableMap::COL_COUNTRY_CREATED);
+        $this->addAscendingOrderByColumn(ShippingZoneTableMap::COL_CREATED_AT);
 
         return $this;
     }

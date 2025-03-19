@@ -2,8 +2,8 @@
 
 namespace Model\Map;
 
-use Model\Country;
-use Model\CountryQuery;
+use Model\ShippingZone;
+use Model\ShippingZoneQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'countries' table.
+ * This class defines the structure of the 'shipping_zones' table.
  *
  *
  *
@@ -25,7 +25,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
  */
-class CountryTableMap extends TableMap
+class ShippingZoneTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -33,7 +33,7 @@ class CountryTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    public const CLASS_NAME = 'Model.Map.CountryTableMap';
+    public const CLASS_NAME = 'Model.Map.ShippingZoneTableMap';
 
     /**
      * The default database name for this class
@@ -43,27 +43,27 @@ class CountryTableMap extends TableMap
     /**
      * The table name for this class
      */
-    public const TABLE_NAME = 'countries';
+    public const TABLE_NAME = 'shipping_zones';
 
     /**
      * The PHP name of this class (PascalCase)
      */
-    public const TABLE_PHP_NAME = 'Country';
+    public const TABLE_PHP_NAME = 'ShippingZone';
 
     /**
      * The related Propel class for this table
      */
-    public const OM_CLASS = '\\Model\\Country';
+    public const OM_CLASS = '\\Model\\ShippingZone';
 
     /**
      * A class that can be returned by this tableMap
      */
-    public const CLASS_DEFAULT = 'Model.Country';
+    public const CLASS_DEFAULT = 'Model.ShippingZone';
 
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 7;
+    public const NUM_COLUMNS = 5;
 
     /**
      * The number of lazy-loaded columns
@@ -73,42 +73,32 @@ class CountryTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 7;
+    public const NUM_HYDRATE_COLUMNS = 5;
 
     /**
-     * the column name for the country_id field
+     * the column name for the id field
      */
-    public const COL_COUNTRY_ID = 'countries.country_id';
+    public const COL_ID = 'shipping_zones.id';
 
     /**
-     * the column name for the country_code field
+     * the column name for the name field
      */
-    public const COL_COUNTRY_CODE = 'countries.country_code';
+    public const COL_NAME = 'shipping_zones.name';
 
     /**
-     * the column name for the country_name field
+     * the column name for the description field
      */
-    public const COL_COUNTRY_NAME = 'countries.country_name';
+    public const COL_DESCRIPTION = 'shipping_zones.description';
 
     /**
-     * the column name for the country_name_en field
+     * the column name for the created_at field
      */
-    public const COL_COUNTRY_NAME_EN = 'countries.country_name_en';
+    public const COL_CREATED_AT = 'shipping_zones.created_at';
 
     /**
-     * the column name for the shipping_zone field
+     * the column name for the updated_at field
      */
-    public const COL_SHIPPING_ZONE = 'countries.shipping_zone';
-
-    /**
-     * the column name for the country_created field
-     */
-    public const COL_COUNTRY_CREATED = 'countries.country_created';
-
-    /**
-     * the column name for the country_updated field
-     */
-    public const COL_COUNTRY_UPDATED = 'countries.country_updated';
+    public const COL_UPDATED_AT = 'shipping_zones.updated_at';
 
     /**
      * The default string format for model objects of the related table
@@ -124,11 +114,11 @@ class CountryTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'Code', 'Name', 'NameEn', 'ShippingZoneCode', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'code', 'name', 'nameEn', 'shippingZoneCode', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [CountryTableMap::COL_COUNTRY_ID, CountryTableMap::COL_COUNTRY_CODE, CountryTableMap::COL_COUNTRY_NAME, CountryTableMap::COL_COUNTRY_NAME_EN, CountryTableMap::COL_SHIPPING_ZONE, CountryTableMap::COL_COUNTRY_CREATED, CountryTableMap::COL_COUNTRY_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['country_id', 'country_code', 'country_name', 'country_name_en', 'shipping_zone', 'country_created', 'country_updated', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
+        self::TYPE_PHPNAME       => ['Id', 'Name', 'Description', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'name', 'description', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [ShippingZoneTableMap::COL_ID, ShippingZoneTableMap::COL_NAME, ShippingZoneTableMap::COL_DESCRIPTION, ShippingZoneTableMap::COL_CREATED_AT, ShippingZoneTableMap::COL_UPDATED_AT, ],
+        self::TYPE_FIELDNAME     => ['id', 'name', 'description', 'created_at', 'updated_at', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, ]
     ];
 
     /**
@@ -140,11 +130,11 @@ class CountryTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'Code' => 1, 'Name' => 2, 'NameEn' => 3, 'ShippingZoneCode' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'code' => 1, 'name' => 2, 'nameEn' => 3, 'shippingZoneCode' => 4, 'createdAt' => 5, 'updatedAt' => 6, ],
-        self::TYPE_COLNAME       => [CountryTableMap::COL_COUNTRY_ID => 0, CountryTableMap::COL_COUNTRY_CODE => 1, CountryTableMap::COL_COUNTRY_NAME => 2, CountryTableMap::COL_COUNTRY_NAME_EN => 3, CountryTableMap::COL_SHIPPING_ZONE => 4, CountryTableMap::COL_COUNTRY_CREATED => 5, CountryTableMap::COL_COUNTRY_UPDATED => 6, ],
-        self::TYPE_FIELDNAME     => ['country_id' => 0, 'country_code' => 1, 'country_name' => 2, 'country_name_en' => 3, 'shipping_zone' => 4, 'country_created' => 5, 'country_updated' => 6, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'Name' => 1, 'Description' => 2, 'CreatedAt' => 3, 'UpdatedAt' => 4, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'name' => 1, 'description' => 2, 'createdAt' => 3, 'updatedAt' => 4, ],
+        self::TYPE_COLNAME       => [ShippingZoneTableMap::COL_ID => 0, ShippingZoneTableMap::COL_NAME => 1, ShippingZoneTableMap::COL_DESCRIPTION => 2, ShippingZoneTableMap::COL_CREATED_AT => 3, ShippingZoneTableMap::COL_UPDATED_AT => 4, ],
+        self::TYPE_FIELDNAME     => ['id' => 0, 'name' => 1, 'description' => 2, 'created_at' => 3, 'updated_at' => 4, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, ]
     ];
 
     /**
@@ -153,62 +143,43 @@ class CountryTableMap extends TableMap
      * @var array<string>
      */
     protected $normalizedColumnNameMap = [
-        'Id' => 'COUNTRY_ID',
-        'Country.Id' => 'COUNTRY_ID',
-        'id' => 'COUNTRY_ID',
-        'country.id' => 'COUNTRY_ID',
-        'CountryTableMap::COL_COUNTRY_ID' => 'COUNTRY_ID',
-        'COL_COUNTRY_ID' => 'COUNTRY_ID',
-        'country_id' => 'COUNTRY_ID',
-        'countries.country_id' => 'COUNTRY_ID',
-        'Code' => 'COUNTRY_CODE',
-        'Country.Code' => 'COUNTRY_CODE',
-        'code' => 'COUNTRY_CODE',
-        'country.code' => 'COUNTRY_CODE',
-        'CountryTableMap::COL_COUNTRY_CODE' => 'COUNTRY_CODE',
-        'COL_COUNTRY_CODE' => 'COUNTRY_CODE',
-        'country_code' => 'COUNTRY_CODE',
-        'countries.country_code' => 'COUNTRY_CODE',
-        'Name' => 'COUNTRY_NAME',
-        'Country.Name' => 'COUNTRY_NAME',
-        'name' => 'COUNTRY_NAME',
-        'country.name' => 'COUNTRY_NAME',
-        'CountryTableMap::COL_COUNTRY_NAME' => 'COUNTRY_NAME',
-        'COL_COUNTRY_NAME' => 'COUNTRY_NAME',
-        'country_name' => 'COUNTRY_NAME',
-        'countries.country_name' => 'COUNTRY_NAME',
-        'NameEn' => 'COUNTRY_NAME_EN',
-        'Country.NameEn' => 'COUNTRY_NAME_EN',
-        'nameEn' => 'COUNTRY_NAME_EN',
-        'country.nameEn' => 'COUNTRY_NAME_EN',
-        'CountryTableMap::COL_COUNTRY_NAME_EN' => 'COUNTRY_NAME_EN',
-        'COL_COUNTRY_NAME_EN' => 'COUNTRY_NAME_EN',
-        'country_name_en' => 'COUNTRY_NAME_EN',
-        'countries.country_name_en' => 'COUNTRY_NAME_EN',
-        'ShippingZoneCode' => 'SHIPPING_ZONE',
-        'Country.ShippingZoneCode' => 'SHIPPING_ZONE',
-        'shippingZoneCode' => 'SHIPPING_ZONE',
-        'country.shippingZoneCode' => 'SHIPPING_ZONE',
-        'CountryTableMap::COL_SHIPPING_ZONE' => 'SHIPPING_ZONE',
-        'COL_SHIPPING_ZONE' => 'SHIPPING_ZONE',
-        'shipping_zone' => 'SHIPPING_ZONE',
-        'countries.shipping_zone' => 'SHIPPING_ZONE',
-        'CreatedAt' => 'COUNTRY_CREATED',
-        'Country.CreatedAt' => 'COUNTRY_CREATED',
-        'createdAt' => 'COUNTRY_CREATED',
-        'country.createdAt' => 'COUNTRY_CREATED',
-        'CountryTableMap::COL_COUNTRY_CREATED' => 'COUNTRY_CREATED',
-        'COL_COUNTRY_CREATED' => 'COUNTRY_CREATED',
-        'country_created' => 'COUNTRY_CREATED',
-        'countries.country_created' => 'COUNTRY_CREATED',
-        'UpdatedAt' => 'COUNTRY_UPDATED',
-        'Country.UpdatedAt' => 'COUNTRY_UPDATED',
-        'updatedAt' => 'COUNTRY_UPDATED',
-        'country.updatedAt' => 'COUNTRY_UPDATED',
-        'CountryTableMap::COL_COUNTRY_UPDATED' => 'COUNTRY_UPDATED',
-        'COL_COUNTRY_UPDATED' => 'COUNTRY_UPDATED',
-        'country_updated' => 'COUNTRY_UPDATED',
-        'countries.country_updated' => 'COUNTRY_UPDATED',
+        'Id' => 'ID',
+        'ShippingZone.Id' => 'ID',
+        'id' => 'ID',
+        'shippingZone.id' => 'ID',
+        'ShippingZoneTableMap::COL_ID' => 'ID',
+        'COL_ID' => 'ID',
+        'shipping_zones.id' => 'ID',
+        'Name' => 'NAME',
+        'ShippingZone.Name' => 'NAME',
+        'name' => 'NAME',
+        'shippingZone.name' => 'NAME',
+        'ShippingZoneTableMap::COL_NAME' => 'NAME',
+        'COL_NAME' => 'NAME',
+        'shipping_zones.name' => 'NAME',
+        'Description' => 'DESCRIPTION',
+        'ShippingZone.Description' => 'DESCRIPTION',
+        'description' => 'DESCRIPTION',
+        'shippingZone.description' => 'DESCRIPTION',
+        'ShippingZoneTableMap::COL_DESCRIPTION' => 'DESCRIPTION',
+        'COL_DESCRIPTION' => 'DESCRIPTION',
+        'shipping_zones.description' => 'DESCRIPTION',
+        'CreatedAt' => 'CREATED_AT',
+        'ShippingZone.CreatedAt' => 'CREATED_AT',
+        'createdAt' => 'CREATED_AT',
+        'shippingZone.createdAt' => 'CREATED_AT',
+        'ShippingZoneTableMap::COL_CREATED_AT' => 'CREATED_AT',
+        'COL_CREATED_AT' => 'CREATED_AT',
+        'created_at' => 'CREATED_AT',
+        'shipping_zones.created_at' => 'CREATED_AT',
+        'UpdatedAt' => 'UPDATED_AT',
+        'ShippingZone.UpdatedAt' => 'UPDATED_AT',
+        'updatedAt' => 'UPDATED_AT',
+        'shippingZone.updatedAt' => 'UPDATED_AT',
+        'ShippingZoneTableMap::COL_UPDATED_AT' => 'UPDATED_AT',
+        'COL_UPDATED_AT' => 'UPDATED_AT',
+        'updated_at' => 'UPDATED_AT',
+        'shipping_zones.updated_at' => 'UPDATED_AT',
     ];
 
     /**
@@ -221,20 +192,18 @@ class CountryTableMap extends TableMap
     public function initialize(): void
     {
         // attributes
-        $this->setName('countries');
-        $this->setPhpName('Country');
+        $this->setName('shipping_zones');
+        $this->setPhpName('ShippingZone');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\Model\\Country');
+        $this->setClassName('\\Model\\ShippingZone');
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('country_id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('country_code', 'Code', 'VARCHAR', false, 3, null);
-        $this->addColumn('country_name', 'Name', 'VARCHAR', false, 200, null);
-        $this->addColumn('country_name_en', 'NameEn', 'VARCHAR', false, 200, null);
-        $this->addColumn('shipping_zone', 'ShippingZoneCode', 'VARCHAR', false, 8, null);
-        $this->addColumn('country_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('country_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
+        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 128, null);
+        $this->addColumn('description', 'Description', 'VARCHAR', false, 512, null);
+        $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     }
 
     /**
@@ -244,21 +213,21 @@ class CountryTableMap extends TableMap
      */
     public function buildRelations(): void
     {
-        $this->addRelation('Order', '\\Model\\Order', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('ShippingOption', '\\Model\\ShippingOption', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':country_id',
-    1 => ':country_id',
+    0 => ':shipping_zone_id',
+    1 => ':id',
   ),
-), null, null, 'Orders', false);
+), null, null, 'ShippingOptions', false);
         $this->addRelation('ShippingZonesCountries', '\\Model\\ShippingZonesCountries', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':country_id',
-    1 => ':country_id',
+    0 => ':shipping_zone_id',
+    1 => ':id',
   ),
 ), null, null, 'ShippingZonesCountriess', false);
-        $this->addRelation('ShippingZone', '\\Model\\ShippingZone', RelationMap::MANY_TO_MANY, array(), null, null, 'ShippingZones');
+        $this->addRelation('Country', '\\Model\\Country', RelationMap::MANY_TO_MANY, array(), null, null, 'Countries');
     }
 
     /**
@@ -270,7 +239,7 @@ class CountryTableMap extends TableMap
     public function getBehaviors(): array
     {
         return [
-            'timestampable' => ['create_column' => 'country_created', 'update_column' => 'country_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
+            'timestampable' => ['create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         ];
     }
 
@@ -331,7 +300,7 @@ class CountryTableMap extends TableMap
      */
     public static function getOMClass(bool $withPrefix = true): string
     {
-        return $withPrefix ? CountryTableMap::CLASS_DEFAULT : CountryTableMap::OM_CLASS;
+        return $withPrefix ? ShippingZoneTableMap::CLASS_DEFAULT : ShippingZoneTableMap::OM_CLASS;
     }
 
     /**
@@ -345,22 +314,22 @@ class CountryTableMap extends TableMap
      *
      * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array (Country object, last column rank)
+     * @return array (ShippingZone object, last column rank)
      */
     public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
-        $key = CountryTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = CountryTableMap::getInstanceFromPool($key))) {
+        $key = ShippingZoneTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = ShippingZoneTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + CountryTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + ShippingZoneTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = CountryTableMap::OM_CLASS;
-            /** @var Country $obj */
+            $cls = ShippingZoneTableMap::OM_CLASS;
+            /** @var ShippingZone $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            CountryTableMap::addInstanceToPool($obj, $key);
+            ShippingZoneTableMap::addInstanceToPool($obj, $key);
         }
 
         return [$obj, $col];
@@ -383,18 +352,18 @@ class CountryTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = CountryTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = CountryTableMap::getInstanceFromPool($key))) {
+            $key = ShippingZoneTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = ShippingZoneTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Country $obj */
+                /** @var ShippingZone $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                CountryTableMap::addInstanceToPool($obj, $key);
+                ShippingZoneTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -416,21 +385,17 @@ class CountryTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(CountryTableMap::COL_COUNTRY_ID);
-            $criteria->addSelectColumn(CountryTableMap::COL_COUNTRY_CODE);
-            $criteria->addSelectColumn(CountryTableMap::COL_COUNTRY_NAME);
-            $criteria->addSelectColumn(CountryTableMap::COL_COUNTRY_NAME_EN);
-            $criteria->addSelectColumn(CountryTableMap::COL_SHIPPING_ZONE);
-            $criteria->addSelectColumn(CountryTableMap::COL_COUNTRY_CREATED);
-            $criteria->addSelectColumn(CountryTableMap::COL_COUNTRY_UPDATED);
+            $criteria->addSelectColumn(ShippingZoneTableMap::COL_ID);
+            $criteria->addSelectColumn(ShippingZoneTableMap::COL_NAME);
+            $criteria->addSelectColumn(ShippingZoneTableMap::COL_DESCRIPTION);
+            $criteria->addSelectColumn(ShippingZoneTableMap::COL_CREATED_AT);
+            $criteria->addSelectColumn(ShippingZoneTableMap::COL_UPDATED_AT);
         } else {
-            $criteria->addSelectColumn($alias . '.country_id');
-            $criteria->addSelectColumn($alias . '.country_code');
-            $criteria->addSelectColumn($alias . '.country_name');
-            $criteria->addSelectColumn($alias . '.country_name_en');
-            $criteria->addSelectColumn($alias . '.shipping_zone');
-            $criteria->addSelectColumn($alias . '.country_created');
-            $criteria->addSelectColumn($alias . '.country_updated');
+            $criteria->addSelectColumn($alias . '.id');
+            $criteria->addSelectColumn($alias . '.name');
+            $criteria->addSelectColumn($alias . '.description');
+            $criteria->addSelectColumn($alias . '.created_at');
+            $criteria->addSelectColumn($alias . '.updated_at');
         }
     }
 
@@ -449,21 +414,17 @@ class CountryTableMap extends TableMap
     public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
-            $criteria->removeSelectColumn(CountryTableMap::COL_COUNTRY_ID);
-            $criteria->removeSelectColumn(CountryTableMap::COL_COUNTRY_CODE);
-            $criteria->removeSelectColumn(CountryTableMap::COL_COUNTRY_NAME);
-            $criteria->removeSelectColumn(CountryTableMap::COL_COUNTRY_NAME_EN);
-            $criteria->removeSelectColumn(CountryTableMap::COL_SHIPPING_ZONE);
-            $criteria->removeSelectColumn(CountryTableMap::COL_COUNTRY_CREATED);
-            $criteria->removeSelectColumn(CountryTableMap::COL_COUNTRY_UPDATED);
+            $criteria->removeSelectColumn(ShippingZoneTableMap::COL_ID);
+            $criteria->removeSelectColumn(ShippingZoneTableMap::COL_NAME);
+            $criteria->removeSelectColumn(ShippingZoneTableMap::COL_DESCRIPTION);
+            $criteria->removeSelectColumn(ShippingZoneTableMap::COL_CREATED_AT);
+            $criteria->removeSelectColumn(ShippingZoneTableMap::COL_UPDATED_AT);
         } else {
-            $criteria->removeSelectColumn($alias . '.country_id');
-            $criteria->removeSelectColumn($alias . '.country_code');
-            $criteria->removeSelectColumn($alias . '.country_name');
-            $criteria->removeSelectColumn($alias . '.country_name_en');
-            $criteria->removeSelectColumn($alias . '.shipping_zone');
-            $criteria->removeSelectColumn($alias . '.country_created');
-            $criteria->removeSelectColumn($alias . '.country_updated');
+            $criteria->removeSelectColumn($alias . '.id');
+            $criteria->removeSelectColumn($alias . '.name');
+            $criteria->removeSelectColumn($alias . '.description');
+            $criteria->removeSelectColumn($alias . '.created_at');
+            $criteria->removeSelectColumn($alias . '.updated_at');
         }
     }
 
@@ -476,13 +437,13 @@ class CountryTableMap extends TableMap
      */
     public static function getTableMap(): TableMap
     {
-        return Propel::getServiceContainer()->getDatabaseMap(CountryTableMap::DATABASE_NAME)->getTable(CountryTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(ShippingZoneTableMap::DATABASE_NAME)->getTable(ShippingZoneTableMap::TABLE_NAME);
     }
 
     /**
-     * Performs a DELETE on the database, given a Country or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a ShippingZone or Criteria object OR a primary key value.
      *
-     * @param mixed $values Criteria or Country object or primary key or array of primary keys
+     * @param mixed $values Criteria or ShippingZone object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -493,27 +454,27 @@ class CountryTableMap extends TableMap
      public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(CountryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(ShippingZoneTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \Model\Country) { // it's a model object
+        } elseif ($values instanceof \Model\ShippingZone) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(CountryTableMap::DATABASE_NAME);
-            $criteria->add(CountryTableMap::COL_COUNTRY_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(ShippingZoneTableMap::DATABASE_NAME);
+            $criteria->add(ShippingZoneTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = CountryQuery::create()->mergeWith($criteria);
+        $query = ShippingZoneQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            CountryTableMap::clearInstancePool();
+            ShippingZoneTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                CountryTableMap::removeInstanceFromPool($singleval);
+                ShippingZoneTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -521,20 +482,20 @@ class CountryTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the countries table.
+     * Deletes all rows from the shipping_zones table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
-        return CountryQuery::create()->doDeleteAll($con);
+        return ShippingZoneQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Country or Criteria object.
+     * Performs an INSERT on the database, given a ShippingZone or Criteria object.
      *
-     * @param mixed $criteria Criteria or Country object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or ShippingZone object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed The new primary key.
      * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
@@ -543,22 +504,22 @@ class CountryTableMap extends TableMap
     public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(CountryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(ShippingZoneTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Country object
+            $criteria = $criteria->buildCriteria(); // build Criteria from ShippingZone object
         }
 
-        if ($criteria->containsKey(CountryTableMap::COL_COUNTRY_ID) && $criteria->keyContainsValue(CountryTableMap::COL_COUNTRY_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.CountryTableMap::COL_COUNTRY_ID.')');
+        if ($criteria->containsKey(ShippingZoneTableMap::COL_ID) && $criteria->keyContainsValue(ShippingZoneTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.ShippingZoneTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = CountryQuery::create()->mergeWith($criteria);
+        $query = ShippingZoneQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)

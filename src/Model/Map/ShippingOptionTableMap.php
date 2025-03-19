@@ -63,7 +63,7 @@ class ShippingOptionTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 16;
+    public const NUM_COLUMNS = 17;
 
     /**
      * The number of lazy-loaded columns
@@ -73,7 +73,7 @@ class ShippingOptionTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 16;
+    public const NUM_HYDRATE_COLUMNS = 17;
 
     /**
      * the column name for the shipping_id field
@@ -104,6 +104,11 @@ class ShippingOptionTableMap extends TableMap
      * the column name for the shipping_zone field
      */
     public const COL_SHIPPING_ZONE = 'shipping.shipping_zone';
+
+    /**
+     * the column name for the shipping_zone_id field
+     */
+    public const COL_SHIPPING_ZONE_ID = 'shipping.shipping_zone_id';
 
     /**
      * the column name for the shipping_min_weight field
@@ -169,11 +174,11 @@ class ShippingOptionTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'ArticleId', 'Mode', 'Type', 'ZoneCode', 'MinWeight', 'MaxWeight', 'MaxArticles', 'MinAmount', 'MaxAmount', 'Fee', 'Info', 'CreatedAt', 'UpdatedAt', 'ArchivedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'articleId', 'mode', 'type', 'zoneCode', 'minWeight', 'maxWeight', 'maxArticles', 'minAmount', 'maxAmount', 'fee', 'info', 'createdAt', 'updatedAt', 'archivedAt', ],
-        self::TYPE_COLNAME       => [ShippingOptionTableMap::COL_SHIPPING_ID, ShippingOptionTableMap::COL_SITE_ID, ShippingOptionTableMap::COL_ARTICLE_ID, ShippingOptionTableMap::COL_SHIPPING_MODE, ShippingOptionTableMap::COL_SHIPPING_TYPE, ShippingOptionTableMap::COL_SHIPPING_ZONE, ShippingOptionTableMap::COL_SHIPPING_MIN_WEIGHT, ShippingOptionTableMap::COL_SHIPPING_MAX_WEIGHT, ShippingOptionTableMap::COL_SHIPPING_MAX_ARTICLES, ShippingOptionTableMap::COL_SHIPPING_MIN_AMOUNT, ShippingOptionTableMap::COL_SHIPPING_MAX_AMOUNT, ShippingOptionTableMap::COL_SHIPPING_FEE, ShippingOptionTableMap::COL_SHIPPING_INFO, ShippingOptionTableMap::COL_SHIPPING_CREATED, ShippingOptionTableMap::COL_SHIPPING_UPDATED, ShippingOptionTableMap::COL_SHIPPING_ARCHIVED_AT, ],
-        self::TYPE_FIELDNAME     => ['shipping_id', 'site_id', 'article_id', 'shipping_mode', 'shipping_type', 'shipping_zone', 'shipping_min_weight', 'shipping_max_weight', 'shipping_max_articles', 'shipping_min_amount', 'shipping_max_amount', 'shipping_fee', 'shipping_info', 'shipping_created', 'shipping_updated', 'shipping_archived_at', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, ]
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'ArticleId', 'Mode', 'Type', 'ZoneCode', 'ShippingZoneId', 'MinWeight', 'MaxWeight', 'MaxArticles', 'MinAmount', 'MaxAmount', 'Fee', 'Info', 'CreatedAt', 'UpdatedAt', 'ArchivedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'articleId', 'mode', 'type', 'zoneCode', 'shippingZoneId', 'minWeight', 'maxWeight', 'maxArticles', 'minAmount', 'maxAmount', 'fee', 'info', 'createdAt', 'updatedAt', 'archivedAt', ],
+        self::TYPE_COLNAME       => [ShippingOptionTableMap::COL_SHIPPING_ID, ShippingOptionTableMap::COL_SITE_ID, ShippingOptionTableMap::COL_ARTICLE_ID, ShippingOptionTableMap::COL_SHIPPING_MODE, ShippingOptionTableMap::COL_SHIPPING_TYPE, ShippingOptionTableMap::COL_SHIPPING_ZONE, ShippingOptionTableMap::COL_SHIPPING_ZONE_ID, ShippingOptionTableMap::COL_SHIPPING_MIN_WEIGHT, ShippingOptionTableMap::COL_SHIPPING_MAX_WEIGHT, ShippingOptionTableMap::COL_SHIPPING_MAX_ARTICLES, ShippingOptionTableMap::COL_SHIPPING_MIN_AMOUNT, ShippingOptionTableMap::COL_SHIPPING_MAX_AMOUNT, ShippingOptionTableMap::COL_SHIPPING_FEE, ShippingOptionTableMap::COL_SHIPPING_INFO, ShippingOptionTableMap::COL_SHIPPING_CREATED, ShippingOptionTableMap::COL_SHIPPING_UPDATED, ShippingOptionTableMap::COL_SHIPPING_ARCHIVED_AT, ],
+        self::TYPE_FIELDNAME     => ['shipping_id', 'site_id', 'article_id', 'shipping_mode', 'shipping_type', 'shipping_zone', 'shipping_zone_id', 'shipping_min_weight', 'shipping_max_weight', 'shipping_max_articles', 'shipping_min_amount', 'shipping_max_amount', 'shipping_fee', 'shipping_info', 'shipping_created', 'shipping_updated', 'shipping_archived_at', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, ]
     ];
 
     /**
@@ -185,11 +190,11 @@ class ShippingOptionTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'ArticleId' => 2, 'Mode' => 3, 'Type' => 4, 'ZoneCode' => 5, 'MinWeight' => 6, 'MaxWeight' => 7, 'MaxArticles' => 8, 'MinAmount' => 9, 'MaxAmount' => 10, 'Fee' => 11, 'Info' => 12, 'CreatedAt' => 13, 'UpdatedAt' => 14, 'ArchivedAt' => 15, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'articleId' => 2, 'mode' => 3, 'type' => 4, 'zoneCode' => 5, 'minWeight' => 6, 'maxWeight' => 7, 'maxArticles' => 8, 'minAmount' => 9, 'maxAmount' => 10, 'fee' => 11, 'info' => 12, 'createdAt' => 13, 'updatedAt' => 14, 'archivedAt' => 15, ],
-        self::TYPE_COLNAME       => [ShippingOptionTableMap::COL_SHIPPING_ID => 0, ShippingOptionTableMap::COL_SITE_ID => 1, ShippingOptionTableMap::COL_ARTICLE_ID => 2, ShippingOptionTableMap::COL_SHIPPING_MODE => 3, ShippingOptionTableMap::COL_SHIPPING_TYPE => 4, ShippingOptionTableMap::COL_SHIPPING_ZONE => 5, ShippingOptionTableMap::COL_SHIPPING_MIN_WEIGHT => 6, ShippingOptionTableMap::COL_SHIPPING_MAX_WEIGHT => 7, ShippingOptionTableMap::COL_SHIPPING_MAX_ARTICLES => 8, ShippingOptionTableMap::COL_SHIPPING_MIN_AMOUNT => 9, ShippingOptionTableMap::COL_SHIPPING_MAX_AMOUNT => 10, ShippingOptionTableMap::COL_SHIPPING_FEE => 11, ShippingOptionTableMap::COL_SHIPPING_INFO => 12, ShippingOptionTableMap::COL_SHIPPING_CREATED => 13, ShippingOptionTableMap::COL_SHIPPING_UPDATED => 14, ShippingOptionTableMap::COL_SHIPPING_ARCHIVED_AT => 15, ],
-        self::TYPE_FIELDNAME     => ['shipping_id' => 0, 'site_id' => 1, 'article_id' => 2, 'shipping_mode' => 3, 'shipping_type' => 4, 'shipping_zone' => 5, 'shipping_min_weight' => 6, 'shipping_max_weight' => 7, 'shipping_max_articles' => 8, 'shipping_min_amount' => 9, 'shipping_max_amount' => 10, 'shipping_fee' => 11, 'shipping_info' => 12, 'shipping_created' => 13, 'shipping_updated' => 14, 'shipping_archived_at' => 15, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'ArticleId' => 2, 'Mode' => 3, 'Type' => 4, 'ZoneCode' => 5, 'ShippingZoneId' => 6, 'MinWeight' => 7, 'MaxWeight' => 8, 'MaxArticles' => 9, 'MinAmount' => 10, 'MaxAmount' => 11, 'Fee' => 12, 'Info' => 13, 'CreatedAt' => 14, 'UpdatedAt' => 15, 'ArchivedAt' => 16, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'articleId' => 2, 'mode' => 3, 'type' => 4, 'zoneCode' => 5, 'shippingZoneId' => 6, 'minWeight' => 7, 'maxWeight' => 8, 'maxArticles' => 9, 'minAmount' => 10, 'maxAmount' => 11, 'fee' => 12, 'info' => 13, 'createdAt' => 14, 'updatedAt' => 15, 'archivedAt' => 16, ],
+        self::TYPE_COLNAME       => [ShippingOptionTableMap::COL_SHIPPING_ID => 0, ShippingOptionTableMap::COL_SITE_ID => 1, ShippingOptionTableMap::COL_ARTICLE_ID => 2, ShippingOptionTableMap::COL_SHIPPING_MODE => 3, ShippingOptionTableMap::COL_SHIPPING_TYPE => 4, ShippingOptionTableMap::COL_SHIPPING_ZONE => 5, ShippingOptionTableMap::COL_SHIPPING_ZONE_ID => 6, ShippingOptionTableMap::COL_SHIPPING_MIN_WEIGHT => 7, ShippingOptionTableMap::COL_SHIPPING_MAX_WEIGHT => 8, ShippingOptionTableMap::COL_SHIPPING_MAX_ARTICLES => 9, ShippingOptionTableMap::COL_SHIPPING_MIN_AMOUNT => 10, ShippingOptionTableMap::COL_SHIPPING_MAX_AMOUNT => 11, ShippingOptionTableMap::COL_SHIPPING_FEE => 12, ShippingOptionTableMap::COL_SHIPPING_INFO => 13, ShippingOptionTableMap::COL_SHIPPING_CREATED => 14, ShippingOptionTableMap::COL_SHIPPING_UPDATED => 15, ShippingOptionTableMap::COL_SHIPPING_ARCHIVED_AT => 16, ],
+        self::TYPE_FIELDNAME     => ['shipping_id' => 0, 'site_id' => 1, 'article_id' => 2, 'shipping_mode' => 3, 'shipping_type' => 4, 'shipping_zone' => 5, 'shipping_zone_id' => 6, 'shipping_min_weight' => 7, 'shipping_max_weight' => 8, 'shipping_max_articles' => 9, 'shipping_min_amount' => 10, 'shipping_max_amount' => 11, 'shipping_fee' => 12, 'shipping_info' => 13, 'shipping_created' => 14, 'shipping_updated' => 15, 'shipping_archived_at' => 16, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, ]
     ];
 
     /**
@@ -246,6 +251,14 @@ class ShippingOptionTableMap extends TableMap
         'COL_SHIPPING_ZONE' => 'SHIPPING_ZONE',
         'shipping_zone' => 'SHIPPING_ZONE',
         'shipping.shipping_zone' => 'SHIPPING_ZONE',
+        'ShippingZoneId' => 'SHIPPING_ZONE_ID',
+        'ShippingOption.ShippingZoneId' => 'SHIPPING_ZONE_ID',
+        'shippingZoneId' => 'SHIPPING_ZONE_ID',
+        'shippingOption.shippingZoneId' => 'SHIPPING_ZONE_ID',
+        'ShippingOptionTableMap::COL_SHIPPING_ZONE_ID' => 'SHIPPING_ZONE_ID',
+        'COL_SHIPPING_ZONE_ID' => 'SHIPPING_ZONE_ID',
+        'shipping_zone_id' => 'SHIPPING_ZONE_ID',
+        'shipping.shipping_zone_id' => 'SHIPPING_ZONE_ID',
         'MinWeight' => 'SHIPPING_MIN_WEIGHT',
         'ShippingOption.MinWeight' => 'SHIPPING_MIN_WEIGHT',
         'minWeight' => 'SHIPPING_MIN_WEIGHT',
@@ -351,6 +364,7 @@ class ShippingOptionTableMap extends TableMap
         $this->addColumn('shipping_mode', 'Mode', 'VARCHAR', false, 64, null);
         $this->addColumn('shipping_type', 'Type', 'VARCHAR', false, 16, null);
         $this->addColumn('shipping_zone', 'ZoneCode', 'VARCHAR', false, 4, null);
+        $this->addForeignKey('shipping_zone_id', 'ShippingZoneId', 'INTEGER', 'shipping_zones', 'id', false, null, null);
         $this->addColumn('shipping_min_weight', 'MinWeight', 'INTEGER', false, null, null);
         $this->addColumn('shipping_max_weight', 'MaxWeight', 'INTEGER', false, null, null);
         $this->addColumn('shipping_max_articles', 'MaxArticles', 'INTEGER', false, null, null);
@@ -370,6 +384,13 @@ class ShippingOptionTableMap extends TableMap
      */
     public function buildRelations(): void
     {
+        $this->addRelation('ShippingZone', '\\Model\\ShippingZone', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':shipping_zone_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
         $this->addRelation('Order', '\\Model\\Order', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -540,6 +561,7 @@ class ShippingOptionTableMap extends TableMap
             $criteria->addSelectColumn(ShippingOptionTableMap::COL_SHIPPING_MODE);
             $criteria->addSelectColumn(ShippingOptionTableMap::COL_SHIPPING_TYPE);
             $criteria->addSelectColumn(ShippingOptionTableMap::COL_SHIPPING_ZONE);
+            $criteria->addSelectColumn(ShippingOptionTableMap::COL_SHIPPING_ZONE_ID);
             $criteria->addSelectColumn(ShippingOptionTableMap::COL_SHIPPING_MIN_WEIGHT);
             $criteria->addSelectColumn(ShippingOptionTableMap::COL_SHIPPING_MAX_WEIGHT);
             $criteria->addSelectColumn(ShippingOptionTableMap::COL_SHIPPING_MAX_ARTICLES);
@@ -557,6 +579,7 @@ class ShippingOptionTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.shipping_mode');
             $criteria->addSelectColumn($alias . '.shipping_type');
             $criteria->addSelectColumn($alias . '.shipping_zone');
+            $criteria->addSelectColumn($alias . '.shipping_zone_id');
             $criteria->addSelectColumn($alias . '.shipping_min_weight');
             $criteria->addSelectColumn($alias . '.shipping_max_weight');
             $criteria->addSelectColumn($alias . '.shipping_max_articles');
@@ -591,6 +614,7 @@ class ShippingOptionTableMap extends TableMap
             $criteria->removeSelectColumn(ShippingOptionTableMap::COL_SHIPPING_MODE);
             $criteria->removeSelectColumn(ShippingOptionTableMap::COL_SHIPPING_TYPE);
             $criteria->removeSelectColumn(ShippingOptionTableMap::COL_SHIPPING_ZONE);
+            $criteria->removeSelectColumn(ShippingOptionTableMap::COL_SHIPPING_ZONE_ID);
             $criteria->removeSelectColumn(ShippingOptionTableMap::COL_SHIPPING_MIN_WEIGHT);
             $criteria->removeSelectColumn(ShippingOptionTableMap::COL_SHIPPING_MAX_WEIGHT);
             $criteria->removeSelectColumn(ShippingOptionTableMap::COL_SHIPPING_MAX_ARTICLES);
@@ -608,6 +632,7 @@ class ShippingOptionTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.shipping_mode');
             $criteria->removeSelectColumn($alias . '.shipping_type');
             $criteria->removeSelectColumn($alias . '.shipping_zone');
+            $criteria->removeSelectColumn($alias . '.shipping_zone_id');
             $criteria->removeSelectColumn($alias . '.shipping_min_weight');
             $criteria->removeSelectColumn($alias . '.shipping_max_weight');
             $criteria->removeSelectColumn($alias . '.shipping_max_articles');
