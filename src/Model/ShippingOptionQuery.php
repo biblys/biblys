@@ -52,7 +52,7 @@ class ShippingOptionQuery extends BaseShippingOptionQuery
         int $articleCount
     ): array
     {
-        $zone = $country->getShippingZone();
+        $zone = $country->getShippingZoneCode();
 
         $query = self::createForSite($currentSite);
         $fees = $query->orderByFee()->find();
@@ -79,7 +79,7 @@ class ShippingOptionQuery extends BaseShippingOptionQuery
                     }
 
                     // Keep only fees for destination country's zone or ALL zones
-                    if ($fee->getZone() !== $zone && $fee->getZone() !== 'ALL') {
+                    if ($fee->getZoneCode() !== $zone && $fee->getZoneCode() !== 'ALL') {
                         continue;
                     }
 

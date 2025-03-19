@@ -410,7 +410,7 @@ abstract class Country implements ActiveRecordInterface
      *
      * @return string|null
      */
-    public function getShippingZone()
+    public function getShippingZoneCode()
     {
         return $this->shipping_zone;
     }
@@ -545,7 +545,7 @@ abstract class Country implements ActiveRecordInterface
      * @param string|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setShippingZone($v)
+    public function setShippingZoneCode($v)
     {
         if ($v !== null) {
             $v = (string) $v;
@@ -647,7 +647,7 @@ abstract class Country implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : CountryTableMap::translateFieldName('NameEn', TableMap::TYPE_PHPNAME, $indexType)];
             $this->country_name_en = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : CountryTableMap::translateFieldName('ShippingZone', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : CountryTableMap::translateFieldName('ShippingZoneCode', TableMap::TYPE_PHPNAME, $indexType)];
             $this->shipping_zone = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : CountryTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
@@ -1039,7 +1039,7 @@ abstract class Country implements ActiveRecordInterface
                 return $this->getNameEn();
 
             case 4:
-                return $this->getShippingZone();
+                return $this->getShippingZoneCode();
 
             case 5:
                 return $this->getCreatedAt();
@@ -1079,7 +1079,7 @@ abstract class Country implements ActiveRecordInterface
             $keys[1] => $this->getCode(),
             $keys[2] => $this->getName(),
             $keys[3] => $this->getNameEn(),
-            $keys[4] => $this->getShippingZone(),
+            $keys[4] => $this->getShippingZoneCode(),
             $keys[5] => $this->getCreatedAt(),
             $keys[6] => $this->getUpdatedAt(),
         ];
@@ -1161,7 +1161,7 @@ abstract class Country implements ActiveRecordInterface
                 $this->setNameEn($value);
                 break;
             case 4:
-                $this->setShippingZone($value);
+                $this->setShippingZoneCode($value);
                 break;
             case 5:
                 $this->setCreatedAt($value);
@@ -1208,7 +1208,7 @@ abstract class Country implements ActiveRecordInterface
             $this->setNameEn($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setShippingZone($arr[$keys[4]]);
+            $this->setShippingZoneCode($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
             $this->setCreatedAt($arr[$keys[5]]);
@@ -1371,7 +1371,7 @@ abstract class Country implements ActiveRecordInterface
         $copyObj->setCode($this->getCode());
         $copyObj->setName($this->getName());
         $copyObj->setNameEn($this->getNameEn());
-        $copyObj->setShippingZone($this->getShippingZone());
+        $copyObj->setShippingZoneCode($this->getShippingZoneCode());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
 

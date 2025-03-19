@@ -483,7 +483,7 @@ abstract class ShippingOption implements ActiveRecordInterface
      *
      * @return string|null
      */
-    public function getZone()
+    public function getZoneCode()
     {
         return $this->shipping_zone;
     }
@@ -730,7 +730,7 @@ abstract class ShippingOption implements ActiveRecordInterface
      * @param string|null $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setZone($v)
+    public function setZoneCode($v)
     {
         if ($v !== null) {
             $v = (string) $v;
@@ -995,7 +995,7 @@ abstract class ShippingOption implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : ShippingOptionTableMap::translateFieldName('Type', TableMap::TYPE_PHPNAME, $indexType)];
             $this->shipping_type = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : ShippingOptionTableMap::translateFieldName('Zone', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : ShippingOptionTableMap::translateFieldName('ZoneCode', TableMap::TYPE_PHPNAME, $indexType)];
             $this->shipping_zone = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : ShippingOptionTableMap::translateFieldName('MinWeight', TableMap::TYPE_PHPNAME, $indexType)];
@@ -1480,7 +1480,7 @@ abstract class ShippingOption implements ActiveRecordInterface
                 return $this->getType();
 
             case 5:
-                return $this->getZone();
+                return $this->getZoneCode();
 
             case 6:
                 return $this->getMinWeight();
@@ -1545,7 +1545,7 @@ abstract class ShippingOption implements ActiveRecordInterface
             $keys[2] => $this->getArticleId(),
             $keys[3] => $this->getMode(),
             $keys[4] => $this->getType(),
-            $keys[5] => $this->getZone(),
+            $keys[5] => $this->getZoneCode(),
             $keys[6] => $this->getMinWeight(),
             $keys[7] => $this->getMaxWeight(),
             $keys[8] => $this->getMaxArticles(),
@@ -1642,7 +1642,7 @@ abstract class ShippingOption implements ActiveRecordInterface
                 $this->setType($value);
                 break;
             case 5:
-                $this->setZone($value);
+                $this->setZoneCode($value);
                 break;
             case 6:
                 $this->setMinWeight($value);
@@ -1716,7 +1716,7 @@ abstract class ShippingOption implements ActiveRecordInterface
             $this->setType($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setZone($arr[$keys[5]]);
+            $this->setZoneCode($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
             $this->setMinWeight($arr[$keys[6]]);
@@ -1931,7 +1931,7 @@ abstract class ShippingOption implements ActiveRecordInterface
         $copyObj->setArticleId($this->getArticleId());
         $copyObj->setMode($this->getMode());
         $copyObj->setType($this->getType());
-        $copyObj->setZone($this->getZone());
+        $copyObj->setZoneCode($this->getZoneCode());
         $copyObj->setMinWeight($this->getMinWeight());
         $copyObj->setMaxWeight($this->getMaxWeight());
         $copyObj->setMaxArticles($this->getMaxArticles());
