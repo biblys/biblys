@@ -25,8 +25,8 @@ use Biblys\Service\InvalidSiteIdException;
 use Exception;
 use Framework\Controller;
 use Model\CountryQuery;
-use Model\ShippingFee;
-use Model\ShippingFeeQuery;
+use Model\ShippingOption;
+use Model\ShippingOptionQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -51,7 +51,7 @@ class ShippingController extends Controller
     {
         $currentUser->authAdmin();
 
-        $allFees = ShippingFeeQuery::createForSite($currentSite)
+        $allFees = ShippingOptionQuery::createForSite($currentSite)
             ->filterByArchivedAt(null, Criteria::ISNULL)
             ->orderByType()
             ->orderByZone()
@@ -81,7 +81,7 @@ class ShippingController extends Controller
 
         $data = self::_getDataFromRequest($request);
 
-        $fee = new ShippingFee();
+        $fee = new ShippingOption();
         self::_hydrateFee($fee, $data);
         $fee->setSiteId($currentSite->getSite()->getId());
         $fee->save();
@@ -126,7 +126,7 @@ class ShippingController extends Controller
     {
         $currentUser->authAdmin();
 
-        $fee = ShippingFeeQuery::create()->findPk($id);
+        $fee = ShippingOptionQuery::create()->findPk($id);
         if (!$fee) {
             throw new ResourceNotFoundException(
                 sprintf("Cannot find shipping fee with id %s", $id)
@@ -193,7 +193,7 @@ class ShippingController extends Controller
         $orderWeight = $request->query->get("order_weight", 0) + $shippingPackagingWeight;
         $orderAmount = $request->query->get("order_amount", 0);
         $articleCount = $request->query->get("article_count", 0);
-        $fees = ShippingFeeQuery::getForCountryAndWeightAndAmountAndArticleCount(
+        $fees = ShippingOptionQuery::getForCountryAndWeightAndAmountAndArticleCount(
             $currentSite,
             $country,
             $orderWeight,
@@ -214,7 +214,7 @@ class ShippingController extends Controller
         return new JsonResponse($serializedFees);
     }
 
-    private static function _feeToJson(ShippingFee $fee): array
+    private static function _feeToJson(ShippingOption $fee): array
     {
         return [
             'id' => $fee->getId(),
@@ -265,11 +265,11 @@ class ShippingController extends Controller
     }
 
     /**
-     * @param ShippingFee $fee
+     * @param ShippingOption $fee
      * @param array $data
-     * @return ShippingFee
+     * @return ShippingOption
      */
-    private static function _hydrateFee(ShippingFee $fee, array $data): ShippingFee
+    private static function _hydrateFee(ShippingOption $fee, array $data): ShippingOption
     {
         $fee->setMode($data["mode"]);
         $fee->setType($data["type"]);
@@ -287,10 +287,10 @@ class ShippingController extends Controller
     /**
      * @throws InvalidSiteIdException
      */
-    private static function _getFeeFromId(Config $config, int $id): ShippingFee
+    private static function _getFeeFromId(Config $config, int $id): ShippingOption
     {
         $currentSite = CurrentSite::buildFromConfig($config);
-        $fee = ShippingFeeQuery::createForSite($currentSite)->findPk($id);
+        $fee = ShippingOptionQuery::createForSite($currentSite)->findPk($id);
         if (!$fee) {
             throw new ResourceNotFoundException(
                 sprintf("Cannot find shipping fee with id %s", $id)

@@ -56,7 +56,7 @@ use Model\PublisherQuery;
 use Model\Right;
 use Model\Role;
 use Model\Session;
-use Model\ShippingFee;
+use Model\ShippingOption;
 use Model\Site;
 use Model\SpecialOffer;
 use Model\Stock;
@@ -293,20 +293,20 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createOrder(
-        ?Site        $site = null,
-        ?User        $user = null,
-        ?Customer    $customer = null,
-        ?ShippingFee $shippingFee = null,
-        ?string      $axysAccountId = null,
-        ?string      $slug = null,
-        string       $firstName = "Silas",
-        string       $lastName = "Coade",
-        string       $address1 = "1 rue de la Fissure",
-        string       $address2 = "Appartement 2",
-        string       $postalCode = "33000",
-        string       $city = "Bordeaux",
-        ?Country     $country = null,
-        string       $phone = "0601020304",
+        ?Site           $site = null,
+        ?User           $user = null,
+        ?Customer       $customer = null,
+        ?ShippingOption $shippingFee = null,
+        ?string         $axysAccountId = null,
+        ?string         $slug = null,
+        string          $firstName = "Silas",
+        string          $lastName = "Coade",
+        string          $address1 = "1 rue de la Fissure",
+        string          $address2 = "Appartement 2",
+        string          $postalCode = "33000",
+        string          $city = "Bordeaux",
+        ?Country        $country = null,
+        string          $phone = "0601020304",
         string      $email = "silas.coade@example.net",
         ?string     $mondialRelayPickupPointCode = null,
     ): Order
@@ -513,9 +513,9 @@ class ModelFactory
         int      $maxAmount = 2000,
         int      $maxArticles = 10,
         bool     $isArchived = false,
-    ): ShippingFee
+    ): ShippingOption
     {
-        $shippingFee = new ShippingFee();
+        $shippingFee = new ShippingOption();
         $shippingFee->setSiteId($site?->getId() ?? 1);
         $shippingFee->setZone($country?->getShippingZone() ?? "ALL");
         $shippingFee->setType($type);

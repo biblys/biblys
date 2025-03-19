@@ -20,7 +20,7 @@ namespace Model;
 
 use Biblys\Service\CurrentSite;
 use Exception;
-use Model\Base\ShippingFeeQuery as BaseShippingFeeQuery;
+use Model\Base\ShippingOptionQuery as BaseShippingOptionQuery;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'shipping' table.
@@ -31,9 +31,9 @@ use Model\Base\ShippingFeeQuery as BaseShippingFeeQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class ShippingFeeQuery extends BaseShippingFeeQuery
+class ShippingOptionQuery extends BaseShippingOptionQuery
 {
-    public static function createForSite(CurrentSite $currentSite): ShippingFeeQuery
+    public static function createForSite(CurrentSite $currentSite): ShippingOptionQuery
     {
         $query = parent::create();
         $query->filterBySiteId($currentSite->getSite()->getId());
@@ -41,7 +41,7 @@ class ShippingFeeQuery extends BaseShippingFeeQuery
     }
 
     /**
-     * @return ShippingFee[]
+     * @return ShippingOption[]
      * @throws Exception
      */
     public static function getForCountryAndWeightAndAmountAndArticleCount(
@@ -61,7 +61,7 @@ class ShippingFeeQuery extends BaseShippingFeeQuery
 
         $feesForEachTypes = array_map(
             function ($type) use ($fees, $zone, $weight, $amount, $currentSite, $articleCount) {
-                /** @var ShippingFee $fee */
+                /** @var ShippingOption $fee */
                 foreach ($fees as $fee) {
                     // Keeps only active fees
                     if ($fee->isArchived()) {

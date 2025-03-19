@@ -4,9 +4,9 @@ namespace Model\Base;
 
 use \Exception;
 use \PDO;
-use Model\ShippingFee as ChildShippingFee;
-use Model\ShippingFeeQuery as ChildShippingFeeQuery;
-use Model\Map\ShippingFeeTableMap;
+use Model\ShippingOption as ChildShippingOption;
+use Model\ShippingOptionQuery as ChildShippingOptionQuery;
+use Model\Map\ShippingOptionTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -19,169 +19,169 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the `shipping` table.
  *
- * @method     ChildShippingFeeQuery orderById($order = Criteria::ASC) Order by the shipping_id column
- * @method     ChildShippingFeeQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
- * @method     ChildShippingFeeQuery orderByArticleId($order = Criteria::ASC) Order by the article_id column
- * @method     ChildShippingFeeQuery orderByMode($order = Criteria::ASC) Order by the shipping_mode column
- * @method     ChildShippingFeeQuery orderByType($order = Criteria::ASC) Order by the shipping_type column
- * @method     ChildShippingFeeQuery orderByZone($order = Criteria::ASC) Order by the shipping_zone column
- * @method     ChildShippingFeeQuery orderByMinWeight($order = Criteria::ASC) Order by the shipping_min_weight column
- * @method     ChildShippingFeeQuery orderByMaxWeight($order = Criteria::ASC) Order by the shipping_max_weight column
- * @method     ChildShippingFeeQuery orderByMaxArticles($order = Criteria::ASC) Order by the shipping_max_articles column
- * @method     ChildShippingFeeQuery orderByMinAmount($order = Criteria::ASC) Order by the shipping_min_amount column
- * @method     ChildShippingFeeQuery orderByMaxAmount($order = Criteria::ASC) Order by the shipping_max_amount column
- * @method     ChildShippingFeeQuery orderByFee($order = Criteria::ASC) Order by the shipping_fee column
- * @method     ChildShippingFeeQuery orderByInfo($order = Criteria::ASC) Order by the shipping_info column
- * @method     ChildShippingFeeQuery orderByCreatedAt($order = Criteria::ASC) Order by the shipping_created column
- * @method     ChildShippingFeeQuery orderByUpdatedAt($order = Criteria::ASC) Order by the shipping_updated column
- * @method     ChildShippingFeeQuery orderByArchivedAt($order = Criteria::ASC) Order by the shipping_archived_at column
+ * @method     ChildShippingOptionQuery orderById($order = Criteria::ASC) Order by the shipping_id column
+ * @method     ChildShippingOptionQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
+ * @method     ChildShippingOptionQuery orderByArticleId($order = Criteria::ASC) Order by the article_id column
+ * @method     ChildShippingOptionQuery orderByMode($order = Criteria::ASC) Order by the shipping_mode column
+ * @method     ChildShippingOptionQuery orderByType($order = Criteria::ASC) Order by the shipping_type column
+ * @method     ChildShippingOptionQuery orderByZone($order = Criteria::ASC) Order by the shipping_zone column
+ * @method     ChildShippingOptionQuery orderByMinWeight($order = Criteria::ASC) Order by the shipping_min_weight column
+ * @method     ChildShippingOptionQuery orderByMaxWeight($order = Criteria::ASC) Order by the shipping_max_weight column
+ * @method     ChildShippingOptionQuery orderByMaxArticles($order = Criteria::ASC) Order by the shipping_max_articles column
+ * @method     ChildShippingOptionQuery orderByMinAmount($order = Criteria::ASC) Order by the shipping_min_amount column
+ * @method     ChildShippingOptionQuery orderByMaxAmount($order = Criteria::ASC) Order by the shipping_max_amount column
+ * @method     ChildShippingOptionQuery orderByFee($order = Criteria::ASC) Order by the shipping_fee column
+ * @method     ChildShippingOptionQuery orderByInfo($order = Criteria::ASC) Order by the shipping_info column
+ * @method     ChildShippingOptionQuery orderByCreatedAt($order = Criteria::ASC) Order by the shipping_created column
+ * @method     ChildShippingOptionQuery orderByUpdatedAt($order = Criteria::ASC) Order by the shipping_updated column
+ * @method     ChildShippingOptionQuery orderByArchivedAt($order = Criteria::ASC) Order by the shipping_archived_at column
  *
- * @method     ChildShippingFeeQuery groupById() Group by the shipping_id column
- * @method     ChildShippingFeeQuery groupBySiteId() Group by the site_id column
- * @method     ChildShippingFeeQuery groupByArticleId() Group by the article_id column
- * @method     ChildShippingFeeQuery groupByMode() Group by the shipping_mode column
- * @method     ChildShippingFeeQuery groupByType() Group by the shipping_type column
- * @method     ChildShippingFeeQuery groupByZone() Group by the shipping_zone column
- * @method     ChildShippingFeeQuery groupByMinWeight() Group by the shipping_min_weight column
- * @method     ChildShippingFeeQuery groupByMaxWeight() Group by the shipping_max_weight column
- * @method     ChildShippingFeeQuery groupByMaxArticles() Group by the shipping_max_articles column
- * @method     ChildShippingFeeQuery groupByMinAmount() Group by the shipping_min_amount column
- * @method     ChildShippingFeeQuery groupByMaxAmount() Group by the shipping_max_amount column
- * @method     ChildShippingFeeQuery groupByFee() Group by the shipping_fee column
- * @method     ChildShippingFeeQuery groupByInfo() Group by the shipping_info column
- * @method     ChildShippingFeeQuery groupByCreatedAt() Group by the shipping_created column
- * @method     ChildShippingFeeQuery groupByUpdatedAt() Group by the shipping_updated column
- * @method     ChildShippingFeeQuery groupByArchivedAt() Group by the shipping_archived_at column
+ * @method     ChildShippingOptionQuery groupById() Group by the shipping_id column
+ * @method     ChildShippingOptionQuery groupBySiteId() Group by the site_id column
+ * @method     ChildShippingOptionQuery groupByArticleId() Group by the article_id column
+ * @method     ChildShippingOptionQuery groupByMode() Group by the shipping_mode column
+ * @method     ChildShippingOptionQuery groupByType() Group by the shipping_type column
+ * @method     ChildShippingOptionQuery groupByZone() Group by the shipping_zone column
+ * @method     ChildShippingOptionQuery groupByMinWeight() Group by the shipping_min_weight column
+ * @method     ChildShippingOptionQuery groupByMaxWeight() Group by the shipping_max_weight column
+ * @method     ChildShippingOptionQuery groupByMaxArticles() Group by the shipping_max_articles column
+ * @method     ChildShippingOptionQuery groupByMinAmount() Group by the shipping_min_amount column
+ * @method     ChildShippingOptionQuery groupByMaxAmount() Group by the shipping_max_amount column
+ * @method     ChildShippingOptionQuery groupByFee() Group by the shipping_fee column
+ * @method     ChildShippingOptionQuery groupByInfo() Group by the shipping_info column
+ * @method     ChildShippingOptionQuery groupByCreatedAt() Group by the shipping_created column
+ * @method     ChildShippingOptionQuery groupByUpdatedAt() Group by the shipping_updated column
+ * @method     ChildShippingOptionQuery groupByArchivedAt() Group by the shipping_archived_at column
  *
- * @method     ChildShippingFeeQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildShippingFeeQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildShippingFeeQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method     ChildShippingOptionQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildShippingOptionQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildShippingOptionQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildShippingFeeQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildShippingFeeQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildShippingFeeQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method     ChildShippingOptionQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method     ChildShippingOptionQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method     ChildShippingOptionQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildShippingFeeQuery leftJoinOrder($relationAlias = null) Adds a LEFT JOIN clause to the query using the Order relation
- * @method     ChildShippingFeeQuery rightJoinOrder($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Order relation
- * @method     ChildShippingFeeQuery innerJoinOrder($relationAlias = null) Adds a INNER JOIN clause to the query using the Order relation
+ * @method     ChildShippingOptionQuery leftJoinOrder($relationAlias = null) Adds a LEFT JOIN clause to the query using the Order relation
+ * @method     ChildShippingOptionQuery rightJoinOrder($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Order relation
+ * @method     ChildShippingOptionQuery innerJoinOrder($relationAlias = null) Adds a INNER JOIN clause to the query using the Order relation
  *
- * @method     ChildShippingFeeQuery joinWithOrder($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Order relation
+ * @method     ChildShippingOptionQuery joinWithOrder($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Order relation
  *
- * @method     ChildShippingFeeQuery leftJoinWithOrder() Adds a LEFT JOIN clause and with to the query using the Order relation
- * @method     ChildShippingFeeQuery rightJoinWithOrder() Adds a RIGHT JOIN clause and with to the query using the Order relation
- * @method     ChildShippingFeeQuery innerJoinWithOrder() Adds a INNER JOIN clause and with to the query using the Order relation
+ * @method     ChildShippingOptionQuery leftJoinWithOrder() Adds a LEFT JOIN clause and with to the query using the Order relation
+ * @method     ChildShippingOptionQuery rightJoinWithOrder() Adds a RIGHT JOIN clause and with to the query using the Order relation
+ * @method     ChildShippingOptionQuery innerJoinWithOrder() Adds a INNER JOIN clause and with to the query using the Order relation
  *
  * @method     \Model\OrderQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildShippingFee|null findOne(?ConnectionInterface $con = null) Return the first ChildShippingFee matching the query
- * @method     ChildShippingFee findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildShippingFee matching the query, or a new ChildShippingFee object populated from the query conditions when no match is found
+ * @method     ChildShippingOption|null findOne(?ConnectionInterface $con = null) Return the first ChildShippingOption matching the query
+ * @method     ChildShippingOption findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildShippingOption matching the query, or a new ChildShippingOption object populated from the query conditions when no match is found
  *
- * @method     ChildShippingFee|null findOneById(int $shipping_id) Return the first ChildShippingFee filtered by the shipping_id column
- * @method     ChildShippingFee|null findOneBySiteId(int $site_id) Return the first ChildShippingFee filtered by the site_id column
- * @method     ChildShippingFee|null findOneByArticleId(int $article_id) Return the first ChildShippingFee filtered by the article_id column
- * @method     ChildShippingFee|null findOneByMode(string $shipping_mode) Return the first ChildShippingFee filtered by the shipping_mode column
- * @method     ChildShippingFee|null findOneByType(string $shipping_type) Return the first ChildShippingFee filtered by the shipping_type column
- * @method     ChildShippingFee|null findOneByZone(string $shipping_zone) Return the first ChildShippingFee filtered by the shipping_zone column
- * @method     ChildShippingFee|null findOneByMinWeight(int $shipping_min_weight) Return the first ChildShippingFee filtered by the shipping_min_weight column
- * @method     ChildShippingFee|null findOneByMaxWeight(int $shipping_max_weight) Return the first ChildShippingFee filtered by the shipping_max_weight column
- * @method     ChildShippingFee|null findOneByMaxArticles(int $shipping_max_articles) Return the first ChildShippingFee filtered by the shipping_max_articles column
- * @method     ChildShippingFee|null findOneByMinAmount(int $shipping_min_amount) Return the first ChildShippingFee filtered by the shipping_min_amount column
- * @method     ChildShippingFee|null findOneByMaxAmount(int $shipping_max_amount) Return the first ChildShippingFee filtered by the shipping_max_amount column
- * @method     ChildShippingFee|null findOneByFee(int $shipping_fee) Return the first ChildShippingFee filtered by the shipping_fee column
- * @method     ChildShippingFee|null findOneByInfo(string $shipping_info) Return the first ChildShippingFee filtered by the shipping_info column
- * @method     ChildShippingFee|null findOneByCreatedAt(string $shipping_created) Return the first ChildShippingFee filtered by the shipping_created column
- * @method     ChildShippingFee|null findOneByUpdatedAt(string $shipping_updated) Return the first ChildShippingFee filtered by the shipping_updated column
- * @method     ChildShippingFee|null findOneByArchivedAt(string $shipping_archived_at) Return the first ChildShippingFee filtered by the shipping_archived_at column
+ * @method     ChildShippingOption|null findOneById(int $shipping_id) Return the first ChildShippingOption filtered by the shipping_id column
+ * @method     ChildShippingOption|null findOneBySiteId(int $site_id) Return the first ChildShippingOption filtered by the site_id column
+ * @method     ChildShippingOption|null findOneByArticleId(int $article_id) Return the first ChildShippingOption filtered by the article_id column
+ * @method     ChildShippingOption|null findOneByMode(string $shipping_mode) Return the first ChildShippingOption filtered by the shipping_mode column
+ * @method     ChildShippingOption|null findOneByType(string $shipping_type) Return the first ChildShippingOption filtered by the shipping_type column
+ * @method     ChildShippingOption|null findOneByZone(string $shipping_zone) Return the first ChildShippingOption filtered by the shipping_zone column
+ * @method     ChildShippingOption|null findOneByMinWeight(int $shipping_min_weight) Return the first ChildShippingOption filtered by the shipping_min_weight column
+ * @method     ChildShippingOption|null findOneByMaxWeight(int $shipping_max_weight) Return the first ChildShippingOption filtered by the shipping_max_weight column
+ * @method     ChildShippingOption|null findOneByMaxArticles(int $shipping_max_articles) Return the first ChildShippingOption filtered by the shipping_max_articles column
+ * @method     ChildShippingOption|null findOneByMinAmount(int $shipping_min_amount) Return the first ChildShippingOption filtered by the shipping_min_amount column
+ * @method     ChildShippingOption|null findOneByMaxAmount(int $shipping_max_amount) Return the first ChildShippingOption filtered by the shipping_max_amount column
+ * @method     ChildShippingOption|null findOneByFee(int $shipping_fee) Return the first ChildShippingOption filtered by the shipping_fee column
+ * @method     ChildShippingOption|null findOneByInfo(string $shipping_info) Return the first ChildShippingOption filtered by the shipping_info column
+ * @method     ChildShippingOption|null findOneByCreatedAt(string $shipping_created) Return the first ChildShippingOption filtered by the shipping_created column
+ * @method     ChildShippingOption|null findOneByUpdatedAt(string $shipping_updated) Return the first ChildShippingOption filtered by the shipping_updated column
+ * @method     ChildShippingOption|null findOneByArchivedAt(string $shipping_archived_at) Return the first ChildShippingOption filtered by the shipping_archived_at column
  *
- * @method     ChildShippingFee requirePk($key, ?ConnectionInterface $con = null) Return the ChildShippingFee by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingFee requireOne(?ConnectionInterface $con = null) Return the first ChildShippingFee matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requirePk($key, ?ConnectionInterface $con = null) Return the ChildShippingOption by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requireOne(?ConnectionInterface $con = null) Return the first ChildShippingOption matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildShippingFee requireOneById(int $shipping_id) Return the first ChildShippingFee filtered by the shipping_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingFee requireOneBySiteId(int $site_id) Return the first ChildShippingFee filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingFee requireOneByArticleId(int $article_id) Return the first ChildShippingFee filtered by the article_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingFee requireOneByMode(string $shipping_mode) Return the first ChildShippingFee filtered by the shipping_mode column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingFee requireOneByType(string $shipping_type) Return the first ChildShippingFee filtered by the shipping_type column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingFee requireOneByZone(string $shipping_zone) Return the first ChildShippingFee filtered by the shipping_zone column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingFee requireOneByMinWeight(int $shipping_min_weight) Return the first ChildShippingFee filtered by the shipping_min_weight column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingFee requireOneByMaxWeight(int $shipping_max_weight) Return the first ChildShippingFee filtered by the shipping_max_weight column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingFee requireOneByMaxArticles(int $shipping_max_articles) Return the first ChildShippingFee filtered by the shipping_max_articles column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingFee requireOneByMinAmount(int $shipping_min_amount) Return the first ChildShippingFee filtered by the shipping_min_amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingFee requireOneByMaxAmount(int $shipping_max_amount) Return the first ChildShippingFee filtered by the shipping_max_amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingFee requireOneByFee(int $shipping_fee) Return the first ChildShippingFee filtered by the shipping_fee column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingFee requireOneByInfo(string $shipping_info) Return the first ChildShippingFee filtered by the shipping_info column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingFee requireOneByCreatedAt(string $shipping_created) Return the first ChildShippingFee filtered by the shipping_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingFee requireOneByUpdatedAt(string $shipping_updated) Return the first ChildShippingFee filtered by the shipping_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingFee requireOneByArchivedAt(string $shipping_archived_at) Return the first ChildShippingFee filtered by the shipping_archived_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requireOneById(int $shipping_id) Return the first ChildShippingOption filtered by the shipping_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requireOneBySiteId(int $site_id) Return the first ChildShippingOption filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requireOneByArticleId(int $article_id) Return the first ChildShippingOption filtered by the article_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requireOneByMode(string $shipping_mode) Return the first ChildShippingOption filtered by the shipping_mode column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requireOneByType(string $shipping_type) Return the first ChildShippingOption filtered by the shipping_type column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requireOneByZone(string $shipping_zone) Return the first ChildShippingOption filtered by the shipping_zone column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requireOneByMinWeight(int $shipping_min_weight) Return the first ChildShippingOption filtered by the shipping_min_weight column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requireOneByMaxWeight(int $shipping_max_weight) Return the first ChildShippingOption filtered by the shipping_max_weight column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requireOneByMaxArticles(int $shipping_max_articles) Return the first ChildShippingOption filtered by the shipping_max_articles column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requireOneByMinAmount(int $shipping_min_amount) Return the first ChildShippingOption filtered by the shipping_min_amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requireOneByMaxAmount(int $shipping_max_amount) Return the first ChildShippingOption filtered by the shipping_max_amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requireOneByFee(int $shipping_fee) Return the first ChildShippingOption filtered by the shipping_fee column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requireOneByInfo(string $shipping_info) Return the first ChildShippingOption filtered by the shipping_info column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requireOneByCreatedAt(string $shipping_created) Return the first ChildShippingOption filtered by the shipping_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requireOneByUpdatedAt(string $shipping_updated) Return the first ChildShippingOption filtered by the shipping_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingOption requireOneByArchivedAt(string $shipping_archived_at) Return the first ChildShippingOption filtered by the shipping_archived_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildShippingFee[]|Collection find(?ConnectionInterface $con = null) Return ChildShippingFee objects based on current ModelCriteria
- * @psalm-method Collection&\Traversable<ChildShippingFee> find(?ConnectionInterface $con = null) Return ChildShippingFee objects based on current ModelCriteria
+ * @method     ChildShippingOption[]|Collection find(?ConnectionInterface $con = null) Return ChildShippingOption objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildShippingOption> find(?ConnectionInterface $con = null) Return ChildShippingOption objects based on current ModelCriteria
  *
- * @method     ChildShippingFee[]|Collection findById(int|array<int> $shipping_id) Return ChildShippingFee objects filtered by the shipping_id column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findById(int|array<int> $shipping_id) Return ChildShippingFee objects filtered by the shipping_id column
- * @method     ChildShippingFee[]|Collection findBySiteId(int|array<int> $site_id) Return ChildShippingFee objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findBySiteId(int|array<int> $site_id) Return ChildShippingFee objects filtered by the site_id column
- * @method     ChildShippingFee[]|Collection findByArticleId(int|array<int> $article_id) Return ChildShippingFee objects filtered by the article_id column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByArticleId(int|array<int> $article_id) Return ChildShippingFee objects filtered by the article_id column
- * @method     ChildShippingFee[]|Collection findByMode(string|array<string> $shipping_mode) Return ChildShippingFee objects filtered by the shipping_mode column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByMode(string|array<string> $shipping_mode) Return ChildShippingFee objects filtered by the shipping_mode column
- * @method     ChildShippingFee[]|Collection findByType(string|array<string> $shipping_type) Return ChildShippingFee objects filtered by the shipping_type column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByType(string|array<string> $shipping_type) Return ChildShippingFee objects filtered by the shipping_type column
- * @method     ChildShippingFee[]|Collection findByZone(string|array<string> $shipping_zone) Return ChildShippingFee objects filtered by the shipping_zone column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByZone(string|array<string> $shipping_zone) Return ChildShippingFee objects filtered by the shipping_zone column
- * @method     ChildShippingFee[]|Collection findByMinWeight(int|array<int> $shipping_min_weight) Return ChildShippingFee objects filtered by the shipping_min_weight column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByMinWeight(int|array<int> $shipping_min_weight) Return ChildShippingFee objects filtered by the shipping_min_weight column
- * @method     ChildShippingFee[]|Collection findByMaxWeight(int|array<int> $shipping_max_weight) Return ChildShippingFee objects filtered by the shipping_max_weight column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByMaxWeight(int|array<int> $shipping_max_weight) Return ChildShippingFee objects filtered by the shipping_max_weight column
- * @method     ChildShippingFee[]|Collection findByMaxArticles(int|array<int> $shipping_max_articles) Return ChildShippingFee objects filtered by the shipping_max_articles column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByMaxArticles(int|array<int> $shipping_max_articles) Return ChildShippingFee objects filtered by the shipping_max_articles column
- * @method     ChildShippingFee[]|Collection findByMinAmount(int|array<int> $shipping_min_amount) Return ChildShippingFee objects filtered by the shipping_min_amount column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByMinAmount(int|array<int> $shipping_min_amount) Return ChildShippingFee objects filtered by the shipping_min_amount column
- * @method     ChildShippingFee[]|Collection findByMaxAmount(int|array<int> $shipping_max_amount) Return ChildShippingFee objects filtered by the shipping_max_amount column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByMaxAmount(int|array<int> $shipping_max_amount) Return ChildShippingFee objects filtered by the shipping_max_amount column
- * @method     ChildShippingFee[]|Collection findByFee(int|array<int> $shipping_fee) Return ChildShippingFee objects filtered by the shipping_fee column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByFee(int|array<int> $shipping_fee) Return ChildShippingFee objects filtered by the shipping_fee column
- * @method     ChildShippingFee[]|Collection findByInfo(string|array<string> $shipping_info) Return ChildShippingFee objects filtered by the shipping_info column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByInfo(string|array<string> $shipping_info) Return ChildShippingFee objects filtered by the shipping_info column
- * @method     ChildShippingFee[]|Collection findByCreatedAt(string|array<string> $shipping_created) Return ChildShippingFee objects filtered by the shipping_created column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByCreatedAt(string|array<string> $shipping_created) Return ChildShippingFee objects filtered by the shipping_created column
- * @method     ChildShippingFee[]|Collection findByUpdatedAt(string|array<string> $shipping_updated) Return ChildShippingFee objects filtered by the shipping_updated column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByUpdatedAt(string|array<string> $shipping_updated) Return ChildShippingFee objects filtered by the shipping_updated column
- * @method     ChildShippingFee[]|Collection findByArchivedAt(string|array<string> $shipping_archived_at) Return ChildShippingFee objects filtered by the shipping_archived_at column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByArchivedAt(string|array<string> $shipping_archived_at) Return ChildShippingFee objects filtered by the shipping_archived_at column
+ * @method     ChildShippingOption[]|Collection findById(int|array<int> $shipping_id) Return ChildShippingOption objects filtered by the shipping_id column
+ * @psalm-method Collection&\Traversable<ChildShippingOption> findById(int|array<int> $shipping_id) Return ChildShippingOption objects filtered by the shipping_id column
+ * @method     ChildShippingOption[]|Collection findBySiteId(int|array<int> $site_id) Return ChildShippingOption objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildShippingOption> findBySiteId(int|array<int> $site_id) Return ChildShippingOption objects filtered by the site_id column
+ * @method     ChildShippingOption[]|Collection findByArticleId(int|array<int> $article_id) Return ChildShippingOption objects filtered by the article_id column
+ * @psalm-method Collection&\Traversable<ChildShippingOption> findByArticleId(int|array<int> $article_id) Return ChildShippingOption objects filtered by the article_id column
+ * @method     ChildShippingOption[]|Collection findByMode(string|array<string> $shipping_mode) Return ChildShippingOption objects filtered by the shipping_mode column
+ * @psalm-method Collection&\Traversable<ChildShippingOption> findByMode(string|array<string> $shipping_mode) Return ChildShippingOption objects filtered by the shipping_mode column
+ * @method     ChildShippingOption[]|Collection findByType(string|array<string> $shipping_type) Return ChildShippingOption objects filtered by the shipping_type column
+ * @psalm-method Collection&\Traversable<ChildShippingOption> findByType(string|array<string> $shipping_type) Return ChildShippingOption objects filtered by the shipping_type column
+ * @method     ChildShippingOption[]|Collection findByZone(string|array<string> $shipping_zone) Return ChildShippingOption objects filtered by the shipping_zone column
+ * @psalm-method Collection&\Traversable<ChildShippingOption> findByZone(string|array<string> $shipping_zone) Return ChildShippingOption objects filtered by the shipping_zone column
+ * @method     ChildShippingOption[]|Collection findByMinWeight(int|array<int> $shipping_min_weight) Return ChildShippingOption objects filtered by the shipping_min_weight column
+ * @psalm-method Collection&\Traversable<ChildShippingOption> findByMinWeight(int|array<int> $shipping_min_weight) Return ChildShippingOption objects filtered by the shipping_min_weight column
+ * @method     ChildShippingOption[]|Collection findByMaxWeight(int|array<int> $shipping_max_weight) Return ChildShippingOption objects filtered by the shipping_max_weight column
+ * @psalm-method Collection&\Traversable<ChildShippingOption> findByMaxWeight(int|array<int> $shipping_max_weight) Return ChildShippingOption objects filtered by the shipping_max_weight column
+ * @method     ChildShippingOption[]|Collection findByMaxArticles(int|array<int> $shipping_max_articles) Return ChildShippingOption objects filtered by the shipping_max_articles column
+ * @psalm-method Collection&\Traversable<ChildShippingOption> findByMaxArticles(int|array<int> $shipping_max_articles) Return ChildShippingOption objects filtered by the shipping_max_articles column
+ * @method     ChildShippingOption[]|Collection findByMinAmount(int|array<int> $shipping_min_amount) Return ChildShippingOption objects filtered by the shipping_min_amount column
+ * @psalm-method Collection&\Traversable<ChildShippingOption> findByMinAmount(int|array<int> $shipping_min_amount) Return ChildShippingOption objects filtered by the shipping_min_amount column
+ * @method     ChildShippingOption[]|Collection findByMaxAmount(int|array<int> $shipping_max_amount) Return ChildShippingOption objects filtered by the shipping_max_amount column
+ * @psalm-method Collection&\Traversable<ChildShippingOption> findByMaxAmount(int|array<int> $shipping_max_amount) Return ChildShippingOption objects filtered by the shipping_max_amount column
+ * @method     ChildShippingOption[]|Collection findByFee(int|array<int> $shipping_fee) Return ChildShippingOption objects filtered by the shipping_fee column
+ * @psalm-method Collection&\Traversable<ChildShippingOption> findByFee(int|array<int> $shipping_fee) Return ChildShippingOption objects filtered by the shipping_fee column
+ * @method     ChildShippingOption[]|Collection findByInfo(string|array<string> $shipping_info) Return ChildShippingOption objects filtered by the shipping_info column
+ * @psalm-method Collection&\Traversable<ChildShippingOption> findByInfo(string|array<string> $shipping_info) Return ChildShippingOption objects filtered by the shipping_info column
+ * @method     ChildShippingOption[]|Collection findByCreatedAt(string|array<string> $shipping_created) Return ChildShippingOption objects filtered by the shipping_created column
+ * @psalm-method Collection&\Traversable<ChildShippingOption> findByCreatedAt(string|array<string> $shipping_created) Return ChildShippingOption objects filtered by the shipping_created column
+ * @method     ChildShippingOption[]|Collection findByUpdatedAt(string|array<string> $shipping_updated) Return ChildShippingOption objects filtered by the shipping_updated column
+ * @psalm-method Collection&\Traversable<ChildShippingOption> findByUpdatedAt(string|array<string> $shipping_updated) Return ChildShippingOption objects filtered by the shipping_updated column
+ * @method     ChildShippingOption[]|Collection findByArchivedAt(string|array<string> $shipping_archived_at) Return ChildShippingOption objects filtered by the shipping_archived_at column
+ * @psalm-method Collection&\Traversable<ChildShippingOption> findByArchivedAt(string|array<string> $shipping_archived_at) Return ChildShippingOption objects filtered by the shipping_archived_at column
  *
- * @method     ChildShippingFee[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildShippingFee> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildShippingOption[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildShippingOption> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
-abstract class ShippingFeeQuery extends ModelCriteria
+abstract class ShippingOptionQuery extends ModelCriteria
 {
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \Model\Base\ShippingFeeQuery object.
+     * Initializes internal state of \Model\Base\ShippingOptionQuery object.
      *
      * @param string $dbName The database name
      * @param string $modelName The phpName of a model, e.g. 'Book'
      * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'default', $modelName = '\\Model\\ShippingFee', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\Model\\ShippingOption', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new ChildShippingFeeQuery object.
+     * Returns a new ChildShippingOptionQuery object.
      *
      * @param string $modelAlias The alias of a model in the query
      * @param Criteria $criteria Optional Criteria to build the query from
      *
-     * @return ChildShippingFeeQuery
+     * @return ChildShippingOptionQuery
      */
     public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
-        if ($criteria instanceof ChildShippingFeeQuery) {
+        if ($criteria instanceof ChildShippingOptionQuery) {
             return $criteria;
         }
-        $query = new ChildShippingFeeQuery();
+        $query = new ChildShippingOptionQuery();
         if (null !== $modelAlias) {
             $query->setModelAlias($modelAlias);
         }
@@ -204,7 +204,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
-     * @return ChildShippingFee|array|mixed the result, formatted by the current formatter
+     * @return ChildShippingOption|array|mixed the result, formatted by the current formatter
      */
     public function findPk($key, ?ConnectionInterface $con = null)
     {
@@ -213,7 +213,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(ShippingFeeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(ShippingOptionTableMap::DATABASE_NAME);
         }
 
         $this->basePreSelect($con);
@@ -226,7 +226,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = ShippingFeeTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
+        if ((null !== ($obj = ShippingOptionTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -243,7 +243,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildShippingFee A model object, or null if the key is not found
+     * @return ChildShippingOption A model object, or null if the key is not found
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
@@ -258,10 +258,10 @@ abstract class ShippingFeeQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildShippingFee $obj */
-            $obj = new ChildShippingFee();
+            /** @var ChildShippingOption $obj */
+            $obj = new ChildShippingOption();
             $obj->hydrate($row);
-            ShippingFeeTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
+            ShippingOptionTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -274,7 +274,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con A connection object
      *
-     * @return ChildShippingFee|array|mixed the result, formatted by the current formatter
+     * @return ChildShippingOption|array|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, ConnectionInterface $con)
     {
@@ -321,7 +321,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
     public function filterByPrimaryKey($key)
     {
 
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ID, $key, Criteria::EQUAL);
 
         return $this;
     }
@@ -336,7 +336,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
     public function filterByPrimaryKeys($keys)
     {
 
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ID, $keys, Criteria::IN);
 
         return $this;
     }
@@ -364,11 +364,11 @@ abstract class ShippingFeeQuery extends ModelCriteria
         if (is_array($id)) {
             $useMinMax = false;
             if (isset($id['min'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ID, $id['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ID, $id['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($id['max'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ID, $id['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ID, $id['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -379,7 +379,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ID, $id, $comparison);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ID, $id, $comparison);
 
         return $this;
     }
@@ -407,11 +407,11 @@ abstract class ShippingFeeQuery extends ModelCriteria
         if (is_array($siteId)) {
             $useMinMax = false;
             if (isset($siteId['min'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SITE_ID, $siteId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SITE_ID, $siteId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($siteId['max'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SITE_ID, $siteId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SITE_ID, $siteId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -422,7 +422,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SITE_ID, $siteId, $comparison);
 
         return $this;
     }
@@ -450,11 +450,11 @@ abstract class ShippingFeeQuery extends ModelCriteria
         if (is_array($articleId)) {
             $useMinMax = false;
             if (isset($articleId['min'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_ARTICLE_ID, $articleId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_ARTICLE_ID, $articleId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($articleId['max'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_ARTICLE_ID, $articleId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_ARTICLE_ID, $articleId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -465,7 +465,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(ShippingFeeTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_ARTICLE_ID, $articleId, $comparison);
 
         return $this;
     }
@@ -493,7 +493,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MODE, $mode, $comparison);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_MODE, $mode, $comparison);
 
         return $this;
     }
@@ -521,7 +521,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_TYPE, $type, $comparison);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_TYPE, $type, $comparison);
 
         return $this;
     }
@@ -549,7 +549,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ZONE, $zone, $comparison);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ZONE, $zone, $comparison);
 
         return $this;
     }
@@ -577,11 +577,11 @@ abstract class ShippingFeeQuery extends ModelCriteria
         if (is_array($minWeight)) {
             $useMinMax = false;
             if (isset($minWeight['min'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MIN_WEIGHT, $minWeight['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_MIN_WEIGHT, $minWeight['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($minWeight['max'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MIN_WEIGHT, $minWeight['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_MIN_WEIGHT, $minWeight['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -592,7 +592,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MIN_WEIGHT, $minWeight, $comparison);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_MIN_WEIGHT, $minWeight, $comparison);
 
         return $this;
     }
@@ -620,11 +620,11 @@ abstract class ShippingFeeQuery extends ModelCriteria
         if (is_array($maxWeight)) {
             $useMinMax = false;
             if (isset($maxWeight['min'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MAX_WEIGHT, $maxWeight['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_MAX_WEIGHT, $maxWeight['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($maxWeight['max'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MAX_WEIGHT, $maxWeight['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_MAX_WEIGHT, $maxWeight['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -635,7 +635,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MAX_WEIGHT, $maxWeight, $comparison);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_MAX_WEIGHT, $maxWeight, $comparison);
 
         return $this;
     }
@@ -663,11 +663,11 @@ abstract class ShippingFeeQuery extends ModelCriteria
         if (is_array($maxArticles)) {
             $useMinMax = false;
             if (isset($maxArticles['min'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MAX_ARTICLES, $maxArticles['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_MAX_ARTICLES, $maxArticles['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($maxArticles['max'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MAX_ARTICLES, $maxArticles['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_MAX_ARTICLES, $maxArticles['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -678,7 +678,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MAX_ARTICLES, $maxArticles, $comparison);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_MAX_ARTICLES, $maxArticles, $comparison);
 
         return $this;
     }
@@ -706,11 +706,11 @@ abstract class ShippingFeeQuery extends ModelCriteria
         if (is_array($minAmount)) {
             $useMinMax = false;
             if (isset($minAmount['min'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MIN_AMOUNT, $minAmount['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_MIN_AMOUNT, $minAmount['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($minAmount['max'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MIN_AMOUNT, $minAmount['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_MIN_AMOUNT, $minAmount['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -721,7 +721,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MIN_AMOUNT, $minAmount, $comparison);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_MIN_AMOUNT, $minAmount, $comparison);
 
         return $this;
     }
@@ -749,11 +749,11 @@ abstract class ShippingFeeQuery extends ModelCriteria
         if (is_array($maxAmount)) {
             $useMinMax = false;
             if (isset($maxAmount['min'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MAX_AMOUNT, $maxAmount['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_MAX_AMOUNT, $maxAmount['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($maxAmount['max'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MAX_AMOUNT, $maxAmount['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_MAX_AMOUNT, $maxAmount['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -764,7 +764,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MAX_AMOUNT, $maxAmount, $comparison);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_MAX_AMOUNT, $maxAmount, $comparison);
 
         return $this;
     }
@@ -792,11 +792,11 @@ abstract class ShippingFeeQuery extends ModelCriteria
         if (is_array($fee)) {
             $useMinMax = false;
             if (isset($fee['min'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_FEE, $fee['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_FEE, $fee['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($fee['max'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_FEE, $fee['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_FEE, $fee['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -807,7 +807,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_FEE, $fee, $comparison);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_FEE, $fee, $comparison);
 
         return $this;
     }
@@ -835,7 +835,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_INFO, $info, $comparison);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_INFO, $info, $comparison);
 
         return $this;
     }
@@ -865,11 +865,11 @@ abstract class ShippingFeeQuery extends ModelCriteria
         if (is_array($createdAt)) {
             $useMinMax = false;
             if (isset($createdAt['min'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_CREATED, $createdAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_CREATED, $createdAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($createdAt['max'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_CREATED, $createdAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_CREATED, $createdAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -880,7 +880,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_CREATED, $createdAt, $comparison);
 
         return $this;
     }
@@ -910,11 +910,11 @@ abstract class ShippingFeeQuery extends ModelCriteria
         if (is_array($updatedAt)) {
             $useMinMax = false;
             if (isset($updatedAt['min'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_UPDATED, $updatedAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_UPDATED, $updatedAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($updatedAt['max'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_UPDATED, $updatedAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_UPDATED, $updatedAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -925,7 +925,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_UPDATED, $updatedAt, $comparison);
 
         return $this;
     }
@@ -955,11 +955,11 @@ abstract class ShippingFeeQuery extends ModelCriteria
         if (is_array($archivedAt)) {
             $useMinMax = false;
             if (isset($archivedAt['min'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ARCHIVED_AT, $archivedAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ARCHIVED_AT, $archivedAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($archivedAt['max'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ARCHIVED_AT, $archivedAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ARCHIVED_AT, $archivedAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -970,7 +970,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ARCHIVED_AT, $archivedAt, $comparison);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ARCHIVED_AT, $archivedAt, $comparison);
 
         return $this;
     }
@@ -987,7 +987,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
     {
         if ($order instanceof \Model\Order) {
             $this
-                ->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ID, $order->getShippingId(), $comparison);
+                ->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ID, $order->getShippingId(), $comparison);
 
             return $this;
         } elseif ($order instanceof ObjectCollection) {
@@ -1151,14 +1151,14 @@ abstract class ShippingFeeQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param ChildShippingFee $shippingFee Object to remove from the list of results
+     * @param ChildShippingOption $shippingOption Object to remove from the list of results
      *
      * @return $this The current query, for fluid interface
      */
-    public function prune($shippingFee = null)
+    public function prune($shippingOption = null)
     {
-        if ($shippingFee) {
-            $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ID, $shippingFee->getId(), Criteria::NOT_EQUAL);
+        if ($shippingOption) {
+            $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ID, $shippingOption->getId(), Criteria::NOT_EQUAL);
         }
 
         return $this;
@@ -1173,7 +1173,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
     public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(ShippingFeeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(ShippingOptionTableMap::DATABASE_NAME);
         }
 
         // use transaction because $criteria could contain info
@@ -1184,8 +1184,8 @@ abstract class ShippingFeeQuery extends ModelCriteria
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            ShippingFeeTableMap::clearInstancePool();
-            ShippingFeeTableMap::clearRelatedInstancePool();
+            ShippingOptionTableMap::clearInstancePool();
+            ShippingOptionTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -1203,23 +1203,23 @@ abstract class ShippingFeeQuery extends ModelCriteria
     public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(ShippingFeeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(ShippingOptionTableMap::DATABASE_NAME);
         }
 
         $criteria = $this;
 
         // Set the correct dbName
-        $criteria->setDbName(ShippingFeeTableMap::DATABASE_NAME);
+        $criteria->setDbName(ShippingOptionTableMap::DATABASE_NAME);
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
 
-            ShippingFeeTableMap::removeInstanceFromPool($criteria);
+            ShippingOptionTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
-            ShippingFeeTableMap::clearRelatedInstancePool();
+            ShippingOptionTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -1236,7 +1236,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
 
         return $this;
     }
@@ -1248,7 +1248,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
      */
     public function lastUpdatedFirst()
     {
-        $this->addDescendingOrderByColumn(ShippingFeeTableMap::COL_SHIPPING_UPDATED);
+        $this->addDescendingOrderByColumn(ShippingOptionTableMap::COL_SHIPPING_UPDATED);
 
         return $this;
     }
@@ -1260,7 +1260,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
      */
     public function firstUpdatedFirst()
     {
-        $this->addAscendingOrderByColumn(ShippingFeeTableMap::COL_SHIPPING_UPDATED);
+        $this->addAscendingOrderByColumn(ShippingOptionTableMap::COL_SHIPPING_UPDATED);
 
         return $this;
     }
@@ -1272,7 +1272,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
      */
     public function lastCreatedFirst()
     {
-        $this->addDescendingOrderByColumn(ShippingFeeTableMap::COL_SHIPPING_CREATED);
+        $this->addDescendingOrderByColumn(ShippingOptionTableMap::COL_SHIPPING_CREATED);
 
         return $this;
     }
@@ -1286,7 +1286,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
      */
     public function recentlyCreated($nbDays = 7)
     {
-        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
 
         return $this;
     }
@@ -1298,7 +1298,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
      */
     public function firstCreatedFirst()
     {
-        $this->addAscendingOrderByColumn(ShippingFeeTableMap::COL_SHIPPING_CREATED);
+        $this->addAscendingOrderByColumn(ShippingOptionTableMap::COL_SHIPPING_CREATED);
 
         return $this;
     }

@@ -46,7 +46,7 @@ class ShippingFeeQueryTest extends TestCase
         $currentSite = new CurrentSite($site);
 
         // when
-        list(, $feeNormal) = ShippingFeeQuery::getForCountryAndWeightAndAmountAndArticleCount(
+        list(, $feeNormal) = ShippingOptionQuery::getForCountryAndWeightAndAmountAndArticleCount(
             $currentSite,
             $country,
             $orderWeight,
@@ -85,7 +85,7 @@ class ShippingFeeQueryTest extends TestCase
         $currentSite = new CurrentSite($site);
 
         // when
-        list(, $returnedFee) = ShippingFeeQuery::getForCountryAndWeightAndAmountAndArticleCount(
+        list(, $returnedFee) = ShippingOptionQuery::getForCountryAndWeightAndAmountAndArticleCount(
             $currentSite,
             $country,
             $orderWeight,
@@ -116,7 +116,7 @@ class ShippingFeeQueryTest extends TestCase
         $currentSite = new CurrentSite($site);
 
         // when
-        $returnedFees = ShippingFeeQuery::getForCountryAndWeightAndAmountAndArticleCount(
+        $returnedFees = ShippingOptionQuery::getForCountryAndWeightAndAmountAndArticleCount(
             $currentSite,
             $country,
             $orderWeight,
