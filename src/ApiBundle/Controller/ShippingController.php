@@ -54,7 +54,7 @@ class ShippingController extends Controller
         $allFees = ShippingOptionQuery::createForSite($currentSite)
             ->filterByArchivedAt(null, Criteria::ISNULL)
             ->orderByType()
-            ->orderByZone()
+            ->orderByZoneCode()
             ->orderByFee()
             ->find();
 
@@ -220,7 +220,7 @@ class ShippingController extends Controller
             'id' => $fee->getId(),
             'mode' => $fee->getMode(),
             'type' => $fee->getType(),
-            'zone' => $fee->getZone(),
+            'zone' => $fee->getZoneCode(),
             'max_weight' => $fee->getMaxWeight(),
             'min_amount' => $fee->getMinAmount(),
             'max_amount' => $fee->getMaxAmount(),
@@ -273,7 +273,7 @@ class ShippingController extends Controller
     {
         $fee->setMode($data["mode"]);
         $fee->setType($data["type"]);
-        $fee->setZone($data["zone"]);
+        $fee->setZoneCode($data["zone"]);
         $fee->setMaxWeight($data["maxWeight"]);
         $fee->setMinAmount($data["minAmount"]);
         $fee->setMaxAmount($data["maxAmount"]);

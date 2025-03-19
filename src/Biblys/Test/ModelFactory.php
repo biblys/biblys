@@ -224,7 +224,7 @@ class ModelFactory
         $country = new Country();
         $country->setName($name);
         $country->setCode("FR");
-        $country->setShippingZone($zone);
+        $country->setShippingZoneCode($zone);
         $country->save();
 
         return $country;
@@ -517,7 +517,7 @@ class ModelFactory
     {
         $shippingFee = new ShippingOption();
         $shippingFee->setSiteId($site?->getId() ?? 1);
-        $shippingFee->setZone($country?->getShippingZone() ?? "ALL");
+        $shippingFee->setZoneCode($country?->getShippingZoneCode() ?? "ALL");
         $shippingFee->setType($type);
         $shippingFee->setMode($mode);
         $shippingFee->setFee($fee);
