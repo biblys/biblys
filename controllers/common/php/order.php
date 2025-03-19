@@ -205,7 +205,8 @@ return function (
         if (isset($_GET["payed"])) $content .= '<p class="success">La commande a été payée.</p><br />';
 
         // Paiement
-        if (!$o["order_payment_date"]) $buttons .= '<a href="/payment/' . $o["order_url"] . '" class="btn btn-primary"><i class="fa-regular fa-money-bill-1"></i>&nbsp; Payer la commande (' . currency($o["order_amount_tobepaid"] / 100) . ')</a> ';
+        $paymentPageUrl = $urlGenerator->generate("payment_pay", ["slug" => $order->getSlug()]);
+        if (!$o["order_payment_date"]) $buttons .= '<a href="'.$paymentPageUrl.'" class="btn btn-primary"><i class="fa-regular fa-money-bill-1"></i>&nbsp; Payer la commande (' . currency($o["order_amount_tobepaid"] / 100) . ')</a> ';
         else $buttons .= '<a href="/invoice/' . $o["order_url"] . '" class="btn btn-outline-secondary"><i class="fa fa-print"></i> Imprimer une facture</a> ';
 
         $currentSite = $currentSiteService->getSite();

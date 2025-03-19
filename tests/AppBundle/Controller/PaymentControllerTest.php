@@ -17,6 +17,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Test\Helpers;
@@ -174,5 +175,148 @@ class PaymentControllerTest extends TestCase
         $this->assertStringContainsString("28/04/2019", $response->getContent());
         $this->assertStringNotContainsString("26/04/2019", $response->getContent());
         $this->assertStringNotContainsString("30/04/2019", $response->getContent());
+    }
+
+    /** selectMethodAction */
+
+    /**
+     * @throws Exception
+     */
+    public function testSelectMethodAction()
+    {
+        // given
+        $controller = new PaymentController();
+        $order = ModelFactory::createOrder();
+        $config = new Config();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->expects("getOption")->with("payment_iban")->andReturn(null);
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->selectMethodAction($config, $currentSite, $templateService, $order->getSlug());
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Comment souhaitez-vous régler votre commande ?", $response->getContent());
+        $this->assertStringNotContainsString("Stripe", $response->getContent());
+        $this->assertStringNotContainsString("PayPlug", $response->getContent());
+        $this->assertStringNotContainsString("PayPal", $response->getContent());
+        $this->assertStringNotContainsString("Virement", $response->getContent());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSelectMethodActionWithStripe()
+    {
+        // given
+        $controller = new PaymentController();
+        $order = ModelFactory::createOrder();
+        $config = new Config(["stripe" => ["public_key" => "abcd"]]);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->expects("getOption")->with("payment_iban")->andReturn(null);
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->selectMethodAction($config, $currentSite, $templateService, $order->getSlug());
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Stripe", $response->getContent());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSelectMethodActionWithPayPlug()
+    {
+        // given
+        $controller = new PaymentController();
+        $order = ModelFactory::createOrder();
+        $config = new Config(["payplug" => ["secret" => "abcd"]]);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->expects("getOption")->with("payment_iban")->andReturn(null);
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->selectMethodAction($config, $currentSite, $templateService, $order->getSlug());
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("PayPlug", $response->getContent());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testSelectMethodActionWithPayPal()
+    {
+        // given
+        $controller = new PaymentController();
+        $order = ModelFactory::createOrder();
+        $config = new Config(["paypal" => ["client_id" => "PAYPAL_CLIENT_ID", "client_secret" => "1234"]]);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->expects("getOption")->with("payment_iban")->andReturn(null);
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->selectMethodAction($config, $currentSite, $templateService, $order->getSlug());
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("PayPal", $response->getContent());
+        $this->assertStringContainsString("PAYPAL_CLIENT_ID", $response->getContent());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testSelectMethodActionWithTransfer()
+    {
+        // given
+        $controller = new PaymentController();
+        $order = ModelFactory::createOrder();
+        $config = new Config();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->expects("getOption")->with("payment_iban")->andReturn("PAYMENT_IBAN");
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->selectMethodAction($config, $currentSite, $templateService, $order->getSlug());
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Virement", $response->getContent());
+        $this->assertStringContainsString("PAYMENT_IBAN", $response->getContent());
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function testSelectMethodActionWithCheck()
+    {
+        // given
+        $controller = new PaymentController();
+        $order = ModelFactory::createOrder();
+        $config = new Config();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->expects("getOption")->with("payment_iban")->andReturn(null);
+        $currentSite->expects("getOption")->with("payment_check")->andReturn(1);
+        $currentSite->expects("getOption")->with("name_for_check_payment")->andReturn("L’ordre");
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->selectMethodAction($config, $currentSite, $templateService, $order->getSlug());
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Chèque", $response->getContent());
+        $this->assertStringContainsString("L’ordre", $response->getContent());
     }
 }
