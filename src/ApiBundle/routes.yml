@@ -56,6 +56,13 @@ api_orders_export:
   path: /api/admin/orders/export
   controller: ApiBundle\Controller\OrderController::exportAction
 
+# Payment
+
+api_stripe_create_payment:
+  methods: POST
+  path: /api/orders/{slug}/stripe/create-payment
+  controller: ApiBundle\Controller\PaymentController::createStripePaymentAction
+
 # Shipping
 
 api_shipping:

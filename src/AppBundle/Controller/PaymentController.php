@@ -230,6 +230,7 @@ class PaymentController extends Controller
         return $templateService->renderResponse('AppBundle:Payment:select-method.html.twig', [
             "order" => $order,
             "stripeIsAvailable" => !!$config->get("stripe"),
+            "stripePublicKey" => $config->get("stripe.public_key"),
             "payplugIsAvailable" => !!$config->get("payplug"),
             "paypalIsAvailable" => $config->isPayPalEnabled(),
             "paypalClientId" => $config->get("paypal.client_id"),

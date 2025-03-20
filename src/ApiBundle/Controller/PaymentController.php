@@ -34,10 +34,13 @@ use PaypalServerSdkLib\Models\Builders\OrderRequestBuilder;
 use PaypalServerSdkLib\Models\Builders\PurchaseUnitRequestBuilder;
 use PaypalServerSdkLib\PaypalServerSdkClient;
 use PaypalServerSdkLib\PaypalServerSdkClientBuilder;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class PaymentController extends Controller
 {
@@ -162,5 +165,29 @@ class PaymentController extends Controller
             )
             ->environment($environment)
             ->build();
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function createStripePaymentAction(UrlGenerator $urlGenerator, string $slug): JsonResponse
+    {
+        $order = OrderQuery::create()->findOneBySlug($slug);
+        if (!$order) {
+            throw new NotFoundHttpException("Commande inconnue");
+        }
+
+        if ($order->isPaid() || $order->isCancelled()) {
+            $orderUrl = $urlGenerator->generate("legacy_order", ["url" => $order->getSlug()]);
+            throw new NotFoundHttpException("Commande inconnue");
+        }
+
+        $orderManager = new OrderManager();
+        /** @var Order $orderEntity */
+        $orderEntity = $orderManager->getById($order->getId());
+
+        $payment = $orderEntity->createStripePayment();
+
+        return new JsonResponse(["session_id" => $payment->get("provider_id")]);
     }
 }

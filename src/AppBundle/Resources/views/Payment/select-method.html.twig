@@ -44,7 +44,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             </a>
           </h5>
         </div>
-        <div id="collapse-stripe" class="collapse" aria-labelledby="headingOne" data-parent="#payment-methods-accordion">
+        <div id="collapse-stripe" class="collapse" aria-labelledby="headingOne"
+             data-parent="#payment-methods-accordion">
           <div class="card-body">
             {% if order.amountTobepaid < 50 %}
               <p class="alert alert-warning">
@@ -58,13 +59,46 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
               Payez par carte bancaire via le serveur sécurisé de notre partenaire Stripe.
             </p>
 
-            <form method="post" action="{{ path('legacy_payment', { url: order.slug }) }}">
-              <input type="hidden" name="payment" value="stripe">
-              <button type="submit" class="btn btn-primary"
-                      {% if order.amountTobepaid < 50 %}disabled{% endif %}
-              >Payer par carte bancaire
-              </button>
-            </form>
+            <button type="submit" class="btn btn-primary" id="pay-with-stripe"
+              {% if order.amountTobepaid < 50 %}disabled{% endif %}
+            >
+              Payer par carte bancaire
+              <div class="spinner-border spinner-border-sm mr-1 d-none" role="status" id="pay-with-stripe-loader">
+                <span class="sr-only">Redirection en cours...</span>
+              </div>
+            </button>
+
+            <script src="https://js.stripe.com/v3/"></script>
+            <script>
+              const payButton = document.getElementById('pay-with-stripe');
+              const payButtonLoader = document.getElementById('pay-with-stripe-loader');
+              payButton.addEventListener('click', async function() {
+                payButton.disabled = true;
+                payButtonLoader.classList.remove('d-none');
+
+                const response = await fetch('{{ path('api_stripe_create_payment', { slug: order.slug }) }}', {
+                  method: 'POST',
+                  headers: { accept: 'application/json' },
+                });
+                const responseData = await response.json();
+
+                if (responseData.error) {
+                  payButton.disabled = false;
+                  payButtonLoader.classList.add('d-none');
+                  window._alert(responseData.error.message);
+                  return;
+                }
+
+                const stripe = Stripe('{{ stripePublicKey }}');
+                stripe.redirectToCheckout({
+                  sessionId: responseData.session_id
+                }).then(function(result) {
+                  payButton.disabled = false;
+                  payButtonLoader.classList.add('d-none');
+                  window._alert(result.error.message);
+                });
+              });
+            </script>
           </div>
         </div>
       </div>
@@ -81,7 +115,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             </a>
           </h5>
         </div>
-        <div id="collapse-payplug" class="collapse" aria-labelledby="headingTwo" data-parent="#payment-methods-accordion">
+        <div id="collapse-payplug" class="collapse" aria-labelledby="headingTwo"
+             data-parent="#payment-methods-accordion">
           <div class="card-body">
 
             {% if order.amountTobepaid < 50 %}
@@ -120,7 +155,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           </h5>
         </div>
 
-        <div id="collapse-paypal" class="collapse" aria-labelledby="headingTwo" data-parent="#payment-methods-accordion">
+        <div id="collapse-paypal" class="collapse" aria-labelledby="headingTwo"
+             data-parent="#payment-methods-accordion">
           <div class="card-body">
 
             {% if order.amountTobepaid < 100 %}
