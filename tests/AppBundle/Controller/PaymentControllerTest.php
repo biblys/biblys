@@ -20,6 +20,7 @@ namespace AppBundle\Controller;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\PaymentService;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use DateTime;
@@ -33,7 +34,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-require_once __DIR__."/../../setUp.php";
+require_once __DIR__ . "/../../setUp.php";
 
 class PaymentControllerTest extends TestCase
 {
@@ -190,10 +191,14 @@ class PaymentControllerTest extends TestCase
         $config = new Config();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->expects("getOption")->with("payment_iban")->andReturn(null);
+        $currentSite->expects("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->expects("getOption")->with("name_for_check_payment")->andReturn(null);
         $templateService = Helpers::getTemplateService();
+        $paymentService = Mockery::mock(PaymentService::class);
+        $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
 
         // when
-        $response = $controller->selectMethodAction($config, $currentSite, $templateService, $order->getSlug());
+        $response = $controller->selectMethodAction($paymentService, $config, $currentSite, $templateService, $order->getSlug());
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -215,10 +220,14 @@ class PaymentControllerTest extends TestCase
         $config = new Config(["stripe" => ["public_key" => "abcd"]]);
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->expects("getOption")->with("payment_iban")->andReturn(null);
+        $currentSite->expects("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->expects("getOption")->with("name_for_check_payment")->andReturn(null);
         $templateService = Helpers::getTemplateService();
+        $paymentService = Mockery::mock(PaymentService::class);
+        $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
 
         // when
-        $response = $controller->selectMethodAction($config, $currentSite, $templateService, $order->getSlug());
+        $response = $controller->selectMethodAction($paymentService, $config, $currentSite, $templateService, $order->getSlug());
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -236,10 +245,14 @@ class PaymentControllerTest extends TestCase
         $config = new Config(["payplug" => ["secret" => "abcd"]]);
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->expects("getOption")->with("payment_iban")->andReturn(null);
+        $currentSite->expects("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->expects("getOption")->with("name_for_check_payment")->andReturn(null);
         $templateService = Helpers::getTemplateService();
+        $paymentService = Mockery::mock(PaymentService::class);
+        $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
 
         // when
-        $response = $controller->selectMethodAction($config, $currentSite, $templateService, $order->getSlug());
+        $response = $controller->selectMethodAction($paymentService, $config, $currentSite, $templateService, $order->getSlug());
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -258,10 +271,14 @@ class PaymentControllerTest extends TestCase
         $config = new Config(["paypal" => ["client_id" => "PAYPAL_CLIENT_ID", "client_secret" => "1234"]]);
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->expects("getOption")->with("payment_iban")->andReturn(null);
+        $currentSite->expects("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->expects("getOption")->with("name_for_check_payment")->andReturn(null);
         $templateService = Helpers::getTemplateService();
+        $paymentService = Mockery::mock(PaymentService::class);
+        $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
 
         // when
-        $response = $controller->selectMethodAction($config, $currentSite, $templateService, $order->getSlug());
+        $response = $controller->selectMethodAction($paymentService, $config, $currentSite, $templateService, $order->getSlug());
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -281,10 +298,14 @@ class PaymentControllerTest extends TestCase
         $config = new Config();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->expects("getOption")->with("payment_iban")->andReturn("PAYMENT_IBAN");
+        $currentSite->expects("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->expects("getOption")->with("name_for_check_payment")->andReturn(null);
         $templateService = Helpers::getTemplateService();
+        $paymentService = Mockery::mock(PaymentService::class);
+        $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
 
         // when
-        $response = $controller->selectMethodAction($config, $currentSite, $templateService, $order->getSlug());
+        $response = $controller->selectMethodAction($paymentService, $config, $currentSite, $templateService, $order->getSlug());
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -310,9 +331,11 @@ class PaymentControllerTest extends TestCase
         $currentSite->expects("getOption")->with("payment_check")->andReturn(1);
         $currentSite->expects("getOption")->with("name_for_check_payment")->andReturn("L’ordre");
         $templateService = Helpers::getTemplateService();
+        $paymentService = Mockery::mock(PaymentService::class);
+        $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
 
         // when
-        $response = $controller->selectMethodAction($config, $currentSite, $templateService, $order->getSlug());
+        $response = $controller->selectMethodAction($paymentService, $config, $currentSite, $templateService, $order->getSlug());
 
         // then
         $this->assertEquals(200, $response->getStatusCode());

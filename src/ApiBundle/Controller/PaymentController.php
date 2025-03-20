@@ -18,10 +18,12 @@
 
 namespace ApiBundle\Controller;
 
+use Biblys\Exception\CannotFindPayableOrderException;
 use Biblys\Service\Config;
 use Biblys\Service\LoggerService;
+use Biblys\Service\PaymentService;
+use Exception;
 use Framework\Controller;
-use Model\OrderQuery;
 use Order;
 use OrderManager;
 use PaypalServerSdkLib\Authentication\ClientCredentialsAuthCredentialsBuilder;
@@ -36,27 +38,30 @@ use PaypalServerSdkLib\PaypalServerSdkClient;
 use PaypalServerSdkLib\PaypalServerSdkClientBuilder;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class PaymentController extends Controller
 {
+    /**
+     * @throws PropelException
+     */
     public function paypalCreateOrderAction(
-        Config $config,
-        LoggerService $logger,
-        string $slug
+        Config         $config,
+        PaymentService $paymentService,
+        LoggerService  $logger,
+        string         $slug
     ): JsonResponse
     {
         if (!$config->isPayPalEnabled()) {
             throw new NotFoundHttpException("PayPal n'est pas configuré sur ce site");
         }
 
-        $order = OrderQuery::create()->findOneBySlug($slug);
-        if (!$order) {
-            throw new NotFoundHttpException("Commande non trouvée");
+        try {
+            $order = $paymentService->getPayableOrderBySlug($slug);
+        } catch (CannotFindPayableOrderException $exception) {
+            throw new NotFoundHttpException($exception->getMessage(), $exception);
         }
 
         $client = $this->_createPayPalClient($config);
@@ -108,45 +113,48 @@ class PaymentController extends Controller
 
     /**
      * @throws TransportExceptionInterface
+     * @throws PropelException
      */
     public function paypalCaptureAction(
-        Request $request,
-        Config $config,
-        LoggerService $logger,
-        string $slug
+        Config         $config,
+        PaymentService $paymentService,
+        Request        $request,
+        LoggerService  $logger,
+        string         $slug
     ): JsonResponse
     {
         if (!$config->isPayPalEnabled()) {
             throw new NotFoundHttpException("PayPal n'est pas configuré sur ce site");
         }
 
-        $order = OrderQuery::create()->findOneBySlug($slug);
-        if (!$order) {
-            throw new NotFoundHttpException("Commande non trouvée");
+        try {
+            $order = $paymentService->getPayableOrderBySlug($slug);
+
+            $data = json_decode($request->getContent());
+
+            $client = $this->_createPayPalClient($config);
+            $apiResponse = $client->getOrdersController()->ordersCapture(["id" => $data->paypalOrderId]);
+            $jsonResponse = json_decode($apiResponse->getBody(), true);
+
+            $logger->log(
+                logger: "paypal",
+                level: "INFO",
+                message: "Captured PayPal payment for order {$order->getId()}.",
+                context: $jsonResponse,
+            );
+
+            if ($jsonResponse["status"] === "COMPLETED") {
+                $paidAmount = $jsonResponse["purchase_units"][0]["payments"]["captures"][0]["amount"]["value"];
+                $orderManager = new OrderManager();
+                /** @var Order $orderEntity */
+                $orderEntity = $orderManager->getById($order->getId());
+                $orderManager->addPayment($orderEntity, "paypal", $paidAmount * 100);
+            }
+
+            return new JsonResponse($jsonResponse, $apiResponse->getStatusCode());
+        } catch (CannotFindPayableOrderException $exception) {
+            throw new NotFoundHttpException($exception->getMessage(), $exception);
         }
-
-        $data = json_decode($request->getContent());
-
-        $client = $this->_createPayPalClient($config);
-        $apiResponse = $client->getOrdersController()->ordersCapture(["id" => $data->paypalOrderId]);
-        $jsonResponse = json_decode($apiResponse->getBody(), true);
-
-        $logger->log(
-            logger: "paypal",
-            level: "INFO",
-            message: "Captured PayPal payment for order {$order->getId()}.",
-            context: $jsonResponse,
-        );
-
-        if ($jsonResponse["status"] === "COMPLETED") {
-            $paidAmount = $jsonResponse["purchase_units"][0]["payments"]["captures"][0]["amount"]["value"];
-            $orderManager = new OrderManager();
-            /** @var Order $orderEntity */
-            $orderEntity = $orderManager->getById($order->getId());
-            $orderManager->addPayment($orderEntity, "paypal", $paidAmount * 100);
-        }
-
-        return new JsonResponse($jsonResponse, $apiResponse->getStatusCode());
     }
 
     /**
@@ -169,25 +177,26 @@ class PaymentController extends Controller
 
     /**
      * @throws PropelException
+     * @throws Exception
      */
-    public function createStripePaymentAction(UrlGenerator $urlGenerator, string $slug): JsonResponse
+    public function createStripePaymentAction(
+        PaymentService $paymentService,
+        string         $slug
+    ): JsonResponse
     {
-        $order = OrderQuery::create()->findOneBySlug($slug);
-        if (!$order) {
-            throw new NotFoundHttpException("Commande inconnue");
+        try {
+            $order = $paymentService->getPayableOrderBySlug($slug);
+
+            $orderManager = new OrderManager();
+            /** @var Order $orderEntity */
+            $orderEntity = $orderManager->getById($order->getId());
+
+            $payment = $orderEntity->createStripePayment();
+
+            return new JsonResponse(["session_id" => $payment->get("provider_id")]);
+        } catch (CannotFindPayableOrderException $exception) {
+            throw new NotFoundHttpException($exception->getMessage(), $exception);
         }
 
-        if ($order->isPaid() || $order->isCancelled()) {
-            $orderUrl = $urlGenerator->generate("legacy_order", ["url" => $order->getSlug()]);
-            throw new NotFoundHttpException("Commande inconnue");
-        }
-
-        $orderManager = new OrderManager();
-        /** @var Order $orderEntity */
-        $orderEntity = $orderManager->getById($order->getId());
-
-        $payment = $orderEntity->createStripePayment();
-
-        return new JsonResponse(["session_id" => $payment->get("provider_id")]);
     }
 }
