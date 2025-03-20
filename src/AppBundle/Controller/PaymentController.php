@@ -20,6 +20,7 @@ namespace AppBundle\Controller;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\FlashMessagesService;
 use Biblys\Service\LoggerService;
 use Biblys\Service\Pagination;
 use Biblys\Service\TemplateService;
@@ -33,17 +34,21 @@ use Model\PaymentQuery;
 use Order;
 use OrderManager;
 use PaymentManager;
+use Payplug\Exception\BadRequestException;
+use Payplug\Exception\ConfigurationNotSetException;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Stripe\Stripe;
 use Stripe\Webhook;
 use Stripe\Exception\SignatureVerificationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -235,5 +240,41 @@ class PaymentController extends Controller
             "orderWillBeShipped" => $orderWillBeShipped,
             "orderWillBeCollected" => $orderWillBeCollected,
         ]);
+    }
+
+    /**
+     * @throws ConfigurationNotSetException
+     * @throws PropelException
+     */
+    public function createPayplugPaymentAction(
+        LoggerService $loggerService,
+        FlashMessagesService $flashMessagesService,
+        UrlGenerator $urlGenerator,
+        string $slug
+    ): RedirectResponse
+    {
+        $order = OrderQuery::create()->findOneBySlug($slug);
+        if (!$order) {
+            throw new NotFoundHttpException("Commande inconnue");
+        }
+
+        if ($order->isPaid() || $order->isCancelled()) {
+            $orderUrl = $urlGenerator->generate("legacy_order", ["url" => $order->getSlug()]);
+            return new RedirectResponse($orderUrl);
+        }
+
+        try {
+            $orderManager = new OrderManager();
+            /** @var Order $orderEntity */
+            $orderEntity = $orderManager->getById($order->getId());
+            $payment = $orderEntity->createPayplugPayment();
+            return new RedirectResponse($payment->get("url"));
+        } catch (BadRequestException $exception) {
+            $error = $exception->getErrorObject();
+            $loggerService->log("payplug", $error["message"], $error["details"]);
+            $flashMessagesService->add("error", "Une erreur est survenue lors de la création du paiement via PayPlug : " . $error["message"]);
+            $paymentPageUrl = $urlGenerator->generate("payment", ["slug" => $order->getSlug()]);
+            return new RedirectResponse($paymentPageUrl);
+        }
     }
 }
