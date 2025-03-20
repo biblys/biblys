@@ -37,6 +37,8 @@ use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
 use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Rest\ApiContext;
+use Payplug\Exception\ConfigurationException;
+use Payplug\Exception\ConfigurationNotSetException;
 use Payplug\Exception\HttpException;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Product;
@@ -215,7 +217,7 @@ class Order extends Entity
 
     public function createStripePayment()
     {
-        $config = LegacyCodeHelper::getGlobalConfig();;
+        $config = LegacyCodeHelper::getGlobalConfig();
 
         $stripe = $config->get('stripe');
         if (!$stripe) {
@@ -784,7 +786,7 @@ class OrderManager extends EntityManager
         $mailer->send($order->get('email'), $subject, $message);
 
         // Physical types
-        $types = \Biblys\Data\ArticleType::getAllPhysicalTypes();
+        $types = ArticleType::getAllPhysicalTypes();
         $physical_types = array_map(function ($type) {
             return $type->getId();
         }, $types);
