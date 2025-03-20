@@ -896,12 +896,6 @@ legacy_order:
   defaults:
     page: order
 
-legacy_payment:
-  path: /payment/{url}
-  controller: AppBundle\Controller\LegacyController::defaultAction
-  defaults:
-    page: order_payment
-
 legacy_pages:
   path: /pages/{page}
   controller: AppBundle\Controller\LegacyController::defaultAction
