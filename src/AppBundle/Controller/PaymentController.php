@@ -17,18 +17,19 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Exception\CannotFindPayableOrderException;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
 use Biblys\Service\LoggerService;
 use Biblys\Service\Pagination;
+use Biblys\Service\PaymentService;
 use Biblys\Service\TemplateService;
 use DateTime;
 use Exception;
 use Framework\Controller;
 use InvalidArgumentException;
-use Model\OrderQuery;
 use Model\Payment;
 use Model\PaymentQuery;
 use Order;
@@ -213,34 +214,36 @@ class PaymentController extends Controller
      * @throws SyntaxError
      */
     public function selectMethodAction(
+        PaymentService  $paymentService,
         Config          $config,
         CurrentSite     $currentSite,
         TemplateService $templateService,
-        string          $slug
+        string          $slug,
     ): Response
     {
-        $order = OrderQuery::create()->findOneBySlug($slug);
-        if (!$order) {
-            throw new NotFoundHttpException("Commande inconnue");
+        try {
+            $order = $paymentService->getPayableOrderBySlug($slug);
+
+            $orderWillBeCollected = $order->getShippingMode() === "magasin";
+            $orderWillBeShipped = !$orderWillBeCollected;
+
+            return $templateService->renderResponse('AppBundle:Payment:select-method.html.twig', [
+                "order" => $order,
+                "stripeIsAvailable" => !!$config->get("stripe"),
+                "stripePublicKey" => $config->get("stripe.public_key"),
+                "payplugIsAvailable" => !!$config->get("payplug"),
+                "paypalIsAvailable" => $config->isPayPalEnabled(),
+                "paypalClientId" => $config->get("paypal.client_id"),
+                "transferIsAvailable" => !!$currentSite->getOption("payment_iban"),
+                "paymentIban" => $currentSite->getOption("payment_iban"),
+                "checkIsAvailable" => !!$currentSite->getOption("payment_check"),
+                "nameForCheckPayment" => $currentSite->getOption("name_for_check_payment"),
+                "orderWillBeShipped" => $orderWillBeShipped,
+                "orderWillBeCollected" => $orderWillBeCollected,
+            ]);
+        } catch (CannotFindPayableOrderException $exception) {
+            throw new NotFoundHttpException($exception->getMessage(), $exception);
         }
-
-        $orderWillBeCollected = $order->getShippingMode() === "magasin";
-        $orderWillBeShipped = !$orderWillBeCollected;
-
-        return $templateService->renderResponse('AppBundle:Payment:select-method.html.twig', [
-            "order" => $order,
-            "stripeIsAvailable" => !!$config->get("stripe"),
-            "stripePublicKey" => $config->get("stripe.public_key"),
-            "payplugIsAvailable" => !!$config->get("payplug"),
-            "paypalIsAvailable" => $config->isPayPalEnabled(),
-            "paypalClientId" => $config->get("paypal.client_id"),
-            "transferIsAvailable" => !!$currentSite->getOption("payment_iban"),
-            "paymentIban" => $currentSite->getOption("payment_iban"),
-            "checkIsAvailable" => !!$currentSite->getOption("payment_check"),
-            "nameForCheckPayment" => $currentSite->getOption("name_for_check_payment"),
-            "orderWillBeShipped" => $orderWillBeShipped,
-            "orderWillBeCollected" => $orderWillBeCollected,
-        ]);
     }
 
     /**
@@ -248,28 +251,22 @@ class PaymentController extends Controller
      * @throws PropelException
      */
     public function createPayplugPaymentAction(
-        LoggerService $loggerService,
+        PaymentService       $paymentService,
+        LoggerService        $loggerService,
         FlashMessagesService $flashMessagesService,
-        UrlGenerator $urlGenerator,
-        string $slug
+        UrlGenerator         $urlGenerator,
+        string               $slug
     ): RedirectResponse
     {
-        $order = OrderQuery::create()->findOneBySlug($slug);
-        if (!$order) {
-            throw new NotFoundHttpException("Commande inconnue");
-        }
-
-        if ($order->isPaid() || $order->isCancelled()) {
-            $orderUrl = $urlGenerator->generate("legacy_order", ["url" => $order->getSlug()]);
-            return new RedirectResponse($orderUrl);
-        }
-
         try {
+            $order = $paymentService->getPayableOrderBySlug($slug);
             $orderManager = new OrderManager();
             /** @var Order $orderEntity */
             $orderEntity = $orderManager->getById($order->getId());
             $payment = $orderEntity->createPayplugPayment();
             return new RedirectResponse($payment->get("url"));
+        } catch (CannotFindPayableOrderException $exception) {
+            throw new NotFoundHttpException($exception->getMessage(), $exception);
         } catch (BadRequestException $exception) {
             $error = $exception->getErrorObject();
             $loggerService->log("payplug", $error["message"], $error["details"]);
