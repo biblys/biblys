@@ -44,7 +44,6 @@ return function (Request $request, Config $config): Response|RedirectResponse {
 
     $stripeConfig = $config->get('stripe');
     $stripeIsAvailable = $stripeConfig;
-    $payplugIsAvailable = !!$config->get('payplug');
 
     $paymentMode = $request->request->get("payment");
 
@@ -52,23 +51,7 @@ return function (Request $request, Config $config): Response|RedirectResponse {
     $orderEntity->set("payment_mode", $paymentMode);
     $om->update($orderEntity);
 
-    if ($paymentMode == 'payplug' && $payplugIsAvailable) {
-
-        try {
-            $payment = $orderEntity->createPayplugPayment();
-            return new RedirectResponse($payment->get("url"));
-        } catch (Payplug\Exception\BadRequestException $exception) {
-            $error = $exception->getErrorObject();
-            $content = '
-                    <p class="alert alert-danger">
-                        Une erreur est survenue lors de la création du paiement via PayPlug :<br />
-                        <strong>Message : ' . $error['message'] . '</strong>
-                    </p>
-                    <pre>' . json_encode($error['details'], JSON_PRETTY_PRINT) . '</pre>
-                ';
-        }
-
-    } elseif ($paymentMode == 'stripe' && $stripeIsAvailable) {
+    if ($paymentMode == "stripe" && $stripeIsAvailable) {
 
         $payment = $orderEntity->createStripePayment();
         /** @noinspection JSUnresolvedReference */

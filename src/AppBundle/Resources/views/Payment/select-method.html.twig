@@ -96,7 +96,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
               Payez par carte bancaire via le serveur sécurisé de notre partenaire PayPlug.
             </p>
 
-            <form method="post" action="{{ path("legacy_payment", { url: order.slug }) }}">
+            <form method="post" action="{{ path("payment_payplug", { slug: order.slug }) }}">
               <input type="hidden" name="payment" value="payplug">
               <button type="submit" class="btn btn-primary"
                       {% if order.amountTobepaid < 50 %}disabled{% endif %}
