@@ -118,141 +118,6 @@ class Order extends Entity
         return true;
     }
 
-    //** PAYPAL **//
-
-    /**
-     * Creates a Paypal payment link for this order using Paypal PHP SDK
-     * @return String the link
-     */
-    public function createPaypalPaymentLink()
-    {
-        
-        $config = \Biblys\Legacy\LegacyCodeHelper::getGlobalConfig();
-        $globalSite = LegacyCodeHelper::getGlobalSite();
-
-        $sm = new StockManager();
-
-        // Get ApiContext
-        $apiContext = $this->getPaypalApiContext();
-
-        // Set Payment method
-        $payer = new Payer();
-        $payer->setPaymentMethod("paypal");
-
-        // Add each copy to paypal item list
-        $copies = $sm->getAll(["order_id" => $this->get("id")]);
-        $item_list = new ItemList();
-        $subtotal = 0;
-        $tax = 0;
-        foreach ($copies as $copy) {
-            $article = $copy->get('article');
-            $item = new Item();
-            $item->setName($article->get('title'))
-                ->setCurrency("EUR")
-                ->setQuantity(1)
-                ->setSku($article->get('id'))
-                ->setPrice(price($copy->get('selling_price_ht')));
-            $item_list->addItem($item);
-            $subtotal += price($copy->get('selling_price_ht'));
-            $tax += price($copy->get('selling_price_tva'));
-        }
-
-        // Set order details
-        $details = new Details();
-        $details->setTax($tax)
-            ->setShipping(price($this->get('shipping')))
-            ->setSubtotal($subtotal);
-
-        // Set order amount
-        $amount = new Amount();
-        $amount->setCurrency("EUR")
-            ->setTotal(price($this->get('amount') + $this->get('shipping')))
-            ->setDetails($details);
-
-        // Create transaction
-        $transaction = new Transaction();
-        $transaction->setAmount($amount)
-            ->setItemList($item_list)
-            ->setDescription("Paiement de la commande n° ".$this->get("id"))
-            ->setInvoiceNumber($this->get("id"));
-
-        // Redirect urls
-        $protocol = 'http';
-        $https = $config->get('https');
-        if ($https) {
-            $protocol = 'https';
-        }
-        $returnUrl = $protocol.'://'.$globalSite->get('domain').\Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('order_paypal_process', ['url' => $this->get('url')]);
-        $cancelUrl = $protocol.'://'.$globalSite->get('domain').'/payment/'.$this->get('url');
-        $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl($returnUrl)
-            ->setCancelUrl($cancelUrl);
-
-        $payment = new Payment();
-        $payment->setIntent("sale")
-            ->setPayer($payer)
-            ->setRedirectUrls($redirectUrls)
-            ->setTransactions([$transaction]);
-
-        try {
-            $payment->create($apiContext);
-        } catch (PayPal\Exception\PayPalConnectionException $pce) {
-            throw new Exception("Une erreur est survenue en tentant de contacter Paypal (".$pce->getMessage()."), merci de réessayer plus tard ou avec un autre mode de paiement.");
-        } catch (Exception $ex) {
-            throw new Exception("Une erreur est survenue en tentant de contacter Paypal, merci de réessayer plus tard ou avec un autre mode de paiement.");
-        }
-
-        return $payment->getApprovalLink();
-    }
-
-    public function executePaypalPayment($paymentId, $payerId)
-    {
-        // Get ApiContext
-        $apiContext = $this->getPaypalApiContext();
-
-        $payment = Payment::get($paymentId, $apiContext);
-
-        $execution = new PaymentExecution();
-        $execution->setPayerId($payerId);
-
-        $payment->execute($execution, $apiContext);
-
-        try {
-            $payment = Payment::get($paymentId, $apiContext);
-        } catch (Exception $ex) {
-            throw new Exception("There was an error while fetching the payment after execution: ".$ex->getMessage());
-        }
-
-        return $payment;
-    }
-
-    /**
-     * Helpers to get paypal api context using credentials in config.yml
-     * Returns an ApiContext object
-     */
-    private function getPaypalApiContext()
-    {
-        $config = \Biblys\Legacy\LegacyCodeHelper::getGlobalConfig();
-
-        $paypal_config = $config->get("paypal");
-        if (!$paypal_config) {
-            throw new Exception("Paypal is not properly configured.");
-        }
-
-        $apiContext = new ApiContext(
-            new OAuthTokenCredential(
-                $paypal_config["client_id"],         // ClientID
-                $paypal_config["client_secret"]      // ClientSecret
-            )
-        );
-
-        $mode = $paypal_config["mode"] ?? "live";
-
-        $apiContext->setConfig(["mode" => $mode]);
-
-        return $apiContext;
-    }
-
     /**
      * Create Payplug payment using PHP SDK
      * @return {string} the link
@@ -260,7 +125,7 @@ class Order extends Entity
     public function createPayplugPayment()
     {
         
-        $config = \Biblys\Legacy\LegacyCodeHelper::getGlobalConfig();
+        $config = LegacyCodeHelper::getGlobalConfig();
 
         $request = LegacyCodeHelper::getGlobalRequest();
 
@@ -292,7 +157,7 @@ class Order extends Entity
             $ipn_host = $payplug['ipn_host'];
         }
 
-        $notification_url = $ipn_protocol.'://'.$ipn_host.\Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('order_payplug_notification', ['url' => $this->get('url')]);
+        $notification_url = $ipn_protocol.'://'.$ipn_host. LegacyCodeHelper::getGlobalUrlGenerator()->generate('order_payplug_notification', ['url' => $this->get('url')]);
 
         // Gather customer info
         $billing = [
@@ -346,7 +211,7 @@ class Order extends Entity
 
     public function createStripePayment()
     {
-        $config = \Biblys\Legacy\LegacyCodeHelper::getGlobalConfig();;
+        $config = LegacyCodeHelper::getGlobalConfig();;
 
         $stripe = $config->get('stripe');
         if (!$stripe) {
