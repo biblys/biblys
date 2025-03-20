@@ -464,6 +464,11 @@ payment_pay:
   methods: GET
   controller: AppBundle\Controller\PaymentController::selectMethodAction
 
+payment_payplug:
+  path: /order/{slug}/payplug
+  methods: POST
+  controller: AppBundle\Controller\PaymentController::createPayplugPaymentAction
+
 payment_stripe_webhook:
   path: /payment/stripe-webhook
   controller: AppBundle\Controller\PaymentController::stripeWebhookAction
