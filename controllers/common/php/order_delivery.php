@@ -512,7 +512,7 @@ return function (
         if ($termsPage) {
             $cgv_checkbox = '
                 <div class="form-check">
-                  <input name="cgv_checkbox" class="form-check-input" type="checkbox" value="1" id="gcv_checkbox" required>
+                  <input name="cgv_checkbox" class="form-check-input" type="checkbox" value="1" id="cgv_checkbox" required>
                   <label class="form-check-label" for="cgv_checkbox">
                      J\'accepte les 
                     <a href="/pages/' . $termsPage->get('url') . '">Conditions Générales de Vente</a>
