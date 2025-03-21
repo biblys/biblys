@@ -46,7 +46,11 @@ class PaymentServiceTest extends TestCase
     public function testGetPayableOrderBySlugWithUnknownSlug()
     {
         // given
-        $paymentService = new PaymentService();
+        $config = new Config();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $loggerService = Mockery::mock(LoggerService::class);
+        $paymentService = new PaymentService($config, $currentSite, $urlGenerator, $loggerService);
         ModelFactory::createOrder();
 
         // when
@@ -66,7 +70,11 @@ class PaymentServiceTest extends TestCase
     public function testGetPayableOrderBySlugWithAlreadyPaidOrder()
     {
         // given
-        $paymentService = new PaymentService();
+        $config = new Config();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $loggerService = Mockery::mock(LoggerService::class);
+        $paymentService = new PaymentService($config, $currentSite, $urlGenerator, $loggerService);
         $order = ModelFactory::createOrder(paymentDate: new DateTime());
 
         // when
@@ -86,7 +94,11 @@ class PaymentServiceTest extends TestCase
     public function testGetPayableOrderBySlugWithCancelledOrder()
     {
         // given
-        $paymentService = new PaymentService();
+        $config = new Config();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $loggerService = Mockery::mock(LoggerService::class);
+        $paymentService = new PaymentService($config, $currentSite, $urlGenerator, $loggerService);
         $order = ModelFactory::createOrder(cancelDate: new DateTime());
 
         // when
@@ -106,7 +118,11 @@ class PaymentServiceTest extends TestCase
     public function testGetPayableOrderBySlug()
     {
         // given
-        $paymentService = new PaymentService();
+        $config = new Config();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $loggerService = Mockery::mock(LoggerService::class);
+        $paymentService = new PaymentService($config, $currentSite, $urlGenerator, $loggerService);
         $order = ModelFactory::createOrder();
 
         // when

@@ -186,14 +186,9 @@ class PaymentController extends Controller
     {
         try {
             $order = $paymentService->getPayableOrderBySlug($slug);
+            $payment = $paymentService->createStripePaymentForOrder($order);
 
-            $orderManager = new OrderManager();
-            /** @var Order $orderEntity */
-            $orderEntity = $orderManager->getById($order->getId());
-
-            $payment = $orderEntity->createStripePayment();
-
-            return new JsonResponse(["session_id" => $payment->get("provider_id")]);
+            return new JsonResponse(["session_id" => $payment->getProviderId()]);
         } catch (CannotFindPayableOrderException $exception) {
             throw new NotFoundHttpException($exception->getMessage(), $exception);
         }
