@@ -42,6 +42,7 @@ class PaymentServiceValueResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
-        yield new PaymentService();
+        $config = Config::load();
+        yield new PaymentService($config);
     }
 }
