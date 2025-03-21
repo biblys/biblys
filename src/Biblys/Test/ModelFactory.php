@@ -307,10 +307,10 @@ class ModelFactory
         string          $city = "Bordeaux",
         ?Country        $country = null,
         string          $phone = "0601020304",
-        string      $email = "silas.coade@example.net",
-        ?string     $mondialRelayPickupPointCode = null,
-        DateTime    $paymentDate = null,
-        DateTime    $cancelDate = null,
+        string          $email = "silas.coade@example.net",
+        ?string         $mondialRelayPickupPointCode = null,
+        DateTime        $paymentDate = null,
+        DateTime        $cancelDate = null,
     ): Order
     {
         $customer = $customer ?? ModelFactory::createCustomer($site, $user);
@@ -363,19 +363,19 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createPayment(
-        array  $attributes,
-        Site   $site,
-        ?Order $order = null
+        ?Site     $site = null,
+        ?Order    $order = null,
+        int       $amount = 10000,
+        string    $mode = "stripe",
+        ?DateTime $executedAt = new DateTime(),
     ): Payment
     {
         $payment = new Payment();
         $payment->setSite($site);
         $payment->setOrder($order ?? self::createOrder());
-        $payment->setAmount($attributes["amount"] ?? 10000);
-        $payment->setMode($attributes["mode"] ?? "stripe");
-        $payment->setExecuted(
-            array_key_exists("executed", $attributes) ? $attributes["executed"] : new DateTime()
-        );
+        $payment->setAmount($amount);
+        $payment->setMode($mode);
+        $payment->setExecuted($executedAt);
         $payment->save();
 
         return $payment;
@@ -632,7 +632,7 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createUser(
-        ?Site  $site = null,
+        ?Site   $site = null,
         ?string $email = "user@biblys.fr",
     ): User
     {
@@ -668,7 +668,7 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createAdminUser(
-        ?Site $site = null,
+        ?Site   $site = null,
         ?string $email = null,
     ): User
     {
@@ -782,7 +782,7 @@ class ModelFactory
         string   $title = "Une actualité",
         bool     $status = Post::STATUS_ONLINE,
         DateTime $date = new DateTime(),
-        ?User     $user = null,
+        ?User    $user = null,
         ?string  $axysAccountId = null,
         ?string  $content = "Un contenu d'actualité qui va vous étonner.",
     ): Post
@@ -810,7 +810,7 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createSubscription(
-        Site   $site,
+        Site    $site,
         ?string $axysAccountId = null
     ): Subscription
     {
@@ -848,7 +848,7 @@ class ModelFactory
      */
     public static function createVote(
         ?string $axysAccountId = null,
-        ?User    $user = null,
+        ?User   $user = null,
     ): Vote
     {
         $vote = new Vote();
@@ -1045,7 +1045,7 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createRedirection(
-        Site $site,
+        Site   $site,
         string $oldUrl,
         string $newUrl,
     ): Redirection
