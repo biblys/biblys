@@ -27,6 +27,7 @@ use DateTime;
 use Exception;
 use Mockery;
 use Model\OrderQuery;
+use Model\PaymentQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,6 +45,7 @@ class PaymentControllerTest extends TestCase
     public function setUp(): void
     {
         OrderQuery::create()->deleteAll();
+        PaymentQuery::create()->deleteAll();
     }
 
     /**
@@ -64,19 +66,12 @@ class PaymentControllerTest extends TestCase
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("getSite")->willReturn($site);
         $today = new DateTime();
-        ModelFactory::createPayment([
-            "mode" => "stripe",
-            "amount" => "10000",
-            "executed" => $today,
-        ], $site, $order);
-        ModelFactory::createPayment(["amount" => "300"], $site);
-        ModelFactory::createPayment(["amount" => "900"], $site);
+        ModelFactory::createPayment(site: $site, order: $order, executedAt: $today);
+        ModelFactory::createPayment(site: $site, amount: 300);
+        ModelFactory::createPayment(site: $site, amount: 900);
         $otherSite = ModelFactory::createSite();
-        ModelFactory::createPayment(
-            ["executed" => new DateTime(), "mode" => "from other site"],
-            $otherSite
-        );
-        ModelFactory::createPayment(["executed" => null, "mode" => "not executed"], $site);
+        ModelFactory::createPayment(site: $otherSite);
+        ModelFactory::createPayment(site: $site, executedAt: null);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn();
         $templateService = Helpers::getTemplateService();
@@ -113,15 +108,16 @@ class PaymentControllerTest extends TestCase
 
         $orderPayedUsingStripe = ModelFactory::createOrder();
         ModelFactory::createPayment(
-            ["mode" => "stripe", "date" => new DateTime("2001-01-01")],
-            $site,
-            $orderPayedUsingStripe
+            site: $site,
+            order: $orderPayedUsingStripe,
+            executedAt: new DateTime(),
         );
         $orderPayedUsingPaypal = ModelFactory::createOrder();
         ModelFactory::createPayment(
-            ["mode" => "paypal", "date" => new DateTime("2001-01-02")],
-            $site,
-            $orderPayedUsingPaypal
+            site: $site,
+            order: $orderPayedUsingPaypal,
+            mode: "paypal",
+            executedAt: new DateTime(),
         );
 
         $controller = new PaymentController();
@@ -156,9 +152,9 @@ class PaymentControllerTest extends TestCase
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("getSite")->willReturn($site);
 
-        ModelFactory::createPayment(["executed" => new DateTime("2019-04-26")], $site);
-        ModelFactory::createPayment(["executed" => new DateTime("2019-04-28")], $site);
-        ModelFactory::createPayment(["executed" => new DateTime("2019-04-30")], $site);
+        ModelFactory::createPayment(site: $site, executedAt: new DateTime("2019-04-26"));
+        ModelFactory::createPayment(site: $site, executedAt: new DateTime("2019-04-28"));
+        ModelFactory::createPayment(site: $site, executedAt: new DateTime("2019-04-30"));
 
         $controller = new PaymentController();
         $request = new Request();
