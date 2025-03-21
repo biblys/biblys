@@ -367,6 +367,7 @@ class ModelFactory
         ?Order    $order = null,
         int       $amount = 10000,
         string    $mode = "stripe",
+        string    $providerId = "stripe-1234",
         ?DateTime $executedAt = new DateTime(),
     ): Payment
     {
@@ -375,6 +376,7 @@ class ModelFactory
         $payment->setOrder($order ?? self::createOrder());
         $payment->setAmount($amount);
         $payment->setMode($mode);
+        $payment->setProviderId($providerId);
         $payment->setExecuted($executedAt);
         $payment->save();
 
