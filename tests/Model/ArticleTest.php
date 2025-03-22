@@ -18,6 +18,7 @@
 
 namespace Model;
 
+use Biblys\Contributor\UnknownJobException;
 use Biblys\Data\ArticleType;
 use Biblys\Exception\ArticleIsUnavailableException;
 use Biblys\Exception\CannotDeleteArticleWithStock;
@@ -597,5 +598,25 @@ class ArticleTest extends TestCase
 
         // then
         $this->assertEquals("978-2-12-345678-0", $isbn);
+    }
+
+    /** getContributors **/
+
+    /**
+     * @throws PropelException
+     * @throws UnknownJobException
+     */
+    public function testGetContributors(): void
+    {
+        // given
+        $contributor = ModelFactory::createContributor();
+        $article = ModelFactory::createArticle(authors: [$contributor]);
+
+        // when
+        $contributors = $article->getContributors();
+
+        // then
+        $this->assertCount(1, $contributors);
+        $this->assertEquals($contributor, $contributors[0]->getPeople());
     }
 }

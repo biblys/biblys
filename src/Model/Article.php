@@ -18,6 +18,8 @@
 
 namespace Model;
 
+use Biblys\Contributor\Contributor;
+use Biblys\Contributor\UnknownJobException;
 use Biblys\Data\ArticleType;
 use Biblys\Exception\ArticleIsUnavailableException;
 use Biblys\Exception\CannotDeleteArticleWithStock;
@@ -284,5 +286,23 @@ class Article extends BaseArticle
     public function getIsbn(): string
     {
         return Isbn::convertToIsbn13($this->getEan());
+    }
+
+
+    /**
+     * @return Contributor[]
+     * @throws PropelException
+     * @throws UnknownJobException
+     */
+    public function getContributors(): array
+    {
+        $roles = $this->getRoles();
+        return array_map(function($role) {
+            return new Contributor(
+                $role->getPeople(),
+                \Biblys\Contributor\Job::getById($role->getJobId()),
+                $role->getId(),
+            );
+        }, $roles->getArrayCopy());
     }
 }
