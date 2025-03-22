@@ -1,0 +1,88 @@
+{#
+Copyright (C) 2024 Clément Latzarus
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Recherche : {{ query }}
+{% endblock %}
+
+{% block main %}
+  <h1>Recherche</h1>
+
+  <form class="search-form">
+    <div class="input-group">
+      <input
+        aria-label="Champ de recherche"
+        type="search"
+        class="form-control search-form-input mt-0"
+        name="q"
+        value="{{ query }}"
+        placeholder="Titre, auteur, mot-clé, ISBN..."
+        required
+        {% if autofocus %}autofocus{% endif %}
+      >
+      <div class="input-group-append">
+        <button type="submit" class="btn btn-primary search-form-button" aria-label="Rechercher">
+          <span class="fa fa-search"></span>
+        </button>
+      </div>
+    </div>
+  </form>
+
+  {% if query %}
+    <h2 class="mt-4">
+      {% if count == 0 %}
+        Aucun résultat
+      {% elseif count == 1 %}
+        1 résultat
+      {% else %}
+        {{ count }} résultats
+      {% endif %}
+    </h2>
+
+    <form class="form-inline">
+      <label class="my-1 mr-2" for="search-results-sort">Trier par</label>
+      <select name="sort" class="custom-select my-1 mr-sm-2" id="search-results-sort">
+        {% for option in sortOptions %}
+          <option
+            value="{{ option.criteria }}|{{ option.order }}"
+            {% if option.criteria == sortCriteria and option.order == sortOrder %}
+              selected
+            {% endif %}
+          >
+            {{ option.label }}
+          </option>
+        {% endfor %}
+      </select>
+
+      {% if app.currentSite.getOption("virtual_stock") != 1 %}
+        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+          <input type="checkbox" class="custom-control-input" id="filter-in-stock" value="1" name="in-stock" {{ inStockFilterChecked }}>
+          <label class="custom-control-label" for="filter-in-stock">Articles en stock uniquement</label>
+        </div>
+      {% endif %}
+
+      <input type="hidden" name="q" value="{{ query }}" />
+
+      <button type="submit" class="btn btn-primary my-1">Actualiser</button>
+    </form>
+
+    {% include "AppBundle:Search:_results.html.twig" %}
+
+  {% endif %}
+
+{% endblock %}

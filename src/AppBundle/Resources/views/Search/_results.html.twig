@@ -1,0 +1,15 @@
+{% for result in results %}
+  <div class="SearchResult">
+    {% if result.imageUrl %}
+      <img src="{{ result.imageUrl }}" alt="Couverture {{ result.title }}" class="SearchResult__image" width="100">
+    {% endif %}
+    <h3 class="SearchResult__title">
+      <a href="{{ path('article_show', { slug: result.slug }) }}">
+        {{ result.title }}
+      </a>
+    </h3>
+    {% if result.authors %}
+      <p>{{ result.authors|join(', ') }}</p>
+    {% endif %}
+  </div>
+{% endfor %}

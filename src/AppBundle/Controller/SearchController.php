@@ -5,10 +5,12 @@ namespace AppBundle\Controller;
 use Biblys\Contributor\UnknownJobException;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\Images\ImagesService;
+use Biblys\Service\QueryParamsService;
+use Biblys\Service\SearchService;
+use Biblys\Service\TemplateService;
+use Exception;
 use Framework\Controller;
-use Loupe\Loupe\Loupe;
-use Model\Article;
-use Model\ArticleQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\LoaderError;
@@ -36,25 +38,29 @@ class SearchController extends Controller
     }
 
     /**
-     * @return Loupe
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     * @throws Exception
      */
-    private function _getLoupeClient(): Loupe
+    public function searchAction(
+        QueryParamsService $queryParams,
+        TemplateService    $templateService
+    ): Response
     {
-        $configuration = Configuration::create()
-            ->withSearchableAttributes(["title", "authors", "publisher"]) // optional, by default it's ['*'] - everything is indexed
-            ->withFilterableAttributes(["type"])
-            ->withSortableAttributes(["title", "price", "publisher"])
-            ->withTypoTolerance(TypoTolerance::create()->withFirstCharTypoCountsDouble(false)) // can be further fine-tuned but is enabled by default
-        ;
-        $searchIndexDirectory = $this->_getSearchIndexDirectory();
-        return (new LoupeFactory())->create($searchIndexDirectory, $configuration);
-    }
+        $queryParams->parse(["q" => ["type" => "string"]]);
+        $query = $queryParams->get("q");
 
-    /**
-     * @return string
-     */
-    private function _getSearchIndexDirectory(): string
-    {
-        return __DIR__ . "/../../../content/search-index";
+        $search = new SearchService();
+        $results = $search->search($query);
+
+        return $templateService->renderResponse("AppBundle:Search:search.html.twig", [
+            "query" => $query,
+            "autofocus" => false,
+            "count" => $results->getTotalHits(),
+            "sortOptions" => [],
+            "results" => $results->getHits(),
+            "inStockFilterChecked" => false,
+        ]);
     }
 }

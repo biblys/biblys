@@ -652,6 +652,11 @@ redirection_delete:
 
 # Search
 
+search:
+  methods: GET
+  path: /search
+  controller: AppBundle\Controller\SearchController::searchAction
+
 search_create_index:
   methods: GET
   path: /admin/search/create-index
