@@ -60,45 +60,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             </p>
 
             <button type="submit" class="btn btn-primary" id="pay-with-stripe"
-              {% if order.amountTobepaid < 50 %}disabled{% endif %}
+                    {% if order.amountTobepaid < 50 %}disabled{% endif %}
+                    data-payment-url="{{ path('api_stripe_create_payment', { slug: order.slug }) }}"
+                    data-public-key="{{ stripePublicKey }}"
             >
               Payer par carte bancaire
-              <div class="spinner-border spinner-border-sm mr-1 d-none" role="status" id="pay-with-stripe-loader">
+              <div class="spinner-border spinner-border-sm ml-1 d-none" role="status" id="pay-with-stripe-loader">
                 <span class="sr-only">Redirection en cours...</span>
               </div>
             </button>
-
-            <script src="https://js.stripe.com/v3/"></script>
-            <script>
-              const payButton = document.getElementById('pay-with-stripe');
-              const payButtonLoader = document.getElementById('pay-with-stripe-loader');
-              payButton.addEventListener('click', async function() {
-                payButton.disabled = true;
-                payButtonLoader.classList.remove('d-none');
-
-                const response = await fetch('{{ path('api_stripe_create_payment', { slug: order.slug }) }}', {
-                  method: 'POST',
-                  headers: { accept: 'application/json' },
-                });
-                const responseData = await response.json();
-
-                if (responseData.error) {
-                  payButton.disabled = false;
-                  payButtonLoader.classList.add('d-none');
-                  window._alert(responseData.error.message);
-                  return;
-                }
-
-                const stripe = Stripe('{{ stripePublicKey }}');
-                stripe.redirectToCheckout({
-                  sessionId: responseData.session_id
-                }).then(function(result) {
-                  payButton.disabled = false;
-                  payButtonLoader.classList.add('d-none');
-                  window._alert(result.error.message);
-                });
-              });
-            </script>
           </div>
         </div>
       </div>
@@ -169,7 +139,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
             <p>Payez avec votre compte PayPal.</p>
 
-            {% include "AppBundle:Payment:_paypal-button.html.twig" %}
+            <div id="pay-with-paypal"
+                 data-create-order-url="{{ path('payment_paypal_create_order', { slug: order.slug }) }}"
+                 data-capture-payment-url="{{ path('payment_paypal_capture', { slug: order.slug }) }}"
+                 data-order-url="{{ path('legacy_order', { url: order.slug }) }}"
+            ></div>
           </div>
         </div>
       </div>
@@ -269,4 +243,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </div>
     {% endif %}
   </div>
+
+  <script src="https://js.stripe.com/v3/"></script>
+  <script
+    src="https://www.paypal.com/sdk/js?components=buttons&disable-funding=card&client-id={{ paypalClientId }}&currency=EUR">
+  </script>
+  <script src="{{ asset('/assets/js/payment-methods.js') }}"></script>
 {% endblock %}
