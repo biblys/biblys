@@ -4,6 +4,8 @@
 
 ### Améliorations
 
+- La page de choix d'un mode de paiement a été entièrement revue pour améliorer
+  son ergonomie.
 - Les "tranches de frais de port" ont été renommées "option d'expédition".
 - Des pages ont été ajoutées à l'administration pour afficher les pays de
   destination et les différentes zones tarifaires pour l'expédition.
