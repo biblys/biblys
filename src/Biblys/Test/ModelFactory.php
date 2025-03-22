@@ -368,6 +368,7 @@ class ModelFactory
         int       $amount = 10000,
         string    $mode = "stripe",
         string    $providerId = "stripe-1234",
+        string    $url = null,
         ?DateTime $executedAt = new DateTime(),
     ): Payment
     {
@@ -377,6 +378,7 @@ class ModelFactory
         $payment->setAmount($amount);
         $payment->setMode($mode);
         $payment->setProviderId($providerId);
+        $payment->setUrl($url);
         $payment->setExecuted($executedAt);
         $payment->save();
 
