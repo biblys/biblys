@@ -19,6 +19,8 @@
 namespace Framework\ArgumentResolver;
 
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
+use Biblys\Service\LoggerService;
 use Biblys\Service\PaymentService;
 use Exception;
 use Generator;
@@ -42,7 +44,13 @@ class PaymentServiceValueResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
+        $urlGeneratorValueResolver = new UrlGeneratorValueResolver();
+        $urlGenerator = $urlGeneratorValueResolver->resolve($request, $argument)->current();
+
         $config = Config::load();
-        yield new PaymentService($config);
+        $currentSite = CurrentSite::buildFromConfig($config);
+        $loggerService = new LoggerService();
+
+        yield new PaymentService($config, $currentSite, $urlGenerator, $loggerService);
     }
 }
