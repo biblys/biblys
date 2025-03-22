@@ -619,4 +619,26 @@ class ArticleTest extends TestCase
         $this->assertCount(1, $contributors);
         $this->assertEquals($contributor, $contributors[0]->getPeople());
     }
+
+    /** getAuthors */
+
+    /**
+     * @throws PropelException
+     * @throws UnknownJobException
+     */
+    public function testGetAuthors(): void
+    {
+        // given
+        $author = ModelFactory::createContributor();
+        $illustrator = ModelFactory::createContributor();
+        $article = ModelFactory::createArticle(authors: [$author]);
+        ModelFactory::createContribution(article: $article, contributor: $illustrator, jobId: \Biblys\Contributor\Job::COVER_ARTIST);
+
+        // when
+        $authors = $article->getAuthors();
+
+        // then
+        $this->assertCount(1, $authors);
+        $this->assertEquals($author, $authors[0]->getPeople());
+    }
 }

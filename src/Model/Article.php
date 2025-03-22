@@ -288,7 +288,6 @@ class Article extends BaseArticle
         return Isbn::convertToIsbn13($this->getEan());
     }
 
-
     /**
      * @return Contributor[]
      * @throws PropelException
@@ -304,5 +303,16 @@ class Article extends BaseArticle
                 $role->getId(),
             );
         }, $roles->getArrayCopy());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws UnknownJobException
+     */
+    public function getAuthors(): array
+    {
+        return array_filter($this->getContributors(), function($contributor) {
+            return $contributor->isAuthor();
+        });
     }
 }

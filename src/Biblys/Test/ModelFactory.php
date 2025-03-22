@@ -18,6 +18,7 @@
 
 namespace Biblys\Test;
 
+use Biblys\Contributor\Job;
 use Biblys\Data\ArticleType;
 use Biblys\Exception\EntityAlreadyExistsException;
 use Biblys\Service\Slug\SlugService;
@@ -588,12 +589,16 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createContribution(Article $article, People $contributor): void
+    public static function createContribution(
+        Article $article,
+        People  $contributor,
+        int     $jobId = 1,
+    ): void
     {
         $contribution = new Role();
         $contribution->setArticle($article);
         $contribution->setPeople($contributor);
-        $contribution->setJobId(1);
+        $contribution->setJobId($jobId);
         $contribution->save();
     }
 
