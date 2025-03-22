@@ -25,16 +25,26 @@ use Model\Order;
 use Model\OrderQuery;
 use Model\Payment;
 use Model\Stock;
+use Payplug\Exception\ConfigurationException;
+use Payplug\Exception\ConfigurationNotSetException;
+use Payplug\Exception\HttpException;
+use Payplug\Payplug;
 use Propel\Runtime\Exception\PropelException;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Price;
 use Stripe\Product;
 use Stripe\Stripe;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class PaymentService
 {
-    public function __construct(private readonly Config $config)
+    public function __construct(
+        private readonly Config        $config,
+        private readonly CurrentSite   $currentSite,
+        private readonly UrlGenerator  $urlGenerator,
+        private readonly LoggerService $loggerService,
+    )
     {
     }
 
@@ -94,17 +104,17 @@ class PaymentService
          * @param Stock $stockItem
          * @return array
          * @throws ApiErrorException|PropelException
-         */ function(Stock $stockItem) {
+         */ function (Stock $stockItem) {
             $product = Product::create(["name" => $stockItem->getArticle()->getTitle()]);
             $price = Price::create([
                 "product" => $product->id,
                 "unit_amount" => $stockItem->getSellingPrice() ?? 0,
                 "currency" => "EUR",
             ]);
-            return [ "quantity" => 1, "price" => $price->id ];
+            return ["quantity" => 1, "price" => $price->id];
         }, $stockItems->getArrayCopy());
 
-        $amountToPay = array_reduce($stockItems->getArrayCopy(), function($total, Stock $current) {
+        $amountToPay = array_reduce($stockItems->getArrayCopy(), function ($total, Stock $current) {
             return $total + $current->getSellingPrice();
         }, 0);
 
@@ -117,20 +127,20 @@ class PaymentService
                 "unit_amount" => $shippingCost,
                 "currency" => "EUR",
             ]);
-            $lineItems[] = [ "quantity" => 1, "price" => $price->id ];
+            $lineItems[] = ["quantity" => 1, "price" => $price->id];
             $amountToPay += $shippingCost;
         }
 
-        if ($amountToPay !== (int) $order->getAmountTobepaid()) {
-            throw new Exception("Stripe's amount to pay ($amountToPay) does not match order's amount to be paid (".$order->getAmountTobepaid().").");
+        if ($amountToPay !== (int)$order->getAmountTobepaid()) {
+            throw new Exception("Stripe's amount to pay ($amountToPay) does not match order's amount to be paid (" . $order->getAmountTobepaid() . ").");
         }
 
         $session = Session::create([
             'payment_method_types' => ['card'],
             'line_items' => $lineItems,
             'mode' => 'payment',
-            'success_url' => 'https://' .$_SERVER["HTTP_HOST"].'/order/'.$order->getSlug().'?payed=1',
-            'cancel_url' => 'https://' .$_SERVER["HTTP_HOST"].'/payment/'.$order->getSlug(),
+            'success_url' => 'https://' . $_SERVER["HTTP_HOST"] . '/order/' . $order->getSlug() . '?payed=1',
+            'cancel_url' => 'https://' . $_SERVER["HTTP_HOST"] . '/payment/' . $order->getSlug(),
             'customer_email' => $order->getEmail(),
         ]);
 
@@ -141,5 +151,98 @@ class PaymentService
         $payment->setProviderId($session["id"]);
 
         return $payment;
+    }
+
+    /**
+     * @param Order $order
+     * @return Payment
+     * @throws ConfigurationException
+     * @throws ConfigurationNotSetException
+     * @throws InvalidConfigurationException
+     * @throws PropelException
+     * @throws HttpException
+     */
+    public function createPayplugPaymentForOrder(Order $order): Payment
+    {
+        $payplug = $this->config->get('payplug');
+        if (!$payplug) {
+            throw new InvalidConfigurationException("Payplug is not configured.");
+        }
+
+        if (empty($payplug["secret"])) {
+            throw new InvalidConfigurationException("Missing Payplug secret key.");
+        }
+
+        Payplug::init(
+            [
+                'secretKey' => $payplug["secret"],
+                'apiVersion' => '2019-08-06',
+            ]
+        );
+
+        $total_amount = $order->getTotalAmountWithShipping();
+
+        $ipn_protocol = 'https';
+        if (isset($payplug['ipn_protocol'])) {
+            $ipn_protocol = $payplug['ipn_protocol'];
+        }
+
+        $ipn_host = $this->currentSite->getSite()->getDomain();
+        if (isset($payplug['ipn_host'])) {
+            $ipn_host = $payplug['ipn_host'];
+        }
+
+        $notification_url = $ipn_protocol . '://' . $ipn_host .
+            $this->urlGenerator->generate("order_payplug_notification", ["url" => $order->getSlug()]);
+
+        // Gather customer info
+        $billing = [
+            "first_name" => $order->getFirstname(),
+            "last_name" => $order->getLastname(),
+            "email" => $order->getEmail(),
+            "address1" => $order->getAddress1(),
+            "postcode" => $order->getPostalcode(),
+            "city" => $order->getCity(),
+            "country" => $order->getCountry()->getCode(),
+        ];
+
+        $shipping = $billing;
+        $shipping["delivery_type"] = "BILLING";
+
+        try {
+            $returnUrl = $this->urlGenerator->generate("legacy_order", ["url" => $order->getSlug()]);
+            $cancelUrl = $this->urlGenerator->generate("payment_pay", ["slug" => $order->getSlug()]);
+            $response = \Payplug\Payment::create([
+                'amount' => $total_amount,
+                'currency' => 'EUR',
+                'billing' => $billing,
+                'shipping' => $shipping,
+                'hosted_payment' => [
+                    'return_url' => "https://{$this->currentSite->getSite()->getDomain()}$returnUrl",
+                    'cancel_url' => "https://{$this->currentSite->getSite()->getDomain()}$cancelUrl"
+                ],
+                'notification_url' => $notification_url,
+                'metadata' => [
+                    'order_id' => $order->getId(),
+                ]
+            ]);
+
+            $payment = new Payment();
+            $payment->setOrder($order);
+            $payment->setMode("payplug");
+            $payment->setAmount($total_amount);
+            $payment->setProviderId($response->id);
+            $payment->setUrl($response->hosted_payment->payment_url);
+
+            return $payment;
+        } catch (HttpException $exception) {
+            $this->loggerService->log(
+                "payplug",
+                "ERROR",
+                "An error occurred while creating a Payment for order " . $order->getId(),
+                [$exception->getHttpResponse()],
+            );
+            throw $exception;
+        }
     }
 }

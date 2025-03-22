@@ -20,6 +20,8 @@ namespace AppBundle\Controller;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\FlashMessagesService;
+use Biblys\Service\LoggerService;
 use Biblys\Service\PaymentService;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
@@ -28,9 +30,11 @@ use Exception;
 use Mockery;
 use Model\OrderQuery;
 use Model\PaymentQuery;
+use Payplug\Exception\BadRequestException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -337,5 +341,77 @@ class PaymentControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString("Chèque", $response->getContent());
         $this->assertStringContainsString("L’ordre", $response->getContent());
+    }
+
+    /** createPayplugPaymentAction */
+
+    /**
+     * @throws Exception
+     */
+    public function testCreatePayplugPaymentAction()
+    {
+        // given
+        $controller = new PaymentController();
+        $order = ModelFactory::createOrder();
+        $payment = ModelFactory::createPayment(url: "/payment_url");
+        $paymentService = Mockery::mock(PaymentService::class);
+        $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
+        $paymentService->expects("createPayplugPaymentForOrder")->with($order)->andReturn($payment);
+        $loggerService = Mockery::mock(LoggerService::class);
+        $flashMessagesService = Mockery::mock(FlashMessagesService::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+
+        // when
+        $response = $controller->createPayplugPaymentAction(
+            $paymentService,
+            $loggerService,
+            $flashMessagesService,
+            $urlGenerator,
+            $order->getSlug()
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/payment_url", $response->getTargetUrl());
+    }
+
+
+    /**
+     * @throws Exception
+     */
+    public function testCreatePayplugPaymentActionWithError()
+    {
+        // given
+        $controller = new PaymentController();
+        $order = ModelFactory::createOrder();
+        $badRequestException = new BadRequestException(
+            "error", '{"message":"message","details":"details"}'
+        );
+
+        $paymentService = Mockery::mock(PaymentService::class);
+        $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
+        $paymentService->expects("createPayplugPaymentForOrder")->with($order)
+            ->andThrows($badRequestException);
+        $loggerService = Mockery::mock(LoggerService::class);
+        $loggerService->expects("log")->with("payplug", "message", "details");
+        $flashMessagesService = Mockery::mock(FlashMessagesService::class);
+        $flashMessagesService->expects("add")
+            ->with("error", "Une erreur est survenue lors de la création du paiement via PayPlug : message");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->with("payment", ["slug" => $order->getSlug()])
+            ->andReturn("/order_url");
+
+        // when
+        $response = $controller->createPayplugPaymentAction(
+            $paymentService,
+            $loggerService,
+            $flashMessagesService,
+            $urlGenerator,
+            $order->getSlug()
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/order_url", $response->getTargetUrl());
     }
 }
