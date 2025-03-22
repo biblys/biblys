@@ -29,6 +29,7 @@ data/*
 .yarn
 content/downloadable
 content/cache
+content/search-index
 
 # IDE config files
 .idea
