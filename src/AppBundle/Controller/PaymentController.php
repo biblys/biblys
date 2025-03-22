@@ -18,6 +18,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Exception\CannotFindPayableOrderException;
+use Biblys\Exception\InvalidConfigurationException;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -36,7 +37,9 @@ use Order;
 use OrderManager;
 use PaymentManager;
 use Payplug\Exception\BadRequestException;
+use Payplug\Exception\ConfigurationException;
 use Payplug\Exception\ConfigurationNotSetException;
+use Payplug\Exception\HttpException;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Stripe\Stripe;
@@ -249,6 +252,9 @@ class PaymentController extends Controller
     /**
      * @throws ConfigurationNotSetException
      * @throws PropelException
+     * @throws InvalidConfigurationException
+     * @throws ConfigurationException
+     * @throws HttpException
      */
     public function createPayplugPaymentAction(
         PaymentService       $paymentService,
@@ -260,19 +266,21 @@ class PaymentController extends Controller
     {
         try {
             $order = $paymentService->getPayableOrderBySlug($slug);
-            $orderManager = new OrderManager();
-            /** @var Order $orderEntity */
-            $orderEntity = $orderManager->getById($order->getId());
-            $payment = $orderEntity->createPayplugPayment();
-            return new RedirectResponse($payment->get("url"));
+
+            try {
+                $payment = $paymentService->createPayplugPaymentForOrder($order);
+                return new RedirectResponse($payment->getURL());
+            } catch (BadRequestException $exception) {
+                $order = $paymentService->getPayableOrderBySlug($slug);
+                $error = $exception->getErrorObject();
+                $loggerService->log("payplug", $error["message"], $error["details"]);
+                $flashMessagesService->add("error", "Une erreur est survenue lors de la création du paiement via PayPlug : " . $error["message"]);
+                $paymentPageUrl = $urlGenerator->generate("payment", ["slug" => $order->getSlug()]);
+                return new RedirectResponse($paymentPageUrl);
+            }
+
         } catch (CannotFindPayableOrderException $exception) {
             throw new NotFoundHttpException($exception->getMessage(), $exception);
-        } catch (BadRequestException $exception) {
-            $error = $exception->getErrorObject();
-            $loggerService->log("payplug", $error["message"], $error["details"]);
-            $flashMessagesService->add("error", "Une erreur est survenue lors de la création du paiement via PayPlug : " . $error["message"]);
-            $paymentPageUrl = $urlGenerator->generate("payment", ["slug" => $order->getSlug()]);
-            return new RedirectResponse($paymentPageUrl);
         }
     }
 }
