@@ -34,11 +34,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <div class="accordion" id="payment-methods-accordion">
 
     {% if stripeIsAvailable %}
-      <div class="card">
+      <div class="card payment-option">
         <div class="card-header">
           <h5 class="radio mb-0">
             <a href="#collapse-stripe" data-toggle="collapse"
-               data-target="#collapse-stripe" aria-expanded="false" aria-controls="collapse-stripe">
+               data-target="#collapse-stripe" aria-expanded="true" aria-controls="collapse-stripe">
               <i class="fa-solid fa-credit-card"></i>&nbsp;
               Carte bancaire
             </a>
@@ -75,7 +75,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     {% endif %}
 
     {% if payplugIsAvailable %}
-      <div class="card">
+      <div class="card payment-option">
         <div class="card-header">
           <h5 class="radio mb-0">
             <a href="#collapse-payplug" data-toggle="collapse"
@@ -114,7 +114,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     {% endif %}
 
     {% if paypalIsAvailable %}
-      <div class="card">
+      <div class="card payment-option">
         <div class="card-header">
           <h5 class="radio mb-0">
             <a href="#collapse-paypal" data-toggle="collapse" data-target="#collapse-paypal" aria-expanded="false"
@@ -150,7 +150,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     {% endif %}
 
     {% if transferIsAvailable %}
-      <div class="card">
+      <div class="card payment-option">
         <div class="card-header">
           <h5 class="radio mb-0">
             <a href="#collapse-transfer" data-toggle="collapse" data-target="#collapse-transfer" aria-expanded="false"
@@ -205,7 +205,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     {% endif %}
 
     {% if checkIsAvailable %}
-      <div class="card">
+      <div class="card payment-option">
         <div class="card-header">
           <h5 class="radio mb-0">
             <a href="#collapse-check" data-toggle="collapse" data-target="#collapse-check" aria-expanded="false"
