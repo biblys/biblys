@@ -101,7 +101,9 @@
     "matthiasmullie/scrapbook": "^1.5",
     "psr/simple-cache": "^3.0",
     "laminas/laminas-feed": "^2.23",
-    "paypal/paypal-server-sdk": "^0.6.1"
+    "paypal/paypal-server-sdk": "^0.6.1",
+    "loupe/loupe": "^0.10.2",
+    "ext-intl": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "~10",
