@@ -15,15 +15,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
-use Biblys\Service\CurrentSite;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @throws Exception
  */
-return function(Request $request, CurrentSite $currentSite): Response
+return function(Request $request): Response
 {
     $request->attributes->set("page_title", "Résultats par facture");
 
@@ -34,9 +32,8 @@ return function(Request $request, CurrentSite $currentSite): Response
             `stock_selling_date`, 
             `stock_return_date`
 	    FROM `stock` 
-	    WHERE `site_id` = :site_id AND `stock_invoice` IS NOT NULL 
-	    ORDER BY `stock_invoice`',
-        ["site_id" => $currentSite->getSite()->getId()]
+	    WHERE `stock_invoice` IS NOT NULL 
+	    ORDER BY `stock_invoice`', []
     );
 
     $invoices = array();
