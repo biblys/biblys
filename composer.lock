@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e38a0ee437fcce80e98f8610f2a69c6e",
+    "content-hash": "73e6ebbaff91da7665b81ae84d29b00d",
     "packages": [
         {
             "name": "apimatic/core",
@@ -3353,16 +3353,16 @@
         },
         {
             "name": "paypal/paypal-server-sdk",
-            "version": "0.7.0",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paypal/PayPal-PHP-Server-SDK.git",
-                "reference": "40adb43e1549de638716b51ba658e8ecbadf223d"
+                "reference": "66fd3341bbffafe7d650fe7d9d2699fabf355e67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paypal/PayPal-PHP-Server-SDK/zipball/40adb43e1549de638716b51ba658e8ecbadf223d",
-                "reference": "40adb43e1549de638716b51ba658e8ecbadf223d",
+                "url": "https://api.github.com/repos/paypal/PayPal-PHP-Server-SDK/zipball/66fd3341bbffafe7d650fe7d9d2699fabf355e67",
+                "reference": "66fd3341bbffafe7d650fe7d9d2699fabf355e67",
                 "shasum": ""
             },
             "require": {
@@ -3390,9 +3390,9 @@
             "homepage": "https://github.com/paypal/PayPal-PHP-Server-SDK",
             "support": {
                 "issues": "https://github.com/paypal/PayPal-PHP-Server-SDK/issues",
-                "source": "https://github.com/paypal/PayPal-PHP-Server-SDK/tree/0.7.0"
+                "source": "https://github.com/paypal/PayPal-PHP-Server-SDK/tree/1.0.0"
             },
-            "time": "2025-03-20T15:58:25+00:00"
+            "time": "2025-03-24T18:44:18+00:00"
         },
         {
             "name": "payplug/payplug-php",
