@@ -24,6 +24,7 @@ use Biblys\Service\LoggerService;
 use Biblys\Service\PaymentService;
 use Exception;
 use Generator;
+use Stripe\StripeClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -51,6 +52,13 @@ class PaymentServiceValueResolver implements ArgumentValueResolverInterface
         $currentSite = CurrentSite::buildFromConfig($config);
         $loggerService = new LoggerService();
 
-        yield new PaymentService($config, $currentSite, $urlGenerator, $loggerService);
+        $stripe = null;
+        if ($config->isStripeEnabled()) {
+            $stripe = new StripeClient([
+                "api_key" => $config->get("stripe.secret_key"),
+            ]);
+        }
+
+        yield new PaymentService($config, $currentSite, $urlGenerator, $loggerService, $stripe);
     }
 }
