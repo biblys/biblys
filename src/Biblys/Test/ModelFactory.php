@@ -297,6 +297,8 @@ class ModelFactory
         ?User           $user = null,
         ?Customer       $customer = null,
         ?ShippingOption $shippingFee = null,
+        int             $amountToBePaid = 0,
+        int             $shippingCost = 0,
         ?string         $axysAccountId = null,
         ?string         $slug = null,
         string          $firstName = "Silas",
@@ -319,6 +321,8 @@ class ModelFactory
         $order = new Order();
         $order->setSite($site ?? ModelFactory::createSite());
         $order->setUser($user);
+        $order->setAmountTobepaid($amountToBePaid);
+        $order->setShippingCost($shippingCost);
         $order->setShippingId($shippingFee?->getId());
         $order->setShippingMode($shippingFee?->getType());
         $order->setType("web");
