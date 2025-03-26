@@ -116,8 +116,11 @@ class MainController extends Controller
             } elseif ($homeOption == 'posts') {
                 $pm = new PostManager();
 
-                $posts = $pm->getAll(['post_status' => 1, 'post_date' => '<= '.date('Y-m-d H:i:s')], ['limit' => 10, 'order' => 'post_date', 'sort' => 'desc']);
-
+                $homePostsLimit = $currentSite->getOption("home_posts_limit", 10);
+                $posts = $pm->getAll(
+                    ["post_status" => 1, "post_date" => "<= ".date("Y-m-d H:i:s")],
+                    ["limit" => $homePostsLimit, "order" => "post_date", "sort" => "desc"]
+                );
                 return $templateService->renderResponse("AppBundle:Main:home-posts.html.twig", ['posts' => $posts]);
 
             // Display ten last posts in a category
