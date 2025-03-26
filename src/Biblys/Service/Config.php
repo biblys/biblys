@@ -162,6 +162,15 @@ class Config
         return false;
     }
 
+    public function isStripeEnabled(): bool
+    {
+        if ($this->get("stripe.secret_key") && $this->get("stripe.public_key") && $this->get("stripe.endpoint_secret")) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function isPayPalEnabled(): bool
     {
         if ($this->get("paypal.client_id") && $this->get("paypal.client_secret")) {
