@@ -151,12 +151,10 @@ function reloadArticleAdminEvents(scope) {
     var type_id = $(this).val();
     if (type_id == 2) {
       $('#ebooks_fieldset').slideDown();
-      $('#article_ean_div').slideUp();
     } else if (type_id == 8) {
       $('#bundle_fieldset').slideDown();
     } else {
       $('#ebooks_fieldset').slideUp();
-      $('#article_ean_div').slideDown();
     }
   });
 
