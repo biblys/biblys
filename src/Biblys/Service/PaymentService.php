@@ -88,7 +88,21 @@ class PaymentService
          * @return array
          * @throws ApiErrorException|PropelException
          */ function (Stock $stockItem) {
-            $product = $this->stripe->products->create(["name" => $stockItem->getArticle()->getTitle()]);
+            $response = $this->stripe->products->search([
+                "query" => "active:'true' AND metadata['article_id']:'{$stockItem->getArticle()->getId()}'"
+            ]);
+            $products = $response->data;
+            if (count($products) > 0) {
+                $product = $products[0];
+                $product = $this->stripe->products->update($product->id, [
+                    "name" => $stockItem->getArticle()->getTitle(),
+                ]);
+            } else {
+                $product = $this->stripe->products->create([
+                    "name" => $stockItem->getArticle()->getTitle(),
+                    "metadata" => ["article_id" => $stockItem->getArticleId()],
+                ]);
+            }
             $price = $this->stripe->prices->create([
                 "product" => $product->id,
                 "unit_amount" => $stockItem->getSellingPrice() ?? 0,
