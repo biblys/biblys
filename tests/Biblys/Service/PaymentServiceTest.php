@@ -28,9 +28,9 @@ use Model\OrderQuery;
 use Model\Payment;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
-use Stripe\Checkout\Session;
-use Stripe\Service\Checkout\CheckoutServiceFactory;
-use Stripe\Service\Checkout\SessionService;
+use Stripe\Customer;
+use Stripe\SearchResult;
+use Stripe\Service\CustomerService;
 use Stripe\Service\PriceService;
 use Stripe\Service\ProductService;
 use Stripe\StripeClient;
@@ -183,7 +183,7 @@ class PaymentServiceTest extends TestCase
 
         $stripe = Mockery::mock(StripeClient::class);
         $productService = Mockery::mock(ProductService::class);
-        $productService->expects("create")->with(["name" => "Stripe Article"])->andReturn((object) ["id" => 5678]);
+        $productService->expects("create")->with(["name" => "Stripe Article"])->andReturn((object)["id" => 5678]);
         $priceService = Mockery::mock(PriceService::class);
         $priceService->expects("create")->with([
             "product" => 5678,
@@ -246,19 +246,19 @@ class PaymentServiceTest extends TestCase
         $productService = Mockery::mock(ProductService::class);
         $productService->expects("create")->with([
             "name" => "Stripe Article",
-        ])->andReturn((object) ["id" => 5678]);
-        $productService->expects("create")->with(["name" => "Frais de port"])->andReturn((object) ["id" => 9123]);
+        ])->andReturn((object)["id" => 5678]);
+        $productService->expects("create")->with(["name" => "Frais de port"])->andReturn((object)["id" => 9123]);
         $priceService = Mockery::mock(PriceService::class);
         $priceService->expects("create")->with([
             "product" => 5678,
             "unit_amount" => 999,
             "currency" => "EUR",
-        ])->andReturn((object) ["id" => "6789"]);
+        ])->andReturn((object)["id" => "6789"]);
         $priceService->expects("create")->with([
             "product" => 9123,
             "unit_amount" => 499,
             "currency" => "EUR",
-        ])->andReturn((object) ["id" => "3456"]);
+        ])->andReturn((object)["id" => "3456"]);
         $session = Mockery::mock(Session::class);
         $session->expects("offsetGet")->with("id")->andReturn(1234);
         $sessionService = Mockery::mock(SessionService::class);
@@ -268,7 +268,7 @@ class PaymentServiceTest extends TestCase
                 [
                     "price" => "6789",
                     "quantity" => 1,
-                ],[
+                ], [
                     "price" => "3456",
                     "quantity" => 1,
                 ],
@@ -291,6 +291,90 @@ class PaymentServiceTest extends TestCase
 
         // then
         $this->assertInstanceOf(Payment::class, $payment);
+    }
+
+    /** getOrCreateStripeCustomer */
+
+    /**
+     * @throws Exception
+     */
+    public function testGetOrCreateStripeCustomerForExistingCustomer(): void
+    {
+        // given
+        $customer = ModelFactory::createCustomer();
+        $order = ModelFactory::createOrder(customer: $customer);
+
+        $config = new Config();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $loggerService = Mockery::mock(LoggerService::class);
+
+        $expectedSearchQuery = "metadata['customer_id']:'{$customer->getId()}'";
+        $returnedSearchResults = [new SearchResult("cus_1234")];
+        $stripeClient = $this->_mockStripeClient($expectedSearchQuery, $returnedSearchResults);
+
+        $paymentService = new PaymentService($config, $currentSite, $urlGenerator, $loggerService, $stripeClient);
+
+        // when
+        $customer = $paymentService->getOrCreateStripeCustomerForOrder($order);
+
+        // then
+        $this->assertInstanceof(Customer::class, $customer);
+        $this->assertEquals("cus_1234", $customer->id);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetOrCreateStripeCustomerForNewCustomer(): void
+    {
+        // given
+        $customer = ModelFactory::createCustomer();
+        $order = ModelFactory::createOrder(customer: $customer);
+
+        $config = new Config();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $loggerService = Mockery::mock(LoggerService::class);
+
+        $expectedSearchQuery = "metadata['customer_id']:'{$customer->getId()}'";
+        $returnedSearchResults = [];
+        $stripeClient = $this->_mockStripeClient(
+            $expectedSearchQuery, $returnedSearchResults, expectedCustomerIdForCreation: $order->getCustomerId()
+        );
+
+
+        $paymentService = new PaymentService($config, $currentSite, $urlGenerator, $loggerService, $stripeClient);
+
+        // when
+        $customer = $paymentService->getOrCreateStripeCustomerForOrder($order);
+
+        // then
+        $this->assertInstanceof(Customer::class, $customer);
+        $this->assertEquals("cus_1234", $customer->id);
+    }
+
+    private function _mockStripeClient(
+        string $expectedSearchQuery,
+        array  $returnedSearchResults,
+        ?int   $expectedCustomerIdForCreation = null
+    ): StripeClient
+    {
+        $stripeClient = Mockery::mock(StripeClient::class);
+
+        $customerService = Mockery::mock(CustomerService::class);
+        $customerService->expects("search")->with(["query" => $expectedSearchQuery])
+            ->andReturn((object)["data" => $returnedSearchResults]);
+        $customerService->expects("retrieve")->with("cus_1234")->andReturn(new Customer("cus_1234"));
+
+        if ($expectedCustomerIdForCreation) {
+            $customerService->expects("create")->with(["metadata" => ["customer_id" => $expectedCustomerIdForCreation]])
+                ->andReturn(new Customer("cus_1234"));
+        }
+
+        $stripeClient->expects("getService")->with("customers")->andReturn($customerService);
+
+        return $stripeClient;
     }
 
 }
