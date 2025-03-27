@@ -415,14 +415,15 @@ function _displayMediaDirectories(CurrentSite $currentSite, Request $request): R
         </table>
         <br>
         
-        <form class="form-inline" method="post">
-        
-          <div class="form-group">
-            <label for="new-directory">Nouveau dossier :</label>
-            <input id="new-directory" type="text" name="new_dir">
+        <form class="form-inline" method="post">          
+          <div class="input-group mb-2 mr-sm-2">
+            <div class="input-group-prepend">
+              <label for="new-directory" class="input-group-text">Nouveau dossier :</label>
+            </div>
+            <input id="new-directory" type="text" class="form-control" name="new_dir">
           </div>
-
-          <button type="submit" class="btn btn-primary btn-sm">Créer</button>
+          
+          <button type="submit" class="btn btn-primary mb-2">Créer</button>
         </form>
     </p>';
 
