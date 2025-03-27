@@ -30,6 +30,7 @@ use Payplug\Exception\ConfigurationNotSetException;
 use Payplug\Exception\HttpException;
 use Payplug\Payplug;
 use Propel\Runtime\Exception\PropelException;
+use Stripe\Customer as StripeCustomer;
 use Stripe\Exception\ApiErrorException;
 use Stripe\StripeClient;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -227,5 +228,25 @@ class PaymentService
             );
             throw $exception;
         }
+    }
+
+    /**
+     * @throws ApiErrorException
+     * @throws InvalidConfigurationException
+     */
+    public function getOrCreateStripeCustomerForOrder(Order $order): StripeCustomer
+    {
+        if (!$this->stripe) {
+            throw new InvalidConfigurationException("Stripe n’est pas configuré.");
+        }
+
+        $searchResults = $this->stripe->customers->search(["query" => "metadata['customer_id']:'" . $order->getCustomerId()."'"]);
+        if (count($searchResults->data) === 0) {
+            return $this->stripe->customers->create([
+                "metadata" => ["customer_id" => $order->getCustomerId()],
+            ]);
+        }
+
+        return $this->stripe->customers->retrieve($searchResults->data[0]->id);
     }
 }
