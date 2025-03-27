@@ -231,7 +231,7 @@ $('[data-toggle=popover]').popover();
 var config = {
   entities: false,
   entities_latin: false,
-  extraPlugins: 'youtube,justify',
+  extraPlugins: 'youtube,justify,nbsp',
   allowedContent: true,
   filebrowserBrowseUrl: '/pages/adm_media',
   toolbarGroups: [
