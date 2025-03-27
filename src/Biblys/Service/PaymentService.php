@@ -155,7 +155,7 @@ class PaymentService
         $payment->setOrder($order);
         $payment->setMode("stripe");
         $payment->setAmount($amountToPay);
-        $payment->setProviderId($session["id"]);
+        $payment->setProviderId($session->id);
 
         return $payment;
     }

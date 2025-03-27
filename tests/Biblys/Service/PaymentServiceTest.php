@@ -183,6 +183,9 @@ class PaymentServiceTest extends TestCase
 
         $stripe = Mockery::mock(StripeClient::class);
         $productService = Mockery::mock(ProductService::class);
+        $priceService = Mockery::mock(PriceService::class);
+        $sessionService = Mockery::mock(SessionService::class);
+
         $productService->expects("search")
             ->with(["query" => "active:'true' AND metadata['article_id']:'{$article->getId()}'"])
             ->andReturn((object)["data" => []]);
@@ -194,10 +197,6 @@ class PaymentServiceTest extends TestCase
                 "currency" => "EUR",
             ]
         ])->andReturn((object) ["id" => "prod_5678", "default_price" => "price_1234"]);
-        $priceService = Mockery::mock(PriceService::class);
-        $session = Mockery::mock(Session::class);
-        $session->expects("offsetGet")->with("id")->andReturn(1234);
-        $sessionService = Mockery::mock(SessionService::class);
         $sessionService->expects("create")->with([
             "payment_method_types" => ["card"],
             "line_items" => [
@@ -210,7 +209,7 @@ class PaymentServiceTest extends TestCase
             "success_url" => "https://www.biblys.fr/order/order-slug?payed=1",
             "cancel_url" => "https://www.biblys.fr/payment/order-slug",
             "customer_email" => "silas.coade@example.net",
-        ])->andReturn($session);
+        ])->andReturn((object)["id" => "cs_1234"]);
         $checkoutServiceFactory = Mockery::mock(CheckoutServiceFactory::class);
         $checkoutServiceFactory->sessions = $sessionService;
         $stripe->expects("getService")->with("products")->andReturn($productService);
@@ -227,7 +226,7 @@ class PaymentServiceTest extends TestCase
         $this->assertEquals($order, $payment->getOrder());
         $this->assertEquals("stripe", $payment->getMode());
         $this->assertEquals(999, $payment->getAmount());
-        $this->assertEquals(1234, $payment->getProviderId());
+        $this->assertEquals("cs_1234", $payment->getProviderId());
         $this->assertNull($payment->getExecuted());
     }
 
@@ -250,6 +249,7 @@ class PaymentServiceTest extends TestCase
         $stripe = Mockery::mock(StripeClient::class);
         $productService = Mockery::mock(ProductService::class);
         $priceService = Mockery::mock(PriceService::class);
+        $sessionService = Mockery::mock(SessionService::class);
 
         $productService->expects("search")
             ->with(["query" => "active:'true' AND metadata['article_id']:'{$article->getId()}'"])
@@ -262,9 +262,6 @@ class PaymentServiceTest extends TestCase
             "prod_1234",
             ["name" => "Stripe Article", "default_price" => "price_1234"]
         )->andReturn((object)["id" => "prod_1234", "default_price" => "price_1234"]);
-        $session = Mockery::mock(Session::class);
-        $session->expects("offsetGet")->with("id")->andReturn(1234);
-        $sessionService = Mockery::mock(SessionService::class);
         $sessionService->expects("create")->with([
             "payment_method_types" => ["card"],
             "line_items" => [
@@ -277,7 +274,7 @@ class PaymentServiceTest extends TestCase
             "success_url" => "https://www.biblys.fr/order/order-slug?payed=1",
             "cancel_url" => "https://www.biblys.fr/payment/order-slug",
             "customer_email" => "silas.coade@example.net",
-        ])->andReturn($session);
+        ])->andReturn((object)["id" => "cs_1234"]);
         $checkoutServiceFactory = Mockery::mock(CheckoutServiceFactory::class);
         $checkoutServiceFactory->sessions = $sessionService;
         $stripe->expects("getService")->with("products")->andReturn($productService);
@@ -294,7 +291,7 @@ class PaymentServiceTest extends TestCase
         $this->assertEquals($order, $payment->getOrder());
         $this->assertEquals("stripe", $payment->getMode());
         $this->assertEquals(999, $payment->getAmount());
-        $this->assertEquals(1234, $payment->getProviderId());
+        $this->assertEquals("cs_1234", $payment->getProviderId());
         $this->assertNull($payment->getExecuted());
     }
 
@@ -317,6 +314,7 @@ class PaymentServiceTest extends TestCase
         $stripe = Mockery::mock(StripeClient::class);
         $productService = Mockery::mock(ProductService::class);
         $priceService = Mockery::mock(PriceService::class);
+        $sessionService = Mockery::mock(SessionService::class);
 
         $productService->expects("search")
             ->with(["query" => "active:'true' AND metadata['article_id']:'{$article->getId()}'"])
@@ -334,9 +332,6 @@ class PaymentServiceTest extends TestCase
             "prod_1234",
             ["name" => "Stripe Article", "default_price" => "price_2345"]
         )->andReturn((object)["id" => "prod_1234", "default_price" => "price_1234"]);
-        $session = Mockery::mock(Session::class);
-        $session->expects("offsetGet")->with("id")->andReturn(1234);
-        $sessionService = Mockery::mock(SessionService::class);
         $sessionService->expects("create")->with([
             "payment_method_types" => ["card"],
             "line_items" => [
@@ -349,7 +344,7 @@ class PaymentServiceTest extends TestCase
             "success_url" => "https://www.biblys.fr/order/order-slug?payed=1",
             "cancel_url" => "https://www.biblys.fr/payment/order-slug",
             "customer_email" => "silas.coade@example.net",
-        ])->andReturn($session);
+        ])->andReturn((object)["id" => "cs_1234"]);
         $checkoutServiceFactory = Mockery::mock(CheckoutServiceFactory::class);
         $checkoutServiceFactory->sessions = $sessionService;
         $stripe->expects("getService")->with("products")->andReturn($productService);
@@ -366,7 +361,7 @@ class PaymentServiceTest extends TestCase
         $this->assertEquals($order, $payment->getOrder());
         $this->assertEquals("stripe", $payment->getMode());
         $this->assertEquals(999, $payment->getAmount());
-        $this->assertEquals(1234, $payment->getProviderId());
+        $this->assertEquals("cs_1234", $payment->getProviderId());
         $this->assertNull($payment->getExecuted());
     }
 
@@ -389,6 +384,7 @@ class PaymentServiceTest extends TestCase
         $stripe = Mockery::mock(StripeClient::class);
         $productService = Mockery::mock(ProductService::class);
         $priceService = Mockery::mock(PriceService::class);
+        $sessionService = Mockery::mock(SessionService::class);
 
         $productService->expects("search")
             ->andReturn((object)["data" => [(object)["id" => "prod_1234", "default_price" => "price_1234"]]]);
@@ -405,9 +401,6 @@ class PaymentServiceTest extends TestCase
             "unit_amount" => 499,
             "currency" => "EUR",
         ])->andReturn((object)["id" => "price_5678"]);
-        $session = Mockery::mock(Session::class);
-        $session->expects("offsetGet")->with("id")->andReturn(1234);
-        $sessionService = Mockery::mock(SessionService::class);
         $sessionService->expects("create")->with([
             "payment_method_types" => ["card"],
             "line_items" => [
@@ -423,7 +416,7 @@ class PaymentServiceTest extends TestCase
             "success_url" => "https://www.biblys.fr/order/order-slug?payed=1",
             "cancel_url" => "https://www.biblys.fr/payment/order-slug",
             "customer_email" => "silas.coade@example.net",
-        ])->andReturn($session);
+        ])->andReturn((object)["id" => "cs_1234"]);
         $checkoutServiceFactory = Mockery::mock(CheckoutServiceFactory::class);
         $checkoutServiceFactory->sessions = $sessionService;
         $stripe->expects("getService")->with("products")->andReturn($productService);
