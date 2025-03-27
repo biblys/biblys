@@ -207,15 +207,15 @@ function _displayMediaFile(string $getDir, CurrentSite $currentSite, string $fil
         <h1><span class="fa fa-image"></span> Médias</h1> 
         
         <ol class="breadcrumb">
-          <li>
+          <li class="breadcrumb-item">
             <span class="fa fa-folder"></span> 
             <a href="/pages/adm_media?CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">media</a>
           </li>
-          <li>
+          <li class="breadcrumb-item">
             <span class="fa fa-folder-open"></span>
             <a href="/pages/adm_media?dir=' . $getDir . '&CKEditorFuncNum=' . $CKEditorFuncNum . '">' . $getDir . '</a>
           </li>
-          <li class="active">
+          <li  class="breadcrumb-item active">
             <span class="fa fa-file"></span> ' . $getFile . '
           </li>
         </ol>       
@@ -295,11 +295,11 @@ function _displayMediaDirectory(CurrentSite $currentSite, string $currentDirecto
         <h1><span class="fa fa-image"></span> Médias</h1>
        
         <ol class="breadcrumb">
-          <li>
+          <li class="breadcrumb-item">
             <span class="fa fa-folder"></span> 
             <a href="/pages/adm_media?CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">media</a>
           </li>
-          <li class="active">
+          <li  class="breadcrumb-item active">
             <span class="fa fa-folder-open"></span> ' . $currentDirectory . '
           </li>
         </ol>
