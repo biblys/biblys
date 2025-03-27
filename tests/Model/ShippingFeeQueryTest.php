@@ -37,7 +37,7 @@ class ShippingFeeQueryTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $country = ModelFactory::createCountry();
-        $fee = ModelFactory::createShippingFee(
+        $fee = ModelFactory::createShippingOption(
             site: $site,
             country: $country,
         );
@@ -70,12 +70,12 @@ class ShippingFeeQueryTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $country = ModelFactory::createCountry();
-        ModelFactory::createShippingFee(
+        ModelFactory::createShippingOption(
             site: $site,
             country: $country,
             maxArticles: 1
         );
-        $feeForTwoArticles = ModelFactory::createShippingFee(
+        $feeForTwoArticles = ModelFactory::createShippingOption(
             site: $site,
             country: $country,
             maxArticles: 2
@@ -109,8 +109,8 @@ class ShippingFeeQueryTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $country = ModelFactory::createCountry();
-        $archivedFee = ModelFactory::createShippingFee(site: $site, country: $country, isArchived: true);
-        $activeFee = ModelFactory::createShippingFee(site: $site, country: $country);
+        $archivedFee = ModelFactory::createShippingOption(site: $site, country: $country, isArchived: true);
+        $activeFee = ModelFactory::createShippingOption(site: $site, country: $country);
         $orderWeight = 500;
         $orderAmount = 1500;
         $currentSite = new CurrentSite($site);
