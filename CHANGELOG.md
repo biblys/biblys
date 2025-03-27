@@ -11,6 +11,8 @@
   destination et les différentes zones tarifaires pour l'expédition.
 - Une option de site `home_posts_limit` a été ajoutée pour limiter le nombre de
   billets de blog affichés sur la page d'accueil.
+- Il est désormais possible d'insérer une espace insécable avec la combinaison
+  de touche <kbd>Ctrl</kbd> + <kbd>espace</kbd> dans l'éditeur de texte enrichi.
 
 ### Corrections
 
