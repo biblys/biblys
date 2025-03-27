@@ -126,16 +126,16 @@ class PaymentService
         }, 0);
 
         // Add shipping cost as a line item
-        $shippingCost = $order->getShippingCost();
-        if ($shippingCost && $shippingCost !== 0) {
-            $product = $this->stripe->products->create(["name" => "Frais de port"]);
-            $price = $this->stripe->prices->create([
-                "product" => $product->id,
-                "unit_amount" => $shippingCost,
-                "currency" => "EUR",
-            ]);
-            $lineItems[] = ["quantity" => 1, "price" => $price->id];
-            $amountToPay += $shippingCost;
+        $shippingOption = $order->getShippingOption();
+        if ($shippingOption && $shippingOption->getFee() !== 0) {
+            $existingRates = $this->stripe->shippingRates->all(["active" => true, "limit" => 100]);
+            $currentRate = array_filter($existingRates->data, function ($rate) use ($shippingOption) {
+                return $rate-> == $shippingOption->getFee();
+            });
+
+            $shippingOptions = [["shipping_rate" => "shr_1234"]];
+
+            $amountToPay += $shippingOption->getFee();
         }
 
         if ($amountToPay !== (int)$order->getAmountTobepaid()) {
@@ -143,12 +143,13 @@ class PaymentService
         }
 
         $session = $this->stripe->checkout->sessions->create([
-            'payment_method_types' => ['card'],
-            'line_items' => $lineItems,
-            'mode' => 'payment',
-            'success_url' => 'https://' . $_SERVER["HTTP_HOST"] . '/order/' . $order->getSlug() . '?payed=1',
-            'cancel_url' => 'https://' . $_SERVER["HTTP_HOST"] . '/payment/' . $order->getSlug(),
-            'customer_email' => $order->getEmail(),
+            "payment_method_types" => ["card"],
+            "line_items" => $lineItems,
+            "shipping_options" => $shippingOptions,
+            "mode" => "payment",
+            "success_url" => "https://{$_SERVER["HTTP_HOST"]}/order/{$order->getSlug()}?payed=1",
+            "cancel_url" => "https://{$_SERVER["HTTP_HOST"]}/payment/{$order->getSlug()}",
+            "customer_email" => $order->getEmail(),
         ]);
 
         $payment = new Payment();

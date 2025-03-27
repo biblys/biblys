@@ -33,6 +33,7 @@ use Stripe\Service\Checkout\CheckoutServiceFactory;
 use Stripe\Service\Checkout\SessionService;
 use Stripe\Service\PriceService;
 use Stripe\Service\ProductService;
+use Stripe\Service\ShippingRateService;
 use Stripe\StripeClient;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
@@ -369,11 +370,12 @@ class PaymentServiceTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
-    public function testCreateStripePaymentForOrderWithShipping()
+    public function testCreateStripePaymentForOrderWithNewShippingOption()
     {
         // given
         $config = new Config();
-        $order = ModelFactory::createOrder(amountToBePaid: 1498, shippingCost: 499);
+        $shippingOption = ModelFactory::createShippingOption(mode: "Colissimo International", fee: 499);
+        $order = ModelFactory::createOrder(shippingOption: $shippingOption, amountToBePaid: 1498, shippingCost: 499);
         $article = ModelFactory::createArticle(title: "Stripe Article");
         ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 999);
 
@@ -385,6 +387,7 @@ class PaymentServiceTest extends TestCase
         $productService = Mockery::mock(ProductService::class);
         $priceService = Mockery::mock(PriceService::class);
         $sessionService = Mockery::mock(SessionService::class);
+        $shippingRateService = Mockery::mock(ShippingRateService::class);
 
         $productService->expects("search")
             ->andReturn((object)["data" => [(object)["id" => "prod_1234", "default_price" => "price_1234"]]]);
@@ -394,23 +397,27 @@ class PaymentServiceTest extends TestCase
         ]);
         $productService->expects("update")
             ->andReturn((object)["id" => "prod_1234", "default_price" => "price_1234"]);
-        $productService->expects("create")->with(["name" => "Frais de port"])
-            ->andReturn((object)["id" => "prod_9123"]);
-        $priceService->expects("create")->with([
-            "product" => "prod_9123",
-            "unit_amount" => 499,
-            "currency" => "EUR",
-        ])->andReturn((object)["id" => "price_5678"]);
+
+        $shippingRateService->expects("all")->with(["active" => true, "limit" => 100])
+            ->andReturn((object)["data" => [(object)["id" => "shr_0", "metadata" => ["shipping_option_id" => 0]]]]);
+        $shippingRateService->expects("create")->with([
+            "display_name" => "Colissimo International",
+            "fixed_amount" => ["unit_amount" => 499, "currency" => "EUR"],
+            "metadata" => ["shipping_option_id" => $shippingOption->getId()],
+        ])->andReturn((object)["id" => "shr_1234"]);
+
         $sessionService->expects("create")->with([
             "payment_method_types" => ["card"],
             "line_items" => [
                 [
                     "price" => "price_1234",
                     "quantity" => 1,
-                ], [
-                    "price" => "price_5678",
-                    "quantity" => 1,
-                ],
+                ]
+            ],
+            "shipping_options" => [
+                [
+                    "shipping_rate" => "shr_1234",
+                ]
             ],
             "mode" => "payment",
             "success_url" => "https://www.biblys.fr/order/order-slug?payed=1",
@@ -421,6 +428,7 @@ class PaymentServiceTest extends TestCase
         $checkoutServiceFactory->sessions = $sessionService;
         $stripe->expects("getService")->with("products")->andReturn($productService);
         $stripe->expects("getService")->with("prices")->andReturn($priceService);
+        $stripe->expects("getService")->with("shippingRates")->andReturn($shippingRateService);
         $stripe->expects("getService")->with("checkout")->andReturn($checkoutServiceFactory);
 
         $paymentService = new PaymentService($config, $currentSite, $urlGenerator, $loggerService, $stripe);
