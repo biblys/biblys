@@ -94,21 +94,31 @@ class PaymentService
             $products = $response->data;
             if (count($products) > 0) {
                 $product = $products[0];
+
+                $price = $this->stripe->prices->retrieve($product->default_price);
+                if (!$price || $price->unit_amount != $stockItem->getSellingPrice()) {
+                    $price = $this->stripe->prices->create([
+                        "product" => $product->id,
+                        "unit_amount" => $stockItem->getSellingPrice() ?? 0,
+                        "currency" => "EUR",
+                    ]);
+                }
+
                 $product = $this->stripe->products->update($product->id, [
                     "name" => $stockItem->getArticle()->getTitle(),
+                    "default_price" => $price->id,
                 ]);
             } else {
                 $product = $this->stripe->products->create([
                     "name" => $stockItem->getArticle()->getTitle(),
                     "metadata" => ["article_id" => $stockItem->getArticleId()],
+                    "default_price_data" => [
+                        "unit_amount" => $stockItem->getSellingPrice() ?? 0,
+                        "currency" => "EUR",
+                    ],
                 ]);
             }
-            $price = $this->stripe->prices->create([
-                "product" => $product->id,
-                "unit_amount" => $stockItem->getSellingPrice() ?? 0,
-                "currency" => "EUR",
-            ]);
-            return ["quantity" => 1, "price" => $price->id];
+            return ["quantity" => 1, "price" => $product->default_price];
         }, $stockItems->getArrayCopy());
 
         $amountToPay = array_reduce($stockItems->getArrayCopy(), function ($total, Stock $current) {
