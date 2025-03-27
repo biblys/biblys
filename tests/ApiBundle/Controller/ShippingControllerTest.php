@@ -167,7 +167,7 @@ class ShippingControllerTest extends TestCase
         $controller = new ShippingController();
         $content = '{"id":"","mode":"Colissimo","type":"suivi","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
         $request = RequestFactory::createAuthRequestForAdminUser($content);
-        $shippingFee = ModelFactory::createShippingFee();
+        $shippingFee = ModelFactory::createShippingOption();
         $config = new Config();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
@@ -208,7 +208,7 @@ class ShippingControllerTest extends TestCase
         $controller = new ShippingController();
         $content = '{"id":"","mode":"Colissimo","type":"suivi","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
         $request = RequestFactory::createAuthRequestForAdminUser($content);
-        $shippingFee = ModelFactory::createShippingFee();
+        $shippingFee = ModelFactory::createShippingOption();
         $shippingFee->setSiteId(2);
         $shippingFee->save();
         $config = new Config();
@@ -233,7 +233,7 @@ class ShippingControllerTest extends TestCase
     {
         // given
         $controller = new ShippingController();
-        $shippingFee = ModelFactory::createShippingFee();
+        $shippingFee = ModelFactory::createShippingOption();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
 
@@ -259,7 +259,7 @@ class ShippingControllerTest extends TestCase
     {
         // given
         $controller = new ShippingController();
-        $shippingFee = ModelFactory::createShippingFee();
+        $shippingFee = ModelFactory::createShippingOption();
         $config = new Config();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
@@ -282,7 +282,7 @@ class ShippingControllerTest extends TestCase
     {
         // given
         $controller = new ShippingController();
-        $shippingFee = ModelFactory::createShippingFee();
+        $shippingFee = ModelFactory::createShippingOption();
         $shippingFee->setSiteId(2);
         $shippingFee->save();
         $config = new Config();
@@ -308,7 +308,7 @@ class ShippingControllerTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $shippingFee = ModelFactory::createShippingFee(
+        $shippingFee = ModelFactory::createShippingOption(
             site: $site,
             type: "suivi",
             mode: "Colissimo",
@@ -405,7 +405,7 @@ class ShippingControllerTest extends TestCase
         // given
         $config = new Config();
         $country = ModelFactory::createCountry(zone: "Z2");
-        $shippingFee = ModelFactory::createShippingFee(
+        $shippingFee = ModelFactory::createShippingOption(
             type: "Type C",
             country: $country,
             mode: "Colissimo",
