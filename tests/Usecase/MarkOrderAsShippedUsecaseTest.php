@@ -45,8 +45,8 @@ class MarkOrderAsShippedUsecaseTest extends TestCase
     public function testExecute()
     {
         // given
-        $shipping = ModelFactory::createShippingFee();
-        $order = ModelFactory::createOrder(shippingFee: $shipping, email: "customer@paronymie.fr");
+        $shipping = ModelFactory::createShippingOption();
+        $order = ModelFactory::createOrder(shippingOption: $shipping, email: "customer@paronymie.fr");
         $site = ModelFactory::createSite(domain: "paronymie-expeditions.fr");
 
         $currentSite = Mockery::mock(CurrentSite::class);
@@ -84,8 +84,8 @@ class MarkOrderAsShippedUsecaseTest extends TestCase
     public function testExecuteWithCustomShippingMessage()
     {
         // given
-        $shipping = ModelFactory::createShippingFee();
-        $order = ModelFactory::createOrder(shippingFee: $shipping, email: "customer@paronymie.fr");
+        $shipping = ModelFactory::createShippingOption();
+        $order = ModelFactory::createOrder(shippingOption: $shipping, email: "customer@paronymie.fr");
         $site = ModelFactory::createSite();
 
         $currentSite = Mockery::mock(CurrentSite::class);
@@ -121,8 +121,8 @@ class MarkOrderAsShippedUsecaseTest extends TestCase
     public function testExecuteWithTrackedShipping()
     {
         // given
-        $shipping = ModelFactory::createShippingFee(type: "suivi");
-        $order = ModelFactory::createOrder(shippingFee: $shipping, email: "customer@paronymie.fr");
+        $shipping = ModelFactory::createShippingOption(type: "suivi");
+        $order = ModelFactory::createOrder(shippingOption: $shipping, email: "customer@paronymie.fr");
         $site = ModelFactory::createSite();
 
         $currentSite = Mockery::mock(CurrentSite::class);
@@ -160,8 +160,8 @@ class MarkOrderAsShippedUsecaseTest extends TestCase
     public function testExecuteWithPickupShipping()
     {
         // given
-        $shipping = ModelFactory::createShippingFee(type: "magasin");
-        $order = ModelFactory::createOrder(shippingFee: $shipping, email: "customer@paronymie.fr");
+        $shipping = ModelFactory::createShippingOption(type: "magasin");
+        $order = ModelFactory::createOrder(shippingOption: $shipping, email: "customer@paronymie.fr");
         $site = ModelFactory::createSite();
 
         $currentSite = Mockery::mock(CurrentSite::class);

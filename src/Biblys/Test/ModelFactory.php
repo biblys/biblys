@@ -296,7 +296,7 @@ class ModelFactory
         ?Site           $site = null,
         ?User           $user = null,
         ?Customer       $customer = null,
-        ?ShippingOption $shippingFee = null,
+        ?ShippingOption $shippingOption = null,
         int             $amountToBePaid = 0,
         int             $shippingCost = 0,
         ?string         $axysAccountId = null,
@@ -323,8 +323,8 @@ class ModelFactory
         $order->setUser($user);
         $order->setAmountTobepaid($amountToBePaid);
         $order->setShippingCost($shippingCost);
-        $order->setShippingId($shippingFee?->getId());
-        $order->setShippingMode($shippingFee?->getType());
+        $order->setShippingId($shippingOption?->getId());
+        $order->setShippingMode($shippingOption?->getType());
         $order->setType("web");
         $order->setAxysAccountId($axysAccountId);
         $order->setSlug($slug ?? "order-slug");
@@ -513,7 +513,7 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createShippingFee(
+    public static function createShippingOption(
         ?Site    $site = null,
         string   $type = "normal",
         ?Country $country = null,
@@ -527,21 +527,21 @@ class ModelFactory
         bool     $isArchived = false,
     ): ShippingOption
     {
-        $shippingFee = new ShippingOption();
-        $shippingFee->setSiteId($site?->getId() ?? 1);
-        $shippingFee->setZoneCode($country?->getShippingZoneCode() ?? "ALL");
-        $shippingFee->setType($type);
-        $shippingFee->setMode($mode);
-        $shippingFee->setFee($fee);
-        $shippingFee->setMinAmount($minAmount);
-        $shippingFee->setMaxWeight($maxWeight);
-        $shippingFee->setMaxAmount($maxAmount);
-        $shippingFee->setMaxArticles($maxArticles);
-        $shippingFee->setInfo($info);
-        $shippingFee->setArchivedAt($isArchived ? new DateTime() : null);
-        $shippingFee->save();
+        $shippingOption = new ShippingOption();
+        $shippingOption->setSiteId($site?->getId() ?? 1);
+        $shippingOption->setZoneCode($country?->getShippingZoneCode() ?? "ALL");
+        $shippingOption->setType($type);
+        $shippingOption->setMode($mode);
+        $shippingOption->setFee($fee);
+        $shippingOption->setMinAmount($minAmount);
+        $shippingOption->setMaxWeight($maxWeight);
+        $shippingOption->setMaxAmount($maxAmount);
+        $shippingOption->setMaxArticles($maxArticles);
+        $shippingOption->setInfo($info);
+        $shippingOption->setArchivedAt($isArchived ? new DateTime() : null);
+        $shippingOption->save();
 
-        return $shippingFee;
+        return $shippingOption;
     }
 
     /**
