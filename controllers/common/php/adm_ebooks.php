@@ -147,7 +147,7 @@ return function(Request $request): Response
                 <legend>Filter les ventes</legend>
 
                 <div class="form-group row">
-                    <label for="people_id" class="col-sm-3 col-form-label">Par auteur :</label>
+                    <label for="people_id" class="col-sm-3 col-form-label text-right">Par auteur :</label>
                     <div class="col-sm-9">
                         <select name="people_id" id="people_id" class="form-control">
                             <option value="0">Tous</option>
@@ -157,7 +157,7 @@ return function(Request $request): Response
                 </div>
 
                 <div class="form-group row">
-                    <label for="article_id" class="col-sm-3 col-form-label">Par titre :</label>
+                    <label for="article_id" class="col-sm-3 col-form-label text-right">Par titre :</label>
                     <div class="col-sm-9">
                         <select name="article_id" id="article_id" class="form-control">
                             <option value="0">Tous</option>
@@ -167,21 +167,21 @@ return function(Request $request): Response
                 </div>
 
                 <div class="form-group row">
-                    <label for="date1" class="col-sm-3 col-form-label">Du :</label>
+                    <label for="date1" class="col-sm-3 col-form-label text-right">Du :</label>
                     <div class="col-sm-9">
-                        <input type="date" class="date" id="date1" name="date1" value="' . ($_GET["date1"] ?? null) . '">
+                        <input type="date" class="form-control" id="date1" name="date1" value="' . ($_GET["date1"] ?? null) . '">
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label for="date2" class="col-sm-3 col-form-label">Au :</label>
+                    <label for="date2" class="col-sm-3 col-form-label text-right">Au :</label>
                     <div class="col-sm-9">
-                        <input type="date" class="date" id="date2" name="date2" value="' . ($_GET["date2"] ?? null) . '">
+                        <input type="date" class="form-control" id="date2" name="date2" value="' . ($_GET["date2"] ?? null) . '">
                     </div>
                 </div>
-
-                <div class="center">
-                    <button type="submit" class="btn btn-primary">Filtrer</button>
+                
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary">Filtrer les ventes</button>                
                 </div>
             </fieldset>
         </form>
@@ -190,7 +190,7 @@ return function(Request $request): Response
         <h3>Par titre</h3>
         <br />
     
-        <table class="admin-table sortable">
+        <table class="table table-striped">
             <thead>
                 <tr class="cliquable">
                     <th>Auteur</th>
@@ -226,7 +226,7 @@ return function(Request $request): Response
         $total = $downloads->rowCount();
 
         $content .= '
-            <table class="admin-table sortable">
+            <table class="table table-striped">
                 <tr>
                     <td class="right">Total :</td>
                     <td class="right">' . $total . '</td>
@@ -253,7 +253,7 @@ return function(Request $request): Response
     );
 
     $content .= '<br />
-        <table class="admin-table sortable">
+        <table class="table table-striped">
             <thead>
                 <tr class="cliquable">
                     <th>Ref.</th>
