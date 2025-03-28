@@ -16,29 +16,19 @@
  */
 
 
-use Biblys\Service\CurrentSite;
-use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @throws InvalidDateFormatException
- * @throws PropelException
  */
-return function(Request $request, CurrentSite $currentSite): Response
+return function(Request $request): Response
 {
     $request->attributes->set("page_title", "Ventes numériques");
 
-    if (!$currentSite->getOption('downloadable_publishers')) {
-        throw new Exception("L'option de site `downloadable_publishers` doit être définie.");
-    }
-
-    // Article select
     $ao = array();
     $articles = EntityManager::prepareAndExecute("SELECT `article_id`, `article_title`, `article_collection` FROM `articles`
-        WHERE
-            `publisher_id` IN (" . $currentSite->getOption('downloadable_publishers') . ")
-            AND (`type_id` = 2 OR `type_id` = 11) ORDER BY `article_collection`, `article_title_alphabetic`",
+        WHERE `type_id` IN (2, 11) ORDER BY `article_collection`, `article_title_alphabetic`",
         []
     );
     while ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
@@ -58,17 +48,17 @@ return function(Request $request, CurrentSite $currentSite): Response
         JOIN `roles` USING(`article_id`) 
         JOIN `people` USING(`people_id`) 
         JOIN `collections` USING(`collection_id`) 
-        WHERE `collections`.`site_id` = :site_id AND `type_id` = 2 AND `job_id` = 1 
+        WHERE `type_id` = 2 AND `job_id` = 1 
         GROUP BY `people_id` 
         ORDER BY MAX(`people_last_name`)
-    ", ["site_id" => $currentSite->getSite()->getId()]);
+    ", []);
     while ($p = $people->fetch(PDO::FETCH_ASSOC)) {
         $people_options .= '<option value="' . $p["people_id"] . '">' . $p["people_name"] . '</option>';
     }
 
     $req = NULL;
     $reqPeople = null;
-    $reqParams = ['site_id' => $currentSite->getSite()->getId()];
+    $reqParams = [];
     $reqPeopleParams = [];
 
     if (!empty($_GET["date1"])) {
@@ -97,8 +87,7 @@ return function(Request $request, CurrentSite $currentSite): Response
     FROM `articles`
     JOIN `stock` USING(`article_id`)
     WHERE
-        `site_id` = :site_id 
-        AND (`type_id` = 2 OR `type_id` = 11) 
+        (`type_id` = 2 OR `type_id` = 11) 
         AND (`stock`.`axys_account_id` IS NOT NULL OR `stock`.`user_id` IS NOT NULL)
         " . $req . $reqPeople . "
     GROUP BY `article_id`
@@ -126,14 +115,13 @@ return function(Request $request, CurrentSite $currentSite): Response
             FROM `stock` 
             WHERE `article_id` = :article_id 
                 AND `stock_selling_price` != '0' 
-                AND `stock_selling_date` 
-                AND `site_id` = :site_id " . $req . " 
+                AND `stock_selling_date` " . $req . " 
                 AND (`stock`.`axys_account_id` IS NOT NULL OR `stock`.`user_id` IS NOT NULL)
             ", $subReqParams);
     $v = $numVentes->fetch(PDO::FETCH_ASSOC);
 
         $numGratuits = EntityManager::prepareAndExecute(
-            "SELECT COUNT(`stock_id`) AS `gratuits` FROM `stock` WHERE `article_id` = :article_id AND `stock_selling_price` IS NULL AND `site_id` = :site_id " . $req,
+            "SELECT COUNT(`stock_id`) AS `gratuits` FROM `stock` WHERE `article_id` = :article_id AND `stock_selling_price` IS NULL " . $req,
             $subReqParams);
         $g = $numGratuits->fetch(PDO::FETCH_ASSOC);
 
@@ -258,7 +246,7 @@ return function(Request $request, CurrentSite $currentSite): Response
         FROM `articles`
         JOIN `stock` USING(`article_id`)
         LEFT JOIN `users` ON `users`.`id` = `stock`.`user_id`
-        WHERE `stock`.`site_id` = :site_id AND (`type_id` = '2' OR `type_id` = 11) " . $req . $reqPeople . "
+        WHERE `type_id` IN (2, 11) " . $req . $reqPeople . "
         GROUP BY `stock_id`
         ORDER BY `stock_selling_date` DESC",
         array_merge($reqParams, $reqPeopleParams)
