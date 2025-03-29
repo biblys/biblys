@@ -13,6 +13,9 @@
   billets de blog affichés sur la page d'accueil.
 - Il est désormais possible d'insérer une espace insécable avec la combinaison
   de touche <kbd>Ctrl</kbd> + <kbd>espace</kbd> dans l'éditeur de texte enrichi.
+- Lors de l'ajout d'un·e utilisateur·ice autorisé·e à gérer un éditeur, il n'est 
+  plus nécessaire que l'adresse e-mail corresponde à un compte existant. Si ce
+  n'est pas le cas, le compte utilisateur sera créé automatiquement.
 
 ### Corrections
 
