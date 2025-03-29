@@ -30,6 +30,7 @@ use Framework\Controller;
 use Model\PublisherQuery;
 use Model\Right;
 use Model\RightQuery;
+use Model\User;
 use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
 use Publisher;
@@ -245,11 +246,11 @@ class PublisherController extends Controller
      * @throws Exception
      */
     public function deleteAction(
-        Request      $request,
-        CurrentUser  $currentUser,
-        UrlGenerator $urlGenerator,
+        Request         $request,
+        CurrentUser     $currentUser,
+        UrlGenerator    $urlGenerator,
         TemplateService $templateService,
-        int          $id,
+        int             $id,
     ): Response
     {
         $currentUser->authAdmin();
@@ -369,8 +370,11 @@ class PublisherController extends Controller
             ->filterBySite($currentSite->getSite())
             ->findOneByEmail($userEmail);
         if (!$user) {
-            $session->getFlashBag()->add("error", "Impossible de trouver un utilisateur avec l'adresse $userEmail.");
-            return new RedirectResponse($publisherRightsUrl);
+            $user = new User();
+            $user->setEmail($userEmail);
+            $user->setSite($currentSite->getSite());
+            $user->save();
+            $session->getFlashBag()->add("success", "Le compte utilisateur $userEmail a été créé.");
         }
 
         $existingRight = RightQuery::create()
@@ -379,7 +383,10 @@ class PublisherController extends Controller
             ->filterByPublisher($publisher)
             ->findOne();
         if ($existingRight) {
-            $session->getFlashBag()->add("warning", "L'utilisateur $userEmail était déjà autorisé.");
+            $session->getFlashBag()->add(
+                "warning",
+                "Le compte utilisateur $userEmail était déjà autorisé pour cet éditeur."
+            );
             return new RedirectResponse($publisherRightsUrl);
         }
 
@@ -389,7 +396,10 @@ class PublisherController extends Controller
         $right->setSite($currentSite->getSite());
         $right->save();
 
-        $session->getFlashBag()->add("success", "L'utilisateur $userEmail a été autorisé.");
+        $session->getFlashBag()->add(
+            "success",
+            "Le compte utilisateur $userEmail peut désormais gérer cet éditeur."
+        );
         return new RedirectResponse($publisherRightsUrl);
     }
 
