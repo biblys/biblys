@@ -168,12 +168,15 @@ class OrderController extends Controller
     public function updateAction(
         Request         $request,
         CurrentSite     $currentSite,
+        CurrentUser     $currentUser,
         TemplateService $templateService,
         Mailer          $mailer,
                         $id,
                         $action
     ): JsonResponse
     {
+        $currentUser->authAdmin();
+
         $notice = "";
 
         /** @var Order $orderEntity */
