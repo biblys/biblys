@@ -94,10 +94,16 @@ class TemplateService
      * @throws SyntaxError
      * @throws Exception
      */
-    public function renderResponse(string $templatePath, array $vars = []): Response
+    public function renderResponse(string $templatePath, array $vars = [], bool $isPrivate = false): Response
     {
         $rendered = $this->render($templatePath, $vars);
-        return new Response($rendered);
+        $response = new Response($rendered);
+
+        if ($isPrivate) {
+            $response->setCache(["no_store" => true, "private" => true]);
+        }
+
+        return $response;
     }
 
     /**
@@ -117,10 +123,16 @@ class TemplateService
      * @throws PropelException
      * @throws SyntaxError
      */
-    public function renderResponseFromString(string $templateString, array $vars = []): Response
+    public function renderResponseFromString(string $templateString, array $vars = [], bool $isPrivate = false): Response
     {
         $rendered = $this->renderFromString($templateString, $vars);
-        return new Response($rendered);
+        $response = new Response($rendered);
+
+        if ($isPrivate) {
+            $response->setCache(["no_store" => true, "private" => true]);
+        }
+
+        return $response;
     }
 
     /**

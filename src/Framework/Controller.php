@@ -54,7 +54,7 @@ class Controller
      * @throws PropelException
      * @throws Exception
      */
-    public function render(string $templatePath, array $vars = []): Response
+    public function render(string $templatePath, array $vars = [], bool $isPrivate = false): Response
     {
         $config = Config::load();
         $request = Request::createFromGlobals();
@@ -68,7 +68,7 @@ class Controller
             metaTagsService: $metaTagsService,
             request: $request,
         );
-        return $templateService->renderResponse($templatePath, $vars);
+        return $templateService->renderResponse($templatePath, $vars, $isPrivate);
     }
 
     /**
