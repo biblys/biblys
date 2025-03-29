@@ -19,6 +19,7 @@
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\InvalidSiteIdException;
 use Biblys\Service\Slug\SlugService;
 use Biblys\Service\StringService;
 use JetBrains\PhpStorm\NoReturn;
@@ -148,7 +149,7 @@ function authors(?string $nameString, ?string $mode = null): ?string
     }
 
     if ($mode === "url") {
-        $urlGenerator = \Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator();
+        $urlGenerator = LegacyCodeHelper::getGlobalUrlGenerator();
         $names = array_map(function ($name) use ($urlGenerator) {
             $slugService = new SlugService();
             $slug = $slugService->slugify($name);
@@ -325,41 +326,6 @@ function file_dir($x): string
 
 //** MEDIAS **//
 
-/**
- * @deprecated Use Media->getUrl instead
- */
-function media_url($type, $id, $size = '0'): string
-{
-    $host = 'media.biblys.fr';
-
-    if (!empty($size)) {
-        $size = '-' . $size;
-    } else {
-        $size = null;
-    }
-    if ('article' == $type) {
-        $type = 'book';
-    }
-    if ('extrait' == $type) {
-        $ext = 'pdf';
-    } elseif ('publisher' == $type) {
-        $ext = 'png';
-    } else {
-        $ext = 'jpg';
-    }
-
-    return 'https://' . $host . '/' . $type . '/' . file_dir($id) . '/' . $id . $size . '.' . $ext;
-}
-
-/**
- * @deprecated Use Media->exists() instead
- */
-function media_exists($type, $id): bool
-{
-    $media = new Media($type, $id);
-    return $media->exists();
-}
-
 function numero($x, $b = ' n&deg;&nbsp;'): string
 {
     if (!empty($x)) {
@@ -386,6 +352,7 @@ function price($x, $m = null, $decimals = 2): float|int|string
  *                      divided by 100 before display
  * @return string
  * @throws PropelException
+ * @throws InvalidSiteIdException
  */
 function currency(float $amount, bool $cents = false): string
 {
@@ -577,13 +544,6 @@ function percent($val1, $val2, $precision = 0): bool|string
     $res = round($res, $precision);
 
     return $res . '&nbsp;%';
-}
-
-function get_template($template, $variables = []): Response
-{
-    $controller = new Framework\Controller();
-
-    return $controller->render($template, $variables);
 }
 
 /**
