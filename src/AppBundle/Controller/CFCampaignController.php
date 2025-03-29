@@ -101,7 +101,7 @@ class CFCampaignController extends Controller
 
         return $this->render('AppBundle:CFCampaign:list.html.twig', [
             'campaigns' => $campaigns,
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -141,7 +141,7 @@ class CFCampaignController extends Controller
 
         return $this->render('AppBundle:CFCampaign:new.html.twig', [
             'campaign' => $campaign,
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -184,7 +184,7 @@ class CFCampaignController extends Controller
 
         return $this->render('AppBundle:CFCampaign:edit.html.twig', [
             'campaign' => $campaign,
-        ]);
+        ], isPrivate: true);
     }
 
     /**

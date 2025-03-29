@@ -446,7 +446,7 @@ class ArticleController extends Controller
         return $templateService->renderResponse("AppBundle:Article:delete.html.twig", [
             "article" => $article,
             "error" => $error,
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -461,7 +461,7 @@ class ArticleController extends Controller
 
         return $this->render('AppBundle:Article:deleted.html.twig', [
             'title' => $title,
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -648,7 +648,7 @@ class ArticleController extends Controller
 
         return $this->render('AppBundle:Article:searchTerms.html.twig', [
             'total' => $total,
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -737,7 +737,7 @@ class ArticleController extends Controller
             "articles" => $articles,
             "count" => $count,
             "pages" => $pagination,
-        ]);
+        ], isPrivate: true);
     }
 
     public function checkIsbn(Request $request): JsonResponse
@@ -815,7 +815,7 @@ class ArticleController extends Controller
             "user_email" => $currentUser->getUser()->getEmail(),
             "isWatermarked" => $libraryItem->isWatermarked(),
             "files" => $files,
-        ]);
+        ], isPrivate: true);
     }
 
     /**

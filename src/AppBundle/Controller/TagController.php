@@ -150,6 +150,6 @@ class TagController extends Controller
             'tag' => $tag,
             'error' => $error,
             'form' => $form->createView()
-        ]);
+        ], isPrivate: true);
     }
 }

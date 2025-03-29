@@ -64,7 +64,7 @@ class AdminsController extends Controller
 
         return $templateService->renderResponse("AppBundle:Admins:new.html.twig", [
             "users" => $users,
-        ]);
+        ], isPrivate: true);
     }
 
     /**

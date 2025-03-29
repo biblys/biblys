@@ -297,7 +297,7 @@ class MainController extends Controller
         if ($cloud->isConfigured()
             && $cloud->getSubscription() !== null
             && !$cloud->getSubscription()->isActive()) {
-            return $this->render("AppBundle:Main:adminCloudSubscriptionExpired.html.twig");
+            return $this->render("AppBundle:Main:adminCloudSubscriptionExpired.html.twig", isPrivate: true);
         }
 
         // Display alert if Biblys has been updated since last visit
@@ -343,7 +343,7 @@ class MainController extends Controller
             'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
             'site_title' => $globalSite->get('title'),
             "hot_news" => $hotNewsBanner,
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -413,7 +413,7 @@ class MainController extends Controller
                 $urlGenerator
             ),
             'site_title' => $globalSite->get('title'),
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -475,7 +475,7 @@ class MainController extends Controller
         return $this->render("AppBundle:Main:adminCloud.html.twig", [
             "domains" => $cloudConfig["domains"] ?? [],
             "subscription" => $cloud->getSubscription(),
-        ]);
+        ], isPrivate: true);
     }
 
     /**
