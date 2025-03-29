@@ -160,7 +160,7 @@ class MaintenanceController extends Controller
             "mediaFilesSize" => $this->_convertToGigabytes($mediaFiles["size"]),
             "totalCount" => $totalCount,
             "totalSize" => $this->_convertToGigabytes($totalSize),
-        ]);
+        ], isPrivate: true);
     }
 
     private function _convertToGigabytes(mixed $bytes): float
@@ -178,7 +178,7 @@ class MaintenanceController extends Controller
     {
         $currentUser->authAdmin();
 
-        return $templateService->renderResponse("AppBundle:Maintenance:cache.html.twig");
+        return $templateService->renderResponse("AppBundle:Maintenance:cache.html.twig", isPrivate: true);
     }
 
     /**

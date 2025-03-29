@@ -58,7 +58,7 @@ class StatsController extends Controller
             'suppliers' => $suppliers,
             'years' => array_reverse(range(2011, date('Y'))),
             'year' => $year
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -102,7 +102,7 @@ class StatsController extends Controller
             'years' => array_reverse(range(2011, date('Y'))),
             'year' => $year,
             'total' => $total
-        ]);
+        ], isPrivate: true);
     }
 
     public function matomo(Config $config): RedirectResponse

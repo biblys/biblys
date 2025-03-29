@@ -1222,7 +1222,7 @@ class ArticleControllerTest extends TestCase
                 "user_email" => "i.hate.tatoo@biblys.fr",
                 "isWatermarked" => false,
                 "files" => [],
-            ])
+            ], true)
             ->andReturn(new Response());
 
         // when

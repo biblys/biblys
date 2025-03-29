@@ -134,7 +134,7 @@ class OrderController extends Controller
 
         return $templateService->renderResponse("AppBundle:Order:index.html.twig", [
             "display_export_button" => $config->isMondialRelayEnabled(),
-        ]);
+        ], isPrivate: true);
     }
 
     /**

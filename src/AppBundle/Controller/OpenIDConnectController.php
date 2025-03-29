@@ -102,7 +102,7 @@ class OpenIDConnectController extends Controller
         if ($error === "access_denied") {
             return $templateService->renderResponse("AppBundle:OpenIDConnect:callback.html.twig", [
                 "siteTitle" => $currentSite->getTitle(),
-            ]);
+            ], isPrivate: true);
         }
 
         $queryParams->parse([

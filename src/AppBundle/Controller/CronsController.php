@@ -85,7 +85,7 @@ class CronsController extends Controller
             'AppBundle:Crons:tasks.html.twig',
             [
                 'jobs' => $jobs,
-            ]
+            ], isPrivate: true
         );
     }
 
@@ -127,7 +127,7 @@ class CronsController extends Controller
                 'slug' => $slug,
                 'jobs' => $jobs,
                 'cronKey' => $cronKey,
-            ]
+            ], isPrivate: true
         );
     }
 

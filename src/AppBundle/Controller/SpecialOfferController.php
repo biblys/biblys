@@ -60,7 +60,7 @@ class SpecialOfferController extends Controller
 
         return $templateService->renderResponse('AppBundle:SpecialOffer:index.html.twig', [
             'offers' => $offers->getArrayCopy(),
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -99,7 +99,7 @@ class SpecialOfferController extends Controller
                 "offer" => $offer,
                 "collections" => $collections->getArrayCopy(),
                 "articles" => $articles->getArrayCopy(),
-        ]);
+        ], isPrivate: true);
     }
 
     /**

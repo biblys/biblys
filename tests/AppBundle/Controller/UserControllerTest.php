@@ -138,7 +138,7 @@ class UserControllerTest extends TestCase
         $templateService->shouldReceive("renderResponse")
             ->with("AppBundle:User:show.html.twig", [
                 "user" => $user
-            ])->andReturn(new Response());
+            ], true)->andReturn(new Response());
 
         // when
         $response = $controller->showAction($currentSite, $currentUser, $templateService, $user->getId());
@@ -907,7 +907,7 @@ class UserControllerTest extends TestCase
             ->with("AppBundle:User:account.html.twig", [
                 "user_email" => "logged-user@biblys.fr",
                 "has_axys_method" => false
-            ]);
+            ], true);
     }
 
     /**
@@ -942,7 +942,7 @@ class UserControllerTest extends TestCase
             ->with("AppBundle:User:account.html.twig", [
                 "user_email" => "logged-user@biblys.fr",
                 "has_axys_method" => true,
-            ]);
+            ], true);
     }
 
     /** #logout */

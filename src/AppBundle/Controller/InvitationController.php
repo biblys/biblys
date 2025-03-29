@@ -84,7 +84,7 @@ class InvitationController extends Controller
             ->find();
         return $templateService->renderResponse("AppBundle:Invitation:new.html.twig", [
             "downloadableArticles" => $downloadableArticles->getData(),
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -208,7 +208,7 @@ class InvitationController extends Controller
             "invitations" => $invitations,
             "pages" => $pagination,
             "total" => $invitationTotalCount,
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -227,6 +227,7 @@ class InvitationController extends Controller
         if (!$currentUser->isAuthenticated()) {
             return $templateService->renderResponse(
                 "AppBundle:Invitation:show-for-anonymous-user.html.twig",
+                isPrivate: true,
             );
         }
 
@@ -243,7 +244,7 @@ class InvitationController extends Controller
             "currentUser" => $currentUser,
             "invitation" => $invitation,
             "error" => $error,
-        ]);
+        ], isPrivate: true);
     }
 
     /**

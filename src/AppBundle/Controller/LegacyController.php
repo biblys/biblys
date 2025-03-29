@@ -62,15 +62,19 @@ class LegacyController extends Controller
 
         $wrapperTemplate = "AppBundle:Legacy:default.html.twig";
         $pagePrefix = substr($pageQueryParam, 0, 4);
+        $isResponsePrivate = false;
         if ($pagePrefix == 'adm_') {
             $wrapperTemplate = "AppBundle:Legacy:default-admin.html.twig";
             $currentUser->authAdmin();
+            $isResponsePrivate = true;
         }
         if ($pagePrefix == 'pub_') {
             $currentUser->authPublisher();
+            $isResponsePrivate = true;
         }
         if ($pagePrefix == 'log_') {
             $currentUser->authUser();
+            $isResponsePrivate = true;
         }
 
         if ($pageQueryParam == "article_edit") {
@@ -80,7 +84,7 @@ class LegacyController extends Controller
         $routeParams = $request->attributes->get("_route_params", []);
         LegacyCodeHelper::saveRouteParams($routeParams);
 
-        // Retrocompatibility for static page urls (eg. /pages/:page_slug)
+        // Backward compatibility for static page urls (eg. /pages/:page_slug)
         $staticPage = PageQuery::create()
             ->filterBySite($currentSite->getSite())
             ->filterByStatus(1)
@@ -140,6 +144,6 @@ class LegacyController extends Controller
         return $templateService->renderResponse($wrapperTemplate, [
             "title" => $request->attributes->get("page_title"),
             "content" => $response->getContent(),
-        ]);
+        ], isPrivate: $isResponsePrivate);
     }
 }

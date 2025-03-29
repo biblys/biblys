@@ -152,7 +152,7 @@ class CollectionController extends Controller
             "AppBundle:Collection:admin.html.twig", [
                 "collections" => $collections,
                 "count" => $count,
-            ]
+            ], isPrivate: true
         );
     }
 
@@ -219,7 +219,7 @@ class CollectionController extends Controller
             'collection' => $collection,
             'error' => $error,
             'form' => $form->createView(),
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -267,6 +267,6 @@ class CollectionController extends Controller
         return $this->render('AppBundle:Collection:delete.html.twig', [
             'collection' => $collection,
             'error' => $error,
-        ]);
+        ], isPrivate: true);
     }
 }

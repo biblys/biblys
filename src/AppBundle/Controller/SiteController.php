@@ -83,7 +83,7 @@ class SiteController extends Controller
             ->orderByKey();
         return $this->render("AppBundle:Site:options.html.twig", [
             "options" => $options
-        ]);
+        ], isPrivate: true);
     }
 
 
@@ -131,7 +131,7 @@ class SiteController extends Controller
                 'default_stock_cascading_discount' => $currentSite->getOption('default_stock_cascading_discount'),
                 'default_stock_purchase_date' => $currentSite->getOption('default_stock_purchase_date')
             ]
-        ]);
+        ], isPrivate: true);
     }
 
 }

@@ -64,7 +64,7 @@ class SpecialOfferControllerTest extends TestCase
             ->shouldReceive("renderResponse")
             ->with('AppBundle:SpecialOffer:index.html.twig', [
                 'offers' => [$offer],
-            ])
+            ], true)
             ->andReturn(new Response());
 
         // when

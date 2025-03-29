@@ -61,7 +61,7 @@ class RayonController extends Controller
 
         return $this->render('AppBundle:Rayon:index.html.twig', [
             'rayons' => $rayons,
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -148,7 +148,7 @@ class RayonController extends Controller
 
         return $this->render('AppBundle:Rayon:edit.html.twig', [
             'rayon' => $rayon,
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -199,7 +199,7 @@ class RayonController extends Controller
         return $this->render('AppBundle:Rayon:new.html.twig', [
             'rayon' => $rayon,
             'error' => $error,
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -311,7 +311,7 @@ class RayonController extends Controller
             'added' => $request->query->get("added"),
             'not_added' => $request->query->get("not_added"),
             'types' => $types,
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -342,7 +342,7 @@ class RayonController extends Controller
         return $this->render('AppBundle:Rayon:articles.html.twig', [
             'rayon' => $rayon,
             'articles' => $articles,
-        ]);
+        ], isPrivate: true);
     }
 
     /**

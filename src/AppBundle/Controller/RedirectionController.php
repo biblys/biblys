@@ -58,7 +58,8 @@ class RedirectionController extends Controller
 
         return $templateService->renderResponse(
             "AppBundle:Redirection:index.html.twig",
-            ["redirections" => $redirections]
+            ["redirections" => $redirections],
+            isPrivate: true,
         );
     }
 

@@ -480,7 +480,7 @@ class InvitationControllerTest extends TestCase
                 "currentUser" => $currentUser,
                 "invitation" => $invitation,
                 "error" => null,
-            ])
+            ], true)
             ->andReturn(new Response("Télécharger The Code Show"));
         $controller = new InvitationController();
 
@@ -513,7 +513,7 @@ class InvitationControllerTest extends TestCase
         $templateService = Mockery::mock(TemplateService::class);
         $templateService
             ->shouldReceive("renderResponse")
-            ->with("AppBundle:Invitation:show-for-anonymous-user.html.twig")
+            ->with("AppBundle:Invitation:show-for-anonymous-user.html.twig", [], true)
             ->andReturn(new Response("Please log in."));
 
         // when

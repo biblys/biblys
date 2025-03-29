@@ -116,5 +116,5 @@ return function(
 
     return $templateService->renderResponseFromString($templateCode, [
         "sections" => $sections,
-    ]);
+    ], isPrivate: true);
 };

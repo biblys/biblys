@@ -194,6 +194,6 @@ class MailingController extends Controller
             "contacts" => $contacts,
             "export" => json_encode($exportableContacts),
             "pagination" => $pagination,
-        ]);
+        ], isPrivate: true);
     }
 }

@@ -122,7 +122,7 @@ class PaymentController extends Controller
             "payments" => $payments,
             "pages" => $pagination,
             "total" => $total,
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -243,7 +243,7 @@ class PaymentController extends Controller
                 "nameForCheckPayment" => $currentSite->getOption("name_for_check_payment"),
                 "orderWillBeShipped" => $orderWillBeShipped,
                 "orderWillBeCollected" => $orderWillBeCollected,
-            ]);
+            ], isPrivate: true);
         } catch (CannotFindPayableOrderException $exception) {
             throw new NotFoundHttpException($exception->getMessage(), $exception);
         }
