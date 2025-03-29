@@ -68,6 +68,8 @@ class TemplateServiceTest extends TestCase
         );
     }
 
+    /** renderResponse */
+
     /**
      * @throws LoaderError
      * @throws RuntimeError
@@ -84,8 +86,31 @@ class TemplateServiceTest extends TestCase
 
         // then
         $this->assertInstanceOf(Response::class, $response);
-        $this->assertEquals("Bienvenue", $response->getContent());
+        $this->assertEquals("no-cache, private", $response->headers->get("Cache-Control"));
+        $this->assertStringContainsString("Bienvenue", $response->getContent());
     }
+
+    /**
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws \Exception
+     */
+    public function testRenderResponseWhenIsPrivateIsTrue()
+    {
+        // given
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $templateService->renderResponse("AppBundle:Main:home.html.twig", isPrivate: true);
+
+        // then
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertEquals("no-store, private", $response->headers->get("Cache-Control"));
+        $this->assertStringContainsString("Bienvenue", $response->getContent());
+    }
+
+    /** renderResponseFromString */
 
     /**
      * @throws LoaderError
@@ -105,6 +130,29 @@ class TemplateServiceTest extends TestCase
 
         // then
         $this->assertInstanceOf(Response::class, $response);
+        $this->assertEquals("Hello <b>World</b>!", $response->getContent());
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws SyntaxError
+     * @throws \Exception
+     */
+    public function testRenderResponseFromStringWithIsPrivate()
+    {
+        // given
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $templateService->renderResponseFromString(
+            "Hello <b>{{ name }}</b>!",
+            ["name" => "World"],
+            isPrivate: true
+        );
+
+        // then
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertEquals("no-store, private", $response->headers->get("Cache-Control"));
         $this->assertEquals("Hello <b>World</b>!", $response->getContent());
     }
 }
