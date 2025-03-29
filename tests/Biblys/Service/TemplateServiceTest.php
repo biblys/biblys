@@ -18,9 +18,14 @@
 
 namespace Biblys\Service;
 
+use Biblys\Test\Helpers;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
 require_once __DIR__."/../../setUp.php";
@@ -29,8 +34,10 @@ class TemplateServiceTest extends TestCase
 {
 
     /**
-     * @throws SyntaxError
+     * @throws Exception
      * @throws LoaderError
+     * @throws PropelException
+     * @throws SyntaxError
      */
     public function testRenderFromString()
     {
@@ -59,5 +66,45 @@ class TemplateServiceTest extends TestCase
             "Hello <b>World</b>!",
             $response->getContent(),
         );
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws \Exception
+     */
+    public function testRenderResponse()
+    {
+        // given
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $templateService->renderResponse("AppBundle:Main:home.html.twig");
+
+        // then
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertEquals("Bienvenue", $response->getContent());
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws SyntaxError
+     * @throws \Exception
+     */
+    public function testRenderResponseFromString()
+    {
+        // given
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $templateService->renderResponseFromString(
+            "Hello <b>{{ name }}</b>!",
+            ["name" => "World"]
+        );
+
+        // then
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertEquals("Hello <b>World</b>!", $response->getContent());
     }
 }
