@@ -23,52 +23,61 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% block main %}
 
   <h1>
-    Permissions pour l'éditeur
+    Éditeur
     <a href="{{ path('publisher_edit', { id: publisher.id }) }}">
       {{ publisher.name }}
     </a>
   </h1>
 
-  <ul>
-    {% for right in publisher.rights %}
-      {% if right.user %}
-        <li>
-          {{ right.user.email }}
-          <a href="{{ path('publisher_rights_remove', {
-            publisherId: publisher.id,
-            userId: right.user.id
-          }) }}">
-            <span class="fa fa-trash-can"></span>
-          </a>
-        </li>
-      {% else %}
-        <li>Utilisateur Axys n° {{ right.axysAccountId }}</li>
-      {% endif %}
-    {% endfor %}
-  </ul>
+  <h2>Utilisateur·ices autorisé·es</h2>
 
-  <h2>Ajouter aux utilisateurs autorisés</h2>
-  <form
-      action="{{ path('publisher_rights_add', { id: publisher.id }) }}"
-      method="post"
-  >
-    <fieldset>
-      <p>
-        L'utilisateur pourra gérer cet éditeur et gérer tous les livres de son
-        catalogue.
-      </p>
-      <div class="form-group">
-        <input
-            type="email"
-            placeholder="Adresse e-mail de l'utilisateur"
-            aria-label="Adresse e-mail de l'utilisateur"
-            class="form-control"
-            name="user_email"
-            required
-        />
-      </div>
-      <button class="btn btn-primary btn-sm" type="submit">Ajouter</button>
-    </fieldset>
-  </form>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Utilisateur·ice</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for right in publisher.rights %}
+      <tr>
+        {% if right.user %}
+          <td>
+            <a href="{{ path('user_show', { id: right.user.id }) }}">
+              {{ right.user.email }}
+            </a>
+          </td>
+          <td>
+            <a href="{{ path('publisher_rights_remove', {
+              publisherId: publisher.id,
+              userId: right.user.id
+            }) }}" class="btn btn-danger btn-sm" title="Retirer les droits de {{ right.user.email }}">
+              <i class="fa-solid fa-user-minus"></i>
+              Retirer
+            </a>
+          </td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>
+          <form id="user-add" class="form-inline"
+                action="{{ path('publisher_rights_add', { id: publisher.id }) }}"
+                method="post"
+          >
+            <input type="email" class="form-control" id="email" aria-label="Adresse e-mail"
+            name="user_email" placeholder="Adresse e-mail" required>
+          </form>
+        </td>
+        <td>
+          <button form="user-add" type="submit" class="btn btn-primary btn-sm">
+            <i class="fa-solid fa-user-plus"></i>
+            Ajouter
+          </button>
+      </tr>
+    </tfoot>
+  </table>
 
 {% endblock %}
