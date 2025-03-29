@@ -50,7 +50,7 @@ class ShippingController extends Controller
     {
         $currentUser->authAdmin();
 
-        return $templateService->renderResponse("AppBundle:Shipping:options.html.twig");
+        return $templateService->renderResponse("AppBundle:Shipping:options.html.twig", isPrivate: true);
     }
 
     /**
@@ -70,7 +70,8 @@ class ShippingController extends Controller
 
         return $templateService->renderResponse(
             "AppBundle:Shipping:countries.html.twig",
-            ["countries" => $countries]
+            ["countries" => $countries],
+            isPrivate: true,
         );
     }
 
@@ -91,7 +92,8 @@ class ShippingController extends Controller
 
         return $templateService->renderResponse(
             "AppBundle:Shipping:zones.html.twig",
-            ["zones" => $zones]
+            ["zones" => $zones],
+            isPrivate: true,
         );
     }
 

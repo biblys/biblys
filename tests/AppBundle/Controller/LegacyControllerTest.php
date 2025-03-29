@@ -67,7 +67,7 @@ class LegacyControllerTest extends TestCase
             ->with("AppBundle:Legacy:default.html.twig", [
                 "title" => null,
                 "content" => '<p>Bientôt…</p>',
-            ])
+            ], false)
             ->andReturn(new Response("bientôt"));
 
         // when

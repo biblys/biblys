@@ -226,6 +226,6 @@ class PeopleController extends Controller
             'people' => $people,
             'error' => $error,
             'form' => $form->createView(),
-        ]);
+        ], isPrivate: true);
     }
 }

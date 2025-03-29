@@ -233,7 +233,7 @@ class PublisherController extends Controller
             'publisher' => $publisher,
             'error' => $error,
             'form' => $form->createView(),
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -288,13 +288,12 @@ class PublisherController extends Controller
             return new RedirectResponse($url);
         }
 
-        return $templateService->renderResponse(
-            'AppBundle:Publisher:delete.html.twig', [
-                'publisher' => $publisher,
-                'collections' => $collections,
-                'articles' => $articles,
-                'error' => $error,
-            ]
+        return $templateService->renderResponse("AppBundle:Publisher:delete.html.twig", [
+                "publisher" => $publisher,
+                "collections" => $collections,
+                "articles" => $articles,
+                "error" => $error,
+            ], isPrivate: true
         );
     }
 
@@ -312,7 +311,8 @@ class PublisherController extends Controller
 
         return $templateService->renderResponse(
             'AppBundle:Publisher:deleted.html.twig',
-            ['name' => $name]
+            ['name' => $name],
+            isPrivate: true,
         );
     }
 
@@ -334,9 +334,9 @@ class PublisherController extends Controller
             throw new NotFoundException("Publisher $id not found.");
         }
 
-        return $templateService->renderResponse('AppBundle:Publisher:rights.html.twig', [
-            'publisher' => $publisher,
-        ]);
+        return $templateService->renderResponse("AppBundle:Publisher:rights.html.twig", [
+            "publisher" => $publisher,
+        ], isPrivate: true);
     }
 
     /**
@@ -466,10 +466,10 @@ class PublisherController extends Controller
         $sm = new SupplierManager();
         $suppliers = $sm->getAll([], ['order' => 'supplier_name']);
 
-        return $templateService->renderResponse('AppBundle:Publisher:suppliers.html.twig', [
-            'publisher' => $publisher,
-            'suppliers' => $suppliers,
-        ]);
+        return $templateService->renderResponse("AppBundle:Publisher:suppliers.html.twig", [
+            "publisher" => $publisher,
+            "suppliers" => $suppliers,
+        ], isPrivate: true);
     }
 
     /**

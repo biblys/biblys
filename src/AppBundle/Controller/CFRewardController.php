@@ -68,7 +68,7 @@ class CFRewardController extends Controller
         return $this->render('AppBundle:CFReward:list.html.twig', [
             "campaign" => $campaign,
             "rewards" => $rewards
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -126,7 +126,7 @@ class CFRewardController extends Controller
 
         return $this->render('AppBundle:CFReward:new.html.twig', [
             'reward' => $reward
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -183,7 +183,7 @@ class CFRewardController extends Controller
 
         return $this->render('AppBundle:CFReward:edit.html.twig', [
             'reward' => $reward
-        ]);
+        ], isPrivate: true);
     }
 
     /**

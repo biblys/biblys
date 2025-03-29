@@ -138,7 +138,7 @@ class InventoryController extends Controller
         return $this->render('AppBundle:Inventory:show.html.twig', [
             "inventory" => $inventory,
             "items" => $items,
-        ]);
+        ], isPrivate: true);
     }
 
     // Import actual stock into inventory
@@ -235,7 +235,7 @@ class InventoryController extends Controller
             "total" => $total,
             "progress" => $progress,
             "nextStepUrl" => $nextStepUrl,
-        ]);
+        ], isPrivate: true);
     }
 
     // Remove this item and all copies completely

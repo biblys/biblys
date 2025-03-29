@@ -101,7 +101,7 @@ class UserController extends Controller
             "users" => $users->getData(),
             "pages" => $pages,
             "query" => $queryParams->get("q"),
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -125,7 +125,7 @@ class UserController extends Controller
 
         return $templateService->renderResponse("AppBundle:User:show.html.twig", [
             "user" => $user,
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -193,7 +193,7 @@ class UserController extends Controller
         $response = $this->render("AppBundle:User:login.html.twig", [
             "loginWithAxysUrl" => $loginWithAxysUrl,
             "returnUrl" => $returnUrl,
-        ]);
+        ], isPrivate: true);
         $response->headers->set("X-Robots-Tag", "noindex, nofollow");
 
         return $response;
@@ -436,7 +436,7 @@ class UserController extends Controller
         return $templateService->renderResponse("AppBundle:User:account.html.twig", [
             "user_email" => $currentUser->getUser()->getEmail(),
             "has_axys_method" => $hasAxysMethod,
-        ]);
+        ], isPrivate: true);
     }
 
     public function logout(CurrentSession $session): Response

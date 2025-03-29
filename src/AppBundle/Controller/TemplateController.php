@@ -52,7 +52,7 @@ class TemplateController extends Controller
 
         return $this->render('AppBundle:Template:index.html.twig', [
             'templates' => Template::getAll(),
-        ]);
+        ], isPrivate: true);
     }
 
     /**
@@ -76,7 +76,7 @@ class TemplateController extends Controller
 
         return $this->render('AppBundle:Template:edit.html.twig', [
             'template' => $template,
-        ]);
+        ], isPrivate: true);
     }
 
     /**
