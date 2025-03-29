@@ -187,7 +187,7 @@ class EntityFactory
         int    $fee = 100,
     ): Shipping
     {
-        $shipping = ModelFactory::createShippingFee(
+        $shipping = ModelFactory::createShippingOption(
             type: $type,
             mode: $mode,
             fee: $fee,

@@ -155,7 +155,7 @@ class ShippingFeeTest extends TestCase
     public function testDeleteWithoutRelatedOrders(): void
     {
         // given
-        $shippingFee = ModelFactory::createShippingFee();
+        $shippingFee = ModelFactory::createShippingOption();
 
         // when
         $shippingFee->delete();
@@ -171,8 +171,8 @@ class ShippingFeeTest extends TestCase
     public function testDeleteWithRelatedOrders(): void
     {
         // given
-        $shippingFee = ModelFactory::createShippingFee();
-        ModelFactory::createOrder(shippingFee: $shippingFee);
+        $shippingFee = ModelFactory::createShippingOption();
+        ModelFactory::createOrder(shippingOption: $shippingFee);
 
         // when
         $exception = Helpers::runAndCatchException(fn() => $shippingFee->delete());

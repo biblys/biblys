@@ -181,7 +181,7 @@ class ConfigTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($isEnabled);
     }
 
-    /** isAxysEnabled */
+    /** isMondialRelayEnabled */
 
     /**
      * @throws Exception
@@ -211,6 +211,42 @@ class ConfigTest extends PHPUnit\Framework\TestCase
 
         // then
         $isEnabled = $config->isMondialRelayEnabled();
+
+        // then
+        $this->assertTrue($isEnabled);
+    }
+
+    /** isStripeEnabled */
+
+    /**
+     * @throws Exception
+     */
+    public function testIsStripeEnabledWhenDisabled(): void
+    {
+        // given
+        $config = new Config([]);
+
+        // then
+        $isEnabled = $config->isStripeEnabled();
+
+        // then
+        $this->assertFalse($isEnabled);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testIsStripeEnabledWhenEnabled(): void
+    {
+        // given
+        $config = new Config(["stripe"  => [
+            "public_key" => "abcd",
+            "secret_key" => "1234",
+            "endpoint_secret" => "!Ù€ô",
+        ]]);
+
+        // then
+        $isEnabled = $config->isStripeEnabled();
 
         // then
         $this->assertTrue($isEnabled);

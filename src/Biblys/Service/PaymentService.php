@@ -30,11 +30,9 @@ use Payplug\Exception\ConfigurationNotSetException;
 use Payplug\Exception\HttpException;
 use Payplug\Payplug;
 use Propel\Runtime\Exception\PropelException;
-use Stripe\Checkout\Session;
+use Stripe\Customer as StripeCustomer;
 use Stripe\Exception\ApiErrorException;
-use Stripe\Price;
-use Stripe\Product;
-use Stripe\Stripe;
+use Stripe\StripeClient;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class PaymentService
@@ -44,6 +42,7 @@ class PaymentService
         private readonly CurrentSite   $currentSite,
         private readonly UrlGenerator  $urlGenerator,
         private readonly LoggerService $loggerService,
+        private readonly ?StripeClient $stripe = null,
     )
     {
     }
@@ -79,24 +78,9 @@ class PaymentService
      */
     public function createStripePaymentForOrder(Order $order): Payment
     {
-        $stripe = $this->config->get('stripe');
-        if (!$stripe) {
-            throw new InvalidConfigurationException("Stripe is not configured.");
+        if (!$this->stripe) {
+            throw new InvalidConfigurationException("Stripe n’est pas configuré.");
         }
-
-        if (empty($stripe["public_key"])) {
-            throw new InvalidConfigurationException("Missing Stripe public key.");
-        }
-
-        if (empty($stripe["secret_key"])) {
-            throw new InvalidConfigurationException("Missing Stripe secret key.");
-        }
-
-        if (empty($stripe["endpoint_secret"])) {
-            throw new InvalidConfigurationException("Missing Stripe endpoint secret.");
-        }
-
-        Stripe::setApiKey($stripe['secret_key']);
 
         // Add each copy to Stripe line items
         $stockItems = $order->getStockItems();
@@ -105,8 +89,8 @@ class PaymentService
          * @return array
          * @throws ApiErrorException|PropelException
          */ function (Stock $stockItem) {
-            $product = Product::create(["name" => $stockItem->getArticle()->getTitle()]);
-            $price = Price::create([
+            $product = $this->stripe->products->create(["name" => $stockItem->getArticle()->getTitle()]);
+            $price = $this->stripe->prices->create([
                 "product" => $product->id,
                 "unit_amount" => $stockItem->getSellingPrice() ?? 0,
                 "currency" => "EUR",
@@ -121,8 +105,8 @@ class PaymentService
         // Add shipping cost as a line item
         $shippingCost = $order->getShippingCost();
         if ($shippingCost && $shippingCost !== 0) {
-            $product = Product::create(["name" => "Frais de port"]);
-            $price = Price::create([
+            $product = $this->stripe->products->create(["name" => "Frais de port"]);
+            $price = $this->stripe->prices->create([
                 "product" => $product->id,
                 "unit_amount" => $shippingCost,
                 "currency" => "EUR",
@@ -135,7 +119,7 @@ class PaymentService
             throw new Exception("Stripe's amount to pay ($amountToPay) does not match order's amount to be paid (" . $order->getAmountTobepaid() . ").");
         }
 
-        $session = Session::create([
+        $session = $this->stripe->checkout->sessions->create([
             'payment_method_types' => ['card'],
             'line_items' => $lineItems,
             'mode' => 'payment',
@@ -244,5 +228,25 @@ class PaymentService
             );
             throw $exception;
         }
+    }
+
+    /**
+     * @throws ApiErrorException
+     * @throws InvalidConfigurationException
+     */
+    public function getOrCreateStripeCustomerForOrder(Order $order): StripeCustomer
+    {
+        if (!$this->stripe) {
+            throw new InvalidConfigurationException("Stripe n’est pas configuré.");
+        }
+
+        $searchResults = $this->stripe->customers->search(["query" => "metadata['customer_id']:'" . $order->getCustomerId()."'"]);
+        if (count($searchResults->data) === 0) {
+            return $this->stripe->customers->create([
+                "metadata" => ["customer_id" => $order->getCustomerId()],
+            ]);
+        }
+
+        return $this->stripe->customers->retrieve($searchResults->data[0]->id);
     }
 }

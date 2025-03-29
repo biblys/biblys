@@ -201,8 +201,8 @@ class OrderTest extends TestCase
     public function testGetTotalAmountWithShipping(): void
     {
         // given
-        $shippingFee = ModelFactory::createShippingFee(fee: 789);
-        $order = ModelFactory::createOrder(shippingFee: $shippingFee);
+        $shippingFee = ModelFactory::createShippingOption(fee: 789);
+        $order = ModelFactory::createOrder(shippingOption: $shippingFee);
         ModelFactory::createStockItem(order: $order, sellingPrice: 123);
         ModelFactory::createStockItem(order: $order, sellingPrice: 456);
 
