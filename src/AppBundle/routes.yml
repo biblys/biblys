@@ -533,6 +533,11 @@ publisher_admin:
   path: /admin/publishers
   controller: AppBundle\Controller\PublisherController::adminAction
 
+publisher_new:
+  methods: [GET,POST]
+  path: /admin/publishers/new
+  controller: AppBundle\Controller\PublisherController::newAction
+
 publisher_edit:
   path: /admin/publisher/{id}/edit
   controller: AppBundle\Controller\PublisherController::editAction
