@@ -529,6 +529,10 @@ publisher_show:
   path: /editeur/{slug}
   controller: AppBundle\Controller\PublisherController::showAction
 
+publisher_admin:
+  path: /admin/publishers
+  controller: AppBundle\Controller\PublisherController::adminAction
+
 publisher_edit:
   path: /admin/publisher/{id}/edit
   controller: AppBundle\Controller\PublisherController::editAction
