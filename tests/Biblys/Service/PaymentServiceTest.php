@@ -24,8 +24,10 @@ use Biblys\Test\ModelFactory;
 use DateTime;
 use Exception;
 use Mockery;
+use Model\Order;
 use Model\OrderQuery;
 use Model\Payment;
+use Model\PaymentQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Stripe\Customer;
@@ -169,140 +171,11 @@ class PaymentServiceTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
-    public function testCreateStripePaymentForOrder()
-    {
-        // given
-        $config = new Config();
-        $order = ModelFactory::createOrder(amountToBePaid: 999);
-        $article = ModelFactory::createArticle(title: "Stripe Article");
-        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 999);
-
-        $currentSite = Mockery::mock(CurrentSite::class);
-        $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $loggerService = Mockery::mock(LoggerService::class);
-
-        $stripe = Mockery::mock(StripeClient::class);
-        $productService = Mockery::mock(ProductService::class);
-        $productService->expects("create")->with(["name" => "Stripe Article"])->andReturn((object)["id" => 5678]);
-        $priceService = Mockery::mock(PriceService::class);
-        $priceService->expects("create")->with([
-            "product" => 5678,
-            "unit_amount" => 999,
-            "currency" => "EUR",
-        ])->andReturn((object)["id" => "6789"]);
-        $session = Mockery::mock(Session::class);
-        $session->expects("offsetGet")->with("id")->andReturn(1234);
-        $sessionService = Mockery::mock(SessionService::class);
-        $sessionService->expects("create")->with([
-            "payment_method_types" => ["card"],
-            "line_items" => [
-                [
-                    "price" => "6789",
-                    "quantity" => 1,
-                ],
-            ],
-            "mode" => "payment",
-            "success_url" => "https://www.biblys.fr/order/order-slug?payed=1",
-            "cancel_url" => "https://www.biblys.fr/payment/order-slug",
-            "customer_email" => "silas.coade@example.net",
-        ])->andReturn($session);
-        $checkoutServiceFactory = Mockery::mock(CheckoutServiceFactory::class);
-        $checkoutServiceFactory->sessions = $sessionService;
-        $stripe->expects("getService")->with("products")->andReturn($productService);
-        $stripe->expects("getService")->with("prices")->andReturn($priceService);
-        $stripe->expects("getService")->with("checkout")->andReturn($checkoutServiceFactory);
-
-        $paymentService = new PaymentService($config, $currentSite, $urlGenerator, $loggerService, $stripe);
-
-        // when
-        $payment = $paymentService->createStripePaymentForOrder($order);
-
-        // then
-        $this->assertInstanceOf(Payment::class, $payment);
-        $this->assertEquals($order, $payment->getOrder());
-        $this->assertEquals("stripe", $payment->getMode());
-        $this->assertEquals(999, $payment->getAmount());
-        $this->assertEquals(1234, $payment->getProviderId());
-        $this->assertNull($payment->getExecuted());
-    }
-
-    /**
-     * @throws PropelException
-     * @throws Exception
-     */
-    public function testCreateStripePaymentForOrderWithShipping()
-    {
-        // given
-        $config = new Config();
-        $order = ModelFactory::createOrder(amountToBePaid: 1498, shippingCost: 499);
-        $article = ModelFactory::createArticle(title: "Stripe Article");
-        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 999);
-
-        $currentSite = Mockery::mock(CurrentSite::class);
-        $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $loggerService = Mockery::mock(LoggerService::class);
-
-        $stripe = Mockery::mock(StripeClient::class);
-        $productService = Mockery::mock(ProductService::class);
-        $productService->expects("create")->with([
-            "name" => "Stripe Article",
-        ])->andReturn((object)["id" => 5678]);
-        $productService->expects("create")->with(["name" => "Frais de port"])->andReturn((object)["id" => 9123]);
-        $priceService = Mockery::mock(PriceService::class);
-        $priceService->expects("create")->with([
-            "product" => 5678,
-            "unit_amount" => 999,
-            "currency" => "EUR",
-        ])->andReturn((object)["id" => "6789"]);
-        $priceService->expects("create")->with([
-            "product" => 9123,
-            "unit_amount" => 499,
-            "currency" => "EUR",
-        ])->andReturn((object)["id" => "3456"]);
-        $session = Mockery::mock(Session::class);
-        $session->expects("offsetGet")->with("id")->andReturn(1234);
-        $sessionService = Mockery::mock(SessionService::class);
-        $sessionService->expects("create")->with([
-            "payment_method_types" => ["card"],
-            "line_items" => [
-                [
-                    "price" => "6789",
-                    "quantity" => 1,
-                ], [
-                    "price" => "3456",
-                    "quantity" => 1,
-                ],
-            ],
-            "mode" => "payment",
-            "success_url" => "https://www.biblys.fr/order/order-slug?payed=1",
-            "cancel_url" => "https://www.biblys.fr/payment/order-slug",
-            "customer_email" => "silas.coade@example.net",
-        ])->andReturn($session);
-        $checkoutServiceFactory = Mockery::mock(CheckoutServiceFactory::class);
-        $checkoutServiceFactory->sessions = $sessionService;
-        $stripe->expects("getService")->with("products")->andReturn($productService);
-        $stripe->expects("getService")->with("prices")->andReturn($priceService);
-        $stripe->expects("getService")->with("checkout")->andReturn($checkoutServiceFactory);
-
-        $paymentService = new PaymentService($config, $currentSite, $urlGenerator, $loggerService, $stripe);
-
-        // when
-        $payment = $paymentService->createStripePaymentForOrder($order);
-
-        // then
-        $this->assertInstanceOf(Payment::class, $payment);
-    }
-
-    /** getOrCreateStripeCustomer */
-
-    /**
-     * @throws Exception
-     */
-    public function testGetOrCreateStripeCustomerForExistingCustomer(): void
+    public function testCreateStripePaymentForOrderWithExistingCustomer()
     {
         // given
         $customer = ModelFactory::createCustomer();
-        $order = ModelFactory::createOrder(customer: $customer);
+        $order = ModelFactory::createOrder(customer: $customer, amountToBePaid: 999);
 
         $config = new Config();
         $currentSite = Mockery::mock(CurrentSite::class);
@@ -311,26 +184,33 @@ class PaymentServiceTest extends TestCase
 
         $expectedSearchQuery = "metadata['customer_id']:'{$customer->getId()}'";
         $returnedSearchResults = [new SearchResult("cus_1234")];
-        $stripeClient = $this->_mockStripeClient($expectedSearchQuery, $returnedSearchResults);
+        $stripeClient = $this->_mockStripeClient($order, $expectedSearchQuery, $returnedSearchResults);
 
         $paymentService = new PaymentService($config, $currentSite, $urlGenerator, $loggerService, $stripeClient);
 
         // when
-        $customer = $paymentService->getOrCreateStripeCustomerForOrder($order);
+        $clientSecret = $paymentService->createStripePaymentForOrder($order);
 
         // then
-        $this->assertInstanceof(Customer::class, $customer);
-        $this->assertEquals("cus_1234", $customer->id);
+        $payment = PaymentQuery::create()->filterByOrder($order)->findOne();
+        $this->assertInstanceOf(Payment::class, $payment);
+        $this->assertEquals($order, $payment->getOrder());
+        $this->assertEquals("stripe", $payment->getMode());
+        $this->assertEquals(999, $payment->getAmount());
+        $this->assertEquals("pi_1234", $payment->getProviderId());
+        $this->assertNull($payment->getExecuted());
+        $this->assertEquals("pi_1234_secret_abcd", $clientSecret);
     }
 
     /**
+     * @throws PropelException
      * @throws Exception
      */
-    public function testGetOrCreateStripeCustomerForNewCustomer(): void
+    public function testCreateStripePaymentForOrderWithNewCustomer()
     {
         // given
         $customer = ModelFactory::createCustomer();
-        $order = ModelFactory::createOrder(customer: $customer);
+        $order = ModelFactory::createOrder(customer: $customer, amountToBePaid: 999);
 
         $config = new Config();
         $currentSite = Mockery::mock(CurrentSite::class);
@@ -340,60 +220,27 @@ class PaymentServiceTest extends TestCase
         $expectedSearchQuery = "metadata['customer_id']:'{$customer->getId()}'";
         $returnedSearchResults = [];
         $stripeClient = $this->_mockStripeClient(
-            $expectedSearchQuery, $returnedSearchResults, expectedCustomerIdForCreation: $order->getCustomerId()
+            $order, $expectedSearchQuery, $returnedSearchResults, expectedCustomerIdForCreation: $order->getCustomerId()
         );
 
-
         $paymentService = new PaymentService($config, $currentSite, $urlGenerator, $loggerService, $stripeClient);
 
         // when
-        $customer = $paymentService->getOrCreateStripeCustomerForOrder($order);
+        $clientSecret = $paymentService->createStripePaymentForOrder($order);
 
         // then
-        $this->assertInstanceof(Customer::class, $customer);
-        $this->assertEquals("cus_1234", $customer->id);
-    }
-
-    /** createStripePaymentIntent */
-
-    /**
-     * @throws InvalidConfigurationException
-     * @throws PropelException
-     */
-    public function testCreatePaymentIntent(): void
-    {
-        // given
-        $order = ModelFactory::createOrder(amountToBePaid: 999);
-        $stripeCustomer = new Customer("cus_1234");
-
-        $config = new Config();
-        $currentSite = Mockery::mock(CurrentSite::class);
-        $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $loggerService = Mockery::mock(LoggerService::class);
-
-        $stripeClient = Mockery::mock(StripeClient::class);
-        $paymentIntentService = Mockery::mock(PaymentIntentService::class);
-        $paymentIntentService->expects("create")->with([
-            "amount" => 999,
-            "customer"=> "cus_1234",
-            "currency" => "eur",
-            "payment_method_types" => ["card"],
-            "metadata" => [
-                "order_id" => $order->getId(),
-            ],
-        ])->andReturn(new PaymentIntent("pi_1234"));
-        $stripeClient->expects("getService")->with("paymentIntents")->andReturn($paymentIntentService);
-
-        $paymentService = new PaymentService($config, $currentSite, $urlGenerator, $loggerService, $stripeClient);
-
-        // when
-        $paymentIntent = $paymentService->createStripePaymentIntentForOrder($order, $stripeCustomer);
-
-        // then
-        $this->assertInstanceof(PaymentIntent::class, $paymentIntent);
+        $payment = PaymentQuery::create()->filterByOrder($order)->findOne();
+        $this->assertInstanceOf(Payment::class, $payment);
+        $this->assertEquals($order, $payment->getOrder());
+        $this->assertEquals("stripe", $payment->getMode());
+        $this->assertEquals(999, $payment->getAmount());
+        $this->assertEquals("pi_1234", $payment->getProviderId());
+        $this->assertNull($payment->getExecuted());
+        $this->assertEquals("pi_1234_secret_abcd", $clientSecret);
     }
 
     private function _mockStripeClient(
+        Order $order,
         string $expectedSearchQuery,
         array  $returnedSearchResults,
         ?int   $expectedCustomerIdForCreation = null
@@ -412,6 +259,20 @@ class PaymentServiceTest extends TestCase
         }
 
         $stripeClient->expects("getService")->with("customers")->andReturn($customerService);
+
+        $paymentIntentService = Mockery::mock(PaymentIntentService::class);
+        $paymentIntent = new PaymentIntent("pi_1234");
+        $paymentIntent->client_secret = "pi_1234_secret_abcd";
+        $paymentIntentService->expects("create")->with([
+            "amount" => 999,
+            "currency" => "eur",
+            "customer"=> "cus_1234",
+            "payment_method_types" => ["card"],
+            "metadata" => [
+                "order_id" => $order->getId(),
+            ],
+        ])->andReturn($paymentIntent);
+        $stripeClient->expects("getService")->with("paymentIntents")->andReturn($paymentIntentService);
 
         return $stripeClient;
     }
