@@ -29,10 +29,10 @@ use Model\Payment;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Stripe\Customer;
+use Stripe\PaymentIntent;
 use Stripe\SearchResult;
 use Stripe\Service\CustomerService;
-use Stripe\Service\PriceService;
-use Stripe\Service\ProductService;
+use Stripe\Service\PaymentIntentService;
 use Stripe\StripeClient;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
@@ -352,6 +352,45 @@ class PaymentServiceTest extends TestCase
         // then
         $this->assertInstanceof(Customer::class, $customer);
         $this->assertEquals("cus_1234", $customer->id);
+    }
+
+    /** createStripePaymentIntent */
+
+    /**
+     * @throws InvalidConfigurationException
+     * @throws PropelException
+     */
+    public function testCreatePaymentIntent(): void
+    {
+        // given
+        $order = ModelFactory::createOrder(amountToBePaid: 999);
+        $stripeCustomer = new Customer("cus_1234");
+
+        $config = new Config();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $loggerService = Mockery::mock(LoggerService::class);
+
+        $stripeClient = Mockery::mock(StripeClient::class);
+        $paymentIntentService = Mockery::mock(PaymentIntentService::class);
+        $paymentIntentService->expects("create")->with([
+            "amount" => 999,
+            "customer"=> "cus_1234",
+            "currency" => "eur",
+            "payment_method_types" => ["card"],
+            "metadata" => [
+                "order_id" => $order->getId(),
+            ],
+        ])->andReturn(new PaymentIntent("pi_1234"));
+        $stripeClient->expects("getService")->with("paymentIntents")->andReturn($paymentIntentService);
+
+        $paymentService = new PaymentService($config, $currentSite, $urlGenerator, $loggerService, $stripeClient);
+
+        // when
+        $paymentIntent = $paymentService->createStripePaymentIntentForOrder($order, $stripeCustomer);
+
+        // then
+        $this->assertInstanceof(PaymentIntent::class, $paymentIntent);
     }
 
     private function _mockStripeClient(
