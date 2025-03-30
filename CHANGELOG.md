@@ -9,6 +9,7 @@
 - Les "tranches de frais de port" ont été renommées "option d'expédition".
 - Des pages ont été ajoutées à l'administration pour afficher les pays de
   destination et les différentes zones tarifaires pour l'expédition.
+- Un outil "Éditeurs" a été ajouté à l'administration.
 - Une option de site `home_posts_limit` a été ajoutée pour limiter le nombre de
   billets de blog affichés sur la page d'accueil.
 - Il est désormais possible d'insérer une espace insécable avec la combinaison
