@@ -28,7 +28,6 @@ use Biblys\Service\TemplateService;
 use CollectionManager;
 use Exception;
 use Framework\Controller;
-use Model\BookCollectionQuery;
 use Model\PublisherQuery;
 use Model\Right;
 use Model\RightQuery;
@@ -219,7 +218,6 @@ class PublisherController extends Controller
 
                 if ($data['logo'] !== null) {
                     $imagesService->addImageFor($publisher->getModel(), $data['logo']);
-                    $updated->addLogo($data['logo']);
                 }
             } catch (Exception $e) {
                 $error = $e->getMessage();
@@ -291,11 +289,11 @@ class PublisherController extends Controller
         }
 
         return $templateService->renderResponse("AppBundle:Publisher:delete.html.twig", [
-                "publisher" => $publisher,
-                "collections" => $collections,
-                "articles" => $articles,
-                "error" => $error,
-            ], isPrivate: true
+            "publisher" => $publisher,
+            "collections" => $collections,
+            "articles" => $articles,
+            "error" => $error,
+        ], isPrivate: true
         );
     }
 
