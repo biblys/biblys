@@ -24,7 +24,6 @@ use Exception;
 use Model\Order;
 use Model\OrderQuery;
 use Model\Payment;
-use Model\Stock;
 use Payplug\Exception\ConfigurationException;
 use Payplug\Exception\ConfigurationNotSetException;
 use Payplug\Exception\HttpException;
@@ -76,67 +75,66 @@ class PaymentService
      * @throws InvalidConfigurationException
      * @throws PropelException
      * @throws Exception
+     * @returns string the payement intent client secret returned by Stripe
      */
-    public function createStripePaymentForOrder(Order $order): Payment
+    public function createStripePaymentForOrder(Order $order): string
     {
         if (!$this->stripe) {
             throw new InvalidConfigurationException("Stripe n’est pas configuré.");
         }
 
-        // Add each copy to Stripe line items
-        $stockItems = $order->getStockItems();
-        $lineItems = array_map(/**
-         * @param Stock $stockItem
-         * @return array
-         * @throws ApiErrorException|PropelException
-         */ function (Stock $stockItem) {
-            $product = $this->stripe->products->create(["name" => $stockItem->getArticle()->getTitle()]);
-            $price = $this->stripe->prices->create([
-                "product" => $product->id,
-                "unit_amount" => $stockItem->getSellingPrice() ?? 0,
-                "currency" => "EUR",
-            ]);
-            return ["quantity" => 1, "price" => $price->id];
-        }, $stockItems->getArrayCopy());
-
-        $amountToPay = array_reduce($stockItems->getArrayCopy(), function ($total, Stock $current) {
-            return $total + $current->getSellingPrice();
-        }, 0);
-
-        // Add shipping cost as a line item
-        $shippingCost = $order->getShippingCost();
-        if ($shippingCost && $shippingCost !== 0) {
-            $product = $this->stripe->products->create(["name" => "Frais de port"]);
-            $price = $this->stripe->prices->create([
-                "product" => $product->id,
-                "unit_amount" => $shippingCost,
-                "currency" => "EUR",
-            ]);
-            $lineItems[] = ["quantity" => 1, "price" => $price->id];
-            $amountToPay += $shippingCost;
-        }
-
-        if ($amountToPay !== (int)$order->getAmountTobepaid()) {
-            throw new Exception("Stripe's amount to pay ($amountToPay) does not match order's amount to be paid (" . $order->getAmountTobepaid() . ").");
-        }
-
-        $session = $this->stripe->checkout->sessions->create([
-            'payment_method_types' => ['card'],
-            'line_items' => $lineItems,
-            'mode' => 'payment',
-            'success_url' => 'https://' . $_SERVER["HTTP_HOST"] . '/order/' . $order->getSlug() . '?payed=1',
-            'cancel_url' => 'https://' . $_SERVER["HTTP_HOST"] . '/payment/' . $order->getSlug(),
-            'customer_email' => $order->getEmail(),
-        ]);
+        $customer = $this->_getOrCreateStripeCustomerForOrder($order);
+        $paymentIntent = $this->_createStripePaymentIntentForOrder($order, $customer);
 
         $payment = new Payment();
         $payment->setOrder($order);
         $payment->setMode("stripe");
-        $payment->setAmount($amountToPay);
-        $payment->setProviderId($session["id"]);
+        $payment->setAmount($order->getAmountTobepaid());
+        $payment->setProviderId($paymentIntent->id);
         $payment->save();
 
-        return $payment;
+        return $paymentIntent->client_secret;
+    }
+
+    /**
+     * @throws ApiErrorException
+     * @throws InvalidConfigurationException
+     */
+    private function _getOrCreateStripeCustomerForOrder(Order $order): StripeCustomer
+    {
+        if (!$this->stripe) {
+            throw new InvalidConfigurationException("Stripe n’est pas configuré.");
+        }
+
+        $searchResults = $this->stripe->customers->search(["query" => "metadata['customer_id']:'" . $order->getCustomerId()."'"]);
+        if (count($searchResults->data) === 0) {
+            return $this->stripe->customers->create([
+                "metadata" => ["customer_id" => $order->getCustomerId()],
+            ]);
+        }
+
+        return $this->stripe->customers->retrieve($searchResults->data[0]->id);
+    }
+
+    /**
+     * @throws InvalidConfigurationException
+     * @throws ApiErrorException
+     */
+    private function _createStripePaymentIntentForOrder(Order $order, StripeCustomer $customer): PaymentIntent
+    {
+        if (!$this->stripe) {
+            throw new InvalidConfigurationException("Stripe n’est pas configuré.");
+        }
+
+        return $this->stripe->paymentIntents->create([
+            "amount" => $order->getAmountTobepaid(),
+            "currency" => "eur",
+            "customer" => $customer->id,
+            "payment_method_types" => ["card"],
+            "metadata" => [
+                "order_id" => $order->getId(),
+            ],
+        ]);
     }
 
     /**
@@ -230,47 +228,5 @@ class PaymentService
             );
             throw $exception;
         }
-    }
-
-    /**
-     * @throws ApiErrorException
-     * @throws InvalidConfigurationException
-     */
-    public function getOrCreateStripeCustomerForOrder(Order $order): StripeCustomer
-    {
-        if (!$this->stripe) {
-            throw new InvalidConfigurationException("Stripe n’est pas configuré.");
-        }
-
-        $searchResults = $this->stripe->customers->search(["query" => "metadata['customer_id']:'" . $order->getCustomerId()."'"]);
-        if (count($searchResults->data) === 0) {
-            return $this->stripe->customers->create([
-                "metadata" => ["customer_id" => $order->getCustomerId()],
-            ]);
-        }
-
-        return $this->stripe->customers->retrieve($searchResults->data[0]->id);
-    }
-
-    /**
-     * @throws InvalidConfigurationException
-     * @throws ApiErrorException
-     */
-    public function createStripePaymentIntentForOrder(Order $order, StripeCustomer $customer): PaymentIntent
-    {
-        if (!$this->stripe) {
-            throw new InvalidConfigurationException("Stripe n’est pas configuré.");
-        }
-
-        return $this->stripe->paymentIntents->create([
-            "amount" => $order->getAmountTobepaid(),
-            "currency" => "eur",
-            "customer" => $customer->id,
-            "payment_method_types" => ["card"],
-            "metadata" => [
-                "order_id" => $order->getId(),
-            ],
-        ]);
-
     }
 }
