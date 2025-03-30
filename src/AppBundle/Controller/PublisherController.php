@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpUnused */
+
 /*
  * Copyright (C) 2024 Clément Latzarus
  *
@@ -28,13 +29,13 @@ use Biblys\Service\TemplateService;
 use CollectionManager;
 use Exception;
 use Framework\Controller;
+use Model\Publisher;
 use Model\PublisherQuery;
 use Model\Right;
 use Model\RightQuery;
 use Model\User;
 use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
-use Publisher;
 use PublisherManager;
 use SupplierManager;
 use InvalidArgumentException;
@@ -43,6 +44,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -159,8 +161,49 @@ class PublisherController extends Controller
     }
 
     /**
+     * @route GET/POST /admin/publishers/new
+     *
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
+     */
+    public function newAction(
+        Request         $request,
+        CurrentUser     $currentUser,
+        ImagesService   $imagesService,
+        URLGenerator    $urlGenerator,
+        TemplateService $templateService,
+    ): Response
+    {
+        $currentUser->authAdmin();
+        $form = $this->_getPublisherForm();
+
+        if ($request->getMethod() === "POST") {
+
+            try {
+                $publisher = $this->_handleRequest($form, $request, $imagesService);
+            } catch (Exception $exception) {
+                return $templateService->renderResponse('AppBundle:Publisher:new.html.twig', [
+                    "form" => $form->createView(),
+                    "error" => $exception->getMessage(),
+                ], isPrivate: true);
+            }
+
+            $url = $urlGenerator->generate("publisher_show", ["slug" => $publisher->getUrl()]);
+            return new RedirectResponse($url);
+        }
+
+        return $templateService->renderResponse('AppBundle:Publisher:new.html.twig', [
+            "form" => $form->createView(),
+            "error" => null,
+        ], isPrivate: true);
+    }
+
+    /**
      * Edit a publisher
-     * /admin/publisher/{id}/edit.
+     * @route GET/POST /admin/publisher/{id}/edit.
      *
      * @throws LoaderError
      * @throws PropelException
@@ -179,60 +222,37 @@ class PublisherController extends Controller
     {
         $currentUser->authAdmin();
 
-        $pm = new PublisherManager();
-
-        /** @var Publisher $publisher */
-        $publisher = $pm->get(['publisher_id' => $id]);
+        $publisher = PublisherQuery::create()->findPk($id);
         if (!$publisher) {
             throw new NotFoundException("Publisher $id not found.");
         }
 
-        $formFactory = $this->getFormFactory();
+        $form = $this->_getPublisherForm(defaults: [
+            "name" => $publisher->getName(),
+            "email" => $publisher->getEmail(),
+            "desc" => $publisher->getDesc(),
+        ]);
 
-        $defaults = [
-            'name' => $publisher->get('name'),
-            'email' => $publisher->get('email'),
-            'desc' => $publisher->get('desc'),
-        ];
-
-        $form = $formFactory->createBuilder(FormType::class, $defaults)
-            ->add('name', TextType::class, ['label' => 'Nom :', 'required' => false])
-            ->add('email', EmailType::class, ['label' => 'Adresse e-mail :', 'required' => false])
-            ->add('logo', FileType::class, ['label' => 'Logo :', 'required' => false])
-            ->add('desc', TextareaType::class, ['label' => false, 'attr' => ['class' => 'wysiwyg']])
-            ->getForm();
-
-        $error = false;
-        if ($request->getMethod() == 'POST') {
-            $form->handleRequest($request);
-            $data = $form->getData();
-
-            $updated = clone $publisher;
-            $updated->set('publisher_name', $data['name'])
-                ->set('publisher_email', $data['email'])
-                ->set('publisher_desc', $data['desc']);
+        if ($request->getMethod() === "POST") {
 
             try {
-                /** @var Publisher $updated */
-                $updated = $pm->update($updated);
-
-                if ($data['logo'] !== null) {
-                    $imagesService->addImageFor($publisher->getModel(), $data['logo']);
-                }
-            } catch (Exception $e) {
-                $error = $e->getMessage();
+                $publisher = $this->_handleRequest($form, $request, $imagesService, $publisher);
+            } catch (Exception $exception) {
+                return $templateService->renderResponse("AppBundle:Publisher:edit.html.twig", [
+                    "publisher" => $publisher,
+                    "error" => $exception->getMessage(),
+                    "form" => $form->createView(),
+                ], isPrivate: true);
             }
 
-            if (!$error) {
-                $url = $urlGenerator->generate('publisher_show', ['slug' => $updated->get('url')]);
-                return new RedirectResponse($url);
-            }
+            $url = $urlGenerator->generate("publisher_show", ["slug" => $publisher->getUrl()]);
+            return new RedirectResponse($url);
         }
 
-        return $templateService->renderResponse('AppBundle:Publisher:edit.html.twig', [
-            'publisher' => $publisher,
-            'error' => $error,
-            'form' => $form->createView(),
+        return $templateService->renderResponse("AppBundle:Publisher:edit.html.twig", [
+            "form" => $form->createView(),
+            "publisher" => $publisher,
+            "error" => null,
         ], isPrivate: true);
     }
 
@@ -573,5 +593,48 @@ class PublisherController extends Controller
             "pages" => $pagination,
         ], isPrivate: true
         );
+    }
+
+    /**
+     * @param $defaults = []
+     * @return FormInterface
+     */
+    private function _getPublisherForm(array $defaults = []): FormInterface
+    {
+        $formFactory = $this->getFormFactory();
+        return $formFactory->createBuilder(FormType::class, $defaults)
+            ->add('name', TextType::class, ['label' => 'Nom', 'required' => false])
+            ->add('email', EmailType::class, ['label' => 'Adresse e-mail', 'required' => false])
+            ->add('logo', FileType::class, ['label' => 'Logo', 'required' => false, "attr" => ["class" => "form-control-file"]])
+            ->add('desc', TextareaType::class, ['label' => false, 'attr' => ['class' => 'wysiwyg']])
+            ->getForm();
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    private function _handleRequest(
+        FormInterface    $form,
+        Request          $request,
+        ImagesService    $imagesService,
+        Publisher $publisher = null,
+    ): Publisher
+    {
+        $form->handleRequest($request);
+        $data = $form->getData();
+
+        $publisher = $publisher ?? new Publisher();
+        $publisher->setName($data["name"]);
+        $publisher->setEmail($data["email"]);
+        $publisher->setDesc($data["desc"]);
+
+        if ($data["logo"] !== null) {
+            $imagesService->addImageFor($publisher, $data["logo"]);
+        }
+
+        $publisher->save();
+
+        return $publisher;
     }
 }

@@ -22,6 +22,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 {% block main %}
 
+  <a href="{{ path('publisher_admin') }}">
+    <span class="fa fa-th-list"></span> Éditeurs
+  </a>
+
   <h1>
     Modifier l'éditeur
     <a href="{{ path("publisher_show", { slug: publisher.url }) }}">
@@ -29,8 +33,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     </a>
   </h1>
 
-  {% if publisher.model|hasImage %}
-    <img src="{{ publisher.model|imageUrl }}" alt="Logo {{ publisher.name }}">
+  {% if publisher|hasImage %}
+    <img src="{{ publisher|imageUrl }}" alt="Logo {{ publisher.name }}">
   {% endif %}
 
   {% if error %}
@@ -52,20 +56,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <form id="viewdetails" class="collapse fieldset">
     <fieldset>
       <p>
-        <label class="after">Identifiant :</label>
-        <input value="{{ publisher.id }}" class="form-control" readonly>
+        <label for="publisher_id" class="after">Identifiant :</label>
+        <input id="publisher_id" value="{{ publisher.id }}" class="form-control" readonly>
       </p>
       <p>
-        <label class="after">Slug :</label>
-        <input value="{{ publisher.url }}" class="form-control" readonly>
-      </p>
-      <p>
-        <label class="after">Date de création :</label>
-        <input value="{{ publisher.has('created') ? publisher.created }}" class="form-control" readonly>
-      </p>
-      <p>
-        <label class="after">Date de modification :</label>
-        <input value="{{ publisher.has('updated') ? publisher.updated }}" class="form-control" readonly>
+        <label for="publisher_slug" class="after">Slug :</label>
+        <input id="publisher_slug" value="{{ publisher.url }}" class="form-control" readonly>
       </p>
     </fieldset>
   </form>
