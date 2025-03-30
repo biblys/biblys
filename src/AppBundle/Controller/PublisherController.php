@@ -23,10 +23,12 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Service\Pagination;
+use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use CollectionManager;
 use Exception;
 use Framework\Controller;
+use Model\BookCollectionQuery;
 use Model\PublisherQuery;
 use Model\Right;
 use Model\RightQuery;
@@ -538,5 +540,40 @@ class PublisherController extends Controller
 
         $suppliersUrl = $urlGenerator->generate('publisher_suppliers', ['id' => $publisher->get('id')]);
         return new RedirectResponse($suppliersUrl);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function adminAction(
+        CurrentUser        $currentUser,
+        QueryParamsService $paramsService,
+        TemplateService    $templateService,
+    ): Response
+    {
+        $currentUser->authAdmin();
+
+        $paramsService->parse(["p" => ["type" => "numeric", "min" => 0, "default" => 0]]);
+
+        $publisherQuery = PublisherQuery::create();
+        $count = $publisherQuery->count();
+
+        $pagination = new Pagination($paramsService->getInteger("p"), $count, 100);
+        $publishers = $publisherQuery
+            ->offset($pagination->getOffset())
+            ->limit($pagination->getLimit())
+            ->orderByNameAlphabetic()
+            ->find();
+
+        return $templateService->renderResponse(
+            "AppBundle:Publisher:admin.html.twig", [
+            "publishers" => $publishers,
+            "count" => $count,
+            "pages" => $pagination,
+        ], isPrivate: true
+        );
     }
 }
