@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.4.3 (31 mars 2025)
+
+### Corrections
+
+- Certaines ventes pouvaient ne pas apparaître les page "Ventes numériques" et "
+  Résultats par facture". C'est maintenant le cas.
+
 ## 3.4.2 (19 mars 2025)
 
 ### Corrections
