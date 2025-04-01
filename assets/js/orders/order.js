@@ -84,7 +84,7 @@ export default class Order {
         '">' +
         '<td title="' +
         self.tooltip +
-        '" class="va-middle"><i class="fa ' +
+        '" class="va-middle"><i class="fa-solid ' +
         self.icon +
         '"></i></td>' +
         '<td><a href="/order/' +
@@ -254,7 +254,7 @@ export default class Order {
       // Order unshipped
       if (self.data.shipping_date === null) {
         self.shipped = false;
-        self.icon = 'fa-dropbox';
+        self.icon = 'fa-box';
         self.class = ' table-success';
         self.tooltip = 'À expédier';
 
