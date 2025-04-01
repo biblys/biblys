@@ -209,7 +209,7 @@ function _displayMediaFile(string $getDir, CurrentSite $currentSite, string $fil
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
             <span class="fa fa-folder"></span> 
-            <a href="/pages/adm_media?CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">media</a>
+            <a href="/pages/adm_media?CKEditorFuncNum=' . ($CKEditorFuncNum) . '">media</a>
           </li>
           <li class="breadcrumb-item">
             <span class="fa fa-folder-open"></span>
@@ -220,7 +220,35 @@ function _displayMediaFile(string $getDir, CurrentSite $currentSite, string $fil
           </li>
         </ol>       
     ';
-    $content .= '<div class="center"><img src="' . $request->getScheme() . '://' . $request->getHttpHost() . '/media/' . $m['media_dir'] . '/' . $m['media_file'] . '.' . $m['media_ext'] . '" style="max-width: 450px;" onClick="window.opener.CKEDITOR.tools.callFunction(\'' . $CKEditorFuncNum . '\',\'' . $request->getScheme() . '://' . $request->getHttpHost() . '/media/' . $m['media_dir'] . '/' . $m['media_file'] . '.' . $m['media_ext'] . '\'); window.close();" title="Cliquer sur l\'image pour l\'insérer." class="pointer"  alt="Cliquer sur l\'image pour l\'insérer"/></div>';
+
+    $mediaUrl = $request->getScheme() . '://' . $request->getHttpHost() . '/media/' . $m['media_dir'] . '/' . $m['media_file'] . '.' . $m['media_ext'];
+
+    $content .= <<<HTML
+
+<div class="text-center">
+    <img src="$mediaUrl" style="max-width: 450px;" alt="" />
+</div>
+
+<div class="text-center mt-2">
+    <button id="insert-image-button" type="button" class="btn btn-primary d-none">
+        <i class="fa-solid fa-file-import"></i> 
+        Insérer l'image
+    </button>
+</div>
+
+<script type="text/javascript">
+    const insertImageButton = document.getElementById('insert-image-button');
+    if (insertImageButton && window.opener && window.opener.CKEDITOR) {
+        insertImageButton.classList.remove('d-none');
+        insertImageButton.addEventListener('click', function() {
+            window.opener.CKEDITOR.tools.callFunction('$CKEditorFuncNum', '$mediaUrl');
+            window.close();
+        });
+    }
+</script>
+
+HTML;
+
     $content .= '<br />';
     $content .= '
             <form method="post">
@@ -267,7 +295,7 @@ function _displayMediaFile(string $getDir, CurrentSite $currentSite, string $fil
                     href="/pages/adm_media?dir=' . $getDir . '&file=' . $getFile . '&del=1&CKEditorFuncNum=' . $CKEditorFuncNum . '" 
                     data-confirm="Voulez-vous vraiment supprimer le fichier ' . $m['media_file'] . '.' . $m['media_ext'] . ' ?"
                 >
-                    Supprimer le fichier &laquo; '.$getFile.' &raquo;
+                    Supprimer le fichier &laquo; ' . $getFile . ' &raquo;
                 </a>
             </div>
         ';
@@ -297,7 +325,7 @@ function _displayMediaDirectory(CurrentSite $currentSite, string $currentDirecto
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
             <span class="fa fa-folder"></span> 
-            <a href="/pages/adm_media?CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">media</a>
+            <a href="/pages/adm_media?CKEditorFuncNum=' . ($CKEditorFuncNum) . '">media</a>
           </li>
           <li  class="breadcrumb-item active">
             <span class="fa fa-folder-open"></span> ' . $currentDirectory . '
@@ -401,7 +429,7 @@ function _displayMediaDirectories(CurrentSite $currentSite, Request $request): R
         $content .= '<tr>
           <td class="min-cell"><span class="fa fa-folder"></span></td>
           <td> 
-              <a href="/pages/adm_media?dir=' . $directory["name"] . '&CKEditorFuncNum=' . ($CKEditorFuncNum ?? null) . '">
+              <a href="/pages/adm_media?dir=' . $directory["name"] . '&CKEditorFuncNum=' . ($CKEditorFuncNum) . '">
                 ' . $directory["name"] . '
               </a>
           </td>
