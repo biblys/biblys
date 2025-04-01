@@ -236,6 +236,17 @@ function _displayMediaFile(string $getDir, CurrentSite $currentSite, string $fil
     </button>
 </div>
 
+<form class="my-4">
+  <div class="input-group">
+    <input class="form-control search- mt-0" value="$mediaUrl" readonly>
+    <div class="input-group-append">
+      <button id="copy-button" type="button" class="btn btn-info" title="Copier l’URL">
+        <span class="fa-solid fa-copy"></span>
+      </button>
+    </div>
+  </div>
+</form>
+
 <script type="text/javascript">
     const insertImageButton = document.getElementById('insert-image-button');
     if (insertImageButton && window.opener && window.opener.CKEDITOR) {
