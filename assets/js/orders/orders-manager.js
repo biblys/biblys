@@ -18,9 +18,10 @@ import $ from 'jquery';
 
 import Order from './order';
 
+// noinspection JSUnusedGlobalSymbols
 export default class OrdersManager {
   constructor() {
-    // Load order on page load
+    // Load order on the page load
     this.loadOrders();
 
     // Load filtered orders on form submit
@@ -46,7 +47,7 @@ export default class OrdersManager {
   loadOrders(offset = 0) {
 
     const url = this._addParamsToUrl(document.location);
-    url.searchParams.append('offset', offset);
+    url.searchParams.append('offset', offset.toString());
 
     // If offset = 0, reset table
     if (offset === 0) {
@@ -56,8 +57,8 @@ export default class OrdersManager {
     // Show loading
     $('#ordersLoading').show();
 
-    var loadMoreOrdersButton = document.getElementById('load-more-orders-button');
-    loadMoreOrdersButton.style.opacity = 0;
+    const loadMoreOrdersButton = document.getElementById('load-more-orders-button');
+    loadMoreOrdersButton.style.opacity = '0';
 
     // Load orders
     fetch(url, {
@@ -74,9 +75,9 @@ export default class OrdersManager {
         }
 
         if (data.results > 0) {
-          var tr = null;
+          let tr = null;
           $.each(data.orders, function(index, order_data) {
-            var order = new Order(order_data);
+            const order = new Order(order_data);
 
             tr = order.getRow();
             $('#orders').append(tr);
@@ -85,11 +86,11 @@ export default class OrdersManager {
           // Using legacy jquery
           window.jQuery('[title]').tooltipster();
 
-          var orders = document.querySelectorAll('#orders tr');
-          var ordersCountElement = document.getElementById('orders-count');
-          var ordersCount = orders.length;
+          const orders = document.querySelectorAll('#orders tr');
+          const ordersCountElement = document.getElementById('orders-count');
+          const ordersCount = orders.length;
           if (ordersCount < data.total) {
-            loadMoreOrdersButton.style.opacity = 1;
+            loadMoreOrdersButton.style.opacity = '1';
             ordersCountElement.textContent = data.total - ordersCount;
           }
         } else {
@@ -101,8 +102,8 @@ export default class OrdersManager {
   }
 
   loadMoreOrders() {
-    var orders = document.querySelectorAll('#orders tr');
-    var ordersCount = orders.length;
+    const orders = document.querySelectorAll('#orders tr');
+    const ordersCount = orders.length;
     this.loadOrders(ordersCount);
   }
 
