@@ -20,51 +20,50 @@ import Notification from '../notification';
 
 const formatDate = (date, format) => {
   if (format === 'short') {
-    var day = date
+    const day = date
         .getDate()
         .toString()
         .padStart(2, '0'),
-      month = (date.getMonth() + 1).toString().padStart(2, 0);
+      month = (date.getMonth() + 1).toString().padStart(2, '0');
     return `<span title="${date.toLocaleString()}">${day}/${month}</span>`;
   }
 };
 
 const diffDate = (date1, date2) => {
-  var coeff = 1000 * 60 * 60 * 24;
+  const coeff = 1000 * 60 * 60 * 24;
   return Math.floor((date1 - date2) / coeff);
 };
 
 const parseMysqlDate = string => {
-  var t = string.split(/[- :]/);
-  var date = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5]));
-  return date;
+  const t = string.split(/[- :]/);
+  return new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5]));
 };
 
 export default class Order {
   constructor(order_data) {
-    var self = this;
+    const self = this;
 
     self.data = order_data;
 
     self.getRow = function() {
-      var shippedButton =
-          '<button title="Marquer comme expédiée" data-action="shipped" class="btn btn-sm btn-success"><i class="fa-solid fa-box"></i></button>',
-        payedButton = `
-          <div class="dropdown">
-            <button class="btn btn-sm btn-success dropdown-toggle" title="Marquée comme payée" type="button" data-toggle="dropdown" aria-expanded="false">
-              <span class="fa-regular fa-money-bill-1"></span>
-            </button>
-            <div class="dropdown-menu">
-              <a class="dropdown-item pointer" data-action="payed" data-mode="card">Carte bancaire</a>
-              <a class="dropdown-item pointer" data-action="payed" data-mode="cheque">Chèque</a>
-              <a class="dropdown-item pointer" data-action="payed" data-mode="cash">Espèces</a>
-              <a class="dropdown-item pointer" data-action="payed" data-mode="paypal">Paypal</a>
-              <a class="dropdown-item pointer" data-action="payed" data-mode="payplug">Payplug</a>
-              <a class="dropdown-item pointer" data-action="payed" data-mode="transfer">Virement</a>
-              <a class="dropdown-item pointer" data-action="payed" data-mode="exchange">Échange</a>
-            </div>
-          </div>`,
-        followupButton = '';
+      let shippedButton =
+        '<button title="Marquer comme expédiée" data-action="shipped" class="btn btn-sm btn-success"><i class="fa-solid fa-box"></i></button>';
+      const payedButton = `
+        <div class="dropdown">
+          <button class="btn btn-sm btn-success dropdown-toggle" title="Marquée comme payée" type="button" data-toggle="dropdown" aria-expanded="false">
+            <span class="fa-regular fa-money-bill-1"></span>
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item pointer" data-action="payed" data-mode="card">Carte bancaire</a>
+            <a class="dropdown-item pointer" data-action="payed" data-mode="cheque">Chèque</a>
+            <a class="dropdown-item pointer" data-action="payed" data-mode="cash">Espèces</a>
+            <a class="dropdown-item pointer" data-action="payed" data-mode="paypal">Paypal</a>
+            <a class="dropdown-item pointer" data-action="payed" data-mode="payplug">Payplug</a>
+            <a class="dropdown-item pointer" data-action="payed" data-mode="transfer">Virement</a>
+            <a class="dropdown-item pointer" data-action="payed" data-mode="exchange">Échange</a>
+          </div>
+        </div>`;
+      let followupButton = '';
 
       if (self.pick) {
         shippedButton =
@@ -77,72 +76,72 @@ export default class Order {
       }
 
       // Render row
-      var row = $(
+      const row = $(
         '<tr id="order_' +
-          self.data.id +
-          '" class="text-center ' +
-          self.class +
-          '">' +
-          '<td title="' +
-          self.tooltip +
-          '" class="va-middle"><i class="fa ' +
-          self.icon +
-          '"></i></td>' +
-          '<td><a href="/order/' +
-          self.data.url +
-          '">' +
-          self.data.id +
-          '</a>' +
-          '<td>' +
-          formatDate(self.created_at, 'short') +
-          '</td>' +
-          '<td class="text-left customer">' +
-          self.data.customer +
-          '</td>' +
-          '<td class="text-right">' +
-          self.data.total +
-          '</td>' +
-          '<td><a href="/invoice/' +
-          self.data.url +
-          '" class="btn btn-sm btn-light" title="Imprimer la facture" ><i class="fa fa-print"></i></a></td>' +
-          '<td>' +
-          (self.data.payment_mode
-            ? '<img src="/assets/icons/payment_' +
-              self.data.payment_mode +
-              '.png" alt="' +
-              self.data.payment_mode +
-              '" title="' +
-              self.data.payment_mode +
-              '" width=20 />'
-            : '') +
-          '</td>' +
-          '<td>' +
-          (self.payed ? formatDate(self.payed_at, 'short') : '<div class="btn-group">' + payedButton + followupButton + '</div>') +
-          '</td>' +
-          '<td>' +
-          (self.shipped ? formatDate(self.shipped_at, 'short') : shippedButton) +
-          '</td>' +
-          '<td><button title="Annuler la commande" data-action="cancel" class="btn btn-sm btn-danger"><i class="fa fa-trash-can"></i></button></td>' +
-          '</tr>'
+        self.data.id +
+        '" class="text-center ' +
+        self.class +
+        '">' +
+        '<td title="' +
+        self.tooltip +
+        '" class="va-middle"><i class="fa ' +
+        self.icon +
+        '"></i></td>' +
+        '<td><a href="/order/' +
+        self.data.url +
+        '">' +
+        self.data.id +
+        '</a>' +
+        '<td>' +
+        formatDate(self.created_at, 'short') +
+        '</td>' +
+        '<td class="text-left customer">' +
+        self.data.customer +
+        '</td>' +
+        '<td class="text-right">' +
+        self.data.total +
+        '</td>' +
+        '<td><a href="/invoice/' +
+        self.data.url +
+        '" class="btn btn-sm btn-light" title="Imprimer la facture" ><i class="fa fa-print"></i></a></td>' +
+        '<td>' +
+        (self.data.payment_mode
+          ? '<img src="/assets/icons/payment_' +
+          self.data.payment_mode +
+          '.png" alt="' +
+          self.data.payment_mode +
+          '" title="' +
+          self.data.payment_mode +
+          '" width=20 />'
+          : '') +
+        '</td>' +
+        '<td>' +
+        (self.payed ? formatDate(self.payed_at, 'short') : '<div class="btn-group">' + payedButton + followupButton + '</div>') +
+        '</td>' +
+        '<td>' +
+        (self.shipped ? formatDate(self.shipped_at, 'short') : shippedButton) +
+        '</td>' +
+        '<td><button title="Annuler la commande" data-action="cancel" class="btn btn-sm btn-danger"><i class="fa fa-trash-can"></i></button></td>' +
+        '</tr>'
       );
 
       // Add actions events
       row.on('click', '[data-action]', function() {
-        var action = $(this).data('action'),
+        const action = $(this).data('action'),
           icon = $(this).find('i'),
-          icon_class = icon.attr('class'),
-          payment_mode = null,
-          tracking_number = null,
-          status_filter = $('#order_status').val();
+          icon_class = icon.attr('class');
+        let payment_mode = null,
+          tracking_number = null;
+        const status_filter = $('#order_status').val();
 
-        // Confirmation before order cancelation
-        if (action == 'cancel') {
-          var confirmation = confirm(
+        // Confirmation before order cancellation
+        if (action === 'cancel') {
+          const confirmation = confirm(
             'Voulez-vous vraiment annuler la commande n° ' +
-              self.data.id +
-              ' de ' +
-              self.data.customer +
-              ' ?'
+            self.data.id +
+            ' de ' +
+            self.data.customer +
+            ' ?'
           );
           if (!confirmation) {
             return false;
@@ -167,7 +166,7 @@ export default class Order {
         }
 
         // Ask for payment mode
-        if (action == 'payed') {
+        if (action === 'payed') {
           payment_mode = $(this).data('mode');
         }
 
@@ -194,7 +193,7 @@ export default class Order {
             self.updateStatus();
 
             // Update row
-            var new_row = self.getRow();
+            const new_row = self.getRow();
             $('#buttons_' + self.data.id).remove();
             $('#order_' + self.data.id).replaceWith(new_row);
 
@@ -252,7 +251,7 @@ export default class Order {
         return;
       }
 
-      // Order not shipped
+      // Order unshipped
       if (self.data.shipping_date === null) {
         self.shipped = false;
         self.icon = 'fa-dropbox';
@@ -260,7 +259,7 @@ export default class Order {
         self.tooltip = 'À expédier';
 
         // Order to pick
-        if (self.data.shipping_mode == 'magasin') {
+        if (self.data.shipping_mode === 'magasin') {
           self.icon = 'fa-shopping-bag';
           self.tooltip = 'À mettre à dispo. en magasin';
           self.pick = true;
@@ -280,7 +279,7 @@ export default class Order {
       }
 
       // Order needs follow_up action
-      var elapsed_since_payment = diffDate(new Date(), self.created_at);
+      const elapsed_since_payment = diffDate(new Date(), self.created_at);
       if (!self.payed && elapsed_since_payment > 4) {
         self.overdued = true;
         self.icon = 'fa-warning';
@@ -290,7 +289,7 @@ export default class Order {
         // Already sent followup
         if (self.data.followup_date) {
           self.followed_up_at = parseMysqlDate(self.data.followup_date);
-          var elapsed_since_followup = diffDate(new Date(), self.followed_up_at);
+          const elapsed_since_followup = diffDate(new Date(), self.followed_up_at);
           self.overdued = false;
           self.icon = 'fa-clock';
           self.class = '';
