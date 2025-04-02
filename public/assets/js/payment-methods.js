@@ -16,7 +16,6 @@
 
 document.addEventListener('DOMContentLoaded', function() {
   const firstPaymentOption = document.querySelector('.payment-option a');
-  console.log(firstPaymentOption);
   if (firstPaymentOption) {
     firstPaymentOption.click();
   }
