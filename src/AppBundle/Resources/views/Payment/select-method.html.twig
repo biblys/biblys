@@ -244,9 +244,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     {% endif %}
   </div>
 
-  <script src="https://js.stripe.com/v3/"></script>
-  <script
-    src="https://www.paypal.com/sdk/js?components=buttons&disable-funding=card&client-id={{ paypalClientId }}&currency=EUR">
-  </script>
+  {% if stripeIsAvailable %}
+    <script src="https://js.stripe.com/v3/"></script>
+  {% endif %}
+
+  {% if paypalIsAvailable %}
+    <script
+      src="https://www.paypal.com/sdk/js?components=buttons&disable-funding=card&client-id={{ paypalClientId }}&currency=EUR">
+    </script>
+  {% endif %}
+
   <script src="{{ asset('/assets/js/payment-methods.js') }}"></script>
 {% endblock %}
