@@ -65,8 +65,6 @@ class PaymentManager extends EntityManager
 
     public function getAll(array $where = array(), array $options = array(), $withJoins = true)
     {
-        $where['payments`.`site_id'] = $this->site['site_id'];
-
         return parent::getAll($where, $options);
     }
 
