@@ -149,6 +149,7 @@ class PaymentService
         $payment->setMode("stripe");
         $payment->setAmount($amountToPay);
         $payment->setProviderId($session["id"]);
+        $payment->save();
 
         return $payment;
     }
