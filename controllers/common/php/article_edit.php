@@ -395,15 +395,9 @@ return function (
     // Types
     $article_ean_required = null;
     $bundle_fieldset_class = 'hidden';
-    $article_ean_div_class = null;
-    $article_ean_class = null;
     $article_title_class = null;
 
     $type_options = ArticleType::getOptions($articleEntity->get('type_id'));
-
-    if ($a['type_id'] == 2) {
-        $article_ean_div_class = 'hidden';
-    }
 
     if ($a['type_id'] == 8) {
         $bundle_fieldset_class = null;
@@ -721,9 +715,9 @@ return function (
             </select>
             <br /><br />
 
-            <div id="article_ean_div" class="' . $article_ean_div_class . '">
+            <div id="article_ean_div">
                 <label class="floating" for="article_ean">EAN/ISBN :</label>
-                <input id="article_ean" name="article_ean" value="' . $a['article_ean'] . '" class="medium event article_ean' . $article_ean_class . '" ' . $article_ean_required . ' autofocus />
+                <input id="article_ean" name="article_ean" value="' . $a['article_ean'] . '" class="medium event article_ean" ' . $article_ean_required . ' autofocus />
                 <br /><br />
             </div>
 
