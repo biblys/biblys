@@ -38,6 +38,11 @@
 composer propel migrate
 ```
 
+#### Stripe
+
+Ajouter l'évènement `payment_intent.succeeded` à la liste des évènements à 
+transmettre au webhook endpoint de Biblys.
+
 #### Swiper
 
 La librairie "swiper" a été supprimée. Si votre thème utilise swiper, vous
