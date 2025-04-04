@@ -99,6 +99,7 @@ class PaymentService
     /**
      * @throws ApiErrorException
      * @throws InvalidConfigurationException
+     * @throws PropelException
      */
     private function _getOrCreateStripeCustomerForOrder(Order $order): StripeCustomer
     {
@@ -106,14 +107,20 @@ class PaymentService
             throw new InvalidConfigurationException("Stripe n’est pas configuré.");
         }
 
-        $searchResults = $this->stripe->customers->search(["query" => "metadata['customer_id']:'" . $order->getCustomerId()."'"]);
+        $searchResults = $this->stripe->customers->search(["query" => "metadata['customer_id']:'" . $order->getCustomerId() . "'"]);
         if (count($searchResults->data) === 0) {
             return $this->stripe->customers->create([
+                "name" => $order->getCustomer()->getFullName(),
+                "email" => $order->getCustomer()->getEmail(),
                 "metadata" => ["customer_id" => $order->getCustomerId()],
             ]);
         }
 
-        return $this->stripe->customers->retrieve($searchResults->data[0]->id);
+        return $this->stripe->customers->update($searchResults->data[0]->id, [
+            "name" => $order->getCustomer()->getFullName(),
+            "email" => $order->getCustomer()->getEmail(),
+            "metadata" => ["customer_id" => $order->getCustomerId()],
+        ]);
     }
 
     /**

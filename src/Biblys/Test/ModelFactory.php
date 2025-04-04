@@ -734,6 +734,9 @@ class ModelFactory
         ?Site   $site = null,
         ?User   $user = null,
         ?string $axysAccountId = null,
+        string  $firstName = "Silas",
+        string  $lastName = "Coade",
+        string  $email = "silas.coade@example.net",
     ): Customer
     {
         $customer = new Customer();
@@ -741,6 +744,9 @@ class ModelFactory
         $customer->setSite($site);
         $customer->setUser($user);
         $customer->setAxysAccountId($axysAccountId);
+        $customer->setFirstname($firstName);
+        $customer->setLastname($lastName);
+        $customer->setEmail($email);
         $customer->save();
 
         return $customer;
