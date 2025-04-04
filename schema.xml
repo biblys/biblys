@@ -841,9 +841,12 @@
     <column name="site_id" phpName="SiteId" type="INTEGER"/>
     <column name="axys_account_id" phpName="AxysAccountId" type="INTEGER" sqlType="int unsigned"/>
     <column name="user_id" phpName="UserId" type="INTEGER" sqlType="int unsigned"/>
-    <column name="customer_id" phpName="CustomerId" type="INTEGER" sqlType="int unsigned"/>
     <foreign-key foreignTable="users" skipSql="true">
       <reference local="user_id" foreign="id"/>
+    </foreign-key>
+    <column name="customer_id" phpName="CustomerId" type="INTEGER" sqlType="int unsigned"/>
+    <foreign-key foreignTable="customers" skipSql="true">
+      <reference local="customer_id" foreign="customer_id"/>
     </foreign-key>
     <column name="seller_id" phpName="SellerId" type="INTEGER" sqlType="int unsigned"/>
     <column name="order_type" phpName="Type" type="VARCHAR" size="8" defaultValue=""/>

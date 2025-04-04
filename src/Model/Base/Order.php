@@ -7,6 +7,8 @@ use \Exception;
 use \PDO;
 use Model\Country as ChildCountry;
 use Model\CountryQuery as ChildCountryQuery;
+use Model\Customer as ChildCustomer;
+use Model\CustomerQuery as ChildCustomerQuery;
 use Model\Order as ChildOrder;
 use Model\OrderQuery as ChildOrderQuery;
 use Model\Payment as ChildPayment;
@@ -437,6 +439,11 @@ abstract class Order implements ActiveRecordInterface
      * @var        ChildUser
      */
     protected $aUser;
+
+    /**
+     * @var        ChildCustomer
+     */
+    protected $aCustomer;
 
     /**
      * @var        ChildShippingOption
@@ -1459,6 +1466,10 @@ abstract class Order implements ActiveRecordInterface
         if ($this->customer_id !== $v) {
             $this->customer_id = $v;
             $this->modifiedColumns[OrderTableMap::COL_CUSTOMER_ID] = true;
+        }
+
+        if ($this->aCustomer !== null && $this->aCustomer->getId() !== $v) {
+            $this->aCustomer = null;
         }
 
         return $this;
@@ -2622,6 +2633,9 @@ abstract class Order implements ActiveRecordInterface
         if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
             $this->aUser = null;
         }
+        if ($this->aCustomer !== null && $this->customer_id !== $this->aCustomer->getId()) {
+            $this->aCustomer = null;
+        }
         if ($this->aShippingOption !== null && $this->shipping_id !== $this->aShippingOption->getId()) {
             $this->aShippingOption = null;
         }
@@ -2668,6 +2682,7 @@ abstract class Order implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aUser = null;
+            $this->aCustomer = null;
             $this->aShippingOption = null;
             $this->aCountry = null;
             $this->aSite = null;
@@ -2801,6 +2816,13 @@ abstract class Order implements ActiveRecordInterface
                     $affectedRows += $this->aUser->save($con);
                 }
                 $this->setUser($this->aUser);
+            }
+
+            if ($this->aCustomer !== null) {
+                if ($this->aCustomer->isModified() || $this->aCustomer->isNew()) {
+                    $affectedRows += $this->aCustomer->save($con);
+                }
+                $this->setCustomer($this->aCustomer);
             }
 
             if ($this->aShippingOption !== null) {
@@ -3594,6 +3616,21 @@ abstract class Order implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aCustomer) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'customer';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'customers';
+                        break;
+                    default:
+                        $key = 'Customer';
+                }
+
+                $result[$key] = $this->aCustomer->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aShippingOption) {
 
@@ -4452,6 +4489,57 @@ abstract class Order implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildCustomer object.
+     *
+     * @param ChildCustomer|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setCustomer(ChildCustomer $v = null)
+    {
+        if ($v === null) {
+            $this->setCustomerId(NULL);
+        } else {
+            $this->setCustomerId($v->getId());
+        }
+
+        $this->aCustomer = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildCustomer object, it will not be re-added.
+        if ($v !== null) {
+            $v->addOrder($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildCustomer object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildCustomer|null The associated ChildCustomer object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getCustomer(?ConnectionInterface $con = null)
+    {
+        if ($this->aCustomer === null && ($this->customer_id != 0)) {
+            $this->aCustomer = ChildCustomerQuery::create()->findPk($this->customer_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aCustomer->addOrders($this);
+             */
+        }
+
+        return $this->aCustomer;
+    }
+
+    /**
      * Declares an association between this object and a ChildShippingOption object.
      *
      * @param ChildShippingOption|null $v
@@ -5245,6 +5333,9 @@ abstract class Order implements ActiveRecordInterface
         if (null !== $this->aUser) {
             $this->aUser->removeOrder($this);
         }
+        if (null !== $this->aCustomer) {
+            $this->aCustomer->removeOrder($this);
+        }
         if (null !== $this->aShippingOption) {
             $this->aShippingOption->removeOrder($this);
         }
@@ -5340,6 +5431,7 @@ abstract class Order implements ActiveRecordInterface
         $this->collPayments = null;
         $this->collStockItems = null;
         $this->aUser = null;
+        $this->aCustomer = null;
         $this->aShippingOption = null;
         $this->aCountry = null;
         $this->aSite = null;
