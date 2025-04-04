@@ -2,10 +2,16 @@
 
 ## 3.5.0 (DEV)
 
-### Améliorations
+### Expérience de paiement
 
 - La page de choix d'un mode de paiement a été entièrement revue pour améliorer
   son ergonomie.
+- Le formulaire de paiement par carte bancaire via Stripe est désormais intégré
+  à la page de choix du mode de paiement de manière sécurisée, ce qui permet 
+  d'éviter une redirection vers le site de paiement.
+
+### Autres améliorations
+
 - Les "tranches de frais de port" ont été renommées "option d'expédition".
 - Des pages ont été ajoutées à l'administration pour afficher les pays de
   destination et les différentes zones tarifaires pour l'expédition.

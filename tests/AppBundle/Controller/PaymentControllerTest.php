@@ -231,7 +231,7 @@ class PaymentControllerTest extends TestCase
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringContainsString("Stripe", $response->getContent());
+        $this->assertStringContainsString("stripe-payment-form", $response->getContent());
     }
 
     /**
