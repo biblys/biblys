@@ -35,17 +35,16 @@ class PaymentControllerTest extends TestCase
         // given
         $controller = new PaymentController();
         $order = ModelFactory::createOrder();
-        $payment = ModelFactory::createPayment(providerId: "1234");
 
         $paymentService = Mockery::mock(PaymentService::class);
         $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
-        $paymentService->expects("createStripePaymentForOrder")->with($order)->andReturn($payment);
+        $paymentService->expects("createStripePaymentForOrder")->with($order)->andReturn("pi_1234_secret_abcd");
 
         // when
         $response = $controller->createStripePaymentAction($paymentService, $order->getSlug());
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('{"session_id":"1234"}', $response->getContent());
+        $this->assertEquals('{"client_secret":"pi_1234_secret_abcd"}', $response->getContent());
     }
 }
