@@ -166,19 +166,17 @@ class PaymentController extends Controller
                 throw new BadRequestHttpException('stripe-signature header is missing');
             }
 
-            $event = Webhook::constructEvent(
-                $payload, $sigHeader, $stripe['endpoint_secret']
-            );
+            $event = Webhook::constructEvent($payload, $sigHeader, $stripe['endpoint_secret']);
 
-            if ($event->type !== 'checkout.session.completed') {
-                $loggerService->log("stripe", "INFO", 'Webhook is not of type checkout.session.completed, ignoring.');
+            if ($event->type !== "payment_intent.succeeded") {
+                $loggerService->log("stripe", "INFO", "Webhook is not of type payment_intent.succeeded, ignoring.");
                 return new JsonResponse();
             }
 
-            // Handle the checkout.session.completed event
+            // Handle the payment_intent.succeeded event
             /** @noinspection PhpPossiblePolymorphicInvocationInspection */
             $session = $event->data->object;
-            $loggerService->log("stripe", "INFO", 'Handling Checkout session…', ["id" => $session->id]);
+            $loggerService->log("stripe", "INFO", 'Handling payment intent…', ["id" => $session->id]);
 
             // Retrieve payment associated with session id
             $pm = new PaymentManager();
