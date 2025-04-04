@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 3.5.0 (DEV)
+## 3.5.0 (4 avril 2025)
 
 ### Expérience de paiement
 
