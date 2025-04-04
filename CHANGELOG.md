@@ -9,6 +9,8 @@
 - Le formulaire de paiement par carte bancaire via Stripe est désormais intégré
   à la page de choix du mode de paiement de manière sécurisée, ce qui permet 
   d'éviter une redirection vers le site de paiement.
+- Il est désormais possible, au moment du paiement, de sauvegarder une carte
+    bancaire pour pouvoir la réutiliser plus tard.
 
 ### Autres améliorations
 
