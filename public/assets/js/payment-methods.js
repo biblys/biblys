@@ -36,17 +36,17 @@ async function loadStripeForm(paymentForm) {
   });
   /**
    * @var responseData {object}
-   * @var responseData.client_secret {string} The client secret of the payment intent
+   * @var responseData.payment_intent_client_secret {string} The client secret for the payment intent
+   * @var responseData.customer_session_client_secret {string} The client secret for the customer session
    */
   const responseData = await response.json();
-  const clientSecret = responseData.client_secret;
-
-  const stripe = window.Stripe(publicKey);
-
   if (responseData.error) {
     window._alert(responseData.error.message);
   } else {
-    const elements = stripe.elements({ clientSecret });
+    const stripe = window.Stripe(publicKey);
+    const paymentIntentClientSecret = responseData.payment_intent_client_secret;
+    const customerSessionClientSecret = responseData.customer_session_client_secret;
+    const elements = stripe.elements({ clientSecret: paymentIntentClientSecret, customerSessionClientSecret });
     const paymentElement = elements.create('payment', {
       disableLink: true,
     });

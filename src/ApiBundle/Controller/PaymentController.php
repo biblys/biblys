@@ -186,12 +186,11 @@ class PaymentController extends Controller
     {
         try {
             $order = $paymentService->getPayableOrderBySlug($slug);
-            $paymentIntentClientSecret = $paymentService->createStripePaymentForOrder($order);
+            $secrets = $paymentService->createStripePaymentForOrder($order);
 
-            return new JsonResponse(["client_secret" => $paymentIntentClientSecret]);
+            return new JsonResponse($secrets);
         } catch (CannotFindPayableOrderException $exception) {
             throw new NotFoundHttpException($exception->getMessage(), $exception);
         }
-
     }
 }

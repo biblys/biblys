@@ -38,13 +38,20 @@ class PaymentControllerTest extends TestCase
 
         $paymentService = Mockery::mock(PaymentService::class);
         $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
-        $paymentService->expects("createStripePaymentForOrder")->with($order)->andReturn("pi_1234_secret_abcd");
+        $paymentService->expects("createStripePaymentForOrder")->with($order)
+            ->andReturn([
+                "payment_intent_client_secret" => "pi_1234_secret_abcd",
+                "customer_session_client_secret" => "cuss_secret_abcd",
+            ]);
 
         // when
         $response = $controller->createStripePaymentAction($paymentService, $order->getSlug());
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('{"client_secret":"pi_1234_secret_abcd"}', $response->getContent());
+        $this->assertEquals(
+            '{"payment_intent_client_secret":"pi_1234_secret_abcd","customer_session_client_secret":"cuss_secret_abcd"}',
+            $response->getContent()
+        );
     }
 }

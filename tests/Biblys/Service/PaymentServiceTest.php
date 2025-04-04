@@ -31,9 +31,11 @@ use Model\PaymentQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Stripe\Customer;
+use Stripe\CustomerSession;
 use Stripe\PaymentIntent;
 use Stripe\SearchResult;
 use Stripe\Service\CustomerService;
+use Stripe\Service\CustomerSessionService;
 use Stripe\Service\PaymentIntentService;
 use Stripe\StripeClient;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -195,7 +197,7 @@ class PaymentServiceTest extends TestCase
         $paymentService = new PaymentService($config, $currentSite, $urlGenerator, $loggerService, $stripeClient);
 
         // when
-        $clientSecret = $paymentService->createStripePaymentForOrder($order);
+        $clientSecrets = $paymentService->createStripePaymentForOrder($order);
 
         // then
         $payment = PaymentQuery::create()->filterByOrder($order)->findOne();
@@ -205,7 +207,8 @@ class PaymentServiceTest extends TestCase
         $this->assertEquals(999, $payment->getAmount());
         $this->assertEquals("pi_1234", $payment->getProviderId());
         $this->assertNull($payment->getExecuted());
-        $this->assertEquals("pi_1234_secret_abcd", $clientSecret);
+        $this->assertEquals("pi_1234_secret_abcd", $clientSecrets["payment_intent_client_secret"]);
+        $this->assertEquals("cuss_secret_abcd", $clientSecrets["customer_session_client_secret"]);
     }
 
     /**
@@ -236,7 +239,7 @@ class PaymentServiceTest extends TestCase
         $paymentService = new PaymentService($config, $currentSite, $urlGenerator, $loggerService, $stripeClient);
 
         // when
-        $clientSecret = $paymentService->createStripePaymentForOrder($order);
+        $clientSecrets = $paymentService->createStripePaymentForOrder($order);
 
         // then
         $payment = PaymentQuery::create()->filterByOrder($order)->findOne();
@@ -246,7 +249,8 @@ class PaymentServiceTest extends TestCase
         $this->assertEquals(999, $payment->getAmount());
         $this->assertEquals("pi_1234", $payment->getProviderId());
         $this->assertNull($payment->getExecuted());
-        $this->assertEquals("pi_1234_secret_abcd", $clientSecret);
+        $this->assertEquals("pi_1234_secret_abcd", $clientSecrets["payment_intent_client_secret"]);
+        $this->assertEquals("cuss_secret_abcd", $clientSecrets["customer_session_client_secret"]);
     }
 
     private function _mockStripeClient(
@@ -295,6 +299,25 @@ class PaymentServiceTest extends TestCase
             ],
         ])->andReturn($paymentIntent);
         $stripeClient->expects("getService")->with("paymentIntents")->andReturn($paymentIntentService);
+
+        $customerSessionService = Mockery::mock(CustomerSessionService::class);
+        $customerSession = new CustomerSession("cuss_1234");
+        $customerSession->client_secret = "cuss_secret_abcd";
+        $customerSessionService->expects("create")->with([
+            "customer" => "cus_1234",
+            "components" => [
+                "payment_element" => [
+                    "enabled" => true,
+                    "features" => [
+                        "payment_method_redisplay" => "enabled",
+                        "payment_method_save" => "enabled",
+                        "payment_method_save_usage" => "on_session",
+                        "payment_method_remove" => "enabled",
+                    ]
+                ]
+            ]
+        ])->andReturn($customerSession);
+        $stripeClient->expects("getService")->with("customerSessions")->andReturn($customerSessionService);
 
         return $stripeClient;
     }
