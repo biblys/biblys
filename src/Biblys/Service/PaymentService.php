@@ -75,9 +75,9 @@ class PaymentService
      * @throws InvalidConfigurationException
      * @throws PropelException
      * @throws Exception
-     * @returns string the payement intent client secret returned by Stripe
+     * @returns array the payement intent and customer session client secrets returned by Stripe
      */
-    public function createStripePaymentForOrder(Order $order): string
+    public function createStripePaymentForOrder(Order $order): array
     {
         if (!$this->stripe) {
             throw new InvalidConfigurationException("Stripe n’est pas configuré.");
@@ -86,6 +86,21 @@ class PaymentService
         $customer = $this->_getOrCreateStripeCustomerForOrder($order);
         $paymentIntent = $this->_createStripePaymentIntentForOrder($order, $customer);
 
+        $customerSession = $this->stripe->customerSessions->create([
+            "customer" => $customer->id,
+            "components" => [
+                "payment_element" => [
+                    "enabled" => true,
+                    "features" => [
+                        "payment_method_redisplay" => "enabled",
+                        "payment_method_save" => "enabled",
+                        "payment_method_save_usage" => "on_session",
+                        "payment_method_remove" => "enabled",
+                    ]
+                ]
+            ]
+        ]);
+
         $payment = new Payment();
         $payment->setOrder($order);
         $payment->setMode("stripe");
@@ -93,7 +108,10 @@ class PaymentService
         $payment->setProviderId($paymentIntent->id);
         $payment->save();
 
-        return $paymentIntent->client_secret;
+        return [
+            "payment_intent_client_secret" => $paymentIntent->client_secret,
+            "customer_session_client_secret" => $customerSession->client_secret,
+        ];
     }
 
     /**
