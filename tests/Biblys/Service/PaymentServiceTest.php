@@ -174,7 +174,11 @@ class PaymentServiceTest extends TestCase
     public function testCreateStripePaymentForOrderWithExistingCustomer()
     {
         // given
-        $customer = ModelFactory::createCustomer();
+        $customer = ModelFactory::createCustomer(
+            firstName: "Maude",
+            lastName: "Zarella",
+            email: "maude.zarella@example.org"
+        );
         $order = ModelFactory::createOrder(customer: $customer, amountToBePaid: 999);
 
         $config = new Config();
@@ -184,7 +188,9 @@ class PaymentServiceTest extends TestCase
 
         $expectedSearchQuery = "metadata['customer_id']:'{$customer->getId()}'";
         $returnedSearchResults = [new SearchResult("cus_1234")];
-        $stripeClient = $this->_mockStripeClient($order, $expectedSearchQuery, $returnedSearchResults);
+        $stripeClient = $this->_mockStripeClient(
+            $order, $expectedSearchQuery, $returnedSearchResults, expectedCustomerIdForUpdate: $customer->getId()
+        );
 
         $paymentService = new PaymentService($config, $currentSite, $urlGenerator, $loggerService, $stripeClient);
 
@@ -209,7 +215,11 @@ class PaymentServiceTest extends TestCase
     public function testCreateStripePaymentForOrderWithNewCustomer()
     {
         // given
-        $customer = ModelFactory::createCustomer();
+        $customer = ModelFactory::createCustomer(
+            firstName: "Gorgone",
+            lastName: "Zola",
+            email: "gorgone.zola@example.org"
+        );
         $order = ModelFactory::createOrder(customer: $customer, amountToBePaid: 999);
 
         $config = new Config();
@@ -243,7 +253,8 @@ class PaymentServiceTest extends TestCase
         Order $order,
         string $expectedSearchQuery,
         array  $returnedSearchResults,
-        ?int   $expectedCustomerIdForCreation = null
+        ?int   $expectedCustomerIdForCreation = null,
+        ?int   $expectedCustomerIdForUpdate = null
     ): StripeClient
     {
         $stripeClient = Mockery::mock(StripeClient::class);
@@ -254,8 +265,19 @@ class PaymentServiceTest extends TestCase
         $customerService->expects("retrieve")->with("cus_1234")->andReturn(new Customer("cus_1234"));
 
         if ($expectedCustomerIdForCreation) {
-            $customerService->expects("create")->with(["metadata" => ["customer_id" => $expectedCustomerIdForCreation]])
-                ->andReturn(new Customer("cus_1234"));
+            $customerService->expects("create")->with([
+                "name" => "Gorgone Zola",
+                "email" => "gorgone.zola@example.org",
+                "metadata" => ["customer_id" => $expectedCustomerIdForCreation]
+            ])->andReturn(new Customer("cus_1234"));
+        }
+
+        if ($expectedCustomerIdForUpdate) {
+            $customerService->expects("update")->with("cus_1234", [
+                "name" => "Maude Zarella",
+                "email" => "maude.zarella@example.org",
+                "metadata" => ["customer_id" => $expectedCustomerIdForUpdate]
+            ])->andReturn(new Customer("cus_1234"));
         }
 
         $stripeClient->expects("getService")->with("customers")->andReturn($customerService);
