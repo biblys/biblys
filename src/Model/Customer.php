@@ -31,5 +31,8 @@ use Model\Base\Customer as BaseCustomer;
  */
 class Customer extends BaseCustomer
 {
-
+    public function getFullName(): string
+    {
+        return trim("{$this->getFirstName()} {$this->getLastName()}");
+    }
 }
