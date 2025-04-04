@@ -24,37 +24,64 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /* Stripe */
 
-const stripePayButton = document.getElementById('pay-with-stripe');
-if (stripePayButton) {
-  stripePayButton.addEventListener('click', async function() {
-    const payButtonLoader = document.getElementById('pay-with-stripe-loader');
-    stripePayButton.disabled = true;
-    payButtonLoader.classList.remove('d-none');
+async function loadStripeForm(paymentForm) {
+  const publicKey = paymentForm.getAttribute('data-public-key');
+  const paymentCreationUrl = paymentForm.getAttribute('data-payment-url');
+  const paymentButton = document.getElementById('stripe-payment-button');
+  const paymentButtonLoader = document.getElementById('stripe-payment-button-loader');
 
-    const createStripePaymentUrl = stripePayButton.getAttribute('data-payment-url');
-    const response = await fetch(createStripePaymentUrl, {
-      method: 'POST',
-      headers: { accept: 'application/json' }
-    });
-    const responseData = await response.json();
-
-    if (responseData.error) {
-      stripePayButton.disabled = false;
-      payButtonLoader.classList.add('d-none');
-      window._alert(responseData.error.message);
-      return;
-    }
-
-    const stripePublicKey = stripePayButton.getAttribute('data-public-key');
-    const stripe = window.Stripe(stripePublicKey);
-    stripe.redirectToCheckout({
-      sessionId: responseData.session_id
-    }).then(function(result) {
-      stripePayButton.disabled = false;
-      payButtonLoader.classList.add('d-none');
-      window._alert(result.error.message);
-    });
+  const response = await fetch(paymentCreationUrl, {
+    method: 'POST',
+    headers: { accept: 'application/json' }
   });
+  /**
+   * @var responseData {object}
+   * @var responseData.client_secret {string} The client secret of the payment intent
+   */
+  const responseData = await response.json();
+  const clientSecret = responseData.client_secret;
+
+  const stripe = window.Stripe(publicKey);
+
+  if (responseData.error) {
+    window._alert(responseData.error.message);
+  } else {
+    const elements = stripe.elements({ clientSecret });
+    const paymentElement = elements.create('payment', {
+      disableLink: true,
+    });
+    paymentElement.mount('#payment-element');
+    paymentElement.on('ready', function() {
+      paymentButton.classList.remove('d-none');
+    });
+
+    paymentForm.addEventListener('submit', async function(event) {
+      event.preventDefault();
+      paymentButton.disabled = true;
+      paymentButtonLoader.classList.remove('d-none');
+
+      const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: paymentForm.getAttribute('data-order-url')
+        }
+      });
+
+      paymentButton.disabled = false;
+      paymentButtonLoader.classList.add('d-none');
+
+      if (error.type === 'validation_error') {
+        return;
+      }
+
+      const errorMessage = `Le paiement a échoué. ${error.message} Pour plus d'informations, veuillez contacter la banque émettrice de la carte.`;
+      window._alert(errorMessage);
+    });
+  }
+}
+const stripePaymentForm = document.getElementById('stripe-payment-form');
+if (stripePaymentForm) {
+  loadStripeForm(stripePaymentForm).then();
 }
 
 /* PayPal */

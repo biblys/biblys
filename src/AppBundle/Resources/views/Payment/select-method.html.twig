@@ -55,20 +55,27 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
               </p>
             {% endif %}
 
-            <p>
-              Payez par carte bancaire via le serveur sécurisé de notre partenaire Stripe.
-            </p>
-
-            <button type="submit" class="btn btn-primary" id="pay-with-stripe"
-                    {% if order.amountTobepaid < 50 %}disabled{% endif %}
-                    data-payment-url="{{ path('api_stripe_create_payment', { slug: order.slug }) }}"
-                    data-public-key="{{ stripePublicKey }}"
+            <form id="stripe-payment-form"
+              data-public-key="{{ stripePublicKey }}"
+              data-payment-url="{{ path('api_stripe_create_payment', { slug: order.slug }) }}"
+              data-order-url="{{ url('legacy_order', { url: order.slug }) }}"
             >
-              Payer par carte bancaire
-              <div class="spinner-border spinner-border-sm ml-1 d-none" role="status" id="pay-with-stripe-loader">
-                <span class="sr-only">Redirection en cours...</span>
+              <div id="payment-element">
+                <span class="spinner-border spinner-border-sm ml-1" role="status" id="spinner"></span>
+                Chargement du formulaire de paiement sécurisé…
               </div>
-            </button>
+
+              <button id="stripe-payment-button" class="btn btn-primary mt-4 d-none" id="submit"
+                  {% if order.amountTobepaid < 50 %}disabled{% endif %}
+                >
+                <div class="spinner-border spinner-border-sm ml-1 d-none" role="status" id="stripe-payment-button-loader">
+                  <span class="sr-only">Paiement en cours…</span>
+                </div>
+                <span id="button-text">Payer</span>
+              </button>
+
+              <div id="payment-message" class="hidden"></div>
+            </form>
           </div>
         </div>
       </div>
