@@ -779,7 +779,7 @@ class OrderTableMap extends TableMap
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
         $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
-        $this->addColumn('customer_id', 'CustomerId', 'INTEGER', false, null, null);
+        $this->addForeignKey('customer_id', 'CustomerId', 'INTEGER', 'customers', 'customer_id', false, null, null);
         $this->addColumn('seller_id', 'SellerId', 'INTEGER', false, null, null);
         $this->addColumn('order_type', 'Type', 'VARCHAR', false, 8, '');
         $this->addColumn('order_as_a_gift', 'AsAGift', 'VARCHAR', false, 16, null);
@@ -837,6 +837,13 @@ class OrderTableMap extends TableMap
   array (
     0 => ':user_id',
     1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('Customer', '\\Model\\Customer', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':customer_id',
+    1 => ':customer_id',
   ),
 ), null, null, null, false);
         $this->addRelation('ShippingOption', '\\Model\\ShippingOption', RelationMap::MANY_TO_ONE, array (

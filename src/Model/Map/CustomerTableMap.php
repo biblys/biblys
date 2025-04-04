@@ -370,6 +370,13 @@ class CustomerTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, null, false);
+        $this->addRelation('Order', '\\Model\\Order', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':customer_id',
+    1 => ':customer_id',
+  ),
+), null, null, 'Orders', false);
     }
 
     /**
