@@ -201,27 +201,29 @@ return function (
 
                 /* CUSTOMER */
 
-                $existingCustomer = CustomerQuery::create()->findOneByEmail($orderEmail);
+                $customer = CustomerQuery::create()->findOneByEmail($orderEmail);
                 if ($currentUser->isAuthenticated()) {
                     $order->setUser($currentUser->getUser());
-                    $existingCustomer = CustomerQuery::create()->findOneByUserId($currentUser->getUser()->getId());
+                    $customer = CustomerQuery::create()->findOneByUserId($currentUser->getUser()->getId());
                 }
 
-                if (!$existingCustomer) {
-                    $firstName = $request->request->get("order_firstname");
-                    $lastName = $request->request->get("order_lastname");
-
-                    $newCustomer = new \Model\Customer();
-                    $newCustomer->setEmail($orderEmail);
-                    $newCustomer->setFirstName($firstName);
-                    $newCustomer->setLastName($lastName);
-                    $newCustomer->save($db);
-                    $existingCustomer = $newCustomer;
+                if (!$customer) {
+                    $customer = new \Model\Customer();
                 }
 
-                $order->setCustomerId($existingCustomer->getId());
+                if ($currentUser->isAuthenticated()) {
+                    $customer->setUser($currentUser->getUser());
+                }
+
+                $customer->setEmail($orderEmail);
+                $customer->setFirstName($request->request->get("order_firstname"));
+                $customer->setLastName($request->request->get("order_lastname"));
+                $customer->save($db);
+
+                $order->setCustomerId($customer->getId());
 
                 /* COUNTRY */
+
                 $countryId = $request->request->get("country_id");
                 $country = CountryQuery::create()->findPk($countryId);
                 if (!$country) {
@@ -271,8 +273,8 @@ return function (
                 $order->save($db);
 
                 // Save customer country
-                $existingCustomer->setCountryId($countryId);
-                $existingCustomer->save($db);
+                $customer->setCountryId($countryId);
+                $customer->save($db);
 
                 // Get cart content
                 $cartStockItems = StockQuery::create()
@@ -311,7 +313,7 @@ return function (
                     }
 
                     // Customer
-                    $stockItem->setCustomerId($existingCustomer->getId());
+                    $stockItem->setCustomerId($customer->getId());
 
                     $stockItem->save($db);
                 }
