@@ -98,7 +98,7 @@ class PaymentController extends Controller
                 ->build(),
         ];
 
-        $apiResponse = $client->getOrdersController()->ordersCreate($orderBody);
+        $apiResponse = $client->getOrdersController()->createOrder($orderBody);
         $jsonResponse = json_decode($apiResponse->getBody(), true);
 
         $logger->log(
@@ -133,7 +133,7 @@ class PaymentController extends Controller
             $data = json_decode($request->getContent());
 
             $client = $this->_createPayPalClient($config);
-            $apiResponse = $client->getOrdersController()->ordersCapture(["id" => $data->paypalOrderId]);
+            $apiResponse = $client->getOrdersController()->captureOrder(["id" => $data->paypalOrderId]);
             $jsonResponse = json_decode($apiResponse->getBody(), true);
 
             $logger->log(
