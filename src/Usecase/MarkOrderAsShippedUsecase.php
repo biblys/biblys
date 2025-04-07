@@ -55,9 +55,14 @@ class MarkOrderAsShippedUsecase
         $order->setTrackNumber($trackingNumber);
         $order->save();
 
+        if (!$order->getShippingOption()) {
+            return;
+        }
+
         $mailSubjectSuffix = $this->currentSite->getOption("shipped_mail_subject") ?? "a été expédiée !";
         $mailSubject = "Votre commande $mailSubjectSuffix";
         $mailMessage = $this->currentSite->getOption("shipped_mail_message") ?? "Votre commande n°{$order->getId()} a été expédiée.";
+
         $isPickup = $order->getShippingOption()->getType() === "magasin";
         if ($isPickup) {
             $mailSubject = "Votre commande est disponible en magasin !";
