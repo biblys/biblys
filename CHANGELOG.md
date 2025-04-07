@@ -1,5 +1,14 @@
 # Historique des modifications
 
+## 3.5.1 (DEV)
+
+### Corrections
+
+- Les commandes payées avec PayPal et PayPlug pouvaient ne pas être marquées
+  comme payées. C'est corrigé.
+- Le marquage d'une commande numérique comme expédiée pouvait échouer sans 
+  erreur. Ça n'arrivera plus.
+
 ## 3.5.0 (4 avril 2025)
 
 ### Expérience de paiement
