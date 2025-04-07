@@ -34,6 +34,34 @@ require_once __DIR__ . "/../setUp.php";
 
 class MarkOrderAsShippedUsecaseTest extends TestCase
 {
+    /**
+     * @throws Exception
+     * @throws PropelException
+     * @throws InvalidEmailAddressException
+     * @throws TransportExceptionInterface
+     * @throws \Exception
+     */
+    public function testExecuteForOrderWithoutShippingOption()
+    {
+        // given
+        $order = ModelFactory::createOrder(email: "customer@paronymie.fr");
+        $site = ModelFactory::createSite();
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->expects("getOption")->andReturn(null);
+        $currentSite->expects("getSite")->andReturn($site);
+        $mailer = $this->createMock(Mailer::class);
+        $templateService = Helpers::getTemplateService();
+
+        $usecase = new MarkOrderAsShippedUsecase($currentSite, $templateService, $mailer);
+
+        // when
+        $usecase->execute($order, trackingNumber: null);
+
+        // then
+        $order->reload();
+        $this->assertNotNull($order->getShippingDate());
+    }
 
     /**
      * @throws Exception

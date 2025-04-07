@@ -242,6 +242,7 @@ class PaymentService
             $payment->setAmount($total_amount);
             $payment->setProviderId($response->id);
             $payment->setUrl($response->hosted_payment->payment_url);
+            $payment->save();
 
             return $payment;
         } catch (HttpException $exception) {
