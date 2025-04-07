@@ -14,23 +14,50 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #}
 
-<button
-  class="btn btn-primary cart-button add_to_cart event"
-  data-type="article"
-  data-id="{{ article.id }}"
-  {% if hideLabel is defined %}
-    aria-label="{{ article.model.cartButtonLabel }}"
-    title="{{ article.model.cartButtonLabel }}"
-  {% endif %}
->
-  <span class="fa-solid fa-shopping-basket"></span>
-  {% if hideLabel is not defined %}
-    <span class="cart-button-text">
-      {% if label is defined %}
-        {{ label }}
-      {% else %}
-        {{ article.model.cartButtonLabel }}
-      {% endif %}
-    </span>
-  {% endif %}
-</button>
+{% if article.model.price == 0 and article.type.isDownloadable %}
+
+  <a
+    class="btn btn-success cart-button"
+    href="{{ path('article_free_download', { id: article.id }) }}"
+    {% if hideLabel is defined %}
+      aria-label="{{ article.model.cartButtonLabel }}"
+      title="{{ article.model.cartButtonLabel }}"
+    {% endif %}
+  >
+    <i class="fa-solid fa-file-arrow-down"></i>
+
+    {% if hideLabel is not defined %}
+      <span class="cart-button-text">
+        {% if label is defined %}
+          {{ label }}
+        {% else %}
+          Télécharger gratuitement
+        {% endif %}
+      </span>
+    {% endif %}
+  </a>
+
+{% else %}
+
+  <button
+    class="btn btn-primary cart-button add_to_cart event"
+    data-type="article"
+    data-id="{{ article.id }}"
+    {% if hideLabel is defined %}
+      aria-label="{{ article.model.cartButtonLabel }}"
+      title="{{ article.model.cartButtonLabel }}"
+    {% endif %}
+  >
+    <span class="fa-solid fa-shopping-basket"></span>
+    {% if hideLabel is not defined %}
+      <span class="cart-button-text">
+        {% if label is defined %}
+          {{ label }}
+        {% else %}
+          {{ article.model.cartButtonLabel }}
+        {% endif %}
+      </span>
+    {% endif %}
+  </button>
+
+{% endif %}
