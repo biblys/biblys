@@ -216,7 +216,7 @@ class PaymentControllerTest extends TestCase
     {
         // given
         $controller = new PaymentController();
-        $order = ModelFactory::createOrder();
+        $order = ModelFactory::createOrder(amountToBePaid: 1000);
         $config = new Config(["stripe" => ["public_key" => "abcd"]]);
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->expects("getOption")->with("payment_iban")->andReturn(null);
