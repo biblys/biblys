@@ -1028,6 +1028,9 @@
     </foreign-key>
     <column name="publisher_id" phpName="PublisherId" type="INTEGER" sqlType="int unsigned"/>
     <column name="category_id" phpName="CategoryId" type="INTEGER" sqlType="int unsigned"/>
+    <foreign-key foreignTable="categories" skipSql="true">
+      <reference local="category_id" foreign="category_id"/>
+    </foreign-key>
     <column name="post_url" phpName="Url" type="LONGVARCHAR"/>
     <column name="post_title" phpName="Title" type="LONGVARCHAR"/>
     <column name="post_content" phpName="Content" type="LONGVARCHAR"/>

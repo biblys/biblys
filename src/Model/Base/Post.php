@@ -5,6 +5,8 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\BlogCategory as ChildBlogCategory;
+use Model\BlogCategoryQuery as ChildBlogCategoryQuery;
 use Model\Image as ChildImage;
 use Model\ImageQuery as ChildImageQuery;
 use Model\Post as ChildPost;
@@ -250,6 +252,11 @@ abstract class Post implements ActiveRecordInterface
      * @var        ChildSite
      */
     protected $aSite;
+
+    /**
+     * @var        ChildBlogCategory
+     */
+    protected $aBlogCategory;
 
     /**
      * @var        ObjectCollection|ChildImage[] Collection to store aggregation of ChildImage objects.
@@ -969,6 +976,10 @@ abstract class Post implements ActiveRecordInterface
             $this->modifiedColumns[PostTableMap::COL_CATEGORY_ID] = true;
         }
 
+        if ($this->aBlogCategory !== null && $this->aBlogCategory->getId() !== $v) {
+            $this->aBlogCategory = null;
+        }
+
         return $this;
     }
 
@@ -1514,6 +1525,9 @@ abstract class Post implements ActiveRecordInterface
         if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
             $this->aSite = null;
         }
+        if ($this->aBlogCategory !== null && $this->category_id !== $this->aBlogCategory->getId()) {
+            $this->aBlogCategory = null;
+        }
     }
 
     /**
@@ -1555,6 +1569,7 @@ abstract class Post implements ActiveRecordInterface
 
             $this->aUser = null;
             $this->aSite = null;
+            $this->aBlogCategory = null;
             $this->collImages = null;
 
         } // if (deep)
@@ -1690,6 +1705,13 @@ abstract class Post implements ActiveRecordInterface
                     $affectedRows += $this->aSite->save($con);
                 }
                 $this->setSite($this->aSite);
+            }
+
+            if ($this->aBlogCategory !== null) {
+                if ($this->aBlogCategory->isModified() || $this->aBlogCategory->isNew()) {
+                    $affectedRows += $this->aBlogCategory->save($con);
+                }
+                $this->setBlogCategory($this->aBlogCategory);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -2172,6 +2194,21 @@ abstract class Post implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aSite->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aBlogCategory) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'blogCategory';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'categories';
+                        break;
+                    default:
+                        $key = 'BlogCategory';
+                }
+
+                $result[$key] = $this->aBlogCategory->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collImages) {
 
@@ -2764,6 +2801,57 @@ abstract class Post implements ActiveRecordInterface
         return $this->aSite;
     }
 
+    /**
+     * Declares an association between this object and a ChildBlogCategory object.
+     *
+     * @param ChildBlogCategory|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setBlogCategory(ChildBlogCategory $v = null)
+    {
+        if ($v === null) {
+            $this->setCategoryId(NULL);
+        } else {
+            $this->setCategoryId($v->getId());
+        }
+
+        $this->aBlogCategory = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildBlogCategory object, it will not be re-added.
+        if ($v !== null) {
+            $v->addPost($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildBlogCategory object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildBlogCategory|null The associated ChildBlogCategory object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getBlogCategory(?ConnectionInterface $con = null)
+    {
+        if ($this->aBlogCategory === null && ($this->category_id != 0)) {
+            $this->aBlogCategory = ChildBlogCategoryQuery::create()->findPk($this->category_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aBlogCategory->addPosts($this);
+             */
+        }
+
+        return $this->aBlogCategory;
+    }
+
 
     /**
      * Initializes a collection based on the name of a relation.
@@ -3191,6 +3279,9 @@ abstract class Post implements ActiveRecordInterface
         if (null !== $this->aSite) {
             $this->aSite->removePost($this);
         }
+        if (null !== $this->aBlogCategory) {
+            $this->aBlogCategory->removePost($this);
+        }
         $this->post_id = null;
         $this->axys_account_id = null;
         $this->user_id = null;
@@ -3247,6 +3338,7 @@ abstract class Post implements ActiveRecordInterface
         $this->collImages = null;
         $this->aUser = null;
         $this->aSite = null;
+        $this->aBlogCategory = null;
         return $this;
     }
 
