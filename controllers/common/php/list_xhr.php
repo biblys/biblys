@@ -198,8 +198,9 @@ return function (Request $request, CurrentUser $currentUser, ImagesService $imag
 
     } elseif ($del) {
         $link = $lm->getById($del);
-        $lm->delete($link);
-
+        if ($link) {
+            $lm->delete($link);
+        }
     }
 
     return new JsonResponse(["content" => $content]);
