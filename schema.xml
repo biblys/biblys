@@ -206,7 +206,7 @@
       <reference local="site_id" foreign="site_id"/>
     </foreign-key>
   </table>
-  <table name="categories" idMethod="native" phpName="Category">
+  <table name="categories" idMethod="native" phpName="BlogCategory">
     <column name="category_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int unsigned"/>
     <column name="category_name" phpName="Name" type="VARCHAR" size="64"/>
