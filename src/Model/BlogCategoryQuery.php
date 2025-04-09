@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2024 Clément Latzarus
+ * Copyright (C) 2025 Clément Latzarus
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
@@ -18,10 +18,10 @@
 
 namespace Model;
 
-use Model\Base\Category as BaseCategory;
+use Model\Base\BlogCategoryQuery as BaseBlogCategoryQuery;
 
 /**
- * Skeleton subclass for representing a row from the 'categories' table.
+ * Skeleton subclass for performing query and update operations on the 'categories' table.
  *
  *
  *
@@ -29,7 +29,7 @@ use Model\Base\Category as BaseCategory;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class Category extends BaseCategory
+class BlogCategoryQuery extends BaseBlogCategoryQuery
 {
 
 }

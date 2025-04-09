@@ -4,9 +4,9 @@ namespace Model\Base;
 
 use \Exception;
 use \PDO;
-use Model\Category as ChildCategory;
-use Model\CategoryQuery as ChildCategoryQuery;
-use Model\Map\CategoryTableMap;
+use Model\BlogCategory as ChildBlogCategory;
+use Model\BlogCategoryQuery as ChildBlogCategoryQuery;
+use Model\Map\BlogCategoryTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -17,127 +17,127 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the `categories` table.
  *
- * @method     ChildCategoryQuery orderById($order = Criteria::ASC) Order by the category_id column
- * @method     ChildCategoryQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
- * @method     ChildCategoryQuery orderByName($order = Criteria::ASC) Order by the category_name column
- * @method     ChildCategoryQuery orderByUrl($order = Criteria::ASC) Order by the category_url column
- * @method     ChildCategoryQuery orderByDesc($order = Criteria::ASC) Order by the category_desc column
- * @method     ChildCategoryQuery orderByOrder($order = Criteria::ASC) Order by the category_order column
- * @method     ChildCategoryQuery orderByHidden($order = Criteria::ASC) Order by the category_hidden column
- * @method     ChildCategoryQuery orderByInsert($order = Criteria::ASC) Order by the category_insert column
- * @method     ChildCategoryQuery orderByUpdate($order = Criteria::ASC) Order by the category_update column
- * @method     ChildCategoryQuery orderByCreatedAt($order = Criteria::ASC) Order by the category_created column
- * @method     ChildCategoryQuery orderByUpdatedAt($order = Criteria::ASC) Order by the category_updated column
+ * @method     ChildBlogCategoryQuery orderById($order = Criteria::ASC) Order by the category_id column
+ * @method     ChildBlogCategoryQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
+ * @method     ChildBlogCategoryQuery orderByName($order = Criteria::ASC) Order by the category_name column
+ * @method     ChildBlogCategoryQuery orderByUrl($order = Criteria::ASC) Order by the category_url column
+ * @method     ChildBlogCategoryQuery orderByDesc($order = Criteria::ASC) Order by the category_desc column
+ * @method     ChildBlogCategoryQuery orderByOrder($order = Criteria::ASC) Order by the category_order column
+ * @method     ChildBlogCategoryQuery orderByHidden($order = Criteria::ASC) Order by the category_hidden column
+ * @method     ChildBlogCategoryQuery orderByInsert($order = Criteria::ASC) Order by the category_insert column
+ * @method     ChildBlogCategoryQuery orderByUpdate($order = Criteria::ASC) Order by the category_update column
+ * @method     ChildBlogCategoryQuery orderByCreatedAt($order = Criteria::ASC) Order by the category_created column
+ * @method     ChildBlogCategoryQuery orderByUpdatedAt($order = Criteria::ASC) Order by the category_updated column
  *
- * @method     ChildCategoryQuery groupById() Group by the category_id column
- * @method     ChildCategoryQuery groupBySiteId() Group by the site_id column
- * @method     ChildCategoryQuery groupByName() Group by the category_name column
- * @method     ChildCategoryQuery groupByUrl() Group by the category_url column
- * @method     ChildCategoryQuery groupByDesc() Group by the category_desc column
- * @method     ChildCategoryQuery groupByOrder() Group by the category_order column
- * @method     ChildCategoryQuery groupByHidden() Group by the category_hidden column
- * @method     ChildCategoryQuery groupByInsert() Group by the category_insert column
- * @method     ChildCategoryQuery groupByUpdate() Group by the category_update column
- * @method     ChildCategoryQuery groupByCreatedAt() Group by the category_created column
- * @method     ChildCategoryQuery groupByUpdatedAt() Group by the category_updated column
+ * @method     ChildBlogCategoryQuery groupById() Group by the category_id column
+ * @method     ChildBlogCategoryQuery groupBySiteId() Group by the site_id column
+ * @method     ChildBlogCategoryQuery groupByName() Group by the category_name column
+ * @method     ChildBlogCategoryQuery groupByUrl() Group by the category_url column
+ * @method     ChildBlogCategoryQuery groupByDesc() Group by the category_desc column
+ * @method     ChildBlogCategoryQuery groupByOrder() Group by the category_order column
+ * @method     ChildBlogCategoryQuery groupByHidden() Group by the category_hidden column
+ * @method     ChildBlogCategoryQuery groupByInsert() Group by the category_insert column
+ * @method     ChildBlogCategoryQuery groupByUpdate() Group by the category_update column
+ * @method     ChildBlogCategoryQuery groupByCreatedAt() Group by the category_created column
+ * @method     ChildBlogCategoryQuery groupByUpdatedAt() Group by the category_updated column
  *
- * @method     ChildCategoryQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildCategoryQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildCategoryQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method     ChildBlogCategoryQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildBlogCategoryQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildBlogCategoryQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildCategoryQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildCategoryQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildCategoryQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method     ChildBlogCategoryQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method     ChildBlogCategoryQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method     ChildBlogCategoryQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildCategory|null findOne(?ConnectionInterface $con = null) Return the first ChildCategory matching the query
- * @method     ChildCategory findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildCategory matching the query, or a new ChildCategory object populated from the query conditions when no match is found
+ * @method     ChildBlogCategory|null findOne(?ConnectionInterface $con = null) Return the first ChildBlogCategory matching the query
+ * @method     ChildBlogCategory findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildBlogCategory matching the query, or a new ChildBlogCategory object populated from the query conditions when no match is found
  *
- * @method     ChildCategory|null findOneById(int $category_id) Return the first ChildCategory filtered by the category_id column
- * @method     ChildCategory|null findOneBySiteId(int $site_id) Return the first ChildCategory filtered by the site_id column
- * @method     ChildCategory|null findOneByName(string $category_name) Return the first ChildCategory filtered by the category_name column
- * @method     ChildCategory|null findOneByUrl(string $category_url) Return the first ChildCategory filtered by the category_url column
- * @method     ChildCategory|null findOneByDesc(string $category_desc) Return the first ChildCategory filtered by the category_desc column
- * @method     ChildCategory|null findOneByOrder(int $category_order) Return the first ChildCategory filtered by the category_order column
- * @method     ChildCategory|null findOneByHidden(boolean $category_hidden) Return the first ChildCategory filtered by the category_hidden column
- * @method     ChildCategory|null findOneByInsert(string $category_insert) Return the first ChildCategory filtered by the category_insert column
- * @method     ChildCategory|null findOneByUpdate(string $category_update) Return the first ChildCategory filtered by the category_update column
- * @method     ChildCategory|null findOneByCreatedAt(string $category_created) Return the first ChildCategory filtered by the category_created column
- * @method     ChildCategory|null findOneByUpdatedAt(string $category_updated) Return the first ChildCategory filtered by the category_updated column
+ * @method     ChildBlogCategory|null findOneById(int $category_id) Return the first ChildBlogCategory filtered by the category_id column
+ * @method     ChildBlogCategory|null findOneBySiteId(int $site_id) Return the first ChildBlogCategory filtered by the site_id column
+ * @method     ChildBlogCategory|null findOneByName(string $category_name) Return the first ChildBlogCategory filtered by the category_name column
+ * @method     ChildBlogCategory|null findOneByUrl(string $category_url) Return the first ChildBlogCategory filtered by the category_url column
+ * @method     ChildBlogCategory|null findOneByDesc(string $category_desc) Return the first ChildBlogCategory filtered by the category_desc column
+ * @method     ChildBlogCategory|null findOneByOrder(int $category_order) Return the first ChildBlogCategory filtered by the category_order column
+ * @method     ChildBlogCategory|null findOneByHidden(boolean $category_hidden) Return the first ChildBlogCategory filtered by the category_hidden column
+ * @method     ChildBlogCategory|null findOneByInsert(string $category_insert) Return the first ChildBlogCategory filtered by the category_insert column
+ * @method     ChildBlogCategory|null findOneByUpdate(string $category_update) Return the first ChildBlogCategory filtered by the category_update column
+ * @method     ChildBlogCategory|null findOneByCreatedAt(string $category_created) Return the first ChildBlogCategory filtered by the category_created column
+ * @method     ChildBlogCategory|null findOneByUpdatedAt(string $category_updated) Return the first ChildBlogCategory filtered by the category_updated column
  *
- * @method     ChildCategory requirePk($key, ?ConnectionInterface $con = null) Return the ChildCategory by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCategory requireOne(?ConnectionInterface $con = null) Return the first ChildCategory matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildBlogCategory requirePk($key, ?ConnectionInterface $con = null) Return the ChildBlogCategory by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildBlogCategory requireOne(?ConnectionInterface $con = null) Return the first ChildBlogCategory matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildCategory requireOneById(int $category_id) Return the first ChildCategory filtered by the category_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCategory requireOneBySiteId(int $site_id) Return the first ChildCategory filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCategory requireOneByName(string $category_name) Return the first ChildCategory filtered by the category_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCategory requireOneByUrl(string $category_url) Return the first ChildCategory filtered by the category_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCategory requireOneByDesc(string $category_desc) Return the first ChildCategory filtered by the category_desc column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCategory requireOneByOrder(int $category_order) Return the first ChildCategory filtered by the category_order column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCategory requireOneByHidden(boolean $category_hidden) Return the first ChildCategory filtered by the category_hidden column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCategory requireOneByInsert(string $category_insert) Return the first ChildCategory filtered by the category_insert column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCategory requireOneByUpdate(string $category_update) Return the first ChildCategory filtered by the category_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCategory requireOneByCreatedAt(string $category_created) Return the first ChildCategory filtered by the category_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCategory requireOneByUpdatedAt(string $category_updated) Return the first ChildCategory filtered by the category_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildBlogCategory requireOneById(int $category_id) Return the first ChildBlogCategory filtered by the category_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildBlogCategory requireOneBySiteId(int $site_id) Return the first ChildBlogCategory filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildBlogCategory requireOneByName(string $category_name) Return the first ChildBlogCategory filtered by the category_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildBlogCategory requireOneByUrl(string $category_url) Return the first ChildBlogCategory filtered by the category_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildBlogCategory requireOneByDesc(string $category_desc) Return the first ChildBlogCategory filtered by the category_desc column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildBlogCategory requireOneByOrder(int $category_order) Return the first ChildBlogCategory filtered by the category_order column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildBlogCategory requireOneByHidden(boolean $category_hidden) Return the first ChildBlogCategory filtered by the category_hidden column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildBlogCategory requireOneByInsert(string $category_insert) Return the first ChildBlogCategory filtered by the category_insert column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildBlogCategory requireOneByUpdate(string $category_update) Return the first ChildBlogCategory filtered by the category_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildBlogCategory requireOneByCreatedAt(string $category_created) Return the first ChildBlogCategory filtered by the category_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildBlogCategory requireOneByUpdatedAt(string $category_updated) Return the first ChildBlogCategory filtered by the category_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildCategory[]|Collection find(?ConnectionInterface $con = null) Return ChildCategory objects based on current ModelCriteria
- * @psalm-method Collection&\Traversable<ChildCategory> find(?ConnectionInterface $con = null) Return ChildCategory objects based on current ModelCriteria
+ * @method     ChildBlogCategory[]|Collection find(?ConnectionInterface $con = null) Return ChildBlogCategory objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildBlogCategory> find(?ConnectionInterface $con = null) Return ChildBlogCategory objects based on current ModelCriteria
  *
- * @method     ChildCategory[]|Collection findById(int|array<int> $category_id) Return ChildCategory objects filtered by the category_id column
- * @psalm-method Collection&\Traversable<ChildCategory> findById(int|array<int> $category_id) Return ChildCategory objects filtered by the category_id column
- * @method     ChildCategory[]|Collection findBySiteId(int|array<int> $site_id) Return ChildCategory objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildCategory> findBySiteId(int|array<int> $site_id) Return ChildCategory objects filtered by the site_id column
- * @method     ChildCategory[]|Collection findByName(string|array<string> $category_name) Return ChildCategory objects filtered by the category_name column
- * @psalm-method Collection&\Traversable<ChildCategory> findByName(string|array<string> $category_name) Return ChildCategory objects filtered by the category_name column
- * @method     ChildCategory[]|Collection findByUrl(string|array<string> $category_url) Return ChildCategory objects filtered by the category_url column
- * @psalm-method Collection&\Traversable<ChildCategory> findByUrl(string|array<string> $category_url) Return ChildCategory objects filtered by the category_url column
- * @method     ChildCategory[]|Collection findByDesc(string|array<string> $category_desc) Return ChildCategory objects filtered by the category_desc column
- * @psalm-method Collection&\Traversable<ChildCategory> findByDesc(string|array<string> $category_desc) Return ChildCategory objects filtered by the category_desc column
- * @method     ChildCategory[]|Collection findByOrder(int|array<int> $category_order) Return ChildCategory objects filtered by the category_order column
- * @psalm-method Collection&\Traversable<ChildCategory> findByOrder(int|array<int> $category_order) Return ChildCategory objects filtered by the category_order column
- * @method     ChildCategory[]|Collection findByHidden(boolean|array<boolean> $category_hidden) Return ChildCategory objects filtered by the category_hidden column
- * @psalm-method Collection&\Traversable<ChildCategory> findByHidden(boolean|array<boolean> $category_hidden) Return ChildCategory objects filtered by the category_hidden column
- * @method     ChildCategory[]|Collection findByInsert(string|array<string> $category_insert) Return ChildCategory objects filtered by the category_insert column
- * @psalm-method Collection&\Traversable<ChildCategory> findByInsert(string|array<string> $category_insert) Return ChildCategory objects filtered by the category_insert column
- * @method     ChildCategory[]|Collection findByUpdate(string|array<string> $category_update) Return ChildCategory objects filtered by the category_update column
- * @psalm-method Collection&\Traversable<ChildCategory> findByUpdate(string|array<string> $category_update) Return ChildCategory objects filtered by the category_update column
- * @method     ChildCategory[]|Collection findByCreatedAt(string|array<string> $category_created) Return ChildCategory objects filtered by the category_created column
- * @psalm-method Collection&\Traversable<ChildCategory> findByCreatedAt(string|array<string> $category_created) Return ChildCategory objects filtered by the category_created column
- * @method     ChildCategory[]|Collection findByUpdatedAt(string|array<string> $category_updated) Return ChildCategory objects filtered by the category_updated column
- * @psalm-method Collection&\Traversable<ChildCategory> findByUpdatedAt(string|array<string> $category_updated) Return ChildCategory objects filtered by the category_updated column
+ * @method     ChildBlogCategory[]|Collection findById(int|array<int> $category_id) Return ChildBlogCategory objects filtered by the category_id column
+ * @psalm-method Collection&\Traversable<ChildBlogCategory> findById(int|array<int> $category_id) Return ChildBlogCategory objects filtered by the category_id column
+ * @method     ChildBlogCategory[]|Collection findBySiteId(int|array<int> $site_id) Return ChildBlogCategory objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildBlogCategory> findBySiteId(int|array<int> $site_id) Return ChildBlogCategory objects filtered by the site_id column
+ * @method     ChildBlogCategory[]|Collection findByName(string|array<string> $category_name) Return ChildBlogCategory objects filtered by the category_name column
+ * @psalm-method Collection&\Traversable<ChildBlogCategory> findByName(string|array<string> $category_name) Return ChildBlogCategory objects filtered by the category_name column
+ * @method     ChildBlogCategory[]|Collection findByUrl(string|array<string> $category_url) Return ChildBlogCategory objects filtered by the category_url column
+ * @psalm-method Collection&\Traversable<ChildBlogCategory> findByUrl(string|array<string> $category_url) Return ChildBlogCategory objects filtered by the category_url column
+ * @method     ChildBlogCategory[]|Collection findByDesc(string|array<string> $category_desc) Return ChildBlogCategory objects filtered by the category_desc column
+ * @psalm-method Collection&\Traversable<ChildBlogCategory> findByDesc(string|array<string> $category_desc) Return ChildBlogCategory objects filtered by the category_desc column
+ * @method     ChildBlogCategory[]|Collection findByOrder(int|array<int> $category_order) Return ChildBlogCategory objects filtered by the category_order column
+ * @psalm-method Collection&\Traversable<ChildBlogCategory> findByOrder(int|array<int> $category_order) Return ChildBlogCategory objects filtered by the category_order column
+ * @method     ChildBlogCategory[]|Collection findByHidden(boolean|array<boolean> $category_hidden) Return ChildBlogCategory objects filtered by the category_hidden column
+ * @psalm-method Collection&\Traversable<ChildBlogCategory> findByHidden(boolean|array<boolean> $category_hidden) Return ChildBlogCategory objects filtered by the category_hidden column
+ * @method     ChildBlogCategory[]|Collection findByInsert(string|array<string> $category_insert) Return ChildBlogCategory objects filtered by the category_insert column
+ * @psalm-method Collection&\Traversable<ChildBlogCategory> findByInsert(string|array<string> $category_insert) Return ChildBlogCategory objects filtered by the category_insert column
+ * @method     ChildBlogCategory[]|Collection findByUpdate(string|array<string> $category_update) Return ChildBlogCategory objects filtered by the category_update column
+ * @psalm-method Collection&\Traversable<ChildBlogCategory> findByUpdate(string|array<string> $category_update) Return ChildBlogCategory objects filtered by the category_update column
+ * @method     ChildBlogCategory[]|Collection findByCreatedAt(string|array<string> $category_created) Return ChildBlogCategory objects filtered by the category_created column
+ * @psalm-method Collection&\Traversable<ChildBlogCategory> findByCreatedAt(string|array<string> $category_created) Return ChildBlogCategory objects filtered by the category_created column
+ * @method     ChildBlogCategory[]|Collection findByUpdatedAt(string|array<string> $category_updated) Return ChildBlogCategory objects filtered by the category_updated column
+ * @psalm-method Collection&\Traversable<ChildBlogCategory> findByUpdatedAt(string|array<string> $category_updated) Return ChildBlogCategory objects filtered by the category_updated column
  *
- * @method     ChildCategory[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCategory> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildBlogCategory[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildBlogCategory> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
-abstract class CategoryQuery extends ModelCriteria
+abstract class BlogCategoryQuery extends ModelCriteria
 {
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \Model\Base\CategoryQuery object.
+     * Initializes internal state of \Model\Base\BlogCategoryQuery object.
      *
      * @param string $dbName The database name
      * @param string $modelName The phpName of a model, e.g. 'Book'
      * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'default', $modelName = '\\Model\\Category', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\Model\\BlogCategory', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new ChildCategoryQuery object.
+     * Returns a new ChildBlogCategoryQuery object.
      *
      * @param string $modelAlias The alias of a model in the query
      * @param Criteria $criteria Optional Criteria to build the query from
      *
-     * @return ChildCategoryQuery
+     * @return ChildBlogCategoryQuery
      */
     public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
-        if ($criteria instanceof ChildCategoryQuery) {
+        if ($criteria instanceof ChildBlogCategoryQuery) {
             return $criteria;
         }
-        $query = new ChildCategoryQuery();
+        $query = new ChildBlogCategoryQuery();
         if (null !== $modelAlias) {
             $query->setModelAlias($modelAlias);
         }
@@ -160,7 +160,7 @@ abstract class CategoryQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
-     * @return ChildCategory|array|mixed the result, formatted by the current formatter
+     * @return ChildBlogCategory|array|mixed the result, formatted by the current formatter
      */
     public function findPk($key, ?ConnectionInterface $con = null)
     {
@@ -169,7 +169,7 @@ abstract class CategoryQuery extends ModelCriteria
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(CategoryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(BlogCategoryTableMap::DATABASE_NAME);
         }
 
         $this->basePreSelect($con);
@@ -182,7 +182,7 @@ abstract class CategoryQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = CategoryTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
+        if ((null !== ($obj = BlogCategoryTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -199,7 +199,7 @@ abstract class CategoryQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildCategory A model object, or null if the key is not found
+     * @return ChildBlogCategory A model object, or null if the key is not found
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
@@ -214,10 +214,10 @@ abstract class CategoryQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildCategory $obj */
-            $obj = new ChildCategory();
+            /** @var ChildBlogCategory $obj */
+            $obj = new ChildBlogCategory();
             $obj->hydrate($row);
-            CategoryTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
+            BlogCategoryTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -230,7 +230,7 @@ abstract class CategoryQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con A connection object
      *
-     * @return ChildCategory|array|mixed the result, formatted by the current formatter
+     * @return ChildBlogCategory|array|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, ConnectionInterface $con)
     {
@@ -277,7 +277,7 @@ abstract class CategoryQuery extends ModelCriteria
     public function filterByPrimaryKey($key)
     {
 
-        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_ID, $key, Criteria::EQUAL);
 
         return $this;
     }
@@ -292,7 +292,7 @@ abstract class CategoryQuery extends ModelCriteria
     public function filterByPrimaryKeys($keys)
     {
 
-        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_ID, $keys, Criteria::IN);
 
         return $this;
     }
@@ -320,11 +320,11 @@ abstract class CategoryQuery extends ModelCriteria
         if (is_array($id)) {
             $useMinMax = false;
             if (isset($id['min'])) {
-                $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_ID, $id['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_ID, $id['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($id['max'])) {
-                $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_ID, $id['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_ID, $id['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -335,7 +335,7 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_ID, $id, $comparison);
+        $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_ID, $id, $comparison);
 
         return $this;
     }
@@ -363,11 +363,11 @@ abstract class CategoryQuery extends ModelCriteria
         if (is_array($siteId)) {
             $useMinMax = false;
             if (isset($siteId['min'])) {
-                $this->addUsingAlias(CategoryTableMap::COL_SITE_ID, $siteId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(BlogCategoryTableMap::COL_SITE_ID, $siteId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($siteId['max'])) {
-                $this->addUsingAlias(CategoryTableMap::COL_SITE_ID, $siteId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(BlogCategoryTableMap::COL_SITE_ID, $siteId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -378,7 +378,7 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(CategoryTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(BlogCategoryTableMap::COL_SITE_ID, $siteId, $comparison);
 
         return $this;
     }
@@ -406,7 +406,7 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_NAME, $name, $comparison);
+        $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_NAME, $name, $comparison);
 
         return $this;
     }
@@ -434,7 +434,7 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_URL, $url, $comparison);
+        $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_URL, $url, $comparison);
 
         return $this;
     }
@@ -462,7 +462,7 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_DESC, $desc, $comparison);
+        $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_DESC, $desc, $comparison);
 
         return $this;
     }
@@ -490,11 +490,11 @@ abstract class CategoryQuery extends ModelCriteria
         if (is_array($order)) {
             $useMinMax = false;
             if (isset($order['min'])) {
-                $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_ORDER, $order['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_ORDER, $order['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($order['max'])) {
-                $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_ORDER, $order['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_ORDER, $order['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -505,7 +505,7 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_ORDER, $order, $comparison);
+        $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_ORDER, $order, $comparison);
 
         return $this;
     }
@@ -534,7 +534,7 @@ abstract class CategoryQuery extends ModelCriteria
             $hidden = in_array(strtolower($hidden), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
-        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_HIDDEN, $hidden, $comparison);
+        $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_HIDDEN, $hidden, $comparison);
 
         return $this;
     }
@@ -564,11 +564,11 @@ abstract class CategoryQuery extends ModelCriteria
         if (is_array($insert)) {
             $useMinMax = false;
             if (isset($insert['min'])) {
-                $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_INSERT, $insert['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_INSERT, $insert['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($insert['max'])) {
-                $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_INSERT, $insert['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_INSERT, $insert['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -579,7 +579,7 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_INSERT, $insert, $comparison);
+        $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_INSERT, $insert, $comparison);
 
         return $this;
     }
@@ -609,11 +609,11 @@ abstract class CategoryQuery extends ModelCriteria
         if (is_array($update)) {
             $useMinMax = false;
             if (isset($update['min'])) {
-                $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_UPDATE, $update['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_UPDATE, $update['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($update['max'])) {
-                $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_UPDATE, $update['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_UPDATE, $update['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -624,7 +624,7 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_UPDATE, $update, $comparison);
+        $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_UPDATE, $update, $comparison);
 
         return $this;
     }
@@ -654,11 +654,11 @@ abstract class CategoryQuery extends ModelCriteria
         if (is_array($createdAt)) {
             $useMinMax = false;
             if (isset($createdAt['min'])) {
-                $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_CREATED, $createdAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_CREATED, $createdAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($createdAt['max'])) {
-                $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_CREATED, $createdAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_CREATED, $createdAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -669,7 +669,7 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_CREATED, $createdAt, $comparison);
 
         return $this;
     }
@@ -699,11 +699,11 @@ abstract class CategoryQuery extends ModelCriteria
         if (is_array($updatedAt)) {
             $useMinMax = false;
             if (isset($updatedAt['min'])) {
-                $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_UPDATED, $updatedAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_UPDATED, $updatedAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($updatedAt['max'])) {
-                $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_UPDATED, $updatedAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_UPDATED, $updatedAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -714,7 +714,7 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_UPDATED, $updatedAt, $comparison);
 
         return $this;
     }
@@ -722,14 +722,14 @@ abstract class CategoryQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param ChildCategory $category Object to remove from the list of results
+     * @param ChildBlogCategory $blogCategory Object to remove from the list of results
      *
      * @return $this The current query, for fluid interface
      */
-    public function prune($category = null)
+    public function prune($blogCategory = null)
     {
-        if ($category) {
-            $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_ID, $category->getId(), Criteria::NOT_EQUAL);
+        if ($blogCategory) {
+            $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_ID, $blogCategory->getId(), Criteria::NOT_EQUAL);
         }
 
         return $this;
@@ -744,7 +744,7 @@ abstract class CategoryQuery extends ModelCriteria
     public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(CategoryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(BlogCategoryTableMap::DATABASE_NAME);
         }
 
         // use transaction because $criteria could contain info
@@ -755,8 +755,8 @@ abstract class CategoryQuery extends ModelCriteria
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            CategoryTableMap::clearInstancePool();
-            CategoryTableMap::clearRelatedInstancePool();
+            BlogCategoryTableMap::clearInstancePool();
+            BlogCategoryTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -774,23 +774,23 @@ abstract class CategoryQuery extends ModelCriteria
     public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(CategoryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(BlogCategoryTableMap::DATABASE_NAME);
         }
 
         $criteria = $this;
 
         // Set the correct dbName
-        $criteria->setDbName(CategoryTableMap::DATABASE_NAME);
+        $criteria->setDbName(BlogCategoryTableMap::DATABASE_NAME);
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
 
-            CategoryTableMap::removeInstanceFromPool($criteria);
+            BlogCategoryTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
-            CategoryTableMap::clearRelatedInstancePool();
+            BlogCategoryTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -807,7 +807,7 @@ abstract class CategoryQuery extends ModelCriteria
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
 
         return $this;
     }
@@ -819,7 +819,7 @@ abstract class CategoryQuery extends ModelCriteria
      */
     public function lastUpdatedFirst()
     {
-        $this->addDescendingOrderByColumn(CategoryTableMap::COL_CATEGORY_UPDATED);
+        $this->addDescendingOrderByColumn(BlogCategoryTableMap::COL_CATEGORY_UPDATED);
 
         return $this;
     }
@@ -831,7 +831,7 @@ abstract class CategoryQuery extends ModelCriteria
      */
     public function firstUpdatedFirst()
     {
-        $this->addAscendingOrderByColumn(CategoryTableMap::COL_CATEGORY_UPDATED);
+        $this->addAscendingOrderByColumn(BlogCategoryTableMap::COL_CATEGORY_UPDATED);
 
         return $this;
     }
@@ -843,7 +843,7 @@ abstract class CategoryQuery extends ModelCriteria
      */
     public function lastCreatedFirst()
     {
-        $this->addDescendingOrderByColumn(CategoryTableMap::COL_CATEGORY_CREATED);
+        $this->addDescendingOrderByColumn(BlogCategoryTableMap::COL_CATEGORY_CREATED);
 
         return $this;
     }
@@ -857,7 +857,7 @@ abstract class CategoryQuery extends ModelCriteria
      */
     public function recentlyCreated($nbDays = 7)
     {
-        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
 
         return $this;
     }
@@ -869,7 +869,7 @@ abstract class CategoryQuery extends ModelCriteria
      */
     public function firstCreatedFirst()
     {
-        $this->addAscendingOrderByColumn(CategoryTableMap::COL_CATEGORY_CREATED);
+        $this->addAscendingOrderByColumn(BlogCategoryTableMap::COL_CATEGORY_CREATED);
 
         return $this;
     }
