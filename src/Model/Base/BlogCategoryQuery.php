@@ -10,7 +10,9 @@ use Model\Map\BlogCategoryTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
+use Propel\Runtime\ActiveQuery\ModelJoin;
 use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -48,6 +50,18 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBlogCategoryQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
  * @method     ChildBlogCategoryQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildBlogCategoryQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ *
+ * @method     ChildBlogCategoryQuery leftJoinPost($relationAlias = null) Adds a LEFT JOIN clause to the query using the Post relation
+ * @method     ChildBlogCategoryQuery rightJoinPost($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Post relation
+ * @method     ChildBlogCategoryQuery innerJoinPost($relationAlias = null) Adds a INNER JOIN clause to the query using the Post relation
+ *
+ * @method     ChildBlogCategoryQuery joinWithPost($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Post relation
+ *
+ * @method     ChildBlogCategoryQuery leftJoinWithPost() Adds a LEFT JOIN clause and with to the query using the Post relation
+ * @method     ChildBlogCategoryQuery rightJoinWithPost() Adds a RIGHT JOIN clause and with to the query using the Post relation
+ * @method     ChildBlogCategoryQuery innerJoinWithPost() Adds a INNER JOIN clause and with to the query using the Post relation
+ *
+ * @method     \Model\PostQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildBlogCategory|null findOne(?ConnectionInterface $con = null) Return the first ChildBlogCategory matching the query
  * @method     ChildBlogCategory findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildBlogCategory matching the query, or a new ChildBlogCategory object populated from the query conditions when no match is found
@@ -717,6 +731,179 @@ abstract class BlogCategoryQuery extends ModelCriteria
         $this->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_UPDATED, $updatedAt, $comparison);
 
         return $this;
+    }
+
+    /**
+     * Filter the query by a related \Model\Post object
+     *
+     * @param \Model\Post|ObjectCollection $post the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByPost($post, ?string $comparison = null)
+    {
+        if ($post instanceof \Model\Post) {
+            $this
+                ->addUsingAlias(BlogCategoryTableMap::COL_CATEGORY_ID, $post->getCategoryId(), $comparison);
+
+            return $this;
+        } elseif ($post instanceof ObjectCollection) {
+            $this
+                ->usePostQuery()
+                ->filterByPrimaryKeys($post->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByPost() only accepts arguments of type \Model\Post or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Post relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinPost(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Post');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Post');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Post relation Post object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\PostQuery A secondary query class using the current class as primary query
+     */
+    public function usePostQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinPost($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Post', '\Model\PostQuery');
+    }
+
+    /**
+     * Use the Post relation Post object
+     *
+     * @param callable(\Model\PostQuery):\Model\PostQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withPostQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->usePostQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Post table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\PostQuery The inner query object of the EXISTS statement
+     */
+    public function usePostExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\PostQuery */
+        $q = $this->useExistsQuery('Post', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Post table for a NOT EXISTS query.
+     *
+     * @see usePostExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\PostQuery The inner query object of the NOT EXISTS statement
+     */
+    public function usePostNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\PostQuery */
+        $q = $this->useExistsQuery('Post', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Post table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\PostQuery The inner query object of the IN statement
+     */
+    public function useInPostQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\PostQuery */
+        $q = $this->useInQuery('Post', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Post table for a NOT IN query.
+     *
+     * @see usePostInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\PostQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInPostQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\PostQuery */
+        $q = $this->useInQuery('Post', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
     }
 
     /**
