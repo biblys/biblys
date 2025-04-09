@@ -61,7 +61,8 @@ return function(
         if ($publisher) {
             $items["Éditeur"][] = array('Fiche d\'identité', '/pages/publisher_edit', 'fa-list-alt');
 
-            $items["Bibliographie"][] = array('Catalogue', '/pages/log_articles', 'fa-list');
+            $catalogUrl = $urlGenerator->generate("article_admin_catalog");
+            $items["Bibliographie"][] = array('Catalogue', $catalogUrl, 'fa-list');
             $collectionUrl = $urlGenerator->generate("collection_admin");
             $items["Bibliographie"][] = array("Collections", $collectionUrl, "fa-th-list");
             $items["Bibliographie"][] = array('Créer un nouveau livre', '/pages/article_edit', 'fa-book');
