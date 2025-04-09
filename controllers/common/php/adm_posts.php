@@ -18,127 +18,136 @@
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\QueryParamsService;
+use Biblys\Service\TemplateService;
+use Model\BlogCategoryQuery;
+use Model\PostQuery;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
-$the_categories = null;
+return function (
+    Request                            $request,
+    Config                             $config,
+    CurrentUser                        $currentUser,
+    UrlGenerator                       $urlGenerator,
+    QueryParamsService $queryParams,
+    TemplateService $templateService,
+): Response {
+    $currentUser->authPublisher();
+    $rank = $currentUser->isAdmin() ? "adm_" : "pub_";
 
-$request = Request::createFromGlobals();
-$config = Config::load();
-$currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+    $queryParams->parse(["category_id" => ["type" => "numeric", "default" => 0]]);
+    $currentCategoryId = $queryParams->getInteger("category_id");
 
-$rank = "log_";
-if ($currentUser->isAdmin()) {
-    $cm = new CategoryManager();
-    $categories = $cm->getAll();
-    foreach ($categories as $category) {
-        $c = $category;
-        $the_categories .= '<option value="?category_id='.$c["category_id"].'" '.(isset($_GET['category_id']) && $_GET['category_id'] == $c['category_id'] ? ' selected' : null).'>'.$c["category_name"].'</option>';
+    $postQuery = PostQuery::create();
+
+    if ($currentCategoryId) {
+        $postQuery->filterByCategoryId($_GET["category_id"]);
     }
-    if(isset($the_categories)) $the_categories = '
-        <select name="category_id" id="category_id" class="goto">
-            <option value="?">Filtrer par catégorie...</option>
-            '.$the_categories.'
-        </select>
-    ';
-    $rank = 'adm_';
-}
-elseif ($currentUser->hasPublisherRight()) $rank = 'pub_';
 
-$req = NULL;
-$params = ["site_id" => $globalSite->get("id")];
-if (isset($_GET["category_id"])) {
-    $req .= 'AND `category_id` = :category_id';
-    $params["category_id"] = $_GET["category_id"];
-}
+    if (!$currentUser->isAdmin() && $currentUser->hasPublisherRight()) {
+        $postQuery->filterByPublisherId($currentUser->getCurrentRight()->getPublisherId());
+    }
 
-if(!$currentUser->isAdmin() && $currentUser->hasPublisherRight()) {
-    $req .= 'AND `posts`.`publisher_id` = :publisher_id';
-    $params["publisher_id"] = $currentUser->getCurrentRight()->getPublisherId();
-}
+    $posts = $postQuery->find();
 
-$config = Config::load();
-$posts = EntityManager::prepareAndExecute(
-    "SELECT
-        `post_id`, `post_title`, `post_content`, `post_url`, `post_status`, `post_date`,
-        `users`.`email`, 
-        `axys_account_id`,
-        `category_name`
-    FROM `posts`
-    LEFT JOIN `users` ON `users`.`id` = `posts`.`user_id`
-    LEFT JOIN `categories` USING(`category_id`)
-    LEFT JOIN `publishers` ON `posts`.`publisher_id` = `publishers`.`publisher_id`
-    WHERE `posts`.`site_id` = :site_id $req
-    ORDER BY `post_date` DESC, `post_id` DESC",
-    $params
-);
+    $rows = "";
+    foreach ($posts as $post) {
+        $userIdentity = $post->getUser()->getEmail();
 
-if(isset($_BIBLYS_TYS)) $post_url = 'post';
-else $post_url = 'blog';
+        $publishedStatus = '<i class="fa-solid fa-square red" aria-label="En ligne"></i>';
+        if ($post->isPublished()) {
+            $publishedStatus = '<i class="fa-solid fa-square green" aria-label="Hors ligne"></i>';
+        }
 
-$table = NULL;
-while($p = $posts->fetch(PDO::FETCH_ASSOC)) {
-    $userIdentity = $p["email"] ?: "Utilisateur Axys n°" . $p["axys_account_id"];
-
-    if($p["post_status"] == 1) $p["status"] = '<img src="/common/img/square_green.png" alt="En ligne" />';
-    else $p["status"] = '<img src="/common/img/square_red.png" alt="Hors ligne" />';
-    if(empty($p["post_title"])) $p["post_title"] = truncate(strip_tags($p["post_content"]),50);
-
-    $table .= '
-        <tr>
-            <td class="right">'.$p["status"].'</td>
-            <td><a href="/'.$post_url.'/'.$p["post_url"].'">'.$p["post_title"].'</a></td>
-            <td class="nowrap">'.$userIdentity.'</td>
-            <td>'.$p["category_name"].'</td>
-            <td>'._date($p["post_date"],'d/m/Y').'</td>
-            <td class="nowrap">
-                <a href="/pages/'.$rank.'post?id='.$p["post_id"].'" title="Éditer">
-                    <span class="fa fa-edit fa-lg"></span>
-                </a>
-                <a href="'.\Biblys\Legacy\LegacyCodeHelper::getGlobalUrlGenerator()->generate('post_delete', ['id' => $p['post_id']]).'" title="Supprimer" data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?">
-                    <span class="fa fa-trash-can fa-lg">
-                    </span>
-                </a>
-            </td>
-        </tr>
-    ';
-}
-
-$request->attributes->set("page_title", "Gestion des billets");
-$content = '
-    <h1><span class="fa fa-newspaper"></span> Gestion des billets</h1>
-
-    <p class="buttonset">
-        <a href="/pages/'.$rank.'post" class="btn btn-primary"><i class="fa fa-newspaper"></i> Nouveau billet</a></a>
-        '.$the_categories.'
-    </p>
-
-    <div class="admin">
-        <p>Billets</p>
-        <p><a href="/pages/'.$rank.'post">nouveau</a></p>
-    </div>
-
-    <br />
-
-    <table class="admin-table">
-
-        <thead>
+        $postShowUrl = $urlGenerator->generate("post_show", ["slug" => $post->getUrl()]);
+        $postEditUrl = "/pages/{$rank}post?id={$post->getId()}";
+        $postDeleteUrl = $urlGenerator->generate("post_delete", ["id" => $post->getId()]);
+        $rows .= '
             <tr>
-                <th></th>
-                <th>Titre</th>
-                <th>Auteur</th>
-                <th>Catégorie</th>
-                <th>Date</th>
-                <th></th>
-                <th></th>
+                <td class="right">' . $publishedStatus . '</td>
+                <td><a href="' . $postShowUrl . '">' . $post->getTitle() . '</a></td>
+                <td class="nowrap">' . $userIdentity . '</td>
+                <td>' . $post->getBlogCategory()?->getName() . '</td>
+                <td>' . _date($post->getDate(), 'd/m/Y') . '</td>
+                <td class="nowrap">
+                    <a class="btn btn-sm btn-primary" href="' . $postEditUrl . '">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        Éditer
+                    </a>
+                    <a class="btn btn-sm btn-danger" href="' . $postDeleteUrl . '" 
+                      aria-label="Supprimer" 
+                      data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?"
+                    >
+                        <i class="fa-solid fa-trash"></i>
+                    </a>
+                </td>
             </tr>
-        </thead>
+        ';
+    }
 
-        <tbody>
-            '.$table.'
-        </tbody>
+    $request->attributes->set("page_title", "Gestion des billets");
 
-    </table>';
+    $categories = BlogCategoryQuery::create()->find();
+    /** @noinspection HtmlUnknownAttribute */
+    $content = $templateService->renderFromString('
+        <h1>
+          <i class="fa-solid fa-newspaper"></i> 
+          Gestion des billets
+        </h1>
+    
+        <div class="mt-4">
+            <a href="/pages/{{ rank }}post" class="btn btn-primary">
+              <i class="fa-solid fa-newspaper"></i> Nouveau billet</a>
+            </a>
+        </div>
+        
+        <form class="form-inline mt-4 mb-2">
+          <label class="my-1 mr-2" for="category_filter">Filtrer par catégorie</label>
+          <select class="custom-select my-1 mr-sm-2" id="category_filter" name="category_id">
+            <option value="0">Catégorie...</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}"
+                  {% if category.id == currentCategoryId %} selected {% endif %}
+                >{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        
+          <button type="submit" class="btn btn-primary my-1">
+            <i class="fa-solid fa-arrows-rotate"></i>
+          </button>
+      </form>
+    
+        <div class="admin">
+            <p>Billets</p>
+            <p><a href="/pages/{{ rank }}post">nouveau</a></p>
+        </div>
+    
+        <table class="table">
+    
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Titre</th>
+                    <th>Auteur</th>
+                    <th>Catégorie</th>
+                    <th>Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+    
+            <tbody>
+                {{rows|raw}}
+            </tbody>
+    
+        </table>
+    ', [
+        "rows" => $rows,
+        "rank" => $rank,
+        "categories" => $categories,
+        "currentCategoryId" => $currentCategoryId,
+    ]);
 
-return new Response($content);
+    return new Response($content);
+};
