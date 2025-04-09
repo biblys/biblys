@@ -18,7 +18,6 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
@@ -30,7 +29,6 @@ use DateTime;
 use Exception;
 use Framework\Controller;
 use League\HTMLToMarkdown\HtmlConverter;
-use Media;
 use Model\Post;
 use Model\PostQuery;
 use PostManager;
@@ -49,15 +47,15 @@ use Twig\Error\SyntaxError;
 class PostController extends Controller
 {
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws PropelException
      * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function indexAction(Request $request)
+    public function indexAction(
+        Request         $request,
+        TemplateService $templateService,
+    ): Response
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
-
         $queryParams = [
             "post_status" => 1,
             "post_date" => "< " . date("Y-m-d H:i:s")
@@ -82,9 +80,9 @@ class PostController extends Controller
 
         $request->attributes->set("page_title", "Actualités");
 
-        return $this->render('AppBundle:Post:index.html.twig', [
-            'posts' => $posts,
-            'pages' => $pagination,
+        return $templateService->renderResponse("AppBundle:Post:index.html.twig", [
+            "posts" => $posts,
+            "pages" => $pagination,
         ]);
     }
 
@@ -147,24 +145,24 @@ class PostController extends Controller
         ]);
     }
 
-// GET /admin/posts/
-    public
-    function adminAction(): RedirectResponse
+    /**
+     * @route GET /admin/posts/
+     * @throws PropelException
+     */
+    public function adminAction(CurrentUser $currentUser): RedirectResponse
     {
-        if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
-            return new RedirectResponse('/pages/adm_posts');
+        if ($currentUser->isAdmin()) {
+            return new RedirectResponse("/pages/adm_posts");
         }
 
-        return new RedirectResponse('/pages/pub_posts');
+        return new RedirectResponse("/pages/pub_posts");
     }
 
-// GET /post/:id/delete
-
     /**
+     * @route GET /post/:id/delete
      * @throws Exception
      */
-    public
-    function deleteAction(
+    public function deleteAction(
         UrlGenerator $urlGenerator,
         CurrentUser  $currentUser,
                      $id
@@ -186,9 +184,10 @@ class PostController extends Controller
         return new RedirectResponse($urlGenerator->generate('posts_admin'));
     }
 
-// GET /post/:slug
-    public
-    function oldUrlAction($slug): RedirectResponse
+    /**
+     * @route GET /post/:slug
+     */
+    public function oldUrlAction($slug): RedirectResponse
     {
         return new RedirectResponse('/blog/' . $slug);
     }
@@ -199,8 +198,7 @@ class PostController extends Controller
      * @throws LoaderError
      * @throws Exception
      */
-    public
-    function exportAction(CurrentSite $currentSite, TemplateService $templateService): Response
+    public function exportAction(CurrentSite $currentSite, TemplateService $templateService): Response
     {
         $posts = PostQuery::create()->findBySiteId($currentSite->getId());
         foreach ($posts as $post) {
