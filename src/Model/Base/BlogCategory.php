@@ -5,8 +5,8 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
-use Model\CategoryQuery as ChildCategoryQuery;
-use Model\Map\CategoryTableMap;
+use Model\BlogCategoryQuery as ChildBlogCategoryQuery;
+use Model\Map\BlogCategoryTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -27,14 +27,14 @@ use Propel\Runtime\Util\PropelDateTime;
  *
  * @package    propel.generator.Model.Base
  */
-abstract class Category implements ActiveRecordInterface
+abstract class BlogCategory implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      *
      * @var string
      */
-    public const TABLE_MAP = '\\Model\\Map\\CategoryTableMap';
+    public const TABLE_MAP = '\\Model\\Map\\BlogCategoryTableMap';
 
 
     /**
@@ -161,7 +161,7 @@ abstract class Category implements ActiveRecordInterface
     }
 
     /**
-     * Initializes internal state of Model\Base\Category object.
+     * Initializes internal state of Model\Base\BlogCategory object.
      * @see applyDefaults()
      */
     public function __construct()
@@ -256,9 +256,9 @@ abstract class Category implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Category</code> instance.  If
-     * <code>obj</code> is an instance of <code>Category</code>, delegates to
-     * <code>equals(Category)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>BlogCategory</code> instance.  If
+     * <code>obj</code> is an instance of <code>BlogCategory</code>, delegates to
+     * <code>equals(BlogCategory)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param mixed $obj The object to compare to.
      * @return bool Whether equal to the object specified.
@@ -570,7 +570,7 @@ abstract class Category implements ActiveRecordInterface
 
         if ($this->category_id !== $v) {
             $this->category_id = $v;
-            $this->modifiedColumns[CategoryTableMap::COL_CATEGORY_ID] = true;
+            $this->modifiedColumns[BlogCategoryTableMap::COL_CATEGORY_ID] = true;
         }
 
         return $this;
@@ -590,7 +590,7 @@ abstract class Category implements ActiveRecordInterface
 
         if ($this->site_id !== $v) {
             $this->site_id = $v;
-            $this->modifiedColumns[CategoryTableMap::COL_SITE_ID] = true;
+            $this->modifiedColumns[BlogCategoryTableMap::COL_SITE_ID] = true;
         }
 
         return $this;
@@ -610,7 +610,7 @@ abstract class Category implements ActiveRecordInterface
 
         if ($this->category_name !== $v) {
             $this->category_name = $v;
-            $this->modifiedColumns[CategoryTableMap::COL_CATEGORY_NAME] = true;
+            $this->modifiedColumns[BlogCategoryTableMap::COL_CATEGORY_NAME] = true;
         }
 
         return $this;
@@ -630,7 +630,7 @@ abstract class Category implements ActiveRecordInterface
 
         if ($this->category_url !== $v) {
             $this->category_url = $v;
-            $this->modifiedColumns[CategoryTableMap::COL_CATEGORY_URL] = true;
+            $this->modifiedColumns[BlogCategoryTableMap::COL_CATEGORY_URL] = true;
         }
 
         return $this;
@@ -650,7 +650,7 @@ abstract class Category implements ActiveRecordInterface
 
         if ($this->category_desc !== $v) {
             $this->category_desc = $v;
-            $this->modifiedColumns[CategoryTableMap::COL_CATEGORY_DESC] = true;
+            $this->modifiedColumns[BlogCategoryTableMap::COL_CATEGORY_DESC] = true;
         }
 
         return $this;
@@ -670,7 +670,7 @@ abstract class Category implements ActiveRecordInterface
 
         if ($this->category_order !== $v) {
             $this->category_order = $v;
-            $this->modifiedColumns[CategoryTableMap::COL_CATEGORY_ORDER] = true;
+            $this->modifiedColumns[BlogCategoryTableMap::COL_CATEGORY_ORDER] = true;
         }
 
         return $this;
@@ -698,7 +698,7 @@ abstract class Category implements ActiveRecordInterface
 
         if ($this->category_hidden !== $v) {
             $this->category_hidden = $v;
-            $this->modifiedColumns[CategoryTableMap::COL_CATEGORY_HIDDEN] = true;
+            $this->modifiedColumns[BlogCategoryTableMap::COL_CATEGORY_HIDDEN] = true;
         }
 
         return $this;
@@ -717,7 +717,7 @@ abstract class Category implements ActiveRecordInterface
         if ($this->category_insert !== null || $dt !== null) {
             if ($this->category_insert === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->category_insert->format("Y-m-d H:i:s.u")) {
                 $this->category_insert = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[CategoryTableMap::COL_CATEGORY_INSERT] = true;
+                $this->modifiedColumns[BlogCategoryTableMap::COL_CATEGORY_INSERT] = true;
             }
         } // if either are not null
 
@@ -737,7 +737,7 @@ abstract class Category implements ActiveRecordInterface
         if ($this->category_update !== null || $dt !== null) {
             if ($this->category_update === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->category_update->format("Y-m-d H:i:s.u")) {
                 $this->category_update = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[CategoryTableMap::COL_CATEGORY_UPDATE] = true;
+                $this->modifiedColumns[BlogCategoryTableMap::COL_CATEGORY_UPDATE] = true;
             }
         } // if either are not null
 
@@ -757,7 +757,7 @@ abstract class Category implements ActiveRecordInterface
         if ($this->category_created !== null || $dt !== null) {
             if ($this->category_created === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->category_created->format("Y-m-d H:i:s.u")) {
                 $this->category_created = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[CategoryTableMap::COL_CATEGORY_CREATED] = true;
+                $this->modifiedColumns[BlogCategoryTableMap::COL_CATEGORY_CREATED] = true;
             }
         } // if either are not null
 
@@ -777,7 +777,7 @@ abstract class Category implements ActiveRecordInterface
         if ($this->category_updated !== null || $dt !== null) {
             if ($this->category_updated === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->category_updated->format("Y-m-d H:i:s.u")) {
                 $this->category_updated = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[CategoryTableMap::COL_CATEGORY_UPDATED] = true;
+                $this->modifiedColumns[BlogCategoryTableMap::COL_CATEGORY_UPDATED] = true;
             }
         } // if either are not null
 
@@ -824,46 +824,46 @@ abstract class Category implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : CategoryTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : BlogCategoryTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->category_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : CategoryTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : BlogCategoryTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : CategoryTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : BlogCategoryTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
             $this->category_name = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : CategoryTableMap::translateFieldName('Url', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : BlogCategoryTableMap::translateFieldName('Url', TableMap::TYPE_PHPNAME, $indexType)];
             $this->category_url = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : CategoryTableMap::translateFieldName('Desc', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : BlogCategoryTableMap::translateFieldName('Desc', TableMap::TYPE_PHPNAME, $indexType)];
             $this->category_desc = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : CategoryTableMap::translateFieldName('Order', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : BlogCategoryTableMap::translateFieldName('Order', TableMap::TYPE_PHPNAME, $indexType)];
             $this->category_order = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : CategoryTableMap::translateFieldName('Hidden', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : BlogCategoryTableMap::translateFieldName('Hidden', TableMap::TYPE_PHPNAME, $indexType)];
             $this->category_hidden = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : CategoryTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : BlogCategoryTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->category_insert = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : CategoryTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : BlogCategoryTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->category_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : CategoryTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : BlogCategoryTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->category_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : CategoryTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : BlogCategoryTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -876,10 +876,10 @@ abstract class Category implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 11; // 11 = CategoryTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 11; // 11 = BlogCategoryTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\Model\\Category'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\Model\\BlogCategory'), 0, $e);
         }
     }
 
@@ -922,13 +922,13 @@ abstract class Category implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(CategoryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(BlogCategoryTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildCategoryQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildBlogCategoryQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -947,8 +947,8 @@ abstract class Category implements ActiveRecordInterface
      * @param ConnectionInterface $con
      * @return void
      * @throws \Propel\Runtime\Exception\PropelException
-     * @see Category::setDeleted()
-     * @see Category::isDeleted()
+     * @see BlogCategory::setDeleted()
+     * @see BlogCategory::isDeleted()
      */
     public function delete(?ConnectionInterface $con = null): void
     {
@@ -957,11 +957,11 @@ abstract class Category implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(CategoryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(BlogCategoryTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildCategoryQuery::create()
+            $deleteQuery = ChildBlogCategoryQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -996,7 +996,7 @@ abstract class Category implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(CategoryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(BlogCategoryTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -1007,16 +1007,16 @@ abstract class Category implements ActiveRecordInterface
                 // timestampable behavior
                 $time = time();
                 $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
-                if (!$this->isColumnModified(CategoryTableMap::COL_CATEGORY_CREATED)) {
+                if (!$this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_CREATED)) {
                     $this->setCreatedAt($highPrecision);
                 }
-                if (!$this->isColumnModified(CategoryTableMap::COL_CATEGORY_UPDATED)) {
+                if (!$this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_UPDATED)) {
                     $this->setUpdatedAt($highPrecision);
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(CategoryTableMap::COL_CATEGORY_UPDATED)) {
+                if ($this->isModified() && !$this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_UPDATED)) {
                     $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
                 }
             }
@@ -1028,7 +1028,7 @@ abstract class Category implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                CategoryTableMap::addInstanceToPool($this);
+                BlogCategoryTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -1085,43 +1085,43 @@ abstract class Category implements ActiveRecordInterface
         $modifiedColumns = [];
         $index = 0;
 
-        $this->modifiedColumns[CategoryTableMap::COL_CATEGORY_ID] = true;
+        $this->modifiedColumns[BlogCategoryTableMap::COL_CATEGORY_ID] = true;
         if (null !== $this->category_id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . CategoryTableMap::COL_CATEGORY_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . BlogCategoryTableMap::COL_CATEGORY_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_ID)) {
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_ID)) {
             $modifiedColumns[':p' . $index++]  = 'category_id';
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_SITE_ID)) {
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_SITE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'site_id';
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_NAME)) {
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_NAME)) {
             $modifiedColumns[':p' . $index++]  = 'category_name';
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_URL)) {
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_URL)) {
             $modifiedColumns[':p' . $index++]  = 'category_url';
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_DESC)) {
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_DESC)) {
             $modifiedColumns[':p' . $index++]  = 'category_desc';
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_ORDER)) {
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_ORDER)) {
             $modifiedColumns[':p' . $index++]  = 'category_order';
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_HIDDEN)) {
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_HIDDEN)) {
             $modifiedColumns[':p' . $index++]  = 'category_hidden';
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_INSERT)) {
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_INSERT)) {
             $modifiedColumns[':p' . $index++]  = 'category_insert';
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_UPDATE)) {
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_UPDATE)) {
             $modifiedColumns[':p' . $index++]  = 'category_update';
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_CREATED)) {
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_CREATED)) {
             $modifiedColumns[':p' . $index++]  = 'category_created';
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_UPDATED)) {
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'category_updated';
         }
 
@@ -1225,7 +1225,7 @@ abstract class Category implements ActiveRecordInterface
      */
     public function getByName(string $name, string $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = CategoryTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = BlogCategoryTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1295,11 +1295,11 @@ abstract class Category implements ActiveRecordInterface
      */
     public function toArray(string $keyType = TableMap::TYPE_PHPNAME, bool $includeLazyLoadColumns = true, array $alreadyDumpedObjects = []): array
     {
-        if (isset($alreadyDumpedObjects['Category'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['BlogCategory'][$this->hashCode()])) {
             return ['*RECURSION*'];
         }
-        $alreadyDumpedObjects['Category'][$this->hashCode()] = true;
-        $keys = CategoryTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['BlogCategory'][$this->hashCode()] = true;
+        $keys = BlogCategoryTableMap::getFieldNames($keyType);
         $result = [
             $keys[0] => $this->getId(),
             $keys[1] => $this->getSiteId(),
@@ -1351,7 +1351,7 @@ abstract class Category implements ActiveRecordInterface
      */
     public function setByName(string $name, $value, string $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = CategoryTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = BlogCategoryTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
 
@@ -1426,7 +1426,7 @@ abstract class Category implements ActiveRecordInterface
      */
     public function fromArray(array $arr, string $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = CategoryTableMap::getFieldNames($keyType);
+        $keys = BlogCategoryTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
@@ -1502,40 +1502,40 @@ abstract class Category implements ActiveRecordInterface
      */
     public function buildCriteria(): Criteria
     {
-        $criteria = new Criteria(CategoryTableMap::DATABASE_NAME);
+        $criteria = new Criteria(BlogCategoryTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_ID)) {
-            $criteria->add(CategoryTableMap::COL_CATEGORY_ID, $this->category_id);
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_ID)) {
+            $criteria->add(BlogCategoryTableMap::COL_CATEGORY_ID, $this->category_id);
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_SITE_ID)) {
-            $criteria->add(CategoryTableMap::COL_SITE_ID, $this->site_id);
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_SITE_ID)) {
+            $criteria->add(BlogCategoryTableMap::COL_SITE_ID, $this->site_id);
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_NAME)) {
-            $criteria->add(CategoryTableMap::COL_CATEGORY_NAME, $this->category_name);
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_NAME)) {
+            $criteria->add(BlogCategoryTableMap::COL_CATEGORY_NAME, $this->category_name);
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_URL)) {
-            $criteria->add(CategoryTableMap::COL_CATEGORY_URL, $this->category_url);
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_URL)) {
+            $criteria->add(BlogCategoryTableMap::COL_CATEGORY_URL, $this->category_url);
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_DESC)) {
-            $criteria->add(CategoryTableMap::COL_CATEGORY_DESC, $this->category_desc);
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_DESC)) {
+            $criteria->add(BlogCategoryTableMap::COL_CATEGORY_DESC, $this->category_desc);
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_ORDER)) {
-            $criteria->add(CategoryTableMap::COL_CATEGORY_ORDER, $this->category_order);
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_ORDER)) {
+            $criteria->add(BlogCategoryTableMap::COL_CATEGORY_ORDER, $this->category_order);
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_HIDDEN)) {
-            $criteria->add(CategoryTableMap::COL_CATEGORY_HIDDEN, $this->category_hidden);
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_HIDDEN)) {
+            $criteria->add(BlogCategoryTableMap::COL_CATEGORY_HIDDEN, $this->category_hidden);
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_INSERT)) {
-            $criteria->add(CategoryTableMap::COL_CATEGORY_INSERT, $this->category_insert);
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_INSERT)) {
+            $criteria->add(BlogCategoryTableMap::COL_CATEGORY_INSERT, $this->category_insert);
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_UPDATE)) {
-            $criteria->add(CategoryTableMap::COL_CATEGORY_UPDATE, $this->category_update);
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_UPDATE)) {
+            $criteria->add(BlogCategoryTableMap::COL_CATEGORY_UPDATE, $this->category_update);
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_CREATED)) {
-            $criteria->add(CategoryTableMap::COL_CATEGORY_CREATED, $this->category_created);
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_CREATED)) {
+            $criteria->add(BlogCategoryTableMap::COL_CATEGORY_CREATED, $this->category_created);
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_UPDATED)) {
-            $criteria->add(CategoryTableMap::COL_CATEGORY_UPDATED, $this->category_updated);
+        if ($this->isColumnModified(BlogCategoryTableMap::COL_CATEGORY_UPDATED)) {
+            $criteria->add(BlogCategoryTableMap::COL_CATEGORY_UPDATED, $this->category_updated);
         }
 
         return $criteria;
@@ -1553,8 +1553,8 @@ abstract class Category implements ActiveRecordInterface
      */
     public function buildPkeyCriteria(): Criteria
     {
-        $criteria = ChildCategoryQuery::create();
-        $criteria->add(CategoryTableMap::COL_CATEGORY_ID, $this->category_id);
+        $criteria = ChildBlogCategoryQuery::create();
+        $criteria->add(BlogCategoryTableMap::COL_CATEGORY_ID, $this->category_id);
 
         return $criteria;
     }
@@ -1617,7 +1617,7 @@ abstract class Category implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of \Model\Category (or compatible) type.
+     * @param object $copyObj An object of \Model\BlogCategory (or compatible) type.
      * @param bool $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param bool $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws \Propel\Runtime\Exception\PropelException
@@ -1650,7 +1650,7 @@ abstract class Category implements ActiveRecordInterface
      * objects.
      *
      * @param bool $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \Model\Category Clone of current object.
+     * @return \Model\BlogCategory Clone of current object.
      * @throws \Propel\Runtime\Exception\PropelException
      */
     public function copy(bool $deepCopy = false)
@@ -1717,7 +1717,7 @@ abstract class Category implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(CategoryTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(BlogCategoryTableMap::DEFAULT_STRING_FORMAT);
     }
 
     // timestampable behavior
@@ -1729,7 +1729,7 @@ abstract class Category implements ActiveRecordInterface
      */
     public function keepUpdateDateUnchanged()
     {
-        $this->modifiedColumns[CategoryTableMap::COL_CATEGORY_UPDATED] = true;
+        $this->modifiedColumns[BlogCategoryTableMap::COL_CATEGORY_UPDATED] = true;
 
         return $this;
     }
