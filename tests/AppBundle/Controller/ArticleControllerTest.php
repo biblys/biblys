@@ -87,20 +87,16 @@ class ArticleControllerTest extends TestCase
     {
         // given
         $controller = new ArticleController();
-        $site = ModelFactory::createSite();
         ModelFactory::createArticle(title: "Article du catalogue");
         ModelFactory::createArticle(title: "");
 
         $request = new Request();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authAdmin");
-        $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->expects("getOption")->andReturn(null);
-        $currentSite->expects("getSite")->andReturn($site);
         $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->adminCatalog($request, $currentSite, $currentUser, $templateService);
+        $response = $controller->adminCatalog($request, $currentUser, $templateService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());

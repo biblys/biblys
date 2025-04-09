@@ -708,7 +708,6 @@ class ArticleController extends Controller
      */
     public function adminCatalog(
         Request $request,
-        CurrentSite $currentSite,
         CurrentUser $currentUser,
         TemplateService $templateService,
     ): Response
@@ -718,9 +717,7 @@ class ArticleController extends Controller
         $request->attributes->set("page_title", "Catalogue");
 
         $page = (int) $request->query->get("p", 0);
-        $count = ArticleQuery::create()
-            ->filterForCurrentSite($currentSite)
-            ->count();
+        $count = ArticleQuery::create()->count();
 
         try {
             $pagination = new Pagination($page, $count, limit: 100);
@@ -728,7 +725,6 @@ class ArticleController extends Controller
             throw new BadRequestHttpException($exception->getMessage());
         }
         $articles = ArticleQuery::create()
-            ->filterForCurrentSite($currentSite)
             ->limit($pagination->getLimit())
             ->offset($pagination->getOffset())
             ->find();
