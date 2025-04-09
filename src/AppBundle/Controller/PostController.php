@@ -23,15 +23,18 @@ use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Service\MetaTagsService;
 use Biblys\Service\Pagination;
+use Biblys\Service\QueryParamsService;
 use Biblys\Service\Slug\SlugService;
 use Biblys\Service\TemplateService;
 use DateTime;
 use Exception;
 use Framework\Controller;
 use League\HTMLToMarkdown\HtmlConverter;
+use Model\BlogCategoryQuery;
 use Model\Post;
 use Model\PostQuery;
 use PostManager;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -147,15 +150,56 @@ class PostController extends Controller
 
     /**
      * @route GET /admin/posts/
+     * @throws LoaderError
      * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function adminAction(CurrentUser $currentUser): RedirectResponse
+    public function adminAction(
+        CurrentUser        $currentUser,
+        QueryParamsService $queryParams,
+        TemplateService    $templateService,
+    ): Response
     {
-        if ($currentUser->isAdmin()) {
-            return new RedirectResponse("/pages/adm_posts");
+        $currentUser->authPublisher();
+        $rank = $currentUser->isAdmin() ? "adm_" : "pub_";
+
+        $queryParams->parse([
+            "category_id" => ["type" => "numeric", "default" => 0],
+            "p" => ["type" => "numeric", "min" => 0, "default" => 0],
+        ]);
+
+        $currentCategoryId = $queryParams->getInteger("category_id");
+
+        $postQuery = PostQuery::create();
+
+        if ($currentCategoryId) {
+            $postQuery->filterByCategoryId($_GET["category_id"]);
         }
 
-        return new RedirectResponse("/pages/pub_posts");
+        if (!$currentUser->isAdmin() && $currentUser->hasPublisherRight()) {
+            $postQuery->filterByPublisherId($currentUser->getCurrentRight()->getPublisherId());
+        }
+
+        $count = $postQuery->count();
+        $pagination = new Pagination($queryParams->getInteger("p"), $count, 100);
+        $pagination->setQueryParams(["category_id" => $currentCategoryId]);
+
+        $posts = $postQuery
+            ->orderByDate(Criteria::DESC)
+            ->limit($pagination->getLimit())
+            ->offset($pagination->getOffset())
+            ->find();
+
+        $categories = BlogCategoryQuery::create()->find();
+        return $templateService->renderResponse('AppBundle:Post:admin.html.twig', [
+            "posts" => $posts,
+            "rank" => $rank,
+            "categories" => $categories,
+            "currentCategoryId" => $currentCategoryId,
+            "count" => $count,
+            "pages" => $pagination,
+        ]);
     }
 
     /**

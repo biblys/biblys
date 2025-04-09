@@ -152,8 +152,8 @@ return function (
                 <p>Billet n° ' . $p["post_id"] . '</p>
                 <p><a href="/blog/' . $p["post_url"] . '">voir</a></p>
                 <p><a href="/pages/links?post_id=' . $p["post_id"] . '">lier</a></p>
-                <p><a href="' . $urlGenerator->generate('post_delete', ['id' => $p['post_id']]) . '" data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?">supprimer</a></p>
-                <p><a href="/pages/adm_posts">billets</a></p>
+                <p><a href="' . $urlGenerator->generate("post_delete", ["id" => $p["post_id"]]) . '" data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?">supprimer</a></p>
+                <p><a href="' . $urlGenerator->generate("posts_admin") . '">billets</a></p>
             </div>
         ';
         $author = $currentUser->getUser()->getEmail();
