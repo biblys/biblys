@@ -26,7 +26,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     Collections ({{ count }})
   </h1>
 
-  <table class="table">
+  <table class="table mt-5">
     <thead>
     <tr>
       <th>Nom</th>
@@ -63,4 +63,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     {% endfor %}
     </tbody>
   </table>
+
+  {% include "AppBundle:Utils:_pagination.html.twig" %}
 {% endblock %}
