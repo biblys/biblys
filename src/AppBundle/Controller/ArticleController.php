@@ -712,19 +712,24 @@ class ArticleController extends Controller
         TemplateService $templateService,
     ): Response
     {
-        $currentUser->authAdmin();
+        $currentUser->authPublisher();
 
         $request->attributes->set("page_title", "Catalogue");
 
-        $page = (int) $request->query->get("p", 0);
-        $count = ArticleQuery::create()->count();
+        $articleQuery = ArticleQuery::create();
+        if (!$currentUser->isAdmin()) {
+            $articleQuery->filterByPublisherId($currentUser->getCurrentRight()->getPublisherId());
+        }
+
+        $count = $articleQuery->count();
 
         try {
+            $page = (int) $request->query->get("p", 0);
             $pagination = new Pagination($page, $count, limit: 100);
         } catch (InvalidArgumentException $exception) {
             throw new BadRequestHttpException($exception->getMessage());
         }
-        $articles = ArticleQuery::create()
+        $articles = $articleQuery
             ->limit($pagination->getLimit())
             ->offset($pagination->getOffset())
             ->find();
