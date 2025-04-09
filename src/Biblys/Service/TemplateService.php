@@ -111,7 +111,7 @@ class TemplateService
      * @throws PropelException
      * @throws SyntaxError
      */
-    private function renderFromString(string $templateString, array $vars): string
+    public function renderFromString(string $templateString, array $vars = []): string
     {
         $twig = $this->_getTwigEnvironment();
         $template = $twig->createTemplate($templateString);
