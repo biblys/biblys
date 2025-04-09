@@ -300,6 +300,13 @@ class BlogCategoryTableMap extends TableMap
      */
     public function buildRelations(): void
     {
+        $this->addRelation('Post', '\\Model\\Post', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':category_id',
+    1 => ':category_id',
+  ),
+), null, null, 'Posts', false);
     }
 
     /**
