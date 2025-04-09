@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 3.5.1 (DEV)
+## 3.5.1 (9 avril 2025)
 
 ### Corrections
 
