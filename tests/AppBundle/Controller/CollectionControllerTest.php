@@ -19,6 +19,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentUser;
+use Biblys\Service\QueryParamsService;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Exception;
@@ -56,10 +57,13 @@ class CollectionControllerTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authPublisher");
         $currentUser->expects("isAdmin")->andReturn(true);
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->expects("parse");
+        $queryParamsService->expects("getInteger")->with("p")->andReturn(0);
         $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->adminAction($currentUser, $templateService);
+        $response = $controller->adminAction($currentUser, $queryParamsService, $templateService);
 
         // then
         $this->assertStringContainsString("Collection à lister", $response->getContent());
@@ -86,10 +90,13 @@ class CollectionControllerTest extends TestCase
         $currentUser->expects("authPublisher");
         $currentUser->expects("isAdmin")->andReturn(false);
         $currentUser->expects("getCurrentRight")->andReturn($publisherRight);
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->expects("parse");
+        $queryParamsService->expects("getInteger")->with("p")->andReturn(0);
         $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->adminAction($currentUser, $templateService);
+        $response = $controller->adminAction($currentUser, $queryParamsService, $templateService);
 
         // then
         $this->assertStringContainsString("Collection utilisateur", $response->getContent());
