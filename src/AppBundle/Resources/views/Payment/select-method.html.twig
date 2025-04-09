@@ -48,34 +48,35 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
              data-parent="#payment-methods-accordion">
           <div class="card-body">
             {% if order.amountTobepaid < 50 %}
-              <p class="alert alert-warning">
+              <p class="alert alert-warning mb-0">
                 <span class="fa-solid fa-triangle-exclamation"></span>&nbsp;
-                Les commandes dont le montant total est inférieur à 0,50 €<br>
+                Les commandes dont le montant total est inférieur à 0,50 €
                 ne peuvent être réglés par carte bancaire.
               </p>
-            {% endif %}
-
-            <form id="stripe-payment-form"
-              data-public-key="{{ stripePublicKey }}"
-              data-payment-url="{{ path('api_stripe_create_payment', { slug: order.slug }) }}"
-              data-order-url="{{ url('legacy_order', { url: order.slug }) }}"
-            >
-              <div id="payment-element">
-                <span class="spinner-border spinner-border-sm ml-1" role="status" id="spinner"></span>
-                Chargement du formulaire de paiement sécurisé…
-              </div>
-
-              <button id="stripe-payment-button" class="btn btn-primary mt-4 d-none" id="submit"
-                  {% if order.amountTobepaid < 50 %}disabled{% endif %}
-                >
-                <div class="spinner-border spinner-border-sm ml-1 d-none" role="status" id="stripe-payment-button-loader">
-                  <span class="sr-only">Paiement en cours…</span>
+            {% else %}
+              <form id="stripe-payment-form"
+                    data-public-key="{{ stripePublicKey }}"
+                    data-payment-url="{{ path('api_stripe_create_payment', { slug: order.slug }) }}"
+                    data-order-url="{{ url('legacy_order', { url: order.slug }) }}"
+              >
+                <div id="payment-element">
+                  <span class="spinner-border spinner-border-sm ml-1" role="status" id="spinner"></span>
+                  Chargement du formulaire de paiement sécurisé…
                 </div>
-                <span id="button-text">Payer</span>
-              </button>
 
-              <div id="payment-message" class="hidden"></div>
-            </form>
+                <button id="stripe-payment-button" class="btn btn-primary mt-4 d-none" id="submit"
+                        {% if order.amountTobepaid < 50 %}disabled{% endif %}
+                >
+                  <div class="spinner-border spinner-border-sm ml-1 d-none" role="status"
+                       id="stripe-payment-button-loader">
+                    <span class="sr-only">Paiement en cours…</span>
+                  </div>
+                  <span id="button-text">Payer</span>
+                </button>
+
+                <div id="payment-message" class="hidden"></div>
+              </form>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -96,25 +97,25 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
              data-parent="#payment-methods-accordion">
           <div class="card-body">
 
+            <p>Payez par carte bancaire via le serveur sécurisé de notre partenaire PayPlug.</p>
+
             {% if order.amountTobepaid < 50 %}
               <p class="alert alert-warning">
                 <span class="fa-solid fa-triangle-exclamation"></span>&nbsp;
                 Les commandes dont le montant total est inférieur à 0,50 €<br>
                 ne peuvent être réglés par carte bancaire.
               </p>
+
+            {% else %}
+
+              <form method="post" action="{{ path("payment_payplug", { slug: order.slug }) }}">
+                <input type="hidden" name="payment" value="payplug">
+                <button type="submit" class="btn btn-primary"
+                        {% if order.amountTobepaid < 50 %}disabled{% endif %}
+                >Payer par carte bancaire
+                </button>
+              </form>
             {% endif %}
-
-            <p>
-              Payez par carte bancaire via le serveur sécurisé de notre partenaire PayPlug.
-            </p>
-
-            <form method="post" action="{{ path("payment_payplug", { slug: order.slug }) }}">
-              <input type="hidden" name="payment" value="payplug">
-              <button type="submit" class="btn btn-primary"
-                      {% if order.amountTobepaid < 50 %}disabled{% endif %}
-              >Payer par carte bancaire
-              </button>
-            </form>
           </div>
         </div>
       </div>
@@ -135,6 +136,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <div id="collapse-paypal" class="collapse" aria-labelledby="headingTwo"
              data-parent="#payment-methods-accordion">
           <div class="card-body">
+            <p>Payez avec votre compte PayPal.</p>
 
             {% if order.amountTobepaid < 100 %}
               <p class="alert alert-warning">
@@ -142,15 +144,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                 Les commandes dont le montant total est inférieur à 1,00 €<br>
                 ne peuvent être réglés par carte bancaire ou Paypal.
               </p>
+
+            {% else %}
+
+              <div id="pay-with-paypal"
+                   data-create-order-url="{{ path('payment_paypal_create_order', { slug: order.slug }) }}"
+                   data-capture-payment-url="{{ path('payment_paypal_capture', { slug: order.slug }) }}"
+                   data-order-url="{{ path('legacy_order', { url: order.slug }) }}"
+              ></div>
             {% endif %}
-
-            <p>Payez avec votre compte PayPal.</p>
-
-            <div id="pay-with-paypal"
-                 data-create-order-url="{{ path('payment_paypal_create_order', { slug: order.slug }) }}"
-                 data-capture-payment-url="{{ path('payment_paypal_capture', { slug: order.slug }) }}"
-                 data-order-url="{{ path('legacy_order', { url: order.slug }) }}"
-            ></div>
           </div>
         </div>
       </div>
