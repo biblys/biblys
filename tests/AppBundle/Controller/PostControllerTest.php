@@ -22,11 +22,15 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Service\MetaTagsService;
+use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use DateTime;
+use Exception;
 use Mockery;
 use Model\Post;
+use Model\PostQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,6 +45,14 @@ require_once __DIR__ . "/../../setUp.php";
 
 class PostControllerTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     */
+    public function setUp(): void
+    {
+        PostQuery::create()->deleteAll();
+    }
+
     /**
      * @throws SyntaxError
      * @throws RuntimeError
@@ -166,5 +178,32 @@ class PostControllerTest extends TestCase
         $metaTagsService->shouldReceive("setDescription");
         $metaTagsService->shouldReceive("setUrl");
         return [$request, $currentSite, $currentUser, $templateService, $urlGenerator, $imagesService, $metaTagsService];
+    }
+
+    /** adminAction */
+
+    /**
+     * @throws Exception
+     */
+    public function testAdminAction()
+    {
+        // given
+        $controller = new PostController();
+        ModelFactory::createPost(title: "Un billet de blog");
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+        $currentUser->expects("isAdmin")->andReturn(true);
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->expects("parse");
+        $queryParamsService->expects("getInteger")->with("category_id")->andReturn(0);
+        $queryParamsService->expects("getInteger")->with("p")->andReturn(0);
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->adminAction($currentUser, $queryParamsService, $templateService);
+
+        // then
+        $this->assertStringContainsString("Un billet de blog", $response->getContent());
     }
 }

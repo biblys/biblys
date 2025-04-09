@@ -234,7 +234,7 @@ class Entry
         $entries[] = new Entry('Invitations de téléchargement', ['category' => 'ebooks', 'path' => 'invitation_list', 'icon' => 'paper-plane']);
 
         $entries[] = new Entry('Pages', ['category' => 'content', 'url' => '/pages/adm_pages', 'icon' => 'file']);
-        $entries[] = new Entry('Billets', ['category' => 'content', 'url' => '/pages/adm_posts', 'icon' => 'newspaper']);
+        $entries[] = new Entry('Billets', ['category' => 'content', 'path' => 'posts_admin', 'icon' => 'newspaper']);
         $entries[] = new Entry('Évènements', ['category' => 'content', 'url' => '/pages/log_events_admin', 'icon' => 'calendar']);
         $entries[] = new Entry('Médias', ['category' => 'content', 'url' => '/pages/adm_media', 'icon' => 'image']);
         $entries[] = new Entry('Liste de contacts', ['category' => 'content', 'path' => 'mailing_contacts', 'icon' => 'address-book']);

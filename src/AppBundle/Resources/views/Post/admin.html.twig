@@ -1,0 +1,103 @@
+{#
+Copyright (C) 2025 Clément Latzarus
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+{% extends "layout:admin.html.twig" %}
+
+{% block title %}
+  Billets de blog
+{% endblock %}
+
+{% block main %}
+
+  <h1>
+    <i class="fa-solid fa-newspaper"></i>
+    Billets de blog ({{ count }})
+  </h1>
+
+  <div class="mt-4">
+    <a href="/pages/{{ rank }}post" class="btn btn-primary">
+      <i class="fa-solid fa-newspaper"></i> Nouveau billet
+    </a>
+  </div>
+
+  <form class="form-inline mt-4 mb-2">
+    <label class="my-1 mr-2" for="category_filter">Filtrer par catégorie</label>
+    <select class="custom-select my-1 mr-sm-2" id="category_filter" name="category_id">
+      <option value="0">Catégorie...</option>
+      {% for category in categories %}
+        <option value="{{ category.id }}"
+          {% if category.id == currentCategoryId %} selected {% endif %}
+        >{{ category.name }}</option>
+      {% endfor %}
+    </select>
+
+    <button type="submit" class="btn btn-primary my-1">
+      <i class="fa-solid fa-arrows-rotate"></i>
+    </button>
+  </form>
+
+  <div class="admin">
+    <p>Billets</p>
+    <p><a href="/pages/{{ rank }}post">nouveau</a></p>
+  </div>
+
+  <table class="table">
+
+    <thead>
+    <tr>
+      <th></th>
+      <th>Titre</th>
+      <th>Auteur</th>
+      <th>Catégorie</th>
+      <th>Date</th>
+      <th></th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for post in posts %}
+      <tr>
+        <td class="right">
+          {% if post.isPublished %}
+            <i class="fa-solid fa-square green" aria-label="En ligne"></i>
+          {% else %}
+            <i class="fa-solid fa-square red" aria-label="Hors ligne"></i>
+          {% endif %}
+        </td>
+        <td><a href="{{ path('post_show', { slug: post.url }) }}">{{ post.title }}</a></td>
+        <td class="nowrap">{{ post.user is not null ? post.user.email }}</td>
+        <td>{{ post.blogCategory is not null ? post.blogCategory.name }}</td>
+        <td>{{ post.date|date }}</td>
+        <td class="nowrap">
+          <a class="btn btn-sm btn-primary" href="/pages/{{ rank }}post?id={{ post.id }}">
+            <i class="fa-solid fa-pen-to-square"></i>
+            Éditer
+          </a>
+          <a class="btn btn-sm btn-danger" href="{{ path('post_delete', { id: post.id }) }}"
+             aria-label="Supprimer"
+             data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?"
+          >
+            <i class="fa-solid fa-trash"></i>
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+
+  </table>
+
+  {% include "AppBundle:Utils:_pagination.html.twig" %}
+{% endblock %}

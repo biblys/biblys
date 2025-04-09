@@ -69,7 +69,8 @@ return function(
 
             // L'Autre Livre
             if ($currentSite->getId() == 11) {
-                $items['Contenu'][] = array('Billets', '/pages/pub_posts', 'fa-newspaper');
+                $postsAdminUrl = $urlGenerator->generate("posts_admin");
+                $items['Contenu'][] = array('Billets', $postsAdminUrl, 'fa-newspaper');
                 $items['Contenu'][] = array('Évènements', '/pages/log_events_admin', 'fa-calendar');
                 $items['Contenu'][] = array('Dédicaces', '/pages/log_signings_admin', 'fa-pencil');
 
