@@ -454,7 +454,7 @@ class PostTableMap extends TableMap
         $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, null, null);
-        $this->addColumn('category_id', 'CategoryId', 'INTEGER', false, null, null);
+        $this->addForeignKey('category_id', 'CategoryId', 'INTEGER', 'categories', 'category_id', false, null, null);
         $this->addColumn('post_url', 'Url', 'LONGVARCHAR', false, null, null);
         $this->addColumn('post_title', 'Title', 'LONGVARCHAR', false, null, null);
         $this->addColumn('post_content', 'Content', 'LONGVARCHAR', false, null, null);
@@ -494,6 +494,13 @@ class PostTableMap extends TableMap
   array (
     0 => ':site_id',
     1 => ':site_id',
+  ),
+), null, null, null, false);
+        $this->addRelation('BlogCategory', '\\Model\\BlogCategory', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':category_id',
+    1 => ':category_id',
   ),
 ), null, null, null, false);
         $this->addRelation('Image', '\\Model\\Image', RelationMap::ONE_TO_MANY, array (

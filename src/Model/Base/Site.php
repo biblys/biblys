@@ -9156,6 +9156,32 @@ abstract class Site implements ActiveRecordInterface
         return $this->getPosts($query, $con);
     }
 
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Posts from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildPost[] List of ChildPost objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildPost}> List of ChildPost objects
+     */
+    public function getPostsJoinBlogCategory(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildPostQuery::create(null, $criteria);
+        $query->joinWith('BlogCategory', $joinBehavior);
+
+        return $this->getPosts($query, $con);
+    }
+
     /**
      * Clears out the collArticleCategories collection
      *
