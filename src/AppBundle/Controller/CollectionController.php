@@ -22,6 +22,7 @@ use ArticleManager;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Pagination;
+use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use CollectionManager;
 use Exception;
@@ -130,30 +131,35 @@ class CollectionController extends Controller
      * @throws PropelException
      */
     public function adminAction(
-        CurrentUser     $currentUser,
-        TemplateService $templateService,
+        CurrentUser        $currentUser,
+        QueryParamsService $queryParams,
+        TemplateService    $templateService,
     ): Response
     {
         $currentUser->authPublisher();
 
-        $collectionQuery = BookCollectionQuery::create();
+        $queryParams->parse(["p" => ["type" => "numeric", "min" => 0, "default" => 0]]);
 
+        $collectionQuery = BookCollectionQuery::create();
         if (!$currentUser->isAdmin()) {
             $collectionQuery->filterByPublisherId($currentUser->getCurrentRight()->getPublisherId());
         }
 
         $count = $collectionQuery->count();
+        $pagination = new Pagination($queryParams->getInteger("p"), $count, 100);
+
         $collections = $collectionQuery
+            ->offset($pagination->getOffset())
+            ->limit($pagination->getLimit())
             ->orderByPublisherName()
             ->orderByName()
             ->find();
 
-        return $templateService->renderResponse(
-            "AppBundle:Collection:admin.html.twig", [
-                "collections" => $collections,
-                "count" => $count,
-            ], isPrivate: true
-        );
+        return $templateService->renderResponse("AppBundle:Collection:admin.html.twig", [
+            "collections" => $collections,
+            "count" => $count,
+            "pages" => $pagination,
+        ], isPrivate: true);
     }
 
     /**
