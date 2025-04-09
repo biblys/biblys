@@ -92,7 +92,8 @@ class ArticleControllerTest extends TestCase
 
         $request = new Request();
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("authAdmin");
+        $currentUser->expects("authPublisher");
+        $currentUser->expects("isAdmin")->andReturn(true);
         $templateService = Helpers::getTemplateService();
 
         // when
