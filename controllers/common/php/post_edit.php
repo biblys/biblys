@@ -15,13 +15,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/** @noinspection PhpPossiblePolymorphicInvocationInspection */
-/** @noinspection PhpUnhandledExceptionInspection */
-
-use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
+use Biblys\Service\QueryParamsService;
 use Biblys\Service\Slug\SlugService;
+use Model\Base\BlogCategoryQuery;
+use Model\BlogCategory;
 use Model\PostQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -33,12 +32,12 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
  * @throws PropelException
  */
 return function (
-    Request $request,
-    CurrentUser $currentUser,
-    UrlGenerator $urlGenerator,
-    ImagesService $imagesService,
-): Response|RedirectResponse
-{
+    Request            $request,
+    QueryParamsService $queryParams,
+    CurrentUser        $currentUser,
+    UrlGenerator       $urlGenerator,
+    ImagesService      $imagesService,
+): Response|RedirectResponse {
     $currentUser->authPublisher();
 
     $pm = new PostManager();
@@ -111,61 +110,56 @@ return function (
         $content .= '<p class="error">Erreur : Le titre du billet est obligatoire !</p>';
     }
 
-    if (!isset($_GET['id'])) $_GET['id'] = NULL;
-    $status_online = NULL;
-    $post_selected = NULL;
+    $isPostPublished = NULL;
+    $isPostSelected = NULL;
 
-    $postId = $request->query->get('id');
-    $postEntity = $pm->getById($postId);
-    $author = null;
+    $queryParams->parse(["id" => ["type" => "numeric", "default" => 0]]);
+    $postId = $queryParams->getInteger("id");
+
+    $post = PostQuery::create()->findPk($postId);
+    if (!$post) {
+        $post = new \Model\Post();
+    }
 
     $pageTitle = 'Nouveau billet';
 
-    $request = Request::createFromGlobals();
-    $config = Config::load();
-    $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-
     // Valeurs par défaut pour un nouveau billet
     $p["user_id"] = $currentUser->getUser()->getId();
-    $p["post_date"] = date("Y-m-d");
-    $p["post_time"] = date("H:i");
+    $postDate = date("Y-m-d");
+    $postTime = date("H:i");
 
-    // Auteur
-    if ($currentUser->isAdmin()) {
-        $author = $currentUser->getUser()->getEmail();
-    } elseif ($currentUser->hasPublisherRight()) {
-        $pum = new PublisherManager();
-        $publisherId = $currentUser->getCurrentRight()->getPublisherId();
-        $publisher = $pum->getById($publisherId);
+    $author = $currentUser->getUser()->getEmail();
+    if ($currentUser->hasPublisherRight()) {
+        $publisher = $currentUser->getCurrentRight()->getPublisher();
         if ($publisher) {
-            $author = $publisher->get("name");
+            $author = $publisher->getName();
         }
     }
 
     $existingPostIllustration = '';
-    if ($postEntity) {
-        $post = PostQuery::create()->findPk($postEntity->get('id'));
-        $p = $postEntity;
-        $pageTitle = 'Modifier « <a href="/blog/' . $p["post_url"] . '">' . $p["post_title"] . '</a> »';
+    if (!$post->isNew()) {
+        /** @var \Model\Post $post */
+        $p = "";
+        $pageTitle = 'Modifier « <a href="/blog/' . $post->getUrl() . '">' . $post->getTitle() . '</a> »';
         $content .= '
             <div class="admin">
-                <p>Billet n° ' . $p["post_id"] . '</p>
-                <p><a href="/blog/' . $p["post_url"] . '">voir</a></p>
-                <p><a href="/pages/links?post_id=' . $p["post_id"] . '">lier</a></p>
-                <p><a href="' . $urlGenerator->generate("post_delete", ["id" => $p["post_id"]]) . '" data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?">supprimer</a></p>
+                <p>Billet n° ' . $post->getId() . '</p>
+                <p><a href="/blog/' . $post->getUrl() . '">voir</a></p>
+                <p><a href="/pages/links?post_id=' . $post->getId() . '">lier</a></p>
+                <p><a href="' . $urlGenerator->generate("post_delete", ["id" => $post->getId()]) . '" data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?">supprimer</a></p>
                 <p><a href="' . $urlGenerator->generate("posts_admin") . '">billets</a></p>
             </div>
         ';
         $author = $currentUser->getUser()->getEmail();
-        $date = explode(" ", $p["post_date"]);
-        $p["post_date"] = $date[0];
-        $p["post_time"] = substr($date[1], 0, 5);
+        $date = explode(" ", $post->getDate()->format("Y-m-d H:i:s"));
+        $postDate = $date[0];
+        $postTime = substr($date[1], 0, 5);
 
         // Illustration
         if ($imagesService->imageExistsFor($post)) {
             $existingPostIllustration = '
                 <div class="text-center">
-                    <img src="'.$imagesService->getImageUrlFor($post, height: 300).'" height="300" alt="">
+                    <img src="' . $imagesService->getImageUrlFor($post, height: 300) . '" height="300" alt="">
                     <br />
                     <input type="checkbox" value=1 name="post_illustration_delete" id="illustration_delete" />
                     <label for="illustration_delete">Supprimer</label>
@@ -173,8 +167,8 @@ return function (
             ';
         }
 
-        if ($p['post_status']) $status_online = ' selected';
-        if ($p['post_selected']) $post_selected = ' checked';
+        if ($post->getStatus()) $isPostPublished = ' selected';
+        if ($post->getSelected()) $isPostSelected = ' checked';
     }
 
     $postEntity = false;
@@ -188,6 +182,26 @@ return function (
         }
     }
 
+    $categories = BlogCategoryQuery::create()->find();
+    /** @var BlogCategory $category */
+    $categoriesOptions = '';
+    foreach ($categories as $category) {
+        $selected = "";
+        if ($post->getCategoryId() == $category->getId()) $selected = ' selected';
+        $categoriesOptions .= '<option value="' . $category->getId() . '"' . $selected . '>' . $category->getName() . '</option>';
+    }
+
+    $deleteButton = '';
+    if ($postEntity) {
+        $deleteButton = '
+            <a class="btn btn-danger" data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?"
+                href="' . $urlGenerator->generate('post_delete', ['id' => $postEntity->get('id')]) . '">
+                <span class="fa fa-trash-can"></span>
+                Supprimer le billet
+            </a>
+        ';
+    }
+
     $content .= '
         <h1><i class="fa fa-newspaper"></i> ' . $pageTitle . '</h1>
     
@@ -197,35 +211,20 @@ return function (
                 <p>
                     <label class="floating" for="post_author">Auteur :</label>
                     <input type="text" name="post_author" id="post_author" value="' . $author . '" class="long" disabled="disabled" />
-                    <input type="hidden" name="user_id" id="user_id" value="' . $p["user_id"] . '" />
-                    <input type="hidden" name="publisher_id" id="publisher_id" value="' . ($p['publisher_id'] ?? null) . '">
+                    <input type="hidden" name="user_id" id="user_id" value="' . $post->getUserId() . '" />
+                    <input type="hidden" name="publisher_id" id="publisher_id" value="' . ($post->getPublisherId() ?? null) . '">
                 </p>
-    ';
-    if ($currentUser->isAdmin()) {
-        $content .= '
             <p>
                 <label class="floating" for="category_id">Catégorie :</label>
                 <select name="category_id">
-                    <option />
-    ';
-        $cm = new CategoryManager();
-        $categories = $cm->getAll();
-        foreach ($categories as $category) {
-            $c = $category;
-            if (isset($p['category_id']) && $p['category_id'] == $c['category_id']) $c['selected'] = ' selected'; else $c['selected'] = NULL;
-            $content .= '<option value="' . $c["category_id"] . '"' . $c['selected'] . '>' . $c["category_name"] . '</option>';
-        }
-
-        $content .= '
+                    <option value="0" />
+                    ' . $categoriesOptions . '
                 </select>
                 <br />
             </p>
-    ';
-    }
-    $content .= '
             <p>
                 <label class="floating" for="post_title" class="required">Titre :</label>
-                <input type="text" name="post_title" id="post_title" value="' . (isset($p['post_title']) ? htmlentities($p['post_title']) : null) . '" class="long required" required />
+                <input type="text" name="post_title" id="post_title" value="' . ($post->getTitle() ? htmlentities($post->getTitle()) : null) . '" class="long required" required />
             </p>
             <br>
 
@@ -233,18 +232,15 @@ return function (
                 <label class="floating" for="post_status">État :</label>
                 <select name="post_status">
                     <option value="0">Hors-ligne</option>
-                    <option value="1" ' . $status_online . '>En ligne</option>
+                    <option value="1" ' . $isPostPublished . '>En ligne</option>
                 </select>
             </p>
             <p>
                 <label class="floating" for="post_date" class="required">Date de parution :</label>
-                <input type="date" name="post_date" id="post_date" value="' . $p["post_date"] . '" placeholder="AAAA-MM-JJ" required>
-                <input type="time" name="post_time" id="post_time" value="' . $p["post_time"] . '" placeholder="HH:MM" required>
+                <input type="date" name="post_date" id="post_date" value="' . $postDate . '" placeholder="AAAA-MM-JJ" required>
+                <input type="time" name="post_time" id="post_time" value="' . $postTime . '" placeholder="HH:MM" required>
             </p>
-    ';
 
-    if ($currentUser->isAdmin()) {
-        $content .= '
             <label class="floating" for="post_link">Lien :</label>
             <input 
                 type="url" 
@@ -257,17 +253,13 @@ return function (
             <br /><br />
 
             <label class="floating" for="post_selected">À la une :</label>
-            <input type="checkbox" name="post_selected" id="post_selected" value="1"' . $post_selected . ' />
+            <input type="checkbox" name="post_selected" id="post_selected" value="1"' . $isPostSelected . ' />
             <br /><br />
-      ';
-    }
-
-    $content .= '
         </fieldset>
         <fieldset>
             <legend>Illustration</legend>
               <div class="form-group">
-                '.$existingPostIllustration.'
+                ' . $existingPostIllustration . '
               
                 <label for="post_illustration_upload">Image</label>
                 <input type="file" id="post_illustration_upload" name="post_illustration_upload" accept="image/jpeg, image/png, image/webp">
@@ -284,19 +276,8 @@ return function (
         </fieldset>
 
         <fieldset class="center">
-    ';
+            ' . $deleteButton . '
 
-    if ($postEntity) {
-        $content .= '
-            <a class="btn btn-danger" data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?"
-                href="' . $urlGenerator->generate('post_delete', ['id' => $postEntity->get('id')]) . '">
-                <span class="fa fa-trash-can"></span>
-                Supprimer le billet
-            </a>
-        ';
-    }
-
-    $content .= '
                 <button class="btn btn-primary" type="submit">
                     <span class="fa fa-save"></span>
                     Enregistrer le billet
