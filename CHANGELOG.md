@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.5.2 (DEV)
+
+### Corrections
+
+- La présence d'un paramètre fbclid ajouté par Facebook dans l'URL de certaines 
+  pages pouvait provoquer une erreur. C'est corrigé.
+
 ## 3.5.1 (9 avril 2025)
 
 ### Corrections
