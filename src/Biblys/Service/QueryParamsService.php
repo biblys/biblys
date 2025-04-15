@@ -25,6 +25,15 @@ class QueryParamsService extends ParamsService
     public function __construct(private readonly Request $request)
     {
         $rawParams = $this->request->query->all();
+
+        $parametersToIgnore = ["fbclid", "ttclid", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
+
+        foreach ($parametersToIgnore as $param) {
+            if (isset($rawParams[$param])) {
+                unset($rawParams[$param]);
+            }
+        }
+
         parent::__construct($rawParams);
     }
 }

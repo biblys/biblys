@@ -437,8 +437,6 @@ class ParamsServiceTest extends TestCase
         $this->assertEquals(123, $page);
     }
 
-
-
     public function testGetIntThrowsForNonNumericValue(): void
     {
         // given
