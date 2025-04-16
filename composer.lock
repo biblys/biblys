@@ -4862,16 +4862,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v17.1.0",
+            "version": "v17.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "b4ce1fdd4ec607e4e8906419c346846f19363f10"
+                "reference": "01ca9b5fdd899b8e4b69f83b85e09d96f6240220"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/b4ce1fdd4ec607e4e8906419c346846f19363f10",
-                "reference": "b4ce1fdd4ec607e4e8906419c346846f19363f10",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/01ca9b5fdd899b8e4b69f83b85e09d96f6240220",
+                "reference": "01ca9b5fdd899b8e4b69f83b85e09d96f6240220",
                 "shasum": ""
             },
             "require": {
@@ -4915,9 +4915,9 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v17.1.0"
+                "source": "https://github.com/stripe/stripe-php/tree/v17.1.1"
             },
-            "time": "2025-04-02T16:32:19+00:00"
+            "time": "2025-04-05T00:09:14+00:00"
         },
         {
             "name": "symfony/asset",
