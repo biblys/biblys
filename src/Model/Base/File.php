@@ -7,17 +7,22 @@ use \Exception;
 use \PDO;
 use Model\Article as ChildArticle;
 use Model\ArticleQuery as ChildArticleQuery;
+use Model\Download as ChildDownload;
+use Model\DownloadQuery as ChildDownloadQuery;
+use Model\File as ChildFile;
 use Model\FileQuery as ChildFileQuery;
 use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
 use Model\User as ChildUser;
 use Model\UserQuery as ChildUserQuery;
+use Model\Map\DownloadTableMap;
 use Model\Map\FileTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
@@ -200,12 +205,26 @@ abstract class File implements ActiveRecordInterface
     protected $aUser;
 
     /**
+     * @var        ObjectCollection|ChildDownload[] Collection to store aggregation of ChildDownload objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildDownload> Collection to store aggregation of ChildDownload objects.
+     */
+    protected $collDownloads;
+    protected $collDownloadsPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
      * @var bool
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildDownload[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildDownload>
+     */
+    protected $downloadsScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -1195,6 +1214,8 @@ abstract class File implements ActiveRecordInterface
             $this->aSite = null;
             $this->aArticle = null;
             $this->aUser = null;
+            $this->collDownloads = null;
+
         } // if (deep)
     }
 
@@ -1346,6 +1367,24 @@ abstract class File implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->downloadsScheduledForDeletion !== null) {
+                if (!$this->downloadsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->downloadsScheduledForDeletion as $download) {
+                        // need to save related object because we set the relation to null
+                        $download->save($con);
+                    }
+                    $this->downloadsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collDownloads !== null) {
+                foreach ($this->collDownloads as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -1719,6 +1758,21 @@ abstract class File implements ActiveRecordInterface
 
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
+            if (null !== $this->collDownloads) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'downloads';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'downloadss';
+                        break;
+                    default:
+                        $key = 'Downloads';
+                }
+
+                $result[$key] = $this->collDownloads->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
         }
 
         return $result;
@@ -2071,6 +2125,20 @@ abstract class File implements ActiveRecordInterface
         $copyObj->setUploaded($this->getUploaded());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         $copyObj->setCreatedAt($this->getCreatedAt());
+
+        if ($deepCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+
+            foreach ($this->getDownloads() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addDownload($relObj->copy($deepCopy));
+                }
+            }
+
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -2252,6 +2320,314 @@ abstract class File implements ActiveRecordInterface
         return $this->aUser;
     }
 
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName): void
+    {
+        if ('Download' === $relationName) {
+            $this->initDownloads();
+            return;
+        }
+    }
+
+    /**
+     * Clears out the collDownloads collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addDownloads()
+     */
+    public function clearDownloads()
+    {
+        $this->collDownloads = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collDownloads collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialDownloads($v = true): void
+    {
+        $this->collDownloadsPartial = $v;
+    }
+
+    /**
+     * Initializes the collDownloads collection.
+     *
+     * By default this just sets the collDownloads collection to an empty array (like clearcollDownloads());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initDownloads(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collDownloads && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = DownloadTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collDownloads = new $collectionClassName;
+        $this->collDownloads->setModel('\Model\Download');
+    }
+
+    /**
+     * Gets an array of ChildDownload objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildFile is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildDownload[] List of ChildDownload objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildDownload> List of ChildDownload objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getDownloads(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collDownloadsPartial && !$this->isNew();
+        if (null === $this->collDownloads || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collDownloads) {
+                    $this->initDownloads();
+                } else {
+                    $collectionClassName = DownloadTableMap::getTableMap()->getCollectionClassName();
+
+                    $collDownloads = new $collectionClassName;
+                    $collDownloads->setModel('\Model\Download');
+
+                    return $collDownloads;
+                }
+            } else {
+                $collDownloads = ChildDownloadQuery::create(null, $criteria)
+                    ->filterByFile($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collDownloadsPartial && count($collDownloads)) {
+                        $this->initDownloads(false);
+
+                        foreach ($collDownloads as $obj) {
+                            if (false == $this->collDownloads->contains($obj)) {
+                                $this->collDownloads->append($obj);
+                            }
+                        }
+
+                        $this->collDownloadsPartial = true;
+                    }
+
+                    return $collDownloads;
+                }
+
+                if ($partial && $this->collDownloads) {
+                    foreach ($this->collDownloads as $obj) {
+                        if ($obj->isNew()) {
+                            $collDownloads[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collDownloads = $collDownloads;
+                $this->collDownloadsPartial = false;
+            }
+        }
+
+        return $this->collDownloads;
+    }
+
+    /**
+     * Sets a collection of ChildDownload objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $downloads A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setDownloads(Collection $downloads, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildDownload[] $downloadsToDelete */
+        $downloadsToDelete = $this->getDownloads(new Criteria(), $con)->diff($downloads);
+
+
+        $this->downloadsScheduledForDeletion = $downloadsToDelete;
+
+        foreach ($downloadsToDelete as $downloadRemoved) {
+            $downloadRemoved->setFile(null);
+        }
+
+        $this->collDownloads = null;
+        foreach ($downloads as $download) {
+            $this->addDownload($download);
+        }
+
+        $this->collDownloads = $downloads;
+        $this->collDownloadsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Download objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related Download objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countDownloads(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collDownloadsPartial && !$this->isNew();
+        if (null === $this->collDownloads || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collDownloads) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getDownloads());
+            }
+
+            $query = ChildDownloadQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByFile($this)
+                ->count($con);
+        }
+
+        return count($this->collDownloads);
+    }
+
+    /**
+     * Method called to associate a ChildDownload object to this object
+     * through the ChildDownload foreign key attribute.
+     *
+     * @param ChildDownload $l ChildDownload
+     * @return $this The current object (for fluent API support)
+     */
+    public function addDownload(ChildDownload $l)
+    {
+        if ($this->collDownloads === null) {
+            $this->initDownloads();
+            $this->collDownloadsPartial = true;
+        }
+
+        if (!$this->collDownloads->contains($l)) {
+            $this->doAddDownload($l);
+
+            if ($this->downloadsScheduledForDeletion and $this->downloadsScheduledForDeletion->contains($l)) {
+                $this->downloadsScheduledForDeletion->remove($this->downloadsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildDownload $download The ChildDownload object to add.
+     */
+    protected function doAddDownload(ChildDownload $download): void
+    {
+        $this->collDownloads[]= $download;
+        $download->setFile($this);
+    }
+
+    /**
+     * @param ChildDownload $download The ChildDownload object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeDownload(ChildDownload $download)
+    {
+        if ($this->getDownloads()->contains($download)) {
+            $pos = $this->collDownloads->search($download);
+            $this->collDownloads->remove($pos);
+            if (null === $this->downloadsScheduledForDeletion) {
+                $this->downloadsScheduledForDeletion = clone $this->collDownloads;
+                $this->downloadsScheduledForDeletion->clear();
+            }
+            $this->downloadsScheduledForDeletion[]= $download;
+            $download->setFile(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this File is new, it will return
+     * an empty collection; or if this File has previously
+     * been saved, it will retrieve related Downloads from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in File.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildDownload[] List of ChildDownload objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildDownload}> List of ChildDownload objects
+     */
+    public function getDownloadsJoinSite(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildDownloadQuery::create(null, $criteria);
+        $query->joinWith('Site', $joinBehavior);
+
+        return $this->getDownloads($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this File is new, it will return
+     * an empty collection; or if this File has previously
+     * been saved, it will retrieve related Downloads from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in File.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildDownload[] List of ChildDownload objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildDownload}> List of ChildDownload objects
+     */
+    public function getDownloadsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildDownloadQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getDownloads($query, $con);
+    }
+
     /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
@@ -2308,8 +2684,14 @@ abstract class File implements ActiveRecordInterface
     public function clearAllReferences(bool $deep = false)
     {
         if ($deep) {
+            if ($this->collDownloads) {
+                foreach ($this->collDownloads as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
+        $this->collDownloads = null;
         $this->aSite = null;
         $this->aArticle = null;
         $this->aUser = null;

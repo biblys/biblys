@@ -391,6 +391,13 @@ class FileTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, null, false);
+        $this->addRelation('Download', '\\Model\\Download', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':file_id',
+    1 => ':file_id',
+  ),
+), null, null, 'Downloads', false);
     }
 
     /**
