@@ -45,7 +45,7 @@ return function (Request $request): Response {
     }
 
     $stocks = EntityManager::prepareAndExecute(
-        'SELECT `stock_id`, `stock`.`site_id` FROM `stock` JOIN `links` USING(`stock_id`) WHERE `list_id` = :list_id',
+        'SELECT `stock_id` FROM `stock` JOIN `links` USING(`stock_id`) WHERE `list_id` = :list_id',
         ["list_id" => $listId]
     );
     $stocks = $stocks->fetchAll(PDO::FETCH_ASSOC);
@@ -65,7 +65,7 @@ return function (Request $request): Response {
 
         $updated = 0;
         foreach ($stocks as $s) {
-            $stock = $sm->get(['stock_id' => $s['stock_id'], 'site_id' => $s['site_id']]);
+            $stock = $sm->get(['stock_id' => $s['stock_id']]);
 
             // Keep a clone old object
             $oldStock = clone $stock;
