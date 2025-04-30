@@ -73,7 +73,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <td>{{ user.lastLoggedAt|date('d/m/Y H:i') }}</td>
         <td class="text-right">
           <a
-            href="{{ path('user_show', { id: user.id }) }}"
+            href="{{ path('admin_user_informations', { id: user.id }) }}"
             class="btn btn-info"
             title="Afficher {{ user.email }}"
           >

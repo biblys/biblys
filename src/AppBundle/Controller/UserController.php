@@ -123,7 +123,7 @@ class UserController extends Controller
             ->filterBySite($currentSite->getSite())
             ->findPk($id);
 
-        return $templateService->renderResponse("AppBundle:User:show.html.twig", [
+        return $templateService->renderResponse("AppBundle:User:admin_informations.html.twig", [
             "user" => $user,
         ], isPrivate: true);
     }
@@ -147,7 +147,7 @@ class UserController extends Controller
                 $usecase->execute($user);
             } /** @noinspection PhpRedundantCatchClauseInspection */ catch (CannotDeleteUser $exception) {
                 $flashMessages->add("error", $exception->getMessage());
-                $userPageUrl = $urlGenerator->generate("user_show", ["id" => $id]);
+                $userPageUrl = $urlGenerator->generate("admin_user_informations", ["id" => $id]);
                 return new RedirectResponse($userPageUrl);
             }
         }
