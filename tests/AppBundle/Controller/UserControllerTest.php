@@ -136,7 +136,7 @@ class UserControllerTest extends TestCase
         $currentUser->shouldReceive('authAdmin')->andReturns();
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->shouldReceive("renderResponse")
-            ->with("AppBundle:User:show.html.twig", [
+            ->with("AppBundle:User:admin_informations.html.twig", [
                 "user" => $user
             ], true)->andReturn(new Response());
 
@@ -195,7 +195,7 @@ class UserControllerTest extends TestCase
             "Impossible de supprimer le compte user-with-orders@example.org car il a des commandes."
         );
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate")->with("user_show", ["id" => $userToDelete->getId()])
+        $urlGenerator->expects("generate")->with("admin_user_informations", ["id" => $userToDelete->getId()])
             ->andReturn("/users/123");
 
         // when

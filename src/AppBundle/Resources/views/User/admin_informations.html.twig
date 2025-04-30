@@ -17,23 +17,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% extends "layout:admin.html.twig" %}
 
 {% block title %}
-  Utilisateur·ice n° {{ user.id }} ({{ user.email }})
+  Informations | Utilisateur·ice {{ user.email }}
 {% endblock %}
 
 {% block main %}
-  <h1>
-    <i class="fa-solid fa-user"></i>
-    Utilisateur·ice n° {{ user.id }}
-  </h1>
-
-  <div class="button-group mt-4" data-confirm="Voulez-vous vraiment SUPPRIMER cet utilisateur·ice ? Cette action est irréversible.">
-    <form method="post" action="{{ path("user_delete", { id: user.id }) }}">
-      <button type="submit" class="btn btn-danger">
-        <i class="fa-solid fa-trash-can"></i>
-        Supprimer
-      </button>
-    </form>
-  </div>
+  {% include "AppBundle:User:_admin_navigation.html.twig" with { active: "informations" } %}
 
   <table class="table table-striped mt-4">
     <tr>
@@ -46,7 +34,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     </tr>
     <tr>
       <td>Dernière connexion</td>
-      <td>{{ user.lastLoggedAt|date('d/m/Y H:i') }} </td>
+      <td>{{ user.lastLoggedAt|date('d/m/Y H:i') }}</td>
     </tr>
     <tr>
       <td>Méthodes de connexion</td>
@@ -63,4 +51,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </td>
     </tr>
   </table>
+
+  <div class="button-group mt-4" data-confirm="Voulez-vous vraiment SUPPRIMER cet utilisateur·ice ? Cette action est irréversible.">
+    <form method="post" action="{{ path("user_delete", { id: user.id }) }}">
+      <button type="submit" class="btn btn-danger">
+        <i class="fa-solid fa-trash-can"></i>
+        Supprimer
+      </button>
+    </form>
+  </div>
 {% endblock %}

@@ -1,0 +1,34 @@
+{#
+Copyright (C) 2025 Clément Latzarus
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+<a href="{{ path('user_index') }}" class="d-block mb-2">Utilisateur·ices</a>
+
+<h1>
+  <i class="fa-solid fa-user"></i>
+  {% block title %}
+    {{ user.email }}
+  {% endblock %}
+</h1>
+
+<nav>
+  <ul class="nav nav-tabs my-4">
+    <li class="nav-item">
+      <a href="{{ path('admin_user_informations', { id: user.id }) }}"
+        {% if active == 'informations' %}class="nav-link active" aria-current="page" {% else %}class="nav-link"{% endif %}
+      >Informations</a>
+    </li>
+  </ul>
+</nav>
