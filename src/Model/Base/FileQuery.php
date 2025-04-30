@@ -91,7 +91,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFileQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
  * @method     ChildFileQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
  *
- * @method     \Model\SiteQuery|\Model\ArticleQuery|\Model\UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildFileQuery leftJoinDownload($relationAlias = null) Adds a LEFT JOIN clause to the query using the Download relation
+ * @method     ChildFileQuery rightJoinDownload($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Download relation
+ * @method     ChildFileQuery innerJoinDownload($relationAlias = null) Adds a INNER JOIN clause to the query using the Download relation
+ *
+ * @method     ChildFileQuery joinWithDownload($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Download relation
+ *
+ * @method     ChildFileQuery leftJoinWithDownload() Adds a LEFT JOIN clause and with to the query using the Download relation
+ * @method     ChildFileQuery rightJoinWithDownload() Adds a RIGHT JOIN clause and with to the query using the Download relation
+ * @method     ChildFileQuery innerJoinWithDownload() Adds a INNER JOIN clause and with to the query using the Download relation
+ *
+ * @method     \Model\SiteQuery|\Model\ArticleQuery|\Model\UserQuery|\Model\DownloadQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildFile|null findOne(?ConnectionInterface $con = null) Return the first ChildFile matching the query
  * @method     ChildFile findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildFile matching the query, or a new ChildFile object populated from the query conditions when no match is found
@@ -1511,6 +1521,179 @@ abstract class FileQuery extends ModelCriteria
     {
         /** @var $q \Model\UserQuery */
         $q = $this->useInQuery('User', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\Download object
+     *
+     * @param \Model\Download|ObjectCollection $download the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByDownload($download, ?string $comparison = null)
+    {
+        if ($download instanceof \Model\Download) {
+            $this
+                ->addUsingAlias(FileTableMap::COL_FILE_ID, $download->getFileId(), $comparison);
+
+            return $this;
+        } elseif ($download instanceof ObjectCollection) {
+            $this
+                ->useDownloadQuery()
+                ->filterByPrimaryKeys($download->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByDownload() only accepts arguments of type \Model\Download or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Download relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinDownload(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Download');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Download');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Download relation Download object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\DownloadQuery A secondary query class using the current class as primary query
+     */
+    public function useDownloadQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinDownload($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Download', '\Model\DownloadQuery');
+    }
+
+    /**
+     * Use the Download relation Download object
+     *
+     * @param callable(\Model\DownloadQuery):\Model\DownloadQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withDownloadQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useDownloadQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Download table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\DownloadQuery The inner query object of the EXISTS statement
+     */
+    public function useDownloadExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\DownloadQuery */
+        $q = $this->useExistsQuery('Download', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Download table for a NOT EXISTS query.
+     *
+     * @see useDownloadExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\DownloadQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useDownloadNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\DownloadQuery */
+        $q = $this->useExistsQuery('Download', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Download table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\DownloadQuery The inner query object of the IN statement
+     */
+    public function useInDownloadQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\DownloadQuery */
+        $q = $this->useInQuery('Download', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Download table for a NOT IN query.
+     *
+     * @see useDownloadInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\DownloadQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInDownloadQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\DownloadQuery */
+        $q = $this->useInQuery('Download', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 

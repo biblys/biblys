@@ -308,7 +308,7 @@ class DownloadTableMap extends TableMap
         // columns
         $this->addPrimaryKey('download_id', 'Id', 'BIGINT', true, null, null);
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
-        $this->addColumn('file_id', 'FileId', 'INTEGER', false, null, null);
+        $this->addForeignKey('file_id', 'FileId', 'INTEGER', 'files', 'file_id', false, null, null);
         $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, null, null);
         $this->addColumn('book_id', 'BookId', 'INTEGER', false, null, null);
         $this->addColumn('axys_account_id', 'AxysAccountId', 'INTEGER', false, null, null);
@@ -333,6 +333,13 @@ class DownloadTableMap extends TableMap
   array (
     0 => ':site_id',
     1 => ':site_id',
+  ),
+), null, null, null, false);
+        $this->addRelation('File', '\\Model\\File', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':file_id',
+    1 => ':file_id',
   ),
 ), null, null, null, false);
         $this->addRelation('User', '\\Model\\User', RelationMap::MANY_TO_ONE, array (
