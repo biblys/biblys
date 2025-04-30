@@ -1343,4 +1343,62 @@ class UserControllerTest extends TestCase
             "displays the article title"
         );
     }
+
+    /* UserController->adminLibraryAction */
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
+     */
+    public function testAdminLibraryAction()
+    {
+        // given
+        $controller = new UserController();
+
+        $user = ModelFactory::createUser();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin")->andReturns();
+
+        $site = ModelFactory::createSite();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+
+        $queryParams = Mockery::mock(QueryParamsService::class);
+        $queryParams->expects("parse");
+        $queryParams->expects("get")->with("q")->andReturn("");
+        $queryParams->expects("get")->with("p")->andReturn("0");
+
+        $templateService = Helpers::getTemplateService();
+
+        $article = ModelFactory::createArticle(title: "In the user library", typeId: ArticleType::EBOOK);
+        ModelFactory::createStockItem(
+            site: $currentSite->getSite(),
+            article: $article,
+            user: $user,
+            sellingDate: new DateTime(),
+        );
+
+        // when
+        $response = $controller->adminLibraryAction(
+            currentUser: $currentUser,
+            queryParams: $queryParams,
+            templateService: $templateService,
+            id: $user->getId(),
+        );
+
+        // then
+        $this->assertEquals(
+            "200",
+            $response->getStatusCode(),
+            "responds with status code 200"
+        );
+        $this->assertStringContainsString(
+            "In the user library",
+            $response->getContent(),
+            "displays the article title"
+        );
+    }
 }

@@ -36,6 +36,7 @@ use DateTime;
 use Exception;
 use Framework\Controller;
 use Model\AuthenticationMethodQuery;
+use Model\DownloadQuery;
 use Model\File;
 use Model\FileQuery;
 use Model\OrderQuery;
@@ -574,16 +575,63 @@ class UserController extends Controller
     ): Response
     {
         $currentUser->authUser();
+        $user = $currentUser->getUser();
 
         $queryParams->parse([
             "q" => ["type" => "string", "default" => ""],
             "p" => ["type" => "numeric", "default" => 0],
         ]);
+
+        list($pagination, $items, $updated) = $this->_getUserLibrary($user, $queryParams);
+        return $templateService->renderResponse("AppBundle:User:library.html.twig", [
+            "updates_available" => $updated > 0,
+            "items" => $items,
+            "pages" => $pagination,
+            "searchQuery" => $queryParams->get("q"),
+        ]);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function adminLibraryAction(
+        CurrentUser        $currentUser,
+        QueryParamsService $queryParams,
+        TemplateService    $templateService,
+        string             $id,
+    ): Response
+    {
+        $currentUser->authAdmin();
+        $user = UserQuery::create()->findPk($id);
+
+        $queryParams->parse([
+            "q" => ["type" => "string", "default" => ""],
+            "p" => ["type" => "numeric", "default" => 0],
+        ]);
+
+        list($pagination, $items, $updated) = $this->_getUserLibrary($user, $queryParams);
+        return $templateService->renderResponse("AppBundle:User:admin_library.html.twig", [
+            "updates_available" => $updated > 0,
+            "items" => $items,
+            "pages" => $pagination,
+            "searchQuery" => $queryParams->get("q"),
+            "user" => $user,
+        ]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    private function _getUserLibrary(User $user, QueryParamsService $queryParams): array
+    {
         $searchQuery = $queryParams->get("q");
         $currentPageIndex = $queryParams->get("p");
 
         $baseQuery = StockQuery::create()
-            ->filterByUser($currentUser->getUser())
+            ->filterByUser($user)
             ->useArticleQuery()
             ->filterByKeywords("%$searchQuery%", Criteria::LIKE)
             ->endUse();
@@ -616,23 +664,23 @@ class UserController extends Controller
             $downloadableFiles = FileQuery::create()
                 ->filterByArticleId($article->getId())
                 ->filterByAccess(File::ACCESS_RESTRICTED)
-                ->find()
-                ->getData();
+                ->find();
+
+            $downloads = DownloadQuery::create()
+                ->filterByUser($user)
+                ->filterByFile($downloadableFiles)
+                ->count();
 
             $items[] = [
                 "article" => $article,
                 "updated" => $item->isFileUpdated(),
                 "predownload_is_allowed" => $item->isAllowPredownload(),
                 "download_icon" => $downloadIcon,
-                "downloadable_files" => $downloadableFiles,
+                "downloadable_files" => $downloadableFiles->getData(),
+                "added_at" => $item->getCreatedAt()->format("d/m/Y"),
+                "downloads" => $downloads,
             ];
         }
-
-        return $templateService->renderResponse("AppBundle:User:library.html.twig", [
-            "updates_available" => $updated > 0,
-            "items" => $items,
-            "pages" => $pagination,
-            "searchQuery" => $searchQuery,
-        ]);
+        return array($pagination, $items, $updated);
     }
 }
