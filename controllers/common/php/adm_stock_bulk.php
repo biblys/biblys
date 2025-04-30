@@ -166,7 +166,7 @@ return function (Request $request): Response {
 
     $content .= '
             <h1>Modifier les exemplaires de la liste</h1>
-            <h2>Liste : <a href="/list/' . $list->get('url') . '">' . $list->get('title') . '</a> (' . count($stocks) . ' exemplaires)</h2>
+            <h2>Liste : <a href="/pages/adm_list?list=' . $list->get('url') . '">' . $list->get('title') . '</a> (' . count($stocks) . ' exemplaires)</h2>
         
             ' . (isset($_GET['updated']) ? '<p class="success">' . $_GET['updated'] . ' exemplaires modifiés.</p>' : null) . '
         ' . $previewTable . '                

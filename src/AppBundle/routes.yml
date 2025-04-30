@@ -879,14 +879,6 @@ legacy_invoice:
   defaults:
     page: order_invoice
 
-legacy_list:
-  path: /list/{slug}
-  controller: AppBundle\Controller\LegacyController::defaultAction
-  defaults:
-    page: list
-  requirements:
-    slug: .+
-
 legacy_o_collection:
   path: /o/collection/{url}
   controller: AppBundle\Controller\LegacyController::defaultAction
