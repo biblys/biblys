@@ -30,5 +30,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         {% if active == 'informations' %}class="nav-link active" aria-current="page" {% else %}class="nav-link"{% endif %}
       >Informations</a>
     </li>
+    <li class="nav-item">
+      <a href="{{ path('user_admin_library', { id: user.id }) }}"
+         {% if active == 'library' %}class="nav-link active" aria-current="page" {% else %}class="nav-link"{% endif %}
+      >Bibliothèque</a>
+    </li>
   </ul>
 </nav>

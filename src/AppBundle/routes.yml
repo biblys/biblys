@@ -809,6 +809,11 @@ admin_user_informations:
   requirements:
         id: \d+
 
+user_admin_library:
+  methods: GET
+  path: /admin/users/{id}/library
+  controller: AppBundle\Controller\UserController::adminLibraryAction
+
 user_delete:
   path: /admin/users/{id}/delete
   controller: AppBundle\Controller\UserController::deleteAction

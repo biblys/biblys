@@ -1,10 +1,17 @@
 # Historique des modifications
 
+## 3.6.0 (DEV)
+
+### Améliorations
+
+- Une page a été ajoutée à l'administration pour permettre de visualiser la
+  bibliothèque numérique d'un·e utilisateur·ice.
+
 ## 3.5.2 (16 avril 2025)
 
 ### Corrections
 
-- La présence d'un paramètre fbclid ajouté par Facebook dans l'URL de certaines 
+- La présence d'un paramètre fbclid ajouté par Facebook dans l'URL de certaines
   pages pouvait provoquer une erreur. C'est corrigé.
 
 ## 3.5.1 (9 avril 2025)
@@ -13,7 +20,7 @@
 
 - Les commandes payées avec PayPal et PayPlug pouvaient ne pas être marquées
   comme payées. C'est corrigé.
-- Le marquage d'une commande numérique comme expédiée pouvait échouer sans 
+- Le marquage d'une commande numérique comme expédiée pouvait échouer sans
   erreur. Ça n'arrivera plus.
 
 ## 3.5.0 (4 avril 2025)
@@ -23,10 +30,10 @@
 - La page de choix d'un mode de paiement a été entièrement revue pour améliorer
   son ergonomie.
 - Le formulaire de paiement par carte bancaire via Stripe est désormais intégré
-  à la page de choix du mode de paiement de manière sécurisée, ce qui permet 
+  à la page de choix du mode de paiement de manière sécurisée, ce qui permet
   d'éviter une redirection vers le site de paiement.
 - Il est désormais possible, au moment du paiement, de sauvegarder une carte
-    bancaire pour pouvoir la réutiliser plus tard.
+  bancaire pour pouvoir la réutiliser plus tard.
 
 ### Autres améliorations
 
@@ -38,7 +45,7 @@
   billets de blog affichés sur la page d'accueil.
 - Il est désormais possible d'insérer une espace insécable avec la combinaison
   de touche <kbd>Ctrl</kbd> + <kbd>espace</kbd> dans l'éditeur de texte enrichi.
-- Lors de l'ajout d'un·e utilisateur·ice autorisé·e à gérer un éditeur, il n'est 
+- Lors de l'ajout d'un·e utilisateur·ice autorisé·e à gérer un éditeur, il n'est
   plus nécessaire que l'adresse e-mail corresponde à un compte existant. Si ce
   n'est pas le cas, le compte utilisateur sera créé automatiquement.
 
@@ -58,7 +65,7 @@ composer propel migrate
 
 #### Stripe
 
-Ajouter l'évènement `payment_intent.succeeded` à la liste des évènements à 
+Ajouter l'évènement `payment_intent.succeeded` à la liste des évènements à
 transmettre au webhook endpoint de Biblys.
 
 #### Swiper
