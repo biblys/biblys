@@ -6,6 +6,8 @@ use \DateTime;
 use \Exception;
 use \PDO;
 use Model\DownloadQuery as ChildDownloadQuery;
+use Model\File as ChildFile;
+use Model\FileQuery as ChildFileQuery;
 use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
 use Model\User as ChildUser;
@@ -162,6 +164,11 @@ abstract class Download implements ActiveRecordInterface
      * @var        ChildSite
      */
     protected $aSite;
+
+    /**
+     * @var        ChildFile
+     */
+    protected $aFile;
 
     /**
      * @var        ChildUser
@@ -629,6 +636,10 @@ abstract class Download implements ActiveRecordInterface
             $this->modifiedColumns[DownloadTableMap::COL_FILE_ID] = true;
         }
 
+        if ($this->aFile !== null && $this->aFile->getId() !== $v) {
+            $this->aFile = null;
+        }
+
         return $this;
     }
 
@@ -953,6 +964,9 @@ abstract class Download implements ActiveRecordInterface
         if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
             $this->aSite = null;
         }
+        if ($this->aFile !== null && $this->file_id !== $this->aFile->getId()) {
+            $this->aFile = null;
+        }
         if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
             $this->aUser = null;
         }
@@ -996,6 +1010,7 @@ abstract class Download implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aSite = null;
+            $this->aFile = null;
             $this->aUser = null;
         } // if (deep)
     }
@@ -1123,6 +1138,13 @@ abstract class Download implements ActiveRecordInterface
                     $affectedRows += $this->aSite->save($con);
                 }
                 $this->setSite($this->aSite);
+            }
+
+            if ($this->aFile !== null) {
+                if ($this->aFile->isModified() || $this->aFile->isNew()) {
+                    $affectedRows += $this->aFile->save($con);
+                }
+                $this->setFile($this->aFile);
             }
 
             if ($this->aUser !== null) {
@@ -1446,6 +1468,21 @@ abstract class Download implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aSite->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aFile) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'file';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'files';
+                        break;
+                    default:
+                        $key = 'File';
+                }
+
+                $result[$key] = $this->aFile->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUser) {
 
@@ -1864,6 +1901,57 @@ abstract class Download implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildFile object.
+     *
+     * @param ChildFile|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setFile(ChildFile $v = null)
+    {
+        if ($v === null) {
+            $this->setFileId(NULL);
+        } else {
+            $this->setFileId($v->getId());
+        }
+
+        $this->aFile = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildFile object, it will not be re-added.
+        if ($v !== null) {
+            $v->addDownload($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildFile object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildFile|null The associated ChildFile object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getFile(?ConnectionInterface $con = null)
+    {
+        if ($this->aFile === null && ($this->file_id != 0)) {
+            $this->aFile = ChildFileQuery::create()->findPk($this->file_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aFile->addDownloads($this);
+             */
+        }
+
+        return $this->aFile;
+    }
+
+    /**
      * Declares an association between this object and a ChildUser object.
      *
      * @param ChildUser|null $v
@@ -1926,6 +2014,9 @@ abstract class Download implements ActiveRecordInterface
         if (null !== $this->aSite) {
             $this->aSite->removeDownload($this);
         }
+        if (null !== $this->aFile) {
+            $this->aFile->removeDownload($this);
+        }
         if (null !== $this->aUser) {
             $this->aUser->removeDownload($this);
         }
@@ -1966,6 +2057,7 @@ abstract class Download implements ActiveRecordInterface
         } // if ($deep)
 
         $this->aSite = null;
+        $this->aFile = null;
         $this->aUser = null;
         return $this;
     }

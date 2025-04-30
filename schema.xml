@@ -445,6 +445,9 @@
       <reference local="site_id" foreign="site_id"/>
     </foreign-key>
     <column name="file_id" phpName="FileId" type="INTEGER" sqlType="int unsigned"/>
+    <foreign-key foreignTable="files" skipSql="true">
+      <reference local="file_id" foreign="file_id"/>
+    </foreign-key>
     <column name="article_id" phpName="ArticleId" type="INTEGER" sqlType="int unsigned"/>
     <column name="book_id" phpName="BookId" type="INTEGER" sqlType="int unsigned"/>
     <column name="axys_account_id" phpName="AxysAccountId" type="INTEGER" sqlType="int unsigned"/>
