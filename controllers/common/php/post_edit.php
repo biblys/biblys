@@ -121,7 +121,8 @@ return function (
         $post = new \Model\Post();
     }
 
-    $pageTitle = 'Nouveau billet';
+    $pageTitle = "Nouveau billet";
+    $request->attributes->set("page_title", $pageTitle);
 
     // Valeurs par défaut pour un nouveau billet
     $p["user_id"] = $currentUser->getUser()->getId();
@@ -140,7 +141,9 @@ return function (
     if (!$post->isNew()) {
         /** @var \Model\Post $post */
         $p = "";
-        $pageTitle = 'Modifier « <a href="/blog/' . $post->getUrl() . '">' . $post->getTitle() . '</a> »';
+        $pageTitle = "Modifier « <a href=\"/blog/{$post->getUrl()}\">{$post->getTitle()}</a> »";
+        $request->attributes->set("page_title", "Modifier « {$post->getTitle()} »");
+
         $content .= '
             <div class="admin">
                 <p>Billet n° ' . $post->getId() . '</p>
@@ -247,7 +250,7 @@ return function (
                 name="post_link" 
                 id="post_link" 
                 placeholder="https://" 
-                value="' . ($p['post_link'] ?? null) . '" 
+                value="' . ($post->getLink()) . '" 
                 class="long" 
             />
             <br /><br />
@@ -267,12 +270,12 @@ return function (
               </div>
             <p>
                 <label class="floating" for="post_illustration_legend">Texte alternatif :</label>
-                <input type="text" name="post_illustration_legend" id="post_illustration_legend" value="' . ($p['post_illustration_legend'] ?? null) . '" maxlength=64 class="long" />
+                <input type="text" name="post_illustration_legend" id="post_illustration_legend" value="' . ($post->getIllustrationLegend()) . '" maxlength=64 class="long" />
             </p>
         </fieldset>
         <fieldset>
             <legend>Contenu</legend>
-            <textarea id="post_content" name="post_content" class="wysiwyg">' . ($p['post_content'] ?? null) . '</textarea>
+            <textarea id="post_content" name="post_content" class="wysiwyg">' . ($post->getContent()) . '</textarea>
         </fieldset>
 
         <fieldset class="center">
@@ -289,29 +292,27 @@ return function (
         
                 <p>
                     <label class="floating" for="post_id" class="disabled">Billet n°</label>
-                    <input type="text" name="post_id" id="post_id" value="' . ($p['post_id'] ?? null) . '" readonly>
+                    <input type="text" name="post_id" id="post_id" value="' . ($post->getId()) . '" readonly>
                 </p>
         
                 <p>
                     <label class="floating" for="post_url">Adresse du billet :</label>
-                    <input type="hidden" name="post_url_old" value=' . ($p['post_url'] ?? null) . '>
-                    <input type="text" name="post_url" id="post_url" value="' . ($p['post_url'] ?? null) . '" placeholder="Champ rempli automatiquement" class="long" />
+                    <input type="hidden" name="post_url_old" value=' . ($post->getUrl()) . '>
+                    <input type="text" name="post_url" id="post_url" value="' . ($post->getUrl()) . '" placeholder="Champ rempli automatiquement" class="long" />
                 </p>
                 <br>
         
                 <p>
                     <label class="floating" for="post_insert" class="readonly">Billet créé le :</label>
-                    <input type="text" name="post_insert" id="post_insert" value="' . ($p['post_insert'] ?? null) . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
+                    <input type="text" name="post_insert" id="post_insert" value="' . ($post->getCreatedAt()?->format("Y-m-d H:i:s")) . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
                 </p>
                 <p>
                     <label class="floating" for="post_update" class="readonly">Billet modifié le :</label>
-                    <input type="text" name="post_update" id="post_update" value="' . ($p['post_update'] ?? null) . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
+                    <input type="text" name="post_update" id="post_update" value="' . ($post->getUpdatedAt()?->format("Y-m-d H:i:s")) . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
                 </p>
             </fieldset>
         </form>
     ';
-
-    $request->attributes->set("page_title", $pageTitle);
 
     return new Symfony\Component\HttpFoundation\Response($content);
 };
