@@ -802,7 +802,7 @@ user_index:
   path: /admin/users/
   controller: AppBundle\Controller\UserController::indexAction
 
-admin_user_informations:
+user_admin_informations:
   path: /admin/users/{id}
   controller: AppBundle\Controller\UserController::showAction
   methods: GET
