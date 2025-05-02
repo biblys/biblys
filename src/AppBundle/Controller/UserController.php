@@ -148,7 +148,7 @@ class UserController extends Controller
                 $usecase->execute($user);
             } /** @noinspection PhpRedundantCatchClauseInspection */ catch (CannotDeleteUser $exception) {
                 $flashMessages->add("error", $exception->getMessage());
-                $userPageUrl = $urlGenerator->generate("admin_user_informations", ["id" => $id]);
+                $userPageUrl = $urlGenerator->generate("user_admin_informations", ["id" => $id]);
                 return new RedirectResponse($userPageUrl);
             }
         }

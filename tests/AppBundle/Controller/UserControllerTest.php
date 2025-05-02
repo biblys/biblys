@@ -195,7 +195,7 @@ class UserControllerTest extends TestCase
             "Impossible de supprimer le compte user-with-orders@example.org car il a des commandes."
         );
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate")->with("admin_user_informations", ["id" => $userToDelete->getId()])
+        $urlGenerator->expects("generate")->with("user_admin_informations", ["id" => $userToDelete->getId()])
             ->andReturn("/users/123");
 
         // when
