@@ -18,7 +18,7 @@ jobs:
           go-version: 1.21
 
       - name: Install NWA
-        run: go install github.com/B1NARY-GR0UP/nwa@v0.5.2
+        run: go install github.com/B1NARY-GR0UP/nwa@v0.6.0
 
       - name: Check license headers in .php files
         run: |
