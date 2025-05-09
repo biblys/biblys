@@ -188,6 +188,29 @@ class ParamsServiceTest extends TestCase
         $queryParamsService->parse($specs);
     }
 
+    /** "type:boolean" rule */
+
+    public function testInvalidValueTypeForBoolean()
+    {
+        // given
+        $request = new Request();
+        $request->query->set("is_enabled", "maybe");
+
+        $specs = [
+            "is_enabled" => [
+                "type" => "boolean",
+            ],
+        ];
+        $queryParamsService = new GenericParamsService($request);
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("Parameter 'is_enabled' must be of type boolean");
+
+        // when
+        $queryParamsService->parse($specs);
+    }
+
     /** "default" rule */
 
     public function testMissingParameterWithDefaultValue()
@@ -500,5 +523,54 @@ class ParamsServiceTest extends TestCase
 
         // when
         $queryParamsService->getInteger("alphabet");
+    }
+
+
+    /** getBool */
+
+    public function testGetIntConvertsBooleanStringToBoolean(): void
+    {
+        // given
+        $request = new Request();
+        $request->query->set("true", "true");
+        $request->query->set("false", "false");
+        $request->query->set("one", "1");
+        $request->query->set("zero", "0");
+        $request->query->set("yes", "yes");
+        $request->query->set("no", "no");
+        $request->query->set("on", "on");
+        $request->query->set("off", "off");
+
+        $queryParamsService = new GenericParamsService($request);
+        $queryParamsService->parse([
+            "true" => ["type" => "boolean"],
+            "false" => ["type" => "boolean"],
+            "one" => ["type" => "boolean"],
+            "zero" => ["type" => "boolean"],
+            "yes" => ["type" => "boolean"],
+            "no" => ["type" => "boolean"],
+            "on" => ["type" => "boolean"],
+            "off" => ["type" => "boolean"],
+        ]);
+
+        // when
+        $true = $queryParamsService->getBoolean("true");
+        $false = $queryParamsService->getBoolean("false");
+        $one = $queryParamsService->getBoolean("one");
+        $zero = $queryParamsService->getBoolean("zero");
+        $yes = $queryParamsService->getBoolean("yes");
+        $no = $queryParamsService->getBoolean("no");
+        $on = $queryParamsService->getBoolean("on");
+        $off = $queryParamsService->getBoolean("off");
+
+        // then
+        $this->assertTrue($true);
+        $this->assertFalse($false);
+        $this->assertTrue($one);
+        $this->assertFalse($zero);
+        $this->assertTrue($yes);
+        $this->assertFalse($no);
+        $this->assertTrue($on);
+        $this->assertFalse($off);
     }
 }
