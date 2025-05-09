@@ -211,6 +211,27 @@ class ParamsServiceTest extends TestCase
         $this->assertEquals("0", $page);
     }
 
+    public function testNullAsDefaultValue()
+    {
+        // given
+        $request = new Request();
+
+        $specs = [
+            "publisher_id" => [
+                "type" => "numeric",
+                "default" => null,
+            ],
+        ];
+        $paramsService = new GenericParamsService($request);
+        $paramsService->parse($specs);
+
+        // when
+        $value = $paramsService->getInteger("publisher_id");
+
+        // then
+        $this->assertNull($value);
+    }
+
     public function testProvidedParameterWithDefaultValue()
     {
         // given
