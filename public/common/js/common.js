@@ -784,6 +784,9 @@ function reloadEvents(scope) {
 
           // If error
           if (data.error) {
+            button.removeClass('btn-success').button('reset');
+            button.html('<i class="fa-solid fa-shopping-basket"></i> ' + buttonLabel);
+
             _alert(data.error.message || data.error);
 
             // If success
@@ -793,11 +796,11 @@ function reloadEvents(scope) {
             button.html('<span class="fa fa-check-circle"></span> ' + successButtonLabel);
             window.setTimeout(function() {
               button.removeClass('btn-success').button('reset');
-              button.html('<i class="fa-solid fa-shopping-basket"></i>'+buttonLabel);
+              button.html('<i class="fa-solid fa-shopping-basket"></i> ' + buttonLabel);
             }, 2500);
 
             new Biblys.Notification(
-              `L'article a bien été ajouté au panier<br /><br /><p class="text-center"><a class="btn btn-success btn-sm" href="/pages/cart"><span class="fa fa-shopping-cart"></span> Voir le panier</a></p>`,
+              'L’article a bien été ajouté au panier<br /><br /><p class="text-center"><a class="btn btn-success btn-sm" href="/pages/cart"><span class="fa fa-shopping-cart"></span> Voir le panier</a></p>',
               { type: 'success' }
             );
           }
