@@ -1,0 +1,125 @@
+<form action="{{ post.isNew ? path("post_create") : path("post_update", { id: post.id }) }}" method="post"
+      class="form-horizontal fieldset"
+      enctype="multipart/form-data">
+  <fieldset>
+    <legend>Informations</legend>
+    <input type="hidden" name="user_id" id="user_id" value="{{ post.userId }}" />
+    <input type="hidden" name="publisher_id" id="publisher_id" value="{{ post.publisherId }}" />
+
+    <div class="form-group row">
+      <label for="post_title" class="col-sm-2 col-form-label text-sm-right">Titre</label>
+      <div class="col-sm-10">
+        <input type="text" name="post_title" id="post_title" value="{{ post.title }}" class="form-control" required />
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="category_id" class="col-sm-2 col-form-label text-sm-right">Catégorie</label>
+      <div class="col-sm-10">
+        <select name="category_id" id="category_id" class="form-control">
+          <option value="0"></option>
+          {% for category in categories %}
+            <option value="{{ category.id }}" {% if category.id == post.categoryId %} selected {% endif %}>
+              {{ category.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="post_status" class="col-sm-2 col-form-label text-sm-right">Statut</label>
+      <div class="col-sm-10">
+        <select name="post_status" id="post_status" class="form-control">
+          <option value="0">Brouillon (visible uniquement par les admins)</option>
+          <option value="1" {{ post.status ? 'selected' : '' }}>Publié</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="post_date" class="col-sm-2 col-form-label text-sm-right">Date de publication</label>
+      <div class="col-sm-6 col-md-5 col-lg-4 col-xl-3">
+        <input type="datetime-local" name="post_date" id="post_date" value="{{ post.date|date('Y-m-d H:i:s') }}"
+               class="form-control" required>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="post_link" class="col-sm-2 col-form-label text-sm-right">Lien</label>
+      <div class="col-sm-10">
+        <input type="url" name="post_link" id="post_link" placeholder="https://"
+               value="{{ post.link }}" class="form-control" />
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-sm-10 offset-sm-2">
+        <div class="form-check">
+          <input type="checkbox" name="post_selected" id="post_selected" value="1"
+                 class="form-check-input" {{ post.selected ? 'checked' : '' }} />
+          <label class="form-check-label" for="post_selected">Mettre en avant</label>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Illustration</legend>
+
+    {% if post|hasImage %}
+      <div class="form-group row">
+        <div class="col-sm-12 text-center">
+          <a href="{{ post|imageUrl }}" rel="lightbox">
+            <img src="{{ post|imageUrl }}" alt="{{ post.illustrationLegend }}"
+                 style="max-width: 300px; max-height: 300px" />
+          </a>
+          <div class="form-check mt-2">
+            <input type="checkbox" name="delete_illustration" id="delete_illustration" value="1" class="form-check-input" />
+            <label class="form-check-label" for="delete_illustration">Supprimer</label>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="form-group row">
+      <label for="post_illustration_upload" class="col-sm-2 col-form-label text-sm-right">Image</label>
+      <div class="col-sm-10">
+        <input type="file" id="post_illustration_upload" name="post_illustration_upload" class="form-control-file"
+               accept="image/jpeg, image/png, image/webp">
+        <small class="form-text text-muted">Image au format JPEG, PNG ou WebP affichée en prévisualisation sur les
+          réseaux sociaux.</small>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="post_illustration_legend" class="col-sm-2 col-form-label text-sm-right">Texte alternatif</label>
+      <div class="col-sm-10">
+        <input type="text" name="post_illustration_legend" id="post_illustration_legend"
+               value="{{ post.illustrationLegend }}" maxlength=64 class="form-control" />
+        <small class="form-text text-muted">
+          Description accessible de l'image à destination des utilisateur·ices malvoyants utilisant un lecteur d'écran,
+          à laisser vide dans le cas d'une image purement décorative.
+        </small>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend id="post_content_label">Contenu</legend>
+    <div class="form-group row">
+      <div class="col-sm-12">
+        <textarea aria-labelledby="post_content_label" id="post_content" name="post_content"
+                  class="form-control wysiwyg">{{ post.content }}</textarea>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset class="form-group row">
+    <div class="col-sm-12 text-center">
+      <button class="btn btn-primary" type="submit">
+        <span class="fa fa-save"></span>
+        Enregistrer le billet
+      </button>
+    </div>
+  </fieldset>
+</form>

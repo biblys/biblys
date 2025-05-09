@@ -18,6 +18,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Service\MetaTagsService;
@@ -51,6 +52,8 @@ class PostControllerTest extends TestCase
     {
         PostQuery::create()->deleteAll();
     }
+
+    /** showAction */
 
     /**
      * @throws SyntaxError
@@ -195,5 +198,156 @@ class PostControllerTest extends TestCase
 
         // then
         $this->assertStringContainsString("Un billet de blog", $response->getContent());
+    }
+
+
+    /** newAction */
+
+    /**
+     * @throws Exception
+     */
+    public function testNewAction()
+    {
+        // given
+        $controller = new PostController();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+        $currentUser->expects("getUser")->andReturn(ModelFactory::createUser());
+        $currentUser->expects("hasPublisherRight")->andReturn(false);
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->newAction($currentUser, $templateService);
+
+        // then
+        $this->assertStringContainsString("Nouveau billet", $response->getContent());
+    }
+
+
+    /** createAction */
+
+    /**
+     * @throws Exception
+     */
+    public function testCreateAction()
+    {
+        // given
+        $controller = new PostController();
+
+        $bodyParams = Mockery::mock(BodyParamsService::class);
+        $bodyParams->expects("parse");
+        $bodyParams->expects("getInteger")->with("user_id")->andReturn(1);
+        $bodyParams->expects("getInteger")->with("publisher_id")->andReturn(2);
+        $bodyParams->expects("get")->with("post_title")->andReturn("Un billet de blog");
+        $bodyParams->expects("get")->with("post_content")->andReturn("Contenu du billet");
+        $bodyParams->expects("getInteger")->with("category_id")->andReturn(3);
+        $bodyParams->expects("get")->with("post_link")->andReturn("https://example.net");
+        $bodyParams->expects("get")->with("post_illustration_legend")->andReturn("Légende de l'illustration");
+        $bodyParams->expects("getBoolean")->with("post_status")->andReturn(true);
+        $bodyParams->expects("getBoolean")->with("post_selected")->andReturn(false);
+        $bodyParams->expects("get")->with("post_date")->andReturn("2019-04-28 02:42");
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("/blog/1");
+
+        $imagesService = Mockery::mock(ImagesService::class);
+
+        // when
+        $response = $controller->createAction($bodyParams, $currentUser, $urlGenerator, $imagesService);
+
+        // then
+        $this->assertEquals("/blog/1", $response->getTargetUrl());
+
+        $post = PostQuery::create()->findOneByTitle("Un billet de blog");
+        $this->assertEquals("Un billet de blog", $post->getTitle());
+        $this->assertEquals("Contenu du billet", $post->getContent());
+        $this->assertEquals(3, $post->getCategoryId());
+        $this->assertEquals("https://example.net", $post->getLink());
+        $this->assertEquals("Légende de l'illustration", $post->getIllustrationLegend());
+        $this->assertEquals(1, $post->getUserId());
+        $this->assertEquals(2, $post->getPublisherId());
+        $this->assertEquals(Post::STATUS_ONLINE, $post->getStatus());
+        $this->assertEquals("2019-04-28 02:42:00", $post->getDate()->format("Y-m-d H:i:s"));
+        $this->assertEquals(0, $post->getSelected());
+    }
+
+
+    /** editAction */
+
+    /**
+     * @throws Exception
+     */
+    public function testEditAction()
+    {
+        // given
+        $controller = new PostController();
+        $post = ModelFactory::createPost(title: "Un billet de blog à modifier");
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->editAction($currentUser, $templateService, $post->getId());
+
+        // then
+        $this->assertStringContainsString("Un billet de blog à modifier", $response->getContent());
+    }
+
+
+    /** updateAction */
+
+    /**
+     * @throws Exception
+     */
+    public function testUpdateAction()
+    {
+        // given
+        $controller = new PostController();
+        $post = ModelFactory::createPost();
+
+        $bodyParams = Mockery::mock(BodyParamsService::class);
+        $bodyParams->expects("parse");
+        $bodyParams->expects("getInteger")->with("user_id")->andReturn(1);
+        $bodyParams->expects("getInteger")->with("publisher_id")->andReturn(2);
+        $bodyParams->expects("get")->with("post_title")->andReturn("Un billet de blog");
+        $bodyParams->expects("get")->with("post_content")->andReturn("Contenu du billet");
+        $bodyParams->expects("getInteger")->with("category_id")->andReturn(3);
+        $bodyParams->expects("get")->with("post_link")->andReturn("https://example.net");
+        $bodyParams->expects("get")->with("post_illustration_legend")->andReturn("Légende de l'illustration");
+        $bodyParams->expects("getBoolean")->with("post_status")->andReturn(true);
+        $bodyParams->expects("getBoolean")->with("post_selected")->andReturn(false);
+        $bodyParams->expects("get")->with("post_date")->andReturn("2019-04-28 02:42");
+
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("/blog/1");
+
+        $imagesService = Mockery::mock(ImagesService::class);
+
+        // when
+        $response = $controller->updateAction($bodyParams, $currentUser, $urlGenerator, $imagesService, $post->getId());
+
+        // then
+        $this->assertEquals("/blog/1", $response->getTargetUrl());
+
+        $post = PostQuery::create()->findOneByTitle("Un billet de blog");
+        $this->assertEquals("Un billet de blog", $post->getTitle());
+        $this->assertEquals("Contenu du billet", $post->getContent());
+        $this->assertEquals(3, $post->getCategoryId());
+        $this->assertEquals("https://example.net", $post->getLink());
+        $this->assertEquals("Légende de l'illustration", $post->getIllustrationLegend());
+        $this->assertEquals(1, $post->getUserId());
+        $this->assertEquals(2, $post->getPublisherId());
+        $this->assertEquals(Post::STATUS_ONLINE, $post->getStatus());
+        $this->assertEquals("2019-04-28 02:42:00", $post->getDate()->format("Y-m-d H:i:s"));
+        $this->assertEquals(0, $post->getSelected());
     }
 }

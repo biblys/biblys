@@ -439,8 +439,8 @@ label.button {
   width: 200px;
 }
 
-input,
-select {
+input:not(.form-control),
+select:not(.form-control) {
   margin-top: 5px;
 }
 

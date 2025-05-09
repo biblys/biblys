@@ -28,8 +28,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   </h1>
 
   <div class="mt-4">
-    <a href="/pages/{{ rank }}post" class="btn btn-primary">
-      <i class="fa-solid fa-newspaper"></i> Nouveau billet
+    <a href="{{ path("post_new") }}" class="btn btn-primary">
+      <i class="fa-solid fa-plus-circle"></i> Nouveau billet
     </a>
   </div>
 
@@ -49,13 +49,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     </button>
   </form>
 
-  <div class="admin">
-    <p>Billets</p>
-    <p><a href="/pages/{{ rank }}post">nouveau</a></p>
-  </div>
-
   <table class="table">
-
     <thead>
     <tr>
       <th></th>
@@ -82,7 +76,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <td>{{ post.blogCategory is not null ? post.blogCategory.name }}</td>
         <td>{{ post.date|date }}</td>
         <td class="nowrap">
-          <a class="btn btn-sm btn-primary" href="/pages/{{ rank }}post?id={{ post.id }}">
+          <a class="btn btn-sm btn-primary" href="{{ path('post_edit', { id: post.id }) }}" aria-label="Éditer">
             <i class="fa-solid fa-pen-to-square"></i>
             Éditer
           </a>
