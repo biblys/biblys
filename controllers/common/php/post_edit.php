@@ -15,55 +15,51 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\Slug\SlugService;
+use Biblys\Service\TemplateService;
 use Model\Base\BlogCategoryQuery;
 use Model\BlogCategory;
 use Model\PostQuery;
-use Propel\Runtime\Exception\PropelException;
+use Model\Post;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
-/**
- * @throws PropelException
- */
 return function (
     Request            $request,
     QueryParamsService $queryParams,
+    BodyParamsService  $bodyParams,
     CurrentUser        $currentUser,
     UrlGenerator       $urlGenerator,
     ImagesService      $imagesService,
+    TemplateService    $templateService,
 ): Response|RedirectResponse {
     $currentUser->authPublisher();
 
-    $pm = new PostManager();
-    $content = '';
+    $queryParams->parse(["id" => ["type" => "numeric", "default" => null]]);
+    $postId = $queryParams->getInteger("id");
 
-    if ($request->getMethod() === 'POST') {
+    /** @var Post $post */
+    $post = PostQuery::create()->findPk($postId);
+    if (!$post) {
+        $post = new Post();
+    }
 
-        // Creation d'un nouveau billet
-        $postId = $request->request->get('post_id');
-        if (!$postId) {
-            /** @var @Post $post */
-            $postEntity = $pm->create();
-        } else {
-            /** @var @Post $post */
-            $postEntity = $pm->getById($postId);
-        }
-        $post = PostQuery::create()->findPk($postEntity->get('id'));
-
+    if ($request->isMethod("POST")) {
         // URL de la page
         $slugService = new SlugService();
         $postUrl = $slugService->slugify($request->request->get('post_title'));
-        $urls = $pm->get(['post_id' => '!= ' . $postEntity->get('id'), 'post_url' => $postUrl]);
-        if ($urls) {
+        $postWithTheSameUrl = PostQuery::create()->filterById($postId, Criteria::NOT_EQUAL)->findOneByUrl($postUrl);
+        if ($postWithTheSameUrl && $postWithTheSameUrl->getId() != $postId) {
             $postUrl .= '_' . $postId;
         }
-        $postEntity->set('post_url', $postUrl);
+        $post->setUrl($postUrl);
 
         // Illustration
         if (!empty($_FILES["post_illustration_upload"]["tmp_name"])) {
@@ -72,60 +68,55 @@ return function (
             $imagesService->deleteImageFor($post);
         }
 
-        $fields = $request->request->all();
-        foreach ($fields as $field => $val) {
-            if (in_array($field, [
-                "post_id",
-                "post_url",
-                "post_url_old",
-                "post_time",
-                "post_illustration_delete",
-            ])) {
-                continue;
-            }
-            $postEntity->set($field, $val);
-        }
+        $bodyParams->parse([
+            "user_id" => ["type" => "numeric"],
+            "publisher_id" => ["type" => "numeric", "default" => null],
+            "category_id" => ["type" => "numeric", "default" => null],
+            "post_title" => ["type" => "string"],
+            "post_status" => ["type" => "boolean", "default" => false],
+            "post_date" => ["type" => "string"],
+            "post_time" => ["type" => "string"],
+            "post_link" => ["type" => "string", "default" => null],
+            "post_selected" => ["type" => "boolean", "default" => false],
+            "post_content" => ["type" => "string"],
+            "post_illustration_legend" => ["type" => "string", "default" => null],
+        ]);
+
+        $post->setUserId($bodyParams->getInteger("user_id"));
+        $post->setPublisherId($bodyParams->getInteger("publisher_id"));
+        $post->setTitle($bodyParams->get("post_title"));
+        $post->setContent($bodyParams->get("post_content"));
+        $post->setCategoryId($bodyParams->getInteger("category_id"));
+        $post->setLink($bodyParams->get("post_link"));
+        $post->setIllustrationLegend($bodyParams->get("post_illustration_legend"));
+        $post->setContent($bodyParams->get("post_content"));
+        $post->setStatus($bodyParams->getBoolean("post_status"));
+        $post->setDate($bodyParams->get("post_time"));
+        $post->setStatus($bodyParams->getBoolean("post_status"));
+        $post->setSelected($bodyParams->getBoolean("post_selected"));
 
         // Dates
-        $date = $request->request->get("post_date");
-        $time = $request->request->get("post_time");
-        $postEntity->set('post_date', $date . " " . $time);
+        $post->setDate("{$bodyParams->get("post_date")} {$bodyParams->get("post_time")}");
 
         // Selected checkbox
         $selected = $request->request->get("post_selected") ? 1 : 0;
-        $postEntity->set('post_selected', $selected);
+        $post->setSelected($selected);
 
-        $postEntity->remove("author_id");
+        $post->save();
 
-        $pm->update($postEntity);
-
-        $postUrl = $urlGenerator->generate(
-            "post_show",
-            ["slug" => $postEntity->get("url")]
-        );
+        $postUrl = $urlGenerator->generate("post_show", ["slug" => $post->getUrl()]);
         return new RedirectResponse($postUrl);
-
-    } elseif (!empty($_POST) and empty($_POST["title"])) {
-        $p = $_POST;
-        $content .= '<p class="error">Erreur : Le titre du billet est obligatoire !</p>';
     }
 
-    $isPostPublished = NULL;
-    $isPostSelected = NULL;
+    $content = '';
 
-    $queryParams->parse(["id" => ["type" => "numeric", "default" => 0]]);
-    $postId = $queryParams->getInteger("id");
-
-    $post = PostQuery::create()->findPk($postId);
-    if (!$post) {
-        $post = new \Model\Post();
-    }
+    $isPostPublished = null;
+    $isPostSelected = null;
 
     $pageTitle = "Nouveau billet";
     $request->attributes->set("page_title", $pageTitle);
 
     // Valeurs par défaut pour un nouveau billet
-    $p["user_id"] = $currentUser->getUser()->getId();
     $postDate = date("Y-m-d");
     $postTime = date("H:i");
 
@@ -139,8 +130,6 @@ return function (
 
     $existingPostIllustration = '';
     if (!$post->isNew()) {
-        /** @var \Model\Post $post */
-        $p = "";
         $pageTitle = "Modifier « <a href=\"/blog/{$post->getUrl()}\">{$post->getTitle()}</a> »";
         $request->attributes->set("page_title", "Modifier « {$post->getTitle()} »");
 
@@ -198,7 +187,7 @@ return function (
     if ($postEntity) {
         $deleteButton = '
             <a class="btn btn-danger" data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?"
-                href="' . $urlGenerator->generate('post_delete', ['id' => $postEntity->get('id')]) . '">
+                href="' . $urlGenerator->generate('post_delete', ['id' => $post->getId()]) . '">
                 <span class="fa fa-trash-can"></span>
                 Supprimer le billet
             </a>
@@ -286,33 +275,10 @@ return function (
                     Enregistrer le billet
                 </button>
             </fieldset>
-        
-            <fieldset>
-                <legend>Base de données</legend>
-        
-                <p>
-                    <label class="floating" for="post_id" class="disabled">Billet n°</label>
-                    <input type="text" name="post_id" id="post_id" value="' . ($post->getId()) . '" readonly>
-                </p>
-        
-                <p>
-                    <label class="floating" for="post_url">Adresse du billet :</label>
-                    <input type="hidden" name="post_url_old" value=' . ($post->getUrl()) . '>
-                    <input type="text" name="post_url" id="post_url" value="' . ($post->getUrl()) . '" placeholder="Champ rempli automatiquement" class="long" />
-                </p>
-                <br>
-        
-                <p>
-                    <label class="floating" for="post_insert" class="readonly">Billet créé le :</label>
-                    <input type="text" name="post_insert" id="post_insert" value="' . ($post->getCreatedAt()?->format("Y-m-d H:i:s")) . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
-                </p>
-                <p>
-                    <label class="floating" for="post_update" class="readonly">Billet modifié le :</label>
-                    <input type="text" name="post_update" id="post_update" value="' . ($post->getUpdatedAt()?->format("Y-m-d H:i:s")) . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
-                </p>
-            </fieldset>
         </form>
     ';
 
-    return new Symfony\Component\HttpFoundation\Response($content);
+    return $templateService->renderResponseFromString($content, [
+        "post" => $post,
+    ]);
 };
