@@ -1,0 +1,40 @@
+{#
+Copyright (C) 2025 Clément Latzarus
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+{% extends "layout:admin.html.twig" %}
+
+{% block title %}
+  Modifier &laquo; {{ post.title }} &raquo;
+{% endblock %}
+
+{% block main %}
+
+  <a href="{{ path("posts_admin") }}">
+    <i class="fa-solid fa-newspaper"></i>
+    Billets de blog
+  </a>
+
+  <h1>
+    Modifier &laquo;
+    <a href="{{ path("post_show", { slug: post.url }) }}">
+      {{ post.title }}
+    </a>
+    &raquo;
+  </h1>
+
+  {% include "AppBundle:Post:_form.html.twig" %}
+
+{% endblock %}

@@ -18,6 +18,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Service\MetaTagsService;
@@ -196,6 +197,139 @@ class PostController extends Controller
             "count" => $count,
             "pages" => $pagination,
         ]);
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function newAction(
+        CurrentUser     $currentUser,
+        TemplateService $templateService,
+    ): Response
+    {
+        $currentUser->authPublisher();
+
+        $post = new Post();
+        $post->setUserId($currentUser->getUser()->getId());
+        if ($currentUser->hasPublisherRight()) {
+            $post->setPublisherId($currentUser->getCurrentRight()->getPublisherId());
+        }
+
+        $categories = BlogCategoryQuery::create()->find();
+
+        return $templateService->renderResponse('AppBundle:Post:new.html.twig', [
+            "post" => $post,
+            "categories" => $categories,
+        ]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function createAction(
+        BodyParamsService $bodyParams,
+        CurrentUser       $currentUser,
+        UrlGenerator      $urlGenerator,
+        ImagesService     $imagesService,
+    ): RedirectResponse
+    {
+        $currentUser->authPublisher();
+        $post = new Post();
+        return $this->_updatePost($bodyParams, $imagesService, $urlGenerator, $post);
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function editAction(
+        CurrentUser     $currentUser,
+        TemplateService $templateService,
+        string          $id,
+    ): Response
+    {
+        $currentUser->authPublisher();
+
+        $post = PostQuery::create()->findPk($id);
+        $categories = BlogCategoryQuery::create()->find();
+
+        return $templateService->renderResponse('AppBundle:Post:edit.html.twig', [
+            "post" => $post,
+            "categories" => $categories,
+        ]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function updateAction(
+        BodyParamsService $bodyParams,
+        CurrentUser       $currentUser,
+        UrlGenerator      $urlGenerator,
+        ImagesService     $imagesService,
+        string            $id,
+    ): RedirectResponse
+    {
+        $currentUser->authPublisher();
+        $post = PostQuery::create()->findPk($id);
+        return $this->_updatePost($bodyParams, $imagesService, $urlGenerator, $post);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    private function _updatePost(BodyParamsService $bodyParams, ImagesService $imagesService, UrlGenerator $urlGenerator, Post $post): RedirectResponse
+    {
+        $bodyParams->parse([
+            "user_id" => ["type" => "numeric"],
+            "publisher_id" => ["type" => "numeric", "default" => null],
+            "category_id" => ["type" => "numeric", "default" => null],
+            "post_title" => ["type" => "string"],
+            "post_status" => ["type" => "boolean", "default" => false],
+            "post_date" => ["type" => "string"],
+            "post_link" => ["type" => "string", "default" => null],
+            "post_selected" => ["type" => "boolean", "default" => false],
+            "post_content" => ["type" => "string"],
+            "post_illustration_legend" => ["type" => "string", "default" => null],
+        ]);
+
+        $post->setUserId($bodyParams->getInteger("user_id"));
+        $post->setPublisherId($bodyParams->getInteger("publisher_id"));
+        $post->setTitle($bodyParams->get("post_title"));
+        $post->setContent($bodyParams->get("post_content"));
+        $post->setCategoryId($bodyParams->getInteger("category_id"));
+        $post->setLink($bodyParams->get("post_link"));
+        $post->setIllustrationLegend($bodyParams->get("post_illustration_legend"));
+        $post->setStatus($bodyParams->getBoolean("post_status"));
+        $post->setDate($bodyParams->get("post_date"));
+        $post->setStatus($bodyParams->getBoolean("post_status"));
+        $post->setSelected($bodyParams->getBoolean("post_selected"));
+        $post->save();
+
+        $slugService = new SlugService();
+        $postUrl = $slugService->slugify($post->getTitle());
+        $postWithTheSameUrl = PostQuery::create()->findOneByUrl($postUrl);
+        if ($postWithTheSameUrl && ($post->isNew() || $postWithTheSameUrl->getId() !== $post->getId())) {
+            $postUrl .= '_' . $post->getId();
+        }
+        $post->setUrl($postUrl);
+        $post->save();
+
+        if (!empty($_FILES["post_illustration_upload"]["tmp_name"])) {
+            $imagesService->addImageFor($post, $_FILES["post_illustration_upload"]["tmp_name"]);
+        }
+
+        if (isset($_POST["post_illustration_delete"]) && $_POST['post_illustration_delete']) {
+            $imagesService->deleteImageFor($post);
+        }
+
+        $postUrl = $urlGenerator->generate("post_show", ["slug" => $post->getUrl()]);
+        return new RedirectResponse($postUrl);
     }
 
     /**
