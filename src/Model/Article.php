@@ -131,6 +131,22 @@ class Article extends BaseArticle
     }
 
     /**
+     * @throws PropelException
+     */
+    public function isPurchasable(): bool
+    {
+        if (!$this->isPublished() and !$this->isPreorder()) {
+            return false;
+        }
+
+        if ($this->isAvailable() || $this->isSoonOutOfPrint()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @throws Exception
      */
     public function addContributor(People $contributor, \Biblys\Contributor\Job $job): Role
