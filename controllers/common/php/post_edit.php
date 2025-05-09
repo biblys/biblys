@@ -19,13 +19,11 @@ use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Service\QueryParamsService;
-use Biblys\Service\Slug\SlugService;
 use Biblys\Service\TemplateService;
 use Model\Base\BlogCategoryQuery;
 use Model\BlogCategory;
 use Model\PostQuery;
 use Model\Post;
-use Propel\Runtime\ActiveQuery\Criteria;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,63 +47,7 @@ return function (
     $post = PostQuery::create()->findPk($postId);
     if (!$post) {
         $post = new Post();
-    }
-
-    if ($request->isMethod("POST")) {
-        // URL de la page
-        $slugService = new SlugService();
-        $postUrl = $slugService->slugify($request->request->get('post_title'));
-        $postWithTheSameUrl = PostQuery::create()->filterById($postId, Criteria::NOT_EQUAL)->findOneByUrl($postUrl);
-        if ($postWithTheSameUrl && $postWithTheSameUrl->getId() != $postId) {
-            $postUrl .= '_' . $postId;
-        }
-        $post->setUrl($postUrl);
-
-        // Illustration
-        if (!empty($_FILES["post_illustration_upload"]["tmp_name"])) {
-            $imagesService->addImageFor($post, $_FILES["post_illustration_upload"]["tmp_name"]);
-        } elseif (isset($_POST["post_illustration_delete"]) && $_POST['post_illustration_delete']) {
-            $imagesService->deleteImageFor($post);
-        }
-
-        $bodyParams->parse([
-            "user_id" => ["type" => "numeric"],
-            "publisher_id" => ["type" => "numeric", "default" => null],
-            "category_id" => ["type" => "numeric", "default" => null],
-            "post_title" => ["type" => "string"],
-            "post_status" => ["type" => "boolean", "default" => false],
-            "post_date" => ["type" => "string"],
-            "post_time" => ["type" => "string"],
-            "post_link" => ["type" => "string", "default" => null],
-            "post_selected" => ["type" => "boolean", "default" => false],
-            "post_content" => ["type" => "string"],
-            "post_illustration_legend" => ["type" => "string", "default" => null],
-        ]);
-
-        $post->setUserId($bodyParams->getInteger("user_id"));
-        $post->setPublisherId($bodyParams->getInteger("publisher_id"));
-        $post->setTitle($bodyParams->get("post_title"));
-        $post->setContent($bodyParams->get("post_content"));
-        $post->setCategoryId($bodyParams->getInteger("category_id"));
-        $post->setLink($bodyParams->get("post_link"));
-        $post->setIllustrationLegend($bodyParams->get("post_illustration_legend"));
-        $post->setContent($bodyParams->get("post_content"));
-        $post->setStatus($bodyParams->getBoolean("post_status"));
-        $post->setDate($bodyParams->get("post_time"));
-        $post->setStatus($bodyParams->getBoolean("post_status"));
-        $post->setSelected($bodyParams->getBoolean("post_selected"));
-
-        // Dates
-        $post->setDate("{$bodyParams->get("post_date")} {$bodyParams->get("post_time")}");
-
-        // Selected checkbox
-        $selected = $request->request->get("post_selected") ? 1 : 0;
-        $post->setSelected($selected);
-
-        $post->save();
-
-        $postUrl = $urlGenerator->generate("post_show", ["slug" => $post->getUrl()]);
-        return new RedirectResponse($postUrl);
+        $post->setUserId($currentUser->getUser()->getId());
     }
 
     $content = '';
@@ -194,10 +136,15 @@ return function (
         ';
     }
 
+    $formActionUrl = $urlGenerator->generate("post_create");
+    if (!$post->isNew()) {
+        $formActionUrl = $urlGenerator->generate("post_update", ["id" => $post->getId()]);
+    }
+
     $content .= '
         <h1><i class="fa fa-newspaper"></i> ' . $pageTitle . '</h1>
     
-        <form method="post" class="check fieldset" enctype="multipart/form-data">
+        <form action="'.$formActionUrl.'" method="post" class="check fieldset" enctype="multipart/form-data">
             <fieldset>
                 <legend>Informations</legend>
                 <p>

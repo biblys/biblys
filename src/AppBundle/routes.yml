@@ -495,8 +495,33 @@ post_show:
   controller: AppBundle\Controller\PostController::showAction
 
 posts_admin:
+  methods: GET
   path: /admin/posts/
   controller: AppBundle\Controller\PostController::adminAction
+
+post_new:
+  methods: GET
+  path: /admin/posts/new
+  controller: AppBundle\Controller\PostController::newAction
+
+post_create:
+  methods: POST
+  path: /admin/posts
+  controller: AppBundle\Controller\PostController::createAction
+
+post_edit:
+  methods: GET
+  path: /admin/posts/{id}/edit
+  controller: AppBundle\Controller\PostController::editAction
+  requirements:
+    id: \d+
+
+post_update:
+  methods: POST
+  path: /admin/posts/{id}
+  controller: AppBundle\Controller\PostController::updateAction
+  requirements:
+    id: \d+
 
 post_delete:
   path: /admin/post/{id}/delete
