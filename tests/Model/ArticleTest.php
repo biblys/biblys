@@ -264,6 +264,108 @@ class ArticleTest extends TestCase
         $this->assertFalse($isPublished);
     }
 
+
+    /** isPurchasable */
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsPurchasableReturnsFalseIfAvailabilityIsUnknown()
+    {
+        // given
+        $article = new Article();
+        $article->setAvailabilityDilicom(0);
+
+        // when
+        $isPurchasable = $article->isPurchasable();
+
+        // then
+        $this->assertFalse($isPurchasable);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsPurchasableReturnsTrueIfAvailable()
+    {
+        // given
+        $article = new Article();
+        $article->setAvailabilityDilicom(Article::AVAILABILITY_AVAILABLE);
+
+        // when
+        $isPurchasable = $article->isPurchasable();
+
+        // then
+        $this->assertTrue($isPurchasable);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsPurchasableReturnsFalseIfPublicationDateIsInTheFuture()
+    {
+        // given
+        $article = new Article();
+        $article->setAvailabilityDilicom(Article::AVAILABILITY_AVAILABLE);
+        $article->setPubdate(new DateTime("tomorrow"));
+
+        // when
+        $isPurchasable = $article->isPurchasable();
+
+        // then
+        $this->assertFalse($isPurchasable);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsPurchasableReturnsFalseIfPublicationDateIsInTheFutureButArticleIsPreorderable()
+    {
+        // given
+        $article = new Article();
+        $article->setAvailabilityDilicom(Article::AVAILABILITY_AVAILABLE);
+        $article->setPubdate(new DateTime("tomorrow"));
+        $article->setPreorder(1);
+
+        // when
+        $isPurchasable = $article->isPurchasable();
+
+        // then
+        $this->assertTrue($isPurchasable);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsPurchasableReturnsFalseIfArticleIsOutOfPrint()
+    {
+        // given
+        $article = new Article();
+        $article->setAvailabilityDilicom(Article::AVAILABILITY_OUT_OF_PRINT);
+
+        // when
+        $isPurchasable = $article->isPurchasable();
+
+        // then
+        $this->assertFalse($isPurchasable);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsPurchasableReturnsTrueIfArticleIsSoonOutOfPrint()
+    {
+        // given
+        $article = new Article();
+        $article->setAvailabilityDilicom(Article::AVAILABILITY_SOON_OUT_OF_PRINT);
+
+        // when
+        $isPurchasable = $article->isPurchasable();
+
+        // then
+        $this->assertTrue($isPurchasable);
+    }
+
     /** addContributor */
 
     /**

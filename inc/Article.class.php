@@ -123,6 +123,7 @@ class Article extends Entity
         $model->setTypeId($this->get("type_id"));
         $model->setPrice($this->get("price"));
         $model->setPubdate($this->get("pubdate"));
+        $model->setAvailabilityDilicom($this->get("availability_dilicom"));
 
         $model->setPublisherId($this->get("publisher_id"));
         $model->setCollectionId($this->get("collection_id"));
