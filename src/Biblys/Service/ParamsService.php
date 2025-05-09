@@ -109,7 +109,7 @@ abstract class ParamsService
                     }
 
                     if ($ruleValue === "numeric") {
-                        if (!is_numeric($value)) {
+                        if (!is_numeric($value) && !empty($value)) {
                             throw new BadRequestHttpException(
                                 "Parameter '$param' must be of type numeric"
                             );
