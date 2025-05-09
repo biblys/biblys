@@ -167,7 +167,7 @@ class ParamsServiceTest extends TestCase
 
     /** "type:numeric" rule */
 
-    public function testInvalidValueTypeForInt()
+    public function testInvalidValueTypeForNumeric()
     {
         // given
         $request = new Request();
@@ -209,6 +209,28 @@ class ParamsServiceTest extends TestCase
 
         // then
         $this->assertEquals("0", $page);
+    }
+
+    public function testEmptyParameterWithDefaultValue()
+    {
+        // given
+        $request = new Request();
+        $request->query->set("page", "");
+
+        $specs = [
+            "page" => [
+                "type" => "numeric",
+                "default" => "0",
+            ],
+        ];
+        $queryParamsService = new GenericParamsService($request);
+        $queryParamsService->parse($specs);
+
+        // when
+        $page = $queryParamsService->get("page");
+
+        // then
+        $this->assertEquals(0, $page);
     }
 
     public function testNullAsDefaultValue()
