@@ -59,6 +59,20 @@ abstract class ParamsService
         return intval($value);
     }
 
+    public function getBoolean(string $key): bool
+    {
+        $value = $this->get($key);
+
+        if (is_string($value)) {
+            $value = strtolower($value);
+            if ($value === "true" || $value === "1" || $value === "yes" || $value === "on") {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     protected function _ensureNoUnexpectedParamIsPresent(array $params, array $specs): void
     {
         foreach ($params as $param => $value) {
@@ -112,6 +126,17 @@ abstract class ParamsService
                         if (!is_numeric($value) && !empty($value)) {
                             throw new BadRequestHttpException(
                                 "Parameter '$param' must be of type numeric"
+                            );
+                        }
+
+                        continue;
+                    }
+
+                    if ($ruleValue === "boolean") {
+                        $acceptedValue = ["true", "false", "1", "0", "yes", "no", "on", "off", ""];
+                        if (!in_array($value, $acceptedValue, true)) {
+                            throw new BadRequestHttpException(
+                                "Parameter '$param' must be of type boolean"
                             );
                         }
 
