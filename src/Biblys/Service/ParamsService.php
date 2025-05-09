@@ -37,20 +37,26 @@ abstract class ParamsService
         $this->params = $params;
     }
 
-    public function get(string $key): string
+    public function get(string $key): ?string
     {
         return $this->params[$key];
     }
 
-    public function getInteger(string $key): int
+    public function getInteger(string $key): ?int
     {
-        if (!is_numeric($this->get($key))) {
+        $value = $this->get($key);
+
+        if (!is_numeric($value) && !is_null($value)) {
             throw new InvalidArgumentException(
                 "Cannot get non numeric parameter '$key' as an integer"
             );
         }
 
-        return intval($this->get($key));
+        if (is_null($value)) {
+            return null;
+        }
+
+        return intval($value);
     }
 
     protected function _ensureNoUnexpectedParamIsPresent(array $params, array $specs): void
@@ -67,8 +73,9 @@ abstract class ParamsService
 
         foreach ($specs as $param => $rules) {
 
-            $isOptional = isset($rules["default"]);
-            if (!isset($params[$param])) {
+            $isOptional = array_key_exists("default", $rules);
+            $isMissing = !isset($params[$param]) || $params[$param] === "";
+            if ($isMissing) {
                 if (!$isOptional) {
                     throw new BadRequestHttpException("Parameter '$param' is required");
                 }
