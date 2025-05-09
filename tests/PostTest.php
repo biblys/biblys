@@ -57,7 +57,6 @@ class PostTest extends PHPUnit\Framework\TestCase
         $post = $pm->create();
 
         $this->assertInstanceOf('Post', $post);
-        $this->assertEquals($post->get('site_id'), $globalSite->get('id'));
 
         return $post;
     }

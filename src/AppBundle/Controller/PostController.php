@@ -18,7 +18,6 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Service\MetaTagsService;
@@ -97,7 +96,6 @@ class PostController extends Controller
      */
     public function showAction(
         Request         $request,
-        CurrentSite     $currentSite,
         CurrentUser     $currentUser,
         TemplateService $templateService,
         UrlGenerator    $urlGenerator,
@@ -106,9 +104,7 @@ class PostController extends Controller
         string          $slug
     ): Response
     {
-        $post = PostQuery::create()
-            ->filterBySite($currentSite->getSite())
-            ->findOneByUrl($slug);
+        $post = PostQuery::create()->findOneByUrl($slug);
         if (!$post) {
             throw new NotFoundException("Post $slug not found.");
         }
@@ -242,9 +238,9 @@ class PostController extends Controller
      * @throws LoaderError
      * @throws Exception
      */
-    public function exportAction(CurrentSite $currentSite, TemplateService $templateService): Response
+    public function exportAction(TemplateService $templateService): Response
     {
-        $posts = PostQuery::create()->findBySiteId($currentSite->getId());
+        $posts = PostQuery::create()->find();
         foreach ($posts as $post) {
             $this->_writePostToFile($post, $templateService);
         }
