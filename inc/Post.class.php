@@ -244,21 +244,5 @@ class PostManager extends EntityManager
 {
     protected $prefix = 'post',
         $table = 'posts',
-        $object = 'Post',
-        $siteAgnostic = false;
-
-    /**
-     * @throws Exception
-     */
-    public function create(array $defaults = array()): Entity
-    {
-        if (!isset($defaults['site_id'])) $defaults['site_id'] = $this->site['site_id'];
-        return parent::create($defaults);
-    }
-
-    public function getAll(array $where = array(), array $options = array(), $withJoins = true): array
-    {
-        $where['posts`.`site_id'] = $this->site['site_id'];
-        return parent::getAll($where, $options);
-    }
+        $object = 'Post';
 }
