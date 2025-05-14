@@ -90,7 +90,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                  style="max-width: 300px; max-height: 300px" />
           </a>
           <div class="form-check mt-2">
-            <input type="checkbox" name="delete_illustration" id="delete_illustration" value="1" class="form-check-input" />
+            <input type="checkbox" name="delete_illustration" id="delete_illustration" value="1"
+                   class="form-check-input" />
             <label class="form-check-label" for="delete_illustration">Supprimer</label>
           </div>
         </div>
@@ -120,12 +121,31 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     </div>
   </fieldset>
 
+  <fieldset style="cursor: pointer">
+    <legend href="#post_excerpt" data-toggle="collapse">
+      Extrait&nbsp; <i class="fa-solid fa-plus-square"></i>
+    </legend>
+    <div id="post_excerpt" class="collapse {% if post.excerpt %}show{% endif %}">
+      <div class="form-group row">
+        <div class="col-sm-12">
+        <textarea aria-label="Extrait" id="post_excerpt" name="post_excerpt" class="form-control wysiwyg">
+          {{ post.excerpt }}
+        </textarea>
+        </div>
+      </div>
+      <small class="form-text text-muted">
+        Si renseigné, l'extrait sera affiché à la place du contenu du billet sur les autres pages affichant ce billet.
+      </small>
+    </div>
+  </fieldset>
+
   <fieldset>
-    <legend id="post_content_label">Contenu</legend>
+    <legend>Contenu</legend>
     <div class="form-group row">
       <div class="col-sm-12">
-        <textarea aria-labelledby="post_content_label" id="post_content" name="post_content"
-                  class="form-control wysiwyg">{{ post.content }}</textarea>
+        <textarea aria-label="Contenu" id="post_content" name="post_content" class="form-control wysiwyg">
+          {{ post.content }}
+        </textarea>
       </div>
     </div>
   </fieldset>

@@ -294,13 +294,15 @@ class PostController extends Controller
             "post_date" => ["type" => "string"],
             "post_link" => ["type" => "string", "default" => null],
             "post_selected" => ["type" => "boolean", "default" => false],
-            "post_content" => ["type" => "string"],
+            "post_excerpt" => ["type" => "string", "default" => ""],
+            "post_content" => ["type" => "string", "default" => ""],
             "post_illustration_legend" => ["type" => "string", "default" => null],
         ]);
 
         $post->setUserId($bodyParams->getInteger("user_id"));
         $post->setPublisherId($bodyParams->getInteger("publisher_id"));
         $post->setTitle($bodyParams->get("post_title"));
+        $post->setExcerpt($bodyParams->get("post_excerpt"));
         $post->setContent($bodyParams->get("post_content"));
         $post->setCategoryId($bodyParams->getInteger("category_id"));
         $post->setLink($bodyParams->get("post_link"));
