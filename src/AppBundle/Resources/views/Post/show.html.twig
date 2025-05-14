@@ -36,10 +36,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
     {% if app.currentUser.isAdmin %}
         <div class="admin">
-            <p>Billet n°
-                {{ post.id }}</p>
+            <p>Billet n°{{ post.id }}</p>
             <p>
-                <a href="/pages/adm_post?id={{ post.id }}">
+                <a href="{{ path('post_edit', {'id': post.id}) }}">
                     modifier
                 </a>
             </p>

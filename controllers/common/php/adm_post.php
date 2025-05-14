@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2024 Clément Latzarus
+ * Copyright (C) 2025 Clément Latzarus
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
@@ -16,6 +16,19 @@
  */
 
 
-$rank = "adm_";
+use Biblys\Service\QueryParamsService;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
-return include("post_edit.php");
+return function(QueryParamsService $queryParams, UrlGenerator $urlGenerator): RedirectResponse
+{
+    $queryParams->parse(["id" => ["type" => "numeric", "default" => null]]);
+    $postId = $queryParams->getInteger("id");
+
+    $url = $urlGenerator->generate("post_new");
+    if ($postId) {
+        $url = $urlGenerator->generate("post_edit", ["id" => $postId]);
+    }
+
+    return new RedirectResponse($url);
+};
