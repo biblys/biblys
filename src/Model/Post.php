@@ -37,6 +37,10 @@ class Post extends BasePost
     public const STATUS_OFFLINE = false;
     public const STATUS_ONLINE = true;
 
+    public function getSlug(): string
+    {
+        return $this->getUrl();
+    }
 
     public function isPublished(): bool
     {
