@@ -1,0 +1,38 @@
+{% extends "layout:admin.html.twig" %}
+
+{% block title %}
+  Fournisseurs
+{% endblock %}
+
+{% block main %}
+  <h1><span class="fa fa-truck"></span> Fournisseurs</h1>
+
+  <div class="my-4">
+    <a class="btn btn-primary" href="/pages/adm_supplier">Nouveau fournisseur</a>
+    <a class="btn btn-info" href="/pages/adm_suppliers_without">Sans fournisseur</a>
+  </div>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Fournisseur</th>
+      <th>Éditeurs</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for supplier in suppliers %}
+      <tr>
+        <td>
+          <a href="/pages/adm_supplier?id={{ supplier.id }}">{{ supplier.name }}</a>
+        </td>
+        <td>
+          {% for publisher in supplier.publishers %}
+            {{ publisher.name }}
+            {% if not loop.last %} · {% endif %}
+          {% endfor %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

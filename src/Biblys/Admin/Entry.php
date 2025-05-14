@@ -217,7 +217,7 @@ class Entry
         $entries[] = new Entry('Stocks', ['category' => 'stock', 'url' => '/pages/adm_stocks', 'icon' => 'cubes']);
         $entries[] = new Entry('Listes', ['category' => 'stock', 'url' => '/pages/adm_list', 'icon' => 'list']);
         $entries[] = new Entry('Réassort', ['category' => 'stock', 'url' => '/pages/adm_reorder', 'icon' => 'refresh']);
-        $entries[] = new Entry('Fournisseurs', ['category' => 'stock', 'url' => '/pages/adm_suppliers', 'icon' => 'truck']);
+        $entries[] = new Entry('Fournisseurs', ['category' => 'stock', 'path' => 'supplier_index', 'icon' => 'truck']);
         $entries[] = new Entry('Inventaires', ['category' => 'stock', 'path' => 'inventory_index', 'icon' => 'check']);
         $entries[] = new Entry('États des stocks', ['category' => 'stock', 'url' => '/pages/adm_stock_status', 'icon' => 'bar-chart']);
 
