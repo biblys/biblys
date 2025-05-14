@@ -62,6 +62,7 @@ use Model\SpecialOffer;
 use Model\Stock;
 use Model\StockItemList;
 use Model\Subscription;
+use Model\Supplier;
 use Model\User;
 use Model\Vote;
 use Model\Wish;
@@ -278,12 +279,16 @@ class ModelFactory
         ?Article         $article = null,
         ?ArticleCategory $articleCategory = null,
         ?Article         $bundleArticle = null,
+        ?Publisher       $publisher = null,
+        ?Supplier        $supplier = null,
     ): Link
     {
         $link = new Link();
         $link->setArticle($article);
         $link->setArticleCategory($articleCategory);
         $link->setBundleId($bundleArticle?->getId());
+        $link->setPublisherId($publisher?->getId());
+        $link->setSupplierId($supplier?->getId());
         $link->save();
 
         return $link;
@@ -1084,6 +1089,19 @@ class ModelFactory
         $download->save();
 
         return $download;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createSupplier(string $name): Supplier
+    {
+        $supplier = new Supplier();
+        $supplier->setName($name);
+        $supplier->setSiteId(0);
+        $supplier->save();
+
+        return $supplier;
     }
 
 }

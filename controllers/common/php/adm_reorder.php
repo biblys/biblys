@@ -29,11 +29,13 @@ $suppliers = array_map(function($supplier) {
     return '<option value="/pages/adm_reorder?f='.$supplier->get('id').'">'.$supplier->get('name').'</option>';
 }, $suppliers);
 
+$suppliersUrl = LegacyCodeHelper::getGlobalUrlGenerator()->generate("supplier_index");
+
 $_ECHO .= '
         <h1><span class="fa fa-refresh"></span> Réassort</h1>
 
         <div class="admin">
-            <p><a href="/pages/adm_suppliers">Fournisseurs</a></p>
+            <p><a href="'.$suppliersUrl.'">Fournisseurs</a></p>
         </div>
 
     <form>
