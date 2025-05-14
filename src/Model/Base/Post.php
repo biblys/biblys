@@ -131,6 +131,13 @@ abstract class Post implements ActiveRecordInterface
     protected $post_title;
 
     /**
+     * The value for the post_excerpt field.
+     *
+     * @var        string|null
+     */
+    protected $post_excerpt;
+
+    /**
      * The value for the post_content field.
      *
      * @var        string|null
@@ -600,6 +607,16 @@ abstract class Post implements ActiveRecordInterface
     }
 
     /**
+     * Get the [post_excerpt] column value.
+     *
+     * @return string|null
+     */
+    public function getExcerpt()
+    {
+        return $this->post_excerpt;
+    }
+
+    /**
      * Get the [post_content] column value.
      *
      * @return string|null
@@ -1024,6 +1041,26 @@ abstract class Post implements ActiveRecordInterface
     }
 
     /**
+     * Set the value of [post_excerpt] column.
+     *
+     * @param string|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setExcerpt($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->post_excerpt !== $v) {
+            $this->post_excerpt = $v;
+            $this->modifiedColumns[PostTableMap::COL_POST_EXCERPT] = true;
+        }
+
+        return $this;
+    }
+
+    /**
      * Set the value of [post_content] column.
      *
      * @param string|null $v New value
@@ -1423,67 +1460,70 @@ abstract class Post implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : PostTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
             $this->post_title = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : PostTableMap::translateFieldName('Content', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : PostTableMap::translateFieldName('Excerpt', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->post_excerpt = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : PostTableMap::translateFieldName('Content', TableMap::TYPE_PHPNAME, $indexType)];
             $this->post_content = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : PostTableMap::translateFieldName('IllustrationVersion', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : PostTableMap::translateFieldName('IllustrationVersion', TableMap::TYPE_PHPNAME, $indexType)];
             $this->post_illustration_version = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : PostTableMap::translateFieldName('IllustrationLegend', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : PostTableMap::translateFieldName('IllustrationLegend', TableMap::TYPE_PHPNAME, $indexType)];
             $this->post_illustration_legend = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : PostTableMap::translateFieldName('Selected', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : PostTableMap::translateFieldName('Selected', TableMap::TYPE_PHPNAME, $indexType)];
             $this->post_selected = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : PostTableMap::translateFieldName('Link', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : PostTableMap::translateFieldName('Link', TableMap::TYPE_PHPNAME, $indexType)];
             $this->post_link = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : PostTableMap::translateFieldName('Status', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : PostTableMap::translateFieldName('Status', TableMap::TYPE_PHPNAME, $indexType)];
             $this->post_status = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : PostTableMap::translateFieldName('Keywords', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : PostTableMap::translateFieldName('Keywords', TableMap::TYPE_PHPNAME, $indexType)];
             $this->post_keywords = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : PostTableMap::translateFieldName('Links', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : PostTableMap::translateFieldName('Links', TableMap::TYPE_PHPNAME, $indexType)];
             $this->post_links = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : PostTableMap::translateFieldName('KeywordsGenerated', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : PostTableMap::translateFieldName('KeywordsGenerated', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->post_keywords_generated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : PostTableMap::translateFieldName('FbId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 18 + $startcol : PostTableMap::translateFieldName('FbId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->post_fb_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 18 + $startcol : PostTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 19 + $startcol : PostTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->post_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 19 + $startcol : PostTableMap::translateFieldName('Hits', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 20 + $startcol : PostTableMap::translateFieldName('Hits', TableMap::TYPE_PHPNAME, $indexType)];
             $this->post_hits = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 20 + $startcol : PostTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 21 + $startcol : PostTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->post_insert = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 21 + $startcol : PostTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 22 + $startcol : PostTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->post_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 22 + $startcol : PostTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 23 + $startcol : PostTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->post_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 23 + $startcol : PostTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 24 + $startcol : PostTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00') {
                 $col = null;
             }
@@ -1496,7 +1536,7 @@ abstract class Post implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 24; // 24 = PostTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 25; // 25 = PostTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Post'), 0, $e);
@@ -1793,6 +1833,9 @@ abstract class Post implements ActiveRecordInterface
         if ($this->isColumnModified(PostTableMap::COL_POST_TITLE)) {
             $modifiedColumns[':p' . $index++]  = 'post_title';
         }
+        if ($this->isColumnModified(PostTableMap::COL_POST_EXCERPT)) {
+            $modifiedColumns[':p' . $index++]  = 'post_excerpt';
+        }
         if ($this->isColumnModified(PostTableMap::COL_POST_CONTENT)) {
             $modifiedColumns[':p' . $index++]  = 'post_content';
         }
@@ -1882,6 +1925,10 @@ abstract class Post implements ActiveRecordInterface
                         break;
                     case 'post_title':
                         $stmt->bindValue($identifier, $this->post_title, PDO::PARAM_STR);
+
+                        break;
+                    case 'post_excerpt':
+                        $stmt->bindValue($identifier, $this->post_excerpt, PDO::PARAM_STR);
 
                         break;
                     case 'post_content':
@@ -2035,51 +2082,54 @@ abstract class Post implements ActiveRecordInterface
                 return $this->getTitle();
 
             case 8:
-                return $this->getContent();
+                return $this->getExcerpt();
 
             case 9:
-                return $this->getIllustrationVersion();
+                return $this->getContent();
 
             case 10:
-                return $this->getIllustrationLegend();
+                return $this->getIllustrationVersion();
 
             case 11:
-                return $this->getSelected();
+                return $this->getIllustrationLegend();
 
             case 12:
-                return $this->getLink();
+                return $this->getSelected();
 
             case 13:
-                return $this->getStatus();
+                return $this->getLink();
 
             case 14:
-                return $this->getKeywords();
+                return $this->getStatus();
 
             case 15:
-                return $this->getLinks();
+                return $this->getKeywords();
 
             case 16:
-                return $this->getKeywordsGenerated();
+                return $this->getLinks();
 
             case 17:
-                return $this->getFbId();
+                return $this->getKeywordsGenerated();
 
             case 18:
-                return $this->getDate();
+                return $this->getFbId();
 
             case 19:
-                return $this->getHits();
+                return $this->getDate();
 
             case 20:
-                return $this->getInsert();
+                return $this->getHits();
 
             case 21:
-                return $this->getUpdate();
+                return $this->getInsert();
 
             case 22:
-                return $this->getCreatedAt();
+                return $this->getUpdate();
 
             case 23:
+                return $this->getCreatedAt();
+
+            case 24:
                 return $this->getUpdatedAt();
 
             default:
@@ -2118,33 +2168,30 @@ abstract class Post implements ActiveRecordInterface
             $keys[5] => $this->getCategoryId(),
             $keys[6] => $this->getUrl(),
             $keys[7] => $this->getTitle(),
-            $keys[8] => $this->getContent(),
-            $keys[9] => $this->getIllustrationVersion(),
-            $keys[10] => $this->getIllustrationLegend(),
-            $keys[11] => $this->getSelected(),
-            $keys[12] => $this->getLink(),
-            $keys[13] => $this->getStatus(),
-            $keys[14] => $this->getKeywords(),
-            $keys[15] => $this->getLinks(),
-            $keys[16] => $this->getKeywordsGenerated(),
-            $keys[17] => $this->getFbId(),
-            $keys[18] => $this->getDate(),
-            $keys[19] => $this->getHits(),
-            $keys[20] => $this->getInsert(),
-            $keys[21] => $this->getUpdate(),
-            $keys[22] => $this->getCreatedAt(),
-            $keys[23] => $this->getUpdatedAt(),
+            $keys[8] => $this->getExcerpt(),
+            $keys[9] => $this->getContent(),
+            $keys[10] => $this->getIllustrationVersion(),
+            $keys[11] => $this->getIllustrationLegend(),
+            $keys[12] => $this->getSelected(),
+            $keys[13] => $this->getLink(),
+            $keys[14] => $this->getStatus(),
+            $keys[15] => $this->getKeywords(),
+            $keys[16] => $this->getLinks(),
+            $keys[17] => $this->getKeywordsGenerated(),
+            $keys[18] => $this->getFbId(),
+            $keys[19] => $this->getDate(),
+            $keys[20] => $this->getHits(),
+            $keys[21] => $this->getInsert(),
+            $keys[22] => $this->getUpdate(),
+            $keys[23] => $this->getCreatedAt(),
+            $keys[24] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[16]] instanceof \DateTimeInterface) {
-            $result[$keys[16]] = $result[$keys[16]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[17]] instanceof \DateTimeInterface) {
+            $result[$keys[17]] = $result[$keys[17]]->format('Y-m-d H:i:s.u');
         }
 
-        if ($result[$keys[18]] instanceof \DateTimeInterface) {
-            $result[$keys[18]] = $result[$keys[18]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[20]] instanceof \DateTimeInterface) {
-            $result[$keys[20]] = $result[$keys[20]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[19]] instanceof \DateTimeInterface) {
+            $result[$keys[19]] = $result[$keys[19]]->format('Y-m-d H:i:s.u');
         }
 
         if ($result[$keys[21]] instanceof \DateTimeInterface) {
@@ -2156,7 +2203,11 @@ abstract class Post implements ActiveRecordInterface
         }
 
         if ($result[$keys[23]] instanceof \DateTimeInterface) {
-            $result[$keys[23]] = $result[$keys[23]]->format('Y-m-d');
+            $result[$keys[23]] = $result[$keys[23]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[24]] instanceof \DateTimeInterface) {
+            $result[$keys[24]] = $result[$keys[24]]->format('Y-m-d');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -2286,51 +2337,54 @@ abstract class Post implements ActiveRecordInterface
                 $this->setTitle($value);
                 break;
             case 8:
-                $this->setContent($value);
+                $this->setExcerpt($value);
                 break;
             case 9:
-                $this->setIllustrationVersion($value);
+                $this->setContent($value);
                 break;
             case 10:
-                $this->setIllustrationLegend($value);
+                $this->setIllustrationVersion($value);
                 break;
             case 11:
-                $this->setSelected($value);
+                $this->setIllustrationLegend($value);
                 break;
             case 12:
-                $this->setLink($value);
+                $this->setSelected($value);
                 break;
             case 13:
-                $this->setStatus($value);
+                $this->setLink($value);
                 break;
             case 14:
-                $this->setKeywords($value);
+                $this->setStatus($value);
                 break;
             case 15:
-                $this->setLinks($value);
+                $this->setKeywords($value);
                 break;
             case 16:
-                $this->setKeywordsGenerated($value);
+                $this->setLinks($value);
                 break;
             case 17:
-                $this->setFbId($value);
+                $this->setKeywordsGenerated($value);
                 break;
             case 18:
-                $this->setDate($value);
+                $this->setFbId($value);
                 break;
             case 19:
-                $this->setHits($value);
+                $this->setDate($value);
                 break;
             case 20:
-                $this->setInsert($value);
+                $this->setHits($value);
                 break;
             case 21:
-                $this->setUpdate($value);
+                $this->setInsert($value);
                 break;
             case 22:
-                $this->setCreatedAt($value);
+                $this->setUpdate($value);
                 break;
             case 23:
+                $this->setCreatedAt($value);
+                break;
+            case 24:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -2384,52 +2438,55 @@ abstract class Post implements ActiveRecordInterface
             $this->setTitle($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setContent($arr[$keys[8]]);
+            $this->setExcerpt($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setIllustrationVersion($arr[$keys[9]]);
+            $this->setContent($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setIllustrationLegend($arr[$keys[10]]);
+            $this->setIllustrationVersion($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setSelected($arr[$keys[11]]);
+            $this->setIllustrationLegend($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setLink($arr[$keys[12]]);
+            $this->setSelected($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
-            $this->setStatus($arr[$keys[13]]);
+            $this->setLink($arr[$keys[13]]);
         }
         if (array_key_exists($keys[14], $arr)) {
-            $this->setKeywords($arr[$keys[14]]);
+            $this->setStatus($arr[$keys[14]]);
         }
         if (array_key_exists($keys[15], $arr)) {
-            $this->setLinks($arr[$keys[15]]);
+            $this->setKeywords($arr[$keys[15]]);
         }
         if (array_key_exists($keys[16], $arr)) {
-            $this->setKeywordsGenerated($arr[$keys[16]]);
+            $this->setLinks($arr[$keys[16]]);
         }
         if (array_key_exists($keys[17], $arr)) {
-            $this->setFbId($arr[$keys[17]]);
+            $this->setKeywordsGenerated($arr[$keys[17]]);
         }
         if (array_key_exists($keys[18], $arr)) {
-            $this->setDate($arr[$keys[18]]);
+            $this->setFbId($arr[$keys[18]]);
         }
         if (array_key_exists($keys[19], $arr)) {
-            $this->setHits($arr[$keys[19]]);
+            $this->setDate($arr[$keys[19]]);
         }
         if (array_key_exists($keys[20], $arr)) {
-            $this->setInsert($arr[$keys[20]]);
+            $this->setHits($arr[$keys[20]]);
         }
         if (array_key_exists($keys[21], $arr)) {
-            $this->setUpdate($arr[$keys[21]]);
+            $this->setInsert($arr[$keys[21]]);
         }
         if (array_key_exists($keys[22], $arr)) {
-            $this->setCreatedAt($arr[$keys[22]]);
+            $this->setUpdate($arr[$keys[22]]);
         }
         if (array_key_exists($keys[23], $arr)) {
-            $this->setUpdatedAt($arr[$keys[23]]);
+            $this->setCreatedAt($arr[$keys[23]]);
+        }
+        if (array_key_exists($keys[24], $arr)) {
+            $this->setUpdatedAt($arr[$keys[24]]);
         }
 
         return $this;
@@ -2497,6 +2554,9 @@ abstract class Post implements ActiveRecordInterface
         }
         if ($this->isColumnModified(PostTableMap::COL_POST_TITLE)) {
             $criteria->add(PostTableMap::COL_POST_TITLE, $this->post_title);
+        }
+        if ($this->isColumnModified(PostTableMap::COL_POST_EXCERPT)) {
+            $criteria->add(PostTableMap::COL_POST_EXCERPT, $this->post_excerpt);
         }
         if ($this->isColumnModified(PostTableMap::COL_POST_CONTENT)) {
             $criteria->add(PostTableMap::COL_POST_CONTENT, $this->post_content);
@@ -2641,6 +2701,7 @@ abstract class Post implements ActiveRecordInterface
         $copyObj->setCategoryId($this->getCategoryId());
         $copyObj->setUrl($this->getUrl());
         $copyObj->setTitle($this->getTitle());
+        $copyObj->setExcerpt($this->getExcerpt());
         $copyObj->setContent($this->getContent());
         $copyObj->setIllustrationVersion($this->getIllustrationVersion());
         $copyObj->setIllustrationLegend($this->getIllustrationLegend());
@@ -3290,6 +3351,7 @@ abstract class Post implements ActiveRecordInterface
         $this->category_id = null;
         $this->post_url = null;
         $this->post_title = null;
+        $this->post_excerpt = null;
         $this->post_content = null;
         $this->post_illustration_version = null;
         $this->post_illustration_legend = null;
