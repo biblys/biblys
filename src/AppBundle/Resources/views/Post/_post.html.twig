@@ -22,7 +22,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 {% if post.has('content') %}
   <div class="post-content">
-    {{ post.content|raw }}
+    {% if post.model.excerpt and use_excerpt is defined %}
+      {{ post.model.excerpt|raw }}
+      <p class="text-right">
+        <a href="{{ path('post_show', { slug: post.model.slug }) }}" class="btn btn-light">
+          Lire la suite
+        </a>
+      </p>
+    {% else %}
+      {{ post.content|raw }}
+    {% endif %}
   </div>
 {% endif %}
 

@@ -36,6 +36,7 @@ class Post extends Entity
             "post_title" => $post->getTitle(),
             "post_url" => $post->getUrl(),
             "post_content" => $post->getContent(),
+            "post_excerpt" => $post->getExcerpt(),
             "post_date" => $post->getDate()->format("Y-m-d H:i:s"),
             "post_illustration_legend" => $post->getIllustrationLegend(),
             "category_id" => $post->getCategoryId(),
@@ -54,13 +55,15 @@ class Post extends Entity
     }
 
     /**
-     * @throws DateMalformedStringException
+     * @throws Exception
      */
     public function getModel(): \Model\Post
     {
         $model = new \Model\Post();
         $model->setId($this->get("id"));
+        $model->setUrl($this->get("url"));
         $model->setDate($this->has("date") ? new DateTime($this->get("date")) : null);
+        $model->setExcerpt($this->get("excerpt"));
 
         return $model;
     }

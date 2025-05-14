@@ -4,6 +4,9 @@
 
 ### Améliorations
 
+- Il est maintenant possible de créer un extrait de billet de blog qui sera
+  affiché à la place du contenu du billet sur les autres pages affichant le
+  billet.
 - Une page a été ajoutée à l'administration pour permettre de visualiser la
   bibliothèque numérique d'un·e utilisateur·ice.
 

@@ -26,7 +26,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         </p>
       </header>
 
-      {% include "AppBundle:Post:_post.html.twig" %}
+      {% include "AppBundle:Post:_post.html.twig" with { use_excerpt: true } %}
     </article>
   {% endfor %}
 </div>
