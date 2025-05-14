@@ -240,6 +240,7 @@ class PostControllerTest extends TestCase
         $bodyParams->expects("getInteger")->with("user_id")->andReturn(1);
         $bodyParams->expects("getInteger")->with("publisher_id")->andReturn(2);
         $bodyParams->expects("get")->with("post_title")->andReturn("Un billet de blog");
+        $bodyParams->expects("get")->with("post_excerpt")->andReturn("Extrait du billet");
         $bodyParams->expects("get")->with("post_content")->andReturn("Contenu du billet");
         $bodyParams->expects("getInteger")->with("category_id")->andReturn(3);
         $bodyParams->expects("get")->with("post_link")->andReturn("https://example.net");
@@ -264,6 +265,7 @@ class PostControllerTest extends TestCase
 
         $post = PostQuery::create()->findOneByTitle("Un billet de blog");
         $this->assertEquals("Un billet de blog", $post->getTitle());
+        $this->assertEquals("Extrait du billet", $post->getExcerpt());
         $this->assertEquals("Contenu du billet", $post->getContent());
         $this->assertEquals(3, $post->getCategoryId());
         $this->assertEquals("https://example.net", $post->getLink());
@@ -315,6 +317,7 @@ class PostControllerTest extends TestCase
         $bodyParams->expects("getInteger")->with("user_id")->andReturn(1);
         $bodyParams->expects("getInteger")->with("publisher_id")->andReturn(2);
         $bodyParams->expects("get")->with("post_title")->andReturn("Un billet de blog");
+        $bodyParams->expects("get")->with("post_excerpt")->andReturn("Extrait du billet");
         $bodyParams->expects("get")->with("post_content")->andReturn("Contenu du billet");
         $bodyParams->expects("getInteger")->with("category_id")->andReturn(3);
         $bodyParams->expects("get")->with("post_link")->andReturn("https://example.net");
@@ -340,6 +343,7 @@ class PostControllerTest extends TestCase
 
         $post = PostQuery::create()->findOneByTitle("Un billet de blog");
         $this->assertEquals("Un billet de blog", $post->getTitle());
+        $this->assertEquals("Extrait du billet", $post->getExcerpt());
         $this->assertEquals("Contenu du billet", $post->getContent());
         $this->assertEquals(3, $post->getCategoryId());
         $this->assertEquals("https://example.net", $post->getLink());
