@@ -27,6 +27,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPostQuery orderByCategoryId($order = Criteria::ASC) Order by the category_id column
  * @method     ChildPostQuery orderByUrl($order = Criteria::ASC) Order by the post_url column
  * @method     ChildPostQuery orderByTitle($order = Criteria::ASC) Order by the post_title column
+ * @method     ChildPostQuery orderByExcerpt($order = Criteria::ASC) Order by the post_excerpt column
  * @method     ChildPostQuery orderByContent($order = Criteria::ASC) Order by the post_content column
  * @method     ChildPostQuery orderByIllustrationVersion($order = Criteria::ASC) Order by the post_illustration_version column
  * @method     ChildPostQuery orderByIllustrationLegend($order = Criteria::ASC) Order by the post_illustration_legend column
@@ -52,6 +53,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPostQuery groupByCategoryId() Group by the category_id column
  * @method     ChildPostQuery groupByUrl() Group by the post_url column
  * @method     ChildPostQuery groupByTitle() Group by the post_title column
+ * @method     ChildPostQuery groupByExcerpt() Group by the post_excerpt column
  * @method     ChildPostQuery groupByContent() Group by the post_content column
  * @method     ChildPostQuery groupByIllustrationVersion() Group by the post_illustration_version column
  * @method     ChildPostQuery groupByIllustrationLegend() Group by the post_illustration_legend column
@@ -130,6 +132,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPost|null findOneByCategoryId(int $category_id) Return the first ChildPost filtered by the category_id column
  * @method     ChildPost|null findOneByUrl(string $post_url) Return the first ChildPost filtered by the post_url column
  * @method     ChildPost|null findOneByTitle(string $post_title) Return the first ChildPost filtered by the post_title column
+ * @method     ChildPost|null findOneByExcerpt(string $post_excerpt) Return the first ChildPost filtered by the post_excerpt column
  * @method     ChildPost|null findOneByContent(string $post_content) Return the first ChildPost filtered by the post_content column
  * @method     ChildPost|null findOneByIllustrationVersion(int $post_illustration_version) Return the first ChildPost filtered by the post_illustration_version column
  * @method     ChildPost|null findOneByIllustrationLegend(string $post_illustration_legend) Return the first ChildPost filtered by the post_illustration_legend column
@@ -158,6 +161,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPost requireOneByCategoryId(int $category_id) Return the first ChildPost filtered by the category_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPost requireOneByUrl(string $post_url) Return the first ChildPost filtered by the post_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPost requireOneByTitle(string $post_title) Return the first ChildPost filtered by the post_title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPost requireOneByExcerpt(string $post_excerpt) Return the first ChildPost filtered by the post_excerpt column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPost requireOneByContent(string $post_content) Return the first ChildPost filtered by the post_content column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPost requireOneByIllustrationVersion(int $post_illustration_version) Return the first ChildPost filtered by the post_illustration_version column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPost requireOneByIllustrationLegend(string $post_illustration_legend) Return the first ChildPost filtered by the post_illustration_legend column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -194,6 +198,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildPost> findByUrl(string|array<string> $post_url) Return ChildPost objects filtered by the post_url column
  * @method     ChildPost[]|Collection findByTitle(string|array<string> $post_title) Return ChildPost objects filtered by the post_title column
  * @psalm-method Collection&\Traversable<ChildPost> findByTitle(string|array<string> $post_title) Return ChildPost objects filtered by the post_title column
+ * @method     ChildPost[]|Collection findByExcerpt(string|array<string> $post_excerpt) Return ChildPost objects filtered by the post_excerpt column
+ * @psalm-method Collection&\Traversable<ChildPost> findByExcerpt(string|array<string> $post_excerpt) Return ChildPost objects filtered by the post_excerpt column
  * @method     ChildPost[]|Collection findByContent(string|array<string> $post_content) Return ChildPost objects filtered by the post_content column
  * @psalm-method Collection&\Traversable<ChildPost> findByContent(string|array<string> $post_content) Return ChildPost objects filtered by the post_content column
  * @method     ChildPost[]|Collection findByIllustrationVersion(int|array<int> $post_illustration_version) Return ChildPost objects filtered by the post_illustration_version column
@@ -325,7 +331,7 @@ abstract class PostQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT post_id, axys_account_id, user_id, site_id, publisher_id, category_id, post_url, post_title, post_content, post_illustration_version, post_illustration_legend, post_selected, post_link, post_status, post_keywords, post_links, post_keywords_generated, post_fb_id, post_date, post_hits, post_insert, post_update, post_created, post_updated FROM posts WHERE post_id = :p0';
+        $sql = 'SELECT post_id, axys_account_id, user_id, site_id, publisher_id, category_id, post_url, post_title, post_excerpt, post_content, post_illustration_version, post_illustration_legend, post_selected, post_link, post_status, post_keywords, post_links, post_keywords_generated, post_fb_id, post_date, post_hits, post_insert, post_update, post_created, post_updated FROM posts WHERE post_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -735,6 +741,34 @@ abstract class PostQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(PostTableMap::COL_POST_TITLE, $title, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the post_excerpt column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByExcerpt('fooValue');   // WHERE post_excerpt = 'fooValue'
+     * $query->filterByExcerpt('%fooValue%', Criteria::LIKE); // WHERE post_excerpt LIKE '%fooValue%'
+     * $query->filterByExcerpt(['foo', 'bar']); // WHERE post_excerpt IN ('foo', 'bar')
+     * </code>
+     *
+     * @param string|string[] $excerpt The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByExcerpt($excerpt = null, ?string $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($excerpt)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(PostTableMap::COL_POST_EXCERPT, $excerpt, $comparison);
 
         return $this;
     }
