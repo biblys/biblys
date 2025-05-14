@@ -1036,6 +1036,7 @@
     </foreign-key>
     <column name="post_url" phpName="Url" type="LONGVARCHAR"/>
     <column name="post_title" phpName="Title" type="LONGVARCHAR"/>
+    <column name="post_excerpt" phpName="Excerpt" type="LONGVARCHAR"/>
     <column name="post_content" phpName="Content" type="LONGVARCHAR"/>
     <column name="post_illustration_version" phpName="IllustrationVersion" type="INTEGER" defaultValue="0" />
     <column name="post_illustration_legend" phpName="IllustrationLegend" type="VARCHAR" size="64"/>
