@@ -19,6 +19,7 @@
 namespace Model;
 
 use Model\Base\Supplier as BaseSupplier;
+use Propel\Runtime\ActiveQuery\Criteria;
 
 /**
  * Skeleton subclass for representing a row from the 'suppliers' table.
@@ -31,5 +32,27 @@ use Model\Base\Supplier as BaseSupplier;
  */
 class Supplier extends BaseSupplier
 {
+    /**
+     * @return Publisher[]
+     */
+    public function getPublishers(): array
+    {
+        $publishers = [];
+        $links = LinkQuery::create()
+            ->filterByPublisherId(null, Criteria::ISNOTNULL)
+            ->filterBySupplierId($this->getId())
+            ->find();
 
+        /**
+         * @var Link $link
+         */
+        foreach ($links as $link) {
+            $publisher = PublisherQuery::create()->findPk($link->getPublisherId());
+            if ($publisher) {
+                $publishers[] = $publisher;
+            }
+        }
+
+        return $publishers;
+    }
 }

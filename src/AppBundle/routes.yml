@@ -795,6 +795,13 @@ stock_item_delete:
   requirements:
     stockId: \d+
 
+# Suppliers
+
+supplier_index:
+  methods: GET
+  path: /admin/suppliers
+  controller: AppBundle\Controller\SupplierController::indexAction
+
 # Tag
 
 tag_show:

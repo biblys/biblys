@@ -16,6 +16,8 @@
  */
 
 
+use Biblys\Legacy\LegacyCodeHelper;
+
 $sm = new SupplierManager();
 
 \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Nouveau fournisseur');
@@ -26,7 +28,8 @@ if (isset($_GET['delete']))
 	if ($supplier)
 	{
 		$sm->delete($supplier);
-		redirect('/pages/adm_suppliers', array('deleted' => $supplier->get('name')));
+        $suppliersUrl = LegacyCodeHelper::getGlobalUrlGenerator()->generate("supplier_index");
+		redirect($suppliersUrl, array('deleted' => $supplier->get('name')));
 	}
 }
 
@@ -91,11 +94,13 @@ if (isset($_GET["articles_to_update"])) {
 	$alerts .= '<p class="warning">'.$_GET['articles_to_update'].' articles devront être <a href="'.$searchTermsUrl.'">mis à jour</a>.</p>';
 }
 
+$suppliersUrl = LegacyCodeHelper::getGlobalUrlGenerator()->generate("supplier_index");
+
 $_ECHO .='
 	<h1><span class="fa fa-truck"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
 
 	<div class="admin">
-		<p><a href="/pages/adm_suppliers">Fournisseurs</a></p>
+		<p><a href="'.$suppliersUrl.'">Fournisseurs</a></p>
 	</div>
 
 	'.$alerts.'
