@@ -157,7 +157,7 @@ return function (
 
         // Titre alphabétique
         $stringService = new StringService($_POST['article_title']);
-        $_POST['article_title_alphabetic'] = $stringService->alphabetize();
+        $_POST['article_title_alphabetic'] = $stringService->alphabetize()->get();
 
         // Retirer les liens dans article_summary
         $_POST['article_summary'] = preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', '\\2', $_POST['article_summary']);
