@@ -101,7 +101,7 @@ export default class Shipping {
     let warning = '';
     if (!range.is_compliant_with_french_law) {
       warning = '<span class="fa fa-exclamation-triangle" title="Ce tarif n\'est pas conforme à la loi française"></span>';
-      rowClass = 'warning';
+      rowClass = 'table-warning';
     }
     const tr = createElementFromHTML(`
       <tr class="${rowClass}">
