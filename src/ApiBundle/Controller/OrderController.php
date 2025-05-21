@@ -127,11 +127,13 @@ class OrderController extends Controller
         $csvAsString = $csv->toString();
         $csvWithoutQuotes = str_replace('"', '', $csvAsString);
 
+        $today = new DateTime();
+        $fileName = "commandes-mondial-relay-{$today->format("Y-m-d")}.csv";
         return new Response(
             content: $csvWithoutQuotes,
             headers: [
                 "Content-Type" => "text/csv",
-                "Content-Disposition" => "attachment; filename=\"commandes.csv\"",
+                "Content-Disposition" => "attachment; filename=\"$fileName\"",
             ]
         );
     }
