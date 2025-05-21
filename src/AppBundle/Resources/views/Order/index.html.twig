@@ -77,10 +77,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           <button type="submit" class="btn btn-primary" data-action="show">Afficher les commandes</button>
 
           {% if display_mondial_relay_export_button %}
-            <button type="submit" class="btn btn-info" data-action="export" data-export_url="{{
+            <button type="submit" class="btn btn-info d-inline-flex gap-2 align-items-center" data-action="export" data-export_url="{{
               path('api_orders_export_mondial_relay')
             }}">
-              <span class="fa fa-cloud-download"></span>
+              <img src="/assets/icons/shipping/mondial-relay.svg" alt="Mondial Relay" height="20">
               Exporter pour Mondial Relay
             </button>
           {% endif %}
