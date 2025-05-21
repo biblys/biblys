@@ -26,7 +26,7 @@ use Propel\Runtime\Exception\PropelException;
 
 require_once __DIR__ . "/../setUp.php";
 
-class ShippingFeeQueryTest extends TestCase
+class ShippingOptionQueryTest extends TestCase
 {
     /**
      * @throws PropelException
