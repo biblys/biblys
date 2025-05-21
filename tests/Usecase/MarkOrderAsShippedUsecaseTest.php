@@ -149,7 +149,7 @@ class MarkOrderAsShippedUsecaseTest extends TestCase
     public function testExecuteWithTrackedShipping()
     {
         // given
-        $shipping = ModelFactory::createShippingOption(type: "suivi");
+        $shipping = ModelFactory::createShippingOption(type: "colissimo");
         $order = ModelFactory::createOrder(shippingOption: $shipping, email: "customer@paronymie.fr");
         $site = ModelFactory::createSite();
 

@@ -9,6 +9,7 @@
   billet.
 - Une page a été ajoutée à l'administration pour permettre de visualiser la
   bibliothèque numérique d'un·e utilisateur·ice.
+- Le mode d'expédition "Suivi" a été renommé "Colissimo"
 
 ## 3.5.2 (16 avril 2025)
 

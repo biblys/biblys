@@ -357,7 +357,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
     {
         $fee = new Shipping([
             'shipping_id' => 45,
-            'shipping_type' => 'suivi',
+            'shipping_type' => 'colissimo',
             'shipping_fee' => 485
         ]);
 
@@ -367,7 +367,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
 
         $this->assertEquals($order->get('shipping_id'), 45);
         $this->assertEquals($order->get('order_shipping'), 485);
-        $this->assertEquals($order->get('order_shipping_mode'), 'suivi');
+        $this->assertEquals($order->get('order_shipping_mode'), 'colissimo');
         $this->assertEquals($order->get('order_amount_tobepaid'), 5500 + 485);
     }
 

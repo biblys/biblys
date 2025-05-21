@@ -125,7 +125,7 @@ class ShippingControllerTest extends TestCase
     {
         // given
         $controller = new ShippingController();
-        $content = '{"id":"","mode":"Colissimo","type":"suivi","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
+        $content = '{"id":"","mode":"Colissimo","type":"colissimo","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
         $request = RequestFactory::createAuthRequestForAdminUser($content);
         $config = new Config();
         $currentUser = Mockery::mock(CurrentUser::class);
@@ -143,7 +143,7 @@ class ShippingControllerTest extends TestCase
         $fee = json_decode($response->getContent(), true);
         $this->assertEquals(57, $fee["fee"]);
         $this->assertEquals("Colissimo", $fee["mode"]);
-        $this->assertEquals("suivi", $fee["type"]);
+        $this->assertEquals("colissimo", $fee["type"]);
         $this->assertEquals("OM2", $fee["zone"]);
         $this->assertEquals(21, $fee["max_weight"]);
         $this->assertEquals(71, $fee["min_amount"]);
@@ -165,7 +165,7 @@ class ShippingControllerTest extends TestCase
     {
         // given
         $controller = new ShippingController();
-        $content = '{"id":"","mode":"Colissimo","type":"suivi","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
+        $content = '{"id":"","mode":"Colissimo","type":"colissimo","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
         $request = RequestFactory::createAuthRequestForAdminUser($content);
         $shippingFee = ModelFactory::createShippingOption();
         $config = new Config();
@@ -190,7 +190,7 @@ class ShippingControllerTest extends TestCase
         $this->assertEquals($shippingFee->getId(), $fee["id"]);
         $this->assertEquals(57, $fee["fee"]);
         $this->assertEquals("Colissimo", $fee["mode"]);
-        $this->assertEquals("suivi", $fee["type"]);
+        $this->assertEquals("colissimo", $fee["type"]);
         $this->assertEquals("OM2", $fee["zone"]);
         $this->assertEquals(21, $fee["max_weight"]);
         $this->assertEquals(71, $fee["min_amount"]);
@@ -206,7 +206,7 @@ class ShippingControllerTest extends TestCase
     {
         // given
         $controller = new ShippingController();
-        $content = '{"id":"","mode":"Colissimo","type":"suivi","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
+        $content = '{"id":"","mode":"Colissimo","type":"colissimo","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
         $request = RequestFactory::createAuthRequestForAdminUser($content);
         $shippingFee = ModelFactory::createShippingOption();
         $shippingFee->setSiteId(2);
@@ -310,7 +310,7 @@ class ShippingControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $shippingFee = ModelFactory::createShippingOption(
             site: $site,
-            type: "suivi",
+            type: "colissimo",
             mode: "Colissimo",
             info: "Expedition sous 72h",
             fee: 560,
@@ -337,7 +337,7 @@ class ShippingControllerTest extends TestCase
                 "id" => $shippingFee->getId(),
                 "mode" => "Colissimo",
                 "fee" => 560,
-                "type" => "suivi",
+                "type" => "colissimo",
                 "info" => "Expedition sous 72h",
             ],
         ];

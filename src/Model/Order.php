@@ -55,7 +55,7 @@ class Order extends BaseOrder
             return "";
         }
 
-        if ($this->getShippingMode() === "suivi") {
+        if ($this->getShippingMode() === "suivi" || $this->getShippingMode() === "colissimo") {
             return "https://www.laposte.fr/outils/suivre-vos-envois?code=$trackingNumber";
         }
 
