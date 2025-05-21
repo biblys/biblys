@@ -24,9 +24,11 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\StringService;
+use DateTime;
 use Framework\Controller;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Exception;
+use League\Csv\InvalidArgument;
 use League\Csv\Writer;
 use Model\OrderQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -129,6 +131,75 @@ class OrderController extends Controller
             headers: [
                 "Content-Type" => "text/csv",
                 "Content-Disposition" => "attachment; filename=\"commandes.csv\"",
+            ]
+        );
+    }
+
+    /**
+     * @throws CannotInsertRecord
+     * @throws Exception
+     * @throws PropelException
+     * @throws InvalidArgument
+     */
+    public function exportForColissimoAction(
+        CurrentUser        $currentUser,
+        CurrentSite        $currentSite,
+        QueryParamsService $queryParams,
+    ): Response
+    {
+        $currentUser->authAdmin();
+
+        $queryParams->parse([
+            "status" => ["type" => "numeric", "default" => 0],
+            "payment" => ["type" => "string", "default" => null],
+            "shipping" => ["type" => "string", "default" => "colissimo"],
+            "query" => ["type" => "string", "default" => ""],
+        ]);
+
+        $orderQuery = OrderQuery::create()
+            ->filterByCancelDate(null, Criteria::ISNULL)
+            ->filterByPaymentDate(null, Criteria::ISNOTNULL)
+            ->filterByShippingDate(null, Criteria::ISNULL)
+            ->joinWithShippingOption()
+            ->useShippingOptionQuery()
+            ->filterByType("colissimo")
+            ->endUse();
+
+        $csv = Writer::createFromString();
+        $csv->setDelimiter(';');
+
+        $shippingPackagingWeight = $currentSite->getOption("shipping_packaging_weight");
+        $orders = $orderQuery->find();
+        foreach ($orders as $order) {
+            $orderWeight = $order->getTotalWeight() + $shippingPackagingWeight;
+            $formattedPhone = preg_replace('/[^\d+]/', '', $order->getPhone());
+
+            $record = [
+                $order->getLastname(),           # A - Nom du destinataire
+                $order->getFirstname(),          # B - Prénom du destinataire
+                $order->getAddress1(),           # C - Adresse 1
+                $order->getAddress2(),           # D - Adresse 2
+                $order->getPostalcode(),         # E - Code postal
+                $order->getCity(),               # F - Commune du destinataire
+                $order->getCountry()->getCode(), # G - Code pays du destinataire
+                $orderWeight,                    # H - Poids
+                $order->getEmail(),              # I - Adresse e-mail du destinataire
+                $formattedPhone,                 # J - Téléphone du destinataire
+            ];
+
+            $csv->insertOne($record);
+        }
+
+        $csvAsString = $csv->toString();
+        $csvWithoutQuotes = str_replace('"', '', $csvAsString);
+
+        $today = new DateTime();
+        $fileName = "commandes-colissimo-{$today->format("Y-m-d")}.csv";
+        return new Response(
+            content: $csvWithoutQuotes,
+            headers: [
+                "Content-Type" => "text/csv",
+                "Content-Disposition" => "attachment; filename=\"$fileName\"",
             ]
         );
     }
