@@ -228,7 +228,7 @@ export default class Shipping {
         <label class="col-form-label label-inline" for="mode">Type d'envoi :</label>
         <select id="type" name="type" class="form-control" required>
           <option value="normal" ${type === 'normal' ? 'selected' : ''}>Normal</option>
-          <option value="colissimo" ${['suivi', 'colissimo'].includes(type) ? 'selected' : ''}>Colissimo</option>
+          <option value="colissimo" ${type === 'colissimo' ? 'selected' : ''}>Colissimo</option>
           <option value="mondial-relay" ${type === 'mondial-relay' ? 'selected' : ''}>Mondial Relay</option>
           <option value="magasin" ${type === 'magasin' ? 'selected' : ''}>Retrait en magasin</option>
         </select>
