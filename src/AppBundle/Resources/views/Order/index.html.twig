@@ -78,19 +78,24 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </div>
 
 
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
+      <div class="form-group d-flex justify-content-center gap-2">
           <button type="submit" class="btn btn-primary" data-action="show">Afficher les commandes</button>
 
+          <button type="submit" class="btn btn-outline-info d-inline-flex gap-2 align-items-center" data-action="export" data-export_url="{{
+            path('api_orders_export_colissimo')
+          }}">
+            <img src="/assets/icons/shipping/colissimo.svg" alt="Colissimo" height="20">
+            Export Colissimo
+          </button>
+
           {% if display_mondial_relay_export_button %}
-            <button type="submit" class="btn btn-info d-inline-flex gap-2 align-items-center" data-action="export" data-export_url="{{
+            <button type="submit" class="btn btn-outline-info d-inline-flex gap-2 align-items-center" data-action="export" data-export_url="{{
               path('api_orders_export_mondial_relay')
             }}">
               <img src="/assets/icons/shipping/mondial-relay.svg" alt="Mondial Relay" height="20">
-              Exporter pour Mondial Relay
+              Export Mondial Relay
             </button>
           {% endif %}
-        </div>
       </div>
 
     </fieldset>

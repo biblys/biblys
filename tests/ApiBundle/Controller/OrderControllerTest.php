@@ -23,17 +23,26 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\QueryParamsService;
 use Biblys\Test\ModelFactory;
+use DateTime;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Exception;
 use Mockery;
+use Model\OrderQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
-use Symfony\Component\HttpFoundation\Response;
 
 require_once __DIR__ . "/../../setUp.php";
 
 class OrderControllerTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     */
+    public function setUp(): void
+    {
+        OrderQuery::create()->deleteAll();
+    }
+
     /**
      * @throws PropelException
      * @throws CannotInsertRecord
@@ -107,7 +116,64 @@ class OrderControllerTest extends TestCase
         ];
         $recordWithEmptyFields = array_merge($record, array_fill(0, 22, ""));
         $expectedLine = implode(";", $recordWithEmptyFields) . "\n";
-        $this->assertInstanceOf(Response::class, $response);
+        $this->assertEquals($expectedLine, $response->getContent());
+    }
+
+    /**
+     * @throws CannotInsertRecord
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testExportForColissimoAction()
+    {
+        // given
+        $controller = new OrderController();
+
+        $site = ModelFactory::createSite();
+        $shippingFee = ModelFactory::createShippingOption(type: "colissimo");
+        $order = ModelFactory::createOrder(
+            site: $site,
+            shippingOption: $shippingFee,
+            firstName: "Éléonore",
+            lastName: "Champollion",
+            postalCode: "02330",
+            city: "Plymouth",
+            phone: "+33.6-01 02/03;04",
+            paymentDate: new DateTime(),
+        );
+        ModelFactory::createStockItem(order: $order, weight: 123);
+        ModelFactory::createStockItem(order: $order, weight: 456);
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("getOption")->with("shipping_packaging_weight")->andReturn("421");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin");
+        $queryParams = Mockery::mock(QueryParamsService::class);
+        $queryParams->shouldReceive("parse")->with([
+            "status" => ["type" => "numeric", "default" => 0],
+            "payment" => ["type" => "string", "default" => null],
+            "shipping" => ["type" => "string", "default" => "colissimo"],
+            "query" => ["type" => "string", "default" => ""],
+        ]);
+
+        // when
+        $response = $controller->exportForColissimoAction($currentUser, $currentSite, $queryParams);
+
+        // then
+        $record = [
+            "Champollion",         # A - Nom du destinataire
+            "Éléonore",            # B - Prénom du destinataire
+            "1 rue de la Fissure", # C - Adresse 1
+            "Appartement 2",       # D - Adresse 2
+            "02330" ,              # E - Code postal
+            "Plymouth",            # F - Commune du destinataire
+            "FR",                  # G - Code pays du destinataire
+            "1000",                # H - Poids
+            $order->getEmail(),    # I - Adresse e-mail du destinataire
+            "+33601020304",        # J - Téléphone du destinataire
+        ];
+        $expectedLine = implode(";", $record) . "\n";
         $this->assertEquals($expectedLine, $response->getContent());
     }
 }
