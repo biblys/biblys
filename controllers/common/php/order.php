@@ -320,24 +320,24 @@ return function (
                 </tr>
         ';
 
-        if (isset($o["order_weight"]) && $currentSite->getShippingFee()) {
+        $orderWeight = $order->getTotalWeight();
+        if ($orderWeight > 0) {
             $content .= '
                 <tr>
                     <th colspan="3" class="right">Poids :</th>
-                    <th class="right">' . round($o["order_weight"] / 1000, 2) . '&nbsp;kg</th>
-                </tr>
-                <tr>
-                    <th colspan="3" class="right">Frais de port (' . $o["order_shipping_mode"] . ') :</th>
-                    <th class="right">' . currency($o["order_shipping"] / 100) . '</th>
+                    <th class="right">' . round($orderWeight / 1000, 2) . '&nbsp;kg</th>
                 </tr>
             ';
-        } elseif ($o["order_shipping"]) {
+        }
+
+        $shippingOption = $order->getShippingOption();
+        if ($shippingOption) {
             $content .= '
                 <tr>
                     <th colspan="3" class="right">Frais de port :</th>
-                    <th class="right">' . currency($o["order_shipping"] / 100) . '</th>
+                    <th class="right">' . currency($shippingOption->getFee() / 100) . '</th>
                 </tr>
-        ';
+          ';
         }
 
         if ($total_tva) {
