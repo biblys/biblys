@@ -31,6 +31,7 @@ use League\Csv\Exception;
 use League\Csv\InvalidArgument;
 use League\Csv\Writer;
 use Model\OrderQuery;
+use Model\Stock;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Response;
@@ -173,30 +174,33 @@ class OrderController extends Controller
         foreach ($orders as $order) {
             $orderWeight = $order->getTotalWeight() + $shippingPackagingWeight;
             $formattedPhone = preg_replace('/[^\d+]/', '', $order->getPhone());
+            $orderItems = $order->getStockItems()->getData();
+            /** @var Stock $item */
+            $articlesToShip = array_filter($orderItems, fn ($item) => $item->getArticle()->getType()->isPhysical());
+            $orderArticles = array_map(fn ($item) => $item->getArticle()->getTitle(), $articlesToShip);
 
             $record = [
-                $order->getLastname(),           # A - Nom du destinataire
-                $order->getFirstname(),          # B - Prénom du destinataire
-                $order->getAddress1(),           # C - Adresse 1
-                $order->getAddress2(),           # D - Adresse 2
-                $order->getPostalcode(),         # E - Code postal
-                $order->getCity(),               # F - Commune du destinataire
-                $order->getCountry()->getCode(), # G - Code pays du destinataire
-                $orderWeight,                    # H - Poids
-                $order->getEmail(),              # I - Adresse e-mail du destinataire
-                $formattedPhone,                 # J - Téléphone du destinataire
+                $order->getLastname(),           # Nom du destinataire
+                $order->getFirstname(),          # Prénom du destinataire
+                $order->getAddress1(),           # Adresse 1
+                $order->getAddress2(),           # Adresse 2
+                $order->getPostalcode(),         # Code postal
+                $order->getCity(),               # Commune du destinataire
+                $order->getCountry()->getCode(), # Code pays du destinataire
+                $orderWeight,                    # Poids
+                $order->getEmail(),              # Adresse e-mail du destinataire
+                $formattedPhone,                 # Téléphone du destinataire
+                join(", ", $orderArticles)       # Liste des articles
             ];
 
             $csv->insertOne($record);
         }
 
         $csvAsString = $csv->toString();
-        $csvWithoutQuotes = str_replace('"', '', $csvAsString);
-
         $today = new DateTime();
         $fileName = "commandes-colissimo-{$today->format("Y-m-d")}.csv";
         return new Response(
-            content: $csvWithoutQuotes,
+            content: $csvAsString,
             headers: [
                 "Content-Type" => "text/csv",
                 "Content-Disposition" => "attachment; filename=\"$fileName\"",
