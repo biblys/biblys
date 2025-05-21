@@ -27,7 +27,6 @@ use Biblys\Service\Images\ImagesService;
 use DansMaCulotte\MondialRelay\DeliveryChoice;
 use Model\OrderQuery;
 use Model\StockQuery;
-use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -36,10 +35,6 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundExc
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 
-/**
- * @throws InvalidDateFormatException
- * @throws PropelException
- */
 return function (
     CurrentUser   $currentUserService,
     Request       $request,
@@ -369,7 +364,7 @@ return function (
         
         <p class="text-center">
             <strong>
-                Un problème avez votre commande ? 
+                Un problème avec votre commande ? 
                 <a href="' . $contactPageUrl . '" class="btn btn-info">Contactez-nous</a>
             </strong>
         </p>
