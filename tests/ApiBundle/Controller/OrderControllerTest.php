@@ -40,7 +40,7 @@ class OrderControllerTest extends TestCase
      * @throws Exception
      * @throws \Exception
      */
-    public function testExportAction()
+    public function testExportForMondialRelayAction()
     {
         // given
         $controller = new OrderController();
@@ -69,15 +69,15 @@ class OrderControllerTest extends TestCase
         $queryParams = Mockery::mock(QueryParamsService::class);
         $queryParams->shouldReceive("parse")->with([
             "status" => ["type" => "numeric", "default" => 0],
-            "payment" => ["type" => "string"],
-            "shipping" => ["type" => "string"],
-            "query" => ["type" => "string"],
+            "payment" => ["type" => "string", "default" => null],
+            "shipping" => ["type" => "string", "default" => "mondial-relay"],
+            "query" => ["type" => "string", "default" => ""],
         ]);
         $queryParams->shouldReceive("getInteger")->with("status")->andReturn(0);
         $queryParams->shouldReceive("get")->with("shipping")->andReturn("mondial-relay");
 
         // when
-        $response = $controller->exportAction($currentUser, $currentSite, $config, $queryParams);
+        $response = $controller->exportForMondialRelayAction($currentUser, $currentSite, $config, $queryParams);
 
         // then
         // https://www.mondialrelay.fr/media/62811/import-de-fichiers-csv-v3.1.pdf

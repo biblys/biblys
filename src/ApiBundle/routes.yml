@@ -51,10 +51,10 @@ api_contribution_delete:
 
 # Orders
 
-api_orders_export:
+api_orders_export_mondial_relay:
   methods: GET
-  path: /api/admin/orders/export
-  controller: ApiBundle\Controller\OrderController::exportAction
+  path: /api/admin/orders/export/mondial-relay
+  controller: ApiBundle\Controller\OrderController::exportForMondialRelayAction
 
 # Payment
 
