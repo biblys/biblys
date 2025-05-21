@@ -51,6 +51,11 @@ api_contribution_delete:
 
 # Orders
 
+api_orders_export_colissimo:
+  methods: GET
+  path: /api/admin/orders/export/colissimo
+  controller: ApiBundle\Controller\OrderController::exportForColissimoAction
+
 api_orders_export_mondial_relay:
   methods: GET
   path: /api/admin/orders/export/mondial-relay

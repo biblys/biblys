@@ -9,7 +9,10 @@
   billet.
 - Une page a été ajoutée à l'administration pour permettre de visualiser la
   bibliothèque numérique d'un·e utilisateur·ice.
-- Le mode d'expédition "Suivi" a été renommé "Colissimo"
+- Une option d'exportation des commandes Colissimo a été ajoutée à la page
+  d'administration des commandes. Elle permet d'exporter les commandes au
+  format CSV pour les importer sur le site de Colissimo Entreprise.
+- Le mode d'expédition "Suivi" a été renommé "Colissimo".
 
 ## 3.5.2 (16 avril 2025)
 
