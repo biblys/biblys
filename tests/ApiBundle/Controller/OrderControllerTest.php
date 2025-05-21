@@ -18,6 +18,7 @@
 
 namespace ApiBundle\Controller;
 
+use Biblys\Data\ArticleType;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -141,8 +142,12 @@ class OrderControllerTest extends TestCase
             phone: "+33.6-01 02/03;04",
             paymentDate: new DateTime(),
         );
-        ModelFactory::createStockItem(order: $order, weight: 123);
-        ModelFactory::createStockItem(order: $order, weight: 456);
+        $article1 = ModelFactory::createArticle(title: "Article 1");
+        ModelFactory::createStockItem(article: $article1, order: $order, weight: 123);
+        $article2 = ModelFactory::createArticle(title: "Article 2");
+        ModelFactory::createStockItem(article: $article2, order: $order, weight: 456);
+        $downloadableArticle = ModelFactory::createArticle(title: "Downloadable", typeId: ArticleType::EBOOK);
+        ModelFactory::createStockItem(article: $downloadableArticle, order: $order);
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
@@ -162,16 +167,17 @@ class OrderControllerTest extends TestCase
 
         // then
         $record = [
-            "Champollion",         # A - Nom du destinataire
-            "Éléonore",            # B - Prénom du destinataire
-            "1 rue de la Fissure", # C - Adresse 1
-            "Appartement 2",       # D - Adresse 2
-            "02330" ,              # E - Code postal
-            "Plymouth",            # F - Commune du destinataire
-            "FR",                  # G - Code pays du destinataire
-            "1000",                # H - Poids
-            $order->getEmail(),    # I - Adresse e-mail du destinataire
-            "+33601020304",        # J - Téléphone du destinataire
+            "Champollion",           # A - Nom du destinataire
+            "Éléonore",              # B - Prénom du destinataire
+            '"1 rue de la Fissure"',   # C - Adresse 1
+            '"Appartement 2"',         # D - Adresse 2
+            "02330" ,                # E - Code postal
+            "Plymouth",              # F - Commune du destinataire
+            "FR",                    # G - Code pays du destinataire
+            "1000",                  # H - Poids
+            $order->getEmail(),      # I - Adresse e-mail du destinataire
+            "+33601020304",          # J - Téléphone du destinataire
+            '"Article 1, Article 2"',  # K - Liste des articles
         ];
         $expectedLine = implode(";", $record) . "\n";
         $this->assertEquals($expectedLine, $response->getContent());
