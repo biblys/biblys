@@ -41,7 +41,7 @@ class OrderController extends Controller
      * @throws Exception
      * @throws InvalidConfigurationException
      */
-    public function exportAction(
+    public function exportForMondialRelayAction(
         CurrentUser        $currentUser,
         CurrentSite        $currentSite,
         Config             $config,
@@ -52,9 +52,9 @@ class OrderController extends Controller
 
         $queryParams->parse([
             "status" => ["type" => "numeric", "default" => 0],
-            "payment" => ["type" => "string"],
-            "shipping" => ["type" => "string"],
-            "query" => ["type" => "string"],
+            "payment" => ["type" => "string", "default" => null],
+            "shipping" => ["type" => "string", "default" => "mondial-relay"],
+            "query" => ["type" => "string", "default" => ""],
         ]);
 
         $orderQuery = OrderQuery::create()
