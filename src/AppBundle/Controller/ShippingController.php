@@ -27,6 +27,7 @@ use DansMaCulotte\MondialRelay\DeliveryChoice;
 use Exception;
 use Framework\Controller;
 use Model\CountryQuery;
+use Model\ShippingZoneQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\LoaderError;
@@ -88,7 +89,7 @@ class ShippingController extends Controller
     {
         $currentUser->authAdmin();
 
-        $zones = ShippingZone::getAll();
+        $zones = ShippingZoneQuery::create()->find();
 
         return $templateService->renderResponse(
             "AppBundle:Shipping:zones.html.twig",
