@@ -152,7 +152,7 @@ export default class Order {
         icon.attr('class', 'fa fa-spinner fa-spin');
 
         // Ask for a tracking number
-        const shippingModeUsesTracking = ['suivi', 'colissimo', 'mondial-relay'].includes(self.data.shipping_mode);
+        const shippingModeUsesTracking = ['colissimo', 'mondial-relay'].includes(self.data.shipping_mode);
         if (shippingModeUsesTracking && action === 'shipped') {
           tracking_number = window.prompt('Numéro de suivi ?');
           if (tracking_number === null) {
