@@ -114,7 +114,7 @@ return function (
 
         if (!empty($o["order_address2"])) $o["order_address2"] = $o["order_address2"] . '<br />';
 
-        if ($orderEntity->get("shipping_mode") === "normal" || $orderEntity->get("shipping_mode") === "suivi") {
+        if (in_array($orderEntity->get("shipping_mode"), ["normal", "suivi", "colissimo"])) {
             $content .= '
                 <h4>Adresse de livraison</h4>
                 <p>

@@ -58,7 +58,7 @@ class OrderDeliveryTest extends TestCase
         $cart = ModelFactory::createCart(site: $site);
         $article = ModelFactory::createArticle();
         ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
-        $shipping = ModelFactory::createShippingOption(type: "suivi");
+        $shipping = ModelFactory::createShippingOption(type: "colissimo");
         $_POST["order_email"] = "customer@biblys.fr";
         $_POST["order_firstname"] = "Barnabé";
         $_POST["order_lastname"] = "Famagouste";
@@ -118,7 +118,7 @@ class OrderDeliveryTest extends TestCase
             "it should redirect to the correct url"
         );
         $this->assertEquals(
-            "suivi",
+            "colissimo",
             $order->get("shipping_mode"),
             "it should set order's shipping mode"
         );
@@ -372,7 +372,7 @@ class OrderDeliveryTest extends TestCase
         ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
         $country = ModelFactory::createCountry();
 
-        $shipping = ModelFactory::createShippingOption(type: "suivi");
+        $shipping = ModelFactory::createShippingOption(type: "colissimo");
         $_POST = [
             "order_email" => "customer@biblys.fr",
             "order_firstname" => "Barnabé",
@@ -457,7 +457,7 @@ class OrderDeliveryTest extends TestCase
         ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
         $country = ModelFactory::createCountry();
 
-        $shipping = ModelFactory::createShippingOption(type: "suivi");
+        $shipping = ModelFactory::createShippingOption(type: "colissimo");
         $_POST = [
             "order_email" => "customer@biblys.fr",
             "order_firstname" => "Barnabé",

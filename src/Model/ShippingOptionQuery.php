@@ -57,7 +57,7 @@ class ShippingOptionQuery extends BaseShippingOptionQuery
         $query = self::createForSite($currentSite);
         $fees = $query->orderByFee()->find();
 
-        $shippingTypes = ['magasin', 'normal', 'suivi', 'mondial-relay'];
+        $shippingTypes = ['magasin', 'normal', 'suivi', 'colissimo', 'mondial-relay'];
 
         $feesForEachTypes = array_map(
             function ($type) use ($fees, $zone, $weight, $amount, $currentSite, $articleCount) {
