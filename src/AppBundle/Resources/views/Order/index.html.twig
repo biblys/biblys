@@ -32,7 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <legend>Filtres</legend>
 
       <div class="form-group row">
-        <label for="order_status" class="col-sm-2 col-form-label">Statut</label>
+        <label for="order_status" class="col-sm-2 col-form-label text-md-right">Statut</label>
         <div class="col-sm-10">
           <select id="order_status" class="form-control">
             <option value="0">Tout</option>
@@ -42,7 +42,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             <option value="4"{{ app.request.get('status') == 4 ? ' selected' }}>Annulées</option>
           </select>
         </div>
-        <label for="order_payment_mode" class="col-sm-2 col-form-label">Paiement</label>
+      </div>
+      <div class="form-group row">
+        <label for="order_payment_mode" class="col-sm-2 col-form-label text-md-right">Paiement</label>
         <div class="col-sm-10">
           <select id="order_payment_mode" class="form-control">
             <option value="">Tout</option>
@@ -54,7 +56,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             <option value="transfer">Virement</option>
           </select>
         </div>
-        <label for="order_shipping_mode" class="col-sm-2 col-form-label">Expédition</label>
+      </div>
+      <div class="form-group row">
+        <label for="order_shipping_mode" class="col-sm-2 col-form-label text-md-right">Expédition</label>
         <div class="col-sm-10">
           <select id="order_shipping_mode" class="form-control">
             <option value="">Tout</option>
@@ -64,7 +68,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             <option value="magasin">Retrait en magasin</option>
           </select>
         </div>
-        <label for="query" class="col-sm-2 col-form-label">Filtre</label>
+      </div>
+      <div class="form-group row">
+        <label for="query" class="col-sm-2 col-form-label text-md-right">Filtre</label>
         <div class="col-sm-10">
           <input type="text" id="query" value="{{ app.request.get('q') }}" class="form-control"
                  placeholder="Nom du client, adresse-email, n&deg; de commande..."/>
