@@ -133,7 +133,7 @@ class OrderController extends Controller
         $request->attributes->set("page_title", "Commandes web");
 
         return $templateService->renderResponse("AppBundle:Order:index.html.twig", [
-            "display_export_button" => $config->isMondialRelayEnabled(),
+            "display_mondial_relay_export_button" => $config->isMondialRelayEnabled(),
         ], isPrivate: true);
     }
 
