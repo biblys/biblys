@@ -89,7 +89,7 @@ class OrderControllerTest extends TestCase
         // then
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString("Commandes web", $response->getContent());
-        $this->assertStringContainsString("Exporter pour Mondial Relay", $response->getContent());
+        $this->assertStringContainsString("Export Mondial Relay", $response->getContent());
     }
 
     /**
