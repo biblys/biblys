@@ -114,7 +114,7 @@ class OrderTest extends TestCase
     {
         // given
         $order = new Order();
-        $order->setShippingMode("suivi");
+        $order->setShippingMode("colissimo");
 
         // when
         $result = $order->getTrackingLink();
@@ -123,11 +123,25 @@ class OrderTest extends TestCase
         $this->assertEquals("", $result);
     }
 
-    public function testGetTrackingLinkForColissimo(): void
+    public function testGetTrackingLinkForLegacySuivi(): void
     {
         // given
         $order = new Order();
         $order->setShippingMode("suivi");
+        $order->setTrackNumber("1234567890");
+
+        // when
+        $result = $order->getTrackingLink();
+
+        // then
+        $this->assertEquals("https://www.laposte.fr/outils/suivre-vos-envois?code=1234567890", $result);
+    }
+
+    public function testGetTrackingLinkForColissimo(): void
+    {
+        // given
+        $order = new Order();
+        $order->setShippingMode("colissimo");
         $order->setTrackNumber("1234567890");
 
         // when
