@@ -21,9 +21,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% endblock %}
 
 {% block main %}
-  <p>
-    <a href="{{ path('special_offer_index') }}">Offres spéciales</a>
-  </p>
+  <a href="{{ path('special_offer_index') }}">
+    <span class="fa-solid fa-certificate"></span>
+    Offres spéciales
+  </a>
 
   <h1>Modifier « {{ offer.name }} »</h1>
 
@@ -38,53 +39,52 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <textarea class="wysiwyg" id="description" name="description" required>{{ offer.description }}</textarea>
     </div>
 
-    <fieldset class="form-inline">
+    <fieldset>
       <legend>Conditions</legend>
 
-      <p>
-        <span class="form-group">
-          <label for="start_date">Du</label>
-          <input type="date" id="start_date" name="start_date" value="{{ offer.startDate|date('Y-m-d') }}" required>
-        </span>
+        <div class="form-group row">
+          <label for="start_date" class="col-md-3 col-form-label text-md-right">Du</label>
+          <input type="date" class="form-control col-md-7" id="start_date" name="start_date" value="{{ offer.startDate|date('Y-m-d') }}" required>
+        </div>
 
-        <span class="form-group">
-          <label for="end_date">au</label>
-          <input type="date" id="end_date" name="end_date" value="{{ offer.endDate|date('Y-m-d') }}" required>
-        </span>
-      </p>
+        <div class="form-group row">
+          <label for="end_date" class="col-md-3 col-form-label text-md-right">au</label>
+          <input type="date" class="form-control col-md-7" id="end_date" name="end_date" value="{{ offer.endDate|date('Y-m-d') }}" required>
+        </div>
 
-      <p>
-        <span class="form-group">
-          <label for="target_quantity">pour</label>
-          <input type="number" id="target_quantity" name="target_quantity" value="{{ offer.targetQuantity }}" required>
+      <div class="form-group row">
+        <label for="target_quantity" class="col-md-3 col-form-label text-md-right">pour</label>
+        <input type="number" class="form-control col-md-7" id="target_quantity" name="target_quantity"
+               value="{{ offer.targetQuantity }}" required>
+        <span class="col-md-2 col-form-label">
           articles achetés
         </span>
-      </p>
+      </div>
 
-      <p>
-        <span class="form-group">
-          <label for="target_collection_id">dans la collection</label>
-          <select id="target_collection_id" name="target_collection_id" required>
-            {% for collection in collections %}
-              <option value="{{ collection.id }}" {% if collection.id == offer.targetCollectionId %}selected{% endif %}>
-                {{ collection.name }}
-              </option>
-            {% endfor %}
-          </select>
-        </span>
-      </p>
+      <div class="form-group row">
+        <label for="target_collection_id" class="col-md-3 col-form-label text-md-right">dans la collection</label>
+        <select id="target_collection_id" class="form-control col-md-7" name="target_collection_id" required>
+          {% for collection in collections %}
+            <option value="{{ collection.id }}" {% if collection.id == offer.targetCollectionId %}selected{% endif %}>
+              {{ collection.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
 
-      <p class="form-group">
-        <label for="free_article_id">l'article</label>
-        <select id="free_article_id" name="free_article_id" required>
+      <div class="form-group row">
+        <label for="free_article_id" class="col-md-3 col-form-label text-md-right">l'article</label>
+        <select id="free_article_id" class="form-control col-md-7" name="free_article_id" required>
           {% for article in articles %}
             <option value="{{ article.id }}" {% if article.id == offer.freeArticleId %}selected{% endif %}>
               {{ article.titleAlphabetic }}
             </option>
           {% endfor %}
         </select>
-        est offert
-      </p>
+        <span class="col-md-2 col-form-label">
+          est offert
+        </span>
+      </div>
     </fieldset>
 
     <div class="text-center">
