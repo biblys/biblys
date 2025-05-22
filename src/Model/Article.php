@@ -110,10 +110,6 @@ class Article extends BaseArticle
             throw new ArticleIsUnavailableException("à reparaître");
         }
 
-        if ($this->isPrivatelyPrinted()) {
-            throw new ArticleIsUnavailableException("hors commerce");
-        }
-
         if (!$this->isPublished() && !$this->isPreorder()) {
             throw new ArticleIsUnavailableException("à paraître");
         }
