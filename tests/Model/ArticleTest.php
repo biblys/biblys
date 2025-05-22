@@ -165,18 +165,17 @@ class ArticleTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testEnsureAvailabilityIfArticleIsPrivatelyPrinted(): void
+    public function testEnsureAvailabilityIfArticleIsPrivatelyPrintedForSpecialOffer(): void
     {
         // given
         $article = new Article();
         $article->setAvailabilityDilicom(Article::AVAILABILITY_PRIVATELY_PRINTED);
 
         // when
-        $exception = Helpers::runAndCatchException(fn() => $article->ensureAvailability());
+        $article->ensureAvailability();
 
         // then
-        $this->assertInstanceOf(ArticleIsUnavailableException::class, $exception);
-        $this->assertEquals("hors commerce", $exception->getMessage());
+        $this->assertTrue(true);
     }
 
     /**
