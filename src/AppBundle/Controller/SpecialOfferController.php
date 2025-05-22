@@ -23,6 +23,7 @@ use Biblys\Service\CurrentUser;
 use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Controller;
+use Model\Article;
 use Model\ArticleQuery;
 use Model\BookCollectionQuery;
 use Model\SpecialOfferQuery;
@@ -91,6 +92,7 @@ class SpecialOfferController extends Controller
 
         $articles = ArticleQuery::create()
             ->select(["id", "titleAlphabetic"])
+            ->filterByAvailabilityDilicom(Article::AVAILABILITY_PRIVATELY_PRINTED)
             ->orderByTitleAlphabetic()
             ->find();
 
