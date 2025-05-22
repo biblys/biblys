@@ -25,6 +25,7 @@ use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Exception;
 use Mockery;
+use Model\Article;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -124,7 +125,12 @@ class SpecialOfferControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $publisher = ModelFactory::createPublisher();
         $collection = ModelFactory::createCollection(publisher: $publisher, name: "Collection spéciale");
-        $article = ModelFactory::createArticle(title: "Livre spécial", publisher: $publisher, collection: $collection);
+        $article = ModelFactory::createArticle(
+            title: "Livre spécial",
+            publisher: $publisher,
+            collection: $collection,
+            availabilityDilicom: Article::AVAILABILITY_PRIVATELY_PRINTED
+        );
         $offer = ModelFactory::createSpecialOffer(site: $site, targetCollection: $collection, freeArticle: $article);
 
         $currentSite = Mockery::mock(CurrentSite::class);
