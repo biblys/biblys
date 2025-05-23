@@ -149,7 +149,7 @@ class SpecialOfferControllerTest extends TestCase
         // then
         $this->assertStringContainsString("Modifier « Offre spéciale »", $response->getContent());
         $this->assertStringContainsString("Collection spéciale", $response->getContent());
-        $this->assertStringContainsString("Livre spécial", $response->getContent());
+        $this->assertStringContainsString("Livre spécial ({$article->getId()})", $response->getContent());
     }
 
     /* UPDATE ACTION */
