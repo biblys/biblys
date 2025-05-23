@@ -77,7 +77,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <select id="free_article_id" class="form-control col-md-7" name="free_article_id" required>
           {% for article in articles %}
             <option value="{{ article.id }}" {% if article.id == offer.freeArticleId %}selected{% endif %}>
-              {{ article.titleAlphabetic }}
+              {{ article.titleAlphabetic }} ({{ article.id }})
             </option>
           {% endfor %}
         </select>
