@@ -251,6 +251,7 @@ class PostControllerTest extends TestCase
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authPublisher");
+        $currentUser->expects("getUser")->andReturn(ModelFactory::createUser());
 
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->expects("generate")->andReturn("/blog/1");
@@ -329,6 +330,7 @@ class PostControllerTest extends TestCase
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authPublisher");
+        $currentUser->expects("getUser")->andReturn(ModelFactory::createUser());
 
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->expects("generate")->andReturn("/blog/1");
