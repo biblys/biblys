@@ -238,7 +238,7 @@ class PostController extends Controller
     {
         $currentUser->authPublisher();
         $post = new Post();
-        return $this->_updatePost($bodyParams, $imagesService, $urlGenerator, $post);
+        return $this->_updatePost($bodyParams, $imagesService, $urlGenerator, $currentUser, $post);
     }
 
     /**
@@ -277,16 +277,22 @@ class PostController extends Controller
     {
         $currentUser->authPublisher();
         $post = PostQuery::create()->findPk($id);
-        return $this->_updatePost($bodyParams, $imagesService, $urlGenerator, $post);
+        return $this->_updatePost($bodyParams, $imagesService, $urlGenerator, $currentUser, $post);
     }
 
     /**
      * @throws PropelException
      */
-    private function _updatePost(BodyParamsService $bodyParams, ImagesService $imagesService, UrlGenerator $urlGenerator, Post $post): RedirectResponse
+    private function _updatePost(
+        BodyParamsService $bodyParams,
+        ImagesService $imagesService,
+        UrlGenerator $urlGenerator,
+        CurrentUser $currentUser,
+        Post $post,
+    ): RedirectResponse
     {
         $bodyParams->parse([
-            "user_id" => ["type" => "numeric"],
+            "user_id" => ["type" => "numeric", "default" => $currentUser->getUser()->getId()],
             "publisher_id" => ["type" => "numeric", "default" => null],
             "category_id" => ["type" => "numeric", "default" => null],
             "post_title" => ["type" => "string"],
