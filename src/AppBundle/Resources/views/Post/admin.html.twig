@@ -80,6 +80,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             <i class="fa-solid fa-pen-to-square"></i>
             Éditer
           </a>
+          <a class="btn btn-sm btn-info" href="/pages/links?post_id={{ post.id }}"
+             aria-label="Lier à un article">
+            <i class="fa-solid fa-link"></i>
+          </a>
           <a class="btn btn-sm btn-danger" href="{{ path('post_delete', { id: post.id }) }}"
              aria-label="Supprimer"
              data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?"
