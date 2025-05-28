@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[13],{rez4:function(n,t,e){"use strict";function r(n){var t=document.createElement("template");return n=n.trim(),t.innerHTML=n,t.content.firstChild}e.r(t),e.d(t,"default",(function(){return r}))}}]);
