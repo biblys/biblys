@@ -14,72 +14,135 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import jQuery from 'jquery';
-require('jquery-ui/ui/widgets/autocomplete');
-require('jquery-ui/themes/base/autocomplete.css');
-
-// TODO: refactor without jQuery
 export default class EntitySearchField {
   constructor(element) {
-    // For each entity search field
-    var field = jQuery(element),
-      entity = field.attr('data-entity_search'),
-      changeButton = jQuery('<button class="btn btn-outline-secondary" disabled>Modifier</button>'),
-      submitButton = field.closest('form').find('button[type=submit]'),
-      idField = jQuery('<input type="hidden" name="' + entity.toLowerCase() + '_id">');
+    // Récupération de l'élément input
+    const field = typeof element === 'string' ? document.querySelector(element) : element;
+    const entity = field.getAttribute('data-entity_search');
+    const form = field.closest('form');
+    const submitButton = form.querySelector('button[type=submit]');
 
-    console.log(field);
+    // Création du bouton "Modifier"
+    const changeButton = document.createElement('button');
+    changeButton.type = 'button';
+    changeButton.className = 'btn btn-outline-secondary';
+    changeButton.disabled = true;
+    changeButton.textContent = 'Modifier';
 
-    // Insert hidden entity_id field after search field
-    field.after(idField);
+    // Création du champ caché pour l'ID
+    const idField = document.createElement('input');
+    idField.type = 'hidden';
+    idField.name = entity.toLowerCase() + '_id';
 
-    // Insert disabled change button after the field
-    field.after(changeButton);
+    // Insertion dans le DOM
+    field.insertAdjacentElement('afterend', idField);
+    field.insertAdjacentElement('afterend', changeButton);
 
-    // Add XHR autocomplete capability
-    field.autocomplete({
-      // Get results
-      source: function(request, response) {
-        var source = '/' + entity.toLowerCase() + 's/';
-        jQuery.getJSON(source, { filter: request.term }, function(results) {
-          results = jQuery.map(results, function(entity, index) {
-            return { label: entity.label, value: entity.id };
+    // Création de la liste d'autocomplétion
+    const autocompleteList = document.createElement('ul');
+    autocompleteList.className = 'entity-autocomplete-list list-group position-absolute';
+    autocompleteList.style.zIndex = '1000';
+    autocompleteList.style.display = 'none';
+    autocompleteList.style.maxHeight = '200px';
+    autocompleteList.style.overflowY = 'auto';
+    autocompleteList.style.top = '39px';
+    autocompleteList.style.left = '-135px';
+    autocompleteList.style.width = field.offsetWidth + 'px';
+    field.parentNode.appendChild(autocompleteList);
+
+    // Gestion de l'autocomplétion
+    field.addEventListener('input', function() {
+      const term = field.value.trim();
+      if (term.length < 2) {
+        autocompleteList.innerHTML = '';
+        autocompleteList.style.display = 'none';
+        return;
+      }
+      const source = '/' + entity.toLowerCase() + 's/';
+      fetch(source + '?filter=' + encodeURIComponent(term))
+        .then(r => r.json())
+        .then(results => {
+          autocompleteList.innerHTML = '';
+          results.forEach(item => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item list-group-item-action';
+            li.textContent = item.label;
+            li.dataset.value = item.id;
+            li.tabIndex = 0;
+            li.addEventListener('mousedown', function(e) {
+              e.preventDefault();
+              selectItem(item);
+            });
+            autocompleteList.appendChild(li);
           });
-          response(results);
+          if (results.length > 0) {
+            autocompleteList.style.display = '';
+            autocompleteList.style.width = field.offsetWidth + 'px';
+          } else {
+            autocompleteList.style.display = 'none';
+          }
         });
-      },
+    });
 
-      // On result selection
-      select: function(event, ui) {
-        // Change field value and disable it
-        field.val(ui.item.label).attr('disabled', true);
+    // Sélection d'un élément
+    const selectItem = (item) => {
+      field.value = item.label;
+      field.disabled = true;
+      idField.value = item.id;
+      changeButton.disabled = false;
+      submitButton.disabled = false;
+      autocompleteList.innerHTML = '';
+      autocompleteList.style.display = 'none';
+    };
 
-        // Add entity id to id field
-        idField.val(ui.item.value);
+    // Navigation clavier dans la liste
+    field.addEventListener('keydown', function(e) {
+      const items = autocompleteList.querySelectorAll('li');
+      if (!items.length || autocompleteList.style.display === 'none') return;
 
-        // Enable change button
-        changeButton.prop('disabled', false);
+      let index = Array.from(items).findIndex(li => li === document.activeElement);
 
-        // Enable submit button
-        submitButton.prop('disabled', false);
-
-        return false;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (index < items.length - 1) {
+          items[index + 1].focus();
+        } else {
+          items[0].focus();
+        }
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (index > 0) {
+          items[index - 1].focus();
+        } else {
+          items[items.length - 1].focus();
+        }
+      } else if (e.key === 'Enter') {
+        if (document.activeElement.parentNode === autocompleteList) {
+          e.preventDefault();
+          document.activeElement.dispatchEvent(new Event('mousedown'));
+        }
+      } else if (e.key === 'Escape') {
+        autocompleteList.innerHTML = '';
+        autocompleteList.style.display = 'none';
       }
     });
 
-    // Change selected item
-    changeButton.on('click', function() {
-      // Reset & enable search field
-      field.val('').prop('disabled', false);
+    // Clic en dehors pour fermer la liste
+    document.addEventListener('mousedown', function(e) {
+      if (!autocompleteList.contains(e.target) && e.target !== field) {
+        autocompleteList.innerHTML = '';
+        autocompleteList.style.display = 'none';
+      }
+    });
 
-      // Reset entity id field
-      idField.val();
-
-      // Disable search button
-      changeButton.prop('disabled', true);
-
-      // Disable submit button
-      submitButton.prop('disabled', true);
+    // Bouton "Modifier"
+    changeButton.addEventListener('click', function() {
+      field.value = '';
+      field.disabled = false;
+      idField.value = '';
+      changeButton.disabled = true;
+      submitButton.disabled = true;
+      field.focus();
     });
   }
 }
