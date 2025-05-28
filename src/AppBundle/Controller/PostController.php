@@ -20,6 +20,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Service\MetaTagsService;
 use Biblys\Service\Pagination;
@@ -32,6 +33,7 @@ use Framework\Controller;
 use League\HTMLToMarkdown\HtmlConverter;
 use Model\ArticleQuery;
 use Model\BlogCategoryQuery;
+use Model\Link;
 use Model\LinkQuery;
 use Model\Post;
 use Model\PostQuery;
@@ -287,10 +289,10 @@ class PostController extends Controller
      */
     private function _updatePost(
         BodyParamsService $bodyParams,
-        ImagesService $imagesService,
-        UrlGenerator $urlGenerator,
-        CurrentUser $currentUser,
-        Post $post,
+        ImagesService     $imagesService,
+        UrlGenerator      $urlGenerator,
+        CurrentUser       $currentUser,
+        Post              $post,
     ): RedirectResponse
     {
         $bodyParams->parse([
@@ -443,5 +445,34 @@ class PostController extends Controller
 
         $fs = new FileSystem();
         $fs->dumpFile(__DIR__ . "/../../../posts/$fileName.md", $response->getContent());
+    }
+
+    /**
+     * @route POST /post/:id/articles
+     * @throws Exception
+     */
+    public function articleLinkAction(
+        CurrentUser $currentUser,
+        BodyParamsService $bodyParamsService,
+        FlashMessagesService $flashMessagesService,
+        UrlGenerator $urlGenerator,
+        int $id
+    ): RedirectResponse
+    {
+        $currentUser->authPublisher();
+
+        $bodyParamsService->parse(["article_id" => ["type" => "numeric"]]);
+        $articleId = $bodyParamsService->getInteger("article_id");
+        $article = ArticleQuery::create()->findPk($articleId);
+
+        $link = new Link();
+        $link->setPostId($id);
+        $link->setArticle($article);
+        $link->save();
+
+        $flashMessagesService->add("success", "L'article {$article->getTitle()} a été lié au billet.");
+
+        $returnUrl = $urlGenerator->generate("post_articles", ["id" => $id]);
+        return new RedirectResponse($returnUrl);
     }
 }

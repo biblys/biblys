@@ -545,6 +545,13 @@ post_articles:
   requirements:
     id: \d+
 
+post_articles_link:
+  methods: POST
+  path: /admin/posts/{id}/articles
+  controller: AppBundle\Controller\PostController::articleLinkAction
+  requirements:
+    id: \d+
+
 # PostCategory
 
 category_show:

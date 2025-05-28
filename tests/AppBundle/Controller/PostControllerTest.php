@@ -20,6 +20,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Service\MetaTagsService;
 use Biblys\Service\QueryParamsService;
@@ -29,6 +30,7 @@ use Biblys\Test\ModelFactory;
 use DateTime;
 use Exception;
 use Mockery;
+use Model\LinkQuery;
 use Model\Post;
 use Model\PostQuery;
 use PHPUnit\Framework\TestCase;
@@ -382,5 +384,47 @@ class PostControllerTest extends TestCase
 
         // then
         $this->assertStringContainsString("Un article lié", $response->getContent());
+    }
+
+
+    /** articlesLinkAction **/
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testArticleLinkAction()
+    {
+        // given
+        $controller = new PostController();
+        $post = ModelFactory::createPost(title: "Un billet de blog avec des liens");
+        $article = ModelFactory::createArticle(title: "Un article à lier");
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+        $bodyParamsService = Mockery::mock(BodyParamsService::class);
+        $bodyParamsService->expects("parse");
+        $bodyParamsService->expects("getInteger")->with("article_id")->andReturn($article->getId());
+        $flashMessagesService = Mockery::mock(FlashMessagesService::class);
+        $flashMessagesService->expects("add")->with("success", "L'article Un article à lier a été lié au billet.");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->with("post_articles", ["id" => $post->getId()])->andReturn("/admin/post/1/articles");
+
+        // when
+        $response = $controller->articleLinkAction(
+            $currentUser,
+            $bodyParamsService,
+            $flashMessagesService,
+            $urlGenerator,
+            $post->getId()
+        );
+
+        // then
+        $this->assertStringContainsString("/admin/post/1/articles", $response->getTargetUrl());
+        $linkExists = LinkQuery::create()
+            ->filterByPostId($post->getId())
+            ->filterByArticleId($article->getId())
+            ->exists();
+        $this->assertTrue($linkExists);
     }
 }
