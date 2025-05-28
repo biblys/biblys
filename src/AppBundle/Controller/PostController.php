@@ -30,7 +30,9 @@ use DateTime;
 use Exception;
 use Framework\Controller;
 use League\HTMLToMarkdown\HtmlConverter;
+use Model\ArticleQuery;
 use Model\BlogCategoryQuery;
+use Model\LinkQuery;
 use Model\Post;
 use Model\PostQuery;
 use PostManager;
@@ -364,6 +366,34 @@ class PostController extends Controller
         $pm->delete($post);
 
         return new RedirectResponse($urlGenerator->generate('posts_admin'));
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function articlesAction(CurrentUser $currentUser, TemplateService $templateService, int $id): Response
+    {
+        $currentUser->authPublisher();
+
+        $post = PostQuery::create()->findPk($id);
+        $articleLinks = LinkQuery::create()
+            ->filterByPostId($id)
+            ->filterByArticleId(null, Criteria::NOT_EQUAL)
+            ->joinWithArticle()
+            ->find();
+
+        $articles = ArticleQuery::create()
+            ->orderByTitleAlphabetic()
+            ->find();
+
+        return $templateService->renderResponse("AppBundle:Post:articles.html.twig", [
+            "post" => $post,
+            "article_links" => $articleLinks,
+            "articles" => $articles,
+        ]);
     }
 
     /**
