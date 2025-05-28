@@ -55,7 +55,7 @@ return function (Request $request, CurrentSite $currentSite): JsonResponse
             $article = $am->getById($linkToId);
             if ($article) {
                 $a = $article;
-                $j["link"] = '<li id="link_' . $link_id . '" class="new" style="display: none;"><span data-link_id="' . $link_id . '" class="fa fa-trash-can deleteLink pointer"></span> <a href="/' . $a["article_url"] . '">' . $a["article_title"] . '</a> de ' . $a["article_authors"] . ' (' . $a["article_collection"] . ')</li>';
+                $j["link"] = '<li id="link_' . $link_id . '" class="new" style="display: none;"><span data-link_id="' . $link_id . '" class="fa-solid fa-xmark-circle red deleteLink pointer"></span> <a href="/' . $a["article_url"] . '">' . $a["article_title"] . '</a> de ' . $a["article_authors"] . ' (' . $a["article_collection"] . ')</li>';
             }
         } elseif ($_POST["linkto_type"] == "people") {
             $people = $pm->getById($linkToId);
@@ -82,15 +82,6 @@ return function (Request $request, CurrentSite $currentSite): JsonResponse
                 $j["link"] = '<li id="link_' . $link_id . '" ><img alt="" src="/common/icons/delete_16.png" data-link_id="' . $link_id . '" class="deleteLink pointer" /> <a href="/editeur/' . $p["publisher_url"] . '">' . $p["publisher_name"] . '</a></li>';
             }
         }
-    } elseif (isset($_GET["del"])) {
-        $linkId = $request->query->get('link_id');
-        $link = $lm->getById($linkId);
-
-        if ($link) {
-            $lm->delete($link);
-        }
-
-        $j["ok"] = 1;
     } elseif (isset($_GET['type'])) {
         $term = $request->query->get('term');
         if ($_GET["type"] == "articles") {

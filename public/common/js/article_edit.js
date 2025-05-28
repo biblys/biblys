@@ -304,16 +304,13 @@ function reloadArticleAdminEvents(scope) {
 
   // Supprimer un lien
   $('.deleteLink').click(function () {
-    var link_id = $(this).data('link_id');
-    $('#link_' + link_id).fadeTo('fast', 0.5);
-    $.get('/pages/adm_links', {
-      del: 1,
-      link_id: link_id
-    }, function (res) {
+    const linkId = $(this).data('link_id');
+    $('#link_' + linkId).fadeTo('fast', 0.5);
+    $.post(`/admin/links/${linkId}/delete`, function (res) {
       if (res.error) {
-        $('#link_' + link_id).fadeTo('fast', 1);
+        $('#link_' + linkId).fadeTo('fast', 1);
         _alert(res.error);
-      } else $('#link_' + link_id).slideUp();
+      } else $('#link_' + linkId).slideUp();
     });
   }).removeClass('deleteLink');
 

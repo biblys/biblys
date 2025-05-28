@@ -597,7 +597,10 @@ return function (
     );
     $the_awards = null;
     while ($aw = $awards->fetch(PDO::FETCH_ASSOC)) {
-        $the_awards .= '<li id="award_' . $aw['award_id'] . '"><img alt="Supprimer" src="/common/icons/delete_16.png" class="pointer deleteAward" data-award_id="' . $aw['award_id'] . '"> ' . $aw['award_name'] . ' ' . $aw['award_year'] . ' (' . $aw['award_category'] . ')</li>';
+        $the_awards .= '<li id="award_' . $aw['award_id'] . '">
+            <i aria-label="Supprimer" class="fa-solid fa-xmark-circle pointer deleteAward" data-award_id="' . $aw['award_id'] . '"></i> 
+            ' . $aw['award_name'] . ' ' . $aw['award_year'] . ' (' . $aw['award_category'] . ')
+        </li>';
     }
 
     // Lot
@@ -608,7 +611,10 @@ return function (
             params: ['article_id' => $articleEntity->get('id')],
         );
         while ($bu = $bundle->fetch(PDO::FETCH_ASSOC)) {
-            $bundle_articles .= '<li id="link_' . $bu['link_id'] . '"><img alt="Supprimer" src="/common/icons/delete_16.png" data-link_id="' . $bu['link_id'] . '" class="deleteLink pointer" /> <a href="/a/' . $bu['article_url'] . '">' . $bu['article_title'] . '</a> de ' . $bu['article_authors'] . ' (' . $bu['article_collection'] . ')</li>';
+            $bundle_articles .= '
+                <li id="link_' . $bu['link_id'] . '">
+                    <i aria-label="Supprimer" data-link_id="' . $bu['link_id'] . '" class="fa-solid red fa-xmark-circle deleteLink pointer"></i> 
+                    <a href="/a/' . $bu['article_url'] . '">' . $bu['article_title'] . '</a> de ' . $bu['article_authors'] . ' (' . $bu['article_collection'] . ')</li>';
         }
     }
 
