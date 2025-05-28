@@ -427,4 +427,44 @@ class PostControllerTest extends TestCase
             ->exists();
         $this->assertTrue($linkExists);
     }
+
+
+    /** articlesUnlinkAction **/
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testArticleUnlinkAction()
+    {
+        // given
+        $controller = new PostController();
+        $post = ModelFactory::createPost(title: "Un billet de blog avec des liens");
+        $article = ModelFactory::createArticle(title: "Un article à détacher");
+        ModelFactory::createLink(article: $article, post: $post);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+        $flashMessagesService = Mockery::mock(FlashMessagesService::class);
+        $flashMessagesService->expects("add")->with("success", "L'article Un article à détacher a été détaché du billet.");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->with("post_articles", ["id" => $post->getId()])->andReturn("/admin/post/1/articles");
+
+        // when
+        $response = $controller->articleUnlinkAction(
+            $currentUser,
+            $flashMessagesService,
+            $urlGenerator,
+            $post->getId(),
+            $article->getId(),
+        );
+
+        // then
+        $this->assertStringContainsString("/admin/post/1/articles", $response->getTargetUrl());
+        $linkExists = LinkQuery::create()
+            ->filterByPostId($post->getId())
+            ->filterByArticleId($article->getId())
+            ->exists();
+        $this->assertFalse($linkExists);
+    }
 }

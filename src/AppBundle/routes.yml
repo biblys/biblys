@@ -552,6 +552,14 @@ post_articles_link:
   requirements:
     id: \d+
 
+post_articles_unlink:
+  methods: POST
+  path: /admin/posts/{id}/articles/{articleId}/unlink
+  controller: AppBundle\Controller\PostController::articleUnlinkAction
+  requirements:
+    id: \d+
+    articleId: \d+
+
 # PostCategory
 
 category_show:

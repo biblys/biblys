@@ -475,4 +475,34 @@ class PostController extends Controller
         $returnUrl = $urlGenerator->generate("post_articles", ["id" => $id]);
         return new RedirectResponse($returnUrl);
     }
+
+    /**
+     * @route POST /post/:id/articles/:articleId/unlink
+     * @throws Exception
+     */
+    public function articleUnlinkAction(
+        CurrentUser $currentUser,
+        FlashMessagesService $flashMessagesService,
+        UrlGenerator $urlGenerator,
+        int $id,
+        int $articleId
+    ): RedirectResponse
+    {
+        $currentUser->authPublisher();
+        $article = ArticleQuery::create()->findPk($articleId);
+
+        $link = LinkQuery::create()
+            ->filterByPostId($id)
+            ->filterByArticleId($articleId)
+            ->findOne();
+        if (!$link) {
+            throw new Exception("Link not found for post $id and article $articleId.");
+        }
+        $link->delete();
+
+        $flashMessagesService->add("success", "L'article {$article->getTitle()} a été détaché du billet.");
+
+        $returnUrl = $urlGenerator->generate("post_articles", ["id" => $id]);
+        return new RedirectResponse($returnUrl);
+    }
 }
