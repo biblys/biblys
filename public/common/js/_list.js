@@ -14,161 +14,194 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* global jQuery */
-
 let listLoading = false;
 
 function loadList(start = 0) {
   listLoading = true; // Chargement en cours
 
-  const articleListElement = jQuery('#articleList');
+  const articleListElement = document.getElementById('articleList');
 
   // Variables de la requête
-  const query = articleListElement.data('search_terms'); // Termes de recherche
-  const sort = articleListElement.data('sort'); // Ordre de tri
-  const order = articleListElement.data('order'); // Tri descendant/ascendant
+  const query = articleListElement.dataset.search_terms; // Termes de recherche
+  const sort = articleListElement.dataset.sort; // Ordre de tri
+  const order = articleListElement.dataset.order; // Tri descendant/ascendant
   start = typeof start !== 'undefined' ? start : '0'; // Première ligne
 
   // Chargement... (remplacer ou ajouter)
-  if (start === 0) jQuery('.list tbody').html('<tr id="loadingTr"><td colspan=6 class="center loading">Chargement...</td></tr>');
-  else jQuery('.list tbody').append('<tr id="loadingTr"><td colspan=6 class="center loading">Chargement...</td></tr>');
+  const listTbody = document.querySelector('.list tbody');
+  if (start === 0) listTbody.innerHTML = '<tr id="loadingTr"><td colspan=6 class="center loading">Chargement...</td></tr>';
+  else listTbody.insertAdjacentHTML('beforeend', '<tr id="loadingTr"><td colspan=6 class="center loading">Chargement...</td></tr>');
 
   // Mise à jour dynamique de l'URL
-  window.history.pushState(null, 'Title', window.location.pathname+'?q='+query+'&o='+sort+'&d='+order);
+  window.history.pushState(null, 'Title', window.location.pathname + '?q=' + query + '&o=' + sort + '&d=' + order);
 
   // Requête
-  const jqXhr = jQuery.get(window.location.pathname+'?_FORMAT=json&q='+query+'&o='+sort+'&d='+order+'&s='+start, function(ws) {
-    listLoading = false; // Fin du chargement
-    if(ws.error) {
-      window._alert('Erreur : impossible d\'afficher les résultats.');
-      jQuery('#list_num').html('0');
-      jQuery('.list tbody').html('<tr><td colspan=6 class="center article_title">Aucun résultat !</td></tr>');
-    } else {
-      let table = null;
-      if(ws.results === 0) {
-        jQuery('#listCount').html('0');
-        jQuery('.list tbody').html('<tr><td colspan=6 class="center article_title">Aucun résultat !</td></tr>');
+  fetch(window.location.pathname + '?_FORMAT=json&q=' + query + '&o=' + sort + '&d=' + order + '&s=' + start)
+    .then(response => response.json())
+    .then(ws => {
+      listLoading = false; // Fin du chargement
+      if (ws.error) {
+        window._alert('Erreur : impossible d\'afficher les résultats.');
+        document.getElementById('listCount').textContent = '0';
+        listTbody.innerHTML = '<tr><td colspan=6 class="center article_title">Aucun résultat !</td></tr>';
       } else {
-        jQuery('#listCount').html(ws.results);
-        let article;
-        for(let i = 0; i < ws.articles.length; i++) {
-          article = ws.articles[i];
+        let table = '';
+        if (ws.results === 0) {
+          document.getElementById('listCount').textContent = '0';
+          listTbody.innerHTML = '<tr><td colspan=6 class="center article_title">Aucun résultat !</td></tr>';
+        } else {
+          document.getElementById('listCount').textContent = ws.results;
+          let article;
+          for (let i = 0; i < ws.articles.length; i++) {
+            /**
+             * @var article {object}
+             * @property {string} article_title
+             * @property {string} article_url
+             * @property {string} article_authors
+             * @property {string} article_collection
+             * @property {string} collection_url
+             * @property {string} article_covers
+             * @property {string} article_condition
+             * @property {string} article_keywords
+             * @property {string} cycle
+             * @property {string} number
+             * @property {string} availability
+             * @property {string} price
+             * @property {string} cart
+             * @property {string} wish
+             * @property {string} alert
+             * @property {string} covers
+             * @property {string} condition
+             * @property {string} article_keywords
+             * @property {string} authors
+             *
+             */
+            article = ws.articles[i];
 
-          const line =
-						'<tr class="item '+article.condition+'" data-keywords="'+article.article_keywords+'">' +
-							'<td><a href="'+article.article_url+'" class="article_title">'+article.article_title+'</a>'+article.cycle+'</td>'+
-							'<td title="'+article.article_authors+'">'+article.authors+'</td>' +
-							'<td class="right"><a href="/collection/'+article.collection_url+'">'+article.article_collection+'</a>'+article.number+'</td>' +
-							'<td class="right nowrap">'+article.availability+'</td>' +
-							'<td>'+article.price+'</td>' +
-							article.cart + article.wish + article.alert +
-						'</tr>';
-          table += line;
+            const line =
+              '<tr class="item ' + article.condition + '" data-keywords="' + article.article_keywords + '">' +
+              '<td><a href="' + article.article_url + '" class="article_title">' + article.article_title + '</a>' + article.cycle + '</td>' +
+              '<td title="' + article.article_authors + '">' + article.authors + '</td>' +
+              '<td class="right"><a href="/collection/' + article.collection_url + '">' + article.article_collection + '</a>' + article.number + '</td>' +
+              '<td class="right nowrap">' + article.availability + '</td>' +
+              '<td>' + article.price + '</td>' +
+              article.cart + article.wish + article.alert +
+              '</tr>';
+            table += line;
+          }
+          const nextPageElem = document.getElementById('nextPage');
+          if (ws.nextPage !== 0) {
+            nextPageElem.dataset.next_page = ws.nextPage;
+            nextPageElem.style.display = '';
+          }
+          const loadingTr = document.getElementById('loadingTr');
+          if (loadingTr) loadingTr.remove();
+          if (start === 0) listTbody.innerHTML = table;
+          else listTbody.insertAdjacentHTML('beforeend', table);
+          document.getElementById('coverLane').innerHTML = article.covers;
+          window.reloadEvents();
         }
-        if(ws.nextPage !== 0) jQuery('#nextPage').data('next_page',ws.nextPage).show();
-        jQuery('#loadingTr').remove();
-        if(start === 0) jQuery('.list tbody').html(table);
-        else jQuery('.list tbody').append(table);
-        jQuery('#coverLane').html(article.covers);
-        window.reloadEvents();
       }
+      document.querySelectorAll('#search input').forEach(input => input.classList.remove('loading'));
+    })
+    .catch(() => {
+      listLoading = false; // Fin du chargement
+      const loadingTr = document.getElementById('loadingTr');
+      if (loadingTr) loadingTr.remove();
+      document.querySelectorAll('#search input').forEach(input => input.classList.remove('loading'));
+    });
+}
+
+function filterList() {
+  const query = document.getElementById('listSearch').value;
+  const tableRows = document.querySelectorAll('tr');
+  tableRows.forEach(row => {
+    const keywords = (row.dataset.keywords || '').toLowerCase();
+    if (keywords.indexOf(query.toLowerCase()) === -1) {
+      row.style.display = 'none';
+    } else {
+      row.style.display = '';
     }
-    jQuery('#search input').removeClass('loading');
-  }, 'json');
-  jqXhr.fail(function(response) {
-    const error = response.responseJSON.error.message;
-    listLoading = false; // Fin du chargement
-    jQuery('#loadingTr').remove();
-    jQuery('#search input').removeClass('loading');
-    window._alert(error);
   });
 }
 
-
-function filterList() {
-  const query = jQuery('#listSearch').val();
-  const tableRows = jQuery('tr');
-  tableRows.show();
-  tableRows.filter(function() {
-    return jQuery(this).data('keywords').toLowerCase().indexOf(query.toLowerCase()) === -1;
-  }).hide();
-
-}
-
-
-jQuery(document).ready(function() {
+document.addEventListener('DOMContentLoaded', function() {
 
   listLoading = false;
 
   // Modifier le filtre
-  jQuery('#listFilter a').click( function() {
-    const articleListElement = jQuery('#articleList');
-    const label = jQuery(this).html().replace('<a>', '').replace('</a>', '');
-    const filter = jQuery(this).data('filter');
-    articleListElement.data('filter',filter).data('filter',filter);
-    let search_terms = articleListElement.data('search_terms');
-    search_terms = search_terms.toString().replace(/ ?etat:\S+/g, '');
-    if (filter !== 'all') search_terms += ' etat:'+filter;
-    articleListElement.data('search_terms',search_terms);
-    jQuery('#search input').val(search_terms);
-    jQuery('#listFilter button').html(label+' <span class="caret"></span>');
+  document.querySelectorAll('#listFilter a').forEach(a => {
+    a.addEventListener('click', function() {
+      const articleListElement = document.getElementById('articleList');
+      const label = this.innerHTML.replace('<a>', '').replace('</a>', '');
+      const filter = this.dataset.filter;
+      articleListElement.dataset.filter = filter;
+      let search_terms = articleListElement.dataset.search_terms;
+      search_terms = search_terms.toString().replace(/ ?etat:\S+/g, '');
+      if (filter !== 'all') search_terms += ' etat:' + filter;
+      articleListElement.dataset.search_terms = search_terms;
+      document.querySelector('#search input').value = search_terms;
+      document.querySelector('#listFilter button').innerHTML = label + ' <span class="caret"></span>';
 
-    loadList();
+      loadList();
+    });
   });
 
   // Modifier l'ordre de tri
-  jQuery('#listSort a').click( function() {
-    const label = jQuery(this).html().replace('<a>', '').replace('</a>', '');
-    const sort = jQuery(this).data('sort');
-    const order = jQuery(this).data('order');
-    jQuery('#articleList').data('sort',sort).data('order',order);
-    jQuery('#listSort button').html(label+' <img src="/common/icons/dropdown.svg" width=8 alt="">');
-    loadList();
-  });
-
-  // Option par défaut
-  jQuery('#listFilter a[data-selected=true]').each( function() {
-    const label = jQuery(this).html();
-    jQuery('#listFilterButton').html(label+' <img src="/common/icons/dropdown.svg" width=8 alt="">');
-    jQuery(this).data('selected','false');
-  });
-  jQuery('#listSort a[data-selected=true]').each( function() {
-    const label = jQuery(this).html();
-    jQuery('#listSortButton').html(label+' <img src="/common/icons/dropdown.svg" width=8 alt="">');
-    jQuery(this).data('selected','false');
+  document.querySelectorAll('#listSort a').forEach(a => {
+    a.addEventListener('click', function() {
+      const label = this.innerHTML.replace('<a>', '').replace('</a>', '');
+      const sort = this.dataset.sort;
+      const order = this.dataset.order;
+      const articleListElement = document.getElementById('articleList');
+      articleListElement.dataset.sort = sort;
+      articleListElement.dataset.order = order;
+      document.querySelector('#listSort button').innerHTML = label + ' <img src="/common/icons/dropdown.svg" width=8 alt="">';
+      loadList();
+    });
   });
 
   // Afficher plus de résultats
-  jQuery('#nextPage').click( function() {
-    jQuery(this).hide();
-    const nextPage = jQuery(this).data('next_page');
-    loadList(nextPage);
-  });
+  const nextPageElem = document.getElementById('nextPage');
+  if (nextPageElem) {
+    nextPageElem.addEventListener('click', function() {
+      this.style.display = 'none';
+      const nextPage = Number(this.dataset.next_page);
+      loadList(nextPage);
+    });
+  }
 
   // Filtrer la liste
-  jQuery('#listSearch').keyup( function() {
-    filterList();
-  });
+  const listSearch = document.getElementById('listSearch');
+  if (listSearch) {
+    listSearch.addEventListener('keyup', function() {
+      filterList();
+    });
+  }
 
   /* Infinite scroll */
 
   // L'élément est-il visible par l'utilisateur ?
   function isScrolledIntoView(elem) {
-    const docViewTop = jQuery(window).scrollTop();
-    const docViewBottom = docViewTop + jQuery(window).height();
-    const elemTop = jQuery(elem).offset().top;
-    const elemBottom = elemTop + jQuery(elem).height();
+    const rect = elem.getBoundingClientRect();
+    const windowHeight = (window.innerHeight || document.documentElement.clientHeight);
+    const windowTop = window.scrollY;
+    const elemTop = rect.top + windowTop;
+    const elemBottom = elemTop + rect.height;
+    const docViewTop = windowTop;
+    const docViewBottom = docViewTop + windowHeight;
     return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
   }
 
   // On surveille l'évènement scroll
-  jQuery(window).scroll( function() {
-    // Si le dernier rang est affiché, bouton page suivante présent et pas de chargement en cours
-    const nextPageElement = jQuery('#nextPage');
-    if (nextPageElement.is(':visible')) {
-      if (isScrolledIntoView(jQuery('.item:last')) && listLoading === false) {
-        nextPageElement.hide();
-        loadList(nextPageElement.data('next_page'));
+  window.addEventListener('scroll', function() {
+    const nextPageElement = document.getElementById('nextPage');
+    if (nextPageElement && nextPageElement.style.display !== 'none') {
+      const lastItem = document.querySelector('.item:last-child');
+      if (lastItem && isScrolledIntoView(lastItem) && listLoading === false) {
+        nextPageElement.style.display = 'none';
+        const nextPage = Number(nextPageElement.dataset.next_page);
+        loadList(nextPage);
       }
     }
   });
