@@ -40,6 +40,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <th>Id</th>
       <th>Titre</th>
       <th>Type</th>
+      <th></th>
     </tr>
     </thead>
     <tbody>
@@ -48,10 +49,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <td>{{ link.article.id }}</td>
         <td>{{ link.article.title }}</td>
         <td>{{ link.article.type.name }}</td>
+        <td>
+          <form method="post" action="{{ path('post_articles_unlink', { id: post.id, articleId: link.article.id }) }}">
+            <button type="submit" class="btn btn-danger btn-sm" title="Délier l'article">
+              <i class="fa-solid fa-chain-broken"></i>
+            </button>
+          </form>
+        </td>
       </tr>
     {% else %}
       <tr>
-        <td colspan="2">Aucun article lié à ce billet.</td>
+        <td colspan="4">Aucun article lié à ce billet.</td>
       </tr>
     {% endfor %}
     </tbody>
@@ -69,7 +77,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </select>
     </div>
     <button type="submit" class="btn btn-primary mb-2 ml-2">
-      <i class="fa-solid fa-plus"></i>
+      <i class="fa-solid fa-chain"></i>
       Lier
     </button>
   </form>
