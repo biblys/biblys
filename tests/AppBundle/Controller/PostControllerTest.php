@@ -173,6 +173,7 @@ class PostControllerTest extends TestCase
         return [$request, $currentUser, $templateService, $urlGenerator, $imagesService, $metaTagsService];
     }
 
+
     /** adminAction */
 
     /**
@@ -355,5 +356,31 @@ class PostControllerTest extends TestCase
         $this->assertEquals(Post::STATUS_ONLINE, $post->getStatus());
         $this->assertEquals("2019-04-28 02:42:00", $post->getDate()->format("Y-m-d H:i:s"));
         $this->assertEquals(0, $post->getSelected());
+    }
+
+
+    /** articlesAction **/
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testArticlesAction()
+    {
+        // given
+        $controller = new PostController();
+        $post = ModelFactory::createPost(title: "Un billet de blog avec des liens");
+        $article = ModelFactory::createArticle(title: "Un article lié");
+        ModelFactory::createLink(article: $article, post: $post);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->articlesAction($currentUser, $templateService, $post->getId());
+
+        // then
+        $this->assertStringContainsString("Un article lié", $response->getContent());
     }
 }

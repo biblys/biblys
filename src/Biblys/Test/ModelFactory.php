@@ -281,6 +281,7 @@ class ModelFactory
         ?Article         $bundleArticle = null,
         ?Publisher       $publisher = null,
         ?Supplier        $supplier = null,
+        ?Post            $post = null,
     ): Link
     {
         $link = new Link();
@@ -289,6 +290,7 @@ class ModelFactory
         $link->setBundleId($bundleArticle?->getId());
         $link->setPublisherId($publisher?->getId());
         $link->setSupplierId($supplier?->getId());
+        $link->setPostId($post?->getId());
         $link->save();
 
         return $link;

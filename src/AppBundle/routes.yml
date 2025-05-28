@@ -538,6 +538,13 @@ post_export:
   path: /admin/posts/export
   controller: AppBundle\Controller\PostController::exportAction
 
+post_articles:
+  methods: GET
+  path: /admin/posts/{id}/articles
+  controller: AppBundle\Controller\PostController::articlesAction
+  requirements:
+    id: \d+
+
 # PostCategory
 
 category_show:

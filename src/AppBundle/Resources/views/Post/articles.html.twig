@@ -17,7 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% extends "layout:admin.html.twig" %}
 
 {% block title %}
-  Modifier &laquo; {{ post.title }} &raquo;
+  Articles liés à &laquo; {{ post.title }} &raquo;
 {% endblock %}
 
 {% block main %}
@@ -28,18 +28,33 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   </a>
 
   <h1>
-    Modifier &laquo;
+    Articles liés à
     <a href="{{ path("post_show", { slug: post.url }) }}">
       {{ post.title }}
     </a>
-    &raquo;
   </h1>
 
-  <a class="btn btn-info mt-2" href="{{ path("post_articles", { id: post.id }) }}">
-    <i class="fa-solid fa-link"></i>
-    Articles liés
-  </a>
-
-  {% include "AppBundle:Post:_form.html.twig" %}
+  <table class="table table-striped mt-4">
+    <thead>
+    <tr>
+      <th>Id</th>
+      <th>Titre</th>
+      <th>Type</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for link in article_links %}
+      <tr>
+        <td>{{ link.article.id }}</td>
+        <td>{{ link.article.title }}</td>
+        <td>{{ link.article.type.name }}</td>
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="2">Aucun article lié à ce billet.</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
 
 {% endblock %}
