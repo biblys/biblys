@@ -32,7 +32,7 @@ async function updateStock(field) {
     headers: {
       Accept: 'application/json',
     },
-    body: stock
+    body: stock.toString(),
   });
 
   loader.remove();
@@ -54,8 +54,10 @@ async function updateStock(field) {
   }
 }
 
-window.jQuery(document).ready(function() {
-  window.jQuery('.stock').blur(function() {
-    updateStock(this);
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.stock').forEach(function(field) {
+    field.addEventListener('blur', async function() {
+      await updateStock(this);
+    });
   });
 });
