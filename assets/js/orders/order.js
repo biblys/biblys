@@ -14,8 +14,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import $ from 'jquery';
-
 import Notification from '../notification';
 
 const formatDate = (date, format) => {
@@ -30,8 +28,8 @@ const formatDate = (date, format) => {
 };
 
 const diffDate = (date1, date2) => {
-  const coeff = 1000 * 60 * 60 * 24;
-  return Math.floor((date1 - date2) / coeff);
+  const coefficient = 1000 * 60 * 60 * 24;
+  return Math.floor((date1 - date2) / coefficient);
 };
 
 const parseMysqlDate = string => {
@@ -40,6 +38,23 @@ const parseMysqlDate = string => {
 };
 
 export default class Order {
+
+  /**
+   * @param order_data object
+   * @param order_data.id int
+   * @param order_data.url string
+   * @param order_data.customer string
+   * @param order_data.amount string
+   * @param order_data.total string
+   * @param order_data.created string
+   * @param order_data.payment_mode string|null
+   * @param order_data.payment_date string|null
+   * @param order_data.shipping_mode string
+   * @param order_data.shipping_date string|null
+   * @param order_data.shipping_amount string
+   * @param order_data.followup_date string|null
+   * @param order_data.cancel_date string|null
+   */
   constructor(order_data) {
     const self = this;
 
@@ -75,66 +90,37 @@ export default class Order {
           ' <button title="Relancer" data-action="followup" class="btn btn-sm btn-warning"><i class="fa fa-warning"></i></button>';
       }
 
-      // Render row
-      const row = $(
-        '<tr id="order_' +
-        self.data.id +
-        '" class="text-center ' +
-        self.class +
-        '">' +
-        '<td title="' +
-        self.tooltip +
-        '" class="va-middle"><i class="fa-solid ' +
-        self.icon +
-        '"></i></td>' +
-        '<td><a href="/order/' +
-        self.data.url +
-        '">' +
-        self.data.id +
-        '</a>' +
-        '<td>' +
-        formatDate(self.created_at, 'short') +
-        '</td>' +
-        '<td class="text-left customer">' +
-        self.data.customer +
-        '</td>' +
-        '<td class="text-right">' +
-        self.data.total +
-        '</td>' +
-        '<td><a href="/invoice/' +
-        self.data.url +
-        '" class="btn btn-sm btn-light" title="Imprimer la facture" ><i class="fa fa-print"></i></a></td>' +
-        '<td>' +
-        (self.data.payment_mode
-          ? '<img src="/assets/icons/payment_' +
-          self.data.payment_mode +
-          '.png" alt="' +
-          self.data.payment_mode +
-          '" title="' +
-          self.data.payment_mode +
-          '" width=20 />'
-          : '') +
-        '</td>' +
-        '<td>' +
-        (self.payed ? formatDate(self.payed_at, 'short') : '<div class="btn-group">' + payedButton + followupButton + '</div>') +
-        '</td>' +
-        '<td>' +
-        (self.shipped ? formatDate(self.shipped_at, 'short') : shippedButton) +
-        '</td>' +
-        '<td><button title="Annuler la commande" data-action="cancel" class="btn btn-sm btn-danger"><i class="fa fa-trash-can"></i></button></td>' +
-        '</tr>'
-      );
+      // Création de la ligne (row) en DOM natif
+      const row = document.createElement('tr');
+      row.id = 'order_' + self.data.id;
+      row.className = 'text-center ' + self.class;
 
-      // Add actions events
-      row.on('click', '[data-action]', function() {
-        const action = $(this).data('action'),
-          icon = $(this).find('i'),
-          icon_class = icon.attr('class');
+      row.innerHTML =
+        `<td title="${self.tooltip}" class="va-middle"><i class="fa-solid ${self.icon}"></i></td>
+          <td><a href="/order/${self.data.url}">${self.data.id}</a></td>
+          <td>${formatDate(self.created_at, 'short')}</td>
+          <td class="text-left customer">${self.data.customer}</td>
+          <td class="text-right">${self.data.total}</td>
+          <td><a href="/invoice/${self.data.url}" class="btn btn-sm btn-light" title="Imprimer la facture" ><i class="fa fa-print"></i></a></td>
+          <td>${self.data.payment_mode ? `<img src="/assets/icons/payment_${self.data.payment_mode}.png" alt="${self.data.payment_mode}" title="${self.data.payment_mode}" width=20 />` : ''}</td>
+          <td>${self.payed ? formatDate(self.payed_at, 'short') : '<div class="btn-group">' + payedButton + followupButton + '</div>'}</td>
+          <td>${self.shipped ? formatDate(self.shipped_at, 'short') : shippedButton}</td>
+          <td><button title="Annuler la commande" data-action="cancel" class="btn btn-sm btn-danger"><i class="fa fa-trash-can"></i></button></td>`;
+
+      // Ajout des événements sur les boutons d'action
+      row.addEventListener('click', function(event) {
+        const target = event.target.closest('[data-action]');
+        if (!target) return;
+
+        const action = target.getAttribute('data-action');
+        const icon = target.querySelector('i');
+        const icon_class = icon ? icon.className : '';
         let payment_mode = null,
           tracking_number = null;
-        const status_filter = $('#order_status').val();
+        const status_filter_elem = document.getElementById('order_status');
+        const status_filter = status_filter_elem ? status_filter_elem.value : null;
 
-        // Confirmation before order cancellation
+        // Confirmation avant annulation
         if (action === 'cancel') {
           const confirmation = confirm(
             'Voulez-vous vraiment annuler la commande n° ' +
@@ -149,60 +135,71 @@ export default class Order {
         }
 
         // Loading state button
-        icon.attr('class', 'fa fa-spinner fa-spin');
+        if (icon) icon.className = 'fa fa-spinner fa-spin';
 
-        // Ask for a tracking number
+        // Demande du numéro de suivi
         const shippingModeUsesTracking = ['colissimo', 'mondial-relay'].includes(self.data.shipping_mode);
         if (shippingModeUsesTracking && action === 'shipped') {
           tracking_number = window.prompt('Numéro de suivi ?');
           if (tracking_number === null) {
             new Notification(
               'La commande n\'a pas été marquée comme expédiée.', { type: 'warning' });
-            
             // Reset button state
-            icon.attr('class', icon_class);
+            if (icon) icon.className = icon_class;
             return;
           }
         }
 
-        // Ask for payment mode
         if (action === 'payed') {
-          payment_mode = $(this).data('mode');
+          payment_mode = target.getAttribute('data-mode');
         }
 
-        $.ajax({
-          type: 'POST',
-          url: '/admin/orders/' + self.data.id + '/' + action,
-          data: {
+        fetch('/admin/orders/' + self.data.id + '/' + action, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: JSON.stringify({
             payment_mode: payment_mode,
             tracking_number: tracking_number
-          },
-          dataType: 'json',
-          success: function(data) {
+          })
+        })
+          .then(response => response.json())
+          /**
+           * @param data.notice string
+           */
+          .then(data => {
             // Reset button state
-            icon.attr('class', icon_class);
+            if (icon) icon.className = icon_class;
 
-            // If error
+            // Si erreur
             if (data.error) {
               window._alert(data.error);
               return;
             }
 
-            // Update order object
+            // Mise à jour de l'objet commande
             self.data = data.order;
             self.updateStatus();
 
-            // Update row
+            // Mise à jour de la ligne
             const new_row = self.getRow();
-            $('#buttons_' + self.data.id).remove();
-            $('#order_' + self.data.id).replaceWith(new_row);
+            const old_row = document.getElementById('order_' + self.data.id);
+            if (old_row && old_row.parentNode) {
+              old_row.parentNode.replaceChild(new_row, old_row);
+            }
+            const buttons = document.getElementById('buttons_' + self.data.id);
+            if (buttons && buttons.parentNode) {
+              buttons.parentNode.removeChild(buttons);
+            }
 
-            // Notify
+            // Notification
             if (data.notice) {
               new Notification(data.notice, { type: 'success' });
             }
 
-            // If order should not be shown, hide after a few seconds
+            // Si la commande ne doit plus être affichée, masquer après un délai
             if (
               (status_filter === '1' && action === 'payed') ||
               (status_filter === '2' && action === 'shipped') ||
@@ -210,19 +207,25 @@ export default class Order {
               action === 'cancel'
             ) {
               setTimeout(function() {
-                $('#order_' + self.data.id).fadeOut();
+                const rowToHide = document.getElementById('order_' + self.data.id);
+                if (rowToHide) rowToHide.style.display = 'none';
               }, 1000);
             }
 
-            $('[title]').tooltipster();
-          },
-
-          error: function(jqXHR) {
+            // Tooltipster non natif, à remplacer si besoin
+            // $('[title]').tooltipster();
+          })
+          .catch(error => {
             // Reset button state
-            icon.attr('class', icon_class);
-            window._alert(jqXHR.responseJSON.error.message);
-          }
-        });
+            if (icon) icon.className = icon_class;
+            if (error && error.response && error.response.json) {
+              error.response.json().then(json => {
+                window._alert(json.error.message);
+              });
+            } else {
+              window._alert('Erreur réseau');
+            }
+          });
       });
 
       return row;
@@ -268,7 +271,6 @@ export default class Order {
         self.shipped_at = parseMysqlDate(self.data.shipping_date);
       }
 
-      // Order not payed
       if (self.data.payment_date === null) {
         self.payed = false;
         self.icon = 'fa-money';
