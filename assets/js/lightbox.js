@@ -14,71 +14,57 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import $ from 'jquery';
-
 export default class Lightbox {
   constructor(elem) {
-    this.link = $(elem);
-    this.image = this.link.find('img');
+    this.link = typeof elem === 'string' ? document.querySelector(elem) : elem;
+    this.image = this.link.querySelector('img');
 
-    if (this.image[0].complete) {
+    if (this.image.complete) {
       this.init();
     } else {
-      this.image.load(
-        function() {
-          this.init();
-        }.bind(this)
-      );
+      this.image.addEventListener('load', () => this.init());
     }
   }
 
   init() {
     this.addEvents();
     this.animationSpeed = 200;
-    this.link.css({ cursor: 'zoom-in' });
+    this.link.style.cursor = 'zoom-in';
     this.displayed = false;
-    this.imageRatio = this.image.width() / this.image.height();
+    this.imageRatio = this.image.naturalWidth / this.image.naturalHeight;
   }
 
   addEvents() {
-    this.link.on(
-      'click',
-      function(event) {
-        event.preventDefault();
-        this.openLightbox();
-      }.bind(this)
-    );
+    this.link.addEventListener('click', (event) => {
+      event.preventDefault();
+      this.openLightbox();
+    });
 
-    $(window).on(
-      'resize',
-      function() {
-        if (!this.displayed) {
-          return;
-        }
-        this.resizeLightbox();
-      }.bind(this)
-    );
+    window.addEventListener('resize', () => {
+      if (!this.displayed) return;
+      this.resizeLightbox();
+    });
   }
 
   getLightbox() {
-    // Create lightbox if necessary
-    if (typeof this.lightbox === 'undefined') {
-      this.lightbox = new Image();
-      this.lightbox.src = this.link.attr('href');
+    if (!this.lightbox) {
+      this.lightbox = new window.Image();
+      this.lightbox.src = this.link.getAttribute('href');
       this.lightbox.style.cursor = 'zoom-out';
-      this.getOverlay().append(this.lightbox);
+      this.lightbox.style.position = 'absolute';
+      this.lightbox.style.transition = `all ${this.animationSpeed}ms`;
+      this.getOverlay().appendChild(this.lightbox);
     }
-
-    return $(this.lightbox);
+    return this.lightbox;
   }
 
   getLightboxDimensions() {
-    var windowHeight = $(window).height(),
-      windowWidth = $(window).width(),
-      targetHeight = windowHeight * 0.95,
-      targetWidth = targetHeight * this.imageRatio,
-      targetTop = windowHeight * 0.025,
-      targetLeft = windowWidth / 2 - targetWidth / 2;
+    const windowHeight = window.innerHeight;
+    const windowWidth = window.innerWidth;
+    let targetHeight = windowHeight * 0.95;
+    let targetWidth = targetHeight * this.imageRatio;
+    let targetTop = windowHeight * 0.025;
+    let targetLeft = windowWidth / 2 - targetWidth / 2;
 
     if (targetWidth > windowWidth * 0.95) {
       targetWidth = windowWidth * 0.95;
@@ -96,89 +82,79 @@ export default class Lightbox {
   }
 
   resizeLightbox() {
-    var target = this.getLightboxDimensions();
-    this.getLightbox().animate(
-      {
-        top: target.top,
-        left: target.left,
-        height: target.height,
-        width: target.width
-      },
-      this.animationSpeed
-    );
+    const target = this.getLightboxDimensions();
+    const lightbox = this.getLightbox();
+    lightbox.style.top = `${target.top}px`;
+    lightbox.style.left = `${target.left}px`;
+    lightbox.style.width = `${target.width}px`;
+    lightbox.style.height = `${target.height}px`;
   }
 
   openLightbox() {
-    var element = this.image,
-      lightbox = this.getLightbox(),
-      startTop =
-        element.offset().top - $(document).scrollTop() + parseInt(element.css('border-top-width')),
-      startLeft =
-        element.offset().left -
-        $(document).scrollLeft() +
-        parseInt(element.css('border-left-width')),
-      target = this.getLightboxDimensions();
+    const element = this.image;
+    const lightbox = this.getLightbox();
+    const rect = element.getBoundingClientRect();
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
+    const startTop = rect.top + scrollTop + (parseInt(getComputedStyle(element).borderTopWidth) || 0);
+    const startLeft = rect.left + scrollLeft + (parseInt(getComputedStyle(element).borderLeftWidth) || 0);
+    const target = this.getLightboxDimensions();
 
     this.showOverlay();
-    lightbox.css({
-      border: '10px solid white',
-      position: 'absolute',
-      top: startTop,
-      left: startLeft,
-      width: element.width(),
-      height: element.height()
-    });
-    element.css('opacity', 0);
+    lightbox.style.border = '10px solid white';
+    lightbox.style.position = 'absolute';
+    lightbox.style.top = `${startTop}px`;
+    lightbox.style.left = `${startLeft}px`;
+    lightbox.style.width = `${element.width}px`;
+    lightbox.style.height = `${element.height}px`;
+    lightbox.style.opacity = '1';
+    element.style.opacity = '0';
 
-    lightbox.animate(
-      {
-        top: target.top,
-        left: target.left,
-        height: target.height,
-        width: target.width
-      },
-      this.animationSpeed * 1.5
-    );
+    // Animation
+    setTimeout(() => {
+      lightbox.style.transition = `all ${this.animationSpeed * 1.5}ms`;
+      lightbox.style.top = `${target.top}px`;
+      lightbox.style.left = `${target.left}px`;
+      lightbox.style.width = `${target.width}px`;
+      lightbox.style.height = `${target.height}px`;
+    }, 10);
 
     this.displayed = true;
   }
 
   closeLightbox() {
-    var element = this.image,
-      clone = this.getLightbox(),
-      targetHeight = element.outerHeight(),
-      targetWidth = element.outerWidth(),
-      targetTop = element.offset().top - $(document).scrollTop(),
-      targetLeft = element.offset().left - $(document).scrollLeft(),
-      targetBorderWidth = element.css('border-width'),
-      targetBorderColor = element.css('border-color');
+    const element = this.image;
+    const lightbox = this.getLightbox();
+    const rect = element.getBoundingClientRect();
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
+    const targetTop = rect.top + scrollTop;
+    const targetLeft = rect.left + scrollLeft;
+    const targetHeight = element.offsetHeight;
+    const targetWidth = element.offsetWidth;
+    const targetBorderWidth = getComputedStyle(element).borderWidth;
+    const targetBorderColor = getComputedStyle(element).borderColor;
 
     this.hideOverlay();
-    clone
-      .animate(
-        {
-          borderWidth: targetBorderWidth,
-          borderColor: targetBorderColor,
-          top: targetTop,
-          left: targetLeft,
-          height: targetHeight,
-          width: targetWidth
-        },
-        this.animationSpeed * 1.25
-      )
-      .promise()
-      .done(function() {
-        element.css('opacity', 1);
-      });
+    lightbox.style.transition = `all ${this.animationSpeed * 1.25}ms`;
+    lightbox.style.top = `${targetTop}px`;
+    lightbox.style.left = `${targetLeft}px`;
+    lightbox.style.width = `${targetWidth}px`;
+    lightbox.style.height = `${targetHeight}px`;
+    lightbox.style.borderWidth = targetBorderWidth;
+    lightbox.style.borderColor = targetBorderColor;
+
+    setTimeout(() => {
+      element.style.opacity = '1';
+    }, this.animationSpeed * 1.25);
 
     this.displayed = false;
   }
 
   getOverlay() {
-    // Create overlay if necessary
-    if (typeof this.overlay === 'undefined') {
-      this.overlay = $('<div></div>');
-      this.overlay.css({
+    if (!this.overlay) {
+      this.overlay = document.createElement('div');
+      Object.assign(this.overlay.style, {
         position: 'fixed',
         display: 'none',
         top: 0,
@@ -186,27 +162,30 @@ export default class Lightbox {
         background: 'rgba(0, 0, 0, .5)',
         width: '100%',
         height: '100%',
-        zIndex: '10000'
+        zIndex: '10000',
+        left: 0,
+        transition: `opacity ${this.animationSpeed}ms`
       });
-      this.overlay.appendTo('body');
-      this.overlay.on(
-        'click',
-        function() {
-          this.closeLightbox();
-        }.bind(this)
-      );
+      document.body.appendChild(this.overlay);
+      this.overlay.addEventListener('click', () => this.closeLightbox());
     }
-
     return this.overlay;
   }
 
   showOverlay() {
-    var overlay = this.getOverlay();
-    overlay.fadeIn(this.animationSpeed);
+    const overlay = this.getOverlay();
+    overlay.style.display = 'block';
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+      overlay.style.opacity = '1';
+    }, 10);
   }
 
   hideOverlay() {
-    var overlay = this.getOverlay();
-    overlay.fadeOut(this.animationSpeed * 3.5);
+    const overlay = this.getOverlay();
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+      overlay.style.display = 'none';
+    }, this.animationSpeed * 3.5);
   }
 }

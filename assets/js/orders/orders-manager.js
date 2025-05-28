@@ -14,8 +14,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import $ from 'jquery';
-
 import Order from './order';
 
 // noinspection JSUnusedGlobalSymbols
@@ -24,7 +22,7 @@ export default class OrdersManager {
     // Load order on the page load
     this.loadOrders();
 
-    // Load filtered orders on form submit
+    // Load filtered orders when the form is submitted
     const showOrdersForm = document.getElementById('showOrders');
     showOrdersForm.addEventListener('submit', (event) => {
       event.preventDefault();
@@ -45,17 +43,16 @@ export default class OrdersManager {
   }
 
   loadOrders(offset = 0) {
-
     const url = this._addParamsToUrl(document.location);
     url.searchParams.append('offset', offset.toString());
 
     // If offset = 0, reset table
     if (offset === 0) {
-      $('#orders').html('');
+      document.getElementById('orders').innerHTML = '';
     }
 
     // Show loading
-    $('#ordersLoading').show();
+    document.getElementById('ordersLoading').style.display = '';
 
     const loadMoreOrdersButton = document.getElementById('load-more-orders-button');
     loadMoreOrdersButton.style.opacity = '0';
@@ -67,8 +64,14 @@ export default class OrdersManager {
       .then(function(response) {
         return response.json();
       })
+      /**
+       * @param {Object} data
+       * @param {number} data.results - The number of results returned.
+       * @param {number} data.total - The total number of orders available.
+       * @param {Array} data.orders - The list of orders.
+       */
       .then(function(data) {
-        $('#ordersLoading').hide();
+        document.getElementById('ordersLoading').style.display = 'none';
 
         if (data.error) {
           window._alert(data.error.message);
@@ -76,27 +79,22 @@ export default class OrdersManager {
 
         if (data.results > 0) {
           let tr = null;
-          $.each(data.orders, function(index, order_data) {
+          data.orders.forEach(function(order_data) {
             const order = new Order(order_data);
-
             tr = order.getRow();
-            $('#orders').append(tr);
+            document.getElementById('orders').appendChild(tr);
           });
-
-          // Using legacy jquery
-          window.jQuery('[title]').tooltipster();
 
           const orders = document.querySelectorAll('#orders tr');
           const ordersCountElement = document.getElementById('orders-count');
           const ordersCount = orders.length;
           if (ordersCount < data.total) {
             loadMoreOrdersButton.style.opacity = '1';
-            ordersCountElement.textContent = data.total - ordersCount;
+            ordersCountElement.textContent = (data.total - ordersCount).toString();
           }
         } else {
-          $('#orders').html(
-            '<tr><td colspan="10" class="text-center alert-success">Aucune commande à afficher.</td></tr>'
-          );
+          document.getElementById('orders').innerHTML =
+            '<tr><td colspan="10" class="text-center alert-success">Aucune commande à afficher.</td></tr>';
         }
       });
   }
