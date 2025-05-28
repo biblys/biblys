@@ -22,10 +22,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 {% block main %}
 
-  <h1><span class="fa fa-sort-amount-asc"></span> Rayons</h1>
+  <h1><span class="fa-solid fa-sort-amount-asc"></span> Rayons</h1>
 
   <p class="buttonset">
-    <a href="{{ path('rayon_new') }}" class="btn btn-primary"><i class="fa fa-plus-square"></i> Nouveau</a>
+    <a href="{{ path('rayon_new') }}" class="btn btn-primary"><i class="fa-solid fa-plus-square"></i> Nouveau</a>
   </p>
 
   <table class="table table-striped table-hover">
@@ -40,17 +40,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <tr>
         <td><a href="{{ path('rayon_show', { url: rayon.url }) }}">{{ rayon.name }}</a></td>
         <td>
-          <a href="{{ path('rayon_edit', { id: rayon.id }) }}" class="btn btn-sm btn-primary" title="Modifier le rayon"><i
-                class="fa fa-edit"> Modifier</i></a>
+          <a href="{{ path('rayon_edit', { id: rayon.id }) }}" class="btn btn-sm btn-primary" title="Modifier le rayon">
+            <i class="fa-solid fa-edit"></i>
+            Modifier
+          </a>
           <a href="{{ path('rayon_delete', { id: rayon.id }) }}" class="btn btn-sm btn-danger"
-             data-confirm="Voulez-vous vraiement SUPPRIMER le rayon {{ rayon.name }} ?" title="Supprimer le rayon"><i
-                class="fa fa-trash-can"></i></a>
+             data-confirm="Voulez-vous vraiement SUPPRIMER le rayon {{ rayon.name }} ?" title="Supprimer le rayon">
+            <i class="fa-solid fa-trash-can"></i>
+          </a>
         </td>
         <td>
           <a href="{{ path('rayon_articles', { id: rayon.id }) }}"
              class="btn btn-outline-secondary btn-sm">{{ rayon.countArticles() }}</a>
           <a href="{{ path('rayon_add', { id: rayon.id }) }}" class="btn btn-sm btn-success"
-             title="Ajouter des articles au rayon"><i class="fa fa-plus-square"> Ajouter</i></a>
+             title="Ajouter des articles au rayon">
+            <i class="fa-solid fa-plus-square"></i>
+            Ajouter
+          </a>
         </td>
       </tr>
     {% endfor %}
