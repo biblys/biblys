@@ -18,6 +18,7 @@
 
 namespace ApiBundle\Controller;
 
+use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Test\ModelFactory;
@@ -25,12 +26,23 @@ use Biblys\Test\RequestFactory;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Exception;
 use Mockery;
+use Model\ArticleQuery;
+use Model\LinkQuery;
+use Payplug\Exception\NotFoundException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
 require_once __DIR__ . "/../../setUp.php";
 class ArticleControllerTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     */
+    public function setUp(): void
+    {
+        ArticleQuery::create()->deleteAll();
+    }
+
     /**
      * @throws PropelException
      * @throws CannotInsertRecord
@@ -114,5 +126,55 @@ class ArticleControllerTest extends TestCase
             "it should return the catalog"
         );
 
+    }
+
+
+    /** addToBundle */
+
+    /**
+     * @throws PropelException
+     * @throws NotFoundException
+     */
+    public function testAddToBundleAction()
+    {
+        // given
+        $controller = new ArticleController();
+        $bundleArticle = ModelFactory::createArticle(title: "Un article de type lot");
+        $articleToAdd = ModelFactory::createArticle(
+            title: "Un article à ajouter au lot",
+            authors: [ModelFactory::createContributor(firstName: "Lolo", lastName: "Lot")],
+            url: "un-article-a-ajouter-au-lot",
+            collection: ModelFactory::createCollection(name: "En lot"),
+        );
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authPublisher")->once()->andReturn(true);
+
+        $bodyParamsService = Mockery::mock(BodyParamsService::class);
+        $bodyParamsService->shouldReceive("parse")->with(["bundle_id" => ["type" => "numeric"]]);
+        $bodyParamsService->shouldReceive("getInteger")->with("bundle_id")->andReturn($bundleArticle->getId());
+
+        // when
+        $response = $controller->addToBundleAction(
+            $currentUser,
+            $bodyParamsService,
+            $articleToAdd->getId()
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $link = LinkQuery::create()
+            ->filterByArticleId($articleToAdd->getId())
+            ->filterByBundleId($bundleArticle->getId())
+            ->findOne();
+        $this->assertNotNull($link);
+        $responseData = json_decode($response->getContent(), true);
+        $this->assertEquals([
+            "link_id" => $link->getId(),
+            "article_title" => "Un article à ajouter au lot",
+            "article_authors" => "Lolo Lot",
+            "article_collection" => "En lot",
+            "article_url" => "lolo-lot/un-article-a-ajouter-au-lot",
+        ], $responseData);
     }
 }
