@@ -15,6 +15,11 @@ api_articles_export:
   path: /api/admin/articles/export
   controller: ApiBundle\Controller\ArticleController::export
 
+api_articles_bundle:
+  methods: POST
+  path: /api/admin/articles/{id}/add-to-bundle
+  controller: ApiBundle\Controller\ArticleController::addToBundleAction
+
 # Collections
 
 api_collection_create:

@@ -18,6 +18,7 @@
 
 namespace ApiBundle\Controller;
 
+use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Exception;
@@ -25,7 +26,10 @@ use Framework\Controller;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Writer;
 use Model\ArticleQuery;
+use Model\Link;
+use Payplug\Exception\NotFoundException;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class ArticleController extends Controller
@@ -65,5 +69,43 @@ class ArticleController extends Controller
 
         $response->setContent($csv);
         return $response;
+    }
+
+    /**
+     * @route POST /admin/articles/{id}/add-to-bundle
+     * @throws PropelException
+     * @throws NotFoundException
+     */
+    public function addToBundleAction(
+        CurrentUser $currentUser,
+        BodyParamsService $bodyParamsService,
+        int $id
+    ): JsonResponse {
+        $currentUser->authPublisher();
+
+        $bodyParamsService->parse(["bundle_id" => ["type" => "numeric"]]);
+        $bundleId = $bodyParamsService->getInteger("bundle_id");
+        $bundleArticle = ArticleQuery::create()->findPk($bundleId);
+        if (!$bundleArticle) {
+            throw new NotFoundException("Bundle article not found");
+        }
+
+        $articleToAdd = ArticleQuery::create()->findPk($id);
+        if (!$articleToAdd) {
+            throw new NotFoundException("Article not found");
+        }
+
+        $link = new Link();
+        $link->setArticle($articleToAdd);
+        $link->setBundleId($bundleArticle->getId());
+        $link->save();
+
+        return new JsonResponse([
+            "link_id" => $link->getId(),
+            "article_title" => $articleToAdd->getTitle(),
+            "article_authors" => $articleToAdd->getAuthors(),
+            "article_collection" => $articleToAdd->getCollectionName(),
+            "article_url" => $articleToAdd->getUrl(),
+        ]);
     }
 }

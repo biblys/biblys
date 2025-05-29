@@ -591,16 +591,34 @@ $(document).ready(function () {
     minLength: 3,
     delay: 250,
     select: function (event, ui) {
-      $.post('/pages/adm_links', {
-        element_type: 'bundle',
-        element_id: $('#article_id').val(),
-        linkto_type: 'article',
-        linkto_id: ui.item.article_id
-      }, function (res) {
+      const articleId = $('#article_id').val();
+      $.post(`/api/admin/articles/${ui.item.article_id}/add-to-bundle`, {
+        bundle_id: articleId,
+      },
+      /**
+       * @param res {object}
+       * @param res.error {string} Error message if any
+       * @param res.link_id {number} ID of the newly created link
+       * @param res.article_title {string} Title of the article
+       * @param res.article_authors {string} Authors of the article
+       * @param res.article_collection {string} Collection of the article
+       * @param res.article_url {string} URL of the article
+       */
+      function (res) {
         if (res.error) {
           _alert(res.error);
         } else {
-          $('#bundle_articles').append(res.link);
+          const row = `<tr id="link_${res.link_id}" class="new">
+                    <td>${res.article_title}</td>
+                    <td>${res.article_authors}</td>
+                    <td>${res.article_collection}</td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm deleteLink pointer" data-link_id="${res.link_id}">
+                            <i aria-label="Supprimer" class="fa-solid fa-chain-broken"></i>
+                        </button> 
+                    </td>
+                </tr>`;
+          $('#bundle_articles').append(row);
           $('.new').slideDown().removeClass('new');
           $('#addToBundle').val('');
           reloadArticleAdminEvents();

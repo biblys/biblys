@@ -612,9 +612,17 @@ return function (
         );
         while ($bu = $bundle->fetch(PDO::FETCH_ASSOC)) {
             $bundle_articles .= '
-                <li id="link_' . $bu['link_id'] . '">
-                    <i aria-label="Supprimer" data-link_id="' . $bu['link_id'] . '" class="fa-solid red fa-xmark-circle deleteLink pointer"></i> 
-                    <a href="/a/' . $bu['article_url'] . '">' . $bu['article_title'] . '</a> de ' . $bu['article_authors'] . ' (' . $bu['article_collection'] . ')</li>';
+                <tr id="link_' . $bu['link_id'] . '">
+                    <td> '.$bu["article_title"].' </td>
+                    <td> '.$bu["article_authors"].' </td>
+                    <td> '.$bu["article_collection"].' </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm deleteLink pointer" data-link_id="' . $bu['link_id'] . '">
+                            <i aria-label="Supprimer" class="fa-solid fa-chain-broken"></i>
+                        </button> 
+                    </td>
+                </tr>
+            ';
         }
     }
 
@@ -782,11 +790,26 @@ return function (
 
         <fieldset id="bundle_fieldset" class="' . $bundle_fieldset_class . '">
             <legend>Contenu du lot</legend>
-            <ul id="bundle_articles">
+            <table class="table" id="bundle_articles">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Auteur·ice·s</th>
+                    <th>Collection</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
                 ' . $bundle_articles . '
-            </ul>
-            <ul>
-                <li><input type="text" id="addToBundle" class="long" placeholder="Ajouter un article..." /></li>
+            </tbody>
+            </tfoot>
+                <tr>
+                    <td colspan="4">
+                        <input type="text" id="addToBundle" class="form-control" placeholder="Titre de l’article à ajouter..." />
+                    </td>
+                </tr>
+            </tfoot>
+            </table>
             </ul>
         </fieldset>
 
