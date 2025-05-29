@@ -192,7 +192,7 @@ function reloadArticleAdminEvents(scope) {
         }).catch(function (error) {
           field.classList.remove('loading');
           notification.remove();
-          window._alert(error);
+          new window.Biblys.Alert(error.message, { title: 'Erreur de validation ISBN' });
         });
     }
   }).removeClass('event');
