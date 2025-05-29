@@ -18,6 +18,13 @@
 window.biblys = {};
 var Biblys = {};
 
+function createElementFromHTML(htmlString) {
+  const template = document.createElement('template');
+  htmlString = htmlString.trim();
+  template.innerHTML = htmlString;
+  return template.content.firstChild;
+}
+
 /* NOTIFICATIONS */
 
 /**
@@ -254,16 +261,48 @@ $('textarea.wysiwyg').ckeditor(config);
 
 function _alert(message) {
   if (message instanceof Error) {
-    message = 'Erreur : ' + message.message;
+    new Biblys.Alert(message.message, { title: 'Erreur' });
+    return;
   }
-  $('body').append('<div id="alert">' + message + '</div>');
-  $('#alert').dialog({
-    modal: true,
-    close: function(e) {
-      $('#alert').remove();
-    }
-  });
+
+  new Biblys.Alert(message);
 }
+
+Biblys.Alert = class {
+  constructor(message, options = {}) {
+    const title = options.title || 'Alerte';
+
+    const alertHtml = `
+    <div class="modal fade" id="alert-modal" tabindex="-1" role="dialog" aria-labelledby="alert-modal-title" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="alert-modal-title">${title}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>${message}</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+    const alertElement = createElementFromHTML(alertHtml);
+    window.document.body.appendChild(alertElement);
+    const alertModal = $('#alert-modal');
+    alertModal.modal();
+    alertModal.on('hidden.bs.modal', function() {
+      document.getElementById('alert-modal').remove();
+    });
+  }
+};
+
+/** NOTIFY */
 
 function notify(text, time) {
   if (text === 'close') {
