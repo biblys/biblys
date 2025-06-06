@@ -30,12 +30,37 @@ use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 require_once __DIR__."/../../setUp.php";
 
 class StockItemControllerTest extends TestCase
 {
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testNewAction()
+    {
+        // given
+        $controller = new StockItemController();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once();
+
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->newAction($currentUser, $templateService);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
     /**
      * @throws PropelException
      * @throws Exception

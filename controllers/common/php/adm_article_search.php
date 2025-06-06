@@ -39,10 +39,10 @@ return function (Request $request, QueryParamsService $queryParams): JsonRespons
 
     $urlEncodedQuery = urlencode($query);
     $searchResults[] = [
-        "label" => "=> Nouvel article pour $query",
+        "label" => "→ Nouvel article pour « $query »",
         "value" => '',
         "url" => "/pages/article_edit?import=$urlEncodedQuery"
     ];
 
-    return new JsonResponse($searchResults);
+    return new JsonResponse(["results" => $searchResults]);
 };

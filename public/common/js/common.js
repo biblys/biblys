@@ -431,39 +431,6 @@ function overlay(text) {
 }
 
 /* QUICK ADD */
-
-function quickAdd() {
-  $('body').append(
-    '<form id="stockQuickAdd"><br /><br /><fieldset for="stockQuickAddInput"><label>Article :</label> <input id="stockQuickAddInput" type="text" class="verylong" placeholder="ISBN, titre, auteur, collection..." autofocus /> <input type="submit" value="&raquo;" /></fieldset></form>'
-  );
-  $('#stockQuickAdd')
-    .dialog({
-      modal: true,
-      title: 'Ajouter un exemplaire de...',
-      height: 450,
-      width: 650,
-      close: function() {
-        $('#stockQuickAdd').remove();
-      }
-    })
-    .submit(function(e) {
-      e.preventDefault();
-      $('#stockQuickAddInput').autocomplete('search');
-    });
-  $('#stockQuickAddInput').autocomplete({
-    source: '/pages/adm_article_search',
-    minLength: 3,
-    delay: 250,
-    select: function(event, ui) {
-      $(this).removeClass('loading');
-      if (ui.item.url) {
-        overlay('Chargement en cours...');
-        window.location = ui.item.url;
-      }
-    }
-  });
-}
-
 /* MISC */
 
 function file_size(size) {
@@ -1024,7 +991,7 @@ function reloadEvents(scope) {
   // ** QUICK ADD **//
   $(document).on('click', '.stockQuickAdd', function(event) {
     event.preventDefault();
-    quickAdd();
+    window.location.href = '/admin/stock-items/new';
   });
 
   // Checklist

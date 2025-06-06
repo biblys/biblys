@@ -85,10 +85,10 @@ class EntryTest extends TestCase
 
     public function testSetClass()
     {
-        $entry = new Entry('Nouvel article', ['class' => 'stockQuickAdd']);
+        $entry = new Entry('Nouvel article', ['class' => 'admin-entry-class']);
 
         $this->assertTrue($entry->hasClass());
-        $this->assertEquals('stockQuickAdd', $entry->getClass());
+        $this->assertEquals('admin-entry-class', $entry->getClass());
     }
 
     public function testgSetTaskCount()
