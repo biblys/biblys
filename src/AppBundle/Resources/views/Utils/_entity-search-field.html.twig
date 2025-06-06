@@ -1,0 +1,56 @@
+{#
+Copyright (C) 2025 Clément Latzarus
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+<div id="entity-search-field" class="EntitySearchField">
+  <div class="input-group">
+    {% if input_name is defined %}
+      <input type="hidden" name="{{ input_name }}" class="EntitySearchField__value-input">
+    {% endif %}
+
+    <input
+      type="search"
+      class="EntitySearchField__search-input form-control search-form-input mt-0"
+      autocomplete="off"
+      aria-label="{{ label|default('Champ de recherche') }}"
+      placeholder="{{ label|default('Rechercher…') }}"
+      {% if autofocus is defined %} autofocus {% endif %}
+      {% if required is defined %} required {% endif %}
+    >
+    <div class="input-group-append">
+      <button type="button" class="btn btn-primary">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <span>Chercher</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="autocomplete-results list-group"></div>
+
+  <div class="help-text bg-light p-3 d-none">
+    <p class="text-muted">
+      Entrez un ou plusieurs termes et appuyez sur <kbd>Entrée</kbd> pour lancer la recherche.<br />
+    </p>
+    <p class="text-muted">
+      Utilisez la touche <kbd>Tab</kbd> ou les touches
+      <kbd><i class="fa-solid fa-arrow-down"></i></kbd> et
+      <kbd><i class="fa-solid fa-arrow-up"></i></kbd>
+      pour sélectionner un résultat.
+    </p>
+    <p class="text-muted mb-0">
+      Appuyez sur <kbd>Entrée</kbd> pour valider la sélection.
+    </p>
+  </div>
+</div>
