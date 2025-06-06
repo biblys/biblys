@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* global $, file_size, _alert, notify, price, currency, quickAdd, Biblys */
+/* global $, file_size, _alert, notify, price, currency, Biblys */
 
 function reloadAdminEvents() {
   /* FORM CHECK */
@@ -689,7 +689,7 @@ function reloadAdminEvents() {
   document.addEventListener('keyup', function(event) {
     const { ctrlKey, shiftKey, key } = event;
     if (ctrlKey && shiftKey && key === 'A') {
-      window.quickAdd();
+      window.location.href = '/admin/stock-items/new';
     }
   });
 }

@@ -213,7 +213,7 @@ class Entry
         $entries[] = new Entry('Codes ISBN', ['category' => 'catalog', 'url' => '/pages/adm_isbn_codes', 'icon' => 'barcode']);
         $entries[] = new Entry('Offres spéciales', ['category' => 'catalog', 'path' => 'special_offer_index', 'icon' => 'certificate']);
 
-        $entries[] = new Entry('Ajouter au stock', ['category' => 'stock', 'url' => '#', 'icon' => 'plus', 'class' => 'stockQuickAdd']);
+        $entries[] = new Entry('Ajouter au stock', ['category' => 'stock', 'path' => 'stock_items_new', 'icon' => 'plus']);
         $entries[] = new Entry('Stocks', ['category' => 'stock', 'url' => '/pages/adm_stocks', 'icon' => 'cubes']);
         $entries[] = new Entry('Listes', ['category' => 'stock', 'url' => '/pages/adm_list', 'icon' => 'list']);
         $entries[] = new Entry('Réassort', ['category' => 'stock', 'url' => '/pages/adm_reorder', 'icon' => 'refresh']);

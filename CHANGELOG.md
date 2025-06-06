@@ -13,6 +13,8 @@
   d'administration des commandes. Elle permet d'exporter les commandes au
   format CSV pour les importer sur le site de Colissimo Entreprise.
 - Le mode d'expédition "Suivi" a été renommé "Colissimo".
+- La page d'ajout rapide d'exemplaire a été revue pour améliorer son
+  ergonomie.
 
 ## 3.5.2 (16 avril 2025)
 

@@ -787,6 +787,11 @@ stats_umami:
 
 # StockItem
 
+stock_items_new:
+  methods: GET
+  path: /admin/stock-items/new
+  controller: AppBundle\Controller\StockItemController::newAction
+
 stock_add_to_cart:
   path: /stock/{stock_id}/add-to-cart
   controller: AppBundle\Controller\StockItemController::addToCartAction

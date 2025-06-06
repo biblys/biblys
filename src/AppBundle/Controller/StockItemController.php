@@ -23,6 +23,7 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Images\ImagesService;
+use Biblys\Service\TemplateService;
 use Cart;
 use CartManager;
 use Exception;
@@ -38,10 +39,27 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use Usecase\UpdateStockItemPriceUsecase;
 
 class StockItemController extends Controller
 {
+
+    /**
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function newAction(CurrentUser $currentUser, TemplateService $templateService): Response
+    {
+        $currentUser->authAdmin();
+
+        return $templateService->renderResponse("AppBundle:StockItem:new.html.twig");
+    }
+
     /**
      * @throws PropelException
      * @throws Exception
