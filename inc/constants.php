@@ -15,4 +15,4 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const BIBLYS_VERSION = "3.6.0-dev.10";
+const BIBLYS_VERSION = "3.6.0";
