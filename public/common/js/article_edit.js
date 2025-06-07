@@ -431,7 +431,7 @@ $(document).ready(function () {
     minLength: 3,
     delay: 250,
     select: function (event, ui) {
-      if (ui.item.create === '1') { // Créer une nouvelle collection
+      if (ui.item.create === 1) { // Créer une nouvelle collection
         $('#collection_name').val(ui.item.value);
         $('#createCollection').dialog({
           title: 'Créer une nouvelle collection',
@@ -465,7 +465,7 @@ $(document).ready(function () {
       minLength: 3,
       delay: 250,
       select: function (event, ui) {
-        if (ui.item.create === '1') { // Créer un nouvel editeur
+        if (ui.item.create === 1) { // Créer un nouvel editeur
           $('#collection_publisher').addClass('loading');
           $.post({
             url: '/x/adm_article_publisher',
@@ -495,7 +495,7 @@ $(document).ready(function () {
     minLength: 3,
     delay: 250,
     select: function (event, ui) {
-      if (ui.item.create === '1') { // Créer un nouveau cycle
+      if (ui.item.create === 1) { // Créer un nouveau cycle
         $('#article_cycle').addClass('loading');
         $.ajax({
           url: '/x/adm_article_cycle',
@@ -533,7 +533,7 @@ $(document).ready(function () {
     select: function (event, ui) {
       const field = $(this);
       field.attr('readonly', 'readonly').addClass('loading');
-      if (ui.item.create === '1') { // Créer un nouveau contributeur
+      if (ui.item.create === 1) { // Créer un nouveau contributeur
         $('#create_people').dialog({
           title: 'Créer un nouveau contributeur',
           modal: true,
