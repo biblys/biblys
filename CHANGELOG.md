@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.6.1 (DEV)
+
+### Corrections
+
+- La création d'un contributeur, d'une collection, d'un éditeur ou d'un cycle
+  depuis la page d'édition d'un article pouvait échouer. C'est corrigé.
+
 ## 3.6.0 (6 juin 2025)
 
 ### Améliorations
