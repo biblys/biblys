@@ -26,7 +26,7 @@ use Propel\Runtime\Exception\PropelException;
 
 require_once __DIR__ . "/../setUp.php";
 
-class ShippingFeeQueryTest extends TestCase
+class ShippingOptionQueryTest extends TestCase
 {
     /**
      * @throws PropelException
@@ -37,10 +37,7 @@ class ShippingFeeQueryTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $country = ModelFactory::createCountry();
-        $fee = ModelFactory::createShippingOption(
-            site: $site,
-            country: $country,
-        );
+        $fee = ModelFactory::createShippingOption(site: $site, country: $country);
         $orderWeight = 500;
         $orderAmount = 1500;
         $currentSite = new CurrentSite($site);

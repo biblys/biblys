@@ -9,6 +9,8 @@ use Model\Order as ChildOrder;
 use Model\OrderQuery as ChildOrderQuery;
 use Model\ShippingOption as ChildShippingOption;
 use Model\ShippingOptionQuery as ChildShippingOptionQuery;
+use Model\ShippingZone as ChildShippingZone;
+use Model\ShippingZoneQuery as ChildShippingZoneQuery;
 use Model\Map\OrderTableMap;
 use Model\Map\ShippingOptionTableMap;
 use Propel\Runtime\Propel;
@@ -111,6 +113,13 @@ abstract class ShippingOption implements ActiveRecordInterface
     protected $shipping_zone;
 
     /**
+     * The value for the shipping_zone_id field.
+     *
+     * @var        int|null
+     */
+    protected $shipping_zone_id;
+
+    /**
      * The value for the shipping_min_weight field.
      *
      * @var        int|null
@@ -179,6 +188,11 @@ abstract class ShippingOption implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $shipping_archived_at;
+
+    /**
+     * @var        ChildShippingZone
+     */
+    protected $aShippingZone;
 
     /**
      * @var        ObjectCollection|ChildOrder[] Collection to store aggregation of ChildOrder objects.
@@ -489,6 +503,16 @@ abstract class ShippingOption implements ActiveRecordInterface
     }
 
     /**
+     * Get the [shipping_zone_id] column value.
+     *
+     * @return int|null
+     */
+    public function getShippingZoneId()
+    {
+        return $this->shipping_zone_id;
+    }
+
+    /**
      * Get the [shipping_min_weight] column value.
      *
      * @return int|null
@@ -739,6 +763,30 @@ abstract class ShippingOption implements ActiveRecordInterface
         if ($this->shipping_zone !== $v) {
             $this->shipping_zone = $v;
             $this->modifiedColumns[ShippingOptionTableMap::COL_SHIPPING_ZONE] = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [shipping_zone_id] column.
+     *
+     * @param int|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setShippingZoneId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->shipping_zone_id !== $v) {
+            $this->shipping_zone_id = $v;
+            $this->modifiedColumns[ShippingOptionTableMap::COL_SHIPPING_ZONE_ID] = true;
+        }
+
+        if ($this->aShippingZone !== null && $this->aShippingZone->getId() !== $v) {
+            $this->aShippingZone = null;
         }
 
         return $this;
@@ -998,40 +1046,43 @@ abstract class ShippingOption implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : ShippingOptionTableMap::translateFieldName('ZoneCode', TableMap::TYPE_PHPNAME, $indexType)];
             $this->shipping_zone = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : ShippingOptionTableMap::translateFieldName('MinWeight', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : ShippingOptionTableMap::translateFieldName('ShippingZoneId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->shipping_zone_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : ShippingOptionTableMap::translateFieldName('MinWeight', TableMap::TYPE_PHPNAME, $indexType)];
             $this->shipping_min_weight = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : ShippingOptionTableMap::translateFieldName('MaxWeight', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : ShippingOptionTableMap::translateFieldName('MaxWeight', TableMap::TYPE_PHPNAME, $indexType)];
             $this->shipping_max_weight = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : ShippingOptionTableMap::translateFieldName('MaxArticles', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : ShippingOptionTableMap::translateFieldName('MaxArticles', TableMap::TYPE_PHPNAME, $indexType)];
             $this->shipping_max_articles = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : ShippingOptionTableMap::translateFieldName('MinAmount', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : ShippingOptionTableMap::translateFieldName('MinAmount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->shipping_min_amount = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : ShippingOptionTableMap::translateFieldName('MaxAmount', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : ShippingOptionTableMap::translateFieldName('MaxAmount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->shipping_max_amount = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : ShippingOptionTableMap::translateFieldName('Fee', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : ShippingOptionTableMap::translateFieldName('Fee', TableMap::TYPE_PHPNAME, $indexType)];
             $this->shipping_fee = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : ShippingOptionTableMap::translateFieldName('Info', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : ShippingOptionTableMap::translateFieldName('Info', TableMap::TYPE_PHPNAME, $indexType)];
             $this->shipping_info = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : ShippingOptionTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : ShippingOptionTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->shipping_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : ShippingOptionTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : ShippingOptionTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->shipping_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : ShippingOptionTableMap::translateFieldName('ArchivedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : ShippingOptionTableMap::translateFieldName('ArchivedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -1044,7 +1095,7 @@ abstract class ShippingOption implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 16; // 16 = ShippingOptionTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 17; // 17 = ShippingOptionTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\ShippingOption'), 0, $e);
@@ -1067,6 +1118,9 @@ abstract class ShippingOption implements ActiveRecordInterface
      */
     public function ensureConsistency(): void
     {
+        if ($this->aShippingZone !== null && $this->shipping_zone_id !== $this->aShippingZone->getId()) {
+            $this->aShippingZone = null;
+        }
     }
 
     /**
@@ -1106,6 +1160,7 @@ abstract class ShippingOption implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aShippingZone = null;
             $this->collOrders = null;
 
         } // if (deep)
@@ -1224,6 +1279,18 @@ abstract class ShippingOption implements ActiveRecordInterface
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aShippingZone !== null) {
+                if ($this->aShippingZone->isModified() || $this->aShippingZone->isNew()) {
+                    $affectedRows += $this->aShippingZone->save($con);
+                }
+                $this->setShippingZone($this->aShippingZone);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -1297,6 +1364,9 @@ abstract class ShippingOption implements ActiveRecordInterface
         if ($this->isColumnModified(ShippingOptionTableMap::COL_SHIPPING_ZONE)) {
             $modifiedColumns[':p' . $index++]  = 'shipping_zone';
         }
+        if ($this->isColumnModified(ShippingOptionTableMap::COL_SHIPPING_ZONE_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'shipping_zone_id';
+        }
         if ($this->isColumnModified(ShippingOptionTableMap::COL_SHIPPING_MIN_WEIGHT)) {
             $modifiedColumns[':p' . $index++]  = 'shipping_min_weight';
         }
@@ -1360,6 +1430,10 @@ abstract class ShippingOption implements ActiveRecordInterface
                         break;
                     case 'shipping_zone':
                         $stmt->bindValue($identifier, $this->shipping_zone, PDO::PARAM_STR);
+
+                        break;
+                    case 'shipping_zone_id':
+                        $stmt->bindValue($identifier, $this->shipping_zone_id, PDO::PARAM_INT);
 
                         break;
                     case 'shipping_min_weight':
@@ -1483,33 +1557,36 @@ abstract class ShippingOption implements ActiveRecordInterface
                 return $this->getZoneCode();
 
             case 6:
-                return $this->getMinWeight();
+                return $this->getShippingZoneId();
 
             case 7:
-                return $this->getMaxWeight();
+                return $this->getMinWeight();
 
             case 8:
-                return $this->getMaxArticles();
+                return $this->getMaxWeight();
 
             case 9:
-                return $this->getMinAmount();
+                return $this->getMaxArticles();
 
             case 10:
-                return $this->getMaxAmount();
+                return $this->getMinAmount();
 
             case 11:
-                return $this->getFee();
+                return $this->getMaxAmount();
 
             case 12:
-                return $this->getInfo();
+                return $this->getFee();
 
             case 13:
-                return $this->getCreatedAt();
+                return $this->getInfo();
 
             case 14:
-                return $this->getUpdatedAt();
+                return $this->getCreatedAt();
 
             case 15:
+                return $this->getUpdatedAt();
+
+            case 16:
                 return $this->getArchivedAt();
 
             default:
@@ -1546,21 +1623,18 @@ abstract class ShippingOption implements ActiveRecordInterface
             $keys[3] => $this->getMode(),
             $keys[4] => $this->getType(),
             $keys[5] => $this->getZoneCode(),
-            $keys[6] => $this->getMinWeight(),
-            $keys[7] => $this->getMaxWeight(),
-            $keys[8] => $this->getMaxArticles(),
-            $keys[9] => $this->getMinAmount(),
-            $keys[10] => $this->getMaxAmount(),
-            $keys[11] => $this->getFee(),
-            $keys[12] => $this->getInfo(),
-            $keys[13] => $this->getCreatedAt(),
-            $keys[14] => $this->getUpdatedAt(),
-            $keys[15] => $this->getArchivedAt(),
+            $keys[6] => $this->getShippingZoneId(),
+            $keys[7] => $this->getMinWeight(),
+            $keys[8] => $this->getMaxWeight(),
+            $keys[9] => $this->getMaxArticles(),
+            $keys[10] => $this->getMinAmount(),
+            $keys[11] => $this->getMaxAmount(),
+            $keys[12] => $this->getFee(),
+            $keys[13] => $this->getInfo(),
+            $keys[14] => $this->getCreatedAt(),
+            $keys[15] => $this->getUpdatedAt(),
+            $keys[16] => $this->getArchivedAt(),
         ];
-        if ($result[$keys[13]] instanceof \DateTimeInterface) {
-            $result[$keys[13]] = $result[$keys[13]]->format('Y-m-d H:i:s.u');
-        }
-
         if ($result[$keys[14]] instanceof \DateTimeInterface) {
             $result[$keys[14]] = $result[$keys[14]]->format('Y-m-d H:i:s.u');
         }
@@ -1569,12 +1643,31 @@ abstract class ShippingOption implements ActiveRecordInterface
             $result[$keys[15]] = $result[$keys[15]]->format('Y-m-d H:i:s.u');
         }
 
+        if ($result[$keys[16]] instanceof \DateTimeInterface) {
+            $result[$keys[16]] = $result[$keys[16]]->format('Y-m-d H:i:s.u');
+        }
+
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aShippingZone) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'shippingZone';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'shipping_zones';
+                        break;
+                    default:
+                        $key = 'ShippingZone';
+                }
+
+                $result[$key] = $this->aShippingZone->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->collOrders) {
 
                 switch ($keyType) {
@@ -1645,33 +1738,36 @@ abstract class ShippingOption implements ActiveRecordInterface
                 $this->setZoneCode($value);
                 break;
             case 6:
-                $this->setMinWeight($value);
+                $this->setShippingZoneId($value);
                 break;
             case 7:
-                $this->setMaxWeight($value);
+                $this->setMinWeight($value);
                 break;
             case 8:
-                $this->setMaxArticles($value);
+                $this->setMaxWeight($value);
                 break;
             case 9:
-                $this->setMinAmount($value);
+                $this->setMaxArticles($value);
                 break;
             case 10:
-                $this->setMaxAmount($value);
+                $this->setMinAmount($value);
                 break;
             case 11:
-                $this->setFee($value);
+                $this->setMaxAmount($value);
                 break;
             case 12:
-                $this->setInfo($value);
+                $this->setFee($value);
                 break;
             case 13:
-                $this->setCreatedAt($value);
+                $this->setInfo($value);
                 break;
             case 14:
-                $this->setUpdatedAt($value);
+                $this->setCreatedAt($value);
                 break;
             case 15:
+                $this->setUpdatedAt($value);
+                break;
+            case 16:
                 $this->setArchivedAt($value);
                 break;
         } // switch()
@@ -1719,34 +1815,37 @@ abstract class ShippingOption implements ActiveRecordInterface
             $this->setZoneCode($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setMinWeight($arr[$keys[6]]);
+            $this->setShippingZoneId($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setMaxWeight($arr[$keys[7]]);
+            $this->setMinWeight($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setMaxArticles($arr[$keys[8]]);
+            $this->setMaxWeight($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setMinAmount($arr[$keys[9]]);
+            $this->setMaxArticles($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setMaxAmount($arr[$keys[10]]);
+            $this->setMinAmount($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setFee($arr[$keys[11]]);
+            $this->setMaxAmount($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setInfo($arr[$keys[12]]);
+            $this->setFee($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
-            $this->setCreatedAt($arr[$keys[13]]);
+            $this->setInfo($arr[$keys[13]]);
         }
         if (array_key_exists($keys[14], $arr)) {
-            $this->setUpdatedAt($arr[$keys[14]]);
+            $this->setCreatedAt($arr[$keys[14]]);
         }
         if (array_key_exists($keys[15], $arr)) {
-            $this->setArchivedAt($arr[$keys[15]]);
+            $this->setUpdatedAt($arr[$keys[15]]);
+        }
+        if (array_key_exists($keys[16], $arr)) {
+            $this->setArchivedAt($arr[$keys[16]]);
         }
 
         return $this;
@@ -1808,6 +1907,9 @@ abstract class ShippingOption implements ActiveRecordInterface
         }
         if ($this->isColumnModified(ShippingOptionTableMap::COL_SHIPPING_ZONE)) {
             $criteria->add(ShippingOptionTableMap::COL_SHIPPING_ZONE, $this->shipping_zone);
+        }
+        if ($this->isColumnModified(ShippingOptionTableMap::COL_SHIPPING_ZONE_ID)) {
+            $criteria->add(ShippingOptionTableMap::COL_SHIPPING_ZONE_ID, $this->shipping_zone_id);
         }
         if ($this->isColumnModified(ShippingOptionTableMap::COL_SHIPPING_MIN_WEIGHT)) {
             $criteria->add(ShippingOptionTableMap::COL_SHIPPING_MIN_WEIGHT, $this->shipping_min_weight);
@@ -1932,6 +2034,7 @@ abstract class ShippingOption implements ActiveRecordInterface
         $copyObj->setMode($this->getMode());
         $copyObj->setType($this->getType());
         $copyObj->setZoneCode($this->getZoneCode());
+        $copyObj->setShippingZoneId($this->getShippingZoneId());
         $copyObj->setMinWeight($this->getMinWeight());
         $copyObj->setMaxWeight($this->getMaxWeight());
         $copyObj->setMaxArticles($this->getMaxArticles());
@@ -1982,6 +2085,57 @@ abstract class ShippingOption implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
+    }
+
+    /**
+     * Declares an association between this object and a ChildShippingZone object.
+     *
+     * @param ChildShippingZone|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setShippingZone(ChildShippingZone $v = null)
+    {
+        if ($v === null) {
+            $this->setShippingZoneId(NULL);
+        } else {
+            $this->setShippingZoneId($v->getId());
+        }
+
+        $this->aShippingZone = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildShippingZone object, it will not be re-added.
+        if ($v !== null) {
+            $v->addShippingOption($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildShippingZone object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildShippingZone|null The associated ChildShippingZone object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getShippingZone(?ConnectionInterface $con = null)
+    {
+        if ($this->aShippingZone === null && ($this->shipping_zone_id != 0)) {
+            $this->aShippingZone = ChildShippingZoneQuery::create()->findPk($this->shipping_zone_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aShippingZone->addShippingOptions($this);
+             */
+        }
+
+        return $this->aShippingZone;
     }
 
 
@@ -2353,12 +2507,16 @@ abstract class ShippingOption implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aShippingZone) {
+            $this->aShippingZone->removeShippingOption($this);
+        }
         $this->shipping_id = null;
         $this->site_id = null;
         $this->article_id = null;
         $this->shipping_mode = null;
         $this->shipping_type = null;
         $this->shipping_zone = null;
+        $this->shipping_zone_id = null;
         $this->shipping_min_weight = null;
         $this->shipping_max_weight = null;
         $this->shipping_max_articles = null;
@@ -2398,6 +2556,7 @@ abstract class ShippingOption implements ActiveRecordInterface
         } // if ($deep)
 
         $this->collOrders = null;
+        $this->aShippingZone = null;
         return $this;
     }
 
