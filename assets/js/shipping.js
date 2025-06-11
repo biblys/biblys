@@ -23,9 +23,9 @@ export default class Shipping {
     this.tableBody = document.querySelector('#shipping-table tbody');
 
     this.addRangeButton = document.querySelector('#add-range');
-    this.addRangeButton.addEventListener('click', () => {
+    this.addRangeButton.addEventListener('click', async () => {
       const newRangeForm = document.querySelector('#new-range-form');
-      const form = this.renderForm({}, event => {
+      const form = await this.renderForm({}, event => {
         event.preventDefault();
         const loader = new Biblys.Notification('Ajout en cours…', { loader: true, sticky: true });
         this.send(form).then(fee => {
@@ -96,6 +96,20 @@ export default class Shipping {
     rows.forEach(row => this.tableBody.appendChild(row));
   }
 
+  /**
+   * @param {object} range
+   * @param {string} range.mode
+   * @param {string} range.type
+   * @param {string} range.zone_name
+   * @param {boolean} range.is_compliant_with_french_law
+   * @param {string} range.max_weight
+   * @param {string} range.min_amount
+   * @param {string} range.max_amount
+   * @param {string} range.max_articles
+   * @param {string} range.fee
+   * @param {string} range.info
+   * @returns {HTMLElement}
+   */
   renderRow(range) {
     let rowClass = '';
     let warning = '';
@@ -107,7 +121,7 @@ export default class Shipping {
       <tr class="${rowClass}">
         <td>${warning} ${range.mode}</td>
         <td>${range.type}</td>
-        <td>${range.zone}</td>
+        <td>${range.zone_name}</td>
         <td class="nowrap">${this.renderConditions(range)}</td>
         <td class="right">${window.currency(parseInt(range.fee) / 100)}</td>
       </tr>
@@ -201,12 +215,12 @@ export default class Shipping {
    *
    * @return {HtmlElement}
    */
-  renderForm(
+  async renderForm(
     {
       id = '',
       mode = '',
       type = '',
-      zone = '',
+      zone_id = '',
       max_weight = '',
       min_amount = '',
       max_amount = '',
@@ -216,6 +230,15 @@ export default class Shipping {
     },
     onSubmit
   ) {
+
+    const zonesResponse = await fetch('/api/admin/shipping/zones', {
+      headers: { Accept: 'application/json' }
+    });
+    const zonesData = await zonesResponse.json();
+    const zonesOptions = zonesData.map(zone => {
+      return `<option value="${zone.id}" ${zone_id === zone.id ? 'selected' : ''}>${zone.name}</option>`;
+    }).join('');
+
     const formContent = `
       <input type="hidden" id="id" name="id" value="${id}">
 
@@ -235,25 +258,9 @@ export default class Shipping {
       </div>
 
       <div class="form-group">
-        <label class="col-form-label label-inline" for="zone">Zone :</label>
-        <select id="zone" name="zone" class="form-control" required>
-          <option value="ALL" ${zone === 'ALL' ? 'selected' : ''}>ALL : Monde</option>
-          <option value="F" ${zone === 'F' ? 'selected' : ''}>F : France</option>
-          <option value="OM1" ${zone === 'OM1' ? 'selected' : ''}>
-            OM1 : Guadeloupe, Martinique, Guyane, La Réunion, Mayotte, Saint-Pierre-et-Miquelon, Saint-Martin, Saint-Barthélemy.
-          </option>
-          <option value="OM2" ${zone === 'OM2' ? 'selected' : ''}>
-            OM2 : Nouvelle-Calédonie, Polynésie Française, Wallis-et-Futuna, Terres australes et antarctiques françaises.
-          </option>
-          <option value="A" ${zone === 'A' ? 'selected' : ''}>
-            A : Union Européenne et Suisse
-          </option>
-          <option value="B" ${zone === 'B' ? 'selected' : ''}>
-            B : Europe de l’Est (hors UE, Suisse et Russie), Norvège et Maghreb
-          </option>
-          <option value="C" ${zone === 'C' ? 'selected' : ''}>
-            C : Autres destinations (hors UE et Suisse)
-          </option>
+        <label class="col-form-label label-inline" for="zone_id">Zone :</label>
+        <select id="zone_id" name="zone_id" class="form-control" required>
+          ${zonesOptions}
         </select>
       </div>
 
@@ -369,10 +376,10 @@ export default class Shipping {
     throw new Error('Une erreur est survenue.');
   }
 
-  showRangeEditForm(range, tr) {
+  async showRangeEditForm(range, tr) {
     const rangeEditRow = createElementFromHTML('<tr></tr>');
     const rangeEditCell = createElementFromHTML('<td colspan=8></td>');
-    const form = this.renderForm(range, event => {
+    const form = await this.renderForm(range, event => {
       event.preventDefault();
       const loader = new Biblys.Notification(
         `Mise à jour de <strong>${range.mode}</strong> en cours…`,

@@ -52,7 +52,7 @@ class ShippingOptionQuery extends BaseShippingOptionQuery
         int $articleCount
     ): array
     {
-        $zone = $country->getShippingZoneCode();
+        $zonesForCountry = $country->getShippingZones();
 
         $query = self::createForSite($currentSite);
         $fees = $query->orderByFee()->find();
@@ -60,7 +60,7 @@ class ShippingOptionQuery extends BaseShippingOptionQuery
         $shippingTypes = ['magasin', 'normal', 'colissimo', 'mondial-relay'];
 
         $feesForEachTypes = array_map(
-            function ($type) use ($fees, $zone, $weight, $amount, $currentSite, $articleCount) {
+            function ($type) use ($fees, $zonesForCountry, $weight, $amount, $currentSite, $articleCount) {
                 /** @var ShippingOption $fee */
                 foreach ($fees as $fee) {
                     // Keeps only active fees
@@ -79,7 +79,7 @@ class ShippingOptionQuery extends BaseShippingOptionQuery
                     }
 
                     // Keep only fees for destination country's zone or ALL zones
-                    if ($fee->getZoneCode() !== $zone && $fee->getZoneCode() !== 'ALL') {
+                    if (!$zonesForCountry->contains($fee->getShippingZone())) {
                         continue;
                     }
 

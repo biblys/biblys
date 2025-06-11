@@ -57,6 +57,7 @@ use Model\Right;
 use Model\Role;
 use Model\Session;
 use Model\ShippingOption;
+use Model\ShippingZone;
 use Model\Site;
 use Model\SpecialOffer;
 use Model\Stock;
@@ -218,14 +219,14 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createCountry(
-        string $name = "France",
-        string $zone = "F",
+        string       $name = "France",
+        ShippingZone $shippingZone = null,
     ): Country
     {
         $country = new Country();
         $country->setName($name);
         $country->setCode("FR");
-        $country->setShippingZoneCode($zone);
+        $country->addShippingZone($shippingZone ?? ModelFactory::createShippingZone());
         $country->save();
 
         return $country;
@@ -521,22 +522,22 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createShippingOption(
-        ?Site    $site = null,
-        string   $type = "normal",
-        ?Country $country = null,
-        string   $mode = "Lettre verte",
-        ?string  $info = null,
-        int      $fee = 100,
-        int      $maxWeight = 1000,
-        int      $minAmount = 0,
-        int      $maxAmount = 2000,
-        int      $maxArticles = 10,
-        bool     $isArchived = false,
+        ?Site         $site = null,
+        string        $type = "normal",
+        ?Country      $country = null,
+        string        $mode = "Lettre verte",
+        ?string       $info = null,
+        int           $fee = 100,
+        int           $maxWeight = 1000,
+        int           $minAmount = 0,
+        int           $maxAmount = 2000,
+        int           $maxArticles = 10,
+        bool          $isArchived = false,
+        ?ShippingZone $shippingZone = null,
     ): ShippingOption
     {
         $shippingOption = new ShippingOption();
         $shippingOption->setSiteId($site?->getId() ?? 1);
-        $shippingOption->setZoneCode($country?->getShippingZoneCode() ?? "ALL");
         $shippingOption->setType($type);
         $shippingOption->setMode($mode);
         $shippingOption->setFee($fee);
@@ -546,6 +547,7 @@ class ModelFactory
         $shippingOption->setMaxArticles($maxArticles);
         $shippingOption->setInfo($info);
         $shippingOption->setArchivedAt($isArchived ? new DateTime() : null);
+        $shippingOption->setShippingZone($shippingZone);
         $shippingOption->save();
 
         return $shippingOption;
@@ -1104,6 +1106,18 @@ class ModelFactory
         $supplier->save();
 
         return $supplier;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createShippingZone(string $name = "Zone France Métropolitaine"): ShippingZone
+    {
+        $shippingZone = new ShippingZone();
+        $shippingZone->setName($name);
+        $shippingZone->save();
+
+        return $shippingZone;
     }
 
 }
