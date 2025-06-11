@@ -21,6 +21,7 @@ namespace ApiBundle\Controller;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\InvalidSiteIdException;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Exception;
@@ -53,34 +54,43 @@ class ShippingControllerTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
+
+        $shippingZone1 = ModelFactory::createShippingZone(name: "Zone 1");
+        $shippingZone2 = ModelFactory::createShippingZone(name: "Zone 2");
+
         $shippingFee1 = new ShippingOption();
         $shippingFee1->setSiteId($site->getId());
         $shippingFee1->setType("Type C");
         $shippingFee1->setZoneCode("Z2");
+        $shippingFee1->setShippingZone($shippingZone2);
         $shippingFee1->setFee(100);
         $shippingFee1->save();
         $shippingFee2 = new ShippingOption();
         $shippingFee2->setSiteId($site->getId());
         $shippingFee2->setType("Type B");
         $shippingFee2->setZoneCode("Z2");
+        $shippingFee2->setShippingZone($shippingZone2);
         $shippingFee2->setFee(100);
         $shippingFee2->save();
         $shippingFee3 = new ShippingOption();
         $shippingFee3->setSiteId($site->getId());
         $shippingFee3->setType("Type A");
         $shippingFee3->setZoneCode("Z2");
+        $shippingFee3->setShippingZone($shippingZone2);
         $shippingFee3->setFee(100);
         $shippingFee3->save();
         $shippingFee4 = new ShippingOption();
         $shippingFee4->setSiteId($site->getId());
         $shippingFee4->setType("Type A");
         $shippingFee4->setZoneCode("Z1");
+        $shippingFee4->setShippingZone($shippingZone1);
         $shippingFee4->setFee(100);
         $shippingFee4->save();
         $shippingFee5 = new ShippingOption();
         $shippingFee5->setSiteId($site->getId());
         $shippingFee5->setType("Type A");
         $shippingFee5->setZoneCode("Z1");
+        $shippingFee5->setShippingZone($shippingZone1);
         $shippingFee5->setFee(90);
         $shippingFee5->save();
         $archivedShippingFee = new ShippingOption();
@@ -110,20 +120,30 @@ class ShippingControllerTest extends TestCase
         );
         $returnedFeeds = json_decode($response->getContent(), true);
         $this->assertCount(5, $returnedFeeds);
+
         $this->assertEquals("Type A", $returnedFeeds[0]["type"]);
-        $this->assertEquals("Z1", $returnedFeeds[0]["zone"]);
+        $this->assertEquals($shippingZone1->getId(), $returnedFeeds[0]["zone_id"]);
+        $this->assertEquals($shippingZone1->getName(), $returnedFeeds[0]["zone_name"]);
         $this->assertEquals(90, $returnedFeeds[0]["fee"]);
+
         $this->assertEquals("Type A", $returnedFeeds[1]["type"]);
-        $this->assertEquals("Z1", $returnedFeeds[1]["zone"]);
+        $this->assertEquals($shippingZone1->getId(), $returnedFeeds[1]["zone_id"]);
+        $this->assertEquals($shippingZone1->getName(), $returnedFeeds[1]["zone_name"]);
         $this->assertEquals(100, $returnedFeeds[1]["fee"]);
+
         $this->assertEquals("Type A", $returnedFeeds[2]["type"]);
-        $this->assertEquals("Z2", $returnedFeeds[2]["zone"]);
+        $this->assertEquals($shippingZone2->getId(), $returnedFeeds[2]["zone_id"]);
+        $this->assertEquals($shippingZone2->getName(), $returnedFeeds[2]["zone_name"]);
         $this->assertEquals(100, $returnedFeeds[2]["fee"]);
+
         $this->assertEquals("Type B", $returnedFeeds[3]["type"]);
-        $this->assertEquals("Z2", $returnedFeeds[3]["zone"]);
+        $this->assertEquals($shippingZone2->getId(), $returnedFeeds[3]["zone_id"]);
+        $this->assertEquals($shippingZone2->getName(), $returnedFeeds[3]["zone_name"]);
         $this->assertEquals(100, $returnedFeeds[3]["fee"]);
+
         $this->assertEquals("Type C", $returnedFeeds[4]["type"]);
-        $this->assertEquals("Z2", $returnedFeeds[4]["zone"]);
+        $this->assertEquals($shippingZone2->getId(), $returnedFeeds[4]["zone_id"]);
+        $this->assertEquals($shippingZone2->getName(), $returnedFeeds[4]["zone_name"]);
         $this->assertEquals(100, $returnedFeeds[4]["fee"]);
     }
 
@@ -134,13 +154,16 @@ class ShippingControllerTest extends TestCase
     {
         // given
         $controller = new ShippingController();
-        $content = '{"id":"","mode":"Colissimo","type":"colissimo","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
-        $request = RequestFactory::createAuthRequestForAdminUser($content);
+
+        $shippingZone = ModelFactory::createShippingZone(name: "Zone Outre-Mer 2");
+
         $config = new Config();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
 
         // when
+        $content = '{"id":"","mode":"Colissimo","type":"colissimo","zone_id":"'.$shippingZone->getId().'","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
+        $request = RequestFactory::createAuthRequestForAdminUser($content);
         $response = $controller->createAction($request, $config, $currentUser);
 
         // then
@@ -153,7 +176,9 @@ class ShippingControllerTest extends TestCase
         $this->assertEquals(57, $fee["fee"]);
         $this->assertEquals("Colissimo", $fee["mode"]);
         $this->assertEquals("colissimo", $fee["type"]);
-        $this->assertEquals("OM2", $fee["zone"]);
+        $this->assertEquals(null, $fee["zone"]);
+        $this->assertEquals($shippingZone->getId(), $fee["zone_id"]);
+        $this->assertEquals($shippingZone->getName(), $fee["zone_name"]);
         $this->assertEquals(21, $fee["max_weight"]);
         $this->assertEquals(71, $fee["min_amount"]);
         $this->assertEquals(76, $fee["max_amount"]);
@@ -174,14 +199,17 @@ class ShippingControllerTest extends TestCase
     {
         // given
         $controller = new ShippingController();
-        $content = '{"id":"","mode":"Colissimo","type":"colissimo","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
-        $request = RequestFactory::createAuthRequestForAdminUser($content);
+
+        $shippingZone = ModelFactory::createShippingZone(name: "Zone Outre-Mer 2");
         $shippingFee = ModelFactory::createShippingOption();
+
         $config = new Config();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
 
         // when
+        $content = '{"id":"","mode":"Colissimo","type":"colissimo","zone_id":"'.$shippingZone->getId().'","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
+        $request = RequestFactory::createAuthRequestForAdminUser($content);
         $response = $controller->updateAction(
             $request,
             $config,
@@ -200,7 +228,8 @@ class ShippingControllerTest extends TestCase
         $this->assertEquals(57, $fee["fee"]);
         $this->assertEquals("Colissimo", $fee["mode"]);
         $this->assertEquals("colissimo", $fee["type"]);
-        $this->assertEquals("OM2", $fee["zone"]);
+        $this->assertEquals($shippingZone->getId(), $fee["zone_id"]);
+        $this->assertEquals($shippingZone->getName(), $fee["zone_name"]);
         $this->assertEquals(21, $fee["max_weight"]);
         $this->assertEquals(71, $fee["min_amount"]);
         $this->assertEquals(76, $fee["max_amount"]);
@@ -266,6 +295,7 @@ class ShippingControllerTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
+        $zone = ModelFactory::createShippingZone();
         $shippingFee = ModelFactory::createShippingOption(
             site: $site,
             type: "colissimo",
@@ -275,8 +305,9 @@ class ShippingControllerTest extends TestCase
             maxWeight: 600,
             maxAmount: 10000,
             maxArticles: 5,
+            shippingZone: $zone,
         );
-        $country = ModelFactory::createCountry();
+        $country = ModelFactory::createCountry(shippingZone: $zone);
         $controller = new ShippingController();
         $request = new Request();
         $request->query->set("country_id", $country->getId());
@@ -357,13 +388,15 @@ class ShippingControllerTest extends TestCase
 
     /**
      * @throws PropelException
+     * @throws InvalidSiteIdException
      */
     public function testGetAction()
     {
         // given
         $config = new Config();
-        $country = ModelFactory::createCountry(zone: "Z2");
-        $shippingFee = ModelFactory::createShippingOption(
+        $zone = ModelFactory::createShippingZone(name: "Zone France");
+        $country = ModelFactory::createCountry(shippingZone: $zone);
+        $shippingOption = ModelFactory::createShippingOption(
             type: "Type C",
             country: $country,
             mode: "Colissimo",
@@ -372,20 +405,22 @@ class ShippingControllerTest extends TestCase
             maxWeight: 1,
             minAmount: 2,
             maxAmount: 3,
-            maxArticles: 4
+            maxArticles: 4,
+            shippingZone:  $zone,
         );
-        $shippingFee->save();
+        $shippingOption->save();
         $controller = new ShippingController();
 
         // when
-        $response = $controller->get($config, $shippingFee->getId());
+        $response = $controller->get($config, $shippingOption->getId());
 
         // then
         $expectedResponse = [
-            "id" => $shippingFee->getId(),
+            "id" => $shippingOption->getId(),
             "mode" => "Colissimo",
             "type" => "Type C",
-            "zone" => "Z2",
+            "zone_id" => $zone->getId(),
+            "zone_name" => "Zone France",
             "max_weight" => 1,
             "min_amount" => 2,
             "max_amount" => 3,
