@@ -163,6 +163,7 @@ class ShippingController extends Controller
     /**
      * @route GET /api/shipping/{id}
      * @throws InvalidSiteIdException
+     * @throws PropelException
      */
     public function get(Config $config, int $id): JsonResponse
     {
@@ -215,13 +216,19 @@ class ShippingController extends Controller
         return new JsonResponse($serializedFees);
     }
 
-    private static function _feeToJson(ShippingOption $fee): array
+    /**
+     * @throws PropelException
+     */
+    private static function  _feeToJson(ShippingOption $fee): array
     {
+        $zone = $fee->getShippingZone();
+
         return [
             'id' => $fee->getId(),
             'mode' => $fee->getMode(),
             'type' => $fee->getType(),
-            'zone' => $fee->getZoneCode(),
+            'zone_id' => $zone?->getId(),
+            'zone_name' => $zone?->getName(),
             'max_weight' => $fee->getMaxWeight(),
             'min_amount' => $fee->getMinAmount(),
             'max_amount' => $fee->getMaxAmount(),
@@ -255,7 +262,7 @@ class ShippingController extends Controller
         return [
             "mode" => $data->mode,
             "type" => $data->type,
-            "zone" => $data->zone,
+            "zoneId" => $data->zone_id,
             "fee" => $data->fee,
             "info" => $data->info,
             "maxWeight" => $maxWeight,
@@ -274,7 +281,7 @@ class ShippingController extends Controller
     {
         $fee->setMode($data["mode"]);
         $fee->setType($data["type"]);
-        $fee->setZoneCode($data["zone"]);
+        $fee->setShippingZoneId($data["zoneId"]);
         $fee->setMaxWeight($data["maxWeight"]);
         $fee->setMinAmount($data["minAmount"]);
         $fee->setMaxAmount($data["maxAmount"]);
