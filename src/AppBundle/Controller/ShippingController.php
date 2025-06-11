@@ -18,7 +18,6 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Data\ShippingZone;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\QueryParamsService;
