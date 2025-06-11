@@ -27,6 +27,7 @@ use Exception;
 use Mockery;
 use Model\ShippingOption;
 use Model\ShippingOptionQuery;
+use Model\ShippingZoneQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,6 +36,14 @@ require_once __DIR__ . "/../../setUp.php";
 
 class ShippingControllerTest extends TestCase
 {
+
+    /**
+     * @throws PropelException
+     */
+    protected function setUp(): void
+    {
+        ShippingZoneQuery::create()->deleteAll();
+    }
 
     /**
      * @throws PropelException
@@ -394,6 +403,41 @@ class ShippingControllerTest extends TestCase
             json_encode($expectedResponse),
             $response->getContent(),
             "it should return all fees for current site"
+        );
+    }
+
+    /** Zones */
+
+    /**
+     * @throws PropelException
+     */
+    public function testZonesAction()
+    {
+        // given
+        $controller = new ShippingController();
+        $shippingZone1 = ModelFactory::createShippingZone(name: "Zone 1");
+        $shippingZone2 = ModelFactory::createShippingZone(name: "Zone 2");
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+
+        // when
+        $response = $controller->zonesAction($currentUser);
+
+        // then
+        $this->assertEquals(
+            json_encode([
+                [
+                    "id" => $shippingZone1->getId(),
+                    "name" => $shippingZone1->getName(),
+                ],
+                [
+                    "id" => $shippingZone2->getId(),
+                    "name" => $shippingZone2->getName(),
+                ],
+            ]),
+            $response->getContent(),
+            "returns all shipping zones"
         );
     }
 }
