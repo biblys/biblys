@@ -37,10 +37,7 @@ class ShippingOptionQueryTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $country = ModelFactory::createCountry();
-        $fee = ModelFactory::createShippingOption(
-            site: $site,
-            country: $country,
-        );
+        $fee = ModelFactory::createShippingOption(site: $site, country: $country);
         $orderWeight = 500;
         $orderAmount = 1500;
         $currentSite = new CurrentSite($site);
