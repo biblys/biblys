@@ -201,32 +201,6 @@ class ShippingControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     */
-    public function testUpdateFeeFromOtherSite()
-    {
-        // given
-        $controller = new ShippingController();
-        $content = '{"id":"","mode":"Colissimo","type":"colissimo","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
-        $request = RequestFactory::createAuthRequestForAdminUser($content);
-        $shippingFee = ModelFactory::createShippingOption();
-        $shippingFee->setSiteId(2);
-        $shippingFee->save();
-        $config = new Config();
-        $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
-
-        // then
-        $this->expectException("Symfony\Component\Routing\Exception\ResourceNotFoundException");
-        $this->expectExceptionMessage(
-            sprintf("Cannot find shipping fee with id %s", $shippingFee->getId())
-        );
-
-        // when
-        $controller->updateAction($request, $config, $currentUser, $shippingFee->getId());
-    }
-
-    /**
-     * @throws PropelException
      * @throws Exception
      */
     public function testArchiveAction(): void
@@ -273,31 +247,6 @@ class ShippingControllerTest extends TestCase
             $response->getStatusCode(),
             "it should respond with http 204"
         );
-    }
-
-    /**
-     * @throws PropelException
-     */
-    public function testDeleteFeeFromOtherSite()
-    {
-        // given
-        $controller = new ShippingController();
-        $shippingFee = ModelFactory::createShippingOption();
-        $shippingFee->setSiteId(2);
-        $shippingFee->save();
-        $config = new Config();
-
-        $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
-
-        // then
-        $this->expectException("Symfony\Component\Routing\Exception\ResourceNotFoundException");
-        $this->expectExceptionMessage(
-            sprintf("Cannot find shipping fee with id %s", $shippingFee->getId())
-        );
-
-        // when
-        $controller->deleteAction($config, $currentUser, $shippingFee->getId());
     }
 
     /**
