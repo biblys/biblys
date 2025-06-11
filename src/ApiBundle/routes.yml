@@ -110,6 +110,11 @@ api_shipping_get:
   methods: GET
   controller: ApiBundle\Controller\ShippingController::get
 
+api_shipping_zones:
+  methods: GET
+  path: /api/admin/shipping/zones
+  controller: ApiBundle\Controller\ShippingController::zonesAction
+
 # Legacy
 
 legacy_x_adm_article_award:
