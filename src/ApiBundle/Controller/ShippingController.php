@@ -27,6 +27,7 @@ use Framework\Controller;
 use Model\CountryQuery;
 use Model\ShippingOption;
 use Model\ShippingOptionQuery;
+use Model\ShippingZoneQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -297,5 +298,25 @@ class ShippingController extends Controller
             );
         }
         return $fee;
+    }
+
+    /**
+     * @route GET /api/admin/shipping/zones
+     * @throws PropelException
+     */
+    public function zonesAction(CurrentUser $currentUser): JsonResponse
+    {
+        $currentUser->authAdmin();
+
+        $zones = ShippingZoneQuery::create()->find();
+
+        $serializedZones = array_map(function ($zone) {
+            return [
+                "id" => $zone->getId(),
+                "name" => $zone->getName(),
+            ];
+        }, $zones->getData());
+
+        return new JsonResponse($serializedZones);
     }
 }
