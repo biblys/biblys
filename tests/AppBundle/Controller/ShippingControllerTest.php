@@ -20,6 +20,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentUser;
 use Biblys\Test\Helpers;
+use Biblys\Test\ModelFactory;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -96,5 +97,34 @@ class ShippingControllerTest extends TestCase
         // then
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString("France", $response->getContent());
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws Exception
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws \Exception
+     */
+    public function testZoneCountriesAction(): void
+    {
+        // given
+        $controller = new ShippingController();
+
+        $zone = ModelFactory::createShippingZone(name: "Zone 51");
+        ModelFactory::createCountry(name: "Nevada", shippingZone: $zone);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->expects($this->once())->method("authAdmin");
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->zoneCountriesAction($currentUser, $templateService, $zone->getId());
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Zone 51", $response->getContent());
+        $this->assertStringContainsString("Nevada", $response->getContent());
     }
 }
