@@ -33,19 +33,11 @@ use Model\Base\ShippingOptionQuery as BaseShippingOptionQuery;
  */
 class ShippingOptionQuery extends BaseShippingOptionQuery
 {
-    public static function createForSite(CurrentSite $currentSite): ShippingOptionQuery
-    {
-        $query = parent::create();
-        $query->filterBySiteId($currentSite->getSite()->getId());
-        return $query;
-    }
-
     /**
      * @return ShippingOption[]
      * @throws Exception
      */
     public static function getForCountryAndWeightAndAmountAndArticleCount(
-        CurrentSite $currentSite,
         Country $country,
         int $weight,
         int $amount,
@@ -54,13 +46,13 @@ class ShippingOptionQuery extends BaseShippingOptionQuery
     {
         $zonesForCountry = $country->getShippingZones();
 
-        $query = self::createForSite($currentSite);
+        $query = self::create();
         $fees = $query->orderByFee()->find();
 
         $shippingTypes = ['magasin', 'normal', 'colissimo', 'mondial-relay'];
 
         $feesForEachTypes = array_map(
-            function ($type) use ($fees, $zonesForCountry, $weight, $amount, $currentSite, $articleCount) {
+            function ($type) use ($fees, $zonesForCountry, $weight, $amount, $articleCount) {
                 /** @var ShippingOption $fee */
                 foreach ($fees as $fee) {
                     // Keeps only active fees

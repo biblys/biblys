@@ -21,7 +21,6 @@ namespace ApiBundle\Controller;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
-use Biblys\Service\InvalidSiteIdException;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Exception;
@@ -43,6 +42,7 @@ class ShippingControllerTest extends TestCase
      */
     protected function setUp(): void
     {
+        ShippingOptionQuery::create()->deleteAll();
         ShippingZoneQuery::create()->deleteAll();
     }
 
@@ -53,64 +53,51 @@ class ShippingControllerTest extends TestCase
     public function testIndexAction()
     {
         // given
-        $site = ModelFactory::createSite();
+        $controller = new ShippingController();
+
 
         $shippingZone1 = ModelFactory::createShippingZone(name: "Zone 1");
         $shippingZone2 = ModelFactory::createShippingZone(name: "Zone 2");
 
         $shippingFee1 = new ShippingOption();
-        $shippingFee1->setSiteId($site->getId());
         $shippingFee1->setType("Type C");
         $shippingFee1->setZoneCode("Z2");
         $shippingFee1->setShippingZone($shippingZone2);
         $shippingFee1->setFee(100);
         $shippingFee1->save();
         $shippingFee2 = new ShippingOption();
-        $shippingFee2->setSiteId($site->getId());
         $shippingFee2->setType("Type B");
         $shippingFee2->setZoneCode("Z2");
         $shippingFee2->setShippingZone($shippingZone2);
         $shippingFee2->setFee(100);
         $shippingFee2->save();
         $shippingFee3 = new ShippingOption();
-        $shippingFee3->setSiteId($site->getId());
         $shippingFee3->setType("Type A");
         $shippingFee3->setZoneCode("Z2");
         $shippingFee3->setShippingZone($shippingZone2);
         $shippingFee3->setFee(100);
         $shippingFee3->save();
         $shippingFee4 = new ShippingOption();
-        $shippingFee4->setSiteId($site->getId());
         $shippingFee4->setType("Type A");
         $shippingFee4->setZoneCode("Z1");
         $shippingFee4->setShippingZone($shippingZone1);
         $shippingFee4->setFee(100);
         $shippingFee4->save();
         $shippingFee5 = new ShippingOption();
-        $shippingFee5->setSiteId($site->getId());
         $shippingFee5->setType("Type A");
         $shippingFee5->setZoneCode("Z1");
         $shippingFee5->setShippingZone($shippingZone1);
         $shippingFee5->setFee(90);
         $shippingFee5->save();
         $archivedShippingFee = new ShippingOption();
-        $archivedShippingFee->setSiteId($site->getId());
         $archivedShippingFee->archive();
         $archivedShippingFee->save();
 
-        $otherSite = ModelFactory::createSite();
-        $otherSiteShippingFee = new ShippingOption();
-        $otherSiteShippingFee->setSiteId($otherSite->getId());
-        $otherSiteShippingFee->save();
-        $controller = new ShippingController();
-
-        $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
 
         // when
-        $response = $controller->indexAction($currentSite, $currentUser);
+        $response = $controller->indexAction($currentUser);
 
         // then
         $this->assertEquals(
@@ -203,7 +190,6 @@ class ShippingControllerTest extends TestCase
         $shippingZone = ModelFactory::createShippingZone(name: "Zone Outre-Mer 2");
         $shippingFee = ModelFactory::createShippingOption();
 
-        $config = new Config();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
 
@@ -212,7 +198,6 @@ class ShippingControllerTest extends TestCase
         $request = RequestFactory::createAuthRequestForAdminUser($content);
         $response = $controller->updateAction(
             $request,
-            $config,
             $currentUser,
             $shippingFee->getId()
         );
@@ -272,12 +257,11 @@ class ShippingControllerTest extends TestCase
         // given
         $controller = new ShippingController();
         $shippingFee = ModelFactory::createShippingOption();
-        $config = new Config();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
 
         // when
-        $response = $controller->deleteAction($config, $currentUser, $shippingFee->getId());
+        $response = $controller->deleteAction($currentUser, $shippingFee->getId());
 
         // then
         $this->assertEquals(
@@ -388,12 +372,10 @@ class ShippingControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws InvalidSiteIdException
      */
     public function testGetAction()
     {
         // given
-        $config = new Config();
         $zone = ModelFactory::createShippingZone(name: "Zone France");
         $country = ModelFactory::createCountry(shippingZone: $zone);
         $shippingOption = ModelFactory::createShippingOption(
@@ -412,7 +394,7 @@ class ShippingControllerTest extends TestCase
         $controller = new ShippingController();
 
         // when
-        $response = $controller->get($config, $shippingOption->getId());
+        $response = $controller->get($shippingOption->getId());
 
         // then
         $expectedResponse = [

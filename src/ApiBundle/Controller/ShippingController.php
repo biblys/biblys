@@ -21,7 +21,6 @@ namespace ApiBundle\Controller;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
-use Biblys\Service\InvalidSiteIdException;
 use Exception;
 use Framework\Controller;
 use Model\CountryQuery;
@@ -37,7 +36,6 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class ShippingController extends Controller
 {
-
     /**
      * Returns shipping fees.
      *
@@ -45,14 +43,11 @@ class ShippingController extends Controller
      *
      * @throws Exception
      */
-    public function indexAction(
-        CurrentSite $currentSite,
-        CurrentUser $currentUser,
-    ): JsonResponse
+    public function indexAction(CurrentUser $currentUser): JsonResponse
     {
         $currentUser->authAdmin();
 
-        $allFees = ShippingOptionQuery::createForSite($currentSite)
+        $allFees = ShippingOptionQuery::create()
             ->filterByArchivedAt(null, Criteria::ISNULL)
             ->orderByType()
             ->orderByZoneCode()
@@ -100,14 +95,13 @@ class ShippingController extends Controller
      */
     public function updateAction(
         Request $request,
-        Config $config,
         CurrentUser $currentUser,
         int $id
     ): JsonResponse
     {
         $currentUser->authAdmin();
 
-        $fee = self::_getFeeFromId($config, $id);
+        $fee = self::_getFeeFromId($id);
         $data = self::_getDataFromRequest($request);
         $fee = self::_hydrateFee($fee, $data);
         $fee->save();
@@ -147,14 +141,13 @@ class ShippingController extends Controller
      * @throws Exception
      */
     public function deleteAction(
-        Config $config,
         CurrentUser $currentUser,
         int $id
     ): JsonResponse
     {
         $currentUser->authAdmin();
 
-        $fee = self::_getFeeFromId($config, $id);
+        $fee = self::_getFeeFromId($id);
         $fee->delete();
 
         return new JsonResponse(null, 204);
@@ -162,12 +155,11 @@ class ShippingController extends Controller
 
     /**
      * @route GET /api/shipping/{id}
-     * @throws InvalidSiteIdException
      * @throws PropelException
      */
-    public function get(Config $config, int $id): JsonResponse
+    public function get(int $id): JsonResponse
     {
-        $fee = self::_getFeeFromId($config, $id);
+        $fee = self::_getFeeFromId($id);
         $json = self::_feeToJson($fee);
         return new JsonResponse($json, 200);
     }
@@ -196,7 +188,6 @@ class ShippingController extends Controller
         $orderAmount = $request->query->get("order_amount", 0);
         $articleCount = $request->query->get("article_count", 0);
         $fees = ShippingOptionQuery::getForCountryAndWeightAndAmountAndArticleCount(
-            $currentSite,
             $country,
             $orderWeight,
             $orderAmount,
@@ -293,12 +284,12 @@ class ShippingController extends Controller
     }
 
     /**
-     * @throws InvalidSiteIdException
+     * @param int $id
+     * @return ShippingOption
      */
-    private static function _getFeeFromId(Config $config, int $id): ShippingOption
+    private static function _getFeeFromId(int $id): ShippingOption
     {
-        $currentSite = CurrentSite::buildFromConfig($config);
-        $fee = ShippingOptionQuery::createForSite($currentSite)->findPk($id);
+        $fee = ShippingOptionQuery::create()->findPk($id);
         if (!$fee) {
             throw new ResourceNotFoundException(
                 sprintf("Cannot find shipping fee with id %s", $id)
