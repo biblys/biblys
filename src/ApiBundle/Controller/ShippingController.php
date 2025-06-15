@@ -48,9 +48,12 @@ class ShippingController extends Controller
         $currentUser->authAdmin();
 
         $allFees = ShippingOptionQuery::create()
+            ->joinWithShippingZone()
             ->filterByArchivedAt(null, Criteria::ISNULL)
             ->orderByType()
-            ->orderByZoneCode()
+            ->useShippingZoneQuery()
+                ->orderByName()
+            ->endUse()
             ->orderByFee()
             ->find();
 
