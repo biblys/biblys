@@ -27,6 +27,8 @@ export default class EntitySearchField {
    * @param {(result: Result) => {}} options.onResultSelected
    */
   constructor(element, options = {}) {
+    this.queryUrl = element.dataset.query_url;
+
     this.searchInput = element.querySelector('.EntitySearchField__search-input');
     this.searchInput.addEventListener('input', this.#onInput.bind(this));
     this.searchInput.addEventListener('focus', this.#onInputFocus.bind(this));
@@ -112,7 +114,7 @@ export default class EntitySearchField {
       window._alert('Veuillez entrer au moins 3 caractères pour la recherche.', { title: 'Erreur lors de la recherche' });
     }
 
-    const response = await fetch(`/pages/adm_article_search?term=${query}`, {
+    const response = await fetch(`${this.queryUrl}?term=${query}`, {
       method: 'GET'
     });
 

@@ -30,6 +30,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <h1>Ajouter un nouvel exemplaire</h1>
 
   {% include "AppBundle:Utils:_entity-search-field.html.twig" with {
+    query_url: "/pages/adm_article_search",
     label: "Rechercher un article par titre, auteur, mot-clé, ISBN...",
     autofocus: true,
     required: true,
