@@ -324,7 +324,6 @@
     <column name="country_code" phpName="Code" type="VARCHAR" size="3"/>
     <column name="country_name" phpName="Name" type="VARCHAR" size="200"/>
     <column name="country_name_en" phpName="NameEn" type="VARCHAR" size="200"/>
-    <column name="shipping_zone" phpName="ShippingZoneCode" type="VARCHAR" size="8"/>
     <column name="country_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="country_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
@@ -1291,7 +1290,6 @@
     <column name="article_id" phpName="ArticleId" type="INTEGER" sqlType="int unsigned"/>
     <column name="shipping_mode" phpName="Mode" type="VARCHAR" size="64"/>
     <column name="shipping_type" phpName="Type" type="VARCHAR" size="16"/>
-    <column name="shipping_zone" phpName="ZoneCode" type="VARCHAR" size="4"/>
     <column name="shipping_zone_id" phpName="ShippingZoneId" type="INTEGER" sqlType="int unsigned"/>
     <foreign-key foreignTable="shipping_zones" skipSql="true">
       <reference local="shipping_zone_id" foreign="id"/>
