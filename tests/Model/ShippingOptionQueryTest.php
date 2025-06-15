@@ -18,7 +18,6 @@
 
 namespace Model;
 
-use Biblys\Service\CurrentSite;
 use Biblys\Test\ModelFactory;
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -41,11 +40,9 @@ class ShippingOptionQueryTest extends TestCase
         $fee = ModelFactory::createShippingOption(site: $site, country: $country, shippingZone: $zone);
         $orderWeight = 500;
         $orderAmount = 1500;
-        $currentSite = new CurrentSite($site);
 
         // when
         $fees = ShippingOptionQuery::getForCountryAndWeightAndAmountAndArticleCount(
-            $currentSite,
             $country,
             $orderWeight,
             $orderAmount,
@@ -81,11 +78,9 @@ class ShippingOptionQueryTest extends TestCase
         );
         $orderWeight = 500;
         $orderAmount = 1500;
-        $currentSite = new CurrentSite($site);
 
         // when
         list(, $returnedFee) = ShippingOptionQuery::getForCountryAndWeightAndAmountAndArticleCount(
-            $currentSite,
             $country,
             $orderWeight,
             $orderAmount,
@@ -113,11 +108,9 @@ class ShippingOptionQueryTest extends TestCase
         $activeFee = ModelFactory::createShippingOption(site: $site, country: $country, shippingZone: $zone);
         $orderWeight = 500;
         $orderAmount = 1500;
-        $currentSite = new CurrentSite($site);
 
         // when
         $returnedFees = ShippingOptionQuery::getForCountryAndWeightAndAmountAndArticleCount(
-            $currentSite,
             $country,
             $orderWeight,
             $orderAmount,
