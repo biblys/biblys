@@ -23,7 +23,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCountryQuery orderByCode($order = Criteria::ASC) Order by the country_code column
  * @method     ChildCountryQuery orderByName($order = Criteria::ASC) Order by the country_name column
  * @method     ChildCountryQuery orderByNameEn($order = Criteria::ASC) Order by the country_name_en column
- * @method     ChildCountryQuery orderByShippingZoneCode($order = Criteria::ASC) Order by the shipping_zone column
  * @method     ChildCountryQuery orderByCreatedAt($order = Criteria::ASC) Order by the country_created column
  * @method     ChildCountryQuery orderByUpdatedAt($order = Criteria::ASC) Order by the country_updated column
  *
@@ -31,7 +30,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCountryQuery groupByCode() Group by the country_code column
  * @method     ChildCountryQuery groupByName() Group by the country_name column
  * @method     ChildCountryQuery groupByNameEn() Group by the country_name_en column
- * @method     ChildCountryQuery groupByShippingZoneCode() Group by the shipping_zone column
  * @method     ChildCountryQuery groupByCreatedAt() Group by the country_created column
  * @method     ChildCountryQuery groupByUpdatedAt() Group by the country_updated column
  *
@@ -72,7 +70,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCountry|null findOneByCode(string $country_code) Return the first ChildCountry filtered by the country_code column
  * @method     ChildCountry|null findOneByName(string $country_name) Return the first ChildCountry filtered by the country_name column
  * @method     ChildCountry|null findOneByNameEn(string $country_name_en) Return the first ChildCountry filtered by the country_name_en column
- * @method     ChildCountry|null findOneByShippingZoneCode(string $shipping_zone) Return the first ChildCountry filtered by the shipping_zone column
  * @method     ChildCountry|null findOneByCreatedAt(string $country_created) Return the first ChildCountry filtered by the country_created column
  * @method     ChildCountry|null findOneByUpdatedAt(string $country_updated) Return the first ChildCountry filtered by the country_updated column
  *
@@ -83,7 +80,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCountry requireOneByCode(string $country_code) Return the first ChildCountry filtered by the country_code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCountry requireOneByName(string $country_name) Return the first ChildCountry filtered by the country_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCountry requireOneByNameEn(string $country_name_en) Return the first ChildCountry filtered by the country_name_en column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCountry requireOneByShippingZoneCode(string $shipping_zone) Return the first ChildCountry filtered by the shipping_zone column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCountry requireOneByCreatedAt(string $country_created) Return the first ChildCountry filtered by the country_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCountry requireOneByUpdatedAt(string $country_updated) Return the first ChildCountry filtered by the country_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -98,8 +94,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildCountry> findByName(string|array<string> $country_name) Return ChildCountry objects filtered by the country_name column
  * @method     ChildCountry[]|Collection findByNameEn(string|array<string> $country_name_en) Return ChildCountry objects filtered by the country_name_en column
  * @psalm-method Collection&\Traversable<ChildCountry> findByNameEn(string|array<string> $country_name_en) Return ChildCountry objects filtered by the country_name_en column
- * @method     ChildCountry[]|Collection findByShippingZoneCode(string|array<string> $shipping_zone) Return ChildCountry objects filtered by the shipping_zone column
- * @psalm-method Collection&\Traversable<ChildCountry> findByShippingZoneCode(string|array<string> $shipping_zone) Return ChildCountry objects filtered by the shipping_zone column
  * @method     ChildCountry[]|Collection findByCreatedAt(string|array<string> $country_created) Return ChildCountry objects filtered by the country_created column
  * @psalm-method Collection&\Traversable<ChildCountry> findByCreatedAt(string|array<string> $country_created) Return ChildCountry objects filtered by the country_created column
  * @method     ChildCountry[]|Collection findByUpdatedAt(string|array<string> $country_updated) Return ChildCountry objects filtered by the country_updated column
@@ -203,7 +197,7 @@ abstract class CountryQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT country_id, country_code, country_name, country_name_en, shipping_zone, country_created, country_updated FROM countries WHERE country_id = :p0';
+        $sql = 'SELECT country_id, country_code, country_name, country_name_en, country_created, country_updated FROM countries WHERE country_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -420,34 +414,6 @@ abstract class CountryQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(CountryTableMap::COL_COUNTRY_NAME_EN, $nameEn, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the shipping_zone column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByShippingZoneCode('fooValue');   // WHERE shipping_zone = 'fooValue'
-     * $query->filterByShippingZoneCode('%fooValue%', Criteria::LIKE); // WHERE shipping_zone LIKE '%fooValue%'
-     * $query->filterByShippingZoneCode(['foo', 'bar']); // WHERE shipping_zone IN ('foo', 'bar')
-     * </code>
-     *
-     * @param string|string[] $shippingZoneCode The value to use as filter.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByShippingZoneCode($shippingZoneCode = null, ?string $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($shippingZoneCode)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(CountryTableMap::COL_SHIPPING_ZONE, $shippingZoneCode, $comparison);
 
         return $this;
     }

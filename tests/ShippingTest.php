@@ -67,14 +67,12 @@ class ShippingTest extends PHPUnit\Framework\TestCase
         $sm = new ShippingManager();
 
         $shipping->set('shipping_mode', 'Shipping mode');
-        $shipping->set('shipping_zone', 'F');
         $sm->update($shipping);
 
         $updatedShipping = $sm->getById($shipping->get('id'));
 
         $this->assertTrue($updatedShipping->has('updated'));
         $this->assertEquals('Shipping mode', $updatedShipping->get('mode'));
-        $this->assertEquals('F', $updatedShipping->get('zone'));
 
         return $updatedShipping;
     }
