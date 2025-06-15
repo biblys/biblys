@@ -98,6 +98,30 @@ class ShippingController extends Controller
     }
 
     /**
+     * @route GET /admin/shipping/zones/{id}/countries
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function zoneCountriesAction(
+        CurrentUser $currentUser,
+        TemplateService $templateService,
+        int $id,
+    ): Response
+    {
+        $currentUser->authAdmin();
+
+        $zone = ShippingZoneQuery::create()->findPk($id);
+
+        return $templateService->renderResponse(
+            "AppBundle:Shipping:zone_countries.html.twig",
+            ["zone" => $zone],
+            isPrivate: true,
+        );
+    }
+
+    /**
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
