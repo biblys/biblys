@@ -18,8 +18,10 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\BodyParamsService;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\FlashMessagesService;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use DansMaCulotte\MondialRelay\DeliveryChoice;
@@ -27,8 +29,12 @@ use Exception;
 use Framework\Controller;
 use Model\CountryQuery;
 use Model\ShippingZoneQuery;
+use Payplug\Exception\NotFoundException;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -119,6 +125,45 @@ class ShippingController extends Controller
             ["zone" => $zone],
             isPrivate: true,
         );
+    }
+
+    /**
+     * @route POST /admin/shipping/zones/{id}/countries
+     * @throws PropelException
+     * @throws NotFoundException
+     */
+    public function zoneRemoveCountryAction(
+        CurrentUser $currentUser,
+        BodyParamsService $bodyParamsService,
+        FlashMessagesService $flashMessagesService,
+        UrlGenerator $urlGenerator,
+        int $id,
+    ): RedirectResponse
+    {
+        $currentUser->authAdmin();
+
+        $zone = ShippingZoneQuery::create()->findPk($id);
+        if (!$zone) {
+            throw new NotFoundException("Zone introuvable.");
+        }
+
+        $bodyParamsService->parse(["country_id" => ["type" => "numeric"]]);
+
+        $countryId = $bodyParamsService->getInteger("country_id");
+        $country = CountryQuery::create()->findPk($countryId);
+        if (!$country) {
+            throw new BadRequestHttpException("Pays introuvable.");
+        }
+
+        $zone->removeCountry($country);
+        $zone->save();
+
+        $flashMessagesService->add("success",
+            "Le pays « {$country->getName()} » a été retiré de la zone « {$zone->getName()} »."
+        );
+
+        $zoneCountriesUrl = $urlGenerator->generate("shipping_zones_countries", ["id" => $zone->getId()]);
+        return new RedirectResponse($zoneCountriesUrl);
     }
 
     /**
