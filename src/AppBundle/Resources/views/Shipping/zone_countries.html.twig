@@ -59,5 +59,32 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         </tr>
       {% endfor %}
     </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3">
+          <form id="add-country-form" action="{{ path('shipping_zones_add_country', { id: zone.id }) }}" method="post">
+            {% include "AppBundle:Utils:_entity-search-field.html.twig" with {
+              query_url: path('api_countries_search'),
+              label: "Ajouter un pays…",
+              required: true,
+              input_name: "country_id",
+            } %}
+          </form>
+
+          <script type="module">
+            import EntitySearchField from '/common/js/entity-search-field.js';
+
+            document.addEventListener('DOMContentLoaded', function() {
+              const field = document.getElementById('entity-search-field');
+              const form = document.getElementById('add-country-form');
+              new EntitySearchField(field, {
+                onResultSelected: () => form.submit(),
+              });
+            });
+          </script>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
 
 {% endblock %}
