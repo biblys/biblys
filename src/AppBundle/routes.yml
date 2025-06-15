@@ -722,6 +722,13 @@ shipping_zones:
   path: /admin/shipping/zones
   controller: AppBundle\Controller\ShippingController::zonesAction
 
+shipping_zones_countries:
+  methods: GET
+  path: /admin/shipping/zones/{id}/countries
+  controller: AppBundle\Controller\ShippingController::zoneCountriesAction
+  requirements:
+    id: \d+
+
 shipping_select_pickup_point:
   path: /shipping/select-pickup-point
   controller: AppBundle\Controller\ShippingController::selectPickupPointAction

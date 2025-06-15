@@ -17,43 +17,37 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% extends "layout:admin.html.twig" %}
 
 {% block title %}
-  Expédition · Zones tarifaires
+  Zone {{ zone.name }} · Expédition
 {% endblock %}
 
 {% block main %}
 
   {% include "AppBundle:Shipping:_admin_navigation.html.twig" with { active: "zones" } %}
 
-  <table class="table table-striped">
+  <h2>Zone «&nbsp;{{ zone.name }}&nbsp;»</h2>
+
+  <p>{{ zone.description }}</p>
+
+  <h3>Pays</h3>
+
+  <table class="table table-striped mt-4">
     <thead>
       <tr>
-        <th>Zone</th>
-        <th></th>
+        <th>Nom</th>
+        <th>Code ISO</th>
       </tr>
     </thead>
     <tbody>
-      {% for zone in zones %}
+      {% for country in zone.countries %}
         <tr>
-          <td>
-            <p>
-              {{ zone.name }}<br />
-              <span class="text-muted">{{ zone.description }}</span>
-            </p>
-          </td>
-          <td>
-            <a href="{{ path('shipping_zones_countries', { id: zone.id }) }}" class="btn btn-info btn-sm">
-              <i class="fa-solid fa-map"></i>
-              {{ zone.countries.count }}
-              pays
-            </a>
-          </td>
+          <td>{{ country.name }}</td>
+          <td>{{ country.code }}</td>
         </tr>
       {% else %}
         <tr>
-          <td colspan="2" class="text-center">Aucune zone tarifaire définie.</td>
+          <td colspan="2" class="text-center">Aucun pays associé à cette zone.</td>
         </tr>
       {% endfor %}
     </tbody>
-  </table>
 
 {% endblock %}
