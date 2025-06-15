@@ -102,13 +102,6 @@ abstract class Country implements ActiveRecordInterface
     protected $country_name_en;
 
     /**
-     * The value for the shipping_zone field.
-     *
-     * @var        string|null
-     */
-    protected $shipping_zone;
-
-    /**
      * The value for the country_created field.
      *
      * @var        DateTime|null
@@ -443,16 +436,6 @@ abstract class Country implements ActiveRecordInterface
     }
 
     /**
-     * Get the [shipping_zone] column value.
-     *
-     * @return string|null
-     */
-    public function getShippingZoneCode()
-    {
-        return $this->shipping_zone;
-    }
-
-    /**
      * Get the [optionally formatted] temporal [country_created] column value.
      *
      *
@@ -577,26 +560,6 @@ abstract class Country implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [shipping_zone] column.
-     *
-     * @param string|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setShippingZoneCode($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->shipping_zone !== $v) {
-            $this->shipping_zone = $v;
-            $this->modifiedColumns[CountryTableMap::COL_SHIPPING_ZONE] = true;
-        }
-
-        return $this;
-    }
-
-    /**
      * Sets the value of [country_created] column to a normalized version of the date/time value specified.
      *
      * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
@@ -684,16 +647,13 @@ abstract class Country implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : CountryTableMap::translateFieldName('NameEn', TableMap::TYPE_PHPNAME, $indexType)];
             $this->country_name_en = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : CountryTableMap::translateFieldName('ShippingZoneCode', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->shipping_zone = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : CountryTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : CountryTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->country_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : CountryTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : CountryTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -706,7 +666,7 @@ abstract class Country implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = CountryTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = CountryTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Country'), 0, $e);
@@ -1002,9 +962,6 @@ abstract class Country implements ActiveRecordInterface
         if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_NAME_EN)) {
             $modifiedColumns[':p' . $index++]  = 'country_name_en';
         }
-        if ($this->isColumnModified(CountryTableMap::COL_SHIPPING_ZONE)) {
-            $modifiedColumns[':p' . $index++]  = 'shipping_zone';
-        }
         if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_CREATED)) {
             $modifiedColumns[':p' . $index++]  = 'country_created';
         }
@@ -1036,10 +993,6 @@ abstract class Country implements ActiveRecordInterface
                         break;
                     case 'country_name_en':
                         $stmt->bindValue($identifier, $this->country_name_en, PDO::PARAM_STR);
-
-                        break;
-                    case 'shipping_zone':
-                        $stmt->bindValue($identifier, $this->shipping_zone, PDO::PARAM_STR);
 
                         break;
                     case 'country_created':
@@ -1125,12 +1078,9 @@ abstract class Country implements ActiveRecordInterface
                 return $this->getNameEn();
 
             case 4:
-                return $this->getShippingZoneCode();
-
-            case 5:
                 return $this->getCreatedAt();
 
-            case 6:
+            case 5:
                 return $this->getUpdatedAt();
 
             default:
@@ -1165,16 +1115,15 @@ abstract class Country implements ActiveRecordInterface
             $keys[1] => $this->getCode(),
             $keys[2] => $this->getName(),
             $keys[3] => $this->getNameEn(),
-            $keys[4] => $this->getShippingZoneCode(),
-            $keys[5] => $this->getCreatedAt(),
-            $keys[6] => $this->getUpdatedAt(),
+            $keys[4] => $this->getCreatedAt(),
+            $keys[5] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[5]] instanceof \DateTimeInterface) {
-            $result[$keys[5]] = $result[$keys[5]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[4]] instanceof \DateTimeInterface) {
+            $result[$keys[4]] = $result[$keys[4]]->format('Y-m-d H:i:s.u');
         }
 
-        if ($result[$keys[6]] instanceof \DateTimeInterface) {
-            $result[$keys[6]] = $result[$keys[6]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[5]] instanceof \DateTimeInterface) {
+            $result[$keys[5]] = $result[$keys[5]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1262,12 +1211,9 @@ abstract class Country implements ActiveRecordInterface
                 $this->setNameEn($value);
                 break;
             case 4:
-                $this->setShippingZoneCode($value);
-                break;
-            case 5:
                 $this->setCreatedAt($value);
                 break;
-            case 6:
+            case 5:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1309,13 +1255,10 @@ abstract class Country implements ActiveRecordInterface
             $this->setNameEn($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setShippingZoneCode($arr[$keys[4]]);
+            $this->setCreatedAt($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setCreatedAt($arr[$keys[5]]);
-        }
-        if (array_key_exists($keys[6], $arr)) {
-            $this->setUpdatedAt($arr[$keys[6]]);
+            $this->setUpdatedAt($arr[$keys[5]]);
         }
 
         return $this;
@@ -1371,9 +1314,6 @@ abstract class Country implements ActiveRecordInterface
         }
         if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_NAME_EN)) {
             $criteria->add(CountryTableMap::COL_COUNTRY_NAME_EN, $this->country_name_en);
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_SHIPPING_ZONE)) {
-            $criteria->add(CountryTableMap::COL_SHIPPING_ZONE, $this->shipping_zone);
         }
         if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_CREATED)) {
             $criteria->add(CountryTableMap::COL_COUNTRY_CREATED, $this->country_created);
@@ -1472,7 +1412,6 @@ abstract class Country implements ActiveRecordInterface
         $copyObj->setCode($this->getCode());
         $copyObj->setName($this->getName());
         $copyObj->setNameEn($this->getNameEn());
-        $copyObj->setShippingZoneCode($this->getShippingZoneCode());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
 
@@ -2412,7 +2351,6 @@ abstract class Country implements ActiveRecordInterface
         $this->country_code = null;
         $this->country_name = null;
         $this->country_name_en = null;
-        $this->shipping_zone = null;
         $this->country_created = null;
         $this->country_updated = null;
         $this->alreadyInSave = false;

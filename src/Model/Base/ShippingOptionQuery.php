@@ -24,7 +24,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingOptionQuery orderByArticleId($order = Criteria::ASC) Order by the article_id column
  * @method     ChildShippingOptionQuery orderByMode($order = Criteria::ASC) Order by the shipping_mode column
  * @method     ChildShippingOptionQuery orderByType($order = Criteria::ASC) Order by the shipping_type column
- * @method     ChildShippingOptionQuery orderByZoneCode($order = Criteria::ASC) Order by the shipping_zone column
  * @method     ChildShippingOptionQuery orderByShippingZoneId($order = Criteria::ASC) Order by the shipping_zone_id column
  * @method     ChildShippingOptionQuery orderByMinWeight($order = Criteria::ASC) Order by the shipping_min_weight column
  * @method     ChildShippingOptionQuery orderByMaxWeight($order = Criteria::ASC) Order by the shipping_max_weight column
@@ -42,7 +41,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingOptionQuery groupByArticleId() Group by the article_id column
  * @method     ChildShippingOptionQuery groupByMode() Group by the shipping_mode column
  * @method     ChildShippingOptionQuery groupByType() Group by the shipping_type column
- * @method     ChildShippingOptionQuery groupByZoneCode() Group by the shipping_zone column
  * @method     ChildShippingOptionQuery groupByShippingZoneId() Group by the shipping_zone_id column
  * @method     ChildShippingOptionQuery groupByMinWeight() Group by the shipping_min_weight column
  * @method     ChildShippingOptionQuery groupByMaxWeight() Group by the shipping_max_weight column
@@ -93,7 +91,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingOption|null findOneByArticleId(int $article_id) Return the first ChildShippingOption filtered by the article_id column
  * @method     ChildShippingOption|null findOneByMode(string $shipping_mode) Return the first ChildShippingOption filtered by the shipping_mode column
  * @method     ChildShippingOption|null findOneByType(string $shipping_type) Return the first ChildShippingOption filtered by the shipping_type column
- * @method     ChildShippingOption|null findOneByZoneCode(string $shipping_zone) Return the first ChildShippingOption filtered by the shipping_zone column
  * @method     ChildShippingOption|null findOneByShippingZoneId(int $shipping_zone_id) Return the first ChildShippingOption filtered by the shipping_zone_id column
  * @method     ChildShippingOption|null findOneByMinWeight(int $shipping_min_weight) Return the first ChildShippingOption filtered by the shipping_min_weight column
  * @method     ChildShippingOption|null findOneByMaxWeight(int $shipping_max_weight) Return the first ChildShippingOption filtered by the shipping_max_weight column
@@ -114,7 +111,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingOption requireOneByArticleId(int $article_id) Return the first ChildShippingOption filtered by the article_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingOption requireOneByMode(string $shipping_mode) Return the first ChildShippingOption filtered by the shipping_mode column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingOption requireOneByType(string $shipping_type) Return the first ChildShippingOption filtered by the shipping_type column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingOption requireOneByZoneCode(string $shipping_zone) Return the first ChildShippingOption filtered by the shipping_zone column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingOption requireOneByShippingZoneId(int $shipping_zone_id) Return the first ChildShippingOption filtered by the shipping_zone_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingOption requireOneByMinWeight(int $shipping_min_weight) Return the first ChildShippingOption filtered by the shipping_min_weight column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingOption requireOneByMaxWeight(int $shipping_max_weight) Return the first ChildShippingOption filtered by the shipping_max_weight column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -140,8 +136,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildShippingOption> findByMode(string|array<string> $shipping_mode) Return ChildShippingOption objects filtered by the shipping_mode column
  * @method     ChildShippingOption[]|Collection findByType(string|array<string> $shipping_type) Return ChildShippingOption objects filtered by the shipping_type column
  * @psalm-method Collection&\Traversable<ChildShippingOption> findByType(string|array<string> $shipping_type) Return ChildShippingOption objects filtered by the shipping_type column
- * @method     ChildShippingOption[]|Collection findByZoneCode(string|array<string> $shipping_zone) Return ChildShippingOption objects filtered by the shipping_zone column
- * @psalm-method Collection&\Traversable<ChildShippingOption> findByZoneCode(string|array<string> $shipping_zone) Return ChildShippingOption objects filtered by the shipping_zone column
  * @method     ChildShippingOption[]|Collection findByShippingZoneId(int|array<int> $shipping_zone_id) Return ChildShippingOption objects filtered by the shipping_zone_id column
  * @psalm-method Collection&\Traversable<ChildShippingOption> findByShippingZoneId(int|array<int> $shipping_zone_id) Return ChildShippingOption objects filtered by the shipping_zone_id column
  * @method     ChildShippingOption[]|Collection findByMinWeight(int|array<int> $shipping_min_weight) Return ChildShippingOption objects filtered by the shipping_min_weight column
@@ -263,7 +257,7 @@ abstract class ShippingOptionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT shipping_id, site_id, article_id, shipping_mode, shipping_type, shipping_zone, shipping_zone_id, shipping_min_weight, shipping_max_weight, shipping_max_articles, shipping_min_amount, shipping_max_amount, shipping_fee, shipping_info, shipping_created, shipping_updated, shipping_archived_at FROM shipping WHERE shipping_id = :p0';
+        $sql = 'SELECT shipping_id, site_id, article_id, shipping_mode, shipping_type, shipping_zone_id, shipping_min_weight, shipping_max_weight, shipping_max_articles, shipping_min_amount, shipping_max_amount, shipping_fee, shipping_info, shipping_created, shipping_updated, shipping_archived_at FROM shipping WHERE shipping_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -538,34 +532,6 @@ abstract class ShippingOptionQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_TYPE, $type, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the shipping_zone column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByZoneCode('fooValue');   // WHERE shipping_zone = 'fooValue'
-     * $query->filterByZoneCode('%fooValue%', Criteria::LIKE); // WHERE shipping_zone LIKE '%fooValue%'
-     * $query->filterByZoneCode(['foo', 'bar']); // WHERE shipping_zone IN ('foo', 'bar')
-     * </code>
-     *
-     * @param string|string[] $zoneCode The value to use as filter.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByZoneCode($zoneCode = null, ?string $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($zoneCode)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(ShippingOptionTableMap::COL_SHIPPING_ZONE, $zoneCode, $comparison);
 
         return $this;
     }
