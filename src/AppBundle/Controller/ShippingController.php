@@ -131,6 +131,47 @@ class ShippingController extends Controller
      * @route POST /admin/shipping/zones/{id}/countries
      * @throws PropelException
      * @throws NotFoundException
+     * @throws BadRequestHttpException
+     */
+    public function zoneAddCountryAction(
+        CurrentUser $currentUser,
+        BodyParamsService $bodyParamsService,
+        FlashMessagesService $flashMessagesService,
+        UrlGenerator $urlGenerator,
+        int $id,
+    ): RedirectResponse
+    {
+        $currentUser->authAdmin();
+
+        $zone = ShippingZoneQuery::create()->findPk($id);
+        if (!$zone) {
+            throw new NotFoundException("Zone introuvable.");
+        }
+
+        $bodyParamsService->parse(["country_id" => ["type" => "numeric"]]);
+
+        $countryId = $bodyParamsService->getInteger("country_id");
+        $country = CountryQuery::create()->findPk($countryId);
+        if (!$country) {
+            throw new BadRequestHttpException("Pays introuvable.");
+        }
+
+        $zone->addCountry($country);
+        $zone->save();
+
+        $flashMessagesService->add("success",
+            "Le pays « {$country->getName()} » a été ajouté à la zone « {$zone->getName()} »."
+        );
+
+        $zoneCountriesUrl = $urlGenerator->generate("shipping_zones_countries", ["id" => $zone->getId()]);
+        return new RedirectResponse($zoneCountriesUrl);
+    }
+
+
+    /**
+     * @route POST /admin/shipping/zones/{id}/countries
+     * @throws PropelException
+     * @throws NotFoundException
      */
     public function zoneRemoveCountryAction(
         CurrentUser $currentUser,

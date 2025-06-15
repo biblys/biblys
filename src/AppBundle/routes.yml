@@ -729,6 +729,13 @@ shipping_zones_countries:
   requirements:
     id: \d+
 
+shipping_zones_add_country:
+  methods: POST
+  path: /admin/shipping/zones/{id}/countries/add
+  controller: AppBundle\Controller\ShippingController::zoneAddCountryAction
+  requirements:
+    id: \d+
+
 shipping_zones_remove_country:
   methods: POST
   path: /admin/shipping/zones/{id}/countries/remove
