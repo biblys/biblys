@@ -35,6 +35,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <tr>
         <th>Nom</th>
         <th>Code ISO</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -42,6 +43,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <tr>
           <td>{{ country.name }}</td>
           <td>{{ country.code }}</td>
+          <td class="text-right">
+            <form method="post" action="{{ path('shipping_zones_remove_country', { id: zone.id }) }}">
+              <input type="hidden" name="country_id" value="{{ country.id }}">
+              <button type="submit" class="btn btn-danger btn-sm">
+                <i class="fa-solid fa-xmark-circle"></i>
+                Retirer
+              </button>
+            </form>
+          </td>
         </tr>
       {% else %}
         <tr>

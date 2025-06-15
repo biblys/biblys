@@ -729,6 +729,13 @@ shipping_zones_countries:
   requirements:
     id: \d+
 
+shipping_zones_remove_country:
+  methods: POST
+  path: /admin/shipping/zones/{id}/countries/remove
+  controller: AppBundle\Controller\ShippingController::zoneRemoveCountryAction
+  requirements:
+    id: \d+
+
 shipping_select_pickup_point:
   path: /shipping/select-pickup-point
   controller: AppBundle\Controller\ShippingController::selectPickupPointAction
