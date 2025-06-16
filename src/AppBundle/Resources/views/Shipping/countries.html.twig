@@ -29,7 +29,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <tr>
         <th>Nom</th>
         <th>Code ISO</th>
-        <th>Zone</th>
+        <th>Zones</th>
       </tr>
     </thead>
     <tbody>
@@ -39,7 +39,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           <td>{{ country.code }}</td>
           <td>
             {% for zone in country.shippingZones %}
-              {{ zone.name }}{% if not loop.last %}, {% endif %}
+              <a href="{{ path('shipping_zones_countries', { id: zone.id }) }}#country_{{ country.code }}">{{ zone.name }}</a>{% if not loop.last %}, {% endif %}
             {% endfor %}
           </td>
         </tr>
