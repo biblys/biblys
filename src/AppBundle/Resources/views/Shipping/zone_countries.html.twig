@@ -1,0 +1,89 @@
+{#
+Copyright (C) 2024 Clément Latzarus
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+{% extends "layout:admin.html.twig" %}
+
+{% block title %}
+  Pays de la zone {{ zone.name }} · Expédition
+{% endblock %}
+
+{% block main %}
+
+  {% include "AppBundle:Shipping:_admin_navigation.html.twig" with { active: "zones" } %}
+
+  <h2>
+    <span class="fa-solid fa-map"></span>
+    Pays de la zone «&nbsp;{{ zone.name }}&nbsp;»
+  </h2>
+
+  <table class="table table-striped mt-4">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Code ISO</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for country in zone.countries %}
+        <tr>
+          <td>{{ country.name }}</td>
+          <td>{{ country.code }}</td>
+          <td class="text-right">
+            <form method="post" action="{{ path('shipping_zones_remove_country', { id: zone.id }) }}">
+              <input type="hidden" name="country_id" value="{{ country.id }}">
+              <button type="submit" class="btn btn-danger btn-sm">
+                <i class="fa-solid fa-xmark-circle"></i>
+                Retirer
+              </button>
+            </form>
+          </td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="2" class="text-center">Aucun pays associé à cette zone.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3">
+          <form id="add-country-form" action="{{ path('shipping_zones_add_country', { id: zone.id }) }}" method="post">
+            {% include "AppBundle:Utils:_entity-search-field.html.twig" with {
+              query_url: path('api_countries_search'),
+              label: "Ajouter un pays…",
+              required: true,
+              input_name: "country_id",
+            } %}
+          </form>
+
+          <script type="module">
+            import EntitySearchField from '/common/js/entity-search-field.js';
+
+            document.addEventListener('DOMContentLoaded', function() {
+              const field = document.getElementById('entity-search-field');
+              const form = document.getElementById('add-country-form');
+              new EntitySearchField(field, {
+                onResultSelected: () => form.submit(),
+              });
+            });
+          </script>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+
+{% endblock %}

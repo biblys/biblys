@@ -98,7 +98,7 @@ class CreateSeedsCommand extends Command
         $shippingFee->setSiteId($site->getId());
         $shippingFee->setMode("Expédition France et Monde");
         $shippingFee->setType("normal");
-        $shippingFee->setZoneCode("ALL");
+        $shippingFee->setShippingZoneId(1);
         $shippingFee->setFee(300);
         $shippingFee->save();
         $output->writeln(["Inserted shipping fee: Offerts"]);

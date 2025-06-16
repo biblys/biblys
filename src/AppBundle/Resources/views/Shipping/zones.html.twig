@@ -24,22 +24,36 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
   {% include "AppBundle:Shipping:_admin_navigation.html.twig" with { active: "zones" } %}
 
-  {% for zone in zones %}
-
-    <div class="card mb-4">
-      <h5 class="card-header">Zone {{ zone.code }}</h5>
-      <div class="card-body">
-        <p class="card-subtitle text-muted mb-2">{{ zone.description }}</p>
-        <p class="card-text">
-          <strong>Pays associés :</strong>
-
-          {% for country in zone.countries %}
-            {{ country.name }}{% if not loop.last %}, {% endif %}
-          {% endfor %}
-        </p>
-      </div>
-    </div>
-
-  {% endfor %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Zone</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for zone in zones %}
+        <tr>
+          <td>
+            <p>
+              {{ zone.name }}<br />
+              <span class="text-muted">{{ zone.description }}</span>
+            </p>
+          </td>
+          <td>
+            <a href="{{ path('shipping_zones_countries', { id: zone.id }) }}" class="btn btn-info btn-sm">
+              <i class="fa-solid fa-map"></i>
+              {{ zone.countries.count }}
+              pays
+            </a>
+          </td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="2" class="text-center">Aucune zone tarifaire définie.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
 {% endblock %}
