@@ -41,7 +41,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     <tbody>
       {% for country in zone.countries %}
         <tr>
-          <td>{{ country.name }}</td>
+          <td id="country_{{ country.code }}">{{ country.name }}</td>
           <td>{{ country.code }}</td>
           <td class="text-right">
             <form method="post" action="{{ path('shipping_zones_remove_country', { id: zone.id }) }}">
