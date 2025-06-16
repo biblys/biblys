@@ -54,6 +54,13 @@ api_contribution_delete:
   methods: DELETE
   controller: ApiBundle\Controller\ContributionController::delete
 
+# Countries
+
+api_countries_search:
+  methods: GET
+  path: /api/admin/countries/search
+  controller: ApiBundle\Controller\CountryController::searchAction
+
 # Orders
 
 api_orders_export_colissimo:

@@ -220,12 +220,13 @@ class ModelFactory
      */
     public static function createCountry(
         string       $name = "France",
+        string       $code = "FR",
         ShippingZone $shippingZone = null,
     ): Country
     {
         $country = new Country();
         $country->setName($name);
-        $country->setCode("FR");
+        $country->setCode($code);
         $country->addShippingZone($shippingZone ?? ModelFactory::createShippingZone());
         $country->save();
 
