@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.7.0 (DEV)
+
+### Améliorations
+
+* Il est désormais possible de modifier les pays associés à une zone tarifaire 
+  d'expédition depuis la page d'administration des zones tarifaires.
+
 ## 3.6.1 (11 juin 2025)
 
 ### Corrections

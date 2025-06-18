@@ -195,7 +195,6 @@ return function (Request $request, CurrentSite $currentSite): Response|RedirectR
     if ($country instanceof Country) {
         $countryModel = CountryQuery::create()->findPk($country->get("id"));
         $fees = ShippingOptionQuery::getForCountryAndWeightAndAmountAndArticleCount(
-            $currentSite,
             $countryModel,
             $order->getTotalWeight(),
             $order->get('amount'),

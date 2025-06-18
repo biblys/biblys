@@ -18,7 +18,6 @@
 
 namespace Model;
 
-use Biblys\Service\CurrentSite;
 use Biblys\Test\ModelFactory;
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -26,7 +25,7 @@ use Propel\Runtime\Exception\PropelException;
 
 require_once __DIR__ . "/../setUp.php";
 
-class ShippingFeeQueryTest extends TestCase
+class ShippingOptionQueryTest extends TestCase
 {
     /**
      * @throws PropelException
@@ -36,18 +35,14 @@ class ShippingFeeQueryTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $country = ModelFactory::createCountry();
-        $fee = ModelFactory::createShippingOption(
-            site: $site,
-            country: $country,
-        );
+        $zone = ModelFactory::createShippingZone();
+        $country = ModelFactory::createCountry(shippingZone: $zone);
+        $fee = ModelFactory::createShippingOption(site: $site, country: $country, shippingZone: $zone);
         $orderWeight = 500;
         $orderAmount = 1500;
-        $currentSite = new CurrentSite($site);
 
         // when
-        list(, $feeNormal) = ShippingOptionQuery::getForCountryAndWeightAndAmountAndArticleCount(
-            $currentSite,
+        $fees = ShippingOptionQuery::getForCountryAndWeightAndAmountAndArticleCount(
             $country,
             $orderWeight,
             $orderAmount,
@@ -55,10 +50,8 @@ class ShippingFeeQueryTest extends TestCase
         );
 
         // then
-        $this->assertEquals(
-            $feeNormal,
-            $fee
-        );
+        $feeNormal = $fees[1];
+        $this->assertEquals($feeNormal, $fee);
     }
 
     /**
@@ -69,24 +62,25 @@ class ShippingFeeQueryTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $country = ModelFactory::createCountry();
+        $zone = ModelFactory::createShippingZone();
+        $country = ModelFactory::createCountry(shippingZone: $zone);
         ModelFactory::createShippingOption(
             site: $site,
             country: $country,
-            maxArticles: 1
+            maxArticles: 1,
+            shippingZone: $zone,
         );
         $feeForTwoArticles = ModelFactory::createShippingOption(
             site: $site,
             country: $country,
-            maxArticles: 2
+            maxArticles: 2,
+            shippingZone: $zone,
         );
         $orderWeight = 500;
         $orderAmount = 1500;
-        $currentSite = new CurrentSite($site);
 
         // when
         list(, $returnedFee) = ShippingOptionQuery::getForCountryAndWeightAndAmountAndArticleCount(
-            $currentSite,
             $country,
             $orderWeight,
             $orderAmount,
@@ -108,16 +102,15 @@ class ShippingFeeQueryTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $country = ModelFactory::createCountry();
-        $archivedFee = ModelFactory::createShippingOption(site: $site, country: $country, isArchived: true);
-        $activeFee = ModelFactory::createShippingOption(site: $site, country: $country);
+        $zone = ModelFactory::createShippingZone();
+        $country = ModelFactory::createCountry(shippingZone: $zone);
+        $archivedFee = ModelFactory::createShippingOption(site: $site, country: $country, isArchived: true, shippingZone: $zone);
+        $activeFee = ModelFactory::createShippingOption(site: $site, country: $country, shippingZone: $zone);
         $orderWeight = 500;
         $orderAmount = 1500;
-        $currentSite = new CurrentSite($site);
 
         // when
         $returnedFees = ShippingOptionQuery::getForCountryAndWeightAndAmountAndArticleCount(
-            $currentSite,
             $country,
             $orderWeight,
             $orderAmount,

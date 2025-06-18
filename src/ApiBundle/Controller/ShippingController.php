@@ -21,12 +21,12 @@ namespace ApiBundle\Controller;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
-use Biblys\Service\InvalidSiteIdException;
 use Exception;
 use Framework\Controller;
 use Model\CountryQuery;
 use Model\ShippingOption;
 use Model\ShippingOptionQuery;
+use Model\ShippingZoneQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -36,7 +36,6 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class ShippingController extends Controller
 {
-
     /**
      * Returns shipping fees.
      *
@@ -44,17 +43,17 @@ class ShippingController extends Controller
      *
      * @throws Exception
      */
-    public function indexAction(
-        CurrentSite $currentSite,
-        CurrentUser $currentUser,
-    ): JsonResponse
+    public function indexAction(CurrentUser $currentUser): JsonResponse
     {
         $currentUser->authAdmin();
 
-        $allFees = ShippingOptionQuery::createForSite($currentSite)
+        $allFees = ShippingOptionQuery::create()
+            ->joinWithShippingZone()
             ->filterByArchivedAt(null, Criteria::ISNULL)
             ->orderByType()
-            ->orderByZoneCode()
+            ->useShippingZoneQuery()
+                ->orderByName()
+            ->endUse()
             ->orderByFee()
             ->find();
 
@@ -99,14 +98,13 @@ class ShippingController extends Controller
      */
     public function updateAction(
         Request $request,
-        Config $config,
         CurrentUser $currentUser,
         int $id
     ): JsonResponse
     {
         $currentUser->authAdmin();
 
-        $fee = self::_getFeeFromId($config, $id);
+        $fee = self::_getFeeFromId($id);
         $data = self::_getDataFromRequest($request);
         $fee = self::_hydrateFee($fee, $data);
         $fee->save();
@@ -146,14 +144,13 @@ class ShippingController extends Controller
      * @throws Exception
      */
     public function deleteAction(
-        Config $config,
         CurrentUser $currentUser,
         int $id
     ): JsonResponse
     {
         $currentUser->authAdmin();
 
-        $fee = self::_getFeeFromId($config, $id);
+        $fee = self::_getFeeFromId($id);
         $fee->delete();
 
         return new JsonResponse(null, 204);
@@ -161,11 +158,11 @@ class ShippingController extends Controller
 
     /**
      * @route GET /api/shipping/{id}
-     * @throws InvalidSiteIdException
+     * @throws PropelException
      */
-    public function get(Config $config, int $id): JsonResponse
+    public function get(int $id): JsonResponse
     {
-        $fee = self::_getFeeFromId($config, $id);
+        $fee = self::_getFeeFromId($id);
         $json = self::_feeToJson($fee);
         return new JsonResponse($json, 200);
     }
@@ -194,7 +191,6 @@ class ShippingController extends Controller
         $orderAmount = $request->query->get("order_amount", 0);
         $articleCount = $request->query->get("article_count", 0);
         $fees = ShippingOptionQuery::getForCountryAndWeightAndAmountAndArticleCount(
-            $currentSite,
             $country,
             $orderWeight,
             $orderAmount,
@@ -214,13 +210,19 @@ class ShippingController extends Controller
         return new JsonResponse($serializedFees);
     }
 
-    private static function _feeToJson(ShippingOption $fee): array
+    /**
+     * @throws PropelException
+     */
+    private static function  _feeToJson(ShippingOption $fee): array
     {
+        $zone = $fee->getShippingZone();
+
         return [
             'id' => $fee->getId(),
             'mode' => $fee->getMode(),
             'type' => $fee->getType(),
-            'zone' => $fee->getZoneCode(),
+            'zone_id' => $zone?->getId(),
+            'zone_name' => $zone?->getName(),
             'max_weight' => $fee->getMaxWeight(),
             'min_amount' => $fee->getMinAmount(),
             'max_amount' => $fee->getMaxAmount(),
@@ -254,7 +256,7 @@ class ShippingController extends Controller
         return [
             "mode" => $data->mode,
             "type" => $data->type,
-            "zone" => $data->zone,
+            "zoneId" => $data->zone_id,
             "fee" => $data->fee,
             "info" => $data->info,
             "maxWeight" => $maxWeight,
@@ -273,7 +275,7 @@ class ShippingController extends Controller
     {
         $fee->setMode($data["mode"]);
         $fee->setType($data["type"]);
-        $fee->setZoneCode($data["zone"]);
+        $fee->setShippingZoneId($data["zoneId"]);
         $fee->setMaxWeight($data["maxWeight"]);
         $fee->setMinAmount($data["minAmount"]);
         $fee->setMaxAmount($data["maxAmount"]);
@@ -285,17 +287,37 @@ class ShippingController extends Controller
     }
 
     /**
-     * @throws InvalidSiteIdException
+     * @param int $id
+     * @return ShippingOption
      */
-    private static function _getFeeFromId(Config $config, int $id): ShippingOption
+    private static function _getFeeFromId(int $id): ShippingOption
     {
-        $currentSite = CurrentSite::buildFromConfig($config);
-        $fee = ShippingOptionQuery::createForSite($currentSite)->findPk($id);
+        $fee = ShippingOptionQuery::create()->findPk($id);
         if (!$fee) {
             throw new ResourceNotFoundException(
                 sprintf("Cannot find shipping fee with id %s", $id)
             );
         }
         return $fee;
+    }
+
+    /**
+     * @route GET /api/admin/shipping/zones
+     * @throws PropelException
+     */
+    public function zonesAction(CurrentUser $currentUser): JsonResponse
+    {
+        $currentUser->authAdmin();
+
+        $zones = ShippingZoneQuery::create()->find();
+
+        $serializedZones = array_map(function ($zone) {
+            return [
+                "id" => $zone->getId(),
+                "name" => $zone->getName(),
+            ];
+        }, $zones->getData());
+
+        return new JsonResponse($serializedZones);
     }
 }
