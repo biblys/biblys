@@ -202,18 +202,22 @@ return function (
         // Paiement
         $paymentPageUrl = $urlGenerator->generate("payment_pay", ["slug" => $order->getSlug()]);
         if (!$o["order_payment_date"]) $buttons .= '<a href="'.$paymentPageUrl.'" class="btn btn-primary"><i class="fa-regular fa-money-bill-1"></i>&nbsp; Payer la commande (' . currency($o["order_amount_tobepaid"] / 100) . ')</a> ';
-        else $buttons .= '<a href="/invoice/' . $o["order_url"] . '" class="btn btn-outline-secondary"><i class="fa fa-print"></i> Imprimer une facture</a> ';
 
-        $currentSite = $currentSiteService->getSite();
         $trackingLink = $order->getTrackingLink();
         if ($trackingLink) {
             $content .= '
-                <p class="text-center">
-                    Numéro de suivi : ' . $o["order_track_number"] . '
-                    <a href="'.$trackingLink.'" class="btn btn-primary">
+                <form class="form-inline text-center">
+                  <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">Numéro de suivi</div>
+                    </div>
+                    <input type="text" class="form-control" id="inlineFormInputGroupUsername2" value="' . $o["order_track_number"] . '">
+                  </div>
+                
+                  <a href="'.$trackingLink.'" class="btn btn-primary mb-2">
                       Suivre l’envoi
                     </a>
-                </p><br />
+                </form>
             ';
         }
 
