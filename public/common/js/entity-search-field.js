@@ -50,6 +50,9 @@ export default class EntitySearchField {
 
     this.onResultSelectedCallback = options.onResultSelected;
 
+    this.shouldSubmitParentForm = element.dataset.submit_form !== undefined;
+    this.parentForm = element.closest("form");
+
     document.addEventListener('keydown', this.#onKeyDown.bind(this));
   }
 
@@ -183,6 +186,10 @@ export default class EntitySearchField {
     this.#switchToLockedMode(selectedResult);
     if (this.onResultSelectedCallback) {
       this.onResultSelectedCallback(selectedResult);
+    }
+
+    if (this.shouldSubmitParentForm && this.parentForm) {
+      this.parentForm.submit();
     }
   }
 
