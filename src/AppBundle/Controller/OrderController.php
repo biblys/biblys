@@ -189,8 +189,7 @@ class OrderController extends Controller
 
         if ($action == 'payed') {
             $amount = $orderEntity->get('amount_tobepaid');
-            $payment_mode = $request->request->get('payment_mode');
-            $om->addPayment($orderEntity, $payment_mode, $amount);
+            $om->addPayment($orderEntity, $requestBody->payment_mode, $amount);
             $notice = 'La commande n°&nbsp;'.$orderEntity->get('id').' de '.$orderEntity->get('firstname').' '.$orderEntity->get('lastname').' a été marquée comme payée.';
         }
 
