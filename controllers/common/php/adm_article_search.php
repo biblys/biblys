@@ -31,7 +31,7 @@ return function (Request $request, QueryParamsService $queryParams): JsonRespons
     $searchResults = array_map(function ($article) {
         return [
             "label" => sprintf("%s (%s%s)", $article->get("title"), $article->get("collection")->get("name"), numero($article->get("number"), ' - ')),
-            "value" => $article->get("title"),
+            "value" => $article->get("id"),
             "url" => "/pages/adm_stock?add=" . $article->get("id") . "#add",
             "article_id" => $article->get("id")
         ];
