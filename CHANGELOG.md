@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.6.2 (18 juin 2025)
+
+### Corrections
+
+- Lorsqu'une commande Colissimo était marquée comme expédiée, le numéro de suivi
+  n'était pas enregistré. C'est corrigé.
+
 ## 3.6.1 (11 juin 2025)
 
 ### Corrections
