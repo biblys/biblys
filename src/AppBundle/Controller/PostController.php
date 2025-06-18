@@ -387,14 +387,10 @@ class PostController extends Controller
             ->joinWithArticle()
             ->find();
 
-        $articles = ArticleQuery::create()
-            ->orderByTitleAlphabetic()
-            ->find();
-
         return $templateService->renderResponse("AppBundle:Post:articles.html.twig", [
             "post" => $post,
             "article_links" => $articleLinks,
-            "articles" => $articles,
+            "articles" => [],
         ]);
     }
 
