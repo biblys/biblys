@@ -18,16 +18,21 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\Mailer;
+use Biblys\Service\TemplateService;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Exception;
 use Mockery;
+use Model\OrderQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -111,5 +116,82 @@ class OrderControllerTest extends TestCase
         // then
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals("/order/order-slug", $response->getTargetUrl());
+    }
+
+    /** updateAction */
+
+    /**
+     * @throws InvalidEmailAddressException
+     * @throws PropelException
+     * @throws TransportExceptionInterface
+     */
+    public function testUpdateActionToMarkOrderAsShipped()
+    {
+        // given
+        $controller = new OrderController();
+
+        $order = ModelFactory::createOrder();
+        $payload = json_encode(["payment_mode" => null, "tracking_number" => null]);
+
+        $request = new Request(content: $payload);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+        $templateService = Mockery::mock(TemplateService::class);
+        $mailer = Mockery::mock(Mailer::class);
+
+        // when
+        $response = $controller->updateAction(
+            $request,
+            $currentSite,
+            $currentUser,
+            $templateService,
+            $mailer,
+            $order->getId(),
+            "shipped"
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $updatedOrder = OrderQuery::create()->findPk($order->getId());
+        $this->assertNotNull($updatedOrder->getShippingDate());
+    }
+
+    /**
+     * @throws InvalidEmailAddressException
+     * @throws PropelException
+     * @throws TransportExceptionInterface
+     */
+    public function testUpdateActionToMarkOrderAsShippedWithTrackingNumber()
+    {
+        // given
+        $controller = new OrderController();
+
+        $order = ModelFactory::createOrder();
+        $payload = json_encode(["payment_mode" => null, "tracking_number" => "123456789"]);
+
+        $request = new Request(content: $payload);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+        $templateService = Mockery::mock(TemplateService::class);
+        $mailer = Mockery::mock(Mailer::class);
+
+        // when
+        $response = $controller->updateAction(
+            $request,
+            $currentSite,
+            $currentUser,
+            $templateService,
+            $mailer,
+            $order->getId(),
+            "shipped"
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $updatedOrder = OrderQuery::create()->findPk($order->getId());
+        $this->assertNotNull($updatedOrder->getShippingDate());
+        $this->assertEquals("123456789", $updatedOrder->getTrackNumber());
     }
 }
