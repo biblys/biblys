@@ -65,21 +65,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     </tbody>
   </table>
 
-  <form class="form-inline" method="post" action="{{ path('post_articles_link', { id: post.id }) }}">
-    <div class="input-group mb-2">
-      <div class="input-group-prepend">
-        <div class="input-group-text">Article</div>
-      </div>
-      <select aria-label="Article" id="article_id" name="article_id" class="form-control">
-        {% for article in articles %}
-          <option value="{{ article.id }}">{{ article.title }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <button type="submit" class="btn btn-primary mb-2 ml-2">
-      <i class="fa-solid fa-chain"></i>
-      Lier
-    </button>
+  <form id="add-country-form" action="{{ path('post_articles_link', { id: post.id }) }}" method="post">
+    {% include "AppBundle:Utils:_entity-search-field.html.twig" with {
+      query_url: "/pages/adm_article_search",
+      label: "Ajouter un article lié…",
+      autofocus: true,
+      required: true,
+      input_name: "article_id",
+      submit_form: true,
+      autoload: true,
+    } %}
   </form>
 
 {% endblock %}
