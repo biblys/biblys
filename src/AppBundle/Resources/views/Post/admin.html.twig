@@ -80,7 +80,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             <i class="fa-solid fa-pen-to-square"></i>
             Éditer
           </a>
-          <a class="btn btn-sm btn-info" href="/pages/links?post_id={{ post.id }}"
+          <a class="btn btn-sm btn-info" href="{{ path('post_articles', { id: post.id }) }}"
              aria-label="Lier à un article">
             <i class="fa-solid fa-link"></i>
           </a>
