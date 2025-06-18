@@ -22,6 +22,7 @@ use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\InvalidSiteIdException;
 use Biblys\Service\LoggerService;
 use Biblys\Service\Mailer;
 use Biblys\Service\TemplateService;
@@ -31,7 +32,6 @@ use Model\OrderQuery;
 use Order;
 use OrderManager;
 use PaymentManager;
-use PayPal\Exception\PayPalConnectionException;
 use Payplug\Exception\ConfigurationException;
 use Payplug\Exception\PayplugException;
 use Payplug\Exception\UnknownAPIResourceException;
@@ -47,7 +47,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -119,7 +118,7 @@ class OrderController extends Controller
                 $orders = $om->getAll($where, $options, false);
             }
 
-            $orders = array_map([$this, '_jsonOrder'], $orders);
+            $orders = array_map([$this, '_jsonOrderFromEntity'], $orders);
 
             $response = [
                 'results' => count($orders),
@@ -186,6 +185,8 @@ class OrderController extends Controller
         /** @var \Model\Base\Order $order */
         $order = OrderQuery::create()->findPk($id);
 
+        $requestBody = json_decode($request->getContent());
+
         if ($action == 'payed') {
             $amount = $orderEntity->get('amount_tobepaid');
             $payment_mode = $request->request->get('payment_mode');
@@ -193,16 +194,16 @@ class OrderController extends Controller
             $notice = 'La commande n°&nbsp;'.$orderEntity->get('id').' de '.$orderEntity->get('firstname').' '.$orderEntity->get('lastname').' a été marquée comme payée.';
         }
 
-        if ($action == 'shipped') {
-            $trackingNumber = $request->request->get("tracking_number");
-            if (strlen($trackingNumber) > 16) {
+        if ($action === "shipped") {
+            $trackingNumber = $requestBody->tracking_number;
+            if ($trackingNumber !== null && strlen($trackingNumber) > 16) {
                 throw new BadRequestHttpException("Le numéro de suivi ne peut pas dépasser 16 caractères.");
             }
 
             $usecase = new MarkOrderAsShippedUsecase($currentSite, $templateService, $mailer);
             $usecase->execute($order, $trackingNumber);
 
-            $notice = 'La commande n°&nbsp;'.$orderEntity->get('id').' de '.$orderEntity->get('firstname').' '.$orderEntity->get('lastname').' a été marquée comme expédiée.';
+            $notice = "La commande n°&nbsp;{$order->getId()} de {$order->getFirstname()} {$order->getLastname()} a été marquée comme expédiée.";
         }
 
         if ($action == 'followup') {
@@ -214,10 +215,11 @@ class OrderController extends Controller
         }
 
         /** @var Order $orderEntity */
-        $orderEntity = $om->reload($orderEntity);
+        $updatedOrder = OrderQuery::create()->findPk($id);
+        $updatedOrder->reload();
         return new JsonResponse([
-            'notice' => $notice,
-            'order' => $this->_jsonOrder($orderEntity),
+            "notice" => $notice,
+            "order" => $this->_jsonOrder($updatedOrder),
         ]);
     }
 
@@ -310,7 +312,7 @@ class OrderController extends Controller
         }
     }
 
-    private function _jsonOrder(Order $order): array
+    private function _jsonOrderFromEntity(Order $order): array
     {
         return [
             'id' => $order->get('id'),
@@ -326,6 +328,29 @@ class OrderController extends Controller
             'shipping_amount' => currency($order->get('shipping') / 100),
             'followup_date' => $order->get('followup_date'),
             'cancel_date' => $order->get('cancel_date'),
+        ];
+    }
+
+    /**
+     * @throws InvalidSiteIdException
+     * @throws PropelException
+     */
+    private function _jsonOrder(\Model\Order $order): array
+    {
+        return [
+            'id' => $order->getId(),
+            'url' => $order->getSlug(),
+            'customer' => $order->getFirstname().' '.$order->getLastname(),
+            'amount' => currency($order->getTotalAmount() / 100),
+            'total' => currency(($order->getTotalAmountWithShipping()) / 100),
+            'created' => $order->getCreatedAt()?->format("Y-m-d H:i:s"),
+            'payment_mode' => $order->getPaymentMode(),
+            'payment_date' => $order->getPaymentDate()?->format("Y-m-d H:i:s"),
+            'shipping_mode' => $order->getShippingMode(),
+            'shipping_date' => $order->getShippingDate()?->format("Y-m-d H:i:s"),
+            'shipping_amount' => currency($order->getShippingCost() / 100),
+            'followup_date' => $order->getFollowupDate()?->format("Y-m-d H:i:s"),
+            'cancel_date' => $order->getCancelDate()?->format("Y-m-d H:i:s"),
         ];
     }
 }
