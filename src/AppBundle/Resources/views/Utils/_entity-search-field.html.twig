@@ -14,7 +14,10 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #}
 
-<div id="entity-search-field" class="EntitySearchField" data-query_url="{{ query_url|default('') }}">
+<div id="entity-search-field" class="EntitySearchField"
+     data-query_url="{{ query_url|default('') }}"
+     {% if submit_form is defined %} data-submit_form {% endif %}
+>
   <div class="input-group">
     {% if input_name is defined %}
       <input type="hidden" name="{{ input_name }}" class="EntitySearchField__value-input">
