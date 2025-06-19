@@ -20,7 +20,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 >
   <div class="input-group">
     {% if input_name is defined %}
-      <input type="hidden" name="{{ input_name }}" class="EntitySearchField__value-input">
+      <input type="hidden" name="{{ input_name }}" class="EntitySearchField__value-input"
+        {% if selected_result_value is defined %} value="{{ selected_result_value }}" {% endif %}>
     {% endif %}
 
     <input
@@ -31,6 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       placeholder="{{ label|default('Rechercher…') }}"
       {% if autofocus is defined %} autofocus {% endif %}
       {% if required is defined %} required {% endif %}
+      {% if selected_result_label is defined %}value="{{ selected_result_label }}" {% endif %}
     >
     <div class="input-group-append">
       <button type="button" class="btn btn-primary">
