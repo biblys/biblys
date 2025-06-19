@@ -48,14 +48,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
       <legend>Ajouter un article au rayon</legend>
 
-      <div class="form-group">
-        <label for="article_ean">Code EAN/ISBN :</label>
-        <input type="text" class="form-control" id="article_ean" name="article_ean"
-               placeholder="Code EAN/ISBN de l'article..." required="required">
+      <div class="form-group row">
+        <div class="col-md-2 text-md-right">
+          <label class="col-form-label">Article :</label>
+        </div>
+        <div class="col-md-10">
+          {% include "AppBundle:Utils:_entity-search-field.html.twig" with {
+            query_url: "/pages/adm_article_search",
+            label: "Choisir un article…",
+            required: true,
+            input_name: "article_id",
+            autoload: true,
+          } %}
+        </div>
       </div>
 
       <div class="text-center">
-        <button type="submit" class="btn btn-primary">Ajouter au rayon</button>
+        <button type="submit" class="btn btn-primary">Ajouter l'article au rayon</button>
       </div>
 
     </fieldset>
