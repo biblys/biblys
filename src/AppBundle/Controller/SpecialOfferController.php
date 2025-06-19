@@ -90,17 +90,10 @@ class SpecialOfferController extends Controller
             ->orderByName()
             ->find();
 
-        $articles = ArticleQuery::create()
-            ->select(["id", "titleAlphabetic"])
-            ->filterByAvailabilityDilicom(Article::AVAILABILITY_PRIVATELY_PRINTED)
-            ->orderByTitleAlphabetic()
-            ->find();
-
         return $templateService->renderResponse(
             "AppBundle:SpecialOffer:edit.html.twig", [
                 "offer" => $offer,
                 "collections" => $collections->getArrayCopy(),
-                "articles" => $articles->getArrayCopy(),
         ], isPrivate: true);
     }
 
