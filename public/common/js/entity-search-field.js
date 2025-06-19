@@ -53,6 +53,14 @@ export default class EntitySearchField {
     this.shouldSubmitParentForm = element.dataset.submit_form !== undefined;
     this.parentForm = element.closest("form");
 
+    if (this.valueInput?.value) {
+      this.#lockedMode = true;
+      this.#switchToLockedMode({
+        label: this.searchInput.value,
+        value: this.valueInput.value,
+      });
+    }
+
     document.addEventListener('keydown', this.#onKeyDown.bind(this));
   }
 
