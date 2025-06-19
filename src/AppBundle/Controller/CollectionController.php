@@ -51,7 +51,7 @@ class CollectionController extends Controller
         $cm = new CollectionManager();
 
         // If there is a filter
-        $filter = $request->query->get('filter');
+        $filter = $request->query->get('term');
         if ($filter) {
             $collections = $cm->filter($filter);
         } else {
@@ -60,13 +60,12 @@ class CollectionController extends Controller
 
         $collections = array_map(function ($collection) {
             return [
-                'id' => $collection->get('id'),
-                'name' => $collection->get('name'),
                 'label' => $collection->get('name') . ' (' . $collection->get('publisher')->get('name') . ')',
+                'value' => $collection->get('id'),
             ];
         }, $collections);
 
-        return new JsonResponse($collections);
+        return new JsonResponse(["results" => $collections]);
     }
 
     /**

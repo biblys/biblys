@@ -48,37 +48,30 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
       <legend>Ajouter un article au rayon</legend>
 
-      <div class="form-group">
-        <label for="article_ean">Code EAN/ISBN :</label>
-        <input type="text" class="form-control" id="article_ean" name="article_ean"
-               placeholder="Code EAN/ISBN de l'article..." required="required">
-      </div>
-
-      <div class="text-center">
-        <button type="submit" class="btn btn-primary">Ajouter au rayon</button>
-      </div>
-
+      {% include "AppBundle:Utils:_entity-search-field.html.twig" with {
+        query_url: "/pages/adm_article_search",
+        label: "Choisir un article à ajouter…",
+        required: true,
+        input_name: "article_id",
+        autoload: true,
+        submit_form: true,
+      } %}
     </fieldset>
   </form>
 
   <form method="post" class="fieldset">
     <fieldset>
 
-      <legend>Ajouter une collection au rayon</legend>
+      <legend>Ajouter tous les articles d'une collection au rayon</legend>
 
-      <div class="form-group row">
-        <div class="col-md-3">
-          <label for="article_ean">Collection :</label>
-        </div>
-        <div class="col-md-9">
-          <input data-entity_search="Collection" type="text" class="form-control verylong" id="article_ean"
-                 name="article_ean" placeholder="Nom de la collection ou de l'éditeur..." required="required">
-        </div>
-      </div>
-
-      <div class="text-center">
-        <button type="submit" class="btn btn-primary" disabled="disabled">Ajouter tous les articles au rayon</button>
-      </div>
+      {% include "AppBundle:Utils:_entity-search-field.html.twig" with {
+        query_url: path('collection_index'),
+        label: "Choisir une collection à ajouter…",
+        required: true,
+        input_name: "collection_id",
+        autoload: true,
+        submit_form: true,
+      } %}
 
     </fieldset>
   </form>
@@ -89,24 +82,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <legend>Ajouter tous les articles d'un type à un rayon</legend>
 
       <div class="form-group row">
-        <div class="col-md-3">
-          <label for="article_type">Type :</label>
-        </div>
-        <div class="col-md-9">
-          <select name="article_type">
+        <div class="col-md-6">
+          <select name="article_type" aria-label="Type d'article" class="form-control">
+            <option value="" disabled selected>Choisir un type d'article…</option>
             {% for type in types %}
               <option value="{{ type.id }}">{{ type.name }}</option>
             {% endfor %}
           </select>
         </div>
+        <div class="col-md-6">
+          <button type="submit" class="btn btn-primary">
+            Ajouter tous les articles au rayon
+          </button>
       </div>
-
-      <div class="text-center">
-        <button type="submit" class="btn btn-primary">
-          Ajouter tous les articles au rayon
-        </button>
-      </div>
-
     </fieldset>
   </form>
 
