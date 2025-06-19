@@ -42,15 +42,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     <fieldset>
       <legend>Conditions</legend>
 
-        <div class="form-group row">
-          <label for="start_date" class="col-md-3 col-form-label text-md-right">Du</label>
-          <input type="date" class="form-control col-md-7" id="start_date" name="start_date" value="{{ offer.startDate|date('Y-m-d') }}" required>
-        </div>
+      <div class="form-group row">
+        <label for="start_date" class="col-md-3 col-form-label text-md-right">Du</label>
+        <input type="date" class="form-control col-md-7" id="start_date" name="start_date"
+               value="{{ offer.startDate|date('Y-m-d') }}" required>
+      </div>
 
-        <div class="form-group row">
-          <label for="end_date" class="col-md-3 col-form-label text-md-right">au</label>
-          <input type="date" class="form-control col-md-7" id="end_date" name="end_date" value="{{ offer.endDate|date('Y-m-d') }}" required>
-        </div>
+      <div class="form-group row">
+        <label for="end_date" class="col-md-3 col-form-label text-md-right">au</label>
+        <input type="date" class="form-control col-md-7" id="end_date" name="end_date"
+               value="{{ offer.endDate|date('Y-m-d') }}" required>
+      </div>
 
       <div class="form-group row">
         <label for="target_quantity" class="col-md-3 col-form-label text-md-right">pour</label>
@@ -74,13 +76,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
       <div class="form-group row">
         <label for="free_article_id" class="col-md-3 col-form-label text-md-right">l'article</label>
-        <select id="free_article_id" class="form-control col-md-7" name="free_article_id" required>
-          {% for article in articles %}
-            <option value="{{ article.id }}" {% if article.id == offer.freeArticleId %}selected{% endif %}>
-              {{ article.titleAlphabetic }} ({{ article.id }})
-            </option>
-          {% endfor %}
-        </select>
+        <div class="col-md-7 p-0">
+          {% include "AppBundle:Utils:_entity-search-field.html.twig" with {
+            query_url: "/pages/adm_article_search",
+            label: "Choisir un article…",
+            required: true,
+            input_name: "free_article_id",
+            selected_result_value: offer.freeArticle.id,
+            selected_result_label: offer.freeArticle.title,
+            autoload: true,
+          } %}
+        </div>
         <span class="col-md-2 col-form-label">
           est offert
         </span>
