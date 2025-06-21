@@ -19,6 +19,7 @@ export default class EntitySearchField {
   #results = [];
   #resultsDisplayed = false;
   #lockedMode = false;
+  #debounceTimeout = null;
 
   /**
    *
@@ -51,13 +52,13 @@ export default class EntitySearchField {
     this.onResultSelectedCallback = options.onResultSelected;
 
     this.shouldSubmitParentForm = element.dataset.submit_form !== undefined;
-    this.parentForm = element.closest("form");
+    this.parentForm = element.closest('form');
 
     if (this.valueInput?.value) {
       this.#lockedMode = true;
       this.#switchToLockedMode({
         label: this.searchInput.value,
-        value: this.valueInput.value,
+        value: this.valueInput.value
       });
     }
 
@@ -83,10 +84,13 @@ export default class EntitySearchField {
     return this.#search(event);
   }
 
-  #onInput() {
+  #onInput(event) {
     if (this.#resultsDisplayed) {
       this.#focusItem(-1);
     }
+
+    window.clearTimeout(this.#debounceTimeout);
+    this.#debounceTimeout = window.setTimeout(() => this.#search(event), 300);
   }
 
   #onKeyDown(event) {
@@ -121,8 +125,8 @@ export default class EntitySearchField {
     event.preventDefault();
 
     const query = this.searchInput.value.trim();
-    if (query.length < 3) {
-      window._alert('Veuillez entrer au moins 3 caractères pour la recherche.', { title: 'Erreur lors de la recherche' });
+    if (query.length < 1) {
+      return;
     }
 
     const response = await fetch(`${this.queryUrl}?term=${query}`, {
@@ -229,7 +233,7 @@ export default class EntitySearchField {
     this.resultsElement.innerHTML = '';
     this.#resultsDisplayed = false;
 
-    this.buttonLabel.textContent = 'Rechercher';
+    this.buttonLabel.textContent = 'Chercher';
     this.button.classList.remove('btn-secondary');
     this.button.classList.add('btn-primary');
     this.buttonIcon.classList.remove('fa-pen-to-square');
