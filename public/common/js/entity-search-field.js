@@ -69,6 +69,10 @@ export default class EntitySearchField {
     if (!this.#resultsDisplayed) {
       this.helpText.classList.remove('d-none');
     }
+
+    if (this.#lockedMode) {
+      this.#switchToSearchMode();
+    }
   }
 
   #onInputBlur() {
@@ -210,6 +214,7 @@ export default class EntitySearchField {
 
     this.searchInput.value = selectedResult.label;
     this.searchInput.readOnly = true;
+    this.searchInput.style.cursor = 'pointer';
     this.searchInput.blur();
 
     this.resultsElement.innerHTML = '';
@@ -228,6 +233,7 @@ export default class EntitySearchField {
 
     this.searchInput.value = '';
     this.searchInput.readOnly = false;
+    this.searchInput.style.cursor = 'text';
     this.searchInput.focus();
 
     this.resultsElement.innerHTML = '';
