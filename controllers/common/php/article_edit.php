@@ -464,17 +464,17 @@ return function (
     $cm = new CollectionManager();
     $collection = $cm->getById($articleEntity->get('collection_id'));
     if ($collection) {
-        $collection = '
-        <input type="text" id="article_collection" value="' . $collection->get('name') . '" class="long pointer changeThis" required readonly />
-        <input type="hidden" id="collection_id" name="collection_id" value="' . $collection->get('id') . '" required />
-        <input type="hidden" id="pricegrid_id" value="' . $collection->get('pricegrid_id') . '" />
-    ';
+        $collectionField = '
+            <input type="text" id="article_collection" value="' . $collection->get('name') . '" class="form-control col-md-6 pointer changeThis" required readonly />
+            <input type="hidden" id="collection_id" name="collection_id" value="' . $collection->get('id') . '" required />
+            <input type="hidden" id="pricegrid_id" value="' . $collection->get('pricegrid_id') . '" />
+        ';
     } else {
-        $collection = '
-        <input type="text" id="article_collection" class="long changeThis uncompleted" required />
-        <input type="hidden" id="collection_id" name="collection_id" required />
-        <input type="hidden" id="pricegrid_id" />
-    ';
+        $collectionField = '
+            <input type="text" id="article_collection" class="form-control col-md-6 changeThis uncompleted" required />
+            <input type="hidden" id="collection_id" name="collection_id" required />
+            <input type="hidden" id="pricegrid_id" />
+        ';
     }
 
     $bonus_fieldset_class = null;
@@ -499,15 +499,15 @@ return function (
     $cym = new CycleManager();
     $cycle = $cym->getById($articleEntity->get('cycle_id'));
     if ($cycle) {
-        $cycle = '
-        <input type="text" id="article_cycle" name="article_cycle" value="' . $cycle->get('name') . '" class="long pointer changeThis" readonly />
-        <input type="hidden" id="cycle_id" name="cycle_id" value="' . $cycle->get('id') . '" />
-    ';
+        $cycleField = '
+            <input type="text" id="article_cycle" name="article_cycle" value="' . $cycle->get('name') . '" class="form-control col-md-6 pointer changeThis" readonly />
+            <input type="hidden" id="cycle_id" name="cycle_id" value="' . $cycle->get('id') . '" />
+        ';
     } else {
-        $cycle = '
-        <input type="text" id="article_cycle" name="article_cycle" class="long changeThis uncompleted" />
-        <input type="hidden" id="cycle_id" name="cycle_id" />
-    ';
+        $cycleField = '
+            <input type="text" id="article_cycle" name="article_cycle" class="form-control col-md-6 changeThis uncompleted" />
+            <input type="hidden" id="cycle_id" name="cycle_id" />
+        ';
     }
 
     // ** CONTRIBUTIONS ** //
@@ -707,7 +707,16 @@ return function (
         </fieldset>
     </form>
 
-    <form id="article_form" action="/pages/article_edit?id=' . $a['article_id'] . '" method="post" enctype="multipart/form-data" class="fieldset check event" data-mode="' . $_MODE . '" data-uploading=0 data-submitted=0>
+    <form 
+      id="article_form" 
+      action="/pages/article_edit?id=' . $a['article_id'] . '" 
+      method="post" 
+      enctype="multipart/form-data" 
+      class="fieldset check event" 
+      data-mode="' . $_MODE . '" 
+      data-uploading=0 
+      data-submitted=0
+    >
 
         <fieldset>
             <legend>Importation</legend>
@@ -716,69 +725,87 @@ return function (
             </div>
         </fieldset>
 
-        <fieldset>
+        <fieldset class="px-5">
             <legend>L\'essentiel</legend>
 
-            <label class="floating" for="article_id">Article n°</label>
-            <input type="text" id="article_id" name="article_id" value="' . $a['article_id'] . '" class="mini" readonly required />
-            <br /><br />
+            <div class="form-group row">
+              <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_id">Article n°</label>
+              <input type="text" id="article_id" name="article_id" value="' . $a['article_id'] . '" class="form-control col-md-2 col-lg-1" readonly required />
+            </div>
 
-            <label class="floating" for="type_id">Type :</label>
-            <select name="type_id" id="type_id" required>
+            <div class="form-group row">
+              <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="type_id">Type</label>
+              <select class="form-control col-md-4 col-lg-3" name="type_id" id="type_id" required>
                 ' . join($type_options) . '
-            </select>
-            <br /><br />
-
-            <div id="article_ean_div">
-                <label class="floating" for="article_ean">EAN/ISBN :</label>
-                <input id="article_ean" name="article_ean" value="' . $a['article_ean'] . '" class="medium event article_ean" ' . $article_ean_required . ' autofocus />
-                <br /><br />
+              </select>
             </div>
 
-            <label class="floating" for="article_title">Titre :</label>
-            <input type="text" id="article_title" name="article_title" value="' . htmlspecialchars($a['article_title'] ?: "") . '" class="long article_duplicate_check event' . $article_title_class . '" required />
-            <br />
+            <div class="form-group row" id="article_ean_div">
+              <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_ean">EAN/ISBN</label>
+              <input id="article_ean" name="article_ean" value="' . $a['article_ean'] . '" class="form-control col-md-4 col-lg-3 event article_ean" ' . $article_ean_required . ' autofocus />
+            </div>
 
-            <label class="floating" for="article_authors">Auteur·trice·s :</label>
-            <input type="text" id="article_authors" value="' . $a['article_authors'] . '" class="long" tabindex="-1" readonly required maxlength=256 data-toggle="popover" data-trigger="focus" title="Liste des auteurs et autrices" data-content="Champ rempli automatiquement. Utilisez la section Contributions (ci-dessous) pour ajouter ou supprimer un auteur ou une autrice.">
-            <br />
+            <div class="form-group row mb-1">
+              <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_title">Titre</label>
+              <input type="text" id="article_title" name="article_title" value="' . htmlspecialchars($a['article_title'] ?: "") . '" class="form-control col-md-9 article_duplicate_check event' . $article_title_class . '" required />
+            </div>
 
-            <label class="floating" for="article_collection">Collection :</label>
-            ' . $collection . '
-            n° <input type="text" id="article_number" name="article_number" value="' . $a['article_number'] . '" class="mini article_duplicate_check event" />
-            <br />
-            <label class="floating" for="article_cycle">Cycle :</label>
-            ' . $cycle . '
-            t. <input type="text" id="article_tome" name="article_tome" value="' . $a['article_tome'] . '" class="mini" maxlength="12" />
-            <br /><br />
+            <div class="form-group row mb-1">
+              <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_authors">Auteur·ices</label>
+              <input type="text" id="article_authors" value="' . $a['article_authors'] . '" class="form-control col-md-9" tabindex="-1" readonly required maxlength=256 data-toggle="popover" data-trigger="focus" title="Liste des auteurs et autrices" data-content="Champ rempli automatiquement. Utilisez la section Contributions (ci-dessous) pour ajouter ou supprimer un auteur ou une autrice.">
+            </div>
 
-            <label class="floating" for="article_availability_dilicom">Disponibilité :</label>
-            <select id="article_availability_dilicom" name="article_availability_dilicom" required>
-                ' . implode($availability_options) . '
-            </select>
-            <br />
+            <div class="form-group row mb-1">
+              <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_collection">Collection</label>
+              ' . $collectionField . '
+              <span class="col-md-2 col-lg-1 col-form-label text-md-right">n°</span> 
+              <input type="text" id="article_number" name="article_number" value="' . $a['article_number'] . '" class="form-control col-md-1 article_duplicate_check event" />
+            </div>
             
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="1" id="article_preorder" name="article_preorder" '.$preorderChecked.'>
-              <label class="form-check-label" for="article_preorder">
-                Précommande
-              </label>
+            <div class="form-group row">
+              <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_cycle">Cycle</label>
+              ' . $cycleField . '
+              <span class="col-md-2 col-lg-1 col-form-label text-md-right">tome</span> 
+              <input type="text" id="article_tome" name="article_tome" value="' . $a['article_tome'] . '" class="form-control col-md-1" maxlength="12" />
             </div>
-            <br />
 
-            <div id="article_category_div" class="' . $category_field_class . '">
-                <label class="floating" for="article_category">Catégorie :</label>
-                <input type="text" id="article_category" name="article_category" value="' . $a['article_category'] . '" class="mini" title="Appuyez sur la touche &darr; pour faire apparaître la liste des catégories." />
-                <br />
+            <div class="form-group row mb-1">
+              <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_availability_dilicom">Disponibilité</label>
+              <select id="article_availability_dilicom" name="article_availability_dilicom" class="form-control col-md-7 col-lg-6" required>
+                  ' . implode($availability_options) . '
+              </select>
             </div>
-            <p>
-                <label class="floating" for="article_price">Prix :</label>
-                <input type="number" step="1" id="article_price" name="article_price" value="' . $a['article_price'] . '" class="short" required ' . $article_price_readonly . ' data-html="true" data-toggle="popover" data-trigger="focus" data-content="Entrez le prix de l\'article en centimes. Par exemple, pour article à 14,00 €, entrez <strong>1400</strong> ; pour un article à 8,50 €, entrez <strong>850</strong>."> centimes
-            </p>
-            <p>
-                <label class="floating" for="article_price_editable">Prix libre :</label>
-                <input type="checkbox" name="article_price_editable" id="article_price_editable" value="1"' . ($articleEntity->has('price_editable') ? ' checked' : null) . '>
-            </p>
+            
+            <div class="form-group row">
+              <div class="form-check offset-md-3 offset-lg-2 col-md-10">
+                <input class="form-check-input" type="checkbox" value="1" id="article_preorder" name="article_preorder" '.$preorderChecked.'>
+                <label class="form-check-label" for="article_preorder">
+                  Autoriser la précommande
+                </label>
+              </div>
+            </div>
+
+            <div id="article_category_div" class="form-group row mb-1 ' . $category_field_class . '">
+              <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_category">Catégorie</label>
+              <input type="text" id="article_category" name="article_category" value="' . $a['article_category'] . '" class="form-control col-md-2 col-lg-1" title="Appuyez sur la touche &darr; pour faire apparaître la liste des catégories." />
+            </div>
+            
+            <div class="form-group row mb-1">
+                <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_price">Prix</label>
+                <input type="number" step="1" id="article_price" name="article_price" value="' . $a['article_price'] . '" class="form-control col-md-2 col-lg-1" required 
+                    ' . $article_price_readonly . ' data-html="true" data-toggle="popover" data-trigger="focus" data-content="Entrez le prix de l\'article en centimes. Par exemple, pour article à 14,00 €, entrez <strong>1400</strong> ; pour un article à 8,50 €, entrez <strong>850</strong>."
+                > 
+                <span class="col-md-1 col-form-label">
+                  centimes
+                </span>
+            </div>
+
+            <div class="form-group row mb-1">
+              <div class="form-check offset-md-3 offset-lg-2 col-md-10">
+                <input class="form-check-input" type="checkbox" name="article_price_editable" id="article_price_editable" value="1"' . ($articleEntity->has('price_editable') ? ' checked' : null) . '>
+                <label class="form-check-label" for="article_price_editable">Autoriser les client·es à payer plus (prix libre)</label>
+              </div>
+            </div>
             <br />
         </fieldset>
 
