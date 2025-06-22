@@ -62,11 +62,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 {% if autoload is defined and autoload %}
   <script type="module">
-    import EntitySearchField from '/common/js/entity-search-field.js';
+      import EntitySearchField from '/common/js/entity-search-field.js';
 
-    document.addEventListener('DOMContentLoaded', function() {
-      const field = document.getElementById('entity-search-field');
-      new EntitySearchField(field);
-    });
+      document.addEventListener('DOMContentLoaded', function() {
+        const fields = document.getElementsByClassName('EntitySearchField');
+        Array.from(fields).forEach(field => new EntitySearchField(field));
+      });
   </script>
 {% endif %}

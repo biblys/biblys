@@ -28,6 +28,12 @@ export default class EntitySearchField {
    * @param {(result: Result) => {}} options.onResultSelected
    */
   constructor(element, options = {}) {
+    if(element.dataset.loaded) {
+      return;
+    }
+
+    element.dataset.loaded = 'true';
+
     this.queryUrl = element.dataset.query_url;
 
     this.searchInput = element.querySelector('.EntitySearchField__search-input');
@@ -153,7 +159,7 @@ export default class EntitySearchField {
 
     if (responseData.error) {
       window._alert(responseData.error, { title: 'Erreur lors de la recherche' });
-      this.#resultsDisplayed = false;
+      this.#hideResults();
       return;
     }
 
@@ -161,6 +167,10 @@ export default class EntitySearchField {
     this.helpText.classList.add('d-none');
 
     this.#results = responseData.results;
+    if (!this.#results) {
+      throw new Error('Invalid autocomplete response: should include a results array.');
+    }
+
     this.#results.forEach((result, index) => {
       const item = document.createElement('a');
       item.href = result.url;
@@ -216,9 +226,7 @@ export default class EntitySearchField {
     this.searchInput.readOnly = true;
     this.searchInput.style.cursor = 'pointer';
     this.searchInput.blur();
-
-    this.resultsElement.innerHTML = '';
-    this.#resultsDisplayed = false;
+    this.#hideResults();
 
     this.buttonLabel.textContent = 'Modifier';
     this.button.classList.remove('btn-primary');
@@ -226,6 +234,11 @@ export default class EntitySearchField {
     this.buttonIcon.classList.remove('fa-magnifying-glass');
     this.buttonIcon.classList.add('fa-pen-to-square');
     this.button.focus();
+  }
+
+  #hideResults() {
+    this.resultsElement.innerHTML = '';
+    this.#resultsDisplayed = false;
   }
 
   #switchToSearchMode() {
@@ -236,8 +249,7 @@ export default class EntitySearchField {
     this.searchInput.style.cursor = 'text';
     this.searchInput.focus();
 
-    this.resultsElement.innerHTML = '';
-    this.#resultsDisplayed = false;
+    this.#hideResults();
 
     this.buttonLabel.textContent = 'Chercher';
     this.button.classList.remove('btn-secondary');
