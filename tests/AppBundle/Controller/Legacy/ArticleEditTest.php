@@ -22,6 +22,8 @@ use Biblys\Data\ArticleType;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\TemplateService;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Exception;
 use Mockery;
@@ -65,8 +67,10 @@ class ArticleEditTest extends TestCase
         $urlGenerator->shouldReceive("generate")->andReturn("url");
         $config = new Config(["lemonink" => ["api_key" => "abcd1234"]]);
 
+        $templateService = Helpers::getTemplateService();
+
         // when
-        $response = $controller($request, $currentUser, $currentSite, $urlGenerator, $config);
+        $response = $controller($request, $currentUser, $currentSite, $urlGenerator, $config, $templateService);
 
         // then
         $this->assertEquals(
