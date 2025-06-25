@@ -20,12 +20,16 @@ export default class EntitySearchField {
   #resultsDisplayed = false;
   #lockedMode = false;
   #debounceTimeout = null;
+  #currentQuery = '';
 
   /**
    *
    * @param {HTMLElement} element
    * @param {object} options
    * @param {(result: Result) => {}} options.onResultSelected
+   * @param {object} options.action
+   * @param {string} options.action.label
+   * @param {(query: string) => {}} options.action.onSelect
    */
   constructor(element, options = {}) {
     if(element.dataset.loaded) {
@@ -69,6 +73,8 @@ export default class EntitySearchField {
     }
 
     document.addEventListener('keydown', this.#onKeyDown.bind(this));
+
+    this.customAction = options.action;
   }
 
   #onInputFocus() {
@@ -139,6 +145,7 @@ export default class EntitySearchField {
       return;
     }
 
+    this.#currentQuery = query;
     const response = await fetch(`${this.queryUrl}?term=${query}`, {
       method: 'GET'
     });
@@ -173,7 +180,7 @@ export default class EntitySearchField {
 
     this.#results.forEach((result, index) => {
       const item = document.createElement('a');
-      item.href = result.url;
+      item.style.cursor = 'pointer';
       item.textContent = result.label;
       item.className = 'list-group-item list-group-item-action';
       this.resultsElement.appendChild(item);
@@ -187,6 +194,19 @@ export default class EntitySearchField {
         this.#onItemSelect();
       });
     });
+
+    // Add custom actions if any
+    if (this.customAction) {
+      const item = document.createElement('a');
+      item.style.cursor = 'pointer';
+      item.textContent = '→ ' + this.customAction.label.replace('%query%', query);
+      item.className = 'list-group-item list-group-item-action lead';
+      this.resultsElement.appendChild(item);
+      item.addEventListener('click', (event) => {
+        event.preventDefault();
+        this.customAction.onSelect(query);
+      });
+    }
 
     this.#resultsDisplayed = true;
   }
@@ -204,6 +224,10 @@ export default class EntitySearchField {
 
   #onItemSelect() {
     const selectedResult = this.#results[this.#focusItemIndex];
+
+    if (!selectedResult && this.customAction) {
+      this.customAction.onSelect(this.#currentQuery);
+    }
 
     if (this.valueInput) {
       this.valueInput.value = selectedResult.value;
