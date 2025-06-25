@@ -80,6 +80,11 @@ class ShippingOptionQuery extends BaseShippingOptionQuery
                         continue;
                     }
 
+                    // Keep only fees for weight lesser than order
+                    if ($fee->getMinWeight() !== null && $fee->getMinWeight() > $weight) {
+                        continue;
+                    }
+
                     // Keep only fees for which order's amount is higher than min amount
                     if ($fee->getMinAmount() !== null && $amount < $fee->getMinAmount()) {
                         continue;
