@@ -28,6 +28,7 @@ use DansMaCulotte\MondialRelay\DeliveryChoice;
 use Exception;
 use Framework\Controller;
 use Model\CountryQuery;
+use Model\ShippingZone;
 use Model\ShippingZoneQuery;
 use Payplug\Exception\NotFoundException;
 use Propel\Runtime\Exception\PropelException;
@@ -101,6 +102,56 @@ class ShippingController extends Controller
             ["zones" => $zones],
             isPrivate: true,
         );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws NotFoundException
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function zoneNewAction(
+        CurrentUser $currentUser,
+        TemplateService $templateService,
+    ): Response
+    {
+        $currentUser->authAdmin();
+
+        return $templateService->renderResponse(
+            "AppBundle:Shipping:zone_new.html.twig",
+            isPrivate: true,
+        );
+    }
+
+    /**
+     * @route POST /admin/shipping/zones
+     * @throws PropelException
+     * @throws BadRequestHttpException
+     */
+    public function zoneCreateAction(
+        CurrentUser $currentUser,
+        BodyParamsService $bodyParamsService,
+        FlashMessagesService $flashMessagesService,
+        UrlGenerator $urlGenerator,
+    ): RedirectResponse
+    {
+        $currentUser->authAdmin();
+
+        $bodyParamsService->parse([
+            "name" => ["type" => "string"],
+            "description" => ["type" => "string"]
+        ]);
+
+        $zone = new ShippingZone();
+        $zone->setName($bodyParamsService->get("name"));
+        $zone->setDescription($bodyParamsService->get("description"));
+        $zone->save();
+
+        $flashMessagesService->add("success", "La zone « {$zone->getName()} » a été créée.");
+
+        $zonesUrl = $urlGenerator->generate("shipping_zones_countries", ["id" => $zone->getId()]);
+        return new RedirectResponse($zonesUrl);
     }
 
     /**

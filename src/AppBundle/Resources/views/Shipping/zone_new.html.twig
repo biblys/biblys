@@ -1,0 +1,51 @@
+{#
+Copyright (C) 2024 Clément Latzarus
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+{% extends "layout:admin.html.twig" %}
+
+{% block title %}
+  Nouvelle zone tarifaire · Expédition
+{% endblock %}
+
+{% block main %}
+
+  {% include "AppBundle:Shipping:_admin_navigation.html.twig" with { active: "zones" } %}
+
+  <h2>Nouvelle zone tarifaire</h2>
+
+  <form action="{{ path('shipping_zones_create') }}" method="post" class="mt-4">
+    <div class="form-group row">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="name">Nom</label>
+      <input type="text" id="name" name="name" class="form-control col-md-9 col-lg-10" required
+        placeholder="Colissimo International A"
+      />
+    </div>
+
+    <div class="form-group row">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="description">Description</label>
+      <input type="text" id="description" name="description" class="form-control col-md-9 col-lg-10" required
+        placeholder="Union Européenne, Suisse, Royaume-Uni, Liechtenstein, Saint-Marin et le Vatican."
+      />
+    </div>
+
+    <div class="col-sm-12 text-center">
+      <button class="btn btn-primary" type="submit">
+        Enregistrer
+      </button>
+    </div>
+  </form>
+
+{% endblock %}

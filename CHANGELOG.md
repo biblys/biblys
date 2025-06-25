@@ -4,8 +4,8 @@
 
 ### Améliorations
 
-* Il est désormais possible de modifier les pays associés à une zone tarifaire 
-  d'expédition depuis la page d'administration des zones tarifaires.
+* Il est désormais possible de créer de nouvelles zones tarifaires pour
+  l'expédition et de modifier les pays associés à une zone tarifaire.
 
 ## 3.6.2 (18 juin 2025)
 
