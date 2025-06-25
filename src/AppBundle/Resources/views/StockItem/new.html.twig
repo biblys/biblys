@@ -42,7 +42,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     document.addEventListener('DOMContentLoaded', function() {
       const field = document.getElementById('entity-search-field');
       new EntitySearchField(field, {
-        onResultSelected: (result) => window.location.href = result.url,
+        action: {
+          label: 'Créer un article pour « %query% »',
+          onSelect: (query) => {
+            window.location.href = `/pages/article_edit?import=${query}`;
+          }
+        },
       });
     });
   </script>
