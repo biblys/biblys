@@ -24,6 +24,7 @@ use Biblys\Service\FlashMessagesService;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Mockery;
+use Model\Base\ShippingZoneQuery;
 use Payplug\Exception\NotFoundException;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -35,6 +36,17 @@ use Twig\Error\SyntaxError;
 
 class ShippingControllerTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     */
+    public function setUp(): void
+    {
+        $testZones = ShippingZoneQuery::create()->findByName("Zone 51");
+        foreach ($testZones as $zone) {
+            $zone->delete();
+        }
+    }
+
     /**
      * @throws SyntaxError
      * @throws Exception
@@ -102,6 +114,69 @@ class ShippingControllerTest extends TestCase
         // then
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString("France", $response->getContent());
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws Exception
+     * @throws NotFoundException
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws \Exception
+     */
+    public function testZoneNewAction(): void
+    {
+        // given
+        $controller = new ShippingController();
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->expects($this->once())->method("authAdmin");
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->zoneNewAction($currentUser, $templateService);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Nouvelle zone tarifaire", $response->getContent());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testZoneCreateAction(): void
+    {
+        // given
+        $controller = new ShippingController();
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->expects($this->once())->method("authAdmin");
+        $bodyParamsService = Mockery::mock(BodyParamsService::class);
+        $bodyParamsService->expects("parse")
+            ->with([
+                "name" => ["type" => "string"],
+                "description" => ["type" => "string"]
+            ]);
+        $bodyParamsService->expects("get")->with("name")->andReturn("Test Zone");
+        $bodyParamsService->expects("get")->with("description")->andReturn("Description de la Test Zone");
+        $flashMessagesService = Mockery::mock(FlashMessagesService::class);
+        $flashMessagesService->expects("add")->with("success", "La zone « Test Zone » a été créée.");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("redirect_url");
+
+        // when
+        $response = $controller->zoneCreateAction(
+            $currentUser, $bodyParamsService, $flashMessagesService, $urlGenerator
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("redirect_url", $response->getTargetUrl());
+        $zone = ShippingZoneQuery::create()->findOneByName("Test Zone");
+        $this->assertNotNull($zone, "creates a new shipping zone");
+        $this->assertEquals("Description de la Test Zone", $zone->getDescription(), "zone description is set correctly");
     }
 
     /**
