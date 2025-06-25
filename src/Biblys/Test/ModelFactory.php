@@ -530,6 +530,7 @@ class ModelFactory
         ?string       $info = null,
         int           $fee = 100,
         int           $maxWeight = 1000,
+        ?int          $minWeight = null,
         int           $minAmount = 0,
         int           $maxAmount = 2000,
         int           $maxArticles = 10,
@@ -544,6 +545,7 @@ class ModelFactory
         $shippingOption->setFee($fee);
         $shippingOption->setMinAmount($minAmount);
         $shippingOption->setMaxWeight($maxWeight);
+        $shippingOption->setMinWeight($minWeight);
         $shippingOption->setMaxAmount($maxAmount);
         $shippingOption->setMaxArticles($maxArticles);
         $shippingOption->setInfo($info);

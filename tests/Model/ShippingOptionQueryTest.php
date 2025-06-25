@@ -121,4 +121,35 @@ class ShippingOptionQueryTest extends TestCase
         $this->assertContains($activeFee, $returnedFees);
         $this->assertNotContains($archivedFee, $returnedFees);
     }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testGetEnforcesMinWeightRules(): void
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $zone = ModelFactory::createShippingZone();
+        $country = ModelFactory::createCountry(shippingZone: $zone);
+        $fee = ModelFactory::createShippingOption(
+            site: $site,
+            country: $country,
+            minWeight: 1000, // 1kg
+            shippingZone: $zone
+        );
+        $orderWeight = 500; // 0.5kg
+        $orderAmount = 1500;
+
+        // when
+        $fees = ShippingOptionQuery::getForCountryAndWeightAndAmountAndArticleCount(
+            $country,
+            $orderWeight,
+            $orderAmount,
+            articleCount: 1
+        );
+
+        // then
+        $this->assertNotContains($fee, $fees);
+    }
 }
