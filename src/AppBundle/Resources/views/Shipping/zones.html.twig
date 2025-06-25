@@ -24,6 +24,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
   {% include "AppBundle:Shipping:_admin_navigation.html.twig" with { active: "zones" } %}
 
+  <a href="{{ path('shipping_zones_new') }}" class="btn btn-primary mb-3">
+    <i class="fa-solid fa-plus-square"></i>
+    Ajouter une zone
+  </a>
+
   <table class="table table-striped">
     <thead>
       <tr>

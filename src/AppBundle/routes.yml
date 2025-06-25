@@ -722,6 +722,16 @@ shipping_zones:
   path: /admin/shipping/zones
   controller: AppBundle\Controller\ShippingController::zonesAction
 
+shipping_zones_new:
+  methods: GET
+  path: /admin/shipping/zones/new
+  controller: AppBundle\Controller\ShippingController::zoneNewAction
+
+shipping_zones_create:
+  methods: POST
+  path: /admin/shipping/zones
+  controller: AppBundle\Controller\ShippingController::zoneCreateAction
+
 shipping_zones_countries:
   methods: GET
   path: /admin/shipping/zones/{id}/countries
