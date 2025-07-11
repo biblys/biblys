@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 3.7.0 (DEV)
+## 3.7.0 (11 juillet 2025)
 
 ### Améliorations
 
