@@ -25,8 +25,10 @@ return function (Request $request, QueryParamsService $queryParams): JsonRespons
     $query = $request->query->get("term");
 
     $am = new ArticleManager();
+    $am->setIgnoreSiteFilters(true);
     /** @var Article[] $articles */
     $articles = $am->search($query, ['limit' => 10]);
+    $am->setIgnoreSiteFilters(false);
 
     $searchResults = array_map(function ($article) {
         return [
