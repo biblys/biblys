@@ -61,11 +61,15 @@ return function(Request $request): Response
     $reqParams = [];
     $reqPeopleParams = [];
 
-    if (!empty($_GET["date1"])) {
-        $req .= " AND `stock_selling_date` >= :date1 AND `stock_selling_date` <= :date2";
-        $reqParams['date1'] = $request->query->get('date1') . ' 00:00:00';
-        $reqParams['date2'] = $request->query->get('date2') . ' 23:59:59';
-    }
+    $firstDayOfCurrentMonth = date("Y-m-01");
+    $lastDayOfCurrentMonth = date("Y-m-t");
+
+    $startDate = $request->query->get("date1", $firstDayOfCurrentMonth);
+    $endDate = $request->query->get("date2", $lastDayOfCurrentMonth);
+
+    $req .= " AND `stock_selling_date` >= :date1 AND `stock_selling_date` <= :date2";
+    $reqParams["date1"] = "$startDate 00:00:00";
+    $reqParams["date2"] = "$endDate 23:59:59";
 
     $articleId = $request->query->get('article_id');
     if ($articleId) {
@@ -169,14 +173,14 @@ return function(Request $request): Response
                 <div class="form-group row">
                     <label for="date1" class="col-sm-3 col-form-label text-right">Du :</label>
                     <div class="col-sm-9">
-                        <input type="date" class="form-control" id="date1" name="date1" value="' . ($_GET["date1"] ?? null) . '">
+                        <input type="date" class="form-control" id="date1" name="date1" value="' . ($startDate ?? null) . '">
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="date2" class="col-sm-3 col-form-label text-right">Au :</label>
                     <div class="col-sm-9">
-                        <input type="date" class="form-control" id="date2" name="date2" value="' . ($_GET["date2"] ?? null) . '">
+                        <input type="date" class="form-control" id="date2" name="date2" value="' . ($endDate ?? null) . '">
                     </div>
                 </div>
                 
