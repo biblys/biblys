@@ -1,5 +1,13 @@
 # Historique des modifications
 
+## 3.7.1 (DEV)
+
+### Corrections
+
+* La page des ventes numériques pouvaient mettre du temps à s'afficher si
+  le nombre de ventes était important. Elle affiche désormais par défaut
+  uniquement les ventes du mois courant.
+
 ## 3.7.0 (11 juillet 2025)
 
 ### Améliorations
