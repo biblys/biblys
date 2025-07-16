@@ -3398,16 +3398,16 @@
         },
         {
             "name": "payplug/payplug-php",
-            "version": "3.7.1",
+            "version": "3.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/payplug/payplug-php.git",
-                "reference": "d5e75b2d0545c63eec06c454d5fe9907c2733fd7"
+                "reference": "fb7ec70300582751e6c5caa451f502ccfebec5ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/payplug/payplug-php/zipball/d5e75b2d0545c63eec06c454d5fe9907c2733fd7",
-                "reference": "d5e75b2d0545c63eec06c454d5fe9907c2733fd7",
+                "url": "https://api.github.com/repos/payplug/payplug-php/zipball/fb7ec70300582751e6c5caa451f502ccfebec5ab",
+                "reference": "fb7ec70300582751e6c5caa451f502ccfebec5ab",
                 "shasum": ""
             },
             "require": {
@@ -3442,7 +3442,7 @@
             "homepage": "https://www.payplug.com",
             "support": {
                 "issues": "https://github.com/payplug/payplug-php/issues",
-                "source": "https://github.com/payplug/payplug-php/tree/3.7.1"
+                "source": "https://github.com/payplug/payplug-php/tree/3.8.0"
             },
             "time": "2015-05-06T00:00:00+00:00"
         },
