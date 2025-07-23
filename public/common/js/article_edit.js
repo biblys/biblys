@@ -652,6 +652,11 @@ $(document).ready(function () {
 
 document.addEventListener('DOMContentLoaded', function () {
 
+  const autoImport = document.querySelector('#article_form')?.dataset.autoimport;
+  if (autoImport) {
+    article_search();
+  }
+
   const article = {
     id: document.querySelector('#article_id')?.value
   };
