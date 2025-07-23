@@ -360,11 +360,13 @@ return function (
         } else {
             $request->attributes->set("page_title", "Créer un nouvel article");
             $formMode = 'insert';
-            if (isset($_GET['import'])) {
-                if (Isbn::isParsable($_GET['import'])) {
-                    $a['article_ean'] = Isbn::convertToEan13($_GET['import']);
+
+            $importQuery = $request->query->get("import");
+            if (isset($importQuery)) {
+                if (Isbn::isParsable($importQuery)) {
+                    $article->setEan(Isbn::convertToEan13($importQuery));
                 } else {
-                    $a['article_title'] = $_GET['import'];
+                    $article->setTitle($importQuery);
                 }
             }
             $content .= '<h1><span class="fa fa-book"></span> Créer un nouvel article</h1>';
