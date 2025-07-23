@@ -9,6 +9,7 @@
       "PHP_ENV=test vendor/bin/phpunit --stop-on-error --stop-on-failure tests/"
     ],
     "test:path": "PHP_ENV=test vendor/bin/phpunit --stop-on-error --stop-on-failure",
+    "test:js": "yarn test",
     "build": "yarn encore dev",
     "build:watch": "yarn encore dev --watch",
     "build:prod": "NODE_ENV=production yarn encore production",
