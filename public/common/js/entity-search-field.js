@@ -14,10 +14,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * A component to search for entities with completion and select them.
+ *
+ * When a user enters characters in the search input, it will query the server
+ * receives the results and display a list with an item for each result.
+ *
+ * @typedef Result an object matching the search query returned by the server
+ * @property {string} error - Error message if the search fails.
+ * @property {string} url - The URL of the article.
+ * @property {string} label - The label to display for the article.
+ *
+ * An Item is a clickable HTMLElement in the submenu that may represent a search result or a custom action.
+ * The focusItemIndex is the index of the currently highlighted item in the submenu.
+ *
+ * The component has two modes
+ * - Search mode: when the user can enter a query and search for entities.
+ * - Locked mode: when the user has selected an entity, the input is read-only and displays the selected entity.
+ */
 export default class EntitySearchField {
   #focusItemIndex = -1;
   #results = [];
-  #resultsDisplayed = false;
+  #subMenuDisplayed = false;
   #lockedMode = false;
   #debounceTimeout = null;
   #currentQuery = '';
@@ -32,7 +50,8 @@ export default class EntitySearchField {
    * @param {(query: string) => {}} options.action.onSelect
    */
   constructor(element, options = {}) {
-    if(element.dataset.loaded) {
+    const currentElementIsAlreadyLoaded = element.dataset.loaded;
+    if (currentElementIsAlreadyLoaded) {
       return;
     }
 
@@ -57,7 +76,7 @@ export default class EntitySearchField {
       this.helpText.classList.remove('d-none');
     }
 
-    this.resultsElement = element.querySelector('.autocomplete-results');
+    this.subMenu = element.querySelector('.autocomplete-results');
 
     this.onResultSelectedCallback = options.onResultSelected;
 
@@ -78,9 +97,7 @@ export default class EntitySearchField {
   }
 
   #onInputFocus() {
-    if (!this.#resultsDisplayed) {
-      this.helpText.classList.remove('d-none');
-    }
+    this.#showHelpText();
 
     if (this.#lockedMode) {
       this.#switchToSearchMode();
@@ -88,7 +105,7 @@ export default class EntitySearchField {
   }
 
   #onInputBlur() {
-    this.helpText.classList.add('d-none');
+    this.#hideHelpText();
   }
 
   #onButtonClick(event) {
@@ -101,7 +118,7 @@ export default class EntitySearchField {
   }
 
   #onInput(event) {
-    if (this.#resultsDisplayed) {
+    if (this.#subMenuDisplayed) {
       this.#focusItem(-1);
     }
 
@@ -114,13 +131,13 @@ export default class EntitySearchField {
       return this.#search(event);
     }
 
-    if (!this.#resultsDisplayed) {
+    if (!this.#subMenuDisplayed) {
       return;
     }
 
     if (event.key === 'ArrowDown') {
       event.preventDefault();
-      const nextItemIndex = Math.min(this.#focusItemIndex + 1, this.resultsElement.children.length - 1);
+      const nextItemIndex = Math.min(this.#focusItemIndex + 1, this.subMenu.children.length - 1);
       this.#focusItem(nextItemIndex);
     } else if (event.key === 'ArrowUp') {
       event.preventDefault();
@@ -137,6 +154,18 @@ export default class EntitySearchField {
     }
   }
 
+  #showHelpText() {
+    if (this.#subMenuDisplayed) {
+      return;
+    }
+
+    this.helpText.classList.remove('d-none');
+  }
+
+  #hideHelpText() {
+    this.helpText.classList.add('d-none');
+  }
+
   async #search(event) {
     event.preventDefault();
 
@@ -151,13 +180,6 @@ export default class EntitySearchField {
     });
 
     /**
-     * @typedef Result
-     * @property {string} error - Error message if the search fails.
-     * @property {string} url - The URL of the article.
-     * @property {string} label - The label to display for the article.
-     */
-
-    /**
      * @type {object}
      * @property {string} error - Error message if the search fails.
      * @property {Result[]} results - Array of search results.
@@ -170,7 +192,7 @@ export default class EntitySearchField {
       return;
     }
 
-    this.resultsElement.innerHTML = '';
+    this.subMenu.innerHTML = '';
     this.helpText.classList.add('d-none');
 
     this.#results = responseData.results;
@@ -183,7 +205,7 @@ export default class EntitySearchField {
       item.style.cursor = 'pointer';
       item.textContent = result.label;
       item.className = 'list-group-item list-group-item-action';
-      this.resultsElement.appendChild(item);
+      this.subMenu.appendChild(item);
       item.addEventListener('focus', (event) => {
         event.preventDefault();
         this.#focusItem(index);
@@ -201,19 +223,24 @@ export default class EntitySearchField {
       item.style.cursor = 'pointer';
       item.textContent = '→ ' + this.customAction.label.replace('%query%', query);
       item.className = 'list-group-item list-group-item-action lead';
-      this.resultsElement.appendChild(item);
+      this.subMenu.appendChild(item);
       item.addEventListener('click', (event) => {
         event.preventDefault();
         this.customAction.onSelect(query);
       });
     }
 
-    this.#resultsDisplayed = true;
+    this.#subMenuDisplayed = true;
   }
 
+  /**
+   * Gives focus to the item at the specified index.
+   *
+   * @param itemIndex
+   */
   #focusItem(itemIndex) {
     this.#focusItemIndex = itemIndex;
-    const items = this.resultsElement.querySelectorAll('.list-group-item');
+    const items = this.subMenu.querySelectorAll('.list-group-item');
     items.forEach((item) => item.classList.remove('active'));
 
     if (this.#focusItemIndex > -1 && this.#focusItemIndex < items.length) {
@@ -260,11 +287,6 @@ export default class EntitySearchField {
     this.button.focus();
   }
 
-  #hideResults() {
-    this.resultsElement.innerHTML = '';
-    this.#resultsDisplayed = false;
-  }
-
   #switchToSearchMode() {
     this.#lockedMode = false;
 
@@ -282,5 +304,10 @@ export default class EntitySearchField {
     this.buttonIcon.classList.add('fa-magnifying-glass');
 
     this.#focusItem(-1);
+  }
+
+  #hideResults() {
+    this.subMenu.innerHTML = '';
+    this.#subMenuDisplayed = false;
   }
 }
