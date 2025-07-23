@@ -1,12 +1,19 @@
 # Historique des modifications
 
-## 3.7.1 (DEV)
+## 3.7.1 (23 juillet 2025)
 
 ### Corrections
 
 * La page des ventes numériques pouvaient mettre du temps à s'afficher si
   le nombre de ventes était important. Elle affiche désormais par défaut
   uniquement les ventes du mois courant.
+* La sélection d'un article depuis la page "Ajouter un exemplaire" ne 
+  déclenchait plus aucune action. Désormais, la sélection de l'article permettra
+  d'aller à la page d'ajout d'exemplaire pour cet article.
+* Le pré-remplissage des champs Titre et EAN sur la page d'édition d'article
+  ne fonctionnait plus. C'est corrigé.
+* La recherche automatique dans les bases externes n'était plus lancée lors de
+  la création d'un nouvel article avec des champs pré-remplis. C'est corrigé.
 
 ## 3.7.0 (11 juillet 2025)
 
