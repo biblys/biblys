@@ -288,6 +288,9 @@ return function (
     if (!isset($_GET['id'])) {
         $_GET['id'] = null;
     }
+
+    $autoImport = false;
+
     $articles = EntityManager::prepareAndExecute(
         'SELECT * FROM `articles`
     WHERE (`article_id` = :article_id OR `article_editing_user` = :user_id)
@@ -363,6 +366,7 @@ return function (
 
             $importQuery = $request->query->get("import");
             if (isset($importQuery)) {
+                $autoImport = true;
                 if (Isbn::isParsable($importQuery)) {
                     $article->setEan(Isbn::convertToEan13($importQuery));
                 } else {
@@ -716,6 +720,9 @@ return function (
           data-mode="{{ form_mode }}"
           data-uploading=0 
           data-submitted=0
+          {% if auto_import %}
+            data-autoimport="true"
+          {% endif %}
         >
     
             <fieldset>
@@ -1190,6 +1197,7 @@ return function (
     ', [
         "article" => $article,
         "form_mode" => $formMode,
+        "auto_import" => $autoImport,
     ]);
 
     return new Response($content);
