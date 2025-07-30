@@ -297,6 +297,9 @@ export default class EntitySearchField {
   #switchToSearchMode() {
     this.#lockedMode = false;
 
+    if (this.valueInput) {
+      this.valueInput.value = '';
+    }
     this.searchInput.value = '';
     this.searchInput.readOnly = false;
     this.searchInput.style.cursor = 'text';
