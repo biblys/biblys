@@ -139,7 +139,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
     <div class="form-group row">
       <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_cycle">Cycle</label>
-      {{ cycle_field|raw }}
+      <div class="col-md-7 col-lg-6 p-0">
+        {% include "AppBundle:Utils:_entity-search-field.html.twig" with {
+          query_url: "/pages/adm_article_cycle",
+          label: "Rechercher ou créer un cycle…",
+          input_name: "cycle_id",
+          field_id: "cycle-search-field",
+          selected_result_value: article.cycle ? article.cycle.id : '',
+          selected_result_label: article.cycle ? article.cycle.name : '',
+        } %}
+      </div>
       <span class="col-md-2 col-lg-1 col-form-label text-md-right">tome</span>
       <input type="text" id="article_tome" name="article_tome" value="{{ article.tome }}" class="form-control col-md-1"
              maxlength="12" />

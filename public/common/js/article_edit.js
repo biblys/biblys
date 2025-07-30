@@ -13,6 +13,41 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import EntitySearchField from '/common/js/entity-search-field.js';
+document.addEventListener('DOMContentLoaded', function() {
+  const field = document.getElementById('cycle-search-field');
+  new EntitySearchField(field, {
+    action: {
+      label: 'Créer un cycle « %query% »',
+      onSelect: (field, query) => {
+        $.ajax({
+          url: '/pages/adm_article_cycle',
+          method: 'POST',
+          data: {
+            cycle_name: query
+          },
+          complete: function(jqXHR) {
+            const data = jqXHR.responseJSON;
+
+            if (data.error) {
+              window._alert(data.error);
+              return;
+            }
+
+            const { cycle_id, cycle_name } = data;
+            field.selectResult({
+              label: cycle_name,
+              value: cycle_id,
+            });
+
+            $('#article_tome').focus();
+          }
+        });
+      }
+    },
+  });
+});
+
 
 /* eslint-env jquery */
 
@@ -47,13 +82,6 @@ function choose_collection(collection_id, collection_name, publisher_id, collect
 function choose_publisher(publisher_id, publisher_name) {
   $('#collection_publisher').addClass('pointer').removeClass('uncompleted').attr('readonly', 'readonly').val(publisher_name);
   $('#collection_publisher_id').val(publisher_id);
-}
-
-// Choisir un cycle
-function choose_cycle(cycle_id, cycle_name) {
-  $('#article_cycle').addClass('pointer').removeClass('uncompleted').attr('readonly', 'readonly').val(cycle_name);
-  $('#cycle_id').val(cycle_id);
-  $('#article_tome').focus();
 }
 
 // Recherche dans les bases externes
@@ -488,42 +516,6 @@ $(document).ready(function () {
       }
     });
   }
-
-  // Autocomplete cycle
-  $('#article_cycle').autocomplete({
-    source: '/x/adm_article_cycle',
-    minLength: 3,
-    delay: 250,
-    select: function (event, ui) {
-      if (ui.item.create === 1) { // Créer un nouveau cycle
-        $('#article_cycle').addClass('loading');
-        $.ajax({
-          url: '/x/adm_article_cycle',
-          method: 'POST',
-          data: {
-            cycle_name: ui.item.value
-          },
-          complete: function (jqXHR) {
-            const data = jqXHR.responseJSON;
-            const articleCycleField = $('#article_cycle');
-            articleCycleField.removeClass('loading');
-
-            if (data.error) {
-              window._alert(data.error);
-              return;
-            }
-
-            articleCycleField.addClass('pointer').removeClass('uncompleted').attr('readonly', 'readonly');
-            $('#cycle_id').val(data.cycle_id);
-            $('#article_tome').focus();
-            reloadArticleAdminEvents(this);
-          }
-        });
-      } else { // Sélectionner un cycle existant
-        choose_cycle(ui.item.cycle_id, ui.item.cycle_name);
-      }
-    }
-  });
 
   // Autocomplete people
   $('#article_people').autocomplete({

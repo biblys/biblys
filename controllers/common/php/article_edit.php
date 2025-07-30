@@ -29,6 +29,7 @@ use Model\ArticleCategory;
 use Model\ArticleCategoryQuery;
 use Model\ArticleQuery;
 use Model\BookCollectionQuery;
+use Model\CycleQuery;
 use Model\LinkQuery;
 use Model\PublisherQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -201,6 +202,13 @@ return function (
         $publisher = PublisherQuery::create()->findPk($collection->getPublisherId());
         $articleEntity->set("publisher_id", $publisher->getId());
         $articleEntity->set("publisher", $publisher->getName());
+
+        $articleEntity->set("article_cycle", "");
+        $cycle = CycleQuery::create()->findPk($request->request->get("cycle_id"));
+        if ($cycle) {
+            $articleEntity->set("cycle_id", $cycle->getId());
+            $articleEntity->set("article_cycle", $cycle->getName());
+        }
 
         // VALIDATION
         foreach ($_POST as $key => $val) {
@@ -495,21 +503,6 @@ return function (
         }
     }
 
-    // Cycle
-    $cym = new CycleManager();
-    $cycle = $cym->getById($articleEntity->get('cycle_id'));
-    if ($cycle) {
-        $cycleField = '
-            <input type="text" id="article_cycle" name="article_cycle" value="' . $cycle->get('name') . '" class="form-control col-md-6 pointer changeThis" readonly />
-            <input type="hidden" id="cycle_id" name="cycle_id" value="' . $cycle->get('id') . '" />
-        ';
-    } else {
-        $cycleField = '
-            <input type="text" id="article_cycle" name="article_cycle" class="form-control col-md-6 changeThis uncompleted" />
-            <input type="hidden" id="cycle_id" name="cycle_id" />
-        ';
-    }
-
     // ** CONTRIBUTIONS ** //
 
     if ($formMode == 'insert') {
@@ -662,7 +655,6 @@ return function (
         "create_collection_publisher" => $createCollectionPublisher,
         "article_type_options" => join($typeOptions),
         "collection_field" => $collectionField,
-        "cycle_field" => $cycleField,
         "availability_options" => implode($availabilityOptions),
         "preorder_checked" => $preorderChecked,
         "category_field_class" => $categoryFieldClass,
