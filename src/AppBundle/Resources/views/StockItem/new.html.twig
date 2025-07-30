@@ -47,7 +47,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         },
         action: {
           label: 'Créer un article pour « %query% »',
-          onSelect: (query) => {
+          onSelect: (_, query) => {
             window.location.href = `/pages/article_edit?import=${query}`;
           }
         },

@@ -47,7 +47,7 @@ export default class EntitySearchField {
    * @param {(result: Result) => {}} options.onResultSelected
    * @param {object} options.action
    * @param {string} options.action.label
-   * @param {(query: string) => {}} options.action.onSelect
+   * @param {(field: EntitySearchField, query: string) => {}} options.action.onSelect
    */
   constructor(element, options = {}) {
     const currentElementIsAlreadyLoaded = element.dataset.loaded;
@@ -226,7 +226,7 @@ export default class EntitySearchField {
       this.subMenu.appendChild(item);
       item.addEventListener('click', (event) => {
         event.preventDefault();
-        this.customAction.onSelect(query);
+        this.customAction.onSelect(this, query);
       });
     }
 
@@ -256,13 +256,20 @@ export default class EntitySearchField {
       this.customAction.onSelect(this.#currentQuery);
     }
 
+    this.selectResult(selectedResult);
+  }
+
+  /**
+   * @param {Result} result
+   */
+  selectResult(result) {
     if (this.valueInput) {
-      this.valueInput.value = selectedResult.value;
+      this.valueInput.value = result.value;
     }
 
-    this.#switchToLockedMode(selectedResult);
+    this.#switchToLockedMode(result);
     if (this.onResultSelectedCallback) {
-      this.onResultSelectedCallback(selectedResult);
+      this.onResultSelectedCallback(result);
     }
 
     if (this.shouldSubmitParentForm && this.parentForm) {
