@@ -68,7 +68,6 @@ export default class EntitySearchField {
 
     this.button = element.querySelector('button');
     this.buttonIcon = this.button.querySelector('i');
-    this.buttonLabel = this.button.querySelector('span');
     this.button.addEventListener('click', this.#onButtonClick.bind(this));
 
     this.helpText = element.querySelector('.help-text');
@@ -253,7 +252,7 @@ export default class EntitySearchField {
     const selectedResult = this.#results[this.#focusItemIndex];
 
     if (!selectedResult && this.customAction) {
-      this.customAction.onSelect(this.#currentQuery);
+      this.customAction.onSelect(this, this.#currentQuery);
     }
 
     this.selectResult(selectedResult);
@@ -264,7 +263,7 @@ export default class EntitySearchField {
    */
   selectResult(result) {
     if (this.valueInput) {
-      this.valueInput.value = result.value;
+      this.valueInput.value = result?.value;
     }
 
     this.#switchToLockedMode(result);
@@ -286,7 +285,7 @@ export default class EntitySearchField {
     this.searchInput.blur();
     this.#hideResults();
 
-    this.buttonLabel.textContent = 'Modifier';
+    this.button.ariaLabel = 'Modifier';
     this.button.classList.remove('btn-primary');
     this.button.classList.add('btn-secondary');
     this.buttonIcon.classList.remove('fa-magnifying-glass');
@@ -307,7 +306,7 @@ export default class EntitySearchField {
 
     this.#hideResults();
 
-    this.buttonLabel.textContent = 'Chercher';
+    this.button.ariaLabel = 'Chercher';
     this.button.classList.remove('btn-secondary');
     this.button.classList.add('btn-primary');
     this.buttonIcon.classList.remove('fa-pen-to-square');
