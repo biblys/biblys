@@ -60,7 +60,7 @@
     "biblys/isbn": "~3.0",
     "symfony/form": "^6.0",
     "symfony/security-csrf": "^6.0",
-    "payplug/payplug-php": "^3.1",
+    "payplug/payplug-php": "^4.0",
     "gitonomy/gitlib": "^1.2",
     "symfony/debug": "^4.4",
     "symfony/event-dispatcher": "^6.0",
