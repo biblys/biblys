@@ -31,14 +31,14 @@ return function (Request $request, BodyParamsService $params): JsonResponse {
         "people_last_name" => ["type" => "string"],
     ]);
 
-    $people = $pm->create([
-        "people_first_name" => $params->get("people_first_name"),
-        "people_last_name" => $params->get("people_last_name"),
-    ]);
+    $people = new \Model\People();
+    $people->setFirstName($params->get("people_first_name"));
+    $people->setLastName($params->get("people_last_name"));
+    $people->save();
 
     return new JsonResponse([
-        "people_id" => $people->get('id'),
-        "people_name" => $people->get('name'),
+        "people_id" => $people->getId(),
+        "people_name" => $people->getFullName(),
         "job_id" => 1
     ]);
 };
