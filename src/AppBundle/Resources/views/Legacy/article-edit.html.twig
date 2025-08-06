@@ -141,7 +141,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           selected_result_label: article.bookCollection ? article.bookCollection.name : '',
         } %}
       </div>
-      <span class="col-md-2 col-lg-1 col-form-label text-md-right">n°</span>
+      <span class="col-auto col-form-label text-md-right">n°</span>
       <input type="text" id="article_number" name="article_number" value="{{ article.number }}"
              class="form-control col-md-1 article_duplicate_check event" />
     </div>
@@ -158,7 +158,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           selected_result_label: article.cycle ? article.cycle.name : '',
         } %}
       </div>
-      <span class="col-md-2 col-lg-1 col-form-label text-md-right">tome</span>
+      <span class="col-auto col-form-label text-md-right">tome</span>
       <input type="text" id="article_tome" name="article_tome" value="{{ article.tome }}" class="form-control col-md-1"
              maxlength="12" />
     </div>
@@ -248,11 +248,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     <div id="people_list"></div>
 
     <div class="form-group row mt-4">
-      <label class="col-md-4 col-lg-3 col-form-label text-md-right">Ajouter</label>
+      <label class="col-md-4 col-lg-3 col-form-label text-md-right">Ajouter un·e contributeur·ice</label>
       <div class="col-md-7 col-lg-6 p-0">
         {% include "AppBundle:Utils:_entity-search-field.html.twig" with {
           query_url: "/pages/adm_article_people",
-          label: "Rechercher un·e contributeur·ice par nom ou prénom…",
+          label: "Rechercher par nom ou prénom…",
           field_id: "contributor-search-field",
         } %}
       </div>
@@ -262,54 +262,64 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <fieldset>
     <legend>Données bibliographiques</legend>
 
-    <label class="floating" for="article_subtitle">Sous-titre :</label>
-    <input type="text" id="article_subtitle" name="article_subtitle" id="article_subtitle"
-           value="{{ article.subtitle }}" class="long" />
-    <br />
-    <label class="floating" for="article_title_original">Titre original :</label>
-    <input type="text" id="article_title_original" name="article_title_original" value="{{ article.titleOriginal }}"
-           class="long" />
-    <br />
-    <label class="floating" for="article_title_others">Autres titres :</label>
-    <input type="text" id="article_title_others" name="article_title_others" value="{{ article.titleOthers }}"
-           class="long" />
-    <br /><br />
+    <div class="form-group row mb-1">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_subtitle">Sous titre</label>
+      <input type="text" id="article_subtitle" name="article_subtitle" value="{{ article.subtitle }}"
+             class="form-control col-md-9" />
+    </div>
 
-    <label class="floating" for="article_copyright">Copyright :</label>
-    <input type="number" id="article_copyright" name="article_copyright" value="{{ article.copyright }}" step="1"
-           min="1800" max="2032" placeholder="AAAA" class="mini" />
-    <br />
-    <label class="floating" for="article_pubdate">Date de parution :</label>
-    <input type="date" id="article_pubdate" name="article_pubdate" value="{{ article.pubdate|date("Y-m-d") }}"
-           placeholder="AAAA-MM-JJ" />
-    <br /><br />
+    <div class="form-group row">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_title_original">Titre original</label>
+      <input type="text" id="article_title_original" name="article_title_original" value="{{ article.titleOriginal }}"
+             class="form-control col-md-9" />
+    </div>
 
-    <p>
-      <label class="floating" for="article_lang_current">Langue actuelle :</label>
-      <select name="article_lang_current" id="article_lang_current">{{ lang_current_options|raw }}</select>
-    </p>
-    <p>
-      <label class="floating" for="article_lang_original">Langue d’origine :</label>
-      <select name="article_lang_original" id="article_lang_original">{{ lang_original_options }}</select>
-    </p>
-    <p>
-      <label class="floating" for="article_origin_country">Pays d’origine :</label>
-      <select name="article_origin_country" id="article_origin_country">
+    <input type="hidden" name="article_title_others" value="{{ article.titleOthers }}" />
+
+    <div class="form-group row mb-1">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_copyright">Copyright (année)</label>
+      <input type="number" id="article_copyright" name="article_copyright" value="{{ article.copyright }}"
+             class="form-control col-md-1" min="1800" max="2048" />
+    </div>
+
+    <div class="form-group row">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_pubdate">Date de parution</label>
+      <input type="date" id="article_pubdate" name="article_pubdate" value="{{ article.pubdate|date("Y-m-d") }}"
+             class="form-control col-md-2" placeholder="AAAA-MM-JJ" />
+    </div>
+
+    <div class="form-group row mb-1">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_lang_current">Langue actuelle</label>
+      <select id="article_lang_current" name="article_lang_current" class="form-control col-md-3">
+        {{ lang_current_options|raw }}
+      </select>
+    </div>
+
+    <div class="form-group row mb-1">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_lang_original">Langue d'origine</label>
+      <select id="article_lang_original" name="article_lang_original" class="form-control col-md-3">
+        {{ lang_original_options|raw }}
+      </select>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_origin_country">Pays d'origine</label>
+      <select id="article_origin_country" name="article_origin_country" class="form-control col-md-3">
         <option value="0"></option>
         {{ origin_country_options|raw }}
       </select>
-    </p>
-    <br />
-    <p>
+    </div>
 
-      <label class="floating" for="article_age_min">Lectorat :</label>
-      <input type="number" id="article_age_min"
-             name="article_age_min" value="{{ article.ageMin }}"
-             step="1" min="1" max="99" class="mini" /> ans à
-      <input type="number" id="article_age_max"
-             name="article_age_max" value="{{ article.ageMax }}"
-             step="1" min="1" max="99" class="mini" /> ans
-    </p>
+    <div class="form-group row">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_age_min">Âge recommandé</label>
+      <span class="col-auto col-form-label pl-0">de</span>
+      <input type="text" id="article_age_min" name="article_age_min" value="{{ article.ageMin }}"
+             class="form-control col-md-1" min="1" max="99" />
+      <span class="col-auto col-form-label">ans à</span>
+      <input type="text" id="article_age_max" name="article_age_max" value="{{ article.ageMax }}"
+             class="form-control col-md-1" min="1" max="99" />
+      <span class="col-md-auto col-form-label">ans</span>
+    </div>
 
   </fieldset>
 
