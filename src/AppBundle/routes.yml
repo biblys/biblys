@@ -48,10 +48,10 @@ main_admin_cloud_portal:
   path: /admin/cloud/portal
   controller: AppBundle\Controller\MainController::adminCloudPortal
 
-main_admin_hot_news_mark_as_read:
+main_admin_mark_cloud_news_as_read:
   methods: POST
   path: /admin/hot-news/mark-as-read
-  controller: AppBundle\Controller\MainController::hotNewsMarkAsRead
+  controller: AppBundle\Controller\MainController::markCloudNewsAsReadAction
 
 # Administrators
 
