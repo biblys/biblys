@@ -96,20 +96,6 @@ class CloudService
 
     /**
      * @throws GuzzleException
-     */
-    public function getNews(): array
-    {
-        if (!$this->isConfigured()) {
-            throw new Exception("L'abonnement Biblys n'est pas configuré.");
-        }
-
-        $response = $this->httpClient->request("GET", "{$this->_getBaseUrl()}/news.json");
-        $body = $response->getBody();
-        return json_decode($body, true);
-    }
-
-    /**
-     * @throws GuzzleException
      * @throws Exception
      */
     private function _query(string $endpointUrl): array

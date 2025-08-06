@@ -721,11 +721,11 @@ class MainControllerTest extends TestCase
         $currentUser
             ->expects($this->once())
             ->method("setOption")
-            ->with("cloud_news_read_at", $this->anything());
+            ->with("biblys_blog_posts_read_at", $this->anything());
         $currentUser->expects($this->once())->method("authAdmin");
 
         // when
-        $response = $controller->markCloudNewsAsReadAction($urlGenerator, $currentUser);
+        $response = $controller->markBiblysBlogPostsAsReadAction($urlGenerator, $currentUser);
 
         // then
         $this->assertEquals(302, $response->getStatusCode(), "returns HTTP 302");

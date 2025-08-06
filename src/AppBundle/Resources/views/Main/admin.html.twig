@@ -67,10 +67,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
   </div>
 
-  {% if cloud_news %}
+  {% if biblys_blog_posts %}
     <div class="card mb-3 mx-5">
       <div class="card-header pt-3">
-
         <form action="{{ path("main_admin_mark_cloud_news_as_read") }}" method="post" class="float-right">
           <button type="submit" class="btn btn-secondary btn-sm" aria-label="Fermer la carte">
             <span class="fa fa-check"></span> Marquer comme lu
@@ -79,7 +78,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <h5><i class="fa fa-newspaper"></i>&nbsp; L'actualité de Biblys</h5>
       </div>
       <div class="list-group list-group-flush">
-        {% for news in cloud_news %}
+        {% for news in biblys_blog_posts %}
           <div class="list-group-item">
             {% if news.image is defined %}
               <img src="{{ news.image }}" class="w-25 float-right ml-2" alt="{{ news.title }}">

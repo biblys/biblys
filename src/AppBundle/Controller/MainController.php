@@ -35,6 +35,7 @@ use CartManager;
 use DateTime;
 use Exception;
 use Framework\Controller;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use OrderManager;
 use PostManager;
@@ -318,18 +319,6 @@ class MainController extends Controller
             $shortcuts = [];
         }
 
-        $cloudNews = [];
-        if ($cloud->isConfigured()) {
-            $cloudNews = $cloud->getNews();
-            $cloudNewsReadAt = $currentUser->getOption("cloud_news_read_at");
-            if ($cloudNewsReadAt) {
-                $cloudNews = array_filter($cloudNews, function ($news) use ($cloudNewsReadAt) {
-                    return $news['date'] > $cloudNewsReadAt;
-                });
-            }
-
-        }
-
         $ebooksSection = null;
         if ($currentSite->getOption("downloadable_publishers") !== null) {
             $ebooksSection = Entry::generateUrlsForEntries(Entry::findByCategory('ebooks'), $urlGenerator);
@@ -350,7 +339,7 @@ class MainController extends Controller
             'biblys' => Entry::generateUrlsForEntries(Entry::findByCategory('biblys'), $urlGenerator),
             'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
             'site_title' => $globalSite->get('title'),
-            "cloud_news" => $cloudNews,
+            "biblys_blog_posts" => $this->_getBiblysBlogPosts($currentUser->getOption("biblys_blog_posts_read_at")),
         ], isPrivate: true);
     }
 
@@ -508,15 +497,35 @@ class MainController extends Controller
      * @throws PropelException
      * @throws Exception
      */
-    public function markCloudNewsAsReadAction(UrlGenerator $urlGenerator, CurrentUser $currentUser): RedirectResponse
+    public function markBiblysBlogPostsAsReadAction(UrlGenerator $urlGenerator, CurrentUser $currentUser): RedirectResponse
     {
         $currentUser->authAdmin();
 
         $today = (new DateTime())->format("Y-m-d");
-        $currentUser->setOption("cloud_news_read_at", $today);
+        $currentUser->setOption("biblys_blog_posts_read_at", $today);
 
         $dashboardUrl = $urlGenerator->generate("main_admin");
         return new RedirectResponse($dashboardUrl);
+    }
+
+    private function _getBiblysBlogPosts(?string $cloudNewsReadAt): mixed
+    {
+        try {
+            $guzzle = new Client();
+            $response = $guzzle->request("GET", "https://blog.biblys.org/news.json");
+            $body = $response->getBody();
+            $biblysBlogPosts = json_decode($body, true);
+            if ($biblysBlogPosts) {
+                if ($cloudNewsReadAt) {
+                    $biblysBlogPosts = array_filter($biblysBlogPosts, function ($news) use ($cloudNewsReadAt) {
+                        return $news['date'] > $cloudNewsReadAt;
+                    });
+                }
+            }
+            return $biblysBlogPosts;
+        } catch(GuzzleException) {
+            return [];
+        }
     }
 
 }
