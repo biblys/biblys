@@ -1,5 +1,16 @@
 # Historique des modifications
 
+## 3.8.0 (6 août 2025)
+
+### Améliorations
+
+- La page d'accueil de l'administration affiche désormais un aperçu des derniers
+  billets publiés sur le blog Biblys. Il est possible de les masquer en cliquant
+  sur le bouton "Marquer comme lu".
+- Le formulaire d'édition d'un article se modernise visuellement pour améliorer
+  son ergonomie. C'est un chantier en cours. La moitié haute du formulaire a
+  déjà été revue.
+
 ## 3.7.1 (23 juillet 2025)
 
 ### Corrections
@@ -7,7 +18,7 @@
 * La page des ventes numériques pouvaient mettre du temps à s'afficher si
   le nombre de ventes était important. Elle affiche désormais par défaut
   uniquement les ventes du mois courant.
-* La sélection d'un article depuis la page "Ajouter un exemplaire" ne 
+* La sélection d'un article depuis la page "Ajouter un exemplaire" ne
   déclenchait plus aucune action. Désormais, la sélection de l'article permettra
   d'aller à la page d'ajout d'exemplaire pour cet article.
 * Le pré-remplissage des champs Titre et EAN sur la page d'édition d'article
