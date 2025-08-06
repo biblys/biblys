@@ -51,7 +51,7 @@ main_admin_cloud_portal:
 main_admin_mark_cloud_news_as_read:
   methods: POST
   path: /admin/hot-news/mark-as-read
-  controller: AppBundle\Controller\MainController::markCloudNewsAsReadAction
+  controller: AppBundle\Controller\MainController::markBiblysBlogPostsAsReadAction
 
 # Administrators
 
