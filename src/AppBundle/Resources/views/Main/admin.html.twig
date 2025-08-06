@@ -41,21 +41,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     </div>
   {% endif %}
 
-  {% if hot_news %}
-    <div class="alert alert-info">
-      <span class="fa fa-newspaper"></span>
-      <strong>Actu Biblys</strong> |
-      <a href="{{ hot_news.link }}">
-        {{ hot_news.message }}
-      </a>
-      <form action="{{ path("main_admin_hot_news_mark_as_read") }}" method="post" class="float-right">
-        <button type="submit" class="btn btn-primary btn-sm">
-          <span class="fa fa-close"></span> Fermer
-        </button>
-      </form>
-    </div>
-  {% endif %}
-
   <h3>Raccourcis</h3>
 
   {% if shortcuts|length > 0 %}
@@ -81,6 +66,33 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     {% endfor %}
 
   </div>
+
+  {% if cloud_news %}
+    <div class="card mb-3 mx-5">
+      <div class="card-header pt-3">
+
+        <form action="{{ path("main_admin_hot_news_mark_as_read") }}" method="post" class="float-right">
+          <button type="submit" class="btn btn-secondary btn-sm" aria-label="Fermer la carte">
+            <span class="fa fa-check"></span> Marquer comme lu
+          </button>
+        </form>
+        <h5><i class="fa fa-newspaper"></i>&nbsp; L'actualité de Biblys</h5>
+      </div>
+      <div class="list-group list-group-flush">
+        {% for news in cloud_news %}
+          <div class="list-group-item">
+            {% if news.image is defined %}
+              <img src="{{ news.image }}" class="w-25 float-right ml-2" alt="{{ news.title }}">
+            {% endif %}
+            <h5 class="card-title">{{ news.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ news.date|date('j f Y') }}</h6>
+            <p class="card-text">{{ news.description }}</p>
+            <a href="{{ news.url }}" class="card-link stretched-link">En savoir plus</a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
 
   <div class="row admin-dashboard">
 
