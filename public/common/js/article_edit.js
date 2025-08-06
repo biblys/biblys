@@ -81,7 +81,7 @@ function initPublisherAutocomplete() {
 /** Cycle autocomplete */
 document.addEventListener('DOMContentLoaded', function() {
   const field = document.getElementById('cycle-search-field');
-  new EntitySearchField(field, {
+  window.cycleField = new EntitySearchField(field, {
     action: {
       label: 'Créer un cycle « %query% »',
       onSelect: (field, query) => {
@@ -108,6 +108,44 @@ document.addEventListener('DOMContentLoaded', function() {
             $('#article_tome').focus();
           }
         });
+      }
+    },
+  });
+});
+
+/** Contributor autocomplete */
+document.addEventListener('DOMContentLoaded', function() {
+  const field = document.getElementById('contributor-search-field');
+  new EntitySearchField(field, {
+    onResultSelected: (field, { value }) => {
+      _addContribution(value, 1);
+      field.reset();
+    },
+    action: {
+      label: 'Créer « %query% »',
+      onSelect: (field, query) => {
+        $('#create_people').dialog({
+          title: 'Créer un nouveau contributeur',
+          modal: true,
+          width: 500,
+          buttons: [{
+            text: 'Annuler',
+            click: function () {
+              $(this).dialog('close');
+            }
+          }, {
+            text: 'Valider',
+            click: function () {
+              $(this).submit();
+            }
+          }],
+          open: function () {
+            const people_name = query.split(' ');
+            $('#people_first_name').val(people_name[0]).select();
+            $('#people_last_name').val(people_name[1]);
+          },
+        });
+        $('#people_first_name').focus();
       }
     },
   });
@@ -313,8 +351,15 @@ function reloadArticleAdminEvents(scope) {
           $.each(data, function (key, val) {
             if (key !== 'article_collection') $('#' + key).val(val);
           });
-          if (data.collection_id) choose_collection(data.collection_id, data.article_collection, data.publisher_id, data.article_publisher, data.pricegrid_id);
-          if (data.cycle_id) choose_cycle(data.cycle_id, data.article_cycle);
+          // if (data.collection_id) choose_collection(data.collection_id, data.article_collection, data.publisher_id, data.article_publisher, data.pricegrid_id);
+          if (data.collection_id) {
+            const collectionLabel = `${data.article_collection} (${data.article_publisher})`;
+            window.collectionField.selectResult({ label: collectionLabel, value: data.collection_id });
+            $('#article_publisher').val(data.publisher_id);
+          }
+          if (data.cycle_id) {
+            window.cycleField.selectResult({ label: data.article_cycle, value: data.cycle_id });
+          }
           if (data.article_people !== undefined && data.article_people != null) {
             $.each(data.article_people, function (pkey, people) {
               window.overlay('Importation en cours...');
@@ -461,9 +506,8 @@ $(document).ready(function () {
     $('#submitPeopleForm').addClass('loading');
     $.post({
       method: 'POST',
-      url: '/x/adm_article_people',
+      url: '/pages/adm_article_people_create',
       data: {
-        action: 'create',
         people_first_name: $('#people_first_name').val(),
         people_last_name: $('#people_last_name').val()
       },
@@ -472,7 +516,6 @@ $(document).ready(function () {
         if (data.error) {
           window._alert(data.error);
         } else {
-          $('#article_people').removeClass('uncompleted').removeAttr('readonly').val('');
           $('#people_first_name').val('');
           $('#people_last_name').val('');
           $('#create_people').dialog('close');
@@ -484,51 +527,6 @@ $(document).ready(function () {
       },
     });
   }).removeClass('e');
-
-  /* AUTOCOMPLETE */
-
-  // Autocomplete people
-  $('#article_people').autocomplete({
-    source: '/x/adm_article_people',
-    minLength: 3,
-    delay: 250,
-    select: function (event, ui) {
-      const field = $(this);
-      field.attr('readonly', 'readonly').addClass('loading');
-      if (ui.item.create === 1) { // Créer un nouveau contributeur
-        $('#create_people').dialog({
-          title: 'Créer un nouveau contributeur',
-          modal: true,
-          width: 500,
-          buttons: [{
-            text: 'Annuler',
-            click: function () {
-              $(this).dialog('close');
-            }
-          }, {
-            text: 'Valider',
-            click: function () {
-              $(this).submit();
-            }
-          }],
-          open: function () {
-            const articlePeopleField = $('#article_people');
-            const people_name = articlePeopleField.val().split(' ');
-            $('#people_first_name').val(people_name[0]).select();
-            $('#people_last_name').val(people_name[1]);
-            articlePeopleField.val('');
-          },
-          close: function () {
-            field.removeAttr('readonly').removeClass('loading').val('');
-          }
-        });
-        $('#people_first_name').focus();
-      } else { // Sélectionner un contributeur existant
-        _addContribution(ui.item.id, 1);
-        field.removeAttr('readonly').removeClass('loading').val('');
-      }
-    }
-  });
 
   // Autocomplete category
   $('#article_category').autocomplete({
@@ -955,17 +953,20 @@ function _addContributorLine({
   const contributionLineSelector = `#contribution_${contributionId}`;
 
   const contributorLine = _createElementFromHTML(`
-    <p id="contribution_${contributionId}" class="article_role">
-      <label>${contributorName}&nbsp;:</label>
-      <select class="contribution-role-selector" data-contribution_id="${contributionId}">
-      </select>
-      <a 
-          class="btn btn-danger btn-sm contribution-delete-button" 
-          data-contribution_id="${contributionId}"
-      >
-          <span class="fa fa-remove"></span>
-      </a>
-    </p>
+    <div id="contribution_${contributionId}" class="form-group row">
+      <label class="col-md-4 col-lg-3 col-form-label text-md-right">${contributorName}</label>
+      <div class="col-md-7 col-lg-6 p-0">
+        <select class="contribution-role-selector form-control" data-contribution_id="${contributionId}"> </select>
+      </div>
+      <div class="col-md-2 col-lg-3">
+        <a 
+            class="btn btn-danger contribution-delete-button" 
+            data-contribution_id="${contributionId}"
+        >
+            <span class="fa fa-remove"></span>
+        </a>
+      </div>
+    </div>
   `);
 
   $('#people_list').append(contributorLine);

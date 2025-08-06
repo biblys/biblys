@@ -244,14 +244,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   </fieldset>
 
   <fieldset id="Contributeurs">
-    <a href="https://docs.biblys.fr/administrer/catalogue/fiche-article/#contributeurs" target="_blank"
-       class="float-right">Besoin d’aide ?</a>
     <legend>Contributions</legend>
     <div id="people_list"></div>
-    <br /><br />
 
-    <label class="floating" for="article_people">Ajouter :</label>
-    <input type="text" id="article_people" placeholder="Rechercher par nom ou prénom…" class="long" />
+    <div class="form-group row mt-4">
+      <label class="col-md-4 col-lg-3 col-form-label text-md-right">Ajouter</label>
+      <div class="col-md-7 col-lg-6 p-0">
+        {% include "AppBundle:Utils:_entity-search-field.html.twig" with {
+          query_url: "/pages/adm_article_people",
+          label: "Rechercher un·e contributeur·ice par nom ou prénom…",
+          field_id: "contributor-search-field",
+        } %}
+      </div>
+    </div>
   </fieldset>
 
   <fieldset>

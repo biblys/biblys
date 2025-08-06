@@ -44,7 +44,7 @@ export default class EntitySearchField {
    *
    * @param {HTMLElement} element
    * @param {object} options
-   * @param {(result: Result) => {}} options.onResultSelected
+   * @param {(field: EntitySearchField, result: Result) => {}} options.onResultSelected
    * @param {object} options.action
    * @param {string} options.action.label
    * @param {(field: EntitySearchField, query: string) => {}} options.action.onSelect
