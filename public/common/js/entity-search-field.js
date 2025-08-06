@@ -268,7 +268,7 @@ export default class EntitySearchField {
 
     this.#switchToLockedMode(result);
     if (this.onResultSelectedCallback) {
-      this.onResultSelectedCallback(result);
+      this.onResultSelectedCallback(this, result);
     }
 
     if (this.shouldSubmitParentForm && this.parentForm) {
@@ -318,5 +318,11 @@ export default class EntitySearchField {
   #hideResults() {
     this.subMenu.innerHTML = '';
     this.#subMenuDisplayed = false;
+  }
+
+  /** Public API **/
+
+  reset() {
+    this.#switchToSearchMode();
   }
 }
