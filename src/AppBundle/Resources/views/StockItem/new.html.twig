@@ -42,7 +42,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     document.addEventListener('DOMContentLoaded', function() {
       const field = document.getElementById('entity-search-field');
       new EntitySearchField(field, {
-        onResultSelected: (result) => {
+        onResultSelected: (_, result) => {
           window.location.href = `/pages/adm_stock?add=${result.value}`;
         },
         action: {
