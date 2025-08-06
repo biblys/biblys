@@ -64,7 +64,7 @@ class CollectionControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("allowsPublisher")->andReturn(true);
         $queryParams = Mockery::mock(QueryParamsService::class);
-        $queryParams->expects("parse")->with(["term" => ["type" => "string", "mb_min_length" => 3]]);
+        $queryParams->expects("parse")->with(["term" => ["type" => "string"]]);
         $queryParams->expects("get")->with("term")->andReturn("Searchable");
 
         // when
@@ -72,19 +72,10 @@ class CollectionControllerTest extends TestCase
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
-        $expectedResponse = '[{
+        $expectedResponse = '{"results":[{
     "label": "Searchable collection (Searchable publisher)",
-    "value": "Searchable collection",
-    "collection_name": "Searchable collection",
-    "collection_publisher": "Searchable publisher",
-    "collection_id": '.$collection->getId().',
-    "publisher_id": '.$publisher->getId().',
-    "pricegrid_id": 123
-}, {
-    "label": "=\u003E Cr\u00e9er : Searchable",
-    "value": "Searchable",
-    "create": 1
-}]';
+    "value": '.$collection->getId().'
+}]}';
         $this->assertJsonStringEqualsJsonString($expectedResponse, $response->getContent());
     }
 
@@ -107,7 +98,7 @@ class CollectionControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("allowsPublisher")->andReturn(true);
         $queryParams = Mockery::mock(QueryParamsService::class);
-        $queryParams->expects("parse")->with(["term" => ["type" => "string", "mb_min_length" => 3]]);
+        $queryParams->expects("parse")->with(["term" => ["type" => "string"]]);
         $queryParams->expects("get")->with("term")->andReturn("User");
 
         // when

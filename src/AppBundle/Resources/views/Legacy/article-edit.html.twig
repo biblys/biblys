@@ -131,7 +131,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
     <div class="form-group row mb-1">
       <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_collection">Collection</label>
-      {{ collection_field|raw }}
+      <div class="col-md-7 col-lg-6 p-0">
+        {% include "AppBundle:Utils:_entity-search-field.html.twig" with {
+          query_url: path("api_collection_search"),
+          label: "Rechercher ou créer une collection…",
+          input_name: "collection_id",
+          field_id: "collection-search-field",
+          selected_result_value: article.bookCollection ? article.bookCollection.id : '',
+          selected_result_label: article.bookCollection ? article.bookCollection.name : '',
+        } %}
+      </div>
       <span class="col-md-2 col-lg-1 col-form-label text-md-right">n°</span>
       <input type="text" id="article_number" name="article_number" value="{{ article.number }}"
              class="form-control col-md-1 article_duplicate_check event" />
@@ -345,11 +354,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <fieldset>
     <legend>Objet</legend>
 
-    <p>
-      <label class="floating" for="article_shaping">Façonnage :</label>
-      <select id="article_shaping" name="article_shaping">
+
+    <div class="form-group row">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_shaping">Façonnage</label>
+      <select id="article_shaping" name="article_shaping" class="form-control col-md-3">
         <option>{{ article.shaping }}</option>
-        <option />
+        <option></option>
         <option>broché</option>
         <option>broché avec rabats</option>
         <option>cartonné</option>
@@ -364,7 +374,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <option>reliure japonaise</option>
         <option>souple</option>
       </select>
-    </p>
+    </div>
 
     <p>
       <label class="floating" for="article_printing_process">Impression :</label>

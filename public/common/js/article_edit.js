@@ -14,6 +14,71 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import EntitySearchField from '/common/js/entity-search-field.js';
+
+/** Collection autocomplete */
+document.addEventListener('DOMContentLoaded', function() {
+  const field = document.getElementById('collection-search-field');
+  window.collectionField = new EntitySearchField(field, {
+    action: {
+      label: 'Créer une collection « %query% »',
+      onSelect: (field, query) => {
+        $('#collection_name').val(query);
+        $('#createCollection').dialog({
+          title: 'Créer une nouvelle collection',
+          minHeight: 500,
+          modal: true,
+          width: 500,
+          buttons: [{
+            text: 'Annuler',
+            click: function () {
+              $(this).dialog('close');
+            }
+          }, {
+            text: 'Valider',
+            click: function () {
+              $(this).submit();
+            }
+          }]
+        });
+        initPublisherAutocomplete();
+        $('#collection_publisher').focus();
+      }
+    },
+  });
+});
+
+/** Publisher autocomplete (upon collection creation) */
+function initPublisherAutocomplete() {
+  $('#collection_publisher').autocomplete({
+    source: '/x/adm_article_publisher',
+    minLength: 3,
+    delay: 250,
+    select: function (event, ui) {
+      if (ui.item.create === 1) { // Créer un nouvel editeur
+        $('#collection_publisher').addClass('loading');
+        $.post({
+          url: '/x/adm_article_publisher',
+          data: {
+            publisher_name: ui.item.value
+          },
+          success: function (data) {
+            $('#collection_publisher').removeClass('loading');
+            const res = jQuery.parseJSON(data);
+            if (res.error) window._alert(res.error);
+            else choose_publisher(res.publisher_id, res.publisher_name);
+          },
+          error: function (data) {
+            window._alert(data.responseJSON.error.message);
+          }
+        });
+      } else {
+        choose_publisher(ui.item.publisher_id, ui.item.value, ui.item);
+      }
+    }
+  });
+}
+
+/** Cycle autocomplete */
 document.addEventListener('DOMContentLoaded', function() {
   const field = document.getElementById('cycle-search-field');
   new EntitySearchField(field, {
@@ -57,25 +122,6 @@ function handleHttpError(response) {
   }
 
   return response;
-}
-
-// Choisir une collection
-function choose_collection(collection_id, collection_name, publisher_id, collection_publisher, pricegrid_id) {
-  $('#article_collection').addClass('pointer').removeClass('uncompleted').attr('readonly', 'readonly').val(collection_name);
-  $('#article_publisher').addClass('pointer').removeClass('uncompleted').attr('readonly', 'readonly').val(collection_publisher);
-  $('#collection_id').val(collection_id);
-  $('#publisher_id').val(publisher_id);
-  $('#pricegrid_id').val(pricegrid_id);
-  if (pricegrid_id !== 0 && typeof (pricegrid_id) !== 'undefined') {
-    $('#article_category_div').slideDown();
-    $('#article_category').attr('required', 'required');
-    $('#article_price').attr('readonly', 'readonly');
-  } else {
-    $('#article_category_div').slideUp();
-    $('#article_category').removeAttr('required').val('');
-    $('#article_price').removeAttr('readonly');
-  }
-  $('#article_number').focus();
 }
 
 // Choisir un editeur (creation de collection)
@@ -302,20 +348,6 @@ function reloadArticleAdminEvents(scope) {
     if ($(this).attr('readonly') !== 'readonly') $(this).val('');
   });
 
-  // Changer les champs collection ou cycle
-  $('.changeThis', scope).click(function () {
-    $(this).removeClass('pointer').addClass('uncompleted').removeAttr('readonly').val('').focus();
-    $('#' + $(this).attr('id').replace('article_', '') + '_id').val('');
-  });
-  $('.changeThis', scope).bind('keypress', function (e) {
-    const code = (e.keyCode ? e.keyCode : e.which);
-    if (code === 13) {
-      e.preventDefault();
-      $(this).removeClass('pointer').addClass('uncompleted').removeAttr('readonly').val('').focus();
-      $('#' + $(this).attr('id').replace('article_', '') + '_id').val('');
-    }
-  });
-
   // Créer une nouvelle collection
   $('#createCollection.event', scope).submit(function (e) {
     e.preventDefault();
@@ -328,9 +360,11 @@ function reloadArticleAdminEvents(scope) {
       },
       dataType: 'json',
       success: function (res) {
-        $('#article_collection').addClass('pointer').removeClass('uncompleted').attr('readonly', 'readonly').val(res.collection_name);
+        window.collectionField.selectResult({
+          label: res.collection_name,
+          value: res.collection_id,
+        });
         $('#article_publisher').val(res.collection_publisher);
-        $('#collection_id').val(res.collection_id);
         $('#publisher_id').val(res.collection_publisher_id);
         $('#createCollection').dialog('close');
         $('#article_number').focus();
@@ -452,70 +486,6 @@ $(document).ready(function () {
   }).removeClass('e');
 
   /* AUTOCOMPLETE */
-
-  // Autocomplete collection
-  $('#article_collection').autocomplete({
-    source: '/api/collections/search',
-    minLength: 3,
-    delay: 250,
-    select: function (event, ui) {
-      if (ui.item.create === 1) { // Créer une nouvelle collection
-        $('#collection_name').val(ui.item.value);
-        $('#createCollection').dialog({
-          title: 'Créer une nouvelle collection',
-          minHeight: 500,
-          modal: true,
-          width: 500,
-          buttons: [{
-            text: 'Annuler',
-            click: function () {
-              $(this).dialog('close');
-            }
-          }, {
-            text: 'Valider',
-            click: function () {
-              $(this).submit();
-            }
-          }]
-        });
-        initPublisherAutocomplete();
-        $('#collection_publisher').focus();
-      } else { // Sélectionner une collection existante
-        choose_collection(ui.item.collection_id, ui.item.value, ui.item.publisher_id, ui.item.collection_publisher, ui.item.pricegrid_id);
-      }
-    }
-  });
-
-  // Autocomplete editeur (a la creation de collection)
-  function initPublisherAutocomplete() {
-    $('#collection_publisher').autocomplete({
-      source: '/x/adm_article_publisher',
-      minLength: 3,
-      delay: 250,
-      select: function (event, ui) {
-        if (ui.item.create === 1) { // Créer un nouvel editeur
-          $('#collection_publisher').addClass('loading');
-          $.post({
-            url: '/x/adm_article_publisher',
-            data: {
-              publisher_name: ui.item.value
-            },
-            success: function (data) {
-              $('#collection_publisher').removeClass('loading');
-              const res = jQuery.parseJSON(data);
-              if (res.error) window._alert(res.error);
-              else choose_publisher(res.publisher_id, res.publisher_name);
-            },
-            error: function (data) {
-              window._alert(data.responseJSON.error.message);
-            }
-          });
-        } else {
-          choose_publisher(ui.item.publisher_id, ui.item.value, ui.item);
-        }
-      }
-    });
-  }
 
   // Autocomplete people
   $('#article_people').autocomplete({
