@@ -318,11 +318,6 @@ class MainController extends Controller
             $shortcuts = [];
         }
 
-        $hotNewsBanner = $config->get("cloud.hot_news");
-        if ($currentUser->getOption("hot_news_read")) {
-            $hotNewsBanner = null;
-        }
-
         $cloudNews = [];
         if ($cloud->isConfigured()) {
             $cloudNews = $cloud->getNews();
@@ -355,7 +350,6 @@ class MainController extends Controller
             'biblys' => Entry::generateUrlsForEntries(Entry::findByCategory('biblys'), $urlGenerator),
             'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
             'site_title' => $globalSite->get('title'),
-            "hot_news" => $hotNewsBanner,
             "cloud_news" => $cloudNews,
         ], isPrivate: true);
     }
