@@ -80,6 +80,13 @@ api_stripe_create_payment:
   path: /api/orders/{slug}/stripe/create-payment
   controller: ApiBundle\Controller\PaymentController::createStripePaymentAction
 
+# Publishers
+
+api_publishers_get:
+  methods: GET
+  path: /api/publishers/{id}
+  controller: ApiBundle\Controller\PublisherController::getAction
+
 # Shipping
 
 api_shipping:
