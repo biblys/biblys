@@ -19,6 +19,8 @@ import EntitySearchField from '/common/js/entity-search-field.js';
 document.addEventListener('DOMContentLoaded', function() {
   const field = document.getElementById('collection-search-field');
   window.collectionField = new EntitySearchField(field, {
+    onResultSelected: async (field, { value, label }) => {
+    },
     action: {
       label: 'Créer une collection « %query% »',
       onSelect: (field, query) => {

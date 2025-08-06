@@ -260,51 +260,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   </fieldset>
 
   <fieldset>
-    <legend>Identifiants et liens</legend>
-
-    <label class="floating" for="article_url">URL Biblys :</label>
-    <input type="text" id="article_url" name="article_url" value="{{ article.url }}" pattern="^[a-z0-9-_]+/[a-z0-9-_]+$"
-           title="Dans le doute, laisser ce champ vide." placeholder="Champ rempli automatiquement" class="long"
-           pattern="^((?!http).)*$" />
-    <br /><br />
-
-    <label class="floating" for="article_textid">TextID :</label>
-    <input type="text" id="article_textid" name="article_textid" value="{{ article.textId }}" class="verylong"
-           maxlength=32>
-    <br />
-    <label class="floating" for="article_item">Item n°</label>
-    <input type="text" id="article_item" name="article_item" value="{{ article.item }}"
-           class="mini article_duplicate_check event" />
-    <br />
-    <label class="floating" for="article_link_to">Lier à l’article n°</label>
-    <input type="number" id="article_link_to" name="article_link_to" class="mini" />
-    <br />
-    <label class="floating" for="article_source_id">Extrait de l’article n°</label>
-    <input type="number" name="article_source_id" value={{ article.sourceId }}" class=" mini" />
-    <br /><br />
-
-    <label class="floating" for="article_noosfere_id">Ref. nooSFere :</label>
-    <input type="text" id="article_noosfere_id" name="article_noosfere_id" value="{{ article.noosfereId }}"
-           class="article_duplicate_check event" />
-    <br />
-    <label class="floating" for="article_asin">Ref. Amazon :</label>
-    <input type="text" id="article_asin" name="article_asin" value="{{ article.asin }}"
-           class="article_duplicate_check event" />
-    <br /><br />
-
-    <label class="floating" for="article_ean_others">Autres ISBN :</label>
-    <textarea id="article_ean_others" name="article_ean_others" class="small"
-              title="ISBN de précédentes éditions dans la méme collection, séparés par un espace.">{{ article.eanOthers }}</textarea>
-    <br /><br />
-  </fieldset>
-
-  <fieldset>
     <legend>Données bibliographiques</legend>
 
-    <label class="floating" for="article_title_alphabetic">Titre pour le tri :</label>
-    <input type="text" id="article_title_alphabetic" name="article_title_alphabetic"
-           value="{{ article.titleAlphabetic }}" class="long" placeholder="Champ rempli automatiquement" />
-    <br />
     <label class="floating" for="article_subtitle">Sous-titre :</label>
     <input type="text" id="article_subtitle" name="article_subtitle" id="article_subtitle"
            value="{{ article.subtitle }}" class="long" />
@@ -597,6 +554,55 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         Supprimer définitivement cet article
       </a>
     </p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Identifiants et liens</legend>
+
+    <p class="alert alert-info">
+      Ces champs sont renseigné automatiquement par Biblys..
+      Ne les modifiez pas manuellement, sauf si vous savez ce que vous faites.
+    </p>
+
+    <label class="floating" for="article_title_alphabetic">Titre pour le tri :</label>
+    <input type="text" id="article_title_alphabetic" name="article_title_alphabetic"
+           value="{{ article.titleAlphabetic }}" class="long" placeholder="Champ rempli automatiquement" />
+    <br />
+
+    <label class="floating" for="article_url">URL Biblys :</label>
+    <input type="text" id="article_url" name="article_url" value="{{ article.url }}" pattern="^[a-z0-9-_]+/[a-z0-9-_]+$"
+           title="Dans le doute, laisser ce champ vide." placeholder="Champ rempli automatiquement" class="long"
+           pattern="^((?!http).)*$" />
+    <br /><br />
+
+    <label class="floating" for="article_textid">TextID :</label>
+    <input type="text" id="article_textid" name="article_textid" value="{{ article.textId }}" class="verylong"
+           maxlength=32>
+    <br />
+    <label class="floating" for="article_item">Item n°</label>
+    <input type="text" id="article_item" name="article_item" value="{{ article.item }}"
+           class="mini article_duplicate_check event" />
+    <br />
+    <label class="floating" for="article_link_to">Lier à l’article n°</label>
+    <input type="number" id="article_link_to" name="article_link_to" class="mini" />
+    <br />
+    <label class="floating" for="article_source_id">Extrait de l’article n°</label>
+    <input type="number" name="article_source_id" value={{ article.sourceId }}" class=" mini" />
+    <br /><br />
+
+    <label class="floating" for="article_noosfere_id">Ref. nooSFere :</label>
+    <input type="text" id="article_noosfere_id" name="article_noosfere_id" value="{{ article.noosfereId }}"
+           class="article_duplicate_check event" />
+    <br />
+    <label class="floating" for="article_asin">Ref. Amazon :</label>
+    <input type="text" id="article_asin" name="article_asin" value="{{ article.asin }}"
+           class="article_duplicate_check event" />
+    <br /><br />
+
+    <label class="floating" for="article_ean_others">Autres ISBN :</label>
+    <textarea id="article_ean_others" name="article_ean_others" class="small"
+              title="ISBN de précédentes éditions dans la méme collection, séparés par un espace.">{{ article.eanOthers }}</textarea>
+    <br /><br />
   </fieldset>
 
   <fieldset>
