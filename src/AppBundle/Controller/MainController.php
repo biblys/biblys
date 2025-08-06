@@ -32,6 +32,7 @@ use Biblys\Service\MetaTagsService;
 use Biblys\Service\Pagination;
 use Biblys\Service\TemplateService;
 use CartManager;
+use DateTime;
 use Exception;
 use Framework\Controller;
 use GuzzleHttp\Exception\GuzzleException;
@@ -325,6 +326,13 @@ class MainController extends Controller
         $cloudNews = [];
         if ($cloud->isConfigured()) {
             $cloudNews = $cloud->getNews();
+            $cloudNewsReadAt = $currentUser->getOption("cloud_news_read_at");
+            if ($cloudNewsReadAt) {
+                $cloudNews = array_filter($cloudNews, function ($news) use ($cloudNewsReadAt) {
+                    return $news['date'] > $cloudNewsReadAt;
+                });
+            }
+
         }
 
         $ebooksSection = null;
@@ -506,14 +514,12 @@ class MainController extends Controller
      * @throws PropelException
      * @throws Exception
      */
-    public function hotNewsMarkAsRead(
-        UrlGenerator $urlGenerator,
-        CurrentUser $currentUser
-    ): RedirectResponse
+    public function markCloudNewsAsReadAction(UrlGenerator $urlGenerator, CurrentUser $currentUser): RedirectResponse
     {
         $currentUser->authAdmin();
 
-        $currentUser->setOption("hot_news_read", 1);
+        $today = (new DateTime())->format("Y-m-d");
+        $currentUser->setOption("cloud_news_read_at", $today);
 
         $dashboardUrl = $urlGenerator->generate("main_admin");
         return new RedirectResponse($dashboardUrl);
