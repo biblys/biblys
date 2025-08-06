@@ -322,6 +322,11 @@ class MainController extends Controller
             $hotNewsBanner = null;
         }
 
+        $cloudNews = [];
+        if ($cloud->isConfigured()) {
+            $cloudNews = $cloud->getNews();
+        }
+
         $ebooksSection = null;
         if ($currentSite->getOption("downloadable_publishers") !== null) {
             $ebooksSection = Entry::generateUrlsForEntries(Entry::findByCategory('ebooks'), $urlGenerator);
@@ -343,6 +348,7 @@ class MainController extends Controller
             'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
             'site_title' => $globalSite->get('title'),
             "hot_news" => $hotNewsBanner,
+            "cloud_news" => $cloudNews,
         ], isPrivate: true);
     }
 

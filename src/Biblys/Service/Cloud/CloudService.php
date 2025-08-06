@@ -96,6 +96,20 @@ class CloudService
 
     /**
      * @throws GuzzleException
+     */
+    public function getNews(): array
+    {
+        if (!$this->isConfigured()) {
+            throw new Exception("L'abonnement Biblys n'est pas configuré.");
+        }
+
+        $response = $this->httpClient->request("GET", "{$this->_getBaseUrl()}/news.json");
+        $body = $response->getBody();
+        return json_decode($body, true);
+    }
+
+    /**
+     * @throws GuzzleException
      * @throws Exception
      */
     private function _query(string $endpointUrl): array
@@ -104,7 +118,7 @@ class CloudService
             throw new Exception("L'abonnement Biblys n'est pas configuré.");
         }
 
-        $baseUrl = $this->config->get("cloud.base_url") ?: "https://cloud.biblys.fr";
+        $baseUrl = $this->_getBaseUrl();
         $requestUrl = "$baseUrl/api$endpointUrl";
 
         $response = $this->httpClient->request("GET", $requestUrl, [
@@ -115,5 +129,10 @@ class CloudService
         ]);
         $body = $response->getBody();
         return json_decode($body, true);
+    }
+
+    private function _getBaseUrl(): string
+    {
+        return $this->config->get("cloud.base_url") ?: "https://cloud.biblys.fr";
     }
 }
