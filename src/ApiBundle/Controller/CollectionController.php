@@ -47,7 +47,7 @@ class CollectionController extends Controller
     {
         $currentUser->authPublisher();
 
-        $queryParams->parse(["term" => ["type" => "string", "mb_min_length" => 3]]);
+        $queryParams->parse(["term" => ["type" => "string"]]);
         $searchQuery = $queryParams->get("term");
 
         $collectionQuery = BookCollectionQuery::create()
@@ -62,27 +62,16 @@ class CollectionController extends Controller
 
         $collections = $collectionQuery->find()->getArrayCopy();
 
-        $json = array_map(/**
+        $results = array_map(/**
          * @throws PropelException
          */ function ($collection) use($currentSite) {
             return [
                 "label" => "{$collection->getName()} ({$collection->getPublisher()->getName()})",
-                "value" => $collection->getName(),
-                "collection_name" => $collection->getName(),
-                "collection_publisher" => $collection->getPublisher()->getName(),
-                "collection_id" => $collection->getId(),
-                "publisher_id" => $collection->getPublisherId(),
-                "pricegrid_id" => $collection->getPricegridId(),
+                "value" => $collection->getId(),
             ];
         }, $collections);
 
-        $json[] = [
-            "label" => "=> Créer : $searchQuery",
-            "value" => $searchQuery,
-            "create" => 1
-        ];
-
-        return new JsonResponse($json);
+        return new JsonResponse(["results" => $results]);
     }
 
     /**
