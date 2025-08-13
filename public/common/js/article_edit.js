@@ -15,6 +15,23 @@
  */
 import EntitySearchField from '/common/js/entity-search-field.js';
 
+/** Article cover preview */
+
+document.addEventListener('DOMContentLoaded', function () {
+  const articleCoverField = document.getElementById('article_cover_upload');
+  const articleCoverPreview = document.getElementById('article-cover-preview');
+  articleCoverField.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        articleCoverPreview.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  })
+});
+
 /** Collection autocomplete */
 document.addEventListener('DOMContentLoaded', function() {
   const field = document.getElementById('collection-search-field');
@@ -391,6 +408,7 @@ function reloadArticleAdminEvents(scope) {
        * @param data.cycle_id {number} ID of the cycle
        * @param data.article_cycle {string} Name of the cycle
        * @param data.article_people {Array} List of people associated with the article
+       * @param data.article_cover_import {string} Url of cover to import
        */
       success: function (data) {
         notification.remove();
@@ -417,6 +435,12 @@ function reloadArticleAdminEvents(scope) {
               _addContribution(people.people_id, people.job_id);
             });
           }
+
+          if (data.article_cover_import) {
+            const articleCoverPreview = document.getElementById('article-cover-preview');
+            articleCoverPreview.src = data.article_cover_import;
+          }
+
           $('#article_people').val('');
           $('#article_import').hide();
           window.overlay('hide');
