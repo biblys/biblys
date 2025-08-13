@@ -327,7 +327,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     <legend>Objet</legend>
 
 
-    <div class="form-group row">
+    <div class="form-group row mb-1">
       <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_shaping">Façonnage</label>
       <select id="article_shaping" name="article_shaping" class="form-control col-md-3">
         <option>{{ article.shaping }}</option>
@@ -348,41 +348,64 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </select>
     </div>
 
-    <p>
-      <label class="floating" for="article_printing_process">Impression :</label>
-      <select id="article_printing_process" name="article_printing_process">
+    <div class="form-group row mb-1">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_printing_process">Impression</label>
+      <select id="article_printing_process" name="article_printing_process" class="form-control col-md-3">
         <option>{{ article.printingProcess }}</option>
-        <option />
+        <option></option>
         <option>quadrichromie</option>
       </select>
-    </p>
+    </div>
 
-    <p>
-      <label class="floating" for="article_format">Format :</label>
-      <input type="text" id="article_format" name="article_format" value="{{ article.format }}" placeholder="10 x 18 cm"
-             class="medium">
-    </p>
+    <div class="form-group row">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_format">Format</label>
+      <input type="text" id="article_format" name="article_format" value="{{ article.format }}"
+             placeholder="Ex. 14 x 20 cm" class="form-control col-md-2" />
+    </div>
 
-    <p>
-      <label class="floating" for="article_pages">Nombre de pages :</label>
-      <input type="number" step="1" id="article_pages" name="article_pages" value="{{ article.pages }}" class="mini" />
-    </p>
+    <div class="form-group row mb-1">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_pages">Pagination</label>
+      <input type="text" id="article_pages" name="article_pages" value="{{ article.pages }}"
+             class="form-control col-md-1" />
+      <div class="col-md-1 col-form-label">pages</div>
+    </div>
 
-    <p>
-      <label class="floating" for="article_weight">Poids :</label>
-      <input type="number" step="1" id="article_weight" name="article_weight" value="{{ article.weight }}"
-             class="mini" /> grammes
-    </p>
+    <div class="form-group row mb-1">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_weight">Poids</label>
+      <input type="text" id="article_weight" name="article_weight" value="{{ article.weight }}"
+             class="form-control col-md-1" />
+      <div class="col-md-1 col-form-label">grammes</div>
+    </div>
   </fieldset>
 
   <fieldset>
     <legend>Images</legend>
 
-    <p title="Image au format JPEG (recommandé), PNG ou WebP">
-      <label for="article_cover_upload">Couverture :</label>
-      {{ article_cover_upload|raw }}
-      <input type="hidden" id="article_cover_import" name="article_cover_import" placeholder="Adresse de l’image...">
-    </p>
+    {% if article|hasImage %}
+      <div class="form-group row">
+        <div class="col-sm-12 text-center">
+          <a href="{{ article|imageUrl }}" rel="lightbox">
+            <img src="{{ article|imageUrl(300) }}" style="max-width: 300px; max-height: 300px" />
+          </a>
+          <div class="form-check mt-2">
+            <input type="checkbox" name="article_cover_delete" id="article_cover_delete" value="1"
+                   class="form-check-input" />
+            <label class="form-check-label" for="article_cover_delete">Supprimer</label>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="form-group row">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_weight">Couverture</label>
+      <div class="col-md-6 col-lg-5 p-0">
+        <input type="file" id="article_cover_upload" name="article_cover_upload"
+               accept="image/jpeg, image/png, image/webp" />
+        <small class="form-text text-muted">Image au format JPEG, PNG ou WebP</small>
+      </div>
+    </div>
+
+    <input type="hidden" id="article_cover_import" name="article_cover_import" placeholder="Adresse de l’image...">
   </fieldset>
 
   <fieldset>
