@@ -381,20 +381,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <fieldset>
     <legend>Images</legend>
 
-    {% if article|hasImage %}
-      <div class="form-group row">
-        <div class="col-sm-12 text-center">
-          <a href="{{ article|imageUrl }}" rel="lightbox">
-            <img src="{{ article|imageUrl(300) }}" style="max-width: 300px; max-height: 300px" />
-          </a>
+    <div class="form-group row">
+      <div class="col-sm-12 text-center">
+        <img src="{% if article|hasImage %}{{ article|imageUrl(300) }}{% endif %}" alt=""
+             style="max-width: 300px; max-height: 300px" id="article-cover-preview" />
+        {% if article|hasImage %}
           <div class="form-check mt-2">
             <input type="checkbox" name="article_cover_delete" id="article_cover_delete" value="1"
                    class="form-check-input" />
             <label class="form-check-label" for="article_cover_delete">Supprimer</label>
           </div>
-        </div>
+        {% endif %}
       </div>
-    {% endif %}
+    </div>
 
     <div class="form-group row">
       <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_weight">Couverture</label>
