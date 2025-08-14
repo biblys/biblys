@@ -177,4 +177,27 @@ class ArticleControllerTest extends TestCase
             "article_url" => "lolo-lot/un-article-a-ajouter-au-lot",
         ], $responseData);
     }
+
+    /**
+     * @throws PropelException
+     * @throws NotFoundException
+     */
+    public function testRemoveTagAction(): void
+    {
+        // given
+        $controller = new ArticleController();
+
+        $article = ModelFactory::createArticle();
+        $tag = ModelFactory::createTag();
+        $article->addTag($tag);
+
+        $curentUser = Mockery::mock(CurrentUser::class);
+        $curentUser->shouldReceive("authPublisher")->once()->andReturn();
+
+        // when
+        $controller->removeTagAction($curentUser, $article->getId(), $tag->getId());
+
+        // then
+        $this->assertNotContains($tag, $article->getTags());
+    }
 }

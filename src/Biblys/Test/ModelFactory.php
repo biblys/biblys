@@ -64,6 +64,7 @@ use Model\Stock;
 use Model\StockItemList;
 use Model\Subscription;
 use Model\Supplier;
+use Model\Tag;
 use Model\User;
 use Model\Vote;
 use Model\Wish;
@@ -1121,6 +1122,18 @@ class ModelFactory
         $shippingZone->save();
 
         return $shippingZone;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createTag(): Tag
+    {
+        $tag = new Tag();
+        $tag->setName("Mot-clé");
+        $tag->save();
+
+        return $tag;
     }
 
 }
