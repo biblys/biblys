@@ -285,7 +285,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery rightJoinWithStock() Adds a RIGHT JOIN clause and with to the query using the Stock relation
  * @method     ChildArticleQuery innerJoinWithStock() Adds a INNER JOIN clause and with to the query using the Stock relation
  *
- * @method     \Model\PublisherQuery|\Model\BookCollectionQuery|\Model\CycleQuery|\Model\FileQuery|\Model\ImageQuery|\Model\InvitationsArticlesQuery|\Model\LinkQuery|\Model\RoleQuery|\Model\SpecialOfferQuery|\Model\StockQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildArticleQuery leftJoinArticleTag($relationAlias = null) Adds a LEFT JOIN clause to the query using the ArticleTag relation
+ * @method     ChildArticleQuery rightJoinArticleTag($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ArticleTag relation
+ * @method     ChildArticleQuery innerJoinArticleTag($relationAlias = null) Adds a INNER JOIN clause to the query using the ArticleTag relation
+ *
+ * @method     ChildArticleQuery joinWithArticleTag($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the ArticleTag relation
+ *
+ * @method     ChildArticleQuery leftJoinWithArticleTag() Adds a LEFT JOIN clause and with to the query using the ArticleTag relation
+ * @method     ChildArticleQuery rightJoinWithArticleTag() Adds a RIGHT JOIN clause and with to the query using the ArticleTag relation
+ * @method     ChildArticleQuery innerJoinWithArticleTag() Adds a INNER JOIN clause and with to the query using the ArticleTag relation
+ *
+ * @method     \Model\PublisherQuery|\Model\BookCollectionQuery|\Model\CycleQuery|\Model\FileQuery|\Model\ImageQuery|\Model\InvitationsArticlesQuery|\Model\LinkQuery|\Model\RoleQuery|\Model\SpecialOfferQuery|\Model\StockQuery|\Model\ArticleTagQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildArticle|null findOne(?ConnectionInterface $con = null) Return the first ChildArticle matching the query
  * @method     ChildArticle findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildArticle matching the query, or a new ChildArticle object populated from the query conditions when no match is found
@@ -5303,6 +5313,179 @@ abstract class ArticleQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related \Model\ArticleTag object
+     *
+     * @param \Model\ArticleTag|ObjectCollection $articleTag the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByArticleTag($articleTag, ?string $comparison = null)
+    {
+        if ($articleTag instanceof \Model\ArticleTag) {
+            $this
+                ->addUsingAlias(ArticleTableMap::COL_ARTICLE_ID, $articleTag->getArticleId(), $comparison);
+
+            return $this;
+        } elseif ($articleTag instanceof ObjectCollection) {
+            $this
+                ->useArticleTagQuery()
+                ->filterByPrimaryKeys($articleTag->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByArticleTag() only accepts arguments of type \Model\ArticleTag or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ArticleTag relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinArticleTag(?string $relationAlias = null, ?string $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ArticleTag');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ArticleTag');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ArticleTag relation ArticleTag object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\ArticleTagQuery A secondary query class using the current class as primary query
+     */
+    public function useArticleTagQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinArticleTag($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ArticleTag', '\Model\ArticleTagQuery');
+    }
+
+    /**
+     * Use the ArticleTag relation ArticleTag object
+     *
+     * @param callable(\Model\ArticleTagQuery):\Model\ArticleTagQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withArticleTagQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::INNER_JOIN
+    ) {
+        $relatedQuery = $this->useArticleTagQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to ArticleTag table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\ArticleTagQuery The inner query object of the EXISTS statement
+     */
+    public function useArticleTagExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\ArticleTagQuery */
+        $q = $this->useExistsQuery('ArticleTag', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to ArticleTag table for a NOT EXISTS query.
+     *
+     * @see useArticleTagExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\ArticleTagQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useArticleTagNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\ArticleTagQuery */
+        $q = $this->useExistsQuery('ArticleTag', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to ArticleTag table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\ArticleTagQuery The inner query object of the IN statement
+     */
+    public function useInArticleTagQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\ArticleTagQuery */
+        $q = $this->useInQuery('ArticleTag', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to ArticleTag table for a NOT IN query.
+     *
+     * @see useArticleTagInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\ArticleTagQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInArticleTagQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\ArticleTagQuery */
+        $q = $this->useInQuery('ArticleTag', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
      * Filter the query by a related Invitation object
      * using the invitations_articles table as cross reference
      *
@@ -5316,6 +5499,25 @@ abstract class ArticleQuery extends ModelCriteria
         $this
             ->useInvitationsArticlesQuery()
             ->filterByInvitation($invitation, $comparison)
+            ->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Filter the query by a related Tag object
+     * using the tags_articles table as cross reference
+     *
+     * @param Tag $tag the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL and Criteria::IN for queries
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByTag($tag, string $comparison = null)
+    {
+        $this
+            ->useArticleTagQuery()
+            ->filterByTag($tag, $comparison)
             ->endUse();
 
         return $this;
