@@ -567,16 +567,6 @@ return function (
         $rayons_options = 'Aucun rayon disponible.';
     }
 
-    // Tags
-    $tags = EntityManager::prepareAndExecute(
-        'SELECT `link_id`, `tag_name` FROM `links` JOIN `tags` USING(`tag_id`) WHERE `article_id` = :article_id ORDER BY `tag_name`',
-        ['article_id' => $articleEntity->get('id')],
-    );
-    $the_tags = null;
-    while ($t = $tags->fetch(PDO::FETCH_ASSOC)) {
-        $the_tags .= '<li><a class="btn btn-danger btn-sm" data-remove_link="' . $t['link_id'] . '"><span class="fa fa-remove"></span></a> ' . $t['tag_name'] . '</li>';
-    }
-
     // Recompenses
     $awards = EntityManager::prepareAndExecute(
         'SELECT `award_id`, `award_name`, `award_year`, `award_category` FROM `awards` WHERE `article_id` = :article_id ORDER BY `award_year` DESC',
@@ -647,7 +637,6 @@ return function (
         "origin_country_options" => join($origin_country_options),
         "files_table" => $files_table,
         "should_display_lemonink_field" => $shouldDisplayLemonInkField,
-        "the_tags" => $the_tags,
         "default_tags" => $default_tags,
         "current_article_categories" => $currentArticleCategories,
         "rayons_options" => $rayons_options,
