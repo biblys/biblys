@@ -21,15 +21,19 @@ namespace ApiBundle\Controller;
 use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\Slug\SlugService;
 use Exception;
 use Framework\Controller;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Writer;
 use Model\ArticleQuery;
 use Model\Link;
+use Model\TagQuery;
 use Payplug\Exception\NotFoundException;
+use PHPUnit\Util\Json;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ArticleController extends Controller
@@ -107,5 +111,31 @@ class ArticleController extends Controller
             "article_collection" => $articleToAdd->getCollectionName(),
             "article_url" => $articleToAdd->getUrl(),
         ]);
+    }
+
+    /**
+     * @route DELETE /admin/articles/{article_id}/tags/{tag_id}
+     *
+     * @throws PropelException
+     * @throws NotFoundException
+     */
+    public function removeTagAction(CurrentUser $currentUser, int $article_id, int $tag_id): JsonResponse
+    {
+        $currentUser->authPublisher();
+
+        $article = ArticleQuery::create()->findPk($article_id);
+        if (!$article) {
+            throw new NotFoundException("Article not $article_id found");
+        }
+
+        $tag = TagQuery::create()->findPk($tag_id);
+        if (!$tag) {
+            throw new NotFoundException("Tag not $tag_id found");
+        }
+
+        $article->removeTag($tag);
+        $article->save();
+
+        return new JsonResponse();
     }
 }
