@@ -50,6 +50,8 @@ use Model\LinkQuery;
 use Model\PublisherQuery;
 use Model\Stock;
 use Model\StockQuery;
+use Model\Tag;
+use Model\TagQuery;
 use Propel\Runtime\Exception\PropelException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -465,27 +467,23 @@ class ArticleController extends Controller
     }
 
     /**
-     * @route /articles/{id}/tags/add.
+     * @route /admin/articles/{id}/tags/add
      * @throws PropelException
      * @throws Exception
      */
     public function addTagsAction(Request $request, CurrentUser $currentUser, $id): Response
     {
         $currentUser->authPublisher();
+        $slugService = new SlugService();
 
-        $am = new ArticleManager();
-        $tm = new TagManager();
-        $lm = new LinkManager();
-
-        $am->setIgnoreSiteFilters(true);
-
-        $article = $am->getById($id);
+        $article = ArticleQuery::create()->findPk($id);
         if (!$article) {
             throw new Exception("Article $id not found");
         }
 
-        if ($article->has('publisher_id')) {
-            $publisher = PublisherQuery::create()->findPk($article->get("publisher_id"));
+        $publisherId = $article->getPublisherId();
+        if ($publisherId) {
+            $publisher = PublisherQuery::create()->findPk($publisherId);
             $currentUser->authPublisher($publisher);
         }
 
@@ -493,37 +491,28 @@ class ArticleController extends Controller
 
         $tags = $request->request->get('tags', "");
         $tags = explode(',', $tags);
-        foreach ($tags as $tag_name) {
-            $tag_name = trim($tag_name);
+        foreach ($tags as $tagName) {
+            $tagName = trim($tagName);
 
-            if (empty($tag_name)) {
+            if (empty($tagName)) {
                 continue;
             }
 
-            // Search if tag already exists
-            $tag = $tm->search($tag_name);
+
+            $tagSlug = $slugService->slugify($tagName);
+            $tag = TagQuery::create()->findOneByUrl($tagSlug);
 
             // Else, create a new one
-            $slugService = new SlugService();
             if ($tag === null) {
-                $tag_url = $slugService->slugify($tag_name);
-                $tag = $tm->create([
-                    'tag_name' => $tag_name,
-                    'tag_url' => $tag_url,
-                ]);
+                $tag = new Tag();
+                $tag->setUrl($tagSlug);
+                $tag->setName($tagName);
+                $tag->save();
             }
 
-            // Search if link between tag and article already exists
-            $link = $lm->get(['article_id' => $article->get('id'), 'tag_id' => $tag->get('id')]);
-
-            // Else, create a new one
-            if (!$link) {
-                $link = $lm->create([
-                    'article_id' => $article->get('id'),
-                    'tag_id' => $tag->get('id'),
-                ]);
-                $links[] = ['id' => $link->get('id'), 'tag_name' => $tag->get('name')];
-            }
+            $article->addTag($tag);
+            $article->save();
+            $links[] = ["tag_id" => $tag->getId(), "tag_name" => $tag->getName()];
         }
 
         return new JsonResponse(['links' => $links]);
