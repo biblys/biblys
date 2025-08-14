@@ -1600,6 +1600,16 @@
       <parameter name="Engine" value="MyISAM"/>
     </vendor>
   </table>
+  <table name="tags_articles" isCrossRef="true" phpName="ArticleTag">
+    <column name="tag_id" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="article_id" type="INTEGER" sqlType="int unsigned" primaryKey="true" required="true"/>
+    <foreign-key foreignTable="articles" skipSql="true">
+      <reference local="article_id" foreign="article_id"/>
+    </foreign-key>
+    <foreign-key foreignTable="tags" skipSql="true">
+      <reference local="tag_id" foreign="tag_id"/>
+    </foreign-key>
+  </table>
   <table name="users" idMethod="native" phpName="User">
     <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" required="true"/>

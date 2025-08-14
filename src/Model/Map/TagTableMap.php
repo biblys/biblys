@@ -293,6 +293,14 @@ class TagTableMap extends TableMap
     1 => ':tag_id',
   ),
 ), null, null, 'Links', false);
+        $this->addRelation('ArticleTag', '\\Model\\ArticleTag', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':tag_id',
+    1 => ':tag_id',
+  ),
+), null, null, 'ArticleTags', false);
+        $this->addRelation('Article', '\\Model\\Article', RelationMap::MANY_TO_MANY, array(), null, null, 'Articles');
     }
 
     /**
