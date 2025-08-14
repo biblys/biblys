@@ -810,7 +810,7 @@ class Article extends Entity
 
         /** @noinspection SqlCheckUsingColumns */
         $sql = $_SQL->prepare("
-            SELECT `tag_id`, `tag_name`, `tag_url` 
+            SELECT `tags`.`tag_id`, `tag_name`, `tag_url` 
             FROM `tags_articles` 
             JOIN `tags` ON `tags_articles`.`tag_id` = `tags`.`tag_id` 
             WHERE `tags_articles`.`article_id` = :article_id 
@@ -1544,7 +1544,7 @@ class ArticleManager extends EntityManager
             }
         }
 
-        $tags = $article->getLinked('tag');
+        $tags = $article->getTags();
         foreach ($tags as $tag) {
             $keywords .= ' ' . $tag->get('name');
             $links .= ' [tag:' . $tag->get('id') . ']';
@@ -1606,7 +1606,7 @@ class ArticleManager extends EntityManager
         }
 
         // Check for links on all sites
-        $links = $_SQL->prepare('SELECT `link_id`, `tag_id`, `rayon_id` FROM `links` WHERE `article_id` = :id');
+        $links = $_SQL->prepare('SELECT `link_id`, `rayon_id` FROM `links` WHERE `article_id` = :id');
         $links->execute(['id' => $article->get('id')]);
         $other_links = [];
         foreach ($links as $link) {
