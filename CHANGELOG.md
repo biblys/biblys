@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.8.1 (DEV)
+
+### Corrections
+
+- Les fichiers téléchargeables associés à un article ne s'affichaient pas
+  correctement. C'est corrigé.
+
 ## 3.8.0 (6 août 2025)
 
 ### Améliorations
