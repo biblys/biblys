@@ -1308,7 +1308,15 @@ class ArticleTableMap extends TableMap
     1 => ':article_id',
   ),
 ), null, null, 'Stocks', false);
+        $this->addRelation('ArticleTag', '\\Model\\ArticleTag', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':article_id',
+    1 => ':article_id',
+  ),
+), null, null, 'ArticleTags', false);
         $this->addRelation('Invitation', '\\Model\\Invitation', RelationMap::MANY_TO_MANY, array(), null, null, 'Invitations');
+        $this->addRelation('Tag', '\\Model\\Tag', RelationMap::MANY_TO_MANY, array(), null, null, 'Tags');
     }
 
     /**
