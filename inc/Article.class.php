@@ -809,7 +809,13 @@ class Article extends Entity
         global $_SQL;
 
         /** @noinspection SqlCheckUsingColumns */
-        $sql = $_SQL->prepare("SELECT `tag_id`, `tag_name`, `tag_url` FROM `links` JOIN `tags` USING(`tag_id`) WHERE `article_id` = :article_id ORDER BY `tag_name`");
+        $sql = $_SQL->prepare("
+            SELECT `tag_id`, `tag_name`, `tag_url` 
+            FROM `tags_articles` 
+            JOIN `tags` ON `tags_articles`.`tag_id` = `tags`.`tag_id` 
+            WHERE `tags_articles`.`article_id` = :article_id 
+            ORDER BY `tag_name`
+        ");
         $sql->execute([':article_id' => $this->get('id')]);
         $tags = $sql->fetchAll();
 
