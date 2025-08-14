@@ -446,7 +446,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
     <h3>Mots-clés</h3>
     <ul id="the_tags">
-      {{ the_tags|raw }}
+      {% for tag in article.tags %}
+        <li class="mt-1">
+          <a class="btn btn-danger btn-sm remove-tag-button" data-article_id="{{ article.id }}" data-tag_id="{{ tag.id }}" aria-label="Retirer le tag {{ tag.name }}">
+            <i class="fa-solid fa-xmark"></i>
+          </a>
+          {{ tag.name }}
+        </li>
+      {% endfor %}
     </ul>
 
     <label class="floating" for="article_theme_bisac">Ajouter :</label>
