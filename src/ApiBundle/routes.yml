@@ -20,6 +20,14 @@ api_articles_bundle:
   path: /api/admin/articles/{id}/add-to-bundle
   controller: ApiBundle\Controller\ArticleController::addToBundleAction
 
+api_article_remove_tag:
+  methods: DELETE
+  path: /api/admin/articles/{article_id}/tags/{tag_id}
+  controller: ApiBundle\Controller\ArticleController::removeTagAction
+  requirements:
+    article_id: \d+
+    tag_id: \d+
+
 # Collections
 
 api_collection_create:
