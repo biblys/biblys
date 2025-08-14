@@ -748,7 +748,21 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Add tags at the page start (for default tags)
-  addTagsFromInput();
+  addTagsFromInput()
+
+  const removeTagButtons = document.querySelectorAll('.remove-tag-button');
+  removeTagButtons.forEach( (removeTagButton) => {
+    removeTagButton.addEventListener('click', async () => {
+      const { article_id, tag_id } = removeTagButton.dataset;
+
+      await fetch(`/api/admin/articles/${article_id}/tags/${tag_id}`, {
+        method: 'DELETE',
+      });
+
+      const tagLine = removeTagButton.parentElement;
+      tagLine.parentNode.removeChild(tagLine);
+    })
+  })
 
   // Add rayon
   const rayonInput = document.querySelector('#rayon_id');
