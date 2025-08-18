@@ -79,7 +79,7 @@ class ArticleEditTest extends TestCase
             "responds with status code 200"
         );
         $this->assertStringContainsString(
-            "Identifiant LemonInk :",
+            "Identifiant LemonInk",
             $response->getContent(),
             "displays the LemonInk field"
         );

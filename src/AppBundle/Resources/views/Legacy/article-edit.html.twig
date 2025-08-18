@@ -408,7 +408,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <fieldset>
     <legend>Fichiers téléchargeables</legend>
 
-    <table id="dlfiles_list" class="admin-table fileUpload dropzone">
+    <table id="dlfiles_list" class="table table-stripped fileUpload dropzone">
       <thead>
       <tr>
         <th>Titre</th>
@@ -436,7 +436,25 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </tfoot>
     </table>
 
-    {{ lemonink_id_field|raw }}
+    {% if should_display_lemonink_field %}
+      <div class="form-group row">
+        <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="lemonink_master_id">
+          Identifiant LemonInk
+        </label>
+
+        <div class="colm-md-9 col-lg-10">
+          <input type="text" class="form-control col-md-1 col-lg-2" id="lemonink_master_id" name="lemonink_master_id"
+                 value="{{ article.lemoninkMasterId }}" />
+          <small class="form-text text-muted">
+            Pour configurer le téléchargement avec tatouage numérique,
+            <a href="https://www.lemonink.co/masters" target="_blank">ajouter l'article sur LemonInk</a>
+            et coller son identifiant dans ce champ.
+          </small>
+        </div>
+      </div>
+    {% else %}
+      <input type="hidden" name="lemonink_master_id" value="{{ article.lemoninkMasterId }}" />
+    {% endif %}
   </fieldset>
 
   <fieldset>
@@ -446,7 +464,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     <ul id="the_tags">
       {% for tag in article.tags %}
         <li class="mt-1">
-          <a class="btn btn-danger btn-sm remove-tag-button" data-article_id="{{ article.id }}" data-tag_id="{{ tag.id }}" aria-label="Retirer le tag {{ tag.name }}">
+          <a class="btn btn-danger btn-sm remove-tag-button" data-article_id="{{ article.id }}"
+             data-tag_id="{{ tag.id }}" aria-label="Retirer le tag {{ tag.name }}">
             <i class="fa-solid fa-xmark"></i>
           </a>
           {{ tag.name }}
