@@ -624,21 +624,7 @@ return function (
         $submit_and_stock = null;
     }
 
-    $lemonInkIdField = "";
-    if ($articleEntity->isDownloadable() && $config->get('lemonink.api_key')) {
-        $lemonInkIdField = '
-          <br />
-          <div class="form-group">
-            <label for="lemonink_master_id">Identifiant LemonInk :</label><br />
-            <small class="form-text text-muted">
-              Pour configurer le téléchargement avec tatouage numérique, 
-              <a href="https://www.lemonink.co/masters" target="_blank">ajouter l\'article sur LemonInk</a>
-              et coller son identifiant dans ce champ.
-            </small>
-            <input type="text" class="form-control" id="lemonink_master_id" name="lemonink_master_id" value="' . $articleEntity->get("lemonink_master_id") . '" />
-          </div>
-        ';
-    }
+    $shouldDisplayLemonInkField = $articleEntity->isDownloadable() && $config->get('lemonink.api_key');
 
     /** @noinspection DuplicatedCode */
     /** @noinspection HtmlUnknownAttribute */
@@ -660,7 +646,7 @@ return function (
         "lang_original_options" => $lang_original_options,
         "origin_country_options" => join($origin_country_options),
         "files_table" => $files_table,
-        "lemonink_id_field" => $lemonInkIdField,
+        "should_display_lemonink_field" => $shouldDisplayLemonInkField,
         "the_tags" => $the_tags,
         "default_tags" => $default_tags,
         "current_article_categories" => $currentArticleCategories,
