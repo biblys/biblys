@@ -704,7 +704,6 @@
     <column name="people_id" phpName="PeopleId" type="INTEGER" sqlType="int unsigned"/>
     <column name="job_id" phpName="JobId" type="INTEGER" sqlType="int unsigned"/>
     <column name="rayon_id" phpName="RayonId" type="INTEGER" sqlType="int unsigned"/>
-    <column name="tag_id" phpName="TagId" type="INTEGER" sqlType="int unsigned"/>
     <column name="event_id" phpName="EventId" type="INTEGER" sqlType="int unsigned"/>
     <column name="post_id" phpName="PostId" type="INTEGER" sqlType="int unsigned"/>
     <column name="collection_id" phpName="CollectionId" type="INTEGER" sqlType="int unsigned"/>
@@ -759,9 +758,6 @@
     </vendor>
     <foreign-key foreignTable="articles" skipSql="true">
       <reference local="article_id" foreign="article_id"/>
-    </foreign-key>
-    <foreign-key foreignTable="tags" skipSql="true">
-      <reference local="tag_id" foreign="tag_id"/>
     </foreign-key>
     <foreign-key foreignTable="rayons" skipSql="true">
       <reference local="rayon_id" foreign="rayon_id" />

@@ -30,7 +30,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLinkQuery orderByPeopleId($order = Criteria::ASC) Order by the people_id column
  * @method     ChildLinkQuery orderByJobId($order = Criteria::ASC) Order by the job_id column
  * @method     ChildLinkQuery orderByRayonId($order = Criteria::ASC) Order by the rayon_id column
- * @method     ChildLinkQuery orderByTagId($order = Criteria::ASC) Order by the tag_id column
  * @method     ChildLinkQuery orderByEventId($order = Criteria::ASC) Order by the event_id column
  * @method     ChildLinkQuery orderByPostId($order = Criteria::ASC) Order by the post_id column
  * @method     ChildLinkQuery orderByCollectionId($order = Criteria::ASC) Order by the collection_id column
@@ -56,7 +55,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLinkQuery groupByPeopleId() Group by the people_id column
  * @method     ChildLinkQuery groupByJobId() Group by the job_id column
  * @method     ChildLinkQuery groupByRayonId() Group by the rayon_id column
- * @method     ChildLinkQuery groupByTagId() Group by the tag_id column
  * @method     ChildLinkQuery groupByEventId() Group by the event_id column
  * @method     ChildLinkQuery groupByPostId() Group by the post_id column
  * @method     ChildLinkQuery groupByCollectionId() Group by the collection_id column
@@ -99,16 +97,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLinkQuery rightJoinWithArticle() Adds a RIGHT JOIN clause and with to the query using the Article relation
  * @method     ChildLinkQuery innerJoinWithArticle() Adds a INNER JOIN clause and with to the query using the Article relation
  *
- * @method     ChildLinkQuery leftJoinTag($relationAlias = null) Adds a LEFT JOIN clause to the query using the Tag relation
- * @method     ChildLinkQuery rightJoinTag($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Tag relation
- * @method     ChildLinkQuery innerJoinTag($relationAlias = null) Adds a INNER JOIN clause to the query using the Tag relation
- *
- * @method     ChildLinkQuery joinWithTag($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Tag relation
- *
- * @method     ChildLinkQuery leftJoinWithTag() Adds a LEFT JOIN clause and with to the query using the Tag relation
- * @method     ChildLinkQuery rightJoinWithTag() Adds a RIGHT JOIN clause and with to the query using the Tag relation
- * @method     ChildLinkQuery innerJoinWithTag() Adds a INNER JOIN clause and with to the query using the Tag relation
- *
  * @method     ChildLinkQuery leftJoinArticleCategory($relationAlias = null) Adds a LEFT JOIN clause to the query using the ArticleCategory relation
  * @method     ChildLinkQuery rightJoinArticleCategory($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ArticleCategory relation
  * @method     ChildLinkQuery innerJoinArticleCategory($relationAlias = null) Adds a INNER JOIN clause to the query using the ArticleCategory relation
@@ -119,7 +107,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLinkQuery rightJoinWithArticleCategory() Adds a RIGHT JOIN clause and with to the query using the ArticleCategory relation
  * @method     ChildLinkQuery innerJoinWithArticleCategory() Adds a INNER JOIN clause and with to the query using the ArticleCategory relation
  *
- * @method     \Model\UserQuery|\Model\ArticleQuery|\Model\TagQuery|\Model\ArticleCategoryQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\UserQuery|\Model\ArticleQuery|\Model\ArticleCategoryQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildLink|null findOne(?ConnectionInterface $con = null) Return the first ChildLink matching the query
  * @method     ChildLink findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildLink matching the query, or a new ChildLink object populated from the query conditions when no match is found
@@ -135,7 +123,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLink|null findOneByPeopleId(int $people_id) Return the first ChildLink filtered by the people_id column
  * @method     ChildLink|null findOneByJobId(int $job_id) Return the first ChildLink filtered by the job_id column
  * @method     ChildLink|null findOneByRayonId(int $rayon_id) Return the first ChildLink filtered by the rayon_id column
- * @method     ChildLink|null findOneByTagId(int $tag_id) Return the first ChildLink filtered by the tag_id column
  * @method     ChildLink|null findOneByEventId(int $event_id) Return the first ChildLink filtered by the event_id column
  * @method     ChildLink|null findOneByPostId(int $post_id) Return the first ChildLink filtered by the post_id column
  * @method     ChildLink|null findOneByCollectionId(int $collection_id) Return the first ChildLink filtered by the collection_id column
@@ -164,7 +151,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLink requireOneByPeopleId(int $people_id) Return the first ChildLink filtered by the people_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOneByJobId(int $job_id) Return the first ChildLink filtered by the job_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOneByRayonId(int $rayon_id) Return the first ChildLink filtered by the rayon_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildLink requireOneByTagId(int $tag_id) Return the first ChildLink filtered by the tag_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOneByEventId(int $event_id) Return the first ChildLink filtered by the event_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOneByPostId(int $post_id) Return the first ChildLink filtered by the post_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOneByCollectionId(int $collection_id) Return the first ChildLink filtered by the collection_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -204,8 +190,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildLink> findByJobId(int|array<int> $job_id) Return ChildLink objects filtered by the job_id column
  * @method     ChildLink[]|Collection findByRayonId(int|array<int> $rayon_id) Return ChildLink objects filtered by the rayon_id column
  * @psalm-method Collection&\Traversable<ChildLink> findByRayonId(int|array<int> $rayon_id) Return ChildLink objects filtered by the rayon_id column
- * @method     ChildLink[]|Collection findByTagId(int|array<int> $tag_id) Return ChildLink objects filtered by the tag_id column
- * @psalm-method Collection&\Traversable<ChildLink> findByTagId(int|array<int> $tag_id) Return ChildLink objects filtered by the tag_id column
  * @method     ChildLink[]|Collection findByEventId(int|array<int> $event_id) Return ChildLink objects filtered by the event_id column
  * @psalm-method Collection&\Traversable<ChildLink> findByEventId(int|array<int> $event_id) Return ChildLink objects filtered by the event_id column
  * @method     ChildLink[]|Collection findByPostId(int|array<int> $post_id) Return ChildLink objects filtered by the post_id column
@@ -331,7 +315,7 @@ abstract class LinkQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT link_id, site_id, axys_account_id, user_id, article_id, stock_id, list_id, book_id, people_id, job_id, rayon_id, tag_id, event_id, post_id, collection_id, publisher_id, supplier_id, media_id, bundle_id, link_hide, link_do_not_reorder, link_sponsor_axys_account_id, link_date, link_created, link_updated FROM links WHERE link_id = :p0';
+        $sql = 'SELECT link_id, site_id, axys_account_id, user_id, article_id, stock_id, list_id, book_id, people_id, job_id, rayon_id, event_id, post_id, collection_id, publisher_id, supplier_id, media_id, bundle_id, link_hide, link_do_not_reorder, link_sponsor_axys_account_id, link_date, link_created, link_updated FROM links WHERE link_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -900,51 +884,6 @@ abstract class LinkQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(LinkTableMap::COL_RAYON_ID, $rayonId, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the tag_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByTagId(1234); // WHERE tag_id = 1234
-     * $query->filterByTagId(array(12, 34)); // WHERE tag_id IN (12, 34)
-     * $query->filterByTagId(array('min' => 12)); // WHERE tag_id > 12
-     * </code>
-     *
-     * @see       filterByTag()
-     *
-     * @param mixed $tagId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByTagId($tagId = null, ?string $comparison = null)
-    {
-        if (is_array($tagId)) {
-            $useMinMax = false;
-            if (isset($tagId['min'])) {
-                $this->addUsingAlias(LinkTableMap::COL_TAG_ID, $tagId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($tagId['max'])) {
-                $this->addUsingAlias(LinkTableMap::COL_TAG_ID, $tagId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(LinkTableMap::COL_TAG_ID, $tagId, $comparison);
 
         return $this;
     }
@@ -1833,181 +1772,6 @@ abstract class LinkQuery extends ModelCriteria
     {
         /** @var $q \Model\ArticleQuery */
         $q = $this->useInQuery('Article', $modelAlias, $queryClass, 'NOT IN');
-        return $q;
-    }
-
-    /**
-     * Filter the query by a related \Model\Tag object
-     *
-     * @param \Model\Tag|ObjectCollection $tag The related object(s) to use as filter
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByTag($tag, ?string $comparison = null)
-    {
-        if ($tag instanceof \Model\Tag) {
-            return $this
-                ->addUsingAlias(LinkTableMap::COL_TAG_ID, $tag->getId(), $comparison);
-        } elseif ($tag instanceof ObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            $this
-                ->addUsingAlias(LinkTableMap::COL_TAG_ID, $tag->toKeyValue('PrimaryKey', 'Id'), $comparison);
-
-            return $this;
-        } else {
-            throw new PropelException('filterByTag() only accepts arguments of type \Model\Tag or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Tag relation
-     *
-     * @param string|null $relationAlias Optional alias for the relation
-     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function joinTag(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Tag');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Tag');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Tag relation Tag object
-     *
-     * @see useQuery()
-     *
-     * @param string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \Model\TagQuery A secondary query class using the current class as primary query
-     */
-    public function useTagQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        return $this
-            ->joinTag($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Tag', '\Model\TagQuery');
-    }
-
-    /**
-     * Use the Tag relation Tag object
-     *
-     * @param callable(\Model\TagQuery):\Model\TagQuery $callable A function working on the related query
-     *
-     * @param string|null $relationAlias optional alias for the relation
-     *
-     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this
-     */
-    public function withTagQuery(
-        callable $callable,
-        string $relationAlias = null,
-        ?string $joinType = Criteria::LEFT_JOIN
-    ) {
-        $relatedQuery = $this->useTagQuery(
-            $relationAlias,
-            $joinType
-        );
-        $callable($relatedQuery);
-        $relatedQuery->endUse();
-
-        return $this;
-    }
-
-    /**
-     * Use the relation to Tag table for an EXISTS query.
-     *
-     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
-     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
-     *
-     * @return \Model\TagQuery The inner query object of the EXISTS statement
-     */
-    public function useTagExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
-    {
-        /** @var $q \Model\TagQuery */
-        $q = $this->useExistsQuery('Tag', $modelAlias, $queryClass, $typeOfExists);
-        return $q;
-    }
-
-    /**
-     * Use the relation to Tag table for a NOT EXISTS query.
-     *
-     * @see useTagExistsQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
-     *
-     * @return \Model\TagQuery The inner query object of the NOT EXISTS statement
-     */
-    public function useTagNotExistsQuery($modelAlias = null, $queryClass = null)
-    {
-        /** @var $q \Model\TagQuery */
-        $q = $this->useExistsQuery('Tag', $modelAlias, $queryClass, 'NOT EXISTS');
-        return $q;
-    }
-
-    /**
-     * Use the relation to Tag table for an IN query.
-     *
-     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
-     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
-     *
-     * @return \Model\TagQuery The inner query object of the IN statement
-     */
-    public function useInTagQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
-    {
-        /** @var $q \Model\TagQuery */
-        $q = $this->useInQuery('Tag', $modelAlias, $queryClass, $typeOfIn);
-        return $q;
-    }
-
-    /**
-     * Use the relation to Tag table for a NOT IN query.
-     *
-     * @see useTagInQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
-     *
-     * @return \Model\TagQuery The inner query object of the NOT IN statement
-     */
-    public function useNotInTagQuery($modelAlias = null, $queryClass = null)
-    {
-        /** @var $q \Model\TagQuery */
-        $q = $this->useInQuery('Tag', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 
