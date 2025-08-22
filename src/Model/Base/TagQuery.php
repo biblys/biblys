@@ -49,16 +49,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTagQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildTagQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildTagQuery leftJoinLink($relationAlias = null) Adds a LEFT JOIN clause to the query using the Link relation
- * @method     ChildTagQuery rightJoinLink($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Link relation
- * @method     ChildTagQuery innerJoinLink($relationAlias = null) Adds a INNER JOIN clause to the query using the Link relation
- *
- * @method     ChildTagQuery joinWithLink($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Link relation
- *
- * @method     ChildTagQuery leftJoinWithLink() Adds a LEFT JOIN clause and with to the query using the Link relation
- * @method     ChildTagQuery rightJoinWithLink() Adds a RIGHT JOIN clause and with to the query using the Link relation
- * @method     ChildTagQuery innerJoinWithLink() Adds a INNER JOIN clause and with to the query using the Link relation
- *
  * @method     ChildTagQuery leftJoinArticleTag($relationAlias = null) Adds a LEFT JOIN clause to the query using the ArticleTag relation
  * @method     ChildTagQuery rightJoinArticleTag($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ArticleTag relation
  * @method     ChildTagQuery innerJoinArticleTag($relationAlias = null) Adds a INNER JOIN clause to the query using the ArticleTag relation
@@ -69,7 +59,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTagQuery rightJoinWithArticleTag() Adds a RIGHT JOIN clause and with to the query using the ArticleTag relation
  * @method     ChildTagQuery innerJoinWithArticleTag() Adds a INNER JOIN clause and with to the query using the ArticleTag relation
  *
- * @method     \Model\LinkQuery|\Model\ArticleTagQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\ArticleTagQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildTag|null findOne(?ConnectionInterface $con = null) Return the first ChildTag matching the query
  * @method     ChildTag findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildTag matching the query, or a new ChildTag object populated from the query conditions when no match is found
@@ -708,179 +698,6 @@ abstract class TagQuery extends ModelCriteria
         $this->addUsingAlias(TagTableMap::COL_TAG_UPDATED, $updatedAt, $comparison);
 
         return $this;
-    }
-
-    /**
-     * Filter the query by a related \Model\Link object
-     *
-     * @param \Model\Link|ObjectCollection $link the related object to use as filter
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByLink($link, ?string $comparison = null)
-    {
-        if ($link instanceof \Model\Link) {
-            $this
-                ->addUsingAlias(TagTableMap::COL_TAG_ID, $link->getTagId(), $comparison);
-
-            return $this;
-        } elseif ($link instanceof ObjectCollection) {
-            $this
-                ->useLinkQuery()
-                ->filterByPrimaryKeys($link->getPrimaryKeys())
-                ->endUse();
-
-            return $this;
-        } else {
-            throw new PropelException('filterByLink() only accepts arguments of type \Model\Link or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Link relation
-     *
-     * @param string|null $relationAlias Optional alias for the relation
-     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function joinLink(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Link');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Link');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Link relation Link object
-     *
-     * @see useQuery()
-     *
-     * @param string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \Model\LinkQuery A secondary query class using the current class as primary query
-     */
-    public function useLinkQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        return $this
-            ->joinLink($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Link', '\Model\LinkQuery');
-    }
-
-    /**
-     * Use the Link relation Link object
-     *
-     * @param callable(\Model\LinkQuery):\Model\LinkQuery $callable A function working on the related query
-     *
-     * @param string|null $relationAlias optional alias for the relation
-     *
-     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this
-     */
-    public function withLinkQuery(
-        callable $callable,
-        string $relationAlias = null,
-        ?string $joinType = Criteria::LEFT_JOIN
-    ) {
-        $relatedQuery = $this->useLinkQuery(
-            $relationAlias,
-            $joinType
-        );
-        $callable($relatedQuery);
-        $relatedQuery->endUse();
-
-        return $this;
-    }
-
-    /**
-     * Use the relation to Link table for an EXISTS query.
-     *
-     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
-     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
-     *
-     * @return \Model\LinkQuery The inner query object of the EXISTS statement
-     */
-    public function useLinkExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
-    {
-        /** @var $q \Model\LinkQuery */
-        $q = $this->useExistsQuery('Link', $modelAlias, $queryClass, $typeOfExists);
-        return $q;
-    }
-
-    /**
-     * Use the relation to Link table for a NOT EXISTS query.
-     *
-     * @see useLinkExistsQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
-     *
-     * @return \Model\LinkQuery The inner query object of the NOT EXISTS statement
-     */
-    public function useLinkNotExistsQuery($modelAlias = null, $queryClass = null)
-    {
-        /** @var $q \Model\LinkQuery */
-        $q = $this->useExistsQuery('Link', $modelAlias, $queryClass, 'NOT EXISTS');
-        return $q;
-    }
-
-    /**
-     * Use the relation to Link table for an IN query.
-     *
-     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
-     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
-     *
-     * @return \Model\LinkQuery The inner query object of the IN statement
-     */
-    public function useInLinkQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
-    {
-        /** @var $q \Model\LinkQuery */
-        $q = $this->useInQuery('Link', $modelAlias, $queryClass, $typeOfIn);
-        return $q;
-    }
-
-    /**
-     * Use the relation to Link table for a NOT IN query.
-     *
-     * @see useLinkInQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
-     *
-     * @return \Model\LinkQuery The inner query object of the NOT IN statement
-     */
-    public function useNotInLinkQuery($modelAlias = null, $queryClass = null)
-    {
-        /** @var $q \Model\LinkQuery */
-        $q = $this->useInQuery('Link', $modelAlias, $queryClass, 'NOT IN');
-        return $q;
     }
 
     /**
