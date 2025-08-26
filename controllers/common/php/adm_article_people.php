@@ -17,6 +17,7 @@
 
 
 use Biblys\Service\QueryParamsService;
+use Biblys\Service\Slug\SlugService;
 use Model\PeopleQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -30,10 +31,11 @@ return function (Request $request, QueryParamsService $params): JsonResponse {
     $params->parse(["term" => ["type" => "string", "default" => ""]]);
     $term = $params->get("term");
 
+    $slugService = new SlugService();
+    $slugTerm = $slugService->slugify($term);
+
     $people = PeopleQuery::create()
-        ->filterByLastName("%$term%", Criteria::LIKE)
-        ->_or()
-        ->filterByFirstName("%$term%", Criteria::LIKE)
+        ->filterByUrl("%$slugTerm%", Criteria::LIKE)
         ->limit(25)
         ->find();
 
