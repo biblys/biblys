@@ -232,15 +232,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <tbody>
       {{ bundle_articles|raw }}
       </tbody>
-      </tfoot>
-      <tr>
-        <td colspan="4">
-          <input type="text" id="addToBundle" class="form-control" placeholder="Titre de l’article à ajouter..." />
-        </td>
-      </tr>
-      </tfoot>
     </table>
-    </ul>
+    {% include "AppBundle:Utils:_entity-search-field.html.twig" with {
+      query_url: "/pages/adm_article_search",
+      label: "Ajouter un article au lot…",
+      field_id: "add-to-bundle-search-field",
+    } %}
   </fieldset>
 
   <fieldset id="Contributeurs">
