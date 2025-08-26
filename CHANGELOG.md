@@ -8,6 +8,8 @@
   correctement. C'est corrigé.
 - La section "Contenu du lot" n'apparaissait sur la page d'édition d'un article
   lorsque le type "Lot" était sélectionné. C'est corrigé.
+- La recherche de contributeur·ices pouvaient ne renvoyer aucun résultat si le
+  nom ou le prénom contenait certains caractères accentués. C'est corrigé.
 
 ## 3.8.0 (6 août 2025)
 
