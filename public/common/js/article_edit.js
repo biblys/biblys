@@ -153,6 +153,48 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+/** Add to bundle autocomplete */
+document.addEventListener('DOMContentLoaded', function() {
+  const field = document.getElementById('add-to-bundle-search-field');
+  new EntitySearchField(field, {
+    onResultSelected: (field, { value }) => {
+      const articleId = document.getElementById('article_id').value;
+      $.post(`/api/admin/articles/${value}/add-to-bundle`, {
+          bundle_id: articleId,
+        },
+        /**
+         * @param res {object}
+         * @param res.error {string} Error message if any
+         * @param res.link_id {number} ID of the newly created link
+         * @param res.article_title {string} Title of the article
+         * @param res.article_authors {string} Authors of the article
+         * @param res.article_collection {string} Collection of the article
+         * @param res.article_url {string} URL of the article
+         */
+        function (res) {
+          if (res.error) {
+            window._alert(res.error);
+          } else {
+            const row = `<tr id="link_${res.link_id}" class="new">
+                    <td>${res.article_title}</td>
+                    <td>${res.article_authors}</td>
+                    <td>${res.article_collection}</td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm deleteLink pointer" data-link_id="${res.link_id}">
+                            <i aria-label="Supprimer" class="fa-solid fa-chain-broken"></i>
+                        </button> 
+                    </td>
+                </tr>`;
+            $('#bundle_articles').append(row);
+            $('.new').slideDown().removeClass('new');
+            $('#addToBundle').val('');
+            reloadArticleAdminEvents();
+          }
+        });
+      field.reset();
+    },
+  });
+});
 
 /* eslint-env jquery */
 
@@ -575,48 +617,6 @@ $(document).ready(function () {
       }
     }
   }).keypress(function () { $(this).autocomplete('search'); });
-
-  // Ajouter au lot
-  $('#addToBundle').autocomplete({
-    source: '/pages/adm_article_search',
-    minLength: 3,
-    delay: 250,
-    select: function (event, ui) {
-      const articleId = $('#article_id').val();
-      $.post(`/api/admin/articles/${ui.item.article_id}/add-to-bundle`, {
-        bundle_id: articleId,
-      },
-      /**
-       * @param res {object}
-       * @param res.error {string} Error message if any
-       * @param res.link_id {number} ID of the newly created link
-       * @param res.article_title {string} Title of the article
-       * @param res.article_authors {string} Authors of the article
-       * @param res.article_collection {string} Collection of the article
-       * @param res.article_url {string} URL of the article
-       */
-      function (res) {
-        if (res.error) {
-          window._alert(res.error);
-        } else {
-          const row = `<tr id="link_${res.link_id}" class="new">
-                    <td>${res.article_title}</td>
-                    <td>${res.article_authors}</td>
-                    <td>${res.article_collection}</td>
-                    <td>
-                        <button type="button" class="btn btn-danger btn-sm deleteLink pointer" data-link_id="${res.link_id}">
-                            <i aria-label="Supprimer" class="fa-solid fa-chain-broken"></i>
-                        </button> 
-                    </td>
-                </tr>`;
-          $('#bundle_articles').append(row);
-          $('.new').slideDown().removeClass('new');
-          $('#addToBundle').val('');
-          reloadArticleAdminEvents();
-        }
-      });
-    }
-  }).keypress(function (event) { if (event.keyCode === 13) { event.preventDefault(); } });
 });
 
 document.addEventListener('DOMContentLoaded', function () {
