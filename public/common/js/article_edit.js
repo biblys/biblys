@@ -275,13 +275,20 @@ function reloadArticleAdminEvents(scope) {
 
   // Changer le type d'article
   $('#type_id', scope).change(function () {
-    const type_id = $(this).val();
+    const type_id = Number(this.value);
+
+    const ebooksFieldset = document.getElementById('ebooks_fieldset');
+    const bundleFieldset = document.getElementById('bundle_fieldset');
+
+    ebooksFieldset && (ebooksFieldset.style.display = 'none');
+    bundleFieldset && (bundleFieldset.style.display = 'none');
+
     if (type_id === 2) {
-      $('#ebooks_fieldset').slideDown();
-    } else if (type_id === 8) {
-      $('#bundle_fieldset').slideDown();
-    } else {
-      $('#ebooks_fieldset').slideUp();
+      ebooksFieldset && (ebooksFieldset.style.display = 'block');
+    }
+
+    if (type_id === 8) {
+      bundleFieldset && (bundleFieldset.style.display = 'block');
     }
   });
 

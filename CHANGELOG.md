@@ -6,6 +6,8 @@
 
 - Les fichiers téléchargeables associés à un article ne s'affichaient pas
   correctement. C'est corrigé.
+- La section "Contenu du lot" n'apparaissait sur la page d'édition d'un article
+  lorsque le type "Lot" était sélectionné. C'est corrigé.
 
 ## 3.8.0 (6 août 2025)
 
