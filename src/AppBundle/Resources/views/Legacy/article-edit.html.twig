@@ -458,7 +458,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   </fieldset>
 
   <fieldset>
-    <legend>Classifications</legend>
+    <legend>Classification</legend>
 
     <h3>Mots-clés</h3>
     <ul id="the_tags">
@@ -473,29 +473,40 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       {% endfor %}
     </ul>
 
-    <label class="floating" for="article_theme_bisac">Ajouter :</label>
-    <textarea id="add_tags_input" class="medium"
-              placeholder="Entrer un ou plusieurs mots-clés, séparés par des virgules...">{{ default_tags }}</textarea>
-    <a id="add_tags_button" class="btn btn-primary">Ajouter</a>
+    <div class="form-group row mb-4">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="add_tags_input">Ajouter</label>
+      <input type="text" id="add_tags_input" name="add_tags_input" class="form-control col-md-6 col-lg-7"
+        placeholder="Entrer un ou plusieurs mots-clés, séparés par des virgules..."
+      />
+      <div class="col-md-1">
+        <button id="add_tags_button" class="btn btn-primary">Ajouter</button>
+      </div>
+    </div>
 
-    <br /><br />
+    <div class="form-group row mb-1">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_theme_bisac">BISAC</label>
+      <input type="text" id="article_theme_bisac" name="article_theme_bisac" value="{{ article.themeBisac }}"
+           class="form-control col-md-2" maxlength="16">
+    </div>
 
-    <label class="floating" for="article_theme_bisac">BISAC :</label>
-    <input type="text" id="article_theme_bisac" name="article_theme_bisac" value="{{ article.themeBisac }}"
-           class="medium" maxlength="16">
-    <br />
-    <label class="floating" for="article_theme_clil">CLIL :</label>
-    <input type="text" id="article_theme_clil" name="article_theme_clil" value="{{ article.themeClil }}" class="medium"
-           maxlength="16">
-    <br />
-    <label class="floating" for="article_theme_dewey">Dewey :</label>
-    <input type="text" id="article_theme_dewey" name="article_theme_dewey" value="{{ article.themeDewey }}"
-           class="medium" maxlength="16">
-    <br />
-    <label class="floating" for="article_theme_electre">Electre :</label>
-    <input type="text" id="article_theme_electre" name="article_theme_electre" value="{{ article.themeElectre }}"
-           class="medium" maxlength="16">
-    <br />
+    <div class="form-group row mb-1">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_theme_clil">CLIL</label>
+      <input type="text" id="article_theme_clil" name="article_theme_clil" value="{{ article.themeClil }}"
+           class="form-control col-md-2" maxlength="16">
+    </div>
+
+    <div class="form-group row mb-1">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_theme_dewey">Dewey</label>
+      <input type="text" id="article_theme_dewey" name="article_theme_dewey" value="{{ article.themeDewey }}"
+           class="form-control col-md-2" maxlength="16">
+    </div>
+
+    <div class="form-group row mb-1">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_theme_electre">Electre</label>
+      <input type="text" id="article_theme_electre" name="article_theme_electre" value="{{ article.themeElectre }}"
+           class="form-control col-md-2" maxlength="16">
+    </div>
+
   </fieldset>
 
   <fieldset>
@@ -616,62 +627,69 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     <legend>Identifiants et liens</legend>
 
     <p class="alert alert-info">
-      Ces champs sont renseigné automatiquement par Biblys..
+      Ces champs sont renseignés automatiquement par Biblys.
       Ne les modifiez pas manuellement, sauf si vous savez ce que vous faites.
     </p>
 
-    <label class="floating" for="article_title_alphabetic">Titre pour le tri :</label>
-    <input type="text" id="article_title_alphabetic" name="article_title_alphabetic"
-           value="{{ article.titleAlphabetic }}" class="long" placeholder="Champ rempli automatiquement" />
-    <br />
+    <div class="form-group row mb-1">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_title_alphabetic">Titre pour le tri</label>
+      <input type="text" id="article_title_alphabetic" name="article_title_alphabetic" value="{{ article.titleAlphabetic }}" class="col-md-5 col-lg-6 form-control" placeholder="Champ rempli automatiquement" />
+    </div>
 
-    <label class="floating" for="article_url">URL Biblys :</label>
-    <input type="text" id="article_url" name="article_url" value="{{ article.url }}" pattern="^[a-z0-9-_]+/[a-z0-9-_]+$"
-           title="Dans le doute, laisser ce champ vide." placeholder="Champ rempli automatiquement" class="long"
-           pattern="^((?!http).)*$" />
-    <br /><br />
+    <div class="form-group row">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_url">URL Biblys</label>
+      <input type="text" id="article_url" name="article_url" value="{{ article.url }}" title="Dans le doute, laisser ce champ vide." placeholder="Champ rempli automatiquement" class="col-md-5 col-lg-6 form-control" pattern="^((?!http).)*$" />
+    </div>
 
-    <label class="floating" for="article_textid">TextID :</label>
-    <input type="text" id="article_textid" name="article_textid" value="{{ article.textId }}" class="verylong"
-           maxlength=32>
-    <br />
-    <label class="floating" for="article_item">Item n°</label>
-    <input type="text" id="article_item" name="article_item" value="{{ article.item }}"
-           class="mini article_duplicate_check event" />
-    <br />
-    <label class="floating" for="article_link_to">Lier à l’article n°</label>
-    <input type="number" id="article_link_to" name="article_link_to" class="mini" />
-    <br />
-    <label class="floating" for="article_source_id">Extrait de l’article n°</label>
-    <input type="number" name="article_source_id" value={{ article.sourceId }}" class=" mini" />
-    <br /><br />
+    <div class="form-group row mb-1">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_textid">TextID</label>
+      <input type="text" id="article_textid" name="article_textid" value="{{ article.textId }}" class="col-md-3 col-lg-2 form-control" maxlength=32>
+    </div>
 
-    <label class="floating" for="article_noosfere_id">Ref. nooSFere :</label>
-    <input type="text" id="article_noosfere_id" name="article_noosfere_id" value="{{ article.noosfereId }}"
-           class="article_duplicate_check event" />
-    <br />
-    <label class="floating" for="article_asin">Ref. Amazon :</label>
-    <input type="text" id="article_asin" name="article_asin" value="{{ article.asin }}"
-           class="article_duplicate_check event" />
-    <br /><br />
+    <div class="form-group row mb-1">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_item">Item n°</label>
+      <input type="text" id="article_item" name="article_item" value="{{ article.item }}" class="col-md-3 col-lg-2 form-control article_duplicate_check event" />
+    </div>
 
-    <label class="floating" for="article_ean_others">Autres ISBN :</label>
-    <textarea id="article_ean_others" name="article_ean_others" class="small"
-              title="ISBN de précédentes éditions dans la méme collection, séparés par un espace.">{{ article.eanOthers }}</textarea>
-    <br /><br />
+    <div class="form-group row mb-1">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_link_to">Lier à l’article n°</label>
+      <input type="number" id="article_link_to" name="article_link_to" class="col-md-3 col-lg-2 form-control" />
+    </div>
+
+    <div class="form-group row">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_source_id">Extrait de l’article n°</label>
+      <input type="number" id="article_source_id" name="article_source_id" value="{{ article.sourceId }}" class="col-md-3 col-lg-2 form-control" />
+    </div>
+
+    <div class="form-group row mb-1">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_noosfere_id">Ref. nooSFere</label>
+      <input type="text" id="article_noosfere_id" name="article_noosfere_id" value="{{ article.noosfereId }}" class="col-md-3 col-lg-2 form-control article_duplicate_check event" />
+    </div>
+
+    <div class="form-group row mb-1">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_asin">Ref. Amazon</label>
+      <input type="text" id="article_asin" name="article_asin" value="{{ article.asin }}" class="col-md-3 col-lg-2 form-control article_duplicate_check event" />
+    </div>
+
+    <div class="form-group row">
+      <label class="col-md-3 col-lg-2 col-form-label text-md-right" for="article_ean_others">Autres ISBN</label>
+      <input type="text" id="article_ean_others" name="article_ean_others" class="col-md-3 col-lg-2 form-control small" title="ISBN de précédentes éditions dans la méme collection, séparés par un espace." value="{{ article.eanOthers }}" />
+    </div>
+
   </fieldset>
 
   <fieldset>
     <legend>Base de données</legend>
 
-    <label class="floating" for="article_created" class="readonly">Fiche créée le :</label>
-    <input type="text" name="article_created" id="article_created" value="{{ article.createdAt|date("Y-m-d H:i:s") }}"
-           placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
-    <br />
-    <label class="floating" for="article_updated" class="readonly">Fiche modifiée le :</label>
-    <input type="text" name="article_updated" id="article_updated" value="{{ article.updatedAt|date("Y-m-d H:i:s") }}"
-           placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
-    <br /><br />
+    <div class="form-group row">
+      <label for="article_created" class="col-md-3 col-lg-2 col-form-label text-md-right">Fiche créée le :</label>
+      <input type="text" name="article_created" id="article_created" value="{{ article.createdAt|date("Y-m-d H:i:s") }}" class="form-control col-lg-3 col-md-5" readonly>
+    </div>
+
+    <div class="form-group row">
+      <label for="article_updated" class="col-md-3 col-lg-2 col-form-label text-md-right">Fiche modifiée le :</label>
+      <input type="text" name="article_updated" id="article_updated" value="{{ article.updatedAt|date("Y-m-d H:i:s") }}" class="form-control col-lg-3 col-md-5" readonly>
+    </div>
   </fieldset>
 
 </form>
