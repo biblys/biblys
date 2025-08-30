@@ -731,6 +731,7 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', removeLink);
 
         const li = document.createElement('li');
+        li.classList.add('mt-1');
         li.id = 'link_' + link.id;
         li.appendChild(button);
         li.appendChild(document.createTextNode(' ' + link.tag_name));

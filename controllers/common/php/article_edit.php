@@ -540,11 +540,11 @@ return function (
         }
 
         $currentArticleCategories .= '<li>
-        <a class="btn btn-danger btn-sm" data-remove_link=' . $articleCategoryLink->getId() . '>
-            <span class="fa fa-remove" title="Supprimer le rayon"></span>
-        </a> 
-        ' . $articleCategory->getName() . '
-    </li>';
+            <a class="btn btn-danger btn-sm" data-remove_link=' . $articleCategoryLink->getId() . '>
+                <span class="fa fa-remove" title="Supprimer le rayon"></span>
+            </a> 
+            ' . $articleCategory->getName() . '
+        </li>';
     }
 
     $rm = new RayonManager();
