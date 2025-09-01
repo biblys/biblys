@@ -2,7 +2,7 @@ environment: dev # dev|prod|test
 
 db:
   host: biblys-mysql
-  host_for_cli: 127.0.0.1
+#  host_for_cli: 127.0.0.1
   port: 3306
   user: root
   pass:
