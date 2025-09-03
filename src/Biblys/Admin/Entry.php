@@ -239,11 +239,11 @@ class Entry
         $entries[] = new Entry('Médias', ['category' => 'content', 'url' => '/pages/adm_media', 'icon' => 'image']);
         $entries[] = new Entry('Liste de contacts', ['category' => 'content', 'path' => 'mailing_contacts', 'icon' => 'address-book']);
 
+        $entries[] = new Entry('Ventes par article', ['category' => 'stats', 'path' => 'stats_sales_by_article', 'icon' => 'book']);
         $entries[] = new Entry('Chiffre d\'affaires', ['category' => 'stats', 'url' => '/pages/adm_revenue', 'icon' => 'money-bills']);
         $entries[] = new Entry('Best-sellers', ['category' => 'stats', 'url' => '/pages/adm_stats_best-sellers', 'icon' => 'sort-amount-desc']);
         $entries[] = new Entry('C.A. par fournisseur', ['category' => 'stats', 'path' => 'stats_suppliers', 'icon' => 'truck']);
         $entries[] = new Entry('C.A. par facture', ['category' => 'stats', 'url' => '/pages/adm_stats_invoices', 'icon' => 'file']);
-        $entries[] = new Entry('Ventes par article', ['category' => 'stats', 'url' => '/pages/adm_sales_articles', 'icon' => 'book']);
         $entries[] = new Entry('Livres recherchés', ['category' => 'stats', 'url' => '/pages/adm_alerts', 'icon' => 'bell']);
         $entries[] = new Entry('Exemplaires perdus', ['category' => 'stats', 'path' => 'stats_lost', 'icon' => 'compass']);
 

@@ -796,6 +796,11 @@ static_page_show:
 
 # Stats
 
+stats_sales_by_article:
+  methods: GET
+  path: /admin/stats/sales-by-article
+  controller: AppBundle\Controller\StatsController::salesByArticleAction
+
 stats_lost:
   path: /admin/stats/lost/{year}
   controller: AppBundle\Controller\StatsController::lostAction
