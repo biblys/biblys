@@ -20,6 +20,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Controller;
@@ -43,16 +44,26 @@ class StatsController extends Controller
      * @throws LoaderError
      * @throws PropelException
      */
-    public function salesByArticleAction(CurrentUser $currentUser, TemplateService $templateService): Response
+    public function salesByArticleAction(
+        CurrentUser $currentUser,
+        QueryParamsService $queryParams,
+        TemplateService $templateService
+    ): Response
     {
         $currentUser->authAdmin();
 
-        $year = date("Y");
+        $queryParams->parse(["year" => [
+            "type" => "numeric",
+            "default" => date("Y"),
+            "mb_min_length" => 4,
+            "mb_max_length" => 4,
+        ]]);
+
+        $year = $queryParams->getInteger("year");
         $sales = StockQuery::create()
             ->filterBySellingDate("$year-01-01", Criteria::GREATER_EQUAL)
             ->filterBySellingDate("$year-12-31", Criteria::LESS_EQUAL)
             ->orderBySellingDate("desc")
-            ->limit(100)
             ->find();
 
         $salesByArticles = [];
@@ -77,6 +88,8 @@ class StatsController extends Controller
 
         return $templateService->renderResponse("AppBundle:Stats:sales_by_article.html.twig", [
             "sales" => $salesByArticles,
+            "year" => $year,
+            "current_year" => date("Y"),
         ], isPrivate: true);
     }
 
