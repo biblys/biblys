@@ -26,6 +26,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     Ventes par article
   </h1>
 
+  <form class="form mt-4" method="get">
+    <div class="form-group row">
+      <label for="year" class="col-md-3 col-lg-2 col-form-label text-md-right">Année :</label>
+      <select id="year" name="year" class="col-md-2 form-control">
+        {% for year_option in current_year..2008 %}
+          <option {% if year == year_option %} selected{% endif %}>
+            {{ year_option }}
+          </option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="btn btn-primary ml-3">Filtrer</button>
+    </div>
+
   <table class="table table-striped mt-4">
     <thead>
       <tr>
