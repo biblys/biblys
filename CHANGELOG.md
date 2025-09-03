@@ -1,5 +1,13 @@
 # Historique des modifications
 
+## 3.9.0 (DEV)
+
+### Améliorations
+
+- Une page "Ventes par article" a été ajoutée avec un filtre par année
+- Il est possible d'exporter les ventes au format CSV depuis la page
+  "Ventes par article"
+
 ## 3.8.2 (10 septembre 2025)
 
 ### Corrections
