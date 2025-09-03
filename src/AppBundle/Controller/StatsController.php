@@ -32,6 +32,7 @@ use SupplierManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -47,19 +48,34 @@ class StatsController extends Controller
     public function salesByArticleAction(
         CurrentUser $currentUser,
         QueryParamsService $queryParams,
+        UrlGenerator $urlGenerator,
         TemplateService $templateService
     ): Response
     {
         $currentUser->authAdmin();
 
-        $queryParams->parse(["year" => [
-            "type" => "numeric",
-            "default" => date("Y"),
-            "mb_min_length" => 4,
-            "mb_max_length" => 4,
-        ]]);
+        $queryParams->parse([
+            "mode" => [
+                "type" => "string",
+                "default" => "display",
+            ],
+            "year" => [
+                "type" => "numeric",
+                "default" => date("Y"),
+                "mb_min_length" => 4,
+                "mb_max_length" => 4,
+            ]
+        ]);
 
         $year = $queryParams->getInteger("year");
+        $mode = $queryParams->get("mode");
+
+        if ($mode === "export") {
+            return new RedirectResponse($urlGenerator->generate("api_stats_sales_by_articles", [
+                "year" => $year,
+            ]));
+        }
+
         $sales = StockQuery::create()
             ->filterBySellingDate("$year-01-01", Criteria::GREATER_EQUAL)
             ->filterBySellingDate("$year-12-31", Criteria::LESS_EQUAL)
