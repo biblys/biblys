@@ -1,0 +1,55 @@
+{#
+Copyright (C) 2024 Clément Latzarus
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Ventes par article
+{% endblock %}
+
+{% block main %}
+  <h1>
+    <i class="fa-solid fa-book"></i>
+    Ventes par article
+  </h1>
+
+  <table class="table table-striped mt-4">
+    <thead>
+      <tr>
+        <th>Titre</th>
+        <th class="text-center">Quantité</th>
+        <th class="text-center">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for item in sales %}
+      <tr>
+        <td>
+          <a href="{{ path('article_show', { slug: item.article.url }) }}">
+            {{ item.article.title }}
+          </a>
+        </td>
+        <td class="text-right">{{ item.quantity }}</td>
+        <td class="text-right">{{ item.total|currency('EUR')|raw }}</td>
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="4">Aucun article vendu.</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -19,11 +19,49 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
+use Biblys\Service\CurrentUser;
+use Biblys\Test\Helpers;
+use Biblys\Test\ModelFactory;
+use DateTime;
 use Exception;
+use Mockery;
 use PHPUnit\Framework\TestCase;
+use Propel\Runtime\Exception\PropelException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class StatsControllerTest extends TestCase
 {
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function testSalesByArticleAction(): void
+    {
+        // given
+        $article = ModelFactory::createArticle(title: "Sold article");
+        ModelFactory::createStockItem(article: $article, sellingPrice: 1234, sellingDate: new DateTime());
+        ModelFactory::createStockItem(article: $article, sellingPrice: 1234, sellingDate: new DateTime());
+        $controller = new StatsController();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->andReturn();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->salesByArticleAction($currentUser, $templateService);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Sold article", $response->getContent());
+        $this->assertStringContainsString("24,68", $response->getContent());
+    }
+
+
     /**
      * @throws Exception
      */
