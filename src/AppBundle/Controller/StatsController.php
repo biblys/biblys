@@ -20,8 +20,11 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Controller;
+use Model\StockQuery;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use StockManager;
 use SupplierManager;
@@ -34,6 +37,48 @@ use Twig\Error\SyntaxError;
 
 class StatsController extends Controller
 {
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function salesByArticleAction(CurrentUser $currentUser, TemplateService $templateService): Response
+    {
+        $currentUser->authAdmin();
+
+        $year = date("Y");
+        $sales = StockQuery::create()
+            ->filterBySellingDate("$year-01-01", Criteria::GREATER_EQUAL)
+            ->filterBySellingDate("$year-12-31", Criteria::LESS_EQUAL)
+            ->orderBySellingDate("desc")
+            ->limit(100)
+            ->find();
+
+        $salesByArticles = [];
+        foreach ($sales as $sale) {
+            $articleId = $sale->getArticleId();
+            if (!isset($salesByArticles[$articleId])) {
+                $article = $sale->getArticle();
+
+                if ($article === null) {
+                    continue;
+                }
+
+                $salesByArticles[$articleId] = [
+                    "article" => $article,
+                    "quantity" => 0,
+                    "total" => 0,
+                ];
+            }
+            $salesByArticles[$articleId]["quantity"]++;
+            $salesByArticles[$articleId]["total"] += $sale->getSellingPrice();
+        }
+
+        return $templateService->renderResponse("AppBundle:Stats:sales_by_article.html.twig", [
+            "sales" => $salesByArticles,
+        ], isPrivate: true);
+    }
 
     /**
      * @throws SyntaxError
