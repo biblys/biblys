@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2024 Clément Latzarus
+ * Copyright (C) 2025 Clément Latzarus
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
@@ -16,22 +16,18 @@
  */
 
 
-namespace AppBundle\Controller;
+namespace ApiBundle\Controller;
 
-use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\QueryParamsService;
-use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use DateTime;
-use Exception;
+use League\Csv\Exception;
+use League\Csv\InvalidArgument;
 use Mockery;
 use Model\StockQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 
 class StatsControllerTest extends TestCase
 {
@@ -44,19 +40,19 @@ class StatsControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws PropelException
-     * @throws LoaderError
      * @throws Exception
+     * @throws InvalidArgument
+     * @throws PropelException
+     * @throws \Exception
      */
     public function testSalesByArticleAction(): void
     {
         // given
+        $controller = new StatsController();
+
         $article = ModelFactory::createArticle(title: "Sold article");
         ModelFactory::createStockItem(article: $article, sellingPrice: 1234, sellingDate: new DateTime());
         ModelFactory::createStockItem(article: $article, sellingPrice: 1234, sellingDate: new DateTime());
-        $controller = new StatsController();
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->andReturn();
@@ -69,92 +65,45 @@ class StatsControllerTest extends TestCase
                 "mb_max_length" => 4,
             ]
         ])->andReturn();
-        $templateService = Helpers::getTemplateService();
         $queryParams->shouldReceive("getInteger")->with("year")->andReturn(date("Y"));
 
         // when
-        $response = $controller->salesByArticleAction($currentUser, $queryParams ,$templateService);
+        $response = $controller->salesByArticleAction($currentUser, $queryParams);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringContainsString("Sold article", $response->getContent());
-        $this->assertStringContainsString("24,68", $response->getContent());
+        $this->assertStringContainsString('9781234567890;"Sold article";9.99;2;0;"Vente directe";5,50%;non', $response->getContent());
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws PropelException
-     * @throws LoaderError
      * @throws Exception
+     * @throws InvalidArgument
+     * @throws \Exception
      */
     public function testSalesByArticleActionWithYear(): void
     {
         // given
+        $controller = new StatsController();
+
         $article = ModelFactory::createArticle(title: "Article sold in 2022");
         ModelFactory::createStockItem(article: $article, sellingPrice: 1234, sellingDate: new DateTime("2022-05-01"));
         $article = ModelFactory::createArticle(title: "Article sold in 2023");
         ModelFactory::createStockItem(article: $article, sellingPrice: 1234, sellingDate: new DateTime("2023-05-01"));
         ModelFactory::createStockItem(article: $article, sellingPrice: 1234, sellingDate: new DateTime("2023-06-01"));
-        $controller = new StatsController();
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->andReturn();
         $queryParams = Mockery::mock(QueryParamsService::class);
         $queryParams->shouldReceive("parse")->andReturn();
         $queryParams->shouldReceive("getInteger")->with("year")->andReturn(2023);
-        $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->salesByArticleAction($currentUser, $queryParams, $templateService);
+        $response = $controller->salesByArticleAction($currentUser, $queryParams);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringContainsString("Article sold in 2023", $response->getContent());
-        $this->assertStringContainsString("24,68", $response->getContent());
+        $this->assertStringContainsString('9781234567890;"Article sold in 2023";9.99;2;0;"Vente directe";5,50%;non', $response->getContent());
         $this->assertStringNotContainsString("Article sold in 2022", $response->getContent());
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testMatomo()
-    {
-        // given
-        $controller = new StatsController();
-        $config = new Config([
-            "matomo" => [
-                "domain" => "example.org",
-                "login" => "login",
-                "md5pass" => "password",
-            ]
-        ]);
-
-        // when
-        $response = $controller->matomo($config);
-
-        // then
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals(
-            "https://example.org/index.php?module=Login&action=logme&login=login&password=password",
-            $response->getTargetUrl(),
-        );
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testUmami()
-    {
-        // given
-        $controller = new StatsController();
-        $config = new Config(["umami" => ["share_url" => "https://example.org/umami"]]);
-
-        // when
-        $response = $controller->umami($config);
-
-        // then
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("https://example.org/umami", $response->getTargetUrl());
     }
 }

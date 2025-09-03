@@ -137,6 +137,13 @@ api_shipping_zones:
   path: /api/admin/shipping/zones
   controller: ApiBundle\Controller\ShippingController::zonesAction
 
+# Stats
+
+api_stats_sales_by_articles:
+  methods: GET
+  path: /api/admin/stats/sales-by-articles
+  controller: ApiBundle\Controller\StatsController::salesByArticleAction
+
 # Legacy
 
 legacy_x_adm_article_award:
