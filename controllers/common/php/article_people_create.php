@@ -17,14 +17,15 @@
 
 
 use Biblys\Service\BodyParamsService;
+use Biblys\Service\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @throws Exception
  */
-return function (Request $request, BodyParamsService $params): JsonResponse {
-    $pm = new PeopleManager();
+return function (CurrentUser $currentUser, BodyParamsService $params): JsonResponse {
+    $currentUser->authPublisher();
 
     $params->parse([
         "people_first_name" => ["type" => "string"],

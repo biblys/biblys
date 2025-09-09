@@ -16,18 +16,18 @@
  */
 
 
+use Biblys\Service\CurrentUser;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\Slug\SlugService;
 use Model\PeopleQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * @throws Exception
  */
-return function (Request $request, QueryParamsService $params): JsonResponse {
+return function (CurrentUser $currentUser, QueryParamsService $params): JsonResponse {
+    $currentUser->authPublisher();
     $params->parse(["term" => ["type" => "string", "default" => ""]]);
     $term = $params->get("term");
 
