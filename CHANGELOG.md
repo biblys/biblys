@@ -1,5 +1,13 @@
 # Historique des modifications
 
+## 3.8.2 (DEV)
+
+### Corrections
+
+- La recherche et la création d'un contributeur depuis la page d'édition
+  d'un article pouvaient échouer si l'utilisateur·ice avait des droits éditeur.
+  C'est corrigé.
+
 ## 3.8.1 (28 août 2025)
 
 ### Corrections

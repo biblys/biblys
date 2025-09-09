@@ -557,7 +557,7 @@ $(document).ready(function () {
     $('#submitPeopleForm').addClass('loading');
     $.post({
       method: 'POST',
-      url: '/pages/adm_article_people_create',
+      url: '/pages/article_people_create',
       data: {
         people_first_name: $('#people_first_name').val(),
         people_last_name: $('#people_last_name').val()
