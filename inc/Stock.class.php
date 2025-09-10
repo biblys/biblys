@@ -65,6 +65,15 @@ class Stock extends Entity
         parent::__construct($data);
     }
 
+    public function getModel(): \Model\Stock
+    {
+        $model = new \Model\Stock();
+        $model->setId($this->get("id"));
+        $model->setArticleId($this->get("article_id"));
+
+        return $model;
+    }
+
     /**
      * Test if a copy has a date of sale.
      *
