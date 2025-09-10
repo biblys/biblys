@@ -271,16 +271,16 @@
         },
         {
             "name": "biblys/isbn",
-            "version": "3.2.30",
+            "version": "3.2.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/biblys/isbn.git",
-                "reference": "60523d9ddae489ccfce35d605588d13510ee74fd"
+                "reference": "f46ed2fedcb1a66e5dfe8b37a29a52a5c34a0e94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/biblys/isbn/zipball/60523d9ddae489ccfce35d605588d13510ee74fd",
-                "reference": "60523d9ddae489ccfce35d605588d13510ee74fd",
+                "url": "https://api.github.com/repos/biblys/isbn/zipball/f46ed2fedcb1a66e5dfe8b37a29a52a5c34a0e94",
+                "reference": "f46ed2fedcb1a66e5dfe8b37a29a52a5c34a0e94",
                 "shasum": ""
             },
             "require": {
@@ -318,7 +318,7 @@
             ],
             "support": {
                 "issues": "https://github.com/biblys/isbn/issues",
-                "source": "https://github.com/biblys/isbn/tree/3.2.30"
+                "source": "https://github.com/biblys/isbn/tree/3.2.31"
             },
             "funding": [
                 {
