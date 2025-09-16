@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f0c04821b8abcab5b858dddad76c45ce",
+    "content-hash": "010341e5511aa1861db3dca80d7086c3",
     "packages": [
         {
             "name": "apimatic/core",
@@ -964,16 +964,16 @@
         },
         {
             "name": "getbrevo/brevo-php",
-            "version": "v2.0.12",
+            "version": "v2.0.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getbrevo/brevo-php.git",
-                "reference": "657412425b7ad8d6101239a30bd384325e8bfdef"
+                "reference": "be204dab9a3e561f934435a6d6d7016efc7bb3d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getbrevo/brevo-php/zipball/657412425b7ad8d6101239a30bd384325e8bfdef",
-                "reference": "657412425b7ad8d6101239a30bd384325e8bfdef",
+                "url": "https://api.github.com/repos/getbrevo/brevo-php/zipball/be204dab9a3e561f934435a6d6d7016efc7bb3d5",
+                "reference": "be204dab9a3e561f934435a6d6d7016efc7bb3d5",
                 "shasum": ""
             },
             "require": {
@@ -1021,9 +1021,9 @@
             ],
             "support": {
                 "issues": "https://github.com/getbrevo/brevo-php/issues",
-                "source": "https://github.com/getbrevo/brevo-php/tree/v2.0.12"
+                "source": "https://github.com/getbrevo/brevo-php/tree/v2.0.13"
             },
-            "time": "2025-09-14T19:16:54+00:00"
+            "time": "2025-09-16T06:38:32+00:00"
         },
         {
             "name": "gitonomy/gitlib",
