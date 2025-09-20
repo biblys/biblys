@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.8.3 (DEV)
+
+### Corrections
+
+- L'ajout ou le retrait d'un contact à une liste Brevo pouvait provoquer une
+  erreur. C'est corrigé.
+
 ## 3.8.2 (10 septembre 2025)
 
 ### Corrections
