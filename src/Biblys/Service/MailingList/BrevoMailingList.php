@@ -89,7 +89,7 @@ class BrevoMailingList implements MailingListInterface
             sort: "asc",
         );
 
-        return array_map(function (array $dto) {
+        return array_map(function ($dto) {
             return new Contact($dto["email"], $dto["createdAt"]);
         }, $result["contacts"]);
     }
