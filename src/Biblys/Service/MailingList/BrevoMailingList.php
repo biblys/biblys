@@ -126,7 +126,7 @@ class BrevoMailingList implements MailingListInterface
 
         $listId = (int) $this->config->get("mailing.list_id");
         $contactEmails = new AddContactToList(["emails" => [$emailAddress]]);
-        $this->client->addContactToList($listId, $contactEmails);
+        $this->client->addContactToList($contactEmails, $listId);
     }
 
     /**
@@ -146,7 +146,7 @@ class BrevoMailingList implements MailingListInterface
 
         $listId = (int) $this->config->get("mailing.list_id");
         $contactEmails = new RemoveContactFromList(["emails" => [$emailAddress]]);
-        $this->client->removeContactFromList($listId, $contactEmails);
+        $this->client->removeContactFromList($contactEmails, $listId);
     }
 
     /**
