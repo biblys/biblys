@@ -297,4 +297,9 @@ class Article extends BaseArticle
     {
         return Isbn::convertToIsbn13($this->getEan());
     }
+
+    public function getModel(): self
+    {
+        return $this;
+    }
 }
