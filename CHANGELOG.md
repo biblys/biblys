@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 3.8.3 (DEV)
+## 3.8.3 (1er octobre 2025)
 
 ### Corrections
 
