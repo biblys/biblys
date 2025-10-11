@@ -132,7 +132,7 @@ return function (
                 ]);
                 try {
                     $pickupPoint = $delivery->findPickupPointByCode(
-                        country: 'FR',
+                        country: $order->getCountry()->getCode(),
                         code: $orderEntity->get("mondial_relay_pickup_point_code")
                     );
                     $content .= '

@@ -138,7 +138,8 @@ return function (
             "site_id" => $config->get("mondial_relay.code_enseigne"),
             "site_key" => $config->get("mondial_relay.private_key"),
         ]);
-        $pickupPoint = $delivery->findPickupPointByCode('FR', $pickupPointCode);
+        $country = CountryQuery::create()->findPk($countryId);
+        $pickupPoint = $delivery->findPickupPointByCode($country->getCode(), $pickupPointCode);
 
         $pickupPointForm = '
            <fieldset class="order-delivery-form__fieldset order-delivery-form__pickup-points">

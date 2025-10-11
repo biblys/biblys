@@ -284,12 +284,14 @@ class ShippingController extends Controller
         $pickupPoints = [];
         $error = null;
         if ($postalCode) {
+            $countryId = $queryParams->getInteger("country_id");
+            $country = CountryQuery::create()->findPk($countryId);
             try {
                 $delivery = new DeliveryChoice([
                     "site_id" => $config->get("mondial_relay.code_enseigne"),
                     "site_key" => $config->get("mondial_relay.private_key"),
                 ]);
-                $pickupPoints = $delivery->findPickupPoints(country: 'FR', zipCode: $postalCode, nbResults: 20);
+                $pickupPoints = $delivery->findPickupPoints(country: $country->getCode(), zipCode: $postalCode, nbResults: 20);
             } catch (\DansMaCulotte\MondialRelay\Exceptions\Exception $e) {
                 $error = "Une erreur est survenue lors de la recherche des points relais : " . $e->getMessage();
             }
