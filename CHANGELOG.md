@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.9.1 (DEV)
+
+### Corrections
+
+- La sélection d'un point de retrait Mondial Relay pouvait échouer pour les pays
+  autres que la France. C'est corrigé.
+
 ## 3.9.0 (1er octobre 2025)
 
 ### Améliorations
