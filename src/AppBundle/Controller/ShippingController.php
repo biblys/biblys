@@ -282,12 +282,17 @@ class ShippingController extends Controller
         $postalCode = $queryParams->get("postal_code");
 
         $pickupPoints = [];
+        $error = null;
         if ($postalCode) {
-            $delivery = new DeliveryChoice([
-                "site_id" => $config->get("mondial_relay.code_enseigne"),
-                "site_key" => $config->get("mondial_relay.private_key"),
-            ]);
-            $pickupPoints = $delivery->findPickupPoints(country: 'FR', zipCode: $postalCode, nbResults: 20);
+            try {
+                $delivery = new DeliveryChoice([
+                    "site_id" => $config->get("mondial_relay.code_enseigne"),
+                    "site_key" => $config->get("mondial_relay.private_key"),
+                ]);
+                $pickupPoints = $delivery->findPickupPoints(country: 'FR', zipCode: $postalCode, nbResults: 20);
+            } catch (\DansMaCulotte\MondialRelay\Exceptions\Exception $e) {
+                $error = "Une erreur est survenue lors de la recherche des points relais : " . $e->getMessage();
+            }
         }
 
         return $templateService->renderResponse("AppBundle:Shipping:select_pickup_point.html.twig", [
@@ -295,6 +300,7 @@ class ShippingController extends Controller
             "pickup_points" => $pickupPoints,
             "country_id" => $queryParams->getInteger("country_id"),
             "shipping_id" => $queryParams->getInteger("shipping_id"),
+            "error" => $error,
         ]);
     }
 }

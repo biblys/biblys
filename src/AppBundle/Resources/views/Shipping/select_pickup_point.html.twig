@@ -41,6 +41,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     <button type="submit" class="btn btn-info">Rechercher</button>
   </form>
 
+  {% if error %}
+    <div class="alert alert-danger my-4">
+      {{ error }}
+    </div>
+  {% endif %}
+
   {% if pickup_points %}
     <h2 class="my-4">Points de retrait disponibles</h2>
   {% endif %}
