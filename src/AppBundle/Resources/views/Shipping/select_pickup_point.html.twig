@@ -29,7 +29,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <label for="postal_code">Votre code postal</label>
       <input
         type="text"
-        class="form-control"
+        class="form-control mx-2"
         id="postal_code"
         name="postal_code"
         placeholder="46800"
@@ -42,28 +42,32 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   </form>
 
   {% if pickup_points %}
-    <h2>Points de retrait disponibles pour {{ postal_code }} :</h2>
+    <h2 class="my-4">Points de retrait disponibles</h2>
   {% endif %}
 
   {% for point in pickup_points %}
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">{{ point.name }}</h3>
+    <div class="card mb-4">
+      <div class="card-header">
+        <h4 class="card-title">{{ point.name }}</h4>
       </div>
-      <div class="panel-body">
+      <div class="card-body">
         <p>
           {{ point.address }}<br />
           {{ point.postalCode }}  {{ point.city }}<br />
-          <a href="{{ point.mapUrl }}" target="_blank" class="btn btn-outline-secondary btn-sm">Voir sur la carte</a>
-        </p>
-        <p>
-          <a
-            href="/pages/order_delivery?pickup_point_code={{ point.id }}&country_id={{ country_id }}&shipping_id={{ shipping_id }}"
-            class="btn btn-primary"
-          >
-            Choisir ce point de retrait
+          <a href="{{ point.mapUrl }}" target="_blank" class="btn btn-outline-secondary btn-sm">
+            <i class="fa fa-map-marker-alt"></i>
+            Voir sur la carte
           </a>
         </p>
+      </div>
+      <div class="card-footer">
+        <a
+          href="/pages/order_delivery?pickup_point_code={{ point.id }}&country_id={{ country_id }}&shipping_id={{ shipping_id }}"
+          class="btn btn-primary"
+        >
+          <i class="fa fa-check"></i>
+          Choisir ce point de retrait
+        </a>
       </div>
     </div>
   {% endfor %}
