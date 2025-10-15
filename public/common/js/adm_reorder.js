@@ -58,9 +58,9 @@ Collection.prototype = {
 					
         // Update progressbar
         Collection.loaded++;
-        const percent = Collection.loaded / (Collection.loaded + collections.length) * 100 + '%';
+        const percent = Collection.loaded / (Collection.loaded + collections.length) * 100;
         $('#progressValue').text(Collection.loaded);
-        $('.progress-bar').html(Math.round(parseFloat(percent))+' %').css({ 'width': percent+'%'});
+        $('.progress-bar').html(Math.round(percent)+' %').css({ 'width': percent+'%'});
 					
         // Add the collection to the loaded collection array
         loadedCollections.push(collection);
