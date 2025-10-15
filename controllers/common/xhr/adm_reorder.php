@@ -43,7 +43,9 @@ if ($collection = $cm->getById($_GET['collection_id'])) {
 
         $ventes = LegacyCodeHelper::getGlobalDatabaseConnection()->query("SELECT DATE_FORMAT(`stock_selling_date`,'%Y-%m-%d') AS `lastSale` FROM `stock` WHERE `article_id` = '".$a["article_id"]."' AND `stock_condition` = 'Neuf' AND `stock_selling_date` IS NOT NULL ORDER BY `stock_selling_date` DESC");
         $v = $ventes->fetch(PDO::FETCH_ASSOC);
-        $a["lastSale"] = $v["lastSale"];
+        if ($v !== false) {
+            $a["lastSale"] = $v["lastSale"];
+        }
         $a["sales"] = $ventes->rowCount();
 
         if (!$a["sales"]) {
