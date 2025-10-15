@@ -6,6 +6,8 @@
 
 - La sélection d'un point de retrait Mondial Relay pouvait échouer pour les pays
   autres que la France. C'est corrigé.
+- La page de réassort pouvait ne pas charger certaines collections. C'est
+  corrigé.
 
 ## 3.9.0 (1er octobre 2025)
 
