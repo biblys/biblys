@@ -20,6 +20,11 @@ import EntitySearchField from '/common/js/entity-search-field.js';
 document.addEventListener('DOMContentLoaded', function () {
   const articleCoverField = document.getElementById('article_cover_upload');
   const articleCoverPreview = document.getElementById('article-cover-preview');
+
+  if (!articleCoverField || !articleCoverPreview) {
+    return;
+  }
+
   articleCoverField.addEventListener('change', (event) => {
     const file = event.target.files[0];
     if (file && file.type.startsWith('image/')) {
@@ -35,6 +40,11 @@ document.addEventListener('DOMContentLoaded', function () {
 /** Collection autocomplete */
 document.addEventListener('DOMContentLoaded', function() {
   const field = document.getElementById('collection-search-field');
+
+  if (!field) {
+    return;
+  }
+
   window.collectionField = new EntitySearchField(field, {
     onResultSelected: async (field, { value, label }) => {
     },
@@ -100,6 +110,11 @@ function initPublisherAutocomplete() {
 /** Cycle autocomplete */
 document.addEventListener('DOMContentLoaded', function() {
   const field = document.getElementById('cycle-search-field');
+
+  if (!field) {
+    return;
+  }
+
   window.cycleField = new EntitySearchField(field, {
     action: {
       label: 'Créer un cycle « %query% »',
@@ -135,6 +150,11 @@ document.addEventListener('DOMContentLoaded', function() {
 /** Contributor autocomplete */
 document.addEventListener('DOMContentLoaded', function() {
   const field = document.getElementById('contributor-search-field');
+
+  if (!field) {
+    return;
+  }
+
   new EntitySearchField(field, {
     onResultSelected: (field, { value }) => {
       _addContribution(value, 1);
@@ -173,6 +193,11 @@ document.addEventListener('DOMContentLoaded', function() {
 /** Add to bundle autocomplete */
 document.addEventListener('DOMContentLoaded', function() {
   const field = document.getElementById('add-to-bundle-search-field');
+
+  if (!field) {
+    return;
+  }
+
   new EntitySearchField(field, {
     onResultSelected: (field, { value }) => {
       const articleId = document.getElementById('article_id').value;
