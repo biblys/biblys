@@ -124,6 +124,10 @@ class Article extends Entity
         $model->setPrice($this->get("price"));
         $model->setPubdate($this->get("pubdate"));
         $model->setAvailabilityDilicom($this->get("availability_dilicom"));
+        $model->setEan($this->get("ean"));
+        $model->setTextid($this->get("textid"));
+        $model->setFormat($this->get("format"));
+        $model->setPages($this->get("pages"));
 
         $model->setPublisherId($this->get("publisher_id"));
         $model->setCollectionId($this->get("collection_id"));
