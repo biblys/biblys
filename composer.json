@@ -69,7 +69,7 @@
     "symfony/twig-bridge": "^6.0",
     "symfony/options-resolver": "^6.0",
     "symfony/webpack-encore-bundle": "^2.0",
-    "stripe/stripe-php": "^17.0",
+    "stripe/stripe-php": "^18.0",
     "egulias/email-validator": "^4.0",
     "symfony/mime": "^6.0",
     "rollbar/rollbar": "~4.0",
