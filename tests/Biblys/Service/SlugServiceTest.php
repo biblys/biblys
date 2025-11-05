@@ -56,7 +56,7 @@ class SlugServiceTest extends TestCase
         $this->assertEquals("elementaire-mon-cher-watson", $slug);
     }
 
-    public function testWithAmpersandCaracter()
+    public function testWithAmpersandCharacter()
     {
         // given
         $slugService = new SlugService();
@@ -66,6 +66,18 @@ class SlugServiceTest extends TestCase
 
         // then
         $this->assertEquals("fruits-et-legumes", $slug);
+    }
+
+    public function testWithPlusCharacter()
+    {
+        // given
+        $slugService = new SlugService();
+
+        // when
+        $slug = $slugService->slugify("Fruits + légumes");
+
+        // then
+        $this->assertEquals("fruits-plus-legumes", $slug);
     }
 
     /**
