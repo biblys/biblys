@@ -6,6 +6,8 @@
 
 - La suppression de l'image d'illustration d'un billet de blog provoquait une
   erreur. C'est corrigé.
+- Le caractère "+" était ignoré dans les slugs des collections. Il est désormais
+  remplacé par le texte "plus".
 
 ## 3.9.1 (22 octobre 2025)
 
