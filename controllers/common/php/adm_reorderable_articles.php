@@ -37,7 +37,9 @@ return function(CurrentSite $currentSite, QueryParamsService $paramsService) {
     $query = "SELECT `articles`.`article_id`, `article_title`, `article_url`, `article_ean`,
         (SELECT `link_do_not_reorder` FROM `links` WHERE `articles`.`article_id` = `links`.`article_id` AND `link_do_not_reorder` = 1 AND `site_id` = :site_id) AS `dnr`
         FROM `articles`
-        WHERE `articles`.`collection_id` = :collection_id AND `type_id` != '2'";
+        WHERE `articles`.`collection_id` = :collection_id 
+          AND `type_id` != '2'
+          AND `article_availability_dilicom` != 6";
 
     $articles = EntityManager::prepareAndExecute($query, [
         "site_id" => $currentSite->getId(),

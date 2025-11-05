@@ -1,5 +1,9 @@
 # Historique des modifications
 
+## 3.10.0 (DEV)
+
+- Les articles épuisés ne sont plus proposé dans l'outil de réassort.
+
 ## 3.9.2 (5 novembre 2025)
 
 ### Corrections
