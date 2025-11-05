@@ -25,7 +25,10 @@ class SlugService
 {
     public function slugify(string $input): string
     {
-        $replacements = ["&" => "et"];
+        $replacements = [
+            "&" => "et",
+            "+" => "plus",
+        ];
         $slugger = new AsciiSlugger("fr", ["fr" => $replacements]);
 
         return $slugger->slug((new StringService($input))->lowercase()->get());
