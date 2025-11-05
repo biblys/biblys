@@ -31,7 +31,7 @@ Collection.prototype = {
 
     const collection = this;
 
-    return $.ajax('/x/adm_reorder', {
+    return $.ajax('/pages/adm_reorderable_articles', {
       data: {
         collection_id: this.id
       },
