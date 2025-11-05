@@ -251,6 +251,7 @@ class PostControllerTest extends TestCase
         $bodyParams->expects("getBoolean")->with("post_status")->andReturn(true);
         $bodyParams->expects("getBoolean")->with("post_selected")->andReturn(false);
         $bodyParams->expects("get")->with("post_date")->andReturn("2019-04-28 02:42");
+        $bodyParams->expects("getBoolean")->with("delete_illustration")->andReturn(false);
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authPublisher");
@@ -329,7 +330,7 @@ class PostControllerTest extends TestCase
         $bodyParams->expects("getBoolean")->with("post_status")->andReturn(true);
         $bodyParams->expects("getBoolean")->with("post_selected")->andReturn(false);
         $bodyParams->expects("get")->with("post_date")->andReturn("2019-04-28 02:42");
-
+        $bodyParams->expects("getBoolean")->with("delete_illustration")->andReturn(false);
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authPublisher");
