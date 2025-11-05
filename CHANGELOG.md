@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.9.2 (DEV)
+
+### Corrections
+
+- La suppression de l'image d'illustration d'un billet de blog provoquait une
+  erreur. C'est corrigé.
+
 ## 3.9.1 (22 octobre 2025)
 
 ### Corrections

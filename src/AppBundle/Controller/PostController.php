@@ -307,6 +307,7 @@ class PostController extends Controller
             "post_excerpt" => ["type" => "string", "default" => ""],
             "post_content" => ["type" => "string", "default" => ""],
             "post_illustration_legend" => ["type" => "string", "default" => null],
+            "delete_illustration" => ["type" => "boolean", "default" => false],
         ]);
 
         $post->setUserId($bodyParams->getInteger("user_id"));
@@ -336,7 +337,7 @@ class PostController extends Controller
             $imagesService->addImageFor($post, $_FILES["post_illustration_upload"]["tmp_name"]);
         }
 
-        if (isset($_POST["post_illustration_delete"]) && $_POST['post_illustration_delete']) {
+        if ($bodyParams->get("delete_illustration")) {
             $imagesService->deleteImageFor($post);
         }
 
