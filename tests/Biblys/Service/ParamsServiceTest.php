@@ -18,6 +18,7 @@
 
 namespace Biblys\Service;
 
+use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -229,6 +230,29 @@ class ParamsServiceTest extends TestCase
         // then
         $this->expectException(BadRequestHttpException::class);
         $this->expectExceptionMessage("Parameter 'articles' must be of type array");
+
+        // when
+        $queryParamsService->parse($specs);
+    }
+
+    /** "type:date" rule */
+
+    public function testInvalidValueTypeForDate()
+    {
+        // given
+        $request = new Request();
+        $request->query->set("date", "string");
+
+        $specs = [
+            "date" => [
+                "type" => "date",
+            ],
+        ];
+        $queryParamsService = new GenericParamsService($request);
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("Parameter 'date' must be of type date");
 
         // when
         $queryParamsService->parse($specs);
@@ -614,5 +638,26 @@ class ParamsServiceTest extends TestCase
 
         // then
         $this->assertEquals([1, 2, 3], $array);
+    }
+
+    /** getDate */
+
+    /**
+     * @throws Exception
+     */
+    public function testGetDateReturnsDate(): void
+    {
+        // given
+        $request = new Request();
+        $request->query->set("date", "2019-04-28");
+
+        $queryParamsService = new GenericParamsService($request);
+        $queryParamsService->parse(["date" => ["type" => "date"]]);
+
+        // when
+        $date = $queryParamsService->getDate("date");
+
+        // then
+        $this->assertEquals("2019-04-28 00:00:00", $date->format('Y-m-d H:i:s'));
     }
 }

@@ -18,6 +18,8 @@
 
 namespace Biblys\Service;
 
+use DateTime;
+use Exception;
 use InvalidArgumentException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -76,6 +78,14 @@ abstract class ParamsService
     public function getArray(string $key): array
     {
         return $this->params[$key];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getDate(string $key): DateTime
+    {
+        return new DateTime($this->params[$key]);
     }
 
     protected function _ensureNoUnexpectedParamIsPresent(array $params, array $specs): void
@@ -152,6 +162,17 @@ abstract class ParamsService
                         if (!is_array($value)) {
                             throw new BadRequestHttpException(
                                 "Parameter '$param' must be of type array"
+                            );
+                        }
+
+                        continue;
+                    }
+
+                    if ($ruleValue === "date") {
+                        $dateRegex = "/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/";
+                        if (!preg_match($dateRegex, $value)) {
+                            throw new BadRequestHttpException(
+                                "Parameter '$param' must be of type date"
                             );
                         }
 
