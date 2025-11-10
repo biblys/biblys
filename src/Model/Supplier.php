@@ -20,6 +20,7 @@ namespace Model;
 
 use Model\Base\Supplier as BaseSupplier;
 use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\Exception\PropelException;
 
 /**
  * Skeleton subclass for representing a row from the 'suppliers' table.
@@ -34,25 +35,16 @@ class Supplier extends BaseSupplier
 {
     /**
      * @return Publisher[]
+     * @throws PropelException
      */
-    public function getPublishers(): array
+    public function getPublisherIds(): array
     {
-        $publishers = [];
         $links = LinkQuery::create()
+            ->select("publisher_id")
             ->filterByPublisherId(null, Criteria::ISNOTNULL)
             ->filterBySupplierId($this->getId())
             ->find();
 
-        /**
-         * @var Link $link
-         */
-        foreach ($links as $link) {
-            $publisher = PublisherQuery::create()->findPk($link->getPublisherId());
-            if ($publisher) {
-                $publishers[] = $publisher;
-            }
-        }
-
-        return $publishers;
+        return $links->getData();
     }
 }
