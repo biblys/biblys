@@ -31,16 +31,20 @@ Collection.prototype = {
 
     const collection = this;
 
+    const startDate = document.getElementById('start_date');
+    const endDate = document.getElementById('end_date');
+
     return $.ajax('/pages/adm_reorderable_articles', {
       data: {
-        collection_id: this.id
+        collection_id: this.id,
+        start_date: startDate.value,
+        end_date: endDate.value,
       },
       dataType: 'json',
       contentType: 'application/json',
       success: function(response) {
 					
-        if (response.error)
-        {
+        if (response.error) {
           window._alert(response.error);
         }
 					
