@@ -2,7 +2,9 @@
 
 ## 3.10.0 (DEV)
 
-- Les articles épuisés ne sont plus proposé dans l'outil de réassort.
+- Les articles épuisés ne sont plus proposés dans l'outil de réassort.
+- Il est désormais possible de spécifier une période pour la comptabilisation
+  des ventes dans l'outil de réassort.
 
 ## 3.9.2 (5 novembre 2025)
 

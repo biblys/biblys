@@ -39,7 +39,11 @@ return function (
 {
     $request->attributes->set("page_title", "Réassort");
 
-    $queryParams->parse(["supplier_id" => ["type" => "numeric", "default" => 0]]);
+    $queryParams->parse([
+        "supplier_id" => ["type" => "numeric", "default" => 0],
+        "start_date" => ["type" => "date", "default" => null],
+        "end_date" => ["type" => "date", "default" => null],
+    ]);
     $supplierId = $queryParams->getInteger("supplier_id");
 
     $suppliers = SupplierQuery::create()->find();
@@ -163,8 +167,39 @@ return function (
     }, $collections->getData());
     $total = count($collectionIds);
 
+    $startDate = $queryParams->getDate("start_date");
+    $endDate = $queryParams->getDate("end_date");
+
     $content .= '
         <div id="collections" data-ids="' . implode(',', $collectionIds) . '"></div>
+        
+        <form class="fieldset" role="form">
+            <fieldset>
+                <input type="hidden" name="supplier_id" value="' . $supplier->getId() . '">
+            
+                <legend>Filter les ventes</legend>
+
+                <div class="form-group row">
+                    <label for="date1" class="col-sm-1 col-form-label text-right">Du :</label>
+                    <div class="col-sm-3">
+                        <input type="date" class="form-control" id="start_date" name="start_date" 
+                          value="' . ($startDate?->format('Y-m-d') ?? null) . '">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="date2" class="col-sm-1 col-form-label text-right">Au :</label>
+                    <div class="col-sm-3">
+                        <input type="date" class="form-control" id="end_date" name="end_date" 
+                          value="' . ($endDate?->format('Y-m-d') ?? null) . '">
+                    </div>
+                </div>
+                
+                <div class="offset-1">
+                  <button type="submit" class="btn btn-primary">Filtrer les ventes</button> 
+                </div>
+            </fieldset>
+        </form>
     
         <br>
         <p id="loadingText" class="center">Chargement : <span id="progressValue">0</span> / ' . $total . '</p>
