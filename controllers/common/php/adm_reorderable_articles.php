@@ -35,20 +35,20 @@ return function(CurrentSite $currentSite, QueryParamsService $paramsService) {
     }
 
     $query = "SELECT `articles`.`article_id`, `article_title`, `article_url`, `article_ean`,
-        (SELECT `link_do_not_reorder` FROM `links` WHERE `articles`.`article_id` = `links`.`article_id` AND `link_do_not_reorder` = 1 AND `site_id` = :site_id) AS `dnr`
+        (SELECT `link_do_not_reorder` FROM `links` WHERE `articles`.`article_id` = `links`.`article_id` AND `link_do_not_reorder` = 1) AS `dnr`
         FROM `articles`
         WHERE `articles`.`collection_id` = :collection_id 
           AND `type_id` != '2'
           AND `article_availability_dilicom` != 6";
 
     $articles = EntityManager::prepareAndExecute($query, [
-        "site_id" => $currentSite->getId(),
         "collection_id" => $collectionId,
     ]);
     $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
 
     $collectionArticles = [];
     foreach ($articles as $article) {
+
         $ventes = EntityManager::prepareAndExecute("
             SELECT DATE_FORMAT(`stock_selling_date`,'%Y-%m-%d') AS `lastSale` FROM `stock` 
             WHERE `article_id` = :article_id 
