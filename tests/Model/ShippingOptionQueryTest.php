@@ -34,10 +34,9 @@ class ShippingOptionQueryTest extends TestCase
     public function testGetForCountryAndAmountAndWeightAndArticleCount()
     {
         // given
-        $site = ModelFactory::createSite();
         $zone = ModelFactory::createShippingZone();
         $country = ModelFactory::createCountry(shippingZone: $zone);
-        $fee = ModelFactory::createShippingOption(site: $site, country: $country, shippingZone: $zone);
+        $fee = ModelFactory::createShippingOption(country: $country, shippingZone: $zone);
         $orderWeight = 500;
         $orderAmount = 1500;
 
@@ -61,17 +60,14 @@ class ShippingOptionQueryTest extends TestCase
     public function testGetForWithArticleCountConstraint()
     {
         // given
-        $site = ModelFactory::createSite();
         $zone = ModelFactory::createShippingZone();
         $country = ModelFactory::createCountry(shippingZone: $zone);
         ModelFactory::createShippingOption(
-            site: $site,
             country: $country,
             maxArticles: 1,
             shippingZone: $zone,
         );
         $feeForTwoArticles = ModelFactory::createShippingOption(
-            site: $site,
             country: $country,
             maxArticles: 2,
             shippingZone: $zone,
@@ -101,11 +97,10 @@ class ShippingOptionQueryTest extends TestCase
     public function testGetForDoesNotReturnArchivedFees()
     {
         // given
-        $site = ModelFactory::createSite();
         $zone = ModelFactory::createShippingZone();
         $country = ModelFactory::createCountry(shippingZone: $zone);
-        $archivedFee = ModelFactory::createShippingOption(site: $site, country: $country, isArchived: true, shippingZone: $zone);
-        $activeFee = ModelFactory::createShippingOption(site: $site, country: $country, shippingZone: $zone);
+        $archivedFee = ModelFactory::createShippingOption(country: $country, isArchived: true, shippingZone: $zone);
+        $activeFee = ModelFactory::createShippingOption(country: $country, shippingZone: $zone);
         $orderWeight = 500;
         $orderAmount = 1500;
 
@@ -129,11 +124,9 @@ class ShippingOptionQueryTest extends TestCase
     public function testGetEnforcesMinWeightRules(): void
     {
         // given
-        $site = ModelFactory::createSite();
         $zone = ModelFactory::createShippingZone();
         $country = ModelFactory::createCountry(shippingZone: $zone);
         $fee = ModelFactory::createShippingOption(
-            site: $site,
             country: $country,
             minWeight: 1000, // 1kg
             shippingZone: $zone

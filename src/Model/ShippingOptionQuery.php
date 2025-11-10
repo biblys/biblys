@@ -18,7 +18,6 @@
 
 namespace Model;
 
-use Biblys\Service\CurrentSite;
 use Exception;
 use Model\Base\ShippingOptionQuery as BaseShippingOptionQuery;
 
