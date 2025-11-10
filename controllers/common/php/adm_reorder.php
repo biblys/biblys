@@ -16,186 +16,204 @@
  */
 
 
-use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\BodyParamsService;
+use Biblys\Service\QueryParamsService;
+use Model\ArticleQuery;
+use Model\BookCollectionQuery;
+use Model\LinkQuery;
+use Model\SupplierQuery;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
-$am = new ArticleManager();
-$sm = new SupplierManager();
-$cm = new CollectionManager();
+/**
+ * @throws Exception
+ */
+return function (
+    Request $request,
+    UrlGenerator $urlGenerator,
+    QueryParamsService $queryParams,
+    BodyParamsService $bodyParams
+): Response
+{
+    $request->attributes->set("page_title", "Réassort");
 
-\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Réassort');
+    $queryParams->parse(["supplier_id" => ["type" => "numeric", "default" => 0]]);
+    $supplierId = $queryParams->getInteger("supplier_id");
 
-$suppliers = $sm->getAll(array(), array('order' => 'supplier_name'));
-$suppliers = array_map(function($supplier) {
-    return '<option value="/pages/adm_reorder?f='.$supplier->get('id').'">'.$supplier->get('name').'</option>';
-}, $suppliers);
+    $suppliers = SupplierQuery::create()->find();
+    $supplierOptions = array_map(function (\Model\Supplier $supplier) use ($supplierId) {
+        return '<option value="/pages/adm_reorder?supplier_id=' . $supplier->getId() . '"
+            '.($supplier->getId() === $supplierId ? 'selected' : "").'
+        >
+            ' . $supplier->getName() . '
+        </option>';
+    }, $suppliers->getData());
 
-$suppliersUrl = LegacyCodeHelper::getGlobalUrlGenerator()->generate("supplier_index");
+    $suppliersUrl = $urlGenerator->generate("supplier_index");
 
-$_ECHO .= '
+    $content = '
         <h1><span class="fa fa-refresh"></span> Réassort</h1>
 
         <div class="admin">
-            <p><a href="'.$suppliersUrl.'">Fournisseurs</a></p>
+            <p><a href="' . $suppliersUrl . '">Fournisseurs</a></p>
         </div>
 
-    <form>
-        <fieldset>
-        <label for="f">Fournisseur :</label>
-        <select id="f" class="goto">
-        <option value=""> </option>
-        '.implode($suppliers).'
-        </select>
-        </fieldset>
-    </form>
+        <form>
+            <fieldset>
+            <label for="supplier_id">Fournisseur :</label>
+            <select id="supplier_id" class="goto">
+            <option value=""> </option>
+              ' . implode($supplierOptions) . '
+            </select>
+            </fieldset>
+        </form>
     ';
 
-$supplierId = $request->query->get('f');
-$supplier = $sm->getById($supplierId);
-
-if($_SERVER["REQUEST_METHOD"] == "POST")
-{
-
-    // Change article reorder status
-    if (isset($_POST['changeStatus']))
-    {
-        $article = $am->getById($_POST['article_id']);
-
-        if (!$article)
-        {
-            trigger_error("Article inexistant");
-        }
-
-        $lm = new LinkManager();
-
-        $link = $lm->get(array('site_id' => LegacyCodeHelper::getGlobalSite()['site_id'], 'article_id' => $article->get('id'), 'link_do_not_reorder' => 1));
-
-        if ($link)
-        {
-            $lm->delete($link);
-            $dnr = '0';
-        }
-        else
-        {
-            $link = $lm->create(array('site_id' => LegacyCodeHelper::getGlobalSite()['site_id'], 'article_id' => $article->get('id'), 'link_do_not_reorder' => 1));
-            $dnr = '1';
-        }
-
-
-
-        die(json_encode(array(
-            'id' => $article->get('id'),
-            'ean' => $article->get('ean'),
-            'title' => $article->get('title'),
-            'url' => $article->get('url'),
-            'publisher' => $article->get('publisher'),
-            'dnr' => $dnr,
-        )));
-
+    $supplier = SupplierQuery::create()->findPk($supplierId);
+    if (!$supplier) {
+        return new Response($content);
     }
 
-    // Generate reorder table
-    else
-    {
-        $table = null;
-        foreach ($_POST["article"] as $id => $qty)
-        {
-            if ($qty)
-            {
-                $article = $am->getById($id);
-                $table .= '<tr>
-                    <td>'.$article->get('publisher')->get('name').'</td>
-                    <td>'.$article->get('title').'</td>
-                    <td>'.$article->get('ean').'</td>
-                    <td class="right">'.$qty.'</td>
-                    </tr> ';
+    if ($request->getMethod() === "POST") {
+        $bodyParams->parse([
+            "changeStatus" => ["type" => "boolean", "default" => false],
+            "article_id" => ["type" => "numeric", "default" => 0],
+            "article" => ["type" => "array", "default" => []],
+        ]);
+
+        // Change article reorder status
+        if ($bodyParams->getBoolean("changeStatus")) {
+            $articleId = $bodyParams->get("article_id");
+            $article = ArticleQuery::create()->findPk($articleId);
+
+            if (!$article) {
+                throw new Exception("Article inexistant");
             }
-        }
 
-        $_ECHO .= '
-    <br>
-    <table class="reassort admin-table">
-    <thead>
-    <th>Éditeur</th>
-    <th>Titre</th>
-    <th>EAN</th>
-    <th>Qté</th>
-    </thead>
-    <tbody>
-    '.$table.'
-    </tbody>
-    </table>
-    ';
+            $link = LinkQuery::create()
+                ->filterByArticle($article)
+                ->filterByDoNotReorder(1)
+                ->findOne();
+
+            if ($link) {
+                $link->delete();
+                $dnr = '0';
+            } else {
+                $link = new \Model\Link();
+                $link->setArticle($article);
+                $link->setDoNotReorder(1);
+                $link->save();
+                $dnr = '1';
+            }
+
+            return new JsonResponse([
+                "id" => $article->getId(),
+                "ean" => $article->getEan(),
+                "title" => $article->getTitle(),
+                "url" => $article->getUrl(),
+                "publisher" => $article->getPublisher(),
+                "dnr" => $dnr,
+            ]);
+
+        } // Generate reorder table
+        else {
+            $table = null;
+            $articles = $bodyParams->getArray("article");
+            foreach ($articles as $id => $qty) {
+                if ($qty) {
+                    $article = ArticleQuery::create()->findPk($id);
+                    $table .= '<tr>
+                        <td>' . $article->getPublisher()->getName() . '</td>
+                        <td>' . $article->getTitle() . '</td>
+                        <td>' . $article->getEan() . '</td>
+                        <td class="right">' . $qty . '</td>
+                    </tr> ';
+                }
+            }
+
+            $content .= '
+                <br>
+                <table class="table">
+                    <thead>
+                        <th>Éditeur</th>
+                        <th>Titre</th>
+                        <th>EAN</th>
+                        <th>Qté</th>
+                    </thead>
+                    <tbody>
+                      ' . $table . '
+                    </tbody>
+                </table>
+            ';
+
+            return new Response($content);
+        }
     }
 
-}
-
-elseif ($supplier && $_SERVER["REQUEST_METHOD"] == "GET")
-{
-
-    $publishers = $supplier->getPublishers();
-    $publisherIds = array_map(function ($publisher) {
-        return $publisher->get('id');
-    }, $publishers);
-
+    $publisherIds = $supplier->getPublisherIds();
     if (count($publisherIds) === 0) {
         throw new Exception("Aucun éditeur associé à ce fournisseur.");
     }
 
-    $collections = $cm->getAll(['publisher_id' => $publisherIds]);
+    $collections = BookCollectionQuery::create()->filterByPublisherId($publisherIds)->find();
     $collectionIds = array_map(function ($collection) {
-        return $collection->get('id');
-    }, $collections);
+        return $collection->getId();
+    }, $collections->getData());
     $total = count($collectionIds);
 
-    $_ECHO .= '
-    <div id="collections" data-ids="'.implode(',', $collectionIds).'"></div>
+    $content .= '
+        <div id="collections" data-ids="' . implode(',', $collectionIds) . '"></div>
+    
+        <br>
+        <p id="loadingText" class="center">Chargement : <span id="progressValue">0</span> / ' . $total . '</p>
+        <div id="loadingBar" class="progress">
+          <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 0;">
+            0%
+          </div>
+        </div>
+    
+        <form method="post" action="/pages/adm_reorder?supplier_id=' . $supplierId . '">
+            <fieldset>
+                <table class="reorder table hidden" id="reorder">
+                    <thead>
+                        <tr class="pointer">
+                            <th>Titre</th>
+                            <th>Dernière vente</th>
+                            <th>Stock</th>
+                            <th>Ventes</th>
+                            <th>Réa</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="doReorder">
+                    </tbody>
+                </table>
+            </fieldset>
+    
+            <fieldset class="center">
+                <br>
+                <button class="btn btn-primary" type="submit">Générer le tableau de réassort</button>
+            </fieldset>
+        </form>
 
-    <br>
-    <p id="loadingText" class="center">Chargement : <span id="progressValue">0</span> / '.$total.'</p>
-    <div id="loadingBar" class="progress">
-    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 0%;">
-    0%
-    </div>
-    </div>
+        <h2>&Agrave; ne pas réassortir</h2>
 
-            <form method="post" action="/pages/adm_reorder?f='.$_GET["f"].'">
-                <fieldset>
-                    <table class="reorder admin-table hidden" id="reorder">
-                        <thead>
-                            <tr class="pointer">
-                                <th>Titre</th>
-                                <th>Dernière vente</th>
-                                <th>Stock</th>
-                                <th>Ventes</th>
-                                <th>Réa</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="doReorder">
-                        </tbody>
-                    </table>
-    </fieldset>
+        <table class="reorder table hidden">
+            <thead>
+                <tr class="pointer">
+                    <th>Titre</th>
+                    <th>Dernière vente</th>
+                    <th>Stock</th>
+                    <th>Ventes</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="doNotReorder">
+            </tbody>
+        </table>
+    ';
 
-                <fieldset class="center">
-                    <br>
-    <button class="btn btn-primary" type="submit">Générer le tableau de réassort</button>
-                </fieldset>
-    </form>
-
-            <h2>&Agrave; ne pas réassortir</h2>
-
-            <table class="reorder admin-table hidden">
-                <thead>
-                    <tr class="pointer">
-                        <th>Titre</th>
-                        <th>Dernière vente</th>
-                        <th>Stock</th>
-                        <th>Ventes</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="doNotReorder">
-                </tbody>
-            </table>
-        ';
-}
+    return new Response($content);
+};
