@@ -73,6 +73,11 @@ abstract class ParamsService
         return false;
     }
 
+    public function getArray(string $key): array
+    {
+        return $this->params[$key];
+    }
+
     protected function _ensureNoUnexpectedParamIsPresent(array $params, array $specs): void
     {
         foreach ($params as $param => $value) {
@@ -137,6 +142,16 @@ abstract class ParamsService
                         if (!in_array($value, $acceptedValue, true)) {
                             throw new BadRequestHttpException(
                                 "Parameter '$param' must be of type boolean"
+                            );
+                        }
+
+                        continue;
+                    }
+
+                    if ($ruleValue === "array") {
+                        if (!is_array($value)) {
+                            throw new BadRequestHttpException(
+                                "Parameter '$param' must be of type array"
                             );
                         }
 
