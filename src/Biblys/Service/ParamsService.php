@@ -83,8 +83,12 @@ abstract class ParamsService
     /**
      * @throws Exception
      */
-    public function getDate(string $key): DateTime
+    public function getDate(string $key): ?DateTime
     {
+        if (empty($this->params[$key])) {
+            return null;
+        }
+
         return new DateTime($this->params[$key]);
     }
 

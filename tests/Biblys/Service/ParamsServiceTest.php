@@ -660,4 +660,22 @@ class ParamsServiceTest extends TestCase
         // then
         $this->assertEquals("2019-04-28 00:00:00", $date->format('Y-m-d H:i:s'));
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetDateReturnsNullWhenDateIsEmpty(): void
+    {
+        // given
+        $request = new Request();
+
+        $queryParamsService = new GenericParamsService($request);
+        $queryParamsService->parse(["date" => ["type" => "date", "default" => null]]);
+
+        // when
+        $date = $queryParamsService->getDate("date");
+
+        // then
+        $this->assertEquals(null, $date);
+    }
 }
