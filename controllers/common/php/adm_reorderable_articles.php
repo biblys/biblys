@@ -26,7 +26,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @throws Exception
  */
 return function(CurrentSite $currentSite, QueryParamsService $paramsService) {
-    $paramsService->parse(["collection_id" => ["type" => "numeric"]]);
+    $paramsService->parse([
+        "collection_id" => ["type" => "numeric"],
+        "start_date" => ["type" => "date", "default" => null],
+        "end_date" => ["type" => "date", "default" => null],
+    ]);
     $collectionId = $paramsService->getInteger("collection_id");
 
     $collection = BookCollectionQuery::create()->findPk($collectionId);
@@ -48,21 +52,33 @@ return function(CurrentSite $currentSite, QueryParamsService $paramsService) {
 
     $collectionArticles = [];
     foreach ($articles as $article) {
+        $salesQueryParams = ["article_id" => $article["article_id"]];
+
+        $startDate = $paramsService->getDate("start_date");
+        $endDate = $paramsService->getDate("end_date");
+        $dateQuery = "";
+        if ($startDate && $endDate) {
+            $startDate->setTime(0, 0);
+            $endDate->setTime(23, 59, 59);
+
+            $dateQuery = "AND `stock_selling_date` BETWEEN :start_date AND :end_date";
+            $salesQueryParams["start_date"] = $startDate->format("Y-m-d H:i:s");
+            $salesQueryParams["end_date"] = $endDate->format("Y-m-d H:i:s");
+        }
 
         $ventes = EntityManager::prepareAndExecute("
-            SELECT DATE_FORMAT(`stock_selling_date`,'%Y-%m-%d') AS `lastSale` FROM `stock` 
+            SELECT DATE_FORMAT(`stock_selling_date`,'%Y-%m-%d') AS `lastSale` 
+            FROM `stock` 
             WHERE `article_id` = :article_id 
-              AND `stock_condition` = 'Neuf' AND `stock_selling_date` IS NOT NULL ORDER BY `stock_selling_date` DESC
-        ", ["article_id" => $article["article_id"]]);
+              AND `stock_condition` = 'Neuf' AND `stock_selling_date` IS NOT NULL
+              ".$dateQuery."
+            ORDER BY `stock_selling_date` DESC
+        ", $salesQueryParams);
         $vente = $ventes->fetch(PDO::FETCH_ASSOC);
         if ($vente !== false) {
             $article["lastSale"] = $vente["lastSale"];
         }
         $article["sales"] = $ventes->rowCount();
-
-        if (!$article["sales"]) {
-            continue;
-        }
 
         $stock = EntityManager::prepareAndExecute("
             SELECT `stock_id` FROM `stock` 
