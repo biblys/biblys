@@ -211,6 +211,29 @@ class ParamsServiceTest extends TestCase
         $queryParamsService->parse($specs);
     }
 
+    /** "type:array" rule */
+
+    public function testInvalidValueTypeForArray()
+    {
+        // given
+        $request = new Request();
+        $request->query->set("articles", "string");
+
+        $specs = [
+            "articles" => [
+                "type" => "array",
+            ],
+        ];
+        $queryParamsService = new GenericParamsService($request);
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("Parameter 'articles' must be of type array");
+
+        // when
+        $queryParamsService->parse($specs);
+    }
+
     /** "default" rule */
 
     public function testMissingParameterWithDefaultValue()
@@ -572,5 +595,24 @@ class ParamsServiceTest extends TestCase
         $this->assertFalse($no);
         $this->assertTrue($on);
         $this->assertFalse($off);
+    }
+
+
+    /** getArray */
+
+    public function testGetArrayReturnsArray(): void
+    {
+        // given
+        $request = new Request();
+        $request->query->set("articles", [1, 2, 3]);
+
+        $queryParamsService = new GenericParamsService($request);
+        $queryParamsService->parse(["articles" => ["type" => "array"]]);
+
+        // when
+        $array = $queryParamsService->getArray("articles");
+
+        // then
+        $this->assertEquals([1, 2, 3], $array);
     }
 }
