@@ -25,7 +25,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @return JsonResponse
  * @throws Exception
  */
-return function(CurrentSite $currentSite, QueryParamsService $paramsService) {
+return function (CurrentSite $currentSite, QueryParamsService $paramsService) {
     $paramsService->parse([
         "collection_id" => ["type" => "numeric"],
         "start_date" => ["type" => "date", "default" => null],
@@ -64,6 +64,14 @@ return function(CurrentSite $currentSite, QueryParamsService $paramsService) {
             $dateQuery = "AND `stock_selling_date` BETWEEN :start_date AND :end_date";
             $salesQueryParams["start_date"] = $startDate->format("Y-m-d H:i:s");
             $salesQueryParams["end_date"] = $endDate->format("Y-m-d H:i:s");
+        } elseif ($startDate) {
+            $startDate->setTime(0, 0);
+            $dateQuery = "AND `stock_selling_date` >= :start_date";
+            $salesQueryParams["start_date"] = $startDate->format("Y-m-d H:i:s");
+        } elseif ($endDate) {
+            $endDate->setTime(23, 59, 59);
+            $dateQuery = "AND `stock_selling_date` <= :end_date";
+            $salesQueryParams["end_date"] = $endDate->format("Y-m-d H:i:s");
         }
 
         $ventes = EntityManager::prepareAndExecute("
@@ -71,7 +79,7 @@ return function(CurrentSite $currentSite, QueryParamsService $paramsService) {
             FROM `stock` 
             WHERE `article_id` = :article_id 
               AND `stock_condition` = 'Neuf' AND `stock_selling_date` IS NOT NULL
-              ".$dateQuery."
+              " . $dateQuery . "
             ORDER BY `stock_selling_date` DESC
         ", $salesQueryParams);
         $vente = $ventes->fetch(PDO::FETCH_ASSOC);
