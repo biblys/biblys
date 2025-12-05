@@ -1,7 +1,7 @@
 services:
   biblys:
     container_name: biblys-dev-env
-    image: biblys/php-dev-env:8.1
+    image: biblys/php-dev-env:8.2
     restart: on-failure
     volumes:
       - './:/usr/src/:cached'
