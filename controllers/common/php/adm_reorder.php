@@ -177,7 +177,7 @@ return function (
             <fieldset>
                 <input type="hidden" name="supplier_id" value="' . $supplier->getId() . '">
             
-                <legend>Filter les ventes</legend>
+                <legend>Filtrer les ventes</legend>
 
                 <div class="form-group row">
                     <label for="date1" class="col-sm-1 col-form-label text-right">Du :</label>

@@ -148,7 +148,7 @@ return function(Request $request): Response
     $content .= '
         <form class="fieldset" role="form">
             <fieldset>
-                <legend>Filter les ventes</legend>
+                <legend>Filtrer les ventes</legend>
 
                 <div class="form-group row">
                     <label for="people_id" class="col-sm-3 col-form-label text-right">Par auteur :</label>
