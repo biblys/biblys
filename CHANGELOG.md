@@ -1,6 +1,8 @@
 # Historique des modifications
 
-## 3.10.0 (DEV)
+## 3.10.0 (5 décembre 2025)
+
+### Améliorations
 
 - Les articles épuisés ne sont plus proposés dans l'outil de réassort.
 - Il est désormais possible de spécifier une période pour la comptabilisation
