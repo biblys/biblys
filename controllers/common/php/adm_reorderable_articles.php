@@ -80,6 +80,10 @@ return function(CurrentSite $currentSite, QueryParamsService $paramsService) {
         }
         $article["sales"] = $ventes->rowCount();
 
+        if ($article["sales"] === 0) {
+            continue;
+        }
+
         $stock = EntityManager::prepareAndExecute("
             SELECT `stock_id` FROM `stock` 
                 WHERE `stock`.`article_id` = :article_id AND `stock_condition` = 'Neuf' AND `stock`.`stock_selling_date` IS NULL AND `stock`.`stock_return_date` IS NULL AND `stock_lost_date` IS NULL",

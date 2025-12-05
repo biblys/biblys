@@ -5,6 +5,8 @@
 - Les articles épuisés ne sont plus proposés dans l'outil de réassort.
 - Il est désormais possible de spécifier une période pour la comptabilisation
   des ventes dans l'outil de réassort.
+- Les articles pour lesquels il n'y a aucune vente sur la période choisie
+  sont désormais exclus de l'outil de réassort.
 
 ## 3.9.2 (5 novembre 2025)
 
