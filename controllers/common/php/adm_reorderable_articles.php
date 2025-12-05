@@ -51,28 +51,29 @@ return function (CurrentSite $currentSite, QueryParamsService $paramsService) {
     $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
 
     $collectionArticles = [];
+
+    $startDate = $paramsService->getDate("start_date");
+    $endDate = $paramsService->getDate("end_date");
+    $dateQuery = "";
+    if ($startDate && $endDate) {
+        $startDate->setTime(0, 0);
+        $endDate->setTime(23, 59, 59);
+
+        $dateQuery = "AND `stock_selling_date` BETWEEN :start_date AND :end_date";
+        $salesQueryParams["start_date"] = $startDate->format("Y-m-d H:i:s");
+        $salesQueryParams["end_date"] = $endDate->format("Y-m-d H:i:s");
+    } elseif ($startDate) {
+        $startDate->setTime(0, 0);
+        $dateQuery = "AND `stock_selling_date` >= :start_date";
+        $salesQueryParams["start_date"] = $startDate->format("Y-m-d H:i:s");
+    } elseif ($endDate) {
+        $endDate->setTime(23, 59, 59);
+        $dateQuery = "AND `stock_selling_date` <= :end_date";
+        $salesQueryParams["end_date"] = $endDate->format("Y-m-d H:i:s");
+    }
+
     foreach ($articles as $article) {
-        $salesQueryParams = ["article_id" => $article["article_id"]];
-
-        $startDate = $paramsService->getDate("start_date");
-        $endDate = $paramsService->getDate("end_date");
-        $dateQuery = "";
-        if ($startDate && $endDate) {
-            $startDate->setTime(0, 0);
-            $endDate->setTime(23, 59, 59);
-
-            $dateQuery = "AND `stock_selling_date` BETWEEN :start_date AND :end_date";
-            $salesQueryParams["start_date"] = $startDate->format("Y-m-d H:i:s");
-            $salesQueryParams["end_date"] = $endDate->format("Y-m-d H:i:s");
-        } elseif ($startDate) {
-            $startDate->setTime(0, 0);
-            $dateQuery = "AND `stock_selling_date` >= :start_date";
-            $salesQueryParams["start_date"] = $startDate->format("Y-m-d H:i:s");
-        } elseif ($endDate) {
-            $endDate->setTime(23, 59, 59);
-            $dateQuery = "AND `stock_selling_date` <= :end_date";
-            $salesQueryParams["end_date"] = $endDate->format("Y-m-d H:i:s");
-        }
+        $salesQueryParams["article_id"] = $article["article_id"];
 
         $ventes = EntityManager::prepareAndExecute("
             SELECT DATE_FORMAT(`stock_selling_date`,'%Y-%m-%d') AS `lastSale` 
