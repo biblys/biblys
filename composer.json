@@ -43,7 +43,7 @@
     "license:add:twig": "docker run -it -v ${PWD}:/src ghcr.io/b1nary-gr0up/nwa:main add --copyright \"Clément Latzarus\" --license agpl-3.0-only \"**/*.twig\""
   },
   "require": {
-    "php": "~8.1",
+    "php": "~8.2",
     "ext-json": "*",
     "ext-pdo": "*",
     "biblys/eurotax": "1.*",
