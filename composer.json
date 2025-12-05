@@ -94,7 +94,7 @@
     "ext-simplexml": "*",
     "ext-curl": "*",
     "ext-fileinfo": "*",
-    "spatie/image": "^2.2",
+    "spatie/image": "^3.0",
     "sentry/sentry": "^4.9",
     "dansmaculotte/mondialrelay-php": "^1.4",
     "spomky-labs/aes-key-wrap": "^7.0",
