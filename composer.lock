@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "86d3b8f916b674f6b9046a3ca6f03b53",
+    "content-hash": "c906ded70867079e67c01ccf67c22045",
     "packages": [
         {
             "name": "apimatic/core",
@@ -272,16 +272,16 @@
         },
         {
             "name": "biblys/isbn",
-            "version": "3.2.37",
+            "version": "3.2.38",
             "source": {
                 "type": "git",
                 "url": "https://github.com/biblys/isbn.git",
-                "reference": "fa149291102a3d67b36de43643d4626e4e2c49d4"
+                "reference": "3fc717bb8d771e0ed0cbedca1607da7e070da08f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/biblys/isbn/zipball/fa149291102a3d67b36de43643d4626e4e2c49d4",
-                "reference": "fa149291102a3d67b36de43643d4626e4e2c49d4",
+                "url": "https://api.github.com/repos/biblys/isbn/zipball/3fc717bb8d771e0ed0cbedca1607da7e070da08f",
+                "reference": "3fc717bb8d771e0ed0cbedca1607da7e070da08f",
                 "shasum": ""
             },
             "require": {
@@ -319,7 +319,7 @@
             ],
             "support": {
                 "issues": "https://github.com/biblys/isbn/issues",
-                "source": "https://github.com/biblys/isbn/tree/3.2.37"
+                "source": "https://github.com/biblys/isbn/tree/3.2.38"
             },
             "funding": [
                 {
@@ -12306,5 +12306,8 @@
         "ext-fileinfo": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "platform-overrides": {
+        "php": "8.2"
+    },
+    "plugin-api-version": "2.9.0"
 }
