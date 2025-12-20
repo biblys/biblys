@@ -49,6 +49,8 @@ require_once __DIR__."/../../setUp.php";
 
 class OpenIDConnectControllerTest extends TestCase
 {
+    private string $testSecretKey = "fcc92afddd243c1fab6d7f08e5debb7fca6de2f34e366efc41782c9d58b24021";
+
     /**
      * @throws JsonException
      */
@@ -60,7 +62,7 @@ class OpenIDConnectControllerTest extends TestCase
         $queryParams->expects("get")->with("return_url")->andReturn("/my-account");
         $tokenService = $this->createMock(TokenService::class);
         $tokenService->method("createOIDCStateToken")
-            ->with("/my-account", "secret_key")
+            ->with("/my-account", $this->testSecretKey)
             ->willReturn("oidc-state-token");
 
         $controller = new OpenIDConnectController();
@@ -121,7 +123,7 @@ class OpenIDConnectControllerTest extends TestCase
         $response = $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
+            config: new Config(["axys" => ["client_secret" => "fcc92afddd243c1fab6d7f08e5debb7fca6de2f34e366efc41782c9d58b24021"]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $this->createMock(TemplateService::class),
@@ -182,7 +184,7 @@ class OpenIDConnectControllerTest extends TestCase
         $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
+            config: new Config(["axys" => ["client_secret" => $this->testSecretKey]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $this->createMock(TemplateService::class),
@@ -241,7 +243,7 @@ class OpenIDConnectControllerTest extends TestCase
         $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
+            config: new Config(["axys" => ["client_secret" => $this->testSecretKey]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $this->createMock(TemplateService::class),
@@ -312,7 +314,7 @@ class OpenIDConnectControllerTest extends TestCase
         $response = $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
+            config: new Config(["axys" => ["client_secret" => $this->testSecretKey]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $this->createMock(TemplateService::class),
@@ -450,7 +452,7 @@ class OpenIDConnectControllerTest extends TestCase
         $response = $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
+            config: new Config(["axys" => ["client_secret" => $this->testSecretKey]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $this->createMock(TemplateService::class),
@@ -517,7 +519,7 @@ class OpenIDConnectControllerTest extends TestCase
         $response = $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
+            config: new Config(["axys" => ["client_secret" => $this->testSecretKey]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $this->createMock(TemplateService::class),
@@ -584,7 +586,7 @@ class OpenIDConnectControllerTest extends TestCase
         $response = $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
+            config: new Config(["axys" => ["client_secret" => $this->testSecretKey]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $this->createMock(TemplateService::class),
@@ -648,7 +650,7 @@ class OpenIDConnectControllerTest extends TestCase
         $response = $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
+            config: new Config(["axys" => ["client_secret" => $this->testSecretKey]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $this->createMock(TemplateService::class),
@@ -712,7 +714,7 @@ class OpenIDConnectControllerTest extends TestCase
         $returnedResponse = $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
+            config: new Config(["axys" => ["client_secret" => $this->testSecretKey]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $templateService,
@@ -758,7 +760,7 @@ class OpenIDConnectControllerTest extends TestCase
         $controller->callback(
             request: $request,
             currentSite: $currentSite,
-            config: new Config(["axys" => ["client_secret" => "secret_key"]]),
+            config: new Config(["axys" => ["client_secret" => $this->testSecretKey]]),
             openIDConnectProviderService: $openIDConnectProviderService,
             queryParams: $queryParamsService,
             templateService: $this->createMock(TemplateService::class),
@@ -774,7 +776,7 @@ class OpenIDConnectControllerTest extends TestCase
     private static function _buildCallbackRequest(string $returnUrl = ""): Request
     {
         $request = Request::create("https://www.biblys.fr/openid/callback");
-        $stateToken = JWT::encode(["return_url" => $returnUrl], "secret_key", "HS256");
+        $stateToken = JWT::encode(["return_url" => $returnUrl], "fcc92afddd243c1fab6d7f08e5debb7fca6de2f34e366efc41782c9d58b24021", "HS256");
         $request->query->set("code", "authorization_code");
         $request->query->set("state", $stateToken);
         $request->cookies->set("visitor_uid", "visitor_token");
