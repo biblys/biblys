@@ -32,6 +32,7 @@ require_once __DIR__ . "/../../setUp.php";
 
 class TokenServiceTest extends TestCase
 {
+    public string $testSecretKey = "222fabebd31bdc2ec7f382404cff0418";
 
     public function testCreateOIDCStateToken()
     {
@@ -41,10 +42,10 @@ class TokenServiceTest extends TestCase
         $tokenService = new TokenService($config, $currentSite);
 
         // when
-        $token = $tokenService->createOIDCStateToken(null, "secret-key");
+        $token = $tokenService->createOIDCStateToken(null, $this->testSecretKey);
 
         // then
-        $decodedToken = JWT::decode($token, new Key("secret-key", "HS256"));
+        $decodedToken = JWT::decode($token, new Key($this->testSecretKey, "HS256"));
         $this->assertEquals(null, $decodedToken->return_url);
     }
 
@@ -56,10 +57,10 @@ class TokenServiceTest extends TestCase
         $tokenService = new TokenService($config, $currentSite);
 
         // when
-        $token = $tokenService->createOIDCStateToken("return_url", "secret-key");
+        $token = $tokenService->createOIDCStateToken("return_url", $this->testSecretKey);
 
         // then
-        $decodedToken = JWT::decode($token, new Key("secret-key", "HS256"));
+        $decodedToken = JWT::decode($token, new Key($this->testSecretKey, "HS256"));
         $this->assertEquals(
             "return_url",
             $decodedToken->return_url,
@@ -78,7 +79,7 @@ class TokenServiceTest extends TestCase
     {
         // given
         $config = Mockery::mock(Config::class);
-        $config->expects("getAuthenticationSecret")->andReturn("secret_key");
+        $config->expects("getAuthenticationSecret")->andReturn($this->testSecretKey);
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
@@ -92,7 +93,7 @@ class TokenServiceTest extends TestCase
         );
 
         // then
-        $decodedToken = JWT::decode($loginToken, new Key("secret_key", "HS256"));
+        $decodedToken = JWT::decode($loginToken, new Key($this->testSecretKey, "HS256"));
         $this->assertEquals("https://paronymie.fr", $decodedToken->iss);
         $this->assertEquals("user@paronymie.fr", $decodedToken->sub);
         $this->assertEquals("https://paronymie.fr", $decodedToken->aud);
@@ -111,7 +112,7 @@ class TokenServiceTest extends TestCase
     {
         // given
         $config = Mockery::mock(Config::class);
-        $config->expects("getAuthenticationSecret")->andReturn("secret_key");
+        $config->expects("getAuthenticationSecret")->andReturn($this->testSecretKey);
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
@@ -125,7 +126,7 @@ class TokenServiceTest extends TestCase
         );
 
         // then
-        $decodedToken = JWT::decode($loginToken, new Key("secret_key", "HS256"));
+        $decodedToken = JWT::decode($loginToken, new Key($this->testSecretKey, "HS256"));
         $this->assertEquals("https://paronymie.fr", $decodedToken->iss);
         $this->assertEquals("user@paronymie.fr", $decodedToken->sub);
         $this->assertEquals("https://paronymie.fr", $decodedToken->aud);
@@ -290,7 +291,7 @@ class TokenServiceTest extends TestCase
         $user = ModelFactory::createUser(site: $site);
 
         $config = Mockery::mock(Config::class);
-        $config->expects("getAuthenticationSecret")->andReturn("secret_key");
+        $config->expects("getAuthenticationSecret")->andReturn($this->testSecretKey);
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $tokenService = new TokenService($config, $currentSite);
@@ -302,7 +303,7 @@ class TokenServiceTest extends TestCase
         );
 
         // then
-        $decodedToken = JWT::decode($loginToken, new Key("secret_key", "HS256"));
+        $decodedToken = JWT::decode($loginToken, new Key($this->testSecretKey, "HS256"));
         $this->assertEquals("https://paronymie.fr", $decodedToken->iss);
         $this->assertEquals($user->getId(), $decodedToken->sub);
         $this->assertEquals("https://paronymie.fr", $decodedToken->aud);
