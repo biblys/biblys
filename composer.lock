@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c906ded70867079e67c01ccf67c22045",
+    "content-hash": "863f01901d383049036fec9a8846202f",
     "packages": [
         {
             "name": "apimatic/core",
@@ -3362,20 +3362,20 @@
         },
         {
             "name": "paypal/paypal-server-sdk",
-            "version": "1.1.0",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paypal/PayPal-PHP-Server-SDK.git",
-                "reference": "3964c1732b1815fa8cf8aee37069ccc4e95d9572"
+                "reference": "7d751fa920fec77353593d6190ff9653d5ae90ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paypal/PayPal-PHP-Server-SDK/zipball/3964c1732b1815fa8cf8aee37069ccc4e95d9572",
-                "reference": "3964c1732b1815fa8cf8aee37069ccc4e95d9572",
+                "url": "https://api.github.com/repos/paypal/PayPal-PHP-Server-SDK/zipball/7d751fa920fec77353593d6190ff9653d5ae90ce",
+                "reference": "7d751fa920fec77353593d6190ff9653d5ae90ce",
                 "shasum": ""
             },
             "require": {
-                "apimatic/core": "~0.3.13",
+                "apimatic/core": "~0.3.16",
                 "apimatic/core-interfaces": "~0.1.5",
                 "apimatic/unirest-php": "^4.0.6",
                 "ext-curl": "*",
@@ -3400,9 +3400,9 @@
             "homepage": "https://github.com/paypal/PayPal-PHP-Server-SDK",
             "support": {
                 "issues": "https://github.com/paypal/PayPal-PHP-Server-SDK/issues",
-                "source": "https://github.com/paypal/PayPal-PHP-Server-SDK/tree/1.1.0"
+                "source": "https://github.com/paypal/PayPal-PHP-Server-SDK/tree/2.1.0"
             },
-            "time": "2025-05-27T17:46:31+00:00"
+            "time": "2025-12-04T21:51:20+00:00"
         },
         {
             "name": "payplug/payplug-php",
