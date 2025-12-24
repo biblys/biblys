@@ -2539,16 +2539,16 @@
         },
         {
             "name": "mailjet/mailjet-apiv3-php",
-            "version": "v1.6.5",
+            "version": "v1.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mailjet/mailjet-apiv3-php.git",
-                "reference": "c31917a8fcf5eb04363aa2af933ab560b0a934ea"
+                "reference": "9d5cea25f347719d7df7909fb4a43a72bd4e5011"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mailjet/mailjet-apiv3-php/zipball/c31917a8fcf5eb04363aa2af933ab560b0a934ea",
-                "reference": "c31917a8fcf5eb04363aa2af933ab560b0a934ea",
+                "url": "https://api.github.com/repos/mailjet/mailjet-apiv3-php/zipball/9d5cea25f347719d7df7909fb4a43a72bd4e5011",
+                "reference": "9d5cea25f347719d7df7909fb4a43a72bd4e5011",
                 "shasum": ""
             },
             "require": {
@@ -2594,9 +2594,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mailjet/mailjet-apiv3-php/issues",
-                "source": "https://github.com/mailjet/mailjet-apiv3-php/tree/v1.6.5"
+                "source": "https://github.com/mailjet/mailjet-apiv3-php/tree/v1.6.6"
             },
-            "time": "2025-04-19T16:48:36+00:00"
+            "time": "2025-12-24T15:55:48+00:00"
         },
         {
             "name": "matthiasmullie/scrapbook",
