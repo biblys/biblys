@@ -1,5 +1,13 @@
 # Historique des modifications
 
+## 3.10.1 (DEV)
+
+### Corrections
+
+Un problème d'envoi d'e-mail pouvait empêcher de marquer une commande comme 
+payée et d'ajouter les livres numériques à la bibliothèque numérique du client 
+le cas échéant. C'est corrigé.
+
 ## 3.10.0 (5 décembre 2025)
 
 ### Améliorations
