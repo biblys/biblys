@@ -22,6 +22,7 @@ use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
 use DateTime;
+use Exception;
 use Model\Article;
 use Model\Stock;
 use Model\StockQuery;
@@ -109,7 +110,11 @@ class AddArticleToUserLibraryUsecase
                     <p><a href="' . $eLibraryUrl . '"><strong>Accéder à votre bibliothèque numérique</strong></a></p>
                     <p>NB : Ces fichiers vous sont volontairement proposés sans dispositif de gestion des droits numériques (DRM ou GDN). Nous vous invitons à les transmettre à vos proches si vous souhaitez les leur faire découvrir, comme vous le feriez avec un livre papier, mais nous vous prions de ne pas les diffuser plus largement, par respect pour l\'auteur et l\'éditeur.</p>
                 ';
-            $this->mailer->send($user->getEmail(), $subject, $message);
+            try {
+                $this->mailer->send($user->getEmail(), $subject, $message);
+            } catch (Exception $e) {
+                // Do nothing
+            }
         }
     }
 

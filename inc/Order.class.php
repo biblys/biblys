@@ -589,34 +589,6 @@ class OrderManager extends EntityManager
             ';
         }
 
-        // Send mail
-        $subject = 'Commande n° '.$order->get('id').' payée';
-        $message = '
-            <p>Bonjour '.$order->get('firstname').' !</p>
-
-            <p>Votre paiement pour la commande n° '.$order->get('id').' a bien été reçu.</p>
-
-            <p>
-                Commande n° '.$order->get('id').'<br>
-                Montant : '.currency($order->getTotal() / 100).'<br>
-                Mode de règlement : '.$order->get('payment_mode'). '<br>
-            </p>
-
-            <p>
-                <a href="https://' .$this->site->get('domain').'/order/'.$order->get('url').'">Suivi de la commande</a></a>
-            </p>
-
-            '.$order_downloadable.'
-
-            <p>
-                Merci pour votre confiance.
-            </p>
-
-            <p><a href="http://'.$this->site->get('domain').'/">http://'.$this->site["site_domain"].'/</a></p>
-        ';
-
-        $mailer->send($order->get('email'), $subject, $message);
-
         // Physical types
         $types = ArticleType::getAllPhysicalTypes();
         $physical_types = array_map(function ($type) {
@@ -671,6 +643,38 @@ class OrderManager extends EntityManager
 
         // Persist
         $this->update($order);
+
+        // Send mail
+        $subject = 'Commande n° '.$order->get('id').' payée';
+        $message = '
+            <p>Bonjour '.$order->get('firstname').' !</p>
+
+            <p>Votre paiement pour la commande n° '.$order->get('id').' a bien été reçu.</p>
+
+            <p>
+                Commande n° '.$order->get('id').'<br>
+                Montant : '.currency($order->getTotal() / 100).'<br>
+                Mode de règlement : '.$order->get('payment_mode'). '<br>
+            </p>
+
+            <p>
+                <a href="https://' .$this->site->get('domain').'/order/'.$order->get('url').'">Suivi de la commande</a></a>
+            </p>
+
+            '.$order_downloadable.'
+
+            <p>
+                Merci pour votre confiance.
+            </p>
+
+            <p><a href="http://'.$this->site->get('domain').'/">http://'.$this->site["site_domain"].'/</a></p>
+        ';
+
+        try {
+            $mailer->send($order->get('email'), $subject, $message);
+        } catch (Exception $e) {
+            // Do nothing
+        }
     }
 
     public function followUp(Order $order)
