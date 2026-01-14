@@ -1,11 +1,19 @@
 # Historique des modifications
 
+## 3.11.0 (DEV)
+
+### Améliorations
+
+- Biblys est désormais compatible avec l'outil de mailing list Listmonk,
+  permettant d'inscrire et de gérer des abonnés directement depuis l'
+  administration.
+
 ## 3.10.1 (14 janvier 2026)
 
 ### Corrections
 
-Un problème d'envoi d'e-mail pouvait empêcher de marquer une commande comme 
-payée et d'ajouter les livres numériques à la bibliothèque numérique du client 
+Un problème d'envoi d'e-mail pouvait empêcher de marquer une commande comme
+payée et d'ajouter les livres numériques à la bibliothèque numérique du client
 le cas échéant. C'est corrigé.
 
 ## 3.10.0 (5 décembre 2025)

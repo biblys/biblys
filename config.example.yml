@@ -135,6 +135,15 @@ cache:
 #  api_key: ghijkl789012
 #  list_id: 321654987
 
+## Listmonk
+## https://listmonk.app
+#mailing:
+#  service: listmonk
+#  base_url: http://example.org/
+#  username: admin
+#  token: your_api_token_here
+#  list_id: 1
+
 ## LemonInk Watermarking
 ## https://lemonink.co
 #lemonink:
