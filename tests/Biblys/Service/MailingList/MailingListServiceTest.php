@@ -88,4 +88,18 @@ class MailingListServiceTest extends TestCase
         // then
         $this->assertInstanceOf(MailjetMailingList::class, $list);
     }
+
+    public function testGetMailingListReturnsListmonkMailingListWhenConfigured()
+    {
+        // given
+        $config = $this->createMock(Config::class);
+        $config->method("get")->willReturn("listmonk");
+        $mailingListService = new MailingListService($config);
+
+        // when
+        $list = $mailingListService->getMailingList();
+
+        // then
+        $this->assertInstanceOf(ListmonkMailingList::class, $list);
+    }
 }
