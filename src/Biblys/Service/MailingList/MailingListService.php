@@ -37,6 +37,11 @@ class MailingListService
             $this->list = new BrevoMailingList($config);
             $this->isConfigured = true;
         }
+
+        if ($config->get("mailing.service") === "listmonk") {
+            $this->list = new ListmonkMailingList($config);
+            $this->isConfigured = true;
+        }
     }
 
     public function isConfigured(): bool
