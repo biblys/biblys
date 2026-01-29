@@ -84,7 +84,7 @@
     "firebase/php-jwt": "^7.0",
     "mailjet/mailjet-apiv3-php": "^1.5",
     "symfony/string": "^6.2",
-    "facile-it/php-openid-client": "^0.3.3",
+    "facile-it/php-openid-client": "^0.4.0",
     "symfony/psr-http-message-bridge": "^6.0",
     "euskadi31/opengraph": "^2.0",
     "symfony/rate-limiter": "^6.3",
