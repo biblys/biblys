@@ -470,23 +470,6 @@ return function (
         return '<option value=' . $country->get('id') . $selected . '>' . $country->get('name') . '</option>';
     }, $countries);
 
-    // Collection
-    $cm = new CollectionManager();
-    $collection = $cm->getById($articleEntity->get('collection_id'));
-    if ($collection) {
-        $collectionField = '
-            <input type="text" id="article_collection" value="' . $collection->get('name') . '" class="form-control col-md-6 pointer changeThis" required readonly />
-            <input type="hidden" id="collection_id" name="collection_id" value="' . $collection->get('id') . '" required />
-            <input type="hidden" id="pricegrid_id" value="' . $collection->get('pricegrid_id') . '" />
-        ';
-    } else {
-        $collectionField = '
-            <input type="text" id="article_collection" class="form-control col-md-6 changeThis uncompleted" required />
-            <input type="hidden" id="collection_id" name="collection_id" required />
-            <input type="hidden" id="pricegrid_id" />
-        ';
-    }
-
     $createCollectionPublisher = '
         <input type="text" id="collection_publisher" name="collection_publisher" class="long uncompleted" required>
         <input type="hidden" id="collection_publisher_id" name="collection_publisher_id" required>
@@ -624,7 +607,6 @@ return function (
         "auto_import" => $autoImport,
         "create_collection_publisher" => $createCollectionPublisher,
         "article_type_options" => join($typeOptions),
-        "collection_field" => $collectionField,
         "availability_options" => implode($availabilityOptions),
         "preorder_checked" => $preorderChecked,
         "category_field_class" => $categoryFieldClass,
