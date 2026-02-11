@@ -142,6 +142,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           required: true,
         } %}
       </div>
+      <input type="hidden" id="pricegrid_id" value="{{ article.bookCollection.pricegridId }}" />
       <span class="col-auto col-form-label text-md-right">n°</span>
       <input type="text" id="article_number" name="article_number" value="{{ article.number }}"
              class="form-control col-md-1 article_duplicate_check event" />
