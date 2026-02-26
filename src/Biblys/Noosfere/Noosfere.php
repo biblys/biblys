@@ -306,52 +306,52 @@ class Noosfere
 
         $articles = [];
 
-        foreach ($xml->Livre as $n) {
-            $a = array();
-            $a["article_title"] = (string)$n->Titre;
-            $a["article_title"] = str_replace("  ", " – ", $a["article_title"]); // Bug tiret long noosfere
-            $a["article_title_original"] = (string)$n->TitreOriginal;
+        foreach ($xml->Livre as $articleFromXml) {
+            $builtArticle = array();
+            $builtArticle["article_title"] = (string)$articleFromXml->Titre;
+            $builtArticle["article_title"] = str_replace("  ", " – ", $builtArticle["article_title"]); // Bug tiret long noosfere
+            $builtArticle["article_title_original"] = (string)$articleFromXml->TitreOriginal;
 
-            $a["article_publisher"] = (string)$n->Editeur;
-            $a["noosfere_IdEditeur"] = (string)$n->Editeur["IdEditeur"];
+            $builtArticle["article_publisher"] = (string)$articleFromXml->Editeur;
+            $builtArticle["noosfere_IdEditeur"] = (string)$articleFromXml->Editeur["IdEditeur"];
 
-            $a["article_collection"] = (string)$n->Collection;
-            $a["noosfere_IdCollection"] = (string)$n->Collection["IdCollection"];
-            if (empty($a["article_collection"])) {
-                $a["article_collection"] = $a["article_publisher"];
-                $a["noosfere_IdCollection"] = (string)$n->Editeur["IdEditeur"];
+            $builtArticle["article_collection"] = (string)$articleFromXml->Collection;
+            $builtArticle["noosfere_IdCollection"] = (string)$articleFromXml->Collection["IdCollection"];
+            if (empty($builtArticle["article_collection"])) {
+                $builtArticle["article_collection"] = $builtArticle["article_publisher"];
+                $builtArticle["noosfere_IdCollection"] = (string)$articleFromXml->Editeur["IdEditeur"];
             }
-            $a["article_number"] = str_replace(")", "", str_replace("(", "", $n->Reference));
+            $builtArticle["article_number"] = str_replace(")", "", str_replace("(", "", $articleFromXml->Reference));
 
-            $a["article_item"] = (string)$n['IdItem'];
-            $a["article_noosfere_id"] = (string)$n['IdLivre'];
+            $builtArticle["article_item"] = (string)$articleFromXml['IdItem'];
+            $builtArticle["article_noosfere_id"] = (string)$articleFromXml['IdLivre'];
 
-            $a["article_cycle"] = (string)$n->Serie->TitreSerie;
-            if (str_contains($a["article_cycle"], "(")) {
-                $ex_cycle = explode("(", $a["article_cycle"]);
+            $builtArticle["article_cycle"] = (string)$articleFromXml->Serie->TitreSerie;
+            if (str_contains($builtArticle["article_cycle"], "(")) {
+                $ex_cycle = explode("(", $builtArticle["article_cycle"]);
                 $cycle = $ex_cycle[1] . "  " . $ex_cycle[0];
                 $cycle = str_replace(")", "", $cycle);
                 $cycle = ucfirst($cycle);
-                $a["article_cycle"] = str_replace("'  ", "'", $cycle);
+                $builtArticle["article_cycle"] = str_replace("'  ", "'", $cycle);
             }
-            $a["article_tome"] = (string)$n->Serie->Volume;
-            $a["noosfere_IdSerie"] = (string)$n->Serie["IdSerie"];
+            $builtArticle["article_tome"] = (string)$articleFromXml->Serie->Volume;
+            $builtArticle["noosfere_IdSerie"] = (string)$articleFromXml->Serie["IdSerie"];
 
-            $a["article_cover_import"] = (string)$n->Couverture['LienCouverture'];
-            $a["article_cover_import"] = str_replace('https://www.noosfere.org/images/', 'https://images.noosfere.org/', $a['article_cover_import']);
+            $builtArticle["article_cover_import"] = (string)$articleFromXml->Couverture['LienCouverture'];
+            $builtArticle["article_cover_import"] = str_replace('https://www.noosfere.org/images/', 'https://images.noosfere.org/', $builtArticle['article_cover_import']);
 
-            $a["article_pages"] = (string)$n->Page;
+            $builtArticle["article_pages"] = (string)$articleFromXml->Page;
 
-            $a["article_summary"] = null;
-            if (!empty($n->Resume) && $n->Resume != "Pas de texte sur la quatriÃ?me de couverture") {
-                $a["article_summary"] = '<p>' . str_replace('<br />', '</p><p>', nl2br($n->Resume)) . '</p>';
+            $builtArticle["article_summary"] = null;
+            if (!empty($articleFromXml->Resume) && $articleFromXml->Resume != "Pas de texte sur la quatriÃ?me de couverture") {
+                $builtArticle["article_summary"] = '<p>' . str_replace('<br />', '</p><p>', nl2br($articleFromXml->Resume)) . '</p>';
             }
 
             // Retrait des liens dans la quatrième
-            $a["article_summary"] = $a["article_summary"] ? preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', "\\2", $a["article_summary"]) : "";
+            $builtArticle["article_summary"] = $builtArticle["article_summary"] ? preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', "\\2", $builtArticle["article_summary"]) : "";
 
             // Date parution
-            $MoisDL = $n->Parution->MoisParution;
+            $MoisDL = $articleFromXml->Parution->MoisParution;
             $MoisDL = str_replace("1", "1er", $MoisDL);
             $MoisDL = str_replace("2", "2Ã?me", $MoisDL);
             $MoisDL = str_replace("3", "3Ã?me", $MoisDL);
@@ -384,45 +384,45 @@ class Noosfere
             } elseif ($MoisDL == "decembre") {
                 $MoisDLNum = '12';
             }
-            $a["article_pubdate"] = trim($n->Parution->AnneeParution . '-' . $MoisDLNum . '-01');
-            $a["article_copyright"] = (string)$n->ParutionOriginale;
+            $builtArticle["article_pubdate"] = trim($articleFromXml->Parution->AnneeParution . '-' . $MoisDLNum . '-01');
+            $builtArticle["article_copyright"] = (string)$articleFromXml->ParutionOriginale;
 
             // Contributeurs
-            $a['article_authors'] = null;
+            $builtArticle['article_authors'] = null;
             $people = [];
-            if (!empty($n->Intervenants->Intervenant)) {
-                $p = 0;
-                foreach ($n->Intervenants->Intervenant as $Intervenant) {
+            if (!empty($articleFromXml->Intervenants->Intervenant)) {
+                $peopleIndex = 0;
+                foreach ($articleFromXml->Intervenants->Intervenant as $Intervenant) {
                     if ($Intervenant->Nom != "ANTHOLOGIE" and $Intervenant->Nom != "REVUE") {
                         if (!empty($Intervenant->Prenom)) {
-                            $people[$p]["people_first_name"] = (string)$Intervenant->Prenom;
+                            $people[$peopleIndex]["people_first_name"] = (string)$Intervenant->Prenom;
                         } else {
-                            $people[$p]["people_first_name"] = null;
+                            $people[$peopleIndex]["people_first_name"] = null;
                         }
-                        $people[$p]["people_last_name"] = (string)$Intervenant->Nom;
-                        $people[$p]["people_name"] = trim($people[$p]["people_first_name"] . ' ' . $people[$p]["people_last_name"]);
-                        $people[$p]["people_role"] = (string)$Intervenant['TypeIntervention'];
+                        $people[$peopleIndex]["people_last_name"] = (string)$Intervenant->Nom;
+                        $people[$peopleIndex]["people_name"] = trim($people[$peopleIndex]["people_first_name"] . ' ' . $people[$peopleIndex]["people_last_name"]);
+                        $people[$peopleIndex]["people_role"] = (string)$Intervenant['TypeIntervention'];
                         /** @noinspection DuplicatedCode */
-                        $people[$p]["people_noosfere_id"] = (string)$Intervenant['NooId'];
-                        if ($people[$p]["people_role"] == "Auteur") {
-                            if (isset($a["article_authors"])) {
-                                $a["article_authors"] .= ', ';
+                        $people[$peopleIndex]["people_noosfere_id"] = (string)$Intervenant['NooId'];
+                        if ($people[$peopleIndex]["people_role"] == "Auteur") {
+                            if (isset($builtArticle["article_authors"])) {
+                                $builtArticle["article_authors"] .= ', ';
                             }
-                            $a["article_authors"] .= $people[$p]["people_name"];
+                            $builtArticle["article_authors"] .= $people[$peopleIndex]["people_name"];
                         }
-                        $p++;
+                        $peopleIndex++;
                     }
                 }
             }
 
             // Sommaire
-            if (!empty($n->Sommaire)) {
-                $a["article_contents"] = '<ul>';
-                foreach ($n->Sommaire->EntreeSommaire as $entree) {
-                    $a["article_contents"] .= '<li>' . $entree->TitreSommaire;
+            if (!empty($articleFromXml->Sommaire)) {
+                $builtArticle["article_contents"] = '<ul>';
+                foreach ($articleFromXml->Sommaire->EntreeSommaire as $entree) {
+                    $builtArticle["article_contents"] .= '<li>' . $entree->TitreSommaire;
                     if (!empty($entree->Intervenants->Intervenant)) {
                         $entry_people = null;
-                        $p = 0;
+                        $peopleIndex = 0;
                         foreach ($entree->Intervenants->Intervenant as $Intervenant) {
                             if (!isset($entry_people)) {
                                 $entry_people .= ' de ';
@@ -432,47 +432,47 @@ class Noosfere
                             $entry_people .= trim($Intervenant->Prenom . " " . $Intervenant->Nom);
 
                             if ($Intervenant['TypeIntervention'] == "Auteur" and $Intervenant->Nom != "REVUE" and $Intervenant->Nom != "COLLECTIF" and $Intervenant->Nom != "ANONYME" and $Intervenant->Nom != "(non mentionnÃ©)") {
-                                $people[$p]['people_first_name'] = null;
+                                $people[$peopleIndex]['people_first_name'] = null;
                                 if (!empty($Intervenant->Prenom)) {
-                                    $people[$p]["people_first_name"] = (string)$Intervenant->Prenom;
+                                    $people[$peopleIndex]["people_first_name"] = (string)$Intervenant->Prenom;
                                 }
-                                $people[$p]["people_last_name"] = (string)$Intervenant->Nom;
-                                $people[$p]["people_name"] = trim($people[$p]["people_first_name"] . ' ' . $people[$p]["people_last_name"]);
-                                $people[$p]["people_role"] = trim($Intervenant['TypeIntervention']);
+                                $people[$peopleIndex]["people_last_name"] = (string)$Intervenant->Nom;
+                                $people[$peopleIndex]["people_name"] = trim($people[$peopleIndex]["people_first_name"] . ' ' . $people[$peopleIndex]["people_last_name"]);
+                                $people[$peopleIndex]["people_role"] = trim($Intervenant['TypeIntervention']);
                                 /** @noinspection DuplicatedCode */
-                                $people[$p]["people_noosfere_id"] = (string)$Intervenant['NooId'];
-                                if ($people[$p]["people_role"] == "Auteur") {
-                                    if (isset($a["article_authors"])) {
-                                        $a["article_authors"] .= ', ';
+                                $people[$peopleIndex]["people_noosfere_id"] = (string)$Intervenant['NooId'];
+                                if ($people[$peopleIndex]["people_role"] == "Auteur") {
+                                    if (isset($builtArticle["article_authors"])) {
+                                        $builtArticle["article_authors"] .= ', ';
                                     }
-                                    $a["article_authors"] .= $people[$p]["people_name"];
+                                    $builtArticle["article_authors"] .= $people[$peopleIndex]["people_name"];
                                 }
-                                $p++;
+                                $peopleIndex++;
                             }
                         }
-                        $a["article_contents"] .= $entry_people;
+                        $builtArticle["article_contents"] .= $entry_people;
                     }
-                    $a["article_contents"] .= '</li>';
+                    $builtArticle["article_contents"] .= '</li>';
                 }
-                $a["article_contents"] .= '</ul>';
+                $builtArticle["article_contents"] .= '</ul>';
             }
 
             // ISBN
-            $a['article_ean'] = null;
-            if (Isbn::isParsable($n->ISBN)) {
-                $a["article_ean"] = Isbn::convertToEan13($n->ISBN);
+            $builtArticle['article_ean'] = null;
+            if (Isbn::isParsable($articleFromXml->ISBN)) {
+                $builtArticle["article_ean"] = Isbn::convertToEan13($articleFromXml->ISBN);
             }
 
             // Prix
-            $category = (string) $n->Categorie;
+            $category = (string) $articleFromXml->Categorie;
             $price = self::parsePriceFromCategory($category);
-            $a["article_price"] = $price;
+            $builtArticle["article_price"] = $price;
 
-            $a["article_people"] = $people;
+            $builtArticle["article_people"] = $people;
 
-            $a["article_uid"] = $a["article_ean"];
-            $a["article_import_source"] = "noosfere";
-            $articles[] = $a;
+            $builtArticle["article_uid"] = $builtArticle["article_ean"];
+            $builtArticle["article_import_source"] = "noosfere";
+            $articles[] = $builtArticle;
         }
 
         return $articles;
