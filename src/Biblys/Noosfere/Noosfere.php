@@ -74,7 +74,7 @@ class Noosfere
     private function fetchData($query, $mode = "isbn"): string
     {
         // Clean query
-        $query = stripslashes(utf8_decode(trim($query)));
+        $query = stripslashes(mb_convert_encoding(trim($query), 'ISO-8859-1', 'UTF-8'));
 
         // Query param name
         $query_key = "isbn";
