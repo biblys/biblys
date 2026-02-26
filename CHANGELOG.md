@@ -5,8 +5,15 @@
 ### Améliorations
 
 - Biblys est désormais compatible avec l'outil de mailing list Listmonk,
-  permettant d'inscrire et de gérer des abonnés directement depuis l'
-  administration.
+  permettant d'inscrire et de gérer des abonnés directement depuis 
+  l'administration.
+
+### Corrections
+
+- Les catégories des grilles de prix n'étaient parfois plus affichés lors de la
+  création d'un article. C'est corrigé.
+- Certains contributeur·ices pouvaient ne pas apparaître lors de l'import d'un
+  article depuis nooSFere. C'est corrigé.
 
 ## 3.10.1 (14 janvier 2026)
 

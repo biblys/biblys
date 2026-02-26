@@ -390,8 +390,8 @@ class Noosfere
             // Contributeurs
             $builtArticle['article_authors'] = null;
             $contributors = [];
+            $contributorIndex = 0;
             if (!empty($articleFromXml->Intervenants->Intervenant)) {
-                $contributorIndex = 0;
                 foreach ($articleFromXml->Intervenants->Intervenant as $Intervenant) {
                     if ((string) $Intervenant->Nom === "ANTHOLOGIE" || (string) $Intervenant->Nom === "REVUE") {
                         continue;
@@ -420,12 +420,21 @@ class Noosfere
                             }
                             $contributorsForTableOfContents .= trim($Intervenant->Prenom . " " . $Intervenant->Nom);
 
-                            if ($Intervenant['TypeIntervention'] !== "Auteur" || $Intervenant->Nom === "REVUE" || $Intervenant->Nom === "COLLECTIF" || $Intervenant->Nom === "ANONYME" || $Intervenant->Nom === "(non mentionnÃ©)") {
+                            if (
+                                (string) $Intervenant['TypeIntervention'] !== "Auteur"
+                                || $Intervenant->Nom === "REVUE"
+                                || $Intervenant->Nom === "COLLECTIF"
+                                || $Intervenant->Nom === "ANONYME"
+                                || $Intervenant->Nom === "(non mentionnÃ©)"
+                            ) {
                                 continue;
                             }
 
                             $newContributorForTableOfContents = self::buildContributorFromIntervenant($Intervenant);
                             $builtArticle = self::addNewContributorToArticleAuthors($newContributorForTableOfContents, $builtArticle);
+
+                            $contributors[$contributorIndex] = $newContributorForTableOfContents;
+                            $contributorIndex++;
                         }
                         $builtArticle["article_contents"] .= $contributorsForTableOfContents;
                     }
