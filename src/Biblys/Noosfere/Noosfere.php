@@ -397,21 +397,10 @@ class Noosfere
                         continue;
                     }
 
-                    if (!empty($Intervenant->Prenom)) {
-                        $contributors[$contributorIndex]["people_first_name"] = (string) $Intervenant->Prenom;
-                    } else {
-                        $contributors[$contributorIndex]["people_first_name"] = null;
-                    }
-                    $contributors[$contributorIndex]["people_last_name"] = (string) $Intervenant->Nom;
-                    $contributors[$contributorIndex]["people_name"] = trim($contributors[$contributorIndex]["people_first_name"] . ' ' . $contributors[$contributorIndex]["people_last_name"]);
-                    $contributors[$contributorIndex]["people_role"] = trim($Intervenant['TypeIntervention']);
-                    $contributors[$contributorIndex]["people_noosfere_id"] = (string)$Intervenant['NooId'];
-                    if ($contributors[$contributorIndex]["people_role"] == "Auteur") {
-                        if (isset($builtArticle["article_authors"])) {
-                            $builtArticle["article_authors"] .= ', ';
-                        }
-                        $builtArticle["article_authors"] .= $contributors[$contributorIndex]["people_name"];
-                    }
+                    $newContributor = self::buildContributorFromIntervenant($Intervenant);
+                    $builtArticle = self::addNewContributorToArticleAuthors($newContributor, $builtArticle);
+
+                    $contributors[$contributorIndex] = $newContributor;
                     $contributorIndex++;
                 }
             }
@@ -422,38 +411,23 @@ class Noosfere
                 foreach ($articleFromXml->Sommaire->EntreeSommaire as $entree) {
                     $builtArticle["article_contents"] .= '<li>' . $entree->TitreSommaire;
                     if (!empty($entree->Intervenants->Intervenant)) {
-                        $contributorForTableOfContents = null;
-                        $contributorForTableOfContentsIndex = 0;
+                        $contributorsForTableOfContents = "";
                         foreach ($entree->Intervenants->Intervenant as $Intervenant) {
-                            if (!isset($contributorForTableOfContents)) {
-                                $contributorForTableOfContents .= ' de ';
+                            if ($contributorsForTableOfContents === "") {
+                                $contributorsForTableOfContents .= ' de ';
                             } else {
-                                $contributorForTableOfContents .= ' &amp; ';
+                                $contributorsForTableOfContents .= ' &amp; ';
                             }
-                            $contributorForTableOfContents .= trim($Intervenant->Prenom . " " . $Intervenant->Nom);
+                            $contributorsForTableOfContents .= trim($Intervenant->Prenom . " " . $Intervenant->Nom);
 
                             if ($Intervenant['TypeIntervention'] !== "Auteur" || $Intervenant->Nom === "REVUE" || $Intervenant->Nom === "COLLECTIF" || $Intervenant->Nom === "ANONYME" || $Intervenant->Nom === "(non mentionnÃ©)") {
                                 continue;
                             }
 
-                            if (!empty($Intervenant->Prenom)) {
-                                $contributors[$contributorForTableOfContentsIndex]["people_first_name"] = (string) $Intervenant->Prenom;
-                            } else {
-                                $contributors[$contributorForTableOfContentsIndex]["people_first_name"] = null;
-                            }
-                            $contributors[$contributorForTableOfContentsIndex]["people_last_name"] = (string) $Intervenant->Nom;
-                            $contributors[$contributorForTableOfContentsIndex]["people_name"] = trim($contributors[$contributorForTableOfContentsIndex]["people_first_name"] . ' ' . $contributors[$contributorForTableOfContentsIndex]["people_last_name"]);
-                            $contributors[$contributorForTableOfContentsIndex]["people_role"] = trim($Intervenant['TypeIntervention']);
-                            $contributors[$contributorForTableOfContentsIndex]["people_noosfere_id"] = (string)$Intervenant['NooId'];
-                            if ($contributors[$contributorForTableOfContentsIndex]["people_role"] == "Auteur") {
-                                if (isset($builtArticle["article_authors"])) {
-                                    $builtArticle["article_authors"] .= ', ';
-                                }
-                                $builtArticle["article_authors"] .= $contributors[$contributorForTableOfContentsIndex]["people_name"];
-                            }
-                            $contributorForTableOfContentsIndex++;
+                            $newContributorForTableOfContents = self::buildContributorFromIntervenant($Intervenant);
+                            $builtArticle = self::addNewContributorToArticleAuthors($newContributorForTableOfContents, $builtArticle);
                         }
-                        $builtArticle["article_contents"] .= $contributorForTableOfContents;
+                        $builtArticle["article_contents"] .= $contributorsForTableOfContents;
                     }
                     $builtArticle["article_contents"] .= '</li>';
                 }
@@ -494,5 +468,40 @@ class Noosfere
         }
 
         return "0";
+    }
+
+    /**
+     * @param SimpleXMLElement|null $Intervenant
+     * @return array
+     */
+    private static function buildContributorFromIntervenant(?SimpleXMLElement $Intervenant): array
+    {
+        $newContributor = [];
+        $newContributor["people_first_name"] = null;
+        if (!empty($Intervenant->Prenom)) {
+            $newContributor["people_first_name"] = (string)$Intervenant->Prenom;
+        }
+        $newContributor["people_last_name"] = (string)$Intervenant->Nom;
+        $newContributor["people_name"] = trim($newContributor["people_first_name"] . ' ' . $newContributor["people_last_name"]);
+        $newContributor["people_role"] = trim($Intervenant['TypeIntervention']);
+        $newContributor["people_noosfere_id"] = (string)$Intervenant['NooId'];
+        return $newContributor;
+    }
+
+    /**
+     * @param array $newContributor
+     * @param array $builtArticle
+     * @return array
+     */
+    private static function addNewContributorToArticleAuthors(array $newContributor, array $builtArticle): array
+    {
+        if ($newContributor["people_role"] == "Auteur") {
+            if (isset($builtArticle["article_authors"])) {
+                $builtArticle["article_authors"] .= ', ';
+            }
+            $builtArticle["article_authors"] .= $newContributor["people_name"];
+        }
+
+        return $builtArticle;
     }
 }
