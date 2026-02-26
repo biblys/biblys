@@ -102,7 +102,7 @@ class Noosfere
         $info = curl_getinfo($curl);
         if ($info['http_code'] != '200') {
             $error = strip_tags($response);
-            throw new Exception("Noosfere a répondu « $error » pour l'url $url");
+            throw new Exception("Noosfere a répondu « $error » pour l‘url $url");
         }
 
         curl_close($curl);
