@@ -1,11 +1,18 @@
 # Historique des modifications
 
+## 3.10.2 (DEV)
+
+- Les catégories des grilles de prix n'étaient parfois plus affichés lors de la
+  création d'un article. C'est corrigé.
+- Certains contributeur·ices pouvaient ne pas apparaître lors de l'import d'un
+  article depuis nooSFere. C'est corrigé.
+
 ## 3.10.1 (14 janvier 2026)
 
 ### Corrections
 
-Un problème d'envoi d'e-mail pouvait empêcher de marquer une commande comme 
-payée et d'ajouter les livres numériques à la bibliothèque numérique du client 
+Un problème d'envoi d'e-mail pouvait empêcher de marquer une commande comme
+payée et d'ajouter les livres numériques à la bibliothèque numérique du client
 le cas échéant. C'est corrigé.
 
 ## 3.10.0 (5 décembre 2025)
