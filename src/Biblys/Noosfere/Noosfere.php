@@ -393,25 +393,26 @@ class Noosfere
             if (!empty($articleFromXml->Intervenants->Intervenant)) {
                 $peopleIndex = 0;
                 foreach ($articleFromXml->Intervenants->Intervenant as $Intervenant) {
-                    if ($Intervenant->Nom != "ANTHOLOGIE" and $Intervenant->Nom != "REVUE") {
-                        if (!empty($Intervenant->Prenom)) {
-                            $people[$peopleIndex]["people_first_name"] = (string)$Intervenant->Prenom;
-                        } else {
-                            $people[$peopleIndex]["people_first_name"] = null;
-                        }
-                        $people[$peopleIndex]["people_last_name"] = (string)$Intervenant->Nom;
-                        $people[$peopleIndex]["people_name"] = trim($people[$peopleIndex]["people_first_name"] . ' ' . $people[$peopleIndex]["people_last_name"]);
-                        $people[$peopleIndex]["people_role"] = (string)$Intervenant['TypeIntervention'];
-                        /** @noinspection DuplicatedCode */
-                        $people[$peopleIndex]["people_noosfere_id"] = (string)$Intervenant['NooId'];
-                        if ($people[$peopleIndex]["people_role"] == "Auteur") {
-                            if (isset($builtArticle["article_authors"])) {
-                                $builtArticle["article_authors"] .= ', ';
-                            }
-                            $builtArticle["article_authors"] .= $people[$peopleIndex]["people_name"];
-                        }
-                        $peopleIndex++;
+                    if ((string) $Intervenant->Nom === "ANTHOLOGIE" || (string) $Intervenant->Nom === "REVUE") {
+                        continue;
                     }
+
+                    if (!empty($Intervenant->Prenom)) {
+                        $people[$peopleIndex]["people_first_name"] = (string) $Intervenant->Prenom;
+                    } else {
+                        $people[$peopleIndex]["people_first_name"] = null;
+                    }
+                    $people[$peopleIndex]["people_last_name"] = (string) $Intervenant->Nom;
+                    $people[$peopleIndex]["people_name"] = trim($people[$peopleIndex]["people_first_name"] . ' ' . $people[$peopleIndex]["people_last_name"]);
+                    $people[$peopleIndex]["people_role"] = trim($Intervenant['TypeIntervention']);
+                    $people[$peopleIndex]["people_noosfere_id"] = (string)$Intervenant['NooId'];
+                    if ($people[$peopleIndex]["people_role"] == "Auteur") {
+                        if (isset($builtArticle["article_authors"])) {
+                            $builtArticle["article_authors"] .= ', ';
+                        }
+                        $builtArticle["article_authors"] .= $people[$peopleIndex]["people_name"];
+                    }
+                    $peopleIndex++;
                 }
             }
 
@@ -431,24 +432,26 @@ class Noosfere
                             }
                             $entry_people .= trim($Intervenant->Prenom . " " . $Intervenant->Nom);
 
-                            if ($Intervenant['TypeIntervention'] == "Auteur" and $Intervenant->Nom != "REVUE" and $Intervenant->Nom != "COLLECTIF" and $Intervenant->Nom != "ANONYME" and $Intervenant->Nom != "(non mentionnÃ©)") {
-                                $people[$peopleIndex]['people_first_name'] = null;
-                                if (!empty($Intervenant->Prenom)) {
-                                    $people[$peopleIndex]["people_first_name"] = (string)$Intervenant->Prenom;
-                                }
-                                $people[$peopleIndex]["people_last_name"] = (string)$Intervenant->Nom;
-                                $people[$peopleIndex]["people_name"] = trim($people[$peopleIndex]["people_first_name"] . ' ' . $people[$peopleIndex]["people_last_name"]);
-                                $people[$peopleIndex]["people_role"] = trim($Intervenant['TypeIntervention']);
-                                /** @noinspection DuplicatedCode */
-                                $people[$peopleIndex]["people_noosfere_id"] = (string)$Intervenant['NooId'];
-                                if ($people[$peopleIndex]["people_role"] == "Auteur") {
-                                    if (isset($builtArticle["article_authors"])) {
-                                        $builtArticle["article_authors"] .= ', ';
-                                    }
-                                    $builtArticle["article_authors"] .= $people[$peopleIndex]["people_name"];
-                                }
-                                $peopleIndex++;
+                            if ($Intervenant['TypeIntervention'] !== "Auteur" || $Intervenant->Nom === "REVUE" || $Intervenant->Nom === "COLLECTIF" || $Intervenant->Nom === "ANONYME" || $Intervenant->Nom === "(non mentionnÃ©)") {
+                                continue;
                             }
+
+                            if (!empty($Intervenant->Prenom)) {
+                                $people[$peopleIndex]["people_first_name"] = (string) $Intervenant->Prenom;
+                            } else {
+                                $people[$peopleIndex]["people_first_name"] = null;
+                            }
+                            $people[$peopleIndex]["people_last_name"] = (string) $Intervenant->Nom;
+                            $people[$peopleIndex]["people_name"] = trim($people[$peopleIndex]["people_first_name"] . ' ' . $people[$peopleIndex]["people_last_name"]);
+                            $people[$peopleIndex]["people_role"] = trim($Intervenant['TypeIntervention']);
+                            $people[$peopleIndex]["people_noosfere_id"] = (string)$Intervenant['NooId'];
+                            if ($people[$peopleIndex]["people_role"] == "Auteur") {
+                                if (isset($builtArticle["article_authors"])) {
+                                    $builtArticle["article_authors"] .= ', ';
+                                }
+                                $builtArticle["article_authors"] .= $people[$peopleIndex]["people_name"];
+                            }
+                            $peopleIndex++;
                         }
                         $builtArticle["article_contents"] .= $entry_people;
                     }
