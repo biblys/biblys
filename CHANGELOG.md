@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 3.11.0 (DEV)
+## 3.11.0 (4 mars 2026)
 
 ### Améliorations
 
