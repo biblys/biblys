@@ -1,6 +1,13 @@
 # Historique des modifications
 
-## 3.11.0 (DEV)
+## 3.11.1 (DEV)
+
+### Corrections
+
+- Les liens inclus dans le courriel de confirmation d'ajout d'un livre numérique 
+à la bibliothèque numérique du client n'étaient pas corrects. C'est corrigé.
+
+## 3.11.0 (4 mars 2026)
 
 ### Améliorations
 
