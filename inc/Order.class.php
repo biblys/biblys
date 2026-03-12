@@ -44,6 +44,7 @@ use Stripe\Exception\ApiErrorException;
 use Stripe\Product;
 use Stripe\Stripe;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Usecase\AddArticleToUserLibraryUsecase;
 
@@ -561,6 +562,7 @@ class OrderManager extends EntityManager
             $config = Config::load();
             $currentSite = CurrentSite::buildFromConfig($config);
             $container = include __DIR__."/../src/container.php";
+            $container->get("context")->fromRequest(Request::createFromGlobals());
             $urlGenerator = $container->get("url_generator");
             $this->markAsPayed($currentSite, $urlGenerator, $order);
         }
