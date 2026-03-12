@@ -292,7 +292,14 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $article = ModelFactory::createArticle(typeId: ArticleType::EBOOK, publisher: $publisher);
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->shouldReceive("send");
+        $mailer->shouldReceive("send")->once()->with(
+            "user@biblys.fr",
+            "De nouveaux livres numériques disponibles dans votre bibliothèque.",
+            Mockery::on(fn($message) =>
+                str_contains($message, "user_library") &&
+                str_contains($message, "Article")
+            )
+        );
         $usecase = new AddArticleToUserLibraryUsecase($mailer);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->expects("generate")->andReturn("user_library");
@@ -306,7 +313,6 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         );
 
         // then
-        $mailer->shouldHaveReceived("send");
         $this->expectNotToPerformAssertions();
     }
 }
