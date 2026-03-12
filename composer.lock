@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "16aeae5faff0ba93fc746fb4bfe92ad6",
+    "content-hash": "60e98c35ee1a54af435f79d47445daa9",
     "packages": [
         {
             "name": "apimatic/core",
@@ -928,66 +928,56 @@
         },
         {
             "name": "getbrevo/brevo-php",
-            "version": "v2.0.14",
+            "version": "4.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getbrevo/brevo-php.git",
-                "reference": "1abb1b75e06aa2ca3a6893d8e8d1968a8a76dc3f"
+                "reference": "a59fb4a0354fb74e6450dfd853c3d3d873af3e08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getbrevo/brevo-php/zipball/1abb1b75e06aa2ca3a6893d8e8d1968a8a76dc3f",
-                "reference": "1abb1b75e06aa2ca3a6893d8e8d1968a8a76dc3f",
+                "url": "https://api.github.com/repos/getbrevo/brevo-php/zipball/a59fb4a0354fb74e6450dfd853c3d3d873af3e08",
+                "reference": "a59fb4a0354fb74e6450dfd853c3d3d873af3e08",
                 "shasum": ""
             },
             "require": {
-                "ext-curl": "*",
                 "ext-json": "*",
-                "ext-mbstring": "*",
-                "guzzlehttp/guzzle": "^7.4.0",
-                "php": ">=5.6"
+                "php": "^8.1",
+                "php-http/discovery": "^1.0",
+                "php-http/multipart-stream-builder": "^1.0",
+                "psr/http-client": "^1.0",
+                "psr/http-client-implementation": "^1.0",
+                "psr/http-factory": "^1.0",
+                "psr/http-factory-implementation": "^1.0",
+                "psr/http-message": "^1.1 || ^2.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "~1.12",
-                "phpunit/phpunit": "^4.8",
-                "squizlabs/php_codesniffer": "~2.6"
+                "friendsofphp/php-cs-fixer": "3.5.0",
+                "guzzlehttp/guzzle": "^7.4",
+                "phpstan/phpstan": "^1.12",
+                "phpunit/phpunit": "^9.0"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
-                    "Brevo\\Client\\": "lib/"
+                    "Brevo\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
-            "authors": [
-                {
-                    "name": "Brevo Developers",
-                    "email": "contact@brevo.com",
-                    "homepage": "https://www.brevo.com/"
-                }
-            ],
-            "description": "Official Brevo provided RESTFul API V3 php library",
-            "homepage": "https://github.com/getbrevo/brevo-php",
+            "description": "Official PHP SDK for the Brevo API.",
             "keywords": [
                 "api",
                 "brevo",
-                "php",
-                "sdk",
-                "swagger"
+                "sdk"
             ],
             "support": {
                 "issues": "https://github.com/getbrevo/brevo-php/issues",
-                "source": "https://github.com/getbrevo/brevo-php/tree/v2.0.14"
+                "source": "https://github.com/getbrevo/brevo-php/tree/v4.0.10"
             },
-            "time": "2025-11-06T10:13:45+00:00"
+            "time": "2026-03-12T11:37:17+00:00"
         },
         {
             "name": "gitonomy/gitlib",
@@ -3425,6 +3415,62 @@
                 "source": "https://github.com/php-http/discovery/tree/1.20.0"
             },
             "time": "2024-10-02T11:20:13+00:00"
+        },
+        {
+            "name": "php-http/multipart-stream-builder",
+            "version": "1.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-http/multipart-stream-builder.git",
+                "reference": "10086e6de6f53489cca5ecc45b6f468604d3460e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-http/multipart-stream-builder/zipball/10086e6de6f53489cca5ecc45b6f468604d3460e",
+                "reference": "10086e6de6f53489cca5ecc45b6f468604d3460e",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1 || ^8.0",
+                "php-http/discovery": "^1.15",
+                "psr/http-factory-implementation": "^1.0"
+            },
+            "require-dev": {
+                "nyholm/psr7": "^1.0",
+                "php-http/message": "^1.5",
+                "php-http/message-factory": "^1.0.2",
+                "phpunit/phpunit": "^7.5.15 || ^8.5 || ^9.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Http\\Message\\MultipartStream\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com"
+                }
+            ],
+            "description": "A builder class that help you create a multipart stream",
+            "homepage": "http://php-http.org",
+            "keywords": [
+                "factory",
+                "http",
+                "message",
+                "multipart stream",
+                "stream"
+            ],
+            "support": {
+                "issues": "https://github.com/php-http/multipart-stream-builder/issues",
+                "source": "https://github.com/php-http/multipart-stream-builder/tree/1.4.2"
+            },
+            "time": "2024-09-04T13:22:54+00:00"
         },
         {
             "name": "php-jsonpointer/php-jsonpointer",
