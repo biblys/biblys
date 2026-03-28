@@ -4225,16 +4225,16 @@
         },
         {
             "name": "rollbar/rollbar",
-            "version": "v4.2.0",
+            "version": "v4.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rollbar/rollbar-php.git",
-                "reference": "16e5514cdfbe8cc0100fab7904a344a05f4c0153"
+                "reference": "98982f49b2ad1cc6469cad7a870ac9361a238a4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rollbar/rollbar-php/zipball/16e5514cdfbe8cc0100fab7904a344a05f4c0153",
-                "reference": "16e5514cdfbe8cc0100fab7904a344a05f4c0153",
+                "url": "https://api.github.com/repos/rollbar/rollbar-php/zipball/98982f49b2ad1cc6469cad7a870ac9361a238a4c",
+                "reference": "98982f49b2ad1cc6469cad7a870ac9361a238a4c",
                 "shasum": ""
             },
             "require": {
@@ -4282,9 +4282,9 @@
             "support": {
                 "email": "support@rollbar.com",
                 "issues": "https://github.com/rollbar/rollbar-php/issues",
-                "source": "https://github.com/rollbar/rollbar-php/tree/v4.2.0"
+                "source": "https://github.com/rollbar/rollbar-php/tree/v4.2.1"
             },
-            "time": "2025-11-26T23:31:06+00:00"
+            "time": "2026-03-27T16:54:00+00:00"
         },
         {
             "name": "sentry/sentry",
