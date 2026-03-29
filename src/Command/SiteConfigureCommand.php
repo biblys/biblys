@@ -52,44 +52,66 @@ class SiteConfigureCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $name = $input->getArgument("name");
-        if (!$name) {
-            $name = $io->ask("Nom du site (par ex. Éditions Paronymie)");
-        }
+        $name = $input->getArgument('name');
+        $url = $input->getArgument('url');
+        $email = $input->getArgument('email');
 
-        $url = $input->getArgument("url");
-        if (!$url) {
-            $url = $io->ask("Adresse URL du site (par ex. https://paronymie.fr)");
-        }
+        $nameIsValid = false;
+        $urlIsValid = false;
+        $emailIsValid = false;
 
-        if (!filter_var($url, FILTER_VALIDATE_URL)) {
-            $output->writeln("Erreur : $url n'est pas une url valide. L'url avoir la forme https://example.org.");
-            return Command::FAILURE;
-        }
+        do {
 
-        $email = $input->getArgument("email");
-        if (!$email) {
-            $email = $io->ask("Adresse de contact (par ex. contact@paronymie.fr)");
-        }
+            do {
+                $name = $io->ask("Nom du site (par ex. Éditions Paronymie)", $name);
+                if (empty($name)) {
+                    $io->error("Le nom du site ne peut pas être vide.");
+                    continue;
+                }
+                $nameIsValid = true;
+            } while (!$nameIsValid);
 
-        $io->writeln("Nom du site: $name");
-        $io->writeln("Adresse URL du site: $url");
-        $io->writeln("Email de contact : $email");
+            do {
+                $url = $io->ask("Adresse URL du site (par ex. https://paronymie.fr)", $url);
+                if (!filter_var($url, FILTER_VALIDATE_URL)) {
+                    $io->error("L'URL $url n'est pas valide. L'URL avoir la forme https://example.org.");
+                    continue;
+                }
+                $urlIsValid = true;
+            } while (!$urlIsValid);
 
-        $confirm = $io->confirm("OK ?");
-        if (!$confirm) {
-            return Command::FAILURE;
-        }
+            do {
+                $email = $io->ask("Adresse de contact (par ex. contact@paronymie.fr)", $email);
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $io->error("L'adresse e-mail $email n'est pas valide. L'adresse avoir la forme contact@example.org.");
+                    continue;
+                }
+                $emailIsValid = true;
+            } while (!$emailIsValid);
+
+            $io->info("Le site $name va être créé avec l‘URL $url et l'email $email.");
+
+            $confirmed = $io->confirm("Continuer ?");
+            if (!$confirmed) {
+                continue;
+            }
+
+            $confirmed = true;
+
+        } while (!$confirmed);
+
 
         try {
             $usecase = new ConfigureSiteUsecase();
             $usecase->execute($name, $url, $email);
 
-            $output->writeln("Le site $name a été créé avec succès. Il sera accessible à l'adresse $url.");
+            $io->success("Le site $name a été créé avec succès.");
+
+            $io->text("Il sera accessible à l'adresse $url.");
 
             return Command::SUCCESS;
         } catch (BusinessRuleException $exception) {
-            $output->writeln($exception->getMessage());
+            $io->error($exception->getMessage());
 
             return Command::FAILURE;
         }
