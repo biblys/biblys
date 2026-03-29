@@ -33,15 +33,14 @@ class ConfigureSiteUsecase
      */
     public function execute(string $siteName, string $baseUrl, string $contactEmail): Site
     {
-        $existingSite = SiteQuery::create()->findOne();
-        if ($existingSite !== null) {
-            throw new BusinessRuleException("Un site est déjà configuré : {$existingSite->getTitle()}");
+        $site = SiteQuery::create()->findOne();
+        if ($site === null) {
+            $site = new Site();
         }
 
         $slugService = new SlugService();
         $slug = $slugService->slugify($siteName);
 
-        $site = new Site();
         $site->setName($slug);
         $site->setTitle($siteName);
         $site->setDomain($baseUrl);

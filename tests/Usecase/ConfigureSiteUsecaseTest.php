@@ -15,20 +15,23 @@ class ConfigureSiteUsecaseTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
-    public function testUsecaseFailsIfASiteAlreadyExists()
+    public function testUsecaseUpdatesAlreadyExistingSite()
     {
         // given
-        ModelFactory::createSite(title: "Existing site", domain: "https://existing-site.com");
+        ModelFactory::createSite(title: "Existing site", domain: "https://existing-site.com", contact: "contact@existing-site.com");
         $usecase = new ConfigureSiteUsecase();
 
         // when
-        $exception = Helpers::runAndCatchException(fn() =>
-            $usecase->execute(siteName: "New site", baseUrl: "https://new-site.com", contactEmail: "contact@new-site.com")
-        );
+        $updatedSite = $usecase->execute(siteName: "New site", baseUrl: "https://new-site.com", contactEmail: "contact@new-site.com");
 
         // then
-        $this->assertInstanceOf(BusinessRuleException::class, $exception);
-        $this->assertEquals("Un site est déjà configuré : Existing site", $exception->getMessage());
+        $this->assertEquals("New site", $updatedSite->getTitle());
+        $this->assertEquals("https://new-site.com", $updatedSite->getDomain());
+        $this->assertEquals("contact@new-site.com", $updatedSite->getContact());
+        $this->assertEquals("new-site", $updatedSite->getName());
+
+        $siteInDB = SiteQuery::create()->findByTitle("New site")->getFirst();
+        $this->assertNotNull($siteInDB);
     }
 
     /**
