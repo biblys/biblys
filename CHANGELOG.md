@@ -1,11 +1,19 @@
 # Historique des modifications
 
+## 3.12.0 (DEV)
+
+### Améliorations
+
+- Pour faciliter l'installation, une commande `composer site:configure` a été
+  ajoutée. Elle permet de définir (ou modifier) le nom, l'url et l'adresse
+  e-mail de contact du site.
+
 ## 3.11.0 (4 mars 2026)
 
 ### Améliorations
 
 - Biblys est désormais compatible avec l'outil de mailing list Listmonk,
-  permettant d'inscrire et de gérer des abonnés directement depuis 
+  permettant d'inscrire et de gérer des abonnés directement depuis
   l'administration.
 
 ### Corrections
