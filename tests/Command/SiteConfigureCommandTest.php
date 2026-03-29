@@ -44,7 +44,6 @@ class SiteConfigureCommandTest extends TestCase
         // given
         $command = new SiteConfigureCommand();
         $commandTester = new CommandTester($command);
-        $commandTester->setInputs(["yes"]);
 
         // when
         $commandTester->execute([
@@ -69,37 +68,42 @@ class SiteConfigureCommandTest extends TestCase
         );
     }
 
-    public function testExecuteFailsIfUrlIsInvalid(): void
+    /**
+     * @throws PropelException
+     */
+    public function testExecuteShowsErrorIfUrlIsInvalid(): void
     {
         // given
         $command = new SiteConfigureCommand();
         $commandTester = new CommandTester($command);
-
-        // when
-        $commandTester->execute([
-            "name" => "Éditions Example",
-            "url" => "example.org",
-            "email" => "contact@example.org",
+        $commandTester->setInputs([
+            "Éditions Example",
+            "example.org",
+            "https://example.org",
+            "contact@example.org",
+            "yes",
         ]);
 
+        // when
+        $commandTester->execute([]);
+
         // then
-        $this->assertEquals(Command::FAILURE, $commandTester->getStatusCode());
         $this->assertStringContainsString(
-            "Erreur : example.org n'est pas une url valide. L'url avoir la forme https://example.org.",
+            "L'URL example.org n'est pas valide. L'URL avoir la forme https://example.org.",
             $commandTester->getDisplay()
         );
+        $this->assertEquals(Command::SUCCESS, $commandTester->getStatusCode());
     }
 
     /**
      * @throws PropelException
      */
-    public function testExecuteFailsIfSiteAlreadyExists(): void
+    public function testExecuteUpdatesExistingSite(): void
     {
         // given
         ModelFactory::createSite(title: "Site existant");
         $command = new SiteConfigureCommand();
         $commandTester = new CommandTester($command);
-        $commandTester->setInputs(["yes"]);
 
         // when
         $commandTester->execute([
