@@ -21,6 +21,7 @@ use Command\MigrateFilesCommand;
 use Command\MigrateImagesCommand;
 use Command\OptimizeImagesCommand;
 use Command\CleanImagesCommand;
+use Command\SiteCreateCommand;
 use Command\UsersCreateAdminCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Filesystem\Filesystem;
@@ -30,6 +31,7 @@ Connection::initPropel($config);
 
 $application = new Application();
 $application->add(new CreateSeedsCommand());
+$application->add(new SiteCreateCommand());
 
 try {
     $currentSite = CurrentSite::buildFromConfig($config);
