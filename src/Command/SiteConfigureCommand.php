@@ -25,13 +25,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Usecase\BusinessRuleException;
-use Usecase\CreateSiteUsecase;
+use Usecase\ConfigureSiteUsecase;
 
-class  SiteCreateCommand extends Command
+class SiteConfigureCommand extends Command
 {
-    protected static $defaultName = "site:create";
+    protected static $defaultName = "site:configure";
 
-    public function __construct(string $name = "site:create")
+    public function __construct(string $name = "site:configure")
     {
         parent::__construct($name);
     }
@@ -82,7 +82,7 @@ class  SiteCreateCommand extends Command
         }
 
         try {
-            $usecase = new CreateSiteUsecase();
+            $usecase = new ConfigureSiteUsecase();
             $usecase->execute($name, $url, $email);
 
             $output->writeln("Le site $name a été créé avec succès. Il sera accessible à l'adresse $url.");
