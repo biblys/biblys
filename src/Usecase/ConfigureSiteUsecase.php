@@ -23,7 +23,7 @@ use Model\Site;
 use Model\SiteQuery;
 use Propel\Runtime\Exception\PropelException;
 
-class CreateSiteUsecase
+class ConfigureSiteUsecase
 {
     public function __construct() {}
 

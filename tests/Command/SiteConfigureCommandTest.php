@@ -19,20 +19,21 @@
 namespace Command;
 
 use Biblys\Test\ModelFactory;
+use Model\Site;
 use Model\SiteQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class SiteCreateCommandTest extends TestCase
+class SiteConfigureCommandTest extends TestCase
 {
-    /**
-     * @throws PropelException
-     */
+    /** @var Site[]  */
+    private array $sitesCreated = [];
+
     public function setUp(): void
     {
-        SiteQuery::create()->deleteAll();
+        $this->sitesCreated = [];
     }
 
     /**
@@ -41,7 +42,7 @@ class SiteCreateCommandTest extends TestCase
     public function testExecuteCreatesASite(): void
     {
         // given
-        $command = new SiteCreateCommand();
+        $command = new SiteConfigureCommand();
         $commandTester = new CommandTester($command);
         $commandTester->setInputs(["yes"]);
 
@@ -53,19 +54,25 @@ class SiteCreateCommandTest extends TestCase
         ]);
 
         // then
+        $site = SiteQuery::create()->findOneByTitle("Éditions Example");
+        $this->sitesCreated[] = $site;
+        $this->assertNotNull($site);
+
         $this->assertEquals(Command::SUCCESS, $commandTester->getStatusCode());
         $this->assertStringContainsString(
-            "Le site Éditions Example a été créé avec succès. Il sera accessible à l'adresse https://example.org.",
+            "Le site Éditions Example a été créé avec succès.",
             $commandTester->getDisplay()
         );
-        $site = SiteQuery::create()->findOneByTitle("Éditions Example");
-        $this->assertNotNull($site);
+        $this->assertStringContainsString(
+            "Il sera accessible à l'adresse https://example.org.",
+            $commandTester->getDisplay()
+        );
     }
 
     public function testExecuteFailsIfUrlIsInvalid(): void
     {
         // given
-        $command = new SiteCreateCommand();
+        $command = new SiteConfigureCommand();
         $commandTester = new CommandTester($command);
 
         // when
@@ -90,22 +97,22 @@ class SiteCreateCommandTest extends TestCase
     {
         // given
         ModelFactory::createSite(title: "Site existant");
-        $command = new SiteCreateCommand();
+        $command = new SiteConfigureCommand();
         $commandTester = new CommandTester($command);
         $commandTester->setInputs(["yes"]);
 
         // when
         $commandTester->execute([
-            "name" => "Nouveau site",
+            "name" => "Nouveau titre",
             "url" => "https://nouveau-site.org",
             "email" => "contact@nouveau-site.org",
         ]);
 
         // then
-        $this->assertEquals(Command::FAILURE, $commandTester->getStatusCode());
-        $this->assertStringContainsString(
-            "Un site est déjà configuré : Site existant",
-            $commandTester->getDisplay()
-        );
+        $site = SiteQuery::create()->findOne();
+        $this->sitesCreated[] = $site;
+        $this->assertEquals(Command::SUCCESS, $commandTester->getStatusCode());
+        $this->assertEquals("Nouveau titre", $site->getTitle());
+        $this->assertEquals("https://nouveau-site.org", $site->getDomain());
     }
 }
