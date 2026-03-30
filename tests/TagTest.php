@@ -21,6 +21,7 @@
 */
 
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Test\ModelFactory;
 
 require_once "setUp.php";
 
@@ -31,7 +32,7 @@ class TagTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        LegacyCodeHelper::setGlobalSite(ModelFactory::createSite());
 
         $tm = new TagManager();
 

@@ -21,6 +21,7 @@
 */
 
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Test\ModelFactory;
 use Model\PublisherQuery;
 
 require_once "setUp.php";
@@ -50,7 +51,7 @@ class PublisherTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        LegacyCodeHelper::setGlobalSite(ModelFactory::createSite());
 
         $pm = new PublisherManager();
 

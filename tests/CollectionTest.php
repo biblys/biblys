@@ -22,6 +22,7 @@
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
 
 require_once "setUp.php";
 
@@ -31,6 +32,7 @@ class CollectionTest extends PHPUnit\Framework\TestCase
 
     public static function setUpBeforeClass(): void
     {
+        LegacyCodeHelper::setGlobalSite(ModelFactory::createSite());
         CollectionTest::$cm = new PublisherManager();
         CollectionTest::$publisher = CollectionTest::$cm->create(['publisher_name' => 'ÉDITEUR TIMBRÉ']);
     }
@@ -40,7 +42,6 @@ class CollectionTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $cm = new CollectionManager();
 

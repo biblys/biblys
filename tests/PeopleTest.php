@@ -22,6 +22,7 @@
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
 
 require_once "setUp.php";
 
@@ -32,7 +33,7 @@ class PeopleTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        LegacyCodeHelper::setGlobalSite(ModelFactory::createSite());
 
         $pm = new PeopleManager();
 
