@@ -50,7 +50,7 @@ class PostTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        LegacyCodeHelper::setGlobalSite(ModelFactory::createSite());
 
         $pm = new PostManager();
 

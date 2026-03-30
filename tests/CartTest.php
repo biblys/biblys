@@ -24,6 +24,7 @@
 use Biblys\Exception\CannotAddStockItemToCartException;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
 use Entity\Exception\CartException;
 use Propel\Runtime\Exception\PropelException;
 
@@ -290,7 +291,9 @@ class CartTest extends PHPUnit\Framework\TestCase
      */
     public function testNeedsShipping()
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        $site = ModelFactory::createSite();
+        LegacyCodeHelper::setGlobalSite($site);
+        $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
 
         $cm = new CartManager();
         $am = new ArticleManager();
@@ -333,7 +336,9 @@ class CartTest extends PHPUnit\Framework\TestCase
      */
     public function testAddArticle()
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        $site = ModelFactory::createSite();
+        LegacyCodeHelper::setGlobalSite($site);
+        $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
 
         $cm = new CartManager();
         $am = new ArticleManager();
@@ -355,7 +360,9 @@ class CartTest extends PHPUnit\Framework\TestCase
      */
     public function testAddArticleForUnreleaseArticle()
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        $site = ModelFactory::createSite();
+        LegacyCodeHelper::setGlobalSite($site);
+        $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
 
         // given
         $this->expectException("Entity\Exception\CartException");
@@ -380,7 +387,9 @@ class CartTest extends PHPUnit\Framework\TestCase
      */
     public function testAddArticleCooldown()
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        $site = ModelFactory::createSite();
+        LegacyCodeHelper::setGlobalSite($site);
+        $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
 
         $cm = new CartManager();
         $am = new ArticleManager();
@@ -445,7 +454,9 @@ class CartTest extends PHPUnit\Framework\TestCase
         $this->expectExceptionMessage("L'article À réimprimer n'a pas pu être ajouté au panier car il est en cours de réimpression.");
 
         // given
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        $site = ModelFactory::createSite();
+        LegacyCodeHelper::setGlobalSite($site);
+        $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
         $globalSite->setOpt('virtual_stock', 1);
         $cm = new CartManager();
         $cart = $cm->create();

@@ -21,6 +21,7 @@
 */
 
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Test\ModelFactory;
 
 require_once "setUp.php";
 
@@ -31,7 +32,9 @@ class PaymentTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        $site = ModelFactory::createSite();
+        LegacyCodeHelper::setGlobalSite($site);
+        $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
 
         $lm = new PaymentManager();
 
