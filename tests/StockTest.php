@@ -22,6 +22,7 @@
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
 
 require_once __DIR__."/setUp.php";
 
@@ -30,7 +31,9 @@ class StockTest extends PHPUnit\Framework\TestCase
     // Set site TVA before tests
     public static function setUpBeforeClass(): void
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        $site = ModelFactory::createSite();
+        LegacyCodeHelper::setGlobalSite($site);
+        $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
         $sm = new SiteManager();
         $globalSite->set('site_tva', 'fr');
         $sm->update($globalSite);

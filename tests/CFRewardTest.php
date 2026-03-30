@@ -18,6 +18,7 @@
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
 
 /**
 * @backupGlobals disabled
@@ -34,7 +35,9 @@ class CFRewardTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $globalSite = LegacyCodeHelper::getGlobalSite();
+        $site = ModelFactory::createSite();
+        LegacyCodeHelper::setGlobalSite($site);
+        $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
 
         $cm = new CFRewardManager();
 
