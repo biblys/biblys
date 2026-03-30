@@ -119,7 +119,7 @@ class OrderController extends Controller
                 "1",                                                             # U - Nombre de colis
                 $orderWeight,                                                    # V - Poids en grammes
             ];
-            $recordWithNormalizedFields = array_map("self::normalizeForExport", $record);
+            $recordWithNormalizedFields = array_map([self::class, 'normalizeForExport'], $record);
             $recordWithEmptyFields = array_merge($recordWithNormalizedFields, array_fill(0, 22, ""));
             $csv->insertOne($recordWithEmptyFields);
         }
