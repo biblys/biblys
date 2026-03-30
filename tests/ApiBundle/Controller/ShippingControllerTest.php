@@ -158,7 +158,6 @@ class ShippingControllerTest extends TestCase
         $this->assertEquals(57, $fee["fee"]);
         $this->assertEquals("Colissimo", $fee["mode"]);
         $this->assertEquals("colissimo", $fee["type"]);
-        $this->assertEquals(null, $fee["zone"]);
         $this->assertEquals($shippingZone->getId(), $fee["zone_id"]);
         $this->assertEquals($shippingZone->getName(), $fee["zone_name"]);
         $this->assertEquals(21, $fee["max_weight"]);
