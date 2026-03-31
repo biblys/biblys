@@ -25,6 +25,7 @@ use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Exception;
 use Mockery;
+use Model\EventQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,6 +39,14 @@ require_once __DIR__ . "/../../setUp.php";
 
 class EventControllerTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     */
+    public function tearDown(): void
+    {
+        EventQuery::create()->deleteAll();
+    }
+
     /**
      * @throws SyntaxError
      * @throws RuntimeError

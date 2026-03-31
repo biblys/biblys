@@ -89,7 +89,6 @@ class MaintenanceController extends Controller
 
         $stockItems = ImageQuery::create()
             ->filterByType("photo")
-            ->filterBySite($currentSite->getSite())
             ->withColumn('COUNT(`id`)', 'count')
             ->withColumn('SUM(`fileSize`)', 'size')
             ->select(['count', 'size'])
@@ -99,7 +98,6 @@ class MaintenanceController extends Controller
         $postIllustrations = ImageQuery::create()
             ->filterByType("illustration")
             ->filterByPostId(null, Criteria::ISNOTNULL)
-            ->filterBySite($currentSite->getSite())
             ->withColumn('COUNT(`id`)', 'count')
             ->withColumn('SUM(`fileSize`)', 'size')
             ->select(['count', 'size'])
@@ -109,7 +107,6 @@ class MaintenanceController extends Controller
         $eventIllustrations = ImageQuery::create()
             ->filterByType("illustration")
             ->filterByEventId(null, Criteria::ISNOTNULL)
-            ->filterBySite($currentSite->getSite())
             ->withColumn('COUNT(`id`)', 'count')
             ->withColumn('SUM(`fileSize`)', 'size')
             ->select(['count', 'size'])
@@ -117,7 +114,6 @@ class MaintenanceController extends Controller
             ->getData()[0];
 
         $mediaFiles = MediaFileQuery::create()
-            ->filterBySiteId($currentSite->getSite()->getId())
             ->withColumn('COUNT(`media_id`)', 'count')
             ->withColumn('SUM(`media_file_size`)', 'size')
             ->select(['count', 'size'])

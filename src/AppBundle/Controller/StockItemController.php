@@ -198,7 +198,7 @@ class StockItemController extends Controller
     {
         $currentUser->authAdmin();
 
-        $stockItem = StockQuery::create()->filterBySite($currentSite->getSite())->findPk($stockId);
+        $stockItem = StockQuery::create()->findPk($stockId);
         if (!$stockItem) {
             throw new NotFoundException("Stock $stockId not found");
         }
@@ -225,7 +225,7 @@ class StockItemController extends Controller
         int         $stockId
     ): Response
     {
-        $stockItem = StockQuery::create()->filterBySite($currentSite->getSite())->findPk($stockId);
+        $stockItem = StockQuery::create()->findPk($stockId);
         if (!$stockItem) {
             throw new NotFoundException("Stock $stockId not found");
         }
@@ -254,7 +254,7 @@ class StockItemController extends Controller
         int                  $stockId
     ): RedirectResponse
     {
-        $stockItem = StockQuery::create()->filterBySite($currentSite->getSite())->findPk($stockId);
+        $stockItem = StockQuery::create()->findPk($stockId);
         if (!$stockItem) {
             throw new NotFoundHttpException("Stock item $stockId not found");
         }

@@ -118,7 +118,6 @@ class OpenIDConnectController extends Controller
             $returnUrl = OpenIDConnectController::_getReturnUrlFromState($request, $config);
 
             $authenticationMethod = AuthenticationMethodQuery::create()
-                ->filterBySite($currentSite->getSite())
                 ->filterByIdentityProvider("axys")
                 ->findOneByExternalId($externalId);
             if ($authenticationMethod === null) {
@@ -205,9 +204,7 @@ class OpenIDConnectController extends Controller
     {
         $con = Propel::getWriteConnection(UserTableMap::DATABASE_NAME);
 
-        $userWithEmail = UserQuery::create()
-            ->filterBySite($currentSite->getSite())
-            ->findOneByEmail($email);
+        $userWithEmail = UserQuery::create()->findOneByEmail($email);
         if ($userWithEmail) {
             throw new AccessDeniedHttpException(
                 "Il existe déjà un compte {$currentSite->getTitle()} pour l'adresse $email"
@@ -232,7 +229,6 @@ class OpenIDConnectController extends Controller
             $authenticationMethod->save($con);
 
             $carts = CartQuery::create()
-                ->filterBySite($currentSite->getSite())
                 ->filterByAxysAccountId($externalId)
                 ->find();
             foreach ($carts as $cart) {
@@ -242,7 +238,6 @@ class OpenIDConnectController extends Controller
             }
 
             $sellerCarts = CartQuery::create()
-                ->filterBySite($currentSite->getSite())
                 ->filterBySellerId($externalId)
                 ->find();
             foreach ($sellerCarts as $cart) {
@@ -252,7 +247,6 @@ class OpenIDConnectController extends Controller
             }
 
             $customers = CustomerQuery::create()
-                ->filterBySite($currentSite->getSite())
                 ->filterByAxysAccountId($externalId)
                 ->find();
             foreach ($customers as $customer) {
@@ -262,7 +256,6 @@ class OpenIDConnectController extends Controller
             }
 
             $lists = StockItemListQuery::create()
-                ->filterBySite($currentSite->getSite())
                 ->filterByAxysAccountId($externalId)
                 ->find();
             foreach ($lists as $list) {
@@ -272,7 +265,6 @@ class OpenIDConnectController extends Controller
             }
 
             $options = OptionQuery::create()
-                ->filterBySite($currentSite->getSite())
                 ->filterByAxysAccountId($externalId)
                 ->find();
             foreach ($options as $option) {
@@ -282,7 +274,6 @@ class OpenIDConnectController extends Controller
             }
 
             $orders = OrderQuery::create()
-                ->filterBySite($currentSite->getSite())
                 ->filterByAxysAccountId($externalId)
                 ->find();
             foreach ($orders as $order) {
@@ -292,7 +283,6 @@ class OpenIDConnectController extends Controller
             }
 
             $posts = PostQuery::create()
-                ->filterBySite($currentSite->getSite())
                 ->filterByAxysAccountId($externalId)
                 ->find();
             foreach ($posts as $post) {
@@ -302,7 +292,6 @@ class OpenIDConnectController extends Controller
             }
 
             $adminRights = RightQuery::create()
-                ->filterBySite($currentSite->getSite())
                 ->filterByAxysAccountId($externalId)
                 ->find();
             foreach ($adminRights as $adminRight) {
@@ -313,7 +302,6 @@ class OpenIDConnectController extends Controller
             }
 
             $libraryItems = StockQuery::create()
-                ->filterBySite($currentSite->getSite())
                 ->filterByAxysAccountId($externalId)
                 ->find();
             foreach ($libraryItems as $libraryItem) {
@@ -323,7 +311,6 @@ class OpenIDConnectController extends Controller
             }
 
             $subscriptions = SubscriptionQuery::create()
-                ->filterBySite($currentSite->getSite())
                 ->filterByAxysAccountId($externalId)
                 ->find();
             foreach ($subscriptions as $subscription) {
@@ -346,7 +333,6 @@ class OpenIDConnectController extends Controller
 
             if ($currentSite->getOption("publisher_rights_managment")) {
                 $publisherRights = RightQuery::create()
-                    ->filterBySiteId(null, Criteria::ISNULL)
                     ->filterByPublisherId(null, Criteria::ISNOTNULL)
                     ->filterByAxysAccountId($externalId)
                     ->find();

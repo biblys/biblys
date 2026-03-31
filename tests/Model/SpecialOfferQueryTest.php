@@ -47,7 +47,6 @@ class SpecialOfferQueryTest extends TestCase
 
         // when
         $activeOffers = SpecialOfferQuery::create()
-            ->filterBySite($site)
             ->filterByActive()
             ->find()
             ->getArrayCopy();

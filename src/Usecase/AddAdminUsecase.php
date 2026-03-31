@@ -38,7 +38,6 @@ class AddAdminUsecase
         $userWasCreated = false;
 
         $user = UserQuery::create()
-            ->filterBySite($this->currentSite->getSite())
             ->findOneByEmail($userEmail);
         if (!$user) {
             $user = new User();

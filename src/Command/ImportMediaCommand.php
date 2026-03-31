@@ -114,7 +114,6 @@ class ImportMediaCommand extends Command
                     ->filterByDir($directory)
                     ->filterByFile($fileName)
                     ->filterByExt($extension)
-                    ->filterBySiteId($this->currentSite->getSite()->getId())
                     ->findOne();
 
                 if (!$mediaFile) {

@@ -80,7 +80,6 @@ class AddArticleToUserLibraryUsecase
             }
 
             $articleInLibrary = StockQuery::create()
-                ->filterBySite($currentSite->getSite())
                 ->filterByArticle($article)
                 ->filterByUser($user)
                 ->findOne();

@@ -77,7 +77,6 @@ class PaymentController extends Controller
         $currentUser->authAdmin();
 
         $paymentQuery = PaymentQuery::create()
-            ->filterBySiteId($currentSite->getSite()->getId())
             ->filterByExecuted(null, Criteria::ISNOTNULL)
             ->orderByCreatedAt(Criteria::DESC);
 
