@@ -225,7 +225,7 @@ class UserTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', true, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addColumn('email', 'Email', 'VARCHAR', false, 256, null);
         $this->addColumn('emailValidatedAt', 'EmailValidatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('lastLoggedAt', 'LastLoggedAt', 'TIMESTAMP', false, null, null);
