@@ -38,6 +38,7 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Mockery;
+use Model\OptionQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,6 +53,11 @@ require_once __DIR__."/../../../tests/setUp.php";
 
 class MainControllerTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        OptionQuery::create()->deleteAll();
+    }
+
     /**
      * @throws SyntaxError
      * @throws RuntimeError
@@ -116,6 +122,7 @@ class MainControllerTest extends TestCase
             "page_title" => "Home",
             "page_url" => "home",
             "site_id" => $site->get("id"),
+            "content" => "Bienvenue",
         ]);
         $site->setOpt("home", "page:home");
         $config = new Config();

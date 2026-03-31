@@ -187,7 +187,6 @@ class InvitationController extends Controller
         $currentUser->authAdmin();
 
         $invitationsQuery = InvitationQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->orderByUpdatedAt(Criteria::DESC);
 
         try {
@@ -327,7 +326,6 @@ class InvitationController extends Controller
     private static function _getInvitationFromCode(CurrentSite $currentSite, string $code): ?Invitation
     {
         return InvitationQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->findOneByCode($code);
     }
 
@@ -396,7 +394,6 @@ class InvitationController extends Controller
     {
         return array_filter($invitation->getArticles()->getData(), function ($article) use ($currentSite, $currentUser, $session) {
             $stock = StockQuery::create()
-                ->filterBySite($currentSite->getSite())
                 ->filterByArticle($article)
                 ->findOneByUserId($currentUser->getUser()->getId());
 

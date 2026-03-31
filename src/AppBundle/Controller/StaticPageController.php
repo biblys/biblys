@@ -48,7 +48,6 @@ class StaticPageController extends Controller
     ): Response
     {
         $pageQuery = PageQuery::create()
-            ->filterBySiteId($currentSite->getId())
             ->filterByUrl($slug);
         $staticPage = $pageQuery->findOne();
 

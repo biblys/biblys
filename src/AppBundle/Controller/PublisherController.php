@@ -387,7 +387,6 @@ class PublisherController extends Controller
 
         $userEmail = $request->request->get('user_email');
         $user = UserQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->findOneByEmail($userEmail);
         if (!$user) {
             $user = new User();
@@ -398,7 +397,6 @@ class PublisherController extends Controller
         }
 
         $existingRight = RightQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->filterByUser($user)
             ->filterByPublisher($publisher)
             ->findOne();
@@ -449,7 +447,6 @@ class PublisherController extends Controller
         }
 
         $existingRight = RightQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->filterByUser($user)
             ->filterByPublisher($publisher)
             ->findOne();

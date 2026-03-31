@@ -150,7 +150,6 @@ class OrderDeliveryHelpers
 
         return OrderQuery::create()
             ->filterByType('web')
-            ->filterBySite($currentSite->getSite())
             ->filterByUser($currentUser->getUser())
             ->filterByPaymentDate(null, Criteria::ISNULL)
             ->filterByShippingDate(null, Criteria::ISNULL)
@@ -424,7 +423,6 @@ class OrderDeliveryHelpers
         $specialOffersApplied = 0;
         foreach ($privatelyPrintedItems as $item) {
             $specialOfferForArticle = SpecialOfferQuery::create()
-                ->filterBySite($currentSite->getSite())
                 ->filterByActive()
                 ->findOneByFreeArticleId($item->getArticle()->getId());
 

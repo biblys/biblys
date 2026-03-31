@@ -34,8 +34,6 @@ class ArticleCategoryQuery extends BaseArticleCategoryQuery
 {
     public static function createForSite(CurrentSite $currentSite): ArticleCategoryQuery
     {
-        $query = parent::create();
-        $query->filterBySiteId($currentSite->getSite()->getId());
-        return $query;
+        return parent::create();
     }
 }

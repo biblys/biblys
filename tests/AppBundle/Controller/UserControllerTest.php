@@ -701,7 +701,6 @@ class UserControllerTest extends TestCase
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals("/login_url", $response->getTargetUrl());
         $newUser = UserQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->findOneByEmail("new-user@paronymie.fr");
         $this->assertNotNull($newUser);
     }
@@ -822,7 +821,6 @@ class UserControllerTest extends TestCase
         $userUidCookie = $cookies[0];
         $this->assertEquals("user_uid", $userUidCookie->getName());
         $session = SessionQuery::create()
-            ->filterBySite($site)
             ->filterByUser($user)
             ->findOneByToken($userUidCookie->getValue());
         $this->assertNotNull($session);

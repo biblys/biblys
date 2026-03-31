@@ -148,7 +148,6 @@ class OrderController extends Controller
         $currentUser->authAdmin();
 
         $order = OrderQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->filterById($id)
             ->findOne();
 

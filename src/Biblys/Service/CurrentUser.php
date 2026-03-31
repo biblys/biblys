@@ -88,7 +88,6 @@ class CurrentUser
 
         $session = SessionQuery::create()
             ->filterByToken($token)
-            ->filterBySite($currentSite->getSite())
             ->findOne();
         if (!$session) {
             return new CurrentUser(null, $token);
@@ -279,7 +278,7 @@ class CurrentUser
     {
         if (!$this->cartWasFetched) {
             /** @var CartQuery $cartQuery */
-            $cartQuery = CartQuery::create()->filterBySite($this->getCurrentSite()->getSite());
+            $cartQuery = CartQuery::create();
 
             if ($this->isAuthenticated()) {
                 $cartQuery = $cartQuery->filterByUser($this->user)->filterByUid(null, Criteria::ISNULL);
@@ -487,7 +486,6 @@ class CurrentUser
         }
 
         $articleInWishlistCount = WishQuery::create()
-            ->filterBySiteId($this->getCurrentSite()->getId())
             ->filterByArticleId($article->getId())
             ->filterByUser($this->user)
             ->count();
@@ -506,7 +504,6 @@ class CurrentUser
         }
 
         $alertsForArticle = AlertQuery::create()
-            ->filterBySite($this->getCurrentSite()->getSite())
             ->filterByUser($this->user)
             ->filterByArticleId($article->getId())
             ->count();
@@ -521,7 +518,6 @@ class CurrentUser
     public function getOrCreateCustomer(): ?Customer
     {
         $customer = CustomerQuery::create()
-            ->filterBySite($this->getCurrentSite()->getSite())
             ->filterByUser($this->getUser())
             ->findOne();
 
@@ -548,7 +544,6 @@ class CurrentUser
 
 
         $purchases = StockQuery::create()
-            ->filterBySite($this->getCurrentSite()->getSite())
             ->filterByUser($this->getUser())
             ->filterByArticle($article)
             ->count();

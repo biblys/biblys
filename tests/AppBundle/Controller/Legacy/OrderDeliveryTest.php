@@ -43,6 +43,7 @@ require_once __DIR__ . "/../../../setUp.php";
 
 class OrderDeliveryTest extends TestCase
 {
+
     /**
      * @throws PropelException
      * @throws Exception
@@ -511,9 +512,9 @@ class OrderDeliveryTest extends TestCase
 
         // then
         $this->assertEquals("Mail not sent", $exception->getMessage(), "Exception should be thrown");
-        $ordersCount = OrderQuery::create()->filterBySiteId($site->getId())->count();
+        $ordersCount = OrderQuery::create()->count();
         $this->assertEquals(0, $ordersCount, "Order should not be created");
-        $customersCount = OrderQuery::create()->filterBySiteId($site->getId())->count();
+        $customersCount = OrderQuery::create()->count();
         $this->assertEquals(0, $customersCount, "Customer should not be created");
         $stockItemInCart = StockQuery::create()->filterByCart($cart)->exists();
         $this->assertTrue($stockItemInCart, "Stock item should still be in cart");
@@ -521,6 +522,7 @@ class OrderDeliveryTest extends TestCase
 
     public function tearDown(): void
     {
+        OrderQuery::create()->deleteAll();
         EntityManager::prepareAndExecute("TRUNCATE TABLE `shipping`", []);
     }
 }

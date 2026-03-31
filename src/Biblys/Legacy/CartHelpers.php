@@ -53,7 +53,6 @@ class CartHelpers
         }
 
         $articleCategory = ArticleCategoryQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->findPk($cartSuggestionsRayonId);
         $articleCategoryLinks = LinkQuery::create()
             ->filterByArticleCategory($articleCategory)
@@ -187,7 +186,6 @@ class CartHelpers
     ): string
     {
         $specialOffers = SpecialOfferQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->find();
 
         if (!$specialOffers) {
