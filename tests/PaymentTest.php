@@ -41,7 +41,6 @@ class PaymentTest extends PHPUnit\Framework\TestCase
         $payment = $lm->create();
 
         $this->assertInstanceOf('Payment', $payment);
-        $this->assertEquals($payment->get('site_id'), $globalSite->get('id'));
 
         return $payment;
     }

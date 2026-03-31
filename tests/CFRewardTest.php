@@ -35,16 +35,11 @@ class CFRewardTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $site = ModelFactory::createSite();
-        LegacyCodeHelper::setGlobalSite($site);
-        $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
-
         $cm = new CFRewardManager();
 
         $reward = $cm->create();
 
         $this->assertInstanceOf('CFReward', $reward);
-        $this->assertEquals($reward->get('site_id'), $globalSite->get('id'));
 
         return $reward;
     }
@@ -123,9 +118,7 @@ class CFRewardTest extends PHPUnit\Framework\TestCase
         $article = EntityFactory::createArticle();
         EntityFactory::createStock(["article_id" => $article->get('id')]);
         EntityFactory::createStock(["article_id" => $article->get('id')]);
-        $reward = EntityFactory::createCrowdfundingReward([
-            "site_id" => $GLOBALS["LEGACY_CURRENT_SITE"]->get('id')
-        ]);
+        $reward = EntityFactory::createCrowdfundingReward();
         $reward->set("reward_quantity", 0);
         $reward->set("reward_limited", 1);
         $reward->set("reward_articles", "[{$article->get("id")}]");
@@ -145,9 +138,7 @@ class CFRewardTest extends PHPUnit\Framework\TestCase
     {
         // given
         $GLOBALS["LEGACY_CURRENT_SITE"] = EntityFactory::createSite();
-        $reward = EntityFactory::createCrowdfundingReward([
-            "site_id" => $GLOBALS["LEGACY_CURRENT_SITE"]->get('id')
-        ]);
+        $reward = EntityFactory::createCrowdfundingReward();
         $reward->set("reward_quantity", 0);
         $reward->set("reward_limited", 1);
         $reward->set("reward_articles", "[99999]");
@@ -169,11 +160,9 @@ class CFRewardTest extends PHPUnit\Framework\TestCase
         // given
         $GLOBALS["LEGACY_CURRENT_SITE"] = EntityFactory::createSite();
         $campaign = EntityFactory::createCrowdfundingCampaign([
-            "site_id" => $GLOBALS["LEGACY_CURRENT_SITE"]->get('id'),
             "ends" => "2019-04-28 02:42:00"
         ]);
         $reward = EntityFactory::createCrowdfundingReward([
-            "site_id" => $GLOBALS["LEGACY_CURRENT_SITE"]->get('id'),
             "campaign_id" => $campaign->get("id"),
             "quantity" => 10,
         ]);

@@ -68,33 +68,11 @@ class Collection extends Entity
         }
 
         /**
-         * Add site filters if any defined.
-         *
-         * @param [type] $where [description]
-         */
-        public function addSiteFilters($where)
-        {
-            if ($this->ignoreSiteFilters) {
-                return $where;
-            }
-
-            $globalSite = LegacyCodeHelper::getGlobalSite();
-
-            $publisher_filter = $globalSite->getOpt('publisher_filter');
-            if ($publisher_filter && !array_key_exists('publisher_id', $where)) {
-                $where['publisher_id'] = explode(',', $publisher_filter);
-            }
-
-            return $where;
-        }
-
-        /**
          * Get query.
          */
         public function getQuery($query, $params, $options = [], $withJoins = true)
         {
-            $filters = $this->addSiteFilters([]);
-            $filtersQuery = EntityManager::buildSqlQuery($filters, [], count($params));
+            $filtersQuery = EntityManager::buildSqlQuery([], [], count($params));
             if ($filtersQuery['where']) {
                 if ($query) {
                     $query .= ' AND ';

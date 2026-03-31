@@ -35,10 +35,6 @@ class ListeManager extends EntityManager
     */
     public function create(array $defaults = array())
     {
-        if (!isset($defaults['site_id'])) {
-            $defaults['site_id'] = $this->site['site_id'];
-        }
-
         try {
             return parent::create($defaults);
         } catch(Exception $e) {
@@ -48,8 +44,6 @@ class ListeManager extends EntityManager
 
     public function getAll(array $where = array(), array $options = array(), $withJoins = true)
     {
-        $where['lists`.`site_id'] = $this->site['site_id'];
-
         return parent::getAll($where, $options);
     }
 

@@ -27,9 +27,7 @@ class Site extends Entity
         
         // Load and cache all site options
         if ($this->options === null) {
-            $this->options = $om->getAll([
-                'site_id' => $this->get('id')
-            ]);
+            $this->options = $om->getAll();
         }
 
         // Get options for key
@@ -51,7 +49,7 @@ class Site extends Entity
     {
         $om = new OptionManager();
 
-        $option = $om->get(['site_id' => $this->get('id'), 'option_key' => $key]);
+        $option = $om->get(['option_key' => $key]);
 
         // If option already exists, update it
         if ($option) {
@@ -61,7 +59,7 @@ class Site extends Entity
         }
 
         // Else, create a new one
-        $option = $om->create(['site_id' => $this->get('id'), 'option_key' => $key, 'option_value' => $value]);
+        $option = $om->create(['option_key' => $key, 'option_value' => $value]);
 
         // Reset cached options
         $this->options = null;
@@ -78,23 +76,6 @@ class Site extends Entity
 
         return $this->get('title');
     }
-
-    public function
-    allowsPublisherWithId($publisherId): bool
-    {
-        $publisherFilter = $this->getOpt('publisher_filter');
-        if (!$publisherFilter) {
-            return true;
-        }
-
-        $allowedPublisherIds = explode(",", $publisherFilter);
-        if (in_array($publisherId, $allowedPublisherIds)) {
-            return true;
-        }
-
-        return false;
-    }
-
 }
 
 class SiteManager extends EntityManager

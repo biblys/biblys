@@ -259,16 +259,12 @@ class OrderManager extends EntityManager
 
     public function getAll(array $where = array(), array $options = array(), $withJoins = true)
     {
-        $where['orders`.`site_id'] = $this->site['site_id'];
-
         return parent::getAll($where, $options);
     }
 
 
     public function count(array $where = array())
     {
-        $where['orders`.`site_id'] = $this->site['site_id'];
-
         return parent::count($where);
     }
 
@@ -282,8 +278,6 @@ class OrderManager extends EntityManager
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $req = [];
-        $params = ['site_id' => $globalSite->get('id')];
-
         if ($filters['source']) {
             $req[] = "AND `order_utmz` LIKE :source";
             $params['source'] = '%utmcsr='.$filters['source'].'%';
@@ -303,7 +297,7 @@ class OrderManager extends EntityManager
             $limit_req = null;
         }
 
-        $sql = $this->db->prepare("SELECT * FROM `orders` WHERE `site_id` = :site_id AND `order_utmz` IS NOT NULL ".join(" ", $req)." AND `order_payment_date` IS NOT NULL AND `order_cancel_date` IS NULL ORDER BY `order_payment_date` DESC ".$limit_req);
+        $sql = $this->db->prepare("SELECT * FROM `orders` WHERE `order_utmz` IS NOT NULL ".join(" ", $req)." AND `order_payment_date` IS NOT NULL AND `order_cancel_date` IS NULL ORDER BY `order_payment_date` DESC ".$limit_req);
         $sql->execute($params);
         $orders = $sql->fetchAll(PDO::FETCH_ASSOC);
 
@@ -325,7 +319,6 @@ class OrderManager extends EntityManager
     {
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
-        $queries = ["site_id = ".$globalSite->get('id')];
         $i = 0;
         $keywords = explode(' ', $keywords);
         foreach ($keywords as $k) {
@@ -353,10 +346,6 @@ class OrderManager extends EntityManager
      */
     public function create(array $defaults = array()): Order
     {
-        if (!isset($defaults['site_id'])) {
-            $defaults['site_id'] = $this->site['site_id'];
-        }
-
         if (!isset($defaults['cart_uid'])) {
             $url = md5(uniqid('', true));
             $defaults['order_url'] = substr($url, 0, 16);

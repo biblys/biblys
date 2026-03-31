@@ -26,5 +26,4 @@ class CronJobManager extends EntityManager
     protected $prefix = 'cron_job';
     protected $table = 'cron_jobs';
     protected $object = 'CronJob';
-    protected $siteAgnostic = false;
 }

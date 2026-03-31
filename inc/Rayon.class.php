@@ -52,13 +52,13 @@ class Rayon extends Entity
         $lm = new LinkManager();
 
         // Check if article is already in rayon
-        $link = $lm->get(['site_id' => $globalSite->get('id'), 'rayon_id' => $this->get('id'), 'article_id' => $article->get('id')]);
+        $link = $lm->get(['rayon_id' => $this->get('id'), 'article_id' => $article->get('id')]);
         if ($link) {
             throw new Exception("L'article « ".$article->get('title')." » est déjà dans le rayon « ".$this->get('name')." ».");
         }
 
         // Create link
-        $link = $lm->create(['site_id' => $globalSite->get('id'), 'rayon_id' => $this->get('id'), 'article_id' => $article->get('id')]);
+        $link = $lm->create(['rayon_id' => $this->get('id'), 'article_id' => $article->get('id')]);
 
         // Update article metadata
         $article_links = $article->get('links')."[rayon:".$this->get('id')."]";
@@ -77,7 +77,7 @@ class Rayon extends Entity
         $am = new ArticleManager();
 
         // Remove links for this article & rayon
-        $links = $lm->getAll(['site_id' => $globalSite->get('id'), 'rayon_id' => $this->get('id'), 'article_id' => $article->get('id')]);
+        $links = $lm->getAll(['rayon_id' => $this->get('id'), 'article_id' => $article->get('id')]);
         foreach ($links as $link) {
             $lm->delete($link);
         }
@@ -99,19 +99,11 @@ class RayonManager extends EntityManager
 
     public function create(array $defaults = [])
     {
-        if (!isset($defaults['site_id'])) {
-            $defaults['site_id'] = $this->site['site_id'];
-        }
-
         return parent::create($defaults);
     }
 
     public function getAll(array $where = array(), array $options = array(), $withJoins = true)
     {
-        if (!isset($where['site_id'])) {
-            $where['rayons`.`site_id'] = $this->site['site_id'];
-        }
-
         return parent::getAll($where, $options);
     }
 

@@ -56,10 +56,6 @@ class PaymentManager extends EntityManager
 
     public function create(array $defaults = array())
     {
-      if (!isset($defaults['site_id'])) {
-          $defaults['site_id'] = $this->site['site_id'];
-      }
-
       return parent::create($defaults);
     }
 
