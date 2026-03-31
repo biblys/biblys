@@ -508,7 +508,6 @@ class CartTest extends PHPUnit\Framework\TestCase
         // given
         $GLOBALS["LEGACY_CURRENT_SITE"] = EntityFactory::createSite();
         $reward = EntityFactory::createCrowdfundingReward([
-            "site_id" => $GLOBALS["LEGACY_CURRENT_SITE"]->get("id"),
             "limited" => 0,
         ]);
         $cart = EntityFactory::createCart();

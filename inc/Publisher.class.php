@@ -66,8 +66,8 @@ class Publisher extends Entity
 
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
-        $query = $_SQL->prepare("SELECT `supplier_id`, `supplier_name` FROM `links` JOIN `suppliers` USING(`supplier_id`) WHERE `links`.`site_id` = :site AND `suppliers`.`site_id` = :site AND `publisher_id` = :publisher");
-        $query->execute(['site' => $globalSite->get('id'), 'publisher' => $this->get('id')]);
+        $query = $_SQL->prepare("SELECT `supplier_id`, `supplier_name` FROM `links` JOIN `suppliers` USING(`supplier_id`) WHERE `publisher_id` = :publisher");
+        $query->execute(['publisher' => $this->get('id')]);
         $query = $query->fetchAll();
 
         $suppliers = [];
@@ -89,14 +89,12 @@ class Publisher extends Entity
         $lm = new LinkManager();
 
         $link = $lm->get([
-            'site_id' => $globalSite->get('id'),
             'supplier_id' => $supplier->get('id'),
             'publisher_id' => $this->get('id')
         ]);
 
         if (!$link) {
             $lm->create([
-                'site_id' => $globalSite->get('id'),
                 'supplier_id' => $supplier->get('id'),
                 'publisher_id' => $this->get('id')
             ]);
@@ -114,7 +112,6 @@ class Publisher extends Entity
         $lm = new LinkManager();
 
         $link = $lm->get([
-            'site_id' => $globalSite->get('id'),
             'supplier_id' => $supplier->get('id'),
             'publisher_id' => $this->get('id')
         ]);
@@ -181,33 +178,11 @@ class PublisherManager extends EntityManager
     }
 
     /**
-     * Add site filters if any defined
-     * @param array $where
-     * @return array
-     */
-    public function addSiteFilters(array $where = []): array
-    {
-        if (!$this->isSiteFilterEnabled) {
-            return $where;
-        }
-
-        $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
-
-        $publisherFilter = $globalSite->getOpt('publisher_filter');
-        if ($publisherFilter && !array_key_exists('publisher_id', $where)) {
-            $where['publisher_id'] = explode(',', $publisherFilter);
-        }
-
-        return $where;
-    }
-
-    /**
      * Calls Entity->getAll after adding site filter
      */
     public function getAll(array $where = array(), array $options =  array(), $withJoins = true): array
     {
 
-        $where = $this->addSiteFilters($where);
         return parent::getAll($where, $options, $withJoins);
     }
 

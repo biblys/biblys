@@ -29,13 +29,11 @@
         
         public function create(array $defaults = array())
         {
-            $defaults['site_id'] = $this->site['site_id']; 
             return parent::create($defaults);
         }
         
         public function getAll(array $where = array(), array $options = array(), $withJoins = true)
         {
-            $where['site_id'] = $this->site['site_id'];
             return parent::getAll($where, $options);
         }
         
@@ -44,9 +42,6 @@
 		 */
 		public function search($query)
 		{
-			
-			$params['site_id'] = $this->site['site_id'];
-			
 			$query = explode(" ",$query);
 			foreach ($query as $i => $keyword)
 			{
@@ -57,7 +52,7 @@
 			
 			$q = $this->db->prepare('
 				SELECT * FROM `customers`
-				WHERE `customers`.`site_id` = :site_id AND '.$req);
+				WHERE '.$req);
 			$q->execute($params) or error($q->errorInfo());
 			
 			$list = array();

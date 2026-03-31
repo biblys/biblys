@@ -249,7 +249,7 @@ class RayonController extends Controller
 
         $rm = new RayonManager();
 
-        $rayon = $rm->get(['rayon_id' => $id, 'site_id' => $globalSite->get('id')]);
+        $rayon = $rm->get(['rayon_id' => $id]);
         if (!$rayon) {
             throw new NotFoundException("Rayon $id not found.");
         }
